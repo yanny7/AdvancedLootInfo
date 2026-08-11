@@ -128,7 +128,7 @@
     "tags": []
   },
   "minecraft:end_gateway": {
-    "visitedMethods": 116,
+    "visitedMethods": 120,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:air",
@@ -155,7 +155,7 @@
     "tags": []
   },
   "minecraft:end_spike": {
-    "visitedMethods": 201,
+    "visitedMethods": 197,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:air",
@@ -190,7 +190,7 @@
     "tags": []
   },
   "minecraft:fossil": {
-    "visitedMethods": 402,
+    "visitedMethods": 404,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:barrier"
@@ -289,7 +289,7 @@
     "tags": []
   },
   "minecraft:monster_room": {
-    "visitedMethods": 150,
+    "visitedMethods": 154,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:cave_air",
@@ -442,7 +442,7 @@
     "tags": []
   },
   "minecraft:underwater_magma": {
-    "visitedMethods": 76,
+    "visitedMethods": 84,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:magma_block"

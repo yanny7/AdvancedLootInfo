@@ -7,7 +7,7 @@ import com.google.gson.JsonParser;
 import com.yanny.awi.plugin.server.FeatureBytecodeScanner;
 import com.yanny.awi.test.utils.BaseLayoutTestUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -19,13 +19,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -66,7 +60,7 @@ public class FeatureBytecodeScanTest {
         List<String> truncated = new ArrayList<>();
 
         for (Map.Entry<net.minecraft.resources.ResourceKey<Feature<?>>, Feature<?>> entry : BuiltInRegistries.FEATURE.entrySet()) {
-            String id = entry.getKey().location().toString();
+            String id = entry.getKey().identifier().toString();
             FeatureBytecodeScanner.ScanResult result = FeatureBytecodeScanner.scan(entry.getValue().getClass());
             Map<String, Object> report = new LinkedHashMap<>();
 
@@ -110,7 +104,7 @@ public class FeatureBytecodeScanTest {
     }
 
     private static List<String> blockIds(Set<Block> blocks) {
-        return blocks.stream().map(BuiltInRegistries.BLOCK::getKey).map(ResourceLocation::toString).sorted().toList();
+        return blocks.stream().map(BuiltInRegistries.BLOCK::getKey).map(Identifier::toString).sorted().toList();
     }
 
     private static List<String> tagIds(Set<TagKey<Block>> tags) {

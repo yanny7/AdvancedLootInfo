@@ -300,7 +300,7 @@ public class GenericUtils {
         for (EntityType<?> entityType : BuiltInRegistries.ENTITY_TYPE) {
             if (config.disabledEntities.stream().anyMatch((f) -> f.equals(BuiltInRegistries.ENTITY_TYPE.getKey(entityType)))) {
                 // at least remove entity default loot table
-                entityType.getDefaultLootTable().ifPresent(lootTableResourceKey -> claimedLootTables.add(lootTableResourceKey.location()));
+                entityType.getDefaultLootTable().ifPresent(lootTableResourceKey -> claimedLootTables.add(lootTableResourceKey.identifier()));
                 continue;
             }
 
