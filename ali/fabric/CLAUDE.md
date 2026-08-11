@@ -17,18 +17,21 @@ Guidance for `ali/fabric` (`com.yanny.ali.fabric`) — ALI's Fabric loader entry
 
 ## Mixins
 
-`ali.fabric.mixins.json` — two `client` mixins, no common ones:
+`ali.fabric.mixins.json` — two `client` mixins plus the ingredient accessors:
 
 - `MixinClientPlayNetworkAddon` (client) — injects `ClientPlayNetworkAddon.receive` HEAD and re-dispatches `StartMessage`/`LootDataChunkMessage`/`DoneMessage` **on the networking thread** (hand-building the `ClientPlayNetworking.Context`, then cancelling), to avoid the deadlock Fabric's default main-thread hand-off causes for the bulk data sync. It touches Fabric's `impl` package, so it is the most upgrade-fragile piece in this module. `awi/fabric` carries a copy.
 - `MixinMinecraft` (client) — `setLevel` HEAD → `EntityStorage.onUnloadLevel()` when a level is already loaded. NeoForge does this with `LevelEvent.Unload` in its client bus subscriber instead.
+- `MixinCombinedIngredient`/`MixinComponentsIngredient`/`MixinCustomDataIngredient`/`MixinDifferenceIngredient` — pure `@Accessor` interfaces onto Fabric API's builtin custom ingredients (`impl.recipe.ingredient.builtin`), read by `plugin/FabricIngredientTooltipUtils`. `CombinedIngredient` is package-private, hence the string `targets` form.
 
 There is no longer a `ReloadableServerResourceMixin`: it existed only to capture a `HolderLookup.Provider` into a static, and the provider now arrives as a parameter (see the reload listener above).
 
 ## Fabric-only compat plugins
 
+`plugin/FabricPlugin` (mod id `fabric`) registers an ingredient tooltip for Fabric API's `CustomIngredientImpl`, which `FabricIngredientTooltipUtils` unwraps into its Any/All/Difference/Components/Custom-Data builtins. It is the only loader where custom ingredients are `Ingredient` subclasses and can therefore be dispatched by class; see `ali/neoforge/CLAUDE.md` for the unwrapper hook NeoForge needs instead.
+
 `plugin/mods/` holds third-party compatibility that is genuinely Fabric-only because it targets Fabric ports of Forge APIs — don't try to move these to `ali/neoforge` without checking whether the target API even exists there.
 
-⚠️ On this branch neither is actually active: `fabric.mod.json`'s `ali` entrypoint array lists only `com.yanny.ali.plugin.Plugin`. Since Fabric discovers plugins by entrypoint and the `@AliEntrypoint` annotation alone does nothing there, both classes below are currently dead code — re-add them to that array to bring them back.
+⚠️ On this branch neither of the two `plugin/mods/` plugins is actually active: `fabric.mod.json`'s `ali` entrypoint array lists only `com.yanny.ali.plugin.Plugin` and `com.yanny.ali.fabric.plugin.FabricPlugin`. Since Fabric discovers plugins by entrypoint and the `@AliEntrypoint` annotation alone does nothing there, both classes below are currently dead code — re-add them to that array to bring them back.
 
 - `plugin/mods/farmers_delight/Plugin` (mod id `farmersdelight`) — registers reflected loot functions (`CopySkilletFunction`, `SmokerCookFunction`), the `CanItemPerformAbilityCondition` condition, and `FDItemListing` as both item listing and item-listing collector, all via `PluginUtils`/`ReflectionUtils` (see `ali/CLAUDE.md`'s `plugin/mods` section).
 - `plugin/mods/porting_lib/loot/Plugin` (mod id `porting_lib_loot`) — the Fabric GLM story: Porting Lib's `LootModifier`/`LootModifierManager`/`LootTableIdCondition`/`IGlmPlugin` are reached reflectively (`Class.forName` in a static block, guarded so the plugin degrades quietly when the mod is absent) and fed into the loader-agnostic `plugin/glm` bridge. This is Fabric's counterpart to `ali/neoforge`'s `NeoForgePlugin` GLM registration.

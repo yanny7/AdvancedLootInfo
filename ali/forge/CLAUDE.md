@@ -17,17 +17,20 @@ Single `AliMod` (`@Mod`). Its static initializer builds the `SimpleChannel` (`ne
 
 ## Mixins
 
-`ali.forge.mixins.json` lists exactly three (all in `mixin/`):
+`ali.forge.mixins.json` (all in `mixin/`):
 
 - `MixinMinecraftServer` — `reloadResources` TAIL → `PluginManager.reloadServer()` + `SERVER.readLootTables(server.reloadableRegistries())`.
 - `MixinLootModifier` — `@Accessor` for `LootModifier.conditions`.
 - `MixinForgeInternalHandler` — `@Invoker` (with `remap = false`) for the package-private static `ForgeInternalHandler.getLootModifierManager()`, the only way to enumerate loaded GLMs.
+- `MixinCompoundIngredient`/`MixinDifferenceIngredient`/`MixinIntersectionIngredient`/`MixinPartialNBTIngredient`/`MixinStrictNBTIngredient` — `@Accessor` interfaces over Forge's `common.crafting.ingredients` classes, read by `plugin/ForgeIngredientTooltipUtils`. Note the package is `...crafting.ingredients` on this branch (it was `...crafting` on `1.20.1`), and `PartialNBTIngredient.items` is a `List`, not a `Set`.
 
 This is a *smaller* set than `ali/neoforge`'s, which also needs accessors for `LootTableIdCondition`/`CanItemPerformAbility`/`AddTableLootModifier`: on Forge those conditions are records whose components are public (`cond.id()`, `cond.action()`), so `ForgePlugin` reads them directly.
 
 ## Forge-only compat plugins
 
-`plugin.{ForgePlugin, GlobalLootModifier, IForgePlugin}` plus `plugin.mods.farmers_delight` — Forge-specific GLM glue mirroring `ali/neoforge`'s `plugin/` package but targeting Forge's native GLM API (`ali/CLAUDE.md`'s `plugin/glm` package is the loader-agnostic half). `ForgePlugin` registers the `CanToolPerformAction`/`LootTableIdCondition` condition tooltips and the GLM bridge over `MixinForgeInternalHandler.getLootModifierManager()`.
+`plugin.{ForgePlugin, GlobalLootModifier, IForgePlugin}` plus `plugin.mods.farmers_delight` — Forge-specific GLM glue mirroring `ali/neoforge`'s `plugin/` package but targeting Forge's native GLM API (`ali/CLAUDE.md`'s `plugin/glm` package is the loader-agnostic half). `ForgePlugin` registers the `CanToolPerformAction`/`LootTableIdCondition` condition tooltips, the five ingredient tooltips below, and the GLM bridge over `MixinForgeInternalHandler.getLootModifierManager()`.
+
+Forge's custom ingredients extend `AbstractIngredient extends Ingredient`, so they dispatch through plain `registerIngredientTooltip(Class, ...)` — no unwrapper hook, unlike NeoForge (see `ali/neoforge/CLAUDE.md`). Forge 1.21.1 has **no** `BasicItemListing`, so unlike `1.20.1` and unlike NeoForge there is no item-listing registration here; don't port that part back.
 
 `compatibility/` holds only a `package-info`: REI was disabled for Forge (`forge_rei_enabled=false`; no `run*Forge*` task is generated at all now), and `@REIPluginClient` is loader-specific so it cannot live in `ali/common-rei` — a `compatibility.ReiCompatibilityWrapper` must be (re)added if that flag is ever flipped on, mirroring `ali/neoforge`'s. `awi/forge` is in the same state for the same reason.
 

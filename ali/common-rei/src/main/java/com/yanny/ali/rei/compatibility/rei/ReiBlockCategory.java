@@ -1,6 +1,7 @@
 package com.yanny.ali.rei.compatibility.rei;
 
 import com.yanny.aci.api.Rect;
+import com.yanny.ali.compatibility.common.AbstractScrollWidget;
 import com.yanny.ali.configuration.LootCategory;
 import com.yanny.ali.mixin.MixinVegetationBlock;
 import com.yanny.ali.pip.BlockRenderState;
@@ -14,6 +15,7 @@ import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -30,6 +32,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
+    // Block edge lengths and centers, in GUI pixels relative to the slot - kept at the values the pre-1.21.6 renderer
+    // produced, where the block was placed by its corner rather than by its center.
+    private static final float BLOCK_SIZE = 18;
+    private static final int BLOCK_CENTER_X = 8;
+    private static final int BLOCK_CENTER_Y = 13;
+    private static final float PLANT_SIZE = 9;
+    private static final int PLANT_CENTER_X = 8;
+    private static final int PLANT_CENTER_Y = 8;
+    private static final int GROUND_CENTER_Y = 16;
+
     private final CategoryIdentifier<ReiBlockDisplay> identifier;
     private final Component title;
     private final ItemStack icon;
@@ -102,11 +114,12 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
             poseStack.pushMatrix();
             poseStack.translate(bounds.getX(), bounds.getY());
 
-            if (isPlant) {
-                int x = (int) guiGraphics.pose().m20() - 6;
-                int y = (int) guiGraphics.pose().m21() - 4;
+            int x = (int) poseStack.m20();
+            int y = (int) poseStack.m21();
+            ScreenRectangle viewport = AbstractScrollWidget.getCurrentViewport();
 
-                BlockRenderState renderState = BlockRenderState.of(blockState, level, x + 3, y, bounds.width + x, bounds.height + y, 0.8f, null);
+            if (isPlant) {
+                BlockRenderState renderState = BlockRenderState.centered(blockState, level, x + PLANT_CENTER_X, y + PLANT_CENTER_Y, PLANT_SIZE, viewport);
 
                 BlockState base;
                 BlockState farmland = Blocks.FARMLAND.defaultBlockState();
@@ -117,15 +130,12 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
                     base = Blocks.GRASS_BLOCK.defaultBlockState();
                 }
 
-                BlockRenderState farmlandState = BlockRenderState.of(base, level, x, y + 8, bounds.width + x + 3, bounds.height + y + 7, 0.8f, null);
+                BlockRenderState farmlandState = BlockRenderState.centered(base, level, x + PLANT_CENTER_X, y + GROUND_CENTER_Y, PLANT_SIZE, viewport);
 
                 Services.getClientPlatform().renderBlockInGui(guiGraphics, farmlandState);
                 Services.getClientPlatform().renderBlockInGui(guiGraphics, renderState);
             } else {
-                int x = (int) guiGraphics.pose().m20() - 5;
-                int y = (int) guiGraphics.pose().m21();
-
-                BlockRenderState renderState = BlockRenderState.of(blockState, level, x, y, bounds.width + x, bounds.height + y, 1.1F, null);
+                BlockRenderState renderState = BlockRenderState.centered(blockState, level, x + BLOCK_CENTER_X, y + BLOCK_CENTER_Y, BLOCK_SIZE, viewport);
                 Services.getClientPlatform().renderBlockInGui(guiGraphics, renderState);
             }
 

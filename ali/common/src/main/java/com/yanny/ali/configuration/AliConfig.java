@@ -23,6 +23,12 @@ public class AliConfig {
 
     private static final List<Identifier> DEFAULT_BLOCK_LOOT_CONDITIONS = List.of(Identifier.withDefaultNamespace("survives_explosion"));
     private static final List<Identifier> DEFAULT_BLOCK_LOOT_FUNCTIONS = List.of(Identifier.withDefaultNamespace("explosion_decay"));
+    private static final List<Identifier> DEFAULT_IGNORED_PREDICATE_CONDITIONS = List.of(
+            Identifier.withDefaultNamespace("random_chance"),
+            Identifier.withDefaultNamespace("random_chance_with_enchanted_bonus"),
+            Identifier.withDefaultNamespace("table_bonus"),
+            Identifier.withDefaultNamespace("survives_explosion")
+    );
 
     public static final Codec<AliConfig> CODEC = RecordCodecBuilder.create((instance) ->
         instance.group(
@@ -36,8 +42,9 @@ public class AliConfig {
                 Codec.BOOL.fieldOf("showInGameNames").orElse(true).forGetter((c) -> c.showInGameNames),
                 Codec.BOOL.fieldOf("hideDefaultBlockLoot").orElse(true).forGetter((c) -> c.hideDefaultBlockLoot),
                 Identifier.CODEC.listOf().fieldOf("defaultBlockLootConditions").orElse(DEFAULT_BLOCK_LOOT_CONDITIONS).forGetter((c) -> c.defaultBlockLootConditions),
-                Identifier.CODEC.listOf().fieldOf("defaultBlockLootFunctions").orElse(DEFAULT_BLOCK_LOOT_FUNCTIONS).forGetter((c) -> c.defaultBlockLootFunctions)
-        ).apply(instance, (version, blocks, entities, gameplay, trades, disabled, log, show, hideDefaultLoot, defaultConditions, defaultFunctions) -> {
+                Identifier.CODEC.listOf().fieldOf("defaultBlockLootFunctions").orElse(DEFAULT_BLOCK_LOOT_FUNCTIONS).forGetter((c) -> c.defaultBlockLootFunctions),
+                Identifier.CODEC.listOf().fieldOf("ignoredPredicateConditions").orElse(DEFAULT_IGNORED_PREDICATE_CONDITIONS).forGetter((c) -> c.ignoredPredicateConditions)
+        ).apply(instance, (version, blocks, entities, gameplay, trades, disabled, log, show, hideDefaultLoot, defaultConditions, defaultFunctions, ignoredPredicates) -> {
             AliConfig config = new AliConfig();
 
             config.configVersion = version;
@@ -51,6 +58,7 @@ public class AliConfig {
             config.hideDefaultBlockLoot = hideDefaultLoot;
             config.defaultBlockLootConditions = new ArrayList<>(defaultConditions);
             config.defaultBlockLootFunctions = new ArrayList<>(defaultFunctions);
+            config.ignoredPredicateConditions = new ArrayList<>(ignoredPredicates);
             return config;
         })
     );
@@ -65,6 +73,7 @@ public class AliConfig {
     public List<Identifier> disabledEntities;
     public List<Identifier> defaultBlockLootConditions;
     public List<Identifier> defaultBlockLootFunctions;
+    public List<Identifier> ignoredPredicateConditions;
 
     public boolean logMoreStatistics = false;
     public boolean showInGameNames = true;
@@ -80,6 +89,7 @@ public class AliConfig {
 
         defaultBlockLootConditions = new ArrayList<>(DEFAULT_BLOCK_LOOT_CONDITIONS);
         defaultBlockLootFunctions = new ArrayList<>(DEFAULT_BLOCK_LOOT_FUNCTIONS);
+        ignoredPredicateConditions = new ArrayList<>(DEFAULT_IGNORED_PREDICATE_CONDITIONS);
     }
 
     @NotNull
