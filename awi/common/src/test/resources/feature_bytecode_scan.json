@@ -155,7 +155,7 @@
     "tags": []
   },
   "minecraft:end_spike": {
-    "visitedMethods": 163,
+    "visitedMethods": 199,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:air",
@@ -190,7 +190,7 @@
     "tags": []
   },
   "minecraft:fossil": {
-    "visitedMethods": 380,
+    "visitedMethods": 422,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:barrier"

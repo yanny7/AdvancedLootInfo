@@ -45,6 +45,8 @@ import java.util.List;
 public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements DisplayCategory<T> {
     static final int CATEGORY_WIDTH = 9 * 18;
     static final int PADDING = 4;
+    /** Block edge length in GUI pixels - fits an 18px slot with a pixel of margin. */
+    private static final float BLOCK_SIZE = 9;
 
     // Mirrors REI's own recipe-window layout math (RoughlyEnoughItems 12.1.785, DefaultDisplayViewingScreen#init):
     // the window is INNER_PADDING_Y + (getDisplayHeight() + DISPLAY_GAP) * displaysPerPage tall, capped by the space
@@ -227,10 +229,10 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
             poseStack.pushMatrix();
             poseStack.translate(bounds.getX(), bounds.getY());
 
-            int x = (int) guiGraphics.pose().m20() - 4;
-            int y = (int) guiGraphics.pose().m21() - 4;
+            int centerX = (int) poseStack.m20() + bounds.width / 2;
+            int centerY = (int) poseStack.m21() + bounds.height / 2;
 
-            BlockRenderState renderState = BlockRenderState.of(blockState, level, x, y, bounds.width + x, bounds.height + y, 1, null);
+            BlockRenderState renderState = BlockRenderState.centered(blockState, level, centerX, centerY, BLOCK_SIZE, AbstractScrollWidget.getCurrentViewport());
             Services.getClientPlatform().renderBlockInGui(guiGraphics, renderState);
 
             poseStack.popMatrix();
