@@ -67,7 +67,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class FeatureBytecodeScanner {
     private static final Logger LOGGER = LogUtils.getLogger();
     // Runaway guard, not a tuning knob: lowering it silently drops blocks rather than failing. Vanilla's widest
-    // feature (fossil) analyzes 422 methods and no other reaches 200, so this sits at ~2x the measured worst case.
+    // feature (fossil) analyzes 402 methods and no other reaches 250, so this sits at ~2.5x the measured worst case.
     private static final int MAX_METHODS = 1000;
     private static final int MAX_RESOLVE_DEPTH = 12;
 

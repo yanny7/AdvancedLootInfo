@@ -128,7 +128,7 @@
     "tags": []
   },
   "minecraft:end_gateway": {
-    "visitedMethods": 114,
+    "visitedMethods": 116,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:air",
@@ -155,7 +155,7 @@
     "tags": []
   },
   "minecraft:end_spike": {
-    "visitedMethods": 199,
+    "visitedMethods": 201,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:air",
@@ -190,7 +190,7 @@
     "tags": []
   },
   "minecraft:fossil": {
-    "visitedMethods": 422,
+    "visitedMethods": 402,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:barrier"
@@ -198,7 +198,7 @@
     "tags": []
   },
   "minecraft:freeze_top_layer": {
-    "visitedMethods": 63,
+    "visitedMethods": 67,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:ice",
@@ -207,7 +207,7 @@
     "tags": []
   },
   "minecraft:geode": {
-    "visitedMethods": 134,
+    "visitedMethods": 136,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:air"
@@ -289,7 +289,7 @@
     "tags": []
   },
   "minecraft:monster_room": {
-    "visitedMethods": 148,
+    "visitedMethods": 150,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:cave_air",
@@ -331,7 +331,7 @@
     "tags": []
   },
   "minecraft:ore": {
-    "visitedMethods": 120,
+    "visitedMethods": 122,
     "methodLimitReached": false,
     "blocks": [],
     "tags": []
