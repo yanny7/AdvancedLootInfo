@@ -58,6 +58,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * ({@code CoralFeature#place} -> abstract {@code placeFeature}); stopping at the abstract declaration would lose
  * every block placed below it.
  *
+ * <p>Branches guarded by a {@code static final boolean} flag that reads {@code false} are pruned before any of that
+ * happens - see {@link #reachableInstructions}.
+ *
  * <p>Known limitations: a lambda parameter is only bound when the receiver it is applied to resolves to blocks, and
  * an abstract call is only dispatched to the class being scanned, not to arbitrary implementors.
  */
@@ -96,6 +99,9 @@ public final class FeatureBytecodeScanner {
 
     /** Key of the method being analyzed, so a parameter can be matched against {@link #parameterCandidates}. */
     private String currentMethodKey;
+
+    /** Instructions of the method being analyzed that survive {@link #reachableInstructions}. */
+    private Set<AbstractInsnNode> currentReachable;
 
     private FeatureBytecodeScanner() {}
 
@@ -188,7 +194,13 @@ public final class FeatureBytecodeScanner {
             return;
         }
 
+        currentReachable = reachableInstructions(cl, method);
+
         for (AbstractInsnNode insn : method.instructions.toArray()) {
+            if (!currentReachable.contains(insn)) {
+                continue;
+            }
+
             // A lambda/method reference body is a separate (usually synthetic) method reachable only through the
             // bootstrap handle - features routinely place their blocks in one (e.g. UnderwaterMagmaFeature's forEach).
             if (insn instanceof InvokeDynamicInsnNode indy) {
@@ -421,6 +433,12 @@ public final class FeatureBytecodeScanner {
         }
 
         for (AbstractInsnNode producer : value.insns) {
+            // The analyzer merges both branches of a dead flag test into one stack value, so the dead half has to be
+            // dropped here too - otherwise LargeDripstoneFeature's DEBUG ? GLASS : DRIPSTONE_BLOCK reports glass.
+            if (currentReachable != null && !currentReachable.contains(producer)) {
+                continue;
+            }
+
             if (!guard.add(producer)) {
                 continue;
             }
@@ -534,6 +552,106 @@ public final class FeatureBytecodeScanner {
             out.blocks().add(state.getBlock());
         } else if (staticValue instanceof TagKey<?> tag && tag.registry().equals(Registries.BLOCK)) {
             out.tags().add((TagKey<Block>) tag);
+        }
+    }
+
+    // -- reachability ----------------------------------------------------------------------------------------------
+
+    /**
+     * Forward control-flow sweep that folds tests on {@code static final boolean} flags, so a branch that can never run
+     * places nothing. Vanilla's debug markers are the reason this exists: up to 1.21.8 {@code SharedConstants.DEBUG_*}
+     * were compile-time constants and javac stripped the branches guarded by them, but they are now initialized from a
+     * method call, so the bytecode carries them and a plain walk reports {@code LargeDripstoneFeature}'s diamond block,
+     * gold block and creeper head as blocks the feature places.
+     *
+     * <p>Only {@code IFEQ}/{@code IFNE} directly on a {@code GETSTATIC} of a final boolean is folded, and only when the
+     * value can be read reflectively; anything else keeps both successors, so this can never prune live code.
+     */
+    private static Set<AbstractInsnNode> reachableInstructions(ClassLoader cl, MethodNode method) {
+        Set<AbstractInsnNode> reachable = new HashSet<>();
+        Deque<AbstractInsnNode> worklist = new ArrayDeque<>();
+
+        if (method.instructions.getFirst() != null) {
+            worklist.add(method.instructions.getFirst());
+        }
+
+        // A handler is entered by the JVM, not by an edge from the guarded region, so it has no predecessor to reach it.
+        method.tryCatchBlocks.forEach((handler) -> worklist.add(handler.handler));
+
+        while (!worklist.isEmpty()) {
+            AbstractInsnNode insn = worklist.poll();
+
+            if (insn == null || !reachable.add(insn)) {
+                continue;
+            }
+
+            int opcode = insn.getOpcode();
+
+            if (insn instanceof JumpInsnNode jump) {
+                Boolean taken = jump.getOpcode() == Opcodes.GOTO ? Boolean.TRUE : constantBranch(cl, jump);
+
+                if (taken == null || taken) {
+                    worklist.add(jump.label);
+                }
+
+                if (taken == null || !taken) {
+                    worklist.add(jump.getNext());
+                }
+            } else if (insn instanceof TableSwitchInsnNode tableSwitch) {
+                worklist.add(tableSwitch.dflt);
+                worklist.addAll(tableSwitch.labels);
+            } else if (insn instanceof LookupSwitchInsnNode lookupSwitch) {
+                worklist.add(lookupSwitch.dflt);
+                worklist.addAll(lookupSwitch.labels);
+            } else if (!(opcode >= Opcodes.IRETURN && opcode <= Opcodes.RETURN) && opcode != Opcodes.ATHROW) {
+                worklist.add(insn.getNext());
+            }
+        }
+
+        return reachable;
+    }
+
+    /** Whether a conditional jump is statically always/never taken, or {@code null} if that is not decidable. */
+    private static Boolean constantBranch(ClassLoader cl, JumpInsnNode jump) {
+        if (jump.getOpcode() != Opcodes.IFEQ && jump.getOpcode() != Opcodes.IFNE) {
+            return null;
+        }
+
+        AbstractInsnNode previous = jump.getPrevious();
+
+        while (previous != null && previous.getOpcode() < 0) {
+            previous = previous.getPrevious();
+        }
+
+        if (!(previous instanceof FieldInsnNode field) || previous.getOpcode() != Opcodes.GETSTATIC
+                || !Type.BOOLEAN_TYPE.getDescriptor().equals(field.desc)) {
+            return null;
+        }
+
+        Boolean value = constantFlag(cl, field.owner, field.name);
+
+        return value == null ? null : jump.getOpcode() == Opcodes.IFEQ ? !value : value;
+    }
+
+    /** Reads a {@code static final boolean} field's value, or {@code null} if it is not one or cannot be read. */
+    private static Boolean constantFlag(ClassLoader cl, String ownerInternal, String name) {
+        try {
+            Class<?> owner = loadClass(cl, ownerInternal);
+
+            if (owner == null) {
+                return null;
+            }
+
+            Field field = owner.getDeclaredField(name);
+
+            if (!Modifier.isStatic(field.getModifiers()) || !Modifier.isFinal(field.getModifiers())) {
+                return null;
+            }
+
+            field.setAccessible(true);
+            return field.get(null) instanceof Boolean flag ? flag : null;
+        } catch (Throwable t) {
+            return null;
         }
     }
 
