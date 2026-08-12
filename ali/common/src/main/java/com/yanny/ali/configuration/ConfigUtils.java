@@ -118,6 +118,9 @@ public class ConfigUtils {
         if (config.ignoredPredicateConditions == null) {
             config.ignoredPredicateConditions = defaults.ignoredPredicateConditions;
         }
+        if (config.entityLootTables == null) {
+            config.entityLootTables = defaults.entityLootTables;
+        }
 
         return config;
     }

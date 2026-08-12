@@ -181,6 +181,14 @@
       "type": "array",
       "description": "Loot condition types that do not mark an item as having predicates, so its slot is not highlighted. Defaults to minecraft:random_chance, minecraft:random_chance_with_looting, minecraft:table_bonus and minecraft:survives_explosion.",
       "items": { "$ref": "#/definitions/ResourceLocation" }
+    },
+    "entityLootTables": {
+      "type": "object",
+      "description": "Loot tables an entity drops, keyed by entity type id. Only needed for entities whose loot table is neither their type's default one (entities/<entity id>) nor a path below it - those are recognized automatically. Takes precedence over the automatic mapping.",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "$ref": "#/definitions/ResourceLocation" }
+      }
     }
   },
   "required": [],

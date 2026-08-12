@@ -13,7 +13,9 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class AliConfig {
@@ -30,6 +32,13 @@ public class AliConfig {
     public List<ResourceLocation> defaultBlockLootConditions;
     public List<ResourceLocation> defaultBlockLootFunctions;
     public List<ResourceLocation> ignoredPredicateConditions;
+
+    /**
+     * Loot tables an entity type drops, keyed by entity type id. Only needed for entities whose loot table is neither
+     * their type's default one nor a path below it - those are found by their id alone, see {@code
+     * EntityLootTableResolver}.
+     */
+    public Map<ResourceLocation, List<ResourceLocation>> entityLootTables;
 
     public boolean logMoreStatistics = false;
     public boolean showInGameNames = true;
@@ -66,6 +75,8 @@ public class AliConfig {
                 new ResourceLocation("table_bonus"),
                 new ResourceLocation("survives_explosion")
         ));
+
+        entityLootTables = new LinkedHashMap<>();
     }
 
     @NotNull

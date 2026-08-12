@@ -159,6 +159,7 @@
     "minecraft:table_bonus",
     "minecraft:survives_explosion"
   ],
+  "entityLootTables": {},
   "logMoreStatistics": false,
   "showInGameNames": true,
   "hideDefaultBlockLoot": true
