@@ -126,7 +126,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
             // One slot per node, cycling through the members when the node stands for a tag. Item-less blocks with a
             // model of their own are no REI entry at all, so a tag made only of those falls back to a rendered model.
             List<Block> blocks = ((IBlockNode) h.entry).getBlocks();
-            List<EntryStack<?>> stacks = blocks.stream().filter((b) -> !GenericUtils.rendersAsBlockModel(b)).map(ReiBaseCategory::toStack).toList();
+            List<EntryStack<?>> stacks = blocks.stream().filter((b) -> !GenericUtils.rendersAsBlockModel(b)).<EntryStack<?>>map(ReiBaseCategory::toStack).toList();
 
             if (stacks.isEmpty()) {
                 Block block = blocks.isEmpty() ? Blocks.AIR : blocks.get(0);
