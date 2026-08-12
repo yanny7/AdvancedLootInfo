@@ -1,9 +1,9 @@
 package com.yanny.awi.rei.compatibility.rei;
 
 import com.mojang.blaze3d.platform.Lighting;
-import com.mojang.datafixers.util.Either;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.datafixers.util.Either;
 import com.mojang.math.Axis;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.api.RelativeRect;
@@ -234,7 +234,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
 
             poseStack.pushPose();
             poseStack.translate(bounds.getX(), bounds.getY(), 100);
-            poseStack.translate(15.5, 13.5, 300);
+            poseStack.translate(15.5, 13.5, 0);
             poseStack.scale(9, -9, 9);
             poseStack.mulPose(Axis.XP.rotationDegrees(30f));
             poseStack.mulPose(Axis.YP.rotationDegrees(225f));
