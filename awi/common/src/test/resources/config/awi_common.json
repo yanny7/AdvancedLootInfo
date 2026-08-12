@@ -1,5 +1,6 @@
 {
   "configVersion": 1,
   "logMoreStatistics": false,
-  "showInGameNames": true
+  "showInGameNames": true,
+  "showConfigConditionalBlocks": false
 }

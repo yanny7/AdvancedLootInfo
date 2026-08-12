@@ -10,6 +10,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.material.FluidState;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Opcodes;
@@ -85,11 +87,34 @@ import java.util.function.Predicate;
  * <p>Branches guarded by a {@code static final boolean} flag that reads {@code false} are pruned before any of that
  * happens - see {@link #reachableInstructions}.
  *
- * <p>Known limitations: a lambda parameter is only bound when the receiver it is applied to resolves to blocks or the
- * enclosing method was handed the lambda directly, and abstract dispatch only reaches implementors that are registered
- * blocks - not an inner class or an anonymous implementation. That second limit is why a sculk patch reports the sculk
- * it grows but not its veins: those are placed through {@code MultifaceSpreader.SpreadConfig#getStateForPlacement},
- * whose implementations are inner classes.
+ * <p>Known limitations, in the "block not found" direction: a lambda parameter is only bound when the receiver it is
+ * applied to resolves to blocks or the enclosing method was handed the lambda directly, and abstract dispatch only
+ * reaches implementors that are registered blocks - not an inner class or an anonymous implementation. That second
+ * limit is why a sculk patch reports the sculk it grows but not its veins: those are placed through
+ * {@code MultifaceSpreader.SpreadConfig#getStateForPlacement}, whose implementations are inner classes.
+ *
+ * <h2>False positives</h2>
+ *
+ * <p>Two kinds exist, and they have different causes - do not treat them as one problem.
+ *
+ * <p><b>A block placed behind a test on the configuration.</b> The scan is keyed by {@link Feature} class, so it cannot
+ * know which {@code FeatureConfiguration} the block is being reported for, and it reports every branch -
+ * {@code LakeFeature}'s {@code ICE} is only placed when {@code configuration.fluid()} yields water, and 1.20.1 ships
+ * exactly one lake ({@code lake_lava}). Those blocks are separated out into
+ * {@link ScanResult#configConditionalBlocks()} by {@link #configGuardedInstructions}, and
+ * {@code FeatureConfigurationCollectorUtils} drops them unless {@code AwiConfig.showConfigConditionalBlocks} says
+ * otherwise. An unrecognized guard shape leaves the block reported unconditionally, so this only ever hides what it
+ * positively proved conditional.
+ *
+ * <p>A guard encoded as a <i>number</i> is out of reach by construction: {@code HugeFungusFeature} grows weeping vines
+ * only for crimson, but the test reaches one of its two call sites as a probability
+ * ({@code placeHatBlock(..., bl2 ? 0.1F : 0.0F)}, then {@code randomSource.nextFloat() < h}). Proving that
+ * {@code h == 0.0F} makes the comparison unsatisfiable is value reasoning, not the identity-test detection this does.
+ *
+ * <p><b>A block placed by a library the feature calls into.</b> {@code FossilFeature} reports {@code BARRIER}, which
+ * comes from {@code StructureTemplate#placeInWorld}, not from the feature - and the blocks the fossil really places live
+ * in NBT structures that no static analysis can reach. Reads of the world are already excluded for this reason (see
+ * {@link #resolveReturnValue}); template placement is not, because there is no equally crisp type to exclude it by.
  */
 public final class FeatureBytecodeScanner {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -142,6 +167,15 @@ public final class FeatureBytecodeScanner {
     /** Return values and fields currently being resolved, so a cyclic helper cannot recurse forever. */
     private final Set<String> inProgress = new HashSet<>();
 
+    /** Callee method key -> boolean parameter positions its call sites were seen passing a config-derived value into. */
+    private final Map<String, Set<Integer>> configTaintedParameters = new HashMap<>();
+
+    /** Method keys reached from a call site that only runs when a config-dependent test passed. */
+    private final Set<String> reachedGuarded = new HashSet<>();
+
+    /** Method keys reached from a call site that runs regardless of any config-dependent test. */
+    private final Set<String> reachedUnguarded = new HashSet<>();
+
     /** Two leading package segments of the scanned class, see {@link #shouldRecurse}. */
     private String rootPkg;
 
@@ -150,6 +184,15 @@ public final class FeatureBytecodeScanner {
 
     /** Instructions of the method being analyzed that survive {@link #reachableInstructions}. */
     private Set<AbstractInsnNode> currentReachable;
+
+    /** Instructions of the method being analyzed that only run when a config-dependent test passed. */
+    private Set<AbstractInsnNode> currentConfigGuarded;
+
+    /** Whether the method being analyzed was itself reached only through a config-dependent test. */
+    private boolean currentEnteredGuarded;
+
+    /** Whether the method being analyzed is also reached on a path with no config-dependent test. */
+    private boolean currentEnteredUnguarded;
 
     /** Helper bodies walked for their return value, out of the same {@link #MAX_METHODS} budget shape as the main walk. */
     private int analyzedReturns;
@@ -189,17 +232,36 @@ public final class FeatureBytecodeScanner {
         IMPLEMENTOR_CACHE.clear();
     }
 
+    /**
+     * Walks the feature twice. The interprocedural facts - which parameters carry blocks, which carry the result of a
+     * config-selective test - are only complete once the whole walk has run, and how a method was reached is recorded
+     * monotonically and never retracted. A method analyzed before its caller's taint was known therefore records itself
+     * as unguarded permanently, which is what hid {@code HugeFungusFeature}'s weeping vines: {@code placeHatDropBlock}
+     * is reached before the crimson test that guards it is known. The second walk starts from cleared reach flags and
+     * the facts the first one learned, and only its attribution is used.
+     */
     private ScanResult doScan(Class<?> featureClass) {
         ClassLoader cl = featureClass.getClassLoader();
+        MethodRef root = new MethodRef(Type.getInternalName(featureClass), PLACE_NAME, PLACE_DESC);
 
         rootPkg = rootPackage(Type.getInternalName(featureClass));
 
-        Candidates out = Candidates.create();
+        walk(cl, featureClass, root);
+        reachedGuarded.clear();
+        reachedUnguarded.clear();
+
+        return walk(cl, featureClass, root);
+    }
+
+    private ScanResult walk(ClassLoader cl, Class<?> featureClass, MethodRef root) {
+        Candidates guarded = Candidates.create();
+        Candidates unguarded = Candidates.create();
         Set<String> visited = new HashSet<>();
         Deque<MethodRef> worklist = new ArrayDeque<>();
         int analyzed = 0;
 
-        worklist.add(new MethodRef(Type.getInternalName(featureClass), PLACE_NAME, PLACE_DESC));
+        reachedUnguarded.add(root.key());
+        worklist.add(root);
 
         while (!worklist.isEmpty() && analyzed < MAX_METHODS) {
             MethodRef ref = worklist.poll();
@@ -222,7 +284,7 @@ public final class FeatureBytecodeScanner {
             // Not a self-call, so the receiver is some other object entirely - the only implementors we can enumerate
             // are the registered blocks (SculkBehaviour, which is how a sculk patch spreads).
             if (declaration != null && declaration.isAbstract()) {
-                queueImplementors(cl, ref, worklist);
+                queueImplementors(cl, ref, worklist, visited);
             }
 
             if (declaration == null || declaration.isAbstract()
@@ -234,16 +296,28 @@ public final class FeatureBytecodeScanner {
             analyzed++;
             // Keyed by the reference, not the declaring class, so it matches what a call site records for it.
             currentMethodKey = ref.key();
-            analyzeMethod(cl, declaration.owner(), declaration.method(), out, worklist, visited);
+            currentEnteredGuarded = reachedGuarded.contains(ref.key());
+            // Absent information counts as unguarded, so a block is only ever reported as conditional on positive
+            // evidence that every path to it passed a config-dependent test.
+            currentEnteredUnguarded = reachedUnguarded.contains(ref.key()) || !currentEnteredGuarded;
+            analyzeMethod(cl, declaration.owner(), declaration.method(), guarded, unguarded, worklist, visited);
         }
 
         // Only a still-pending, not-yet-visited method means the budget actually cut the walk short.
-        boolean truncated = worklist.stream().anyMatch((ref) -> !visited.contains(ref.key()));
+        boolean truncated = worklist.stream().anyMatch((pending) -> !visited.contains(pending.key()));
 
-        return new ScanResult(out.blocks(), out.tags(), analyzed, truncated);
+        Set<Block> blocks = new HashSet<>(unguarded.blocks());
+        Set<TagKey<Block>> tags = new HashSet<>(unguarded.tags());
+        Set<Block> conditionalBlocks = new HashSet<>(guarded.blocks());
+
+        blocks.addAll(guarded.blocks());
+        tags.addAll(guarded.tags());
+        conditionalBlocks.removeAll(unguarded.blocks());
+
+        return new ScanResult(blocks, conditionalBlocks, tags, analyzed, truncated);
     }
 
-    private void analyzeMethod(ClassLoader cl, ClassNode owner, MethodNode method, Candidates out,
+    private void analyzeMethod(ClassLoader cl, ClassNode owner, MethodNode method, Candidates guarded, Candidates unguarded,
                                Deque<MethodRef> worklist, Set<String> visited) {
         Frame<SourceValue>[] frames = frames(owner, method);
 
@@ -252,16 +326,20 @@ public final class FeatureBytecodeScanner {
         }
 
         currentReachable = reachableInstructions(cl, method);
+        currentConfigGuarded = configGuardedInstructions(cl, method, frames);
 
         for (AbstractInsnNode insn : method.instructions.toArray()) {
             if (!currentReachable.contains(insn)) {
                 continue;
             }
 
+            boolean siteGuarded = isConfigGuarded(insn);
+            boolean siteUnguarded = !currentConfigGuarded.contains(insn) && currentEnteredUnguarded;
+
             // A lambda/method reference body is a separate (usually synthetic) method reachable only through the
             // bootstrap handle - features routinely place their blocks in one (e.g. UnderwaterMagmaFeature's forEach).
             if (insn instanceof InvokeDynamicInsnNode indy) {
-                queueBootstrapTargets(indy, worklist);
+                queueBootstrapTargets(indy, siteGuarded, siteUnguarded, worklist, visited);
                 continue;
             }
 
@@ -278,9 +356,10 @@ public final class FeatureBytecodeScanner {
 
             // Transitive follow into feature/block/level-gen code and the mod's own package.
             if (shouldRecurse(call.owner)) {
-                worklist.add(new MethodRef(call.owner, call.name, call.desc));
+                markReached(new MethodRef(call.owner, call.name, call.desc), siteGuarded, siteUnguarded, worklist, visited);
                 bindArguments(cl, call, frame, frames, method, worklist, visited);
                 recordFunctionalArguments(call, frame, worklist, visited);
+                recordConfigTaint(cl, call, frame, frames, method, worklist, visited);
             }
 
             // Not gated on shouldRecurse: the call handing a lambda its values is usually a JDK one (Optional#ifPresent).
@@ -302,10 +381,46 @@ public final class FeatureBytecodeScanner {
                     SourceValue value = argValue(frame, call, i);
 
                     if (value != null) {
-                        resolve(value, frames, method, cl, out, new HashSet<>(), 0);
+                        // Resolved per sink rather than straight into one accumulator, so the blocks this placement
+                        // contributes can be attributed to whether the placement itself is config-dependent.
+                        Candidates placed = Candidates.create();
+
+                        resolve(value, frames, method, cl, placed, new HashSet<>(), 0);
+
+                        if (siteGuarded) {
+                            guarded.addAll(placed);
+                        }
+
+                        if (siteUnguarded) {
+                            unguarded.addAll(placed);
+                        }
                     }
                 }
             }
+        }
+    }
+
+    /** Whether an instruction only runs when a config-dependent test passed, locally or on the way into this method. */
+    private boolean isConfigGuarded(AbstractInsnNode insn) {
+        return currentConfigGuarded.contains(insn) || currentEnteredGuarded;
+    }
+
+    /**
+     * Records how a callee was reached, re-queueing it when that grows. A method first seen behind a config-dependent
+     * test and later reached without one places its blocks unconditionally after all, so it has to be revisited - the
+     * same monotone growth argument as {@link #recordCandidates}.
+     */
+    private void markReached(MethodRef callee, boolean siteGuarded, boolean siteUnguarded, Deque<MethodRef> worklist,
+                             Set<String> visited) {
+        boolean grown = siteGuarded && reachedGuarded.add(callee.key());
+
+        grown |= siteUnguarded && reachedUnguarded.add(callee.key());
+
+        if (!visited.contains(callee.key())) {
+            worklist.add(callee);
+        } else if (grown) {
+            visited.remove(callee.key());
+            worklist.add(callee);
         }
     }
 
@@ -584,12 +699,16 @@ public final class FeatureBytecodeScanner {
      * analyzing, and non-lambda bootstraps (string concatenation, record {@code ObjectMethods}) either carry no handle
      * or carry accessors that place nothing.
      */
-    private void queueBootstrapTargets(InvokeDynamicInsnNode indy, Deque<MethodRef> worklist) {
+    private void queueBootstrapTargets(InvokeDynamicInsnNode indy, boolean siteGuarded, boolean siteUnguarded,
+                                       Deque<MethodRef> worklist, Set<String> visited) {
         for (Object arg : indy.bsmArgs) {
             // Tags below H_INVOKEVIRTUAL are field handles, whose descriptor would never match a method.
             if (arg instanceof Handle handle && handle.getTag() >= Opcodes.H_INVOKEVIRTUAL
                     && shouldRecurse(handle.getOwner())) {
-                worklist.add(new MethodRef(handle.getOwner(), handle.getName(), handle.getDesc()));
+                // Guardedness is taken from where the lambda is created, not from where it is invoked - the invocation
+                // is usually inside a JDK method this walk never enters.
+                markReached(new MethodRef(handle.getOwner(), handle.getName(), handle.getDesc()), siteGuarded,
+                        siteUnguarded, worklist, visited);
             }
         }
     }
@@ -835,11 +954,13 @@ public final class FeatureBytecodeScanner {
             return null;
         }
 
-        if (local.getOpcode() == Opcodes.ALOAD) {
+        // ILOAD/ISTORE are here for guard detection, which follows boolean locals; resolve only ever reaches this with
+        // object-typed values, so accepting the wider set changes nothing for it.
+        if (local.getOpcode() == Opcodes.ALOAD || local.getOpcode() == Opcodes.ILOAD) {
             return local.var < frame.getLocals() ? frame.getLocal(local.var) : null;
         }
 
-        if (local.getOpcode() == Opcodes.ASTORE) {
+        if (local.getOpcode() == Opcodes.ASTORE || local.getOpcode() == Opcodes.ISTORE) {
             return frame.getStackSize() > 0 ? frame.getStack(frame.getStackSize() - 1) : null;
         }
 
@@ -885,6 +1006,281 @@ public final class FeatureBytecodeScanner {
         } else if (staticValue instanceof TagKey<?> tag && tag.registry().equals(Registries.BLOCK)) {
             out.tags().add((TagKey<Block>) tag);
         }
+    }
+
+    // -- config-dependent guards -----------------------------------------------------------------------------------
+
+    /**
+     * Instructions that only run when a test on the {@code FeatureConfiguration} passed. This is what separates a block
+     * a feature always places from one it places only for some configurations - {@code LakeFeature}'s {@code ICE} is
+     * only reached when {@code configuration.fluid()} yields water, and {@code HugeFungusFeature}'s weeping vines only
+     * when its {@code hatState} is crimson, so both are reported for configurations that never place them.
+     *
+     * <p>Control dependence, per conditional jump: what is reachable from one successor but not from the other runs only
+     * when that branch was taken. Nested regions need no extra work, since an outer region already contains them.
+     */
+    private Set<AbstractInsnNode> configGuardedInstructions(ClassLoader cl, MethodNode method, Frame<SourceValue>[] frames) {
+        Set<AbstractInsnNode> guarded = new HashSet<>();
+
+        for (AbstractInsnNode insn : method.instructions.toArray()) {
+            if (!(insn instanceof JumpInsnNode jump) || jump.getOpcode() == Opcodes.GOTO
+                    || !currentReachable.contains(insn) || !isConfigCondition(cl, jump, frames, method)) {
+                continue;
+            }
+
+            Set<AbstractInsnNode> fromTaken = reachableFrom(jump.label);
+            Set<AbstractInsnNode> fromNext = reachableFrom(jump.getNext());
+
+            fromTaken.stream().filter((node) -> !fromNext.contains(node)).forEach(guarded::add);
+            fromNext.stream().filter((node) -> !fromTaken.contains(node)).forEach(guarded::add);
+        }
+
+        return guarded;
+    }
+
+    /** Forward walk from one CFG node, restricted to the instructions that survived {@link #reachableInstructions}. */
+    private Set<AbstractInsnNode> reachableFrom(AbstractInsnNode start) {
+        Set<AbstractInsnNode> reached = new HashSet<>();
+        Deque<AbstractInsnNode> worklist = new ArrayDeque<>();
+
+        worklist.add(start);
+
+        while (!worklist.isEmpty()) {
+            AbstractInsnNode insn = worklist.poll();
+
+            if (insn == null || !currentReachable.contains(insn) || !reached.add(insn)) {
+                continue;
+            }
+
+            int opcode = insn.getOpcode();
+
+            if (insn instanceof JumpInsnNode jump) {
+                worklist.add(jump.label);
+
+                if (jump.getOpcode() != Opcodes.GOTO) {
+                    worklist.add(jump.getNext());
+                }
+            } else if (insn instanceof TableSwitchInsnNode tableSwitch) {
+                worklist.add(tableSwitch.dflt);
+                worklist.addAll(tableSwitch.labels);
+            } else if (insn instanceof LookupSwitchInsnNode lookupSwitch) {
+                worklist.add(lookupSwitch.dflt);
+                worklist.addAll(lookupSwitch.labels);
+            } else if (!(opcode >= Opcodes.IRETURN && opcode <= Opcodes.RETURN) && opcode != Opcodes.ATHROW) {
+                worklist.add(insn.getNext());
+            }
+        }
+
+        return reached;
+    }
+
+    /** Whether a conditional jump tests a value that came out of the configuration. */
+    private boolean isConfigCondition(ClassLoader cl, JumpInsnNode jump, Frame<SourceValue>[] frames, MethodNode method) {
+        int index = method.instructions.indexOf(jump);
+        Frame<SourceValue> frame = index >= 0 && index < frames.length ? frames[index] : null;
+        int opcode = jump.getOpcode();
+        int operands = opcode >= Opcodes.IF_ICMPEQ && opcode <= Opcodes.IF_ACMPNE ? 2 : 1;
+
+        if (frame == null || frame.getStackSize() < operands) {
+            return false;
+        }
+
+        for (int i = 0; i < operands; i++) {
+            if (isConfigSelectiveTest(frame.getStack(frame.getStackSize() - 1 - i), frames, method, cl, new HashSet<>(), 0)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Whether a boolean value is an identity test of a block, state or fluid that came out of the configuration -
+     * {@code configuration.hatState.is(Blocks.NETHER_WART_BLOCK)}, or {@code configuration.fluid()}'s state tested
+     * against {@code FluidTags.WATER}.
+     *
+     * <p><b>Being config-derived is deliberately not enough</b>, and this is the whole reason this method exists rather
+     * than {@link #isConfigDerived} being used directly. A loop bound (`{@code l < configuration.tries()}`) and an
+     * iteration over a configuration's list (`{@code for (Spike spike : configuration.spikes())}`) are config-derived
+     * too, yet they always run - and since a feature's whole body typically sits inside one, treating them as guards
+     * marked nearly every feature's own blocks as conditional (measured: 8 of 61 features, including
+     * {@code underwater_magma}'s magma and {@code end_spike}'s obsidian). An identity test is the shape that actually
+     * <i>selects</i>, so only that is counted.
+     */
+    private boolean isConfigSelectiveTest(SourceValue value, Frame<SourceValue>[] frames, MethodNode method, ClassLoader cl,
+                                          Set<AbstractInsnNode> guard, int depth) {
+        if (value == null || depth > MAX_RESOLVE_DEPTH) {
+            return false;
+        }
+
+        for (AbstractInsnNode producer : value.insns) {
+            if (!currentReachable.contains(producer) || !guard.add(producer)) {
+                continue;
+            }
+
+            if (producer instanceof MethodInsnNode call) {
+                int index = method.instructions.indexOf(call);
+                Frame<SourceValue> frame = index >= 0 && index < frames.length ? frames[index] : null;
+
+                if (frame != null && isStateIdentityTest(cl, call)
+                        && isConfigDerived(receiverValue(frame, call), frames, method, cl, new HashSet<>(), 0)) {
+                    return true;
+                }
+            } else if (producer instanceof VarInsnNode local) {
+                SourceValue stored = throughLocal(local, frames, method);
+
+                if (stored != null && !stored.insns.isEmpty()) {
+                    if (isConfigSelectiveTest(stored, frames, method, cl, guard, depth + 1)) {
+                        return true;
+                    }
+                } else if (isTaintedParameter(local, method)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /** Whether a call is a boolean identity test on a block, state or fluid, whichever end of the hierarchy declares it. */
+    private static boolean isStateIdentityTest(ClassLoader cl, MethodInsnNode call) {
+        if (call.getOpcode() == Opcodes.INVOKESTATIC || !Type.BOOLEAN_TYPE.equals(Type.getReturnType(call.desc))) {
+            return false;
+        }
+
+        Class<?> owner = loadClass(cl, call.owner);
+
+        if (owner == null) {
+            return false;
+        }
+
+        // Either direction: BlockState#is is declared on BlockBehaviour.BlockStateBase, which BlockState extends.
+        return isRelated(owner, BlockState.class) || isRelated(owner, Block.class) || isRelated(owner, FluidState.class);
+    }
+
+    private static boolean isRelated(Class<?> owner, Class<?> type) {
+        return owner.isAssignableFrom(type) || type.isAssignableFrom(owner);
+    }
+
+    /**
+     * Whether a stack value was computed from the {@code FeatureConfiguration}. Backwards over the same producer graph
+     * {@link #resolve} walks, but collecting a yes/no instead of blocks. A configuration is recognized by type, never by
+     * name: reading a field <i>of</i> one, calling a method <i>on</i> one (a record accessor), or receiving one as a
+     * declared parameter or return value ({@code FeaturePlaceContext#config()}) all count.
+     */
+    private boolean isConfigDerived(SourceValue value, Frame<SourceValue>[] frames, MethodNode method, ClassLoader cl,
+                                    Set<AbstractInsnNode> guard, int depth) {
+        if (value == null || depth > MAX_RESOLVE_DEPTH) {
+            return false;
+        }
+
+        for (AbstractInsnNode producer : value.insns) {
+            if (!currentReachable.contains(producer) || !guard.add(producer)) {
+                continue;
+            }
+
+            if (producer instanceof FieldInsnNode field) {
+                if (isConfiguration(cl, Type.getObjectType(field.owner)) || isConfiguration(cl, Type.getType(field.desc))) {
+                    return true;
+                }
+
+                if (producer.getOpcode() == Opcodes.GETFIELD
+                        && isConfigDerived(stackTop(producer, frames, method), frames, method, cl, guard, depth + 1)) {
+                    return true;
+                }
+            } else if (producer instanceof MethodInsnNode call) {
+                if (isConfiguration(cl, Type.getObjectType(call.owner)) || isConfiguration(cl, Type.getReturnType(call.desc))) {
+                    return true;
+                }
+
+                int index = method.instructions.indexOf(call);
+                Frame<SourceValue> frame = index >= 0 && index < frames.length ? frames[index] : null;
+
+                if (frame == null) {
+                    continue;
+                }
+
+                if (call.getOpcode() != Opcodes.INVOKESTATIC
+                        && isConfigDerived(receiverValue(frame, call), frames, method, cl, guard, depth + 1)) {
+                    return true;
+                }
+
+                for (int i = 0; i < Type.getArgumentTypes(call.desc).length; i++) {
+                    if (isConfigDerived(argValue(frame, call, i), frames, method, cl, guard, depth + 1)) {
+                        return true;
+                    }
+                }
+            } else if (producer instanceof TypeInsnNode cast && producer.getOpcode() == Opcodes.CHECKCAST) {
+                if (isConfigDerived(stackTop(cast, frames, method), frames, method, cl, guard, depth + 1)) {
+                    return true;
+                }
+            } else if (producer instanceof VarInsnNode local) {
+                SourceValue stored = throughLocal(local, frames, method);
+
+                if (stored != null && !stored.insns.isEmpty()) {
+                    if (isConfigDerived(stored, frames, method, cl, guard, depth + 1)) {
+                        return true;
+                    }
+                } else if (isConfigParameter(cl, local, method)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /** Whether a slot holds a parameter declared as a configuration. */
+    private static boolean isConfigParameter(ClassLoader cl, VarInsnNode local, MethodNode method) {
+        int index = parameterIndex(method, local.var);
+
+        return index >= 0 && isConfiguration(cl, Type.getArgumentTypes(method.desc)[index]);
+    }
+
+    /** Whether a slot holds a {@code boolean} parameter that call sites fill with a config-selective test's result. */
+    private boolean isTaintedParameter(VarInsnNode local, MethodNode method) {
+        int index = parameterIndex(method, local.var);
+
+        return index >= 0 && currentMethodKey != null
+                && configTaintedParameters.getOrDefault(currentMethodKey, Set.of()).contains(index);
+    }
+
+    /**
+     * Records that a call site fills a {@code boolean} parameter with a config-derived value, the interprocedural half
+     * of guard detection. {@code HugeFungusFeature} needs it: the crimson test is evaluated once in {@code placeHat} and
+     * travels two calls down as a plain flag, so the method that actually places the vines has no config value in sight.
+     *
+     * <p>Only {@code boolean} parameters are tracked, and only when the value is a config-<i>selective</i> test
+     * ({@link #isConfigSelectiveTest}), not merely config-derived. A configuration passed by reference is already
+     * recognized from its declared type, and anything else (an int, an enum) is not a decided test - leaving it
+     * unrecognized keeps the block reported unconditionally, which is the safe direction.
+     */
+    private void recordConfigTaint(ClassLoader cl, MethodInsnNode call, Frame<SourceValue> frame, Frame<SourceValue>[] frames,
+                                   MethodNode method, Deque<MethodRef> worklist, Set<String> visited) {
+        Type[] args = Type.getArgumentTypes(call.desc);
+        MethodRef callee = new MethodRef(call.owner, call.name, call.desc);
+
+        for (int i = 0; i < args.length; i++) {
+            if (!Type.BOOLEAN_TYPE.equals(args[i])
+                    || !isConfigSelectiveTest(argValue(frame, call, i), frames, method, cl, new HashSet<>(), 0)) {
+                continue;
+            }
+
+            if (configTaintedParameters.computeIfAbsent(callee.key(), (key) -> new HashSet<>()).add(i)
+                    && visited.remove(callee.key())) {
+                worklist.add(callee);
+            }
+        }
+    }
+
+    private static boolean isConfiguration(ClassLoader cl, Type type) {
+        if (type.getSort() != Type.OBJECT) {
+            return false;
+        }
+
+        Class<?> candidate = loadClass(cl, type.getInternalName());
+
+        return candidate != null && FeatureConfiguration.class.isAssignableFrom(candidate);
     }
 
     // -- reachability ----------------------------------------------------------------------------------------------
@@ -1027,15 +1423,20 @@ public final class FeatureBytecodeScanner {
      * on a wide base type ({@code BlockBehaviour}) resolves to hundreds of classes and is dropped by
      * {@link #MAX_IMPLEMENTORS} rather than dispatched.
      */
-    private static void queueImplementors(ClassLoader cl, MethodRef ref, Deque<MethodRef> worklist) {
+    private void queueImplementors(ClassLoader cl, MethodRef ref, Deque<MethodRef> worklist, Set<String> visited) {
         Class<?> declaring = loadClass(cl, ref.owner);
 
         if (declaring == null) {
             return;
         }
 
+        // The dispatch is not a call site of its own, so an implementation inherits how the abstract reference itself
+        // was reached.
+        boolean siteGuarded = reachedGuarded.contains(ref.key());
+        boolean siteUnguarded = reachedUnguarded.contains(ref.key()) || !siteGuarded;
+
         for (String implementor : IMPLEMENTOR_CACHE.computeIfAbsent(ref.owner, (name) -> implementors(declaring))) {
-            worklist.add(new MethodRef(implementor, ref.name, ref.desc));
+            markReached(new MethodRef(implementor, ref.name, ref.desc), siteGuarded, siteUnguarded, worklist, visited);
         }
     }
 
@@ -1156,14 +1557,19 @@ public final class FeatureBytecodeScanner {
     }
 
     /**
-     * @param blocks             blocks that flow into a placement sink
-     * @param tags               block tags that flow into a placement sink, left unexpanded so a caller can either
-     *                           display the tag itself or resolve its current members
-     * @param visitedMethods     methods analyzed, out of the {@link #MAX_METHODS} budget
-     * @param methodLimitReached whether the budget cut the walk short, so the results may be incomplete
+     * @param blocks                  blocks that flow into a placement sink
+     * @param configConditionalBlocks the subset of {@code blocks} whose every placement is reached only through a test
+     *                                on the {@code FeatureConfiguration} - so whether they are placed at all depends on
+     *                                which configuration the feature is used with
+     *                                (see {@link #configGuardedInstructions})
+     * @param tags                    block tags that flow into a placement sink, left unexpanded so a caller can either
+     *                                display the tag itself or resolve its current members
+     * @param visitedMethods          methods analyzed, out of the {@link #MAX_METHODS} budget
+     * @param methodLimitReached      whether the budget cut the walk short, so the results may be incomplete
      */
-    public record ScanResult(Set<Block> blocks, Set<TagKey<Block>> tags, int visitedMethods, boolean methodLimitReached) {
-        public static final ScanResult EMPTY = new ScanResult(Set.of(), Set.of(), 0, false);
+    public record ScanResult(Set<Block> blocks, Set<Block> configConditionalBlocks, Set<TagKey<Block>> tags,
+                             int visitedMethods, boolean methodLimitReached) {
+        public static final ScanResult EMPTY = new ScanResult(Set.of(), Set.of(), Set.of(), 0, false);
     }
 
     /**
