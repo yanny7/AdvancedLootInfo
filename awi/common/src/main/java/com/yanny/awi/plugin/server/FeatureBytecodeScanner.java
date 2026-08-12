@@ -1,8 +1,10 @@
 package com.yanny.awi.plugin.server;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelWriter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -40,6 +42,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 
 /**
  * Proof of concept: statically discovers the blocks a {@link Feature} places directly in its {@code place()} method
@@ -54,7 +57,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Sinks and value types are identified via assignability of real {@link Class} objects, and concrete blocks are
  * resolved by reflectively reading the referenced static field's value.
  *
- * <p>The value flowing into a sink is followed backwards across four hops, each of which is load-bearing for real
+ * <p>The value flowing into a sink is followed backwards across seven hops, each of which is load-bearing for real
  * vanilla features - without them only a block written inline in the {@code setBlock} argument would ever be seen:
  * <ul>
  *     <li>local variables, back to the stores that reach them ({@link #throughLocal});</li>
@@ -64,20 +67,29 @@ import java.util.concurrent.ConcurrentHashMap;
  *     chain;</li>
  *     <li>lambda and method-reference bodies, through the {@code INVOKEDYNAMIC} bootstrap handle, including the
  *     parameters the lambda receives from the call it is handed to rather than from a capture
- *     ({@link #bindLambdaParameters}).</li>
+ *     ({@link #bindLambdaParameters});</li>
+ *     <li>a lambda handed to a method as an <i>argument</i>, back to the values that method later passes into it
+ *     ({@link #recordFunctionalArguments} / {@link #bindFunctionalCandidates});</li>
+ *     <li>the return value of a called helper, resolved out of its own {@code ARETURN}s ({@link #returnedCandidates});</li>
+ *     <li>a {@code final} instance field, resolved out of the {@code PUTFIELD}s in its owner's constructors
+ *     ({@link #addInstanceFieldValue}).</li>
  * </ul>
  *
  * <p>Method lookup walks the class hierarchy in both directions. Up, because {@code place()} is frequently declared
  * on an abstract base ({@code CoralFeature}, {@code AbstractHugeMushroomFeature}) rather than on the registered
  * subclass. Down, because such a base then calls back into an abstract method the subclass implements
  * ({@code CoralFeature#place} -> abstract {@code placeFeature}); stopping at the abstract declaration would lose
- * every block placed below it.
+ * every block placed below it. An abstract call that is neither is dispatched to the block classes implementing it
+ * ({@link #queueImplementors}).
  *
  * <p>Branches guarded by a {@code static final boolean} flag that reads {@code false} are pruned before any of that
  * happens - see {@link #reachableInstructions}.
  *
- * <p>Known limitations: a lambda parameter is only bound when the receiver it is applied to resolves to blocks, and
- * an abstract call is only dispatched to the class being scanned, not to arbitrary implementors.
+ * <p>Known limitations: a lambda parameter is only bound when the receiver it is applied to resolves to blocks or the
+ * enclosing method was handed the lambda directly, and abstract dispatch only reaches implementors that are registered
+ * blocks - not an inner class or an anonymous implementation. That second limit is why a sculk patch reports the sculk
+ * it grows but not its veins: those are placed through {@code MultifaceSpreader.SpreadConfig#getStateForPlacement},
+ * whose implementations are inner classes.
  */
 public final class FeatureBytecodeScanner {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -85,10 +97,16 @@ public final class FeatureBytecodeScanner {
     // feature (fossil) analyzes 422 methods and no other reaches 200, so this sits at ~2x the measured worst case.
     private static final int MAX_METHODS = 1000;
     private static final int MAX_RESOLVE_DEPTH = 12;
+    // Keeps abstract dispatch off the wide base types: BlockBehaviour's own methods are implemented by every block in
+    // the game, and queueing all of them would spend the whole method budget on code no feature reaches.
+    private static final int MAX_IMPLEMENTORS = 4;
+
+    private static final String CONSTRUCTOR = "<init>";
 
     private static final Map<Class<?>, ScanResult> RESULT_CACHE = new ConcurrentHashMap<>();
     private static final Map<String, ClassNode> CLASS_NODE_CACHE = new ConcurrentHashMap<>();
     private static final Map<String, Class<?>> CLASS_CACHE = new ConcurrentHashMap<>();
+    private static final Map<String, Set<String>> IMPLEMENTOR_CACHE = new ConcurrentHashMap<>();
 
     // Runtime name+descriptor of Feature#place(FeaturePlaceContext), resolved reflectively (mapping-agnostic).
     private static final String PLACE_NAME;
@@ -112,18 +130,37 @@ public final class FeatureBytecodeScanner {
     /** Callee method key -> parameter position -> what its call sites were seen passing in. One scan's worth. */
     private final Map<String, Map<Integer, Candidates>> parameterCandidates = new HashMap<>();
 
+    /** Callee method key -> parameter position -> the lambdas its call sites were seen passing in. */
+    private final Map<String, Map<Integer, Set<Functional>>> functionalArguments = new HashMap<>();
+
+    /** Method key -> blocks its return value can be, so a helper's body is only walked once. */
+    private final Map<String, Candidates> returnedValues = new HashMap<>();
+
+    /** Field key -> blocks its constructors assign to it. */
+    private final Map<String, Candidates> instanceFieldValues = new HashMap<>();
+
+    /** Return values and fields currently being resolved, so a cyclic helper cannot recurse forever. */
+    private final Set<String> inProgress = new HashSet<>();
+
+    /** Two leading package segments of the scanned class, see {@link #shouldRecurse}. */
+    private String rootPkg;
+
     /** Key of the method being analyzed, so a parameter can be matched against {@link #parameterCandidates}. */
     private String currentMethodKey;
 
     /** Instructions of the method being analyzed that survive {@link #reachableInstructions}. */
     private Set<AbstractInsnNode> currentReachable;
 
+    /** Helper bodies walked for their return value, out of the same {@link #MAX_METHODS} budget shape as the main walk. */
+    private int analyzedReturns;
+
     private FeatureBytecodeScanner() {}
 
     /**
-     * Scans one feature class for the blocks and block tags it places. Needs no registry and no running server: a tag
-     * is reported as the tag itself, and resolving it into members is the display's job
-     * ({@link com.yanny.awi.plugin.common.nodes.BlockNode}).
+     * Scans one feature class for the blocks and block tags it places. Needs no running server, and a tag is reported
+     * as the tag itself - resolving it into members is the display's job
+     * ({@link com.yanny.awi.plugin.common.nodes.BlockNode}). The block registry is read for one purpose only, as the
+     * implementor index behind {@link #queueImplementors}.
      */
     public static ScanResult scan(Class<?> featureClass) {
         if (PLACE_NAME == null) {
@@ -149,11 +186,13 @@ public final class FeatureBytecodeScanner {
         RESULT_CACHE.clear();
         CLASS_NODE_CACHE.clear();
         CLASS_CACHE.clear();
+        IMPLEMENTOR_CACHE.clear();
     }
 
     private ScanResult doScan(Class<?> featureClass) {
         ClassLoader cl = featureClass.getClassLoader();
-        String rootPkg = rootPackage(Type.getInternalName(featureClass));
+
+        rootPkg = rootPackage(Type.getInternalName(featureClass));
 
         Candidates out = Candidates.create();
         Set<String> visited = new HashSet<>();
@@ -180,6 +219,12 @@ public final class FeatureBytecodeScanner {
                 declaration = override != null && !override.isAbstract() ? override : declaration;
             }
 
+            // Not a self-call, so the receiver is some other object entirely - the only implementors we can enumerate
+            // are the registered blocks (SculkBehaviour, which is how a sculk patch spreads).
+            if (declaration != null && declaration.isAbstract()) {
+                queueImplementors(cl, ref, worklist);
+            }
+
             if (declaration == null || declaration.isAbstract()
                     || (declaration.method().access & Opcodes.ACC_NATIVE) != 0
                     || declaration.method().instructions.size() == 0) {
@@ -189,7 +234,7 @@ public final class FeatureBytecodeScanner {
             analyzed++;
             // Keyed by the reference, not the declaring class, so it matches what a call site records for it.
             currentMethodKey = ref.key();
-            analyzeMethod(cl, declaration.owner(), declaration.method(), rootPkg, out, worklist, visited);
+            analyzeMethod(cl, declaration.owner(), declaration.method(), out, worklist, visited);
         }
 
         // Only a still-pending, not-yet-visited method means the budget actually cut the walk short.
@@ -198,14 +243,11 @@ public final class FeatureBytecodeScanner {
         return new ScanResult(out.blocks(), out.tags(), analyzed, truncated);
     }
 
-    private void analyzeMethod(ClassLoader cl, ClassNode owner, MethodNode method, String rootPkg, Candidates out,
+    private void analyzeMethod(ClassLoader cl, ClassNode owner, MethodNode method, Candidates out,
                                Deque<MethodRef> worklist, Set<String> visited) {
-        Frame<SourceValue>[] frames;
+        Frame<SourceValue>[] frames = frames(owner, method);
 
-        try {
-            frames = new Analyzer<>(new SourceInterpreter()).analyze(owner.name, method);
-        } catch (Throwable t) {
-            LOGGER.debug("Analyzer failed for {}.{}{}", owner.name, method.name, method.desc);
+        if (frames == null) {
             return;
         }
 
@@ -219,7 +261,7 @@ public final class FeatureBytecodeScanner {
             // A lambda/method reference body is a separate (usually synthetic) method reachable only through the
             // bootstrap handle - features routinely place their blocks in one (e.g. UnderwaterMagmaFeature's forEach).
             if (insn instanceof InvokeDynamicInsnNode indy) {
-                queueBootstrapTargets(indy, rootPkg, worklist);
+                queueBootstrapTargets(indy, worklist);
                 continue;
             }
 
@@ -235,13 +277,15 @@ public final class FeatureBytecodeScanner {
             }
 
             // Transitive follow into feature/block/level-gen code and the mod's own package.
-            if (shouldRecurse(call.owner, rootPkg)) {
+            if (shouldRecurse(call.owner)) {
                 worklist.add(new MethodRef(call.owner, call.name, call.desc));
                 bindArguments(cl, call, frame, frames, method, worklist, visited);
+                recordFunctionalArguments(call, frame, worklist, visited);
             }
 
             // Not gated on shouldRecurse: the call handing a lambda its values is usually a JDK one (Optional#ifPresent).
-            bindLambdaParameters(cl, call, frame, frames, method, rootPkg, worklist, visited);
+            bindLambdaParameters(cl, call, frame, frames, method, worklist, visited);
+            bindFunctionalCandidates(cl, call, frame, frames, method, worklist, visited);
 
             Class<?> callOwner = loadClass(cl, call.owner);
 
@@ -311,7 +355,7 @@ public final class FeatureBytecodeScanner {
      * only to parameters that can carry a block, so a lambda over positions or random sources binds nothing.
      */
     private void bindLambdaParameters(ClassLoader cl, MethodInsnNode call, Frame<SourceValue> frame, Frame<SourceValue>[] frames,
-                                      MethodNode method, String rootPkg, Deque<MethodRef> worklist, Set<String> visited) {
+                                      MethodNode method, Deque<MethodRef> worklist, Set<String> visited) {
         if (call.getOpcode() == Opcodes.INVOKESTATIC) {
             return;
         }
@@ -337,9 +381,124 @@ public final class FeatureBytecodeScanner {
                 }
 
                 if (!fromReceiver.isEmpty()) {
-                    bindFunctionalParameters(cl, indy, fromReceiver, rootPkg, worklist, visited);
+                    bindFunctionalParameters(cl, indy, fromReceiver, worklist, visited);
                 }
             }
+        }
+    }
+
+    /**
+     * Records which lambdas a call site hands to which callee parameter. This is the caller half of the second lambda
+     * link: a lambda passed <i>as an argument</i> gets its values from inside the callee rather than from the receiver
+     * {@link #bindLambdaParameters} looks at, and the callee is frequently static, so that hop never fires. Dripstone
+     * is the case that needs it - {@code DripstoneUtils#growPointedDripstone} hands
+     * {@code state -> level.setBlock(pos, state, 2)} to the static {@code buildBaseToTipColumn}, which is the only place
+     * {@code POINTED_DRIPSTONE} is ever produced.
+     *
+     * <p>Re-queued on growth for the same reason {@link #recordCandidates} is: a callee already analyzed did not see
+     * the lambda, so its use of that parameter bound nothing.
+     */
+    private void recordFunctionalArguments(MethodInsnNode call, Frame<SourceValue> frame, Deque<MethodRef> worklist,
+                                           Set<String> visited) {
+        Type[] args = Type.getArgumentTypes(call.desc);
+        MethodRef callee = new MethodRef(call.owner, call.name, call.desc);
+
+        for (int i = 0; i < args.length; i++) {
+            SourceValue value = argValue(frame, call, i);
+
+            if (value == null) {
+                continue;
+            }
+
+            for (AbstractInsnNode producer : value.insns) {
+                if (!(producer instanceof InvokeDynamicInsnNode indy)) {
+                    continue;
+                }
+
+                int captured = Type.getArgumentTypes(indy.desc).length;
+
+                for (Object arg : indy.bsmArgs) {
+                    if (!(arg instanceof Handle handle) || handle.getTag() < Opcodes.H_INVOKEVIRTUAL
+                            || !shouldRecurse(handle.getOwner())) {
+                        continue;
+                    }
+
+                    Set<Functional> known = functionalArguments.computeIfAbsent(callee.key(), (key) -> new HashMap<>())
+                            .computeIfAbsent(i, (index) -> new HashSet<>());
+
+                    if (known.add(new Functional(handle, captured)) && visited.remove(callee.key())) {
+                        worklist.add(callee);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Callee half of the lambda-argument link: a call on a parameter that holds a lambda feeds the lambda's body. The
+     * binding is positional - the {@code n}-th argument of {@code consumer.accept(...)} is the {@code n}-th value the
+     * body receives from the functional interface.
+     *
+     * <p>Argument types are not filtered by {@link #carriesBlocks} here, unlike everywhere else: a functional
+     * interface's descriptor is erased, so {@code Consumer#accept} declares {@code Object}. The implementation
+     * method's own parameter type is what decides whether the value is kept.
+     */
+    private void bindFunctionalCandidates(ClassLoader cl, MethodInsnNode call, Frame<SourceValue> frame, Frame<SourceValue>[] frames,
+                                          MethodNode method, Deque<MethodRef> worklist, Set<String> visited) {
+        Map<Integer, Set<Functional>> known = currentMethodKey != null ? functionalArguments.get(currentMethodKey) : null;
+
+        if (known == null || call.getOpcode() == Opcodes.INVOKESTATIC) {
+            return;
+        }
+
+        SourceValue receiver = receiverValue(frame, call);
+        Set<Functional> functionals = new HashSet<>();
+
+        if (receiver != null) {
+            for (AbstractInsnNode producer : receiver.insns) {
+                if (producer instanceof VarInsnNode local && local.getOpcode() == Opcodes.ALOAD) {
+                    functionals.addAll(known.getOrDefault(parameterIndex(method, local.var), Set.of()));
+                }
+            }
+        }
+
+        if (functionals.isEmpty()) {
+            return;
+        }
+
+        Type[] args = Type.getArgumentTypes(call.desc);
+
+        for (int i = 0; i < args.length; i++) {
+            Candidates resolved = Candidates.create();
+
+            resolve(argValue(frame, call, i), frames, method, cl, resolved, new HashSet<>(), 0);
+
+            if (resolved.isEmpty()) {
+                continue;
+            }
+
+            for (Functional functional : functionals) {
+                bindFunctionalArgument(cl, functional, i, resolved, worklist, visited);
+            }
+        }
+    }
+
+    /** Binds one positional functional argument to the matching parameter of a lambda body. */
+    private void bindFunctionalArgument(ClassLoader cl, Functional functional, int argIndex, Candidates candidates,
+                                        Deque<MethodRef> worklist, Set<String> visited) {
+        Handle handle = functional.handle();
+        Type[] implArgs = Type.getArgumentTypes(handle.getDesc());
+        int index = functional.firstFunctionalParameter() + argIndex;
+
+        if (index >= implArgs.length) {
+            return;
+        }
+
+        Class<?> type = loadClass(cl, implArgs[index].getInternalName());
+
+        if (type != null && carriesBlocks(type)) {
+            recordCandidates(new MethodRef(handle.getOwner(), handle.getName(), handle.getDesc()), index, candidates,
+                    worklist, visited);
         }
     }
 
@@ -348,20 +507,18 @@ public final class FeatureBytecodeScanner {
      * {@code INVOKEDYNAMIC} consumes exactly the captured values off the stack, so the implementation method's
      * parameters start with the captures and the functional arguments make up the rest.
      */
-    private void bindFunctionalParameters(ClassLoader cl, InvokeDynamicInsnNode indy, Candidates candidates, String rootPkg,
+    private void bindFunctionalParameters(ClassLoader cl, InvokeDynamicInsnNode indy, Candidates candidates,
                                           Deque<MethodRef> worklist, Set<String> visited) {
         int captured = Type.getArgumentTypes(indy.desc).length;
 
         for (Object arg : indy.bsmArgs) {
             if (!(arg instanceof Handle handle) || handle.getTag() < Opcodes.H_INVOKEVIRTUAL
-                    || !shouldRecurse(handle.getOwner(), rootPkg)) {
+                    || !shouldRecurse(handle.getOwner())) {
                 continue;
             }
 
-            // A non-static implementation takes its receiver from the first captured value, so it consumes one
-            // capture without spending a parameter.
             Type[] implArgs = Type.getArgumentTypes(handle.getDesc());
-            int first = Math.max(captured - (handle.getTag() == Opcodes.H_INVOKESTATIC ? 0 : 1), 0);
+            int first = new Functional(handle, captured).firstFunctionalParameter();
 
             for (int i = first; i < implArgs.length; i++) {
                 Class<?> type = loadClass(cl, implArgs[i].getInternalName());
@@ -427,11 +584,11 @@ public final class FeatureBytecodeScanner {
      * analyzing, and non-lambda bootstraps (string concatenation, record {@code ObjectMethods}) either carry no handle
      * or carry accessors that place nothing.
      */
-    private static void queueBootstrapTargets(InvokeDynamicInsnNode indy, String rootPkg, Deque<MethodRef> worklist) {
+    private void queueBootstrapTargets(InvokeDynamicInsnNode indy, Deque<MethodRef> worklist) {
         for (Object arg : indy.bsmArgs) {
             // Tags below H_INVOKEVIRTUAL are field handles, whose descriptor would never match a method.
             if (arg instanceof Handle handle && handle.getTag() >= Opcodes.H_INVOKEVIRTUAL
-                    && shouldRecurse(handle.getOwner(), rootPkg)) {
+                    && shouldRecurse(handle.getOwner())) {
                 worklist.add(new MethodRef(handle.getOwner(), handle.getName(), handle.getDesc()));
             }
         }
@@ -460,6 +617,8 @@ public final class FeatureBytecodeScanner {
 
             if (producer instanceof FieldInsnNode field && producer.getOpcode() == Opcodes.GETSTATIC) {
                 addFieldValue(cl, field, out);
+            } else if (producer instanceof FieldInsnNode field && producer.getOpcode() == Opcodes.GETFIELD) {
+                addInstanceFieldValue(cl, field, out, depth);
             } else if (producer instanceof VarInsnNode local) {
                 SourceValue stored = throughLocal(local, frames, method);
 
@@ -496,7 +655,165 @@ public final class FeatureBytecodeScanner {
                         resolve(argValue(frame, call, i), frames, method, cl, out, guard, depth + 1);
                     }
                 }
+
+                resolveReturnValue(cl, call, out, depth);
             }
+        }
+    }
+
+    /**
+     * Follows a call into the helper that produced the value, when neither its receiver nor its arguments carry the
+     * block. {@code DripstoneUtils#createPointedDripstone(direction, thickness)} is the shape this exists for: a static
+     * factory whose whole input is enum values, so without reading its {@code ARETURN} the pointed dripstone is
+     * invisible - the block only appears inside the callee.
+     *
+     * <p>Reads of the world itself are excluded, which is load-bearing rather than an optimization: a feature that
+     * copies a state it read back into the world ({@code setBlock(pos, level.getBlockState(other), 2)}) would otherwise
+     * report the sentinel states a reader returns out of bounds - {@code ProtoChunk#getBlockState} answers
+     * {@code VOID_AIR}, so fossil and end gateway both picked up blocks no feature places.
+     */
+    private void resolveReturnValue(ClassLoader cl, MethodInsnNode call, Candidates out, int depth) {
+        Class<?> callOwner = loadClass(cl, call.owner);
+
+        if (!shouldRecurse(call.owner) || callOwner == null || BlockGetter.class.isAssignableFrom(callOwner)) {
+            return;
+        }
+
+        Type returnType = Type.getReturnType(call.desc);
+        Class<?> returnClass = returnType.getSort() == Type.OBJECT ? loadClass(cl, returnType.getInternalName()) : null;
+
+        if (returnClass != null && carriesBlocks(returnClass)) {
+            out.addAll(returnedCandidates(cl, new MethodRef(call.owner, call.name, call.desc), depth));
+        }
+    }
+
+    /** Blocks a method's return value can be, resolved once per method and reused. */
+    private Candidates returnedCandidates(ClassLoader cl, MethodRef ref, int depth) {
+        Candidates known = returnedValues.get(ref.key());
+
+        if (known != null) {
+            return known;
+        }
+
+        Candidates collected = Candidates.create();
+
+        if (depth > MAX_RESOLVE_DEPTH || analyzedReturns >= MAX_METHODS || !inProgress.add(ref.key())) {
+            return collected;
+        }
+
+        try {
+            Declaration declaration = declaration(cl, ref.owner, ref.name, ref.desc);
+
+            if (declaration == null || declaration.isAbstract() || declaration.method().instructions.size() == 0) {
+                return collected;
+            }
+
+            Frame<SourceValue>[] frames = frames(declaration.owner(), declaration.method());
+
+            if (frames == null) {
+                return collected;
+            }
+
+            analyzedReturns++;
+            collectStackTops(cl, declaration.owner().name, declaration.method(), frames,
+                    (insn) -> insn.getOpcode() == Opcodes.ARETURN, collected, depth);
+            returnedValues.put(ref.key(), collected);
+        } finally {
+            inProgress.remove(ref.key());
+        }
+
+        return collected;
+    }
+
+    /**
+     * Blocks a {@code final} instance field can hold, read out of the {@code PUTFIELD}s in its owner's constructors.
+     * A {@code GETFIELD} has no value to read reflectively - {@link #scan} is handed a {@link Class}, never an
+     * instance - so a feature that caches its states in fields ({@code DesertWellFeature}: sand, sandstone, sandstone
+     * slab, water) otherwise reaches its sinks carrying nothing.
+     *
+     * <p>Restricted to {@code final} fields: anything else can be reassigned from outside the constructor, and the
+     * constructor's value would then be a guess rather than the field's content.
+     */
+    private void addInstanceFieldValue(ClassLoader cl, FieldInsnNode field, Candidates out, int depth) {
+        String key = field.owner + '#' + field.name + ':' + field.desc;
+        Candidates known = instanceFieldValues.get(key);
+
+        if (known != null) {
+            out.addAll(known);
+            return;
+        }
+
+        if (!shouldRecurse(field.owner) || !isFinalBlockField(cl, field) || depth > MAX_RESOLVE_DEPTH || !inProgress.add(key)) {
+            return;
+        }
+
+        try {
+            ClassNode owner = classNode(cl, field.owner);
+
+            if (owner == null) {
+                return;
+            }
+
+            Candidates collected = Candidates.create();
+
+            for (MethodNode method : owner.methods) {
+                Frame<SourceValue>[] frames = CONSTRUCTOR.equals(method.name) ? frames(owner, method) : null;
+
+                if (frames != null) {
+                    collectStackTops(cl, owner.name, method, frames, (insn) -> insn.getOpcode() == Opcodes.PUTFIELD
+                            && insn instanceof FieldInsnNode store && store.name.equals(field.name)
+                            && store.desc.equals(field.desc), collected, depth);
+                }
+            }
+
+            instanceFieldValues.put(key, collected);
+            out.addAll(collected);
+        } finally {
+            inProgress.remove(key);
+        }
+    }
+
+    /** Whether a field is declared {@code final} and typed to carry a block, checked on the bytecode, not reflectively. */
+    private static boolean isFinalBlockField(ClassLoader cl, FieldInsnNode field) {
+        ClassNode owner = classNode(cl, field.owner);
+        Type type = Type.getType(field.desc);
+
+        if (owner == null || type.getSort() != Type.OBJECT) {
+            return false;
+        }
+
+        Class<?> fieldType = loadClass(cl, type.getInternalName());
+
+        if (fieldType == null || !carriesBlocks(fieldType)) {
+            return false;
+        }
+
+        return owner.fields.stream().anyMatch((node) -> node.name.equals(field.name) && node.desc.equals(field.desc)
+                && (node.access & Opcodes.ACC_FINAL) != 0);
+    }
+
+    /**
+     * Resolves the stack top at every reachable instruction the selector accepts, inside a method other than the one
+     * being walked. {@link #resolve} reads the current method out of {@link #currentMethodKey}/{@link #currentReachable},
+     * so both have to be swapped for the duration and put back afterwards.
+     */
+    private void collectStackTops(ClassLoader cl, String ownerName, MethodNode method, Frame<SourceValue>[] frames,
+                                  Predicate<AbstractInsnNode> selector, Candidates out, int depth) {
+        String previousKey = currentMethodKey;
+        Set<AbstractInsnNode> previousReachable = currentReachable;
+
+        currentMethodKey = MethodRef.key(ownerName, method.name, method.desc);
+        currentReachable = reachableInstructions(cl, method);
+
+        try {
+            for (AbstractInsnNode insn : method.instructions.toArray()) {
+                if (currentReachable.contains(insn) && selector.test(insn)) {
+                    resolve(stackTop(insn, frames, method), frames, method, cl, out, new HashSet<>(), depth + 1);
+                }
+            }
+        } finally {
+            currentMethodKey = previousKey;
+            currentReachable = previousReachable;
         }
     }
 
@@ -691,6 +1008,53 @@ public final class FeatureBytecodeScanner {
 
     // -- loading / reflection --------------------------------------------------------------------------------------
 
+    private static Frame<SourceValue>[] frames(ClassNode owner, MethodNode method) {
+        try {
+            return new Analyzer<>(new SourceInterpreter()).analyze(owner.name, method);
+        } catch (Throwable t) {
+            LOGGER.debug("Analyzer failed for {}.{}{}", owner.name, method.name, method.desc);
+            return null;
+        }
+    }
+
+    /**
+     * Queues the implementations of an abstract method on the classes of registered blocks. Vanilla needs this for
+     * sculk: a patch spreads through {@code SculkSpreader}, which calls {@code SculkBehaviour#attemptSpreadVein} on
+     * whatever block it found in the world, so the blocks it places live in {@code SculkBlock}/{@code SculkVeinBlock}
+     * and no static receiver type leads there.
+     *
+     * <p>The block registry is the only implementor index available, which also bounds the blow-up: a method declared
+     * on a wide base type ({@code BlockBehaviour}) resolves to hundreds of classes and is dropped by
+     * {@link #MAX_IMPLEMENTORS} rather than dispatched.
+     */
+    private static void queueImplementors(ClassLoader cl, MethodRef ref, Deque<MethodRef> worklist) {
+        Class<?> declaring = loadClass(cl, ref.owner);
+
+        if (declaring == null) {
+            return;
+        }
+
+        for (String implementor : IMPLEMENTOR_CACHE.computeIfAbsent(ref.owner, (name) -> implementors(declaring))) {
+            worklist.add(new MethodRef(implementor, ref.name, ref.desc));
+        }
+    }
+
+    private static Set<String> implementors(Class<?> declaring) {
+        Set<String> found = new HashSet<>();
+
+        for (Block block : BuiltInRegistries.BLOCK) {
+            if (declaring.isAssignableFrom(block.getClass())) {
+                found.add(Type.getInternalName(block.getClass()));
+
+                if (found.size() > MAX_IMPLEMENTORS) {
+                    return Set.of();
+                }
+            }
+        }
+
+        return found;
+    }
+
     private static ClassNode classNode(ClassLoader cl, String internalName) {
         return CLASS_NODE_CACHE.computeIfAbsent(internalName, (name) -> {
             try (InputStream is = cl.getResourceAsStream(name + ".class")) {
@@ -778,7 +1142,7 @@ public final class FeatureBytecodeScanner {
      *
      * <p>The two explicit prefixes only ever apply on loaders that keep Mojang package names (Forge from 1.17 on).
      */
-    private static boolean shouldRecurse(String owner, String rootPkg) {
+    private boolean shouldRecurse(String owner) {
         return owner.startsWith("net/minecraft/world/level/levelgen/")
                 || owner.startsWith("net/minecraft/world/level/block/")
                 || (rootPkg != null && owner.startsWith(rootPkg));
@@ -800,6 +1164,21 @@ public final class FeatureBytecodeScanner {
      */
     public record ScanResult(Set<Block> blocks, Set<TagKey<Block>> tags, int visitedMethods, boolean methodLimitReached) {
         public static final ScanResult EMPTY = new ScanResult(Set.of(), Set.of(), 0, false);
+    }
+
+    /**
+     * A lambda body plus how many values the {@code INVOKEDYNAMIC} captured, which is what separates the captured
+     * parameters of the implementation method from the ones the functional interface supplies.
+     */
+    private record Functional(Handle handle, int captured) {
+        /**
+         * Index of the implementation method's first parameter that comes from the functional interface. A non-static
+         * implementation takes its receiver from the first captured value, so it consumes one capture without spending
+         * a parameter.
+         */
+        int firstFunctionalParameter() {
+            return Math.max(captured - (handle.getTag() == Opcodes.H_INVOKESTATIC ? 0 : 1), 0);
+        }
     }
 
     /** What a value resolved to: concrete blocks, plus the block tags it was reached through. */

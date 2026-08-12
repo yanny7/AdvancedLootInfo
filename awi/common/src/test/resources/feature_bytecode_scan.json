@@ -108,7 +108,11 @@
     "visitedMethods": 39,
     "methodLimitReached": false,
     "blocks": [
-      "minecraft:suspicious_sand"
+      "minecraft:sand",
+      "minecraft:sandstone",
+      "minecraft:sandstone_slab",
+      "minecraft:suspicious_sand",
+      "minecraft:water"
     ],
     "tags": []
   },
@@ -119,16 +123,17 @@
     "tags": []
   },
   "minecraft:dripstone_cluster": {
-    "visitedMethods": 93,
+    "visitedMethods": 94,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:dripstone_block",
+      "minecraft:pointed_dripstone",
       "minecraft:water"
     ],
     "tags": []
   },
   "minecraft:end_gateway": {
-    "visitedMethods": 106,
+    "visitedMethods": 110,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:air",
@@ -146,7 +151,7 @@
     "tags": []
   },
   "minecraft:end_spike": {
-    "visitedMethods": 163,
+    "visitedMethods": 167,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:air",
@@ -175,7 +180,7 @@
     "tags": []
   },
   "minecraft:fossil": {
-    "visitedMethods": 422,
+    "visitedMethods": 427,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:barrier"
@@ -192,7 +197,7 @@
     "tags": []
   },
   "minecraft:geode": {
-    "visitedMethods": 126,
+    "visitedMethods": 130,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:air"
@@ -286,7 +291,7 @@
     "tags": []
   },
   "minecraft:multiface_growth": {
-    "visitedMethods": 106,
+    "visitedMethods": 108,
     "methodLimitReached": false,
     "blocks": [],
     "tags": []
@@ -316,16 +321,17 @@
     "tags": []
   },
   "minecraft:ore": {
-    "visitedMethods": 114,
+    "visitedMethods": 118,
     "methodLimitReached": false,
     "blocks": [],
     "tags": []
   },
   "minecraft:pointed_dripstone": {
-    "visitedMethods": 57,
+    "visitedMethods": 58,
     "methodLimitReached": false,
     "blocks": [
-      "minecraft:dripstone_block"
+      "minecraft:dripstone_block",
+      "minecraft:pointed_dripstone"
     ],
     "tags": []
   },
@@ -366,11 +372,15 @@
     "tags": []
   },
   "minecraft:sculk_patch": {
-    "visitedMethods": 145,
+    "visitedMethods": 263,
     "methodLimitReached": false,
     "blocks": [
+      "minecraft:air",
+      "minecraft:sculk",
       "minecraft:sculk_catalyst",
-      "minecraft:sculk_shrieker"
+      "minecraft:sculk_sensor",
+      "minecraft:sculk_shrieker",
+      "minecraft:water"
     ],
     "tags": []
   },
