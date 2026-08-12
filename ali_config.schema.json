@@ -1,14 +1,19 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://github.com/yanny7/AdvancedLootInfo/blob/master/alic_config.schema.json",
+  "$id": "https://github.com/yanny7/AdvancedLootInfo/blob/master/ali_config.schema.json",
   "title": "Advanced Loot Info Configuration Schema",
-  "description": "Main configuration file for the AdvancedLootInfo mod.",
+  "description": "Main configuration file for the AdvancedLootInfo mod (config/ali/ali_common.json).",
   "type": "object",
   "definitions": {
     "ResourceLocation": {
       "type": "string",
       "description": "A Minecraft Resource Location string, typically formatted as 'namespace:path'.",
       "pattern": "^[a-z0-9_.-]+:[a-z0-9_/.-]+$"
+    },
+    "ResourceLocationOrTag": {
+      "type": "string",
+      "description": "A Minecraft Resource Location, optionally prefixed with '#' to reference a tag instead of a single entry.",
+      "pattern": "^#?[a-z0-9_.-]+:[a-z0-9_/.-]+$"
     },
     "Ingredient": {
       "description": "An ingredient. Can be a single item, a tag, or a list of either.",
@@ -22,9 +27,11 @@
       ]
     },
     "IngredientValue": {
-      "type": "object",
+      "description": "A single ingredient option. The accepted form follows vanilla for the given Minecraft version: an object with 'item'/'tag' on older versions, a plain item id or '#tag' string on newer ones.",
       "oneOf": [
+        { "$ref": "#/definitions/ResourceLocationOrTag" },
         {
+          "type": "object",
           "required": ["item"],
           "properties": {
             "item": { "$ref": "#/definitions/ResourceLocation" }
@@ -33,6 +40,7 @@
           "description": "A specific item ID."
         },
         {
+          "type": "object",
           "required": ["tag"],
           "properties": {
             "tag": { "$ref": "#/definitions/ResourceLocation" }
@@ -44,7 +52,7 @@
     },
     "LootCategoryType": {
       "type": "string",
-      "description": "The type of the loot category, corresponding to the list it belongs to.",
+      "description": "The type of the loot category. Required on Minecraft 1.20.1, where the config is parsed with Gson and this field selects the category class. From 1.21.1 on the config is parsed with codecs, the type follows from the list the category belongs to, and this field is neither written nor read.",
       "enum": [
         "BLOCK",
         "ENTITY",
@@ -57,15 +65,15 @@
       "description": "Defines the common properties for all loot categories.",
       "properties": {
         "key": {
-          "description": "The unique ResourceLocation identifier for this category (e.g., 'ali:plant_loot').",
+          "description": "The unique identifier for this category (e.g., 'ali:plant_loot'). Its display name is translated from 'emi.category.<namespace>.<path>'.",
           "$ref": "#/definitions/ResourceLocation"
         },
         "type": {
-          "description": "The category type (e.g., BLOCK, ENTITY).",
+          "description": "The category type (e.g., BLOCK, ENTITY). Required on Minecraft 1.20.1, unused from 1.21.1 on.",
           "$ref": "#/definitions/LootCategoryType"
         },
         "icon": {
-          "description": "The ResourceLocation ID of the item used as the display icon.",
+          "description": "The ID of the item used as the display icon.",
           "$ref": "#/definitions/ResourceLocation"
         },
         "hide": {
@@ -73,50 +81,78 @@
           "description": "If true, this category will be hidden from the UI. When set on server, no loot data are sent to client.",
           "default": false
         },
-        "catalyst": {
-          "description": "Catalyst item for category",
-          "$ref": "#/definitions/Ingredient"
+        "catalysts": {
+          "type": "array",
+          "description": "Items that lead to this category - looking one of them up in the recipe viewer shows the category (e.g. Fishing Rod for fishing loot).",
+          "items": { "$ref": "#/definitions/Ingredient" }
         }
       },
-      "required": ["key", "type", "icon", "hide"],
-      "additionalProperties": false
+      "required": ["key", "type", "icon", "hide"]
     },
-    "BlockAndEntityCategoryDefinition": {
+    "BlockCategoryDefinition": {
       "allOf": [
-        {
-          "$ref": "#/definitions/LootCategoryDefinition"
-        },
+        { "$ref": "#/definitions/LootCategoryDefinition" },
         {
           "type": "object",
-          "description": "Loot categories using class names for matching (Block and Entity).",
+          "description": "Loot category matching blocks by id or tag.",
           "properties": {
-            "classes": {
+            "key": true,
+            "type": true,
+            "icon": true,
+            "hide": true,
+            "catalysts": true,
+            "blocks": {
               "type": "array",
-              "description": "An array of fully qualified Java class names (FQN) used to match blocks or entities.",
-              "items": {
-                "type": "string"
-              }
+              "description": "Block ids and block tags ('#namespace:path') this category matches. An empty list matches every block, which makes the category a catch-all.",
+              "items": { "$ref": "#/definitions/ResourceLocationOrTag" }
             }
           },
-          "required": ["classes"],
+          "required": ["blocks"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "EntityCategoryDefinition": {
+      "allOf": [
+        { "$ref": "#/definitions/LootCategoryDefinition" },
+        {
+          "type": "object",
+          "description": "Loot category matching entity types by id or tag.",
+          "properties": {
+            "key": true,
+            "type": true,
+            "icon": true,
+            "hide": true,
+            "catalysts": true,
+            "entityTypes": {
+              "type": "array",
+              "description": "Entity type ids and entity type tags ('#namespace:path') this category matches. An empty list matches every entity type, which makes the category a catch-all.",
+              "items": { "$ref": "#/definitions/ResourceLocationOrTag" }
+            }
+          },
+          "required": ["entityTypes"],
           "additionalProperties": false
         }
       ]
     },
     "GameplayAndTradeCategoryDefinition": {
       "allOf": [
-        {
-          "$ref": "#/definitions/LootCategoryDefinition"
-        },
+        { "$ref": "#/definitions/LootCategoryDefinition" },
         {
           "type": "object",
           "description": "Loot categories using regular expression patterns for matching (Gameplay and Trade).",
           "properties": {
+            "key": true,
+            "type": true,
+            "icon": true,
+            "hide": true,
+            "catalysts": true,
             "pattern": {
               "type": "array",
               "description": "An array of regular expressions (regex) used to match loot table Resource Locations.",
               "items": {
-                "type": "string"
+                "type": "string",
+                "format": "regex"
               }
             }
           },
@@ -127,24 +163,28 @@
     }
   },
   "properties": {
+    "configVersion": {
+      "type": "integer",
+      "description": "Format version of this file. When it is lower than the version the mod expects, the file is renamed to '.bak' and regenerated with defaults."
+    },
     "blockCategories": {
       "type": "array",
-      "description": "List of loot categories for blocks.",
-      "items": { "$ref": "#/definitions/BlockAndEntityCategoryDefinition" }
+      "description": "List of loot categories for blocks. The first matching category wins, so catch-all categories must come last.",
+      "items": { "$ref": "#/definitions/BlockCategoryDefinition" }
     },
     "entityCategories": {
       "type": "array",
-      "description": "List of loot categories for entities (mobs).",
-      "items": { "$ref": "#/definitions/BlockAndEntityCategoryDefinition" }
+      "description": "List of loot categories for entities (mobs). The first matching category wins, so catch-all categories must come last.",
+      "items": { "$ref": "#/definitions/EntityCategoryDefinition" }
     },
     "gameplayCategories": {
       "type": "array",
-      "description": "List of loot categories associated with gameplay mechanics (e.g., fishing, chest loot).",
+      "description": "List of loot categories associated with gameplay mechanics (e.g., fishing, chest loot). The first matching category wins, so catch-all categories must come last.",
       "items": { "$ref": "#/definitions/GameplayAndTradeCategoryDefinition" }
     },
     "tradeCategories": {
       "type": "array",
-      "description": "List of loot categories associated with trading.",
+      "description": "List of loot categories associated with trading. The first matching category wins, so catch-all categories must come last.",
       "items": { "$ref": "#/definitions/GameplayAndTradeCategoryDefinition" }
     },
     "disabledEntities": {
@@ -159,7 +199,7 @@
     },
     "showInGameNames": {
       "type": "boolean",
-      "description": "If true, displays names instead of ResourceLocation",
+      "description": "If true, displays translated names instead of ids.",
       "default": true
     },
     "hideDefaultBlockLoot": {
@@ -179,7 +219,7 @@
     },
     "ignoredPredicateConditions": {
       "type": "array",
-      "description": "Loot condition types that do not mark an item as having predicates, so its slot is not highlighted. Defaults to minecraft:random_chance, minecraft:random_chance_with_looting, minecraft:table_bonus and minecraft:survives_explosion.",
+      "description": "Loot condition types that do not mark an item as having predicates, so its slot is not highlighted. Defaults to minecraft:random_chance, minecraft:table_bonus, minecraft:survives_explosion and the version's random-chance-with-bonus condition (minecraft:random_chance_with_looting on 1.20.1, minecraft:random_chance_with_enchanted_bonus on newer versions).",
       "items": { "$ref": "#/definitions/ResourceLocation" }
     },
     "entityLootTables": {
