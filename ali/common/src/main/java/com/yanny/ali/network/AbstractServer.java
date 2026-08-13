@@ -10,6 +10,7 @@ import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.AliServerRegistry;
 import com.yanny.ali.manager.FakeLootDataManager;
 import com.yanny.ali.manager.PluginManager;
+import com.yanny.ali.plugin.common.EntityLootTableResolver;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
@@ -30,7 +31,6 @@ import net.minecraft.server.ReloadableServerRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.npc.villager.VillagerProfession;
@@ -328,43 +328,39 @@ public abstract class AbstractServer {
                                                               Map<Identifier, LootTable> fakeLootTables, List<ILootModifier<?>> entityLootModifiers,
                                                               List<ILootModifier<?>> lootTableLootModifiers, Map<Identifier, List<Item>> lootTableItems) {
         Map<Identifier, IDataNode> lootNodes = new HashMap<>();
-        Map<Identifier, List<Entity>> entitiesByLootTable = new LinkedHashMap<>();
+        EntityLootTableResolver resolver = new EntityLootTableResolver(serverRegistry, level);
+        Set<Identifier> candidates = new HashSet<>(lootTables.keySet());
         Set<Identifier> disabledLootTables = new HashSet<>();
 
-        for (EntityType<?> entityType : BuiltInRegistries.ENTITY_TYPE) {
-            if (config.disabledEntities.stream().anyMatch((f) -> f.equals(BuiltInRegistries.ENTITY_TYPE.getKey(entityType)))) {
-                // at least remove entity default loot table, otherwise it will end up in gameplay category
-                entityType.getDefaultLootTable().ifPresent((resourceKey) -> disabledLootTables.add(resourceKey.identifier()));
-                continue;
-            }
+        candidates.addAll(fakeLootTables.keySet());
 
-            if (entityType == EntityType.PLAYER) {
-                continue;
-            }
-
-            List<Entity> entityList = serverRegistry.createEntities(entityType, level);
-
-            for (Entity entity : entityList) {
-                if (entity instanceof Mob mob) {
-                    mob.getLootTable().ifPresent((resourceKey) -> entitiesByLootTable.computeIfAbsent(resourceKey.identifier(), (k) -> new ArrayList<>()).add(entity));
-                }
-            }
+        if (!entityLootModifiers.isEmpty()) {
+            // a modifier can add drops to an entity whose own loot table does not exist, so those tables have to be
+            // considered even though no data references them
+            BuiltInRegistries.ENTITY_TYPE.forEach((entityType) -> entityType.getDefaultLootTable().ifPresent((resourceKey) -> candidates.add(resourceKey.identifier())));
         }
 
         // same grouping as for blocks: all entities sharing a loot table contribute to the single node under its id
-        for (Map.Entry<Identifier, List<Entity>> entry : entitiesByLootTable.entrySet()) {
+        for (Map.Entry<Identifier, List<EntityType<?>>> entry : resolver.resolveAll(candidates).entrySet()) {
             Identifier location = entry.getKey();
-            List<Entity> entities = entry.getValue().stream()
-                    .filter((e) -> config.entityCategories.stream().filter((f) -> f.validate(e.getType())).findFirst().map((f) -> !f.isHidden()).orElse(false))
+
+            if (entry.getValue().stream().allMatch((t) -> config.disabledEntities.stream().anyMatch((f) -> f.equals(BuiltInRegistries.ENTITY_TYPE.getKey(t))))) {
+                disabledLootTables.add(location); // remove the table, otherwise it will end up in gameplay category
+                continue;
+            }
+
+            List<EntityType<?>> entityTypes = entry.getValue().stream()
+                    .filter((t) -> config.entityCategories.stream().filter((f) -> f.validate(t)).findFirst().map((f) -> !f.isHidden()).orElse(false))
                     .toList();
             LootTable lootTable = lootTables.remove(location);
 
             TooltipContext.set(location);
 
-            if (!entities.isEmpty()) {
+            if (!entityTypes.isEmpty()) {
                 List<Item> items = lootTableItems.getOrDefault(location, Collections.emptyList());
                 List<ILootModifier<?>> lootModifiers = Stream.concat(
-                        entityLootModifiers.stream().filter((m) -> entities.stream().anyMatch((e) -> predicateModifier(m, e, items))),
+                        // the only step that still needs an instance, and only when global loot modifiers exist at all
+                        entityLootModifiers.stream().filter((m) -> entityTypes.stream().anyMatch((t) -> resolver.getEntities(t).stream().anyMatch((e) -> predicateModifier(m, e, items)))),
                         lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
                 ).toList();
 
