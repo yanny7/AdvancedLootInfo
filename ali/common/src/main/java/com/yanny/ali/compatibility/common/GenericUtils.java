@@ -13,6 +13,7 @@ import com.yanny.ali.manager.AliClientRegistry;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.network.AbstractClient;
 import com.yanny.ali.network.RequestLootDataMessage;
+import com.yanny.ali.plugin.common.EntityLootTableResolver;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.mods.PluginUtils;
@@ -275,10 +276,10 @@ public class GenericUtils {
         // a loot table is claimed only after every block using it got its own entry - blocks sharing one table
         // (vanilla's dropsLike) must not hide each other; claimed tables are dropped before the gameplay pass
         Set<Identifier> claimedLootTables = new HashSet<>();
-        // entities keep the one-entry-per-table rule: entity entries are identified by their loot table, so a table
-        // shared by two entity types would produce two entries under the same id
-        Set<Identifier> handledEntityLootTables = new HashSet<>();
         Map<Identifier, Set<Item>> handledBlockItems = new HashMap<>();
+        // entities keep the one-entry-per-table rule: entity entries are identified by their loot table, so a table
+        // shared by two entity types has to produce a single entry, shown under the first of them
+        Map<Identifier, List<EntityType<?>>> entityLootTables = new EntityLootTableResolver(clientRegistry, level).resolveAll(lootData.keySet());
 
         for (Block block : BuiltInRegistries.BLOCK) {
             Identifier location = Utils.getLootTableKey(block);
@@ -298,33 +299,21 @@ public class GenericUtils {
             }
         }
 
-        for (EntityType<?> entityType : BuiltInRegistries.ENTITY_TYPE) {
-            if (config.disabledEntities.stream().anyMatch((f) -> f.equals(BuiltInRegistries.ENTITY_TYPE.getKey(entityType)))) {
-                // at least remove entity default loot table
-                entityType.getDefaultLootTable().ifPresent(lootTableResourceKey -> claimedLootTables.add(lootTableResourceKey.identifier()));
+        for (Map.Entry<Identifier, List<EntityType<?>>> entry : entityLootTables.entrySet()) {
+            Identifier location = entry.getKey();
+
+            if (entry.getValue().stream().allMatch((t) -> config.disabledEntities.stream().anyMatch((f) -> f.equals(BuiltInRegistries.ENTITY_TYPE.getKey(t))))) {
+                claimedLootTables.add(location);
                 continue;
             }
 
-            if (entityType == EntityType.PLAYER) {
-                continue;
+            LootData data = lootData.get(location);
+
+            if (data != null) {
+                entityConsumer.accept(data.node, location, entry.getValue().get(0), data.items);
             }
 
-            List<Entity> entityList = clientRegistry.createEntities(entityType, level);
-
-            for (Entity entity : entityList) {
-                if (entity instanceof Mob mob) {
-                    mob.getLootTable().ifPresent((resourceKey) -> {
-                        Identifier location = resourceKey.identifier();
-                        LootData data = lootData.get(location);
-
-                        if (data != null && handledEntityLootTables.add(location)) {
-                            entityConsumer.accept(data.node, location, entityType, data.items);
-                        }
-
-                        claimedLootTables.add(location);
-                    });
-                }
-            }
+            claimedLootTables.add(location);
         }
 
         lootData.keySet().removeAll(claimedLootTables);
