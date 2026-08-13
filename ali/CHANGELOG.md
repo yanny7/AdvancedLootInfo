@@ -1,6 +1,9 @@
 ## []
 
 - Improved rendering performance with a lot of slots (radimous)
+- Improved world load and recipe viewer reload times - loot tables are matched to entities by their id instead of by creating a sample entity of every registered type
+- Entity loot table variants (like sheep colors) are recognized without registering an entity variant factory
+- Added `entityLootTables` configuration for entities whose loot table id follows no naming convention
 - Minor changes to tooltips - fewer levels in some cases
 - Added tooltip note on trade level/pool badges showing how many trades are randomly selected
 - Improved category height management in REI
