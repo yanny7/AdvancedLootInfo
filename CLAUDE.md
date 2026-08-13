@@ -28,7 +28,7 @@ Cross-cutting mechanisms are documented **once**, in whichever doc owns them, an
 
 ## Repo/branch layout
 
-This is a single mod (source: `https://github.com/yanny7/AdvancedLootInfo`) developed across multiple Minecraft versions in parallel, one version per git branch (`1.20.1`, `1.21.1`, `1.21.5`, `1.21.8`, `1.21.10`, `1.21.11`, `26.1.2`, `master` for the latest/in-development version, plus archived `archive/1.2x.y` branches). Each Minecraft version is checked out into its own sibling directory (this one, `ali_1_21_1/`, is the `1.21.1` branch).
+This is a single mod (source: `https://github.com/yanny7/AdvancedLootInfo`) developed across multiple Minecraft versions in parallel, one version per git branch (`1.20.1`, `1.21.1`, `1.21.5`, `1.21.8`, `1.21.10`, `1.21.11`, `26.1.2`, `master` for the latest/in-development version, plus archived `archive/1.2x.y` branches). Branches are typically worked on as separate checkouts, one per Minecraft version — read `minecraft_version` in the repo-root `gradle.properties` to know which version the current checkout is.
 
 The mod's architecture, package layout, and plugin model described across this doc tree are identical across all these branches — they should stay accurate regardless of which version branch they're read from. What legitimately differs per branch:
 - Which loaders are available/enabled (see Module layout below): Fabric on every branch, Forge from `1.20.1` on, NeoForge from `1.21.1` on (Forge support has been getting phased out on newer branches in favor of NeoForge). On this `1.21.1` branch, both ALI and AWI ship `fabric`+`forge`+`neoforge`.
@@ -128,6 +128,12 @@ Generate data (recipes/loot/lang, per loader) via the IDE run configurations in 
 ## Versioning
 
 ALI and AWI version independently (`ali_version` / `awi_version` in `gradle.properties`), each with its own `CHANGELOG.md` (`ali/CHANGELOG.md`, `awi/CHANGELOG.md`). Update the relevant changelog and bump the relevant version property when shipping a change to that mod. Because the same fix/feature is typically ported across the active version branches, the same `ali_version`/`awi_version` bump and changelog entry commonly land on several branches — check whether a change belongs on other branches too, not just the one you're on.
+
+## Wiki
+
+The user-facing documentation is the project's GitHub wiki — a separate repository, not part of this one. It is a single wiki covering **all** supported Minecraft versions, split into a `Users/` section (no implementation details — no Gson/codecs/registries/API names there) and a `Developers/` section (plugin API). Version-specific behaviour is marked inline per Minecraft version; mod versions are never mentioned, only current behaviour is documented.
+
+**Whenever a change adds, removes or alters user-visible behaviour, a config option, the config format, the datapack format (`fake_loot`), or the plugin API — tell the user explicitly that the wiki needs updating, and name which page(s).** Do not silently assume the wiki is fine; it is not part of this repo, so nothing else will catch the drift. The same applies to `ali_config.schema.json`, which the wiki links to and which must stay in sync with `configuration/AliConfig` and the `LootCategory` subclasses.
 
 ## Publishing
 
