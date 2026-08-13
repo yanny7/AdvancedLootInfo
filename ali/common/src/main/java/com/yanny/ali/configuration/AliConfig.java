@@ -15,7 +15,9 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class AliConfig {
@@ -43,8 +45,9 @@ public class AliConfig {
                 Codec.BOOL.fieldOf("hideDefaultBlockLoot").orElse(true).forGetter((c) -> c.hideDefaultBlockLoot),
                 ResourceLocation.CODEC.listOf().fieldOf("defaultBlockLootConditions").orElse(DEFAULT_BLOCK_LOOT_CONDITIONS).forGetter((c) -> c.defaultBlockLootConditions),
                 ResourceLocation.CODEC.listOf().fieldOf("defaultBlockLootFunctions").orElse(DEFAULT_BLOCK_LOOT_FUNCTIONS).forGetter((c) -> c.defaultBlockLootFunctions),
-                ResourceLocation.CODEC.listOf().fieldOf("ignoredPredicateConditions").orElse(DEFAULT_IGNORED_PREDICATE_CONDITIONS).forGetter((c) -> c.ignoredPredicateConditions)
-        ).apply(instance, (version, blocks, entities, gameplay, trades, disabled, log, show, hideDefaultLoot, defaultConditions, defaultFunctions, ignoredPredicates) -> {
+                ResourceLocation.CODEC.listOf().fieldOf("ignoredPredicateConditions").orElse(DEFAULT_IGNORED_PREDICATE_CONDITIONS).forGetter((c) -> c.ignoredPredicateConditions),
+                Codec.unboundedMap(ResourceLocation.CODEC, ResourceLocation.CODEC.listOf()).fieldOf("entityLootTables").orElse(Collections.emptyMap()).forGetter((c) -> c.entityLootTables)
+        ).apply(instance, (version, blocks, entities, gameplay, trades, disabled, log, show, hideDefaultLoot, defaultConditions, defaultFunctions, ignoredPredicates, entityLoot) -> {
             AliConfig config = new AliConfig();
 
             config.configVersion = version;
@@ -59,6 +62,7 @@ public class AliConfig {
             config.defaultBlockLootConditions = new ArrayList<>(defaultConditions);
             config.defaultBlockLootFunctions = new ArrayList<>(defaultFunctions);
             config.ignoredPredicateConditions = new ArrayList<>(ignoredPredicates);
+            config.entityLootTables = new LinkedHashMap<>(entityLoot);
             return config;
         })
     );
@@ -75,6 +79,13 @@ public class AliConfig {
     public List<ResourceLocation> defaultBlockLootFunctions;
     public List<ResourceLocation> ignoredPredicateConditions;
 
+    /**
+     * Loot tables an entity type drops, keyed by entity type id. Only needed for entities whose loot table is neither
+     * their type's default one nor a path below it - those are found by their id alone, see {@code
+     * EntityLootTableResolver}.
+     */
+    public Map<ResourceLocation, List<ResourceLocation>> entityLootTables;
+
     public boolean logMoreStatistics = false;
     public boolean showInGameNames = true;
     public boolean hideDefaultBlockLoot = true;
@@ -90,6 +101,8 @@ public class AliConfig {
         defaultBlockLootConditions = new ArrayList<>(DEFAULT_BLOCK_LOOT_CONDITIONS);
         defaultBlockLootFunctions = new ArrayList<>(DEFAULT_BLOCK_LOOT_FUNCTIONS);
         ignoredPredicateConditions = new ArrayList<>(DEFAULT_IGNORED_PREDICATE_CONDITIONS);
+
+        entityLootTables = new LinkedHashMap<>();
     }
 
     @NotNull

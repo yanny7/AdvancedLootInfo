@@ -64,6 +64,7 @@ public class FeatureBytecodeScanTest {
 
         Map<String, Map<String, Object>> actual = new TreeMap<>();
         List<String> truncated = new ArrayList<>();
+        List<String> conditional = new ArrayList<>();
 
         for (Map.Entry<net.minecraft.resources.ResourceKey<Feature<?>>, Feature<?>> entry : BuiltInRegistries.FEATURE.entrySet()) {
             String id = entry.getKey().location().toString();
@@ -73,8 +74,13 @@ public class FeatureBytecodeScanTest {
             report.put("visitedMethods", result.visitedMethods());
             report.put("methodLimitReached", result.methodLimitReached());
             report.put("blocks", blockIds(result.blocks()));
+            report.put("configConditionalBlocks", blockIds(result.configConditionalBlocks()));
             report.put("tags", tagIds(result.tags()));
             actual.put(id, report);
+
+            if (!result.configConditionalBlocks().isEmpty()) {
+                conditional.add("%s: %s".formatted(id, blockIds(result.configConditionalBlocks())));
+            }
 
             if (result.methodLimitReached()) {
                 truncated.add("%s (%s): %d methods, %d blocks".formatted(id, entry.getValue().getClass().getSimpleName(),
@@ -82,8 +88,10 @@ public class FeatureBytecodeScanTest {
             }
         }
 
-        System.out.printf("%nfeature bytecode scan: %d features, %d hit the method budget%n", actual.size(), truncated.size());
+        System.out.printf("%nfeature bytecode scan: %d features, %d hit the method budget, %d have config-conditional blocks%n",
+                actual.size(), truncated.size(), conditional.size());
         truncated.forEach((line) -> System.out.println("  budget reached: " + line));
+        conditional.forEach((line) -> System.out.println("  config-conditional: " + line));
 
         if (Boolean.getBoolean("awi.featurescan.regenerate")) {
             Files.writeString(GOLDEN_FILE, GSON.toJson(actual) + "\n", StandardCharsets.UTF_8);
