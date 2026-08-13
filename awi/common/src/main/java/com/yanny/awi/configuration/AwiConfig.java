@@ -10,13 +10,15 @@ public class AwiConfig {
         instance.group(
                 Codec.INT.fieldOf("configVersion").orElse(0).forGetter((c) -> c.configVersion),
                 Codec.BOOL.fieldOf("logMoreStatistics").orElse(false).forGetter((c) -> c.logMoreStatistics),
-                Codec.BOOL.fieldOf("showInGameNames").orElse(true).forGetter((c) -> c.showInGameNames)
-        ).apply(instance, (version, log, show) -> {
+                Codec.BOOL.fieldOf("showInGameNames").orElse(true).forGetter((c) -> c.showInGameNames),
+                Codec.BOOL.fieldOf("showConfigConditionalBlocks").orElse(false).forGetter((c) -> c.showConfigConditionalBlocks)
+        ).apply(instance, (version, log, show, showConfigConditional) -> {
             AwiConfig config = new AwiConfig();
 
             config.configVersion = version;
             config.logMoreStatistics = log;
             config.showInGameNames = show;
+            config.showConfigConditionalBlocks = showConfigConditional;
             return config;
         })
     );
@@ -25,4 +27,12 @@ public class AwiConfig {
 
     public boolean logMoreStatistics = false;
     public boolean showInGameNames = true;
+
+    /**
+     * Whether to display blocks that a feature's {@code place()} bytecode only reaches through a test on the
+     * configuration it was given. Off by default: for a lava lake that is {@code minecraft:ice}, which the feature only
+     * places when its fluid is water, so showing it is wrong for every vanilla lake. Turn it on to see everything the
+     * bytecode scan found, at the cost of those blocks being wrong for some configurations.
+     */
+    public boolean showConfigConditionalBlocks = false;
 }

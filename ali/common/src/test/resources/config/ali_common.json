@@ -179,5 +179,6 @@
     "minecraft:random_chance_with_enchanted_bonus",
     "minecraft:table_bonus",
     "minecraft:survives_explosion"
-  ]
+  ],
+  "entityLootTables": {}
 }
