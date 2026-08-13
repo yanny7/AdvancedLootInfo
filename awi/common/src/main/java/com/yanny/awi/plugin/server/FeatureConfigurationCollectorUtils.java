@@ -18,7 +18,9 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 public class FeatureConfigurationCollectorUtils {
@@ -321,13 +323,24 @@ public class FeatureConfigurationCollectorUtils {
      * <p>The scanner's tags travel out as tags rather than as their members, which is also why every collector in this
      * class hands back {@code Either}s: the coral tags are found this deep in the nesting, and flattening them here
      * would leave the display nothing to name the slot after.
+     *
+     * <p>Blocks the scanner only reached through a test on the configuration are dropped unless
+     * {@link com.yanny.awi.configuration.AwiConfig#showConfigConditionalBlocks} says otherwise - the scan is keyed by
+     * {@code Feature} class and so cannot tell which configuration it is being asked about, which is why a lava lake
+     * otherwise reports the ice only a water lake freezes. Dropping them here rather than in the widget also keeps them
+     * out of the reverse index, so a block that is not shown is not searchable either.
      */
     @NotNull
     public static List<Either<Block, TagKey<Block>>> collectConfiguredFeatureBlocks(IServerUtils utils, ConfiguredFeature<?, ?> feature) {
         List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(utils.collectBlocks(utils, feature.config()));
         FeatureBytecodeScanner.ScanResult scan = FeatureBytecodeScanner.scan(feature.feature().getClass());
+        Set<Block> scanned = new LinkedHashSet<>(scan.blocks());
 
-        blocks.addAll(wrap(scan.blocks()));
+        if (!utils.getConfiguration().showConfigConditionalBlocks) {
+            scanned.removeAll(scan.configConditionalBlocks());
+        }
+
+        blocks.addAll(wrap(scanned));
         scan.tags().forEach((tag) -> blocks.add(Either.right(tag)));
         return blocks;
     }
