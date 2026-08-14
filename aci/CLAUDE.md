@@ -14,8 +14,11 @@ Guidance for working in `aci` (`com.yanny.aci`), the shared core library consume
 - `CoreListNode<TServerUtils,TDataNode,TClientUtils>` — abstract composite `ICoreDataNode` holding a sorted child-node list plus shared network encode/decode logic; base for `ali.api.ListNode`/`awi.api.ListNode`.
 - `IWidget` — GUI widget contract (`render`, `getRect`, `getTooltipComponents`) — the single rendering abstraction every recipe-viewer widget wrapper (EMI/JEI/REI, in both mods) adapts to its host viewer's native widget interface. See `ali/common-emi/CLAUDE.md` for how that adaptation works.
 - `CoreListWidget<TDataNode,TWidgetUtils,TClientUtils>` — abstract widget that lays out a tree of child `IWidget`s and draws the connecting branch lines; base for `ali.*.ListWidget`/`awi.*.ListWidget`.
+- `AbstractScrollWidget` — scrollable viewport + scrollbar (drag/click/wheel handling, scissored content rendering, `isOutsideViewport` culling); base for the `Emi/Jei/ReiScrollWidget` in all six recipe-viewer modules. Subclasses supply `renderWidgets` and `getTexture`.
 - `Rect` (record) / `RelativeRect` (mutable, parent-chained) / `WidgetDirection` (enum) — geometry primitives for widget layout.
 - `RangeValue` — immutable numeric range/score value type (min/max, "is range", "has score", "is unknown" flags), used throughout tooltip value formatting.
+
+**Shared atlas layout.** `CoreListWidget` and `AbstractScrollWidget` both hardcode u/v offsets but take the `ResourceLocation` from an abstract `getTexture()`, so `ali`'s and `awi`'s `textures/gui/gui.png` must keep the shared sprites at identical coordinates: branch trunk at `(0,0)` 2×1 and branch arm at `(2,0)` 18×2 (`CoreListWidget`), scrollbar track at `(2,2)` 16×16 and scrollbar marker at `(18,0)` 12×17 (`AbstractScrollWidget`). Each mod is free to place its own sprites elsewhere in the atlas. This coupling is invisible to the compiler — changing a sprite means editing both atlases.
 
 ### `manager` — plugin-manager and registry base classes
 
