@@ -1,6 +1,7 @@
 package com.yanny.awi.network;
 
 import com.mojang.logging.LogUtils;
+import com.yanny.aci.network.NetworkUtils;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.api.IServerUtils;
@@ -25,17 +26,13 @@ import net.minecraft.world.level.dimension.LevelStem;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.GZIPOutputStream;
 
 public abstract class AbstractServer {
-    private static final int MAX_CHUNK_SIZE = 32 * 1024; // 32 KB
     private static final DecimalFormat DOUBLE_FORMAT = new DecimalFormat("#0.00");
     private static final Logger LOGGER = LogUtils.getLogger();
 
@@ -96,7 +93,7 @@ public abstract class AbstractServer {
 
         serverRegistry.getTooltipCache().encode(serverRegistry, buf);
         writeWorldgenData(serverRegistry, buf, worldgenNodes);
-        compressAndStoreData(buf);
+        NetworkUtils.compressAndStoreData(rawBuf, "worldgen", (i, data) -> chunks.add(new WorldgenDataChunkMessage(i, data)));
 
         serverRegistry.printRuntimeInfo();
 
@@ -162,36 +159,6 @@ public abstract class AbstractServer {
         }
 
         worldgenNodes.clear();
-    }
-
-    private void compressAndStoreData(ByteBuf rawBuf) {
-        int rawSize = rawBuf.readableBytes();
-        ByteArrayOutputStream bos = new ByteArrayOutputStream(rawSize);
-
-        try (GZIPOutputStream gzip = new GZIPOutputStream(bos)) {
-            rawBuf.readBytes(gzip, rawBuf.readableBytes());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        byte[] compressedData = bos.toByteArray();
-        int totalChunks = (int) Math.ceil((double) compressedData.length / MAX_CHUNK_SIZE);
-
-        for (int i = 0; i < totalChunks; i++) {
-            int offset = i * MAX_CHUNK_SIZE;
-            int length = Math.min(MAX_CHUNK_SIZE, compressedData.length - offset);
-            byte[] chunkData = new byte[length];
-
-            System.arraycopy(compressedData, offset, chunkData, 0, length);
-            chunks.add(new WorldgenDataChunkMessage(i, chunkData));
-        }
-
-        rawBuf.release();
-
-        LOGGER.info("Compressed worldgen data ({} MB -> {} MB) and stored in {} chunk(s)",
-                DOUBLE_FORMAT.format(rawSize / 1024.0 / 1024.0),
-                DOUBLE_FORMAT.format(compressedData.length / 1024.0 / 1024.0),
-                totalChunks);
     }
 
     @NotNull
