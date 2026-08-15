@@ -18,7 +18,6 @@ import net.minecraft.world.level.storage.loot.functions.SetItemFunction;
 import net.minecraft.world.level.storage.loot.functions.SmeltItemFunction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
-import oshi.util.tuples.Pair;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -114,18 +113,4 @@ public class ItemCollectorUtils {
         return List.of(function.item.value());
     }
 
-    @NotNull
-    public static Pair<List<Item>, List<Item>> collectTradeSetItems(IServerUtils utils, TradeSet tradeSet) {
-        List<Item> inputs = new ArrayList<>();
-        List<Item> outputs = new ArrayList<>();
-
-        for (Holder<VillagerTrade> trade : tradeSet.getTrades()) {
-            Pair<List<Item>, List<Item>> pair = TradeUtils.collectItems(utils, trade.value());
-
-            inputs.addAll(pair.getA());
-            outputs.addAll(pair.getB());
-        }
-
-        return new Pair<>(inputs, outputs);
-    }
 }

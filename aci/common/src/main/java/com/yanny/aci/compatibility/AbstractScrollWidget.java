@@ -1,10 +1,10 @@
-package com.yanny.awi.compatibility;
+package com.yanny.aci.compatibility;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.yanny.aci.api.Rect;
-import com.yanny.awi.plugin.client.WidgetUtils;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,7 +20,7 @@ public abstract class AbstractScrollWidget {
 
     /**
      * Absolute area the widget being rendered right now is clipped to, or null outside {@link #renderWidgets}. A
-     * picture-in-picture render state carries its own scissor rectangle instead of honouring {@link GuiGraphics}'
+     * picture-in-picture render state carries its own scissor rectangle instead of honouring {@link GuiGraphicsExtractor}'
      * scissor stack, so a block drawn through one has to be told where the viewport ends or it draws over the rest of
      * the screen. Kept as static state rather than plumbed through, because the widgets that need it are handed to the
      * recipe viewer before the scroll widget that owns them exists.
@@ -42,11 +42,18 @@ public abstract class AbstractScrollWidget {
 
     public abstract void renderWidgets(GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY);
 
+    /**
+     * The atlas holding the scrollbar sprites. Every implementor's texture must place them at the same coordinates,
+     * because the u/v offsets used by {@link #render} live here rather than in the individual mods.
+     */
+    @NotNull
+    protected abstract Identifier getTexture();
+
     public void render(GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
-        WidgetUtils.blitNineSliced(guiGraphics, WidgetUtils.TEXTURE_LOC, scrollRect.x(), scrollRect.y(), scrollRect.width(), scrollRect.height(), 2, 2, 2, 2, 16, 16, 2, 2);
+        RenderingUtils.blitNineSliced(guiGraphics, getTexture(), scrollRect.x(), scrollRect.y(), scrollRect.width(), scrollRect.height(), 2, 2, 2, 2, 16, 16, 2, 2);
 
         Rect markerArea = calculateScrollbarMarkerArea();
-        WidgetUtils.blitNineSliced(guiGraphics, WidgetUtils.TEXTURE_LOC, markerArea.x(), markerArea.y(), markerArea.width(), markerArea.height(), 2, 2, 2, 1, 12, 17, 18, 0);
+        RenderingUtils.blitNineSliced(guiGraphics, getTexture(), markerArea.x(), markerArea.y(), markerArea.width(), markerArea.height(), 2, 2, 2, 1, 12, 17, 18, 0);
 
         drawContents(guiGraphics, mouseX, mouseY);
     }
