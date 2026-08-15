@@ -352,13 +352,15 @@ public class NodeUtils {
 
     @NotNull
     private static <T extends ItemLike> List<ItemStack> toItemStacks(TagKey<? extends ItemLike> tag) {
-        //noinspection unchecked
-        Registry<T> registry = (Registry<T>) BuiltInRegistries.REGISTRY.get(tag.registry().location());
+        Optional<? extends Holder.Reference<? extends Registry<?>>> registry = BuiltInRegistries.REGISTRY.get(tag.registry().identifier());
 
-        if (registry != null) {
+        if (registry.isPresent()) {
             //noinspection unchecked
-            return registry
-                    .getTag((TagKey<T>) tag)
+            Holder.Reference<? extends Registry<T>> reference = (Holder.Reference<? extends Registry<T>>) registry.get();
+            //noinspection unchecked
+            return reference
+                    .value()
+                    .get((TagKey<T>) tag)
                     .map((holders) -> holders.stream().map(Holder::value).map((i) -> i.asItem().getDefaultInstance()).toList())
                     .orElse(Collections.emptyList());
         } else {

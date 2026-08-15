@@ -13,7 +13,7 @@ import mezz.jei.api.gui.widgets.ISlottedRecipeWidget;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -31,7 +31,7 @@ public class JeiScrollWidget extends AbstractScrollWidget implements IRecipeWidg
 
     @NotNull
     @Override
-    protected ResourceLocation getTexture() {
+    protected Identifier getTexture() {
         return WidgetUtils.TEXTURE_LOC;
     }
 

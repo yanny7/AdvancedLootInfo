@@ -4,7 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.yanny.aci.api.Rect;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -47,7 +47,7 @@ public abstract class AbstractScrollWidget {
      * because the u/v offsets used by {@link #render} live here rather than in the individual mods.
      */
     @NotNull
-    protected abstract ResourceLocation getTexture();
+    protected abstract Identifier getTexture();
 
     public void render(GuiGraphics guiGraphics, double mouseX, double mouseY) {
         RenderingUtils.blitNineSliced(guiGraphics, getTexture(), scrollRect.x(), scrollRect.y(), scrollRect.width(), scrollRect.height(), 2, 2, 2, 2, 16, 16, 2, 2);

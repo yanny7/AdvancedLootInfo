@@ -1,7 +1,7 @@
 package com.yanny.awi.jei.compatibility.jei;
 
 import com.yanny.aci.api.Rect;
-import com.yanny.awi.compatibility.AbstractScrollWidget;
+import com.yanny.aci.compatibility.AbstractScrollWidget;
 import com.yanny.awi.pip.BlockRenderState;
 import com.yanny.awi.platform.Services;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
@@ -25,7 +25,6 @@ public class JeiBlockSlotWidget implements ISlottedRecipeWidget {
     private static final float BLOCK_SIZE = 9;
 
     private final BlockState blockState;
-    private final Block block;
     private final ScreenPosition position;
     private final Rect rect;
     private final ClientLevel level;
@@ -34,7 +33,6 @@ public class JeiBlockSlotWidget implements ISlottedRecipeWidget {
 
     public JeiBlockSlotWidget(IRecipeSlotDrawable slotDrawable, Block block, int x, int y) {
         this.slotDrawable = slotDrawable;
-        this.block = block;
         blockState = block.defaultBlockState();
         position = new ScreenPosition(x, y);
         rect = new Rect(x, y, 18, 18);

@@ -6,7 +6,7 @@ import com.yanny.aci.api.ICoreServerUtils;
 import com.yanny.aci.tooltip.TooltipContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
 
 import java.io.ByteArrayOutputStream;
@@ -55,13 +55,13 @@ public class NetworkUtils {
     public static <
             TServerUtils extends ICoreServerUtils<?>,
             TNode extends ICoreDataNode<TServerUtils>
-            > void writeMapData(String modId, TServerUtils utils, RegistryFriendlyByteBuf buf, Map<ResourceLocation, TNode> nodes) {
+            > void writeMapData(String modId, TServerUtils utils, RegistryFriendlyByteBuf buf, Map<Identifier, TNode> nodes) {
         int countIndex = buf.writerIndex();
         int successfulNodes = 0;
 
         buf.writeInt(nodes.size());
 
-        for (Map.Entry<ResourceLocation, TNode> nodeEntry : nodes.entrySet()) {
+        for (Map.Entry<Identifier, TNode> nodeEntry : nodes.entrySet()) {
             if (writeEntryData(modId, utils, buf, nodeEntry)) {
                 successfulNodes++;
             }
@@ -83,10 +83,10 @@ public class NetworkUtils {
     public static <
             TServerUtils extends ICoreServerUtils<?>,
             TNode extends ICoreDataNode<TServerUtils>
-            > boolean writeEntryData(String modId, TServerUtils utils, RegistryFriendlyByteBuf buf, Map.Entry<ResourceLocation, TNode> nodeEntry) {
+            > boolean writeEntryData(String modId, TServerUtils utils, RegistryFriendlyByteBuf buf, Map.Entry<Identifier, TNode> nodeEntry) {
         int startOfEntry = buf.writerIndex();
 
-        buf.writeResourceLocation(nodeEntry.getKey());
+        buf.writeIdentifier(nodeEntry.getKey());
 
         if (writeNodeData(modId, utils, buf, nodeEntry.getKey(), nodeEntry.getValue())) {
             return true;
@@ -99,7 +99,7 @@ public class NetworkUtils {
     public static <
             TServerUtils extends ICoreServerUtils<?>,
             TNode extends ICoreDataNode<TServerUtils>
-            > boolean writeNodeData(String modId, TServerUtils utils, RegistryFriendlyByteBuf buf, ResourceLocation id, TNode node) {
+            > boolean writeNodeData(String modId, TServerUtils utils, RegistryFriendlyByteBuf buf, Identifier id, TNode node) {
         int startOfNode = buf.writerIndex();
 
         try {

@@ -23,7 +23,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -113,7 +112,7 @@ public abstract class AbstractServer {
         NetworkUtils.writeMapData(Utils.MOD_ID, serverRegistry, buf, lootNodes);
         NetworkUtils.writeMapData(Utils.MOD_ID, serverRegistry, buf, tradeNodes);
 
-        if (!NetworkUtils.writeNodeData(Utils.MOD_ID, serverRegistry, buf, ResourceLocation.withDefaultNamespace("wandering_trader"), wanderingTraderNode)) {
+        if (!NetworkUtils.writeNodeData(Utils.MOD_ID, serverRegistry, buf, Identifier.withDefaultNamespace("wandering_trader"), wanderingTraderNode)) {
             new TradeNode(serverRegistry, new Int2ObjectOpenHashMap<>(), true).encode(serverRegistry, buf);
         }
 
