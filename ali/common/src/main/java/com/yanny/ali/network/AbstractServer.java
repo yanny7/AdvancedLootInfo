@@ -6,7 +6,10 @@ import com.yanny.aci.network.NetworkUtils;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
-import com.yanny.ali.api.*;
+import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IItemNode;
+import com.yanny.ali.api.ILootModifier;
+import com.yanny.ali.api.ListNode;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.AliServerRegistry;
 import com.yanny.ali.manager.FakeLootDataManager;
@@ -104,7 +107,7 @@ public abstract class AbstractServer {
         NetworkUtils.writeMapData(Utils.MOD_ID, serverRegistry, buf, lootNodes);
         NetworkUtils.writeMapData(Utils.MOD_ID, serverRegistry, buf, tradeNodes);
 
-        if (!NetworkUtils.writeNodeData(Utils.MOD_ID, serverRegistry, buf, new ResourceLocation("wandering_trader"), wanderingTraderNode)) {
+        if (!NetworkUtils.writeNodeData(Utils.MOD_ID, serverRegistry, buf, ResourceLocation.withDefaultNamespace("wandering_trader"), wanderingTraderNode)) {
             new TradeNode(serverRegistry, new Int2ObjectOpenHashMap<>(), true).encode(serverRegistry, buf);
         }
 

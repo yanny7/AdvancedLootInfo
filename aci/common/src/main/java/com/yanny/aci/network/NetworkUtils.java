@@ -5,7 +5,7 @@ import com.yanny.aci.api.ICoreDataNode;
 import com.yanny.aci.api.ICoreServerUtils;
 import com.yanny.aci.tooltip.TooltipContext;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
 
@@ -55,7 +55,7 @@ public class NetworkUtils {
     public static <
             TServerUtils extends ICoreServerUtils<?>,
             TNode extends ICoreDataNode<TServerUtils>
-            > void writeMapData(String modId, TServerUtils utils, FriendlyByteBuf buf, Map<ResourceLocation, TNode> nodes) {
+            > void writeMapData(String modId, TServerUtils utils, RegistryFriendlyByteBuf buf, Map<ResourceLocation, TNode> nodes) {
         int countIndex = buf.writerIndex();
         int successfulNodes = 0;
 
@@ -83,7 +83,7 @@ public class NetworkUtils {
     public static <
             TServerUtils extends ICoreServerUtils<?>,
             TNode extends ICoreDataNode<TServerUtils>
-            > boolean writeEntryData(String modId, TServerUtils utils, FriendlyByteBuf buf, Map.Entry<ResourceLocation, TNode> nodeEntry) {
+            > boolean writeEntryData(String modId, TServerUtils utils, RegistryFriendlyByteBuf buf, Map.Entry<ResourceLocation, TNode> nodeEntry) {
         int startOfEntry = buf.writerIndex();
 
         buf.writeResourceLocation(nodeEntry.getKey());
@@ -99,7 +99,7 @@ public class NetworkUtils {
     public static <
             TServerUtils extends ICoreServerUtils<?>,
             TNode extends ICoreDataNode<TServerUtils>
-            > boolean writeNodeData(String modId, TServerUtils utils, FriendlyByteBuf buf, ResourceLocation id, TNode node) {
+            > boolean writeNodeData(String modId, TServerUtils utils, RegistryFriendlyByteBuf buf, ResourceLocation id, TNode node) {
         int startOfNode = buf.writerIndex();
 
         try {
