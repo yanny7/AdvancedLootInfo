@@ -18,7 +18,7 @@ public class ItemTagWidget implements IWidget {
     public ItemTagWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int ignoredMaxWidth) {
         ItemTagNode node = (ItemTagNode) entry;
 
-        utils.addSlotWidget(node.getModifiedItem(), node, rect);
+        utils.addSlotWidget(node.getItem(), node, rect);
         bounds = rect;
         bounds.setDimensions(18, 18);
         widget = WidgetUtils.getUnknownWidget(rect);

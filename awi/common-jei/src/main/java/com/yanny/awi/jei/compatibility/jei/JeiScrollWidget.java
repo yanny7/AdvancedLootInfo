@@ -2,7 +2,8 @@ package com.yanny.awi.jei.compatibility.jei;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.yanny.aci.api.Rect;
-import com.yanny.awi.compatibility.AbstractScrollWidget;
+import com.yanny.aci.compatibility.AbstractScrollWidget;
+import com.yanny.awi.plugin.client.WidgetUtils;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.inputs.IJeiInputHandler;
 import mezz.jei.api.gui.inputs.IJeiUserInput;
@@ -12,6 +13,7 @@ import mezz.jei.api.gui.widgets.ISlottedRecipeWidget;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -25,6 +27,12 @@ public class JeiScrollWidget extends AbstractScrollWidget implements IRecipeWidg
     public JeiScrollWidget(Rect rect, int contentHeight, List<IRecipeWidget> widgets) {
         super(rect, contentHeight);
         this.widgets = widgets;
+    }
+
+    @NotNull
+    @Override
+    protected Identifier getTexture() {
+        return WidgetUtils.TEXTURE_LOC;
     }
 
     @NotNull

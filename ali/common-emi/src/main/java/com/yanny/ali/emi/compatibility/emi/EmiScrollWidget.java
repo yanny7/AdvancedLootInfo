@@ -1,12 +1,15 @@
 package com.yanny.ali.emi.compatibility.emi;
 
 import com.yanny.aci.api.Rect;
-import com.yanny.ali.compatibility.common.AbstractScrollWidget;
+import com.yanny.aci.compatibility.AbstractScrollWidget;
 import com.yanny.ali.emi.compatibility.IMouseEvents;
+import com.yanny.ali.plugin.client.WidgetUtils;
 import dev.emi.emi.api.widget.Bounds;
 import dev.emi.emi.api.widget.Widget;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -20,6 +23,12 @@ public class EmiScrollWidget extends Widget implements IMouseEvents {
         this.widgets = widgets;
         bounds = new Bounds(rect.x(), rect.y(), rect.width(), rect.height());
         scrollWidget = new AbstractScrollWidget(rect, contentHeight) {
+            @NotNull
+            @Override
+            protected ResourceLocation getTexture() {
+                return WidgetUtils.TEXTURE_LOC;
+            }
+
             @Override
             public void renderWidgets(GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
                 for (Widget widget : widgets) {

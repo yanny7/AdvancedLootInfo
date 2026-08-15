@@ -1,7 +1,8 @@
 package com.yanny.awi.rei.compatibility.rei;
 
 import com.yanny.aci.api.Rect;
-import com.yanny.awi.compatibility.AbstractScrollWidget;
+import com.yanny.aci.compatibility.AbstractScrollWidget;
+import com.yanny.awi.plugin.client.WidgetUtils;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.compat.GuiGraphics;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
@@ -9,6 +10,7 @@ import me.shedaniel.rei.api.client.gui.widgets.WidgetWithBounds;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -22,6 +24,12 @@ public class ReiScrollWidget extends Widget {
         this.rect = rect;
         this.widgets = widgets;
         scrollWidget = new AbstractScrollWidget(rect, contentHeight) {
+            @NotNull
+            @Override
+            protected Identifier getTexture() {
+                return WidgetUtils.TEXTURE_LOC;
+            }
+
             @Override
             public void renderWidgets(GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
                 for (Widget widget : widgets) {

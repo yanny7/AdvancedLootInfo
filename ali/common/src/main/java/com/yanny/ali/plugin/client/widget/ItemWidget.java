@@ -13,7 +13,7 @@ public class ItemWidget implements IWidget {
 
     public ItemWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int ignoredMaxWidth) {
         ItemNode node = (ItemNode) entry;
-        utils.addSlotWidget(node.getModifiedItem(), node, rect);
+        utils.addSlotWidget(node.getItem(), node, rect);
         bounds = rect;
         bounds.setDimensions(18, 18);
     }
