@@ -18,12 +18,9 @@ import com.yanny.ali.plugin.common.EntityLootTableResolver;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
-import com.yanny.ali.plugin.common.trades.TradeUtils;
 import com.yanny.ali.plugin.server.ItemCollectorUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -39,11 +36,8 @@ import net.minecraft.world.entity.npc.villager.VillagerProfession;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.trading.TradeSet;
 import net.minecraft.world.item.trading.TradeSets;
-import net.minecraft.world.item.trading.VillagerTrade;
-import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -57,7 +51,6 @@ import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.Logger;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -119,7 +112,7 @@ public abstract class AbstractServer {
         NetworkUtils.writeMapData(Utils.MOD_ID, serverRegistry, buf, tradeNodes);
 
         if (!NetworkUtils.writeNodeData(Utils.MOD_ID, serverRegistry, buf, Identifier.withDefaultNamespace("wandering_trader"), wanderingTraderNode)) {
-            new TradeNode(serverRegistry, new Int2ObjectOpenHashMap<>(), true).encode(serverRegistry, buf);
+            new TradeNode(serverRegistry, Collections.emptyList(), true).encode(serverRegistry, buf);
         }
 
         NetworkUtils.compressAndStoreData(Utils.MOD_ID, rawBuf, (i, data) -> chunks.add(new LootDataChunkMessage(i, data)));
@@ -448,35 +441,11 @@ public abstract class AbstractServer {
     @NotNull
     private static Map<Identifier, IDataNode> processTrades(AliServerRegistry serverRegistry, AliConfig config) {
         Map<Identifier, IDataNode> nodes = new HashMap<>();
-        HolderLookup.RegistryLookup<TradeSet> lookup = serverRegistry.lookupProvider().lookup(Registries.TRADE_SET).orElseThrow();
 
         for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : BuiltInRegistries.VILLAGER_PROFESSION.entrySet()) {
             Identifier location = entry.getKey().identifier();
             VillagerProfession profession = entry.getValue();
-            List<Int2ObjectMap.Entry<ResourceKey<TradeSet>>> entries = profession.tradeSetsByLevel().int2ObjectEntrySet()
-                    .stream()
-                    .sorted(Comparator.comparingInt(Int2ObjectMap.Entry::getIntKey))
-                    .toList();
-            Pair<List<Item>, List<Item>> items = new Pair<>(new ArrayList<>(), new ArrayList<>());
 
-            for (Int2ObjectMap.Entry<ResourceKey<TradeSet>> entryTrades : entries) {
-                Optional<Holder.Reference<TradeSet>> tradeSetReference = lookup.get(entryTrades.getValue());
-
-                tradeSetReference.ifPresent((tradeSet) -> {
-                    for (Holder<VillagerTrade> trade : tradeSet.value().getTrades()) {
-                        Pair<List<Item>, List<Item>> pair = TradeUtils.collectItems(serverRegistry, trade.value());
-                        items.getA().addAll(pair.getA());
-                        items.getB().addAll(pair.getB());
-                    }
-                });
-            }
-
-            if (items.getA().isEmpty() && items.getB().isEmpty()) {
-                LOGGER.warn("No trades defined for profession {}", location);
-                continue;
-            }
-
-            tradeItems.put(location, items);
             TooltipContext.set(location);
 
             if (config.tradeCategories.stream().filter((f) -> f.validate(location)).findFirst().map((f) -> !f.isHidden()).orElse(false)) {
@@ -508,30 +477,6 @@ public abstract class AbstractServer {
             LOGGER.warn("Failed to parse wandering trader with error {}", e.getMessage(), e);
             return new MissingNode(TooltipNode.empty());
         }
-    }
-
-    @NotNull
-    private static Pair<List<Item>, List<Item>> collectWanderingTraderItems(AliServerRegistry serverRegistry, ReloadableServerRegistries.Holder manager) {
-        List<Item> inputs = new ArrayList<>();
-        List<Item> outputs = new ArrayList<>();
-        Consumer<Holder.Reference<TradeSet>> collectConsumer = (set) -> {
-            Pair<List<Item>, List<Item>> pair = ItemCollectorUtils.collectTradeSetItems(serverRegistry, set.value());
-
-            inputs.addAll(pair.getA());
-            outputs.addAll(pair.getB());
-        };
-
-        try {
-            Registry<TradeSet> registry = (Registry<TradeSet>)manager.lookup().lookup(Registries.TRADE_SET).orElseThrow();
-
-            registry.get(TradeSets.WANDERING_TRADER_BUYING).ifPresent(collectConsumer);
-            registry.get(TradeSets.WANDERING_TRADER_COMMON).ifPresent(collectConsumer);
-            registry.get(TradeSets.WANDERING_TRADER_UNCOMMON).ifPresent(collectConsumer);
-        } catch (Throwable e) {
-            LOGGER.warn("Failed to parse wandering trader items with error {}", e.getMessage(), e);
-        }
-
-        return new Pair<>(inputs, outputs);
     }
 
     private static <T> boolean predicateModifier(ILootModifier<?> modifier, T value, List<Item> items) {
