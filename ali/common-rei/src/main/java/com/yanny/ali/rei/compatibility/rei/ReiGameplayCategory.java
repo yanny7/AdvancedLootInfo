@@ -1,7 +1,7 @@
 package com.yanny.ali.rei.compatibility.rei;
 
 import com.yanny.aci.api.Rect;
-import com.yanny.ali.compatibility.common.AbstractScrollWidget;
+import com.yanny.aci.compatibility.AbstractScrollWidget;
 import com.yanny.ali.compatibility.common.GenericUtils;
 import com.yanny.ali.configuration.LootCategory;
 import me.shedaniel.math.Point;

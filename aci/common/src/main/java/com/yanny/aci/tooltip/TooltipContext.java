@@ -1,16 +1,17 @@
 package com.yanny.aci.tooltip;
 
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.Nullable;
 
 public class TooltipContext {
     private static final ThreadLocal<ResourceLocation> CURRENT_LOOT_TABLE = new ThreadLocal<>();
 
-    public static void set(ResourceLocation lootTable) {
+    public static void set(@Nullable ResourceLocation lootTable) {
         CURRENT_LOOT_TABLE.set(lootTable);
     }
 
     public static ResourceLocation get() {
-        return  CURRENT_LOOT_TABLE.get();
+        return CURRENT_LOOT_TABLE.get();
     }
 
     public static void clear() {

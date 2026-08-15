@@ -130,7 +130,7 @@ The type carried end to end is `Either<Block, TagKey<Block>>`, deliberately the 
 GUI-side rendering: `ClientUtils`, `WidgetUtils` (dispatch to per-node-id widget), widgets `LevelStemWidget`, `BiomeWidget`, `GenerationStepWidget`, `PlacedFeatureWidget`, `BlockWidget`, `BaseTerrainWidget`, `TextureWidget`.
 
 ### `compatibility`
-`AbstractScrollWidget` (custom scrollbar widget base), `GenericUtils` (gunzip + decode the reassembled network buffer client-side into `Map<ResourceLocation, LevelStemNode>` — the recipe-viewer-integration glue analogous to ALI's `compatibility/common`, consumed by `awi/common-emi`/`common-jei`/`common-rei`).
+`GenericUtils` (gunzip + decode the reassembled network buffer client-side into `Map<ResourceLocation, LevelStemNode>` — the recipe-viewer-integration glue analogous to ALI's `compatibility/common`, consumed by `awi/common-emi`/`common-jei`/`common-rei`).
 
 `GenericUtils` also owns `rendersAsFluid`/`rendersAsBlockModel`, the shared rule for how a `Block` becomes a viewer ingredient — item, else fluid, else 3D model. It lives here because all three viewer modules need the same answer and previously each carried its own copy, all three with the same bug: the fluid was tested first, so every block waterlogged in its default state (all 30 coral/coral-fan variants, seagrass, kelp, sea pickle, conduit) rendered as plain water. The fluid must stay the *last* resort, gated on `RenderShape.INVISIBLE` — an item-less block that still has a model (`tall_seagrass`, `kelp_plant`) belongs in the 3D-model branch, not the fluid one.
 
@@ -145,7 +145,7 @@ Single `MixinClientPlayNetworkHandler` — injects into `handleUpdateTags` (tail
 
 ## Data-scan entry point
 
-`network.AbstractServer.readWorldgenInfo(ServerLevel level)` is where AWI's whole scan starts: gets `AwiServerRegistry`, runs `BaseLayoutScanner.scan` over the `Registries.LEVEL_STEM` registry (the parallel base-block phase, ~70% of the total time), then iterates the same registry and builds one `LevelStemNode` per dimension from the scanned layouts into a `Map<ResourceLocation, IDataNode>`, drops empty/optimized-away nodes (`ListNode.optimizeList`), encodes the whole tree plus the server's `TooltipCache` into a `FriendlyByteBuf` (palette-first — see `aci/CLAUDE.md`'s tree-model section), gzips it, and slices it into `WorldgenDataChunkMessage` chunks cached in memory for later per-player sync.
+`network.AbstractServer.readWorldgenInfo(ServerLevel level)` is where AWI's whole scan starts: gets `AwiServerRegistry`, runs `BaseLayoutScanner.scan` over the `Registries.LEVEL_STEM` registry (the parallel base-block phase, ~70% of the total time), then iterates the same registry and builds one `LevelStemNode` per dimension from the scanned layouts into a `Map<ResourceLocation, IDataNode>`, drops empty/optimized-away nodes (`ListNode.optimizeList`), encodes the whole tree plus the server's `TooltipCache` into a `FriendlyByteBuf` (palette-first — see `aci/CLAUDE.md`'s tree-model section; the node write itself is `NetworkUtils.writeMapData`), gzips it, and slices it into `WorldgenDataChunkMessage` chunks cached in memory for later per-player sync.
 
 It runs **on the server thread**, at server start and on datapack reload (see the root `CLAUDE.md` — only the *transfer* is on demand), and it blocks that thread for the whole duration.
 
@@ -160,7 +160,7 @@ Both properties are forwarded to the test JVM from `awi/common/build.gradle`.
 
 ## Networking
 
-Mirrors `ali/CLAUDE.md`'s networking pattern exactly — same `AbstractServer`/`AbstractClient` template-method shape, same chunked-gzip-payload-with-palette-first-in-buffer design — this is a conceptually identical, copy-pasted (not code-shared) pattern in both mods' `network` packages. The only differences are the payload/entry-point names:
+Mirrors `ali/CLAUDE.md`'s networking pattern exactly — same `AbstractServer`/`AbstractClient` template-method shape, same chunked-gzip-payload-with-palette-first-in-buffer design. The buffer-writing and compression half is genuinely code-shared through `aci.network.NetworkUtils`; the packets, channels and the `AbstractServer`/`AbstractClient` templates themselves are still copy-pasted per mod. The only differences are the payload/entry-point names:
 
 | ALI | AWI |
 |---|---|

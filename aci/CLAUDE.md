@@ -14,8 +14,11 @@ Guidance for working in `aci` (`com.yanny.aci`), the shared core library consume
 - `CoreListNode<TServerUtils,TDataNode,TClientUtils>` — abstract composite `ICoreDataNode` holding a sorted child-node list plus shared network encode/decode logic; base for `ali.api.ListNode`/`awi.api.ListNode`.
 - `IWidget` — GUI widget contract (`getRect`, `getDirection`, defaulted `render`/`getTooltipComponents`, shared `PADDING`) — the single rendering abstraction every recipe-viewer widget wrapper (EMI/JEI/REI, in both mods) adapts to its host viewer's native widget interface. See `ali/common-emi/CLAUDE.md` for how that adaptation works.
 - `CoreListWidget<TDataNode,TWidgetUtils,TClientUtils>` — abstract widget that lays out a tree of child `IWidget`s and draws the connecting branch lines; base for `ali.*.ListWidget`/`awi.*.ListWidget`.
+- `AbstractScrollWidget` — scrollable viewport + scrollbar (drag/click/wheel handling, scissored content rendering, `isOutsideViewport` culling); base for the `Emi/Jei/ReiScrollWidget` in all six recipe-viewer modules. Subclasses supply `renderWidgets` and `getTexture`.
 - `Rect` (record) / `RelativeRect` (mutable, parent-chained) / `WidgetDirection` (enum) — geometry primitives for widget layout.
 - `RangeValue` — immutable numeric range/score value type (min/max, "is range", "has score", "is unknown" flags), used throughout tooltip value formatting.
+
+**Shared atlas layout.** `CoreListWidget` and `AbstractScrollWidget` both hardcode u/v offsets but take the `ResourceLocation` from an abstract `getTexture()`, so `ali`'s and `awi`'s `textures/gui/gui.png` must keep the shared sprites at identical coordinates: branch trunk at `(0,0)` 2×1 and branch arm at `(2,0)` 18×2 (`CoreListWidget`), scrollbar track at `(2,2)` 16×16 and scrollbar marker at `(18,0)` 12×17 (`AbstractScrollWidget`). Each mod is free to place its own sprites elsewhere in the atlas. This coupling is invisible to the compiler — changing a sprite means editing both atlases.
 
 ### `manager` — plugin-manager and registry base classes
 
@@ -29,7 +32,11 @@ Guidance for working in `aci` (`com.yanny.aci`), the shared core library consume
 
 - `DataReceiver` — accumulates indexed byte-array chunks into a `CompletableFuture<byte[]>`, with `forceDone`/`cancelOperation` timeout handling. Used only internally by `manager.CoreClientRegistry`; this is the *client-side reassembly* half of the chunked-sync pattern each mod's `network` package implements independently (see `ali/CLAUDE.md`'s networking section, mirrored by `awi/CLAUDE.md`).
 
-`aci` itself has **no `network` package** — packet/channel definitions are entirely mod-specific and duplicated between `ali/common/.../network` and `awi/common/.../network`.
+### `network`
+
+- `NetworkUtils` — the *server-side write/compress* half of the chunked-sync pattern, shared by both mods' `AbstractServer`: `writeMapData` (length-prefixed `Map<ResourceLocation, TNode>`, rewinding and re-patching the count when an entry fails), `writeEntryData`/`writeNodeData` (single entry / single node — the latter is what ALI's wandering-trader node uses, since it carries no `ResourceLocation` on the wire), and `compressAndStoreData` (gzip + slice into ≤32KB chunks, handed to a `BiConsumer<Integer, byte[]>` that wraps each chunk in the mod's own packet type). Every method takes a `String modId` first argument, used purely to prefix its log lines (`[ali]`/`[awi]`) — `NetworkUtils` logs through its own logger, so without it the two mods would be indistinguishable in the log.
+
+Packet/channel definitions stay entirely mod-specific — the `*Message` records, channel ids and registration live in `ali/common/.../network` + the loader modules, and are duplicated in `awi`.
 
 ### `platform`
 

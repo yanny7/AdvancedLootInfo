@@ -24,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class ItemStackNode implements IDataNode, IItemNode {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(LootJsPlugin.ID, "item_stack");
@@ -32,6 +33,7 @@ public class ItemStackNode implements IDataNode, IItemNode {
     private final List<LootItemCondition> conditions;
     private final List<LootItemFunction> functions;
     private final ItemStack itemStack;
+    private final List<ItemStack> items;
     private final RangeValue count;
     private final float chance;
     private final boolean modified;
@@ -46,6 +48,7 @@ public class ItemStackNode implements IDataNode, IItemNode {
         this.conditions = conditions;
         this.functions = functions;
         this.itemStack = TooltipUtils.getItemStack(utils, itemStack.copyWithCount(1), this.functions);
+        this.items = NodeUtils.resolveItems(Either.left(this.itemStack));
         this.chance = chance;
         this.modified = modified;
         this.hasPredicates = false;
@@ -61,6 +64,7 @@ public class ItemStackNode implements IDataNode, IItemNode {
 
     public ItemStackNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         itemStack = ItemStack.STREAM_CODEC.decode(buf);
+        items = NodeUtils.resolveItems(Either.left(itemStack));
         tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
         count = new RangeValue(buf);
         modified = buf.readBoolean();
@@ -77,8 +81,19 @@ public class ItemStackNode implements IDataNode, IItemNode {
 
     @NotNull
     @Override
-    public Either<ItemStack, TagKey<? extends ItemLike>> getModifiedItem() {
+    public Either<ItemStack, TagKey<? extends ItemLike>> getItem() {
         return Either.left(itemStack);
+    }
+
+    @NotNull
+    @Override
+    public List<ItemStack> getItems() {
+        return items;
+    }
+
+    @Override
+    public void retainItems(Predicate<ItemStack> isVisible) {
+        items.removeIf(Predicate.not(isVisible));
     }
 
     @NotNull

@@ -18,7 +18,7 @@ public class ItemStackWidget implements IWidget {
     public ItemStackWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int ignoredMaxWidth) {
         ItemStackNode node = (ItemStackNode) entry;
 
-        utils.addSlotWidget(node.getModifiedItem(), node, rect);
+        utils.addSlotWidget(node.getItem(), node, rect);
         bounds = rect;
         bounds.setDimensions(18, 18);
         widget = WidgetUtils.getUnknownWidget(rect);

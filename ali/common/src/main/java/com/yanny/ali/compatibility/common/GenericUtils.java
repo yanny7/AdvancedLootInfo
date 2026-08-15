@@ -11,6 +11,7 @@ import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IItemNode;
+import com.yanny.ali.api.ITradeNode;
 import com.yanny.ali.api.ListNode;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.AliClientRegistry;
@@ -163,9 +164,9 @@ public class GenericUtils {
     }
 
     @NotNull
-    public static Pair<Map<ResourceLocation, LootData>, Map<ResourceLocation, TradeData>> decompressLootData(IClientUtils utils, byte[] fullCompressedData, RegistryAccess registryAccess) {
-        Map<ResourceLocation, LootData> lootData = new HashMap<>();
-        Map<ResourceLocation, TradeData> tradeData = new HashMap<>();
+    public static Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>> decompressLootData(IClientUtils utils, byte[] fullCompressedData, RegistryAccess registryAccess) {
+        Map<ResourceLocation, IDataNode> lootData = new HashMap<>();
+        Map<ResourceLocation, IDataNode> tradeData = new HashMap<>();
 
         if (fullCompressedData.length == 0) {
             return new Pair<>(lootData, tradeData);
@@ -197,27 +198,17 @@ public class GenericUtils {
 
     /**
      * Drops every item the recipe viewer hides from the decoded loot trees, along with any pool/group left empty by
-     * that, and drops loot tables left with nothing at all. Must run before a tree is handed to a recipe/widget, so
-     * that the rendered tree and the recipe outputs agree on what is visible.
+     * that, and drops loot tables left with nothing at all. Must run before a tree is handed to a recipe/widget and
+     * before {@link #collectItems} is asked for the recipe's outputs, so that the rendered tree, the outputs and the
+     * reverse index cannot disagree on what is visible.
      * <p>
-     * Tag entries are always kept - a tag is not a stack the viewer can hide, and resolving it here would change what
-     * the tooltip claims the loot table contains.
+     * A tag entry loses the members the viewer hides rather than being kept whole, and is dropped once none are left -
+     * see {@link #keepItemNode}.
      *
      * @param isVisible viewer-specific visibility test
      */
-    public static void pruneHiddenItems(Map<ResourceLocation, LootData> lootData, Predicate<ItemStack> isVisible) {
-        Iterator<Map.Entry<ResourceLocation, LootData>> iterator = lootData.entrySet().iterator();
-
-        while (iterator.hasNext()) {
-            Map.Entry<ResourceLocation, LootData> entry = iterator.next();
-            LootData data = entry.getValue();
-
-            if (data.node() instanceof ListNode listNode && listNode.prune(hiddenItemFilter(isVisible))) {
-                iterator.remove();
-            } else {
-                entry.setValue(new LootData(data.node(), data.items().stream().filter(isVisible).toList()));
-            }
-        }
+    public static void pruneHiddenItems(Map<ResourceLocation, IDataNode> lootData, Predicate<ItemStack> isVisible) {
+        lootData.values().removeIf((node) -> node instanceof ListNode listNode && listNode.prune(hiddenItemFilter(isVisible)));
     }
 
     /**
@@ -226,31 +217,76 @@ public class GenericUtils {
      * of its costs reads as a different, cheaper trade. Trade levels and professions left empty by that are dropped
      * too. See {@code CoreListNode#requiresAllChildren}.
      * <p>
-     * The flat input/output lists are filtered per item rather than recomputed from the pruned tree: they only feed
-     * the viewer's ingredient index, and the tree does not record which side of a trade an item sat on. An item that
-     * is visible itself but only occurred in a dropped trade therefore stays in the index.
+     * The flat input/output lists a viewer indexes are read back out of the pruned tree afterwards
+     * ({@link #collectTradeItems}), so an item that only occurred in a dropped trade leaves the index with it.
      */
-    public static void pruneHiddenTrades(Map<ResourceLocation, TradeData> tradeData, Predicate<ItemStack> isVisible) {
-        Iterator<Map.Entry<ResourceLocation, TradeData>> iterator = tradeData.entrySet().iterator();
-
-        while (iterator.hasNext()) {
-            Map.Entry<ResourceLocation, TradeData> entry = iterator.next();
-            TradeData data = entry.getValue();
-
-            if (data.node() instanceof ListNode listNode && listNode.prune(hiddenItemFilter(isVisible))) {
-                iterator.remove();
-            } else {
-                entry.setValue(new TradeData(data.node(),
-                        data.inputs().stream().filter((item) -> isVisible.test(item.getDefaultInstance())).toList(),
-                        data.outputs().stream().filter((item) -> isVisible.test(item.getDefaultInstance())).toList()));
-            }
-        }
+    public static void pruneHiddenTrades(Map<ResourceLocation, IDataNode> tradeData, Predicate<ItemStack> isVisible) {
+        tradeData.values().removeIf((node) -> node instanceof ListNode listNode && listNode.prune(hiddenItemFilter(isVisible)));
     }
 
     @NotNull
     private static Predicate<ICoreDataNode<?>> hiddenItemFilter(Predicate<ItemStack> isVisible) {
-        return (node) -> !(node instanceof IItemNode itemNode)
-                || itemNode.getModifiedItem().map(isVisible::test, (tag) -> true);
+        return (node) -> !(node instanceof IItemNode itemNode) || keepItemNode(itemNode, isVisible);
+    }
+
+    /**
+     * A node survives while it still stands for something the player can see. The hidden members of a tag are dropped
+     * first, so that {@link IItemNode#getItems()} - what the recipe outputs and the reverse index are built from -
+     * cannot claim more than the tree shows; a tag left without a single visible member is dropped whole.
+     * <p>
+     * A node standing for nothing at all is kept: the second input of a single-input villager trade is an empty
+     * placeholder stack, and dropping it would take the whole trade with it (see {@code requiresAllChildren}).
+     */
+    private static boolean keepItemNode(IItemNode itemNode, Predicate<ItemStack> isVisible) {
+        itemNode.retainItems(isVisible);
+
+        List<ItemStack> items = itemNode.getItems();
+
+        if (items.isEmpty()) {
+            return itemNode.getItem().left().filter(ItemStack::isEmpty).isPresent();
+        }
+
+        return items.stream().anyMatch(isVisible);
+    }
+
+    /** Every stack the tree below {@code node} stands for - the client-side counterpart of the server's own walk. */
+    @NotNull
+    public static List<ItemStack> collectItems(IDataNode node) {
+        List<ItemStack> items = new ArrayList<>();
+
+        if (node instanceof ListNode listNode) {
+            for (IDataNode child : listNode.nodes()) {
+                items.addAll(collectItems(child));
+            }
+        } else if (node instanceof IItemNode itemNode) {
+            items.addAll(itemNode.getItems());
+        }
+
+        return items;
+    }
+
+    /**
+     * The costs and the results of every trade below {@code node}, kept apart - only an {@link ITradeNode} knows which
+     * of its children is which, so the walk asks it instead of looking at the item nodes itself.
+     */
+    @NotNull
+    public static Pair<List<ItemStack>, List<ItemStack>> collectTradeItems(IDataNode node) {
+        List<ItemStack> inputs = new ArrayList<>();
+        List<ItemStack> outputs = new ArrayList<>();
+
+        collectTradeItems(node, inputs, outputs);
+        return new Pair<>(inputs, outputs);
+    }
+
+    private static void collectTradeItems(IDataNode node, List<ItemStack> inputs, List<ItemStack> outputs) {
+        if (node instanceof ITradeNode tradeNode) {
+            inputs.addAll(tradeNode.getInputItems());
+            outputs.addAll(tradeNode.getOutputItems());
+        } else if (node instanceof ListNode listNode) {
+            for (IDataNode child : listNode.nodes()) {
+                collectTradeItems(child, inputs, outputs);
+            }
+        }
     }
 
     public static void processData(ClientLevel level, AliClientRegistry clientRegistry, AliConfig config, byte[] fullCompressedData,
@@ -260,9 +296,9 @@ public class GenericUtils {
                                    TriConsumer<IDataNode, ResourceLocation, List<ItemStack>> gameplayConsumer,
                                    QuintConsumer<IDataNode, ResourceLocation, VillagerProfession, List<ItemStack>, List<ItemStack>> traderConsumer,
                                    QuadConsumer<IDataNode, ResourceLocation, List<ItemStack>, List<ItemStack>> wanderingTraderConsumer) {
-        Pair<Map<ResourceLocation, LootData>, Map<ResourceLocation, TradeData>> pair = GenericUtils.decompressLootData(clientRegistry, fullCompressedData, level.registryAccess());
-        Map<ResourceLocation, LootData> lootData = pair.getA();
-        Map<ResourceLocation, TradeData> tradeData = pair.getB();
+        Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>> pair = GenericUtils.decompressLootData(clientRegistry, fullCompressedData, level.registryAccess());
+        Map<ResourceLocation, IDataNode> lootData = pair.getA();
+        Map<ResourceLocation, IDataNode> tradeData = pair.getB();
 
         pruneHiddenItems(lootData, isVisible);
         pruneHiddenTrades(tradeData, isVisible);
@@ -280,16 +316,16 @@ public class GenericUtils {
 
             //noinspection ConstantValue
             if (location != null) {
-                LootData data = lootData.get(location);
+                IDataNode node = lootData.get(location);
 
-                if (data != null) {
+                if (node != null) {
                     // blocks sharing both a loot table and an item (StandingAndWallBlockItem, e.g. banner + wall
                     // banner) would render as two identical entries; blocks with no item of their own are drawn as
                     // the block itself, so those stay distinguishable and are always kept
                     Item item = block.asItem();
 
                     if (item == Items.AIR || handledBlockItems.computeIfAbsent(location, (k) -> new HashSet<>()).add(item)) {
-                        blockConsumer.accept(data.node, location, block, data.items);
+                        blockConsumer.accept(node, location, block, collectItems(node));
                     }
 
                     claimedLootTables.add(location);
@@ -305,10 +341,10 @@ public class GenericUtils {
                 continue;
             }
 
-            LootData data = lootData.get(location);
+            IDataNode node = lootData.get(location);
 
-            if (data != null) {
-                entityConsumer.accept(data.node, location, entry.getValue().get(0), data.items);
+            if (node != null) {
+                entityConsumer.accept(node, location, entry.getValue().get(0), collectItems(node));
             }
 
             claimedLootTables.add(location);
@@ -316,8 +352,8 @@ public class GenericUtils {
 
         lootData.keySet().removeAll(claimedLootTables);
 
-        for (Map.Entry<ResourceLocation, LootData> entry : lootData.entrySet()) {
-            gameplayConsumer.accept(entry.getValue().node, entry.getKey(), entry.getValue().items());
+        for (Map.Entry<ResourceLocation, IDataNode> entry : lootData.entrySet()) {
+            gameplayConsumer.accept(entry.getValue(), entry.getKey(), collectItems(entry.getValue()));
         }
 
         lootData.clear();
@@ -329,27 +365,20 @@ public class GenericUtils {
 
         for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : entries) {
             ResourceLocation location = entry.getKey().location();
-            TradeData tradeEntry = tradeData.get(location);
+            IDataNode node = tradeData.get(location);
 
-            if (tradeEntry != null) {
-                List<ItemStack> inputs = tradeEntry.inputs.stream().map(Item::getDefaultInstance).toList();
-                List<ItemStack> outputs = tradeEntry.outputs.stream().map(Item::getDefaultInstance).toList();
+            if (node != null) {
+                Pair<List<ItemStack>, List<ItemStack>> items = collectTradeItems(node);
 
-                traderConsumer.accept(tradeEntry.node, location, entry.getValue(), inputs, outputs);
+                traderConsumer.accept(node, location, entry.getValue(), items.getA(), items.getB());
                 tradeData.remove(location);
             }
         }
 
-        for (Map.Entry<ResourceLocation, TradeData> entry : tradeData.entrySet()) {
-            ResourceLocation location = entry.getKey();
-            TradeData tradeEntry = tradeData.get(location);
+        for (Map.Entry<ResourceLocation, IDataNode> entry : tradeData.entrySet()) {
+            Pair<List<ItemStack>, List<ItemStack>> items = collectTradeItems(entry.getValue());
 
-            if (tradeEntry != null) {
-                List<ItemStack> inputs = tradeEntry.inputs.stream().map(Item::getDefaultInstance).toList();
-                List<ItemStack> outputs = tradeEntry.outputs.stream().map(Item::getDefaultInstance).toList();
-
-                wanderingTraderConsumer.accept(tradeEntry.node, location, inputs, outputs);
-            }
+            wanderingTraderConsumer.accept(entry.getValue(), entry.getKey(), items.getA(), items.getB());
         }
 
         tradeData.clear();
@@ -457,38 +486,26 @@ public class GenericUtils {
                 .collect(Collectors.joining(" "));
     }
 
-    private static void readLootData(IClientUtils utils, RegistryFriendlyByteBuf readerBuf, Map<ResourceLocation, LootData> lootData) {
+    private static void readLootData(IClientUtils utils, RegistryFriendlyByteBuf readerBuf, Map<ResourceLocation, IDataNode> lootData) {
         int lootDataCount = readerBuf.readInt();
 
         for (int i = 0; i < lootDataCount; i++) {
             ResourceLocation location = readerBuf.readResourceLocation();
-            IDataNode dataNode = utils.getDataNodeFactory(LootTableNode.ID).apply(utils, readerBuf);
-            List<ItemStack> items = ItemStack.OPTIONAL_LIST_STREAM_CODEC.decode(readerBuf);
 
-            lootData.put(location, new LootData(dataNode, items));
+            lootData.put(location, utils.getDataNodeFactory(LootTableNode.ID).apply(utils, readerBuf));
         }
     }
 
-    private static void readTradeData(IClientUtils utils, RegistryFriendlyByteBuf buf, Map<ResourceLocation, TradeData> tradeData) {
+    private static void readTradeData(IClientUtils utils, RegistryFriendlyByteBuf buf, Map<ResourceLocation, IDataNode> tradeData) {
         int tradeDataCount = buf.readInt();
 
         for (int i = 0; i < tradeDataCount; i++) {
             ResourceLocation location = buf.readResourceLocation();
-            IDataNode dataNode = utils.getDataNodeFactory(TradeNode.ID).apply(utils, buf);
-            List<Item> inputs = buf.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
-            List<Item> outputs = buf.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
-            tradeData.put(location, new TradeData(dataNode, inputs, outputs));
+
+            tradeData.put(location, utils.getDataNodeFactory(TradeNode.ID).apply(utils, buf));
         }
 
         // wandering trader
-        IDataNode dataNode = utils.getDataNodeFactory(TradeNode.ID).apply(utils, buf);
-        List<Item> inputs = buf.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
-        List<Item> outputs = buf.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
-
-        tradeData.put(ResourceLocation.withDefaultNamespace("empty"), new TradeData(dataNode, inputs, outputs));
+        tradeData.put(ResourceLocation.withDefaultNamespace("empty"), utils.getDataNodeFactory(TradeNode.ID).apply(utils, buf));
     }
-
-    public record LootData(IDataNode node, List<ItemStack> items) {}
-
-    public record TradeData(IDataNode node, List<Item> inputs, List<Item> outputs) {}
 }

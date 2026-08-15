@@ -22,7 +22,6 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import oshi.util.tuples.Pair;
 
 import java.util.List;
 
@@ -63,9 +62,6 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
 
     @NotNull
     <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, TooltipNode condition);
-
-    @NotNull
-    <T extends VillagerTrades.ItemListing> Pair<List<Item>, List<Item>> collectItems(IServerUtils utils, T entry);
 
     @NotNull
     RangeValue convertNumber(IServerUtils utils, @Nullable NumberProvider numberProvider);

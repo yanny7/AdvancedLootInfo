@@ -1,11 +1,11 @@
-package com.yanny.awi.compatibility;
+package com.yanny.aci.compatibility;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.aci.api.Rect;
-import com.yanny.awi.plugin.client.WidgetUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
@@ -33,11 +33,18 @@ public abstract class AbstractScrollWidget {
 
     public abstract void renderWidgets(GuiGraphics guiGraphics, double mouseX, double mouseY);
 
+    /**
+     * The atlas holding the scrollbar sprites. Every implementor's texture must place them at the same coordinates,
+     * because the u/v offsets used by {@link #render} live here rather than in the individual mods.
+     */
+    @NotNull
+    protected abstract ResourceLocation getTexture();
+
     public void render(GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        WidgetUtils.blitNineSliced(guiGraphics, WidgetUtils.TEXTURE_LOC, scrollRect.x(), scrollRect.y(), scrollRect.width(), scrollRect.height(), 2, 2, 2, 2, 16, 16, 2, 2);
+        WidgetUtils.blitNineSliced(guiGraphics, getTexture(), scrollRect.x(), scrollRect.y(), scrollRect.width(), scrollRect.height(), 2, 2, 2, 2, 16, 16, 2, 2);
 
         Rect markerArea = calculateScrollbarMarkerArea();
-        WidgetUtils.blitNineSliced(guiGraphics, WidgetUtils.TEXTURE_LOC, markerArea.x(), markerArea.y(), markerArea.width(), markerArea.height(), 2, 2, 2, 1, 12, 17, 18, 0);
+        WidgetUtils.blitNineSliced(guiGraphics, getTexture(), markerArea.x(), markerArea.y(), markerArea.width(), markerArea.height(), 2, 2, 2, 1, 12, 17, 18, 0);
 
         drawContents(guiGraphics, mouseX, mouseY);
     }
