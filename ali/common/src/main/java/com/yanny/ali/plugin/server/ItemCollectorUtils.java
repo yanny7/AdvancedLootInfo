@@ -1,7 +1,6 @@
 package com.yanny.ali.plugin.server;
 
 import com.yanny.ali.api.IServerUtils;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
@@ -16,7 +15,6 @@ import net.minecraft.world.level.storage.loot.functions.SetItemFunction;
 import net.minecraft.world.level.storage.loot.functions.SmeltItemFunction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
-import oshi.util.tuples.Pair;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -112,37 +110,4 @@ public class ItemCollectorUtils {
         return List.of(function.item.value());
     }
 
-    @NotNull
-    public static Pair<List<Item>, List<Item>> collectTradeItems(IServerUtils utils, Int2ObjectMap<VillagerTrades.ItemListing[]> itemLists) {
-        List<Item> inputs = new ArrayList<>();
-        List<Item> outputs = new ArrayList<>();
-
-        for (VillagerTrades.ItemListing[] itemListings : itemLists.values()) {
-            for (VillagerTrades.ItemListing itemListing : itemListings) {
-                Pair<List<Item>, List<Item>> pair = utils.collectItems(utils, itemListing);
-
-                inputs.addAll(pair.getA());
-                outputs.addAll(pair.getB());
-            }
-        }
-
-        return new Pair<>(inputs, outputs);
-    }
-
-    @NotNull
-    public static Pair<List<Item>, List<Item>> collectTradeItems(IServerUtils utils, List<org.apache.commons.lang3.tuple.Pair<VillagerTrades.ItemListing[], Integer>> itemLists) {
-        List<Item> inputs = new ArrayList<>();
-        List<Item> outputs = new ArrayList<>();
-
-        for (org.apache.commons.lang3.tuple.Pair<VillagerTrades.ItemListing[], Integer> p : itemLists) {
-            for (VillagerTrades.ItemListing itemListing : p.getLeft()) {
-                Pair<List<Item>, List<Item>> pair = utils.collectItems(utils, itemListing);
-
-                inputs.addAll(pair.getA());
-                outputs.addAll(pair.getB());
-            }
-        }
-
-        return new Pair<>(inputs, outputs);
-    }
 }

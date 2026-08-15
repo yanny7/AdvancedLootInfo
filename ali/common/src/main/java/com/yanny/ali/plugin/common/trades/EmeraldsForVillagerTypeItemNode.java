@@ -9,9 +9,6 @@ import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.entity.npc.villager.VillagerType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import org.jetbrains.annotations.NotNull;
-import oshi.util.tuples.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,13 +32,5 @@ public class EmeraldsForVillagerTypeItemNode extends SubTradesNode<VillagerTrade
         }
 
         return nodes;
-    }
-
-    @NotNull
-    public static Pair<List<Item>, List<Item>> collectItems(IServerUtils ignoredUtils, VillagerTrades.EmeraldsForVillagerTypeItem listing) {
-        return new Pair<>(
-                List.of(Items.EMERALD),
-                listing.trades.values().stream().toList()
-        );
     }
 }

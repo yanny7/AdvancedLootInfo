@@ -270,22 +270,6 @@ public class PluginUtils {
         }
     }
 
-    public static <T extends BaseAccessor<?> & IItemListing> void registerItemListingCollector(IServerRegistry registry, Class<T> clazz) {
-        ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
-
-        if (classAnnotation != null) {
-            try {
-                //noinspection unchecked
-                Class<VillagerTrades.ItemListing> conditionClass = (Class<VillagerTrades.ItemListing>) Class.forName(classAnnotation.value());
-                registry.registerItemListingCollector(conditionClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c).collectItems(u));
-            } catch (Throwable e) {
-                LOGGER.warn("Failed to register item listing collector for {} with error {}", classAnnotation.value(), e.getMessage(), e);
-            }
-        } else {
-            LOGGER.warn("Missing ClassAccessor annotation for item listing collector {}", clazz.getName());
-        }
-    }
-
     @NotNull
     @Unmodifiable
     public static <T extends ItemLike> List<Item> getItems(IServerUtils utils, TagKey<T> tag) {

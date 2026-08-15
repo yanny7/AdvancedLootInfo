@@ -337,8 +337,37 @@ public class NodeUtils {
         }
     }
 
+    /**
+     * The stacks an {@link IItemNode} stands for, resolved against the current registry - a tag becomes its members,
+     * an empty stack becomes nothing. The returned list is mutable, so that {@link IItemNode#retainItems} can narrow
+     * it in place.
+     */
+    @NotNull
+    public static List<ItemStack> resolveItems(Either<ItemStack, TagKey<? extends ItemLike>> item) {
+        return new ArrayList<>(item.map(
+                (stack) -> stack.isEmpty() ? Collections.emptyList() : List.of(stack),
+                NodeUtils::toItemStacks
+        ));
+    }
+
+    @NotNull
+    private static <T extends ItemLike> List<ItemStack> toItemStacks(TagKey<? extends ItemLike> tag) {
+        //noinspection unchecked
+        Registry<T> registry = (Registry<T>) BuiltInRegistries.REGISTRY.get(tag.registry().location());
+
+        if (registry != null) {
+            //noinspection unchecked
+            return registry
+                    .getTag((TagKey<T>) tag)
+                    .map((holders) -> holders.stream().map(Holder::value).map((i) -> i.asItem().getDefaultInstance()).toList())
+                    .orElse(Collections.emptyList());
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
     private static <T extends ItemLike> boolean predicateEither(IItemNode itemNode, Predicate<ItemStack> predicate) {
-        return itemNode.getModifiedItem().map(
+        return itemNode.getItem().map(
                 predicate::test,
                 (tagKey) -> {
                     Optional<? extends Holder.Reference<? extends Registry<?>>> registry = BuiltInRegistries.REGISTRY.get(tagKey.registry().identifier());
