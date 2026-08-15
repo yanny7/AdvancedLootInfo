@@ -54,7 +54,6 @@ import org.jetbrains.annotations.Nullable;
 import org.junit.platform.suite.api.BeforeSuite;
 import org.junit.platform.suite.api.SelectClasses;
 import org.junit.platform.suite.api.Suite;
-import oshi.util.tuples.Pair;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -168,12 +167,6 @@ public class TooltipTestSuite {
             @Override
             public <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, TooltipNode condition) {
                 return PluginManager.getInstance().serverRegistry.getItemListing(utils, entry, condition);
-            }
-
-            @NotNull
-            @Override
-            public <T extends VillagerTrades.ItemListing> Pair<List<Item>, List<Item>> collectItems(IServerUtils utils, T entry) {
-                return PluginManager.getInstance().serverRegistry.collectItems(utils, entry);
             }
 
             @NotNull

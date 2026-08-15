@@ -8,16 +8,12 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.npc.VillagerTrades;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SuspiciousStewItem;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.jetbrains.annotations.NotNull;
-import oshi.util.tuples.Pair;
-
-import java.util.List;
 
 public class TradeUtils {
     @NotNull
@@ -220,86 +216,6 @@ public class TradeUtils {
                 listing.villagerXp,
                 0.2F,
                 condition
-        );
-    }
-
-    @NotNull
-    public static Pair<List<Item>, List<Item>> collectItems(IServerUtils ignoredUtils, MerchantOffer offer) {
-        return new Pair<>(
-                List.of(offer.getBaseCostA().getItem(), offer.getCostB().getItem()),
-                List.of(offer.getResult().getItem())
-        );
-    }
-
-    @NotNull
-    public static Pair<List<Item>, List<Item>> collectItems(IServerUtils ignoredUtils, VillagerTrades.DyedArmorForEmeralds listing) {
-        return new Pair<>(
-                List.of(Items.EMERALD),
-                List.of(listing.item)
-        );
-    }
-
-    @NotNull
-    public static Pair<List<Item>, List<Item>> collectItems(IServerUtils ignoredUtils, VillagerTrades.EmeraldForItems listing) {
-        return new Pair<>(
-                List.of(listing.item),
-                List.of(Items.EMERALD)
-        );
-    }
-
-    @NotNull
-    public static Pair<List<Item>, List<Item>> collectItems(IServerUtils ignoredUtils, VillagerTrades.EnchantBookForEmeralds ignoredListing) {
-        return new Pair<>(
-                List.of(Items.EMERALD),
-                List.of(Items.ENCHANTED_BOOK)
-        );
-    }
-
-    @NotNull
-    public static Pair<List<Item>, List<Item>> collectItems(IServerUtils ignoredUtils, VillagerTrades.EnchantedItemForEmeralds listing) {
-        return new Pair<>(
-                List.of(Items.EMERALD),
-                List.of(listing.itemStack.getItem())
-        );
-    }
-
-    @NotNull
-    public static Pair<List<Item>, List<Item>> collectItems(IServerUtils ignoredUtils, VillagerTrades.ItemsAndEmeraldsToItems listing) {
-        return new Pair<>(
-                List.of(Items.EMERALD, listing.fromItem.getItem()),
-                List.of(listing.toItem.getItem())
-        );
-    }
-
-    @NotNull
-    public static Pair<List<Item>, List<Item>> collectItems(IServerUtils ignoredUtils, VillagerTrades.ItemsForEmeralds listing) {
-        return new Pair<>(
-                List.of(Items.EMERALD),
-                List.of(listing.itemStack.getItem())
-        );
-    }
-
-    @NotNull
-    public static Pair<List<Item>, List<Item>> collectItems(IServerUtils ignoredUtils, VillagerTrades.SuspiciousStewForEmerald ignoredListing) {
-        return new Pair<>(
-                List.of(Items.EMERALD),
-                List.of(Items.SUSPICIOUS_STEW)
-        );
-    }
-
-    @NotNull
-    public static Pair<List<Item>, List<Item>> collectItems(IServerUtils ignoredUtils, VillagerTrades.TippedArrowForItemsAndEmeralds listing) {
-        return new Pair<>(
-                List.of(Items.EMERALD, listing.fromItem),
-                List.of(Items.TIPPED_ARROW)
-        );
-    }
-
-    @NotNull
-    public static Pair<List<Item>, List<Item>> collectItems(IServerUtils ignoredUtils, VillagerTrades.TreasureMapForEmeralds ignoredListing) {
-        return new Pair<>(
-                List.of(Items.EMERALD, Items.COMPASS),
-                List.of(Items.MAP)
         );
     }
 }

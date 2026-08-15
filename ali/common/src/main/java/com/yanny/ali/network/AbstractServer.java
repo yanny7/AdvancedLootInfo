@@ -20,22 +20,18 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.*;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
@@ -45,7 +41,6 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
-import oshi.util.tuples.Pair;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -73,15 +68,12 @@ public abstract class AbstractServer {
         Map<ResourceLocation, LootTable> unprocessedLootTables = new HashMap<>(lootTables);
         Map<ResourceLocation, LootTable> fakeLootTables = new HashMap<>(fakeLootDataManager.getLootTables());
         Map<ResourceLocation, List<Item>> lootTableItems;
-        Map<ResourceLocation, List<ItemStack>> lootTableItemStacks;
         List<ILootModifier<?>> lootModifiers = serverRegistry.getLootModifiers();
         Map<ILootModifier.IType<?>, List<ILootModifier<?>>> groupedTypes = lootModifiers.stream().collect(Collectors.groupingBy(ILootModifier::getType));
         List<ILootModifier<?>> blockLootModifiers = groupedTypes.getOrDefault(ILootModifier.IType.BLOCK, Collections.emptyList());
         List<ILootModifier<?>> entityLootModifiers = groupedTypes.getOrDefault(ILootModifier.IType.ENTITY, Collections.emptyList());
         List<ILootModifier<?>> lootTableLootModifiers = groupedTypes.getOrDefault(ILootModifier.IType.LOOT_TABLE, Collections.emptyList());
         Map<ResourceLocation, IDataNode> tradeNodes;
-        Map<ResourceLocation, Pair<List<Item>, List<Item>>> tradeItems = new HashMap<>();
-        Pair<List<Item>, List<Item>> wanderingTraderItems = ItemCollectorUtils.collectTradeItems(serverRegistry, VillagerTrades.WANDERING_TRADER_TRADES);
         IDataNode wanderingTraderNode = processWanderingTrader(serverRegistry);
 
         lootTables.forEach(serverRegistry::addLootTable); // used for table references
@@ -94,9 +86,8 @@ public abstract class AbstractServer {
         lootNodes.putAll(processEntities(serverRegistry, config, serverRegistry.getServerLevel(), unprocessedLootTables, fakeLootTables, entityLootModifiers, lootTableLootModifiers, lootTableItems));
         lootNodes.putAll(processLootTables(serverRegistry, config, unprocessedLootTables, fakeLootTables, lootTableLootModifiers, lootTableItems));
 
-        lootTableItemStacks = lootNodes.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, (e) -> collectItems(e.getValue())));
-        lootNodes = removeEmptyLootTable(serverRegistry, lootNodes, lootTableItemStacks);
-        tradeNodes = new HashMap<>(processTrades(serverRegistry, config, tradeItems));
+        lootNodes = removeEmptyLootTable(serverRegistry, lootNodes);
+        tradeNodes = new HashMap<>(processTrades(serverRegistry, config));
 
         LOGGER.info("Processing {} loot tables, {} fake loot tables and {} trades took {}ms", lootNodes.size(), fakeLootTables.size(), tradeNodes.size() + 1, System.currentTimeMillis() - startTime);
 
@@ -105,9 +96,14 @@ public abstract class AbstractServer {
 
         // storing and compressing data
         serverRegistry.getTooltipCache().encode(serverRegistry, buf);
-        writeLootData(serverRegistry, buf, lootTableItemStacks, lootNodes);
-        writeTradeData(serverRegistry, buf, tradeNodes, tradeItems, wanderingTraderNode, wanderingTraderItems);
-        NetworkUtils.compressAndStoreData(rawBuf, "loot", (i, data) -> chunks.add(new LootDataChunkMessage(i, data)));
+        NetworkUtils.writeMapData(Utils.MOD_ID, serverRegistry, buf, lootNodes);
+        NetworkUtils.writeMapData(Utils.MOD_ID, serverRegistry, buf, tradeNodes);
+
+        if (!NetworkUtils.writeNodeData(Utils.MOD_ID, serverRegistry, buf, new ResourceLocation("wandering_trader"), wanderingTraderNode)) {
+            new TradeNode(serverRegistry, new Int2ObjectOpenHashMap<>(), true).encode(serverRegistry, buf);
+        }
+
+        NetworkUtils.compressAndStoreData(Utils.MOD_ID, rawBuf, (i, data) -> chunks.add(new LootDataChunkMessage(i, data)));
 
         serverRegistry.printRuntimeInfo();
 
@@ -145,8 +141,12 @@ public abstract class AbstractServer {
         return ItemCollectorUtils.collectLootTable(PluginManager.getInstance().serverRegistry, lootTableMap.getValue());
     }
 
+    /**
+     * The items a table produces are collected here only to tell an empty table from a real one - the client derives
+     * its own from the very same node tree ({@code GenericUtils.collectItems}), so nothing item-shaped is sent.
+     */
     @NotNull
-    private static Map<ResourceLocation, IDataNode> removeEmptyLootTable(AliServerRegistry serverRegistry, Map<ResourceLocation, IDataNode> lootNodes, Map<ResourceLocation, List<ItemStack>> items) {
+    private static Map<ResourceLocation, IDataNode> removeEmptyLootTable(AliServerRegistry serverRegistry, Map<ResourceLocation, IDataNode> lootNodes) {
         Map<ResourceLocation, IDataNode> result = new HashMap<>();
         int emptyLootTables = 0;
         int injectedLootTables = 0;
@@ -158,7 +158,7 @@ public abstract class AbstractServer {
                 listNode.optimizeList();
             }
 
-            if (!items.getOrDefault(entry.getKey(), Collections.emptyList()).isEmpty()) {
+            if (!collectItems(node).isEmpty()) {
                 if (!serverRegistry.isSubTable(entry.getKey())) {
                     result.put(entry.getKey(), node);
                 } else {
@@ -429,7 +429,7 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static Map<ResourceLocation, IDataNode> processTrades(AliServerRegistry serverRegistry, AliConfig config, Map<ResourceLocation, Pair<List<Item>, List<Item>>> tradeItems) {
+    private static Map<ResourceLocation, IDataNode> processTrades(AliServerRegistry serverRegistry, AliConfig config) {
         Map<ResourceLocation, IDataNode> nodes = new HashMap<>();
 
         for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : BuiltInRegistries.VILLAGER_PROFESSION.entrySet()) {
@@ -443,7 +443,6 @@ public abstract class AbstractServer {
                 if (itemListingMap != null && itemListingMap.int2ObjectEntrySet().stream().anyMatch((e) -> e.getValue().length > 0)) {
                     try {
                         nodes.put(location, serverRegistry.parseTrade(itemListingMap, false));
-                        tradeItems.put(location, ItemCollectorUtils.collectTradeItems(serverRegistry, itemListingMap));
                     } catch (Throwable e) {
                         LOGGER.warn("Failed to parse trade for villager {} with error {}", location, e.getMessage(), e);
                     }
@@ -490,116 +489,10 @@ public abstract class AbstractServer {
                 itemStacks.addAll(collectItems(n));
             }
         } else if (node instanceof IItemNode itemNode) {
-            itemStacks.addAll(itemNode.getModifiedItem().map(List::of, AbstractServer::toItemStacks));
+            itemStacks.addAll(itemNode.getItems());
         }
 
         return itemStacks;
-    }
-
-    private void writeLootData(IServerUtils utils, FriendlyByteBuf buf, Map<ResourceLocation, List<ItemStack>> lootTableItemStacks, Map<ResourceLocation, IDataNode> lootNodes) {
-        int countIndex = buf.writerIndex();
-        int successfulNodes = 0;
-
-        buf.writeInt(lootNodes.size());
-
-        for (Map.Entry<ResourceLocation, IDataNode> nodeEntry : lootNodes.entrySet()) {
-            int startOfNode = buf.writerIndex();
-
-            try {
-                TooltipContext.set(nodeEntry.getKey());
-                buf.writeResourceLocation(nodeEntry.getKey());
-                nodeEntry.getValue().encode(utils, buf);
-                buf.writeCollection(lootTableItemStacks.getOrDefault(nodeEntry.getKey(), Collections.emptyList()), FriendlyByteBuf::writeItem);
-                successfulNodes++;
-            } catch (Throwable e) {
-                buf.writerIndex(startOfNode);
-                LOGGER.warn("Failed to write loot data in {}", nodeEntry.getKey(), e);
-            } finally {
-                TooltipContext.clear();
-            }
-        }
-
-        if (successfulNodes != lootNodes.size()) {
-            int endIndex = buf.writerIndex();
-
-            buf.writerIndex(countIndex);
-            buf.writeInt(successfulNodes);
-            buf.writerIndex(endIndex);
-        }
-
-        lootNodes.clear();
-        lootTableItemStacks.clear();
-    }
-
-    private void writeTradeData(IServerUtils utils, FriendlyByteBuf buf, Map<ResourceLocation, IDataNode> trades, Map<ResourceLocation, Pair<List<Item>, List<Item>>> items, IDataNode wanderingTraderNode, Pair<List<Item>, List<Item>> wanderingTraderItems) {
-        int countIndex = buf.writerIndex();
-        int successfulNodes = 0;
-
-        buf.writeInt(trades.size());
-
-        for (Map.Entry<ResourceLocation, IDataNode> nodeEntry : trades.entrySet()) {
-            int startOfNode = buf.writerIndex();
-
-            try {
-                Pair<List<Item>, List<Item>> pair = items.getOrDefault(nodeEntry.getKey(), new Pair<>(Collections.emptyList(), Collections.emptyList()));
-
-                TooltipContext.set(nodeEntry.getKey());
-                buf.writeResourceLocation(nodeEntry.getKey());
-                nodeEntry.getValue().encode(utils, buf);
-                buf.writeCollection(pair.getA(), (b, i) -> b.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i)));
-                buf.writeCollection(pair.getB(), (b, i) -> b.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i)));
-                successfulNodes++;
-            } catch (Throwable e) {
-                buf.writerIndex(startOfNode);
-                LOGGER.warn("Failed to write trade data in {}", nodeEntry.getKey(), e);
-            } finally {
-                TooltipContext.clear();
-            }
-        }
-
-        if (successfulNodes != trades.size()) {
-            int endIndex = buf.writerIndex();
-
-            buf.writerIndex(countIndex);
-            buf.writeInt(successfulNodes);
-            buf.writerIndex(endIndex);
-        }
-
-        int wtStart = buf.writerIndex();
-
-        try {
-            TooltipContext.set(new ResourceLocation("wandering_trader"));
-            wanderingTraderNode.encode(utils, buf);
-            buf.writeCollection(wanderingTraderItems.getA(), (b, i) -> b.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i)));
-            buf.writeCollection(wanderingTraderItems.getB(), (b, i) -> b.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i)));
-        } catch (Throwable e) {
-            LOGGER.warn("Failed to encode Wandering Trader", e);
-
-            // write dummy data
-            buf.writerIndex(wtStart);
-            new TradeNode(utils, new Int2ObjectOpenHashMap<>(), true).encode(utils, buf);
-            buf.writeCollection(List.of(), (b, i) -> {});
-            buf.writeCollection(List.of(), (b, i) -> {});
-        } finally {
-            TooltipContext.clear();
-        }
-
-        trades.clear();
-        items.clear();
-    }
-
-    private static <T extends ItemLike> List<ItemStack> toItemStacks(TagKey<T> tag) {
-        //noinspection unchecked
-        Registry<T> registry = (Registry<T>)BuiltInRegistries.REGISTRY.get(tag.registry().location());
-
-        if (registry != null) {
-            return registry
-                    .getTag(tag)
-                    .map(holders -> holders.stream().map(Holder::value).map((i) -> i.asItem().getDefaultInstance()).toList())
-                    .orElse(Collections.emptyList());
-        } else {
-            return Collections.emptyList();
-        }
     }
 
     private static Map<ResourceLocation, List<Item>> collectLootTableItems(Map<ResourceLocation, LootTable> lootTables, Map<ResourceLocation, LootTable> fakeLootTables) {

@@ -1,11 +1,9 @@
 package com.yanny.ali.plugin.server;
 
 import com.yanny.ali.api.IServerUtils;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -14,7 +12,6 @@ import net.minecraft.world.level.storage.loot.entries.*;
 import net.minecraft.world.level.storage.loot.functions.SmeltItemFunction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
-import oshi.util.tuples.Pair;
 
 import java.util.*;
 
@@ -101,20 +98,4 @@ public class ItemCollectorUtils {
                 .map((l) -> List.of(l.getResultItem(utils.getServerLevel().registryAccess()).getItem())).orElse(List.of())).flatMap(Collection::stream).toList();
     }
 
-    @NotNull
-    public static Pair<List<Item>, List<Item>> collectTradeItems(IServerUtils utils, Int2ObjectMap<VillagerTrades.ItemListing[]> itemLists) {
-        List<Item> inputs = new ArrayList<>();
-        List<Item> outputs = new ArrayList<>();
-
-        for (VillagerTrades.ItemListing[] itemListings : itemLists.values()) {
-            for (VillagerTrades.ItemListing itemListing : itemListings) {
-                Pair<List<Item>, List<Item>> pair = utils.collectItems(utils, itemListing);
-
-                inputs.addAll(pair.getA());
-                outputs.addAll(pair.getB());
-            }
-        }
-
-        return new Pair<>(inputs, outputs);
-    }
 }

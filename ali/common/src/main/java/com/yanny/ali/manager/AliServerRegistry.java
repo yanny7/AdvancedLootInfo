@@ -39,7 +39,6 @@ import org.apache.logging.log4j.util.TriConsumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
-import oshi.util.tuples.Pair;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -58,7 +57,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     // collectors
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootPoolEntryContainer, List<Item>>> entryItemCollectors = registerClassKeyed("entry item collectors", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, List<Item>, LootItemFunction, List<Item>>> functionItemCollectors = registerClassKeyed("function item collectors", false, HashMap::new, null);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, VillagerTrades.ItemListing, Pair<List<Item>, List<Item>>>> tradeItemCollectors = registerClassKeyed("trade item collectors", false, HashMap::new, null);
     // tooltips
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemFunction, TooltipBuilder>> functionTooltips = registerClassKeyed("function tooltips", true, HashMap::new, BuiltInRegistries.LOOT_FUNCTION_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemCondition, TooltipBuilder>> conditionTooltips = registerClassKeyed("condition tooltips", true, HashMap::new, BuiltInRegistries.LOOT_CONDITION_TYPE);
@@ -170,11 +168,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         tradeItemListings.put(type, (u, i, c) -> tradeFactory.apply(u, type.cast(i), c));
     }
 
-    @Override
-    public <T extends VillagerTrades.ItemListing> void registerItemListingCollector(Class<T> type, BiFunction<IServerUtils, T, Pair<List<Item>, List<Item>>> itemSupplier) {
-        tradeItemCollectors.put(type, (u, i) -> itemSupplier.apply(u, (type.cast(i))));
-    }
-
     @NotNull
     @Override
     public <T extends LootPoolEntryContainer> List<Item> collectItems(IServerUtils utils, T entry) {
@@ -284,26 +277,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
                     } catch (Throwable e) {
                         return new MissingNode(TooltipNode.empty());
                     }
-                });
-    }
-
-    @NotNull
-    @Override
-    public <T extends VillagerTrades.ItemListing> Pair<List<Item>, List<Item>> collectItems(IServerUtils utils, T entry) {
-        return tradeItemCollectors.get(entry.getClass())
-                .map((e) -> e.apply(utils, entry))
-                .orElseGet(() -> {
-                    try {
-                        // try to get result from MerchantOffer. only if params aren't used (otherwise values can be dynamic)
-                        //noinspection DataFlowIssue
-                        MerchantOffer offer = entry.getOffer(null, null);
-
-                        if (offer != null) {
-                            return TradeUtils.collectItems(utils, offer);
-                        }
-                    } catch (Throwable ignored) {}
-
-                    return new Pair<>(Collections.emptyList(), Collections.emptyList());
                 });
     }
 

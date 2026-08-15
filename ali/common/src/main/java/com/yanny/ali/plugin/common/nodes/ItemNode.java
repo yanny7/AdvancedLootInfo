@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class ItemNode implements IDataNode, IItemNode {
     public static final ResourceLocation ID = Utils.modLoc("item");
@@ -34,6 +35,7 @@ public class ItemNode implements IDataNode, IItemNode {
     private final List<LootItemCondition> conditions;
     private final List<LootItemFunction> functions;
     private final Either<ItemStack, TagKey<? extends ItemLike>> item;
+    private final List<ItemStack> items;
     private final RangeValue count;
     private final float chance;
     /** Only populated on the client - on the server it is derived from {@link #conditions} in {@link #encode}. */
@@ -51,6 +53,7 @@ public class ItemNode implements IDataNode, IItemNode {
         this.chance = chance;
         this.count = count.clamp(0, 9999);
         this.item = item;
+        this.items = NodeUtils.resolveItems(item);
         this.tooltip = tooltip;
         this.functions = functions;
         this.conditions = conditions;
@@ -59,6 +62,7 @@ public class ItemNode implements IDataNode, IItemNode {
 
     public ItemNode(IClientUtils utils, FriendlyByteBuf buf) {
         item = buf.readEither(FriendlyByteBuf::readItem, (b) -> TagKey.create(Registries.ITEM, b.readResourceLocation()));
+        items = NodeUtils.resolveItems(item);
         tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
         count = new RangeValue(buf);
         chance = buf.readFloat();
@@ -70,8 +74,19 @@ public class ItemNode implements IDataNode, IItemNode {
 
     @NotNull
     @Override
-    public Either<ItemStack, TagKey<? extends ItemLike>> getModifiedItem() {
+    public Either<ItemStack, TagKey<? extends ItemLike>> getItem() {
         return item;
+    }
+
+    @NotNull
+    @Override
+    public List<ItemStack> getItems() {
+        return items;
+    }
+
+    @Override
+    public void retainItems(Predicate<ItemStack> isVisible) {
+        items.removeIf(Predicate.not(isVisible));
     }
 
     @NotNull

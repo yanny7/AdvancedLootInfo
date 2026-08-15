@@ -3,8 +3,8 @@ package com.yanny.awi.network;
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.network.NetworkUtils;
 import com.yanny.aci.tooltip.TooltipContext;
+import com.yanny.awi.Utils;
 import com.yanny.awi.api.IDataNode;
-import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ListNode;
 import com.yanny.awi.manager.AwiServerRegistry;
 import com.yanny.awi.manager.PluginManager;
@@ -92,8 +92,8 @@ public abstract class AbstractServer {
         chunks.clear();
 
         serverRegistry.getTooltipCache().encode(serverRegistry, buf);
-        writeWorldgenData(serverRegistry, buf, worldgenNodes);
-        NetworkUtils.compressAndStoreData(rawBuf, "worldgen", (i, data) -> chunks.add(new WorldgenDataChunkMessage(i, data)));
+        NetworkUtils.writeMapData(Utils.MOD_ID, serverRegistry, buf, worldgenNodes);
+        NetworkUtils.compressAndStoreData(Utils.MOD_ID, rawBuf, (i, data) -> chunks.add(new WorldgenDataChunkMessage(i, data)));
 
         serverRegistry.printRuntimeInfo();
 
@@ -124,42 +124,6 @@ public abstract class AbstractServer {
     protected abstract void sendWorldgenDataChunkMessage(ServerPlayer serverPlayer, WorldgenDataChunkMessage message);
 
     protected abstract void sendDoneMessage(ServerPlayer serverPlayer, DoneMessage message);
-
-    private void writeWorldgenData(IServerUtils utils, FriendlyByteBuf buf, Map<ResourceLocation, IDataNode> worldgenNodes) {
-        int countIndex = buf.writerIndex();
-        int successfulNodes = 0;
-
-        buf.writeInt(worldgenNodes.size());
-
-        for (Map.Entry<ResourceLocation, IDataNode> nodeEntry : worldgenNodes.entrySet()) {
-            int startOfNode = buf.writerIndex();
-
-            try {
-                TooltipContext.set(nodeEntry.getKey());
-                buf.writeResourceLocation(nodeEntry.getKey());
-                nodeEntry.getValue().encode(utils, buf);
-                //TODO write blocks
-                successfulNodes++;
-            } catch (Throwable e) {
-                buf.writerIndex(startOfNode);
-                LOGGER.warn("Failed to write worldgen data in {}", nodeEntry.getKey(), e);
-            } finally {
-                TooltipContext.clear();
-            }
-        }
-
-        if (successfulNodes != worldgenNodes.size()) {
-            LOGGER.warn("Only {} of {} level(s) were encoded successfully", successfulNodes, worldgenNodes.size());
-
-            int endIndex = buf.writerIndex();
-
-            buf.writerIndex(countIndex);
-            buf.writeInt(successfulNodes);
-            buf.writerIndex(endIndex);
-        }
-
-        worldgenNodes.clear();
-    }
 
     @NotNull
     private static Map<ResourceLocation, IDataNode> removeEmptyNodes(Map<ResourceLocation, IDataNode> nodes) {

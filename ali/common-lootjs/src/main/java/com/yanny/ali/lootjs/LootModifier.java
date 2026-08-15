@@ -92,7 +92,7 @@ public abstract class LootModifier<T> implements ILootModifier<T> {
 
                     allConditions.add(new InvertedLootItemCondition(new AllOfCondition(conditions.toArray(LootItemCondition[]::new))));
                     TooltipBuilder tooltip = EntryTooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, enchantedChance, enchantedCount, i.getFunctions(), allConditions);
-                    return new ItemNode(i.getChance(), i.getCount(), i.getModifiedItem(), tooltip.build(), i.getFunctions(), i.getConditions());
+                    return new ItemNode(i.getChance(), i.getCount(), i.getItem(), tooltip.build(), i.getFunctions(), i.getConditions());
                 }
 
                 return c;
@@ -133,7 +133,7 @@ public abstract class LootModifier<T> implements ILootModifier<T> {
                 IItemNode node = (IItemNode) c;
                 List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), node.getConditions().stream()).toList();
                 List<LootItemFunction> allFunctions = new ArrayList<>();
-                Either<ItemStack, TagKey<? extends ItemLike>> either = node.getModifiedItem();
+                Either<ItemStack, TagKey<? extends ItemLike>> either = node.getItem();
 
                 allFunctions.add(new ModifiedItemFunction());
                 allFunctions.addAll(Stream.concat(functions.stream(), node.getFunctions().stream()).toList());

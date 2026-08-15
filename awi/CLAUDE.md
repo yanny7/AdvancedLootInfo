@@ -136,7 +136,7 @@ Single `MixinClientPlayNetworkHandler` — injects into `handleUpdateTags` (tail
 
 ## Data-scan entry point
 
-`network.AbstractServer.readWorldgenInfo(ServerLevel level)` is where AWI's whole scan starts: gets `AwiServerRegistry`, runs `BaseLayoutScanner.scan` over the `Registries.LEVEL_STEM` registry (the parallel base-block phase, ~70% of the total time), then iterates the same registry and builds one `LevelStemNode` per dimension from the scanned layouts into a `Map<ResourceLocation, IDataNode>`, drops empty/optimized-away nodes (`ListNode.optimizeList`), encodes the whole tree plus the server's `TooltipCache` into a `FriendlyByteBuf` (palette-first — see `aci/CLAUDE.md`'s tree-model section), gzips it, and slices it into `WorldgenDataChunkMessage` chunks cached in memory for later per-player sync.
+`network.AbstractServer.readWorldgenInfo(ServerLevel level)` is where AWI's whole scan starts: gets `AwiServerRegistry`, runs `BaseLayoutScanner.scan` over the `Registries.LEVEL_STEM` registry (the parallel base-block phase, ~70% of the total time), then iterates the same registry and builds one `LevelStemNode` per dimension from the scanned layouts into a `Map<ResourceLocation, IDataNode>`, drops empty/optimized-away nodes (`ListNode.optimizeList`), encodes the whole tree plus the server's `TooltipCache` into a `FriendlyByteBuf` (palette-first — see `aci/CLAUDE.md`'s tree-model section; the node write itself is `NetworkUtils.writeMapData`), gzips it, and slices it into `WorldgenDataChunkMessage` chunks cached in memory for later per-player sync.
 
 It runs **on the server thread**, at server start and on datapack reload (see the root `CLAUDE.md` — only the *transfer* is on demand), and it blocks that thread for the whole duration.
 
@@ -151,7 +151,7 @@ Both properties are forwarded to the test JVM from `awi/common/build.gradle`.
 
 ## Networking
 
-Mirrors `ali/CLAUDE.md`'s networking pattern exactly — same `AbstractServer`/`AbstractClient` template-method shape, same chunked-gzip-payload-with-palette-first-in-buffer design — this is a conceptually identical, copy-pasted (not code-shared) pattern in both mods' `network` packages. The only differences are the payload/entry-point names:
+Mirrors `ali/CLAUDE.md`'s networking pattern exactly — same `AbstractServer`/`AbstractClient` template-method shape, same chunked-gzip-payload-with-palette-first-in-buffer design. The buffer-writing and compression half is genuinely code-shared through `aci.network.NetworkUtils`; the packets, channels and the `AbstractServer`/`AbstractClient` templates themselves are still copy-pasted per mod. The only differences are the payload/entry-point names:
 
 | ALI | AWI |
 |---|---|

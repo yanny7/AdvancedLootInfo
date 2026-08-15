@@ -32,7 +32,11 @@ Guidance for working in `aci` (`com.yanny.aci`), the shared core library consume
 
 - `DataReceiver` — accumulates indexed byte-array chunks into a `CompletableFuture<byte[]>`, with `forceDone`/`cancelOperation` timeout handling. Used only internally by `manager.CoreClientRegistry`; this is the *client-side reassembly* half of the chunked-sync pattern each mod's `network` package implements independently (see `ali/CLAUDE.md`'s networking section, mirrored by `awi/CLAUDE.md`).
 
-`aci` itself has **no `network` package** — packet/channel definitions are entirely mod-specific and duplicated between `ali/common/.../network` and `awi/common/.../network`.
+### `network`
+
+- `NetworkUtils` — the *server-side write/compress* half of the chunked-sync pattern, shared by both mods' `AbstractServer`: `writeMapData` (length-prefixed `Map<ResourceLocation, TNode>`, rewinding and re-patching the count when an entry fails), `writeEntryData`/`writeNodeData` (single entry / single node — the latter is what ALI's wandering-trader node uses, since it carries no `ResourceLocation` on the wire), and `compressAndStoreData` (gzip + slice into ≤32KB chunks, handed to a `BiConsumer<Integer, byte[]>` that wraps each chunk in the mod's own packet type). Every method takes a `String modId` first argument, used purely to prefix its log lines (`[ali]`/`[awi]`) — `NetworkUtils` logs through its own logger, so without it the two mods would be indistinguishable in the log.
+
+Packet/channel definitions stay entirely mod-specific — the `*Message` records, channel ids and registration live in `ali/common/.../network` + the loader modules, and are duplicated in `awi`.
 
 ### `platform`
 

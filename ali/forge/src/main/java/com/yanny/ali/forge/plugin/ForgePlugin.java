@@ -22,7 +22,6 @@ import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierWrapper;
 import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.BasicItemListing;
 import net.minecraftforge.common.crafting.CompoundIngredient;
@@ -34,7 +33,6 @@ import net.minecraftforge.common.loot.*;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
-import oshi.util.tuples.Pair;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -61,7 +59,6 @@ public class ForgePlugin implements IPlugin {
         registry.registerIngredientTooltip(StrictNBTIngredient.class, ForgeIngredientTooltipUtils::getStrictNbtIngredientTooltip);
 
         registry.registerItemListing(BasicItemListing.class, ForgePlugin::getBasicItemListingNode);
-        registry.registerItemListingCollector(BasicItemListing.class, ForgePlugin::collectBasicItemListingItems);
 
         registry.registerLootModifiers(ForgePlugin::registerLootModifiers);
     }
@@ -82,16 +79,6 @@ public class ForgePlugin implements IPlugin {
                 accessor.getXp(),
                 accessor.getPriceMult(),
                 condition
-        );
-    }
-
-    @NotNull
-    public static Pair<List<Item>, List<Item>> collectBasicItemListingItems(IServerUtils ignoredUtils, BasicItemListing listing) {
-        MixinBasicItemListing accessor = (MixinBasicItemListing) listing;
-
-        return new Pair<>(
-                List.of(accessor.getPrice().getItem(), accessor.getPrice2().getItem()),
-                List.of(accessor.getForSale().getItem())
         );
     }
 
