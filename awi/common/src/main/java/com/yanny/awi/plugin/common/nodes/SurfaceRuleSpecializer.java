@@ -26,27 +26,18 @@ import java.util.Set;
  * Rewrites a dimension's surface rule into the subset that can fire for one specific biome. One instance per dimension
  * (the encode and the {@link RegistryOps} are done once and reused for every biome of that dimension).
  * <p>
- * The scan pins the biome for the whole of {@link NodeUtils#getBaseBlocksForBiome}, so every {@code minecraft:biome}
- * condition in the rule is a constant during that scan — yet the compiled rule still evaluates each of them. They are
- * {@code LazyYCondition}s, invalidated on every cell, so a heavily-modded overworld rule (one biome-gated branch per
- * biome per mod) pays a set lookup per branch per cell. Dropping the branches that can never match removes that.
- * <p>
  * The rewrite goes through {@link SurfaceRules.RuleSource#CODEC} rather than over the object graph: the node classes
  * ({@code SequenceRuleSource}, {@code TestRuleSource}, {@code BiomeConditionSource}) are package-private records, so
  * reaching them means reflection over names that remap in production. Serialized form is keyed by registry ids, which
  * do not.
  * <p>
- * <b>Unknown node types are descended into but never restructured.</b> Mods wrap the vanilla rule in their own rule
- * type (Terrablender being the common one), and the biome-gated branches worth pruning sit *inside* that wrapper — so
- * stopping at the first unrecognised node prunes nothing on exactly the packs that need it most. Inside an unknown
- * node, a dead branch is therefore replaced <i>in place</i> with an empty {@code minecraft:sequence} (a valid rule that
- * never fires) instead of being removed: arity and element order stay intact, so it does not matter whether the wrapper
- * indexes its children or pairs them with data of its own. Elements are only really dropped inside a
- * {@code minecraft:sequence}, whose semantics are known. An object carrying {@code "type": "minecraft:condition"} is
- * always a {@code RuleSource} (that id belongs to the rule registry), so descending cannot misread a condition as one.
+ * <b>Unknown node types are descended into but never restructured.</b> Inside an unknown node a dead branch is
+ * replaced <i>in place</i> with an empty {@code minecraft:sequence} (a valid rule that never fires) instead of being
+ * removed, so arity and element order stay intact whether the wrapper indexes its children or pairs them with data of
+ * its own. Elements are only really dropped inside a {@code minecraft:sequence}, whose semantics are known.
  * <p>
  * Any failure falls back to the original rule, and a dimension whose first biome prunes nothing turns specialization
- * off for itself, so the encode cost is not paid per biome for nothing.
+ * off for itself.
  */
 public class SurfaceRuleSpecializer {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -74,7 +65,7 @@ public class SurfaceRuleSpecializer {
     /**
      * @param codecLookup the provider that <i>owns</i> the holders the rule references — a different provider holding
      *                    equal values still fails the codec's ownership check and turns specialization off. In game
-     *                    that is simply the level's {@code RegistryAccess}.
+     *                    that is the level's {@code RegistryAccess}.
      */
     public SurfaceRuleSpecializer(SurfaceRules.RuleSource original, HolderLookup.Provider codecLookup, boolean logStatistics) {
         JsonElement json = null;
@@ -105,7 +96,7 @@ public class SurfaceRuleSpecializer {
             JsonElement pruned = prune(encoded, key.get().location().toString(), false);
 
             if (pruned == null || pruned.equals(encoded)) {
-                // Nothing in this rule is decidable per biome — stop paying the encode for the rest of the dimension.
+                // Nothing in this rule is decidable per biome.
                 effective = false;
                 log("not specializable, no biome-gated branch could be pruned", encoded, null);
 

@@ -147,10 +147,8 @@ public class GenericUtils {
      * Whether a block can only be shown as its fluid: it has no item form <i>and</i> nothing to draw, so the fluid is
      * all that is left (water, lava, bubble_column).
      *
-     * <p>The fluid must stay the last resort. Anything waterlogged in its default state reports a fluid - every coral
-     * and coral fan, seagrass, kelp, sea pickle, conduit - and picking the fluid first drew all 34 of them as plain
-     * water. Testing only for an item is not enough either: {@code tall_seagrass} and {@code kelp_plant} have no item
-     * but do have a model, and would still end up as water.
+     * <p>The fluid must stay the last resort - anything waterlogged in its default state reports a fluid, and
+     * {@code tall_seagrass}/{@code kelp_plant} have no item but do have a model.
      */
     public static boolean rendersAsFluid(Block block) {
         BlockState state = block.defaultBlockState();
@@ -176,8 +174,8 @@ public class GenericUtils {
                 blocks.addAll(collectBlocks(iDataNode));
             }
         } else if (node instanceof IBlockNode blockNode) {
-            // A tag contributes its members, so the reverse lookup (which biome generates this block?) keeps working
-            // for a block that only ever reaches the world through a tag.
+            // A tag contributes its members, so the reverse lookup keeps working for a block that only ever reaches
+            // the world through a tag.
             blocks.addAll(blockNode.getBlocks());
         }
 
@@ -195,9 +193,6 @@ public class GenericUtils {
         String cleanPath = WordUtils.capitalizeFully(path.replace('_', ' '));
         String cleanNamespace = WordUtils.capitalizeFully(namespace.replace('_', ' '));
 
-//        if ("minecraft".equals(namespace)) {
-//            return cleanPath;
-//        }
 
         if (cleanNamespace.equalsIgnoreCase(cleanPath) || namespace.replace("_", "").equalsIgnoreCase(path.replace("_", ""))) {
             return cleanPath;

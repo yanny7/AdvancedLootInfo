@@ -27,15 +27,14 @@ import java.util.function.Function;
 /**
  * Determines, per biome, which blocks the dimension's surface rules place and at what vertical position.
  * <p>
- * Instead of fuzzing the {@link SurfaceRules.Context} inputs across a fixed grid of guessed values, this
- * evaluates the (mod-agnostic) compiled surface rule against a <b>physically consistent, canonical column</b>:
- * flat terrain with the surface at an assumed height {@code H}, solid below, water up to sea level, air above.
- * All rule inputs ({@code stoneDepthAbove/Below}, {@code waterHeight}, {@code minSurfaceLevel}) are then
- * <i>derived</i> from that column exactly like {@code SurfaceSystem#buildSurface} does — no magic constants.
+ * The compiled surface rule is evaluated against a <b>physically consistent, canonical column</b>: flat terrain with
+ * the surface at an assumed height {@code H}, solid below, water up to sea level, air above. All rule inputs
+ * ({@code stoneDepthAbove/Below}, {@code waterHeight}, {@code minSurfaceLevel}) are derived from that column exactly
+ * like {@code SurfaceSystem#buildSurface} does.
  * <p>
- * The assumed surface height {@code H} is swept across the world's build range (its only bound) and a handful of
- * horizontal sample points feed the real 2D surface/noise-threshold fields. Every rule hit is recorded both as an
- * absolute Y and as a depth below the assumed surface; a block is then classified empirically:
+ * The assumed surface height {@code H} is swept across the world's build range and a handful of horizontal sample
+ * points feed the real 2D surface/noise-threshold fields. Every rule hit is recorded both as an absolute Y and as a
+ * depth below the assumed surface; a block is then classified empirically:
  * <ul>
  *     <li><b>surface-relative</b> (grass, dirt, sand, badlands bands) — its depth below the surface is stable while
  *     its absolute Y tracks {@code H}; reported as "depth below surface".</li>
@@ -50,19 +49,17 @@ public class NodeUtils {
     private static final int SURFACE_BUILD_DEPTH = 8;
 
     /**
-     * Sampling knobs (performance/coverage trade-off, NOT rule-logic magic values), parameterised so the scan's cost
-     * can be swept against its coverage — see {@code BaseLayoutSweepTest}. {@link #DEFAULT} is what production uses.
+     * Sampling knobs, parameterised so the scan's cost can be swept against its coverage — see
+     * {@code BaseLayoutSweepTest}. {@link #DEFAULT} is what production uses.
      * <p>
      * The scan converges: each round samples a fresh batch of horizontal points and a shifted surface-height phase; it
      * repeats while rounds keep discovering new (block, position) observations and stops once a full phase cycle adds
-     * nothing. This lets simple dimensions finish in a couple rounds while volumetric ones densify themselves.
+     * nothing.
      *
      * @param columnsPerRound     horizontal sample columns added per round
      * @param surfaceHeightStep   vertical stride between assumed surface heights within one round; consecutive rounds
      *                            shift the phase so a full cycle of {@code surfaceHeightStep} rounds retries every height
-     * @param stableRounds        stop after this many consecutive rounds add nothing new; a full phase cycle
-     *                            ({@code >= surfaceHeightStep}) guarantees every surface height was retried before
-     *                            concluding coverage is complete
+     * @param stableRounds        stop after this many consecutive rounds add nothing new
      * @param maxRounds           hard safety cap so a pathological rule cannot loop forever; hitting it is logged, never
      *                            silently truncated
      * @param maxCeilingThickness besides the solid column, each surface height is also probed as a thin floating stone
@@ -72,19 +69,14 @@ public class NodeUtils {
      * @param deepWalkWindow      how many blocks below the assumed surface a normal column walk still evaluates
      *                            ({@code 0} = down to the world bottom). Every Y is reached regardless, because the
      *                            assumed surface height sweeps the whole build range; only the combination "this Y with
-     *                            a very large stone depth above it" stops being sampled. Bounding it turns the walk's
-     *                            cost from quadratic in world height into linear.
+     *                            a very large stone depth above it" stops being sampled
      * @param extentStableRounds  second, weaker stop condition ({@code 0} disables it): stop after this many consecutive
      *                            rounds in which nothing <i>widened</i> the reported result (no new block, flag, or wider
-     *                            depth/Y extent), even though new positions keep turning up. Noise-banded rules
-     *                            (badlands) reveal new interior band positions forever, so {@code stableRounds} alone
-     *                            never triggers for them and they always run to {@code maxRounds}. It has to be the
-     *                            weaker of the two conditions rather than a replacement: raising {@code stableRounds}
-     *                            instead taxes every simple biome, which is most of them in a real pack.
+     *                            depth/Y extent), even though new positions keep turning up. It must stay the weaker of
+     *                            the two conditions rather than replace {@code stableRounds}
      * @param specializeRulePerBiome recompile the surface rule per biome with the branches that cannot fire for it
      *                            removed — see {@link SurfaceRuleSpecializer}. Semantics-preserving, so it must never
-     *                            change the result; it only stops the compiled rule from re-testing every other biome's
-     *                            branch on every cell.
+     *                            change the result
      */
     public record ScanSettings(int columnsPerRound, int surfaceHeightStep, int stableRounds, int extentStableRounds,
                                int maxRounds, int maxCeilingThickness, int deepWalkWindow, boolean specializeRulePerBiome) {
@@ -182,8 +174,7 @@ public class NodeUtils {
     /** Collects a set of integer positions and compacts them into contiguous ranges. */
     public static class RangeHolder {
         private final Set<Integer> positions = new HashSet<>();
-        // Tracked on insert: the convergence check reads them once per round per block, and scanning the whole set for
-        // them showed up as a per-round tax on biomes with large position sets.
+        // Tracked on insert: the convergence check reads them once per round per block.
         private int min = Integer.MAX_VALUE;
         private int max = Integer.MIN_VALUE;
 
@@ -259,21 +250,16 @@ public class NodeUtils {
     private static class BlockObservation {
         // A surface-relative block whose absolute Y fragments into at least this many disjoint bands is reported as
         // "layered" rather than "depth below surface": its identity is a periodic function of absolute Y (e.g. the
-        // badlands banded-terracotta strata, clay bands mod 192) so a single depth range would be actively misleading.
-        // This is a reporting/classification threshold, not rule logic — observed banded blocks fragment into 5..28
-        // bands while plain surface layers stay at a single contiguous band, so the boundary is wide.
+        // badlands banded-terracotta strata, clay bands mod 192).
         private static final int LAYERED_MIN_BANDS = 3;
 
         final RangeHolder depths = new RangeHolder();
         final RangeHolder absolute = new RangeHolder();
         // Depths split by placement context: floor = normal below-surface placement (sandstone under the sand),
-        // ceiling = ON_CEILING overhang placement (red_sandstone). Kept apart because merging them pollutes the
-        // reported "depth below surface" — an overhang exposes a block at depth 0 that is really several blocks down.
+        // ceiling = ON_CEILING overhang placement (red_sandstone).
         final RangeHolder floorDepths = new RangeHolder();
         final RangeHolder ceilingDepths = new RangeHolder();
-        // Which flooding contexts the rule placed this block in. Set from whether the walk had water above the surface:
-        // ocean-floor blocks (sandstone, gravel) only fire when the underwater rule branches see a water column,
-        // dry-land blocks only fire without one, and depth blocks (deepslate, bedrock) appear either way.
+        // Which flooding contexts the rule placed this block in, taken from whether the walk had water above the surface.
         private boolean seenUnderwater;
         private boolean seenDry;
 
@@ -331,23 +317,17 @@ public class NodeUtils {
 
         Kind classify(ScanSettings settings) {
             // Surface-relative: depth-below-surface stays tighter than absolute Y as the assumed surface height is
-            // swept (grass/sand track the surface), whereas absolute features (deepslate, bedrock) and volumetric
-            // fills (netherrack) keep a smaller — or no smaller — absolute span.
-            // A bounded deep walk censors the depth axis at the window, so a block whose observed depths run into that
-            // window is treated as unbounded-depth (absolute) rather than as a very thick surface layer — without this,
-            // deepslate/bedrock would flip to "1..window blocks below the surface" as soon as the window is enabled.
+            // swept. A bounded deep walk censors the depth axis at the window, so a block whose observed depths run
+            // into that window is treated as unbounded-depth (absolute) rather than as a very thick surface layer.
             boolean depthCensored = settings.deepWalkWindow() > 0 && depths.max() >= settings.deepWalkWindow() - 1;
             boolean surfaceRelative = !depthCensored && depths.spread() < absolute.spread();
 
             if (!surfaceRelative) {
                 return Kind.ABSOLUTE;
             }
-            // Layered strata recur at many separated absolute-Y bands AND span a depth window at least as thick as the
-            // surface-height sampling step. The thickness guard is essential and non-arbitrary: a block thinner than
-            // the height step is only ever recorded once per swept surface height, so its absolute Y fragments into a
-            // regular grid (spacing == the step) that mimics banding — a sampling artifact, not strata (a one-block
-            // ice skin on frozen peaks, a lava-sea top). Only when the depth window bridges the step do consecutive
-            // surface heights overlap, making the absolute-Y clustering a real property of the rule rather than the grid.
+            // Layered strata recur at many separated absolute-Y bands AND span a depth window at least as thick as
+            // the surface-height sampling step. Below that thickness the absolute-Y fragmentation is a sampling
+            // artifact: the block is recorded once per swept surface height, so its Ys fall on a regular grid.
             if (depths.spread() >= settings.surfaceHeightStep() && absolute.clusterCount() >= LAYERED_MIN_BANDS) {
                 return Kind.LAYERED;
             }
@@ -437,9 +417,8 @@ public class NodeUtils {
          * <p>
          * Surface-relative (depth) blocks are split by placement when their floor and ceiling depths genuinely differ,
          * so a block that is both a normal below-surface layer <i>and</i> an exposed overhang (e.g. warm-ocean
-         * sandstone) keeps both modes instead of collapsing to one. Absolute/layered blocks are keyed by absolute Y,
-         * which placement does not change, so they stay a single entry (splitting them would also mis-read a thin
-         * ceiling slab of an absolute block, whose few depth samples look surface-relative).
+         * sandstone) keeps both modes. Absolute/layered blocks are keyed by absolute Y, which placement does not
+         * change, so they stay a single entry.
          */
         public Set<BlockInfo> getBlockInfos() {
             Set<BlockInfo> infos = new HashSet<>();
@@ -488,10 +467,8 @@ public class NodeUtils {
      *     {@code stoneDepthBelow} down to 1 and fires ceiling-gated rules.</li>
      * </ul>
      * {@code walkBottom} is where the walk stops evaluating, which is not necessarily where the modelled stone run ends:
-     * the run's shape (and with it {@code stoneDepthBelow}) still comes from {@code stoneBottom}, so shortening the walk
-     * skips deep cells without pretending the column floats. The caller must have called
-     * {@link SurfaceRules.Context#updateXZ} for {@code posX}/{@code posZ} — it is hoisted out because every walk over the
-     * same column would otherwise re-sample the same surface-depth noise.
+     * the run's shape (and with it {@code stoneDepthBelow}) still comes from {@code stoneBottom}. The caller must have
+     * called {@link SurfaceRules.Context#updateXZ} for {@code posX}/{@code posZ}.
      */
     private static void walkColumn(DimensionContext dimCtx, LayerHolder holder, int posX, int posZ,
                                    int surfaceTop, int stoneBottom, int walkBottom, boolean hasWaterAbove) {
