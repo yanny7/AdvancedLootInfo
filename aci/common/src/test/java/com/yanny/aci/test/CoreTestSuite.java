@@ -5,7 +5,8 @@ import org.junit.platform.suite.api.Suite;
 
 @Suite
 @SelectClasses({
-        CoreConfigUtilsTest.class
+        CoreConfigUtilsTest.class,
+        NodeCodecTest.class
 })
 public class CoreTestSuite {
 }
