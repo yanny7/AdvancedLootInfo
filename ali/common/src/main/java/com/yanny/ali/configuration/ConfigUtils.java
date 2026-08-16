@@ -1,140 +1,26 @@
 package com.yanny.ali.configuration;
 
-import com.google.gson.*;
-import com.mojang.logging.LogUtils;
+import com.google.gson.Gson;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+import com.yanny.aci.configuration.CoreConfigUtils;
 import com.yanny.ali.Utils;
 import com.yanny.ali.platform.Services;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Reader;
 import java.lang.reflect.Type;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 public class ConfigUtils {
-    private static final Logger LOGGER = LogUtils.getLogger();
-
     @NotNull
     public static AliConfig readConfiguration() {
-        Path configDir = Services.getPlatform().getConfiguration();
-
-        if (configDir == null) {
-            LOGGER.warn("Failed to obtain config dir path!");
-            return new AliConfig();
-        }
-
-        Path modConfigDir = configDir.resolve(Utils.MOD_ID);
-        Path configFile = modConfigDir.resolve(Utils.COMMON_CONFIG_NAME);
-
-        if (!Files.exists(modConfigDir)) {
-            try {
-                Files.createDirectories(modConfigDir);
-            } catch (IOException e) {
-                LOGGER.warn("Failed to create path {} for configuration", modConfigDir);
-                return new AliConfig();
-            }
-        }
-
-        File config = configFile.toFile();
-        Gson gson = createGson();
-
-        if (!config.exists()) {
-            saveConfig(configFile, gson);
-        }
-
-        AliConfig loadedConfig = load(configFile, gson);
-
-        if (loadedConfig.configVersion < AliConfig.CURRENT_VERSION) {
-            LOGGER.info("Config version mismatch (found {}, expected {}). Re-creating...", loadedConfig.configVersion, AliConfig.CURRENT_VERSION);
-
-            try {
-                File backupFile = new File(config.getAbsolutePath() + ".bak");
-
-                if (backupFile.exists()) {
-                    if (!backupFile.delete()) {
-                        LOGGER.warn("Failed to delete backup file {}", backupFile);
-                    }
-                }
-
-                if (!config.renameTo(backupFile)) {
-                    LOGGER.warn("Failed to rename config file {} to {}", config, backupFile);
-                }
-
-                saveConfig(configFile, gson);
-                return load(configFile, gson);
-            } catch (Exception e) {
-                LOGGER.warn("Failed to rotate outdated config file!", e);
-            }
-        }
-
-        return loadedConfig;
-    }
-
-    @NotNull
-    private static AliConfig load(Path configFilePath, Gson gson) {
-        try (Reader reader = Files.newBufferedReader(configFilePath)) {
-            LOGGER.info("Loading configuration file {}", configFilePath);
-            AliConfig config = gson.fromJson(reader, AliConfig.class);
-
-            return config != null ? normalize(config) : new AliConfig();
-        } catch (Exception e) {
-            LOGGER.warn("Error while reading configuration file: {}", e.getMessage(), e);
-            return new AliConfig();
-        }
-    }
-
-    // an explicit null in the config file is treated the same way as a missing key - it falls back to the default value
-    @NotNull
-    private static AliConfig normalize(AliConfig config) {
-        AliConfig defaults = new AliConfig();
-
-        if (config.blockCategories == null) {
-            config.blockCategories = defaults.blockCategories;
-        }
-        if (config.entityCategories == null) {
-            config.entityCategories = defaults.entityCategories;
-        }
-        if (config.gameplayCategories == null) {
-            config.gameplayCategories = defaults.gameplayCategories;
-        }
-        if (config.tradeCategories == null) {
-            config.tradeCategories = defaults.tradeCategories;
-        }
-        if (config.disabledEntities == null) {
-            config.disabledEntities = defaults.disabledEntities;
-        }
-        if (config.defaultBlockLootConditions == null) {
-            config.defaultBlockLootConditions = defaults.defaultBlockLootConditions;
-        }
-        if (config.defaultBlockLootFunctions == null) {
-            config.defaultBlockLootFunctions = defaults.defaultBlockLootFunctions;
-        }
-        if (config.ignoredPredicateConditions == null) {
-            config.ignoredPredicateConditions = defaults.ignoredPredicateConditions;
-        }
-        if (config.entityLootTables == null) {
-            config.entityLootTables = defaults.entityLootTables;
-        }
-
-        return config;
-    }
-
-    private static void saveConfig(Path configFilePath, Gson gson) {
-        try (FileWriter writer = new FileWriter(configFilePath.toFile())) {
-            AliConfig config = new AliConfig();
-
-            config.configVersion = AliConfig.CURRENT_VERSION;
-            gson.toJson(config, writer);
-            LOGGER.info("Created new configuration file {}", configFilePath);
-        } catch (IOException e) {
-            LOGGER.warn("Error while writing configuration file: {}", e.getMessage(), e);
-        }
+        return CoreConfigUtils.readConfiguration(Services.getPlatform().getConfiguration(), Utils.MOD_ID, Utils.COMMON_CONFIG_NAME,
+                AliConfig.class, AliConfig::new, createGson());
     }
 
     private static class LootCategoryAdapter implements JsonSerializer<LootCategory<?>>, JsonDeserializer<LootCategory<?>> {
@@ -161,9 +47,7 @@ public class ConfigUtils {
 
     @NotNull
     private static Gson createGson() {
-        return new GsonBuilder()
-                .setPrettyPrinting()
-                .registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer())
+        return CoreConfigUtils.gsonBuilder()
                 .registerTypeAdapter(LootCategory.class, new LootCategoryAdapter())
                 .registerTypeAdapter(BlockLootCategory.class, new LootCategoryAdapter())
                 .registerTypeAdapter(EntityLootCategory.class, new LootCategoryAdapter())

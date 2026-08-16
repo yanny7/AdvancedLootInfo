@@ -1,6 +1,8 @@
 package com.yanny.awi.configuration;
 
-public class AwiConfig {
+import com.yanny.aci.configuration.ICoreConfig;
+
+public class AwiConfig implements ICoreConfig {
     public static final int CURRENT_VERSION = 1;
 
     public int configVersion = 0;
@@ -15,4 +17,19 @@ public class AwiConfig {
      * bytecode scan found, at the cost of those blocks being wrong for some configurations.
      */
     public boolean showConfigConditionalBlocks = false;
+
+    @Override
+    public int getConfigVersion() {
+        return configVersion;
+    }
+
+    @Override
+    public void setConfigVersion(int configVersion) {
+        this.configVersion = configVersion;
+    }
+
+    @Override
+    public int getCurrentVersion() {
+        return CURRENT_VERSION;
+    }
 }

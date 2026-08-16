@@ -9,7 +9,7 @@ Guidance for working on **AWI** (`AdvancedWorldgenInfo`, `com.yanny.awi`) — th
 - `awi/fabric` — Fabric loader module. See `awi/fabric/CLAUDE.md`.
 - `awi/forge` — Forge loader module (enabled via `forge_enabled`). See `awi/forge/CLAUDE.md`.
 
-AWI has no `common-lootjs` equivalent, and its `configuration` package is minimal compared to ALI's: `AwiConfig` (`configVersion`, `logMoreStatistics`, `showInGameNames`) plus `ConfigUtils` (same read/version-rotate/re-create logic as ALI's, minus the loot-category Gson adapters), written to `<config>/awi/awi_common.json`. There are no loot-category-style filters to configure, since worldgen registries are enumerated exhaustively rather than matched against user-declared categories (contrast with ALI's `ali_config.schema.json`-driven filtering).
+AWI has no `common-lootjs` equivalent, and its `configuration` package is minimal compared to ALI's: `AwiConfig` (`configVersion`, `logMoreStatistics`, `showInGameNames`) plus `ConfigUtils`, written to `<config>/awi/awi_common.json`. The read/version-rotate/re-create logic is no longer copy-pasted from ALI — both go through `aci.configuration.CoreConfigUtils` and `AwiConfig` implements `aci.configuration.ICoreConfig` (see `aci/CLAUDE.md`); AWI's `ConfigUtils` is just that call with the plain shared Gson, no loot-category adapters. There are no loot-category-style filters to configure, since worldgen registries are enumerated exhaustively rather than matched against user-declared categories (contrast with ALI's `ali_config.schema.json`-driven filtering).
 
 ## `awi/common` package map (`com.yanny.awi`)
 

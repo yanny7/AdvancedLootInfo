@@ -1,6 +1,7 @@
 package com.yanny.ali.configuration;
 
 import com.mojang.datafixers.util.Either;
+import com.yanny.aci.configuration.ICoreConfig;
 import com.yanny.ali.Utils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class AliConfig {
+public class AliConfig implements ICoreConfig {
     public static final int CURRENT_VERSION = 2;
 
     public int configVersion = 0;
@@ -77,6 +78,54 @@ public class AliConfig {
         ));
 
         entityLootTables = new LinkedHashMap<>();
+    }
+
+    @Override
+    public int getConfigVersion() {
+        return configVersion;
+    }
+
+    @Override
+    public void setConfigVersion(int configVersion) {
+        this.configVersion = configVersion;
+    }
+
+    @Override
+    public int getCurrentVersion() {
+        return CURRENT_VERSION;
+    }
+
+    @Override
+    public void normalize() {
+        AliConfig defaults = new AliConfig();
+
+        if (blockCategories == null) {
+            blockCategories = defaults.blockCategories;
+        }
+        if (entityCategories == null) {
+            entityCategories = defaults.entityCategories;
+        }
+        if (gameplayCategories == null) {
+            gameplayCategories = defaults.gameplayCategories;
+        }
+        if (tradeCategories == null) {
+            tradeCategories = defaults.tradeCategories;
+        }
+        if (disabledEntities == null) {
+            disabledEntities = defaults.disabledEntities;
+        }
+        if (defaultBlockLootConditions == null) {
+            defaultBlockLootConditions = defaults.defaultBlockLootConditions;
+        }
+        if (defaultBlockLootFunctions == null) {
+            defaultBlockLootFunctions = defaults.defaultBlockLootFunctions;
+        }
+        if (ignoredPredicateConditions == null) {
+            ignoredPredicateConditions = defaults.ignoredPredicateConditions;
+        }
+        if (entityLootTables == null) {
+            entityLootTables = defaults.entityLootTables;
+        }
     }
 
     @NotNull
