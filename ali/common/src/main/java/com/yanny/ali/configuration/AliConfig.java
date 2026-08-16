@@ -3,6 +3,7 @@ package com.yanny.ali.configuration;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.yanny.aci.configuration.ICoreConfig;
 import com.yanny.ali.Utils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class AliConfig {
+public class AliConfig implements ICoreConfig {
     public static final int CURRENT_VERSION = 2;
 
     private static final List<ResourceLocation> DEFAULT_BLOCK_LOOT_CONDITIONS = List.of(ResourceLocation.withDefaultNamespace("survives_explosion"));
@@ -103,6 +104,21 @@ public class AliConfig {
         ignoredPredicateConditions = new ArrayList<>(DEFAULT_IGNORED_PREDICATE_CONDITIONS);
 
         entityLootTables = new LinkedHashMap<>();
+    }
+
+    @Override
+    public int getConfigVersion() {
+        return configVersion;
+    }
+
+    @Override
+    public void setConfigVersion(int configVersion) {
+        this.configVersion = configVersion;
+    }
+
+    @Override
+    public int getCurrentVersion() {
+        return CURRENT_VERSION;
     }
 
     @NotNull

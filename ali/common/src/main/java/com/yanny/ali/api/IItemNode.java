@@ -22,11 +22,9 @@ public interface IItemNode {
 
     /**
      * The stacks this node actually stands for - the single stack, or the tag's members resolved against the current
-     * registry. Client-side this is what the collected recipe outputs and the reverse index use, so they cannot
-     * disagree with what is rendered.
+     * registry. Client-side this is what the collected recipe outputs and the reverse index use.
      *
-     * <p>An empty stack stands for nothing and is never reported - the second input of a single-input villager trade
-     * is such a placeholder.
+     * <p>An empty stack stands for nothing and is never reported.
      */
     @NotNull
     List<ItemStack> getItems();

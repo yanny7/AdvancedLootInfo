@@ -131,7 +131,7 @@ public abstract class JeiBaseLoot implements IRecipeCategory<RecipeHolder> {
                 List<Block> models = modelBlocks(h);
 
                 if (!models.isEmpty() && ingredientBlocks(h).isEmpty()) {
-                    scrollWidgets.add(new JeiBlockSlotWidget(slotDrawable, models.get(0), h.rect.getX(), h.rect.getY()));
+                    scrollWidgets.add(new JeiBlockSlotWidget(slotDrawable, models.getFirst(), h.rect.getX(), h.rect.getY()));
                 } else {
                     scrollWidgets.add(new JeiLootSlotWidget(slotDrawable, h.rect.getX(), h.rect.getY(), new RangeValue(1)));
                 }

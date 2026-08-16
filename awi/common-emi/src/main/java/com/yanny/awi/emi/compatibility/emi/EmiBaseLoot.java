@@ -61,13 +61,13 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
             List<EmiStack> stacks = blocks.stream().filter((b) -> !GenericUtils.rendersAsBlockModel(b)).map(EmiBaseLoot::toStack).toList();
 
             if (stacks.isEmpty()) {
-                EmiBlockSlotWidget blockWidget = new EmiBlockSlotWidget(h.entry, blocks.isEmpty() ? Blocks.AIR : blocks.get(0), h.rect.getX(), h.rect.getY());
+                EmiBlockSlotWidget blockWidget = new EmiBlockSlotWidget(h.entry, blocks.isEmpty() ? Blocks.AIR : blocks.getFirst(), h.rect.getX(), h.rect.getY());
 
                 blockWidget.recipeContext(h.recipe);
                 return blockWidget;
             }
 
-            EmiIngredient ingredient = stacks.size() == 1 ? stacks.get(0) : EmiIngredient.of(stacks);
+            EmiIngredient ingredient = stacks.size() == 1 ? stacks.getFirst() : EmiIngredient.of(stacks);
             EmiLootSlotWidget widget = new EmiLootSlotWidget(h.entry, ingredient, h.rect.getX(), h.rect.getY(), new RangeValue(1));
 
             widget.recipeContext(h.recipe);

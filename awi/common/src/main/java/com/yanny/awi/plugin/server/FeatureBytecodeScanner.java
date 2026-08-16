@@ -47,83 +47,30 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
 /**
- * Proof of concept: statically discovers the blocks a {@link Feature} places directly in its {@code place()} method
- * (category C - blocks hardcoded in bytecode, absent from the {@code FeatureConfiguration}), without ever running
- * world generation.
+ * Statically discovers the blocks and block tags a {@link Feature} places directly in its {@code place()} method,
+ * without ever running world generation.
  *
- * <p>Approach: ASM data-flow (sink tracking). Only {@link BlockState}/{@link Block} values that flow as an argument
- * into a block-placing sink ({@code LevelWriter#setBlock} / {@code Feature#setBlock}) are collected, so blocks that
- * are merely read/checked (e.g. an {@code END_STONE} support check) are NOT reported.
+ * <p>ASM data-flow (sink tracking): only {@link BlockState}/{@link Block} values that flow as an argument into a
+ * block-placing sink ({@code LevelWriter#setBlock} / {@code Feature#setBlock}) are collected, so blocks that are
+ * merely read or checked are not reported. Nothing is matched by method/field/class NAME - sinks and value types are
+ * identified via assignability of real {@link Class} objects, and concrete blocks are resolved by reflectively
+ * reading the referenced static field's value.
  *
- * <p>Mapping-agnostic by design: nothing is matched by method/field/class NAME (those are remapped in production).
- * Sinks and value types are identified via assignability of real {@link Class} objects, and concrete blocks are
- * resolved by reflectively reading the referenced static field's value.
+ * <p>The value flowing into a sink is followed backwards across local variables, method parameters, {@code CHECKCAST}
+ * plus the receiver and arguments of the producing call, lambda and method-reference bodies, the return value of a
+ * called helper and {@code final} instance fields. Method lookup walks the class hierarchy in both directions, and an
+ * abstract call that is not a self-call is dispatched to the block classes implementing it ({@link #queueImplementors}).
  *
- * <p>The value flowing into a sink is followed backwards across seven hops, each of which is load-bearing for real
- * vanilla features - without them only a block written inline in the {@code setBlock} argument would ever be seen:
- * <ul>
- *     <li>local variables, back to the stores that reach them ({@link #throughLocal});</li>
- *     <li>method parameters, back to what call sites pass in ({@link #bindArguments} / {@link #addParameterCandidates});</li>
- *     <li>{@code CHECKCAST}, and the receiver plus block-carrying arguments of the call that produced the value, which
- *     is what exposes a tag-driven pick such as {@code BLOCK.getTag(BlockTags.CORAL_BLOCKS)} through an {@code Optional}
- *     chain;</li>
- *     <li>lambda and method-reference bodies, through the {@code INVOKEDYNAMIC} bootstrap handle, including the
- *     parameters the lambda receives from the call it is handed to rather than from a capture
- *     ({@link #bindLambdaParameters});</li>
- *     <li>a lambda handed to a method as an <i>argument</i>, back to the values that method later passes into it
- *     ({@link #recordFunctionalArguments} / {@link #bindFunctionalCandidates});</li>
- *     <li>the return value of a called helper, resolved out of its own {@code ARETURN}s ({@link #returnedCandidates});</li>
- *     <li>a {@code final} instance field, resolved out of the {@code PUTFIELD}s in its owner's constructors
- *     ({@link #addInstanceFieldValue}).</li>
- * </ul>
- *
- * <p>Method lookup walks the class hierarchy in both directions. Up, because {@code place()} is frequently declared
- * on an abstract base ({@code CoralFeature}, {@code AbstractHugeMushroomFeature}) rather than on the registered
- * subclass. Down, because such a base then calls back into an abstract method the subclass implements
- * ({@code CoralFeature#place} -> abstract {@code placeFeature}); stopping at the abstract declaration would lose
- * every block placed below it. An abstract call that is neither is dispatched to the block classes implementing it
- * ({@link #queueImplementors}).
- *
- * <p>Branches guarded by a {@code static final boolean} flag that reads {@code false} are pruned before any of that
- * happens - see {@link #reachableInstructions}.
- *
- * <p>Known limitations, in the "block not found" direction: a lambda parameter is only bound when the receiver it is
- * applied to resolves to blocks or the enclosing method was handed the lambda directly, and abstract dispatch only
- * reaches implementors that are registered blocks - not an inner class or an anonymous implementation. That second
- * limit is why a sculk patch reports the sculk it grows but not its veins: those are placed through
- * {@code MultifaceSpreader.SpreadConfig#getStateForPlacement}, whose implementations are inner classes.
- *
- * <h2>False positives</h2>
- *
- * <p>Two kinds exist, and they have different causes - do not treat them as one problem.
- *
- * <p><b>A block placed behind a test on the configuration.</b> The scan is keyed by {@link Feature} class, so it cannot
- * know which {@code FeatureConfiguration} the block is being reported for, and it reports every branch -
- * {@code LakeFeature}'s {@code ICE} is only placed when {@code configuration.fluid()} yields water, and 1.20.1 ships
- * exactly one lake ({@code lake_lava}). Those blocks are separated out into
- * {@link ScanResult#configConditionalBlocks()} by {@link #configGuardedInstructions}, and
- * {@code FeatureConfigurationCollectorUtils} drops them unless {@code AwiConfig.showConfigConditionalBlocks} says
- * otherwise. An unrecognized guard shape leaves the block reported unconditionally, so this only ever hides what it
- * positively proved conditional.
- *
- * <p>A guard encoded as a <i>number</i> is out of reach by construction: {@code HugeFungusFeature} grows weeping vines
- * only for crimson, but the test reaches one of its two call sites as a probability
- * ({@code placeHatBlock(..., bl2 ? 0.1F : 0.0F)}, then {@code randomSource.nextFloat() < h}). Proving that
- * {@code h == 0.0F} makes the comparison unsatisfiable is value reasoning, not the identity-test detection this does.
- *
- * <p><b>A block placed by a library the feature calls into.</b> {@code FossilFeature} reports {@code BARRIER}, which
- * comes from {@code StructureTemplate#placeInWorld}, not from the feature - and the blocks the fossil really places live
- * in NBT structures that no static analysis can reach. Reads of the world are already excluded for this reason (see
- * {@link #resolveReturnValue}); template placement is not, because there is no equally crisp type to exclude it by.
+ * <p>{@link ScanResult#configConditionalBlocks()} is the subset of the result whose every placement is reached only
+ * through a test on the {@code FeatureConfiguration}, so whether those blocks are placed at all depends on which
+ * configuration the feature is used with.
  */
 public final class FeatureBytecodeScanner {
     private static final Logger LOGGER = LogUtils.getLogger();
-    // Runaway guard, not a tuning knob: lowering it silently drops blocks rather than failing. Vanilla's widest
-    // feature (fossil) analyzes 422 methods and no other reaches 200, so this sits at ~2x the measured worst case.
+    // Runaway guard, not a tuning knob: lowering it silently drops blocks rather than failing.
     private static final int MAX_METHODS = 1000;
     private static final int MAX_RESOLVE_DEPTH = 12;
-    // Keeps abstract dispatch off the wide base types: BlockBehaviour's own methods are implemented by every block in
-    // the game, and queueing all of them would spend the whole method budget on code no feature reaches.
+    // Keeps abstract dispatch off the wide base types, which are implemented by every block in the game.
     private static final int MAX_IMPLEMENTORS = 4;
 
     private static final String CONSTRUCTOR = "<init>";
@@ -202,8 +149,7 @@ public final class FeatureBytecodeScanner {
     /**
      * Scans one feature class for the blocks and block tags it places. Needs no running server, and a tag is reported
      * as the tag itself - resolving it into members is the display's job
-     * ({@link com.yanny.awi.plugin.common.nodes.BlockNode}). The block registry is read for one purpose only, as the
-     * implementor index behind {@link #queueImplementors}.
+     * ({@link com.yanny.awi.plugin.common.nodes.BlockNode}).
      */
     public static ScanResult scan(Class<?> featureClass) {
         if (PLACE_NAME == null) {
@@ -222,8 +168,7 @@ public final class FeatureBytecodeScanner {
 
     /**
      * Drops every cached scan result and the intermediate ASM/class caches. Must be called once the worldgen scan is
-     * done: the caches are only useful within a single scan and they retain the {@link ClassNode} graph of every
-     * visited class.
+     * done - the caches retain the {@link ClassNode} graph of every visited class.
      */
     public static void clearCaches() {
         RESULT_CACHE.clear();
@@ -233,12 +178,8 @@ public final class FeatureBytecodeScanner {
     }
 
     /**
-     * Walks the feature twice. The interprocedural facts - which parameters carry blocks, which carry the result of a
-     * config-selective test - are only complete once the whole walk has run, and how a method was reached is recorded
-     * monotonically and never retracted. A method analyzed before its caller's taint was known therefore records itself
-     * as unguarded permanently, which is what hid {@code HugeFungusFeature}'s weeping vines: {@code placeHatDropBlock}
-     * is reached before the crimson test that guards it is known. The second walk starts from cleared reach flags and
-     * the facts the first one learned, and only its attribution is used.
+     * Walks the feature twice: the first walk only learns the interprocedural facts, the second attributes with
+     * cleared reach flags and the facts the first one learned.
      */
     private ScanResult doScan(Class<?> featureClass) {
         ClassLoader cl = featureClass.getClassLoader();
@@ -272,17 +213,15 @@ public final class FeatureBytecodeScanner {
 
             Declaration declaration = declaration(cl, ref.owner, ref.name, ref.desc);
 
-            // An abstract declaration is dispatched at runtime. A feature calling itself (CoralFeature#place ->
-            // abstract placeFeature) has the scanned class as its receiver, so the body to analyze is the override
-            // there - stopping at the abstract declaration loses everything below it.
+            // An abstract declaration is dispatched at runtime. A feature calling itself has the scanned class as
+            // its receiver, so the body to analyze is the override there.
             if (declaration != null && declaration.isAbstract() && isSubclass(cl, featureClass, ref.owner)) {
                 Declaration override = declaration(cl, Type.getInternalName(featureClass), ref.name, ref.desc);
 
                 declaration = override != null && !override.isAbstract() ? override : declaration;
             }
 
-            // Not a self-call, so the receiver is some other object entirely - the only implementors we can enumerate
-            // are the registered blocks (SculkBehaviour, which is how a sculk patch spreads).
+            // Not a self-call, so the only implementors that can be enumerated are the registered blocks.
             if (declaration != null && declaration.isAbstract()) {
                 queueImplementors(cl, ref, worklist, visited);
             }
@@ -297,8 +236,7 @@ public final class FeatureBytecodeScanner {
             // Keyed by the reference, not the declaring class, so it matches what a call site records for it.
             currentMethodKey = ref.key();
             currentEnteredGuarded = reachedGuarded.contains(ref.key());
-            // Absent information counts as unguarded, so a block is only ever reported as conditional on positive
-            // evidence that every path to it passed a config-dependent test.
+            // Absent information counts as unguarded, so a block is only reported as conditional on positive evidence.
             currentEnteredUnguarded = reachedUnguarded.contains(ref.key()) || !currentEnteredGuarded;
             analyzeMethod(cl, declaration.owner(), declaration.method(), guarded, unguarded, worklist, visited);
         }
@@ -337,7 +275,7 @@ public final class FeatureBytecodeScanner {
             boolean siteUnguarded = !currentConfigGuarded.contains(insn) && currentEnteredUnguarded;
 
             // A lambda/method reference body is a separate (usually synthetic) method reachable only through the
-            // bootstrap handle - features routinely place their blocks in one (e.g. UnderwaterMagmaFeature's forEach).
+            // bootstrap handle.
             if (insn instanceof InvokeDynamicInsnNode indy) {
                 queueBootstrapTargets(indy, siteGuarded, siteUnguarded, worklist, visited);
                 continue;
@@ -381,8 +319,8 @@ public final class FeatureBytecodeScanner {
                     SourceValue value = argValue(frame, call, i);
 
                     if (value != null) {
-                        // Resolved per sink rather than straight into one accumulator, so the blocks this placement
-                        // contributes can be attributed to whether the placement itself is config-dependent.
+                        // Resolved per sink, so the blocks this placement contributes can be attributed to whether
+                        // the placement itself is config-dependent.
                         Candidates placed = Candidates.create();
 
                         resolve(value, frames, method, cl, placed, new HashSet<>(), 0);
@@ -405,11 +343,7 @@ public final class FeatureBytecodeScanner {
         return currentConfigGuarded.contains(insn) || currentEnteredGuarded;
     }
 
-    /**
-     * Records how a callee was reached, re-queueing it when that grows. A method first seen behind a config-dependent
-     * test and later reached without one places its blocks unconditionally after all, so it has to be revisited - the
-     * same monotone growth argument as {@link #recordCandidates}.
-     */
+    /** Records how a callee was reached, re-queueing it when that grows. */
     private void markReached(MethodRef callee, boolean siteGuarded, boolean siteUnguarded, Deque<MethodRef> worklist,
                              Set<String> visited) {
         boolean grown = siteGuarded && reachedGuarded.add(callee.key());
@@ -425,16 +359,10 @@ public final class FeatureBytecodeScanner {
     }
 
     /**
-     * Records, per callee parameter, what a call site passes in - the caller half of the interprocedural link.
-     * A feature that hands the block to a helper ({@code placeFeature(level, random, pos, state)} in {@code
-     * CoralFeature}) places it through a parameter, which has no producer instruction of its own; the callee half
-     * ({@link #addParameterCandidates}) picks these up when that parameter reaches a placement sink.
-     *
-     * <p>Recording is unconditional but harmless: a block merely handed to a predicate is never materialized, because
-     * only a parameter that actually flows into a sink is ever looked up.
-     *
-     * <p>A callee analyzed before this call site was reached never saw these blocks, so it is dropped from
-     * {@code visited} and re-queued. The candidate sets only ever grow, so the re-queueing terminates.
+     * Records, per callee parameter, what a call site passes in - the caller half of the interprocedural link;
+     * {@link #addParameterCandidates} is the callee half and materializes these only for a parameter that actually
+     * flows into a sink. A callee already analyzed without them is dropped from {@code visited} and re-queued; the
+     * candidate sets only ever grow, so that terminates.
      */
     private void bindArguments(ClassLoader cl, MethodInsnNode call, Frame<SourceValue> frame, Frame<SourceValue>[] frames,
                                MethodNode method, Deque<MethodRef> worklist, Set<String> visited) {
@@ -460,14 +388,12 @@ public final class FeatureBytecodeScanner {
     }
 
     /**
-     * Binds the parameters a lambda receives from the call it is handed to, rather than from a capture. In
-     * {@code BLOCK.getTag(BlockTags.CORALS)...ifPresent(block -> level.setBlock(pos, block.defaultBlockState(), 2))}
-     * the placed block is the {@code Consumer}'s own argument, so it has no producer anywhere in the enclosing method
-     * - it comes out of the receiver the lambda is being applied to. Resolving that receiver and binding it to the
-     * implementation method's trailing parameters is what recovers the coral fans.
+     * Binds the parameters a lambda receives from the call it is handed to, rather than from a capture - in
+     * {@code ...ifPresent(block -> level.setBlock(pos, block.defaultBlockState(), 2))} the placed block is the
+     * {@code Consumer}'s own argument and comes out of the receiver the lambda is applied to.
      *
      * <p>The receiver is only resolved once a lambda is actually found among the arguments, and the result is bound
-     * only to parameters that can carry a block, so a lambda over positions or random sources binds nothing.
+     * only to parameters that can carry a block.
      */
     private void bindLambdaParameters(ClassLoader cl, MethodInsnNode call, Frame<SourceValue> frame, Frame<SourceValue>[] frames,
                                       MethodNode method, Deque<MethodRef> worklist, Set<String> visited) {
@@ -503,15 +429,9 @@ public final class FeatureBytecodeScanner {
     }
 
     /**
-     * Records which lambdas a call site hands to which callee parameter. This is the caller half of the second lambda
-     * link: a lambda passed <i>as an argument</i> gets its values from inside the callee rather than from the receiver
-     * {@link #bindLambdaParameters} looks at, and the callee is frequently static, so that hop never fires. Dripstone
-     * is the case that needs it - {@code DripstoneUtils#growPointedDripstone} hands
-     * {@code state -> level.setBlock(pos, state, 2)} to the static {@code buildBaseToTipColumn}, which is the only place
-     * {@code POINTED_DRIPSTONE} is ever produced.
-     *
-     * <p>Re-queued on growth for the same reason {@link #recordCandidates} is: a callee already analyzed did not see
-     * the lambda, so its use of that parameter bound nothing.
+     * Records which lambdas a call site hands to which callee parameter - the caller half of the lambda-argument link,
+     * for a lambda that gets its values from inside the callee rather than from the receiver
+     * {@link #bindLambdaParameters} looks at. Re-queued on growth, like {@link #recordCandidates}.
      */
     private void recordFunctionalArguments(MethodInsnNode call, Frame<SourceValue> frame, Deque<MethodRef> worklist,
                                            Set<String> visited) {
@@ -555,8 +475,7 @@ public final class FeatureBytecodeScanner {
      * body receives from the functional interface.
      *
      * <p>Argument types are not filtered by {@link #carriesBlocks} here, unlike everywhere else: a functional
-     * interface's descriptor is erased, so {@code Consumer#accept} declares {@code Object}. The implementation
-     * method's own parameter type is what decides whether the value is kept.
+     * interface's descriptor is erased, so the implementation method's own parameter type is what decides.
      */
     private void bindFunctionalCandidates(ClassLoader cl, MethodInsnNode call, Frame<SourceValue> frame, Frame<SourceValue>[] frames,
                                           MethodNode method, Deque<MethodRef> worklist, Set<String> visited) {
@@ -696,8 +615,7 @@ public final class FeatureBytecodeScanner {
     /**
      * Queues the implementation methods referenced by an {@code INVOKEDYNAMIC}'s bootstrap arguments. Covers
      * {@code LambdaMetafactory} without depending on it: any method handle among the arguments is a body worth
-     * analyzing, and non-lambda bootstraps (string concatenation, record {@code ObjectMethods}) either carry no handle
-     * or carry accessors that place nothing.
+     * analyzing.
      */
     private void queueBootstrapTargets(InvokeDynamicInsnNode indy, boolean siteGuarded, boolean siteUnguarded,
                                        Deque<MethodRef> worklist, Set<String> visited) {
@@ -705,8 +623,7 @@ public final class FeatureBytecodeScanner {
             // Tags below H_INVOKEVIRTUAL are field handles, whose descriptor would never match a method.
             if (arg instanceof Handle handle && handle.getTag() >= Opcodes.H_INVOKEVIRTUAL
                     && shouldRecurse(handle.getOwner())) {
-                // Guardedness is taken from where the lambda is created, not from where it is invoked - the invocation
-                // is usually inside a JDK method this walk never enters.
+                // Guardedness is taken from where the lambda is created, not from where it is invoked.
                 markReached(new MethodRef(handle.getOwner(), handle.getName(), handle.getDesc()), siteGuarded,
                         siteUnguarded, worklist, visited);
             }
@@ -724,8 +641,8 @@ public final class FeatureBytecodeScanner {
         }
 
         for (AbstractInsnNode producer : value.insns) {
-            // The analyzer merges both branches of a dead flag test into one stack value, so the dead half has to be
-            // dropped here too - otherwise LargeDripstoneFeature's DEBUG ? GLASS : DRIPSTONE_BLOCK reports glass.
+                // The analyzer merges both branches of a dead flag test into one stack value, so the dead half has
+                // to be dropped here too.
             if (currentReachable != null && !currentReachable.contains(producer)) {
                 continue;
             }
@@ -747,8 +664,7 @@ public final class FeatureBytecodeScanner {
                     addParameterCandidates(local, method, out);
                 }
             } else if (producer instanceof TypeInsnNode cast && producer.getOpcode() == Opcodes.CHECKCAST) {
-                // Optional#get() and friends return Object; the cast is the only thing standing between the call and
-                // the block it produced.
+                // Optional#get() and friends return Object; the cast identifies the block the call produced.
                 resolve(stackTop(cast, frames, method), frames, method, cl, out, guard, depth + 1);
             } else if (producer instanceof MethodInsnNode call) {
                 int index = method.instructions.indexOf(call);
@@ -758,9 +674,7 @@ public final class FeatureBytecodeScanner {
                     continue;
                 }
 
-                // The produced value was computed from the receiver and the arguments, so both are genuine
-                // dependencies: defaultBlockState()/setValue() live in the receiver chain, while a tag-driven pick
-                // (BuiltInRegistries.BLOCK.getTag(BlockTags.CORAL_BLOCKS)...) only exposes its TagKey as an argument.
+                // The produced value was computed from the receiver and the arguments, so both are dependencies.
                 if (call.getOpcode() != Opcodes.INVOKESTATIC) {
                     resolve(receiverValue(frame, call), frames, method, cl, out, guard, depth + 1);
                 }
@@ -782,14 +696,9 @@ public final class FeatureBytecodeScanner {
 
     /**
      * Follows a call into the helper that produced the value, when neither its receiver nor its arguments carry the
-     * block. {@code DripstoneUtils#createPointedDripstone(direction, thickness)} is the shape this exists for: a static
-     * factory whose whole input is enum values, so without reading its {@code ARETURN} the pointed dripstone is
-     * invisible - the block only appears inside the callee.
-     *
-     * <p>Reads of the world itself are excluded, which is load-bearing rather than an optimization: a feature that
-     * copies a state it read back into the world ({@code setBlock(pos, level.getBlockState(other), 2)}) would otherwise
-     * report the sentinel states a reader returns out of bounds - {@code ProtoChunk#getBlockState} answers
-     * {@code VOID_AIR}, so fossil and end gateway both picked up blocks no feature places.
+     * block. Reads of the world itself are excluded: a reader answers out-of-bounds positions with sentinel states
+     * ({@code ProtoChunk#getBlockState} returns {@code VOID_AIR}), which a feature copying a state back into the world
+     * would otherwise report.
      */
     private void resolveReturnValue(ClassLoader cl, MethodInsnNode call, Candidates out, int depth) {
         Class<?> callOwner = loadClass(cl, call.owner);
@@ -845,13 +754,11 @@ public final class FeatureBytecodeScanner {
     }
 
     /**
-     * Blocks a {@code final} instance field can hold, read out of the {@code PUTFIELD}s in its owner's constructors.
-     * A {@code GETFIELD} has no value to read reflectively - {@link #scan} is handed a {@link Class}, never an
-     * instance - so a feature that caches its states in fields ({@code DesertWellFeature}: sand, sandstone, sandstone
-     * slab, water) otherwise reaches its sinks carrying nothing.
+     * Blocks a {@code final} instance field can hold, read out of the {@code PUTFIELD}s in its owner's constructors -
+     * a {@code GETFIELD} has no value to read reflectively, since {@link #scan} is handed a {@link Class}, never an
+     * instance.
      *
-     * <p>Restricted to {@code final} fields: anything else can be reassigned from outside the constructor, and the
-     * constructor's value would then be a guess rather than the field's content.
+     * <p>Restricted to {@code final} fields: anything else can be reassigned from outside the constructor.
      */
     private void addInstanceFieldValue(ClassLoader cl, FieldInsnNode field, Candidates out, int depth) {
         String key = field.owner + '#' + field.name + ':' + field.desc;
@@ -939,10 +846,7 @@ public final class FeatureBytecodeScanner {
     /**
      * Hops one step across a local variable, which {@link SourceInterpreter} treats as an opaque producer: a load's
      * producer is the load itself, not the value that was stored. A load resolves to whatever the slot holds at that
-     * point (the stores reaching it), and a store resolves to the value on top of the stack when it ran. A block
-     * assigned to a local before being placed - {@code BlockState state = flag ? TALL_SEAGRASS... : SEAGRASS...;} then
-     * {@code setBlock(pos, state, 2)} - is only reachable this way; the two branches of the ternary merge on the stack
-     * before the store, so both arrive.
+     * point (the stores reaching it), and a store resolves to the value on top of the stack when it ran.
      *
      * <p>Returns {@code null} for a slot that holds a method parameter, which has no producer instruction to follow.
      */
@@ -954,8 +858,7 @@ public final class FeatureBytecodeScanner {
             return null;
         }
 
-        // ILOAD/ISTORE are here for guard detection, which follows boolean locals; resolve only ever reaches this with
-        // object-typed values, so accepting the wider set changes nothing for it.
+        // ILOAD/ISTORE are here for guard detection, which follows boolean locals.
         if (local.getOpcode() == Opcodes.ALOAD || local.getOpcode() == Opcodes.ILOAD) {
             return local.var < frame.getLocals() ? frame.getLocal(local.var) : null;
         }
@@ -1008,16 +911,11 @@ public final class FeatureBytecodeScanner {
         }
     }
 
-    // -- config-dependent guards -----------------------------------------------------------------------------------
 
     /**
-     * Instructions that only run when a test on the {@code FeatureConfiguration} passed. This is what separates a block
-     * a feature always places from one it places only for some configurations - {@code LakeFeature}'s {@code ICE} is
-     * only reached when {@code configuration.fluid()} yields water, and {@code HugeFungusFeature}'s weeping vines only
-     * when its {@code hatState} is crimson, so both are reported for configurations that never place them.
-     *
-     * <p>Control dependence, per conditional jump: what is reachable from one successor but not from the other runs only
-     * when that branch was taken. Nested regions need no extra work, since an outer region already contains them.
+     * Instructions that only run when a test on the {@code FeatureConfiguration} passed, by control dependence per
+     * conditional jump: what is reachable from one successor but not from the other runs only when that branch was
+     * taken. Nested regions need no extra work, since an outer region already contains them.
      */
     private Set<AbstractInsnNode> configGuardedInstructions(ClassLoader cl, MethodNode method, Frame<SourceValue>[] frames) {
         Set<AbstractInsnNode> guarded = new HashSet<>();
@@ -1099,13 +997,9 @@ public final class FeatureBytecodeScanner {
      * {@code configuration.hatState.is(Blocks.NETHER_WART_BLOCK)}, or {@code configuration.fluid()}'s state tested
      * against {@code FluidTags.WATER}.
      *
-     * <p><b>Being config-derived is deliberately not enough</b>, and this is the whole reason this method exists rather
-     * than {@link #isConfigDerived} being used directly. A loop bound (`{@code l < configuration.tries()}`) and an
-     * iteration over a configuration's list (`{@code for (Spike spike : configuration.spikes())}`) are config-derived
-     * too, yet they always run - and since a feature's whole body typically sits inside one, treating them as guards
-     * marked nearly every feature's own blocks as conditional (measured: 8 of 61 features, including
-     * {@code underwater_magma}'s magma and {@code end_spike}'s obsidian). An identity test is the shape that actually
-     * <i>selects</i>, so only that is counted.
+     * <p>Being config-derived is deliberately not enough: a loop bound ({@code l < configuration.tries()}) or an
+     * iteration over a configuration's list is config-derived too, yet always runs. An identity test is the shape that
+     * actually <i>selects</i>, so only that is counted.
      */
     private boolean isConfigSelectiveTest(SourceValue value, Frame<SourceValue>[] frames, MethodNode method, ClassLoader cl,
                                           Set<AbstractInsnNode> guard, int depth) {
@@ -1247,13 +1141,11 @@ public final class FeatureBytecodeScanner {
 
     /**
      * Records that a call site fills a {@code boolean} parameter with a config-derived value, the interprocedural half
-     * of guard detection. {@code HugeFungusFeature} needs it: the crimson test is evaluated once in {@code placeHat} and
-     * travels two calls down as a plain flag, so the method that actually places the vines has no config value in sight.
+     * of guard detection.
      *
      * <p>Only {@code boolean} parameters are tracked, and only when the value is a config-<i>selective</i> test
-     * ({@link #isConfigSelectiveTest}), not merely config-derived. A configuration passed by reference is already
-     * recognized from its declared type, and anything else (an int, an enum) is not a decided test - leaving it
-     * unrecognized keeps the block reported unconditionally, which is the safe direction.
+     * ({@link #isConfigSelectiveTest}), not merely config-derived. Leaving anything else unrecognized keeps the block
+     * reported unconditionally, which is the safe direction.
      */
     private void recordConfigTaint(ClassLoader cl, MethodInsnNode call, Frame<SourceValue> frame, Frame<SourceValue>[] frames,
                                    MethodNode method, Deque<MethodRef> worklist, Set<String> visited) {
@@ -1283,17 +1175,13 @@ public final class FeatureBytecodeScanner {
         return candidate != null && FeatureConfiguration.class.isAssignableFrom(candidate);
     }
 
-    // -- reachability ----------------------------------------------------------------------------------------------
 
     /**
-     * Forward control-flow sweep that folds tests on {@code static final boolean} flags, so a branch that can never run
-     * places nothing. Vanilla's debug markers are the reason this exists: up to 1.21.8 {@code SharedConstants.DEBUG_*}
-     * were compile-time constants and javac stripped the branches guarded by them, but they are now initialized from a
-     * method call, so the bytecode carries them and a plain walk reports {@code LargeDripstoneFeature}'s diamond block,
-     * gold block and creeper head as blocks the feature places.
+     * Forward control-flow sweep that folds tests on {@code static final boolean} flags, so a branch that can never
+     * run places nothing.
      *
-     * <p>Only {@code IFEQ}/{@code IFNE} directly on a {@code GETSTATIC} of a final boolean is folded, and only when the
-     * value can be read reflectively; anything else keeps both successors, so this can never prune live code.
+     * <p>Only {@code IFEQ}/{@code IFNE} directly on a {@code GETSTATIC} of a final boolean is folded, and only when
+     * the value can be read reflectively; anything else keeps both successors, so this can never prune live code.
      */
     private static Set<AbstractInsnNode> reachableInstructions(ClassLoader cl, MethodNode method) {
         Set<AbstractInsnNode> reachable = new HashSet<>();
@@ -1383,7 +1271,6 @@ public final class FeatureBytecodeScanner {
         }
     }
 
-    // -- ASM stack helpers -----------------------------------------------------------------------------------------
 
     private static SourceValue receiverValue(Frame<SourceValue> frame, MethodInsnNode call) {
         int base = frame.getStackSize() - consumedEntries(call);
@@ -1402,7 +1289,6 @@ public final class FeatureBytecodeScanner {
         return entries + Type.getArgumentTypes(call.desc).length;
     }
 
-    // -- loading / reflection --------------------------------------------------------------------------------------
 
     private static Frame<SourceValue>[] frames(ClassNode owner, MethodNode method) {
         try {
@@ -1414,14 +1300,11 @@ public final class FeatureBytecodeScanner {
     }
 
     /**
-     * Queues the implementations of an abstract method on the classes of registered blocks. Vanilla needs this for
-     * sculk: a patch spreads through {@code SculkSpreader}, which calls {@code SculkBehaviour#attemptSpreadVein} on
-     * whatever block it found in the world, so the blocks it places live in {@code SculkBlock}/{@code SculkVeinBlock}
-     * and no static receiver type leads there.
+     * Queues the implementations of an abstract method on the classes of registered blocks, for an abstract call whose
+     * receiver is some object found in the world rather than the feature itself.
      *
      * <p>The block registry is the only implementor index available, which also bounds the blow-up: a method declared
-     * on a wide base type ({@code BlockBehaviour}) resolves to hundreds of classes and is dropped by
-     * {@link #MAX_IMPLEMENTORS} rather than dispatched.
+     * on a wide base type resolves to hundreds of classes and is dropped by {@link #MAX_IMPLEMENTORS}.
      */
     private void queueImplementors(ClassLoader cl, MethodRef ref, Deque<MethodRef> worklist, Set<String> visited) {
         Class<?> declaring = loadClass(cl, ref.owner);
@@ -1532,16 +1415,12 @@ public final class FeatureBytecodeScanner {
     }
 
     /**
-     * <b>The {@code rootPkg} clause is load-bearing, not a fallback - do not narrow it.</b> For a vanilla feature
-     * {@code rootPkg} degrades to {@code net/minecraft/}, which looks like it makes the two explicit prefixes
-     * redundant. It is the other way round: under Fabric's production (intermediary) mappings every Minecraft class is
-     * flat {@code net/minecraft/class_NNNN}, so the two package prefixes below match <i>nothing</i> there and the
-     * {@code rootPkg} clause is the only thing keeping the walk alive. Restricting it to the two prefixes cuts the
-     * walk by ~70% in dev (3464 -> 1051 methods over vanilla's features) without losing a single block, which is
-     * exactly what makes it tempting - and it would reduce the scan to {@code place()} alone in a Fabric production
-     * jar. Tests run against named mappings, so they cannot catch that regression.
+     * Whether a call is followed transitively.
      *
-     * <p>The two explicit prefixes only ever apply on loaders that keep Mojang package names (Forge from 1.17 on).
+     * <p><b>The {@code rootPkg} clause must not be narrowed.</b> Under production (intermediary) mappings every
+     * Minecraft class is flat {@code net/minecraft/class_NNNN}, so the two explicit package prefixes match
+     * <i>nothing</i> there and only {@code rootPkg} keeps the walk alive. Those prefixes apply on loaders that keep
+     * Mojang package names, and tests run against named mappings, so they cannot catch that regression.
      */
     private boolean shouldRecurse(String owner) {
         return owner.startsWith("net/minecraft/world/level/levelgen/")

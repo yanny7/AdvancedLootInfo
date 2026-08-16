@@ -106,6 +106,7 @@ Run the game (client) with a given loader/viewer combination — generated per-p
 
 Run all tests (JUnit 5 via `junit-platform-suite`, in `common` modules only — recipe-viewer modules have empty/placeholder test dirs):
 ```
+./gradlew :aci:common:test
 ./gradlew :ali:common:test
 ./gradlew :awi:common:test
 ```
@@ -120,6 +121,8 @@ AWI's base-layout scan is guarded by a golden file instead of unit assertions, w
 ./gradlew :awi:common:test --tests "com.yanny.awi.test.BaseLayoutTest" -Dawi.baselayout.regenerate=true
 ./gradlew :awi:common:test --tests "com.yanny.awi.test.BaseLayoutSweepTest" -Dawi.baselayout.sweep=true
 ```
+
+`aci:common` has its own small suite (`CoreTestSuite`) covering the mod-agnostic machinery — anything shared by both mods is tested there once rather than twice in ALI and AWI. It deliberately needs no Minecraft bootstrap, so it runs in a couple of seconds.
 
 Tests are organized behind JUnit Platform `@Suite`/`@SelectClasses` runners (`TooltipTestSuite` in each mod's `common` test tree) that bootstrap Minecraft's registries/resources (`Bootstrap.bootStrap()`, `SharedConstants.setVersion(...)`) once before delegating to individual `@Test` classes — run the suite class, not only an individual test class, if a test depends on that shared bootstrap state.
 

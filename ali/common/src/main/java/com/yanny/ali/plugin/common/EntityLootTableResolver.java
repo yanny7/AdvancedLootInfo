@@ -12,23 +12,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Maps a loot table id back to the entity types that can drop it, the opposite direction of asking every entity type
- * what it drops. The reason is cost: reading the loot table off an entity means constructing one sample entity per
- * registered type - goals, attributes and brains included - and throwing away every type that has no loot at all,
- * which on a large modpack is the single most expensive part of the scan.
+ * what it drops.
  * <p>
  * Nothing here needs an instance. {@link EntityType#getDefaultLootTable()} is derived from the registry key alone, and
  * {@code Mob#getLootTable} is final and delegates to {@code getDefaultLootTable}, so the only entities that can drop a
@@ -37,10 +25,9 @@ import java.util.Set;
  * trailing segments off an unmatched {@code entities/} table finds the owning type without any variant registration.
  * <p>
  * A table that neither matches nor trims down to a known type falls back to {@link #scanNamespace}, which does build
- * entities, but only for the namespace of the table that could not be explained - the cost is bound to the number of
- * unusual mods rather than to the size of the registry, and vanilla data never triggers it. An entity that is not
- * found even that way, or that is attributed to the wrong type, can be declared in the config's
- * {@code entityLootTables}, which takes precedence over everything derived here.
+ * entities, but only for the namespace of the table that could not be explained. An entity that is not found even that
+ * way, or that is attributed to the wrong type, can be declared in the config's {@code entityLootTables}, which takes
+ * precedence over everything derived here.
  */
 public class EntityLootTableResolver {
     private static final String ENTITY_PREFIX = "entities/";
@@ -92,7 +79,7 @@ public class EntityLootTableResolver {
             List<EntityType<?>> types = resolve(lootTable);
 
             if (!types.isEmpty()) {
-                tablesByType.computeIfAbsent(types.get(0), (k) -> new ArrayList<>()).add(lootTable);
+                tablesByType.computeIfAbsent(types.getFirst(), (k) -> new ArrayList<>()).add(lootTable);
             }
         });
 
@@ -134,8 +121,7 @@ public class EntityLootTableResolver {
 
     /**
      * The sample entities of a type, created once and reused. Only the loot modifier path needs them - a modifier's
-     * predicate takes an {@code Entity}, not an {@link EntityType} - so on an installation without global loot
-     * modifiers this is never called.
+     * predicate takes an {@code Entity}, not an {@link EntityType}.
      */
     @NotNull
     public List<Entity> getEntities(EntityType<?> type) {

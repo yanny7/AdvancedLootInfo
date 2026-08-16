@@ -45,18 +45,6 @@ public class ConfigTest {
     }
 
     @Test
-    public void testExistingConfigFileIsNotRewritten() throws IOException {
-        ConfigUtils.readConfiguration();
-
-        String created = Files.readString(configFile());
-
-        ConfigUtils.readConfiguration();
-
-        assertEquals(created, Files.readString(configFile()));
-        assertFalse(Files.exists(backupFile()));
-    }
-
-    @Test
     public void testMissingKeysUseDefaultValues() throws IOException {
         writeConfig("{\"configVersion\": " + AliConfig.CURRENT_VERSION + "}");
 
@@ -137,16 +125,6 @@ public class ConfigTest {
         assertEquals(expectedConfig(), writtenConfig());
         assertEquals(AliConfig.CURRENT_VERSION, config.configVersion);
         assertFalse(config.logMoreStatistics);
-    }
-
-    @Test
-    public void testEmptyConfigIsRecreated() throws IOException {
-        writeConfig("");
-
-        AliConfig config = ConfigUtils.readConfiguration();
-
-        assertEquals(expectedConfig(), writtenConfig());
-        assertEquals(AliConfig.CURRENT_VERSION, config.configVersion);
     }
 
     private Path configFile() {

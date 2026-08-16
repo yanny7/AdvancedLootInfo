@@ -14,23 +14,15 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Regression guard for the surface-rule scan ({@link NodeUtils#getBaseBlocksForBiome}): scans every vanilla biome of
- * every vanilla dimension and compares the discovered base blocks against a committed golden file.
- * <p>
- * Several seeds are scanned because the scan's coverage is genuinely seed-dependent — noise-gated blocks (nether
- * soul_sand, frozen-peaks ice) are only hit for some seeds, and badlands band positions differ per seed. A single seed
- * would let a reduction in sampling pass here while silently losing blocks in other worlds.
+ * every vanilla dimension over several seeds and compares the discovered base blocks against a committed golden file.
+ * Several seeds, because the scan's coverage is seed-dependent — noise-gated blocks are only hit for some seeds.
  * <p>
  * Regenerate after an intentional change with:
  * {@code ./gradlew :awi:common:test --tests "com.yanny.awi.test.BaseLayoutTest" -Dawi.baselayout.regenerate=true}
@@ -75,8 +67,7 @@ public class BaseLayoutTest {
 
     /**
      * Per-biome rule specialization only removes branches that cannot fire for that biome, so it must never change what
-     * the scan finds — one seed is enough, since this compares the two paths against each other rather than against a
-     * recorded expectation.
+     * the scan finds.
      */
     @Test
     public void testSpecializationDoesNotChangeResult() {
@@ -85,8 +76,8 @@ public class BaseLayoutTest {
                 settings.stableRounds(), settings.extentStableRounds(), settings.maxRounds(), settings.maxCeilingThickness(),
                 settings.deepWalkWindow(), false);
 
-        Map<String, String> specializedEntries = flatten(BaseLayoutTestUtils.scan(SEEDS.get(0), settings));
-        Map<String, String> unspecializedEntries = flatten(BaseLayoutTestUtils.scan(SEEDS.get(0), unspecialized));
+        Map<String, String> specializedEntries = flatten(BaseLayoutTestUtils.scan(SEEDS.getFirst(), settings));
+        Map<String, String> unspecializedEntries = flatten(BaseLayoutTestUtils.scan(SEEDS.getFirst(), unspecialized));
         Set<String> keys = new TreeSet<>(unspecializedEntries.keySet());
 
         keys.addAll(specializedEntries.keySet());

@@ -32,13 +32,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Regression guard for {@link FeatureBytecodeScanner}: scans every vanilla {@link Feature} and compares the discovered
- * blocks against a committed golden file. Nothing else covers the scanner's output — the base-layout golden file only
- * covers surface rules, so before this test any change to the ASM walk was unguarded in both directions.
+ * blocks against a committed golden file.
  * <p>
  * Alongside the blocks it records how much of the scanner's {@code MAX_METHODS} budget each feature consumed. That is
- * the number to watch when widening the walk (e.g. following {@code INVOKEDYNAMIC} lambda bodies): the walk is
- * breadth-first and hard-capped, so a wider walk can push a feature over the cap and make it lose blocks it finds
- * today. A pure improvement must add blocks and remove none.
+ * the number to watch when widening the walk: the walk is breadth-first and hard-capped, so a wider walk can push a
+ * feature over the cap and make it lose blocks it finds today. A pure improvement must add blocks and remove none.
  * <p>
  * Tags are recorded as tag keys rather than as their members, matching what the scanner reports, so the file does not
  * depend on any tags being bound.
@@ -58,8 +56,7 @@ public class FeatureBytecodeScanTest {
 
     @Test
     public void testFeatureScanMatchesGolden() throws IOException {
-        // The scanner caches per feature class across the whole JVM; a stale entry would make this test report whatever
-        // an earlier test happened to scan.
+        // The scanner caches per feature class across the whole JVM.
         FeatureBytecodeScanner.clearCaches();
 
         Map<String, Map<String, Object>> actual = new TreeMap<>();
