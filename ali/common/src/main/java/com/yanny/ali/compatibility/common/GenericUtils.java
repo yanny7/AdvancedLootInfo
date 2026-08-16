@@ -4,11 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.yanny.aci.api.ICoreDataNode;
 import com.yanny.aci.api.Rect;
 import com.yanny.ali.Utils;
-import com.yanny.ali.api.IClientUtils;
-import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.IItemNode;
-import com.yanny.ali.api.ITradeNode;
-import com.yanny.ali.api.ListNode;
+import com.yanny.ali.api.*;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.AliClientRegistry;
 import com.yanny.ali.manager.PluginManager;
@@ -30,12 +26,14 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.locale.Language;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.npc.villager.VillagerProfession;
 import net.minecraft.world.item.Item;
@@ -204,8 +202,7 @@ public class GenericUtils {
     /**
      * Drops every item the recipe viewer hides from the decoded loot trees, along with any pool/group left empty by
      * that, and drops loot tables left with nothing at all. Must run before a tree is handed to a recipe/widget and
-     * before {@link #collectItems} is asked for the recipe's outputs, so that the rendered tree, the outputs and the
-     * reverse index cannot disagree on what is visible.
+     * before {@link #collectItems} is asked for the recipe's outputs.
      * <p>
      * A tag entry loses the members the viewer hides rather than being kept whole, and is dropped once none are left -
      * see {@link #keepItemNode}.
@@ -218,12 +215,11 @@ public class GenericUtils {
 
     /**
      * Same as {@link #pruneHiddenItems}, for villager trades. A single trade ({@code ItemsToItemsNode}) is all or
-     * nothing - it disappears as soon as any of its inputs or its result is hidden, because a trade shown without one
-     * of its costs reads as a different, cheaper trade. Trade levels and professions left empty by that are dropped
-     * too. See {@code CoreListNode#requiresAllChildren}.
+     * nothing - it disappears as soon as any of its inputs or its result is hidden. Trade levels and professions left
+     * empty by that are dropped too. See {@code CoreListNode#requiresAllChildren}.
      * <p>
      * The flat input/output lists a viewer indexes are read back out of the pruned tree afterwards
-     * ({@link #collectTradeItems}), so an item that only occurred in a dropped trade leaves the index with it.
+     * ({@link #collectTradeItems}).
      */
     public static void pruneHiddenTrades(Map<Identifier, IDataNode> tradeData, Predicate<ItemStack> isVisible) {
         tradeData.values().removeIf((node) -> node instanceof ListNode listNode && listNode.prune(hiddenItemFilter(isVisible)));
@@ -236,8 +232,7 @@ public class GenericUtils {
 
     /**
      * A node survives while it still stands for something the player can see. The hidden members of a tag are dropped
-     * first, so that {@link IItemNode#getItems()} - what the recipe outputs and the reverse index are built from -
-     * cannot claim more than the tree shows; a tag left without a single visible member is dropped whole.
+     * first, and a tag left without a single visible member is dropped whole.
      * <p>
      * A node standing for nothing at all is kept: the second input of a single-input villager trade is an empty
      * placeholder stack, and dropping it would take the whole trade with it (see {@code requiresAllChildren}).
@@ -272,7 +267,7 @@ public class GenericUtils {
 
     /**
      * The costs and the results of every trade below {@code node}, kept apart - only an {@link ITradeNode} knows which
-     * of its children is which, so the walk asks it instead of looking at the item nodes itself.
+     * of its children is which.
      */
     @NotNull
     public static Pair<List<ItemStack>, List<ItemStack>> collectTradeItems(IDataNode node) {
@@ -308,12 +303,12 @@ public class GenericUtils {
         pruneHiddenItems(lootData, isVisible);
         pruneHiddenTrades(tradeData, isVisible);
 
-        // a loot table is claimed only after every block using it got its own entry - blocks sharing one table
-        // (vanilla's dropsLike) must not hide each other; claimed tables are dropped before the gameplay pass
+        // a loot table is claimed only after every block using it got its own entry; claimed tables are dropped
+        // before the gameplay pass
         Set<Identifier> claimedLootTables = new HashSet<>();
         Map<Identifier, Set<Item>> handledBlockItems = new HashMap<>();
-        // entities keep the one-entry-per-table rule: entity entries are identified by their loot table, so a table
-        // shared by two entity types has to produce a single entry, shown under the first of them
+        // entity entries are identified by their loot table, so a table shared by two entity types produces a single
+        // entry, shown under the first of them
         Map<Identifier, List<EntityType<?>>> entityLootTables = new EntityLootTableResolver(clientRegistry, level).resolveAll(lootData.keySet());
 
         for (Block block : BuiltInRegistries.BLOCK) {
@@ -326,7 +321,7 @@ public class GenericUtils {
                 if (node != null) {
                     // blocks sharing both a loot table and an item (StandingAndWallBlockItem, e.g. banner + wall
                     // banner) would render as two identical entries; blocks with no item of their own are drawn as
-                    // the block itself, so those stay distinguishable and are always kept
+                    // the block itself and are always kept
                     Item item = block.asItem();
 
                     if (item == Items.AIR || handledBlockItems.computeIfAbsent(location, (k) -> new HashSet<>()).add(item)) {
@@ -349,7 +344,7 @@ public class GenericUtils {
             IDataNode node = lootData.get(location);
 
             if (node != null) {
-                entityConsumer.accept(node, location, entry.getValue().get(0), collectItems(node));
+                entityConsumer.accept(node, location, entry.getValue().getFirst(), collectItems(node));
             }
 
             claimedLootTables.add(location);

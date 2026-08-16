@@ -127,7 +127,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
             List<EntryStack<?>> stacks = blocks.stream().filter((b) -> !GenericUtils.rendersAsBlockModel(b)).<EntryStack<?>>map(ReiBaseCategory::toStack).toList();
 
             if (stacks.isEmpty()) {
-                Block block = blocks.isEmpty() ? Blocks.AIR : blocks.get(0);
+                Block block = blocks.isEmpty() ? Blocks.AIR : blocks.getFirst();
                 Rectangle slotRect = new Rectangle(slotX, slotY, 18, 18);
 
                 widgets.add(Widgets.createSlotBase(slotRect));

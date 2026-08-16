@@ -34,9 +34,7 @@ public class ItemsToItemsNode extends ListNode implements ITradeNode {
     /**
      * How many of the leading children are the trade's costs - the rest is its result. The children are added in that
      * order below and stay in it through the wire: every one of them carries chance 1, and {@code CoreListNode}'s
-     * decode sorts them by chance with a stable sort, so equal keys cannot reorder. The count is encoded rather than
-     * derived from the child count so that a child lost to an encode failure is detected instead of silently turning
-     * a cost into a result.
+     * decode sorts them by chance with a stable sort, so equal keys cannot reorder.
      */
     private final int inputCount;
 

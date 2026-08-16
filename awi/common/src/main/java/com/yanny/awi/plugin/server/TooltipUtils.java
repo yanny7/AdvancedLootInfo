@@ -21,7 +21,7 @@ public class TooltipUtils {
     @NotNull
     public static TooltipBuilder getBlockInfoTooltip(IServerUtils utils, NodeUtils.BlockInfo info) {
         return TooltipBuilder.array((b) -> {
-            RangeValue fistValue = info.ranges().get(0);
+            RangeValue fistValue = info.ranges().getFirst();
 
             switch (info.storageType()) {
                 case RELATIVE -> b.add(utils.getValueTooltip(utils, fistValue).build(Lang.Value.DEPTH_BELOW_SURFACE));

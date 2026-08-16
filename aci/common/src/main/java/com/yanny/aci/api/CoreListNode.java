@@ -1,8 +1,11 @@
 package com.yanny.aci.api;
 
+import com.mojang.logging.LogUtils;
+import com.yanny.aci.tooltip.TooltipContext;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,6 +19,8 @@ public abstract class CoreListNode<
         TClientUtils extends ICoreClientUtils<TDataNode, ?, TClientUtils>
         >
         implements ICoreDataNode<TServerUtils> {
+    private static final Logger LOGGER = LogUtils.getLogger();
+
     @Nullable
     private List<TDataNode> nodes;
 
@@ -123,6 +128,43 @@ public abstract class CoreListNode<
         if (nodes.isEmpty()) {
             nodes = null;
         }
+    }
+
+    // must not touch TooltipContext - it is set once per top-level entry by NetworkUtils and stays ambient for the siblings
+    @Override
+    public final void encode(TServerUtils utils, RegistryFriendlyByteBuf buf) {
+        List<TDataNode> nodes = nodes();
+        int countIndex = buf.writerIndex();
+        int successfulNodes = 0;
+
+        buf.writeInt(nodes.size());
+
+        for (TDataNode node : nodes) {
+            int startOfNode = buf.writerIndex();
+
+            try {
+                buf.writeResourceLocation(node.getId());
+                node.encode(utils, buf);
+                successfulNodes++;
+            } catch (Throwable e) {
+                buf.writerIndex(startOfNode);
+                LOGGER.warn("[{}] Failed to write child node {} of parent {} (in {})",
+                        getId().getNamespace(), node.getId(), getId(), TooltipContext.get(), e);
+            }
+        }
+
+        if (successfulNodes != nodes.size()) {
+            LOGGER.warn("[{}] Dropped {} of {} child node(s) of {} (in {}) while encoding",
+                    getId().getNamespace(), nodes.size() - successfulNodes, nodes.size(), getId(), TooltipContext.get());
+
+            int endIndex = buf.writerIndex();
+
+            buf.writerIndex(countIndex);
+            buf.writeInt(successfulNodes);
+            buf.writerIndex(endIndex);
+        }
+
+        encodeNode(utils, buf);
     }
 
     public abstract void encodeNode(TServerUtils utils, RegistryFriendlyByteBuf buf);

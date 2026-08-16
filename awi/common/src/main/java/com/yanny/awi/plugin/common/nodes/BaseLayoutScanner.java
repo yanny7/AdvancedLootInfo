@@ -29,11 +29,9 @@ import java.util.concurrent.Future;
  * Runs {@link NodeUtils#getBaseBlocksForBiome} for every (dimension, biome) pair of a world up front, on one shared
  * thread pool.
  * <p>
- * Scanning all dimensions through a single pool (instead of one pool per dimension) keeps the workers busy across
- * dimension boundaries — otherwise every dimension ends with its threads idling until its slowest biome finishes.
  * Results are cached per (noise settings, biome): the scan's outcome depends only on the dimension's
  * {@link NoiseGeneratorSettings} (surface rule, height range, sea level, default block/fluid), the biome and the world
- * seed, so dimensions sharing settings — common in packs that reuse vanilla generators — scan each biome once.
+ * seed, so dimensions sharing settings scan each biome once.
  */
 public class BaseLayoutScanner {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -43,16 +41,15 @@ public class BaseLayoutScanner {
 
     /**
      * {@code totalTimeMs} is the real elapsed time of the whole parallel scan phase. The two surface-rule counts say how
-     * much wider the result cache could get: it is keyed on (noise settings, biome), so dimensions that share a rule but
-     * not their settings scan the same biome twice. {@code distinctSurfaceRules} counts rules that are structurally
-     * equal, {@code sharedSurfaceRuleInstances} only those that are the very same object.
+     * much wider the result cache could get: {@code distinctSurfaceRules} counts rules that are structurally equal,
+     * {@code sharedSurfaceRuleInstances} only those that are the very same object.
      */
     public record Stats(long totalTimeMs, int scannedBiomeCount, int cachedBiomeCount,
                         long minBiomeTimeMs, long maxBiomeTimeMs, double meanBiomeTimeMs,
                         int scannedDimensionCount, int distinctSurfaceRules, int distinctSurfaceRuleInstances,
                         List<DimensionCost> costliestDimensions) {}
 
-    /** Summed scan time of one dimension — the whole scan is dominated by a few of these, so they are worth naming. */
+    /** Summed scan time of one dimension. */
     public record DimensionCost(Identifier dimension, long timeMs, int biomeCount, int roundCappedCount) {}
 
     private record CacheKey(Object settings, Object biome) {}
@@ -90,9 +87,8 @@ public class BaseLayoutScanner {
             }
         }
 
-        // Per dimension, not per task: a structural HashSet of rules hashes whole rule trees, which is not free on the
-        // multi-thousand-node trees of a modded pack. The identity set filters first, so equals/hashCode runs a handful
-        // of times instead of once per biome.
+        // Per dimension, not per task: a structural HashSet of rules hashes whole rule trees. The identity set filters
+        // first, so equals/hashCode runs a handful of times instead of once per biome.
         Set<SurfaceRules.RuleSource> distinctRuleInstances = Collections.newSetFromMap(new IdentityHashMap<>());
         Set<Identifier> scannedDimensions = new HashSet<>();
 
@@ -221,9 +217,9 @@ public class BaseLayoutScanner {
     }
 
     /**
-     * Per-thread {@link NodeUtils.DimensionContext} holder. Building one creates a {@link RandomState} (expensive), so
-     * it is kept for as long as the worker keeps receiving tasks of the same dimension; only one context per thread is
-     * alive at a time, which bounds the memory the mock chunks hold.
+     * Per-thread {@link NodeUtils.DimensionContext} holder. Building one creates a {@link RandomState}, so it is kept
+     * for as long as the worker keeps receiving tasks of the same dimension; only one context per thread is alive at a
+     * time, which bounds the memory the mock chunks hold.
      */
     private static class ContextCache {
         private Identifier dimension;
