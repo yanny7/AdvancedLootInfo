@@ -17,18 +17,16 @@ import java.util.*;
 
 /**
  * Reuses {@link PlacedFeatureNode}s and {@link GenerationStepNode}s across the whole scan - biomes of one dimension and
- * dimensions alike share the very same {@link PlacedFeature} instances and repeat whole feature lists. On vanilla data
- * only 188 of 2490 placed feature occurrences and 80 of 647 generation step lists are distinct.
+ * dimensions alike share the very same {@link PlacedFeature} instances and repeat whole feature lists.
  *
  * <p>A placed feature node's content is a pure function of (placed feature, column context): the configuration is part
  * of the placed feature's identity ({@code PlacedFeature -> ConfiguredFeature -> FeatureConfiguration}), while the
  * column context decides how vertical anchors resolve. Keying by identity rather than by {@code equals} keeps
- * third-party {@code PlacementModifier} implementations out of the lookup path; on vanilla data it costs no cache hit.
+ * third-party {@code PlacementModifier} implementations out of the lookup path.
  *
  * <p>A generation step node's content is a pure function of (step, child nodes). The column context is not part of that
- * key because the children are already resolved against one - and the step's own tooltip depends on nothing else.
- * {@link StepKey} compares its children by identity, since {@link PlacedFeatureNode} does not override {@code equals}
- * and the children are themselves deduplicated here.
+ * key because the children are already resolved against one. {@link StepKey} compares its children by identity, since
+ * {@link PlacedFeatureNode} does not override {@code equals} and the children are themselves deduplicated here.
  *
  * <p>The resulting tree is a DAG - a shared node is encoded once per occurrence (the wire format is unchanged) and
  * {@code optimizeList} is idempotent over it. Not thread safe: node building runs on the server thread.

@@ -316,19 +316,14 @@ public class FeatureConfigurationCollectorUtils {
     /**
      * Blocks of one configured feature: what its configuration declares, plus what its {@code place()} bytecode
      * hardcodes. Every descent into a nested feature has to go through here - a nested feature whose configuration
-     * carries no blocks of its own is dropped entirely otherwise. That is not a corner case: warm ocean's coral
-     * reaches the world only as three {@code NoneFeatureConfiguration} features nested inside
-     * {@code warm_ocean_vegetation}, so scanning just the outer feature finds nothing at all.
+     * carries no blocks of its own is dropped entirely otherwise.
      *
-     * <p>The scanner's tags travel out as tags rather than as their members, which is also why every collector in this
-     * class hands back {@code Either}s: the coral tags are found this deep in the nesting, and flattening them here
-     * would leave the display nothing to name the slot after.
+     * <p>The scanner's tags travel out as tags rather than as their members, which is why every collector in this
+     * class hands back {@code Either}s.
      *
      * <p>Blocks the scanner only reached through a test on the configuration are dropped unless
-     * {@link com.yanny.awi.configuration.AwiConfig#showConfigConditionalBlocks} says otherwise - the scan is keyed by
-     * {@code Feature} class and so cannot tell which configuration it is being asked about, which is why a lava lake
-     * otherwise reports the ice only a water lake freezes. Dropping them here rather than in the widget also keeps them
-     * out of the reverse index, so a block that is not shown is not searchable either.
+     * {@link com.yanny.awi.configuration.AwiConfig#showConfigConditionalBlocks} says otherwise. Dropping them here
+     * rather than in the widget also keeps them out of the reverse index.
      */
     @NotNull
     public static List<Either<Block, TagKey<Block>>> collectConfiguredFeatureBlocks(IServerUtils utils, ConfiguredFeature<?, ?> feature) {

@@ -15,7 +15,7 @@ import java.util.List;
 
 import static com.yanny.awi.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.awi.test.TooltipTestSuite.UTILS;
-import static com.yanny.awi.test.utils.TestUtils.assertTooltip;
+import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
 
 public class StructureProcessorTooltipTest {
     @Test

@@ -45,7 +45,7 @@ import java.util.Optional;
 
 import static com.yanny.awi.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.awi.test.TooltipTestSuite.UTILS;
-import static com.yanny.awi.test.utils.TestUtils.assertTooltip;
+import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
 
 public class FeatureConfigurationTooltipTest {
     private static final Holder<PlacedFeature> PLACED_FEATURE = Holder.direct(new PlacedFeature(
