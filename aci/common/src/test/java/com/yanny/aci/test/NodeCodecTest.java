@@ -11,7 +11,7 @@ import net.minecraft.SharedConstants;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.Bootstrap;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -49,7 +49,7 @@ public class NodeCodecTest {
         root.addChildren(new TestLeafNode("second", 7, 0.5f, leafTooltip(palette, "tooltip.aci_test.unknown", "b")));
 
         byte[] payload = encodePayload(server, Map.of(entryId("root"), root));
-        Map<ResourceLocation, TestListNode> decoded = roundTrip(payload, new TestClientUtils(DICTIONARY));
+        Map<Identifier, TestListNode> decoded = roundTrip(payload, new TestClientUtils(DICTIONARY));
         TestListNode decodedRoot = decoded.get(entryId("root"));
 
         assertEquals(1, decoded.size());
@@ -62,14 +62,14 @@ public class NodeCodecTest {
     public void testDecodedTreeReEncodesToTheSameBytes() {
         TooltipNodePalette palette = new TooltipNodePalette();
         TestServerUtils server = new TestServerUtils(palette, DICTIONARY);
-        Map<ResourceLocation, TestDataNode> nodes = new LinkedHashMap<>();
+        Map<Identifier, TestDataNode> nodes = new LinkedHashMap<>();
 
         nodes.put(entryId("first"), tree(palette, "first", 4, 0));
         nodes.put(entryId("second"), tree(palette, "second", 2, 100));
 
         byte[] payload = encodePayload(server, nodes);
         TestClientUtils client = new TestClientUtils(DICTIONARY);
-        Map<ResourceLocation, TestListNode> decoded = roundTrip(payload, client);
+        Map<Identifier, TestListNode> decoded = roundTrip(payload, client);
         byte[] reEncoded = encodePayload(new TestServerUtils(client.getTooltipCache(), DICTIONARY), new LinkedHashMap<>(decoded));
 
         assertArrayEquals(payload, reEncoded);
@@ -199,13 +199,13 @@ public class NodeCodecTest {
     public void testTopLevelEntryThatCannotBeEncodedIsDroppedFromTheMap() {
         TooltipNodePalette palette = new TooltipNodePalette();
         TestServerUtils server = new TestServerUtils(palette, DICTIONARY);
-        Map<ResourceLocation, TestDataNode> nodes = new LinkedHashMap<>();
+        Map<Identifier, TestDataNode> nodes = new LinkedHashMap<>();
 
         nodes.put(entryId("broken"), new FailingNode(1.0f));
         nodes.put(entryId("healthy"), tree(palette, "healthy", 2, 0));
 
         byte[] payload = encodePayload(server, nodes);
-        Map<ResourceLocation, TestListNode> decoded = roundTrip(payload, new TestClientUtils(DICTIONARY));
+        Map<Identifier, TestListNode> decoded = roundTrip(payload, new TestClientUtils(DICTIONARY));
 
         assertEquals(1, decoded.size());
         assertEquals("healthy", decoded.get(entryId("healthy")).name);
@@ -247,7 +247,7 @@ public class NodeCodecTest {
         return TooltipNode.getOrCreate(palette, key, null, Component.literal(value), TooltipNode.FLAG_COMPONENT, List.of(child));
     }
 
-    private static byte[] encodePayload(TestServerUtils utils, Map<ResourceLocation, ? extends TestDataNode> nodes) {
+    private static byte[] encodePayload(TestServerUtils utils, Map<Identifier, ? extends TestDataNode> nodes) {
         RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(Unpooled.buffer(), RegistryAccess.EMPTY);
 
         utils.getTooltipCache().encode(utils, buf);
@@ -281,15 +281,15 @@ public class NodeCodecTest {
         return await(receiver.getFuture());
     }
 
-    private static Map<ResourceLocation, TestListNode> roundTrip(byte[] payload, TestClientUtils client) {
+    private static Map<Identifier, TestListNode> roundTrip(byte[] payload, TestClientUtils client) {
         List<byte[]> chunks = compress(payload);
 
         return decode(reassemble(chunks, chunks.size()), client);
     }
 
-    private static Map<ResourceLocation, TestListNode> decode(byte[] compressed, TestClientUtils utils) {
+    private static Map<Identifier, TestListNode> decode(byte[] compressed, TestClientUtils utils) {
         RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(Unpooled.wrappedBuffer(decompress(compressed)), RegistryAccess.EMPTY);
-        Map<ResourceLocation, TestListNode> nodes = new LinkedHashMap<>();
+        Map<Identifier, TestListNode> nodes = new LinkedHashMap<>();
 
         try {
             utils.getTooltipCache().decode(utils, buf);
@@ -297,7 +297,7 @@ public class NodeCodecTest {
             int count = buf.readInt();
 
             for (int i = 0; i < count; i++) {
-                nodes.put(buf.readResourceLocation(), new TestListNode(utils, buf));
+                nodes.put(buf.readIdentifier(), new TestListNode(utils, buf));
             }
 
             assertFalse(buf.isReadable(), "payload has trailing bytes after decoding");
@@ -342,7 +342,7 @@ public class NodeCodecTest {
         return builder.toString();
     }
 
-    private static ResourceLocation entryId(String path) {
-        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+    private static Identifier entryId(String path) {
+        return Identifier.fromNamespaceAndPath(MOD_ID, path);
     }
 }

@@ -10,6 +10,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.stream.Stream;
+
 public class ConfigUtils {
     @NotNull
     public static AliConfig readConfiguration() {

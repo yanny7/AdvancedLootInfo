@@ -2,11 +2,11 @@ package com.yanny.aci.test.utils;
 
 import com.yanny.aci.tooltip.TooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public class FailingNode implements TestDataNode {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath("aci_test", "failing");
+    public static final Identifier ID = Identifier.fromNamespaceAndPath("aci_test", "failing");
 
     private final float chance;
 
@@ -22,7 +22,7 @@ public class FailingNode implements TestDataNode {
 
     @NotNull
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 

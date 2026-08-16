@@ -3,11 +3,11 @@ package com.yanny.aci.test.utils;
 import com.yanny.aci.api.CoreListNode;
 import com.yanny.aci.tooltip.TooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public class TestListNode extends CoreListNode<TestServerUtils, TestDataNode, TestClientUtils> implements TestDataNode {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath("aci_test", "list");
+    public static final Identifier ID = Identifier.fromNamespaceAndPath("aci_test", "list");
 
     public final String name;
 
@@ -32,7 +32,7 @@ public class TestListNode extends CoreListNode<TestServerUtils, TestDataNode, Te
 
     @NotNull
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 

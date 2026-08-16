@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.JsonOps;
 import com.yanny.aci.configuration.CoreConfigUtils;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -13,9 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CoreConfigUtilsTest {
     private static final String MOD_ID = "aci_test";
@@ -64,7 +62,7 @@ public class CoreConfigUtilsTest {
         TestConfig config = read();
 
         assertFalse(config.flag);
-        assertEquals(ResourceLocation.fromNamespaceAndPath("minecraft", "dirt"), config.location);
+        assertEquals(Identifier.fromNamespaceAndPath("minecraft", "dirt"), config.location);
         assertEquals(List.of("only"), config.values);
     }
 

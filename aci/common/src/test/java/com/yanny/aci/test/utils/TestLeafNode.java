@@ -2,11 +2,11 @@ package com.yanny.aci.test.utils;
 
 import com.yanny.aci.tooltip.TooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public class TestLeafNode implements TestDataNode {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath("aci_test", "leaf");
+    public static final Identifier ID = Identifier.fromNamespaceAndPath("aci_test", "leaf");
 
     public final String value;
     public final int count;
@@ -36,7 +36,7 @@ public class TestLeafNode implements TestDataNode {
 
     @NotNull
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 

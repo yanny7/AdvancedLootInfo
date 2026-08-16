@@ -5,7 +5,7 @@ import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.tooltip.TooltipNodePalette;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,7 +16,7 @@ import java.util.function.BiFunction;
 
 public class TestClientUtils implements ICoreWidgetUtils<Object, TestDataNode, TestClientUtils, TestClientUtils> {
     private final TooltipNodePalette palette = new TooltipNodePalette();
-    private final Map<ResourceLocation, BiFunction<TestClientUtils, RegistryFriendlyByteBuf, TestDataNode>> factories = new HashMap<>();
+    private final Map<Identifier, BiFunction<TestClientUtils, RegistryFriendlyByteBuf, TestDataNode>> factories = new HashMap<>();
     private final List<String> dictionary;
 
     public TestClientUtils(List<String> dictionary) {
@@ -33,7 +33,7 @@ public class TestClientUtils implements ICoreWidgetUtils<Object, TestDataNode, T
 
     @NotNull
     @Override
-    public BiFunction<TestClientUtils, RegistryFriendlyByteBuf, TestDataNode> getDataNodeFactory(ResourceLocation id) {
+    public BiFunction<TestClientUtils, RegistryFriendlyByteBuf, TestDataNode> getDataNodeFactory(Identifier id) {
         BiFunction<TestClientUtils, RegistryFriendlyByteBuf, TestDataNode> factory = factories.get(id);
 
         if (factory == null) {

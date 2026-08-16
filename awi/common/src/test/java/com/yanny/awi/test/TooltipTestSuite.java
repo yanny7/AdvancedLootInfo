@@ -100,7 +100,6 @@ public class TooltipTestSuite {
         TestUtils.LoadedLanguage loadedLanguage = TestUtils.loadDefaultLanguage(resourceManager, LanguageHolder.TRANSLATION_MAP);
 
         Language.inject(loadedLanguage.language());
-//        TestUtils.bindVanillaTags();
         LOOKUP = VanillaRegistries.createLookup();
         UNUSED = loadedLanguage.unusedKeys();
 

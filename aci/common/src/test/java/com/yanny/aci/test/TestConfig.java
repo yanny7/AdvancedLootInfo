@@ -3,7 +3,7 @@ package com.yanny.aci.test;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.yanny.aci.configuration.ICoreConfig;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ public class TestConfig implements ICoreConfig {
         instance.group(
                 Codec.INT.fieldOf("configVersion").orElse(0).forGetter((c) -> c.configVersion),
                 Codec.BOOL.fieldOf("flag").orElse(true).forGetter((c) -> c.flag),
-                ResourceLocation.CODEC.fieldOf("location").orElseGet(() -> new TestConfig().location).forGetter((c) -> c.location),
+                Identifier.CODEC.fieldOf("location").orElseGet(() -> new TestConfig().location).forGetter((c) -> c.location),
                 Codec.STRING.listOf().fieldOf("values").orElseGet(() -> new TestConfig().values).forGetter((c) -> c.values)
         ).apply(instance, (version, flag, location, values) -> {
             TestConfig config = new TestConfig();
@@ -31,11 +31,11 @@ public class TestConfig implements ICoreConfig {
     public int configVersion = 0;
 
     public boolean flag = true;
-    public ResourceLocation location;
+    public Identifier location;
     public List<String> values;
 
     public TestConfig() {
-        location = ResourceLocation.fromNamespaceAndPath("minecraft", "stone");
+        location = Identifier.fromNamespaceAndPath("minecraft", "stone");
         values = new ArrayList<>(List.of("first", "second"));
     }
 
