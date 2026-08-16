@@ -20,6 +20,20 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
 }
 
+// shared test utilities consumed by :ali:common and :awi:common test source sets
+configurations {
+    testArtifacts
+}
+
+tasks.register("testJar", Jar) {
+    archiveClassifier = "tests"
+    from sourceSets.test.output
+}
+
+artifacts {
+    testArtifacts tasks.testJar
+}
+
 sourceSets {
     main {
         resources {

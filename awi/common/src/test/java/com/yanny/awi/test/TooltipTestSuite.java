@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNodePalette;
+import com.yanny.awi.datagen.LanguageHolder;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.configuration.AwiConfig;
 import com.yanny.awi.manager.PluginManager;
@@ -11,7 +12,7 @@ import com.yanny.awi.plugin.server.summary.ColumnContext;
 import com.yanny.awi.plugin.server.summary.CountSpan;
 import com.yanny.awi.plugin.server.summary.HeightSpan;
 import com.yanny.awi.plugin.server.summary.PlacementContribution;
-import com.yanny.awi.test.utils.TestUtils;
+import com.yanny.aci.test.utils.TestUtils;
 import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
 import net.minecraft.Util;
@@ -52,7 +53,6 @@ import org.junit.platform.suite.api.BeforeSuite;
 import org.junit.platform.suite.api.SelectClasses;
 import org.junit.platform.suite.api.Suite;
 import org.slf4j.Logger;
-import oshi.util.tuples.Pair;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -96,12 +96,12 @@ public class TooltipTestSuite {
         Bootstrap.bootStrap();
 
         ResourceManager resourceManager = loadClientResources();
-        Pair<Language, Set<String>> pair = TestUtils.loadDefaultLanguage(resourceManager);
+        TestUtils.LoadedLanguage loadedLanguage = TestUtils.loadDefaultLanguage(resourceManager, LanguageHolder.TRANSLATION_MAP);
 
-        Language.inject(pair.getA());
+        Language.inject(loadedLanguage.language());
         TestUtils.bindVanillaTags();
         LOOKUP = VanillaRegistries.createLookup();
-        UNUSED = pair.getB();
+        UNUSED = loadedLanguage.unusedKeys();
 
         PluginManager.getInstance().registerCommonEvent();
         PluginManager.getInstance().registerClientEvent();

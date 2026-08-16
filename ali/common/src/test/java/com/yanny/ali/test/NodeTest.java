@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
-import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
+import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
 
 public class NodeTest {
     @Test
