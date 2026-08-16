@@ -130,15 +130,7 @@ public abstract class CoreListNode<
         }
     }
 
-    /**
-     * Writes the child list (count + each child's {@link ICoreDataNode#getId()} and payload) followed by this node's
-     * own payload.
-     * <p>
-     * A child whose encode throws is dropped instead of corrupting the whole stream: the writer index is rewound to
-     * where that child started and the leading count is patched afterwards. {@link TooltipContext} is deliberately
-     * left untouched - it is set once per top-level entry by {@code NetworkUtils} and must stay ambient for the
-     * remaining siblings.
-     */
+    // must not touch TooltipContext - it is set once per top-level entry by NetworkUtils and stays ambient for the siblings
     @Override
     public final void encode(TServerUtils utils, FriendlyByteBuf buf) {
         List<TDataNode> nodes = nodes();

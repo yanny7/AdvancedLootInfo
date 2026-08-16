@@ -35,7 +35,7 @@ Guidance for working in `aci` (`com.yanny.aci`), the shared core library consume
 ### `configuration`
 
 - `ICoreConfig` — the contract a mod's config root implements: `getConfigVersion`/`setConfigVersion`/`getCurrentVersion` (the version field stays a plain public field on `AliConfig`/`AwiConfig`, so the generated JSON's field order is unchanged) plus an optional `normalize()`, called on a freshly deserialized config to treat an explicit `null` in the file like a missing key. ALI's `normalize()` fills its nine list/map fields back in from a default instance; AWI has nothing to normalize and uses the default no-op.
-- `CoreConfigUtils` — `readConfiguration(configDir, modId, fileName, type, factory, gson)`: creates `<configDir>/<modId>/<fileName>` from defaults when missing, loads it, and rotates it to `.bak` + regenerates when the file's version is older than `getCurrentVersion()`. Every failure path falls back to `factory.get()`, so it never returns null and never throws. `gsonBuilder()` is the shared `GsonBuilder` (pretty printing + `ResourceLocation.Serializer`); a mod layers its own type adapters on top — ALI adds its `LootCategoryAdapter`, AWI just calls `create()`. Each mod's own `configuration.ConfigUtils` is now only that call plus its Gson setup.
+- `CoreConfigUtils` — guarded by `CoreConfigUtilsTest` (see "Tests" below). `readConfiguration(configDir, modId, fileName, type, factory, gson)`: creates `<configDir>/<modId>/<fileName>` from defaults when missing, loads it, and rotates it to `.bak` + regenerates when the file's version is older than `getCurrentVersion()`. Every failure path falls back to `factory.get()`, so it never returns null and never throws. `gsonBuilder()` is the shared `GsonBuilder` (pretty printing + `ResourceLocation.Serializer`); a mod layers its own type adapters on top — ALI adds its `LootCategoryAdapter`, AWI just calls `create()`. Each mod's own `configuration.ConfigUtils` is now only that call plus its Gson setup.
 
 ### `network`
 
@@ -94,6 +94,12 @@ Some types are deliberately registered to return `TooltipBuilder.empty()` (e.g. 
 ### Language wiring
 
 Tooltip keys are `IMultiKey`/`ITooltipKey` enum constants (each mod's `language.Lang`, e.g. `Lang.Value`, `Lang.Branch`, one enum per semantic grouping) carrying a singular/plural key plus English fallback text (`Translation` record). `CoreLang.register(SomeEnum.class)` — called once per enum, from `<mod>.datagen.LanguageHolder`'s static initializer — merges those into a shared `TRANSLATION_MAP`, which both feeds datagen's generated `en_us.json` and gets registered into the per-node translation-key index (`Plugin.registerCommon` → `registry.registerTranslationKey`). That index lets `TooltipNode.encode` send a compact varint key index over the network instead of the full string (`FLAG_INDEX_KEY`). Forgetting to route a new `Lang` enum through `CoreLang.register` in `LanguageHolder` means its keys compile and even display server-side, but the client shows raw untranslated keys and lang datagen won't include them.
+
+## Tests
+
+`aci/common/src/test` (`./gradlew :aci:common:test`) holds `CoreTestSuite`, the suite for the mod-agnostic machinery. **Anything shared by both mods belongs here, tested once, instead of being asserted twice in ALI's and AWI's suites.** Unlike those two it needs no `Bootstrap.bootStrap()`, so keep it that way: test against stand-ins like `TestConfig` (a minimal `ICoreConfig` holding no registry-backed content) rather than pulling in `Items`/`Blocks`.
+
+Currently: `CoreConfigUtilsTest` covers the whole config lifecycle — create-from-defaults, don't rewrite an existing file, load custom values, `normalize()` on load, `.bak` rotation of an outdated file (including replacing an older `.bak`), recreation from an empty or malformed file, and the two give-up paths (`null` config dir, a config dir that cannot be created). ALI's and AWI's own `ConfigTest` keep only what is theirs: the golden `<mod>_common.json` comparison, their `normalize()`/default-value behaviour, and their own custom values.
 
 ### Reference implementations
 

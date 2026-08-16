@@ -19,11 +19,6 @@ import java.util.function.Supplier;
 public class CoreConfigUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    /**
-     * Reads {@code <configDir>/<modId>/<fileName>}, creating it from defaults when missing and rotating it to
-     * {@code .bak} when its {@link ICoreConfig#getConfigVersion()} is older than {@link ICoreConfig#getCurrentVersion()}.
-     * Every failure path falls back to a default instance, so this never returns null and never throws.
-     */
     @NotNull
     public static <T extends ICoreConfig> T readConfiguration(@Nullable Path configDir, String modId, String fileName,
                                                               Class<T> type, Supplier<T> factory, Gson gson) {
@@ -79,10 +74,6 @@ public class CoreConfigUtils {
         return loadedConfig;
     }
 
-    /**
-     * The shared {@link Gson} setup both mods need; a mod adds its own type adapters on top before calling
-     * {@link GsonBuilder#create()}.
-     */
     @NotNull
     public static GsonBuilder gsonBuilder() {
         return new GsonBuilder()
