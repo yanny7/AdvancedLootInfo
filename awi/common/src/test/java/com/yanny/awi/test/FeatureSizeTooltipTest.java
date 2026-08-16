@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.OptionalInt;
 
 import static com.yanny.awi.test.TooltipTestSuite.UTILS;
-import static com.yanny.awi.test.utils.TestUtils.assertTooltip;
+import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
 
 public class FeatureSizeTooltipTest {
     @Test

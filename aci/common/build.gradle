@@ -14,6 +14,24 @@ dependencies {
     // We depend on fabric loader here to use the fabric @Environment annotations and get the mixin dependencies
     // Do NOT use other classes from fabric loader
     implementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+
+    testImplementation 'org.junit.platform:junit-platform-suite:1.12.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
+}
+
+// shared test utilities consumed by :ali:common and :awi:common test source sets
+configurations {
+    testArtifacts
+}
+
+tasks.register("testJar", Jar) {
+    archiveClassifier = "tests"
+    from sourceSets.test.output
+}
+
+artifacts {
+    testArtifacts tasks.testJar
 }
 
 sourceSets {
@@ -23,4 +41,8 @@ sourceSets {
             exclude ".cache/**"
         }
     }
+}
+
+test {
+    useJUnitPlatform()
 }

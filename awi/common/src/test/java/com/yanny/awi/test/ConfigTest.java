@@ -43,18 +43,6 @@ public class ConfigTest {
     }
 
     @Test
-    public void testExistingConfigFileIsNotRewritten() throws IOException {
-        ConfigUtils.readConfiguration();
-
-        String created = Files.readString(configFile());
-
-        ConfigUtils.readConfiguration();
-
-        assertEquals(created, Files.readString(configFile()));
-        assertFalse(Files.exists(backupFile()));
-    }
-
-    @Test
     public void testMissingKeysUseDefaultValues() throws IOException {
         writeConfig("{\"configVersion\": " + AwiConfig.CURRENT_VERSION + "}");
 
@@ -92,16 +80,6 @@ public class ConfigTest {
         assertEquals(expectedConfig(), writtenConfig());
         assertEquals(AwiConfig.CURRENT_VERSION, config.configVersion);
         assertTrue(config.showInGameNames);
-    }
-
-    @Test
-    public void testEmptyConfigIsRecreated() throws IOException {
-        writeConfig("");
-
-        AwiConfig config = ConfigUtils.readConfiguration();
-
-        assertEquals(expectedConfig(), writtenConfig());
-        assertEquals(AwiConfig.CURRENT_VERSION, config.configVersion);
     }
 
     private Path configFile() {

@@ -22,8 +22,8 @@ import java.util.regex.Pattern;
  * <p>
  * For every candidate setting it scans all vanilla biomes over the same seeds as {@link BaseLayoutTest} and prints how
  * long it took plus what changed against the current production settings — blocks that disappeared (coverage lost) and
- * blocks that appeared (coverage gained). Only the block set is diffed, not the exact ranges, because the ranges of
- * noise-driven blocks legitimately move with the sampling.
+ * blocks that appeared (coverage gained). Only the block set is diffed, not the exact ranges, which legitimately move
+ * with the sampling.
  * <p>
  * Run with: {@code ./gradlew :awi:common:test --tests "com.yanny.awi.test.BaseLayoutSweepTest" -Dawi.baselayout.sweep=true}
  */
@@ -47,8 +47,7 @@ public class BaseLayoutSweepTest {
 
     @Test
     public void sweepScanSettings() {
-        // Warm-up: without it the first timed scan pays the JIT cost and every later candidate looks ~20% faster than
-        // it is — enough to rank a slower setting as an improvement.
+        // Warm-up, so the first timed scan does not pay the JIT cost the later candidates avoid.
         long warmupStart = System.currentTimeMillis();
 
         coveragePerBiome(NodeUtils.ScanSettings.DEFAULT);
@@ -80,8 +79,7 @@ public class BaseLayoutSweepTest {
     /**
      * Expands every discovered block into atomic {@code (block, storage, position, water, placement)} tuples, so the
      * diff catches not just a missing block but also a narrowed range or a lost flag: {@code ANY} water covers both
-     * DRY and UNDERWATER, {@code ANY} placement covers both FLOOR and CEILING, so splitting {@code ANY} into its two
-     * halves is not a loss while replacing it with only one half is.
+     * DRY and UNDERWATER, {@code ANY} placement covers both FLOOR and CEILING.
      */
     private static Map<String, Set<String>> coveragePerBiome(NodeUtils.ScanSettings settings) {
         Map<String, Set<String>> coverage = new LinkedHashMap<>();
