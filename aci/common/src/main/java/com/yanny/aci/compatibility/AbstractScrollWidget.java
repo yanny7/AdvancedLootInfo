@@ -1,14 +1,17 @@
 package com.yanny.aci.compatibility;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.aci.api.Rect;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
+import org.lwjgl.opengl.GL30;
 import org.joml.Vector3f;
 
 public abstract class AbstractScrollWidget {
@@ -159,8 +162,12 @@ public abstract class AbstractScrollWidget {
         Matrix4f pose = last.pose();
         ScreenRectangle scissorArea = transform(rect, pose);
         float scrollAmount = getScrollAmount();
+        boolean scissor = isOnMainRenderTarget();
 
-        guiGraphics.enableScissor(scissorArea.left(), scissorArea.top(), scissorArea.right(), scissorArea.bottom());
+        if (scissor) {
+            guiGraphics.enableScissor(scissorArea.left(), scissorArea.top(), scissorArea.right(), scissorArea.bottom());
+        }
+
         poseStack.pushPose();
         poseStack.translate(0.0, -scrollAmount, 0.0);
 
@@ -168,8 +175,19 @@ public abstract class AbstractScrollWidget {
             renderWidgets(guiGraphics, mouseX, mouseY + scrollAmount);
         } finally {
             poseStack.popPose();
-            guiGraphics.disableScissor();
+
+            if (scissor) {
+                guiGraphics.disableScissor();
+            }
         }
+    }
+
+    /**
+     * {@link GuiGraphics#enableScissor} maps its arguments through the main window, so on an off-screen target
+     * (EMI's recipe screenshot) it discards everything - such a target bounds the content by its own size anyway.
+     */
+    private static boolean isOnMainRenderTarget() {
+        return GlStateManager._getInteger(GL30.GL_FRAMEBUFFER_BINDING) == Minecraft.getInstance().getMainRenderTarget().frameBufferId;
     }
 
     public static int getScrollbarExtraWidth() {

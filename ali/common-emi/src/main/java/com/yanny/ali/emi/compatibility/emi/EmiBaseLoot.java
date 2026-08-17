@@ -11,6 +11,7 @@ import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.client.ClientUtils;
+import dev.emi.emi.api.EmiApi;
 import dev.emi.emi.api.recipe.BasicEmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
@@ -18,6 +19,10 @@ import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.Widget;
 import dev.emi.emi.api.widget.WidgetHolder;
+import dev.emi.emi.config.EmiConfig;
+import dev.emi.emi.config.SidebarSide;
+import dev.emi.emi.screen.RecipeScreen;
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
@@ -60,17 +65,30 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         }).toList());
         widgets.addAll(getAdditionalWidgets(widgetHolder));
         widgets.add(widget);
-        widgetHolder.add(new EmiScrollWidget(rect, getDisplayHeight(), widgets));
+        widgetHolder.add(new EmiScrollWidget(rect, getContentHeight(), widgets));
     }
 
-    /**
-     * EMI treats this as the <i>maximum</i> height the recipe wants and clamps it to the space it can actually
-     * provide ({@link WidgetHolder#getHeight()}), so reporting the full content height is safe - a tall loot table
-     * simply gets a page of its own.
-     */
+    /** EMI clamps this only for the recipe background - the fill/tree/screenshot buttons are positioned from the raw value. */
     @Override
     public final int getDisplayHeight() {
+        return Math.min(getContentHeight(), getAvailableHeight());
+    }
+
+    private int getContentHeight() {
         return getHeaderHeight() + getItemsHeight();
+    }
+
+    /** Mirrors {@code RecipeScreen#init} + {@code RecipeTab#getVerticalRecipeSpace} - EMI exposes neither. */
+    private int getAvailableHeight() {
+        int screenHeight = Math.min(EmiConfig.maximumRecipeScreenHeight, Minecraft.getInstance().getWindow().getGuiScaledHeight() - 52 - EmiConfig.verticalMargin);
+        int height = screenHeight - 46;
+
+        if (EmiConfig.workstationLocation == SidebarSide.BOTTOM
+                && (!EmiApi.getRecipeManager().getWorkstations(getCategory()).isEmpty() || RecipeScreen.resolve != null)) {
+            height -= 23;
+        }
+
+        return height;
     }
 
     @Override
