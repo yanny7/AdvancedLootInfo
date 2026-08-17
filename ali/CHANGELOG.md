@@ -21,6 +21,7 @@
 - Added support for Forge's ingredients (compound, difference, intersection, partial NBT, strict NBT)
 - Added support for Fabric's difference and NBT ingredients
 - Fixed recipe screenshot not working on EMI
+- Displaying horizontal scrollbar when tree is too deep
 
 ## [1.12.0]
 

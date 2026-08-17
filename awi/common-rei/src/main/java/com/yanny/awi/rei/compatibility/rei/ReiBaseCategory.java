@@ -41,7 +41,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
-import oshi.util.tuples.Triplet;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -101,13 +100,13 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
         return largestHeight - INNER_PADDING_Y - DISPLAY_GAP;
     }
 
-    protected Triplet<Rectangle, Rectangle, List<Widget>> prepareWidgets(T display, Rectangle bounds, int offset) {
+    protected PreparedWidgets prepareWidgets(T display, Rectangle bounds, int offset) {
         WidgetHolder holder = getBaseWidget(display, new Rectangle(0, 0, bounds.width, bounds.height), offset);
         Rectangle innerBounds = new Rectangle(0, 0, bounds.width, holder.bounds().getHeight() + offset);
         int height = Math.min(innerBounds.height + 2 * PADDING, bounds.height - 2 * PADDING);
         Rectangle fullBounds = new Rectangle(0, 0, innerBounds.width + 3 * PADDING + AbstractScrollWidget.getScrollbarExtraWidth(), height);
 
-        return new Triplet<>(innerBounds, fullBounds, holder.widgets);
+        return new PreparedWidgets(innerBounds, fullBounds, holder.bounds().getWidth(), holder.widgets);
     }
 
     protected WidgetHolder getBaseWidget(T display, Rectangle bounds, int y) {
@@ -213,6 +212,8 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
     }
 
     protected record WidgetHolder(List<Widget> widgets, RelativeRect bounds){}
+
+    protected record PreparedWidgets(Rectangle innerBounds, Rectangle fullBounds, int contentWidth, List<Widget> widgets){}
 
     private static class BlockSlotRenderer implements Renderer {
         private final BlockState blockState;

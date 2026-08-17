@@ -29,7 +29,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.joml.Vector3f;
-import oshi.util.tuples.Triplet;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -50,10 +49,10 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
     public List<Widget> setupDisplay(ReiBlockDisplay display, Rectangle bounds) {
         boolean isSpecial = display.getBlock() instanceof BushBlock || display.getBlock().asItem() == Items.AIR;
         List<Widget> widgets = new LinkedList<>();
-        Triplet<Rectangle, Rectangle, List<Widget>> prepared = prepareWidgets(display, bounds, isSpecial ? OUT_SLOT_SIZE + PADDING : SLOT_SIZE + PADDING);
-        Rectangle innerBounds = prepared.getA();
-        Rectangle fullBounds = prepared.getB();
-        List<Widget> innerWidgets = new LinkedList<>(prepared.getC());
+        PreparedWidgets prepared = prepareWidgets(display, bounds, isSpecial ? OUT_SLOT_SIZE + PADDING : SLOT_SIZE + PADDING);
+        Rectangle innerBounds = prepared.innerBounds();
+        Rectangle fullBounds = prepared.fullBounds();
+        List<Widget> innerWidgets = new LinkedList<>(prepared.widgets());
 
         if (isSpecial) {
             innerWidgets.add(Widgets.createResultSlotBackground(new Point(innerBounds.getCenterX() - ITEM_SIZE / 2, innerBounds.getY() + OUT_SLOT_OFFSET)));
@@ -65,7 +64,7 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
         fullBounds.move(bounds.getCenterX() - fullBounds.width / 2, bounds.y + PADDING);
         widgets.add(Widgets.createCategoryBase(fullBounds));
         widgets.add(Widgets.withTranslate(
-                new ReiScrollWidget(new Rect(0, 0, fullBounds.width - 2 * PADDING, fullBounds.height - 2 * PADDING), innerBounds.height, innerWidgets),
+                new ReiScrollWidget(new Rect(0, 0, fullBounds.width - 2 * PADDING, fullBounds.height - 2 * PADDING), prepared.contentWidth(), innerBounds.height, innerWidgets),
                 fullBounds.x + PADDING,
                 fullBounds.y + PADDING,
                 0

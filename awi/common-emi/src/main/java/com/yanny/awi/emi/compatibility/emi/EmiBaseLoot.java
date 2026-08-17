@@ -80,7 +80,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         }).toList());
         widgets.addAll(getAdditionalWidgets(widgetHolder));
         widgets.add(widget);
-        widgetHolder.add(new EmiScrollWidget(rect, getContentHeight(), widgets));
+        widgetHolder.add(new EmiScrollWidget(rect, getItemsWidth(), getContentHeight(), widgets));
     }
 
     /** EMI clamps this only for the recipe background - the fill/tree/screenshot buttons are positioned from the raw value. */
@@ -118,6 +118,10 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
 
     protected int getItemsHeight() {
         return widget.getBounds().height();
+    }
+
+    protected int getItemsWidth() {
+        return widget.getBounds().width();
     }
 
     protected List<Widget> getAdditionalWidgets(WidgetHolder widgetHolder) {
