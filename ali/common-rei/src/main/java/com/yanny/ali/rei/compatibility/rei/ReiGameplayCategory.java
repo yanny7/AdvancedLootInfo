@@ -35,16 +35,16 @@ public class ReiGameplayCategory extends ReiBaseCategory<ReiGameplayDisplay, Res
     public List<Widget> setupDisplay(ReiGameplayDisplay display, Rectangle bounds) {
         Triplet<Component, Component, Rect> title = GenericUtils.prepareGameplayTitle(display.getId(), bounds.width - AbstractScrollWidget.getScrollbarExtraWidth());
         List<Widget> widgets = new LinkedList<>();
-        Triplet<Rectangle, Rectangle, List<Widget>> prepared = prepareWidgets(display, bounds, 10);
-        Rectangle innerBounds = prepared.getA();
-        Rectangle fullBounds = prepared.getB();
-        List<Widget> innerWidgets = new LinkedList<>(prepared.getC());
+        PreparedWidgets prepared = prepareWidgets(display, bounds, 10);
+        Rectangle innerBounds = prepared.innerBounds();
+        Rectangle fullBounds = prepared.fullBounds();
+        List<Widget> innerWidgets = new LinkedList<>(prepared.widgets());
 
         fullBounds.move(bounds.getCenterX() - fullBounds.width / 2, bounds.y + PADDING);
         innerWidgets.add(Widgets.createLabel(new Point(0, 0), title.getA()).leftAligned().noShadow().color(0).tooltip(title.getB()));
         widgets.add(Widgets.createCategoryBase(fullBounds));
         widgets.add(Widgets.withTranslate(
-                new ReiScrollWidget(new Rect(0, 0, fullBounds.width - 2 * PADDING, fullBounds.height - 2 * PADDING), innerBounds.height, innerWidgets),
+                new ReiScrollWidget(new Rect(0, 0, fullBounds.width - 2 * PADDING, fullBounds.height - 2 * PADDING), prepared.contentWidth(), innerBounds.height, innerWidgets),
                 fullBounds.x + PADDING,
                 fullBounds.y + PADDING,
                 0

@@ -14,12 +14,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class ReiScrollWidget extends Widget {
+    private static final int NO_MOUSE = -10000;
+
     private final AbstractScrollWidget scrollWidget;
     private final List<Widget> widgets;
 
-    public ReiScrollWidget(Rect rect, int contentHeight, List<Widget> widgets) {
+    public ReiScrollWidget(Rect rect, int contentWidth, int contentHeight, List<Widget> widgets) {
         this.widgets = widgets;
-        scrollWidget = new AbstractScrollWidget(rect, contentHeight) {
+        scrollWidget = new AbstractScrollWidget(rect, contentWidth, contentHeight) {
             @NotNull
             @Override
             protected ResourceLocation getTexture() {
@@ -32,7 +34,7 @@ public class ReiScrollWidget extends Widget {
                     if (widget instanceof WidgetWithBounds boundedWidget) {
                         Rectangle b = boundedWidget.getBounds();
 
-                        if (isOutsideViewport(b.y, b.height)) {
+                        if (isOutsideViewport(b.x, b.y, b.width, b.height)) {
                             continue;
                         }
                     }
@@ -45,7 +47,12 @@ public class ReiScrollWidget extends Widget {
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
-        scrollWidget.render(guiGraphics, mouseX, mouseY);
+        // REI queues tooltips from render's mouse args, so off-screen coords are the only way to mute one we still draw.
+        if (scrollWidget.isMouseOverContent(mouseX, mouseY)) {
+            scrollWidget.render(guiGraphics, mouseX, mouseY);
+        } else {
+            scrollWidget.render(guiGraphics, NO_MOUSE, NO_MOUSE);
+        }
     }
 
     @NotNull
@@ -56,17 +63,17 @@ public class ReiScrollWidget extends Widget {
 
     @Override
     public boolean mouseReleased(double d, double e, int i) {
-        return super.mouseReleased(d, e + scrollWidget.getScrollAmount(), i);
+        return super.mouseReleased(d + scrollWidget.getScrollAmountX(), e + scrollWidget.getScrollAmountY(), i);
     }
 
     @Override
     public void mouseMoved(double d, double e) {
-        super.mouseMoved(d, e + scrollWidget.getScrollAmount());
+        super.mouseMoved(d + scrollWidget.getScrollAmountX(), e + scrollWidget.getScrollAmountY());
     }
 
     @Override
     public boolean containsMouse(double mouseX, double mouseY) {
-        return super.containsMouse(mouseX, mouseY + scrollWidget.getScrollAmount());
+        return super.containsMouse(mouseX + scrollWidget.getScrollAmountX(), mouseY + scrollWidget.getScrollAmountY());
     }
 
     @Override
@@ -75,7 +82,7 @@ public class ReiScrollWidget extends Widget {
             return true;
         }
 
-        return super.mouseClicked(mouseX, mouseY + scrollWidget.getScrollAmount(), button);
+        return super.mouseClicked(mouseX + scrollWidget.getScrollAmountX(), mouseY + scrollWidget.getScrollAmountY(), button);
     }
 
     @Override
@@ -84,7 +91,7 @@ public class ReiScrollWidget extends Widget {
             return true;
         }
 
-        return super.mouseScrolled(mouseX, mouseY + scrollWidget.getScrollAmount(), scrollDeltaX, scrollDeltaY);
+        return super.mouseScrolled(mouseX + scrollWidget.getScrollAmountX(), mouseY + scrollWidget.getScrollAmountY(), scrollDeltaX, scrollDeltaY);
     }
 
     @Override
@@ -93,6 +100,6 @@ public class ReiScrollWidget extends Widget {
             return true;
         }
 
-        return super.mouseDragged(mouseX, mouseY + scrollWidget.getScrollAmount(), button, dragX, dragY);
+        return super.mouseDragged(mouseX + scrollWidget.getScrollAmountX(), mouseY + scrollWidget.getScrollAmountY(), button, dragX, dragY);
     }
 }

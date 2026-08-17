@@ -24,8 +24,8 @@ public class JeiScrollWidget extends AbstractScrollWidget implements IRecipeWidg
 
     private final List<IRecipeWidget> widgets;
 
-    public JeiScrollWidget(Rect rect, int contentHeight, List<IRecipeWidget> widgets) {
-        super(rect, contentHeight);
+    public JeiScrollWidget(Rect rect, int contentWidth, int contentHeight, List<IRecipeWidget> widgets) {
+        super(rect, contentWidth, contentHeight);
         this.widgets = widgets;
     }
 
@@ -50,14 +50,19 @@ public class JeiScrollWidget extends AbstractScrollWidget implements IRecipeWidg
     @NotNull
     @Override
     public Optional<RecipeSlotUnderMouse> getSlotUnderMouse(double mouseX, double mouseY) {
-        float scrollAmount = getScrollAmount();
+        if (!isMouseOverContent(mouseX, mouseY)) {
+            return Optional.empty();
+        }
+
+        float scrollAmountX = getScrollAmountX();
+        float scrollAmountY = getScrollAmountY();
 
         for (IRecipeWidget widget : widgets) {
             if (widget instanceof ISlottedRecipeWidget slottedWidget) {
-                Optional<RecipeSlotUnderMouse> slotUnderMouse = slottedWidget.getSlotUnderMouse(mouseX, mouseY + scrollAmount);
+                Optional<RecipeSlotUnderMouse> slotUnderMouse = slottedWidget.getSlotUnderMouse(mouseX + scrollAmountX, mouseY + scrollAmountY);
 
                 if (slotUnderMouse.isPresent()) {
-                    return Optional.of(new RecipeSlotUnderMouse(slotUnderMouse.get().slot(), 1, (int) (1 - scrollAmount)));
+                    return Optional.of(new RecipeSlotUnderMouse(slotUnderMouse.get().slot(), (int) (1 - scrollAmountX), (int) (1 - scrollAmountY)));
                 }
             }
         }
@@ -73,7 +78,7 @@ public class JeiScrollWidget extends AbstractScrollWidget implements IRecipeWidg
     @Override
     public void renderWidgets(GuiGraphics guiGraphics, double mouseX, double mouseY) {
         for (IRecipeWidget widget : widgets) {
-            if ((widget instanceof JeiLootSlotWidget || widget instanceof JeiBlockSlotWidget) && isOutsideViewport(widget.getPosition().y(), SLOT_SIZE)) {
+            if ((widget instanceof JeiLootSlotWidget || widget instanceof JeiBlockSlotWidget) && isOutsideViewport(widget.getPosition().x(), widget.getPosition().y(), SLOT_SIZE, SLOT_SIZE)) {
                 continue;
             }
 
@@ -84,7 +89,7 @@ public class JeiScrollWidget extends AbstractScrollWidget implements IRecipeWidg
     @Override
     public final boolean handleInput(double mouseX, double mouseY, IJeiUserInput userInput) {
         if (!userInput.isSimulate()) {
-            dragOriginY = -1;
+            resetDrag();
         }
 
         return onScrollbarClicked(mouseX, mouseY, userInput.getKey().getValue());
@@ -102,7 +107,12 @@ public class JeiScrollWidget extends AbstractScrollWidget implements IRecipeWidg
 
     @Override
     public void getTooltip(ITooltipBuilder tooltip, double mouseX, double mouseY) {
-        float scrollAmount = getScrollAmount();
-        widgets.forEach((widget) -> widget.getTooltip(tooltip, mouseX, mouseY + scrollAmount));
+        if (!isMouseOverContent(mouseX, mouseY)) {
+            return;
+        }
+
+        float scrollAmountX = getScrollAmountX();
+        float scrollAmountY = getScrollAmountY();
+        widgets.forEach((widget) -> widget.getTooltip(tooltip, mouseX + scrollAmountX, mouseY + scrollAmountY));
     }
 }

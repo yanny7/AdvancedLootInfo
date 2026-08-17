@@ -17,6 +17,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ItemListingWidget implements IWidget {
+    private static final int SLOT_SIZE = 18;
+    private static final int ARROW_WIDTH = 24;
+    private static final int SECOND_COST_OFFSET = 20;
+    private static final int ARROW_OFFSET = 40;
+    private static final int RESULT_OFFSET = 66;
+    private static final int WIDTH = RESULT_OFFSET + SLOT_SIZE;
+
     private final List<IWidget> widgets;
     private final RelativeRect bounds;
 
@@ -26,12 +33,12 @@ public class ItemListingWidget implements IWidget {
         widgets = new ArrayList<>();
 
         addWidget(utils, rect, node.nodes().get(0), 0, maxWidth);
-        addWidget(utils, rect, node.nodes().get(1), 20, maxWidth);
-        widgets.add(WidgetUtils.getArrowWidget(new RelativeRect(40, 0, 24, 18, rect), entry));
-        addWidget(utils, rect, node.nodes().get(2), 66, maxWidth);
+        addWidget(utils, rect, node.nodes().get(1), SECOND_COST_OFFSET, maxWidth);
+        widgets.add(WidgetUtils.getArrowWidget(new RelativeRect(ARROW_OFFSET, 0, ARROW_WIDTH, SLOT_SIZE, rect), entry));
+        addWidget(utils, rect, node.nodes().get(2), RESULT_OFFSET, maxWidth);
 
         bounds = rect;
-        bounds.setDimensions(maxWidth, 18);
+        bounds.setDimensions(WIDTH, SLOT_SIZE);
     }
 
     @NotNull
@@ -70,6 +77,6 @@ public class ItemListingWidget implements IWidget {
     }
 
     private void addWidget(IWidgetUtils utils, RelativeRect rect, IDataNode node, int offsetX, int maxWidth) {
-        widgets.add(new ItemWidget(utils, node, new RelativeRect(offsetX, 0, 18, 18, rect), maxWidth));
+        widgets.add(new ItemWidget(utils, node, new RelativeRect(offsetX, 0, SLOT_SIZE, SLOT_SIZE, rect), maxWidth));
     }
 }

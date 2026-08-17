@@ -33,6 +33,8 @@ public class LevelStemNode extends ListNode {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
+    private final TooltipNode tooltip;
+
     public LevelStemNode(IServerUtils utils, LevelStem levelStem, Map<Holder<Biome>, NodeUtils.LayerHolder> baseLayouts,
                          WorldgenNodeCache nodeCache) {
         ChunkGenerator generator = levelStem.generator();
@@ -47,32 +49,36 @@ public class LevelStemNode extends ListNode {
             defaultFluid = settings.defaultFluid().getFluidState().getType();
         }
 
-        TooltipNode tooltip = buildTooltip(utils, defaultFluid, seaLevel);
+        TooltipNode biomeTooltip = buildTooltip(utils, defaultFluid, seaLevel);
 
         for (Holder<Biome> biomeHolder : generator.getBiomeSource().possibleBiomes()) {
             NodeUtils.LayerHolder layers = baseLayouts.get(biomeHolder);
             Set<NodeUtils.BlockInfo> baseBlocks = layers != null ? layers.getBlockInfos() : Collections.emptySet();
 
             try {
-                addChildren(new BiomeNode(utils, biomeHolder.value(), tooltip, baseBlocks, defaultBlock, defaultFluid, columnContext, nodeCache));
+                addChildren(new BiomeNode(utils, biomeHolder.value(), biomeTooltip, baseBlocks, defaultBlock, defaultFluid, columnContext, nodeCache));
             } catch (Exception e) {
                 LOGGER.error("Failed to analyze biome {}", biomeName(biomeHolder), e);
             }
         }
+
+        tooltip = TooltipNode.empty();
     }
 
     public LevelStemNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
+        tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
     }
 
     @Override
     public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
+        buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
     }
 
     @NotNull
     @Override
     public TooltipNode getTooltip() {
-        return TooltipNode.empty();
+        return tooltip;
     }
 
     @NotNull
