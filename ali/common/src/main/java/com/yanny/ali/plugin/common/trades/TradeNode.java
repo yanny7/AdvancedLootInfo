@@ -20,6 +20,8 @@ import java.util.List;
 public class TradeNode extends ListNode {
     public static final Identifier ID = Utils.modLoc("trade");
 
+    private final TooltipNode tooltip;
+
     public TradeNode(IServerUtils utils, Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap, boolean isWanderingTrader) {
         List<Int2ObjectMap.Entry<VillagerTrades.ItemListing[]>> entries = itemListingMap.int2ObjectEntrySet()
                 .stream()
@@ -31,6 +33,8 @@ public class TradeNode extends ListNode {
                 addChildren(new TradeLevelNode(utils, entry.getIntKey(), entry.getValue(), isWanderingTrader));
             }
         }
+
+        tooltip = TooltipNode.empty();
     }
 
     public TradeNode(IServerUtils utils, List<Pair<VillagerTrades.ItemListing[], Integer>> itemListingList, boolean isWanderingTrader) {
@@ -39,17 +43,18 @@ public class TradeNode extends ListNode {
 
     public TradeNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
+        tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
     }
 
     @Override
     public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
-
+        buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
     }
 
     @NotNull
     @Override
     public TooltipNode getTooltip() {
-        return TooltipNode.empty();
+        return tooltip;
     }
 
     @NotNull

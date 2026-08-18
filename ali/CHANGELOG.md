@@ -2,7 +2,6 @@
 
 - Smaller network payload - the items of a loot table and the costs/results of a trade are no longer sent, the client reads them from the loot tree it already receives
 - Item tags are resolved on the client, so a tag entry follows datapack/tag reloads and stops listing items the recipe viewer hides
-- Plugin API: `IItemNode.getModifiedItem` is now `getItem`, joined by `getItems`/`retainItems`; a trade node implements the new `ITradeNode`; `registerItemListingCollector` and `IServerUtils.collectItems(ItemListing)` were removed
 - Improved rendering performance with a lot of slots (radimous)
 - Improved world load and recipe viewer reload times - loot tables are matched to entities by their id instead of by creating a sample entity of every registered type
 - Entity loot table variants (like sheep colors) are recognized without registering an entity variant factory
@@ -22,6 +21,8 @@
 - Added support for Forge's ingredients (compound, difference, intersection, partial NBT, strict NBT)
 - Added support for NeoForge's ingredients (compound, difference, intersection, data component, block tag)
 - Added support for Fabric's ingredients (any, all, difference, components, custom data)
+- Fixed recipe screenshot not working on EMI
+- Displaying horizontal scrollbar when tree is too deep
 
 ## [1.12.0]
 
