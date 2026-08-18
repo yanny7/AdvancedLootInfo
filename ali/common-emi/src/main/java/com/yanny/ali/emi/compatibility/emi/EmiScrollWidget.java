@@ -19,10 +19,10 @@ public class EmiScrollWidget extends Widget implements IMouseEvents {
     private final List<Widget> widgets;
     private final Bounds bounds;
 
-    public EmiScrollWidget(Rect rect, int contentHeight, List<Widget> widgets) {
+    public EmiScrollWidget(Rect rect, int contentWidth, int contentHeight, List<Widget> widgets) {
         this.widgets = widgets;
         bounds = new Bounds(rect.x(), rect.y(), rect.width(), rect.height());
-        scrollWidget = new AbstractScrollWidget(rect, contentHeight) {
+        scrollWidget = new AbstractScrollWidget(rect, contentWidth, contentHeight) {
             @NotNull
             @Override
             protected ResourceLocation getTexture() {
@@ -34,7 +34,7 @@ public class EmiScrollWidget extends Widget implements IMouseEvents {
                 for (Widget widget : widgets) {
                     Bounds b = widget.getBounds();
 
-                    if (isOutsideViewport(b.y(), b.height())) {
+                    if (isOutsideViewport(b.x(), b.y(), b.width(), b.height())) {
                         continue;
                     }
 
@@ -60,14 +60,15 @@ public class EmiScrollWidget extends Widget implements IMouseEvents {
             return true;
         }
 
-        if (bounds.contains(mouseX, mouseY)) {
-            float scrollAmount = scrollWidget.getScrollAmount();
+        if (scrollWidget.isMouseOverContent(mouseX, mouseY)) {
+            int contentX = (int) (mouseX + scrollWidget.getScrollAmountX());
+            int contentY = (int) (mouseY + scrollWidget.getScrollAmountY());
 
             for (Widget widget : widgets) {
                 Bounds b = widget.getBounds();
 
-                if (b.contains(mouseX, (int) (mouseY + scrollAmount))) {
-                    if (widget.mouseClicked(mouseX, (int) (mouseY + scrollAmount), button)) {
+                if (b.contains(contentX, contentY)) {
+                    if (widget.mouseClicked(contentX, contentY, button)) {
                         return true;
                     }
                 }
@@ -90,13 +91,19 @@ public class EmiScrollWidget extends Widget implements IMouseEvents {
     @Override
     public List<ClientTooltipComponent> getTooltip(int mouseX, int mouseY) {
         List<ClientTooltipComponent> components = new LinkedList<>();
-        float scrollAmount = scrollWidget.getScrollAmount();
+
+        if (!scrollWidget.isMouseOverContent(mouseX, mouseY)) {
+            return components;
+        }
+
+        int contentX = (int) (mouseX + scrollWidget.getScrollAmountX());
+        int contentY = (int) (mouseY + scrollWidget.getScrollAmountY());
 
         for (Widget widget : widgets) {
             Bounds b = widget.getBounds();
 
-            if (b.contains(mouseX, (int) (mouseY + scrollAmount))) {
-                components.addAll(widget.getTooltip(mouseX, (int) (mouseY + scrollAmount)));
+            if (b.contains(contentX, contentY)) {
+                components.addAll(widget.getTooltip(contentX, contentY));
             }
         }
 
