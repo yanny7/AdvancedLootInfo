@@ -142,7 +142,7 @@ public abstract class JeiBaseLoot implements IRecipeCategory<RecipeHolder> {
         }
 
         Rect renderRect = new Rect(0, 0, CATEGORY_WIDTH + JeiScrollWidget.getScrollbarExtraWidth(), MAX_SAFE_HEIGHT);
-        JeiScrollWidget scrollWidget = new JeiScrollWidget(renderRect, widgetWrapper.getRect().height() + getYOffset(), scrollWidgets);
+        JeiScrollWidget scrollWidget = new JeiScrollWidget(renderRect, widgetWrapper.getRect().width(), widgetWrapper.getRect().height() + getYOffset(), scrollWidgets);
 
         builder.addSlottedWidget(scrollWidget, slotDrawables);
         builder.addInputHandler(scrollWidget);

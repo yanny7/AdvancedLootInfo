@@ -37,10 +37,10 @@ public class ReiTradeCategory extends ReiBaseCategory<ReiTradeDisplay, Identifie
     public List<Widget> setupDisplay(ReiTradeDisplay display, Rectangle bounds) {
         Triplet<Component, Component, Rect> traderTitle = GenericUtils.prepareTraderTitle(display.getId(), bounds.width);
         List<Widget> widgets = new LinkedList<>();
-        Triplet<Rectangle, Rectangle, List<Widget>> prepared = prepareWidgets(display, bounds, (display.getPois().isEmpty() ? 10 : 20) + (display.getAccepts().isEmpty() ? 0 : 20));
-        Rectangle innerBounds = prepared.getA();
-        Rectangle fullBounds = prepared.getB();
-        List<Widget> innerWidgets = new LinkedList<>(prepared.getC());
+        PreparedWidgets prepared = prepareWidgets(display, bounds, (display.getPois().isEmpty() ? 10 : 20) + (display.getAccepts().isEmpty() ? 0 : 20));
+        Rectangle innerBounds = prepared.innerBounds();
+        Rectangle fullBounds = prepared.fullBounds();
+        List<Widget> innerWidgets = new LinkedList<>(prepared.widgets());
 
         if (!display.getPois().isEmpty()) {
             int i = 1;
@@ -69,7 +69,7 @@ public class ReiTradeCategory extends ReiBaseCategory<ReiTradeDisplay, Identifie
         innerWidgets.add(Widgets.createLabel(new Point(0, 0), traderTitle.getA()).leftAligned().noShadow().color(0xFF000000).tooltip(traderTitle.getB()));
         widgets.add(Widgets.createCategoryBase(fullBounds));
         widgets.add(Widgets.withTranslate(
-                new ReiScrollWidget(new Rect(0, 0, fullBounds.width - 2 * PADDING, fullBounds.height - 2 * PADDING), innerBounds.height, innerWidgets),
+                new ReiScrollWidget(new Rect(0, 0, fullBounds.width - 2 * PADDING, fullBounds.height - 2 * PADDING), prepared.contentWidth(), innerBounds.height, innerWidgets),
                 fullBounds.x + PADDING,
                 fullBounds.y + PADDING
         ));

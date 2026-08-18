@@ -21,7 +21,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import oshi.util.tuples.Triplet;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -47,10 +46,10 @@ public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, EntityT
         List<Widget> widgets = new LinkedList<>();
         Rect rect = new Rect(0, 0, WIDGET_SIZE, WIDGET_SIZE);
         Optional<Holder<Item>> spawnEgg = Services.getPlatform().getSpawnEggItem(display.getEntityType());
-        Triplet<Rectangle, Rectangle, List<Widget>> prepared = prepareWidgets(display, bounds, TEXT_OFFSET + WIDGET_SIZE + PADDING);
-        Rectangle innerBounds = prepared.getA();
-        Rectangle fullBounds = prepared.getB();
-        List<Widget> innerWidgets = new LinkedList<>(prepared.getC());
+        PreparedWidgets prepared = prepareWidgets(display, bounds, TEXT_OFFSET + WIDGET_SIZE + PADDING);
+        Rectangle innerBounds = prepared.innerBounds();
+        Rectangle fullBounds = prepared.fullBounds();
+        List<Widget> innerWidgets = new LinkedList<>(prepared.widgets());
 
         spawnEgg.ifPresent(itemHolder -> innerWidgets.add(Widgets.createSlot(new Point(innerBounds.getX() + 1, innerBounds.getY() + TEXT_OFFSET + 1)).entry(EntryStacks.of(itemHolder.value())).markInput()));
 
@@ -70,7 +69,7 @@ public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, EntityT
         fullBounds.move(bounds.getCenterX() - fullBounds.width / 2, bounds.y + PADDING);
         widgets.add(Widgets.createCategoryBase(fullBounds));
         widgets.add(Widgets.withTranslate(
-                new ReiScrollWidget(new Rect(0, 0, fullBounds.width - 2 * PADDING, fullBounds.height - 2 * PADDING), innerBounds.height, innerWidgets),
+                new ReiScrollWidget(new Rect(0, 0, fullBounds.width - 2 * PADDING, fullBounds.height - 2 * PADDING), prepared.contentWidth(), innerBounds.height, innerWidgets),
                 fullBounds.x + PADDING,
                 fullBounds.y + PADDING
         ));
