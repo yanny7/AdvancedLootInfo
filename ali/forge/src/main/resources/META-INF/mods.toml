@@ -72,6 +72,13 @@ ordering="AFTER"
 side="BOTH"
 
 [[dependencies.ali]]
+modId="aci"
+mandatory=true
+versionRange="${aci_version_range}"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.ali]]
 modId="emi"
 mandatory=false
 versionRange="${emi_version_range}"

@@ -41,6 +41,14 @@ subprojects {
                 "awi_group"                 : awi_group,
                 "awi_description"           : awi_description,
 
+                "aci_mod_name"              : aci_mod_name,
+                "aci_mod_id"                : aci_mod_id,
+                "aci_version"               : aci_version,
+                "aci_group"                 : aci_group,
+                "aci_description"           : aci_description,
+                "aci_version_range"         : aci_version_range,
+                "aci_version_range_fabric"  : aci_version_range_fabric,
+
                 "java_version"              : java_version,
 
                 "minecraft_version"         : minecraft_version,
@@ -74,12 +82,15 @@ subprojects {
         def jei_available = jei_enabled == "true" && project.findProperty("${project.name}_jei_enabled") == "true"
         def rei_available = rei_enabled == "true" && project.findProperty("${project.name}_rei_enabled") == "true"
         def lootjs_available = lootjs_enabled == "true" && project.findProperty("${project.name}_lootjs_enabled") == "true"
+        def isAci = project.parent.name == "aci"
 
         ext {
-            commonProjects = [":aci:common"]
+            commonProjects = []
         }
 
-        if (project.parent.name == "ali") {
+        if (isAci) {
+            project.ext.commonProjects << ":aci:common"
+        } else if (project.parent.name == "ali") {
             project.ext.commonProjects << ":ali:common"
 
             if (emi_available) project.ext.commonProjects << ":ali:common-emi"
@@ -105,45 +116,47 @@ subprojects {
             if (rei_available) project.ext.commonProjects << ":awi:common-rei"
         }
 
-        // register tasks that allow running specific combination of recipe viewer and launcher
-        viewers.each { viewer ->
-            if (project.findProperty("${viewer}_enabled") == "true" && project.findProperty("${project.name}_${viewer}_enabled") == "true") {
-                tasks.register("run${project.parent.name.capitalize()}${project.name.capitalize()}${viewer.capitalize()}Client", GradleBuild) {
-                    group = "launchers"
-                    description = "Launch ${project.parent.name.capitalize()} ${project.name.toUpperCase()} with ${viewer.toUpperCase()} recipe viewer"
-                    setTasks([":${project.parent.name}:${project.name}:runClient".toString()])
-                    startParameter.projectProperties = ["recipe_viewer": viewer]
+        if (!isAci) {
+            // register tasks that allow running specific combination of recipe viewer and launcher
+            viewers.each { viewer ->
+                if (project.findProperty("${viewer}_enabled") == "true" && project.findProperty("${project.name}_${viewer}_enabled") == "true") {
+                    tasks.register("run${project.parent.name.capitalize()}${project.name.capitalize()}${viewer.capitalize()}Client", GradleBuild) {
+                        group = "launchers"
+                        description = "Launch ${project.parent.name.capitalize()} ${project.name.toUpperCase()} with ${viewer.toUpperCase()} recipe viewer"
+                        setTasks([":${project.parent.name}:${project.name}:runClient".toString()])
+                        startParameter.projectProperties = ["recipe_viewer": viewer]
+                    }
                 }
             }
-        }
 
-        dependencies {
-            def recipe_viewer = project.findProperty("recipe_viewer")
-            if (!recipe_viewer) {
-                if (emi_available) recipe_viewer = "emi"
-                else if (jei_available) recipe_viewer = "jei"
-                else if (rei_available) recipe_viewer = "rei"
-            }
-
-            if (emi_available) {
-                modCompileOnlyApi "dev.emi:emi-${project.name}:${emi_version}"
-
-                if (recipe_viewer == "emi") {
-                    modRuntimeOnly "dev.emi:emi-${project.name}:${emi_version}"
+            dependencies {
+                def recipe_viewer = project.findProperty("recipe_viewer")
+                if (!recipe_viewer) {
+                    if (emi_available) recipe_viewer = "emi"
+                    else if (jei_available) recipe_viewer = "jei"
+                    else if (rei_available) recipe_viewer = "rei"
                 }
-            }
-            if (jei_available && recipe_viewer == "jei") {
-                modRuntimeOnly "mezz.jei:jei-${minecraft_version}-${project.name}:${jei_version}"
-            }
-            if (rei_available) {
-                modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-api-${project.name}:${rei_version}"
 
-                if (recipe_viewer == "rei") {
-                    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-${project.name}:${rei_version}"
+                if (emi_available) {
+                    modCompileOnlyApi "dev.emi:emi-${project.name}:${emi_version}"
 
-                    if (project.name == "forge") {
-                        modRuntimeOnly "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
-                        modRuntimeOnly "dev.architectury:architectury-forge:${architectury_version}"
+                    if (recipe_viewer == "emi") {
+                        modRuntimeOnly "dev.emi:emi-${project.name}:${emi_version}"
+                    }
+                }
+                if (jei_available && recipe_viewer == "jei") {
+                    modRuntimeOnly "mezz.jei:jei-${minecraft_version}-${project.name}:${jei_version}"
+                }
+                if (rei_available) {
+                    modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-api-${project.name}:${rei_version}"
+
+                    if (recipe_viewer == "rei") {
+                        modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-${project.name}:${rei_version}"
+
+                        if (project.name == "forge") {
+                            modRuntimeOnly "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
+                            modRuntimeOnly "dev.architectury:architectury-forge:${architectury_version}"
+                        }
                     }
                 }
             }
@@ -159,6 +172,10 @@ subprojects {
                 from(project(":awi:common").sourceSets.main.resources.srcDirs) {
                     include "pack.mcmeta"
                     include "awi.accesswidener"
+                }
+            } else if (project.parent.name == "aci") {
+                from(project(":aci:common").sourceSets.main.resources.srcDirs) {
+                    include "pack.mcmeta"
                 }
             }
 
@@ -199,6 +216,13 @@ allprojects {
 
             version = minecraft_version + "-" + awi_version
             group = awi_group
+        } else if (project.parent.name == "aci") {
+            base {
+                archivesName = "${aci_mod_name}-${project.name}"
+            }
+
+            version = minecraft_version + "-" + aci_version
+            group = aci_group
         }
     }
 
