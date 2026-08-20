@@ -6,12 +6,16 @@ import com.yanny.aci.network.NetworkUtils;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
-import com.yanny.ali.api.*;
+import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IItemNode;
+import com.yanny.ali.api.ILootModifier;
+import com.yanny.ali.api.ListNode;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.AliServerRegistry;
 import com.yanny.ali.manager.FakeLootDataManager;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.common.EntityLootTableResolver;
+import com.yanny.ali.plugin.common.nodes.EntityLootTableNode;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
@@ -26,7 +30,9 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
@@ -107,7 +113,7 @@ public abstract class AbstractServer {
 
         // storing and compressing data
         serverRegistry.getTooltipCache().encode(serverRegistry, buf);
-        NetworkUtils.writeMapData(Utils.MOD_ID, serverRegistry, buf, lootNodes);
+        writeLootData(serverRegistry, buf, lootNodes);
         NetworkUtils.writeMapData(Utils.MOD_ID, serverRegistry, buf, tradeNodes);
 
         if (!NetworkUtils.writeNodeData(Utils.MOD_ID, serverRegistry, buf, new ResourceLocation("wandering_trader"), wanderingTraderNode)) {
@@ -354,7 +360,7 @@ public abstract class AbstractServer {
                 List<Item> items = lootTableItems.getOrDefault(location, Collections.emptyList());
                 List<ILootModifier<?>> lootModifiers = Stream.concat(
                         // the only step that still needs an instance, and only when global loot modifiers exist at all
-                        entityLootModifiers.stream().filter((m) -> entityTypes.stream().anyMatch((t) -> resolver.getEntities(t).stream().anyMatch((e) -> predicateModifier(m, e, items)))),
+                        entityLootModifiers.stream().filter((m) -> entityTypes.stream().anyMatch((t) -> sampleEntities(resolver, t, location).stream().anyMatch((e) -> predicateModifier(m, e, items)))),
                         lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
                 ).toList();
 
@@ -367,7 +373,7 @@ public abstract class AbstractServer {
                             fakePools.forEach(lootTableNode::addChildren);
                         }
 
-                        lootNodes.put(location, node);
+                        lootNodes.put(location, asEntityNode(node, entityTypes));
                     } else if (!lootModifiers.isEmpty()) {
                         IDataNode node = serverRegistry.parseTable(lootModifiers);
                         List<IDataNode> fakePools = getFakeLootPools(location, serverRegistry, fakeLootTables);
@@ -376,12 +382,12 @@ public abstract class AbstractServer {
                             fakePools.forEach(lootTableNode::addChildren);
                         }
 
-                        lootNodes.put(location, node);
+                        lootNodes.put(location, asEntityNode(node, entityTypes));
                     } else {
                         LootTable fakeLootTable = fakeLootTables.get(location);
 
                         if (fakeLootTable != null) {
-                            lootNodes.put(location, serverRegistry.parseTable(Collections.emptyList(), fakeLootTable));
+                            lootNodes.put(location, asEntityNode(serverRegistry.parseTable(Collections.emptyList(), fakeLootTable), entityTypes));
                         } else if (!location.equals(BuiltInLootTables.EMPTY)) {
                             LOGGER.debug("Missing entity loot table for {}", location);
                         }
@@ -396,6 +402,57 @@ public abstract class AbstractServer {
 
         lootTables.keySet().removeAll(disabledLootTables);
         return lootNodes;
+    }
+
+    private static void writeLootData(AliServerRegistry serverRegistry, FriendlyByteBuf buf, Map<ResourceLocation, IDataNode> lootNodes) {
+        int countIndex = buf.writerIndex();
+        int successfulNodes = 0;
+
+        buf.writeInt(lootNodes.size());
+
+        for (Map.Entry<ResourceLocation, IDataNode> entry : lootNodes.entrySet()) {
+            int startOfEntry = buf.writerIndex();
+
+            buf.writeResourceLocation(entry.getKey());
+            buf.writeResourceLocation(entry.getValue().getId());
+
+            if (NetworkUtils.writeNodeData(Utils.MOD_ID, serverRegistry, buf, entry.getKey(), entry.getValue())) {
+                successfulNodes++;
+            } else {
+                buf.writerIndex(startOfEntry);
+            }
+        }
+
+        if (successfulNodes != lootNodes.size()) {
+            LOGGER.warn("Only {} of {} node(s) were encoded successfully", successfulNodes, lootNodes.size());
+
+            int endIndex = buf.writerIndex();
+
+            buf.writerIndex(countIndex);
+            buf.writeInt(successfulNodes);
+            buf.writerIndex(endIndex);
+        }
+
+        lootNodes.clear();
+    }
+
+    @NotNull
+    private static List<Entity> sampleEntities(EntityLootTableResolver resolver, EntityType<?> type, ResourceLocation lootTable) {
+        List<Entity> entities = resolver.getEntities(type);
+        List<Entity> variants = entities.stream().filter((e) -> e instanceof Mob mob && mob.getLootTable().equals(lootTable)).toList();
+
+        // a table claimed by the entityLootTables configuration has an id no instance of the type reports, so testing
+        // the modifier against nothing would silently drop it
+        return variants.isEmpty() ? entities : variants;
+    }
+
+    @NotNull
+    private static IDataNode asEntityNode(IDataNode node, List<EntityType<?>> entityTypes) {
+        if (node instanceof LootTableNode lootTableNode) {
+            return new EntityLootTableNode(lootTableNode, entityTypes.get(0));
+        }
+
+        return node;
     }
 
     @NotNull

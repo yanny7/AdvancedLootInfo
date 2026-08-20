@@ -65,9 +65,7 @@ public class EmiCompatibility implements EmiPlugin {
             tradeCategories.values().forEach(registry::addCategory);
 
             GenericUtils.processData(
-                    level,
                     clientRegistry,
-                    config,
                     fullCompressedData,
                     EmiCompatibility::isVisible,
                     (node, location, block, outputs) ->

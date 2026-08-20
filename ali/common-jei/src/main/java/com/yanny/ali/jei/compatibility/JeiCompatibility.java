@@ -100,9 +100,7 @@ public class JeiCompatibility implements IModPlugin {
             Map<RecipeType<RecipeHolder<TradeLootType>>, List<TradeLootType>> tradeRecipeTypes = new HashMap<>();
 
             GenericUtils.processData(
-                    level,
                     clientRegistry,
-                    config,
                     fullCompressedData,
                     (stack) -> stack.isEmpty() || ingredientVisibility.isIngredientVisible(VanillaTypes.ITEM_STACK, stack),
                     (node, location, block, outputs) ->

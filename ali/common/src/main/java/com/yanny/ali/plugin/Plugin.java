@@ -55,6 +55,7 @@ public class Plugin implements IPlugin {
     @Override
     public void registerClient(IClientRegistry registry) {
         registry.registerWidget(LootTableNode.ID, LootTableWidget::new);
+        registry.registerWidget(EntityLootTableNode.ID, LootTableWidget::new);
         registry.registerWidget(LootPoolNode.ID, LootPoolWidget::new);
         registry.registerWidget(ItemNode.ID, ItemWidget::new);
         registry.registerWidget(EmptyNode.ID, EmptyWidget::new);
@@ -73,6 +74,7 @@ public class Plugin implements IPlugin {
         registry.registerWidget(ItemsToItemsNode.ID, ItemListingWidget::new);
 
         registry.registerDataNode(LootTableNode.ID, LootTableNode::new);
+        registry.registerDataNode(EntityLootTableNode.ID, EntityLootTableNode::new);
         registry.registerDataNode(LootPoolNode.ID, LootPoolNode::new);
         registry.registerDataNode(ItemNode.ID, ItemNode::new);
         registry.registerDataNode(AlternativesNode.ID, AlternativesNode::new);

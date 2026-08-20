@@ -87,9 +87,7 @@ public class ReiCompatibility implements REIClientPlugin {
             Map<Holder<ReiTradeDisplay, TradeLootType, ResourceLocation>, List<TradeLootType>> tradeRecipeTypes = new HashMap<>();
 
             GenericUtils.processData(
-                    level,
                     clientRegistry,
-                    config,
                     fullCompressedData,
                     ReiCompatibility.visibilityFilter(),
                     (node, location, block, outputs) ->

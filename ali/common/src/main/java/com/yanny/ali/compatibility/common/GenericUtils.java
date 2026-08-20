@@ -9,13 +9,11 @@ import com.yanny.aci.api.ICoreDataNode;
 import com.yanny.aci.api.Rect;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
-import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.AliClientRegistry;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.network.AbstractClient;
 import com.yanny.ali.network.RequestLootDataMessage;
-import com.yanny.ali.plugin.common.EntityLootTableResolver;
-import com.yanny.ali.plugin.common.nodes.LootTableNode;
+import com.yanny.ali.plugin.common.nodes.EntityLootTableNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.mods.PluginUtils;
 import io.netty.buffer.ByteBuf;
@@ -24,7 +22,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.locale.Language;
 import net.minecraft.network.FriendlyByteBuf;
@@ -272,7 +269,7 @@ public class GenericUtils {
         }
     }
 
-    public static void processData(ClientLevel level, AliClientRegistry clientRegistry, AliConfig config, byte[] fullCompressedData,
+    public static void processData(AliClientRegistry clientRegistry, byte[] fullCompressedData,
                                    Predicate<ItemStack> isVisible,
                                    QuadConsumer<IDataNode, ResourceLocation, Block, List<ItemStack>> blockConsumer,
                                    QuadConsumer<IDataNode, ResourceLocation, EntityType<?>, List<ItemStack>> entityConsumer,
@@ -290,9 +287,6 @@ public class GenericUtils {
         // before the gameplay pass
         Set<ResourceLocation> claimedLootTables = new HashSet<>();
         Map<ResourceLocation, Set<Item>> handledBlockItems = new HashMap<>();
-        // entity entries are identified by their loot table, so a table shared by two entity types produces a single
-        // entry, shown under the first of them
-        Map<ResourceLocation, List<EntityType<?>>> entityLootTables = new EntityLootTableResolver(clientRegistry, level).resolveAll(lootData.keySet());
 
         for (Block block : BuiltInRegistries.BLOCK) {
             ResourceLocation location = Utils.getLootTableKey(block);
@@ -316,21 +310,13 @@ public class GenericUtils {
             }
         }
 
-        for (Map.Entry<ResourceLocation, List<EntityType<?>>> entry : entityLootTables.entrySet()) {
-            ResourceLocation location = entry.getKey();
+        for (Map.Entry<ResourceLocation, IDataNode> entry : lootData.entrySet()) {
+            if (entry.getValue() instanceof EntityLootTableNode node) {
+                ResourceLocation location = entry.getKey();
 
-            if (entry.getValue().stream().allMatch((t) -> config.disabledEntities.stream().anyMatch((f) -> f.equals(BuiltInRegistries.ENTITY_TYPE.getKey(t))))) {
+                entityConsumer.accept(node, location, node.getEntityType(), collectItems(node));
                 claimedLootTables.add(location);
-                continue;
             }
-
-            IDataNode node = lootData.get(location);
-
-            if (node != null) {
-                entityConsumer.accept(node, location, entry.getValue().get(0), collectItems(node));
-            }
-
-            claimedLootTables.add(location);
         }
 
         lootData.keySet().removeAll(claimedLootTables);
@@ -474,8 +460,9 @@ public class GenericUtils {
 
         for (int i = 0; i < lootDataCount; i++) {
             ResourceLocation location = readerBuf.readResourceLocation();
+            ResourceLocation id = readerBuf.readResourceLocation();
 
-            lootData.put(location, utils.getDataNodeFactory(LootTableNode.ID).apply(utils, readerBuf));
+            lootData.put(location, utils.getDataNodeFactory(id).apply(utils, readerBuf));
         }
     }
 
