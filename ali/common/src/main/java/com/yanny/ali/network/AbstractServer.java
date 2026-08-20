@@ -277,17 +277,13 @@ public abstract class AbstractServer {
         return lootNodes;
     }
 
-    /**
-     * Matches the shape produced by vanilla's {@code dropSelf}: a single pool with exactly one roll, holding a single
-     * {@link LootItem} for the block's own item. Functions and conditions make the table non-default unless their type
-     * is listed in the config's {@code defaultBlockLootFunctions}/{@code defaultBlockLootConditions}.
-     */
     private static boolean isDefaultBlockDrop(AliServerRegistry serverRegistry, AliConfig config, Block block, @Nullable LootTable lootTable) {
         if (lootTable == null || !isIgnoredFunctions(config, lootTable.functions)) {
             return false;
         }
 
-        List<LootPool> pools = serverRegistry.getLootPools(lootTable);
+        // mods inject entry-less pools into every block table, keeping them here would match no table at all
+        List<LootPool> pools = serverRegistry.getLootPools(lootTable).stream().filter((p) -> p.entries.length > 0).toList();
 
         if (pools.size() != 1) {
             return false;
