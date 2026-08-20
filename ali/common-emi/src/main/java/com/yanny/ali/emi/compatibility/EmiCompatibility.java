@@ -1,6 +1,7 @@
 package com.yanny.ali.emi.compatibility;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
+import com.yanny.ali.Utils;
 import com.yanny.ali.compatibility.common.GenericUtils;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.configuration.LootCategory;
@@ -37,7 +38,7 @@ import java.util.stream.Collectors;
 
 @EmiEntrypoint
 public class EmiCompatibility implements EmiPlugin {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     @Override
     public void register(EmiRegistry emiRegistry) {

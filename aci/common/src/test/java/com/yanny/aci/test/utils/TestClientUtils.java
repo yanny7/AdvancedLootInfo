@@ -15,9 +15,17 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 public class TestClientUtils implements ICoreWidgetUtils<Object, TestDataNode, TestClientUtils, TestClientUtils> {
-    private final TooltipNodePalette palette = new TooltipNodePalette();
+    private static final String MOD_ID = "aci_test";
+
+    private final TooltipNodePalette palette = new TooltipNodePalette(MOD_ID);
     private final Map<ResourceLocation, BiFunction<TestClientUtils, FriendlyByteBuf, TestDataNode>> factories = new HashMap<>();
     private final List<String> dictionary;
+
+    @NotNull
+    @Override
+    public String getModId() {
+        return MOD_ID;
+    }
 
     public TestClientUtils(List<String> dictionary) {
         this.dictionary = dictionary;

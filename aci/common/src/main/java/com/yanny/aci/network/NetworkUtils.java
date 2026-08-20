@@ -1,13 +1,12 @@
 package com.yanny.aci.network;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.ICoreDataNode;
 import com.yanny.aci.api.ICoreServerUtils;
 import com.yanny.aci.tooltip.TooltipContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import org.slf4j.Logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -19,7 +18,6 @@ import java.util.zip.GZIPOutputStream;
 public class NetworkUtils {
     private static final int MAX_CHUNK_SIZE = 32 * 1024; // 32 KB
     private static final DecimalFormat DOUBLE_FORMAT = new DecimalFormat("#0.00");
-    private static final Logger LOGGER = LogUtils.getLogger();
 
     public static void compressAndStoreData(String modId, ByteBuf rawBuf, BiConsumer<Integer, byte[]> chunkConsumer) {
         int rawSize = rawBuf.readableBytes();
@@ -45,8 +43,7 @@ public class NetworkUtils {
 
         rawBuf.release();
 
-        LOGGER.info("[{}] Compressed data ({} MB -> {} MB) and stored in {} chunk(s)",
-                modId,
+        CommonLogUtils.getLogger(modId).info("Compressed data ({} MB -> {} MB) and stored in {} chunk(s)",
                 DOUBLE_FORMAT.format(rawSize / 1024.0 / 1024.0),
                 DOUBLE_FORMAT.format(compressedData.length / 1024.0 / 1024.0),
                 totalChunks);
@@ -68,7 +65,7 @@ public class NetworkUtils {
         }
 
         if (successfulNodes != nodes.size()) {
-            LOGGER.warn("[{}] Only {} of {} node(s) were encoded successfully", modId, successfulNodes, nodes.size());
+            CommonLogUtils.getLogger(modId).warn("Only {} of {} node(s) were encoded successfully", successfulNodes, nodes.size());
 
             int endIndex = buf.writerIndex();
 
@@ -108,7 +105,7 @@ public class NetworkUtils {
             return true;
         } catch (Throwable e) {
             buf.writerIndex(startOfNode);
-            LOGGER.warn("[{}] Failed to write data in {}", modId, id, e);
+            CommonLogUtils.getLogger(modId).warn("Failed to write data in {}", id, e);
             return false;
         } finally {
             TooltipContext.clear(); // executed right before return

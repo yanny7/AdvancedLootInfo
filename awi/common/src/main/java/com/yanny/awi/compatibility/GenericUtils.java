@@ -1,6 +1,7 @@
 package com.yanny.awi.compatibility;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
+import com.yanny.awi.Utils;
 import com.yanny.awi.api.IBlockNode;
 import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IDataNode;
@@ -35,7 +36,7 @@ import java.util.function.Predicate;
 import java.util.zip.GZIPInputStream;
 
 public class GenericUtils {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     @NotNull
     public static Map<ResourceLocation, LevelStemNode> decompressWorldgenData(IClientUtils utils, byte[] fullCompressedData) {

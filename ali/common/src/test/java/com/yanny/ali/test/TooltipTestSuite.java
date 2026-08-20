@@ -108,6 +108,12 @@ public class TooltipTestSuite {
         UTILS = new IServerUtils() {
             @NotNull
             @Override
+            public String getModId() {
+                return PluginManager.getInstance().serverRegistry.getModId();
+            }
+
+            @NotNull
+            @Override
             public List<Entity> createEntities(EntityType<?> type, Level level) {
                 return PluginManager.getInstance().serverRegistry.createEntities(type, level);
             }

@@ -1,6 +1,7 @@
 package com.yanny.ali.rei.compatibility;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
+import com.yanny.ali.Utils;
 import com.yanny.ali.compatibility.common.*;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.configuration.LootCategory;
@@ -40,7 +41,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class ReiCompatibility implements REIClientPlugin {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     private final Map<LootCategory<Block>, Holder<ReiBlockDisplay, BlockLootType, Block>> blockCategories = new LinkedHashMap<>();
     private final Map<LootCategory<EntityType<?>>, Holder<ReiEntityDisplay, EntityLootType, EntityType<?>>> entityCategories = new LinkedHashMap<>();

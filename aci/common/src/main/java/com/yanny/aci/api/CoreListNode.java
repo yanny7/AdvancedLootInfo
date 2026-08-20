@@ -1,11 +1,10 @@
 package com.yanny.aci.api;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.tooltip.TooltipContext;
 import net.minecraft.network.FriendlyByteBuf;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,8 +18,6 @@ public abstract class CoreListNode<
         TClientUtils extends ICoreClientUtils<TDataNode, ?, TClientUtils>
         >
         implements ICoreDataNode<TServerUtils> {
-    private static final Logger LOGGER = LogUtils.getLogger();
-
     @Nullable
     private List<TDataNode> nodes;
 
@@ -148,14 +145,14 @@ public abstract class CoreListNode<
                 successfulNodes++;
             } catch (Throwable e) {
                 buf.writerIndex(startOfNode);
-                LOGGER.warn("[{}] Failed to write child node {} of parent {} (in {})",
-                        getId().getNamespace(), node.getId(), getId(), TooltipContext.get(), e);
+                CommonLogUtils.getLogger(utils.getModId()).warn("Failed to write child node {} of parent {} (in {})",
+                        node.getId(), getId(), TooltipContext.get(), e);
             }
         }
 
         if (successfulNodes != nodes.size()) {
-            LOGGER.warn("[{}] Dropped {} of {} child node(s) of {} (in {}) while encoding",
-                    getId().getNamespace(), nodes.size() - successfulNodes, nodes.size(), getId(), TooltipContext.get());
+            CommonLogUtils.getLogger(utils.getModId()).warn("Dropped {} of {} child node(s) of {} (in {}) while encoding",
+                    nodes.size() - successfulNodes, nodes.size(), getId(), TooltipContext.get());
 
             int endIndex = buf.writerIndex();
 

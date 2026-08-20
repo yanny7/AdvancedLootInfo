@@ -1,6 +1,7 @@
 package com.yanny.ali.plugin.common;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
+import com.yanny.ali.Utils;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Sheep;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EntityUtils {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     @NotNull
     public static List<Entity> getSheepVariants(Level level) {

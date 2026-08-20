@@ -109,6 +109,12 @@ public class TooltipTestSuite {
         PluginManager.getInstance().registerServerEvent(null);
         TooltipContext.setPalette(PluginManager.getInstance().serverRegistry.getTooltipCache());
         UTILS = new IServerUtils() {
+            @NotNull
+            @Override
+            public String getModId() {
+                return PluginManager.getInstance().serverRegistry.getModId();
+            }
+
             @Override
             public @NotNull ServerLevel getServerLevel() {
                 return PluginManager.getInstance().serverRegistry.getServerLevel();

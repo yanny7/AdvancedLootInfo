@@ -1,6 +1,6 @@
 package com.yanny.aci.manager;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
 import net.minecraft.core.Registry;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -13,8 +13,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class ManagedRegistry<K, V> {
-    private static final Logger LOGGER = LogUtils.getLogger();
-
+    private final Logger logger;
     private final Map<K, V> storage;
     @Nullable
     private final Registry<?> registry;
@@ -23,7 +22,8 @@ public class ManagedRegistry<K, V> {
     @Nullable
     private final Set<K> missing;
 
-    public ManagedRegistry(String label, boolean reportMissing, Supplier<Map<K, V>> mapSupplier, Function<K, String> keyNameGetter, @Nullable Registry<?> registry) {
+    public ManagedRegistry(String modId, String label, boolean reportMissing, Supplier<Map<K, V>> mapSupplier, Function<K, String> keyNameGetter, @Nullable Registry<?> registry) {
+        this.logger = CommonLogUtils.getLogger(modId);
         this.label = label;
         this.keyNameGetter = keyNameGetter;
         this.registry = registry;
@@ -64,15 +64,15 @@ public class ManagedRegistry<K, V> {
 
     public void logMissing() {
         if (missing != null) {
-            missing.forEach((t) -> LOGGER.warn("Missing {} for {}", label, keyNameGetter.apply(t)));
+            missing.forEach((t) -> logger.warn("Missing {} for {}", label, keyNameGetter.apply(t)));
         }
     }
 
     public void logStatistics() {
         if (registry != null) {
-            LOGGER.info("Registered {}/{} {}", storage.size(), registry.size(), label);
+            logger.info("Registered {}/{} {}", storage.size(), registry.size(), label);
         } else {
-            LOGGER.info("Registered {} {}", storage.size(), label);
+            logger.info("Registered {} {}", storage.size(), label);
         }
     }
 }

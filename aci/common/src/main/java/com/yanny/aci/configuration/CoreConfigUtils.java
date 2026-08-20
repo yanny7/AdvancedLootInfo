@@ -2,7 +2,7 @@ package com.yanny.aci.configuration;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,13 +17,13 @@ import java.nio.file.Path;
 import java.util.function.Supplier;
 
 public class CoreConfigUtils {
-    private static final Logger LOGGER = LogUtils.getLogger();
-
     @NotNull
     public static <T extends ICoreConfig> T readConfiguration(@Nullable Path configDir, String modId, String fileName,
                                                               Class<T> type, Supplier<T> factory, Gson gson) {
+        Logger logger = CommonLogUtils.getLogger(modId);
+
         if (configDir == null) {
-            LOGGER.warn("[{}] Failed to obtain config dir path!", modId);
+            logger.warn("Failed to obtain config dir path!");
             return factory.get();
         }
 
@@ -34,7 +34,7 @@ public class CoreConfigUtils {
             try {
                 Files.createDirectories(modConfigDir);
             } catch (IOException e) {
-                LOGGER.warn("[{}] Failed to create path {} for configuration", modId, modConfigDir);
+                logger.warn("Failed to create path {} for configuration", modConfigDir);
                 return factory.get();
             }
         }
@@ -49,25 +49,25 @@ public class CoreConfigUtils {
         int currentVersion = loadedConfig.getCurrentVersion();
 
         if (loadedConfig.getConfigVersion() < currentVersion) {
-            LOGGER.info("[{}] Config version mismatch (found {}, expected {}). Re-creating...", modId, loadedConfig.getConfigVersion(), currentVersion);
+            logger.info("Config version mismatch (found {}, expected {}). Re-creating...", loadedConfig.getConfigVersion(), currentVersion);
 
             try {
                 File backupFile = new File(config.getAbsolutePath() + ".bak");
 
                 if (backupFile.exists()) {
                     if (!backupFile.delete()) {
-                        LOGGER.warn("[{}] Failed to delete backup file {}", modId, backupFile);
+                        logger.warn("Failed to delete backup file {}", backupFile);
                     }
                 }
 
                 if (!config.renameTo(backupFile)) {
-                    LOGGER.warn("[{}] Failed to rename config file {} to {}", modId, config, backupFile);
+                    logger.warn("Failed to rename config file {} to {}", config, backupFile);
                 }
 
                 saveConfig(modId, configFile, factory, gson);
                 return load(modId, configFile, type, factory, gson);
             } catch (Exception e) {
-                LOGGER.warn("[{}] Failed to rotate outdated config file!", modId, e);
+                logger.warn("Failed to rotate outdated config file!", e);
             }
         }
 
@@ -83,8 +83,10 @@ public class CoreConfigUtils {
 
     @NotNull
     private static <T extends ICoreConfig> T load(String modId, Path configFilePath, Class<T> type, Supplier<T> factory, Gson gson) {
+        Logger logger = CommonLogUtils.getLogger(modId);
+
         try (Reader reader = Files.newBufferedReader(configFilePath)) {
-            LOGGER.info("[{}] Loading configuration file {}", modId, configFilePath);
+            logger.info("Loading configuration file {}", configFilePath);
             T config = gson.fromJson(reader, type);
 
             if (config == null) {
@@ -94,20 +96,22 @@ public class CoreConfigUtils {
             config.normalize();
             return config;
         } catch (Exception e) {
-            LOGGER.warn("[{}] Error while reading configuration file: {}", modId, e.getMessage(), e);
+            logger.warn("Error while reading configuration file: {}", e.getMessage(), e);
             return factory.get();
         }
     }
 
     private static <T extends ICoreConfig> void saveConfig(String modId, Path configFilePath, Supplier<T> factory, Gson gson) {
+        Logger logger = CommonLogUtils.getLogger(modId);
+
         try (FileWriter writer = new FileWriter(configFilePath.toFile())) {
             T config = factory.get();
 
             config.setConfigVersion(config.getCurrentVersion());
             gson.toJson(config, writer);
-            LOGGER.info("[{}] Created new configuration file {}", modId, configFilePath);
+            logger.info("Created new configuration file {}", configFilePath);
         } catch (IOException e) {
-            LOGGER.warn("[{}] Error while writing configuration file: {}", modId, e.getMessage(), e);
+            logger.warn("Error while writing configuration file: {}", e.getMessage(), e);
         }
     }
 }

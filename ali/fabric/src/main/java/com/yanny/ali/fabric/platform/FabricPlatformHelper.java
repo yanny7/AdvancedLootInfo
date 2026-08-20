@@ -2,7 +2,8 @@ package com.yanny.ali.fabric.platform;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
+import com.yanny.ali.Utils;
 import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.fabric.mixin.MixinLootTableFabric;
 import com.yanny.ali.platform.services.IPlatformHelper;
@@ -20,7 +21,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class FabricPlatformHelper implements IPlatformHelper {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     @Override
     public List<LootPool> getLootPools(LootTable table) {

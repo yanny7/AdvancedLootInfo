@@ -1,7 +1,8 @@
 package com.yanny.ali.fabric.plugin.mods.porting_lib.loot;
 
 import com.google.gson.JsonElement;
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
+import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
@@ -20,7 +21,7 @@ import java.util.function.BiFunction;
 
 @AliEntrypoint
 public class Plugin implements IPlugin {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
     private static Class<?> LOOT_MODIFIER_CLASS;
     private static Class<?> LOOT_TABLE_ID_CONDITION_CLASS;
 

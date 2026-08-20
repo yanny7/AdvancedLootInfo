@@ -9,9 +9,9 @@ Guidance for working in `aci` (`com.yanny.aci`), the shared core library consume
 ### `api` — generic contracts implemented per-mod
 
 - `ICorePlugin<TCommonRegistry, TClientRegistry, TServerRegistry>` — plugin entry-point contract (`getModId`, `registerCommon/Client/Server`); implemented by `ali.api.IPlugin` and `awi.api.IPlugin`.
-- `ICoreCommonRegistry` / `ICoreClientRegistry` / `ICoreServerRegistry` and their `...Utils` counterparts (`ICoreCommonUtils`, `ICoreClientUtils`, `ICoreServerUtils`, `ICoreWidgetUtils`) — side-specific registration/runtime-helper contracts. Backed by the abstract `manager.Core*Registry` classes below, extended by `Ali*Registry`/`Awi*Registry`.
+- `ICoreCommonRegistry` / `ICoreClientRegistry` / `ICoreServerRegistry` and their `...Utils` counterparts (`ICoreCommonUtils`, `ICoreClientUtils`, `ICoreServerUtils`, `ICoreWidgetUtils`) — side-specific registration/runtime-helper contracts. Backed by the abstract `manager.Core*Registry` classes below, extended by `Ali*Registry`/`Awi*Registry`. All three `...Utils` contracts declare `getModId()` (see "Logging" below).
 - `ICoreDataNode<TServerUtils>` — base for network-serializable, tooltip-bearing, chance-comparable data entries (`encode`, `getTooltip`, `getChance`, `Comparable`). Every mod-specific node type (`ali.plugin.common.nodes.*`, `awi.plugin.common.nodes.*`) implements this.
-- `CoreListNode<TServerUtils,TDataNode,TClientUtils>` — abstract composite `ICoreDataNode` holding a sorted child-node list plus shared network encode/decode logic; base for `ali.api.ListNode`/`awi.api.ListNode` (both of which are nothing but the two constructors). Its `encode` is `final`: it writes the child count + each child's `ResourceLocation` id and payload, then delegates to the subclass's `encodeNode` for the node's own payload. A child whose encode throws is dropped rather than corrupting the stream — the writer index rewinds to that child's start and the leading count is patched afterwards. It deliberately does **not** touch `TooltipContext`: that is set once per top-level entry by `network.NetworkUtils` and must stay ambient across the remaining siblings. Log lines are prefixed with `getId().getNamespace()`, which is the mod id.
+- `CoreListNode<TServerUtils,TDataNode,TClientUtils>` — abstract composite `ICoreDataNode` holding a sorted child-node list plus shared network encode/decode logic; base for `ali.api.ListNode`/`awi.api.ListNode` (both of which are nothing but the two constructors). Its `encode` is `final`: it writes the child count + each child's `ResourceLocation` id and payload, then delegates to the subclass's `encodeNode` for the node's own payload. A child whose encode throws is dropped rather than corrupting the stream — the writer index rewinds to that child's start and the leading count is patched afterwards. It deliberately does **not** touch `TooltipContext`: that is set once per top-level entry by `network.NetworkUtils` and must stay ambient across the remaining siblings. It logs through `utils.getModId()` (see "Logging" below).
 - `IWidget` — GUI widget contract (`render`, `getRect`, `getTooltipComponents`) — the single rendering abstraction every recipe-viewer widget wrapper (EMI/JEI/REI, in both mods) adapts to its host viewer's native widget interface. See `ali/common-emi/CLAUDE.md` for how that adaptation works.
 - `CoreListWidget<TDataNode,TWidgetUtils,TClientUtils>` — abstract widget that lays out a tree of child `IWidget`s and draws the connecting branch lines; base for `ali.*.ListWidget`/`awi.*.ListWidget`.
 - `AbstractScrollWidget` — scrollable viewport + scrollbars on **both** axes (drag/click/wheel handling, scissored content rendering, `isOutsideViewport` culling); base for the `Emi/Jei/ReiScrollWidget` in all six recipe-viewer modules. Subclasses supply `renderWidgets` and `getTexture`, and pass `(contentWidth, contentHeight)` — the real laid-out tree size, which `CoreClientRegistry.createWidgets` already writes back into the root `RelativeRect`, *not* the available width. Design points worth knowing before touching it:
@@ -30,10 +30,10 @@ Guidance for working in `aci` (`com.yanny.aci`), the shared core library consume
 ### `manager` — plugin-manager and registry base classes
 
 - `ClassKeyedMap` / `ManagedRegistry` / `CorePluginManager` — the generic dispatch/discovery machinery; see "Tooltip system" below for the two dispatch tiers, and the repo-root `CLAUDE.md`'s "Adding a new category" recipe for how `ali`/`awi` build on top of these.
-- `BaseRegistry` (package-private) — tracks every `ManagedRegistry` a mod's registry creates, exposing `clearData`/`printRegistrationInfo`/`printRuntimeInfo` (see "Missing-entry fallback and coverage reporting" below). Parent of `CoreCommonRegistry`/`CoreServerRegistry`.
-- `CoreCommonRegistry<TConfig>` — implements `ICoreCommonRegistry`+`ICoreCommonUtils`; owns the translation-key dictionary (`HashBiMap<String,Integer>`) and config access. Extended by `AliCommonRegistry`/`AwiCommonRegistry`.
-- `CoreServerRegistry<TConfig,TCommonUtils,TServerUtils>` — server-side utils base holding the `ServerLevel`, tooltip cache, and `HolderLookup.Provider`. Extended by `AliServerRegistry`/`AwiServerRegistry`.
-- `CoreClientRegistry<...>` — client-side registry; owns widget/data-node factory maps, and uses `compatibility.DataReceiver` plus a `ScheduledExecutorService` to reassemble chunked payloads received over the network (see each mod's `network` package). Extended by `AliClientRegistry`/`AwiClientRegistry`.
+- `BaseRegistry` (package-private) — holds the mod id (`getModId()`, the single implementation behind the three `...Utils` declarations) and tracks every `ManagedRegistry` a mod's registry creates, passing the mod id into each, exposing `clearData`/`printRegistrationInfo`/`printRuntimeInfo` (see "Missing-entry fallback and coverage reporting" below). Parent of `CoreCommonRegistry`/`CoreServerRegistry`/`CoreClientRegistry`.
+- `CoreCommonRegistry<TConfig>` — implements `ICoreCommonRegistry`+`ICoreCommonUtils`; takes the mod id as its constructor argument, and owns the translation-key dictionary (`HashBiMap<String,Integer>`) and config access. Extended by `AliCommonRegistry`/`AwiCommonRegistry`, which pass their `Utils.MOD_ID`.
+- `CoreServerRegistry<TConfig,TCommonUtils,TServerUtils>` — server-side utils base holding the `ServerLevel`, tooltip cache, and `HolderLookup.Provider`. Takes its mod id from the `CoreCommonRegistry` handed to it. Extended by `AliServerRegistry`/`AwiServerRegistry`.
+- `CoreClientRegistry<...>` — client-side registry; takes its mod id from the `CoreCommonRegistry` handed to it, owns widget/data-node factory maps, and uses `compatibility.DataReceiver` plus a `ScheduledExecutorService` to reassemble chunked payloads received over the network (see each mod's `network` package). Extended by `AliClientRegistry`/`AwiClientRegistry`.
 
 ### `compatibility`
 
@@ -46,7 +46,7 @@ Guidance for working in `aci` (`com.yanny.aci`), the shared core library consume
 
 ### `network`
 
-- `NetworkUtils` — the *server-side write/compress* half of the chunked-sync pattern, shared by both mods' `AbstractServer`: `writeMapData` (length-prefixed `Map<ResourceLocation, TNode>`, rewinding and re-patching the count when an entry fails), `writeEntryData`/`writeNodeData` (single entry / single node — the latter is what ALI's wandering-trader node uses, since it carries no `ResourceLocation` on the wire), and `compressAndStoreData` (gzip + slice into ≤32KB chunks, handed to a `BiConsumer<Integer, byte[]>` that wraps each chunk in the mod's own packet type). Every method takes a `String modId` first argument, used purely to prefix its log lines (`[ali]`/`[awi]`) — `NetworkUtils` logs through its own logger, so without it the two mods would be indistinguishable in the log.
+- `NetworkUtils` — the *server-side write/compress* half of the chunked-sync pattern, shared by both mods' `AbstractServer`: `writeMapData` (length-prefixed `Map<ResourceLocation, TNode>`, rewinding and re-patching the count when an entry fails), `writeEntryData`/`writeNodeData` (single entry / single node — the latter is what ALI's wandering-trader node uses, since it carries no `ResourceLocation` on the wire), and `compressAndStoreData` (gzip + slice into ≤32KB chunks, handed to a `BiConsumer<Integer, byte[]>` that wraps each chunk in the mod's own packet type). Every method takes a `String modId` first argument, used purely to resolve the logger it writes through (see "Logging" below).
 
 Packet/channel definitions stay entirely mod-specific — the `*Message` records, channel ids and registration live in `ali/common/.../network` + the loader modules, and are duplicated in `awi`.
 
@@ -63,7 +63,20 @@ Supporting types for the translation-key model (not the whole wiring mechanism, 
 
 ### `tooltip`
 
-`TooltipBuilder`, `TooltipNode`, `RawTooltipNode`, `TooltipNodePalette`, `TooltipContext`, `CacheKey`, `CommonValueTooltip`, `CoreTooltipUtils` — the tree model described in full below.
+`TooltipBuilder`, `TooltipNode`, `RawTooltipNode`, `TooltipNodePalette`, `TooltipContext`, `CacheKey`, `CommonValueTooltip`, `CoreTooltipUtils` — the tree model described in full below. A `TooltipNodePalette` is built for one mod and carries its id (`getModId()`).
+
+## Logging
+
+Loggers come from `CommonLogUtils.getLogger(modId)` (root package, next to `Utils`): it names the logger after the calling class through a `StackWalker` and wraps it in `PrefixLogger`, which prepends `[<modId>]` to every message. Minecraft's log pattern prints the logger name on Forge but not on Fabric, so that prefix is what identifies the writing mod there; it is emitted on every loader. Never prefix a message by hand.
+
+ACI's shared code logs under the mod it works for, not under `aci`, so the mod id has to reach every log site:
+- classes owned by one mod's registry tree — `CorePluginManager`, `CoreCommonRegistry`, `CoreClientRegistry`, `ManagedRegistry`, `DataReceiver`, `TooltipNodePalette` — take the mod id as a constructor argument and keep an instance `logger` field;
+- static helpers `CoreConfigUtils` and `NetworkUtils` resolve the logger from their `String modId` parameter;
+- code reached through a utils instance uses `utils.getModId()` (`CoreListNode.encode`, `TooltipNode.decodeRaw`), and `TooltipBuilder.build` uses `TooltipContext.getPalette().getModId()`.
+
+`getModId()` is declared three times — on `ICoreCommonUtils`, `ICoreServerUtils` and `ICoreClientUtils`. The latter two cannot inherit it from `ICoreCommonUtils<TConfig>`, because a mod's `IServerUtils`/`IClientUtils` already extends that interface with its concrete config type and a second, wildcarded inheritance is a type-argument clash. `BaseRegistry` implements it once for all three.
+
+`ali`/`awi` classes need none of this plumbing: they hold `private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID)`.
 
 ## Tooltip system
 

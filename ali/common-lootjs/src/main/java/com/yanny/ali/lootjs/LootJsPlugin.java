@@ -2,7 +2,7 @@ package com.yanny.ali.lootjs;
 
 import com.almostreliable.lootjs.core.*;
 import com.almostreliable.lootjs.loot.condition.*;
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.lootjs.mixin.MixinAbstractLootModification;
 import com.yanny.ali.lootjs.mixin.MixinLootModificationsAPI;
@@ -23,7 +23,7 @@ import java.util.List;
 public class LootJsPlugin implements IPlugin {
     public static final String ID = "lootjs";
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(com.yanny.ali.Utils.MOD_ID);
 
     @NotNull
     @Override

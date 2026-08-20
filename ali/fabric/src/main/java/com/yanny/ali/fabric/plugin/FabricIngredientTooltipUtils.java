@@ -1,7 +1,8 @@
 package com.yanny.ali.fabric.plugin;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.ali.Utils;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.fabric.mixin.MixinCombinedIngredient;
 import com.yanny.ali.fabric.mixin.MixinDifferenceIngredient;
@@ -19,7 +20,7 @@ import org.slf4j.Logger;
 
 @SuppressWarnings("UnstableApiUsage")
 public class FabricIngredientTooltipUtils {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     @NotNull
     public static TooltipBuilder getCustomIngredientTooltip(IServerUtils utils, CustomIngredientImpl ingredient) {

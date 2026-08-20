@@ -2,7 +2,8 @@ package com.yanny.ali.manager;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
+import com.yanny.ali.Utils;
 import com.yanny.ali.platform.Services;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -16,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FakeLootDataManager extends SimpleJsonResourceReloadListener {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
     private static final String FOLDER = "fake_loot";
     private static final Gson GSON = Deserializers.createLootTableSerializer().create();
 

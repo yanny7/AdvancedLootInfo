@@ -1,7 +1,7 @@
 package com.yanny.ali.plugin.common.nodes;
 
 import com.mojang.datafixers.util.Either;
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
@@ -29,7 +29,7 @@ import java.util.function.Predicate;
 
 public class ItemNode implements IDataNode, IItemNode {
     public static final ResourceLocation ID = Utils.modLoc("item");
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     private final TooltipNode tooltip;
     private final List<LootItemCondition> conditions;

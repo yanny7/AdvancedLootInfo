@@ -1,7 +1,8 @@
 package com.yanny.awi.plugin.server;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.awi.Utils;
 import com.yanny.awi.api.IServerUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.valueproviders.FloatProviderType;
@@ -28,7 +29,7 @@ import org.slf4j.Logger;
 import static com.yanny.aci.tooltip.CoreTooltipUtils.getBuiltInRegistryTooltip;
 
 public class RegistriesTooltipUtils {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     @NotNull
     public static TooltipBuilder getBlockTooltip(IServerUtils utils, Block block) {

@@ -1,6 +1,6 @@
 package com.yanny.ali.jei.compatibility;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.ali.Utils;
 import com.yanny.ali.compatibility.common.*;
 import com.yanny.ali.configuration.AliConfig;
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 
 @JeiPlugin
 public class JeiCompatibility implements IModPlugin {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     private final Map<LootCategory<Block>, JeiBlockLoot> blockCategories = new LinkedHashMap<>();
     private final Map<LootCategory<EntityType<?>>, JeiEntityLoot> entityCategories = new LinkedHashMap<>();

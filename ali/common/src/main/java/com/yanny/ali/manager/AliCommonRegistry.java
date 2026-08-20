@@ -1,8 +1,9 @@
 package com.yanny.ali.manager;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.manager.CoreCommonRegistry;
 import com.yanny.aci.manager.ManagedRegistry;
+import com.yanny.ali.Utils;
 import com.yanny.ali.api.ICommonRegistry;
 import com.yanny.ali.api.ICommonUtils;
 import com.yanny.ali.configuration.AliConfig;
@@ -18,12 +19,12 @@ import java.util.*;
 import java.util.function.Function;
 
 public class AliCommonRegistry extends CoreCommonRegistry<AliConfig> implements ICommonRegistry, ICommonUtils {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     private final ManagedRegistry<EntityType<?>, Function<Level, List<Entity>>> entityVariants = register("entity variants", false, HashMap::new, EntityType::toString, null);
 
     public AliCommonRegistry() {
-        super();
+        super(Utils.MOD_ID);
     }
 
     @Override

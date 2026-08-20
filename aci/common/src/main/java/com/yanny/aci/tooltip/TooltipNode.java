@@ -1,6 +1,6 @@
 package com.yanny.aci.tooltip;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.ICoreClientUtils;
 import com.yanny.aci.api.ICoreServerUtils;
 import com.yanny.aci.language.CoreLang;
@@ -10,7 +10,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,8 +29,6 @@ public class TooltipNode {
     public static final short FLAG_HAS_VALUE = 1 << 6;
     public static final short FLAG_COMPONENT = 1 << 7;
     public static final short FLAG_INDEX_KEY = 1 << 8;
-
-    private static final Logger LOGGER = LogUtils.getLogger();
 
     private @Nullable final String key;
     private final String @Nullable[] values;
@@ -319,7 +316,7 @@ public class TooltipNode {
                 key = utils.getTranslationKey(buf.readVarInt());
 
                 if (key == null) {
-                    LOGGER.warn("Unable to decode indexed key! Version mismatch!");
+                    CommonLogUtils.getLogger(utils.getModId()).warn("Unable to decode indexed key! Version mismatch!");
                     key = CoreLang.Utils.NOT_IMPLEMENTED.singular();
                 }
             } else {

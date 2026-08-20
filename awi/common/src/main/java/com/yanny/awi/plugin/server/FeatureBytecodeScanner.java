@@ -1,6 +1,7 @@
 package com.yanny.awi.plugin.server;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
+import com.yanny.awi.Utils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
@@ -66,7 +67,7 @@ import java.util.function.Predicate;
  * configuration the feature is used with.
  */
 public final class FeatureBytecodeScanner {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
     // Runaway guard, not a tuning knob: lowering it silently drops blocks rather than failing.
     private static final int MAX_METHODS = 1000;
     private static final int MAX_RESOLVE_DEPTH = 12;

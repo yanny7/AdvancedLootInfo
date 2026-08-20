@@ -18,10 +18,12 @@ public abstract class CoreServerRegistry<
         ICoreServerUtils<TServerUtils>,
         ICoreCommonUtils<TConfig> {
     private final ServerLevel serverLevel;
-    private final TooltipNodePalette tooltipNodeCache = new TooltipNodePalette();
+    private final TooltipNodePalette tooltipNodeCache;
     protected final TCommonUtils commonUtils;
 
     public CoreServerRegistry(TCommonUtils registry, ServerLevel level) {
+        super(registry.getModId());
+        tooltipNodeCache = new TooltipNodePalette(registry.getModId());
         commonUtils = registry;
         serverLevel = level;
     }

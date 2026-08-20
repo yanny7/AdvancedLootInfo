@@ -6,7 +6,7 @@ import com.almostreliable.lootjs.core.ILootHandler;
 import com.almostreliable.lootjs.core.LootEntry;
 import com.almostreliable.lootjs.loot.action.*;
 import com.mojang.datafixers.util.Either;
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.*;
 import com.yanny.ali.lootjs.mixin.MixinCompositeLootAction;
@@ -39,7 +39,7 @@ import static com.yanny.ali.plugin.common.NodeUtils.getEnchantedChance;
 import static com.yanny.ali.plugin.common.NodeUtils.getEnchantedCount;
 
 public abstract class LootModifier<T> implements ILootModifier<T> {
-    protected static final Logger LOGGER = LogUtils.getLogger();
+    protected static final Logger LOGGER = CommonLogUtils.getLogger(com.yanny.ali.Utils.MOD_ID);
 
     private final List<IOperation> operations = new ArrayList<>();
 

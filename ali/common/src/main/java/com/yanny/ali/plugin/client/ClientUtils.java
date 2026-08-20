@@ -2,6 +2,7 @@ package com.yanny.ali.plugin.client;
 
 import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RelativeRect;
+import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IWidgetUtils;
@@ -18,6 +19,12 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 public abstract class ClientUtils implements IWidgetUtils, IClientUtils {
+    @NotNull
+    @Override
+    public String getModId() {
+        return Utils.MOD_ID;
+    }
+
     @NotNull
     @Override
     public List<IWidget> createWidgets(IWidgetUtils registry, List<IDataNode> entries, RelativeRect parent, int maxWidth) {

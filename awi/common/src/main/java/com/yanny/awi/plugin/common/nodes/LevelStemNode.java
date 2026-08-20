@@ -1,6 +1,6 @@
 package com.yanny.awi.plugin.common.nodes;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.Utils;
@@ -31,7 +31,7 @@ import java.util.Set;
 public class LevelStemNode extends ListNode {
     public static final ResourceLocation ID = Utils.modLoc("level_stem");
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     private final TooltipNode tooltip;
 

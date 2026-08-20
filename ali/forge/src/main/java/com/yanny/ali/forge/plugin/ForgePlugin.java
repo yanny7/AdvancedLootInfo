@@ -2,12 +2,13 @@ package com.yanny.ali.forge.plugin;
 
 import com.google.gson.JsonElement;
 import com.mojang.datafixers.util.Either;
-import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
+import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.forge.mixin.MixinBasicItemListing;
 import com.yanny.ali.forge.mixin.MixinCanToolPerformAction;
@@ -39,7 +40,7 @@ import java.util.function.BiFunction;
 
 @AliEntrypoint
 public class ForgePlugin implements IPlugin {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     @NotNull
     @Override
