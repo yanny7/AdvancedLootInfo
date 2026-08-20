@@ -3,7 +3,6 @@ package com.yanny.aci.tooltip;
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.language.IMultiKey;
-import com.yanny.aci.manager.CorePluginManager;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -259,7 +258,7 @@ public class TooltipBuilder {
             }
         }
 
-        return TooltipNode.getOrCreate(CorePluginManager.INSTANCE.serverRegistry.getTooltipCache(), finalKeyStr, finalValues, finalComponent, finalFlags, finalChildren);
+        return TooltipNode.getOrCreate(TooltipContext.getPalette(), finalKeyStr, finalValues, finalComponent, finalFlags, finalChildren);
     }
 
     private short getFlags() {

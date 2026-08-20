@@ -20,16 +20,10 @@ public abstract class CorePluginManager<
         > {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static CorePluginManager<?, ?, ?, ?, ?, ?, ?> INSTANCE;
-
     public TCoreCommonRegistry commonRegistry;
     public TCoreClientRegistry clientRegistry;
     public TCoreServerRegistry serverRegistry;
     private List<TPlugin> plugins;
-
-    protected CorePluginManager() {
-        INSTANCE = this;
-    }
 
     @NotNull
     protected abstract List<TPlugin> getPlugins();

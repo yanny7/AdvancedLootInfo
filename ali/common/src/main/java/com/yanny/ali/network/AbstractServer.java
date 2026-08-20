@@ -57,12 +57,23 @@ public abstract class AbstractServer {
     }
 
     public final void readLootTables(LootDataManager manager) {
+        AliServerRegistry serverRegistry = PluginManager.getInstance().serverRegistry;
+
+        TooltipContext.setPalette(serverRegistry.getTooltipCache());
+
+        try {
+            readLootTables(manager, serverRegistry);
+        } finally {
+            TooltipContext.clearPalette();
+        }
+    }
+
+    private void readLootTables(LootDataManager manager, AliServerRegistry serverRegistry) {
         LOGGER.info("Started reading loot info");
 
         long startTime = System.currentTimeMillis();
         AliConfig config = PluginManager.getInstance().commonRegistry.getConfiguration();
 
-        AliServerRegistry serverRegistry = PluginManager.getInstance().serverRegistry;
         Map<ResourceLocation, LootTable> lootTables = collectLootTables(manager);
         Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();
         Map<ResourceLocation, LootTable> unprocessedLootTables = new HashMap<>(lootTables);

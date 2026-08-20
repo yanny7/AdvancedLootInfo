@@ -39,10 +39,21 @@ public abstract class AbstractServer {
     private final List<WorldgenDataChunkMessage> chunks = new ArrayList<>();
 
     public void readWorldgenInfo(ServerLevel level) {
+        AwiServerRegistry serverRegistry = PluginManager.getInstance().serverRegistry;
+
+        TooltipContext.setPalette(serverRegistry.getTooltipCache());
+
+        try {
+            readWorldgenInfo(level, serverRegistry);
+        } finally {
+            TooltipContext.clearPalette();
+        }
+    }
+
+    private void readWorldgenInfo(ServerLevel level, AwiServerRegistry serverRegistry) {
         LOGGER.info("Started reading worldgen info");
 
         long startTime = System.currentTimeMillis();
-        AwiServerRegistry serverRegistry = PluginManager.getInstance().serverRegistry;
         RegistryAccess registryAccess = level.registryAccess();
         Registry<LevelStem> levelStemRegistry = registryAccess.registryOrThrow(Registries.LEVEL_STEM);
         Map<ResourceLocation, IDataNode> worldgenNodes = new HashMap<>();

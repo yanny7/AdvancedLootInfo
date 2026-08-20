@@ -4,7 +4,6 @@ import com.mojang.logging.LogUtils;
 import com.yanny.aci.api.ICoreClientUtils;
 import com.yanny.aci.api.ICoreServerUtils;
 import com.yanny.aci.language.CoreLang;
-import com.yanny.aci.manager.CorePluginManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -354,7 +353,7 @@ public class TooltipNode {
 
     @NotNull
     public static TooltipNode empty() {
-        return getOrCreate(CorePluginManager.INSTANCE.serverRegistry.getTooltipCache(), null, null, null, FLAG_EMPTY, Collections.emptyList());
+        return getOrCreate(TooltipContext.getPalette(), null, null, null, FLAG_EMPTY, Collections.emptyList());
     }
 
     @NotNull
