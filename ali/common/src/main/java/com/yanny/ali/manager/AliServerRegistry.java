@@ -6,6 +6,7 @@ import com.yanny.aci.manager.ClassKeyedMap;
 import com.yanny.aci.manager.CoreServerRegistry;
 import com.yanny.aci.manager.ManagedRegistry;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
@@ -357,8 +358,14 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     private void prepareLootModifiers() {
-        for (Function<IServerUtils, List<ILootModifier<?>>> lootModifierGetter : lootModifierGetters) {
-            lootModifierMap.addAll(lootModifierGetter.apply(this));
+        TooltipContext.setPalette(getTooltipCache());
+
+        try {
+            for (Function<IServerUtils, List<ILootModifier<?>>> lootModifierGetter : lootModifierGetters) {
+                lootModifierMap.addAll(lootModifierGetter.apply(this));
+            }
+        } finally {
+            TooltipContext.clearPalette();
         }
     }
 }
