@@ -41,7 +41,7 @@ public class NodeCodecTest {
 
     @Test
     public void testSingleLevelTreeSurvivesTheRoundTrip() {
-        TooltipNodePalette palette = new TooltipNodePalette();
+        TooltipNodePalette palette = new TooltipNodePalette(MOD_ID);
         TestServerUtils server = new TestServerUtils(palette, DICTIONARY);
         TestListNode root = new TestListNode("root", leafTooltip(palette, "tooltip.aci_test.known", "1"));
 
@@ -60,7 +60,7 @@ public class NodeCodecTest {
 
     @Test
     public void testDecodedTreeReEncodesToTheSameBytes() {
-        TooltipNodePalette palette = new TooltipNodePalette();
+        TooltipNodePalette palette = new TooltipNodePalette(MOD_ID);
         TestServerUtils server = new TestServerUtils(palette, DICTIONARY);
         Map<ResourceLocation, TestDataNode> nodes = new LinkedHashMap<>();
 
@@ -77,7 +77,7 @@ public class NodeCodecTest {
 
     @Test
     public void testNestedTreeSurvivesTheRoundTrip() {
-        TooltipNodePalette palette = new TooltipNodePalette();
+        TooltipNodePalette palette = new TooltipNodePalette(MOD_ID);
         TestServerUtils server = new TestServerUtils(palette, DICTIONARY);
         TestListNode root = new TestListNode("root", leafTooltip(palette, "tooltip.aci_test.known", "1"));
         TestListNode branch = new TestListNode("branch", leafTooltip(palette, "tooltip.aci_test.known", "2"));
@@ -100,7 +100,7 @@ public class NodeCodecTest {
 
     @Test
     public void testChildrenAreSortedByChanceOnDecode() {
-        TooltipNodePalette palette = new TooltipNodePalette();
+        TooltipNodePalette palette = new TooltipNodePalette(MOD_ID);
         TestServerUtils server = new TestServerUtils(palette, DICTIONARY);
         TestListNode root = new TestListNode("root", leafTooltip(palette, "tooltip.aci_test.known", "1"));
         TooltipNode shared = leafTooltip(palette, "tooltip.aci_test.other", "x");
@@ -117,7 +117,7 @@ public class NodeCodecTest {
 
     @Test
     public void testLargePayloadIsSplitIntoChunksAndReassembled() {
-        TooltipNodePalette palette = new TooltipNodePalette();
+        TooltipNodePalette palette = new TooltipNodePalette(MOD_ID);
         TestServerUtils server = new TestServerUtils(palette, DICTIONARY);
         TestListNode root = new TestListNode("root", leafTooltip(palette, "tooltip.aci_test.known", "1"));
         Random random = new Random(42);
@@ -138,7 +138,7 @@ public class NodeCodecTest {
     @Test
     public void testChunksMayArriveOutOfOrder() {
         List<byte[]> chunks = compress(simplePayload());
-        DataReceiver receiver = new DataReceiver(chunks.size());
+        DataReceiver receiver = new DataReceiver(MOD_ID, chunks.size());
 
         for (int i = chunks.size() - 1; i >= 0; i--) {
             receiver.messageReceived(i, chunks.get(i));
@@ -150,7 +150,7 @@ public class NodeCodecTest {
     @Test
     public void testDuplicateChunkIsIgnored() {
         List<byte[]> chunks = compress(simplePayload());
-        DataReceiver receiver = new DataReceiver(chunks.size());
+        DataReceiver receiver = new DataReceiver(MOD_ID, chunks.size());
 
         for (int i = 0; i < chunks.size(); i++) {
             receiver.messageReceived(i, chunks.get(i));
@@ -165,7 +165,7 @@ public class NodeCodecTest {
     @Test
     public void testMissingChunkFailsTheFuture() {
         List<byte[]> chunks = compress(largePayload());
-        DataReceiver receiver = new DataReceiver(chunks.size());
+        DataReceiver receiver = new DataReceiver(MOD_ID, chunks.size());
 
         for (int i = 1; i < chunks.size(); i++) {
             receiver.messageReceived(i, chunks.get(i));
@@ -179,7 +179,7 @@ public class NodeCodecTest {
 
     @Test
     public void testChildThatCannotBeEncodedIsDroppedFromTheTree() {
-        TooltipNodePalette palette = new TooltipNodePalette();
+        TooltipNodePalette palette = new TooltipNodePalette(MOD_ID);
         TestServerUtils server = new TestServerUtils(palette, DICTIONARY);
         TestListNode root = new TestListNode("root", leafTooltip(palette, "tooltip.aci_test.known", "1"));
         TooltipNode shared = leafTooltip(palette, "tooltip.aci_test.other", "x");
@@ -197,7 +197,7 @@ public class NodeCodecTest {
 
     @Test
     public void testTopLevelEntryThatCannotBeEncodedIsDroppedFromTheMap() {
-        TooltipNodePalette palette = new TooltipNodePalette();
+        TooltipNodePalette palette = new TooltipNodePalette(MOD_ID);
         TestServerUtils server = new TestServerUtils(palette, DICTIONARY);
         Map<ResourceLocation, TestDataNode> nodes = new LinkedHashMap<>();
 
@@ -212,13 +212,13 @@ public class NodeCodecTest {
     }
 
     private static byte[] simplePayload() {
-        TooltipNodePalette palette = new TooltipNodePalette();
+        TooltipNodePalette palette = new TooltipNodePalette(MOD_ID);
 
         return encodePayload(new TestServerUtils(palette, DICTIONARY), Map.of(entryId("root"), tree(palette, "root", 3, 0)));
     }
 
     private static byte[] largePayload() {
-        TooltipNodePalette palette = new TooltipNodePalette();
+        TooltipNodePalette palette = new TooltipNodePalette(MOD_ID);
         TestListNode root = new TestListNode("root", leafTooltip(palette, "tooltip.aci_test.known", "1"));
         Random random = new Random(7);
 
@@ -272,7 +272,7 @@ public class NodeCodecTest {
     }
 
     private static byte[] reassemble(List<byte[]> chunks, int expectedCount) {
-        DataReceiver receiver = new DataReceiver(expectedCount);
+        DataReceiver receiver = new DataReceiver(MOD_ID, expectedCount);
 
         for (int i = 0; i < chunks.size(); i++) {
             receiver.messageReceived(i, chunks.get(i));

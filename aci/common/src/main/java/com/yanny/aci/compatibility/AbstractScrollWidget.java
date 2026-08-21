@@ -59,13 +59,13 @@ public abstract class AbstractScrollWidget {
     public void render(GuiGraphics guiGraphics, double mouseX, double mouseY) {
         drawContents(guiGraphics, mouseX, mouseY);
 
-        guiGraphics.blitNineSliced(getTexture(), verticalScrollRect.x(), verticalScrollRect.y(), verticalScrollRect.width(), verticalScrollRect.height(), 2, 16, 16, 2, 2);
+        RenderingUtils.blitNineSliced(guiGraphics, getTexture(), verticalScrollRect.x(), verticalScrollRect.y(), verticalScrollRect.width(), verticalScrollRect.height(), 2, 2, 2, 2, 16, 16, 2, 2);
 
         Rect verticalMarker = calculateVerticalMarkerArea();
-        guiGraphics.blitNineSliced(getTexture(), verticalMarker.x(), verticalMarker.y(), verticalMarker.width(), verticalMarker.height(), 2, 2, 2, 1, 12, 17, 18, 0);
+        RenderingUtils.blitNineSliced(guiGraphics, getTexture(), verticalMarker.x(), verticalMarker.y(), verticalMarker.width(), verticalMarker.height(), 2, 2, 2, 1, 12, 17, 18, 0);
 
         if (horizontalScrollbar) {
-            guiGraphics.blitNineSliced(getTexture(), horizontalScrollRect.x(), horizontalScrollRect.y(), horizontalScrollRect.width(), horizontalScrollRect.height(), 2, 16, 16, 2, 2);
+            RenderingUtils.blitNineSliced(guiGraphics, getTexture(), horizontalScrollRect.x(), horizontalScrollRect.y(), horizontalScrollRect.width(), horizontalScrollRect.height(), 2, 2, 2, 2, 16, 16, 2, 2);
 
             drawHorizontalMarker(guiGraphics, calculateHorizontalMarkerArea());
         }
@@ -224,7 +224,7 @@ public abstract class AbstractScrollWidget {
         RenderSystem.disableCull();
 
         try {
-            guiGraphics.blitNineSliced(getTexture(), 0, 0, markerArea.height(), markerArea.width(), 2, 2, 2, 1, 12, 17, 18, 0);
+            RenderingUtils.blitNineSliced(guiGraphics, getTexture(), 0, 0, markerArea.height(), markerArea.width(), 2, 2, 2, 1, 12, 17, 18, 0);
         } finally {
             RenderSystem.enableCull();
             poseStack.popPose();

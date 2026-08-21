@@ -1,7 +1,8 @@
 package com.yanny.ali.fabric.plugin.mods.porting_lib.loot;
 
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
+import com.yanny.ali.Utils;
 import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
 
@@ -10,7 +11,7 @@ import java.util.Collections;
 import java.util.Map;
 
 public class LootModifierManager {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
     private static final Object INSTANCE;
     private static final Field REGISTERED_GLM;
 

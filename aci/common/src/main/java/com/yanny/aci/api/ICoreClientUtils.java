@@ -15,6 +15,9 @@ public interface ICoreClientUtils<
         SELF         extends ICoreClientUtils<?, ?, ?>
         > {
     @NotNull
+    String getModId();
+
+    @NotNull
     List<IWidget> createWidgets(TWidgetUtils utils, List<TDataNode> entries, RelativeRect parent, int maxWidth);
 
     @NotNull

@@ -1,7 +1,7 @@
 package com.yanny.ali.plugin.common.trades;
 
 import com.mojang.datafixers.util.Either;
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
@@ -28,7 +28,7 @@ import java.util.List;
 
 public class ItemsToItemsNode extends ListNode implements ITradeNode {
     public static final ResourceLocation ID = Utils.modLoc("items_to_items");
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     private final TooltipNode tooltip;
     /**

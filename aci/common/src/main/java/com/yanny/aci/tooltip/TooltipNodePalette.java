@@ -1,19 +1,17 @@
 package com.yanny.aci.tooltip;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.ICoreClientUtils;
 import com.yanny.aci.api.ICoreServerUtils;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TooltipNodePalette {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private final Logger logger;
+    private final String modId;
 
     private final Map<CacheKey, TooltipNode> pool = new HashMap<>();
     private final List<TooltipNode> idToNode = new ArrayList<>();
@@ -21,6 +19,16 @@ public class TooltipNodePalette {
 
     private int hits = 0;
     private int misses = 0;
+
+    public TooltipNodePalette(String modId) {
+        this.logger = CommonLogUtils.getLogger(modId);
+        this.modId = modId;
+    }
+
+    @NotNull
+    public String getModId() {
+        return modId;
+    }
 
     public TooltipNode getOrCreate(CacheKey key) {
         TooltipNode cached = pool.get(key);
@@ -104,9 +112,9 @@ public class TooltipNodePalette {
     public void logStatistics() {
         double total = hits + misses;
 
-        LOGGER.info("Node Statistics:");
-        LOGGER.info("Total Requests: {}", (int) total);
-        LOGGER.info("Hits (Reused):  {} ({})", hits, String.format("%.2f%%", (hits / total) * 100));
-        LOGGER.info("Misses (New):   {} ({})", misses, String.format("%.2f%%", (misses / total) * 100));
+        logger.info("Node Statistics:");
+        logger.info("Total Requests: {}", (int) total);
+        logger.info("Hits (Reused):  {} ({})", hits, String.format("%.2f%%", (hits / total) * 100));
+        logger.info("Misses (New):   {} ({})", misses, String.format("%.2f%%", (misses / total) * 100));
     }
 }

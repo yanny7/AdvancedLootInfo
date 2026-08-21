@@ -7,6 +7,7 @@ import com.yanny.aci.tooltip.TooltipNodePalette;
 import com.yanny.awi.datagen.LanguageHolder;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.configuration.AwiConfig;
+import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.plugin.server.summary.ColumnContext;
 import com.yanny.awi.plugin.server.summary.CountSpan;
@@ -107,7 +108,14 @@ public class TooltipTestSuite {
         PluginManager.getInstance().registerCommonEvent();
         PluginManager.getInstance().registerClientEvent();
         PluginManager.getInstance().registerServerEvent(null);
+        TooltipContext.setPalette(PluginManager.getInstance().serverRegistry.getTooltipCache());
         UTILS = new IServerUtils() {
+            @NotNull
+            @Override
+            public String getModId() {
+                return PluginManager.getInstance().serverRegistry.getModId();
+            }
+
             @Override
             public @NotNull ServerLevel getServerLevel() {
                 return PluginManager.getInstance().serverRegistry.getServerLevel();

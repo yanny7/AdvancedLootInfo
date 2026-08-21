@@ -12,6 +12,16 @@ import java.util.function.Supplier;
 
 abstract class BaseRegistry {
     private final List<ManagedRegistry<?, ?>> allRegistries = new ArrayList<>();
+    private final String modId;
+
+    protected BaseRegistry(String modId) {
+        this.modId = modId;
+    }
+
+    @NotNull
+    public final String getModId() {
+        return modId;
+    }
 
     public void clearData() {
         allRegistries.forEach(ManagedRegistry::clear);
@@ -32,7 +42,7 @@ abstract class BaseRegistry {
 
     @NotNull
     protected <K, V> ManagedRegistry<K, V> register(String label, boolean reportMissing, Supplier<Map<K, V>> mapSupplier, Function<K, String> keyNameGetter, @Nullable Registry<?> registry) {
-        ManagedRegistry<K, V> reg = new ManagedRegistry<>(label, reportMissing, mapSupplier, keyNameGetter, registry);
+        ManagedRegistry<K, V> reg = new ManagedRegistry<>(modId, label, reportMissing, mapSupplier, keyNameGetter, registry);
         allRegistries.add(reg);
         return reg;
     }

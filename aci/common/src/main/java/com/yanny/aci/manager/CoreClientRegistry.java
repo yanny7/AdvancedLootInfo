@@ -1,6 +1,6 @@
 package com.yanny.aci.manager;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.*;
 import com.yanny.aci.compatibility.DataReceiver;
 import com.yanny.aci.tooltip.TooltipNodePalette;
@@ -37,14 +37,14 @@ public abstract class CoreClientRegistry<
         ICoreCommonUtils<TConfig>,
         ICoreClientRegistry<TDataNode, TWidgetUtils, TClientUtils> {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private final Logger logger;
 
     private final ManagedRegistry<ResourceLocation, IWidgetFactory<TDataNode, TWidgetUtils>> widgetMap = register("node widgets", false, HashMap::new, ResourceLocation::toString, null);
     private final ManagedRegistry<ResourceLocation, BiFunction<TClientUtils, RegistryFriendlyByteBuf, TDataNode>> dataNodeFactoryMap = register("data node factories", false, HashMap::new, ResourceLocation::toString, null);
 
     protected final TCommonUtils commonUtils;
 
-    private final TooltipNodePalette tooltipNodeCache = new TooltipNodePalette();
+    private final TooltipNodePalette tooltipNodeCache;
 
     private final AtomicInteger receivedChunks = new AtomicInteger(0);
     private final AtomicInteger receivedChunksPerSecond = new AtomicInteger(0);
@@ -55,6 +55,9 @@ public abstract class CoreClientRegistry<
     private final AtomicReference<CompletableFuture<byte[]>> activeDataPromise = new AtomicReference<>(new CompletableFuture<>());
 
     public CoreClientRegistry(TCommonUtils registry) {
+        super(registry.getModId());
+        logger = CommonLogUtils.getLogger(registry.getModId());
+        tooltipNodeCache = new TooltipNodePalette(registry.getModId());
         commonUtils = registry;
     }
 
@@ -175,7 +178,7 @@ public abstract class CoreClientRegistry<
         DataReceiver receiver = currentDataReceiver;
 
         if (receiver == null) {
-            LOGGER.warn("Dropping data chunk {} - no active receiver (StartMessage was never received or data was cleared)", index);
+            logger.warn("Dropping data chunk {} - no active receiver (StartMessage was never received or data was cleared)", index);
             return;
         }
 
@@ -189,7 +192,7 @@ public abstract class CoreClientRegistry<
             currentDataReceiver.cancelOperation();
         }
 
-        currentDataReceiver = new DataReceiver(totalMessages);
+        currentDataReceiver = new DataReceiver(getModId(), totalMessages);
         CompletableFuture<byte[]> currentPromise = activeDataPromise.get();
 
         if (currentPromise.isDone()) {
@@ -207,7 +210,7 @@ public abstract class CoreClientRegistry<
         });
 
         startLogging();
-        LOGGER.info("Started receiving data");
+        logger.info("Started receiving data");
     }
 
     public synchronized void clearReceivedData() {
@@ -218,23 +221,23 @@ public abstract class CoreClientRegistry<
         }
 
         activeDataPromise.set(new CompletableFuture<>());
-        LOGGER.info("Cleared data");
+        logger.info("Cleared data");
     }
 
     public synchronized void reloadData() {
         // reload is called on login, causing clearing already received data
         if (loggedIn.get()) {
-            LOGGER.info("Reloading data");
+            logger.info("Reloading data");
             clearReceivedData();
         }
     }
 
     public synchronized void loggingIn(boolean modAvailableOnServer) {
-        LOGGER.info("Player login received");
+        logger.info("Player login received");
         loggedIn.set(true);
 
         if (!modAvailableOnServer) {
-            LOGGER.info("Mod is not present on the server. Completing sync with empty data.");
+            logger.info("Mod is not present on the server. Completing sync with empty data.");
             CompletableFuture<byte[]> currentPromise = activeDataPromise.get();
 
             if (!currentPromise.isDone()) {
@@ -244,7 +247,7 @@ public abstract class CoreClientRegistry<
     }
 
     public synchronized void loggingOut() {
-        LOGGER.info("Player logout received");
+        logger.info("Player logout received");
 
         CompletableFuture<byte[]> oldPromise = activeDataPromise.get();
 
@@ -265,14 +268,14 @@ public abstract class CoreClientRegistry<
 
         receiver.forceDone();
         stopLogging(false);
-        LOGGER.info("Finished receiving data");
+        logger.info("Finished receiving data");
     }
 
     private void startLogging() {
         Runnable logTask = () -> {
             long count = receivedChunksPerSecond.getAndSet(0);
 
-            LOGGER.info("Received {} chunk(s) per second", count);
+            logger.info("Received {} chunk(s) per second", count);
         };
 
         receivedChunks.set(0);
@@ -286,14 +289,14 @@ public abstract class CoreClientRegistry<
             long count = receivedChunksPerSecond.getAndSet(0);
 
             if (!forcedStop) {
-                LOGGER.info("Received last {} chunk(s). Done receiving data.", count);
+                logger.info("Received last {} chunk(s). Done receiving data.", count);
             }
 
             loggerScheduler.shutdownNow();
 
             try {
                 if (!loggerScheduler.awaitTermination(5, TimeUnit.SECONDS)) {
-                    LOGGER.warn("Logging scheduler didn't stop in time!");
+                    logger.warn("Logging scheduler didn't stop in time!");
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();

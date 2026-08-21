@@ -1,7 +1,8 @@
 package com.yanny.awi.forge.platform;
 
 import com.google.common.base.Suppliers;
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
+import com.yanny.awi.Utils;
 import com.yanny.awi.api.AwiEntrypoint;
 import com.yanny.awi.api.IPlugin;
 import com.yanny.awi.platform.services.IPlatformHelper;
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class ForgePlatformHelper implements IPlatformHelper {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     private final Supplier<List<IPlugin>> pluginsSupplier = Suppliers.memoize(this::loadPlugins);
 

@@ -1,7 +1,8 @@
 package com.yanny.awi.plugin.common.nodes;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.RangeValue;
+import com.yanny.awi.Utils;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.ChunkPos;
@@ -39,7 +40,7 @@ import java.util.function.Function;
  * </ul>
  */
 public class NodeUtils {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     // How far below the preliminary surface vanilla builds surface (SurfaceRules.Context constant), used to derive minSurfaceLevel.
     private static final int SURFACE_BUILD_DEPTH = 8;
