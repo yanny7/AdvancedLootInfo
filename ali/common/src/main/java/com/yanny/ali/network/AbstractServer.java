@@ -1,6 +1,6 @@
 package com.yanny.ali.network;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.network.NetworkUtils;
 import com.yanny.aci.tooltip.TooltipContext;
@@ -15,6 +15,7 @@ import com.yanny.ali.manager.AliServerRegistry;
 import com.yanny.ali.manager.FakeLootDataManager;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.common.EntityLootTableResolver;
+import com.yanny.ali.plugin.common.nodes.EntityLootTableNode;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
@@ -33,7 +34,9 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.ReloadableServerRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.npc.villager.VillagerProfession;
 import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
@@ -56,7 +59,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class AbstractServer {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     private final List<LootDataChunkMessage> chunks = new ArrayList<>();
     private FakeLootDataManager fakeLootDataManager;
@@ -70,12 +73,23 @@ public abstract class AbstractServer {
     }
 
     public final void readLootTables(ReloadableServerRegistries.Holder manager) {
+        AliServerRegistry serverRegistry = PluginManager.getInstance().serverRegistry;
+
+        TooltipContext.setPalette(serverRegistry.getTooltipCache());
+
+        try {
+            readLootTables(manager, serverRegistry);
+        } finally {
+            TooltipContext.clearPalette();
+        }
+    }
+
+    private void readLootTables(ReloadableServerRegistries.Holder manager, AliServerRegistry serverRegistry) {
         LOGGER.info("Started reading loot info");
 
         long startTime = System.currentTimeMillis();
         AliConfig config = PluginManager.getInstance().commonRegistry.getConfiguration();
 
-        AliServerRegistry serverRegistry = PluginManager.getInstance().serverRegistry;
         Map<Identifier, LootTable> lootTables = collectLootTables(manager);
         Map<Identifier, IDataNode> lootNodes = new HashMap<>();
         Map<Identifier, LootTable> unprocessedLootTables = new HashMap<>(lootTables);
@@ -109,7 +123,7 @@ public abstract class AbstractServer {
 
         // storing and compressing data
         serverRegistry.getTooltipCache().encode(serverRegistry, buf);
-        NetworkUtils.writeMapData(Utils.MOD_ID, serverRegistry, buf, lootNodes);
+        writeLootData(serverRegistry, buf, lootNodes);
         NetworkUtils.writeMapData(Utils.MOD_ID, serverRegistry, buf, tradeNodes);
 
         if (!NetworkUtils.writeNodeData(Utils.MOD_ID, serverRegistry, buf, Identifier.withDefaultNamespace("wandering_trader"), wanderingTraderNode)) {
@@ -277,17 +291,13 @@ public abstract class AbstractServer {
         return lootNodes;
     }
 
-    /**
-     * Matches the shape produced by vanilla's {@code dropSelf}: a single pool with exactly one roll, holding a single
-     * {@link LootItem} for the block's own item. Functions and conditions make the table non-default unless their type
-     * is listed in the config's {@code defaultBlockLootFunctions}/{@code defaultBlockLootConditions}.
-     */
     private static boolean isDefaultBlockDrop(AliServerRegistry serverRegistry, AliConfig config, Block block, @Nullable LootTable lootTable) {
         if (lootTable == null || !isIgnoredFunctions(config, lootTable.functions)) {
             return false;
         }
 
-        List<LootPool> pools = lootTable.pools;
+        // mods inject entry-less pools into every block table, keeping them here would match no table at all
+        List<LootPool> pools = lootTable.pools.stream().filter((p) -> !p.entries.isEmpty()).toList();
 
         if (pools.size() != 1) {
             return false;
@@ -358,7 +368,7 @@ public abstract class AbstractServer {
                 List<Item> items = lootTableItems.getOrDefault(location, Collections.emptyList());
                 List<ILootModifier<?>> lootModifiers = Stream.concat(
                         // the only step that still needs an instance, and only when global loot modifiers exist at all
-                        entityLootModifiers.stream().filter((m) -> entityTypes.stream().anyMatch((t) -> resolver.getEntities(t).stream().anyMatch((e) -> predicateModifier(m, e, items)))),
+                        entityLootModifiers.stream().filter((m) -> entityTypes.stream().anyMatch((t) -> sampleEntities(resolver, t, location).stream().anyMatch((e) -> predicateModifier(m, e, items)))),
                         lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
                 ).toList();
 
@@ -371,7 +381,7 @@ public abstract class AbstractServer {
                             fakePools.forEach(lootTableNode::addChildren);
                         }
 
-                        lootNodes.put(location, node);
+                        lootNodes.put(location, asEntityNode(node, entityTypes));
                     } else if (!lootModifiers.isEmpty()) {
                         IDataNode node = serverRegistry.parseTable(lootModifiers);
                         List<IDataNode> fakePools = getFakeLootPools(location, serverRegistry, fakeLootTables);
@@ -380,12 +390,12 @@ public abstract class AbstractServer {
                             fakePools.forEach(lootTableNode::addChildren);
                         }
 
-                        lootNodes.put(location, node);
+                        lootNodes.put(location, asEntityNode(node, entityTypes));
                     } else {
                         LootTable fakeLootTable = fakeLootTables.get(location);
 
                         if (fakeLootTable != null) {
-                            lootNodes.put(location, serverRegistry.parseTable(Collections.emptyList(), fakeLootTable));
+                            lootNodes.put(location, asEntityNode(serverRegistry.parseTable(Collections.emptyList(), fakeLootTable), entityTypes));
                         } else {
                             LOGGER.debug("Missing entity loot table for {}", location);
                         }
@@ -400,6 +410,57 @@ public abstract class AbstractServer {
 
         lootTables.keySet().removeAll(disabledLootTables);
         return lootNodes;
+    }
+
+    private static void writeLootData(AliServerRegistry serverRegistry, RegistryFriendlyByteBuf buf, Map<ResourceLocation, IDataNode> lootNodes) {
+        int countIndex = buf.writerIndex();
+        int successfulNodes = 0;
+
+        buf.writeInt(lootNodes.size());
+
+        for (Map.Entry<ResourceLocation, IDataNode> entry : lootNodes.entrySet()) {
+            int startOfEntry = buf.writerIndex();
+
+            buf.writeResourceLocation(entry.getKey());
+            buf.writeResourceLocation(entry.getValue().getId());
+
+            if (NetworkUtils.writeNodeData(Utils.MOD_ID, serverRegistry, buf, entry.getKey(), entry.getValue())) {
+                successfulNodes++;
+            } else {
+                buf.writerIndex(startOfEntry);
+            }
+        }
+
+        if (successfulNodes != lootNodes.size()) {
+            LOGGER.warn("Only {} of {} node(s) were encoded successfully", successfulNodes, lootNodes.size());
+
+            int endIndex = buf.writerIndex();
+
+            buf.writerIndex(countIndex);
+            buf.writeInt(successfulNodes);
+            buf.writerIndex(endIndex);
+        }
+
+        lootNodes.clear();
+    }
+
+    @NotNull
+    private static List<Entity> sampleEntities(EntityLootTableResolver resolver, EntityType<?> type, ResourceLocation lootTable) {
+        List<Entity> entities = resolver.getEntities(type);
+        List<Entity> variants = entities.stream().filter((e) -> e instanceof Mob mob && mob.getLootTable().equals(lootTable)).toList();
+
+        // a table claimed by the entityLootTables configuration has an id no instance of the type reports, so testing
+        // the modifier against nothing would silently drop it
+        return variants.isEmpty() ? entities : variants;
+    }
+
+    @NotNull
+    private static IDataNode asEntityNode(IDataNode node, List<EntityType<?>> entityTypes) {
+        if (node instanceof LootTableNode lootTableNode) {
+            return new EntityLootTableNode(lootTableNode, entityTypes.get(0));
+        }
+
+        return node;
     }
 
     @NotNull

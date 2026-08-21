@@ -1,9 +1,4 @@
 {
-  "aci.util.auto_detected": "Auto-detected: %s",
-  "aci.util.entry": "Entry:",
-  "aci.util.missing": "Not implemented: %s",
-  "aci.util.removed": "REMOVED",
-  "aci.util.tag": "Tag: %s",
   "ali.description.chance": "Chance: %s%s",
   "ali.description.chance_bonus": "%s (%s %s)",
   "ali.description.count": "Count: %s",

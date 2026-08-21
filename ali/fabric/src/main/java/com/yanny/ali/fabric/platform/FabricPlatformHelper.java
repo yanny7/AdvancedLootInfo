@@ -1,6 +1,7 @@
 package com.yanny.ali.fabric.platform;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
+import com.yanny.ali.Utils;
 import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.platform.services.IPlatformHelper;
 import net.fabricmc.loader.api.FabricLoader;
@@ -16,7 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class FabricPlatformHelper implements IPlatformHelper {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     @NotNull
     @Override

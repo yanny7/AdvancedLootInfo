@@ -1,6 +1,7 @@
 package com.yanny.awi.rei.compatibility;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
+import com.yanny.awi.Utils;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.compatibility.GenericUtils;
 import com.yanny.awi.manager.AwiClientRegistry;
@@ -41,7 +42,7 @@ import java.util.function.Function;
 
 @SuppressWarnings("UnstableApiUsage")
 public class ReiCompatibility implements REIClientPlugin {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     private final Map<Holder, List<RecipeHolder>> dimensions = new LinkedHashMap<>();
 

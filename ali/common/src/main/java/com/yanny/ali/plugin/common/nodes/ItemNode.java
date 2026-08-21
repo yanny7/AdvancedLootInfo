@@ -1,7 +1,7 @@
 package com.yanny.ali.plugin.common.nodes;
 
 import com.mojang.datafixers.util.Either;
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
@@ -33,7 +33,7 @@ import java.util.function.Predicate;
 
 public class ItemNode implements IDataNode, IItemNode {
     public static final Identifier ID = Utils.modLoc("item");
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
     private static final StreamCodec<RegistryFriendlyByteBuf, TagKey<Item>> ITEM_TAG_STREAM_CODEC =
             ByteBufCodecs.fromCodecWithRegistries(TagKey.codec(Registries.ITEM));
     private static final StreamCodec<RegistryFriendlyByteBuf, TagKey<Block>> BLOCK_TAG_STREAM_CODEC =

@@ -1,8 +1,9 @@
 package com.yanny.ali.plugin.mods;
 
 import com.mojang.datafixers.util.Either;
-import com.mojang.logging.LogUtils;
 import com.mojang.serialization.MapCodec;
+import com.yanny.aci.CommonLogUtils;
+import com.yanny.ali.Utils;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
 import net.minecraft.advancements.criterion.EntitySubPredicate;
@@ -31,7 +32,7 @@ import java.util.List;
 import java.util.stream.StreamSupport;
 
 public class PluginUtils {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     public static <T extends BaseAccessor<?> & IEntryItemCollector> void registerEntryItemCollector(IServerRegistry registry, Class<T> clazz) {
         ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);

@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package com.yanny.ali.emi;
+package com.yanny.awi.emi;
 
 import javax.annotation.ParametersAreNonnullByDefault;

@@ -4,9 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DynamicOps;
+import com.yanny.aci.CommonLogUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -20,14 +20,15 @@ import java.nio.file.Path;
 import java.util.function.Supplier;
 
 public class CoreConfigUtils {
-    private static final Logger LOGGER = LogUtils.getLogger();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     @NotNull
     public static <T extends ICoreConfig> T readConfiguration(@Nullable Path configDir, String modId, String fileName,
                                                               Codec<T> codec, DynamicOps<JsonElement> ops, Supplier<T> factory) {
+        Logger logger = CommonLogUtils.getLogger(modId);
+
         if (configDir == null) {
-            LOGGER.warn("[{}] Failed to obtain config dir path!", modId);
+            logger.warn("Failed to obtain config dir path!");
             return factory.get();
         }
 
@@ -38,7 +39,7 @@ public class CoreConfigUtils {
             try {
                 Files.createDirectories(modConfigDir);
             } catch (IOException e) {
-                LOGGER.warn("[{}] Failed to create path {} for configuration", modId, modConfigDir);
+                logger.warn("Failed to create path {} for configuration", modConfigDir);
                 return factory.get();
             }
         }
@@ -53,25 +54,25 @@ public class CoreConfigUtils {
         int currentVersion = loadedConfig.getCurrentVersion();
 
         if (loadedConfig.getConfigVersion() < currentVersion) {
-            LOGGER.info("[{}] Config version mismatch (found {}, expected {}). Re-creating...", modId, loadedConfig.getConfigVersion(), currentVersion);
+            logger.info("Config version mismatch (found {}, expected {}). Re-creating...", loadedConfig.getConfigVersion(), currentVersion);
 
             try {
                 File backupFile = new File(config.getAbsolutePath() + ".bak");
 
                 if (backupFile.exists()) {
                     if (!backupFile.delete()) {
-                        LOGGER.warn("[{}] Failed to delete backup file {}", modId, backupFile);
+                        logger.warn("Failed to delete backup file {}", backupFile);
                     }
                 }
 
                 if (!config.renameTo(backupFile)) {
-                    LOGGER.warn("[{}] Failed to rename config file {} to {}", modId, config, backupFile);
+                    logger.warn("Failed to rename config file {} to {}", config, backupFile);
                 }
 
                 saveConfig(modId, configFile, codec, ops, factory);
                 return load(modId, configFile, codec, ops, factory);
             } catch (Exception e) {
-                LOGGER.warn("[{}] Failed to rotate outdated config file!", modId, e);
+                logger.warn("Failed to rotate outdated config file!", e);
             }
         }
 
@@ -80,19 +81,23 @@ public class CoreConfigUtils {
 
     @NotNull
     private static <T extends ICoreConfig> T load(String modId, Path configFilePath, Codec<T> codec, DynamicOps<JsonElement> ops, Supplier<T> factory) {
+        Logger logger = CommonLogUtils.getLogger(modId);
+
         try (Reader reader = Files.newBufferedReader(configFilePath)) {
-            LOGGER.info("[{}] Loading configuration file {}", modId, configFilePath);
+            logger.info("Loading configuration file {}", configFilePath);
 
             JsonElement json = JsonParser.parseReader(reader);
 
             return codec.parse(ops, json).getOrThrow((s) -> new RuntimeException("Config error: " + s));
         } catch (Exception e) {
-            LOGGER.warn("[{}] Error while reading configuration file: {}", modId, e.getMessage(), e);
+            logger.warn("Error while reading configuration file: {}", e.getMessage(), e);
             return factory.get();
         }
     }
 
     private static <T extends ICoreConfig> void saveConfig(String modId, Path configFilePath, Codec<T> codec, DynamicOps<JsonElement> ops, Supplier<T> factory) {
+        Logger logger = CommonLogUtils.getLogger(modId);
+
         try (FileWriter writer = new FileWriter(configFilePath.toFile())) {
             T config = factory.get();
 
@@ -101,9 +106,9 @@ public class CoreConfigUtils {
             JsonElement json = codec.encodeStart(ops, config).getOrThrow((s) -> new RuntimeException("Config save error: " + s));
 
             GSON.toJson(json, writer);
-            LOGGER.info("[{}] Created new configuration file {}", modId, configFilePath);
+            logger.info("Created new configuration file {}", configFilePath);
         } catch (Exception e) {
-            LOGGER.warn("[{}] Error while writing configuration file: {}", modId, e.getMessage(), e);
+            logger.warn("Error while writing configuration file: {}", e.getMessage(), e);
         }
     }
 }

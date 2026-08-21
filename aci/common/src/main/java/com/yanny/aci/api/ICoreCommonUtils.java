@@ -4,5 +4,8 @@ import org.jetbrains.annotations.NotNull;
 
 public interface ICoreCommonUtils<TConfig> {
     @NotNull
+    String getModId();
+
+    @NotNull
     TConfig getConfiguration();
 }
