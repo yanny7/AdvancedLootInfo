@@ -5,12 +5,12 @@ import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IServerUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 
 public class EntityLootTableNode extends LootTableNode {
-    public static final ResourceLocation ID = Utils.modLoc("entity_loot_table");
+    public static final Identifier ID = Utils.modLoc("entity_loot_table");
 
     private final EntityType<?> entityType;
 
@@ -21,13 +21,13 @@ public class EntityLootTableNode extends LootTableNode {
 
     public EntityLootTableNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
-        entityType = BuiltInRegistries.ENTITY_TYPE.get(buf.readResourceLocation());
+        entityType = BuiltInRegistries.ENTITY_TYPE.getValue(buf.readIdentifier());
     }
 
     @Override
     public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         super.encodeNode(utils, buf);
-        buf.writeResourceLocation(BuiltInRegistries.ENTITY_TYPE.getKey(entityType));
+        buf.writeIdentifier(BuiltInRegistries.ENTITY_TYPE.getKey(entityType));
     }
 
     @NotNull
@@ -37,7 +37,7 @@ public class EntityLootTableNode extends LootTableNode {
 
     @NotNull
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 }

@@ -18,7 +18,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
@@ -478,7 +477,7 @@ public class GenericUtils {
 
         for (int i = 0; i < lootDataCount; i++) {
             Identifier location = readerBuf.readIdentifier();
-            ResourceLocation id = readerBuf.readResourceLocation();
+            Identifier id = readerBuf.readIdentifier();
 
             lootData.put(location, utils.getDataNodeFactory(id).apply(utils, readerBuf));
         }
