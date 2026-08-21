@@ -1,6 +1,6 @@
 # aci/fabric/CLAUDE.md
 
-Guidance for `aci/fabric` (`com.yanny.aci.fabric`) — ACI's Fabric loader wrapper; its Forge counterpart is `aci/forge` (see `aci/forge/CLAUDE.md`). See `aci/CLAUDE.md` for the library this packages. Unlike `ali/fabric` and `awi/fabric` this module carries **no mod logic at all**: ACI has no `ModInitializer`, no client initializer, no mixins, no access widener and no platform-service implementation (`ICorePlatformHelper` is implemented by each *mod's* own `IPlatformHelper`, not here). Its whole job is to shadow `aci:common` into a jar the loader accepts.
+Guidance for `aci/fabric` (`com.yanny.aci.fabric`) — ACI's Fabric loader wrapper; its Forge and NeoForge counterparts are `aci/forge` and `aci/neoforge` (see `aci/forge/CLAUDE.md`, `aci/neoforge/CLAUDE.md`). See `aci/CLAUDE.md` for the library this packages. Unlike `ali/fabric` and `awi/fabric` this module carries **no mod logic at all**: ACI has no `ModInitializer`, no client initializer, no mixins, no access widener and no platform-service implementation (`ICorePlatformHelper` is implemented by each *mod's* own `IPlatformHelper`, not here). Its whole job is to shadow `aci:common` into a jar the loader accepts.
 
 ## What is in it
 

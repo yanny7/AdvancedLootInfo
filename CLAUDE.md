@@ -9,6 +9,7 @@ CLAUDE.md                      — this file: repo layout, module map, commands,
 aci/CLAUDE.md                  — shared core library mod: plugin-manager base, tooltip tree system, language wiring
 aci/fabric/CLAUDE.md           — ACI's Fabric loader wrapper (no mod logic; datagen + metadata only)
 aci/forge/CLAUDE.md            — ACI's Forge loader wrapper (no mod logic; datagen + metadata only)
+aci/neoforge/CLAUDE.md         — ACI's NeoForge loader wrapper (no mod logic; datagen + metadata only)
 ali/CLAUDE.md                  — ALI mod: loot/trade data-scan, plugin wiring, config schema, GLM, mod-compat shims, networking (canonical)
 ali/common-emi/CLAUDE.md       — canonical EMI/JEI/REI viewer-integration pattern (shared by all 6 common-<viewer> modules) + EMI specifics
 ali/common-jei/CLAUDE.md       — JEI specifics (references ali/common-emi/CLAUDE.md for the shared pattern)
@@ -55,7 +56,7 @@ Each mod (`ali/`, `awi/`, `aci/`) follows the same subproject pattern:
 - `common-lootjs` (ALI only) — optional LootJS compatibility module.
 - `fabric`, `forge`, `neoforge` — per-loader entry points/glue code. Both ALI and AWI ship whichever of these are enabled on the current branch (`forge` from `1.20.1` on, `neoforge` from `1.21.1` on).
 
-`aci` has only `common` + the loader modules — no viewer or compat subprojects, since it registers nothing with a recipe viewer. Its loader modules carry no mod logic at all (no mixins, no access widener, no platform-service implementation); they exist to shadow `aci:common` into a loadable jar. `ali:common`/`awi:common` compile against `aci:common` directly (`configuration: "namedElements"`), while the ALI/AWI loader modules take `modImplementation project(":aci:fabric")` / `project(":aci:forge")` for the runtime — `aci:common` is deliberately **not** in their `commonProjects` list, so `com.yanny.aci.*` is not duplicated inside their jars.
+`aci` has only `common` + the loader modules — no viewer or compat subprojects, since it registers nothing with a recipe viewer. Its loader modules carry no mod logic at all (no mixins, no access widener, no platform-service implementation); they exist to shadow `aci:common` into a loadable jar. `ali:common`/`awi:common` compile against `aci:common` directly (`configuration: "namedElements"`), while the ALI/AWI loader modules take `modImplementation project(":aci:<loader>")` for the runtime — `aci:common` is deliberately **not** in their `commonProjects` list, so `com.yanny.aci.*` is not duplicated inside their jars.
 
 Which optional subprojects get included is controlled entirely by `settings.gradle` reading flags from `gradle.properties` (e.g. `emi_enabled`, `jei_enabled`, `rei_enabled`, `lootjs_enabled`, `fabric_enabled`, `forge_enabled`, `neoforge_enabled`). The root `build.gradle` further gates per-project availability with `<platform>_<viewer>_enabled` properties and wires in the correct `commonProjects` dependency list for each loader module.
 
@@ -96,7 +97,10 @@ Build/work on a single mod or module:
 ./gradlew :aci:common:build
 ./gradlew :aci:fabric:build
 ./gradlew :aci:forge:build
+./gradlew :aci:neoforge:build
 ```
+
+On a checkout with no `aci/<loader>/build/libs/` jar yet, **every** Gradle invocation fails while configuring `:ali:fabric` with `NoSuchFileException: aci/fabric/build/libs/AdvancedCoreInfo-fabric-<version>.jar` — `modImplementation project(":aci:<loader>")` resolves at configuration time. `--configure-on-demand` does not help (loom then fails with `Cannot get MappingsProvider before it has been setup`). Bootstrap it by commenting out the six `modImplementation project(":aci:<loader>")` lines in the ALI/AWI loader build scripts, building the three `:aci:<loader>:build` targets, then restoring them.
 
 After editing `aci`, a dev run may keep loading a stale copy: loom caches remapped mod dependencies keyed on version, and `aci_version` does not move during development. Clear it with `rm -rf .gradle/loom-cache/remapped_mods/*/com/yanny/aci`.
 
@@ -132,7 +136,7 @@ AWI's base-layout scan is guarded by a golden file instead of unit assertions, w
 
 Tests are organized behind JUnit Platform `@Suite`/`@SelectClasses` runners (`TooltipTestSuite` in each mod's `common` test tree) that bootstrap Minecraft's registries/resources (`Bootstrap.bootStrap()`, `SharedConstants.setVersion(...)`) once before delegating to individual `@Test` classes — run the suite class, not only an individual test class, if a test depends on that shared bootstrap state.
 
-Generate data (recipes/loot/lang, per loader) via the IDE run configurations in `.idea/runConfigurations/Minecraft_Data_*.xml`, or the equivalent `run<Platform><Loader>Datagen`-style Gradle tasks wired by the `architectury-loom` plugin. All three mods have datagen; ACI's generates only its four `aci.util.*` language keys. Fabric datagen initialises the `fabric-datagen` entrypoint of every loaded mod, so a broken ACI datagen class breaks ALI's and AWI's datagen runs too.
+Generate data (recipes/loot/lang, per loader) via the IDE run configurations in `.idea/runConfigurations/Minecraft_Data_*.xml`, or the equivalent `run<Platform><Loader>Datagen`-style Gradle tasks wired by the `architectury-loom` plugin. All three mods have datagen; ACI's generates only its `aci.util.*` language keys. Fabric datagen initialises the `fabric-datagen` entrypoint of every loaded mod, so a broken ACI datagen class breaks ALI's and AWI's datagen runs too.
 
 ## Versioning
 

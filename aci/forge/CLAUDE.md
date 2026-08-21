@@ -1,6 +1,6 @@
 # aci/forge/CLAUDE.md
 
-Guidance for `aci/forge` (`com.yanny.aci.forge`) — ACI's Forge loader wrapper. See `aci/CLAUDE.md` for the library this packages, and `aci/fabric/CLAUDE.md` for the Fabric half. Like that half it carries **no mod logic**: no networking, no mixins, no access widener, no platform-service implementation. Its whole job is to shadow `aci:common` into a jar Forge accepts.
+Guidance for `aci/forge` (`com.yanny.aci.forge`) — ACI's Forge loader wrapper. See `aci/CLAUDE.md` for the library this packages, and `aci/fabric/CLAUDE.md` / `aci/neoforge/CLAUDE.md` for the other two halves. Like those it carries **no mod logic**: no networking, no mixins, no access widener, no platform-service implementation. Its whole job is to shadow `aci:common` into a jar Forge accepts.
 
 ## What is in it
 
