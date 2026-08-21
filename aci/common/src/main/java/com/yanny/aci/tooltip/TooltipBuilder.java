@@ -1,13 +1,11 @@
 package com.yanny.aci.tooltip;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.language.IMultiKey;
-import com.yanny.aci.manager.CorePluginManager;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +13,6 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 public class TooltipBuilder {
-    private static final Logger LOGGER = LogUtils.getLogger();
-
     static final char TRANSLATE_MARKER = '\uE000';
 
     private IMultiKey translatableKey;
@@ -249,7 +245,8 @@ public class TooltipBuilder {
                 finalChildren.clear();
             } else {
                 if (potentiallyMergeable && !isArray && !hasMultiKey) {
-                    LOGGER.info("Tooltip {} could be merged if defined singular form in {}", translatableKey.plural(), TooltipContext.get());
+                    CommonLogUtils.getLogger(TooltipContext.getPalette().getModId())
+                            .info("Tooltip {} could be merged if defined singular form in {}", translatableKey.plural(), TooltipContext.get());
                 }
 
                 if (hasMultiKey && (finalChildren.isEmpty() || values != null)) {
@@ -260,7 +257,7 @@ public class TooltipBuilder {
             }
         }
 
-        return TooltipNode.getOrCreate(CorePluginManager.INSTANCE.serverRegistry.getTooltipCache(), finalKeyStr, finalValues, finalComponent, finalFlags, finalChildren);
+        return TooltipNode.getOrCreate(TooltipContext.getPalette(), finalKeyStr, finalValues, finalComponent, finalFlags, finalChildren);
     }
 
     private short getFlags() {

@@ -1,0 +1,6 @@
+{
+    "pack": {
+        "description": "${aci_mod_id} resources",
+        "pack_format": 15
+    }
+}

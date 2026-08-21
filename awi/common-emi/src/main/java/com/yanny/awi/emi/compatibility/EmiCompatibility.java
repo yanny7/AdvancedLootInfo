@@ -1,6 +1,7 @@
 package com.yanny.awi.emi.compatibility;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
+import com.yanny.awi.Utils;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.compatibility.GenericUtils;
 import com.yanny.awi.emi.compatibility.emi.EmiBiomeLoot;
@@ -27,7 +28,7 @@ import java.util.Map;
 
 @EmiEntrypoint
 public class EmiCompatibility implements EmiPlugin {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     @Override
     public void register(EmiRegistry emiRegistry) {

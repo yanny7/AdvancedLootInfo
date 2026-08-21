@@ -8,6 +8,7 @@ import com.yanny.aci.tooltip.TooltipNodePalette;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.configuration.AliConfig;
+import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.LootConditionTypes;
@@ -117,7 +118,14 @@ public class TooltipTestSuite {
         PluginManager.getInstance().registerCommonEvent();
         PluginManager.getInstance().registerClientEvent();
         PluginManager.getInstance().registerServerEvent(null);
+        TooltipContext.setPalette(PluginManager.getInstance().serverRegistry.getTooltipCache());
         UTILS = new IServerUtils() {
+            @NotNull
+            @Override
+            public String getModId() {
+                return PluginManager.getInstance().serverRegistry.getModId();
+            }
+
             @NotNull
             @Override
             public List<Entity> createEntities(EntityType<?> type, Level level) {

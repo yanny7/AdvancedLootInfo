@@ -7,30 +7,28 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LanguageHolder {
-    public static final Map<String, String> TRANSLATION_MAP;
+    public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 
     static {
-        CoreLang.register(Lang.FeatureConfiguration.class);
-        CoreLang.register(Lang.RuleTest.class);
-        CoreLang.register(Lang.Value.class);
-        CoreLang.register(Lang.Branch.class);
-        CoreLang.register(Lang.BaseTerrain.class);
-        CoreLang.register(Lang.Placement.class);
-        CoreLang.register(Lang.PlacementModifier.class);
-        CoreLang.register(Lang.TrunkPlacer.class);
-        CoreLang.register(Lang.FeatureSize.class);
-        CoreLang.register(Lang.BlockStateProvider.class);
-        CoreLang.register(Lang.TreeDecorator.class);
-        CoreLang.register(Lang.RootPlacer.class);
-        CoreLang.register(Lang.FoliagePlacer.class);
-        CoreLang.register(Lang.IntProvider.class);
-        CoreLang.register(Lang.FloatProvider.class);
-        CoreLang.register(Lang.HeightProvider.class);
-        CoreLang.register(Lang.BlockPredicate.class);
-        CoreLang.register(Lang.GenerationStep.class);
-        CoreLang.register(Lang.StructureProcessor.class);
-        CoreLang.register(Lang.Kind.class);
-
-        TRANSLATION_MAP = new HashMap<>(CoreLang.TRANSLATION_MAP);
+        CoreLang.register(TRANSLATION_MAP, Lang.FeatureConfiguration.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.RuleTest.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.Value.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.Branch.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.BaseTerrain.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.Placement.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.PlacementModifier.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.TrunkPlacer.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.FeatureSize.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.BlockStateProvider.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.TreeDecorator.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.RootPlacer.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.FoliagePlacer.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.IntProvider.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.FloatProvider.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.HeightProvider.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.BlockPredicate.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.GenerationStep.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.StructureProcessor.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.Kind.class);
     }
 }

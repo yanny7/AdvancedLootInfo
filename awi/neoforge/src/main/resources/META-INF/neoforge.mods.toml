@@ -34,6 +34,13 @@ ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.awi]]
+modId="aci"
+type="required" #mandatory (Can be one of "required", "optional", "incompatible" or "discouraged")
+versionRange="${aci_version_range}"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.awi]]
 modId="emi"
 type="optional" #mandatory (Can be one of "required", "optional", "incompatible" or "discouraged")
 versionRange="${emi_version_range}"

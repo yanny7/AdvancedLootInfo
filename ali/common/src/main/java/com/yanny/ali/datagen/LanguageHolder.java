@@ -7,21 +7,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LanguageHolder {
-    public static final Map<String, String> TRANSLATION_MAP;
+    public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 
     static {
-        CoreLang.register(Lang.Conditions.class);
-        CoreLang.register(Lang.Functions.class);
-        CoreLang.register(Lang.EntitySubPredicates.class);
-        CoreLang.register(Lang.ConsumeEffects.class);
-        CoreLang.register(Lang.SlotSource.class);
-        CoreLang.register(Lang.Value.class);
-        CoreLang.register(Lang.Branch.class);
-        CoreLang.register(Lang.Description.class);
-        CoreLang.register(Lang.Group.class);
-        CoreLang.register(Lang.Multi.class);
-
-        TRANSLATION_MAP = new HashMap<>(CoreLang.TRANSLATION_MAP);
+        CoreLang.register(TRANSLATION_MAP, Lang.Conditions.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.Functions.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.EntitySubPredicates.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.ConsumeEffects.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.SlotSource.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.Value.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.Branch.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.Description.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.Group.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.Multi.class);
 
         TRANSLATION_MAP.put("emi.category.ali.block_loot", "Block Drops");
         TRANSLATION_MAP.put("emi.category.ali.plant_loot", "Plant Drops");

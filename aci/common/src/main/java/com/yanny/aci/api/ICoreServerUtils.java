@@ -9,6 +9,9 @@ import org.jetbrains.annotations.Nullable;
 
 public interface ICoreServerUtils<SELF extends ICoreServerUtils<?>> {
     @NotNull
+    String getModId();
+
+    @NotNull
     <T> TooltipBuilder getValueTooltip(SELF utils, @Nullable T value);
 
     @NotNull

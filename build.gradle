@@ -36,6 +36,14 @@ subprojects {
                 "awi_group"                    : awi_group,
                 "awi_description"              : awi_description,
 
+                "aci_mod_name"                 : aci_mod_name,
+                "aci_mod_id"                   : aci_mod_id,
+                "aci_version"                  : aci_version,
+                "aci_group"                    : aci_group,
+                "aci_description"              : aci_description,
+                "aci_version_range"            : aci_version_range,
+                "aci_version_range_fabric"     : aci_version_range_fabric,
+
                 "java_version"                 : java_version,
 
                 "minecraft_version"            : minecraft_version,
@@ -73,12 +81,15 @@ subprojects {
         def jei_available = jei_enabled == "true" && project.findProperty("${project.name}_jei_enabled") == "true"
         def rei_available = rei_enabled == "true" && project.findProperty("${project.name}_rei_enabled") == "true"
         def lootjs_available = lootjs_enabled == "true" && project.findProperty("${project.name}_lootjs_enabled") == "true"
+        def isAci = project.parent.name == "aci"
 
         ext {
-            commonProjects = [":aci:common"]
+            commonProjects = []
         }
 
-        if (project.parent.name == "ali") {
+        if (isAci) {
+            project.ext.commonProjects << ":aci:common"
+        } else if (project.parent.name == "ali") {
             project.ext.commonProjects << ":ali:common"
 
             if (emi_available) project.ext.commonProjects << ":ali:common-emi"
@@ -104,45 +115,47 @@ subprojects {
             if (rei_available) project.ext.commonProjects << ":awi:common-rei"
         }
 
-        // register tasks that allow running specific combination of recipe viewer and launcher
-        viewers.each { viewer ->
-            if (project.findProperty("${viewer}_enabled") == "true" && project.findProperty("${project.name}_${viewer}_enabled") == "true") {
-                tasks.register("run${project.parent.name.capitalize()}${project.name.capitalize()}${viewer.capitalize()}Client", GradleBuild) {
-                    group = "launchers"
-                    description = "Launch ${project.parent.name.capitalize()} ${project.name.toUpperCase()} with ${viewer.toUpperCase()} recipe viewer"
-                    setTasks([":${project.parent.name}:${project.name}:runClient".toString()])
-                    startParameter.projectProperties = ["recipe_viewer": viewer]
+        if (!isAci) {
+            // register tasks that allow running specific combination of recipe viewer and launcher
+            viewers.each { viewer ->
+                if (project.findProperty("${viewer}_enabled") == "true" && project.findProperty("${project.name}_${viewer}_enabled") == "true") {
+                    tasks.register("run${project.parent.name.capitalize()}${project.name.capitalize()}${viewer.capitalize()}Client", GradleBuild) {
+                        group = "launchers"
+                        description = "Launch ${project.parent.name.capitalize()} ${project.name.toUpperCase()} with ${viewer.toUpperCase()} recipe viewer"
+                        setTasks([":${project.parent.name}:${project.name}:runClient".toString()])
+                        startParameter.projectProperties = ["recipe_viewer": viewer]
+                    }
                 }
             }
-        }
 
-        dependencies {
-            def recipe_viewer = project.findProperty("recipe_viewer")
-            if (!recipe_viewer) {
-                if (emi_available) recipe_viewer = "emi"
-                else if (jei_available) recipe_viewer = "jei"
-                else if (rei_available) recipe_viewer = "rei"
-            }
-
-            if (emi_available) {
-                compileOnlyApi "dev.emi:emi-${project.name}:${emi_version}"
-
-                if (recipe_viewer == "emi") {
-                    runtimeOnly "dev.emi:emi-${project.name}:${emi_version}"
+            dependencies {
+                def recipe_viewer = project.findProperty("recipe_viewer")
+                if (!recipe_viewer) {
+                    if (emi_available) recipe_viewer = "emi"
+                    else if (jei_available) recipe_viewer = "jei"
+                    else if (rei_available) recipe_viewer = "rei"
                 }
-            }
-            if (jei_available && recipe_viewer == "jei") {
-                runtimeOnly "mezz.jei:jei-${minecraft_version}-${project.name}:${jei_version}"
-            }
-            if (rei_available) {
-                compileOnlyApi "me.shedaniel:RoughlyEnoughItems-api-${project.name}:${rei_version}"
 
-                if (recipe_viewer == "rei") {
-                    runtimeOnly "me.shedaniel:RoughlyEnoughItems-${project.name}:${rei_version}"
+                if (emi_available) {
+                    compileOnlyApi "dev.emi:emi-${project.name}:${emi_version}"
 
-                    if (project.name == "forge") {
-                        runtimeOnly "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
-                        runtimeOnly "dev.architectury:architectury-forge:${architectury_version}"
+                    if (recipe_viewer == "emi") {
+                        runtimeOnly "dev.emi:emi-${project.name}:${emi_version}"
+                    }
+                }
+                if (jei_available && recipe_viewer == "jei") {
+                    runtimeOnly "mezz.jei:jei-${minecraft_version}-${project.name}:${jei_version}"
+                }
+                if (rei_available) {
+                    compileOnlyApi "me.shedaniel:RoughlyEnoughItems-api-${project.name}:${rei_version}"
+
+                    if (recipe_viewer == "rei") {
+                        runtimeOnly "me.shedaniel:RoughlyEnoughItems-${project.name}:${rei_version}"
+
+                        if (project.name == "forge") {
+                            runtimeOnly "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
+                            runtimeOnly "dev.architectury:architectury-forge:${architectury_version}"
+                        }
                     }
                 }
             }
@@ -158,6 +171,10 @@ subprojects {
                 from(project(":awi:common").sourceSets.main.resources.srcDirs) {
                     include "pack.mcmeta"
                     include "awi.accesswidener"
+                }
+            } else if (project.parent.name == "aci") {
+                from(project(":aci:common").sourceSets.main.resources.srcDirs) {
+                    include "pack.mcmeta"
                 }
             }
 
@@ -198,6 +215,13 @@ allprojects {
 
             version = minecraft_version + "-" + awi_version
             group = awi_group
+        } else if (project.parent.name == "aci") {
+            base {
+                archivesName = "${aci_mod_name}-${project.name}"
+            }
+
+            version = minecraft_version + "-" + aci_version
+            group = aci_group
         }
     }
 
@@ -262,4 +286,58 @@ allprojects {
     tasks.withType(GenerateModuleMetadata).configureEach {
         enabled = false
     }
+}
+
+def uploadRunConfigTasks = ["ali", "awi", "aci"].collect { modId ->
+    tasks.register("generateUploadRunConfig${modId.capitalize()}") {
+        group = "ide"
+        description = "Writes an IntelliJ Python run configuration that uploads ${project.property("${modId}_mod_name")} to Modrinth and CurseForge"
+
+        def modName = project.property("${modId}_mod_name")
+        def parameters = [
+                "--mod-id=${modId}",
+                "--modrinth-project-id=${project.property("${modId}_modrinth_project_id")}",
+                "--curseforge-project-id=${project.property("${modId}_curseforge_project_id")}",
+                "--release-type=release",
+        ].join(" ")
+        def outputFile = file(".idea/runConfigurations/Upload_${modId.toUpperCase()}.xml")
+
+        outputs.file(outputFile)
+
+        doLast {
+            outputFile.parentFile.mkdirs()
+            outputFile.text = """<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Upload ${modId.toUpperCase()} (${modName})" type="PythonConfigurationType" factoryName="Python" folderName="Upload">
+    <module name="MultiLoader-AdvancedLootInfo"/>
+    <option name="ENV_FILES" value=""/>
+    <option name="INTERPRETER_OPTIONS" value=""/>
+    <option name="PARENT_ENVS" value="true"/>
+    <envs>
+      <env name="PYTHONUNBUFFERED" value="1"/>
+    </envs>
+    <option name="SDK_HOME" value=""/>
+    <option name="WORKING_DIRECTORY" value="\$PROJECT_DIR\$"/>
+    <option name="IS_MODULE_SDK" value="true"/>
+    <option name="ADD_CONTENT_ROOTS" value="true"/>
+    <option name="ADD_SOURCE_ROOTS" value="true"/>
+    <option name="SCRIPT_NAME" value="\$PROJECT_DIR\$/upload.py"/>
+    <option name="PARAMETERS" value="${parameters}"/>
+    <option name="SHOW_COMMAND_LINE" value="false"/>
+    <option name="EMULATE_TERMINAL" value="false"/>
+    <option name="MODULE_MODE" value="false"/>
+    <option name="REDIRECT_INPUT" value="false"/>
+    <option name="INPUT_FILE" value=""/>
+    <method v="2"/>
+  </configuration>
+</component>
+"""
+            logger.lifecycle("Wrote ${outputFile}")
+        }
+    }
+}
+
+tasks.register("generateUploadRunConfigs") {
+    group = "ide"
+    description = "Writes the IntelliJ Python run configurations for all upload targets"
+    dependsOn uploadRunConfigTasks
 }

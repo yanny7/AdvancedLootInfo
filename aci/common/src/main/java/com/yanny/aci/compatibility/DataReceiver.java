@@ -1,6 +1,6 @@
 package com.yanny.aci.compatibility;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
 import org.slf4j.Logger;
 
 import java.util.Map;
@@ -9,14 +9,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class DataReceiver {
-    private static final Logger LOGGER = LogUtils.getLogger();
-
+    private final Logger logger;
     private final CompletableFuture<byte[]> dataFuture = new CompletableFuture<>();
     private final Map<Integer, byte[]> chunkMap = new ConcurrentHashMap<>();
     private final int totalChunks;
     private final AtomicInteger receivedChunksCount = new AtomicInteger(0);
 
-    public DataReceiver(int expectedMessageCount) {
+    public DataReceiver(String modId, int expectedMessageCount) {
+        logger = CommonLogUtils.getLogger(modId);
         totalChunks = expectedMessageCount;
     }
 
@@ -26,7 +26,7 @@ public class DataReceiver {
         }
 
         if (chunkMap.put(index, data) != null) {
-            LOGGER.warn("Received duplicate chunk with index {}, ignoring", index);
+            logger.warn("Received duplicate chunk with index {}, ignoring", index);
             return;
         }
 
@@ -39,7 +39,7 @@ public class DataReceiver {
         if (!dataFuture.isDone()) {
             String errorMsg = String.format("Incomplete data! Expected %d chunks, but received only %d. Data is unusable.", totalChunks, receivedChunksCount.get());
 
-            LOGGER.error(errorMsg);
+            logger.error(errorMsg);
             dataFuture.completeExceptionally(new IllegalStateException(errorMsg));
         }
     }
@@ -59,7 +59,7 @@ public class DataReceiver {
             if (chunk == null) {
                 String errorMsg = String.format("Missing chunk with index %d out of %d. Data is unusable.", i, totalChunks);
 
-                LOGGER.error(errorMsg);
+                logger.error(errorMsg);
                 chunkMap.clear();
                 dataFuture.completeExceptionally(new IllegalStateException(errorMsg));
                 return;

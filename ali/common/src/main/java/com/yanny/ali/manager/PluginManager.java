@@ -1,6 +1,7 @@
 package com.yanny.ali.manager;
 
 import com.yanny.aci.manager.CorePluginManager;
+import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientRegistry;
 import com.yanny.ali.api.ICommonRegistry;
 import com.yanny.ali.api.IPlugin;
@@ -13,6 +14,10 @@ import java.util.List;
 
 public class PluginManager extends CorePluginManager<ICommonRegistry, IServerRegistry, AliCommonRegistry, AliClientRegistry, AliServerRegistry, IClientRegistry, IPlugin> {
     private static PluginManager pluginManager;
+
+    PluginManager() {
+        super(Utils.MOD_ID);
+    }
 
     public static PluginManager getInstance() {
         if (pluginManager == null) {

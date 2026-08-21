@@ -1,13 +1,14 @@
 package com.yanny.ali.plugin.server;
 
 import com.google.gson.JsonElement;
-import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipContext;
+import com.yanny.ali.Utils;
 import com.yanny.ali.api.IServerUtils;
 import net.minecraft.advancements.criterion.EntitySubPredicate;
 import net.minecraft.core.component.DataComponentType;
@@ -30,7 +31,7 @@ import java.util.Objects;
 import static com.yanny.ali.plugin.server.RegistriesTooltipUtils.*;
 
 public class MissingTooltipUtils {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     @NotNull
     public static TooltipBuilder getMissingEntryTooltip(IServerUtils utils, LootPoolEntryContainer entry) {

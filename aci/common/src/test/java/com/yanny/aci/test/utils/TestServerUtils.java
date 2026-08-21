@@ -11,12 +11,20 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class TestServerUtils implements ICoreServerUtils<TestServerUtils> {
+    private static final String MOD_ID = "aci_test";
+
     private final TooltipNodePalette palette;
     private final List<String> dictionary;
 
     public TestServerUtils(TooltipNodePalette palette, List<String> dictionary) {
         this.palette = palette;
         this.dictionary = dictionary;
+    }
+
+    @NotNull
+    @Override
+    public String getModId() {
+        return MOD_ID;
     }
 
     @NotNull

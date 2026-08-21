@@ -1,6 +1,6 @@
 package com.yanny.awi.jei.compatibility;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.awi.Utils;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.compatibility.GenericUtils;
@@ -36,7 +36,7 @@ import java.util.Map;
 
 @JeiPlugin
 public class JeiCompatibility implements IModPlugin {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     private static final Map<IRecipeCategory<RecipeHolder>, List<RecipeHolder>> dimensions = new HashMap<>();
 

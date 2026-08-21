@@ -34,6 +34,8 @@ configurations {
 dependencies {
     implementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     api "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+    common(project(path: ":aci:common", configuration: "namedElements")) { transitive false }
+    runtimeOnly project(path: ":aci:fabric", configuration: "namedElements")
 
     project.ext.commonProjects.each { p ->
         common(project(path: p)) { transitive false }

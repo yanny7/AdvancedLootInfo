@@ -1,7 +1,8 @@
 package com.yanny.ali.forge.platform;
 
 import com.google.common.base.Suppliers;
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
+import com.yanny.ali.Utils;
 import com.yanny.ali.api.AliEntrypoint;
 import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.platform.services.IPlatformHelper;
@@ -23,7 +24,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class ForgePlatformHelper implements IPlatformHelper {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     public static HolderLookup.Provider PROVIDER = null;
 

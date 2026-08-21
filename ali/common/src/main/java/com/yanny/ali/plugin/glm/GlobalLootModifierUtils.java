@@ -1,8 +1,9 @@
 package com.yanny.ali.plugin.glm;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.ali.Utils;
 import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
@@ -28,7 +29,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 public class GlobalLootModifierUtils {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     public static Optional<ILootModifier<?>> getLootModifier(List<LootItemCondition> conditions, Function<List<LootItemCondition>, List<IOperation>> operationSupplier, ILootTableIdConditionPredicate predicate) {
         if (GlobalLootModifierUtils.entityPredicate(conditions)) {

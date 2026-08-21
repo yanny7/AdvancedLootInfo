@@ -1,17 +1,15 @@
 package com.yanny.ali.compatibility.common;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.ICoreDataNode;
 import com.yanny.aci.api.Rect;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
-import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.AliClientRegistry;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.network.AbstractClient;
 import com.yanny.ali.network.RequestLootDataMessage;
-import com.yanny.ali.plugin.common.EntityLootTableResolver;
-import com.yanny.ali.plugin.common.nodes.LootTableNode;
+import com.yanny.ali.plugin.common.nodes.EntityLootTableNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.mods.PluginUtils;
 import io.netty.buffer.ByteBuf;
@@ -60,7 +58,7 @@ import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
 
 public class GenericUtils {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
     private static final Identifier TEXTURE_LOC = com.yanny.ali.Utils.modLoc("textures/gui/gui.png");
     private static final int WIDGET_SIZE = 36;
     private static final int DOTS_WIDTH = Minecraft.getInstance().font.width("...");
@@ -290,14 +288,14 @@ public class GenericUtils {
         }
     }
 
-    public static void processData(ClientLevel level, AliClientRegistry clientRegistry, AliConfig config, byte[] fullCompressedData,
+    public static void processData(AliClientRegistry clientRegistry, RegistryAccess registryAccess, byte[] fullCompressedData,
                                    Predicate<ItemStack> isVisible,
                                    QuadConsumer<IDataNode, Identifier, Block, List<ItemStack>> blockConsumer,
                                    QuadConsumer<IDataNode, Identifier, EntityType<?>, List<ItemStack>> entityConsumer,
                                    TriConsumer<IDataNode, Identifier, List<ItemStack>> gameplayConsumer,
                                    QuintConsumer<IDataNode, Identifier, VillagerProfession, List<ItemStack>, List<ItemStack>> traderConsumer,
                                    QuadConsumer<IDataNode, Identifier, List<ItemStack>, List<ItemStack>> wanderingTraderConsumer) {
-        Pair<Map<Identifier, IDataNode>, Map<Identifier, IDataNode>> pair = GenericUtils.decompressLootData(clientRegistry, fullCompressedData, level.registryAccess());
+        Pair<Map<Identifier, IDataNode>, Map<Identifier, IDataNode>> pair = GenericUtils.decompressLootData(clientRegistry, fullCompressedData, registryAccess);
         Map<Identifier, IDataNode> lootData = pair.getA();
         Map<Identifier, IDataNode> tradeData = pair.getB();
 
@@ -308,9 +306,6 @@ public class GenericUtils {
         // before the gameplay pass
         Set<Identifier> claimedLootTables = new HashSet<>();
         Map<Identifier, Set<Item>> handledBlockItems = new HashMap<>();
-        // entity entries are identified by their loot table, so a table shared by two entity types produces a single
-        // entry, shown under the first of them
-        Map<Identifier, List<EntityType<?>>> entityLootTables = new EntityLootTableResolver(clientRegistry, level).resolveAll(lootData.keySet());
 
         for (Block block : BuiltInRegistries.BLOCK) {
             Identifier location = Utils.getLootTableKey(block);
@@ -334,21 +329,13 @@ public class GenericUtils {
             }
         }
 
-        for (Map.Entry<Identifier, List<EntityType<?>>> entry : entityLootTables.entrySet()) {
-            Identifier location = entry.getKey();
+        for (Map.Entry<Identifier, IDataNode> entry : lootData.entrySet()) {
+            if (entry.getValue() instanceof EntityLootTableNode node) {
+                Identifier location = entry.getKey();
 
-            if (entry.getValue().stream().allMatch((t) -> config.disabledEntities.stream().anyMatch((f) -> f.equals(BuiltInRegistries.ENTITY_TYPE.getKey(t))))) {
+                entityConsumer.accept(node, location, node.getEntityType(), collectItems(node));
                 claimedLootTables.add(location);
-                continue;
             }
-
-            IDataNode node = lootData.get(location);
-
-            if (node != null) {
-                entityConsumer.accept(node, location, entry.getValue().getFirst(), collectItems(node));
-            }
-
-            claimedLootTables.add(location);
         }
 
         lootData.keySet().removeAll(claimedLootTables);
@@ -492,8 +479,9 @@ public class GenericUtils {
 
         for (int i = 0; i < lootDataCount; i++) {
             Identifier location = readerBuf.readIdentifier();
+            ResourceLocation id = readerBuf.readResourceLocation();
 
-            lootData.put(location, utils.getDataNodeFactory(LootTableNode.ID).apply(utils, readerBuf));
+            lootData.put(location, utils.getDataNodeFactory(id).apply(utils, readerBuf));
         }
     }
 
