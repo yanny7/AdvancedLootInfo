@@ -277,3 +277,57 @@ allprojects {
         withSourcesJar()
     }
 }
+
+def uploadRunConfigTasks = ["ali", "awi", "aci"].collect { modId ->
+    tasks.register("generateUploadRunConfig${modId.capitalize()}") {
+        group = "ide"
+        description = "Writes an IntelliJ Python run configuration that uploads ${project.property("${modId}_mod_name")} to Modrinth and CurseForge"
+
+        def modName = project.property("${modId}_mod_name")
+        def parameters = [
+                "--mod-id=${modId}",
+                "--modrinth-project-id=${project.property("${modId}_modrinth_project_id")}",
+                "--curseforge-project-id=${project.property("${modId}_curseforge_project_id")}",
+                "--release-type=release",
+        ].join(" ")
+        def outputFile = file(".idea/runConfigurations/Upload_${modId.toUpperCase()}.xml")
+
+        outputs.file(outputFile)
+
+        doLast {
+            outputFile.parentFile.mkdirs()
+            outputFile.text = """<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Upload ${modId.toUpperCase()} (${modName})" type="PythonConfigurationType" factoryName="Python" folderName="Upload">
+    <module name="MultiLoader-AdvancedLootInfo"/>
+    <option name="ENV_FILES" value=""/>
+    <option name="INTERPRETER_OPTIONS" value=""/>
+    <option name="PARENT_ENVS" value="true"/>
+    <envs>
+      <env name="PYTHONUNBUFFERED" value="1"/>
+    </envs>
+    <option name="SDK_HOME" value=""/>
+    <option name="WORKING_DIRECTORY" value="\$PROJECT_DIR\$"/>
+    <option name="IS_MODULE_SDK" value="true"/>
+    <option name="ADD_CONTENT_ROOTS" value="true"/>
+    <option name="ADD_SOURCE_ROOTS" value="true"/>
+    <option name="SCRIPT_NAME" value="\$PROJECT_DIR\$/upload.py"/>
+    <option name="PARAMETERS" value="${parameters}"/>
+    <option name="SHOW_COMMAND_LINE" value="false"/>
+    <option name="EMULATE_TERMINAL" value="false"/>
+    <option name="MODULE_MODE" value="false"/>
+    <option name="REDIRECT_INPUT" value="false"/>
+    <option name="INPUT_FILE" value=""/>
+    <method v="2"/>
+  </configuration>
+</component>
+"""
+            logger.lifecycle("Wrote ${outputFile}")
+        }
+    }
+}
+
+tasks.register("generateUploadRunConfigs") {
+    group = "ide"
+    description = "Writes the IntelliJ Python run configurations for all upload targets"
+    dependsOn uploadRunConfigTasks
+}
