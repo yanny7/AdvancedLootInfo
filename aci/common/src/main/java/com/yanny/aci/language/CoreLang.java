@@ -30,13 +30,13 @@ public final class CoreLang {
     }
 
     static {
-        register(Utils.class);
+        register(TRANSLATION_MAP, Utils.class);
     }
 
-    public static void register(Class<? extends ITooltipKey> enumClass) {
+    public static void register(Map<String, String> translationMap, Class<? extends ITooltipKey> enumClass) {
         for (ITooltipKey entry : enumClass.getEnumConstants()) {
-            TRANSLATION_MAP.put(entry.singular(), entry.englishSingular());
-            TRANSLATION_MAP.put(entry.plural(), entry.englishPlural());
+            translationMap.put(entry.singular(), entry.englishSingular());
+            translationMap.put(entry.plural(), entry.englishPlural());
         }
     }
 }

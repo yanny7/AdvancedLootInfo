@@ -6,6 +6,7 @@ import com.mojang.serialization.Codec;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.test.utils.TestUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.aci.tooltip.TooltipNodePalette;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
@@ -118,7 +119,14 @@ public class TooltipTestSuite {
         PluginManager.getInstance().registerCommonEvent();
         PluginManager.getInstance().registerClientEvent();
         PluginManager.getInstance().registerServerEvent(null);
+        TooltipContext.setPalette(PluginManager.getInstance().serverRegistry.getTooltipCache());
         UTILS = new IServerUtils() {
+            @NotNull
+            @Override
+            public String getModId() {
+                return PluginManager.getInstance().serverRegistry.getModId();
+            }
+
             @NotNull
             @Override
             public List<Entity> createEntities(EntityType<?> type, Level level) {

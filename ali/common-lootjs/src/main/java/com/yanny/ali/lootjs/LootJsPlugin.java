@@ -4,7 +4,7 @@ import com.almostreliable.lootjs.core.filters.IdFilter;
 import com.almostreliable.lootjs.core.filters.ItemFilter;
 import com.almostreliable.lootjs.loot.condition.*;
 import com.almostreliable.lootjs.loot.modifier.LootModifier;
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.lootjs.mixin.MixinLootModificationsAPI;
 import com.yanny.ali.lootjs.modifier.CustomPlayerFunction;
@@ -29,7 +29,7 @@ import java.util.function.Predicate;
 public class LootJsPlugin implements IPlugin {
     public static final String ID = "lootjs";
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(com.yanny.ali.Utils.MOD_ID);
 
     @NotNull
     @Override

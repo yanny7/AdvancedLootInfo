@@ -1,6 +1,6 @@
 package com.yanny.awi.network;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.network.NetworkUtils;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.awi.Utils;
@@ -34,15 +34,26 @@ import java.util.Map;
 
 public abstract class AbstractServer {
     private static final DecimalFormat DOUBLE_FORMAT = new DecimalFormat("#0.00");
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     private final List<WorldgenDataChunkMessage> chunks = new ArrayList<>();
 
     public void readWorldgenInfo(ServerLevel level) {
+        AwiServerRegistry serverRegistry = PluginManager.getInstance().serverRegistry;
+
+        TooltipContext.setPalette(serverRegistry.getTooltipCache());
+
+        try {
+            readWorldgenInfo(level, serverRegistry);
+        } finally {
+            TooltipContext.clearPalette();
+        }
+    }
+
+    private void readWorldgenInfo(ServerLevel level, AwiServerRegistry serverRegistry) {
         LOGGER.info("Started reading worldgen info");
 
         long startTime = System.currentTimeMillis();
-        AwiServerRegistry serverRegistry = PluginManager.getInstance().serverRegistry;
         RegistryAccess registryAccess = level.registryAccess();
         Registry<LevelStem> levelStemRegistry = registryAccess.lookupOrThrow(Registries.LEVEL_STEM);
         Map<Identifier, IDataNode> worldgenNodes = new HashMap<>();

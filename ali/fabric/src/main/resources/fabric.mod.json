@@ -47,7 +47,8 @@
         "fabricloader": "*",
         "fabric-api": "*",
         "minecraft": "${minecraft_version}",
-        "java": ">=${java_version}"
+        "java": ">=${java_version}",
+        "aci": "${aci_version_range_fabric}"
     },
     "suggests": {
         "emi": "${emi_version_range_fabric}",

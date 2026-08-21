@@ -1,13 +1,15 @@
 package com.yanny.awi.plugin.server;
 
 import com.google.gson.JsonElement;
-import com.mojang.logging.LogUtils;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.JsonOps;
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipContext;
+import com.yanny.awi.Utils;
 import com.yanny.awi.api.IServerUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.RegistryOps;
@@ -31,7 +33,7 @@ import org.slf4j.Logger;
 import static com.yanny.aci.tooltip.CoreTooltipUtils.getBuiltInRegistryTooltip;
 
 public class MissingTooltipUtils {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     @NotNull
     public static TooltipBuilder getMissingFeatureConfigurationTooltip(IServerUtils utils, FeatureConfiguration configuration) {

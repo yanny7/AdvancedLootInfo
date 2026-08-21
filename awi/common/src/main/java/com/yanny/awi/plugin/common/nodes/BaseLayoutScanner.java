@@ -1,6 +1,7 @@
 package com.yanny.awi.plugin.common.nodes;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
+import com.yanny.awi.Utils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
@@ -34,7 +35,7 @@ import java.util.concurrent.Future;
  * seed, so dimensions sharing settings scan each biome once.
  */
 public class BaseLayoutScanner {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     private final Map<Identifier, Map<Holder<Biome>, NodeUtils.LayerHolder>> resultsByDimension;
     private final Stats stats;

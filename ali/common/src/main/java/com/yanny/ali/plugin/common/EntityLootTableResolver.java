@@ -1,6 +1,7 @@
 package com.yanny.ali.plugin.common;
 
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
+import com.yanny.ali.Utils;
 import com.yanny.ali.api.ICommonUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -32,7 +33,7 @@ import java.util.*;
  */
 public class EntityLootTableResolver {
     private static final String ENTITY_PREFIX = "entities/";
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     private final Map<Identifier, List<EntityType<?>>> typesByLootTable = new HashMap<>();
     private final Map<EntityType<?>, List<Entity>> entities = new HashMap<>();

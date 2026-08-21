@@ -1,6 +1,7 @@
 package com.yanny.awi.manager;
 
 import com.yanny.aci.manager.CorePluginManager;
+import com.yanny.awi.Utils;
 import com.yanny.awi.api.IClientRegistry;
 import com.yanny.awi.api.ICommonRegistry;
 import com.yanny.awi.api.IPlugin;
@@ -23,7 +24,7 @@ public class PluginManager extends CorePluginManager<ICommonRegistry, IServerReg
     }
 
     PluginManager() {
-        super();
+        super(Utils.MOD_ID);
     }
 
     @NotNull

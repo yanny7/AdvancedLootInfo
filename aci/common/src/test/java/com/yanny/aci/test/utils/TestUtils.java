@@ -2,6 +2,7 @@ package com.yanny.aci.test.utils;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.logging.LogUtils;
+import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipNode;
 import net.minecraft.locale.Language;
@@ -130,12 +131,13 @@ public class TestUtils {
     public record LoadedLanguage(Language language, Set<String> unusedKeys) {}
 
     /**
-     * @param translations the mod's own {@code LanguageHolder.TRANSLATION_MAP}, layered under the resource packs' own
-     *                     {@code en_us.json}
+     * @param translations the mod's own {@code LanguageHolder.TRANSLATION_MAP}, layered over ACI's own keys and under
+     *                     the resource packs' own {@code en_us.json}. Only the mod's keys are tracked as unused.
      */
     @NotNull
     public static LoadedLanguage loadDefaultLanguage(ResourceManager resourceManager, Map<String, String> translations) {
         ImmutableMap.Builder<String, String> stringBuilder = ImmutableMap.builder();
+        CoreLang.TRANSLATION_MAP.forEach(stringBuilder::put);
         translations.forEach(stringBuilder::put);
         Set<String> notUsed = new HashSet<>(translations.keySet());
         String lang = String.format(Locale.ROOT, "lang/%s.json", "en_us");

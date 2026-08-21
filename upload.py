@@ -8,6 +8,8 @@ import re
 import requests
 
 MODRINTH_USER_AGENT = "Modrinth-Uploader-Script/1.0 (Yanny/AdvancedLootInfo)"
+MODRINTH_VIEWER_PROJECT_IDS = ["fRiHVvU7", "u6dRKJwZ", "nfn13YXA", "fJFETWDN"] # EMI JEI REI LOOTJS
+MODRINTH_ACI_PROJECT_ID = "BaR4ijFC"
 CURSEFORGE_USER_AGENT = "CurseForge-Uploader-Script/1.0 (Yanny/AdvancedLootInfo)"
 
 def calculate_sha512(file_path: str):
@@ -19,10 +21,28 @@ def calculate_sha512(file_path: str):
 
     return sha512_hash.hexdigest()
 
-def prepare_dependency(dep_id):
+def print_response_body(response):
+    if response is None or not response.content:
+        return
+
+    try:
+        print(f"API Error: {response.json()}")
+    except json.JSONDecodeError:
+        print(f"API Error (invalid JSON): {response.text}")
+
+def read_env_secret(env_name: str):
+    value = os.environ.get(env_name)
+
+    if not value:
+        print(f"Error: neither the matching argument nor the environment variable '{env_name}' is set.")
+        return None
+
+    return value
+
+def prepare_dependency(dep_id, dependency_type="optional"):
     return {
         "project_id": dep_id,
-        "dependency_type": "optional"
+        "dependency_type": dependency_type
     }
 
 @functools.lru_cache(maxsize=1)
@@ -42,7 +62,8 @@ def get_curseforge_game_version_types_mapping(api_key: str):
         print(f"CurseForge: Loaded mapping for {len(version_map)} game versions.")
         return version_map
     except requests.exceptions.RequestException as e:
-        print(f"CurseForge Error while reading game versions: {e}")
+        print(f"CurseForge Error while reading game version types: {e}")
+        print_response_body(e.response)
         return {}
 
 @functools.lru_cache(maxsize=1)
@@ -62,6 +83,7 @@ def get_curseforge_game_versions_mapping(api_token: str):
         return list(versions_data)
     except requests.exceptions.RequestException as e:
         print(f"CurseForge Error while reading game versions: {e}")
+        print_response_body(e.response)
         return {}
 
 def read_properties(properties_file_path="gradle.properties", keys_to_find=None):
@@ -133,7 +155,7 @@ def read_changelog(filename: str):
 def upload_to_modrinth(api_token: str, project_id: str, version_number: str, mod_file_path: str, loaders: list, game_versions: list, changelog: str, dependencies: list, release_type: str, version_name: str):
     if not os.path.exists(mod_file_path):
         print(f"Error: File '{mod_file_path}' was not found!")
-        return
+        return False
 
     url = "https://api.modrinth.com/v2/version"
     file_hash_sha512 = calculate_sha512(mod_file_path)
@@ -172,7 +194,8 @@ def upload_to_modrinth(api_token: str, project_id: str, version_number: str, mod
     #
     # if not yes_no.startswith("y"):
     #     print("Skipping upload...")
-    #     return
+    #     return False
+    return True
 
     try:
         with open(mod_file_path, 'rb') as f:
@@ -186,24 +209,22 @@ def upload_to_modrinth(api_token: str, project_id: str, version_number: str, mod
 
         print("File was successfully uploaded to Modrinth!")
         print(f"API Response: {response.json()}")
+        return True
 
     except requests.exceptions.HTTPError as e:
         print(f"HTTP Error: {e}")
-        if response.content:
-            try:
-                error_response = response.json()
-                print(f"API Error: {error_response}")
-            except json.JSONDecodeError:
-                print(f"API Error (invalid JSON): {response.text}")
+        print_response_body(e.response)
     except requests.exceptions.RequestException as e:
         print(f"Request Error: {e}")
     except Exception as e:
         print(f"Other Error: {e}")
 
+    return False
+
 def upload_to_curseforge(api_token: str, api_key: str, project_id: str, version_number: str, mod_file_path: str, loaders: list, game_versions: list, release_type: str, changelog: str, version_name: str):
     if not os.path.exists(mod_file_path):
         print(f"Error: File '{mod_file_path}' was not found!")
-        return
+        return False
 
     url = f"https://minecraft.curseforge.com/api/projects/{project_id}/upload-file"
     headers = {
@@ -221,12 +242,12 @@ def upload_to_curseforge(api_token: str, api_key: str, project_id: str, version_
             cf_game_version_ids.append(gv_id[0]["id"])
         else:
             print(f"CurseForge warning: Missing mapping for '{loader}'.")
-            return
+            return False
 
     # get minecraft version
     type_mapping = get_curseforge_game_version_types_mapping(api_key)
     mc_group = re.search(r'\d+\.\d+', game_versions[0]).group()
-    tv_id = type_mapping[f"{mc_group}"]
+    tv_id = type_mapping.get(f"{mc_group}")
     if tv_id:
         gv_id = list(filter(lambda x: x["name"] == game_versions[0] and x["gameVersionTypeID"] == tv_id, mapping))
 
@@ -234,10 +255,25 @@ def upload_to_curseforge(api_token: str, api_key: str, project_id: str, version_
             cf_game_version_ids.append(gv_id[0]["id"])
         else:
             print(f"CurseForge warning: Missing game version for '{mc_group}'.")
-            return
+            return False
     else:
         print(f"CurseForge warning: Missing mapping for '{mc_group}'.")
-        return
+        return False
+
+    # CurseForge rejects Minecraft Java uploads without an explicit Client/Server environment
+    env_type_id = type_mapping.get("Environment")
+    if not env_type_id:
+        print("CurseForge warning: Missing mapping for 'Environment'.")
+        return False
+
+    for environment in ["client", "server"]:
+        gv_id = list(filter(lambda x: x["slug"] == environment and x["gameVersionTypeID"] == env_type_id, mapping))
+
+        if gv_id:
+            cf_game_version_ids.append(gv_id[0]["id"])
+        else:
+            print(f"CurseForge warning: Missing environment mapping for '{environment}'.")
+            return False
 
     metadata = {
         "changelog": changelog,
@@ -257,7 +293,8 @@ def upload_to_curseforge(api_token: str, api_key: str, project_id: str, version_
     #
     # if not yes_no.startswith("y"):
     #     print("Skipping upload...")
-    #     return
+    #     return False
+    return True
 
     try:
         with open(mod_file_path, 'rb') as f:
@@ -271,38 +308,52 @@ def upload_to_curseforge(api_token: str, api_key: str, project_id: str, version_
 
         print("Mod was successfully uploaded to CurseForge!")
         print(f"API Response: {response.json()}")
-        return
+        return True
 
     except requests.exceptions.HTTPError as e:
         print(f"CurseForge HTTP Error: {e}")
-        if response.content:
-            try:
-                error_response = response.json()
-                print(f"CurseForge Response Error from API: {error_response}")
-            except json.JSONDecodeError:
-                print(f"CurseForge Response Error from API (invalid JSON): {response.text}")
-        return
+        print_response_body(e.response)
     except requests.exceptions.RequestException as e:
         print(f"CurseForge: Request error: {e}")
-        return
     except Exception as e:
         print(f"CurseForge: Unexpected error: {e}")
-        return
+
+    return False
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Upload mod to Modrinth.")
-    parser.add_argument("--modrinth-api-token", required=True, help="Modrinth API Token")
-    parser.add_argument("--curseforge-api-token", required=True, help="CurseForge API Token")
-    parser.add_argument("--curseforge-api-key", required=True, help="CurseForge API Key")
+    parser.add_argument("--modrinth-api-token", help="Modrinth API Token (default: $MODRINTH_API_TOKEN)")
+    parser.add_argument("--curseforge-api-token", help="CurseForge API Token (default: $CURSEFORGE_API_TOKEN)")
+    parser.add_argument("--curseforge-api-key", help="CurseForge API Key (default: $CURSEFORGE_API_KEY)")
     parser.add_argument("--release-type", required=True, help="Mod release type (release|beta|alpha)")
-    parser.add_argument("--mod-id", required=True, help="Mod ID (ali|awi)")
+    parser.add_argument("--mod-id", required=True, help="Mod ID (ali|awi|aci)")
+    parser.add_argument("--modrinth-project-id", required=True, help="Modrinth project ID")
+    parser.add_argument("--curseforge-project-id", required=True, help="CurseForge project ID")
 
     args = parser.parse_args()
-    props = read_properties(keys_to_find=["ali_version", "awi_version", "minecraft_version", "ali_mod_name", "awi_mod_name"])
+    modrinth_api_token = args.modrinth_api_token or read_env_secret("MODRINTH_API_TOKEN")
+    curseforge_api_token = args.curseforge_api_token or read_env_secret("CURSEFORGE_API_TOKEN")
+    curseforge_api_key = args.curseforge_api_key or read_env_secret("CURSEFORGE_API_KEY")
+
+    if not modrinth_api_token or not curseforge_api_token or not curseforge_api_key:
+        raise SystemExit(1)
+
+    props = read_properties(keys_to_find=["ali_version", "awi_version", "aci_version", "minecraft_version", "ali_mod_name", "awi_mod_name", "aci_mod_name", "enabled_platforms"])
     version_changelog = read_changelog(filename=f"{args.mod_id}/CHANGELOG.md")
 
-    mod_loaders = [["forge"], ["neoforge"], ["fabric"]]
-    mod_dependencies = list(map(prepare_dependency, ["fRiHVvU7", "u6dRKJwZ", "nfn13YXA", "fJFETWDN"])) # EMI JEI REI LOOTJS
+    mod_loaders = [[platform] for platform in props["enabled_platforms"].split(",")]
+
+    # branches without a neoforge module ship one Forge jar that NeoForge loads too
+    if ["forge"] in mod_loaders and ["neoforge"] not in mod_loaders:
+        mod_loaders[mod_loaders.index(["forge"])] = ["forge", "neoforge"]
+
+    if args.mod_id == "aci":
+        mod_dependencies = []
+    else:
+        mod_dependencies = list(map(prepare_dependency, MODRINTH_VIEWER_PROJECT_IDS))
+        mod_dependencies.append(prepare_dependency(MODRINTH_ACI_PROJECT_ID, "required"))
+
+    failed = False
 
     for mod_loader in mod_loaders:
         print (f"processing {mod_loader} launcher")
@@ -312,9 +363,9 @@ if __name__ == "__main__":
         file_path = f"{path}/{file_name}"
         name = f"{re.sub(r'(?<!^)(?=[A-Z])', ' ', props[f"{args.mod_id}_mod_name"])} {version}"
 
-        upload_to_modrinth(
-            api_token=args.modrinth_api_token,
-            project_id="PEPVViac",
+        modrinth_uploaded = upload_to_modrinth(
+            api_token=modrinth_api_token,
+            project_id=args.modrinth_project_id,
             mod_file_path=file_path,
             version_number=version,
             loaders=mod_loader,
@@ -325,10 +376,10 @@ if __name__ == "__main__":
             version_name=name,
         )
 
-        upload_to_curseforge(
-            api_token=args.curseforge_api_token,
-            api_key=args.curseforge_api_key,
-            project_id="1205426",
+        curseforge_uploaded = upload_to_curseforge(
+            api_token=curseforge_api_token,
+            api_key=curseforge_api_key,
+            project_id=args.curseforge_project_id,
             version_number=version,
             mod_file_path=file_path,
             loaders=mod_loader,
@@ -337,4 +388,11 @@ if __name__ == "__main__":
             changelog="\n".join(version_changelog),
             version_name=name,
         )
+
+        if not modrinth_uploaded or not curseforge_uploaded:
+            failed = True
+
         print()
+
+    if failed:
+        raise SystemExit(1)

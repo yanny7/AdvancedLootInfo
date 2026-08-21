@@ -6,7 +6,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```
 CLAUDE.md                      — this file: repo layout, module map, commands, versioning
-aci/CLAUDE.md                  — shared core library: plugin-manager base, tooltip tree system, language wiring
+aci/CLAUDE.md                  — shared core library mod: plugin-manager base, tooltip tree system, language wiring
+aci/fabric/CLAUDE.md           — ACI's Fabric loader wrapper (no mod logic; datagen + metadata only)
+aci/forge/CLAUDE.md            — ACI's Forge loader wrapper (no mod logic; datagen + metadata only)
+aci/neoforge/CLAUDE.md         — ACI's NeoForge loader wrapper (no mod logic; datagen + metadata only)
 ali/CLAUDE.md                  — ALI mod: loot/trade data-scan, plugin wiring, config schema, GLM, mod-compat shims, networking (canonical)
 ali/common-emi/CLAUDE.md       — canonical EMI/JEI/REI viewer-integration pattern (shared by all 6 common-<viewer> modules) + EMI specifics
 ali/common-jei/CLAUDE.md       — JEI specifics (references ali/common-emi/CLAUDE.md for the shared pattern)
@@ -33,8 +36,7 @@ Cross-cutting mechanisms are documented **once**, in whichever doc owns them, an
 This is a single mod (source: `https://github.com/yanny7/AdvancedLootInfo`) developed across multiple Minecraft versions in parallel, one version per git branch (`1.20.1`, `1.21.1`, `1.21.5`, `1.21.8`, `1.21.10`, `1.21.11`, `26.1.2`, `master` for the latest/in-development version, plus archived `archive/1.2x.y` branches). Branches are typically worked on as separate checkouts, one per Minecraft version — read `minecraft_version` in the repo-root `gradle.properties` to know which version the current checkout is (this one, `ali_1_21_5/`, is the `1.21.5` branch).
 
 The mod's architecture, package layout, and plugin model described across this doc tree are identical across all these branches — they should stay accurate regardless of which version branch they're read from. What legitimately differs per branch:
-- Which loaders are available/enabled (see Module layout below): Fabric on every branch, Forge from `1.20.1` on, NeoForge from `1.21.1` on (Forge support has been getting phased out on newer branches in favor of NeoForge). On this `1.21.5` branch that phase-out has happened: `forge_enabled=false`, so only `fabric`+`neoforge` are built for both ALI and AWI.
-- Which recipe viewers are available: on this branch `jei_enabled`/`rei_enabled=true` but `emi_enabled=false` (EMI has no 1.21.5 build — note `emi_version` is still pinned at a `+1.21.1` version), and `lootjs_enabled=false`.
+- Which loaders are available/enabled (see Module layout below): Fabric on every branch, Forge from `1.20.1` on, NeoForge from `1.21.1` on (Forge support has been getting phased out on newer branches in favor of NeoForge). On this `1.21.1` branch, ALI, AWI and ACI all ship `fabric`+`forge`+`neoforge`.
 - Loader/dependency versions in `gradle.properties` (`minecraft_version`, `forge_version`, `fabric_version`, `neoforge_version`, EMI/JEI/REI/architectury versions, etc.).
 - Minor Minecraft-API glue inside `fabric`/`forge`/`neoforge` modules and datagen.
 
@@ -45,18 +47,18 @@ This is a Minecraft mod monorepo built on the **Architectury MultiLoader templat
 - **ALI** (`AdvancedLootInfo`, group `com.yanny.ali`) — a recipe-viewer (EMI/JEI/REI) plugin that displays detailed information about loot tables and villager trades. See `ali/CLAUDE.md`.
 - **AWI** (`AdvancedWorldgenInfo`, group `com.yanny.awi`) — a recipe-viewer plugin that displays worldgen information. See `awi/CLAUDE.md`.
 
-Both mods share a common core library, **ACI** (`com.yanny.aci`, under `aci/`), which provides the generic, mod-agnostic building blocks (plugin manager, tooltip tree builder, registries, widgets) that ALI and AWI each specialize. See `aci/CLAUDE.md`.
+Both mods depend on a third, **ACI** (`AdvancedCoreInfo`, group `com.yanny.aci`, under `aci/`) — a library mod providing the generic, mod-agnostic building blocks (plugin manager, tooltip tree builder, registries, widgets) that ALI and AWI each specialize. It ships as its own jar and is a **mandatory** dependency of both, so users install three jars. See `aci/CLAUDE.md`.
 
 ## Module layout
 
-Each mod (`ali/`, `awi/`) follows the same subproject pattern:
+Each mod (`ali/`, `awi/`, `aci/`) follows the same subproject pattern:
 
 - `common` — platform-agnostic mod logic (loader-independent). Depends on `aci:common`.
 - `common-emi`, `common-jei`, `common-rei` — optional integrations for each supported recipe viewer, enabled independently via `gradle.properties` flags (`<viewer>_enabled` + `<platform>_<viewer>_enabled`).
 - `common-lootjs` (ALI only) — optional LootJS compatibility module.
 - `fabric`, `forge`, `neoforge` — per-loader entry points/glue code. Both ALI and AWI ship whichever of these are enabled on the current branch; on this branch that is `fabric` and `neoforge` only.
 
-`aci/common` has no per-loader modules — it is a pure shared library consumed by `ali:common` and `awi:common`.
+`aci` has only `common` + the loader modules — no viewer or compat subprojects, since it registers nothing with a recipe viewer. Its loader modules carry no mod logic at all (no mixins, no access widener, no platform-service implementation); they exist to shadow `aci:common` into a loadable jar. `ali:common`/`awi:common` compile against `aci:common` directly (`configuration: "namedElements"`), while the ALI/AWI loader modules take `modImplementation project(":aci:<loader>")` for the runtime — `aci:common` is deliberately **not** in their `commonProjects` list, so `com.yanny.aci.*` is not duplicated inside their jars.
 
 Which optional subprojects get included is controlled entirely by `settings.gradle` reading flags from `gradle.properties` (e.g. `emi_enabled`, `jei_enabled`, `rei_enabled`, `lootjs_enabled`, `fabric_enabled`, `forge_enabled`, `neoforge_enabled`). The root `build.gradle` further gates per-project availability with `<platform>_<viewer>_enabled` properties and wires in the correct `commonProjects` dependency list for each loader module.
 
@@ -95,7 +97,14 @@ Build/work on a single mod or module:
 ```
 ./gradlew :ali:common:build
 ./gradlew :aci:common:build
+./gradlew :aci:fabric:build
+./gradlew :aci:forge:build
+./gradlew :aci:neoforge:build
 ```
+
+On a checkout with no `aci/<loader>/build/libs/` jar yet, **every** Gradle invocation fails while configuring `:ali:fabric` with `NoSuchFileException: aci/fabric/build/libs/AdvancedCoreInfo-fabric-<version>.jar` — `modImplementation project(":aci:<loader>")` resolves at configuration time. `--configure-on-demand` does not help (loom then fails with `Cannot get MappingsProvider before it has been setup`). Bootstrap it by commenting out the six `modImplementation project(":aci:<loader>")` lines in the ALI/AWI loader build scripts, building the three `:aci:<loader>:build` targets, then restoring them.
+
+After editing `aci`, a dev run may keep loading a stale copy: loom caches remapped mod dependencies keyed on version, and `aci_version` does not move during development. Clear it with `rm -rf .gradle/loom-cache/remapped_mods/*/com/yanny/aci`.
 
 Run the game (client) with a given loader/viewer combination — generated per-platform tasks follow the pattern `run<Ali|Awi><Fabric|Forge|NeoForge><Emi|Jei|Rei>Client`:
 ```
@@ -130,11 +139,26 @@ AWI's base-layout scan is guarded by a golden file instead of unit assertions, w
 
 Tests are organized behind JUnit Platform `@Suite`/`@SelectClasses` runners (`TooltipTestSuite` in each mod's `common` test tree) that bootstrap Minecraft's registries/resources (`Bootstrap.bootStrap()`, `SharedConstants.setVersion(...)`) once before delegating to individual `@Test` classes — run the suite class, not only an individual test class, if a test depends on that shared bootstrap state.
 
-Generate data (recipes/loot/lang, per loader) via the IDE run configurations in `.idea/runConfigurations/Minecraft_Data_*.xml`, or the equivalent `run<Platform><Loader>Datagen`-style Gradle tasks wired by the `architectury-loom` plugin.
+Generate data (recipes/loot/lang, per loader) via the IDE run configurations in `.idea/runConfigurations/Minecraft_Data_*.xml`, or the equivalent `run<Platform><Loader>Datagen`-style Gradle tasks wired by the `architectury-loom` plugin. All three mods have datagen; ACI's generates only its `aci.util.*` language keys. Fabric datagen initialises the `fabric-datagen` entrypoint of every loaded mod, so a broken ACI datagen class breaks ALI's and AWI's datagen runs too.
 
 ## Versioning
 
-ALI and AWI version independently (`ali_version` / `awi_version` in `gradle.properties`), each with its own `CHANGELOG.md` (`ali/CHANGELOG.md`, `awi/CHANGELOG.md`). Update the relevant changelog and bump the relevant version property when shipping a change to that mod. Because the same fix/feature is typically ported across the active version branches, the same `ali_version`/`awi_version` bump and changelog entry commonly land on several branches — check whether a change belongs on other branches too, not just the one you're on.
+ALI, AWI and ACI version independently (`ali_version` / `awi_version` / `aci_version` in `gradle.properties`), each with its own `CHANGELOG.md` (`ali/CHANGELOG.md`, `awi/CHANGELOG.md`, `aci/CHANGELOG.md`). Update the relevant changelog and bump the relevant version property when shipping a change to that mod. Because the same fix/feature is typically ported across the active version branches, the same version bump and changelog entry commonly land on several branches — check whether a change belongs on other branches too, not just the one you're on.
+
+### ACI is published API
+
+ACI ships as its own jar and is a **mandatory** dependency of both ALI and AWI, so `com.yanny.aci.api`, `com.yanny.aci.tooltip` and `com.yanny.aci.manager` are published API — a breaking change there is not free.
+
+1. `aci_version` is `MAJOR.MINOR.PATCH`.
+2. **MAJOR** — source- or binary-incompatible change to those three packages: a removed or renamed public type/method, a changed signature or return type, a new abstract method on an interface others implement.
+3. **MINOR** — additive only: new public types/methods, new default methods, new tooltip node kinds. Existing callers keep compiling and keep running.
+4. **PATCH** — internal fixes with no API surface change.
+5. A MAJOR bump also raises the **lower** bound in both mods' metadata: `aci_version_range=[<new major>.0,)` and `aci_version_range_fabric=>=<new major>.0`. A MINOR bump raises them only once the mods actually use the new API; PATCH never touches them.
+6. Never widen a range to paper over a breakage — the point of the mandatory dependency is that the loader refuses a mismatched pair instead of failing later with `NoSuchMethodError`.
+7. The network protocol in `aci.network` follows the same number: a wire-format change is a MAJOR bump even when the Java signatures are untouched.
+8. Release order is always ACI first, then ALI/AWI, so their required-dependency reference never dangles.
+
+The `testArtifacts` configuration on `aci:common` (the shared `TestUtils`) is not published API — it never leaves the repo, so its shape can change without touching `aci_version`.
 
 ## Wiki
 
@@ -144,4 +168,4 @@ The user-facing documentation is the project's GitHub wiki — a separate reposi
 
 ## Publishing
 
-`upload.py` at the repo root pushes built jars to Modrinth and CurseForge; it reads mod metadata from `gradle.properties`. Treat running it as a release action, not something to invoke incidentally.
+`upload.py` at the repo root pushes built jars to Modrinth and CurseForge; it reads mod metadata from `gradle.properties`. Treat running it as a release action, not something to invoke incidentally. ACI is published as its own project and must go out **before** ALI/AWI, which declare it as a required dependency.

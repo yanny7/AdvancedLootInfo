@@ -3,9 +3,10 @@ package com.yanny.awi.plugin.common.nodes;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.mojang.logging.LogUtils;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
+import com.yanny.aci.CommonLogUtils;
+import com.yanny.awi.Utils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.RegistryOps;
@@ -36,7 +37,7 @@ import java.util.*;
  * off for itself.
  */
 public class SurfaceRuleSpecializer {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
     private static final Set<SurfaceRules.RuleSource> LOGGED_RULES = Collections.newSetFromMap(new IdentityHashMap<>());
 
     private static final String TYPE = "type";

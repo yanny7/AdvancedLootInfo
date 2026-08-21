@@ -1,7 +1,7 @@
 package com.yanny.aci.manager;
 
 import com.google.common.collect.HashBiMap;
-import com.mojang.logging.LogUtils;
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.ICoreCommonRegistry;
 import com.yanny.aci.api.ICoreCommonUtils;
 import org.jetbrains.annotations.NotNull;
@@ -10,14 +10,15 @@ import org.slf4j.Logger;
 import java.util.*;
 
 public abstract class CoreCommonRegistry<TConfig> extends BaseRegistry implements ICoreCommonRegistry, ICoreCommonUtils<TConfig> {
-    private static final Logger LOGGER = LogUtils.getLogger();
-
+    private final Logger logger;
     private final TConfig configuration;
     private final Set<String> translationKeys = new HashSet<>();
 
     private HashBiMap<String, Integer> dictionary = null;
 
-    public CoreCommonRegistry() {
+    public CoreCommonRegistry(String modId) {
+        super(modId);
+        logger = CommonLogUtils.getLogger(modId);
         configuration = loadConfiguration();
     }
 
@@ -35,7 +36,7 @@ public abstract class CoreCommonRegistry<TConfig> extends BaseRegistry implement
         if (dictionary == null) {
             translationKeys.add(key);
         } else {
-            LOGGER.warn("Trying to register key {} after registry freeze!", key);
+            logger.warn("Trying to register key {} after registry freeze!", key);
         }
     }
 

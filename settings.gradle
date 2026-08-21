@@ -60,16 +60,19 @@ if (settings.lootjs_enabled == "true") {
 }
 
 if (settings.fabric_enabled == "true") {
+    include("aci:fabric")
     include("ali:fabric")
     include("awi:fabric")
 }
 
 if (settings.forge_enabled == "true") {
+    include("aci:forge")
     include("ali:forge")
     include("awi:forge")
 }
 
 if (settings.neoforge_enabled == "true") {
+    include("aci:neoforge")
     include("ali:neoforge")
     include("awi:neoforge")
 }
