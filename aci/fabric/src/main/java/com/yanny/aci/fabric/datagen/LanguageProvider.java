@@ -1,14 +1,14 @@
 package com.yanny.aci.fabric.datagen;
 
 import com.yanny.aci.datagen.LanguageHolder;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.core.HolderLookup;
 
 import java.util.concurrent.CompletableFuture;
 
 class LanguageProvider extends FabricLanguageProvider {
-    public LanguageProvider(FabricDataOutput dataGenerator, CompletableFuture<HolderLookup.Provider> registryLookup, String locale) {
+    public LanguageProvider(FabricPackOutput dataGenerator, CompletableFuture<HolderLookup.Provider> registryLookup, String locale) {
         super(dataGenerator, locale, registryLookup);
     }
 

@@ -30,23 +30,26 @@ dependencies {
     neoForge "net.neoforged:neoforge:${neoforge_version}"
 
     project.ext.commonProjects.each { p ->
-        common(project(path: p, configuration: "namedElements")) { transitive false }
+        common(project(path: p)) { transitive false }
         shadowCommon(project(path: p, configuration: "transformProductionNeoForge")) { transitive false }
     }
 }
 
+jar {
+    archiveClassifier = "raw"
+}
+
 shadowJar {
+    dependsOn(jar)
+    mainSpec.sourcePaths.clear()       // Remove default source set inclusion
+    from(zipTree(jar.archiveFile))     // Unpack jar output (preserves Loom modifications)
+
     exclude "fabric.mod.json"
     exclude "architectury.common.json"
 
     configurations = [project.configurations.shadowCommon]
-    archiveClassifier = "dev-shadow"
-}
-
-remapJar {
-    input.set shadowJar.archiveFile
-    dependsOn shadowJar
-    archiveClassifier = null
+    archiveClassifier = null           // shadowJar becomes the main artifact
+    from rootProject.file("LICENSE")
 }
 
 sourcesJar {

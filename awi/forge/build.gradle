@@ -46,8 +46,8 @@ configurations {
 
 dependencies {
     forge "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    common(project(path: ":aci:common", configuration: "namedElements")) { transitive false }
-    runtimeOnly project(path: ":aci:forge", configuration: "namedElements")
+    common(project(path: ":aci:common")) { transitive false }
+    runtimeOnly project(":aci:forge")
 
     project.ext.commonProjects.each { p ->
         common(project(path: p, configuration: "namedElements")) { transitive false }

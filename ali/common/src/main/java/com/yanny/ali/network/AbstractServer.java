@@ -411,17 +411,17 @@ public abstract class AbstractServer {
         return lootNodes;
     }
 
-    private static void writeLootData(AliServerRegistry serverRegistry, RegistryFriendlyByteBuf buf, Map<ResourceLocation, IDataNode> lootNodes) {
+    private static void writeLootData(AliServerRegistry serverRegistry, RegistryFriendlyByteBuf buf, Map<Identifier, IDataNode> lootNodes) {
         int countIndex = buf.writerIndex();
         int successfulNodes = 0;
 
         buf.writeInt(lootNodes.size());
 
-        for (Map.Entry<ResourceLocation, IDataNode> entry : lootNodes.entrySet()) {
+        for (Map.Entry<Identifier, IDataNode> entry : lootNodes.entrySet()) {
             int startOfEntry = buf.writerIndex();
 
-            buf.writeResourceLocation(entry.getKey());
-            buf.writeResourceLocation(entry.getValue().getId());
+            buf.writeIdentifier(entry.getKey());
+            buf.writeIdentifier(entry.getValue().getId());
 
             if (NetworkUtils.writeNodeData(Utils.MOD_ID, serverRegistry, buf, entry.getKey(), entry.getValue())) {
                 successfulNodes++;
@@ -444,7 +444,7 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static List<Entity> sampleEntities(EntityLootTableResolver resolver, EntityType<?> type, ResourceLocation lootTable) {
+    private static List<Entity> sampleEntities(EntityLootTableResolver resolver, EntityType<?> type, Identifier lootTable) {
         List<Entity> entities = resolver.getEntities(type);
         List<Entity> variants = entities.stream().filter((e) -> e instanceof Mob mob && mob.getLootTable().equals(lootTable)).toList();
 

@@ -30,7 +30,7 @@ dependencies {
     forge "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
     project.ext.commonProjects.each { p ->
-        common(project(path: p, configuration: "namedElements")) { transitive false }
+        common(project(path: p)) { transitive false }
         shadowCommon(project(path: p, configuration: "transformProductionForge")) { transitive false }
     }
 }

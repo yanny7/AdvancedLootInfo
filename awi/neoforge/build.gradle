@@ -34,8 +34,8 @@ configurations {
 
 dependencies {
     neoForge "net.neoforged:neoforge:${neoforge_version}"
-    common(project(path: ":aci:common", configuration: "namedElements")) { transitive false }
-    runtimeOnly project(path: ":aci:neoforge", configuration: "namedElements")
+    common(project(path: ":aci:common")) { transitive false }
+    runtimeOnly project(":aci:neoforge")
 
     project.ext.commonProjects.each { p ->
         common(project(path: p)) { transitive false }

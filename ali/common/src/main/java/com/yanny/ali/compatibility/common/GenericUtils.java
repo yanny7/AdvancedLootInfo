@@ -479,7 +479,7 @@ public class GenericUtils {
 
         for (int i = 0; i < lootDataCount; i++) {
             Identifier location = readerBuf.readIdentifier();
-            ResourceLocation id = readerBuf.readResourceLocation();
+            Identifier id = readerBuf.readIdentifier();
 
             lootData.put(location, utils.getDataNodeFactory(id).apply(utils, readerBuf));
         }
