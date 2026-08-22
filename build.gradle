@@ -288,7 +288,7 @@ def uploadRunConfigTasks = ["ali", "awi", "aci"].collect { modId ->
                 "--mod-id=${modId}",
                 "--modrinth-project-id=${project.property("${modId}_modrinth_project_id")}",
                 "--curseforge-project-id=${project.property("${modId}_curseforge_project_id")}",
-                "--release-type=release",
+                "--release-type=beta",
         ].join(" ")
         def outputFile = file(".idea/runConfigurations/Upload_${modId.toUpperCase()}.xml")
 
