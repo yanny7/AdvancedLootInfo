@@ -1,3 +1,9 @@
+## []
+
+IMPORTANT - Advanced Core Info (ACI) mod is now required dependency!
+
+- Fixed crash on server start when a modded mob returns no loot table id
+
 ## [2.0.0]
 
 - Smaller network payload - the items of a loot table and the costs/results of a trade are no longer sent, the client reads them from the loot tree it already receives

@@ -439,7 +439,7 @@ public abstract class AbstractServer {
     @NotNull
     private static List<Entity> sampleEntities(EntityLootTableResolver resolver, EntityType<?> type, ResourceLocation lootTable) {
         List<Entity> entities = resolver.getEntities(type);
-        List<Entity> variants = entities.stream().filter((e) -> e instanceof Mob mob && mob.getLootTable().equals(lootTable)).toList();
+        List<Entity> variants = entities.stream().filter((e) -> e instanceof Mob mob && lootTable.equals(mob.getLootTable())).toList();
 
         // a table claimed by the entityLootTables configuration has an id no instance of the type reports, so testing
         // the modifier against nothing would silently drop it
@@ -532,8 +532,13 @@ public abstract class AbstractServer {
     }
 
     private static <T> boolean predicateModifier(ILootModifier<?> modifier, T value, List<Item> items) {
-        //noinspection unchecked
-        return ((ILootModifier<T>) modifier).predicate(value) && predicateItem(modifier, items);
+        try {
+            //noinspection unchecked
+            return ((ILootModifier<T>) modifier).predicate(value) && predicateItem(modifier, items);
+        } catch (Throwable e) {
+            LOGGER.warn("Failed to evaluate loot modifier predicate for {}: {}", value, e.getMessage(), e);
+            return false;
+        }
     }
 
     private static boolean predicateItem(ILootModifier<?> modifier, List<Item> items) { //FIXME ItemStack!

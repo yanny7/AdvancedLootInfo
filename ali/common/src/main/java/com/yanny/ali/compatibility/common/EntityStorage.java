@@ -26,7 +26,12 @@ public class EntityStorage {
 
             for (Entity entity : utils.createEntities(t, level)) {
                 if (entity instanceof Mob mob) {
-                    variantMap.put(mob.getLootTable(), entity);
+                    ResourceLocation entityLootTable = mob.getLootTable();
+
+                    //noinspection ConstantValue - some modded mobs does return null
+                    if (entityLootTable != null) {
+                        variantMap.put(entityLootTable, entity);
+                    }
                 }
             }
 

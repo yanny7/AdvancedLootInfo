@@ -13,17 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Maps a loot table id back to the entity types that can drop it, the opposite direction of asking every entity type
@@ -153,7 +143,12 @@ public class EntityLootTableResolver {
 
                     for (Entity entity : getEntities(type)) {
                         if (entity instanceof Mob mob) {
-                            addMapping(mob.getLootTable(), type);
+                            ResourceLocation entityLootTable = mob.getLootTable();
+
+                            //noinspection ConstantValue - some modded mobs does return null
+                            if (entityLootTable != null) {
+                                addMapping(entityLootTable, type);
+                            }
                         }
                     }
                 }
