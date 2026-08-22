@@ -10,6 +10,7 @@ import requests
 MODRINTH_USER_AGENT = "Modrinth-Uploader-Script/1.0 (Yanny/AdvancedLootInfo)"
 MODRINTH_VIEWER_PROJECT_IDS = ["fRiHVvU7", "u6dRKJwZ", "nfn13YXA", "fJFETWDN"] # EMI JEI REI LOOTJS
 MODRINTH_ACI_PROJECT_ID = "BaR4ijFC"
+MODRINTH_ENVIRONMENT = "client_and_server"
 CURSEFORGE_USER_AGENT = "CurseForge-Uploader-Script/1.0 (Yanny/AdvancedLootInfo)"
 
 def calculate_sha512(file_path: str):
@@ -152,7 +153,7 @@ def read_changelog(filename: str):
 
     return changelog_content
 
-def upload_to_modrinth(api_token: str, project_id: str, version_number: str, mod_file_path: str, loaders: list, game_versions: list, changelog: str, dependencies: list, release_type: str, version_name: str):
+def upload_to_modrinth(api_token: str, project_id: str, version_number: str, mod_file_path: str, loaders: list, game_versions: list, changelog: str, dependencies: list, release_type: str, version_name: str, environment: str):
     if not os.path.exists(mod_file_path):
         print(f"Error: File '{mod_file_path}' was not found!")
         return False
@@ -175,6 +176,7 @@ def upload_to_modrinth(api_token: str, project_id: str, version_number: str, mod
         "dependencies": dependencies,
         "file_parts": [os.path.basename(mod_file_path)],
         "version_type": release_type,
+        "environment": environment,
         "files": [
             {
                 "hashes": {
@@ -372,6 +374,7 @@ if __name__ == "__main__":
             dependencies=mod_dependencies,
             release_type=args.release_type,
             version_name=name,
+            environment=MODRINTH_ENVIRONMENT,
         )
 
         curseforge_uploaded = upload_to_curseforge(
