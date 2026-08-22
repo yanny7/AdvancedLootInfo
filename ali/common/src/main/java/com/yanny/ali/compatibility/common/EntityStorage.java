@@ -1,11 +1,13 @@
 package com.yanny.ali.compatibility.common;
 
 import com.yanny.ali.api.ICommonUtils;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
