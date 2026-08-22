@@ -330,14 +330,27 @@ if __name__ == "__main__":
     parser.add_argument("--mod-id", required=True, help="Mod ID (ali|awi|aci)")
     parser.add_argument("--modrinth-project-id", required=True, help="Modrinth project ID")
     parser.add_argument("--curseforge-project-id", required=True, help="CurseForge project ID")
+    parser.add_argument("--target", default="all", choices=["all", "modrinth", "curseforge"], help="Which platform to upload to (default: all)")
 
     args = parser.parse_args()
-    modrinth_api_token = args.modrinth_api_token or read_env_secret("MODRINTH_API_TOKEN")
-    curseforge_api_token = args.curseforge_api_token or read_env_secret("CURSEFORGE_API_TOKEN")
-    curseforge_api_key = args.curseforge_api_key or read_env_secret("CURSEFORGE_API_KEY")
+    upload_modrinth = args.target in ("all", "modrinth")
+    upload_curseforge = args.target in ("all", "curseforge")
+    modrinth_api_token = None
+    curseforge_api_token = None
+    curseforge_api_key = None
 
-    if not modrinth_api_token or not curseforge_api_token or not curseforge_api_key:
-        raise SystemExit(1)
+    if upload_modrinth:
+        modrinth_api_token = args.modrinth_api_token or read_env_secret("MODRINTH_API_TOKEN")
+
+        if not modrinth_api_token:
+            raise SystemExit(1)
+
+    if upload_curseforge:
+        curseforge_api_token = args.curseforge_api_token or read_env_secret("CURSEFORGE_API_TOKEN")
+        curseforge_api_key = args.curseforge_api_key or read_env_secret("CURSEFORGE_API_KEY")
+
+        if not curseforge_api_token or not curseforge_api_key:
+            raise SystemExit(1)
 
     props = read_properties(keys_to_find=["ali_version", "awi_version", "aci_version", "minecraft_version", "ali_mod_name", "awi_mod_name", "aci_mod_name", "enabled_platforms"])
     version_changelog = read_changelog(filename=f"{args.mod_id}/CHANGELOG.md")
@@ -367,7 +380,7 @@ if __name__ == "__main__":
         file_path = f"{path}/{file_name}"
         name = f"{re.sub(r'(?<!^)(?=[A-Z])', ' ', props[f"{args.mod_id}_mod_name"])} {version}"
 
-        modrinth_uploaded = upload_to_modrinth(
+        modrinth_uploaded = not upload_modrinth or upload_to_modrinth(
             api_token=modrinth_api_token,
             project_id=args.modrinth_project_id,
             mod_file_path=file_path,
@@ -381,7 +394,7 @@ if __name__ == "__main__":
             environment=MODRINTH_ENVIRONMENT,
         )
 
-        curseforge_uploaded = upload_to_curseforge(
+        curseforge_uploaded = not upload_curseforge or upload_to_curseforge(
             api_token=curseforge_api_token,
             api_key=curseforge_api_key,
             project_id=args.curseforge_project_id,
