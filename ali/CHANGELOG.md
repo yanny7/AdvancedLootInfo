@@ -1,4 +1,4 @@
-## []
+## [2.0.0]
 
 - Smaller network payload - the items of a loot table and the costs/results of a trade are no longer sent, the client reads them from the loot tree it already receives
 - Item tags are resolved on the client, so a tag entry follows datapack/tag reloads and stops listing items the recipe viewer hides
