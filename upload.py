@@ -8,7 +8,8 @@ import re
 import requests
 
 MODRINTH_USER_AGENT = "Modrinth-Uploader-Script/1.0 (Yanny/AdvancedLootInfo)"
-MODRINTH_VIEWER_PROJECT_IDS = ["fRiHVvU7", "u6dRKJwZ", "nfn13YXA", "fJFETWDN"] # EMI JEI REI LOOTJS
+MODRINTH_VIEWER_PROJECT_IDS = ["fRiHVvU7", "u6dRKJwZ", "nfn13YXA"] # EMI JEI REI
+MODRINTH_LOOTJS_PROJECT_ID = "fJFETWDN"
 MODRINTH_ACI_PROJECT_ID = "BaR4ijFC"
 MODRINTH_ENVIRONMENT = "client_and_server"
 CURSEFORGE_USER_AGENT = "CurseForge-Uploader-Script/1.0 (Yanny/AdvancedLootInfo)"
@@ -352,6 +353,9 @@ if __name__ == "__main__":
     else:
         mod_dependencies = list(map(prepare_dependency, MODRINTH_VIEWER_PROJECT_IDS))
         mod_dependencies.append(prepare_dependency(MODRINTH_ACI_PROJECT_ID, "required"))
+
+        if args.mod_id == "ali":
+            mod_dependencies.append(prepare_dependency(MODRINTH_LOOTJS_PROJECT_ID))
 
     failed = False
 
