@@ -195,7 +195,6 @@ def upload_to_modrinth(api_token: str, project_id: str, version_number: str, mod
     # if not yes_no.startswith("y"):
     #     print("Skipping upload...")
     #     return False
-    return True
 
     try:
         with open(mod_file_path, 'rb') as f:
@@ -294,7 +293,6 @@ def upload_to_curseforge(api_token: str, api_key: str, project_id: str, version_
     # if not yes_no.startswith("y"):
     #     print("Skipping upload...")
     #     return False
-    return True
 
     try:
         with open(mod_file_path, 'rb') as f:
