@@ -8,8 +8,10 @@ import re
 import requests
 
 MODRINTH_USER_AGENT = "Modrinth-Uploader-Script/1.0 (Yanny/AdvancedLootInfo)"
-MODRINTH_VIEWER_PROJECT_IDS = ["fRiHVvU7", "u6dRKJwZ", "nfn13YXA", "fJFETWDN"] # EMI JEI REI LOOTJS
+MODRINTH_VIEWER_PROJECT_IDS = ["fRiHVvU7", "u6dRKJwZ", "nfn13YXA"] # EMI JEI REI
+MODRINTH_LOOTJS_PROJECT_ID = "fJFETWDN"
 MODRINTH_ACI_PROJECT_ID = "BaR4ijFC"
+MODRINTH_ENVIRONMENT = "client_and_server"
 CURSEFORGE_USER_AGENT = "CurseForge-Uploader-Script/1.0 (Yanny/AdvancedLootInfo)"
 
 def calculate_sha512(file_path: str):
@@ -152,7 +154,7 @@ def read_changelog(filename: str):
 
     return changelog_content
 
-def upload_to_modrinth(api_token: str, project_id: str, version_number: str, mod_file_path: str, loaders: list, game_versions: list, changelog: str, dependencies: list, release_type: str, version_name: str):
+def upload_to_modrinth(api_token: str, project_id: str, version_number: str, mod_file_path: str, loaders: list, game_versions: list, changelog: str, dependencies: list, release_type: str, version_name: str, environment: str):
     if not os.path.exists(mod_file_path):
         print(f"Error: File '{mod_file_path}' was not found!")
         return False
@@ -175,6 +177,7 @@ def upload_to_modrinth(api_token: str, project_id: str, version_number: str, mod
         "dependencies": dependencies,
         "file_parts": [os.path.basename(mod_file_path)],
         "version_type": release_type,
+        "environment": environment,
         "files": [
             {
                 "hashes": {
@@ -195,7 +198,6 @@ def upload_to_modrinth(api_token: str, project_id: str, version_number: str, mod
     # if not yes_no.startswith("y"):
     #     print("Skipping upload...")
     #     return False
-    return True
 
     try:
         with open(mod_file_path, 'rb') as f:
@@ -294,7 +296,6 @@ def upload_to_curseforge(api_token: str, api_key: str, project_id: str, version_
     # if not yes_no.startswith("y"):
     #     print("Skipping upload...")
     #     return False
-    return True
 
     try:
         with open(mod_file_path, 'rb') as f:
@@ -329,14 +330,27 @@ if __name__ == "__main__":
     parser.add_argument("--mod-id", required=True, help="Mod ID (ali|awi|aci)")
     parser.add_argument("--modrinth-project-id", required=True, help="Modrinth project ID")
     parser.add_argument("--curseforge-project-id", required=True, help="CurseForge project ID")
+    parser.add_argument("--target", default="all", choices=["all", "modrinth", "curseforge"], help="Which platform to upload to (default: all)")
 
     args = parser.parse_args()
-    modrinth_api_token = args.modrinth_api_token or read_env_secret("MODRINTH_API_TOKEN")
-    curseforge_api_token = args.curseforge_api_token or read_env_secret("CURSEFORGE_API_TOKEN")
-    curseforge_api_key = args.curseforge_api_key or read_env_secret("CURSEFORGE_API_KEY")
+    upload_modrinth = args.target in ("all", "modrinth")
+    upload_curseforge = args.target in ("all", "curseforge")
+    modrinth_api_token = None
+    curseforge_api_token = None
+    curseforge_api_key = None
 
-    if not modrinth_api_token or not curseforge_api_token or not curseforge_api_key:
-        raise SystemExit(1)
+    if upload_modrinth:
+        modrinth_api_token = args.modrinth_api_token or read_env_secret("MODRINTH_API_TOKEN")
+
+        if not modrinth_api_token:
+            raise SystemExit(1)
+
+    if upload_curseforge:
+        curseforge_api_token = args.curseforge_api_token or read_env_secret("CURSEFORGE_API_TOKEN")
+        curseforge_api_key = args.curseforge_api_key or read_env_secret("CURSEFORGE_API_KEY")
+
+        if not curseforge_api_token or not curseforge_api_key:
+            raise SystemExit(1)
 
     props = read_properties(keys_to_find=["ali_version", "awi_version", "aci_version", "minecraft_version", "ali_mod_name", "awi_mod_name", "aci_mod_name", "enabled_platforms"])
     version_changelog = read_changelog(filename=f"{args.mod_id}/CHANGELOG.md")
@@ -353,6 +367,9 @@ if __name__ == "__main__":
         mod_dependencies = list(map(prepare_dependency, MODRINTH_VIEWER_PROJECT_IDS))
         mod_dependencies.append(prepare_dependency(MODRINTH_ACI_PROJECT_ID, "required"))
 
+        if args.mod_id == "ali":
+            mod_dependencies.append(prepare_dependency(MODRINTH_LOOTJS_PROJECT_ID))
+
     failed = False
 
     for mod_loader in mod_loaders:
@@ -363,7 +380,7 @@ if __name__ == "__main__":
         file_path = f"{path}/{file_name}"
         name = f"{re.sub(r'(?<!^)(?=[A-Z])', ' ', props[f"{args.mod_id}_mod_name"])} {version}"
 
-        modrinth_uploaded = upload_to_modrinth(
+        modrinth_uploaded = not upload_modrinth or upload_to_modrinth(
             api_token=modrinth_api_token,
             project_id=args.modrinth_project_id,
             mod_file_path=file_path,
@@ -374,9 +391,10 @@ if __name__ == "__main__":
             dependencies=mod_dependencies,
             release_type=args.release_type,
             version_name=name,
+            environment=MODRINTH_ENVIRONMENT,
         )
 
-        curseforge_uploaded = upload_to_curseforge(
+        curseforge_uploaded = not upload_curseforge or upload_to_curseforge(
             api_token=curseforge_api_token,
             api_key=curseforge_api_key,
             project_id=args.curseforge_project_id,

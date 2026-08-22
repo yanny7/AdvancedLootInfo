@@ -293,26 +293,35 @@ allprojects {
     }
 }
 
-def uploadRunConfigTasks = ["ali", "awi", "aci"].collect { modId ->
-    tasks.register("generateUploadRunConfig${modId.capitalize()}") {
-        group = "ide"
-        description = "Writes an IntelliJ Python run configuration that uploads ${project.property("${modId}_mod_name")} to Modrinth and CurseForge"
+def uploadTargets = [
+        all       : ["suffix": "", "label": "Modrinth and CurseForge"],
+        modrinth  : ["suffix": "Modrinth", "label": "Modrinth"],
+        curseforge: ["suffix": "Curseforge", "label": "CurseForge"],
+]
 
-        def modName = project.property("${modId}_mod_name")
-        def parameters = [
-                "--mod-id=${modId}",
-                "--modrinth-project-id=${project.property("${modId}_modrinth_project_id")}",
-                "--curseforge-project-id=${project.property("${modId}_curseforge_project_id")}",
-                "--release-type=release",
-        ].join(" ")
-        def outputFile = file(".idea/runConfigurations/Upload_${modId.toUpperCase()}.xml")
+def uploadRunConfigTasks = ["ali", "awi", "aci"].collectMany { modId ->
+    uploadTargets.collect { target, targetInfo ->
+        tasks.register("generateUploadRunConfig${modId.capitalize()}${targetInfo.suffix}") {
+            group = "ide"
+            description = "Writes an IntelliJ Python run configuration that uploads ${project.property("${modId}_mod_name")} to ${targetInfo.label}"
 
-        outputs.file(outputFile)
+            def modName = project.property("${modId}_mod_name")
+            def parameters = [
+                    "--mod-id=${modId}",
+                    "--modrinth-project-id=${project.property("${modId}_modrinth_project_id")}",
+                    "--curseforge-project-id=${project.property("${modId}_curseforge_project_id")}",
+                    "--release-type=beta",
+                    "--target=${target}",
+            ].join(" ")
+            def configName = "Upload ${modId.toUpperCase()}${targetInfo.suffix.isEmpty() ? "" : " ${targetInfo.label}"} (${modName})"
+            def outputFile = file(".idea/runConfigurations/Upload_${modId.toUpperCase()}${targetInfo.suffix.isEmpty() ? "" : "_${targetInfo.suffix}"}.xml")
 
-        doLast {
-            outputFile.parentFile.mkdirs()
-            outputFile.text = """<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Upload ${modId.toUpperCase()} (${modName})" type="PythonConfigurationType" factoryName="Python" folderName="Upload">
+            outputs.file(outputFile)
+
+            doLast {
+                outputFile.parentFile.mkdirs()
+                outputFile.text = """<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="${configName}" type="PythonConfigurationType" factoryName="Python" folderName="Upload">
     <module name="MultiLoader-AdvancedLootInfo"/>
     <option name="ENV_FILES" value=""/>
     <option name="INTERPRETER_OPTIONS" value=""/>
@@ -336,7 +345,8 @@ def uploadRunConfigTasks = ["ali", "awi", "aci"].collect { modId ->
   </configuration>
 </component>
 """
-            logger.lifecycle("Wrote ${outputFile}")
+                logger.lifecycle("Wrote ${outputFile}")
+            }
         }
     }
 }
