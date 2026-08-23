@@ -1,3 +1,7 @@
+## []
+
+- Added `tooltipColors` configuration to change the tooltip text, value, error and branch colors
+
 ## [2.0.1]
 
 IMPORTANT - Advanced Core Info (ACI) mod is now required dependency!

@@ -13,6 +13,7 @@ import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.configuration.LootCategory;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.client.ClientUtils;
+import com.yanny.ali.plugin.client.TooltipUtils;
 import com.yanny.ali.plugin.client.WidgetUtils;
 import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import me.shedaniel.math.Point;
@@ -139,13 +140,13 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
                 ItemStack itemStack = left.get();
                 EntryStack<ItemStack> stack = EntryStacks.of(itemStack);
 
-                stack.tooltip((s) -> CoreTooltipUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips));
+                stack.tooltip((s) -> CoreTooltipUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle()));
                 slot = Widgets.createSlot(point).entry(stack).markOutput();
             } else if (right.isPresent()) {
                 TagKey<? extends ItemLike> tagKey = right.get();
                 EntryIngredient ingredient = EntryIngredients.ofItemTag(tagKey);
 
-                ingredient.map((stack) -> stack.tooltip((s) -> CoreTooltipUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips)));
+                ingredient.map((stack) -> stack.tooltip((s) -> CoreTooltipUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle())));
                 slot = Widgets.createSlot(point).entries(ingredient).markOutput();
             }
 

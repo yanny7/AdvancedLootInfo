@@ -1,11 +1,14 @@
 package com.yanny.awi.configuration;
 
 import com.yanny.aci.configuration.ICoreConfig;
+import com.yanny.aci.configuration.TooltipColors;
 
 public class AwiConfig implements ICoreConfig {
     public static final int CURRENT_VERSION = 1;
 
     public int configVersion = 0;
+
+    public TooltipColors tooltipColors = new TooltipColors();
 
     public boolean logMoreStatistics = false;
     public boolean showInGameNames = true;
@@ -31,5 +34,12 @@ public class AwiConfig implements ICoreConfig {
     @Override
     public int getCurrentVersion() {
         return CURRENT_VERSION;
+    }
+
+    @Override
+    public void normalize() {
+        if (tooltipColors == null) {
+            tooltipColors = new TooltipColors();
+        }
     }
 }

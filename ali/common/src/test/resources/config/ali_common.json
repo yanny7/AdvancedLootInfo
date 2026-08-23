@@ -160,6 +160,12 @@
     "minecraft:survives_explosion"
   ],
   "entityLootTables": {},
+  "tooltipColors": {
+    "text": "gold",
+    "value": "aqua",
+    "error": "red",
+    "branch": "dark_gray"
+  },
   "logMoreStatistics": false,
   "showInGameNames": true,
   "hideDefaultBlockLoot": true

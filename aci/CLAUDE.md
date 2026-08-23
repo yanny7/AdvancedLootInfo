@@ -41,8 +41,9 @@ Guidance for working in `aci` (`com.yanny.aci`), the shared core library consume
 
 ### `configuration`
 
-- `ICoreConfig` — the contract a mod's config root implements: `getConfigVersion`/`setConfigVersion`/`getCurrentVersion` (the version field stays a plain public field on `AliConfig`/`AwiConfig`, so the generated JSON's field order is unchanged) plus an optional `normalize()`, called on a freshly deserialized config to treat an explicit `null` in the file like a missing key. ALI's `normalize()` fills its nine list/map fields back in from a default instance; AWI has nothing to normalize and uses the default no-op.
+- `ICoreConfig` — the contract a mod's config root implements: `getConfigVersion`/`setConfigVersion`/`getCurrentVersion` (the version field stays a plain public field on `AliConfig`/`AwiConfig`, so the generated JSON's field order is unchanged) plus an optional `normalize()`, called on a freshly deserialized config to treat an explicit `null` in the file like a missing key. Both mods override it: ALI fills its nine list/map fields and its `tooltipColors` back in from a default instance, AWI its `tooltipColors`.
 - `CoreConfigUtils` — guarded by `CoreConfigUtilsTest` (see "Tests" below). `readConfiguration(configDir, modId, fileName, type, factory, gson)`: creates `<configDir>/<modId>/<fileName>` from defaults when missing, loads it, and rotates it to `.bak` + regenerates when the file's version is older than `getCurrentVersion()`. Every failure path falls back to `factory.get()`, so it never returns null and never throws. `gsonBuilder()` is the shared `GsonBuilder` (pretty printing + `ResourceLocation.Serializer`); a mod layers its own type adapters on top — ALI adds its `LootCategoryAdapter`, AWI just calls `create()`. Each mod's own `configuration.ConfigUtils` is only that call plus its Gson setup.
+- `TooltipColors` — the config block behind both mods' `tooltipColors` option: four color strings (`text`, `value`, `error`, `branch`), each a vanilla color name or a `#RRGGBB` code, resolved by `resolve(modId)` into a `TooltipStyle` cached in a `transient` field. An unparseable value logs a warning and falls back to that field's default, so a bad color never breaks rendering. It is a plain Gson-serialized POJO embedded in `AliConfig`/`AwiConfig`, not something ACI loads for itself — ACI has no config file and no common initializer.
 
 ### `network`
 
@@ -63,7 +64,7 @@ Supporting types for the translation-key model (not the whole wiring mechanism, 
 
 ### `tooltip`
 
-`TooltipBuilder`, `TooltipNode`, `RawTooltipNode`, `TooltipNodePalette`, `TooltipContext`, `CacheKey`, `CommonValueTooltip`, `CoreTooltipUtils` — the tree model described in full below. A `TooltipNodePalette` is built for one mod and carries its id (`getModId()`).
+`TooltipBuilder`, `TooltipNode`, `RawTooltipNode`, `TooltipNodePalette`, `TooltipContext`, `TooltipStyle`, `CacheKey`, `CommonValueTooltip`, `CoreTooltipUtils` — the tree model described in full below. A `TooltipNodePalette` is built for one mod and carries its id (`getModId()`).
 
 ## Logging
 
@@ -89,6 +90,12 @@ ALI and AWI both display their information the same way: a tree of `TooltipNode`
 - Which palette a build writes into is **ambient**, held in a `TooltipContext` `ThreadLocal`: `TooltipBuilder.build()` and `TooltipNode.empty()` resolve it through `TooltipContext.getPalette()`. Each mod brackets its whole server-side scan (`AbstractServer.readLootTables` / `readWorldgenInfo`) with `TooltipContext.setPalette(serverRegistry.getTooltipCache())` and a `finally`-clause `clearPalette()`, and each mod's `TooltipTestSuite` binds it once in `@BeforeSuite`. Anything that builds a tooltip outside such a bracket throws `IllegalStateException` naming the fix, rather than writing into another mod's palette. This is why the palette is not reachable from a static singleton: ALI and AWI load one shared copy of `aci`, so a static field on `CorePluginManager` would be one field for both mods and whichever registered last would win.
 - Both `TooltipContext` ThreadLocals (the current loot table and the current palette) are therefore shared between ALI and AWI at runtime. That is safe only because the two scans run sequentially on the server thread and each brackets its own region — never leave either one set across a mod boundary.
 - On the wire, the full deduplicated `TooltipNodePalette` is sent **upfront**, once per full sync (not lazily/per-request): each mod's `AbstractServer` data-build method calls `serverRegistry.getTooltipCache().encode(serverRegistry, buf)` as the very first thing written into the raw buffer, before any loot/trade/worldgen node tree. Client-side, `TooltipNodePalette.decode` reads that header first and rebuilds `idToNode` before any dependent node reconstruction resolves children by id lookup.
+
+### Tooltip colors
+
+Rendering colors live in the `TooltipStyle` record (`text`, `value`, `error`, `branch` as `Style`s) and are applied at render time only — nothing style-related is part of `CacheKey`, of the palette's deduplication, or of the wire format, so color is a purely client-side decision. `TooltipNode.getComponents`/`CoreTooltipUtils.toComponents` each take the style as their last argument; `TooltipStyle.DEFAULT` is gold/aqua/red/dark_gray.
+
+Each mod resolves its **own** style from its **own** config through `plugin/client/TooltipUtils.getStyle()` and passes it into `CoreTooltipUtils.toComponents` at the call site. A static style field on an ACI class would be wrong for the same reason the palette is not a static singleton: ALI and AWI share one loaded copy of `aci`, so whichever mod wrote last would win. The config is read once at `CoreCommonRegistry` construction, so a color change needs a restart.
 
 ### Two dispatch tiers
 

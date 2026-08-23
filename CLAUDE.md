@@ -79,7 +79,7 @@ Core flow, per mod (see `ali/CLAUDE.md` / `awi/CLAUDE.md` for the concrete insta
 
 Server-collected data is sent to the client over custom networking (`network` package). **Only the transfer is on demand**: the whole data tree is built eagerly on the server thread at server start (and on datapack/tag reload) by `AbstractServer.readLootTables`/`readWorldgenInfo`, and the recipe viewer's `RequestLootDataMessage`/`RequestWorldgenDataMessage` merely starts streaming the already-built, gzipped chunks to that client. Scan cost is therefore server-startup cost — it is never deferred until a viewer asks. See `ali/CLAUDE.md`'s networking section (canonical) and `awi/CLAUDE.md`'s (the same pattern, diffed).
 
-Mod compatibility for ALI's built-in loot categories is data-driven: `ali_config.schema.json` documents the datapack-based configuration format (loot categories, ingredients, tags) that ALI's `configuration`/`datagen` packages read and generate — see `ali/CLAUDE.md`. AWI's config surface is much smaller: just `AwiConfig` (`configVersion`, `logMoreStatistics`, `showInGameNames`) in `awi/common`'s `configuration` package — no datapack-driven categories.
+Mod compatibility for ALI's built-in loot categories is data-driven: `ali_config.schema.json` documents the datapack-based configuration format (loot categories, ingredients, tags) that ALI's `configuration`/`datagen` packages read and generate — see `ali/CLAUDE.md`. AWI's config surface is much smaller: `AwiConfig` (`configVersion`, `tooltipColors`, `logMoreStatistics`, `showInGameNames`, `showConfigConditionalBlocks`) in `awi/common`'s `configuration` package, documented by `awi_config.schema.json` — no datapack-driven categories.
 
 ## Common commands
 
@@ -134,7 +134,16 @@ Generate data (recipes/loot/lang, per loader) via the IDE run configurations in 
 
 ## Versioning
 
-ALI, AWI and ACI version independently (`ali_version` / `awi_version` / `aci_version` in `gradle.properties`), each with its own `CHANGELOG.md` (`ali/CHANGELOG.md`, `awi/CHANGELOG.md`, `aci/CHANGELOG.md`). Update the relevant changelog and bump the relevant version property when shipping a change to that mod. Because the same fix/feature is typically ported across the active version branches, the same version bump and changelog entry commonly land on several branches — check whether a change belongs on other branches too, not just the one you're on.
+ALI, AWI and ACI version independently (`ali_version` / `awi_version` / `aci_version` in `gradle.properties`), each with its own `CHANGELOG.md` (`ali/CHANGELOG.md`, `awi/CHANGELOG.md`, `aci/CHANGELOG.md`). Every change to a mod gets a changelog entry there. Because the same fix/feature is typically ported across the active version branches, the same entry and version property commonly land on several branches — check whether a change belongs on other branches too, not just the one you're on.
+
+A changelog section header states the release status of what is under it:
+
+- `## [X.Y.Z]` — that version is **released**. Never append to it.
+- `## []` — **unreleased** changes, the section the next release will be numbered. Add new entries here.
+
+So: if the top section carries a version number, open a new `## []` section above it; if it is already `## []`, append to it. The version number is filled in when the mod is actually published.
+
+`gradle.properties` follows from that. Bump the mod's version property only when the version currently in it has been published — i.e. when you are opening a new `## []` section. While an unreleased `## []` section already exists, the property already points at the coming release and stays untouched no matter how many further changes land. Size the bump to the change: a feature or other significant change raises the minor (`1.0.1` → `1.1.0`), a plain fix raises the patch.
 
 ### ACI is published API
 
@@ -149,14 +158,24 @@ ACI ships as its own jar and is a **mandatory** dependency of both ALI and AWI, 
 7. The network protocol in `aci.network` follows the same number: a wire-format change is a MAJOR bump even when the Java signatures are untouched.
 8. Release order is always ACI first, then ALI/AWI, so their required-dependency reference never dangles.
 
+Anything that stays only to keep older callers working — a superseded method or overload, a constant no longer read, a type left in place after its replacement landed — is marked `@Deprecated(forRemoval = true, since = "<the version the deprecation ships in>")` (with the replacement named in a `@deprecated` Javadoc line) instead of being changed or dropped, and no code in this repo calls it any more. Those annotations are the removal list — never keep a second one in a doc — and the members go away in the next MAJOR release and nowhere else.
+
 The `testArtifacts` configuration on `aci:common` (the shared `TestUtils`) is not published API — it never leaves the repo, so its shape can change without touching `aci_version`.
 
 ## Wiki
 
 The user-facing documentation is the project's GitHub wiki — a separate repository, not part of this one. It is a single wiki covering **all** supported Minecraft versions, split into a `Users/` section (no implementation details — no Gson/codecs/registries/API names there) and a `Developers/` section (plugin API). Version-specific behaviour is marked inline per Minecraft version; mod versions are never mentioned, only current behaviour is documented.
 
-**Whenever a change adds, removes or alters user-visible behaviour, a config option, the config format, the datapack format (`fake_loot`), or the plugin API — tell the user explicitly that the wiki needs updating, and name which page(s).** Do not silently assume the wiki is fine; it is not part of this repo, so nothing else will catch the drift. The same applies to `ali_config.schema.json`, which the wiki links to and which must stay in sync with `configuration/AliConfig` and the `LootCategory` subclasses.
+**Whenever a change adds, removes or alters user-visible behaviour, a config option, the config format, the datapack format (`fake_loot`), or the plugin API — tell the user explicitly that the wiki needs updating, and name which page(s).** Do not silently assume the wiki is fine; it is not part of this repo, so nothing else will catch the drift. The same applies to the two published schemas the wiki links to: `ali_config.schema.json`, which must stay in sync with `configuration/AliConfig` and the `LootCategory` subclasses, and `awi_config.schema.json`, which must stay in sync with `configuration/AwiConfig`.
 
 ## Publishing
 
 `upload.py` at the repo root pushes built jars to Modrinth and CurseForge; it reads mod metadata from `gradle.properties`. Treat running it as a release action, not something to invoke incidentally. ACI is published as its own project and must go out **before** ALI/AWI, which declare it as a required dependency.
+
+Before a release, list what is queued for removal:
+
+```
+grep -rn "forRemoval = true" --include=*.java --exclude-dir=build .
+```
+
+On a MAJOR bump of the mod that owns them, delete everything that prints — `since` says how long each has been carried. On any other release just read it, and check nothing in the repo calls those members: `./gradlew build 2>&1 | grep -i "deprecated and marked for removal"`, ignoring the hits from vanilla/loader classes.

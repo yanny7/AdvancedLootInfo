@@ -2,6 +2,7 @@ package com.yanny.ali.configuration;
 
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.configuration.ICoreConfig;
+import com.yanny.aci.configuration.TooltipColors;
 import com.yanny.ali.Utils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -40,6 +41,8 @@ public class AliConfig implements ICoreConfig {
      * EntityLootTableResolver}.
      */
     public Map<ResourceLocation, List<ResourceLocation>> entityLootTables;
+
+    public TooltipColors tooltipColors = new TooltipColors();
 
     public boolean logMoreStatistics = false;
     public boolean showInGameNames = true;
@@ -125,6 +128,9 @@ public class AliConfig implements ICoreConfig {
         }
         if (entityLootTables == null) {
             entityLootTables = defaults.entityLootTables;
+        }
+        if (tooltipColors == null) {
+            tooltipColors = defaults.tooltipColors;
         }
     }
 
