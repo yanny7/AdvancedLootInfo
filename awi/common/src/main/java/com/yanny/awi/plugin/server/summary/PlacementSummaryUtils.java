@@ -84,7 +84,7 @@ public class PlacementSummaryUtils {
     /** One line: full range, distribution kind, and the "most likely" band (only when it narrows the range). */
     private static void addHeight(TooltipBuilder b, IServerUtils utils, HeightSpan height) {
         if (height.heightmap() != null) {
-            b.add(utils.getValueTooltip(utils, height.heightmap()).build(Lang.Value.HEIGHTMAP));
+            b.add(utils.getValueTooltip(utils, height.heightmap()).build(Lang.Value.HEIGHT));
             return;
         }
         if (height.range().isUnknown()) {

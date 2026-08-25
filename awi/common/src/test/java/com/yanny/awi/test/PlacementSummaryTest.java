@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.yanny.awi.test.TooltipTestSuite.UTILS;
 import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
+import static com.yanny.awi.test.TooltipTestSuite.UTILS;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PlacementSummaryTest {
@@ -175,7 +175,7 @@ public class PlacementSummaryTest {
     public void testSummaryTooltipHeightmapFallback() {
         List<PlacementModifier> modifiers = List.of(HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR));
         assertTooltip(renderSummary(modifiers), List.of(
-                "Heightmap: OCEAN_FLOOR"
+                "Height: OCEAN_FLOOR"
         ));
     }
 
