@@ -92,5 +92,5 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
     <T extends PlacementModifier> PlacementContribution getPlacementContribution(IServerUtils utils, T modifier, ColumnContext ctx);
 
     @NotNull
-    TooltipBuilder getEnumTranslation(Enum<?> value);
+    TooltipBuilder getEnumTranslation(IServerUtils utils, Enum<?> value);
 }

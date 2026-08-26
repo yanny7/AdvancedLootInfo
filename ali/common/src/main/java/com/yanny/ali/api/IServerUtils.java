@@ -52,7 +52,7 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
     <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, TooltipNode condition);
 
     @NotNull
-    TooltipBuilder getEnumTranslation(Enum<?> value);
+    TooltipBuilder getEnumTranslation(IServerUtils utils, Enum<?> value);
 
     @NotNull
     RangeValue convertNumber(IServerUtils utils, @Nullable NumberProvider numberProvider);

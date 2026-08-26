@@ -40,7 +40,7 @@ import org.jetbrains.annotations.NotNull;
 public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getEnumTooltip(IServerUtils utils, Enum<?> value) {
-        return utils.getEnumTranslation(value);
+        return utils.getEnumTranslation(utils, value);
     }
 
     @NotNull

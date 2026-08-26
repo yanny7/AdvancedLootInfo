@@ -293,7 +293,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     @NotNull
     @Override
-    public TooltipBuilder getEnumTranslation(Enum<?> value) {
+    public TooltipBuilder getEnumTranslation(IServerUtils utils, Enum<?> value) {
         Class<?> type = value.getDeclaringClass();
         String owner = enumValues.get(type).orElseGet(() -> CoreTooltipUtils.enumOwnerPath(type));
         String key = CoreTooltipUtils.enumKey(Utils.MOD_ID, owner, value.name());

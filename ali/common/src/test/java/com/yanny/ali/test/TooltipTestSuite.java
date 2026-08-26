@@ -190,8 +190,8 @@ public class TooltipTestSuite {
 
             @NotNull
             @Override
-            public TooltipBuilder getEnumTranslation(Enum<?> value) {
-                return PluginManager.getInstance().serverRegistry.getEnumTranslation(value);
+            public TooltipBuilder getEnumTranslation(IServerUtils utils, Enum<?> value) {
+                return PluginManager.getInstance().serverRegistry.getEnumTranslation(utils, value);
             }
 
             @NotNull
