@@ -5,6 +5,7 @@ import com.mojang.logging.LogUtils;
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipNode;
+import com.yanny.aci.tooltip.TooltipStyle;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -49,7 +50,7 @@ public class TestUtils {
     }
 
     public static void assertTooltip(TooltipNode tooltip, boolean isAdvanced, List<String> expected) {
-        List<Component> components = CoreTooltipUtils.toComponents(tooltip, 0, isAdvanced);
+        List<Component> components = CoreTooltipUtils.toComponents(tooltip, 0, isAdvanced, TooltipStyle.DEFAULT);
         List<Executable> executables = new LinkedList<>();
 
         executables.add(() -> Assertions.assertEquals(expected.size(), components.size()));
@@ -70,7 +71,7 @@ public class TestUtils {
     }
 
     public static void assertTooltip(List<TooltipNode> tooltip, List<String> expected) {
-        List<Component> components = CoreTooltipUtils.toComponents(tooltip, 0, true);
+        List<Component> components = CoreTooltipUtils.toComponents(tooltip, 0, true, TooltipStyle.DEFAULT);
         List<Executable> executables = new LinkedList<>();
 
         executables.add(() -> Assertions.assertEquals(expected.size(), components.size()));

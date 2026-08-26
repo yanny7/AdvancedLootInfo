@@ -104,7 +104,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testRarityTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getRarityTooltip(UTILS, Rarity.EPIC).build(), List.of("Rarity: EPIC"));
+        assertTooltip(DataComponentTooltipUtils.getRarityTooltip(UTILS, Rarity.EPIC).build(), List.of("Rarity: Epic"));
     }
 
     @Test
@@ -181,15 +181,15 @@ public class DataComponentTooltipTest {
                 "    -> Modifier:",
                 "      -> Id: minecraft:hello",
                 "      -> Amount: 0.5",
-                "      -> Operation: ADD_VALUE",
-                "    -> Slot: HEAD",
+                "      -> Operation: Add Value",
+                "    -> Slot: Head",
                 "  -> Entry:",
                 "    -> Attribute: minecraft:generic.armor_toughness",
                 "    -> Modifier:",
                 "      -> Id: minecraft:world",
                 "      -> Amount: 1.25",
-                "      -> Operation: ADD_MULTIPLIED_TOTAL",
-                "    -> Slot: HAND",
+                "      -> Operation: Multiply Total",
+                "    -> Slot: Hand",
                 "Show In Tooltip: false"
         ));
     }
@@ -333,7 +333,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testMapPostProcessingTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getMapPostProcessingTooltip(UTILS, MapPostProcessing.SCALE).build(), List.of("Value: SCALE"));
+        assertTooltip(DataComponentTooltipUtils.getMapPostProcessingTooltip(UTILS, MapPostProcessing.SCALE).build(), List.of("Value: Scale"));
     }
 
     @Test
@@ -547,7 +547,7 @@ public class DataComponentTooltipTest {
                 true,
                 false
         )).build(), List.of(
-                "Shape: LARGE_BALL",
+                "Shape: Large Ball",
                 "Colors: [1, 2, 3]",
                 "Fade Colors: []",
                 "Has Trail: true",
@@ -567,13 +567,13 @@ public class DataComponentTooltipTest {
                 "Flight Duration: 10",
                 "Explosions:",
                 "  -> Entry:",
-                "    -> Shape: STAR",
+                "    -> Shape: Star",
                 "    -> Colors: []",
                 "    -> Fade Colors: []",
                 "    -> Has Trail: true",
                 "    -> Has Twinkle: true",
                 "  -> Entry:",
-                "    -> Shape: CREEPER",
+                "    -> Shape: Creeper",
                 "    -> Colors: []",
                 "    -> Fade Colors: []",
                 "    -> Has Trail: true",
@@ -622,15 +622,15 @@ public class DataComponentTooltipTest {
         ))).build(), List.of(
                 "Banner Patterns:",
                 "  -> minecraft:base",
-                "    -> Color: BLUE",
+                "    -> Color: Blue",
                 "  -> minecraft:border",
-                "    -> Color: RED"
+                "    -> Color: Red"
         ));
     }
 
     @Test
     public void testBaseColorTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getBaseColorTooltip(UTILS, DyeColor.CYAN).build(), List.of("Color: CYAN"));
+        assertTooltip(DataComponentTooltipUtils.getBaseColorTooltip(UTILS, DyeColor.CYAN).build(), List.of("Color: Cyan"));
     }
 
     @Test

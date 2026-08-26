@@ -59,7 +59,7 @@ public class StructureProcessorTooltipTest {
     public void testGravityProcessorTooltip() {
         assertTooltip(StructureProcessorTooltipUtils.getGravityProcessorTooltip(UTILS, new GravityProcessor(Heightmap.Types.WORLD_SURFACE_WG, 1)).build(), List.of(
                 "Gravity:",
-                "  -> Heightmap: WORLD_SURFACE_WG",
+                "  -> Heightmap: Highest Block, Plants Included",
                 "  -> Offset: 1"
         ));
     }

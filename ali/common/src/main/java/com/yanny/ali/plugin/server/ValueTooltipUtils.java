@@ -47,6 +47,11 @@ import static com.yanny.ali.plugin.server.GenericTooltipUtils.getStatTranslation
 
 public class ValueTooltipUtils {
     @NotNull
+    public static TooltipBuilder getEnumTooltip(IServerUtils utils, Enum<?> condition) {
+        return utils.getEnumTranslation(utils, condition);
+    }
+
+    @NotNull
     public static TooltipBuilder getConditionTooltip(IServerUtils utils, LootItemCondition condition) {
         return utils.getConditionTooltip(utils, condition);
     }

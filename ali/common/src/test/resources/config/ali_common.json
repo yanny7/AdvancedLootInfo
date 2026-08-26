@@ -186,5 +186,11 @@
     "minecraft:table_bonus",
     "minecraft:survives_explosion"
   ],
-  "entityLootTables": {}
+  "entityLootTables": {},
+  "tooltipColors": {
+    "text": "gold",
+    "value": "aqua",
+    "error": "red",
+    "branch": "dark_gray"
+  }
 }

@@ -2,25 +2,24 @@ package com.yanny.awi.test;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
+import com.yanny.aci.test.utils.TestUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.aci.tooltip.TooltipNodePalette;
-import com.yanny.awi.datagen.LanguageHolder;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.configuration.AwiConfig;
-import com.yanny.aci.tooltip.TooltipContext;
+import com.yanny.awi.datagen.LanguageHolder;
 import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.plugin.server.summary.ColumnContext;
 import com.yanny.awi.plugin.server.summary.CountSpan;
 import com.yanny.awi.plugin.server.summary.HeightSpan;
 import com.yanny.awi.plugin.server.summary.PlacementContribution;
-import com.yanny.aci.test.utils.TestUtils;
 import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
 import net.minecraft.Util;
 import net.minecraft.client.resources.ClientPackSource;
 import net.minecraft.client.resources.language.LanguageManager;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.tags.TagKey;
 import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.locale.Language;
 import net.minecraft.server.Bootstrap;
@@ -31,6 +30,7 @@ import net.minecraft.server.packs.repository.PackRepository;
 import net.minecraft.server.packs.resources.ReloadInstance;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Unit;
 import net.minecraft.util.valueproviders.FloatProvider;
 import net.minecraft.util.valueproviders.IntProvider;
@@ -251,6 +251,11 @@ public class TooltipTestSuite {
             @Override
             public @NotNull <T extends PlacementModifier> PlacementContribution getPlacementContribution(IServerUtils utils, T modifier, ColumnContext ctx) {
                 return PluginManager.getInstance().serverRegistry.getPlacementContribution(utils, modifier, ctx);
+            }
+
+            @Override
+            public @NotNull TooltipBuilder getEnumTranslation(IServerUtils utils, Enum<?> value) {
+                return PluginManager.getInstance().serverRegistry.getEnumTranslation(utils, value);
             }
         };
 

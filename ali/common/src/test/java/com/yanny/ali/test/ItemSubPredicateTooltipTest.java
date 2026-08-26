@@ -140,7 +140,7 @@ public class ItemSubPredicateTooltipTest {
                 Optional.of(false)
         ))).build(), List.of(
                 "Firework Explosion:",
-                "  -> Shape: LARGE_BALL",
+                "  -> Shape: Large Ball",
                 "  -> Trail: false",
                 "  -> Twinkle: true"
         ));
@@ -156,9 +156,9 @@ public class ItemSubPredicateTooltipTest {
                 "Fireworks:",
                 "  -> Explosions:",
                 "    -> Contains:",
-                "      -> Shape: BURST",
+                "      -> Shape: Burst",
                 "    -> Counts:",
-                "      -> Shape: CREEPER",
+                "      -> Shape: Creeper",
                 "      -> Count: 1-5",
                 "    -> Size: ≥4",
                 "  -> Flight Duration: 1-4"
@@ -228,8 +228,8 @@ public class ItemSubPredicateTooltipTest {
                 "    -> Attribute: minecraft:generic.armor",
                 "    -> Id: minecraft:help",
                 "    -> Amount: 1.0-4.0",
-                "    -> Operation: ADD_VALUE",
-                "    -> Slot: ARMOR",
+                "    -> Operation: Add Value",
+                "    -> Slot: Armor",
                 "  -> Counts:",
                 "    -> Attribute: minecraft:generic.gravity",
                 "    -> Count: 1-5",

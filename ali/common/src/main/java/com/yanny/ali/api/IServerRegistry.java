@@ -63,6 +63,8 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     <T extends VillagerTrades.ItemListing> void registerItemListing(Class<T> type, TriFunction<IServerUtils, T, TooltipNode, IDataNode> supplier);
 
+    void registerEnumTranslation(Class<? extends Enum<?>> type, String owner);
+
     @FunctionalInterface
     interface EntryFactory<T extends LootPoolEntryContainer> {
         IDataNode create(IServerUtils utils, T entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions);

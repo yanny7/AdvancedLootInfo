@@ -3,20 +3,20 @@ package com.yanny.ali.test;
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.test.utils.TestUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.aci.tooltip.TooltipNodePalette;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.configuration.AliConfig;
-import com.yanny.aci.tooltip.TooltipContext;
+import com.yanny.ali.datagen.LanguageHolder;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.LootConditionTypes;
 import com.yanny.ali.plugin.server.LootFunctionTypes;
-import com.yanny.ali.datagen.LanguageHolder;
-import com.yanny.aci.test.utils.TestUtils;
 import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
 import net.minecraft.Util;
@@ -209,6 +209,12 @@ public class TooltipTestSuite {
             @Override
             public <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, TooltipNode condition) {
                 return PluginManager.getInstance().serverRegistry.getItemListing(utils, entry, condition);
+            }
+
+            @NotNull
+            @Override
+            public TooltipBuilder getEnumTranslation(IServerUtils utils, Enum<?> value) {
+                return PluginManager.getInstance().serverRegistry.getEnumTranslation(utils, value);
             }
 
             @NotNull

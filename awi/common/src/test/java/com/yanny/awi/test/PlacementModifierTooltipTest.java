@@ -37,7 +37,7 @@ public class PlacementModifierTooltipTest {
     public void testCarvingMaskPlacementTooltip() {
         assertTooltip(PlacementModifierTooltipUtils.getCarvingMaskPlacementTooltip(UTILS, CarvingMaskPlacement.forStep(GenerationStep.Carving.AIR)).build(), List.of(
                 "Carving Mask Placement:",
-                "  -> Step: AIR"
+                "  -> Step: Air"
         ));
     }
 
@@ -84,7 +84,7 @@ public class PlacementModifierTooltipTest {
                 32
         )).build(), List.of(
                 "Environment Scan Placement:",
-                "  -> Direction Of Search: UP",
+                "  -> Direction Of Search: Up",
                 "  -> Target Condition:",
                 "    -> Solid:",
                 "  -> Allowed Search Condition:",
@@ -97,7 +97,7 @@ public class PlacementModifierTooltipTest {
     public void testHeightmapPlacementTooltip() {
         assertTooltip(PlacementModifierTooltipUtils.getHeightmapPlacementTooltip(UTILS, HeightmapPlacement.onHeightmap(Heightmap.Types.MOTION_BLOCKING)).build(), List.of(
                 "Heightmap Placement:",
-                "  -> Heightmap: MOTION_BLOCKING"
+                "  -> Heightmap: Ground or Water Surface"
         ));
     }
 
@@ -168,17 +168,17 @@ public class PlacementModifierTooltipTest {
     public void testSurfaceRelativeThresholdFilterTooltip() {
         assertTooltip(PlacementModifierTooltipUtils.getSurfaceRelativeThresholdFilterTooltip(UTILS, SurfaceRelativeThresholdFilter.of(Heightmap.Types.WORLD_SURFACE_WG, Integer.MIN_VALUE, 5)).build(), List.of(
                 "Surface Relative Threshold Filter:",
-                "  -> Heightmap: WORLD_SURFACE_WG",
+                "  -> Heightmap: Highest Block, Plants Included",
                 "  -> Range: ≤5"
         ));
         assertTooltip(PlacementModifierTooltipUtils.getSurfaceRelativeThresholdFilterTooltip(UTILS, SurfaceRelativeThresholdFilter.of(Heightmap.Types.WORLD_SURFACE_WG, 3, Integer.MAX_VALUE)).build(), List.of(
                 "Surface Relative Threshold Filter:",
-                "  -> Heightmap: WORLD_SURFACE_WG",
+                "  -> Heightmap: Highest Block, Plants Included",
                 "  -> Range: ≥3"
         ));
         assertTooltip(PlacementModifierTooltipUtils.getSurfaceRelativeThresholdFilterTooltip(UTILS, SurfaceRelativeThresholdFilter.of(Heightmap.Types.WORLD_SURFACE_WG, 2, 8)).build(), List.of(
                 "Surface Relative Threshold Filter:",
-                "  -> Heightmap: WORLD_SURFACE_WG",
+                "  -> Heightmap: Highest Block, Plants Included",
                 "  -> Range: 2-8"
         ));
     }

@@ -112,7 +112,7 @@ public class WidgetUtils {
             @NotNull
             @Override
             public List<Component> getTooltipComponents(int mouseX, int mouseY) {
-                return CoreTooltipUtils.toComponents(node.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips);
+                return CoreTooltipUtils.toComponents(node.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle());
             }
 
             @Override
