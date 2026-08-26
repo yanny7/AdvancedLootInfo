@@ -66,6 +66,9 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
     <T extends LootItemFunction> ItemStack applyItemStackModifier(IServerUtils utils, T function, ItemStack itemStack);
 
     @NotNull
+    TooltipBuilder getEnumTranslation(IServerUtils utils, Enum<?> value);
+
+    @NotNull
     RangeValue convertNumber(IServerUtils utils, @Nullable NumberProvider numberProvider);
 
     @Nullable

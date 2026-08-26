@@ -7,6 +7,7 @@ import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.test.utils.TestUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipContext;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.aci.tooltip.TooltipNodePalette;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
@@ -217,6 +218,12 @@ public class TooltipTestSuite {
             @Override
             public <T extends LootItemFunction> ItemStack applyItemStackModifier(IServerUtils utils, T function, ItemStack itemStack) {
                 return PluginManager.getInstance().serverRegistry.applyItemStackModifier(utils, function, itemStack);
+            }
+
+            @NotNull
+            @Override
+            public TooltipBuilder getEnumTranslation(IServerUtils utils, Enum<?> value) {
+                return PluginManager.getInstance().serverRegistry.getEnumTranslation(utils, value);
             }
 
             @NotNull

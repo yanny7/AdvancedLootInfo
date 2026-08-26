@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/yanny7/AdvancedLootInfo/blob/master/awi_config.schema.json",
+  "title": "Advanced Worldgen Info Configuration Schema",
+  "description": "Main configuration file for the AdvancedWorldgenInfo mod (config/awi/awi_common.json).",
+  "type": "object",
+  "properties": {
+    "configVersion": {
+      "type": "integer",
+      "description": "Version of the configuration format. Do not edit by hand - an outdated value makes the mod rename the file to awi_common.json.bak and write a fresh default file."
+    },
+    "tooltipColors": {
+      "type": "object",
+      "description": "Colors used when rendering tooltips. Changes take effect on restart.",
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "Color of tooltip keys and labels. A vanilla color name or a hex color code such as #FFAA00. An invalid value falls back to the default.",
+          "pattern": "^(#[0-9a-fA-F]{6}|[a-z_]+)$",
+          "default": "gold"
+        },
+        "value": {
+          "type": "string",
+          "description": "Color of tooltip values. A vanilla color name or a hex color code such as #FFAA00. An invalid value falls back to the default.",
+          "pattern": "^(#[0-9a-fA-F]{6}|[a-z_]+)$",
+          "default": "aqua"
+        },
+        "error": {
+          "type": "string",
+          "description": "Color of values belonging to an errored tooltip entry. A vanilla color name or a hex color code such as #FFAA00. An invalid value falls back to the default.",
+          "pattern": "^(#[0-9a-fA-F]{6}|[a-z_]+)$",
+          "default": "red"
+        },
+        "branch": {
+          "type": "string",
+          "description": "Color of the tree branch arrows. A vanilla color name or a hex color code such as #FFAA00. An invalid value falls back to the default.",
+          "pattern": "^(#[0-9a-fA-F]{6}|[a-z_]+)$",
+          "default": "dark_gray"
+        }
+      }
+    },
+    "logMoreStatistics": {
+      "type": "boolean",
+      "description": "If true, logs more detailed statistics about the worldgen scan.",
+      "default": false
+    },
+    "showInGameNames": {
+      "type": "boolean",
+      "description": "If true, displays translated names instead of ids.",
+      "default": true
+    },
+    "showConfigConditionalBlocks": {
+      "type": "boolean",
+      "description": "If true, shows blocks that a feature's code only places depending on the configuration it was given. Those blocks are wrong for some configurations, so they are hidden by default.",
+      "default": false
+    }
+  },
+  "additionalProperties": false
+}

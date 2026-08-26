@@ -52,7 +52,7 @@ public class BlockPredicateTooltipTest {
     public void testHasSturdyFacePredicateTooltip() {
         assertTooltip(BlockPredicateTooltipUtils.getHasSturdyFacePredicateTooltip(UTILS, new HasSturdyFacePredicate(new Vec3i(1, 2, 3), Direction.UP)).build(), List.of(
                 "Has Sturdy Face:",
-                "  -> Direction: UP",
+                "  -> Direction: Up",
                 "  -> Offset: [1,2,3]"
         ));
     }
@@ -108,7 +108,7 @@ public class BlockPredicateTooltipTest {
                 "  -> Predicates:",
                 "    -> Inside World Bounds:",
                 "    -> Has Sturdy Face:",
-                "      -> Direction: UP"
+                "      -> Direction: Up"
         ));
     }
 

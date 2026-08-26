@@ -35,7 +35,6 @@ public class CommonValueTooltip<
         registry.registerValueTooltip(String.class, this::getStringTooltip);
         registry.registerValueTooltip(Float.class, this::getFloatTooltip);
         registry.registerValueTooltip(Double.class, this::getDoubleTooltip);
-        registry.registerValueTooltip(Enum.class, this::getEnumTooltip);
         registry.registerValueTooltip(Identifier.class, this::getIdentifierTooltip);
         registry.registerValueTooltip(ResourceKey.class, this::getResourceKeyTooltip);
         registry.registerValueTooltip(TagKey.class, this::getTagKeyTooltip);
@@ -119,11 +118,6 @@ public class CommonValueTooltip<
     @NotNull
     private TooltipBuilder getDoubleTooltip(TServerUtils utils, Double value) {
         return TooltipBuilder.value((float) (double) value);
-    }
-
-    @NotNull
-    private TooltipBuilder getEnumTooltip(TServerUtils utils, Enum<?> value) {
-        return TooltipBuilder.value(value.name());
     }
 
     @NotNull

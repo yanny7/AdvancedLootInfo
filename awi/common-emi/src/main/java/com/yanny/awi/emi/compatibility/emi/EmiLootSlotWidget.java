@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.awi.api.IDataNode;
+import com.yanny.awi.plugin.client.TooltipUtils;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.widget.SlotWidget;
 import net.minecraft.client.Minecraft;
@@ -28,7 +29,7 @@ public class EmiLootSlotWidget extends SlotWidget {
 
     @Override
     protected void addSlotTooltip(List<ClientTooltipComponent> list) {
-        CoreTooltipUtils.toComponents(entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips)
+        CoreTooltipUtils.toComponents(entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle())
                 .forEach((c) -> list.add(ClientTooltipComponent.create(c.getVisualOrderText())));
         super.addSlotTooltip(list);
     }

@@ -168,14 +168,14 @@ public class GenericTooltipTest {
                 .build()).build(Lang.Branch.MODIFIER), List.of(
                 "Modifier:",
                 "  -> Attribute: minecraft:armor",
-                "  -> Operation: ADD_MULTIPLIED_TOTAL",
+                "  -> Operation: Multiply Total",
                 "  -> Amount: 1-5",
                 "  -> Id: minecraft:armor",
                 "  -> Equipment Slots:",
-                "    -> FEET",
-                "    -> LEGS",
-                "    -> CHEST",
-                "    -> HEAD"
+                "    -> Feet",
+                "    -> Legs",
+                "    -> Chest",
+                "    -> Head"
         ));
     }
 
@@ -549,7 +549,7 @@ public class GenericTooltipTest {
                 "  -> Components:",
                 "    -> Expected Components:",
                 "      -> minecraft:base_color",
-                "        -> Color: BLUE"
+                "        -> Color: Blue"
         ));
         assertTooltip(ValueTooltipUtils.getItemPredicateTooltip(UTILS, ItemPredicate.Builder.item()
                 .of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.CAKE, Items.NETHERITE_AXE)
@@ -706,11 +706,11 @@ public class GenericTooltipTest {
                 "          -> Attribute: minecraft:armor",
                 "          -> Id: minecraft:test",
                 "          -> Amount: =3.2",
-                "          -> Operation: ADD_VALUE",
-                "          -> Slot: CHEST",
+                "          -> Operation: Add Value",
+                "          -> Slot: Chest",
                 "        -> Counts:",
                 "          -> Amount: 1.0-3.5",
-                "          -> Slot: BODY",
+                "          -> Slot: Body",
                 "          -> Count: ≤8",
                 "        -> Size: =2",
                 "      -> minecraft:bundle_contents",
@@ -734,15 +734,15 @@ public class GenericTooltipTest {
                 "        -> Enchantment: minecraft:flame",
                 "        -> Level: 1-2",
                 "      -> minecraft:firework_explosion",
-                "        -> Shape: CREEPER",
+                "        -> Shape: Creeper",
                 "        -> Trail: false",
                 "        -> Twinkle: true",
                 "      -> minecraft:fireworks",
                 "        -> Explosions:",
                 "          -> Contains:",
-                "            -> Shape: STAR",
+                "            -> Shape: Star",
                 "          -> Counts:",
-                "            -> Shape: LARGE_BALL",
+                "            -> Shape: Large Ball",
                 "            -> Count: ≤6",
                 "          -> Size: ≥1",
                 "        -> Flight Duration: =3",
@@ -814,7 +814,7 @@ public class GenericTooltipTest {
     @Test
     public void testGameTypeTooltip() {
         assertTooltip(ValueTooltipUtils.getGameTypePredicateTooltip(UTILS, GameTypePredicate.of(GameType.SPECTATOR)).build(Lang.Branch.GAME_TYPES), List.of(
-                "Game Type: SPECTATOR"
+                "Game Type: Spectator"
         ));
     }
 
@@ -848,11 +848,11 @@ public class GenericTooltipTest {
     @Test
     public void testListOperationTooltip() {
         assertTooltip(ValueTooltipUtils.getListOperationTooltip(UTILS, new ListOperation.Insert(1)).build(Lang.Value.LIST_OPERATION), List.of(
-                "List Operation: INSERT",
+                "List Operation: Insert",
                 "  -> Offset: 1"
         ));
         assertTooltip(ValueTooltipUtils.getListOperationTooltip(UTILS, new ListOperation.ReplaceSection(1, Optional.of(2))).build(Lang.Value.LIST_OPERATION), List.of(
-                "List Operation: REPLACE_SECTION",
+                "List Operation: Replace Section",
                 "  -> Offset: 1",
                 "  -> Size: 2"
         ));
@@ -912,7 +912,7 @@ public class GenericTooltipTest {
                 Optional.of(false)
         )).build(Lang.Branch.CONDITION), List.of(
                 "Predicate:",
-                "  -> Shape: CREEPER",
+                "  -> Shape: Creeper",
                 "  -> Trail: false",
                 "  -> Twinkle: true"
         ));
@@ -939,8 +939,8 @@ public class GenericTooltipTest {
                 "    -> minecraft:gravity",
                 "  -> Id: minecraft:test",
                 "  -> Amount: 1.5-3.1",
-                "  -> Operation: ADD_VALUE",
-                "  -> Slot: ARMOR"
+                "  -> Operation: Add Value",
+                "  -> Slot: Armor"
         ));
     }
 
@@ -955,7 +955,7 @@ public class GenericTooltipTest {
         ).build(Lang.Branch.COMPONENTS), List.of(
                 "Components:",
                 "  -> minecraft:base_color",
-                "    -> Color: BLUE",
+                "    -> Color: Blue",
                 "  -> minecraft:custom_name",
                 "    -> Custom Name: Hello",
                 "  -> minecraft:damage",
@@ -976,7 +976,7 @@ public class GenericTooltipTest {
                 false
         )).build(Lang.Branch.EXPLOSION), List.of(
                 "Explosion:",
-                "  -> Shape: STAR",
+                "  -> Shape: Star",
                 "  -> Colors: [1, 2, 3]",
                 "  -> Fade Colors: [3, 4, 5]",
                 "  -> Has Trail: true",
@@ -1009,8 +1009,8 @@ public class GenericTooltipTest {
                 "  -> Modifier:",
                 "    -> Id: minecraft:test",
                 "    -> Amount: 1.25",
-                "    -> Operation: ADD_VALUE",
-                "  -> Slot: HEAD"
+                "    -> Operation: Add Value",
+                "  -> Slot: Head"
         ));
     }
 
@@ -1024,7 +1024,7 @@ public class GenericTooltipTest {
                 "Attribute Modifier:",
                 "  -> Id: minecraft:test",
                 "  -> Amount: 1.25",
-                "  -> Operation: ADD_VALUE"
+                "  -> Operation: Add Value"
         ));
     }
 
@@ -1292,7 +1292,7 @@ public class GenericTooltipTest {
                 "  -> Values:",
                 "    -> asdf",
                 "    -> jklo",
-                "  -> List Operation: INSERT",
+                "  -> List Operation: Insert",
                 "    -> Offset: 2"
         ));
     }
