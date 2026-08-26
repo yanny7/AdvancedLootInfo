@@ -14,6 +14,7 @@ import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.pip.BlockRenderState;
 import com.yanny.awi.platform.Services;
 import com.yanny.awi.plugin.client.ClientUtils;
+import com.yanny.awi.plugin.client.TooltipUtils;
 import com.yanny.awi.plugin.client.widget.BiomeWidget;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
@@ -134,7 +135,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
                 widgets.add(Widgets.wrapRenderer(slotRect, new BlockSlotRenderer(block)));
                 widgets.add(Widgets.createTooltip(slotRect, Component.translatable(block.getDescriptionId())));
             } else {
-                stacks.forEach((stack) -> stack.tooltip((s) -> CoreTooltipUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips)));
+                stacks.forEach((stack) -> stack.tooltip((s) -> CoreTooltipUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle())));
                 widgets.add(Widgets.createSlot(new Point(slotX + 1, slotY + 1)).entries(stacks).markOutput());
             }
 

@@ -144,7 +144,7 @@ public class DataComponentPredicateTooltipTest {
                 Optional.of(false)
         ))).build(Lang.Branch.PREDICATE), List.of(
                 "Predicate:",
-                "  -> Shape: LARGE_BALL",
+                "  -> Shape: Large Ball",
                 "  -> Trail: false",
                 "  -> Twinkle: true"
         ));
@@ -160,9 +160,9 @@ public class DataComponentPredicateTooltipTest {
                 "Predicate:",
                 "  -> Explosions:",
                 "    -> Contains:",
-                "      -> Shape: BURST",
+                "      -> Shape: Burst",
                 "    -> Counts:",
-                "      -> Shape: CREEPER",
+                "      -> Shape: Creeper",
                 "      -> Count: 1-5",
                 "    -> Size: ≥4",
                 "  -> Flight Duration: 1-4"
@@ -232,8 +232,8 @@ public class DataComponentPredicateTooltipTest {
                 "    -> Attribute: minecraft:armor",
                 "    -> Id: minecraft:help",
                 "    -> Amount: 1.0-4.0",
-                "    -> Operation: ADD_VALUE",
-                "    -> Slot: ARMOR",
+                "    -> Operation: Add Value",
+                "    -> Slot: Armor",
                 "  -> Counts:",
                 "    -> Attribute: minecraft:gravity",
                 "    -> Count: 1-5",

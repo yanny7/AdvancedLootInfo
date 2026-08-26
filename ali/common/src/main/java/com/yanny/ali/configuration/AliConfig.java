@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.yanny.aci.configuration.ICoreConfig;
+import com.yanny.aci.configuration.TooltipColors;
 import com.yanny.ali.Utils;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
@@ -47,8 +48,9 @@ public class AliConfig implements ICoreConfig {
                 Identifier.CODEC.listOf().fieldOf("defaultBlockLootConditions").orElse(DEFAULT_BLOCK_LOOT_CONDITIONS).forGetter((c) -> c.defaultBlockLootConditions),
                 Identifier.CODEC.listOf().fieldOf("defaultBlockLootFunctions").orElse(DEFAULT_BLOCK_LOOT_FUNCTIONS).forGetter((c) -> c.defaultBlockLootFunctions),
                 Identifier.CODEC.listOf().fieldOf("ignoredPredicateConditions").orElse(DEFAULT_IGNORED_PREDICATE_CONDITIONS).forGetter((c) -> c.ignoredPredicateConditions),
-                Codec.unboundedMap(Identifier.CODEC, Identifier.CODEC.listOf()).fieldOf("entityLootTables").orElse(Collections.emptyMap()).forGetter((c) -> c.entityLootTables)
-        ).apply(instance, (version, blocks, entities, gameplay, trades, disabled, log, show, hideDefaultLoot, defaultConditions, defaultFunctions, ignoredPredicates, entityLoot) -> {
+                Codec.unboundedMap(Identifier.CODEC, Identifier.CODEC.listOf()).fieldOf("entityLootTables").orElse(Collections.emptyMap()).forGetter((c) -> c.entityLootTables),
+                TooltipColors.CODEC.fieldOf("tooltipColors").orElseGet(TooltipColors::new).forGetter((c) -> c.tooltipColors)
+        ).apply(instance, (version, blocks, entities, gameplay, trades, disabled, log, show, hideDefaultLoot, defaultConditions, defaultFunctions, ignoredPredicates, entityLoot, colors) -> {
             AliConfig config = new AliConfig();
 
             config.configVersion = version;
@@ -64,6 +66,7 @@ public class AliConfig implements ICoreConfig {
             config.defaultBlockLootFunctions = new ArrayList<>(defaultFunctions);
             config.ignoredPredicateConditions = new ArrayList<>(ignoredPredicates);
             config.entityLootTables = new LinkedHashMap<>(entityLoot);
+            config.tooltipColors = colors;
             return config;
         })
     );
@@ -86,6 +89,8 @@ public class AliConfig implements ICoreConfig {
      * EntityLootTableResolver}.
      */
     public Map<Identifier, List<Identifier>> entityLootTables;
+
+    public TooltipColors tooltipColors = new TooltipColors();
 
     public boolean logMoreStatistics = false;
     public boolean showInGameNames = true;

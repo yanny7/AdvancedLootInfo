@@ -1,5 +1,6 @@
 package com.yanny.awi.plugin.server.summary;
 
+import com.yanny.awi.plugin.EnumTypes;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.awi.api.IServerUtils;
@@ -62,7 +63,7 @@ public class PlacementSummaryUtils {
     /** Attempts per chunk (feature tries, NOT block count), with the count distribution kind when meaningful. */
     private static void addCount(TooltipBuilder b, CountSpan count) {
         if (count.range().isUnknown()) {
-            TooltipBuilder value = TooltipBuilder.value(TooltipBuilder.translate(Lang.Kind.UNKNOWN.singular()));
+            TooltipBuilder value = TooltipBuilder.value(TooltipBuilder.translate(EnumTypes.key(Kind.UNKNOWN)));
 
             if (count.details() != null) {
                 value.add(count.details());
@@ -84,11 +85,11 @@ public class PlacementSummaryUtils {
     /** One line: full range, distribution kind, and the "most likely" band (only when it narrows the range). */
     private static void addHeight(TooltipBuilder b, IServerUtils utils, HeightSpan height) {
         if (height.heightmap() != null) {
-            b.add(utils.getValueTooltip(utils, height.heightmap()).build(Lang.Value.HEIGHTMAP));
+            b.add(utils.getValueTooltip(utils, height.heightmap()).build(Lang.Value.HEIGHT));
             return;
         }
         if (height.range().isUnknown()) {
-            b.add(TooltipBuilder.value(TooltipBuilder.translate(Lang.Kind.UNKNOWN.singular())).build(Lang.Value.HEIGHT));
+            b.add(TooltipBuilder.value(TooltipBuilder.translate(EnumTypes.key(Kind.UNKNOWN))).build(Lang.Value.HEIGHT));
             return;
         }
 
@@ -109,7 +110,7 @@ public class PlacementSummaryUtils {
 
     @NotNull
     private static String kindKey(Kind kind) {
-        return Lang.Kind.valueOf(kind.name()).singular();
+        return EnumTypes.key(kind);
     }
 
     private static boolean showsKind(Kind kind) {

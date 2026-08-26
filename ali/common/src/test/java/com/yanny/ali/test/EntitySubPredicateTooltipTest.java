@@ -65,7 +65,7 @@ public class EntitySubPredicateTooltipTest {
                 "  -> Food:",
                 "    -> Level: ≥3",
                 "    -> Saturation: ≥2.0",
-                "  -> Game Type: SURVIVAL",
+                "  -> Game Type: Survival",
                 "  -> Stats:",
                 "    -> Block: minecraft:cobblestone",
                 "      -> Times Mined: ≥100",

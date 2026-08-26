@@ -66,6 +66,8 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     void registerLootModifiers(Function<IServerUtils, List<ILootModifier<?>>> getter);
 
+    void registerEnumTranslation(Class<? extends Enum<?>> type, String owner);
+
     @FunctionalInterface
     interface EntryFactory<T extends LootPoolEntryContainer> {
         IDataNode create(IServerUtils utils, T entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions);

@@ -110,7 +110,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testRarityTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getRarityTooltip(UTILS, Rarity.EPIC).build(), List.of("Rarity: EPIC"));
+        assertTooltip(DataComponentTooltipUtils.getRarityTooltip(UTILS, Rarity.EPIC).build(), List.of("Rarity: Epic"));
     }
 
     @Test
@@ -182,15 +182,15 @@ public class DataComponentTooltipTest {
                 "    -> Modifier:",
                 "      -> Id: minecraft:hello",
                 "      -> Amount: 0.5",
-                "      -> Operation: ADD_VALUE",
-                "    -> Slot: HEAD",
+                "      -> Operation: Add Value",
+                "    -> Slot: Head",
                 "  -> Entry:",
                 "    -> Attribute: minecraft:armor_toughness",
                 "    -> Modifier:",
                 "      -> Id: minecraft:world",
                 "      -> Amount: 1.25",
-                "      -> Operation: ADD_MULTIPLIED_TOTAL",
-                "    -> Slot: HAND"
+                "      -> Operation: Multiply Total",
+                "    -> Slot: Hand"
         ));
     }
 
@@ -261,7 +261,7 @@ public class DataComponentTooltipTest {
                 )
         )).build(), List.of(
                 "Consume Seconds: 5.0",
-                "Animation: DRINK",
+                "Animation: Drink",
                 "Sound: minecraft:entity.allay.hurt",
                 "Has Custom Particles: true",
                 "On Consume Effects:",
@@ -372,7 +372,7 @@ public class DataComponentTooltipTest {
                 false,
                 SoundEvents.ARMOR_EQUIP_TURTLE
         )).build(), List.of(
-                "Slot: LEGS",
+                "Slot: Legs",
                 "Equip Sound: minecraft:block.anvil.fall",
                 "Asset ID: minecraft:anvil",
                 "Camera Overlay: minecraft:camera",
@@ -485,7 +485,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testMapPostProcessingTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getMapPostProcessingTooltip(UTILS, MapPostProcessing.SCALE).build(), List.of("Value: SCALE"));
+        assertTooltip(DataComponentTooltipUtils.getMapPostProcessingTooltip(UTILS, MapPostProcessing.SCALE).build(), List.of("Value: Scale"));
     }
 
     @Test
@@ -706,7 +706,7 @@ public class DataComponentTooltipTest {
                 true,
                 false
         )).build(), List.of(
-                "Shape: LARGE_BALL",
+                "Shape: Large Ball",
                 "Colors: [1, 2, 3]",
                 "Fade Colors: []",
                 "Has Trail: true",
@@ -726,13 +726,13 @@ public class DataComponentTooltipTest {
                 "Flight Duration: 10",
                 "Explosions:",
                 "  -> Entry:",
-                "    -> Shape: STAR",
+                "    -> Shape: Star",
                 "    -> Colors: []",
                 "    -> Fade Colors: []",
                 "    -> Has Trail: true",
                 "    -> Has Twinkle: true",
                 "  -> Entry:",
-                "    -> Shape: CREEPER",
+                "    -> Shape: Creeper",
                 "    -> Colors: []",
                 "    -> Fade Colors: []",
                 "    -> Has Trail: true",
@@ -753,15 +753,15 @@ public class DataComponentTooltipTest {
         ))).build(), List.of(
                 "Banner Patterns:",
                 "  -> minecraft:base",
-                "    -> Color: BLUE",
+                "    -> Color: Blue",
                 "  -> minecraft:border",
-                "    -> Color: RED"
+                "    -> Color: Red"
         ));
     }
 
     @Test
     public void testDyeColorTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getDyeColorTooltip(UTILS, DyeColor.CYAN).build(), List.of("Color: CYAN"));
+        assertTooltip(DataComponentTooltipUtils.getDyeColorTooltip(UTILS, DyeColor.CYAN).build(), List.of("Color: Cyan"));
     }
 
     @Test
@@ -867,7 +867,7 @@ public class DataComponentTooltipTest {
     @Test
     public void testEnumTypeTooltip() {
         assertTooltip(DataComponentTooltipUtils.getEnumTypeTooltip(UTILS, Rabbit.Variant.EVIL).build(),
-                List.of("Type: EVIL"));
+                List.of("Type: Killer Bunny"));
     }
 
     @Test
@@ -880,7 +880,7 @@ public class DataComponentTooltipTest {
     public void testSwingAnimationTooltip() {
         assertTooltip(DataComponentTooltipUtils.getSwingAnimationTooltip(UTILS, SwingAnimation.DEFAULT).build(),
                 List.of(
-                        "Type: WHACK",
+                        "Type: Whack",
                         "Duration: 6"
                 ));
     }

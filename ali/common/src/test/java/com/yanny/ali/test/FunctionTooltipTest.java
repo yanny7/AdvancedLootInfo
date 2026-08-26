@@ -93,11 +93,11 @@ public class FunctionTooltipTest {
                 "    -> Entry:",
                 "      -> Source Path: asdf",
                 "      -> Target Path: jklo",
-                "      -> Merge Strategy: MERGE",
+                "      -> Merge Strategy: Merge",
                 "    -> Entry:",
                 "      -> Source Path: qwer",
                 "      -> Target Path: uiop",
-                "      -> Merge Strategy: APPEND"
+                "      -> Merge Strategy: Append"
         ));
     }
 
@@ -184,7 +184,7 @@ public class FunctionTooltipTest {
     public void testFillPlayerHeadTooltip() {
         assertTooltip(FunctionTooltipUtils.getFillPlayerHeadTooltip(UTILS, (FillPlayerHead) FillPlayerHead.fillPlayerHead(LootContext.EntityTarget.ATTACKER).build()).build(), List.of(
                 "Fill Player Head:",
-                "  -> Target: ATTACKER"
+                "  -> Target: Attacker"
         ));
     }
 
@@ -260,20 +260,20 @@ public class FunctionTooltipTest {
                 "  -> Modifiers:",
                 "    -> Entry:",
                 "      -> Attribute: minecraft:armor",
-                "      -> Operation: ADD_MULTIPLIED_TOTAL",
+                "      -> Operation: Multiply Total",
                 "      -> Amount: 1-5",
                 "      -> Id: minecraft:armor",
                 "      -> Equipment Slots:",
-                "        -> FEET",
-                "        -> LEGS",
-                "        -> CHEST",
-                "        -> HEAD",
+                "        -> Feet",
+                "        -> Legs",
+                "        -> Chest",
+                "        -> Head",
                 "    -> Entry:",
                 "      -> Attribute: minecraft:armor_toughness",
-                "      -> Operation: ADD_MULTIPLIED_BASE",
+                "      -> Operation: Multiply Base",
                 "      -> Amount: 3",
                 "      -> Id: minecraft:chest",
-                "      -> Equipment Slot: MAINHAND",
+                "      -> Equipment Slot: Main Hand",
                 "  -> Replace: false"
         ));
     }
@@ -288,9 +288,9 @@ public class FunctionTooltipTest {
                 "  -> Append: true",
                 "  -> Banner Patterns:",
                 "    -> minecraft:base",
-                "      -> Color: WHITE",
+                "      -> Color: White",
                 "    -> minecraft:creeper",
-                "      -> Color: GREEN"
+                "      -> Color: Green"
         ));
     }
 
@@ -376,7 +376,7 @@ public class FunctionTooltipTest {
                 .build()
         ).build(), List.of(
                 "Set Lore:",
-                "  -> List Operation: REPLACE_SECTION",
+                "  -> List Operation: Replace Section",
                 "    -> Offset: 1",
                 "    -> Size: 2",
                 "  -> Lore:",
@@ -390,10 +390,10 @@ public class FunctionTooltipTest {
                 .build()
         ).build(), List.of(
                 "Set Lore:",
-                "  -> List Operation: INSERT",
+                "  -> List Operation: Insert",
                 "    -> Offset: 1",
                 "  -> Lore: Block Drops",
-                "  -> Resolution Context: ATTACKER"
+                "  -> Resolution Context: Attacker"
         ));
     }
 
@@ -402,7 +402,7 @@ public class FunctionTooltipTest {
         assertTooltip(FunctionTooltipUtils.getSetNameTooltip(UTILS, (SetNameFunction) SetNameFunction.setName(Component.literal("Epic Item"), SetNameFunction.Target.ITEM_NAME).build()).build(), List.of(
                 "Set Name:",
                 "  -> Name: Epic Item",
-                "  -> Target: ITEM_NAME"
+                "  -> Target: Item Name"
         ));
         assertTooltip(FunctionTooltipUtils.getSetNameTooltip(UTILS, (SetNameFunction) SetNameFunction.setName(
                 Component.translatable("emi.category.ali.block_loot"),
@@ -411,8 +411,8 @@ public class FunctionTooltipTest {
         ).build(), List.of(
                 "Set Name:",
                 "  -> Name: Block Drops",
-                "  -> Resolution Context: ATTACKER",
-                "  -> Target: CUSTOM_NAME"
+                "  -> Resolution Context: Attacker",
+                "  -> Target: Custom Name"
         ));
     }
 
@@ -545,18 +545,18 @@ public class FunctionTooltipTest {
                 "  -> Explosions:",
                 "    -> Values:",
                 "      -> Entry:",
-                "        -> Shape: SMALL_BALL",
+                "        -> Shape: Small Ball",
                 "        -> Colors: []",
                 "        -> Fade Colors: []",
                 "        -> Has Trail: false",
                 "        -> Has Twinkle: false",
                 "      -> Entry:",
-                "        -> Shape: STAR",
+                "        -> Shape: Star",
                 "        -> Colors: [1]",
                 "        -> Fade Colors: [2]",
                 "        -> Has Trail: true",
                 "        -> Has Twinkle: false",
-                "    -> List Operation: INSERT",
+                "    -> List Operation: Insert",
                 "      -> Offset: 0",
                 "  -> Flight Duration: 10"
         ));
@@ -573,7 +573,7 @@ public class FunctionTooltipTest {
                 Optional.of(true)
         )).build(), List.of(
                 "Set Firework Explosion:",
-                "  -> Shape: CREEPER",
+                "  -> Shape: Creeper",
                 "  -> Colors: [1, 2]",
                 "  -> Fade Colors: [3, 4]",
                 "  -> Trail: false",
@@ -616,7 +616,7 @@ public class FunctionTooltipTest {
                 "    -> Entry:",
                 "      -> Raw: Bye",
                 "      -> Filtered: Ahoj",
-                "  -> List Operation: INSERT",
+                "  -> List Operation: Insert",
                 "    -> Offset: 0"
         ));
     }
@@ -639,7 +639,7 @@ public class FunctionTooltipTest {
                 "    -> Entry:",
                 "      -> Raw: Keep",
                 "      -> Filtered: Calm",
-                "  -> List Operation: REPLACE_SECTION",
+                "  -> List Operation: Replace Section",
                 "    -> Offset: 1",
                 "    -> Size: 4"
         ));
@@ -688,16 +688,16 @@ public class FunctionTooltipTest {
                 "Set Custom Model Data:",
                 "  -> Floats:",
                 "    -> Value: 3.14",
-                "    -> List Operation: REPLACE_ALL",
+                "    -> List Operation: Replace All",
                 "  -> Colors:",
                 "    -> Value: 25",
-                "    -> List Operation: REPLACE_ALL",
+                "    -> List Operation: Replace All",
                 "  -> Flags:",
                 "    -> Value: true",
-                "    -> List Operation: REPLACE_ALL",
+                "    -> List Operation: Replace All",
                 "  -> Strings:",
                 "    -> Value: test",
-                "    -> List Operation: REPLACE_ALL"
+                "    -> List Operation: Replace All"
         ));
     }
 
