@@ -1,12 +1,28 @@
 package com.yanny.ali.datagen;
 
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.language.CoreLang;
+import com.yanny.ali.Utils;
 import com.yanny.ali.language.Lang;
+import com.yanny.ali.plugin.EnumTypes;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.saveddata.maps.MapDecoration;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.functions.CopyNameFunction;
+import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
+import org.slf4j.Logger;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class LanguageHolder {
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
+
     public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 
     static {
@@ -18,6 +34,83 @@ public class LanguageHolder {
         CoreLang.register(TRANSLATION_MAP, Lang.Group.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Multi.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Error.class);
+
+        put(EquipmentSlot.MAINHAND, "Main Hand");
+        put(EquipmentSlot.OFFHAND, "Off Hand");
+        put(EquipmentSlot.FEET, "Feet");
+        put(EquipmentSlot.LEGS, "Legs");
+        put(EquipmentSlot.CHEST, "Chest");
+        put(EquipmentSlot.HEAD, "Head");
+
+        put(DyeColor.WHITE, "White");
+        put(DyeColor.ORANGE, "Orange");
+        put(DyeColor.MAGENTA, "Magenta");
+        put(DyeColor.LIGHT_BLUE, "Light Blue");
+        put(DyeColor.YELLOW, "Yellow");
+        put(DyeColor.LIME, "Lime");
+        put(DyeColor.PINK, "Pink");
+        put(DyeColor.GRAY, "Gray");
+        put(DyeColor.LIGHT_GRAY, "Light Gray");
+        put(DyeColor.CYAN, "Cyan");
+        put(DyeColor.PURPLE, "Purple");
+        put(DyeColor.BLUE, "Blue");
+        put(DyeColor.BROWN, "Brown");
+        put(DyeColor.GREEN, "Green");
+        put(DyeColor.RED, "Red");
+        put(DyeColor.BLACK, "Black");
+
+        put(GameType.SURVIVAL, "Survival");
+        put(GameType.CREATIVE, "Creative");
+        put(GameType.ADVENTURE, "Adventure");
+        put(GameType.SPECTATOR, "Spectator");
+
+        put(MapDecoration.Type.PLAYER, "Player");
+        put(MapDecoration.Type.FRAME, "Item Frame");
+        put(MapDecoration.Type.RED_MARKER, "Red Marker");
+        put(MapDecoration.Type.BLUE_MARKER, "Blue Marker");
+        put(MapDecoration.Type.TARGET_X, "Target X");
+        put(MapDecoration.Type.TARGET_POINT, "Target Point");
+        put(MapDecoration.Type.PLAYER_OFF_MAP, "Player Off Map");
+        put(MapDecoration.Type.PLAYER_OFF_LIMITS, "Player Off Limits");
+        put(MapDecoration.Type.MANSION, "Woodland Mansion");
+        put(MapDecoration.Type.MONUMENT, "Ocean Monument");
+        put(MapDecoration.Type.BANNER_WHITE, "White Banner");
+        put(MapDecoration.Type.BANNER_ORANGE, "Orange Banner");
+        put(MapDecoration.Type.BANNER_MAGENTA, "Magenta Banner");
+        put(MapDecoration.Type.BANNER_LIGHT_BLUE, "Light Blue Banner");
+        put(MapDecoration.Type.BANNER_YELLOW, "Yellow Banner");
+        put(MapDecoration.Type.BANNER_LIME, "Lime Banner");
+        put(MapDecoration.Type.BANNER_PINK, "Pink Banner");
+        put(MapDecoration.Type.BANNER_GRAY, "Gray Banner");
+        put(MapDecoration.Type.BANNER_LIGHT_GRAY, "Light Gray Banner");
+        put(MapDecoration.Type.BANNER_CYAN, "Cyan Banner");
+        put(MapDecoration.Type.BANNER_PURPLE, "Purple Banner");
+        put(MapDecoration.Type.BANNER_BLUE, "Blue Banner");
+        put(MapDecoration.Type.BANNER_BROWN, "Brown Banner");
+        put(MapDecoration.Type.BANNER_GREEN, "Green Banner");
+        put(MapDecoration.Type.BANNER_RED, "Red Banner");
+        put(MapDecoration.Type.BANNER_BLACK, "Black Banner");
+        put(MapDecoration.Type.RED_X, "Red X");
+
+        put(CopyNbtFunction.MergeStrategy.REPLACE, "Replace");
+        put(CopyNbtFunction.MergeStrategy.APPEND, "Append");
+        put(CopyNbtFunction.MergeStrategy.MERGE, "Merge");
+
+        put(AttributeModifier.Operation.ADDITION, "Addition");
+        put(AttributeModifier.Operation.MULTIPLY_BASE, "Multiply Base");
+        put(AttributeModifier.Operation.MULTIPLY_TOTAL, "Multiply Total");
+
+        put(LootContext.EntityTarget.THIS, "This Entity");
+        put(LootContext.EntityTarget.KILLER, "Killer");
+        put(LootContext.EntityTarget.DIRECT_KILLER, "Direct Killer");
+        put(LootContext.EntityTarget.KILLER_PLAYER, "Killer Player");
+
+        put(CopyNameFunction.NameSource.THIS, "This Entity");
+        put(CopyNameFunction.NameSource.KILLER, "Killer");
+        put(CopyNameFunction.NameSource.KILLER_PLAYER, "Killer Player");
+        put(CopyNameFunction.NameSource.BLOCK_ENTITY, "Block Entity");
+
+        verifyEnumTranslations();
 
         TRANSLATION_MAP.put("emi.category.ali.block_loot", "Block Drops");
         TRANSLATION_MAP.put("emi.category.ali.plant_loot", "Plant Drops");
@@ -109,5 +202,25 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali/loot_table/gameplay/sniffer_digging", "Sniffer Digging");
         TRANSLATION_MAP.put("ali/loot_table/gameplay/cat_morning_gift", "Cat Morning Gift");
         TRANSLATION_MAP.put("ali/loot_table/gameplay/piglin_bartering", "Piglin Bartering");
+    }
+
+    private static void put(Enum<?> value, String english) {
+        TRANSLATION_MAP.put(EnumTypes.key(value), english);
+    }
+
+    private static void verifyEnumTranslations() {
+        List<String> missing = new ArrayList<>();
+
+        EnumTypes.TRANSLATED_ENUMS.forEach((type, owner) -> {
+            for (Enum<?> value : type.getEnumConstants()) {
+                if (!TRANSLATION_MAP.containsKey(EnumTypes.key(value))) {
+                    missing.add(type.getSimpleName() + "." + value.name());
+                }
+            }
+        });
+
+        if (!missing.isEmpty()) {
+            LOGGER.warn("Missing enum translations: {}", String.join(", ", missing));
+        }
     }
 }

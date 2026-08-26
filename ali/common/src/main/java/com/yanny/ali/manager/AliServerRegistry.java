@@ -5,6 +5,7 @@ import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.manager.ClassKeyedMap;
 import com.yanny.aci.manager.CoreServerRegistry;
 import com.yanny.aci.manager.ManagedRegistry;
+import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.aci.tooltip.TooltipNode;
@@ -20,6 +21,7 @@ import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.MissingTooltipUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -68,6 +70,8 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemCondition, EnchantedRanges>> chanceModifiers = registerClassKeyed("chance modifiers", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemFunction, EnchantedRanges>> countModifiers = registerClassKeyed("count modifiers", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifiers = registerClassKeyed("item stack modifiers", false, HashMap::new, null);
+    // translations
+    private final ManagedRegistry<Class<?>, String> enumValues = registerClassKeyed("enum values", true, HashMap::new, null);
 
     private final Map<ResourceLocation, LootTable> lootTableMap = new HashMap<>();
     private final Map<ResourceLocation, Integer> hitMap = new HashMap<>();
@@ -168,6 +172,11 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @Override
     public <T extends VillagerTrades.ItemListing> void registerItemListing(Class<T> type, TriFunction<IServerUtils, T, TooltipNode, IDataNode> tradeFactory) {
         tradeItemListings.put(type, (u, i, c) -> tradeFactory.apply(u, type.cast(i), c));
+    }
+
+    @Override
+    public void registerEnumTranslation(Class<? extends Enum<?>> type, String owner) {
+        enumValues.put(type, owner);
     }
 
     @NotNull
@@ -280,6 +289,16 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
                         return new MissingNode(TooltipNode.empty());
                     }
                 });
+    }
+
+    @NotNull
+    @Override
+    public TooltipBuilder getEnumTranslation(Enum<?> value) {
+        Class<?> type = value.getDeclaringClass();
+        String owner = enumValues.get(type).orElseGet(() -> CoreTooltipUtils.enumOwnerPath(type));
+        String key = CoreTooltipUtils.enumKey(Utils.MOD_ID, owner, value.name());
+
+        return TooltipBuilder.component(Component.translatableWithFallback(key, value.name()));
     }
 
     @NotNull

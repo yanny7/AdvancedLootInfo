@@ -49,7 +49,7 @@ public class FunctionTooltipTest {
     public void testCopyNameTooltip() {
         assertTooltip(FunctionTooltipUtils.getCopyNameTooltip(UTILS, (CopyNameFunction) CopyNameFunction.copyName(CopyNameFunction.NameSource.THIS).build()).build(), List.of(
                 "Copy Name:",
-                "  -> Source: THIS"
+                "  -> Source: This Entity"
         ));
     }
 
@@ -70,11 +70,11 @@ public class FunctionTooltipTest {
                 "    -> Entry:",
                 "      -> Source: asdf",
                 "      -> Target: jklo",
-                "      -> Merge Strategy: MERGE",
+                "      -> Merge Strategy: Merge",
                 "    -> Entry:",
                 "      -> Source: qwer",
                 "      -> Target: uiop",
-                "      -> Merge Strategy: APPEND"
+                "      -> Merge Strategy: Append"
         ));
     }
 
@@ -134,7 +134,7 @@ public class FunctionTooltipTest {
         ).build(), List.of(
                 "Exploration Map:",
                 "  -> Destination: minecraft:ruined_portal",
-                "  -> Map Decoration: MONUMENT",
+                "  -> Map Decoration: Ocean Monument",
                 "  -> Zoom: 2",
                 "  -> Search Radius: 50",
                 "  -> Skip Known Structures: true"
@@ -150,7 +150,7 @@ public class FunctionTooltipTest {
     public void testFillPlayerHeadTooltip() {
         assertTooltip(FunctionTooltipUtils.getFillPlayerHeadTooltip(UTILS, (FillPlayerHead) FillPlayerHead.fillPlayerHead(LootContext.EntityTarget.KILLER).build()).build(), List.of(
                 "Fill Player Head:",
-                "  -> Target: KILLER"
+                "  -> Target: Killer"
         ));
     }
 
@@ -200,19 +200,19 @@ public class FunctionTooltipTest {
                 "  -> Entry:",
                 "    -> Name: armor",
                 "    -> Attribute: minecraft:generic.armor",
-                "    -> Operation: MULTIPLY_TOTAL",
+                "    -> Operation: Multiply Total",
                 "    -> Amount: 1-5",
                 "    -> Equipment Slots:",
-                "      -> FEET",
-                "      -> LEGS",
-                "      -> CHEST",
-                "      -> HEAD",
+                "      -> Feet",
+                "      -> Legs",
+                "      -> Chest",
+                "      -> Head",
                 "  -> Entry:",
                 "    -> Name: chest",
                 "    -> Attribute: minecraft:generic.armor_toughness",
-                "    -> Operation: MULTIPLY_BASE",
+                "    -> Operation: Multiply Base",
                 "    -> Amount: 3",
-                "    -> Equipment Slot: MAINHAND"
+                "    -> Equipment Slot: Main Hand"
         ));
     }
 
@@ -226,9 +226,9 @@ public class FunctionTooltipTest {
                 "  -> Append: true",
                 "  -> Banner Patterns:",
                 "    -> minecraft:base",
-                "      -> Color: WHITE",
+                "      -> Color: White",
                 "    -> minecraft:creeper",
-                "      -> Color: GREEN"
+                "      -> Color: Green"
         ));
     }
 
@@ -326,7 +326,7 @@ public class FunctionTooltipTest {
                 "Set Lore:",
                 "  -> Replace: true",
                 "  -> Lore: Block Drops",
-                "  -> Resolution Context: KILLER"
+                "  -> Resolution Context: Killer"
         ));
     }
 
@@ -342,7 +342,7 @@ public class FunctionTooltipTest {
         ).build(), List.of(
                 "Set Name:",
                 "  -> Name: Block Drops",
-                "  -> Resolution Context: KILLER"
+                "  -> Resolution Context: Killer"
         ));
     }
 

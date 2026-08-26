@@ -1,6 +1,7 @@
 ## []
 
 - Added `tooltipColors` configuration to change the tooltip text, value, error and branch colors
+- Enum values shown in tooltips are translatable
 
 ## [2.0.1]
 

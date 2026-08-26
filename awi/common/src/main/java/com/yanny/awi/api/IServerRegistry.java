@@ -68,4 +68,6 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
     <T extends HeightProvider> void registerHeightSpanPropagator(Class<T> type, HeightSpanPropagator<T> getter);
 
     <T extends PlacementModifier> void registerPlacementPropagator(Class<T> type, PlacementPropagator<T> getter);
+
+    void registerEnumTranslation(Class<? extends Enum<?>> type, String owner);
 }

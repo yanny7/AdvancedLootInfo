@@ -730,44 +730,8 @@ public final class Lang {
         }
     }
 
-    public enum Kind implements ITooltipKey {
-        BIASED_TO_BOTTOM("biased_to_bottom", "Biased To Bottom"),
-        CLAMPED("clamped", "Clamped"),
-        CLAMPED_NORMAL("clamped_normal", "Clamped Normal"),
-        CONSTANT("constant", "Constant"),
-        TRAPEZOID("trapezoid", "Trapezoid"),
-        UNIFORM("uniform", "Uniform"),
-        UNKNOWN("unknown", "Unknown"),
-        VERY_BIASED_TO_BOTTOM("very_biased_to_bottom", "Very Biased To Bottom"),
-        WEIGHTED("weighted", "Weighted"),
-        ;
-
-        private final Translation translation;
-
-        Kind(String k, String e) {
-            this.translation = new Translation("awi.property.kind." + k, e);
-        }
-
-        @NotNull
-        @Override
-        public Translation getTranslation() {
-            return translation;
-        }
-    }
-
     public enum GenerationStep implements ITooltipKey {
         BASE_TERRAIN("base_terrain", "Base Terrain"),
-        FLUID_SPRINGS("fluid_springs", "Fluid Springs"),
-        LAKES("lakes", "Lakes"),
-        LOCAL_MODIFICATIONS("local_modifications", "Local Modifications"),
-        RAW_GENERATION("raw_generation", "Raw Generation"),
-        STRONGHOLDS("strongholds", "Strongholds"),
-        SURFACE_STRUCTURES("surface_structures", "Surface Structures"),
-        TOP_LAYER_MODIFICATION("top_layer_modification", "Top Layer Modifications"),
-        UNDERGROUND_DECORATION("underground_decoration", "Underground Decoration"),
-        UNDERGROUND_ORES("underground_ores", "Underground Ores"),
-        UNDERGROUND_STRUCTURES("underground_structures", "Underground Structures"),
-        VEGETAL_DECORATION("vegetal_decoration", "Vegetation Decoration"),
         ;
 
         private final Translation translation;

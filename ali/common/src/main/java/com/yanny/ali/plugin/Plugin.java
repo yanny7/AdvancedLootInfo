@@ -97,6 +97,8 @@ public class Plugin implements IPlugin {
     public void registerServer(IServerRegistry registry) {
         new CommonValueTooltip<IServerUtils, IServerRegistry>().registerAll(registry);
 
+        EnumTypes.TRANSLATED_ENUMS.forEach(registry::registerEnumTranslation);
+
         registry.registerItemCollector(LootItem.class, ItemCollectorUtils::collectItems);
         registry.registerItemCollector(TagEntry.class, ItemCollectorUtils::collectTags);
         registry.registerItemCollector(AlternativesEntry.class, ItemCollectorUtils::collectComposite);
@@ -185,6 +187,7 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(Enchantment.class, RegistriesTooltipUtils::getEnchantmentTooltip);
         registry.registerValueTooltip(Attribute.class, RegistriesTooltipUtils::getAttributeTooltip);
 
+        registry.registerValueTooltip(Enum.class, ValueTooltipUtils::getEnumTooltip);
         registry.registerValueTooltip(LootItemCondition.class, ValueTooltipUtils::getConditionTooltip);
         registry.registerValueTooltip(LootItemFunction.class, ValueTooltipUtils::getFunctionTooltip);
         registry.registerValueTooltip(Ingredient.class, ValueTooltipUtils::getIngredientTooltip);

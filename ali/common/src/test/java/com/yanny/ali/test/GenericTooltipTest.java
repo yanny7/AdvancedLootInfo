@@ -148,13 +148,13 @@ public class GenericTooltipTest {
                 "Modifier:",
                 "  -> Name: armor",
                 "  -> Attribute: minecraft:generic.armor",
-                "  -> Operation: MULTIPLY_TOTAL",
+                "  -> Operation: Multiply Total",
                 "  -> Amount: 1-5",
                 "  -> Equipment Slots:",
-                "    -> FEET",
-                "    -> LEGS",
-                "    -> CHEST",
-                "    -> HEAD"
+                "    -> Feet",
+                "    -> Legs",
+                "    -> Chest",
+                "    -> Head"
         ));
     }
 
@@ -552,7 +552,7 @@ public class GenericTooltipTest {
                 .build()).build(Lang.Branch.ENTITY_SUB_PREDICATE), List.of(
                 "Entity Sub Predicate:",
                 "  -> Level: ≥3",
-                "  -> Game Type: SURVIVAL",
+                "  -> Game Type: Survival",
                 "  -> Stats:",
                 "    -> Id: minecraft:leave_game",
                 "      -> Games Quit: 1-10",

@@ -175,7 +175,7 @@ public class PlacementSummaryTest {
     public void testSummaryTooltipHeightmapFallback() {
         List<PlacementModifier> modifiers = List.of(HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR));
         assertTooltip(renderSummary(modifiers), List.of(
-                "Height: OCEAN_FLOOR"
+                "Height: Solid Ground, Ignores Water"
         ));
     }
 

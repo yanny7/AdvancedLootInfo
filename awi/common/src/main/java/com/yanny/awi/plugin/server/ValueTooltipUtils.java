@@ -39,6 +39,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class ValueTooltipUtils {
     @NotNull
+    public static TooltipBuilder getEnumTooltip(IServerUtils utils, Enum<?> value) {
+        return utils.getEnumTranslation(value);
+    }
+
+    @NotNull
     public static TooltipBuilder getIntProviderTooltip(IServerUtils utils, IntProvider value) {
         return utils.getIntProviderTooltip(utils, value);
     }
