@@ -60,9 +60,6 @@ public class LanguageHolder {
         put(CaveSurface.CEILING, "Ceiling");
         put(CaveSurface.FLOOR, "Floor");
 
-        put(GenerationStep.Carving.AIR, "Air");
-        put(GenerationStep.Carving.LIQUID, "Liquid");
-
         put(GenerationStep.Decoration.RAW_GENERATION, "Raw Generation");
         put(GenerationStep.Decoration.LAKES, "Lakes");
         put(GenerationStep.Decoration.LOCAL_MODIFICATIONS, "Local Modifications");

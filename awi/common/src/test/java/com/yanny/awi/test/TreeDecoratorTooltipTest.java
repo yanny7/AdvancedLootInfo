@@ -145,8 +145,8 @@ public class TreeDecoratorTooltipTest {
                 "          -> persistent: false",
                 "          -> waterlogged: false",
                 "  -> Directions:",
-                "    -> UP",
-                "    -> DOWN"
+                "    -> Up",
+                "    -> Down"
         ));
     }
 }

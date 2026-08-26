@@ -679,16 +679,16 @@ public class FunctionTooltipTest {
                 "Set Custom Model Data:",
                 "  -> Floats:",
                 "    -> Value: 3.14",
-                "    -> List Operation: REPLACE_ALL",
+                "    -> List Operation: Replace All",
                 "  -> Colors:",
                 "    -> Value: 25",
-                "    -> List Operation: REPLACE_ALL",
+                "    -> List Operation: Replace All",
                 "  -> Flags:",
                 "    -> Value: true",
-                "    -> List Operation: REPLACE_ALL",
+                "    -> List Operation: Replace All",
                 "  -> Strings:",
                 "    -> Value: test",
-                "    -> List Operation: REPLACE_ALL"
+                "    -> List Operation: Replace All"
         ));
     }
 

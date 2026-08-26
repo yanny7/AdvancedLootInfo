@@ -6,16 +6,25 @@ import com.yanny.ali.Utils;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.EnumTypes;
 import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.animal.axolotl.Axolotl;
+import net.minecraft.world.entity.animal.cow.MushroomCow;
+import net.minecraft.world.entity.animal.equine.Llama;
+import net.minecraft.world.entity.animal.equine.Variant;
+import net.minecraft.world.entity.animal.fish.Salmon;
+import net.minecraft.world.entity.animal.fish.TropicalFish;
+import net.minecraft.world.entity.animal.fox.Fox;
+import net.minecraft.world.entity.animal.parrot.Parrot;
+import net.minecraft.world.entity.animal.rabbit.Rabbit;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.SwingAnimationType;
 import net.minecraft.world.item.component.FireworkExplosion;
 import net.minecraft.world.item.component.MapPostProcessing;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
 import net.minecraft.world.level.storage.loot.functions.CopyCustomDataFunction;
-import net.minecraft.world.level.storage.loot.functions.CopyNameFunction;
 import net.minecraft.world.level.storage.loot.functions.ListOperation;
 import net.minecraft.world.level.storage.loot.functions.SetNameFunction;
 import org.slf4j.Logger;
@@ -52,6 +61,7 @@ public class LanguageHolder {
         put(EquipmentSlotGroup.HEAD, "Head");
         put(EquipmentSlotGroup.ARMOR, "Armor");
         put(EquipmentSlotGroup.BODY, "Body");
+        put(EquipmentSlotGroup.SADDLE, "Saddle");
 
         put(DyeColor.WHITE, "White");
         put(DyeColor.ORANGE, "Orange");
@@ -101,11 +111,8 @@ public class LanguageHolder {
         put(LootContext.EntityTarget.ATTACKER, "Attacker");
         put(LootContext.EntityTarget.DIRECT_ATTACKER, "Direct Attacker");
         put(LootContext.EntityTarget.ATTACKING_PLAYER, "Attacking Player");
-
-        put(CopyNameFunction.NameSource.THIS, "This Entity");
-        put(CopyNameFunction.NameSource.ATTACKING_ENTITY, "Attacking Entity");
-        put(CopyNameFunction.NameSource.LAST_DAMAGE_PLAYER, "Last Damage Player");
-        put(CopyNameFunction.NameSource.BLOCK_ENTITY, "Block Entity");
+        put(LootContext.EntityTarget.TARGET_ENTITY, "Target Entity");
+        put(LootContext.EntityTarget.INTERACTING_ENTITY, "Interacting Entity");
 
         put(SetNameFunction.Target.CUSTOM_NAME, "Custom Name");
         put(SetNameFunction.Target.ITEM_NAME, "Item Name");
@@ -115,7 +122,78 @@ public class LanguageHolder {
         put(ListOperation.Type.INSERT, "Insert");
         put(ListOperation.Type.APPEND, "Append");
 
-        put(CopyComponentsFunction.Source.BLOCK_ENTITY, "Block Entity");
+        put(ItemUseAnimation.NONE, "None");
+        put(ItemUseAnimation.EAT, "Eat");
+        put(ItemUseAnimation.DRINK, "Drink");
+        put(ItemUseAnimation.BLOCK, "Block");
+        put(ItemUseAnimation.BOW, "Bow");
+        put(ItemUseAnimation.TRIDENT, "Trident");
+        put(ItemUseAnimation.CROSSBOW, "Crossbow");
+        put(ItemUseAnimation.SPYGLASS, "Spyglass");
+        put(ItemUseAnimation.TOOT_HORN, "Toot Horn");
+        put(ItemUseAnimation.BRUSH, "Brush");
+        put(ItemUseAnimation.BUNDLE, "Bundle");
+        put(ItemUseAnimation.SPEAR, "Spear");
+
+        put(SwingAnimationType.NONE, "None");
+        put(SwingAnimationType.WHACK, "Whack");
+        put(SwingAnimationType.STAB, "Stab");
+
+        put(Fox.Variant.RED, "Red");
+        put(Fox.Variant.SNOW, "Snow");
+
+        put(Salmon.Variant.SMALL, "Small");
+        put(Salmon.Variant.MEDIUM, "Medium");
+        put(Salmon.Variant.LARGE, "Large");
+
+        put(Parrot.Variant.RED_BLUE, "Red & Blue");
+        put(Parrot.Variant.BLUE, "Blue");
+        put(Parrot.Variant.GREEN, "Green");
+        put(Parrot.Variant.YELLOW_BLUE, "Yellow & Blue");
+        put(Parrot.Variant.GRAY, "Gray");
+
+        put(TropicalFish.Pattern.KOB, "Kob");
+        put(TropicalFish.Pattern.SUNSTREAK, "Sunstreak");
+        put(TropicalFish.Pattern.SNOOPER, "Snooper");
+        put(TropicalFish.Pattern.DASHER, "Dasher");
+        put(TropicalFish.Pattern.BRINELY, "Brinely");
+        put(TropicalFish.Pattern.SPOTTY, "Spotty");
+        put(TropicalFish.Pattern.FLOPPER, "Flopper");
+        put(TropicalFish.Pattern.STRIPEY, "Stripey");
+        put(TropicalFish.Pattern.GLITTER, "Glitter");
+        put(TropicalFish.Pattern.BLOCKFISH, "Blockfish");
+        put(TropicalFish.Pattern.BETTY, "Betty");
+        put(TropicalFish.Pattern.CLAYFISH, "Clayfish");
+
+        put(MushroomCow.Variant.RED, "Red");
+        put(MushroomCow.Variant.BROWN, "Brown");
+
+        put(Rabbit.Variant.BROWN, "Brown");
+        put(Rabbit.Variant.WHITE, "White");
+        put(Rabbit.Variant.BLACK, "Black");
+        put(Rabbit.Variant.WHITE_SPLOTCHED, "Black & White");
+        put(Rabbit.Variant.GOLD, "Gold");
+        put(Rabbit.Variant.SALT, "Salt & Pepper");
+        put(Rabbit.Variant.EVIL, "Killer Bunny");
+
+        put(Variant.WHITE, "White");
+        put(Variant.CREAMY, "Creamy");
+        put(Variant.CHESTNUT, "Chestnut");
+        put(Variant.BROWN, "Brown");
+        put(Variant.BLACK, "Black");
+        put(Variant.GRAY, "Gray");
+        put(Variant.DARK_BROWN, "Dark Brown");
+
+        put(Llama.Variant.CREAMY, "Creamy");
+        put(Llama.Variant.WHITE, "White");
+        put(Llama.Variant.BROWN, "Brown");
+        put(Llama.Variant.GRAY, "Gray");
+
+        put(Axolotl.Variant.LUCY, "Pink");
+        put(Axolotl.Variant.WILD, "Brown");
+        put(Axolotl.Variant.GOLD, "Gold");
+        put(Axolotl.Variant.CYAN, "Cyan");
+        put(Axolotl.Variant.BLUE, "Blue");
 
         verifyEnumTranslations();
 

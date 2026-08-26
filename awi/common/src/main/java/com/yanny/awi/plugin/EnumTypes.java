@@ -19,7 +19,6 @@ public class EnumTypes {
         TRANSLATED_ENUMS.put(Direction.class, "direction");
         TRANSLATED_ENUMS.put(Heightmap.Types.class, "heightmap_type");
         TRANSLATED_ENUMS.put(CaveSurface.class, "cave_surface");
-        TRANSLATED_ENUMS.put(GenerationStep.Carving.class, "carving_step");
         TRANSLATED_ENUMS.put(GenerationStep.Decoration.class, "decoration_step");
         TRANSLATED_ENUMS.put(Kind.class, "kind");
     }

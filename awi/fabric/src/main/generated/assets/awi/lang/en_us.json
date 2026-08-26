@@ -1,6 +1,4 @@
 {
-  "awi.enum.carving_step.air": "Air",
-  "awi.enum.carving_step.liquid": "Liquid",
   "awi.enum.cave_surface.ceiling": "Ceiling",
   "awi.enum.cave_surface.floor": "Floor",
   "awi.enum.decoration_step.base_terrain": "Base Terrain",

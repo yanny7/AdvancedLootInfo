@@ -265,7 +265,7 @@ public class DataComponentTooltipTest {
                 )
         )).build(), List.of(
                 "Consume Seconds: 5.0",
-                "Animation: DRINK",
+                "Animation: Drink",
                 "Sound: minecraft:entity.allay.hurt",
                 "Has Custom Particles: true",
                 "On Consume Effects:",
@@ -372,7 +372,7 @@ public class DataComponentTooltipTest {
                 false,
                 SoundEvents.ARMOR_EQUIP_TURTLE
         )).build(), List.of(
-                "Slot: LEGS",
+                "Slot: Legs",
                 "Equip Sound: minecraft:block.anvil.fall",
                 "Asset ID: minecraft:anvil",
                 "Camera Overlay: minecraft:camera",
@@ -902,7 +902,7 @@ public class DataComponentTooltipTest {
     @Test
     public void testEnumTypeTooltip() {
         assertTooltip(DataComponentTooltipUtils.getEnumTypeTooltip(UTILS, Rabbit.Variant.EVIL).build(),
-                List.of("Type: EVIL"));
+                List.of("Type: Killer Bunny"));
     }
 
     @Test
@@ -921,7 +921,7 @@ public class DataComponentTooltipTest {
     public void testSwingAnimationTooltip() {
         assertTooltip(DataComponentTooltipUtils.getSwingAnimationTooltip(UTILS, SwingAnimation.DEFAULT).build(),
                 List.of(
-                        "Type: WHACK",
+                        "Type: Whack",
                         "Duration: 6"
                 ));
     }
