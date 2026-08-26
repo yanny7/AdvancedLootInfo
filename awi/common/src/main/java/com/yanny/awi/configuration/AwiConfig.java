@@ -3,6 +3,7 @@ package com.yanny.awi.configuration;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.yanny.aci.configuration.ICoreConfig;
+import com.yanny.aci.configuration.TooltipColors;
 
 public class AwiConfig implements ICoreConfig {
     public static final int CURRENT_VERSION = 1;
@@ -12,19 +13,23 @@ public class AwiConfig implements ICoreConfig {
                 Codec.INT.fieldOf("configVersion").orElse(0).forGetter((c) -> c.configVersion),
                 Codec.BOOL.fieldOf("logMoreStatistics").orElse(false).forGetter((c) -> c.logMoreStatistics),
                 Codec.BOOL.fieldOf("showInGameNames").orElse(true).forGetter((c) -> c.showInGameNames),
-                Codec.BOOL.fieldOf("showConfigConditionalBlocks").orElse(false).forGetter((c) -> c.showConfigConditionalBlocks)
-        ).apply(instance, (version, log, show, showConfigConditional) -> {
+                Codec.BOOL.fieldOf("showConfigConditionalBlocks").orElse(false).forGetter((c) -> c.showConfigConditionalBlocks),
+                TooltipColors.CODEC.fieldOf("tooltipColors").orElseGet(TooltipColors::new).forGetter((c) -> c.tooltipColors)
+        ).apply(instance, (version, log, show, showConfigConditional, colors) -> {
             AwiConfig config = new AwiConfig();
 
             config.configVersion = version;
             config.logMoreStatistics = log;
             config.showInGameNames = show;
             config.showConfigConditionalBlocks = showConfigConditional;
+            config.tooltipColors = colors;
             return config;
         })
     );
 
     public int configVersion = 0;
+
+    public TooltipColors tooltipColors = new TooltipColors();
 
     public boolean logMoreStatistics = false;
     public boolean showInGameNames = true;

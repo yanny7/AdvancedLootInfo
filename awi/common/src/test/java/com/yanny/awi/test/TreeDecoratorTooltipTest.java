@@ -99,8 +99,8 @@ public class TreeDecoratorTooltipTest {
                 "          -> waterlogged: false",
                 "  -> Required Empty Blocks: 2",
                 "  -> Directions:",
-                "    -> UP",
-                "    -> DOWN"
+                "    -> Up",
+                "    -> Down"
         ));
     }
 

@@ -122,7 +122,7 @@ public class ConditionTooltipTest {
                                 .build())
         ).build()).build(), List.of(
             "Entity Properties:",
-            "  -> Target: ATTACKER",
+            "  -> Target: Attacker",
             "  -> Predicate:",
             "    -> Entity Equipment:",
             "      -> Main Hand:",
@@ -135,7 +135,7 @@ public class ConditionTooltipTest {
     public void testEntityScoresTooltip() {
         assertTooltip(ConditionTooltipUtils.getEntityScoresTooltip(UTILS, (EntityHasScoreCondition) EntityHasScoreCondition.hasScores(LootContext.EntityTarget.DIRECT_ATTACKER).build()).build(), List.of(
                 "Entity Scores:",
-                "  -> Target: DIRECT_ATTACKER"
+                "  -> Target: Direct Attacker"
         ));
         assertTooltip(ConditionTooltipUtils.getEntityScoresTooltip(UTILS, (EntityHasScoreCondition) EntityHasScoreCondition.hasScores(LootContext.EntityTarget.DIRECT_ATTACKER)
                 .withScore("single", IntRange.range(2, 5))
@@ -143,7 +143,7 @@ public class ConditionTooltipTest {
                 .build()
         ).build(), List.of(
                 "Entity Scores:",
-                "  -> Target: DIRECT_ATTACKER",
+                "  -> Target: Direct Attacker",
                 "  -> Scores:",
                 "    -> double",
                 "      -> Limit: 1 - 7",

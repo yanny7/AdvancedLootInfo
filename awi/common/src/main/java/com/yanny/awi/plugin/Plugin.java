@@ -73,6 +73,9 @@ public class Plugin implements IPlugin {
     public void registerServer(IServerRegistry registry) {
         new CommonValueTooltip<IServerUtils, IServerRegistry>().registerAll(registry);
 
+        EnumTypes.TRANSLATED_ENUMS.forEach(registry::registerEnumTranslation);
+
+        registry.registerValueTooltip(Enum.class, ValueTooltipUtils::getEnumTooltip);
         registry.registerValueTooltip(IntProvider.class, ValueTooltipUtils::getIntProviderTooltip);
         registry.registerValueTooltip(RuleTest.class, ValueTooltipUtils::getRuleTestTooltip);
         registry.registerValueTooltip(HeightProvider.class, ValueTooltipUtils::getHeightProviderTooltip);
@@ -86,6 +89,7 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(FloatProvider.class, ValueTooltipUtils::getFloatProviderTooltip);
         registry.registerValueTooltip(PlacementModifier.class, ValueTooltipUtils::getPlacementModifierTooltip);
         registry.registerValueTooltip(FeatureConfiguration.class, ValueTooltipUtils::getFeatureConfigurationTooltip);
+
         registry.registerValueTooltip(OreConfiguration.TargetBlockState.class, ValueTooltipUtils::getTargetBlockStateTooltip);
         registry.registerValueTooltip(BlockState.class, ValueTooltipUtils::getBlockStateTooltip);
         registry.registerValueTooltip(FluidState.class, ValueTooltipUtils::getFluidStateTooltip);

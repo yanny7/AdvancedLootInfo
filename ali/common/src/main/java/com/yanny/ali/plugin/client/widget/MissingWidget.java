@@ -7,6 +7,7 @@ import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.language.Lang;
+import com.yanny.ali.plugin.client.TooltipUtils;
 import com.yanny.ali.plugin.client.WidgetUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -27,7 +28,7 @@ public class MissingWidget implements IWidget {
         widget = WidgetUtils.getMissingWidget(rect);
 
         components.add(Component.translatable(Lang.Group.MISSING.singular()));
-        components.addAll(CoreTooltipUtils.toComponents(entry.getTooltip(), 0, false));
+        components.addAll(CoreTooltipUtils.toComponents(entry.getTooltip(), 0, false, TooltipUtils.getStyle()));
     }
 
     public MissingWidget(RelativeRect rect) {

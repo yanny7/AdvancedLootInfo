@@ -61,7 +61,7 @@ public class EntitySubPredicateTooltipTest {
                 .hasInput(new InputPredicate(Optional.of(true), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()))
                 .build()).build(), List.of(
                 "Player:",
-                "  -> Game Type: SURVIVAL",
+                "  -> Game Type: Survival",
                 "  -> Stats:",
                 "    -> Block: minecraft:cobblestone",
                 "      -> Times Mined: ≥100",

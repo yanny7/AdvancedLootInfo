@@ -5,6 +5,7 @@ import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.api.WidgetDirection;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipNode;
+import com.yanny.ali.plugin.client.TooltipUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -61,7 +62,7 @@ public class TextureWidget implements IWidget {
     @NotNull
     @Override
     public List<Component> getTooltipComponents(int mouseX, int mouseY) {
-        return CoreTooltipUtils.toComponents(tooltips, 0, Minecraft.getInstance().options.advancedItemTooltips);
+        return CoreTooltipUtils.toComponents(tooltips, 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle());
     }
 
     @Override

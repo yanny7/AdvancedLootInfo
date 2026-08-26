@@ -1,12 +1,33 @@
 package com.yanny.ali.datagen;
 
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.language.CoreLang;
+import com.yanny.ali.Utils;
 import com.yanny.ali.language.Lang;
+import com.yanny.ali.plugin.EnumTypes;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.component.FireworkExplosion;
+import net.minecraft.world.item.component.MapPostProcessing;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
+import net.minecraft.world.level.storage.loot.functions.CopyCustomDataFunction;
+import net.minecraft.world.level.storage.loot.functions.CopyNameFunction;
+import net.minecraft.world.level.storage.loot.functions.ListOperation;
+import net.minecraft.world.level.storage.loot.functions.SetNameFunction;
+import org.slf4j.Logger;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class LanguageHolder {
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
+
     public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 
     static {
@@ -20,6 +41,83 @@ public class LanguageHolder {
         CoreLang.register(TRANSLATION_MAP, Lang.Description.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Group.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Multi.class);
+
+        put(EquipmentSlotGroup.ANY, "Any");
+        put(EquipmentSlotGroup.MAINHAND, "Main Hand");
+        put(EquipmentSlotGroup.OFFHAND, "Off Hand");
+        put(EquipmentSlotGroup.HAND, "Hand");
+        put(EquipmentSlotGroup.FEET, "Feet");
+        put(EquipmentSlotGroup.LEGS, "Legs");
+        put(EquipmentSlotGroup.CHEST, "Chest");
+        put(EquipmentSlotGroup.HEAD, "Head");
+        put(EquipmentSlotGroup.ARMOR, "Armor");
+        put(EquipmentSlotGroup.BODY, "Body");
+
+        put(DyeColor.WHITE, "White");
+        put(DyeColor.ORANGE, "Orange");
+        put(DyeColor.MAGENTA, "Magenta");
+        put(DyeColor.LIGHT_BLUE, "Light Blue");
+        put(DyeColor.YELLOW, "Yellow");
+        put(DyeColor.LIME, "Lime");
+        put(DyeColor.PINK, "Pink");
+        put(DyeColor.GRAY, "Gray");
+        put(DyeColor.LIGHT_GRAY, "Light Gray");
+        put(DyeColor.CYAN, "Cyan");
+        put(DyeColor.PURPLE, "Purple");
+        put(DyeColor.BLUE, "Blue");
+        put(DyeColor.BROWN, "Brown");
+        put(DyeColor.GREEN, "Green");
+        put(DyeColor.RED, "Red");
+        put(DyeColor.BLACK, "Black");
+
+        put(GameType.SURVIVAL, "Survival");
+        put(GameType.CREATIVE, "Creative");
+        put(GameType.ADVENTURE, "Adventure");
+        put(GameType.SPECTATOR, "Spectator");
+
+        put(Rarity.COMMON, "Common");
+        put(Rarity.UNCOMMON, "Uncommon");
+        put(Rarity.RARE, "Rare");
+        put(Rarity.EPIC, "Epic");
+
+        put(MapPostProcessing.LOCK, "Lock");
+        put(MapPostProcessing.SCALE, "Scale");
+
+        put(FireworkExplosion.Shape.SMALL_BALL, "Small Ball");
+        put(FireworkExplosion.Shape.LARGE_BALL, "Large Ball");
+        put(FireworkExplosion.Shape.STAR, "Star");
+        put(FireworkExplosion.Shape.CREEPER, "Creeper");
+        put(FireworkExplosion.Shape.BURST, "Burst");
+
+        put(CopyCustomDataFunction.MergeStrategy.REPLACE, "Replace");
+        put(CopyCustomDataFunction.MergeStrategy.APPEND, "Append");
+        put(CopyCustomDataFunction.MergeStrategy.MERGE, "Merge");
+
+        put(AttributeModifier.Operation.ADD_VALUE, "Add Value");
+        put(AttributeModifier.Operation.ADD_MULTIPLIED_BASE, "Multiply Base");
+        put(AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL, "Multiply Total");
+
+        put(LootContext.EntityTarget.THIS, "This Entity");
+        put(LootContext.EntityTarget.ATTACKER, "Attacker");
+        put(LootContext.EntityTarget.DIRECT_ATTACKER, "Direct Attacker");
+        put(LootContext.EntityTarget.ATTACKING_PLAYER, "Attacking Player");
+
+        put(CopyNameFunction.NameSource.THIS, "This Entity");
+        put(CopyNameFunction.NameSource.ATTACKING_ENTITY, "Attacking Entity");
+        put(CopyNameFunction.NameSource.LAST_DAMAGE_PLAYER, "Last Damage Player");
+        put(CopyNameFunction.NameSource.BLOCK_ENTITY, "Block Entity");
+
+        put(SetNameFunction.Target.CUSTOM_NAME, "Custom Name");
+        put(SetNameFunction.Target.ITEM_NAME, "Item Name");
+
+        put(ListOperation.Type.REPLACE_ALL, "Replace All");
+        put(ListOperation.Type.REPLACE_SECTION, "Replace Section");
+        put(ListOperation.Type.INSERT, "Insert");
+        put(ListOperation.Type.APPEND, "Append");
+
+        put(CopyComponentsFunction.Source.BLOCK_ENTITY, "Block Entity");
+
+        verifyEnumTranslations();
 
         TRANSLATION_MAP.put("emi.category.ali.block_loot", "Block Drops");
         TRANSLATION_MAP.put("emi.category.ali.plant_loot", "Plant Drops");
@@ -191,5 +289,25 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali/loot_table/shearing/sheep/white", "White Sheep Shearing");
         TRANSLATION_MAP.put("ali/loot_table/shearing/sheep/yellow", "Yellow Sheep Shearing");
         TRANSLATION_MAP.put("ali/loot_table/shearing/snow_golem", "Snow Golem Shearing");
+    }
+
+    private static void put(Enum<?> value, String english) {
+        TRANSLATION_MAP.put(EnumTypes.key(value), english);
+    }
+
+    private static void verifyEnumTranslations() {
+        List<String> missing = new ArrayList<>();
+
+        EnumTypes.TRANSLATED_ENUMS.forEach((type, owner) -> {
+            for (Enum<?> value : type.getEnumConstants()) {
+                if (!TRANSLATION_MAP.containsKey(EnumTypes.key(value))) {
+                    missing.add(type.getSimpleName() + "." + value.name());
+                }
+            }
+        });
+
+        if (!missing.isEmpty()) {
+            LOGGER.warn("Missing enum translations: {}", String.join(", ", missing));
+        }
     }
 }

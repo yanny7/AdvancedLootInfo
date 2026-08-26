@@ -192,6 +192,37 @@
       "description": "List of entities that will not be used for gathering loot tables.",
       "items": { "$ref": "#/definitions/Identifier" }
     },
+    "tooltipColors": {
+      "type": "object",
+      "description": "Colors used when rendering tooltips. Changes take effect on restart.",
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "Color of tooltip keys and labels. A vanilla color name or a hex color code such as #FFAA00. An invalid value falls back to the default.",
+          "pattern": "^(#[0-9a-fA-F]{6}|[a-z_]+)$",
+          "default": "gold"
+        },
+        "value": {
+          "type": "string",
+          "description": "Color of tooltip values. A vanilla color name or a hex color code such as #FFAA00. An invalid value falls back to the default.",
+          "pattern": "^(#[0-9a-fA-F]{6}|[a-z_]+)$",
+          "default": "aqua"
+        },
+        "error": {
+          "type": "string",
+          "description": "Color of values belonging to an errored tooltip entry. A vanilla color name or a hex color code such as #FFAA00. An invalid value falls back to the default.",
+          "pattern": "^(#[0-9a-fA-F]{6}|[a-z_]+)$",
+          "default": "red"
+        },
+        "branch": {
+          "type": "string",
+          "description": "Color of the tree branch arrows. A vanilla color name or a hex color code such as #FFAA00. An invalid value falls back to the default.",
+          "pattern": "^(#[0-9a-fA-F]{6}|[a-z_]+)$",
+          "default": "dark_gray"
+        }
+      }
+    },
     "logMoreStatistics": {
       "type": "boolean",
       "description": "If true, logs more detailed statistics.",

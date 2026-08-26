@@ -5,6 +5,7 @@ import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.api.WidgetDirection;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipNode;
+import com.yanny.awi.plugin.client.TooltipUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -57,7 +58,7 @@ public class TextureWidget implements IWidget {
     }
 
     public void tooltipText(TooltipNode tooltip) {
-        this.components.add(() -> CoreTooltipUtils.toComponents(tooltip, 0, Minecraft.getInstance().options.advancedItemTooltips));
+        this.components.add(() -> CoreTooltipUtils.toComponents(tooltip, 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle()));
     }
 
     /** Adds a raw component line to the tooltip (e.g. a white title). Lines appear in the order they were added. */
