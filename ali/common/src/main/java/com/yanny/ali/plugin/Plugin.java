@@ -124,6 +124,15 @@ public class Plugin implements IPlugin {
         registry.registerEntry(DynamicLoot.class, NodeUtils::getDynamicNode);
         registry.registerEntry(LootTableReference.class, NodeUtils::getReferenceNode);
 
+        registry.registerEntryTooltip(LootItem.class, EntryTooltipUtils::getItemTooltip);
+        registry.registerEntryTooltip(TagEntry.class, EntryTooltipUtils::getTagTooltip);
+        registry.registerEntryTooltip(AlternativesEntry.class, EntryTooltipUtils::getAlternativesTooltip);
+        registry.registerEntryTooltip(EntryGroup.class, EntryTooltipUtils::getGroupTooltip);
+        registry.registerEntryTooltip(SequentialEntry.class, EntryTooltipUtils::getSequentialTooltip);
+        registry.registerEntryTooltip(EmptyLootItem.class, EntryTooltipUtils::getEmptyTooltip);
+        registry.registerEntryTooltip(DynamicLoot.class, EntryTooltipUtils::getDynamicTooltip);
+        registry.registerEntryTooltip(LootTableReference.class, EntryTooltipUtils::getReferenceTooltip);
+
         registry.registerConditionTooltip(AllOfCondition.class, ConditionTooltipUtils::getAllOfTooltip);
         registry.registerConditionTooltip(AnyOfCondition.class, ConditionTooltipUtils::getAnyOfTooltip);
         registry.registerConditionTooltip(LootItemBlockStatePropertyCondition.class, ConditionTooltipUtils::getBlockStatePropertyTooltip);
@@ -188,6 +197,7 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(Attribute.class, RegistriesTooltipUtils::getAttributeTooltip);
 
         registry.registerValueTooltip(Enum.class, ValueTooltipUtils::getEnumTooltip);
+        registry.registerValueTooltip(LootPoolEntryContainer.class, ValueTooltipUtils::getEntryTooltip);
         registry.registerValueTooltip(LootItemCondition.class, ValueTooltipUtils::getConditionTooltip);
         registry.registerValueTooltip(LootItemFunction.class, ValueTooltipUtils::getFunctionTooltip);
         registry.registerValueTooltip(Ingredient.class, ValueTooltipUtils::getIngredientTooltip);

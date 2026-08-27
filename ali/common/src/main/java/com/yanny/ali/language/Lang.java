@@ -113,6 +113,30 @@ public final class Lang {
         }
     }
 
+    public enum Entry implements ITooltipKey {
+        ALTERNATIVES("alternatives", "Alternatives:"),
+        DYNAMIC("dynamic", "Dynamic:"),
+        EMPTY("empty", "Empty"),
+        GROUP("group", "Group:"),
+        ITEM("item", "Item:"),
+        LOOT_TABLE("loot_table", "Loot Table:"),
+        SEQUENCE("sequence", "Sequence:"),
+        TAG("tag", "Tag:"),
+        ;
+
+        private final Translation translation;
+
+        Entry(String k, String e) {
+            this.translation = new Translation("ali.type.entry." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
     public enum Value implements ITooltipKey {
         ABSOLUTE("absolute", "Absolute: %s"),
         ADD("add", "Add: %s"),
@@ -140,6 +164,7 @@ public final class Lang {
         ENTITY_TYPE("entity_type", "Entity Type: %s"),
         EQUIPMENT_SLOT("equipment_slot", "Equipment Slot: %s"),
         EXACT("exact", "Exact: %s"),
+        EXPAND("expand", "Expand: %s"),
         EXTRA_ROUNDS("extra_rounds", "Extra Rounds: %s"),
         FLUID("fluid", "Fluid: %s"),
         FORMULA("formula", "Formula: %s"),
@@ -206,6 +231,7 @@ public final class Lang {
         VARIANT("variant", "Variant: %s"),
         VILLAGER_TYPE("villager_type", "Villager Type: %s"),
         VILLAGER_XP("villager_xp", "XP: %s"),
+        WEIGHT("weight", "Weight: %s"),
         X("x", "X: %s"),
         Y("y", "Y: %s"),
         Z("z", "Z: %s"),
@@ -246,9 +272,11 @@ public final class Lang {
         ENTITY_FLAGS("entity_flags", "Entity Flags:"),
         ENTITY_SUB_PREDICATE("entity_sub_predicate", "Entity Sub Predicate:"),
         ENTITY_TYPES(Value.ENTITY_TYPE, "entity_types",  "Entity Types:"),
+        ENTRIES("entries", "Entries:"),
         EQUIPMENT_SLOTS(Value.EQUIPMENT_SLOT, "equipment_slots", "Equipment Slots:"),
         FEET("feet", "Feet:"),
         FLUID_PREDICATE("fluid_predicate", "Fluid Predicate:"),
+        FUNCTIONS("functions", "Functions:"),
         HEAD("head", "Head:"),
         ITEM("item", "Item:"),
         ITEMS(Value.ITEM, "items", "Items:"),

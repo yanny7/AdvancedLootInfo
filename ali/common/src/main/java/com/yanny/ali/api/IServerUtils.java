@@ -33,6 +33,9 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
     <T extends LootPoolEntryContainer> IServerRegistry.EntryFactory<T> getEntryFactory(IServerUtils utils, T type);
 
     @NotNull
+    <T extends LootPoolEntryContainer> TooltipBuilder getEntryTooltip(IServerUtils utils, T entry);
+
+    @NotNull
     <T extends LootItemFunction> TooltipBuilder getFunctionTooltip(IServerUtils utils, T function);
 
     @NotNull

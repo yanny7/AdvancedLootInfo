@@ -3,7 +3,7 @@ package com.yanny.ali.test;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.server.EnchantedRanges;
-import com.yanny.ali.plugin.server.EntryTooltipUtils;
+import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.ali.plugin.server.ValueTooltipUtils;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
@@ -44,8 +44,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
+import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 
 public class GenericTooltipTest {
     @Test
@@ -79,7 +79,7 @@ public class GenericTooltipTest {
             default -> throw new IllegalStateException("Unexpected value: " + level);
         });
 
-        assertTooltip(EntryTooltipUtils.getTooltip(
+        assertTooltip(TooltipUtils.getTooltip(
                 UTILS,
                 0,
                 new EnchantedRanges(2.5F),
@@ -90,7 +90,7 @@ public class GenericTooltipTest {
                 "Chance: 2.50%",
                 "Count: 2-10"
         ));
-        assertTooltip(EntryTooltipUtils.getTooltip(
+        assertTooltip(TooltipUtils.getTooltip(
                 UTILS,
                 5,
                 chanceMap,

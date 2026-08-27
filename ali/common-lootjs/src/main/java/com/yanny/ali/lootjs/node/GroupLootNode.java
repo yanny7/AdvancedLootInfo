@@ -12,7 +12,7 @@ import com.yanny.ali.api.ListNode;
 import com.yanny.ali.lootjs.LootJsPlugin;
 import com.yanny.ali.lootjs.mixin.MixinCompositeLootAction;
 import com.yanny.ali.lootjs.mixin.MixinGroupedLootAction;
-import com.yanny.ali.plugin.server.EntryTooltipUtils;
+import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
@@ -29,7 +29,7 @@ public class GroupLootNode extends ListNode {
     public GroupLootNode(IServerUtils utils, GroupedLootAction lootPool, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         MixinGroupedLootAction action = (MixinGroupedLootAction) lootPool;
 
-        tooltip = EntryTooltipUtils.getLootPoolTooltip(utils.convertNumber(utils, action.getNumberProvider()), new RangeValue(0)).build();
+        tooltip = TooltipUtils.getLootPoolTooltip(utils.convertNumber(utils, action.getNumberProvider()), new RangeValue(0)).build();
 
         for (ILootHandler entry : ((MixinCompositeLootAction) lootPool).getHandlers()) {
             if (entry instanceof AddLootAction addLootAction) {

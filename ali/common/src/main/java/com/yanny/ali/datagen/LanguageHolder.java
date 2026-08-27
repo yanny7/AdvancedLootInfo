@@ -28,6 +28,7 @@ public class LanguageHolder {
     static {
         CoreLang.register(TRANSLATION_MAP, Lang.Conditions.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Functions.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.Entry.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Value.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Branch.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Description.class);

@@ -13,7 +13,7 @@ import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.server.EnchantedRanges;
-import com.yanny.ali.plugin.server.EntryTooltipUtils;
+import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -47,7 +47,7 @@ public class ReplaceItemModifier extends BaseAccessor<Object> implements IGlobal
                 List<LootItemCondition> allConditions = Stream.concat(c.stream(), node.getConditions().stream()).toList();
                 EnchantedRanges chance = NodeUtils.getEnchantedChance(utils, allConditions, 1);
                 EnchantedRanges count = NodeUtils.getEnchantedCount(utils, Collections.emptyList());
-                TooltipBuilder tooltip = EntryTooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, count, Collections.emptyList(), allConditions);
+                TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, count, Collections.emptyList(), allConditions);
 
                 if (!c.isEmpty()) {
                     nodes.add(new ModifiedNode(utils, src, new ItemNode(1, new RangeValue(addedCount), addedItem.getDefaultInstance(), tooltip.build(), Collections.emptyList(), allConditions)));

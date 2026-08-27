@@ -2,6 +2,7 @@
 
 - Added `tooltipColors` configuration to change the tooltip text, value, error and branch colors
 - Enum values shown in tooltips are translatable
+- Displaying loot entries inside tooltip (e.g. in Shulker Box)
 
 ## [2.0.1]
 

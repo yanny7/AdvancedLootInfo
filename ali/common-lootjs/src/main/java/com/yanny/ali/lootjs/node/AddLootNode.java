@@ -9,7 +9,7 @@ import com.yanny.ali.api.ListNode;
 import com.yanny.ali.lootjs.LootJsPlugin;
 import com.yanny.ali.lootjs.Utils;
 import com.yanny.ali.lootjs.mixin.MixinAddLootAction;
-import com.yanny.ali.plugin.server.EntryTooltipUtils;
+import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
@@ -45,9 +45,9 @@ public class AddLootNode extends ListNode {
 
         addType = mixinAddLootAction.getType();
         tooltip = switch (mixinAddLootAction.getType()) {
-            case DEFAULT -> EntryTooltipUtils.getGroupTooltip().build();
-            case SEQUENCE -> EntryTooltipUtils.getSequentialTooltip().build();
-            case ALTERNATIVES -> EntryTooltipUtils.getAlternativesTooltip().build();
+            case DEFAULT -> TooltipUtils.getGroupTooltip().build();
+            case SEQUENCE -> TooltipUtils.getSequentialTooltip().build();
+            case ALTERNATIVES -> TooltipUtils.getAlternativesTooltip().build();
         };
     }
 

@@ -11,6 +11,7 @@ accessible field net/minecraft/world/level/storage/loot/IntRange min Lnet/minecr
 accessible field net/minecraft/world/level/storage/loot/IntRange max Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
 accessible field net/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer conditions [Lnet/minecraft/world/level/storage/loot/predicates/LootItemCondition;
 accessible field net/minecraft/world/level/storage/loot/entries/CompositeEntryBase children [Lnet/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer;
+accessible field net/minecraft/world/level/storage/loot/entries/DynamicLoot name Lnet/minecraft/resources/ResourceLocation;
 accessible field net/minecraft/world/level/storage/loot/entries/LootItem item Lnet/minecraft/world/item/Item;
 accessible field net/minecraft/world/level/storage/loot/entries/LootPoolSingletonContainer functions [Lnet/minecraft/world/level/storage/loot/functions/LootItemFunction;
 accessible field net/minecraft/world/level/storage/loot/entries/LootPoolSingletonContainer quality I

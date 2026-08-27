@@ -13,7 +13,7 @@ import com.yanny.ali.lootjs.LootJsPlugin;
 import com.yanny.ali.lootjs.Utils;
 import com.yanny.ali.lootjs.mixin.MixinWeightedAddLootAction;
 import com.yanny.ali.lootjs.mixin.MixinWeightedRandomList;
-import com.yanny.ali.plugin.server.EntryTooltipUtils;
+import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.random.WeightedEntry;
@@ -67,7 +67,7 @@ public class WeightedAddLootNode extends ListNode {
     public static TooltipNode getTooltip(IServerUtils utils, MixinWeightedAddLootAction action) {
         return TooltipBuilder.array((b) -> {
             b.add(TooltipBuilder.keyOnly(Lang.Group.RANDOM));
-            b.add(EntryTooltipUtils.getRolls(utils.convertNumber(utils, action.getNumberProvider()), new RangeValue(0)));
+            b.add(TooltipUtils.getRolls(utils.convertNumber(utils, action.getNumberProvider()), new RangeValue(0)));
             b.add(TooltipBuilder.value(action.getAllowDuplicateLoot()).build(Lang.Value.ALLOW_DUPLICATE_LOOT));
         }).build();
     }

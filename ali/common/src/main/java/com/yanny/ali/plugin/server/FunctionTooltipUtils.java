@@ -159,7 +159,7 @@ public class FunctionTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, fun.type).build(Lang.Value.BLOCK_ENTITY_TYPE));
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
-            // TODO entries
+            b.add(utils.getValueTooltip(utils, fun.entries).build(Lang.Branch.ENTRIES));
         }, Lang.Functions.SET_CONTENTS);
     }
 

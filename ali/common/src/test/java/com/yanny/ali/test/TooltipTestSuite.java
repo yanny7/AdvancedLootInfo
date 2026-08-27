@@ -144,6 +144,12 @@ public class TooltipTestSuite {
 
             @NotNull
             @Override
+            public <T extends LootPoolEntryContainer> TooltipBuilder getEntryTooltip(IServerUtils utils, T entry) {
+                return PluginManager.getInstance().serverRegistry.getEntryTooltip(utils, entry);
+            }
+
+            @NotNull
+            @Override
             public <T extends LootItemFunction> TooltipBuilder getFunctionTooltip(IServerUtils utils, T function) {
                 return PluginManager.getInstance().serverRegistry.getFunctionTooltip(utils, function);
             }

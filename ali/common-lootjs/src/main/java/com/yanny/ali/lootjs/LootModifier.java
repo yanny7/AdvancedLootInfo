@@ -19,7 +19,7 @@ import com.yanny.ali.lootjs.node.*;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.ModifiedNode;
 import com.yanny.ali.plugin.server.EnchantedRanges;
-import com.yanny.ali.plugin.server.EntryTooltipUtils;
+import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -91,7 +91,7 @@ public abstract class LootModifier<T> implements ILootModifier<T> {
                     List<LootItemCondition> allConditions = new LinkedList<>(i.getConditions());
 
                     allConditions.add(new InvertedLootItemCondition(new AllOfCondition(conditions.toArray(LootItemCondition[]::new))));
-                    TooltipBuilder tooltip = EntryTooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, enchantedChance, enchantedCount, i.getFunctions(), allConditions);
+                    TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, enchantedChance, enchantedCount, i.getFunctions(), allConditions);
                     return new ItemNode(i.getChance(), i.getCount(), i.getItem(), tooltip.build(), i.getFunctions(), i.getConditions());
                 }
 
