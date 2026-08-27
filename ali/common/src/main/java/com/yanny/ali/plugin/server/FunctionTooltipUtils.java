@@ -17,7 +17,7 @@ public class FunctionTooltipUtils {
         return hideWhenFoldedIntoCount(TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, fun.enchantment).build(Lang.Value.ENCHANTMENT));
             b.add(utils.getValueTooltip(utils, fun.formula).build(Lang.Value.FORMULA));
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.APPLY_BONUS), fun);
     }
 
@@ -25,7 +25,7 @@ public class FunctionTooltipUtils {
     public static TooltipBuilder getCopyNameTooltip(IServerUtils utils, CopyNameFunction fun) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, fun.source).build(Lang.Value.SOURCE));
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.COPY_NAME);
     }
 
@@ -34,7 +34,7 @@ public class FunctionTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, fun.source.getType()).build(Lang.Value.NBT_PROVIDER));
             b.add(utils.getValueTooltip(utils, fun.operations).build(Lang.Branch.OPERATIONS));
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.COPY_NBT);
     }
 
@@ -43,7 +43,7 @@ public class FunctionTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, fun.block).build(Lang.Value.BLOCK));
             b.add(utils.getValueTooltip(utils, fun.properties).build(Lang.Branch.PROPERTIES));
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.COPY_STATE);
     }
 
@@ -54,7 +54,7 @@ public class FunctionTooltipUtils {
                 b.add(utils.getValueTooltip(utils, fun.enchantments));
             }
 
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
             b.showEmpty();
         }, Lang.Functions.ENCHANT_RANDOMLY);
     }
@@ -64,7 +64,7 @@ public class FunctionTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, fun.levels).build(Lang.Value.LEVELS));
             b.add(utils.getValueTooltip(utils, fun.treasure).build(Lang.Value.TREASURE));
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.ENCHANT_WITH_LEVELS);
     }
 
@@ -76,14 +76,14 @@ public class FunctionTooltipUtils {
             b.add(utils.getValueTooltip(utils, fun.zoom).build(Lang.Value.ZOOM));
             b.add(utils.getValueTooltip(utils, fun.searchRadius).build(Lang.Value.SEARCH_RADIUS));
             b.add(utils.getValueTooltip(utils, fun.skipKnownStructures).build(Lang.Value.SKIP_KNOWN_STRUCTURES));
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.EXPLORATION_MAP);
     }
 
     @NotNull
     public static TooltipBuilder getExplosionDecayTooltip(IServerUtils utils, ApplyExplosionDecay fun) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
             b.showEmpty();
         }, Lang.Functions.EXPLOSION_DECAY);
     }
@@ -92,14 +92,14 @@ public class FunctionTooltipUtils {
     public static TooltipBuilder getFillPlayerHeadTooltip(IServerUtils utils, FillPlayerHead fun) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, fun.entityTarget).build(Lang.Value.TARGET));
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.FILL_PLAYER_HEAD);
     }
 
     @NotNull
     public static TooltipBuilder getFurnaceSmeltTooltip(IServerUtils utils, SmeltItemFunction fun) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
             b.showEmpty();
         }, Lang.Functions.FURNACE_SMELT);
     }
@@ -108,7 +108,7 @@ public class FunctionTooltipUtils {
     public static TooltipBuilder getLimitCountTooltip(IServerUtils utils, LimitCount fun) {
         return hideWhenFoldedIntoCount(TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, fun.limiter).build(Lang.Value.LIMIT));
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.LIMIT_COUNT), fun);
     }
 
@@ -121,7 +121,7 @@ public class FunctionTooltipUtils {
                 b.add(utils.getValueTooltip(utils, fun.limit).build(Lang.Value.LIMIT));
             }
 
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
             b.showEmpty();
         }, Lang.Functions.LOOTING_ENCHANT);
     }
@@ -130,7 +130,7 @@ public class FunctionTooltipUtils {
     public static TooltipBuilder getReferenceTooltip(IServerUtils utils, FunctionReference fun) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, fun.name).build(Lang.Value.NAME));
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.REFERENCE);
     }
 
@@ -141,7 +141,7 @@ public class FunctionTooltipUtils {
                 b.add(utils.getValueTooltip(utils, fun.modifiers));
             }
 
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.SET_ATTRIBUTES);
     }
 
@@ -150,7 +150,7 @@ public class FunctionTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, fun.append).build(Lang.Value.APPEND));
             b.add(utils.getValueTooltip(utils, fun.patterns).build(Lang.Branch.BANNER_PATTERNS));
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.SET_BANNER_PATTERN);
     }
 
@@ -158,7 +158,7 @@ public class FunctionTooltipUtils {
     public static TooltipBuilder getSetContentsTooltip(IServerUtils utils, SetContainerContents fun) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, fun.type).build(Lang.Value.BLOCK_ENTITY_TYPE));
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
             b.add(utils.getValueTooltip(utils, fun.entries).build(Lang.Branch.ENTRIES));
         }, Lang.Functions.SET_CONTENTS);
     }
@@ -168,7 +168,7 @@ public class FunctionTooltipUtils {
         return hideWhenFoldedIntoCount(TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, fun.value).build(Lang.Value.COUNT));
             b.add(utils.getValueTooltip(utils, fun.add).build(Lang.Value.ADD));
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.SET_COUNT), fun);
     }
 
@@ -177,7 +177,7 @@ public class FunctionTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, fun.damage).build(Lang.Value.DAMAGE));
             b.add(utils.getValueTooltip(utils, fun.add).build(Lang.Value.ADD));
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.SET_DAMAGE);
     }
 
@@ -186,7 +186,7 @@ public class FunctionTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(getMapTooltip(utils, fun.enchantments, Comparator.comparing(BuiltInRegistries.ENCHANTMENT::getKey), GenericTooltipUtils::getEnchantmentLevelsEntryTooltip).build(Lang.Branch.ENCHANTMENTS));
             b.add(utils.getValueTooltip(utils, fun.add).build(Lang.Value.ADD));
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.SET_ENCHANTMENTS);
     }
 
@@ -194,7 +194,7 @@ public class FunctionTooltipUtils {
     public static TooltipBuilder getSetInstrumentTooltip(IServerUtils utils, SetInstrumentFunction fun) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, fun.options).build(Lang.Value.OPTIONS));
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.SET_INSTRUMENT);
     }
 
@@ -204,7 +204,7 @@ public class FunctionTooltipUtils {
             b.add(utils.getValueTooltip(utils, fun.name).build(Lang.Value.NAME));
             b.add(utils.getValueTooltip(utils, fun.seed).build(Lang.Value.SEED));
             b.add(utils.getValueTooltip(utils, fun.type).build(Lang.Value.BLOCK_ENTITY_TYPE));
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.SET_LOOT_TABLE);
     }
 
@@ -214,7 +214,7 @@ public class FunctionTooltipUtils {
             b.add(utils.getValueTooltip(utils, fun.replace).build(Lang.Value.REPLACE));
             b.add(utils.getValueTooltip(utils, fun.lore).build(Lang.Branch.LORE));
             b.add(utils.getValueTooltip(utils, fun.resolutionContext).build(Lang.Value.RESOLUTION_CONTEXT));
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.SET_LORE);
     }
 
@@ -223,7 +223,7 @@ public class FunctionTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, fun.name).build(Lang.Value.NAME));
             b.add(utils.getValueTooltip(utils, fun.resolutionContext).build(Lang.Value.RESOLUTION_CONTEXT));
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.SET_NAME);
     }
 
@@ -231,7 +231,7 @@ public class FunctionTooltipUtils {
     public static TooltipBuilder getSetNbtTooltip(IServerUtils utils, SetNbtFunction fun) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, fun.tag.getAsString()).build(Lang.Value.TAG));
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.SET_NBT);
     }
 
@@ -239,7 +239,7 @@ public class FunctionTooltipUtils {
     public static TooltipBuilder getSetPotionTooltip(IServerUtils utils, SetPotionFunction fun) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, fun.potion).build(Lang.Value.POTION));
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.SET_POTION);
     }
 
@@ -250,7 +250,7 @@ public class FunctionTooltipUtils {
                 b.add(getMapTooltip(utils, fun.effectDurationMap, Comparator.comparing(BuiltInRegistries.MOB_EFFECT::getKey), GenericTooltipUtils::getMobEffectDurationEntryTooltip));
             }
 
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.SET_STEW_EFFECT);
     }
 

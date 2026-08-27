@@ -16,7 +16,7 @@ public class CopyMealFunction extends ConditionalFunction implements IFunctionTo
 
     @Override
     public TooltipBuilder getTooltip(IServerUtils utils) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicates).build(Lang.Branch.CONDITIONS)))
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicates).build(Lang.Branch.PREDICATES)))
                 .key(Lang.Functions.COPY_MEAL);
     }
 }

@@ -63,8 +63,8 @@ public class EntryTooltipUtils {
     private static void addSingleton(TooltipBuilder builder, IServerUtils utils, LootPoolSingletonContainer entry) {
         builder.add(TooltipUtils.getWeightTooltip(entry.weight));
         builder.add(TooltipUtils.getQualityTooltip(entry.quality));
-        builder.add(utils.getValueTooltip(utils, entry.conditions).build(Lang.Branch.CONDITIONS));
-        builder.add(utils.getValueTooltip(utils, entry.functions).build(Lang.Branch.FUNCTIONS));
+        builder.add(utils.getValueTooltip(utils, entry.conditions).build(Lang.Branch.PREDICATES));
+        builder.add(utils.getValueTooltip(utils, entry.functions).build(Lang.Branch.MODIFIERS));
     }
 
     private static void addComposite(TooltipBuilder builder, IServerUtils utils, CompositeEntryBase entry) {
@@ -73,6 +73,6 @@ public class EntryTooltipUtils {
                 b.add(utils.getEntryTooltip(utils, child));
             }
         }, Lang.Branch.ENTRIES));
-        builder.add(utils.getValueTooltip(utils, entry.conditions).build(Lang.Branch.CONDITIONS));
+        builder.add(utils.getValueTooltip(utils, entry.conditions).build(Lang.Branch.PREDICATES));
     }
 }
