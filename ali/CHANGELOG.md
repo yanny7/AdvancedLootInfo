@@ -2,6 +2,7 @@
 
 - Added `tooltipColors` configuration to change the tooltip text, value, error and branch colors
 - Enum values shown in tooltips are translatable
+- Removed equipment pattern from the default Trial Chambers loot category - it also matched unrelated modded equipment loot tables
 
 ## [2.0.1]
 
