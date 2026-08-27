@@ -9,6 +9,6 @@ import java.util.List;
 
 @Mixin(LootTable.class)
 public interface MixinLootTableForge {
-    @Accessor
-    List<LootPool> getPools();
+    @Accessor("pools")
+    List<LootPool> getAliPools();
 }

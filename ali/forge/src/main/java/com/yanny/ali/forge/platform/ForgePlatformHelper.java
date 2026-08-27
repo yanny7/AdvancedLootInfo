@@ -35,7 +35,7 @@ public class ForgePlatformHelper implements IPlatformHelper {
 
     @Override
     public List<LootPool> getLootPools(LootTable table) {
-        return ((MixinLootTableForge) table).getPools();
+        return ((MixinLootTableForge) table).getAliPools();
     }
 
     @Override

@@ -32,11 +32,11 @@ public class WeightedAddLootNode extends ListNode {
         MixinWeightedAddLootAction action = (MixinWeightedAddLootAction) lootAction;
         //noinspection unchecked
         MixinWeightedRandomList<WeightedEntry.Wrapper<LootEntry>> weightedList = (MixinWeightedRandomList<WeightedEntry.Wrapper<LootEntry>>) action.getWeightedRandomList();
-        int sumWeight = weightedList.getTotalWeight();
+        int sumWeight = weightedList.getAliTotalWeight();
 
         tooltip = getTooltip(utils, action);
 
-        for (WeightedEntry.Wrapper<LootEntry> wrapper : weightedList.getItems()) {
+        for (WeightedEntry.Wrapper<LootEntry> wrapper : weightedList.getAliItems()) {
             addChildren(Utils.getEntry(utils, wrapper.getData(), sumWeight, functions, conditions, false));
         }
     }

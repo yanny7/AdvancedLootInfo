@@ -25,7 +25,7 @@ public class FabricPlatformHelper implements IPlatformHelper {
 
     @Override
     public List<LootPool> getLootPools(LootTable table) {
-        return List.of(((MixinLootTableFabric) table).getPools());
+        return List.of(((MixinLootTableFabric) table).getAliPools());
     }
 
     @Override
