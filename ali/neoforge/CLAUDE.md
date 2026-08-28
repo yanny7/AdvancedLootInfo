@@ -25,7 +25,7 @@ Mixin configs are declared **once**, in `META-INF/neoforge.mods.toml`'s `[[mixin
 
 ## Access transformers
 
-NeoForge does not read access wideners, so `META-INF/accesstransformer.cfg` is a hand-maintained translation of `ali/common`'s `ali.accesswidener` (`accessible field X y Ldesc;` → `public X y`, `accessible method X y (desc)ret` → `public X y(desc)ret`, `accessible class X` → `public X`), plus one NeoForge-only entry (`CanToolPerformAction.action`). It is deliberately **not** a full 1:1 copy — the `# TESTS` block of the accesswidener is test-only and stays out. **Any entry added to `ali.accesswidener` for production code must be mirrored here**, or the shadowed `ali/common` code will compile (it compiles against the widened jar) and then fail at runtime on NeoForge with `IllegalAccessError`. `awi/neoforge` carries the same duplicated file for the same reason.
+NeoForge does not read access wideners, so the jar ships `META-INF/accesstransformer.cfg` — but nothing here is hand-maintained. `build.gradle`'s `loom { neoForge { convertAccessWideners(tasks.named("remapJar"), "ali.accesswidener") } }` makes loom convert `ali/common`'s `ali.accesswidener` during `remapJar` (`accessible field X y Ldesc;` → `public X y`, `accessible method X y (desc)ret` → `public X y(desc)ret`, `accessible class X` → `public X`) and drop the accesswidener from the NeoForge jar. An entry added to `ali.accesswidener` therefore reaches NeoForge on its own, the accesswidener's `# TESTS` block included — those widenings ship in production too. The API needs `dev.architectury.loom` 1.17+, which in turn needs Gradle 9 and `architectury-plugin` 3.5+; on older loom the conversion exists for Forge only. `awi/neoforge` is wired the same way.
 
 ## NeoForge-only compat plugins
 
