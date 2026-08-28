@@ -10,6 +10,10 @@ architectury {
 loom {
     accessWidenerPath = project(":ali:common").loom.accessWidenerPath
 
+    neoForge {
+        convertAccessWideners(tasks.named("remapJar"), "ali.accesswidener")
+    }
+
     mixin {
         useLegacyMixinAp = true
         defaultRefmapName = "ali.neoforge.refmap.json"
