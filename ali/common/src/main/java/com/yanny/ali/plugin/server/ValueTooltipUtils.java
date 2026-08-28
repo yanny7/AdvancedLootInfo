@@ -31,6 +31,7 @@ import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.storage.loot.ContainerComponentManipulator;
 import net.minecraft.world.level.storage.loot.IntRange;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -49,6 +50,11 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getEnumTooltip(IServerUtils utils, Enum<?> condition) {
         return utils.getEnumTranslation(utils, condition);
+    }
+
+    @NotNull
+    public static TooltipBuilder getEntryTooltip(IServerUtils utils, LootPoolEntryContainer condition) {
+        return utils.getEntryTooltip(utils, condition);
     }
 
     @NotNull

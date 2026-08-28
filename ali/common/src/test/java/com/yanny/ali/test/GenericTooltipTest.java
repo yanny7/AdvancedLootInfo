@@ -5,7 +5,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.server.EnchantedRanges;
-import com.yanny.ali.plugin.server.EntryTooltipUtils;
+import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.ali.plugin.server.ValueTooltipUtils;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.advancements.critereon.*;
@@ -63,6 +63,7 @@ import java.util.Optional;
 import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
+import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 
 public class GenericTooltipTest {
     @Test
@@ -96,7 +97,7 @@ public class GenericTooltipTest {
             default -> throw new IllegalStateException("Unexpected value: " + level);
         });
 
-        assertTooltip(EntryTooltipUtils.getTooltip(
+        assertTooltip(TooltipUtils.getTooltip(
                 UTILS,
                 0,
                 new EnchantedRanges(2.5F),
@@ -107,7 +108,7 @@ public class GenericTooltipTest {
                 "Chance: 2.50%",
                 "Count: 2-10"
         ));
-        assertTooltip(EntryTooltipUtils.getTooltip(
+        assertTooltip(TooltipUtils.getTooltip(
                 UTILS,
                 5,
                 chanceMap,
@@ -727,7 +728,7 @@ public class GenericTooltipTest {
                 Optional.of(FireworkExplosion.Shape.CREEPER),
                 Optional.of(true),
                 Optional.of(false)
-        )).build(Lang.Branch.CONDITION), List.of(
+        )).build(Lang.Branch.PREDICATE), List.of(
                 "Predicate:",
                 "  -> Shape: Creeper",
                 "  -> Trail: false",
@@ -749,7 +750,7 @@ public class GenericTooltipTest {
                 MinMaxBounds.Doubles.between(1.5, 3.14),
                 Optional.of(AttributeModifier.Operation.ADD_VALUE),
                 Optional.of(EquipmentSlotGroup.ARMOR)
-        )).build(Lang.Branch.CONDITION), List.of(
+        )).build(Lang.Branch.PREDICATE), List.of(
                 "Predicate:",
                 "  -> Attributes:",
                 "    -> minecraft:generic.armor",

@@ -11,6 +11,7 @@ accessible field net/minecraft/world/level/storage/loot/IntRange min Lnet/minecr
 accessible field net/minecraft/world/level/storage/loot/IntRange max Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
 accessible field net/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer conditions Ljava/util/List;
 accessible field net/minecraft/world/level/storage/loot/entries/CompositeEntryBase children Ljava/util/List;
+accessible field net/minecraft/world/level/storage/loot/entries/DynamicLoot name Lnet/minecraft/resources/ResourceLocation;
 accessible field net/minecraft/world/level/storage/loot/entries/LootItem item Lnet/minecraft/core/Holder;
 accessible field net/minecraft/world/level/storage/loot/entries/LootPoolSingletonContainer functions Ljava/util/List;
 accessible field net/minecraft/world/level/storage/loot/entries/LootPoolSingletonContainer quality I

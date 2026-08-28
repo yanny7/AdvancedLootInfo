@@ -127,6 +127,30 @@ public final class Lang {
         }
     }
 
+    public enum Entry implements ITooltipKey {
+        ALTERNATIVES("alternatives", "Alternatives:"),
+        DYNAMIC("dynamic", "Dynamic:"),
+        EMPTY("empty", "Empty"),
+        GROUP("group", "Group:"),
+        ITEM("item", "Item:"),
+        LOOT_TABLE("loot_table", "Loot Table:"),
+        SEQUENCE("sequence", "Sequence:"),
+        TAG("tag", "Tag:"),
+        ;
+
+        private final Translation translation;
+
+        Entry(String k, String e) {
+            this.translation = new Translation("ali.type.entry." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
     public enum ItemSubPredicates implements ITooltipKey {
         ATTRIBUTE_MODIFIERS("item_attribute_modifiers", "Attribute Modifiers:"),
         BUNDLE("item_bundle", "Bundle:"),
@@ -228,6 +252,7 @@ public final class Lang {
         EQUIPMENT_SLOT("equipment_slot", "Equipment Slot: %s"),
         EXACT("exact", "Exact: %s"),
         EXCLUDE("exclude", "Exclude: %s"),
+        EXPAND("expand", "Expand: %s"),
         EXTRA_ROUNDS("extra_rounds", "Extra Rounds: %s"),
         FADE_COLORS("fade_colors", "Fade Colors: %s"),
         FALL_DISTANCE("fall_distance", "Fall Distance: %s"),
@@ -348,6 +373,7 @@ public final class Lang {
         VARIANT("variant", "Variant: %s"),
         VERTICAL_SPEED("vertical_speed", "Vertical Speed: %s"),
         VILLAGER_TYPE("villager_type", "Villager Type: %s"),
+        WEIGHT("weight", "Weight: %s"),
         X("x", "X: %s"),
         XP("villager_xp", "XP: %s"),
         Y("y", "Y: %s"),
@@ -387,8 +413,6 @@ public final class Lang {
         CLAMPED("clamped", "Clamped:"),
         COMPONENT_PREDICATES("component_predicates", "Component Predicates:"),
         COMPONENTS(Value.COMPONENT, "components", "Components:"),
-        CONDITION("condition", "Predicate:"),
-        CONDITIONS("conditions", "Predicates:"),
         CONTAINS("contains", "Contains:"),
         COPY_OPERATIONS("copy_operations", "Copy Operations:"),
         COUNTS("counts", "Counts:"),
@@ -408,6 +432,7 @@ public final class Lang {
         ENTITY_FLAGS("entity_flags", "Entity Flags:"),
         ENTITY_SUB_PREDICATE("entity_sub_predicate", "Entity Sub Predicate:"),
         ENTITY_TYPES(Value.ENTITY_TYPE, "entity_types", "Entity Types:"),
+        ENTRIES("entries", "Entries:"),
         EQUIPMENT_SLOTS(Value.EQUIPMENT_SLOT, "equipment_slots", "Equipment Slots:"),
         EXCLUDE(Value.EXCLUDE, "exclude", "Exclude:"),
         EXPLOSION("explosion", "Explosion:"),
@@ -456,6 +481,7 @@ public final class Lang {
         POSITION("position", "Position:"),
         POSSIBLE_EFFECT("possible_effect", "Possible Effect:"),
         PREDICATE("predicate", "Predicate:"),
+        PREDICATES("predicates", "Predicates:"),
         PROPERTIES(Value.PROPERTY, "properties", "Properties:"),
         PROPERTY("property", "Property:"),
         RECIPES(Value.RECIPE, "recipes", "Recipes:"),

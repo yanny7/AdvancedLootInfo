@@ -1,0 +1,51 @@
+name: Feature request
+description: Suggest a new feature or an improvement
+labels: ["enhancement"]
+body:
+  - type: dropdown
+    id: mod
+    attributes:
+      label: Mod
+      description: Which mod should the feature go into?
+      options:
+        - ALI (Advanced Loot Info)
+        - AWI (Advanced Worldgen Info)
+        - ACI (Advanced Core Info)
+        - Not sure
+    validations:
+      required: true
+
+  - type: input
+    id: mod-version
+    attributes:
+      label: Mod version
+      description: Version you are currently using, as shown in the jar file name.
+
+  - type: dropdown
+    id: minecraft-version
+    attributes:
+      label: Minecraft version
+      description: Version you are playing on. Pick "All versions" if the request is not tied to one.
+      options:
+        - All versions
+        - "26.2"
+        - "26.1.2"
+        - "1.21.11"
+        - "1.21.1"
+        - "1.20.1"
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What should the mod do, and what problem does it solve for you?
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered

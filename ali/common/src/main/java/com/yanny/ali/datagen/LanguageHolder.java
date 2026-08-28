@@ -35,6 +35,7 @@ public class LanguageHolder {
         CoreLang.register(TRANSLATION_MAP, Lang.Functions.class);
         CoreLang.register(TRANSLATION_MAP, Lang.ItemSubPredicates.class);
         CoreLang.register(TRANSLATION_MAP, Lang.EntitySubPredicates.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.Entry.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Value.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Branch.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Description.class);

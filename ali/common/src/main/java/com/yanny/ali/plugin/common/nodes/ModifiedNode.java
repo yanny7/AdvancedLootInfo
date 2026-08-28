@@ -6,7 +6,7 @@ import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ListNode;
-import com.yanny.ali.plugin.server.EntryTooltipUtils;
+import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +17,7 @@ public class ModifiedNode extends ListNode {
     private final TooltipNode tooltip;
 
     public ModifiedNode(IServerUtils ignoredUtils, IDataNode original, IDataNode modified) {
-        tooltip = EntryTooltipUtils.getAlternativesTooltip().build();
+        tooltip = TooltipUtils.getAlternativesTooltip().build();
         addChildren(modified);
         addChildren(original);
     }

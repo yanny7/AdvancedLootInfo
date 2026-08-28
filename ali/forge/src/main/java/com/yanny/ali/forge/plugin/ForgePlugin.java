@@ -153,7 +153,7 @@ public class ForgePlugin implements IPlugin {
 
             @Override
             public List<LootItemCondition> getConditions() {
-                return Arrays.asList(((MixinLootModifier) modifier).getConditions());
+                return Arrays.asList(((MixinLootModifier) modifier).getAliConditions());
             }
 
             @Override
