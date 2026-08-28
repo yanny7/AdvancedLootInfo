@@ -70,6 +70,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootPoolEntryContainer, List<Item>>> entryItemCollectors = registerClassKeyed("entry item collectors", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, List<Item>, LootItemFunction, List<Item>>> functionItemCollectors = registerClassKeyed("function item collectors", false, HashMap::new, null);
     // tooltips
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootPoolEntryContainer, TooltipBuilder>> entryTooltips = registerClassKeyed("entry tooltips", true, HashMap::new, BuiltInRegistries.LOOT_POOL_ENTRY_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemFunction, TooltipBuilder>> functionTooltips = registerClassKeyed("function tooltips", true, HashMap::new, BuiltInRegistries.LOOT_FUNCTION_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemCondition, TooltipBuilder>> conditionTooltips = registerClassKeyed("condition tooltips", true, HashMap::new, BuiltInRegistries.LOOT_CONDITION_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Ingredient, TooltipBuilder>> ingredientTooltips = registerClassKeyed("ingredient tooltips", true, HashMap::new, null);
@@ -132,6 +133,11 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @Override
     public <T extends LootPoolEntryContainer> void registerEntry(Class<T> type, EntryFactory<T> entry) {
         entryFactories.put(type, entry);
+    }
+
+    @Override
+    public <T extends LootPoolEntryContainer> void registerEntryTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
+        entryTooltips.put(type, (u, e) -> getter.apply(u, type.cast(e)));
     }
 
     @Override
@@ -243,6 +249,14 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         //noinspection unchecked
         return (EntryFactory<T>) entryFactories.get(type.getClass())
                 .orElseGet(() -> (u, e, c, s, f, o) -> new MissingNode(MissingTooltipUtils.getMissingEntryTooltip(u, e).build()));
+    }
+
+    @NotNull
+    @Override
+    public <T extends LootPoolEntryContainer> TooltipBuilder getEntryTooltip(IServerUtils utils, T entry) {
+        return entryTooltips.get(entry.getClass())
+                .map((e) -> e.apply(utils, entry))
+                .orElseGet(() -> MissingTooltipUtils.getMissingEntryTooltip(utils, entry));
     }
 
     @NotNull

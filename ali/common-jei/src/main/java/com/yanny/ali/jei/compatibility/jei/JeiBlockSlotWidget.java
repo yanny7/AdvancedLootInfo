@@ -90,7 +90,7 @@ public class JeiBlockSlotWidget implements ISlottedRecipeWidget {
                 BlockState base;
                 BlockState farmland = Blocks.FARMLAND.defaultBlockState();
 
-                if (block instanceof MixinVegetationBlock bushBlock && bushBlock.invokeMayPlaceOn(farmland, level, BlockPos.ZERO)) {
+                if (block instanceof MixinVegetationBlock bushBlock && bushBlock.invokeAliMayPlaceOn(farmland, level, BlockPos.ZERO)) {
                     base = farmland;
                 } else {
                     base = Blocks.GRASS_BLOCK.defaultBlockState();

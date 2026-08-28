@@ -7,7 +7,6 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.nodes.*;
 import com.yanny.ali.plugin.server.EnchantedRanges;
-import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -51,7 +50,7 @@ public class NodeUtils {
         float chance = getChance(entry, rawChance, sumWeight);
         EnchantedRanges enchantedChance = getEnchantedChance(utils, allConditions, chance);
         EnchantedRanges enchantedCount = getEnchantedCount(utils, allFunctions);
-        TooltipNode tooltip = EntryTooltipUtils.getTooltip(utils, entry.quality, enchantedChance, enchantedCount, allFunctions, allConditions).build();
+        TooltipNode tooltip = TooltipUtils.getTooltip(utils, entry.quality, enchantedChance, enchantedCount, allFunctions, allConditions).build();
         Either<ItemStack, TagKey<? extends ItemLike>> either = itemGetter.apply(allFunctions);
 
         if (either.left().isPresent() && either.left().get().isEmpty()) {
@@ -65,7 +64,7 @@ public class NodeUtils {
     public static AlternativesNode getAlternativesNode(IServerUtils utils, AlternativesEntry entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
         List<IDataNode> children = getChildren(utils, entry.children, rawChance, sumWeight, functions, allConditions);
-        TooltipNode tooltip = EntryTooltipUtils.getAlternativesTooltip().build();
+        TooltipNode tooltip = TooltipUtils.getAlternativesTooltip().build();
 
         return new AlternativesNode(children, tooltip);
     }
@@ -75,7 +74,7 @@ public class NodeUtils {
         List<LootItemFunction> allFunctions = getAllFunctions(entry, functions);
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
         float chance = getChance(entry, rawChance, sumWeight);
-        TooltipNode tooltip = EntryTooltipUtils.getDynamicTooltip(utils, entry.quality, chance, allFunctions, allConditions).build();
+        TooltipNode tooltip = TooltipUtils.getDynamicTooltip(utils, entry.quality, chance, allFunctions, allConditions).build();
 
         return new DynamicNode(chance, tooltip);
     }
@@ -86,7 +85,7 @@ public class NodeUtils {
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
         float chance = getChance(entry, rawChance, sumWeight);
         EnchantedRanges enchantedChance = getEnchantedChance(utils, allConditions, chance);
-        TooltipNode tooltip = EntryTooltipUtils.getEmptyTooltip(utils, entry.quality, enchantedChance, allFunctions, allConditions).build();
+        TooltipNode tooltip = TooltipUtils.getEmptyTooltip(utils, entry.quality, enchantedChance, allFunctions, allConditions).build();
 
         return new EmptyNode(chance, tooltip);
     }
@@ -95,7 +94,7 @@ public class NodeUtils {
     public static GroupNode getGroupNode(IServerUtils utils, EntryGroup entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
         List<IDataNode> children = getChildren(utils, entry.children, rawChance, sumWeight, functions, allConditions);
-        TooltipNode tooltip = EntryTooltipUtils.getGroupTooltip().build();
+        TooltipNode tooltip = TooltipUtils.getGroupTooltip().build();
 
         return new GroupNode(children, tooltip);
     }
@@ -104,7 +103,7 @@ public class NodeUtils {
     public static SequenceNode getSequenceNode(IServerUtils utils, SequentialEntry entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
         List<IDataNode> children = getChildren(utils, entry.children, rawChance, sumWeight, functions, allConditions);
-        TooltipNode tooltip = EntryTooltipUtils.getSequentialTooltip().build();
+        TooltipNode tooltip = TooltipUtils.getSequentialTooltip().build();
 
         return new SequenceNode(children, tooltip);
     }
@@ -115,7 +114,7 @@ public class NodeUtils {
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
         float chance = getChance(entry, rawChance, sumWeight);
         LootTable lootTable = utils.getLootTable(entry.contents.mapLeft(ResourceKey::identifier));
-        TooltipNode tooltip = EntryTooltipUtils.getReferenceTooltip(entry, rawChance, sumWeight).build();
+        TooltipNode tooltip = TooltipUtils.getReferenceTooltip(entry, rawChance, sumWeight).build();
         List<IDataNode> children;
 
         if (lootTable != null) {
@@ -157,7 +156,7 @@ public class NodeUtils {
         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), entry.functions.stream()).toList();
         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), entry.conditions.stream()).toList();
         int sumWeight = getTotalWeight(entry.entries);
-        TooltipNode tooltip = EntryTooltipUtils.getLootPoolTooltip(utils.convertNumber(utils, entry.rolls), utils.convertNumber(utils, entry.bonusRolls)).build();
+        TooltipNode tooltip = TooltipUtils.getLootPoolTooltip(utils.convertNumber(utils, entry.rolls), utils.convertNumber(utils, entry.bonusRolls)).build();
         List<IDataNode> children = getChildren(utils, entry.entries, rawChance, sumWeight, allFunctions, allConditions);
 
         return new LootPoolNode(children, tooltip);
@@ -165,7 +164,7 @@ public class NodeUtils {
 
     @NotNull
     public static LootTableNode getLootTableNode(List<ILootModifier<?>> modifiers) {
-        TooltipNode tooltip = EntryTooltipUtils.getLootTableTooltip().build();
+        TooltipNode tooltip = TooltipUtils.getLootTableTooltip().build();
         List<IDataNode> children = new ArrayList<>();
         LootTableNode node = new LootTableNode(children, tooltip);
 
@@ -179,7 +178,7 @@ public class NodeUtils {
     @NotNull
     public static LootTableNode getLootTableNode(List<ILootModifier<?>> modifiers, IServerUtils utils, LootTable entry, float rawChance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), entry.functions.stream()).toList();
-        TooltipNode tooltip = EntryTooltipUtils.getLootTableTooltip().build();
+        TooltipNode tooltip = TooltipUtils.getLootTableTooltip().build();
         List<IDataNode> children = entry.pools.stream().map((lootPool) -> (IDataNode) getLootPoolNode(utils, lootPool, rawChance, allFunctions, conditions)).toList();
         LootTableNode node = new LootTableNode(children, tooltip);
 

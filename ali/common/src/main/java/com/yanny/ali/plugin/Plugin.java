@@ -168,6 +168,15 @@ public class Plugin implements IPlugin {
         registry.registerEntry(NestedLootTable.class, NodeUtils::getReferenceNode);
         registry.registerEntry(SlotLoot.class, NodeUtils::getSlotNode);
 
+        registry.registerEntryTooltip(LootItem.class, EntryTooltipUtils::getItemTooltip);
+        registry.registerEntryTooltip(TagEntry.class, EntryTooltipUtils::getTagTooltip);
+        registry.registerEntryTooltip(AlternativesEntry.class, EntryTooltipUtils::getAlternativesTooltip);
+        registry.registerEntryTooltip(EntryGroup.class, EntryTooltipUtils::getGroupTooltip);
+        registry.registerEntryTooltip(SequentialEntry.class, EntryTooltipUtils::getSequentialTooltip);
+        registry.registerEntryTooltip(EmptyLootItem.class, EntryTooltipUtils::getEmptyTooltip);
+        registry.registerEntryTooltip(DynamicLoot.class, EntryTooltipUtils::getDynamicTooltip);
+        registry.registerEntryTooltip(NestedLootTable.class, EntryTooltipUtils::getReferenceTooltip);
+
         registry.registerConditionTooltip(AllOfCondition.class, ConditionTooltipUtils::getAllOfTooltip);
         registry.registerConditionTooltip(AnyOfCondition.class, ConditionTooltipUtils::getAnyOfTooltip);
         registry.registerConditionTooltip(LootItemBlockStatePropertyCondition.class, ConditionTooltipUtils::getBlockStatePropertyTooltip);
@@ -404,6 +413,7 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(ZombieNautilusVariant.class, RegistriesTooltipUtils::getZombieNautilusVariantTooltip);
 
         registry.registerValueTooltip(Enum.class, ValueTooltipUtils::getEnumTooltip);
+        registry.registerValueTooltip(LootPoolEntryContainer.class, ValueTooltipUtils::getEntryTooltip);
         registry.registerValueTooltip(LootItemCondition.class, ValueTooltipUtils::getConditionTooltip);
         registry.registerValueTooltip(LootItemFunction.class, ValueTooltipUtils::getFunctionTooltip);
         registry.registerValueTooltip(Ingredient.class, ValueTooltipUtils::getIngredientTooltip);

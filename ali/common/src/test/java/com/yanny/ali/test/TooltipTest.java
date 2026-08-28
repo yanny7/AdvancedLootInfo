@@ -1,7 +1,7 @@
 package com.yanny.ali.test;
 
 import com.yanny.aci.tooltip.TooltipNode;
-import com.yanny.ali.plugin.server.EntryTooltipUtils;
+import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
@@ -17,13 +17,13 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
 import static com.yanny.ali.plugin.common.NodeUtils.getEnchantedChance;
 import static com.yanny.ali.plugin.common.NodeUtils.getEnchantedCount;
-import static com.yanny.ali.plugin.server.EntryTooltipUtils.getChanceTooltip;
-import static com.yanny.ali.plugin.server.EntryTooltipUtils.getCountTooltip;
+import static com.yanny.ali.plugin.server.TooltipUtils.getChanceTooltip;
+import static com.yanny.ali.plugin.server.TooltipUtils.getCountTooltip;
 import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
-import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
 
 public class TooltipTest {
     @Test
@@ -251,7 +251,7 @@ public class TooltipTest {
 
     @NotNull
     private static TooltipNode itemTooltip(List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        return EntryTooltipUtils.getTooltip(UTILS, LootPoolSingletonContainer.DEFAULT_QUALITY,
+        return TooltipUtils.getTooltip(UTILS, LootPoolSingletonContainer.DEFAULT_QUALITY,
                 getEnchantedChance(UTILS, conditions, 1), getEnchantedCount(UTILS, functions), functions, conditions).build();
     }
 }

@@ -15,7 +15,7 @@ import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.server.EnchantedRanges;
-import com.yanny.ali.plugin.server.EntryTooltipUtils;
+import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -41,7 +41,7 @@ public class PastrySlicingModifier extends GlobalLootModifier implements IGlobal
         return GlobalLootModifierUtils.getLootModifier(conditionList, (c) -> {
             EnchantedRanges chance = NodeUtils.getEnchantedChance(utils, c, 1);
             EnchantedRanges count = new EnchantedRanges(1, 7);
-            TooltipBuilder tooltip = EntryTooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, count, Collections.emptyList(), c);
+            TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, count, Collections.emptyList(), c);
             IDataNode node = new ItemNode(1, new RangeValue(1, 7), pastrySlice.getDefaultInstance(), tooltip.build(), Collections.emptyList(), c);
 
             return Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, node));

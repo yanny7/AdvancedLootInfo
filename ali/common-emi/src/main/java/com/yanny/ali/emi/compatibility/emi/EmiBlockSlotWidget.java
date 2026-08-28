@@ -63,7 +63,7 @@ public class EmiBlockSlotWidget extends SlotWidget {
             BlockState base;
             BlockState farmland = Blocks.FARMLAND.defaultBlockState();
 
-            if (block instanceof MixinVegetationBlock vegetationBlock && vegetationBlock.invokeMayPlaceOn(farmland, level, BlockPos.ZERO)) {
+            if (block instanceof MixinVegetationBlock vegetationBlock && vegetationBlock.invokeAliMayPlaceOn(farmland, level, BlockPos.ZERO)) {
                 base = farmland;
             } else {
                 base = Blocks.GRASS_BLOCK.defaultBlockState();
