@@ -10,7 +10,7 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.lootjs.LootJsPlugin;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.server.EnchantedRanges;
-import com.yanny.ali.plugin.server.EntryTooltipUtils;
+import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
@@ -150,7 +150,7 @@ public class ItemTagNode implements IDataNode, IItemNode {
         EnchantedRanges chanceMap = NodeUtils.getEnchantedChance(utils, conditions, chance);
         EnchantedRanges countMap = getCount(utils, 1, functions);
 
-        return EntryTooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chanceMap, countMap, functions, conditions).build();
+        return TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chanceMap, countMap, functions, conditions).build();
     }
 
     @NotNull

@@ -2,7 +2,7 @@ package com.yanny.ali.test;
 
 import com.yanny.aci.api.RangeValue;
 import com.yanny.ali.plugin.server.EnchantedRanges;
-import com.yanny.ali.plugin.server.EntryTooltipUtils;
+import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
@@ -14,18 +14,19 @@ import java.util.List;
 import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
+import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 
 public class EntryTooltipTest {
     @Test
     public void testLootTableTooltip() {
-        assertTooltip(EntryTooltipUtils.getLootTableTooltip().build(), List.of(
+        assertTooltip(TooltipUtils.getLootTableTooltip().build(), List.of(
                 "Selects all entries"
         ));
     }
 
     @Test
     public void testLootPoolTooltip() {
-        assertTooltip(EntryTooltipUtils.getLootPoolTooltip(new RangeValue(2, 3), new RangeValue(1, 2)).build(), List.of(
+        assertTooltip(TooltipUtils.getLootPoolTooltip(new RangeValue(2, 3), new RangeValue(1, 2)).build(), List.of(
                 "Selects random entry",
                 "Rolls: 3-5x"
         ));
@@ -33,14 +34,14 @@ public class EntryTooltipTest {
 
     @Test
     public void testAlternativesTooltip() {
-        assertTooltip(EntryTooltipUtils.getAlternativesTooltip().build(), List.of(
+        assertTooltip(TooltipUtils.getAlternativesTooltip().build(), List.of(
                 "Selects only first successful entry"
         ));
     }
 
     @Test
     public void testDynamicTooltip() {
-        assertTooltip(EntryTooltipUtils.getDynamicTooltip(UTILS, 10, 0.3f, List.of(), List.of()).build(), List.of(
+        assertTooltip(TooltipUtils.getDynamicTooltip(UTILS, 10, 0.3f, List.of(), List.of()).build(), List.of(
                 "Dynamic block-specific drops",
                 "Quality: 10",
                 "Chance: 30%"
@@ -49,14 +50,14 @@ public class EntryTooltipTest {
 
     @Test
     public void testGroupTooltip() {
-        assertTooltip(EntryTooltipUtils.getGroupTooltip().build(), List.of(
+        assertTooltip(TooltipUtils.getGroupTooltip().build(), List.of(
                 "Selects all entries"
         ));
     }
 
     @Test
     public void testSequentialTooltip() {
-        assertTooltip(EntryTooltipUtils.getSequentialTooltip().build(), List.of(
+        assertTooltip(TooltipUtils.getSequentialTooltip().build(), List.of(
                 "Selects entries sequentially until first failed"
         ));
     }
@@ -79,7 +80,7 @@ public class EntryTooltipTest {
             default -> throw new IllegalStateException("Unexpected value: " + level);
         });
 
-        assertTooltip(EntryTooltipUtils.getTooltip(
+        assertTooltip(TooltipUtils.getTooltip(
                 UTILS,
                 3,
                 chanceMap,
@@ -101,7 +102,7 @@ public class EntryTooltipTest {
                 "----- Modifiers -----",
                 "Explosion Decay"
         ));
-        assertTooltip(EntryTooltipUtils.getTooltip(
+        assertTooltip(TooltipUtils.getTooltip(
                 UTILS,
                 3,
                 chanceMap,

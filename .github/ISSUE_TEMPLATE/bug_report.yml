@@ -1,0 +1,91 @@
+name: Bug report
+description: Report a problem with ALI, AWI or ACI
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: mod
+    attributes:
+      label: Mod
+      description: Which mod is affected?
+      options:
+        - ALI (Advanced Loot Info)
+        - AWI (Advanced Worldgen Info)
+        - ACI (Advanced Core Info)
+        - Not sure
+    validations:
+      required: true
+
+  - type: input
+    id: mod-version
+    attributes:
+      label: Mod version
+      description: Version of the mod selected above, as shown in the jar file name (e.g. 2.1.0).
+    validations:
+      required: true
+
+  - type: dropdown
+    id: minecraft-version
+    attributes:
+      label: Minecraft version
+      options:
+        - "26.2"
+        - "26.1.2"
+        - "1.21.11"
+        - "1.21.1"
+        - "1.20.1"
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: loader
+    attributes:
+      label: Mod loader
+      options:
+        - Fabric
+        - Forge
+        - NeoForge
+    validations:
+      required: true
+
+  - type: dropdown
+    id: viewer
+    attributes:
+      label: Recipe viewer
+      options:
+        - EMI
+        - JEI
+        - REI
+        - None / not relevant
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What happened, and what did you expect to happen instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Attach `latest.log` / `crash-report.txt`, or paste the relevant part. Automatically formatted as code.
+      render: text
+
+  - type: textarea
+    id: other-mods
+    attributes:
+      label: Other mods
+      description: Mods that seem related to the problem, with their versions.

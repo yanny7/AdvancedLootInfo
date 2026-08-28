@@ -10,6 +10,6 @@ public abstract class GlobalLootModifier extends BaseAccessor<LootModifier> {
 
     public GlobalLootModifier(LootModifier parent) {
         super(parent);
-        conditions = ((MixinLootModifier) parent).getConditions();
+        conditions = ((MixinLootModifier) parent).getAliConditions();
     }
 }

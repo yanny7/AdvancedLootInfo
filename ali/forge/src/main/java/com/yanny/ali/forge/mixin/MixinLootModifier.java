@@ -7,6 +7,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(LootModifier.class)
 public interface MixinLootModifier {
-    @Accessor
-    LootItemCondition[] getConditions();
+    @Accessor("conditions")
+    LootItemCondition[] getAliConditions();
 }
