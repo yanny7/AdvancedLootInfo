@@ -239,7 +239,12 @@ public class FunctionTooltipTest {
                 .withEntry(LootItem.lootTableItem(Items.ENCHANTED_BOOK))
                 .build()).build(), List.of(
                 "Set Contents:",
-                "  -> Block Entity Type: minecraft:brewing_stand"
+                "  -> Block Entity Type: minecraft:brewing_stand",
+                "  -> Entries:",
+                "    -> Item:",
+                "      -> Item: minecraft:book",
+                "    -> Item:",
+                "      -> Item: minecraft:enchanted_book"
         ));
     }
 
