@@ -42,8 +42,7 @@
         "^.*:pots/trial_chambers/.*$",
         "^.*:dispensers/trial_chambers/.*$",
         "^.*:spawners/ominous/trial_chamber/.*$",
-        "^.*:spawners/trial_chamber/.*$",
-        "^.*:equipment/.*$"
+        "^.*:spawners/trial_chamber/.*$"
       ],
       "key": "ali:trial_chambers",
       "icon": "minecraft:trial_spawner"
