@@ -7,6 +7,7 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.nodes.*;
 import com.yanny.ali.plugin.server.EnchantedRanges;
+import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;

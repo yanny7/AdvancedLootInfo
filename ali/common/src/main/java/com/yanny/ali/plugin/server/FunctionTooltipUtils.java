@@ -385,7 +385,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static TooltipBuilder getDiscardItemTooltip(IServerUtils utils, DiscardItem fun) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
             b.showEmpty();
         }, Lang.Functions.DISCARD_ITEM);
     }

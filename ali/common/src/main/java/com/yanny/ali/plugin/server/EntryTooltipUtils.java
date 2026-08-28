@@ -5,7 +5,14 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import net.minecraft.world.item.slot.SlotSource;
 import net.minecraft.world.level.storage.loot.entries.*;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+
+import static com.yanny.ali.plugin.server.TooltipUtils.getChanceTooltip;
+import static com.yanny.ali.plugin.server.TooltipUtils.getQualityTooltip;
 
 public class EntryTooltipUtils {
     @NotNull
@@ -75,7 +82,7 @@ public class EntryTooltipUtils {
 
     private static void addSingleton(TooltipBuilder builder, IServerUtils utils, LootPoolSingletonContainer entry) {
         builder.add(TooltipUtils.getWeightTooltip(entry.weight));
-        builder.add(TooltipUtils.getQualityTooltip(entry.quality));
+        builder.add(getQualityTooltip(entry.quality));
         builder.add(utils.getValueTooltip(utils, entry.conditions).build(Lang.Branch.PREDICATES));
         builder.add(utils.getValueTooltip(utils, entry.functions).build(Lang.Branch.MODIFIERS));
     }
