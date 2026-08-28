@@ -397,7 +397,7 @@ public class FunctionTooltipUtils {
     public static TooltipBuilder getSetRandomDyesTooltip(IServerUtils utils, SetRandomDyesFunction fun) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, fun.numberOfDyes).build(Lang.Value.NUMBER_OF_DYES));
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.SET_RANDOM_DYES);
     }
 
@@ -405,7 +405,7 @@ public class FunctionTooltipUtils {
     public static TooltipBuilder getSetRandomPotionsTooltip(IServerUtils utils, SetRandomPotionFunction fun) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, fun.options).build(Lang.Branch.POTIONS));
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.SET_RANDOM_POTIONS);
     }
 

@@ -11,7 +11,7 @@ loom {
     accessWidenerPath = project(":awi:common").loom.accessWidenerPath
 
     neoForge {
-        convertAccessWideners(tasks.named("remapJar"), "awi.accesswidener")
+        convertAccessWideners(tasks.named("shadowJar"), "awi.accesswidener")
     }
 
     mixin {
