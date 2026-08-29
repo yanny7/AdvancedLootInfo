@@ -48,7 +48,7 @@ public class ConditionTooltipUtils {
     public static TooltipBuilder getEntityPropertiesTooltip(IServerUtils utils, LootItemEntityPropertyCondition cond) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, cond.entityTarget()).build(Lang.Value.TARGET));
-            b.add(utils.getValueTooltip(utils, cond.predicate()).build(Lang.Branch.CONDITION));
+            b.add(utils.getValueTooltip(utils, cond.predicate()).build(Lang.Branch.PREDICATE));
         }, Lang.Conditions.ENTITY_PROPERTIES);
     }
 

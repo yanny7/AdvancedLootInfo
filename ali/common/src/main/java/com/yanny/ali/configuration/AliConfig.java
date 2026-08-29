@@ -154,8 +154,7 @@ public class AliConfig implements ICoreConfig {
                         Pattern.compile("^.*:pots/trial_chambers/.*$"),
                         Pattern.compile("^.*:dispensers/trial_chambers/.*$"),
                         Pattern.compile("^.*:spawners/ominous/trial_chamber/.*$"),
-                        Pattern.compile("^.*:spawners/trial_chamber/.*$"),
-                        Pattern.compile("^.*:equipment/.*$")
+                        Pattern.compile("^.*:spawners/trial_chamber/.*$")
                 )),
                 new GameplayLootCategory(Utils.modLoc("fishing_loot"), Items.FISHING_ROD, false, of(Items.FISHING_ROD), List.of(Pattern.compile("^.*:gameplay/fishing.*$"))),
                 new GameplayLootCategory(Utils.modLoc("archaeology_loot"), Items.DECORATED_POT, false, of(Items.BRUSH, Items.SUSPICIOUS_SAND, Items.SUSPICIOUS_GRAVEL), List.of(

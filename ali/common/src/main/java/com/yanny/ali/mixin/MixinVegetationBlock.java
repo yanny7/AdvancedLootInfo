@@ -9,6 +9,6 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(VegetationBlock.class)
 public interface MixinVegetationBlock {
-    @Invoker
-    boolean invokeMayPlaceOn(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos);
+    @Invoker("mayPlaceOn")
+    boolean invokeAliMayPlaceOn(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos);
 }

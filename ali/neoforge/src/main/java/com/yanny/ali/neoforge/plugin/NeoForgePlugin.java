@@ -110,7 +110,7 @@ public class NeoForgePlugin implements IPlugin {
                 .getListener(NeoForgeReloadListeners.LOOT_MODIFIERS_KEY);
 
         forgeRegistry.registerGlobalLootModifier(AddTableLootModifier.class, (u, m) -> {
-            List<LootItemCondition> conditionList = Arrays.asList(((MixinLootModifier) m).getConditions());
+            List<LootItemCondition> conditionList = Arrays.asList(((MixinLootModifier) m).getAliConditions());
 
             return GlobalLootModifierUtils.getLootModifier(conditionList, (c) -> {
                 TooltipNode tooltip = TooltipBuilder.array((b) -> b
@@ -193,7 +193,7 @@ public class NeoForgePlugin implements IPlugin {
 
             @Override
             public List<LootItemCondition> getConditions() {
-                return Arrays.asList(((MixinLootModifier) modifier).getConditions());
+                return Arrays.asList(((MixinLootModifier) modifier).getAliConditions());
             }
 
             @Override

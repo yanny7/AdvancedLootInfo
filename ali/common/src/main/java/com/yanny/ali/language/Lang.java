@@ -106,6 +106,30 @@ public final class Lang {
         }
     }
 
+    public enum Entry implements ITooltipKey {
+        ALTERNATIVES("alternatives", "Alternatives:"),
+        DYNAMIC("dynamic", "Dynamic:"),
+        EMPTY("empty", "Empty"),
+        GROUP("group", "Group:"),
+        ITEM("item", "Item:"),
+        LOOT_TABLE("loot_table", "Loot Table:"),
+        SEQUENCE("sequence", "Sequence:"),
+        TAG("tag", "Tag:"),
+        ;
+
+        private final Translation translation;
+
+        Entry(String k, String e) {
+            this.translation = new Translation("ali.type.entry." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
     public enum EntitySubPredicates implements ITooltipKey {
         COMPONENTS(Branch.COMPONENTS.translation),
         CUBE_MOB("cube_mob", "Cube Mob:"),
@@ -267,6 +291,7 @@ public final class Lang {
         EQUIP_SOUND("equip_sound", "Equip Sound: %s"),
         EXACT("exact", "Exact: %s"),
         EXCLUDE("exclude", "Exclude: %s"),
+        EXPAND("expand", "Expand: %s"),
         EXTRA_ROUNDS("extra_rounds", "Extra Rounds: %s"),
         FACTOR("factor", "Factor: %s"),
         FADE_COLORS("fade_colors", "Fade Colors: %s"),
@@ -413,6 +438,7 @@ public final class Lang {
         VARIANT("variant", "Variant: %s"),
         VERTICAL_SPEED("vertical_speed", "Vertical Speed: %s"),
         VILLAGER_XP("villager_xp", "XP: %s"),
+        WEIGHT("weight", "Weight: %s"),
         X("x", "X: %s"),
         Y("y", "Y: %s"),
         Z("z", "Z: %s"),
@@ -453,8 +479,6 @@ public final class Lang {
         CLAMPED("clamped", "Clamped:"),
         COLORS("colors", "Colors:"),
         COMPONENTS(Value.COMPONENT, "components", "Components:"),
-        CONDITION("condition", "Predicate:"),
-        CONDITIONS("conditions", "Predicates:"),
         CONTAINS("contains", "Contains:"),
         CONVERT_INTO("convert_into", "Convert Into:"),
         COPY_OPERATIONS("copy_operations", "Copy Operations:"),
@@ -481,6 +505,7 @@ public final class Lang {
         ENTITY_FLAGS("entity_flags", "Entity Flags:"),
         ENTITY_SUB_PREDICATE("entity_sub_predicate", "Entity Sub Predicate:"),
         ENTITY_TYPES(Value.ENTITY_TYPE, "entity_types", "Entity Types:"),
+        ENTRIES("entries", "Entries:"),
         EQUIPMENT_SLOTS(Value.EQUIPMENT_SLOT, "equipment_slots", "Equipment Slots:"),
         EXCLUDE(Value.EXCLUDE, "exclude", "Exclude:"),
         EXPECTED_COMPONENTS("expected_components", "Expected Components:"),
@@ -539,6 +564,7 @@ public final class Lang {
         POSITION("position", "Position:"),
         POTIONS(Value.POTION, "potions", "Potions:"),
         PREDICATE(Value.PREDICATE, "predicate", "Predicate:"),
+        PREDICATES("predicates", "Predicates:"),
         PROPERTIES(Value.PROPERTY, "properties", "Properties:"),
         PROPERTY("property", "Property:"),
         RECIPES(Value.RECIPE, "recipes", "Recipes:"),

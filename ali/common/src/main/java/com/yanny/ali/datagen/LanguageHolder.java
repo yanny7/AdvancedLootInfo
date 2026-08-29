@@ -43,6 +43,7 @@ public class LanguageHolder {
         CoreLang.register(TRANSLATION_MAP, Lang.Conditions.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Functions.class);
         CoreLang.register(TRANSLATION_MAP, Lang.EntitySubPredicates.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.Entry.class);
         CoreLang.register(TRANSLATION_MAP, Lang.ConsumeEffects.class);
         CoreLang.register(TRANSLATION_MAP, Lang.SlotSource.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Value.class);

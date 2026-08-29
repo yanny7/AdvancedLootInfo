@@ -10,6 +10,10 @@ architectury {
 loom {
     accessWidenerPath = project(":awi:common").loom.accessWidenerPath
 
+    neoForge {
+        convertAccessWideners(tasks.named("shadowJar"), "awi.accesswidener")
+    }
+
     mixin {
         defaultRefmapName = "awi.neoforge.refmap.json"
     }

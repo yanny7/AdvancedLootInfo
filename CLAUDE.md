@@ -17,7 +17,7 @@ ali/common-rei/CLAUDE.md       — REI specifics: Category/Display split, filler
 ali/common-lootjs/CLAUDE.md    — optional LootJS compatibility module (not built on this branch)
 ali/fabric/CLAUDE.md           — ALI's Fabric loader glue
 ali/forge/CLAUDE.md            — ALI's Forge loader glue (not built on this branch)
-ali/neoforge/CLAUDE.md         — ALI's NeoForge loader glue (incl. the GLM bridge and the accesswidener → accesstransformer duplication)
+ali/neoforge/CLAUDE.md         — ALI's NeoForge loader glue (incl. the GLM bridge and the loom-generated accesswidener → accesstransformer conversion)
 awi/CLAUDE.md                  — AWI mod: worldgen data-scan (incl. surface-rule reverse engineering), plugin wiring, networking (mirrors ali/CLAUDE.md)
 awi/common-emi/CLAUDE.md       — EMI specifics for AWI (references ali/common-emi/CLAUDE.md)
 awi/common-jei/CLAUDE.md       — JEI specifics for AWI
