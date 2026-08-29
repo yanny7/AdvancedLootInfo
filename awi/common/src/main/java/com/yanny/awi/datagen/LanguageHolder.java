@@ -7,6 +7,7 @@ import com.yanny.awi.language.Lang;
 import com.yanny.awi.plugin.EnumTypes;
 import com.yanny.awi.plugin.server.summary.Kind;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
@@ -56,6 +57,11 @@ public class LanguageHolder {
         put(Heightmap.Types.OCEAN_FLOOR, "Solid Ground, Ignores Water");
         put(Heightmap.Types.MOTION_BLOCKING, "Ground or Water Surface");
         put(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, "Ground or Water Surface, Below Leaves");
+
+        put(Rotation.NONE, "None");
+        put(Rotation.CLOCKWISE_90, "Clockwise 90");
+        put(Rotation.CLOCKWISE_180, "Clockwise 180");
+        put(Rotation.COUNTERCLOCKWISE_90, "Counterclockwise 90");
 
         put(CaveSurface.CEILING, "Ceiling");
         put(CaveSurface.FLOOR, "Floor");

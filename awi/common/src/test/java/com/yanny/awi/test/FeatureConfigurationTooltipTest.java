@@ -1164,8 +1164,8 @@ public class FeatureConfigurationTooltipTest {
                 "      -> Value:",
                 "        -> Template: minecraft:trail_ruins/tower/tower_1",
                 "        -> Rotations:",
-                "          -> NONE",
-                "          -> CLOCKWISE_90"
+                "          -> None",
+                "          -> Clockwise 90"
         ));
         assertTooltip(FeatureConfigurationTooltipUtils.getTemplateFeatureConfigurationTooltip(UTILS, new TemplateFeatureConfiguration(
                 WeightedList.of(List.of(new Weighted<>(new TemplateFeatureConfiguration.TemplateEntry(
@@ -1180,7 +1180,7 @@ public class FeatureConfigurationTooltipTest {
                 "      -> Weight: 2",
                 "      -> Value:",
                 "        -> Template: minecraft:trail_ruins/tower/tower_1",
-                "        -> Rotation: NONE"
+                "        -> Rotation: None"
         ));
     }
 }
