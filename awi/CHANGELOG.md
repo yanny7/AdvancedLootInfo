@@ -1,3 +1,7 @@
+## []
+
+- Fixed Plugins discovered multiple times on Fabric
+
 ## [1.1.0]
 
 - Added `tooltipColors` configuration to change the tooltip text, value, error and branch colors

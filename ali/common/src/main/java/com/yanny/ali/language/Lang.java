@@ -93,9 +93,6 @@ public final class Lang {
         SET_STEW_EFFECT("set_stew_effect", "Set Stew Effect:"),
         // LootJS
         CUSTOM_PLAYER("custom_player", "Custom Player Modifier:"),
-        // Farmer's delight
-        COPY_MEAL("copy_meal", "Copy Meal"),
-        COPY_SKILLET("copy_skillet", "Copy Skillet"),
         // Trades
         DYED_RANDOMLY("dyed_randomly", "Dyed Randomly"),
         ;

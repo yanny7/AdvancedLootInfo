@@ -56,7 +56,7 @@ public class Plugin implements IPlugin {
         IGlobalLootModifierPlugin.IRegistry forgeRegistry = getRegistry(glmMap);
 
         for (IPlugin plugin : Services.getPlatform().getPlugins()) {
-            if (plugin instanceof IGlmPlugin glmPlugin) {
+            if (plugin instanceof IGlobalLootModifierPlugin glmPlugin) {
                 glmPlugin.registerGlobalLootModifier(forgeRegistry, tablePredicate);
             }
         }

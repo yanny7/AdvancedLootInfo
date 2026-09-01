@@ -29,7 +29,6 @@
             "com.yanny.ali.plugin.Plugin",
             "com.yanny.ali.lootjs.LootJsPlugin",
             "com.yanny.ali.fabric.plugin.FabricPlugin",
-            "com.yanny.ali.fabric.plugin.mods.farmers_delight.Plugin",
             "com.yanny.ali.fabric.plugin.mods.porting_lib.loot.Plugin"
         ],
         "emi": [

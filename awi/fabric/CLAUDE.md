@@ -8,7 +8,7 @@ Guidance for `awi/fabric` (`com.yanny.awi.fabric`) — AWI's Fabric loader entry
 
 ## Platform + networking implementation
 
-- `platform.FabricPlatformHelper` — implements only `getPlugins`/`getConfiguration` (AWI's `IPlatformHelper` interface is smaller than ALI's — no loot-pool/spawn-egg/loot-table-parsing methods, since there's no loot domain to support).
+- `platform.FabricPlatformHelper` — implements only `getPlugins` (Fabric `EntrypointContainer`s for key `"awi"`, memoized with `Suppliers.memoize` so repeated calls neither re-instantiate the plugins nor re-log the discovery)/`getConfiguration` (AWI's `IPlatformHelper` interface is smaller than ALI's — no loot-pool/spawn-egg/loot-table-parsing methods, since there's no loot domain to support).
 - `network.{Client,Server,NetworkUtils}` — worldgen packet IDs (`WorldgenDataChunkMessage`, `RequestWorldgenDataMessage`, etc. — see `awi/CLAUDE.md`'s networking table for the full ALI↔AWI packet-name mapping).
 
 ## Mixins

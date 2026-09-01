@@ -1,3 +1,8 @@
+## []
+
+- Global loot modifier plugins are now declared by implementing `IGlobalLootModifierPlugin` on both loaders
+- Fixed Plugins discovered multiple times on Fabric
+
 ## [2.1.0]
 
 - Added `tooltipColors` configuration to change the tooltip text, value, error and branch colors
