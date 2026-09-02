@@ -65,7 +65,9 @@ Register nothing ALI already registers: node ids, widgets and data-node factorie
 
 ## Current targets
 
-- `farmersdelight` (Fabric + NeoForge) — `CopySkilletFunction`/`SmokerCookFunction` tooltips (keys in `FarmersDelightLang`, one copy per source set). The Fabric set adds the refabricated-only `CanItemPerformAbilityCondition` tooltip, which reads the condition record's public `ability()` and so needs no accessor of its own; the NeoForge set adds the four Farmer's Delight GLMs (`AddItemModifier`, `FDAddTableLootModifier`, `PastrySlicingModifier`, `ReplaceItemModifier`).
+- `farmersdelight` (Fabric + NeoForge) — `CopySkilletFunction`/`SmokerCookFunction` tooltips (keys in `FarmersDelightLang`, one copy per source set). The NeoForge set adds the four Farmer's Delight GLMs (`AddItemModifier`, `FDAddTableLootModifier`, `PastrySlicingModifier`, `ReplaceItemModifier`). The Fabric set adds two refabricated-only shims:
+  - the `CanItemPerformAbility` condition tooltip, which reads the condition record's public `ability()` and so needs no accessor of its own.
+  - `FDItemListingAccessor`, which wraps `VillagerEvents$FDItemListing`. That class is package-private, so it cannot be named as a compile type and this one shim keeps the `@ClassAccessor` string form plus a reflective `@FieldAccessor listing` — hence the compile-time `Target class ... is not on the compile classpath` note from `AccessorProcessor`, which resolves canonical names only.
 
 A target mod without a build for this branch's Minecraft version has no source set here: Farmer's Delight ships no Forge build for 1.21.1 (NeoForge only), and Porting Lib stops at 1.20.4, so `alicompat/forge` carries no shims at all on this branch and `compat_mods` names only `farmersdelight`.
 
