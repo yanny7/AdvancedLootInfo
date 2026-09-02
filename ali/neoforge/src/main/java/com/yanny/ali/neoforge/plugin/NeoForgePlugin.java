@@ -116,7 +116,7 @@ public class NeoForgePlugin implements IPlugin {
         IGlobalLootModifierPlugin.IRegistry forgeRegistry = getForgeRegistry(glmMap);
 
         for (IPlugin plugin : Services.getPlatform().getPlugins()) {
-            if (plugin instanceof IForgePlugin forgePlugin) {
+            if (plugin instanceof IGlobalLootModifierPlugin forgePlugin) {
                 forgePlugin.registerGlobalLootModifier(forgeRegistry, tablePredicate);
             }
         }

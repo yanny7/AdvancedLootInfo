@@ -3,6 +3,7 @@ package com.yanny.ali.plugin;
 import com.mojang.datafixers.util.Pair;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.CommonValueTooltip;
+import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.datagen.LanguageHolder;
 import com.yanny.ali.plugin.client.widget.*;
@@ -136,7 +137,7 @@ public class Plugin implements IPlugin {
     public void registerServer(IServerRegistry registry) {
         new CommonValueTooltip<IServerUtils, IServerRegistry>().registerAll(registry);
 
-        EnumTypes.TRANSLATED_ENUMS.forEach(registry::registerEnumTranslation);
+        EnumTypes.TRANSLATED_ENUMS.forEach((type, owner) -> registry.registerEnumTranslation(type, Utils.MOD_ID, owner));
 
         registry.registerItemCollector(LootItem.class, ItemCollectorUtils::collectItems);
         registry.registerItemCollector(TagEntry.class, ItemCollectorUtils::collectTags);

@@ -1,0 +1,76 @@
+plugins {
+    id 'com.gradleup.shadow'
+}
+
+architectury {
+    platformSetupLoomIde()
+    neoForge()
+}
+
+loom {
+    accessWidenerPath = project(":ali:common").loom.accessWidenerPath
+
+    runs {
+        data {
+            data()
+            programArgs "--all", "--mod", "${alicompat_mod_id}"
+            programArgs "--output", "${file('src/main/generated/')}"
+            programArgs "--existing", "${file("src/main/resources").absolutePath}"
+        }
+    }
+}
+
+evaluationDependsOn(":ali:neoforge")
+
+configurations {
+    common
+    shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentNeoForge.extendsFrom common
+}
+
+dependencies {
+    neoForge "net.neoforged:neoforge:${neoforge_version}"
+
+    common(project(path: ":aci:common", configuration: "namedElements")) { transitive false }
+    common(project(path: ":ali:common", configuration: "namedElements")) { transitive false }
+    runtimeOnly project(path: ":aci:neoforge", configuration: "namedElements")
+    runtimeOnly project(path: ":ali:neoforge", configuration: "namedElements")
+    rootProject.project(":ali:neoforge").ext.commonProjects.each { p ->
+        common(project(path: p, configuration: "namedElements")) { transitive false }
+    }
+
+    modRuntimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+
+    project.ext.commonProjects.each { p ->
+        common(project(path: p, configuration: "namedElements")) { transitive false }
+        shadowCommon(project(path: p, configuration: "transformProductionNeoForge")) { transitive false }
+    }
+}
+
+shadowJar {
+    exclude "fabric.mod.json"
+    exclude "architectury.common.json"
+
+    configurations = [project.configurations.shadowCommon]
+    archiveClassifier = "dev-shadow"
+}
+
+remapJar {
+    input.set shadowJar.archiveFile
+    dependsOn shadowJar
+    archiveClassifier = null
+}
+
+sourcesJar {
+    def commonSources = project(":alicompat:common").sourcesJar
+    dependsOn commonSources
+    from commonSources.archiveFile.map { zipTree(it) }
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
+}

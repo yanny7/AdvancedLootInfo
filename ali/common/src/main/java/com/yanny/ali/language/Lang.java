@@ -85,9 +85,8 @@ public final class Lang {
         SET_WRITABLE_BOOK_PAGES("set_writable_book_pages", "Set Writable Book Pages:"),
         SET_WRITTEN_BOOK_PAGES("set_written_book_pages", "Set Written Book Pages:"),
         TOGGLE_TOOLTIPS("toggle_tooltips", "Toggle Tooltips:"),
-        // Farmer's delight
-        COPY_SKILLET("copy_skillet", "Copy Skillet"),
-        SMOKER_COOK("smoker_cook", "Smoker Cook"),
+        // LootJS
+        PLAYER_ACTION("player_action", "Player Action:"),
         // Trades
         DYED_RANDOMLY("dyed_randomly", "Dyed Randomly"),
         ;
