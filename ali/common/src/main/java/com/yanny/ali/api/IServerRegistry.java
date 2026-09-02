@@ -66,7 +66,13 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     void registerLootModifiers(Function<IServerUtils, List<ILootModifier<?>>> getter);
 
+    /**
+     * @deprecated use {@link #registerEnumTranslation(Class, String, String)}
+     */
+    @Deprecated(forRemoval = true, since = "2.2.0")
     void registerEnumTranslation(Class<? extends Enum<?>> type, String owner);
+
+    void registerEnumTranslation(Class<? extends Enum<?>> type, String modId, String owner);
 
     @FunctionalInterface
     interface EntryFactory<T extends LootPoolEntryContainer> {

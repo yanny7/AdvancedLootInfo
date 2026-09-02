@@ -28,7 +28,9 @@ This is a *smaller* set than `ali/neoforge`'s, which also needs accessors for `L
 
 ## Forge-only compat plugins
 
-`plugin.{ForgePlugin, GlobalLootModifier, IForgePlugin}` plus `plugin.mods.farmers_delight` — Forge-specific GLM glue mirroring `ali/neoforge`'s `plugin/` package but targeting Forge's native GLM API (`ali/CLAUDE.md`'s `plugin/glm` package is the loader-agnostic half). `ForgePlugin` registers the `CanToolPerformAction`/`LootTableIdCondition` condition tooltips, the five ingredient tooltips below, and the GLM bridge over `MixinForgeInternalHandler.getLootModifierManager()`.
+`plugin.{ForgePlugin, IForgePlugin}` — Forge-specific GLM glue mirroring `ali/neoforge`'s `plugin/` package but targeting Forge's native GLM API (`ali/CLAUDE.md`'s `plugin/glm` package is the loader-agnostic half). `ForgePlugin` (`@AliEntrypoint`, mod id `forge`) registers the `CanToolPerformAction`/`LootTableIdCondition` condition tooltips, the five ingredient tooltips below, and the GLM bridge over `MixinForgeInternalHandler.getLootModifierManager()`. The bridge collects adapters from every loaded plugin that is an `IGlobalLootModifierPlugin`; `IForgePlugin` survives only as a deprecated alias of it.
+
+Per-target-mod compatibility is **not** here — it ships in the separate ALICompat jar (`alicompat/CLAUDE.md`), which is also where the reflective accessor toolkit those shims are written against lives. Nothing targets Forge on this branch: neither Farmer's Delight nor Porting Lib has a Forge build for 1.21.1.
 
 Forge's custom ingredients extend `AbstractIngredient extends Ingredient`, so they dispatch through plain `registerIngredientTooltip(Class, ...)` — no unwrapper hook, unlike NeoForge (see `ali/neoforge/CLAUDE.md`). Forge 1.21.1 has **no** `BasicItemListing`, so unlike `1.20.1` and unlike NeoForge there is no item-listing registration here; don't port that part back.
 

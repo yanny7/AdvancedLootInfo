@@ -2,6 +2,7 @@ plugins {
     id "architectury-plugin" version "3.5.169"
     id "dev.architectury.loom" version "1.17.491" apply false
     id "com.gradleup.shadow" version "9.4.1" apply false
+    id "lol.bai.explosion" version "0.3.1" apply false
 }
 
 architectury {
@@ -12,11 +13,16 @@ def platforms = enabled_platforms.split(",")
 def viewers = ["emi", "jei", "rei"]
 
 subprojects {
+    if (project.name == "processor") {
+        return
+    }
+
     apply plugin: "dev.architectury.loom-no-remap"
 
     dependencies {
         implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
         minecraft "com.mojang:minecraft:${minecraft_version}"
+        annotationProcessor project(":processor")
     }
 
     ext {
@@ -43,6 +49,14 @@ subprojects {
                 "aci_description"              : aci_description,
                 "aci_version_range"            : aci_version_range,
                 "aci_version_range_fabric"     : aci_version_range_fabric,
+
+                "alicompat_mod_name"           : alicompat_mod_name,
+                "alicompat_mod_id"             : alicompat_mod_id,
+                "alicompat_version"            : alicompat_version,
+                "alicompat_group"              : alicompat_group,
+                "alicompat_description"        : alicompat_description,
+                "alicompat_ali_version_range"  : alicompat_ali_version_range,
+                "alicompat_ali_version_range_fabric": alicompat_ali_version_range_fabric,
 
                 "java_version"                 : java_version,
 
@@ -82,6 +96,7 @@ subprojects {
         def rei_available = rei_enabled == "true" && project.findProperty("${project.name}_rei_enabled") == "true"
         def lootjs_available = lootjs_enabled == "true" && project.findProperty("${project.name}_lootjs_enabled") == "true"
         def isAci = project.parent.name == "aci"
+        def isAliCompat = project.parent.name == "alicompat"
 
         ext {
             commonProjects = []
@@ -113,9 +128,74 @@ subprojects {
             if (emi_available) project.ext.commonProjects << ":awi:common-emi"
             if (jei_available) project.ext.commonProjects << ":awi:common-jei"
             if (rei_available) project.ext.commonProjects << ":awi:common-rei"
+        } else if (isAliCompat) {
+            project.ext.commonProjects << ":alicompat:common"
+
+            // Fabric target mods bundle their libraries as jar-in-jar, which a dev launch does not unpack
+            if (project.name == "fabric") {
+                apply plugin: "lol.bai.explosion"
+            }
+
+            def compatMods = (project.findProperty("compat_mods") ?: "").split(",").findAll { it }.findAll { project.findProperty("${it}_${project.name}_dep") }
+
+            // ServiceLoader reads one file per name, so the per-mod fragments have to be merged
+            def generateCompatServices = tasks.register("generateCompatServices") {
+                def serviceDirs = compatMods.collect { file("src/compat/$it/services") }.findAll { it.isDirectory() }
+                def outDir = layout.buildDirectory.dir("generated/compat-resources").get().asFile
+
+                inputs.files(serviceDirs)
+                outputs.dir(outDir)
+
+                doLast {
+                    def fragments = [:].withDefault { [] }
+
+                    serviceDirs.each { dir ->
+                        dir.listFiles({ f -> f.isFile() } as FileFilter).each { fragments[it.name] << it.text.trim() }
+                    }
+
+                    outDir.deleteDir()
+
+                    fragments.each { name, texts ->
+                        def content = texts.findAll { it }.join("\n")
+
+                        if (!content.isEmpty()) {
+                            def target = new File(outDir, "META-INF/services/$name")
+
+                            target.parentFile.mkdirs()
+                            target.text = content
+                        }
+                    }
+                }
+            }
+
+            sourceSets.main {
+                java.srcDirs += compatMods.collect { "src/compat/$it/java" }
+                resources.srcDirs += compatMods.collect { "src/compat/$it/resources" }
+                resources.srcDir generateCompatServices
+            }
+
+            dependencies {
+                compatMods.each { mod ->
+                    def dep = project.findProperty("${mod}_${project.name}_dep")
+
+                    // compile-only on purpose: a target mod on the run classpath drags its own datagen entrypoint into ours
+                    compileOnly project.name == "fabric" ? project.explosion.fabric(dep) : dep
+                }
+            }
+
+            loom {
+                runs {
+                    client {
+                        client()
+                        ideConfigGenerated = true
+                        name = "Run ALICompat Client"
+                        source(sourceSets.main)
+                    }
+                }
+            }
         }
 
-        if (!isAci) {
+        if (!isAci && !isAliCompat) {
             // register tasks that allow running specific combination of recipe viewer and launcher
             viewers.each { viewer ->
                 if (project.findProperty("${viewer}_enabled") == "true" && project.findProperty("${project.name}_${viewer}_enabled") == "true") {
@@ -126,6 +206,14 @@ subprojects {
                         startParameter.projectProperties = ["recipe_viewer": viewer]
                     }
                 }
+            }
+
+            // recipe viewer stays off the datagen classpath: EMI's client mixins fail injection during Forge datagen
+            tasks.register("run${project.parent.name.capitalize()}${project.name.capitalize()}Datagen", GradleBuild) {
+                group = "launchers"
+                description = "Generate ${project.parent.name.capitalize()} ${project.name.toUpperCase()} data"
+                setTasks([":${project.parent.name}:${project.name}:runData".toString()])
+                startParameter.projectProperties = ["recipe_viewer": "none"]
             }
 
             dependencies {
@@ -176,6 +264,10 @@ subprojects {
                 from(project(":aci:common").sourceSets.main.resources.srcDirs) {
                     include "pack.mcmeta"
                 }
+            } else if (project.parent.name == "alicompat") {
+                from(project(":alicompat:common").sourceSets.main.resources.srcDirs) {
+                    include "pack.mcmeta"
+                }
             }
 
             inputs.property "version", project.version
@@ -222,6 +314,13 @@ allprojects {
 
             version = minecraft_version + "-" + aci_version
             group = aci_group
+        } else if (project.parent.name == "alicompat") {
+            base {
+                archivesName = "${alicompat_mod_name}-${project.name}"
+            }
+
+            version = minecraft_version + "-" + alicompat_version
+            group = alicompat_group
         }
     }
 
@@ -246,6 +345,12 @@ allprojects {
             url "https://www.cursemaven.com"
             content {
                 includeGroup "curse.maven"
+            }
+        }
+        maven { // ALICompat's explosion plugin resolves its jar-in-jar helper as a normal dependency
+            url "https://maven2.bai.lol"
+            content {
+                includeGroup "lol.bai.explosion"
             }
         }
         maven { // KubeJS

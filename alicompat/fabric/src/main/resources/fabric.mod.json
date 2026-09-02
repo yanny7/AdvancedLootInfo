@@ -1,0 +1,33 @@
+{
+    "schemaVersion": 1,
+    "id": "${alicompat_mod_id}",
+    "version": "${alicompat_version}",
+    "name": "${alicompat_mod_name}",
+    "description": "${alicompat_description}",
+    "authors": [
+        "${mod_author}"
+    ],
+    "contact": {
+        "issues": "https://github.com/yanny7/advancedlootinfo/issues",
+        "sources": "https://github.com/yanny7/advancedlootinfo"
+    },
+    "license": "${license}",
+    "icon": "logo.png",
+    "environment": "*",
+    "entrypoints": {
+        "fabric-datagen": [
+            "com.yanny.alicompat.fabric.datagen.DataGeneration"
+        ],
+        "ali": [
+            "com.yanny.alicompat.fabric.Plugin"
+        ]
+    },
+    "depends": {
+        "fabricloader": "*",
+        "fabric-api": "*",
+        "minecraft": "${minecraft_version}",
+        "java": ">=17",
+        "aci": "${aci_version_range_fabric}",
+        "ali": "${alicompat_ali_version_range_fabric}"
+    }
+}

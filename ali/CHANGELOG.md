@@ -1,3 +1,9 @@
+## []
+
+- Global loot modifier plugins are now declared by implementing `IGlobalLootModifierPlugin` on all loaders
+- Fixed global loot modifier plugins from other mods being ignored on NeoForge
+- Moved Farmer's Delight support into new mod `ALI Compat`
+
 ## [2.1.0]
 
 - Added `tooltipColors` configuration to change the tooltip text, value, error and branch colors

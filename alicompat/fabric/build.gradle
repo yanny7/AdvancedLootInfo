@@ -1,0 +1,82 @@
+plugins {
+    id 'com.gradleup.shadow'
+}
+
+architectury {
+    platformSetupLoomIde()
+    fabric()
+}
+
+loom {
+    accessWidenerPath = project(":ali:common").loom.accessWidenerPath
+
+    runs {
+        datagen {
+            inherit client
+            name "Minecraft Data"
+            vmArg "-Dfabric-api.datagen"
+            vmArg "-Dfabric-api.datagen.output-dir=${project(":alicompat:fabric").file("src/main/generated")}"
+            vmArg "-Dfabric-api.datagen.modid=${alicompat_mod_id}"
+
+            runDir "build/datagen"
+        }
+    }
+}
+
+evaluationDependsOn(":ali:fabric")
+
+configurations {
+    common
+    shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
+}
+
+dependencies {
+    implementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    api "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+
+    common(project(path: ":aci:common")) { transitive false }
+    common(project(path: ":ali:common")) { transitive false }
+    runtimeOnly project(":aci:fabric")
+    runtimeOnly project(":ali:fabric")
+    rootProject.project(":ali:fabric").ext.commonProjects.each { p ->
+        common(project(path: p)) { transitive false }
+    }
+
+    runtimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
+
+    project.ext.commonProjects.each { p ->
+        common(project(path: p)) { transitive false }
+        shadowCommon(project(path: p, configuration: "transformProductionFabric")) { transitive false }
+    }
+}
+
+jar {
+    archiveClassifier = "raw"
+}
+
+shadowJar {
+    dependsOn(jar)
+    mainSpec.sourcePaths.clear()       // Remove default source set inclusion
+    from(zipTree(jar.archiveFile))     // Unpack jar output (preserves Loom modifications)
+
+    exclude "architectury.common.json"
+
+    configurations = [project.configurations.shadowCommon]
+    archiveClassifier = null           // shadowJar becomes the main artifact
+    from rootProject.file("LICENSE")
+}
+
+sourcesJar {
+    def commonSources = project(":alicompat:common").sourcesJar
+    dependsOn commonSources
+    from commonSources.archiveFile.map { zipTree(it) }
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
+}
