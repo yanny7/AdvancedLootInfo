@@ -1,7 +1,6 @@
 ## []
 
 - Fixed Plugins discovered multiple times on Fabric
-- Plugins can register enum translations under their own mod id (`registerEnumTranslation(type, modId, owner)`); the two-argument overload is deprecated
 
 ## [1.1.0]
 

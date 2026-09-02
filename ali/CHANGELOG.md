@@ -3,7 +3,6 @@
 - Global loot modifier plugins are now declared by implementing `IGlobalLootModifierPlugin` on Forge
 - Fixed Plugins discovered multiple times on Fabric
 - Moved Farmer's Delight support into new mod `ALI Compat`
-- Plugins can register enum translations under their own mod id (`registerEnumTranslation(type, modId, owner)`); the two-argument overload is deprecated
 
 ## [2.1.0]
 
