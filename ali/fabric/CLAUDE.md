@@ -10,7 +10,7 @@ Guidance for `ali/fabric` (`com.yanny.ali.fabric`) — ALI's Fabric loader entry
 
 ## Platform + networking implementation
 
-- `platform.FabricPlatformHelper implements IPlatformHelper` — loot pools via the `MixinLootTableFabric` accessor mixin, plugin discovery via Fabric `EntrypointContainer`s for key `"ali"` (memoized with `Suppliers.memoize`, like Forge's — `getPlugins` is called both by `PluginManager` at startup and by the Porting Lib GLM plugin per server registry build, and an unmemoized scan re-instantiates every plugin and re-logs the discovery each time), config dir via `FabricLoader`, plus `SpawnEggItem.byId`/`Gson.fromJson` helpers for loot-table parsing.
+- `platform.FabricPlatformHelper implements IPlatformHelper` — loot pools via the `MixinLootTableFabric` accessor mixin, plugin discovery via Fabric `EntrypointContainer`s for key `"ali"` (memoized with `Suppliers.memoize`, like Forge's — `getPlugins` is called both by `PluginManager` at startup and by ALICompat's Porting Lib GLM driver per server registry build, and an unmemoized scan re-instantiates every plugin and re-logs the discovery each time), config dir via `FabricLoader`, plus `SpawnEggItem.byId`/`Gson.fromJson` helpers for loot-table parsing.
 - `network.{Client,Server,NetworkUtils}` — implement `ali.network.AbstractClient`/`AbstractServer` (see `ali/CLAUDE.md`'s networking section) using `ServerPlayNetworking`/`ClientPlayNetworking` over 4 `ResourceLocation` channel IDs.
 
 ## Mixins
@@ -21,9 +21,8 @@ Guidance for `ali/fabric` (`com.yanny.ali.fabric`) — ALI's Fabric loader entry
 
 `plugin/` holds third-party compatibility that's genuinely Fabric-only because it targets Fabric-specific APIs — don't try to port these to `ali/forge` without checking whether the target API even has a Forge equivalent:
 - `FabricPlugin` + `FabricIngredientTooltipUtils` — registers a tooltip for Fabric API's `CustomIngredientImpl`, unwrapping its Any/All/Difference/Nbt builtins. LootJS compat itself lives in `ali/common-lootjs` (see `ali/common-lootjs/CLAUDE.md`).
-- `plugin/mods/porting_lib/loot` — Porting Lib's Global Loot Modifier support (`LootModifier`, `LootModifierManager`, `LootTableIdCondition`, and the `Plugin` that turns the installed GLMs into `ILootModifier`s). This is ALI's whole GLM path on Fabric, not one mod's compatibility, which is why it lives here rather than in `alicompat`.
 
-Per-target-mod compatibility is **not** here — it ships in the separate ALICompat jar, see `alicompat/CLAUDE.md`.
+Per-target-mod compatibility is **not** here — it ships in the separate ALICompat jar, see `alicompat/CLAUDE.md`. Neither is the Global Loot Modifier path: Fabric has no GLM machinery of its own, so ALI reads Porting Lib's, and that whole driver lives in ALICompat's `portinglib` source set. Without that optional jar a Fabric client shows loot unmodified by any GLM.
 
 ## Boilerplate vs genuine glue
 

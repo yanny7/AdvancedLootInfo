@@ -1,20 +1,19 @@
-package com.yanny.ali.fabric.plugin.mods.porting_lib.loot;
+package com.yanny.alicompat.compat.portinglib;
 
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.mods.BaseAccessor;
-import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.mods.IConditionTooltip;
+import io.github.fabricators_of_create.porting_lib.loot.LootTableIdCondition;
 import net.minecraft.resources.ResourceLocation;
 
-@ClassAccessor("io.github.fabricators_of_create.porting_lib.loot.LootTableIdCondition")
-public class LootTableIdCondition extends BaseAccessor<Object> implements IConditionTooltip {
+public class LootTableIdConditionAccessor extends BaseAccessor<LootTableIdCondition> implements IConditionTooltip {
     @FieldAccessor
     private ResourceLocation targetLootTableId;
 
-    public LootTableIdCondition(Object parent) {
+    public LootTableIdConditionAccessor(LootTableIdCondition parent) {
         super(parent);
     }
 

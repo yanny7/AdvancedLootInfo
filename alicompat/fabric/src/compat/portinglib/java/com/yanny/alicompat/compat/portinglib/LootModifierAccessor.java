@@ -1,16 +1,15 @@
-package com.yanny.ali.fabric.plugin.mods.porting_lib.loot;
+package com.yanny.alicompat.compat.portinglib;
 
 import com.yanny.ali.plugin.mods.BaseAccessor;
-import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
+import io.github.fabricators_of_create.porting_lib.loot.LootModifier;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
-@ClassAccessor("io.github.fabricators_of_create.porting_lib.loot.LootModifier")
-public class LootModifier extends BaseAccessor<Object> {
+public class LootModifierAccessor extends BaseAccessor<LootModifier> {
     @FieldAccessor
     protected LootItemCondition[] conditions;
 
-    public LootModifier(Object parent) {
+    public LootModifierAccessor(LootModifier parent) {
         super(parent);
     }
 
