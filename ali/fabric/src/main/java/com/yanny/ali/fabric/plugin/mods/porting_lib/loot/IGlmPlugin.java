@@ -1,9 +1,10 @@
 package com.yanny.ali.fabric.plugin.mods.porting_lib.loot;
 
-import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
-import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 
-public interface IGlmPlugin extends IPlugin {
-    void registerGlobalLootModifier(IGlobalLootModifierPlugin.IRegistry registry, ILootTableIdConditionPredicate predicate);
+/**
+ * @deprecated implement {@link IGlobalLootModifierPlugin} instead
+ */
+@Deprecated(forRemoval = true, since = "2.2.0")
+public interface IGlmPlugin extends IGlobalLootModifierPlugin {
 }

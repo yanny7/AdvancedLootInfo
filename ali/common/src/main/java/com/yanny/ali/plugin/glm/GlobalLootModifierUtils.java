@@ -166,6 +166,14 @@ public class GlobalLootModifierUtils {
         });
     }
 
+    public static <M, T extends BaseAccessor<?> & IGlobalLootModifierAccessor> void registerGlobalLootModifier(IGlobalLootModifierPlugin.IRegistry registry, Class<M> targetClass, Class<T> clazz, ILootTableIdConditionPredicate predicate) {
+        try {
+            registry.registerGlobalLootModifier(targetClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c, targetClass).getLootModifier(u, predicate));
+        } catch (Throwable e) {
+            LOGGER.warn("Failed to register GLM for {} with error {}", targetClass.getName(), e.getMessage(), e);
+        }
+    }
+
     public static <T extends BaseAccessor<?> & IGlobalLootModifierAccessor> void registerGlobalLootModifier(IGlobalLootModifierPlugin.IRegistry registry, Class<T> clazz, ILootTableIdConditionPredicate predicate) {
         ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
 

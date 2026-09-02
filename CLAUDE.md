@@ -25,6 +25,7 @@ awi/common-rei/CLAUDE.md       — REI specifics for AWI
 awi/fabric/CLAUDE.md           — AWI's Fabric loader glue
 awi/forge/CLAUDE.md            — AWI's Forge loader glue
 awi/neoforge/CLAUDE.md         — AWI's NeoForge loader glue (references ali/neoforge/CLAUDE.md)
+alicompat/CLAUDE.md            — ALICompat mod: ALI compatibility for mods that ship no ALI plugin of their own
 ```
 
 Cross-cutting mechanisms are documented **once**, in whichever doc owns them, and referenced (not restated) everywhere else: the tooltip tree system lives in `aci/CLAUDE.md`; the recipe-viewer integration pattern lives in `ali/common-emi/CLAUDE.md`; the networking pattern lives in `ali/CLAUDE.md` (AWI's is a byte-for-byte structural mirror, documented as a diff in `awi/CLAUDE.md`). When editing one of these, check whether the change belongs in the canonical doc or a per-instance one before writing anything.
@@ -34,18 +35,21 @@ Cross-cutting mechanisms are documented **once**, in whichever doc owns them, an
 This is a single mod (source: `https://github.com/yanny7/AdvancedLootInfo`) developed across multiple Minecraft versions in parallel, one version per git branch (`1.20.1`, `1.21.1`, `1.21.5`, `1.21.8`, `1.21.10`, `1.21.11`, `26.1.2`, `master` for the latest/in-development version, plus archived `archive/1.2x.y` branches). Branches are typically worked on as separate checkouts, one per Minecraft version — read `minecraft_version` in the repo-root `gradle.properties` to know which version the current checkout is.
 
 The mod's architecture, package layout, and plugin model described across this doc tree are identical across all these branches — they should stay accurate regardless of which version branch they're read from. What legitimately differs per branch:
-- Which loaders are available/enabled (see Module layout below): Fabric on every branch, Forge from `1.20.1` on, NeoForge from `1.21.1` on (Forge support has been getting phased out on newer branches in favor of NeoForge). On this `1.21.1` branch, ALI, AWI and ACI all ship `fabric`+`forge`+`neoforge`.
+- Which loaders are available/enabled (see Module layout below): Fabric on every branch, Forge from `1.20.1` on, NeoForge from `1.21.1` on (Forge support has been getting phased out on newer branches in favor of NeoForge). On this `1.21.1` branch, ALI, AWI, ACI and ALICompat all ship `fabric`+`forge`+`neoforge`.
+- Which ALICompat target mods have a build for the branch's Minecraft version, hence `compat_mods` and the `<slug>_<loader>_dep` coordinates in `gradle.properties`.
 - Loader/dependency versions in `gradle.properties` (`minecraft_version`, `forge_version`, `fabric_version`, `neoforge_version`, EMI/JEI/REI/architectury versions, etc.).
 - Minor Minecraft-API glue inside `fabric`/`forge`/`neoforge` modules and datagen.
 
 ## Project overview
 
-This is a Minecraft mod monorepo built on the **Architectury MultiLoader template**. It produces two related but independently-versioned mods:
+This is a Minecraft mod monorepo built on the **Architectury MultiLoader template**. It produces two related but independently-versioned recipe-viewer mods:
 
 - **ALI** (`AdvancedLootInfo`, group `com.yanny.ali`) — a recipe-viewer (EMI/JEI/REI) plugin that displays detailed information about loot tables and villager trades. See `ali/CLAUDE.md`.
 - **AWI** (`AdvancedWorldgenInfo`, group `com.yanny.awi`) — a recipe-viewer plugin that displays worldgen information. See `awi/CLAUDE.md`.
 
 Both mods depend on a third, **ACI** (`AdvancedCoreInfo`, group `com.yanny.aci`, under `aci/`) — a library mod providing the generic, mod-agnostic building blocks (plugin manager, tooltip tree builder, registries, widgets) that ALI and AWI each specialize. It ships as its own jar and is a **mandatory** dependency of both, so users install three jars. See `aci/CLAUDE.md`.
+
+A fourth jar, **ALICompat** (`ALICompat`, group `com.yanny.alicompat`, under `alicompat/`), is **optional**: it carries ALI compatibility for third-party mods that ship no ALI plugin of their own. It is a single ALI plugin whose per-target-mod shims are gated on the target mod being loaded. See `alicompat/CLAUDE.md`.
 
 ## Module layout
 
@@ -55,6 +59,8 @@ Each mod (`ali/`, `awi/`, `aci/`) follows the same subproject pattern:
 - `common-emi`, `common-jei`, `common-rei` — optional integrations for each supported recipe viewer, enabled independently via `gradle.properties` flags (`<viewer>_enabled` + `<platform>_<viewer>_enabled`).
 - `common-lootjs` (ALI only) — optional LootJS compatibility module.
 - `fabric`, `forge`, `neoforge` — per-loader entry points/glue code. Both ALI and AWI ship whichever of these are enabled on the current branch (`forge` from `1.20.1` on, `neoforge` from `1.21.1` on).
+
+`alicompat` has `common` + the loader modules too, plus one extra source set per target mod (`<loader>/src/compat/<slug>/`) — see `alicompat/CLAUDE.md`.
 
 `aci` has only `common` + the loader modules — no viewer or compat subprojects, since it registers nothing with a recipe viewer. Its loader modules carry no mod logic at all (no mixins, no access widener, no platform-service implementation); they exist to shadow `aci:common` into a loadable jar. `ali:common`/`awi:common` compile against `aci:common` directly (`configuration: "namedElements"`), while the ALI/AWI loader modules take `modImplementation project(":aci:<loader>")` for the runtime — `aci:common` is deliberately **not** in their `commonProjects` list, so `com.yanny.aci.*` is not duplicated inside their jars.
 
@@ -136,11 +142,11 @@ AWI's base-layout scan is guarded by a golden file instead of unit assertions, w
 
 Tests are organized behind JUnit Platform `@Suite`/`@SelectClasses` runners (`TooltipTestSuite` in each mod's `common` test tree) that bootstrap Minecraft's registries/resources (`Bootstrap.bootStrap()`, `SharedConstants.setVersion(...)`) once before delegating to individual `@Test` classes — run the suite class, not only an individual test class, if a test depends on that shared bootstrap state.
 
-Generate data (recipes/loot/lang, per loader) via the IDE run configurations in `.idea/runConfigurations/Minecraft_Data_*.xml`, or the equivalent `run<Platform><Loader>Datagen`-style Gradle tasks wired by the `architectury-loom` plugin. All three mods have datagen; ACI's generates only its `aci.util.*` language keys. Fabric datagen initialises the `fabric-datagen` entrypoint of every loaded mod, so a broken ACI datagen class breaks ALI's and AWI's datagen runs too.
+Generate data (recipes/loot/lang, per loader) via the IDE run configurations in `.idea/runConfigurations/Minecraft_Data_*.xml`, or the equivalent `run<Platform><Loader>Datagen`-style Gradle tasks wired by the `architectury-loom` plugin. All four mods have datagen; ACI's generates only its `aci.util.*` language keys, ALICompat's only the tooltip keys of the compat shims that are built into it. Fabric datagen initialises the `fabric-datagen` entrypoint of every loaded mod, so a broken ACI datagen class breaks ALI's and AWI's datagen runs too.
 
 ## Versioning
 
-ALI, AWI and ACI version independently (`ali_version` / `awi_version` / `aci_version` in `gradle.properties`), each with its own `CHANGELOG.md` (`ali/CHANGELOG.md`, `awi/CHANGELOG.md`, `aci/CHANGELOG.md`). Every change to a mod gets a changelog entry there. Because the same fix/feature is typically ported across the active version branches, the same entry and version property commonly land on several branches — check whether a change belongs on other branches too, not just the one you're on.
+ALI, AWI, ACI and ALICompat version independently (`ali_version` / `awi_version` / `aci_version` / `alicompat_version` in `gradle.properties`), each with its own `CHANGELOG.md` (`ali/CHANGELOG.md`, `awi/CHANGELOG.md`, `aci/CHANGELOG.md`, `alicompat/CHANGELOG.md`). Every change to a mod gets a changelog entry there. Because the same fix/feature is typically ported across the active version branches, the same entry and version property commonly land on several branches — check whether a change belongs on other branches too, not just the one you're on.
 
 A changelog section header states the release status of what is under it:
 

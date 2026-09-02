@@ -107,9 +107,6 @@ public final class Lang {
         TOGGLE_TOOLTIPS("toggle_tooltips", "Toggle Tooltips:"),
         // LootJS
         PLAYER_ACTION("player_action", "Player Action:"),
-        // Farmer's delight
-        COPY_SKILLET("copy_skillet", "Copy Skillet"),
-        SMOKER_COOK("smoker_cook", "Smoker Cook"),
         // Trades
         DYED_RANDOMLY("dyed_randomly", "Dyed Randomly"),
         ;

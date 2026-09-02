@@ -1,0 +1,50 @@
+package com.yanny.alicompat.compat.farmersdelight;
+
+import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
+import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.ILootModifier;
+import com.yanny.ali.api.IOperation;
+import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.language.Lang;
+import com.yanny.ali.plugin.common.NodeUtils;
+import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
+import com.yanny.ali.plugin.glm.IGlobalLootModifierAccessor;
+import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
+import com.yanny.ali.plugin.mods.BaseAccessor;
+import com.yanny.ali.plugin.mods.FieldAccessor;
+import com.yanny.ali.plugin.server.GenericTooltipUtils;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import vectorwing.farmersdelight.common.loot.modifier.FDAddTableLootModifier;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+public class FDAddTableLootModifierAccessor extends BaseAccessor<FDAddTableLootModifier> implements IGlobalLootModifierAccessor {
+    @FieldAccessor
+    private ResourceKey<LootTable> lootTable;
+    @FieldAccessor
+    protected LootItemCondition[] conditions;
+
+    public FDAddTableLootModifierAccessor(FDAddTableLootModifier parent) {
+        super(parent);
+    }
+
+    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils, ILootTableIdConditionPredicate predicate) {
+        List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
+
+        return GlobalLootModifierUtils.getLootModifier(conditionList, (c) -> {
+            TooltipNode tooltip = TooltipBuilder.array((b) -> b
+                            .add(TooltipBuilder.keyOnly(Lang.Group.ALL))
+                            .add(GenericTooltipUtils.getConditionsSectionTooltip(utils, c))
+                    )
+                    .build();
+            IDataNode node = NodeUtils.getReferenceNode(utils, lootTable.location(), c, tooltip);
+            return Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, node));
+        }, predicate);
+    }
+}

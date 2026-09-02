@@ -1,5 +1,6 @@
 package com.yanny.ali.fabric.platform;
 
+import com.google.common.base.Suppliers;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IPlugin;
@@ -16,15 +17,23 @@ import org.slf4j.Logger;
 import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class FabricPlatformHelper implements IPlatformHelper {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     public static HolderLookup.Provider PROVIDER = null;
 
+    private final Supplier<List<IPlugin>> pluginsSupplier = Suppliers.memoize(this::loadPlugins);
+
     @NotNull
     @Override
     public List<IPlugin> getPlugins() {
+        return pluginsSupplier.get();
+    }
+
+    @NotNull
+    private List<IPlugin> loadPlugins() {
         List<IPlugin> plugins = new LinkedList<>();
 
         for (EntrypointContainer<IPlugin> container : FabricLoader.getInstance().getEntrypointContainers("ali", IPlugin.class)) {

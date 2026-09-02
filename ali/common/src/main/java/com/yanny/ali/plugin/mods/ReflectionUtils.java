@@ -13,48 +13,53 @@ import java.util.Optional;
 
 public class ReflectionUtils {
     public static <T extends BaseAccessor<?>> T copyClassData(Class<T> myClass, Object targetObject) {
+        ClassAccessor classAnnotation = myClass.getAnnotation(ClassAccessor.class);
+
+        if (classAnnotation == null) {
+            throw new IllegalStateException("Class is not annotated with @ClassAccessor");
+        }
+
         try {
-            ClassAccessor classAnnotation = myClass.getAnnotation(ClassAccessor.class);
+            return copyClassData(myClass, targetObject, Class.forName(classAnnotation.value()));
+        } catch (Throwable e) {
+            throw new IllegalStateException(e);
+        }
+    }
 
-            if (classAnnotation != null) {
-                // Load the inaccessible class by its name
-                Class<?> targetClass = Class.forName(classAnnotation.value());
+    public static <T extends BaseAccessor<?>> T copyClassData(Class<T> myClass, Object targetObject, Class<?> targetClass) {
+        try {
+            T myObject = createObject(myClass, targetObject);
 
-                T myObject = createObject(myClass, targetObject);
+            // Iterate over all fields in your annotated class
+            for (Field myField : myClass.getDeclaredFields()) {
+                FieldAccessor fieldAnnotation = myField.getAnnotation(FieldAccessor.class);
 
-                // Iterate over all fields in your annotated class
-                for (Field myField : myClass.getDeclaredFields()) {
-                    FieldAccessor fieldAnnotation = myField.getAnnotation(FieldAccessor.class);
+                if (fieldAnnotation != null) {
+                    // Find the corresponding field in the inaccessible class
+                    Optional<Field> optional = getFieldsUpTo(targetClass, Object.class).stream().filter((f) -> f.getName().equals(myField.getName())).findFirst();
 
-                    if (fieldAnnotation != null) {
-                        // Find the corresponding field in the inaccessible class
-                        Optional<Field> optional = getFieldsUpTo(targetClass, Object.class).stream().filter((f) -> f.getName().equals(myField.getName())).findFirst();
+                    if (optional.isPresent()) {
+                        Field targetField = optional.get();
 
-                        if (optional.isPresent()) {
-                            Field targetField = optional.get();
+                        targetField.setAccessible(true);
+                        myField.setAccessible(true);
 
-                            targetField.setAccessible(true);
-                            myField.setAccessible(true);
+                        // Copy the value from the inaccessible field to your field
+                        Object value = targetField.get(targetObject);
 
-                            // Copy the value from the inaccessible field to your field
-                            Object value = targetField.get(targetObject);
-
-                            if (fieldAnnotation.clazz() == Object.class) {
-                                myField.set(myObject, value);
-                            } else {
-                                //noinspection unchecked
-                                myField.set(myObject, copyClassData((Class<T>) fieldAnnotation.clazz(), value));
-                            }
+                        if (fieldAnnotation.clazz() == Object.class) {
+                            myField.set(myObject, value);
                         } else {
-                            throw new NoSuchFieldException(myField.getName());
+                            //noinspection unchecked
+                            myField.set(myObject, copyClassData((Class<T>) fieldAnnotation.clazz(), value));
                         }
+                    } else {
+                        throw new NoSuchFieldException(myField.getName());
                     }
                 }
-
-                return myObject;
             }
 
-            throw new IllegalStateException("Class is not annotated with @ClassAccessor");
+            return myObject;
         } catch (Throwable e) {
             throw new IllegalStateException(e);
         }
