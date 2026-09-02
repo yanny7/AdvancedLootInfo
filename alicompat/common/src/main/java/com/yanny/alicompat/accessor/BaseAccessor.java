@@ -1,4 +1,4 @@
-package com.yanny.ali.plugin.mods;
+package com.yanny.alicompat.accessor;
 
 public abstract class BaseAccessor<T> {
     protected final T parent;

@@ -1,4 +1,4 @@
-package com.yanny.ali.plugin.mods;
+package com.yanny.alicompat.accessor;
 
 import com.google.common.collect.Lists;
 import org.jetbrains.annotations.NotNull;

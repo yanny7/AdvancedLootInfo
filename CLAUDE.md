@@ -80,7 +80,7 @@ Core flow, per mod (see `ali/CLAUDE.md` / `awi/CLAUDE.md` for the concrete insta
 - `manager.PluginManager` (extends `aci`'s `CorePluginManager`) drives three registries built from all discovered `IPlugin`s: `CommonRegistry` (shared/common-side registration), `ClientRegistry` (client-only rendering/widget registration), `ServerRegistry` (server-side data collection built per `ServerLevel`).
 - `plugin/server` — turns domain entries (loot-table entries/functions/conditions/ingredients for ALI; worldgen types for AWI) into `TooltipBuilder`/`TooltipNode` trees (the generic tooltip tree model lives in `aci.tooltip`, documented in full in `aci/CLAUDE.md`).
 - `plugin/client` — client-side widget/rendering utilities.
-- ALI additionally has `plugin/glm` (Global Loot Modifier compatibility) and `plugin/mods` (reflection-based third-party compat shims) — see `ali/CLAUDE.md`.
+- ALI additionally has `plugin/glm` (Global Loot Modifier compatibility) — see `ali/CLAUDE.md`. The reflective accessor toolkit third-party compat shims are written against lives in `alicompat/common`'s `accessor` package — see `alicompat/CLAUDE.md`.
 
 Server-collected data is sent to the client over custom networking (`network` package). **Only the transfer is on demand**: the whole data tree is built eagerly on the server thread at server start (and on datapack/tag reload) by `AbstractServer.readLootTables`/`readWorldgenInfo`, and the recipe viewer's `RequestLootDataMessage`/`RequestWorldgenDataMessage` merely starts streaming the already-built, gzipped chunks to that client. Scan cost is therefore server-startup cost — it is never deferred until a viewer asks. See `ali/CLAUDE.md`'s networking section (canonical) and `awi/CLAUDE.md`'s (the same pattern, diffed).
 

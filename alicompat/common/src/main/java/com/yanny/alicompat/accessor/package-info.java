@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package com.yanny.ali.plugin.mods;
+package com.yanny.alicompat.accessor;
 
 import javax.annotation.ParametersAreNonnullByDefault;

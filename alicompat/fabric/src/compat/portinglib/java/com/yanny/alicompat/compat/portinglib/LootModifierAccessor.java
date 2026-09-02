@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.portinglib;
 
-import com.yanny.ali.plugin.mods.BaseAccessor;
-import com.yanny.ali.plugin.mods.FieldAccessor;
+import com.yanny.alicompat.accessor.BaseAccessor;
+import com.yanny.alicompat.accessor.FieldAccessor;
 import io.github.fabricators_of_create.porting_lib.loot.LootModifier;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 

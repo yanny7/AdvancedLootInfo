@@ -1,8 +1,8 @@
 package com.yanny.alicompat.compat.portinglib;
 
 import com.yanny.ali.api.IServerRegistry;
-import com.yanny.ali.plugin.mods.ReflectionUtils;
 import com.yanny.alicompat.IModCompat;
+import com.yanny.alicompat.accessor.ReflectionUtils;
 import io.github.fabricators_of_create.porting_lib.tool.loot.CanToolPerformAction;
 import org.jetbrains.annotations.NotNull;
 

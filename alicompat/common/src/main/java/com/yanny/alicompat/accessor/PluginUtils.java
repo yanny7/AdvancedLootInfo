@@ -1,30 +1,15 @@
-package com.yanny.ali.plugin.mods;
+package com.yanny.alicompat.accessor;
 
-import com.mojang.datafixers.util.Either;
 import com.yanny.aci.CommonLogUtils;
-import com.yanny.ali.Utils;
 import com.yanny.ali.api.IServerRegistry;
-import com.yanny.ali.api.IServerUtils;
-import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
-import net.minecraft.tags.TagKey;
+import com.yanny.alicompat.Utils;
 import net.minecraft.world.entity.npc.VillagerTrades;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.Logger;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.StreamSupport;
 
 public class PluginUtils {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
@@ -203,48 +188,5 @@ public class PluginUtils {
         } else {
             throw new IllegalStateException("Missing ClassAccessor annotation for item listing {}" + clazz.getName());
         }
-    }
-
-    @NotNull
-    @Unmodifiable
-    public static <T extends ItemLike> List<Item> getItems(IServerUtils utils, TagKey<T> tag) {
-        Registry<T> registry = utils.getServerLevel().registryAccess().registryOrThrow(tag.registry());
-        return StreamSupport.stream(registry.getTagOrEmpty(tag).spliterator(), false).map(Holder::value).map(ItemLike::asItem).toList();
-
-    }
-
-    public static <T extends ItemLike> List<Item> getItems(IServerUtils utils, Either<ItemStack, TagKey<T>> either) {
-        return either.map(
-                (i) -> List.of(i.getItem()),
-                (t) -> {
-                    Registry<T> registry = utils.getServerLevel().registryAccess().registryOrThrow(t.registry());
-                    return StreamSupport.stream(registry.getTagOrEmpty(t).spliterator(), false).map(Holder::value).map(ItemLike::asItem).toList();
-                }
-        );
-
-    }
-
-    @NotNull
-    public static <T> List<T> getCapturedInstances(Object predicate, Class<T> requiredType) {
-        List<T> instances = new ArrayList<>();
-
-        try {
-            Field[] fields = predicate.getClass().getDeclaredFields();
-
-            for (Field field : fields) {
-                field.setAccessible(true);
-                Object entry = field.get(predicate);
-
-                if (requiredType.isInstance(entry)) {
-                    instances.add(requiredType.cast(entry));
-                }
-            }
-        } catch (IllegalAccessException e) {
-            LOGGER.warn("Error while accessing field: {}", e.getMessage(), e);
-        } catch (SecurityException e) {
-            LOGGER.warn("Security error while accessing field: {}", e.getMessage(), e);
-        }
-
-        return instances;
     }
 }

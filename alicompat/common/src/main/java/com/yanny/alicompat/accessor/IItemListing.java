@@ -1,4 +1,4 @@
-package com.yanny.ali.plugin.mods;
+package com.yanny.alicompat.accessor;
 
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;

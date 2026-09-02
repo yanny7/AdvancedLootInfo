@@ -8,9 +8,6 @@ import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.common.nodes.GlobalLootModifierNode;
-import com.yanny.ali.plugin.mods.BaseAccessor;
-import com.yanny.ali.plugin.mods.ClassAccessor;
-import com.yanny.ali.plugin.mods.ReflectionUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.EntityTypePredicate;
@@ -167,29 +164,6 @@ public class GlobalLootModifierUtils {
                 return c instanceof AnyOfCondition condition && tablePredicate(Arrays.asList(condition.terms), location, predicate);
             }
         });
-    }
-
-    public static <M, T extends BaseAccessor<?> & IGlobalLootModifierAccessor> void registerGlobalLootModifier(IGlobalLootModifierPlugin.IRegistry registry, Class<M> targetClass, Class<T> clazz, ILootTableIdConditionPredicate predicate) {
-        try {
-            registry.registerGlobalLootModifier(targetClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c, targetClass).getLootModifier(u, predicate));
-        } catch (Throwable e) {
-            LOGGER.warn("Failed to register GLM for {} with error {}", targetClass.getName(), e.getMessage(), e);
-        }
-    }
-
-    public static <T extends BaseAccessor<?> & IGlobalLootModifierAccessor> void registerGlobalLootModifier(IGlobalLootModifierPlugin.IRegistry registry, Class<T> clazz, ILootTableIdConditionPredicate predicate) {
-        ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
-
-        if (classAnnotation != null) {
-            try {
-                Class<?> functionClass = Class.forName(classAnnotation.value());
-                registry.registerGlobalLootModifier(functionClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c).getLootModifier(u, predicate));
-            } catch (Throwable e) {
-                LOGGER.warn("Failed to register GLM for {} with error {}", classAnnotation.value(), e.getMessage(), e);
-            }
-        } else {
-            throw new IllegalStateException("Missing ClassAccessor annotation for GLM " + clazz.getName());
-        }
     }
 
     public static Optional<ILootModifier<?>> getMissingGlobalLootModifier(IServerUtils utils, IGlobalLootModifierWrapper modifier, ILootTableIdConditionPredicate predicate) {

@@ -1,4 +1,4 @@
-package com.yanny.ali.plugin.mods;
+package com.yanny.alicompat.accessor;
 
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;

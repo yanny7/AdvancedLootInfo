@@ -1,4 +1,4 @@
-package com.yanny.ali.plugin.mods;
+package com.yanny.alicompat.accessor;
 
 import com.yanny.ali.api.IServerUtils;
 import net.minecraft.world.item.Item;

@@ -11,7 +11,7 @@ import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierWrapper;
 import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
-import com.yanny.ali.plugin.mods.ReflectionUtils;
+import com.yanny.alicompat.accessor.ReflectionUtils;
 import com.yanny.alicompat.IModCompat;
 import com.yanny.alicompat.Utils;
 import io.github.fabricators_of_create.porting_lib.loot.IGlobalLootModifier;

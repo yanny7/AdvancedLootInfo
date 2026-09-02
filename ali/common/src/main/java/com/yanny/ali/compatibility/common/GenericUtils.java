@@ -15,7 +15,7 @@ import com.yanny.ali.network.AbstractClient;
 import com.yanny.ali.network.RequestLootDataMessage;
 import com.yanny.ali.plugin.common.nodes.EntityLootTableNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
-import com.yanny.ali.plugin.mods.PluginUtils;
+import com.yanny.ali.plugin.common.ReflectionUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
@@ -402,7 +402,7 @@ public class GenericUtils {
     public static Set<Block> getJobSites(@Nullable VillagerProfession profession) {
         if (profession != null) {
             //noinspection unchecked
-            List<ResourceKey<PoiType>> poi = (List<ResourceKey<PoiType>>) (Object) PluginUtils.getCapturedInstances(profession.acquirableJobSite(), ResourceKey.class);
+            List<ResourceKey<PoiType>> poi = (List<ResourceKey<PoiType>>) (Object) ReflectionUtils.getCapturedInstances(profession.acquirableJobSite(), ResourceKey.class);
             PoiType poiType;
 
             if (poi.size() == 1 && (poiType = BuiltInRegistries.POINT_OF_INTEREST_TYPE.get(poi.get(0))) != null) {

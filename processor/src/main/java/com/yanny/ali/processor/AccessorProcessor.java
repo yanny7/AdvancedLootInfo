@@ -29,9 +29,9 @@ import java.util.Set;
 
 @SupportedAnnotationTypes(AccessorProcessor.FIELD_ACCESSOR)
 public class AccessorProcessor extends AbstractProcessor {
-    static final String FIELD_ACCESSOR = "com.yanny.ali.plugin.mods.FieldAccessor";
-    private static final String CLASS_ACCESSOR = "com.yanny.ali.plugin.mods.ClassAccessor";
-    private static final String BASE_ACCESSOR = "com.yanny.ali.plugin.mods.BaseAccessor";
+    static final String FIELD_ACCESSOR = "com.yanny.alicompat.accessor.FieldAccessor";
+    private static final String CLASS_ACCESSOR = "com.yanny.alicompat.accessor.ClassAccessor";
+    private static final String BASE_ACCESSOR = "com.yanny.alicompat.accessor.BaseAccessor";
     private static final String OBJECT = "java.lang.Object";
 
     @Override
