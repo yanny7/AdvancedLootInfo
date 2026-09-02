@@ -1,6 +1,7 @@
 package com.yanny.awi.plugin;
 
 import com.yanny.aci.tooltip.CommonValueTooltip;
+import com.yanny.awi.Utils;
 import com.yanny.awi.api.*;
 import com.yanny.awi.datagen.LanguageHolder;
 import com.yanny.awi.plugin.client.widget.*;
@@ -73,7 +74,7 @@ public class Plugin implements IPlugin {
     public void registerServer(IServerRegistry registry) {
         new CommonValueTooltip<IServerUtils, IServerRegistry>().registerAll(registry);
 
-        EnumTypes.TRANSLATED_ENUMS.forEach(registry::registerEnumTranslation);
+        EnumTypes.TRANSLATED_ENUMS.forEach((type, owner) -> registry.registerEnumTranslation(type, Utils.MOD_ID, owner));
 
         registry.registerValueTooltip(Enum.class, ValueTooltipUtils::getEnumTooltip);
         registry.registerValueTooltip(IntProvider.class, ValueTooltipUtils::getIntProviderTooltip);
