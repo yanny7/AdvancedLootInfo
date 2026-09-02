@@ -1,4 +1,15 @@
 {
+  "alicompat.enum.farmersdelight.item_ability.axe_dig": "Axe Dig",
+  "alicompat.enum.farmersdelight.item_ability.axe_strip": "Axe Strip",
+  "alicompat.enum.farmersdelight.item_ability.hoe_dig": "Hoe Dig",
+  "alicompat.enum.farmersdelight.item_ability.knife_dig": "Knife Dig",
+  "alicompat.enum.farmersdelight.item_ability.knife_harvest": "Knife Harvest",
+  "alicompat.enum.farmersdelight.item_ability.pickaxe_dig": "Pickaxe Dig",
+  "alicompat.enum.farmersdelight.item_ability.shears_carve": "Shears Carve",
+  "alicompat.enum.farmersdelight.item_ability.shears_dig": "Shears Dig",
+  "alicompat.enum.farmersdelight.item_ability.shears_harvest": "Shears Harvest",
+  "alicompat.enum.farmersdelight.item_ability.shovel_dig": "Shovel Dig",
+  "alicompat.enum.farmersdelight.item_ability.sword_dig": "Sword Dig",
   "alicompat.type.function.copy_skillet": "Copy Skillet",
   "alicompat.type.function.smoker_cook": "Smoker Cook"
 }

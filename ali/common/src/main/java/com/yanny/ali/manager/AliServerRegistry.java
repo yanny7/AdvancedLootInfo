@@ -81,7 +81,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemFunction, EnchantedRanges>> countModifiers = registerClassKeyed("count modifiers", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifiers = registerClassKeyed("item stack modifiers", false, HashMap::new, null);
     // translations
-    private final ManagedRegistry<Class<?>, String> enumValues = registerClassKeyed("enum values", true, HashMap::new, null);
+    private final ManagedRegistry<Class<?>, EnumTranslation> enumValues = registerClassKeyed("enum values", true, HashMap::new, null);
 
     private final Map<ResourceLocation, LootTable> lootTableMap = new HashMap<>();
     private final Map<ResourceLocation, Integer> hitMap = new HashMap<>();
@@ -208,9 +208,15 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         tradeItemListings.put(type, (u, i, c) -> tradeFactory.apply(u, type.cast(i), c));
     }
 
+    @Deprecated(forRemoval = true, since = "2.2.0")
     @Override
     public void registerEnumTranslation(Class<? extends Enum<?>> type, String owner) {
-        enumValues.put(type, owner);
+        registerEnumTranslation(type, Utils.MOD_ID, owner);
+    }
+
+    @Override
+    public void registerEnumTranslation(Class<? extends Enum<?>> type, String modId, String owner) {
+        enumValues.put(type, new EnumTranslation(modId, owner));
     }
 
     @NotNull
@@ -369,8 +375,8 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @Override
     public TooltipBuilder getEnumTranslation(IServerUtils utils, Enum<?> value) {
         Class<?> type = value.getDeclaringClass();
-        String owner = enumValues.get(type).orElseGet(() -> CoreTooltipUtils.enumOwnerPath(type));
-        String key = CoreTooltipUtils.enumKey(Utils.MOD_ID, owner, value.name());
+        EnumTranslation translation = enumValues.get(type).orElseGet(() -> new EnumTranslation(Utils.MOD_ID, CoreTooltipUtils.enumOwnerPath(type)));
+        String key = CoreTooltipUtils.enumKey(translation.modId(), translation.owner(), value.name());
 
         return TooltipBuilder.component(utils.lookupProvider(), Component.translatableWithFallback(key, value.name()));
     }

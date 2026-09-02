@@ -69,5 +69,11 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     <T extends PlacementModifier> void registerPlacementPropagator(Class<T> type, PlacementPropagator<T> getter);
 
+    /**
+     * @deprecated use {@link #registerEnumTranslation(Class, String, String)}
+     */
+    @Deprecated(forRemoval = true, since = "1.1.1")
     void registerEnumTranslation(Class<? extends Enum<?>> type, String owner);
+
+    void registerEnumTranslation(Class<? extends Enum<?>> type, String modId, String owner);
 }

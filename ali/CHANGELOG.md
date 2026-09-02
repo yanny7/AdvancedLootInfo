@@ -6,6 +6,7 @@
 - Moved the accessor toolkit (`com.yanny.ali.plugin.mods`) into `ALI Compat` as `com.yanny.alicompat.accessor`
 - Removed Porting Lib support - the library has no build for this Minecraft version
 - Fixed Plugins discovered multiple times on Fabric
+- Plugins can register enum translations under their own mod id (`registerEnumTranslation(type, modId, owner)`); the two-argument overload is deprecated
 
 ## [2.1.0]
 
