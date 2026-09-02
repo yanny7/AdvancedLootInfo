@@ -1,7 +1,10 @@
 ## []
 
 - Global loot modifier plugins are now declared by implementing `IGlobalLootModifierPlugin` on all loaders
-- Farmer's Delight support moved to the separate ALICompat mod
+- Fixed global loot modifier plugins from other mods being ignored on NeoForge
+- Moved Farmer's Delight support into new mod `ALI Compat`
+- Moved the accessor toolkit (`com.yanny.ali.plugin.mods`) into `ALI Compat` as `com.yanny.alicompat.accessor`
+- Removed Porting Lib support - the library has no build for this Minecraft version
 - Fixed Plugins discovered multiple times on Fabric
 
 ## [2.1.0]

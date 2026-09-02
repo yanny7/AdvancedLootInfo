@@ -2,8 +2,8 @@ package com.yanny.alicompat.compat.farmersdelight;
 
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.language.Lang;
-import com.yanny.ali.plugin.mods.PluginUtils;
 import com.yanny.alicompat.IModCompat;
+import com.yanny.alicompat.accessor.PluginUtils;
 import org.jetbrains.annotations.NotNull;
 import vectorwing.farmersdelight.common.loot.function.CopySkilletFunction;
 import vectorwing.farmersdelight.common.loot.function.SmokerCookFunction;
