@@ -47,7 +47,13 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     <T extends VillagerTrades.ItemListing> void registerItemListing(Class<T> type, TriFunction<IServerUtils, T, TooltipNode, IDataNode> supplier);
 
+    /**
+     * @deprecated use {@link #registerEnumTranslation(Class, String, String)}
+     */
+    @Deprecated(forRemoval = true, since = "2.2.0")
     void registerEnumTranslation(Class<? extends Enum<?>> type, String owner);
+
+    void registerEnumTranslation(Class<? extends Enum<?>> type, String modId, String owner);
 
     @FunctionalInterface
     interface EntryFactory<T extends LootPoolEntryContainer> {

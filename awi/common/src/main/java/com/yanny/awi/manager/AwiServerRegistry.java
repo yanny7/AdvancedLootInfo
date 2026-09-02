@@ -68,7 +68,7 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
     private final ManagedRegistry<Class<?>, HeightSpanPropagator<HeightProvider>> heightSpanPropagators = registerClassKeyed("height span propagators", true, HashMap::new, BuiltInRegistries.HEIGHT_PROVIDER_TYPE);
     private final ManagedRegistry<Class<?>, PlacementPropagator<PlacementModifier>> placementPropagators = registerClassKeyed("placement propagators", false, HashMap::new, BuiltInRegistries.PLACEMENT_MODIFIER_TYPE);
     // translations
-    private final ManagedRegistry<Class<?>, String> enumValues = registerClassKeyed("enum values", true, HashMap::new, null);
+    private final ManagedRegistry<Class<?>, EnumTranslation> enumValues = registerClassKeyed("enum values", true, HashMap::new, null);
 
     public AwiServerRegistry(AwiCommonRegistry registry, ServerLevel level) {
         super(registry, level);
@@ -205,9 +205,15 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
         valueTooltips.put(type, (u, v) -> getter.apply(u, type.cast(v)));
     }
 
+    @Deprecated(forRemoval = true, since = "1.1.1")
     @Override
     public void registerEnumTranslation(Class<? extends Enum<?>> type, String owner) {
-        enumValues.put(type, owner);
+        registerEnumTranslation(type, Utils.MOD_ID, owner);
+    }
+
+    @Override
+    public void registerEnumTranslation(Class<? extends Enum<?>> type, String modId, String owner) {
+        enumValues.put(type, new EnumTranslation(modId, owner));
     }
 
     @NotNull
@@ -399,8 +405,8 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
     @Override
     public TooltipBuilder getEnumTranslation(IServerUtils utils, Enum<?> value) {
         Class<?> type = value.getDeclaringClass();
-        String owner = enumValues.get(type).orElseGet(() -> CoreTooltipUtils.enumOwnerPath(type));
-        String key = CoreTooltipUtils.enumKey(Utils.MOD_ID, owner, value.name());
+        EnumTranslation translation = enumValues.get(type).orElseGet(() -> new EnumTranslation(Utils.MOD_ID, CoreTooltipUtils.enumOwnerPath(type)));
+        String key = CoreTooltipUtils.enumKey(translation.modId(), translation.owner(), value.name());
 
         return TooltipBuilder.component(Component.translatableWithFallback(key, value.name()));
     }
