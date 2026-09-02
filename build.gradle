@@ -211,6 +211,14 @@ subprojects {
                 }
             }
 
+            // recipe viewer stays off the datagen classpath: EMI's client mixins fail injection during Forge datagen
+            tasks.register("run${project.parent.name.capitalize()}${project.name.capitalize()}Datagen", GradleBuild) {
+                group = "launchers"
+                description = "Generate ${project.parent.name.capitalize()} ${project.name.toUpperCase()} data"
+                setTasks([":${project.parent.name}:${project.name}:runData".toString()])
+                startParameter.projectProperties = ["recipe_viewer": "none"]
+            }
+
             dependencies {
                 def recipe_viewer = project.findProperty("recipe_viewer")
                 if (!recipe_viewer) {
