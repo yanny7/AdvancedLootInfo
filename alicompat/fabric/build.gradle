@@ -45,7 +45,7 @@ dependencies {
         common(project(path: p, configuration: "namedElements")) { transitive false }
     }
 
-    modRuntimeOnly "dev.emi:emi-fabric:${emi_version}"
+    modRuntimeOnly "mezz.jei:jei-${minecraft_version}-fabric:${jei_version}"
 
     project.ext.commonProjects.each { p ->
         common(project(path: p, configuration: "namedElements")) { transitive false }
