@@ -40,10 +40,7 @@ public class ItemTagWidget implements IWidget {
     @Override
     public void render(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY) {
         if (modified) {
-            guiGraphics.pose().pushPose();
-            guiGraphics.pose().translate(0, 0, 200);
             widget.render(guiGraphics, mouseX, mouseY);
-            guiGraphics.pose().popPose();
         }
     }
 }

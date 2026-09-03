@@ -12,7 +12,7 @@ import com.yanny.ali.lootjs.EntityLootModifier;
 import com.yanny.ali.lootjs.TableLootModifier;
 import dev.latvian.mods.kubejs.block.state.BlockStatePredicate;
 import net.minecraft.core.HolderSet;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Blocks;
@@ -67,7 +67,7 @@ public class LootModifierScopeTest {
     @Test
     public void testTableModifierMatchesAnyFilter() {
         TableLootModifier modifier = tableModifier(
-                new LootTableFilter.ByIdFilter(new IdFilter.ByLocation(ResourceLocation.withDefaultNamespace("chests/igloo_chest"))),
+                new LootTableFilter.ByIdFilter(new IdFilter.ByLocation(Identifier.withDefaultNamespace("chests/igloo_chest"))),
                 new LootTableFilter.ByIdFilter(new IdFilter.ByPattern(Pattern.compile("minecraft:blocks/.*")))
         );
 
@@ -109,8 +109,8 @@ public class LootModifierScopeTest {
         return predicate::test;
     }
 
-    private static ResourceLocation table(String path) {
-        return ResourceLocation.withDefaultNamespace(path);
+    private static Identifier table(String path) {
+        return Identifier.withDefaultNamespace(path);
     }
 
     private static Entity entity(EntityType<?> type) {

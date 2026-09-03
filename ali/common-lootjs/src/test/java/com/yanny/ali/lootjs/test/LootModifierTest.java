@@ -16,7 +16,9 @@ import com.yanny.ali.lootjs.node.ItemStackNode;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.LootPoolNode;
 import com.yanny.ali.plugin.common.nodes.ModifiedNode;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -216,6 +218,23 @@ public class LootModifierTest {
     }
 
     @Test
+    public void testReplaceActionShowsPreservedComponents() {
+        IOperation.ReplaceOperation operation = replaceOperation(List.of(), itemEntry(Items.EMERALD), false, new DataComponentType<?>[]{
+                DataComponents.ENCHANTMENTS,
+                DataComponents.DAMAGE
+        });
+        ItemStackNode result = (ItemStackNode) operation.factory().apply(itemNode(3)).getFirst();
+
+        assertTooltip(result.getTooltip(), List.of(
+                "Count: 1",
+                "----- Modifiers -----",
+                "Preserve Components:",
+                "  -> minecraft:enchantments",
+                "  -> minecraft:damage"
+        ));
+    }
+
+    @Test
     public void testReplaceActionWithConditionsWrapsInModifiedNode() {
         IOperation.ReplaceOperation operation = replaceOperation(
                 List.of(LootItemRandomChanceCondition.randomChance(0.25F).build()), itemEntry(Items.EMERALD), false);
@@ -244,8 +263,12 @@ public class LootModifierTest {
     }
 
     private static IOperation.ReplaceOperation replaceOperation(List<LootItemCondition> conditions, ItemLootEntry entry, boolean preserveCount) {
+        return replaceOperation(conditions, entry, preserveCount, new DataComponentType<?>[0]);
+    }
+
+    private static IOperation.ReplaceOperation replaceOperation(List<LootItemCondition> conditions, ItemLootEntry entry, boolean preserveCount, DataComponentType<?>[] preserveComponentTypes) {
         return (IOperation.ReplaceOperation) operations(conditions, List.of(),
-                new ReplaceLootAction(ItemFilter.ANY, entry, preserveCount)).getFirst();
+                new ReplaceLootAction(ItemFilter.ANY, entry, preserveCount, preserveComponentTypes)).getFirst();
     }
 
     private static ItemLootEntry itemEntry(Item item) {
@@ -286,19 +309,19 @@ public class LootModifierTest {
         return new ItemStackNode(UTILS, new ItemStack(Items.DIAMOND), 1.0F, List.of(), List.of(), null);
     }
 
-    private static class TestLootModifier extends AbstractLootModifier<ResourceLocation> {
+    private static class TestLootModifier extends AbstractLootModifier<Identifier> {
         TestLootModifier(IServerUtils utils, LootModifier modifier) {
             super(utils, modifier);
         }
 
         @Override
-        public boolean predicate(ResourceLocation value) {
+        public boolean predicate(Identifier value) {
             return true;
         }
 
         @NotNull
         @Override
-        public ILootModifier.IType<ResourceLocation> getType() {
+        public ILootModifier.IType<Identifier> getType() {
             return ILootModifier.IType.LOOT_TABLE;
         }
     }

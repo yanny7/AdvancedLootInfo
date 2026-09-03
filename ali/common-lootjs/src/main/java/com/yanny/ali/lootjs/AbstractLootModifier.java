@@ -1,6 +1,6 @@
 package com.yanny.ali.lootjs;
 
-import com.almostreliable.lootjs.core.entry.ItemLootEntry;
+import com.almostreliable.lootjs.core.entry.LootEntry;
 import com.almostreliable.lootjs.loot.modifier.LootAction;
 import com.almostreliable.lootjs.loot.modifier.LootModifier;
 import com.almostreliable.lootjs.loot.modifier.handler.*;
@@ -11,6 +11,7 @@ import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.*;
 import com.yanny.ali.lootjs.modifier.CustomPlayerFunction;
 import com.yanny.ali.lootjs.modifier.ModifiedItemFunction;
+import com.yanny.ali.lootjs.modifier.PreserveComponentsFunction;
 import com.yanny.ali.lootjs.node.ItemStackNode;
 import com.yanny.ali.lootjs.node.ItemTagNode;
 import com.yanny.ali.plugin.common.NodeUtils;
@@ -99,10 +100,16 @@ public abstract class AbstractLootModifier<T> implements ILootModifier<T> {
 
                         List<IDataNode> nodes = new ArrayList<>();
                         IItemNode node = (IItemNode) c;
-                        ItemLootEntry entry = replaceLootAction.itemLootEntry();
+                        LootEntry entry = replaceLootAction.lootEntry();
                         RangeValue preservedCount = replaceLootAction.preserveCount() ? node.getCount() : null;
                         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), node.getConditions().stream()).toList();
-                        List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), node.getFunctions().stream()).toList();
+                        List<LootItemFunction> allFunctions = new ArrayList<>();
+
+                        if (replaceLootAction.preserveComponentTypes().length > 0) {
+                            allFunctions.add(new PreserveComponentsFunction(replaceLootAction.preserveComponentTypes()));
+                        }
+
+                        allFunctions.addAll(Stream.concat(functions.stream(), node.getFunctions().stream()).toList());
 
                         if (!conditions.isEmpty()) {
                             nodes.add(new ModifiedNode(utils, c, Utils.getEntry(utils, entry, 1, allFunctions, allConditions, preservedCount)));

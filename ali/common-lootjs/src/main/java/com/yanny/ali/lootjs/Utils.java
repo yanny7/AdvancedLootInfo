@@ -1,15 +1,18 @@
 package com.yanny.ali.lootjs;
 
 import com.almostreliable.lootjs.core.LootType;
-import com.almostreliable.lootjs.core.entry.ItemLootEntry;
+import com.almostreliable.lootjs.core.entry.LootEntry;
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.lootjs.node.ItemStackNode;
+import com.yanny.ali.lootjs.node.ItemTagNode;
 import com.yanny.ali.plugin.common.NodeUtils;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.entries.TagEntry;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
@@ -67,11 +70,26 @@ public class Utils {
     }
 
     @NotNull
-    public static IDataNode getEntry(IServerUtils utils, ItemLootEntry entry, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions, @Nullable RangeValue preservedCount) {
-        LootItem vanillaEntry = entry.getVanillaEntry();
-        List<LootItemCondition> allConditions = NodeUtils.getAllConditions(vanillaEntry, conditions);
-        List<LootItemFunction> allFunctions = NodeUtils.getAllFunctions(vanillaEntry, functions);
+    public static IDataNode getEntry(IServerUtils utils, LootEntry entry, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions, @Nullable RangeValue preservedCount) {
+        LootPoolEntryContainer vanillaEntry = entry.getVanillaEntry();
 
-        return new ItemStackNode(utils, vanillaEntry.item.value().getDefaultInstance(), chance, allFunctions, allConditions, preservedCount);
+        switch (vanillaEntry) {
+            case LootItem lootItem -> {
+                List<LootItemCondition> allConditions = NodeUtils.getAllConditions(lootItem, conditions);
+                List<LootItemFunction> allFunctions = NodeUtils.getAllFunctions(lootItem, functions);
+
+                return new ItemStackNode(utils, lootItem.item.value().getDefaultInstance(), chance, allFunctions, allConditions, preservedCount);
+            }
+            case TagEntry tagEntry -> {
+                List<LootItemCondition> allConditions = NodeUtils.getAllConditions(tagEntry, conditions);
+                List<LootItemFunction> allFunctions = NodeUtils.getAllFunctions(tagEntry, functions);
+
+                return new ItemTagNode(utils, tagEntry.tag, chance, allFunctions, allConditions, preservedCount);
+            }
+            default -> {
+                LOGGER.warn("Unsupported replacement loot entry {}", vanillaEntry.getClass().getCanonicalName());
+                return utils.getEntryFactory(utils, vanillaEntry).create(utils, vanillaEntry, chance, 1, functions, conditions);
+            }
+        }
     }
 }

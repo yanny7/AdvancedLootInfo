@@ -29,6 +29,26 @@ public final class Lang {
         // Forge
         CAN_ITEM_PERFORM_ABILITY("can_item_perform_ability", "Can Item Perform Ability: %s"),
         LOOT_TABLE_ID("loot_table_id", "Loot Table Id: %s"),
+        // LootJS
+        BLOCK_ENTITY("block_entity", "Block Entity:"),
+        IS_LIGHT_LEVEL("is_light_level", "Is Light Level:"),
+        MATCH_ANY_INVENTORY_SLOT("match_any_inventory_slot", "Match Any Inventory Slot:"),
+        MATCH_ATTACKER_CUSTOM("match_attacker_custom", "Match Attacker Custom:"),
+        MATCH_BIOME("match_biome", "Match Biome:"),
+        MATCH_CHEST("match_chest", "Match Chest:"),
+        MATCH_DIMENSION("match_dimension", "Match Dimension:"),
+        MATCH_DIRECT_ATTACKER_CUSTOM("match_direct_attacker_custom", "Match Direct Attacker Custom:"),
+        MATCH_DISTANCE("match_distance", "Match Distance:"),
+        MATCH_ENTITY_CUSTOM("match_entity_custom", "Match Entity Custom:"),
+        MATCH_EQUIPMENT_SLOT("match_equipment_slot", "Match Equipment Slot:"),
+        MATCH_FEET("match_feet", "Match Feet:"),
+        MATCH_HEAD("match_head", "Match Head:"),
+        MATCH_LEGS("match_legs", "Match Legs:"),
+        MATCH_MAINHAND("match_mainhand", "Match Mainhand:"),
+        MATCH_OFFHAND("match_offhand", "Match Offhand:"),
+        MATCH_PLAYER("match_player", "Match Player:"),
+        MATCH_PLAYER_CUSTOM("match_player_custom", "Match Player Custom:"),
+        MATCH_STRUCTURE("match_structure", "Match Structure:"),
         ;
 
         private final Translation translation;
@@ -90,6 +110,7 @@ public final class Lang {
         TOGGLE_TOOLTIPS("toggle_tooltips", "Toggle Tooltips:"),
         // LootJS
         PLAYER_ACTION("player_action", "Player Action:"),
+        PRESERVE_COMPONENTS("preserve_components", "Preserve Components:"),
         ;
 
         private final Translation translation;
@@ -225,6 +246,7 @@ public final class Lang {
         CAN_SEE_SKY("can_see_sky", "Can See Sky: %s"),
         CAN_SPRINT("can_sprint", "Can Sprint: %s"),
         CHANCE("chance", "Chance: %s"),
+        CHECK_COMPONENTS("check_components", "Check Components: %s"),
         CLOCK("clock", "Clock: %s"),
         COLOR("color", "Color: %s"),
         COLORS("colors", "Colors: %s"),
@@ -248,6 +270,7 @@ public final class Lang {
         DEFAULT_MINING_SPEED("default_mining_speed", "Default Mining Speed: %s"),
         DELAY_TICKS("delay_ticks", "Delay Ticks: %s"),
         DESTINATION("destination", "Destination: %s"),
+        DESCRIPTION("description", "Description: %s"),
         DIAMETER("diameter", "Diameter: %s"),
         DIMENSION("dimension", "Dimension: %s"),
         DISABLE_BLOCKING_FOR_SECONDS("disable_blocking_for_seconds", "Disable Blocking For Seconds: %s"),
@@ -295,6 +318,7 @@ public final class Lang {
         HORIZONTAL("horizontal", "Horizontal: %s"),
         HORIZONTAL_BLOCKING_ANGLE("horizontal_blocking_angle", "Horizontal Blocking Angle: %s"),
         HORIZONTAL_SPEED("horizontal_speed", "Horizontal Speed: %s"),
+        HOTBAR("hotbar", "Hotbar: %s"),
         ID("id", "Id: %s"),
         INCLUDE("include", "Include: %s"),
         INCLUDE_ADDITIONAL_COST_COMPONENT("include_additional_cost_component", "Include Additional Cost Component: %s"),
@@ -315,6 +339,7 @@ public final class Lang {
         IS_VISIBLE("is_visible", "Is Visible: %s"),
         ITEM("item", "Item: %s"),
         ITEM_DAMAGE_PER_ATTACK("item_damage_per_attack", "Item Damage Per Attack: %s"),
+        ITEM_FILTER("item_filter", "Item Filter: %s"),
         ITEM_NAME("item_name", "Item Name: %s"),
         JUMP("jump", "Jump: %s"),
         LEFT("left", "Left: %s"),
@@ -340,6 +365,7 @@ public final class Lang {
         MIN_SPEED("min_speed", "Min Speed: %s"),
         MIN_TICKS_IN_HIVE("min_ticks_in_hive", "Min Ticks In Hive: %s"),
         MOB_FACTOR("mob_factor", "Mob Factor: %s"),
+        MOD("mod", "Mod: %s"),
         NAME("name", "Name: %s"),
         NBT("nbt", "Nbt: %s"),
         NUMBER_OF_DYES("number_of_dyes", "Number Of Dyes: %s"),
@@ -383,6 +409,7 @@ public final class Lang {
         SIZE("size", "Size: %s"),
         SKIP_KNOWN_STRUCTURES("skip_known_structures", "Skip Known Structures: %s"),
         SLOT("slot", "Slot: %s"),
+        SLOT_GROUP("slot_group", "Slot Group: %s"),
         SLOT_RANGE("slot_range", "Slot Range: %s"),
         SMOKEY("smokey", "Smokey: %s"),
         SNEAK("sneak", "Sneak: %s"),
@@ -437,6 +464,7 @@ public final class Lang {
     }
 
     public enum Branch implements ITooltipKey {
+        ABILITIES("abilities", "Abilities:"),
         ADVANCEMENTS("advancements", "Advancements:"),
         AFFECTS_MOVEMENT("affects_movement", "Affects Movement:"),
         ALL("all", "All:"),
@@ -469,6 +497,7 @@ public final class Lang {
         DEATH_EFFECTS("death_effects", "Death Effects:"),
         DECORATIONS("decorations", "Decorations:"),
         DENOMINATOR("denominator", "Denominator:"),
+        DIMENSIONS("dimensions", "Dimensions:"),
         DIRECT_ENTITY("direct_entity", "Direct Entity:"),
         DISMOUNT_CONDITION("dismount_condition", "Dismount Condition:"),
         DISTANCE_TO_PLAYER("distance_to_player", "Distance to Player:"),
@@ -535,6 +564,7 @@ public final class Lang {
         ON_PASS("on_pass", "On Pass:"),
         OPERATION("operation", "Operation:"),
         OPTIONS(Value.OPTIONS, "options", "Options:"),
+        OR("or", "Or:"),
         PAGE("page", "Page:"),
         PAGES("pages", "Pages:"),
         PARTIAL_MATCHERS(Value.PARTIAL_MATCHER, "partial_matchers", "Partial Matchers:"),
@@ -642,6 +672,24 @@ public final class Lang {
 
         Multi(String k, String e) {
             this.translation = new Translation("ali.property.multi." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
+    public enum Error implements ITooltipKey {
+        DETAIL_NOT_AVAILABLE("detail_not_available", "Detail Not Available"),
+        MODIFIED_ITEM("modified_item", "Modified dynamically!"),
+        ;
+
+        private final Translation translation;
+
+        Error(String k, String e) {
+            this.translation = new Translation("ali.error." + k, e);
         }
 
         @NotNull

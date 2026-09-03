@@ -2,19 +2,18 @@ package com.yanny.ali.lootjs.test;
 
 import com.almostreliable.lootjs.core.filters.ItemFilter;
 import com.almostreliable.lootjs.loot.condition.*;
-import com.yanny.ali.lootjs.mixin.MixinCustomParamPredicate;
 import com.yanny.ali.lootjs.server.LootJsConditionTooltipUtils;
-import net.minecraft.advancements.critereon.DistancePredicate;
-import net.minecraft.advancements.critereon.EntityPredicate;
-import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.advancements.criterion.DistancePredicate;
+import net.minecraft.advancements.criterion.EntityPredicate;
+import net.minecraft.advancements.criterion.MinMaxBounds;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.context.ContextKey;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -44,9 +43,9 @@ public class LootJsConditionTooltipTest {
 
     @Test
     public void testMatchDimensionTooltip() {
-        MatchDimension condition = new MatchDimension(new ResourceLocation[]{
-                ResourceLocation.withDefaultNamespace("overworld"),
-                ResourceLocation.withDefaultNamespace("the_nether")
+        MatchDimension condition = new MatchDimension(new Identifier[]{
+                Identifier.withDefaultNamespace("overworld"),
+                Identifier.withDefaultNamespace("the_nether")
         });
 
         assertTooltip(LootJsConditionTooltipUtils.matchDimensionTooltip(UTILS, condition).build(), List.of(
@@ -155,7 +154,7 @@ public class LootJsConditionTooltipTest {
 
     @Test
     public void testMatchPlayerTooltip() {
-        MatchPlayer condition = new MatchPlayer(EntityPredicate.Builder.entity().of(EntityType.PLAYER).team("blue").build());
+        MatchPlayer condition = new MatchPlayer(EntityPredicate.Builder.entity().of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.PLAYER).team("blue").build());
 
         assertTooltip(LootJsConditionTooltipUtils.matchPlayerTooltip(UTILS, condition).build(), List.of(
                 "Match Player:",
@@ -182,11 +181,8 @@ public class LootJsConditionTooltipTest {
         ));
     }
 
-    private static CustomParamPredicate<?> customParamPredicate(LootContextParam<?> param) {
-        CustomParamPredicate<?> condition = mock(CustomParamPredicate.class, MixinCustomParamPredicate.class);
-
-        Mockito.doReturn(param).when((MixinCustomParamPredicate<?>) condition).getParam();
-        return condition;
+    private static <T> CustomParamPredicate<T> customParamPredicate(ContextKey<T> param) {
+        return new CustomParamPredicate<>(param, (value) -> true);
     }
 
     private static MatchEquipmentSlot matchEquipmentSlot(EquipmentSlot slot) {

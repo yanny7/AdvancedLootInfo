@@ -5,7 +5,7 @@ import com.almostreliable.lootjs.core.entry.ItemLootEntry;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.ali.lootjs.Utils;
 import com.yanny.ali.lootjs.node.ItemStackNode;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
@@ -122,6 +122,6 @@ public class LootJsUtilsTest {
     }
 
     private static boolean matches(LootType type, String path) {
-        return Utils.typePredicate(type).test(ResourceLocation.withDefaultNamespace(path));
+        return Utils.typePredicate(type).test(Identifier.withDefaultNamespace(path));
     }
 }

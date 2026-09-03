@@ -48,6 +48,9 @@ public class LootJsGenericTooltipUtils {
                     .add(utils.getValueTooltip(utils, filter).build(Lang.Branch.FILTER))
                     .add(utils.getValueTooltip(utils, levelBounds).build(Lang.Value.LEVELS))
                     .add(utils.getValueTooltip(utils, type).build(Lang.Value.COMPONENT));
+        } else if (predicate instanceof ItemFilterImpl.HasComponent hasComponent) {
+            return TooltipBuilder.value("HAS_COMPONENT")
+                    .add(utils.getValueTooltip(utils, List.of(hasComponent.types())).build(Lang.Branch.COMPONENTS));
         } else if (predicate instanceof ItemFilterImpl.IsEquipmentSlot(EquipmentSlot equipmentSlot)) {
             return TooltipBuilder.value("EQUIPMENT_SLOT")
                     .add(utils.getValueTooltip(utils, equipmentSlot).build(Lang.Value.SLOT));

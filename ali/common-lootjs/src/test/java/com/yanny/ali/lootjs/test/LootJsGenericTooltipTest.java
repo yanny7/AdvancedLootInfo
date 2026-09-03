@@ -4,9 +4,10 @@ import com.almostreliable.lootjs.core.filters.IdFilter;
 import com.almostreliable.lootjs.core.filters.ItemFilter;
 import com.almostreliable.lootjs.core.filters.ItemFilterImpl;
 import com.yanny.ali.lootjs.server.LootJsGenericTooltipUtils;
-import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.advancements.criterion.MinMaxBounds;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -39,7 +40,7 @@ public class LootJsGenericTooltipTest {
     @Test
     public void testItemFilterHasEnchantmentTooltip() {
         ItemFilterImpl.HasEnchantment filter = new ItemFilterImpl.HasEnchantment(
-                new IdFilter.ByLocation(ResourceLocation.withDefaultNamespace("fortune")),
+                new IdFilter.ByLocation(Identifier.withDefaultNamespace("fortune")),
                 MinMaxBounds.Ints.between(2, 4),
                 DataComponents.ENCHANTMENTS
         );
@@ -50,6 +51,21 @@ public class LootJsGenericTooltipTest {
                 "    -> minecraft:fortune",
                 "  -> Levels: 2-4",
                 "  -> Component: minecraft:enchantments"
+        ));
+    }
+
+    @Test
+    public void testItemFilterHasComponentTooltip() {
+        ItemFilterImpl.HasComponent filter = new ItemFilterImpl.HasComponent(new DataComponentType<?>[]{
+                DataComponents.ENCHANTMENTS,
+                DataComponents.DAMAGE
+        });
+
+        assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, filter).build(), List.of(
+                "HAS_COMPONENT",
+                "  -> Components:",
+                "    -> minecraft:enchantments",
+                "    -> minecraft:damage"
         ));
     }
 
@@ -72,6 +88,13 @@ public class LootJsGenericTooltipTest {
                 "  -> Item:",
                 "    -> Item: minecraft:diamond",
                 "    -> Count: 1",
+                "    -> Components:",
+                "      -> minecraft:item_model",
+                "        -> Value: minecraft:diamond",
+                "      -> minecraft:item_name",
+                "        -> Item Name: Diamond",
+                "      -> minecraft:provides_trim_material",
+                "        -> Value: minecraft:diamond",
                 "  -> Check Components: true"
         ));
     }
@@ -80,12 +103,8 @@ public class LootJsGenericTooltipTest {
     public void testItemFilterByIngredientTooltip() {
         assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, new ItemFilterImpl.ByIngredient(Ingredient.of(Items.DIAMOND, Items.EMERALD))).build(), List.of(
                 "INGREDIENT",
-                "  -> Entry:",
-                "    -> Item: minecraft:diamond",
-                "    -> Count: 1",
-                "  -> Entry:",
-                "    -> Item: minecraft:emerald",
-                "    -> Count: 1"
+                "  -> Item: minecraft:diamond",
+                "  -> Item: minecraft:emerald"
         ));
     }
 
@@ -99,15 +118,15 @@ public class LootJsGenericTooltipTest {
 
     @Test
     public void testItemFilterToolActionTooltip() {
-        assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, new ItemFilterImpl.AnyOfToolAction(List.of(ItemAbilities.AXE_DIG), (stack) -> true)).build(), List.of(
+        assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, new ItemFilterImpl.AnyOfToolAction(List.of(ItemAbilities.AXE_STRIP), (stack) -> true)).build(), List.of(
                 "ANY_OF_TOOL_ACTION",
                 "  -> Abilities:",
-                "    -> axe_dig"
+                "    -> axe_strip"
         ));
-        assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, new ItemFilterImpl.AllOfToolAction(List.of(ItemAbilities.SHOVEL_DIG), (stack) -> true)).build(), List.of(
+        assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, new ItemFilterImpl.AllOfToolAction(List.of(ItemAbilities.SHOVEL_FLATTEN), (stack) -> true)).build(), List.of(
                 "ALL_OF_TOOL_ACTION",
                 "  -> Abilities:",
-                "    -> shovel_dig"
+                "    -> shovel_flatten"
         ));
     }
 
@@ -146,7 +165,7 @@ public class LootJsGenericTooltipTest {
 
     @Test
     public void testIdFilterTooltip() {
-        assertTooltip(LootJsGenericTooltipUtils.getIdFilterTooltip(UTILS, new IdFilter.ByLocation(ResourceLocation.withDefaultNamespace("fortune"))).build(), List.of(
+        assertTooltip(LootJsGenericTooltipUtils.getIdFilterTooltip(UTILS, new IdFilter.ByLocation(Identifier.withDefaultNamespace("fortune"))).build(), List.of(
                 "minecraft:fortune"
         ));
         assertTooltip(LootJsGenericTooltipUtils.getIdFilterTooltip(UTILS, new IdFilter.ByPattern(Pattern.compile("minecraft:.*"))).build(), List.of(
@@ -157,7 +176,7 @@ public class LootJsGenericTooltipTest {
         ));
         assertTooltip(LootJsGenericTooltipUtils.getIdFilterTooltip(UTILS, new IdFilter.Or(List.of(
                 new IdFilter.ByMod("lootjs"),
-                new IdFilter.ByLocation(ResourceLocation.withDefaultNamespace("fortune"))
+                new IdFilter.ByLocation(Identifier.withDefaultNamespace("fortune"))
         ))).build(), List.of(
                 "Or:",
                 "  -> Mod: lootjs",
@@ -174,14 +193,14 @@ public class LootJsGenericTooltipTest {
 
     @Test
     public void testItemAbilityTooltip() {
-        assertTooltip(LootJsGenericTooltipUtils.getItemAbilityTooltip(UTILS, ItemAbilities.AXE_DIG).build(), List.of(
-                "axe_dig"
+        assertTooltip(LootJsGenericTooltipUtils.getItemAbilityTooltip(UTILS, ItemAbilities.AXE_STRIP).build(), List.of(
+                "axe_strip"
         ));
     }
 
     private static class UnknownIdFilter implements IdFilter {
         @Override
-        public boolean test(ResourceLocation location) {
+        public boolean test(Identifier location) {
             return true;
         }
     }

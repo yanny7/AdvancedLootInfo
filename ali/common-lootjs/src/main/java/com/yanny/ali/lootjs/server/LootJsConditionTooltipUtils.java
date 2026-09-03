@@ -4,7 +4,6 @@ import com.almostreliable.lootjs.loot.condition.*;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
-import com.yanny.ali.lootjs.mixin.MixinCustomParamPredicate;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.jetbrains.annotations.NotNull;
@@ -34,18 +33,17 @@ public class LootJsConditionTooltipUtils {
 
     @NotNull
     public static TooltipBuilder customParamPredicateTooltip(IServerUtils ignoredUtils, CustomParamPredicate<?> condition) {
-        MixinCustomParamPredicate<?> cond = (MixinCustomParamPredicate<?>) condition;
 
-        if (cond.getParam() == LootContextParams.THIS_ENTITY) {
+        if (condition.param() == LootContextParams.THIS_ENTITY) {
             return TooltipBuilder.array((b) -> b.add(TooltipBuilder.keyOnly(Lang.Error.DETAIL_NOT_AVAILABLE)))
                     .key(Lang.Conditions.MATCH_ENTITY_CUSTOM);
-        } else if (cond.getParam() == LootContextParams.ATTACKING_ENTITY) {
+        } else if (condition.param() == LootContextParams.ATTACKING_ENTITY) {
             return TooltipBuilder.array((b) -> b.add(TooltipBuilder.keyOnly(Lang.Error.DETAIL_NOT_AVAILABLE)))
                     .key(Lang.Conditions.MATCH_ATTACKER_CUSTOM);
-        } else if (cond.getParam() == LootContextParams.DIRECT_ATTACKING_ENTITY) {
+        } else if (condition.param() == LootContextParams.DIRECT_ATTACKING_ENTITY) {
             return TooltipBuilder.array((b) -> b.add(TooltipBuilder.keyOnly(Lang.Error.DETAIL_NOT_AVAILABLE)))
                     .key(Lang.Conditions.MATCH_DIRECT_ATTACKER_CUSTOM);
-        } else if (cond.getParam() == LootContextParams.BLOCK_ENTITY) {
+        } else if (condition.param() == LootContextParams.BLOCK_ENTITY) {
             return TooltipBuilder.array((b) -> b.add(TooltipBuilder.keyOnly(Lang.Error.DETAIL_NOT_AVAILABLE)))
                     .key(Lang.Conditions.BLOCK_ENTITY);
         } else {

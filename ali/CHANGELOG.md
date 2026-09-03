@@ -3,6 +3,7 @@
 - Global loot modifier plugins are now declared by implementing `IGlobalLootModifierPlugin` on all loaders
 - Fixed global loot modifier plugins from other mods being ignored on NeoForge
 - Moved Farmer's Delight support into new mod `ALI Compat`
+- LootJS support
 
 ## [2.1.0]
 
