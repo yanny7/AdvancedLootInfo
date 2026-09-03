@@ -116,7 +116,7 @@ public class LootJsConditionTooltipUtils {
     @NotNull
     public static TooltipBuilder matchAnyInventorySlot(IServerUtils utils, MatchAnyInventorySlot condition) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, condition.filter()).build(Lang.Branch.PREDICATE));
+            b.add(utils.getValueTooltip(utils, condition.filter()).build(Lang.Value.ITEM_FILTER));
             b.add(utils.getValueTooltip(utils, condition.hotbar()).build(Lang.Value.HOTBAR));
         }).key(Lang.Conditions.MATCH_ANY_INVENTORY_SLOT);
     }

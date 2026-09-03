@@ -53,7 +53,7 @@ public class LootModifierTest {
         Assertions.assertEquals(2, operations.size());
         Assertions.assertEquals(ItemNode.ID, node(operations, 0).getId());
         Assertions.assertEquals(ItemNode.ID, node(operations, 1).getId());
-        Assertions.assertTrue(operations.get(0).predicate().test(new ItemStack(Items.STICK)));
+        Assertions.assertTrue(operations.getFirst().predicate().test(new ItemStack(Items.STICK)));
     }
 
     @Test
@@ -87,15 +87,62 @@ public class LootModifierTest {
     }
 
     @Test
+    public void testCustomPlayerActionBecomesFunctionOnAddedEntries() {
+        List<IOperation> operations = operations(List.of(), List.of(),
+                new CustomPlayerAction((player) -> {}),
+                new AddLootAction(itemEntry(Items.DIAMOND))
+        );
+
+        Assertions.assertEquals(1, operations.size());
+        assertTooltip(node(operations, 0).getTooltip(), List.of(
+                "Count: 1",
+                "----- Modifiers -----",
+                "Player Action:",
+                "  -> Detail Not Available"
+        ));
+    }
+
+    @Test
+    public void testCustomPlayerActionAppliesToEarlierActionsToo() {
+        List<IOperation> operations = operations(List.of(), List.of(),
+                new AddLootAction(itemEntry(Items.DIAMOND)),
+                new CustomPlayerAction((player) -> {})
+        );
+
+        assertTooltip(node(operations, 0).getTooltip(), List.of(
+                "Count: 1",
+                "----- Modifiers -----",
+                "Player Action:",
+                "  -> Detail Not Available"
+        ));
+    }
+
+    @Test
+    public void testReplaceActionKeepsOwnNodes() {
+        IOperation.ReplaceOperation operation = replaceOperation(List.of(), itemEntry(Items.EMERALD, 7), false);
+        IDataNode own = itemStackNode();
+
+        Assertions.assertEquals(List.of(own), operation.factory().apply(own));
+    }
+
+    @Test
+    public void testModifyActionKeepsOwnNodes() {
+        IOperation.ReplaceOperation operation = modifyOperation();
+        IDataNode own = itemStackNode();
+
+        Assertions.assertEquals(List.of(own), operation.factory().apply(own));
+    }
+
+    @Test
     public void testRemoveActionWithoutConditionsRemovesNode() {
-        IOperation.RemoveOperation operation = (IOperation.RemoveOperation) operations(List.of(), List.of(), removeLootAction()).get(0);
+        IOperation.RemoveOperation operation = (IOperation.RemoveOperation) operations(List.of(), List.of(), removeLootAction()).getFirst();
 
         Assertions.assertNull(operation.factory().apply(itemNode(3)));
     }
 
     @Test
     public void testRemoveActionKeepsOwnNodes() {
-        IOperation.RemoveOperation operation = (IOperation.RemoveOperation) operations(List.of(), List.of(), removeLootAction()).get(0);
+        IOperation.RemoveOperation operation = (IOperation.RemoveOperation) operations(List.of(), List.of(), removeLootAction()).getFirst();
         IDataNode own = itemStackNode();
 
         Assertions.assertSame(own, operation.factory().apply(own));
@@ -139,7 +186,7 @@ public class LootModifierTest {
     @Test
     public void testReplaceActionPreservedCountWinsOverEntryCountFunction() {
         IOperation.ReplaceOperation operation = replaceOperation(List.of(), itemEntry(Items.EMERALD, 7), true);
-        ItemStackNode result = (ItemStackNode) operation.factory().apply(itemNode(3)).get(0);
+        ItemStackNode result = (ItemStackNode) operation.factory().apply(itemNode(3)).getFirst();
 
         Assertions.assertEquals("3", result.getCount().toIntString());
         assertTooltip(result.getTooltip(), List.of(
@@ -157,7 +204,7 @@ public class LootModifierTest {
         List<IDataNode> result = operation.factory().apply(itemNode(3));
 
         Assertions.assertEquals(1, result.size());
-        Assertions.assertEquals("7", ((ItemStackNode) result.get(0)).getCount().toIntString());
+        Assertions.assertEquals("7", ((ItemStackNode) result.getFirst()).getCount().toIntString());
     }
 
     @Test
@@ -165,7 +212,7 @@ public class LootModifierTest {
         IOperation.ReplaceOperation operation = replaceOperation(List.of(), itemEntry(Items.EMERALD, 7), true);
         List<IDataNode> result = operation.factory().apply(itemNode(3));
 
-        Assertions.assertEquals("3", ((ItemStackNode) result.get(0)).getCount().toIntString());
+        Assertions.assertEquals("3", ((ItemStackNode) result.getFirst()).getCount().toIntString());
     }
 
     @Test
@@ -174,13 +221,13 @@ public class LootModifierTest {
                 List.of(LootItemRandomChanceCondition.randomChance(0.25F).build()), itemEntry(Items.EMERALD), false);
         List<IDataNode> result = operation.factory().apply(itemNode(3));
 
-        Assertions.assertInstanceOf(ModifiedNode.class, result.get(0));
+        Assertions.assertInstanceOf(ModifiedNode.class, result.getFirst());
     }
 
     @Test
     public void testModifyActionMarksNodeModifiedAndKeepsCount() {
         IOperation.ReplaceOperation operation = modifyOperation();
-        ItemStackNode result = (ItemStackNode) operation.factory().apply(itemNode(3)).get(0);
+        ItemStackNode result = (ItemStackNode) operation.factory().apply(itemNode(3)).getFirst();
 
         Assertions.assertTrue(result.isModified());
         Assertions.assertEquals("3", result.getCount().toIntString());
@@ -193,12 +240,12 @@ public class LootModifierTest {
 
     private static IOperation.RemoveOperation removeOperationWithConditions() {
         return (IOperation.RemoveOperation) operations(
-                List.of(LootItemRandomChanceCondition.randomChance(0.25F).build()), List.of(), removeLootAction()).get(0);
+                List.of(LootItemRandomChanceCondition.randomChance(0.25F).build()), List.of(), removeLootAction()).getFirst();
     }
 
     private static IOperation.ReplaceOperation replaceOperation(List<LootItemCondition> conditions, ItemLootEntry entry, boolean preserveCount) {
         return (IOperation.ReplaceOperation) operations(conditions, List.of(),
-                new ReplaceLootAction(ItemFilter.ANY, entry, preserveCount)).get(0);
+                new ReplaceLootAction(ItemFilter.ANY, entry, preserveCount)).getFirst();
     }
 
     private static ItemLootEntry itemEntry(Item item) {
@@ -213,7 +260,7 @@ public class LootModifierTest {
 
     private static IOperation.ReplaceOperation modifyOperation() {
         return (IOperation.ReplaceOperation) operations(List.of(), List.of(),
-                new ModifyLootAction(ItemFilter.ANY, (stack) -> stack)).get(0);
+                new ModifyLootAction(ItemFilter.ANY, (stack) -> stack)).getFirst();
     }
 
     private static RemoveLootAction removeLootAction() {

@@ -8,6 +8,8 @@
 - Fixed LootJS damaged item filter labelled as `ENCHANTABLE`
 - Fixed LootJS tag entries not showing their conditions and modifiers
 - LootJS replaced and modified loot now keeps the count of entry it replaced
+- Fixed LootJS filter tooltips shown without their value
+- Fixed LootJS custom player action not shown on the loot it applies to
 - LootJS entries ALI can not read no longer discard whole loot table
 
 ## [2.1.0]

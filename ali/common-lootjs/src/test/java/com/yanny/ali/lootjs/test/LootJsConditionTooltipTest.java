@@ -177,7 +177,7 @@ public class LootJsConditionTooltipTest {
     public void testMatchAnyInventorySlotTooltip() {
         assertTooltip(LootJsConditionTooltipUtils.matchAnyInventorySlot(UTILS, new MatchAnyInventorySlot(ItemFilter.ENCHANTED, true)).build(), List.of(
                 "Match Any Inventory Slot:",
-                "  -> Predicate:",
+                "  -> Item Filter: ENCHANTED",
                 "  -> Hotbar: true"
         ));
     }

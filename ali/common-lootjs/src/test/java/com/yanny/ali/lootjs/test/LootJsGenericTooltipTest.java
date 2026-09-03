@@ -47,6 +47,7 @@ public class LootJsGenericTooltipTest {
         assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, filter).build(), List.of(
                 "HAS_ENCHANTMENT",
                 "  -> Filter:",
+                "    -> minecraft:fortune",
                 "  -> Levels: 2-4",
                 "  -> Component: minecraft:enchantments"
         ));
@@ -114,7 +115,7 @@ public class LootJsGenericTooltipTest {
     public void testItemFilterCompositeTooltip() {
         assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, new ItemFilterImpl.Not(ItemFilter.ARMOR)).build(), List.of(
                 "NOT",
-                "  -> Filter:"
+                "  -> Item Filter: ARMOR"
         ));
         assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, new ItemFilterImpl.AllOf(new ItemFilter[]{ItemFilter.ARMOR, ItemFilter.DAMAGED}, ItemFilter.ANY)).build(), List.of(
                 "ALL_OF",

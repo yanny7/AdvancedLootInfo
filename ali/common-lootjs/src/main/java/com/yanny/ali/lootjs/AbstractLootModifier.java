@@ -9,6 +9,7 @@ import com.mojang.logging.LogUtils;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.*;
+import com.yanny.ali.lootjs.modifier.CustomPlayerFunction;
 import com.yanny.ali.lootjs.modifier.ModifiedItemFunction;
 import com.yanny.ali.lootjs.node.ItemStackNode;
 import com.yanny.ali.lootjs.node.ItemTagNode;
@@ -45,11 +46,18 @@ public abstract class AbstractLootModifier<T> implements ILootModifier<T> {
 
     public AbstractLootModifier(IServerUtils utils, LootModifier modifier) {
         List<LootItemCondition> conditions = modifier.conditions();
-        List<LootItemFunction> functions = modifier.functions();
         List<LootAction> actions = modifier.actions();
+        List<LootItemFunction> functions = new ArrayList<>(modifier.functions());
+
+        for (LootAction action : actions) {
+            if (action instanceof CustomPlayerAction customPlayerAction) {
+                functions.add(new CustomPlayerFunction(customPlayerAction));
+            }
+        }
 
         for (LootAction action : actions) {
             switch (action) {
+                case CustomPlayerAction ignoredAction -> {}
                 case AddLootAction addLootAction -> {
                     for (LootPoolEntryContainer entry : addLootAction.entries()) {
                         operations.add(new IOperation.AddOperation((s) -> true, utils.getEntryFactory(utils, entry).create(utils, entry, 1, 1, functions, conditions)));
@@ -59,9 +67,10 @@ public abstract class AbstractLootModifier<T> implements ILootModifier<T> {
                         operations.add(new IOperation.AddOperation((s) -> true, NodeUtils.getLootPoolNode(utils, lootPoolAction.pool(), 1, functions, conditions)));
                 case RemoveLootAction removeLootAction -> {
                     Function<IDataNode, IDataNode> factory = (c) -> {
-                        if (c instanceof ItemStackNode || c instanceof ItemTagNode || c instanceof ModifiedNode) {
-                            return c; // do not replace self!
+                        if (isOwnNode(c)) {
+                            return c;
                         }
+
                         if (conditions.isEmpty()) {
                             return null; // remove item
                         }
@@ -84,6 +93,9 @@ public abstract class AbstractLootModifier<T> implements ILootModifier<T> {
                 }
                 case ReplaceLootAction replaceLootAction -> {
                     Function<IDataNode, List<IDataNode>> factory = (c) -> {
+                        if (isOwnNode(c)) {
+                            return List.of(c);
+                        }
 
                         List<IDataNode> nodes = new ArrayList<>();
                         IItemNode node = (IItemNode) c;
@@ -104,6 +116,10 @@ public abstract class AbstractLootModifier<T> implements ILootModifier<T> {
                 }
                 case ModifyLootAction modifyLootAction -> {
                     Function<IDataNode, List<IDataNode>> factory = (c) -> {
+                        if (isOwnNode(c)) {
+                            return List.of(c);
+                        }
+
                         List<IDataNode> nodes = new ArrayList<>();
                         IItemNode node = (IItemNode) c;
                         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), node.getConditions().stream()).toList();
@@ -127,6 +143,10 @@ public abstract class AbstractLootModifier<T> implements ILootModifier<T> {
                 default -> LOGGER.warn("Skipping unexpected loot action {}", action.getClass().getCanonicalName());
             }
         }
+    }
+
+    private static boolean isOwnNode(IDataNode node) {
+        return node instanceof ItemStackNode || node instanceof ItemTagNode || node instanceof ModifiedNode;
     }
 
     @NotNull

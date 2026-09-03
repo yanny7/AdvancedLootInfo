@@ -72,7 +72,7 @@ public class LootJsGenericTooltipUtils {
                     .add(utils.getValueTooltip(utils, toolAction.toolActions()).build(Lang.Branch.ABILITIES));
         } else if (predicate instanceof ItemFilterImpl.Not(ItemFilter itemFilter)) {
             return TooltipBuilder.value("NOT")
-                    .add(utils.getValueTooltip(utils, itemFilter).build(Lang.Branch.FILTER));
+                    .add(utils.getValueTooltip(utils, itemFilter).build(Lang.Value.ITEM_FILTER));
         } else if (predicate instanceof ItemFilterImpl.AllOf allOf) {
             return TooltipBuilder.value("ALL_OF")
                     .add(utils.getValueTooltip(utils, List.of(allOf.itemFilters())).build(Lang.Branch.FILTERS));
@@ -90,10 +90,10 @@ public class LootJsGenericTooltipUtils {
     @NotNull
     public static TooltipBuilder getIdFilterTooltip(IServerUtils utils, IdFilter filter) {
         return switch (filter) {
-            case IdFilter.ByLocation byLocation -> utils.getValueTooltip(utils, byLocation.location());
-            case IdFilter.ByPattern byPattern -> utils.getValueTooltip(utils, byPattern.pattern().pattern()).key(Lang.Value.PATTERN);
-            case IdFilter.ByMod byMod -> utils.getValueTooltip(utils, byMod.mod()).key(Lang.Value.MOD);
-            case IdFilter.Or or -> utils.getValueTooltip(utils, or.filters()).key(Lang.Branch.OR);
+            case IdFilter.ByLocation byLocation -> TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, byLocation.location())));
+            case IdFilter.ByPattern byPattern -> TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, byPattern.pattern().pattern()).build(Lang.Value.PATTERN)));
+            case IdFilter.ByMod byMod -> TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, byMod.mod()).build(Lang.Value.MOD)));
+            case IdFilter.Or or -> TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, or.filters()).build(Lang.Branch.OR)));
             default -> MissingTooltipUtils.getMissingValueTooltip(utils, filter);
         };
     }
