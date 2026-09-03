@@ -5,17 +5,23 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.lootjs.modifier.CustomPlayerFunction;
 import com.yanny.ali.lootjs.modifier.ModifiedItemFunction;
+import com.yanny.ali.lootjs.modifier.PreserveComponentsFunction;
 import org.jetbrains.annotations.NotNull;
 
 public class LootJsFunctionTooltipUtils {
     @NotNull
     public static TooltipBuilder customPlayerTooltip(IServerUtils ignoredUtils, CustomPlayerFunction ignoredFunction) {
-        return TooltipBuilder.array((b) -> b.add(TooltipBuilder.error(Lang.Error.DETAIL_NOT_AVAILABLE.singular())))
+        return TooltipBuilder.array((b) -> b.add(TooltipBuilder.error(TooltipBuilder.translate(Lang.Error.DETAIL_NOT_AVAILABLE.singular()))))
                 .key(Lang.Functions.PLAYER_ACTION);
     }
 
     @NotNull
+    public static TooltipBuilder preserveComponentsTooltip(IServerUtils utils, PreserveComponentsFunction function) {
+        return utils.getValueTooltip(utils, function.getTypes()).key(Lang.Functions.PRESERVE_COMPONENTS);
+    }
+
+    @NotNull
     public static TooltipBuilder modifiedItemTooltip(IServerUtils ignoredUtils, ModifiedItemFunction ignoredFunction) {
-        return TooltipBuilder.error(Lang.Error.MODIFIED_ITEM.singular());
+        return TooltipBuilder.error(TooltipBuilder.translate(Lang.Error.MODIFIED_ITEM.singular()));
     }
 }

@@ -3,7 +3,6 @@
   "minVersion": "0.8",
   "package": "com.yanny.ali.lootjs.mixin",
   "mixins": [
-    "MixinCustomParamPredicate",
     "MixinLootModificationsAPI"
   ],
   "injectors": {

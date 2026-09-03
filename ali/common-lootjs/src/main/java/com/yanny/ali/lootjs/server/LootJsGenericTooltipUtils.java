@@ -6,6 +6,7 @@ import com.almostreliable.lootjs.core.filters.ItemFilterImpl;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
+import com.yanny.ali.plugin.server.MissingTooltipUtils;
 import net.minecraft.advancements.predicates.MinMaxBounds;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.tags.TagKey;
@@ -37,7 +38,7 @@ public class LootJsGenericTooltipUtils {
         } else if (predicate == ItemFilter.DAMAGEABLE) {
             return TooltipBuilder.value("DAMAGEABLE");
         } else if (predicate == ItemFilter.DAMAGED) {
-            return TooltipBuilder.value("ENCHANTABLE");
+            return TooltipBuilder.value("DAMAGED");
         } else if (predicate == ItemFilter.ENCHANTED) {
             return TooltipBuilder.value("ENCHANTED");
         } else if (predicate == ItemFilter.BLOCK_ITEM) {
@@ -47,6 +48,9 @@ public class LootJsGenericTooltipUtils {
                     .add(utils.getValueTooltip(utils, filter).build(Lang.Branch.FILTER))
                     .add(utils.getValueTooltip(utils, levelBounds).build(Lang.Value.LEVELS))
                     .add(utils.getValueTooltip(utils, type).build(Lang.Value.COMPONENT));
+        } else if (predicate instanceof ItemFilterImpl.HasComponent hasComponent) {
+            return TooltipBuilder.value("HAS_COMPONENT")
+                    .add(utils.getValueTooltip(utils, List.of(hasComponent.types())).build(Lang.Branch.COMPONENTS));
         } else if (predicate instanceof ItemFilterImpl.IsEquipmentSlot(EquipmentSlot equipmentSlot)) {
             return TooltipBuilder.value("EQUIPMENT_SLOT")
                     .add(utils.getValueTooltip(utils, equipmentSlot).build(Lang.Value.SLOT));
@@ -71,7 +75,7 @@ public class LootJsGenericTooltipUtils {
                     .add(utils.getValueTooltip(utils, toolAction.toolActions()).build(Lang.Branch.ABILITIES));
         } else if (predicate instanceof ItemFilterImpl.Not(ItemFilter itemFilter)) {
             return TooltipBuilder.value("NOT")
-                    .add(utils.getValueTooltip(utils, itemFilter).build(Lang.Branch.FILTER));
+                    .add(utils.getValueTooltip(utils, itemFilter).build(Lang.Value.ITEM_FILTER));
         } else if (predicate instanceof ItemFilterImpl.AllOf allOf) {
             return TooltipBuilder.value("ALL_OF")
                     .add(utils.getValueTooltip(utils, List.of(allOf.itemFilters())).build(Lang.Branch.FILTERS));
@@ -89,11 +93,11 @@ public class LootJsGenericTooltipUtils {
     @NotNull
     public static TooltipBuilder getIdFilterTooltip(IServerUtils utils, IdFilter filter) {
         return switch (filter) {
-            case IdFilter.ByLocation byLocation -> utils.getValueTooltip(utils, byLocation.location());
-            case IdFilter.ByPattern byPattern -> utils.getValueTooltip(utils, byPattern.toString()).key(Lang.Value.PATTERN);
-            case IdFilter.ByMod byMod -> utils.getValueTooltip(utils, byMod.mod()).key(Lang.Value.MOD);
-            case IdFilter.Or or -> utils.getValueTooltip(utils, or.filters()).key(Lang.Branch.OR);
-            default -> throw new IllegalStateException("Unexpected IdFilter type: " + filter);
+            case IdFilter.ByLocation byLocation -> TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, byLocation.location())));
+            case IdFilter.ByPattern byPattern -> TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, byPattern.pattern().pattern()).build(Lang.Value.PATTERN)));
+            case IdFilter.ByMod byMod -> TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, byMod.mod()).build(Lang.Value.MOD)));
+            case IdFilter.Or or -> TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, or.filters()).build(Lang.Branch.OR)));
+            default -> MissingTooltipUtils.getMissingValueTooltip(utils, filter);
         };
     }
 

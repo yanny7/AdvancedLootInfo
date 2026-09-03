@@ -9,6 +9,7 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.lootjs.mixin.MixinLootModificationsAPI;
 import com.yanny.ali.lootjs.modifier.CustomPlayerFunction;
 import com.yanny.ali.lootjs.modifier.ModifiedItemFunction;
+import com.yanny.ali.lootjs.modifier.PreserveComponentsFunction;
 import com.yanny.ali.lootjs.node.ItemStackNode;
 import com.yanny.ali.lootjs.node.ItemTagNode;
 import com.yanny.ali.lootjs.server.LootJsConditionTooltipUtils;
@@ -90,6 +91,7 @@ public class LootJsPlugin implements IPlugin {
 
         registry.registerFunctionTooltip(CustomPlayerFunction.class, LootJsFunctionTooltipUtils::customPlayerTooltip);
         registry.registerFunctionTooltip(ModifiedItemFunction.class, LootJsFunctionTooltipUtils::modifiedItemTooltip);
+        registry.registerFunctionTooltip(PreserveComponentsFunction.class, LootJsFunctionTooltipUtils::preserveComponentsTooltip);
 
         registry.registerValueTooltip(ItemFilter.class, LootJsGenericTooltipUtils::getItemFilterTooltip);
         registry.registerValueTooltip(IdFilter.class, LootJsGenericTooltipUtils::getIdFilterTooltip);
