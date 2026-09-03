@@ -378,13 +378,14 @@ public class NodeUtils {
                         //noinspection unchecked
                         Holder.Reference<? extends Registry<T>> reference = (Holder.Reference<? extends Registry<T>>) registry.get();
                         //noinspection unchecked
-                        return reference
+                        List<ItemStack> stacks = reference
                                 .value()
                                 .get((TagKey<T>) tagKey)
                                 .map((holders) -> holders.stream().map(Holder::value))
                                 .orElse(Stream.of())
                                 .map((i) -> i.asItem().getDefaultInstance())
-                                .allMatch(predicate);
+                                .toList();
+                        return !stacks.isEmpty() && stacks.stream().allMatch(predicate);
                     } else {
                         return false;
                     }

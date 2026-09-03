@@ -20,4 +20,23 @@ dependencies {
     compileOnly "curse.maven:kubejs-238086:5810100"
     compileOnly "curse.maven:rhino-416294:6184623"
     compileOnly "curse.maven:lootjs-570630:6792267"
+
+    testImplementation 'org.junit.platform:junit-platform-suite:1.12.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
+    testImplementation 'org.mockito:mockito-core:5.11.0'
+
+    testImplementation project(path: ":aci:common")
+    testImplementation project(path: ":aci:common", configuration: "testArtifacts")
+    testImplementation project(path: ":ali:common")
+    testImplementation project(path: ":ali:common", configuration: "testArtifacts")
+}
+
+configurations {
+    testCompileClasspath.extendsFrom compileClasspath
+    testRuntimeClasspath.extendsFrom compileClasspath
+}
+
+test {
+    useJUnitPlatform()
 }

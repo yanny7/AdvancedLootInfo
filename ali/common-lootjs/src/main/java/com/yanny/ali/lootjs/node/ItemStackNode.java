@@ -20,6 +20,7 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -39,11 +40,11 @@ public class ItemStackNode implements IDataNode, IItemNode {
     /** Only populated on the client - on the server it is derived from {@link #conditions} in {@link #encode}. */
     private final boolean hasPredicates;
 
-    public ItemStackNode(IServerUtils utils, ItemStack itemStack, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions, boolean preserveCount) {
-       this(utils, itemStack, chance, false, functions, conditions, preserveCount);
+    public ItemStackNode(IServerUtils utils, ItemStack itemStack, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions, @Nullable RangeValue preservedCount) {
+       this(utils, itemStack, chance, false, functions, conditions, preservedCount);
     }
 
-    public ItemStackNode(IServerUtils utils, ItemStack itemStack, float chance, boolean modified, List<LootItemFunction> functions, List<LootItemCondition> conditions, boolean preserveCount) {
+    public ItemStackNode(IServerUtils utils, ItemStack itemStack, float chance, boolean modified, List<LootItemFunction> functions, List<LootItemCondition> conditions, @Nullable RangeValue preservedCount) {
         this.conditions = conditions;
         this.functions = functions;
         this.itemStack = TooltipUtils.getItemStack(utils, itemStack.copyWithCount(1), this.functions);
@@ -52,13 +53,12 @@ public class ItemStackNode implements IDataNode, IItemNode {
         this.modified = modified;
         this.hasPredicates = false;
 
-        if (preserveCount) {
-            tooltip = getItemTooltip(utils, 1, chance, functions, conditions);
-            count = getCount(utils, 1, functions).getUnenchantedValue();
-        } else {
-            tooltip = getItemTooltip(utils, itemStack.getCount(), chance, functions, conditions);
-            count = getCount(utils, itemStack.getCount(), functions).getUnenchantedValue();
-        }
+        EnchantedRanges countRanges = preservedCount != null
+                ? new EnchantedRanges(clampToStackSize(preservedCount, this.itemStack.getMaxStackSize()))
+                : getCount(utils, new RangeValue(itemStack.getCount()), functions);
+
+        tooltip = getItemTooltip(utils, countRanges, chance, functions, conditions);
+        count = countRanges.getUnenchantedValue();
     }
 
     public ItemStackNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
@@ -146,15 +146,23 @@ public class ItemStackNode implements IDataNode, IItemNode {
     }
 
     @NotNull
-    private static TooltipNode getItemTooltip(IServerUtils utils, int baseCount, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    private static TooltipNode getItemTooltip(IServerUtils utils, EnchantedRanges countMap, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         EnchantedRanges chanceMap = NodeUtils.getEnchantedChance(utils, conditions, chance);
-        EnchantedRanges countMap = getCount(utils, baseCount, functions);
 
         return TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chanceMap, countMap, functions, conditions).build();
     }
 
     @NotNull
-    public static EnchantedRanges getCount(IServerUtils utils, int baseCount, List<LootItemFunction> functions) {
+    private static RangeValue clampToStackSize(RangeValue count, int maxStackSize) {
+        if (count.isUnknown()) {
+            return new RangeValue(count);
+        }
+
+        return new RangeValue(Math.min(count.min(), maxStackSize), Math.min(count.max(), maxStackSize));
+    }
+
+    @NotNull
+    public static EnchantedRanges getCount(IServerUtils utils, RangeValue baseCount, List<LootItemFunction> functions) {
         EnchantedRanges count = new EnchantedRanges(baseCount);
 
         for (LootItemFunction function : functions) {
