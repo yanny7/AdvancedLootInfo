@@ -14,6 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.entries.TagEntry;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -51,6 +52,24 @@ public class LootJsUtilsTest {
 
         Assertions.assertEquals(ItemNode.ID, node.getId());
         assertTooltip(node.getTooltip(), List.of("Count: 1"));
+    }
+
+    @Test
+    public void testVanillaWrappedGeneratorNodeWithPreservedCount() {
+        ItemStackNode node = (ItemStackNode) getEntry(new LootEntry.VanillaWrappedLootEntry(
+                LootItem.lootTableItem(Items.DIAMOND).apply(SetItemCountFunction.setCount(ConstantValue.exactly(5))).build()
+        ), 1, 1, new RangeValue(3));
+
+        Assertions.assertEquals("3", node.getCount().toIntString());
+    }
+
+    @Test
+    public void testVanillaWrappedTagGeneratorNodeWithPreservedCount() {
+        ItemTagNode node = (ItemTagNode) getEntry(new LootEntry.VanillaWrappedLootEntry(
+                TagEntry.expandTag(ItemTags.PLANKS).build()
+        ), 1, 1, new RangeValue(4));
+
+        Assertions.assertEquals("4", node.getCount().toIntString());
     }
 
     @Test

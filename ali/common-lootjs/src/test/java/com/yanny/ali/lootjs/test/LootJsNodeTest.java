@@ -100,20 +100,39 @@ public class LootJsNodeTest {
     }
 
     @Test
-    public void testItemTagNodeAppliesModifiersRegardlessOfPreservedCount() {
-        ItemTagNode preserved = new ItemTagNode(UTILS, ItemTags.PLANKS, 1.0F,
-                List.of(SetItemCountFunction.setCount(ConstantValue.exactly(5)).build()), List.of(chance(0.25F)), new RangeValue(3));
-        ItemTagNode notPreserved = new ItemTagNode(UTILS, ItemTags.PLANKS, 1.0F,
+    public void testItemTagNodeAppliesModifiersWithoutPreservedCount() {
+        ItemTagNode node = new ItemTagNode(UTILS, ItemTags.PLANKS, 1.0F,
                 List.of(SetItemCountFunction.setCount(ConstantValue.exactly(5)).build()), List.of(chance(0.25F)), null);
 
-        Assertions.assertEquals("5", preserved.getCount().toIntString());
-        Assertions.assertEquals("5", notPreserved.getCount().toIntString());
-        assertTooltip(notPreserved.getTooltip(), List.of(
+        Assertions.assertEquals("5", node.getCount().toIntString());
+        assertTooltip(node.getTooltip(), List.of(
                 "Chance: 25%",
                 "Count: 5",
                 "----- Predicates -----",
                 "Random Chance:",
                 "  -> Probability: 0.25",
+                "----- Modifiers -----",
+                "Set Count:",
+                "  -> Count: 5",
+                "  -> Add: false"
+        ));
+    }
+
+    @Test
+    public void testItemTagNodePreservedCount() {
+        ItemTagNode node = new ItemTagNode(UTILS, ItemTags.PLANKS, 1.0F, List.of(), List.of(), new RangeValue(2, 5));
+
+        Assertions.assertEquals("2-5", node.getCount().toIntString());
+    }
+
+    @Test
+    public void testItemTagNodePreservedCountWinsOverCountFunction() {
+        ItemTagNode node = new ItemTagNode(UTILS, ItemTags.PLANKS, 1.0F,
+                List.of(SetItemCountFunction.setCount(ConstantValue.exactly(5)).build()), List.of(), new RangeValue(3));
+
+        Assertions.assertEquals("3", node.getCount().toIntString());
+        assertTooltip(node.getTooltip(), List.of(
+                "Count: 3",
                 "----- Modifiers -----",
                 "Set Count:",
                 "  -> Count: 5",

@@ -8,10 +8,13 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.lootjs.mixin.MixinLootEntry;
 import com.yanny.ali.lootjs.node.ItemStackNode;
 import com.yanny.ali.lootjs.node.ItemTagNode;
+import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.server.MissingTooltipUtils;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.entries.TagEntry;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
@@ -35,6 +38,17 @@ public class Utils {
             return new ItemStackNode(utils, itemGenerator.item(), (float) weight / sumWeight, allFunctions, allConditions, preservedCount);
         } else if (generator instanceof LootEntry.VanillaWrappedLootEntry lootEntry) {
             LootPoolEntryContainer entryContainer = lootEntry.entry();
+
+            if (preservedCount != null) {
+                if (entryContainer instanceof LootItem lootItem) {
+                    return new ItemStackNode(utils, lootItem.item.getDefaultInstance(), NodeUtils.getChance(lootItem, 1, sumWeight),
+                            NodeUtils.getAllFunctions(lootItem, allFunctions), NodeUtils.getAllConditions(lootItem, allConditions), preservedCount);
+                } else if (entryContainer instanceof TagEntry tagEntry) {
+                    return new ItemTagNode(utils, tagEntry.tag, NodeUtils.getChance(tagEntry, 1, sumWeight),
+                            NodeUtils.getAllFunctions(tagEntry, allFunctions), NodeUtils.getAllConditions(tagEntry, allConditions), preservedCount);
+                }
+            }
+
             return utils.getEntryFactory(utils, entryContainer).create(utils, entryContainer, 1, sumWeight, allFunctions, allConditions);
         } else if (generator instanceof LootEntry.RandomIngredientGenerator ingredientGenerator) {
             Ingredient ingredient = ingredientGenerator.ingredient();

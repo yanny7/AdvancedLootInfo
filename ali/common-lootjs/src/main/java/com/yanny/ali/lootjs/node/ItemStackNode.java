@@ -53,12 +53,12 @@ public class ItemStackNode implements IDataNode, IItemNode {
         this.modified = modified;
         this.hasPredicates = false;
 
-        RangeValue baseCount = preservedCount != null
-                ? clampToStackSize(preservedCount, this.itemStack.getMaxStackSize())
-                : new RangeValue(itemStack.getCount());
+        EnchantedRanges countRanges = preservedCount != null
+                ? new EnchantedRanges(clampToStackSize(preservedCount, this.itemStack.getMaxStackSize()))
+                : getCount(utils, new RangeValue(itemStack.getCount()), functions);
 
-        tooltip = getItemTooltip(utils, baseCount, chance, functions, conditions);
-        count = getCount(utils, baseCount, functions).getUnenchantedValue();
+        tooltip = getItemTooltip(utils, countRanges, chance, functions, conditions);
+        count = countRanges.getUnenchantedValue();
     }
 
     public ItemStackNode(IClientUtils utils, FriendlyByteBuf buf) {
@@ -146,9 +146,8 @@ public class ItemStackNode implements IDataNode, IItemNode {
     }
 
     @NotNull
-    private static TooltipNode getItemTooltip(IServerUtils utils, RangeValue baseCount, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    private static TooltipNode getItemTooltip(IServerUtils utils, EnchantedRanges countMap, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         EnchantedRanges chanceMap = NodeUtils.getEnchantedChance(utils, conditions, chance);
-        EnchantedRanges countMap = getCount(utils, baseCount, functions);
 
         return TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chanceMap, countMap, functions, conditions).build();
     }
