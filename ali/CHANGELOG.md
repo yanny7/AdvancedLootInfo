@@ -3,6 +3,12 @@
 - Global loot modifier plugins are now declared by implementing `IGlobalLootModifierPlugin` on Forge
 - Fixed Plugins discovered multiple times on Fabric
 - Moved Farmer's Delight support into new mod `ALI Compat`
+- Fixed LootJS function tooltips showing raw translation keys
+- Fixed LootJS enchantment pattern filter showing a raw record dump
+- Fixed LootJS enchantment filter hiding level range whenever it started at 1
+- Fixed LootJS tag entries not showing their conditions and modifiers
+- LootJS replaced and modified loot now keeps the count of entry it replaced
+- LootJS entries ALI can not read no longer discard whole loot table
 
 ## [2.1.0]
 

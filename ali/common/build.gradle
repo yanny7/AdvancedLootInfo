@@ -6,6 +6,19 @@ loom {
     accessWidenerPath = file("src/main/resources/ali.accesswidener")
 }
 
+configurations {
+    testArtifacts
+}
+
+tasks.register("testJar", Jar) {
+    archiveClassifier = "tests"
+    from sourceSets.test.output
+}
+
+artifacts {
+    testArtifacts tasks.testJar
+}
+
 dependencies {
     // We depend on fabric loader here to use the fabric @Environment annotations and get the mixin dependencies
     // Do NOT use other classes from fabric loader

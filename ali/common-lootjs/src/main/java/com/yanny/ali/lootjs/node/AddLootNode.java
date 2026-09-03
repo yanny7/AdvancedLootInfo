@@ -40,7 +40,7 @@ public class AddLootNode extends ListNode {
         }
 
         for (LootEntry entry : mixinAddLootAction.getEntries()) {
-            addChildren(Utils.getEntry(utils, entry, sumWeight, functions, conditions, false));
+            addChildren(Utils.getEntry(utils, entry, sumWeight, functions, conditions, null));
         }
 
         addType = mixinAddLootAction.getType();

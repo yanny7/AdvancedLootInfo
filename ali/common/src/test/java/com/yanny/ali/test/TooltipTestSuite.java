@@ -88,7 +88,7 @@ public class TooltipTestSuite {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     @BeforeSuite
-    static void beforeAllTests() throws NoSuchFieldException, IllegalAccessException {
+    public static void beforeAllTests() throws NoSuchFieldException, IllegalAccessException {
         SharedConstants.setVersion(DetectedVersion.BUILT_IN);
         Bootstrap.bootStrap();
 

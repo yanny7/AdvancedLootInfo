@@ -79,7 +79,7 @@ public class LootJsGenericTooltipUtils {
 
                     tooltip.add(utils.getValueTooltip(utils, byLocation.get(0).location()).build(Lang.Value.ENCHANTMENT));
 
-                    if (min != 1 && max != 255) {
+                    if (min != 1 || max != 255) {
                         tooltip.add(utils.getValueTooltip(utils, IntRange.range(min, max)).build(Lang.Value.LEVELS));
                     }
 
@@ -97,9 +97,9 @@ public class LootJsGenericTooltipUtils {
                     int min = Math.min(minMax.get(0), minMax.get(1));
                     int max = Math.max(minMax.get(0), minMax.get(1));
 
-                    tooltip.add(utils.getValueTooltip(utils, byPattern.get(0).toString()).build(Lang.Value.ENCHANTMENT));
+                    tooltip.add(utils.getValueTooltip(utils, byPattern.get(0).pattern().pattern()).build(Lang.Value.ENCHANTMENT));
 
-                    if (min != 1 && max != 255) {
+                    if (min != 1 || max != 255) {
                         tooltip.add(utils.getValueTooltip(utils, IntRange.range(min, max)).build(Lang.Value.LEVELS));
                     }
 

@@ -22,28 +22,18 @@ public class TypeLootModifier extends LootModifier<ResourceLocation> {
         String path = value.getPath();
 
         for (LootContextType type : types) {
-            switch (type) {
-                case UNKNOWN, ADVANCEMENT_ENTITY, ADVANCEMENT_REWARD -> {
-                    return false;
-                }
-                case BLOCK -> {
-                    return path.startsWith("blocks/");
-                }
-                case ENTITY -> {
-                    return path.startsWith("entities/");
-                }
-                case CHEST -> {
-                    return path.startsWith("chests/");
-                }
-                case FISHING -> {
-                    return path.startsWith("gameplay/fishing");
-                }
-                case GIFT -> {
-                    return path.endsWith("_gift");
-                }
-                case PIGLIN_BARTER -> {
-                    return path.endsWith("_bartering");
-                }
+            boolean matches = switch (type) {
+                case UNKNOWN, ADVANCEMENT_ENTITY, ADVANCEMENT_REWARD -> false;
+                case BLOCK -> path.startsWith("blocks/");
+                case ENTITY -> path.startsWith("entities/");
+                case CHEST -> path.startsWith("chests/");
+                case FISHING -> path.startsWith("gameplay/fishing");
+                case GIFT -> path.endsWith("_gift");
+                case PIGLIN_BARTER -> path.endsWith("_bartering");
+            };
+
+            if (matches) {
+                return true;
             }
         }
 
