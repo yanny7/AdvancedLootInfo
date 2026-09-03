@@ -3,6 +3,12 @@
 - Global loot modifier plugins are now declared by implementing `IGlobalLootModifierPlugin` on all loaders
 - Fixed global loot modifier plugins from other mods being ignored on NeoForge
 - Moved Farmer's Delight support into new mod `ALI Compat`
+- Fixed LootJS function tooltips showing raw translation keys
+- Fixed LootJS enchantment pattern filter showing a raw record dump
+- Fixed LootJS damaged item filter labelled as `ENCHANTABLE`
+- Fixed LootJS tag entries not showing their conditions and modifiers
+- LootJS replaced and modified loot now keeps the count of entry it replaced
+- LootJS entries ALI can not read no longer discard whole loot table
 
 ## [2.1.0]
 

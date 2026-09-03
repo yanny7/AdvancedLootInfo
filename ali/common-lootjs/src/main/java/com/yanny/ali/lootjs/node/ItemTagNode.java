@@ -21,6 +21,7 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -40,11 +41,11 @@ public class ItemTagNode implements IDataNode, IItemNode {
     /** Only populated on the client - on the server it is derived from {@link #conditions} in {@link #encode}. */
     private final boolean hasPredicates;
 
-    public ItemTagNode(IServerUtils utils, TagKey<? extends ItemLike> entry, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions, boolean preserveCount) {
-        this(utils, entry, chance, false, functions, conditions, preserveCount);
+    public ItemTagNode(IServerUtils utils, TagKey<? extends ItemLike> entry, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions, @Nullable RangeValue ignoredPreservedCount) {
+        this(utils, entry, chance, false, functions, conditions, ignoredPreservedCount);
     }
 
-    public ItemTagNode(IServerUtils utils, TagKey<? extends ItemLike> entry, float chance, boolean modified, List<LootItemFunction> functions, List<LootItemCondition> conditions, boolean preserveCount) {
+    public ItemTagNode(IServerUtils utils, TagKey<? extends ItemLike> entry, float chance, boolean modified, List<LootItemFunction> functions, List<LootItemCondition> conditions, @Nullable RangeValue ignoredPreservedCount) {
         this.conditions = conditions;
         this.functions = functions;
         this.tag = entry;
@@ -53,13 +54,8 @@ public class ItemTagNode implements IDataNode, IItemNode {
         this.modified = modified;
         this.hasPredicates = false;
 
-        if (preserveCount) {
-            tooltip = getItemTooltip(utils, chance, functions, conditions);
-            count = getCount(utils, 1, functions).getUnenchantedValue();
-        } else {
-            tooltip = getItemTooltip(utils, chance, Collections.emptyList(), Collections.emptyList());
-            count = getCount(utils, 1, Collections.emptyList()).getUnenchantedValue();
-        }
+        tooltip = getItemTooltip(utils, chance, functions, conditions);
+        count = getCount(utils, 1, functions).getUnenchantedValue();
     }
 
     public ItemTagNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {

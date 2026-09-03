@@ -6,6 +6,7 @@ import com.almostreliable.lootjs.loot.modifier.LootModifier;
 import com.almostreliable.lootjs.loot.modifier.handler.*;
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
+import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.*;
 import com.yanny.ali.lootjs.modifier.ModifiedItemFunction;
@@ -67,7 +68,9 @@ public abstract class AbstractLootModifier<T> implements ILootModifier<T> {
 
                         if (c instanceof ItemNode i) {
                             EnchantedRanges enchantedChance = getEnchantedChance(utils, i.getConditions(), i.getChance());
-                            EnchantedRanges enchantedCount = getEnchantedCount(utils, i.getFunctions());
+                            EnchantedRanges enchantedCount = i.getFunctions().isEmpty()
+                                    ? new EnchantedRanges(i.getCount())
+                                    : getEnchantedCount(utils, i.getFunctions());
                             List<LootItemCondition> allConditions = new LinkedList<>(i.getConditions());
 
                             allConditions.add(new InvertedLootItemCondition(new AllOfCondition(conditions)));
@@ -85,14 +88,14 @@ public abstract class AbstractLootModifier<T> implements ILootModifier<T> {
                         List<IDataNode> nodes = new ArrayList<>();
                         IItemNode node = (IItemNode) c;
                         ItemLootEntry entry = replaceLootAction.itemLootEntry();
-                        boolean preserveCount = replaceLootAction.preserveCount(); //FIXME custom itemNode with preserveCount
+                        RangeValue preservedCount = replaceLootAction.preserveCount() ? node.getCount() : null;
                         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), node.getConditions().stream()).toList();
                         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), node.getFunctions().stream()).toList();
 
                         if (!conditions.isEmpty()) {
-                            nodes.add(new ModifiedNode(utils, c, NodeUtils.getItemNode(utils, entry.getVanillaEntry(), 1, 1, allFunctions, allConditions)));
+                            nodes.add(new ModifiedNode(utils, c, Utils.getEntry(utils, entry, 1, allFunctions, allConditions, preservedCount)));
                         } else {
-                            nodes.add(NodeUtils.getItemNode(utils, entry.getVanillaEntry(), 1, 1, allFunctions, allConditions));
+                            nodes.add(Utils.getEntry(utils, entry, 1, allFunctions, allConditions, preservedCount));
                         }
 
                         return nodes;
@@ -111,9 +114,9 @@ public abstract class AbstractLootModifier<T> implements ILootModifier<T> {
                         allFunctions.addAll(Stream.concat(functions.stream(), node.getFunctions().stream()).toList());
 
                         if (!conditions.isEmpty()) {
-                            nodes.add(new ModifiedNode(utils, c, constructEither(utils, either, node.getChance(), allFunctions, allConditions)));
+                            nodes.add(new ModifiedNode(utils, c, constructEither(utils, either, node.getChance(), node.getCount(), allFunctions, allConditions)));
                         } else {
-                            nodes.add(constructEither(utils, either, node.getChance(), allFunctions, allConditions));
+                            nodes.add(constructEither(utils, either, node.getChance(), node.getCount(), allFunctions, allConditions));
                         }
 
                         return nodes;
@@ -132,10 +135,10 @@ public abstract class AbstractLootModifier<T> implements ILootModifier<T> {
         return operations;
     }
 
-    private static IDataNode constructEither(IServerUtils utils, Either<ItemStack, TagKey<? extends ItemLike>> either, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    private static IDataNode constructEither(IServerUtils utils, Either<ItemStack, TagKey<? extends ItemLike>> either, float chance, RangeValue preservedCount, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         return either.map(
-                (itemStack) -> new ItemStackNode(utils, itemStack, chance, true, functions, conditions, true),
-                (tagKey) -> new ItemTagNode(utils, tagKey, chance, true, functions, conditions, true)
+                (itemStack) -> new ItemStackNode(utils, itemStack, chance, true, functions, conditions, preservedCount),
+                (tagKey) -> new ItemTagNode(utils, tagKey, chance, true, functions, conditions, preservedCount)
         );
     }
 }
