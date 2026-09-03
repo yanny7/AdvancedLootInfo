@@ -361,12 +361,12 @@ public class NodeUtils {
 
                     if (registry != null) {
                         //noinspection unchecked
-                        return registry
+                        List<ItemStack> stacks = registry
                                 .getTag((TagKey<T>) tagKey)
-                                .map((holders) -> holders.stream().map(Holder::value))
-                                .orElse(Stream.of())
-                                .map((i) -> i.asItem().getDefaultInstance())
-                                .allMatch(predicate);
+                                .map((holders) -> holders.stream().map(Holder::value).map((i) -> i.asItem().getDefaultInstance()).toList())
+                                .orElse(List.of());
+
+                        return !stacks.isEmpty() && stacks.stream().allMatch(predicate);
                     } else {
                         return false;
                     }

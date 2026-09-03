@@ -9,6 +9,7 @@
 - Fixed LootJS tag entries not showing their conditions and modifiers
 - LootJS replaced and modified loot now keeps the count of entry it replaced
 - LootJS entries ALI can not read no longer discard whole loot table
+- Fixed loot entries with an empty tag matching every LootJS item filter
 
 ## [2.1.0]
 
