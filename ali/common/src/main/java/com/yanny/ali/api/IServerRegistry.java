@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.IntUnaryOperator;
+import java.util.function.IntFunction;
 import java.util.function.Supplier;
 
 public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
@@ -77,7 +77,7 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     <T extends VillagerTrades.ItemListing> void registerItemListing(Class<T> type, TriFunction<IServerUtils, T, TooltipNode, IDataNode> supplier);
 
-    void registerTrades(Identifier traderId, Supplier<Int2ObjectMap<VillagerTrades.ItemListing[]>> itemListings, IntUnaryOperator offersPerLevel);
+    void registerTrades(Identifier traderId, Supplier<Int2ObjectMap<VillagerTrades.ItemListing[]>> itemListings, IntFunction<TradeLevelInfo> levelInfo);
 
     @NotNull
     ServerLevel getServerLevel();

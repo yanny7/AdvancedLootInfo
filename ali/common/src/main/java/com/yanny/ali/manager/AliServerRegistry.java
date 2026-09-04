@@ -56,7 +56,7 @@ import java.lang.reflect.Array;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.IntUnaryOperator;
+import java.util.function.IntFunction;
 import java.util.function.Supplier;
 
 public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRegistry, IServerUtils> implements IServerRegistry, IServerUtils, ICommonUtils {
@@ -229,8 +229,8 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
-    public void registerTrades(Identifier traderId, Supplier<Int2ObjectMap<VillagerTrades.ItemListing[]>> itemListings, IntUnaryOperator offersPerLevel) {
-        trades.put(traderId, new Trades(itemListings, offersPerLevel));
+    public void registerTrades(Identifier traderId, Supplier<Int2ObjectMap<VillagerTrades.ItemListing[]>> itemListings, IntFunction<TradeLevelInfo> levelInfo) {
+        trades.put(traderId, new Trades(itemListings, levelInfo));
     }
 
     public Map<Identifier, Trades> getTrades() {
@@ -467,7 +467,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     public IDataNode parseTrade(Trades trades) {
-        return new TradeNode(this, trades.itemListings().get(), trades.offersPerLevel());
+        return new TradeNode(this, trades.itemListings().get(), trades.levelInfo());
     }
 
     // hitCount != null means this table is referenced from another table's tree; the paramSet check
@@ -535,5 +535,5 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         }
     }
 
-    public record Trades(Supplier<Int2ObjectMap<VillagerTrades.ItemListing[]>> itemListings, IntUnaryOperator offersPerLevel) {}
+    public record Trades(Supplier<Int2ObjectMap<VillagerTrades.ItemListing[]>> itemListings, IntFunction<TradeLevelInfo> levelInfo) {}
 }
