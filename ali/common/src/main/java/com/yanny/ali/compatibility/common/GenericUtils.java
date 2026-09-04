@@ -15,13 +15,13 @@ import com.yanny.ali.network.AbstractClient;
 import com.yanny.ali.network.RequestLootDataMessage;
 import com.yanny.ali.plugin.common.nodes.EntityLootTableNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
-import com.yanny.ali.plugin.common.ReflectionUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.locale.Language;
@@ -313,18 +313,29 @@ public class GenericUtils {
             }
         }
 
-        for (Map.Entry<ResourceLocation, IDataNode> entry : lootData.entrySet()) {
-            if (entry.getValue() instanceof EntityLootTableNode node) {
-                ResourceLocation location = entry.getKey();
+        List<Map.Entry<ResourceLocation, IDataNode>> entityEntries = lootData.entrySet()
+                .stream()
+                .filter((e) -> e.getValue() instanceof EntityLootTableNode)
+                .sorted(Comparator.<Map.Entry<ResourceLocation, IDataNode>>comparingInt((e) -> BuiltInRegistries.ENTITY_TYPE.getId(((EntityLootTableNode) e.getValue()).getEntityType()))
+                        .thenComparing(Map.Entry::getKey))
+                .toList();
 
-                entityConsumer.accept(node, location, node.getEntityType(), collectItems(node));
-                claimedLootTables.add(location);
-            }
+        for (Map.Entry<ResourceLocation, IDataNode> entry : entityEntries) {
+            EntityLootTableNode node = (EntityLootTableNode) entry.getValue();
+            ResourceLocation location = entry.getKey();
+
+            entityConsumer.accept(node, location, node.getEntityType(), collectItems(node));
+            claimedLootTables.add(location);
         }
 
         lootData.keySet().removeAll(claimedLootTables);
 
-        for (Map.Entry<ResourceLocation, IDataNode> entry : lootData.entrySet()) {
+        List<Map.Entry<ResourceLocation, IDataNode>> gameplayEntries = lootData.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey())
+                .toList();
+
+        for (Map.Entry<ResourceLocation, IDataNode> entry : gameplayEntries) {
             gameplayConsumer.accept(entry.getValue(), entry.getKey(), collectItems(entry.getValue()));
         }
 
@@ -403,17 +414,22 @@ public class GenericUtils {
     }
 
     public static Set<Block> getJobSites(@Nullable VillagerProfession profession) {
-        if (profession != null) {
-            //noinspection unchecked
-            List<ResourceKey<PoiType>> poi = (List<ResourceKey<PoiType>>) (Object) ReflectionUtils.getCapturedInstances(profession.acquirableJobSite(), ResourceKey.class);
-            PoiType poiType;
-
-            if (poi.size() == 1 && (poiType = BuiltInRegistries.POINT_OF_INTEREST_TYPE.get(poi.getFirst())) != null) {
-                return poiType.matchingStates().stream().map(BlockBehaviour.BlockStateBase::getBlock).collect(Collectors.toSet());
-            }
+        if (profession == null) {
+            return Set.of();
         }
 
-        return Set.of();
+        Predicate<Holder<PoiType>> acquirableJobSite = profession.acquirableJobSite();
+
+        try {
+            return BuiltInRegistries.POINT_OF_INTEREST_TYPE.holders()
+                    .filter(acquirableJobSite)
+                    .flatMap((holder) -> holder.value().matchingStates().stream())
+                    .map(BlockBehaviour.BlockStateBase::getBlock)
+                    .collect(Collectors.toSet());
+        } catch (Throwable e) {
+            LOGGER.warn("Failed to resolve job sites for profession {} with error {}", profession.name(), e.getMessage(), e);
+            return Set.of();
+        }
     }
 
     public static Set<Item> getRequestedItems(@Nullable VillagerProfession profession) {
