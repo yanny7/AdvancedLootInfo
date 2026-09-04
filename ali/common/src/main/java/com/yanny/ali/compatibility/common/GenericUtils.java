@@ -310,18 +310,29 @@ public class GenericUtils {
             }
         }
 
-        for (Map.Entry<ResourceLocation, IDataNode> entry : lootData.entrySet()) {
-            if (entry.getValue() instanceof EntityLootTableNode node) {
-                ResourceLocation location = entry.getKey();
+        List<Map.Entry<ResourceLocation, IDataNode>> entityEntries = lootData.entrySet()
+                .stream()
+                .filter((e) -> e.getValue() instanceof EntityLootTableNode)
+                .sorted(Comparator.<Map.Entry<ResourceLocation, IDataNode>>comparingInt((e) -> BuiltInRegistries.ENTITY_TYPE.getId(((EntityLootTableNode) e.getValue()).getEntityType()))
+                        .thenComparing(Map.Entry::getKey))
+                .toList();
 
-                entityConsumer.accept(node, location, node.getEntityType(), collectItems(node));
-                claimedLootTables.add(location);
-            }
+        for (Map.Entry<ResourceLocation, IDataNode> entry : entityEntries) {
+            EntityLootTableNode node = (EntityLootTableNode) entry.getValue();
+            ResourceLocation location = entry.getKey();
+
+            entityConsumer.accept(node, location, node.getEntityType(), collectItems(node));
+            claimedLootTables.add(location);
         }
 
         lootData.keySet().removeAll(claimedLootTables);
 
-        for (Map.Entry<ResourceLocation, IDataNode> entry : lootData.entrySet()) {
+        List<Map.Entry<ResourceLocation, IDataNode>> gameplayEntries = lootData.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey())
+                .toList();
+
+        for (Map.Entry<ResourceLocation, IDataNode> entry : gameplayEntries) {
             gameplayConsumer.accept(entry.getValue(), entry.getKey(), collectItems(entry.getValue()));
         }
 
