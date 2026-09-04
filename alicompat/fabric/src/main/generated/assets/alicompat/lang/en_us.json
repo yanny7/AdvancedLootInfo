@@ -11,5 +11,11 @@
   "alicompat.enum.farmersdelight.item_ability.shovel_dig": "Shovel Dig",
   "alicompat.enum.farmersdelight.item_ability.sword_dig": "Sword Dig",
   "alicompat.type.function.copy_skillet": "Copy Skillet",
-  "alicompat.type.function.smoker_cook": "Smoker Cook"
+  "alicompat.type.function.smoker_cook": "Smoker Cook",
+  "alicompat.type.function.random_potion": "Random Potion",
+  "entity.ribbits.ribbit_fisherman": "Fisherman Ribbit",
+  "entity.ribbits.ribbit_gardener": "Gardener Ribbit",
+  "entity.ribbits.ribbit_merchant": "Merchant Ribbit",
+  "entity.ribbits.ribbit_nitwit": "Nitwit Ribbit",
+  "entity.ribbits.ribbit_sorcerer": "Sorcerer Ribbit"
 }
