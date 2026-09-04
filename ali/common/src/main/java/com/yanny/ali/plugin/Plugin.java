@@ -475,10 +475,10 @@ public class Plugin implements IPlugin {
         boolean tradeRebalance = registry.getServerLevel().enabledFeatures().contains(FeatureFlags.TRADE_REBALANCE);
 
         for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : BuiltInRegistries.VILLAGER_PROFESSION.entrySet()) {
-            registry.registerTrades(entry.getKey().location(), () -> villagerTrades(entry.getValue(), tradeRebalance), (level) -> 2);
+            registry.registerTrades(entry.getKey().location(), () -> villagerTrades(entry.getValue(), tradeRebalance), (level) -> new TradeLevelInfo(new RangeValue(2)));
         }
 
-        registry.registerTrades(ResourceLocation.withDefaultNamespace("wandering_trader"), () -> wanderingTraderTrades(tradeRebalance), (level) -> wanderingTraderOffers(tradeRebalance, level));
+        registry.registerTrades(ResourceLocation.withDefaultNamespace("wandering_trader"), () -> wanderingTraderTrades(tradeRebalance), (level) -> new TradeLevelInfo(new RangeValue(wanderingTraderOffers(tradeRebalance, level))));
     }
 
     private static Int2ObjectMap<VillagerTrades.ItemListing[]> villagerTrades(VillagerProfession profession, boolean tradeRebalance) {
