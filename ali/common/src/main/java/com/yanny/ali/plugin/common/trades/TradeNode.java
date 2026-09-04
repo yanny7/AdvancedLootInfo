@@ -5,6 +5,7 @@ import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ListNode;
+import com.yanny.ali.api.TradeLevelInfo;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -13,14 +14,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.IntUnaryOperator;
+import java.util.function.IntFunction;
 
 public class TradeNode extends ListNode {
     public static final ResourceLocation ID = Utils.modLoc("trade");
 
     private final TooltipNode tooltip;
 
-    public TradeNode(IServerUtils utils, Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap, IntUnaryOperator offersPerLevel) {
+    public TradeNode(IServerUtils utils, Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap, IntFunction<TradeLevelInfo> levelInfo) {
         List<Int2ObjectMap.Entry<VillagerTrades.ItemListing[]>> entries = itemListingMap.int2ObjectEntrySet()
                 .stream()
                 .sorted(Comparator.comparingInt(Int2ObjectMap.Entry::getIntKey))
@@ -28,7 +29,7 @@ public class TradeNode extends ListNode {
 
         for (Int2ObjectMap.Entry<VillagerTrades.ItemListing[]> entry : entries) {
             if (entry.getValue().length > 0) {
-                addChildren(new TradeLevelNode(utils, entry.getIntKey(), entry.getValue(), offersPerLevel.applyAsInt(entry.getIntKey())));
+                addChildren(new TradeLevelNode(utils, entry.getIntKey(), entry.getValue(), levelInfo.apply(entry.getIntKey())));
             }
         }
 

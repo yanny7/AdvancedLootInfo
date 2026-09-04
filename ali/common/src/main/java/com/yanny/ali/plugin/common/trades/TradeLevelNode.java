@@ -1,11 +1,13 @@
 package com.yanny.ali.plugin.common.trades;
 
+import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ListNode;
+import com.yanny.ali.api.TradeLevelInfo;
 import com.yanny.ali.language.Lang;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -16,13 +18,17 @@ public class TradeLevelNode extends ListNode {
     public static final ResourceLocation ID = Utils.modLoc("trade_level");
 
     public final int level;
-    public final int selectionCount;
+    public final RangeValue selectionCount;
+    public final float chance;
     private final TooltipNode tooltip;
 
     // a trader adds every entry instead of picking randomly once its pool is no bigger than the number it picks
-    public TradeLevelNode(IServerUtils utils, int level, VillagerTrades.ItemListing[] itemListings, int offers) {
+    public TradeLevelNode(IServerUtils utils, int level, VillagerTrades.ItemListing[] itemListings, TradeLevelInfo levelInfo) {
+        RangeValue offers = levelInfo.offers();
+
         this.level = level;
-        this.selectionCount = Math.min(offers, itemListings.length);
+        this.selectionCount = new RangeValue(Math.min(offers.min(), itemListings.length), Math.min(offers.max(), itemListings.length));
+        this.chance = levelInfo.chance();
 
         for (VillagerTrades.ItemListing itemListing : itemListings) {
             if (itemListing != null) {
@@ -30,23 +36,29 @@ public class TradeLevelNode extends ListNode {
             }
         }
 
-        tooltip = TooltipBuilder.branch((b) -> b
-                .add(TooltipBuilder.value(this.level).build(Lang.Value.LEVEL))
-                .add(TooltipBuilder.value(this.selectionCount).build(Lang.Description.RANDOM_TRADE_SELECTION))
-        ).build();
+        tooltip = TooltipBuilder.branch((b) -> {
+            b.add(TooltipBuilder.value(this.level).build(Lang.Value.LEVEL));
+            b.add(TooltipBuilder.value(this.selectionCount.toIntString()).build(Lang.Description.RANDOM_TRADE_SELECTION));
+
+            if (this.chance < 1.0f) {
+                b.add(TooltipBuilder.value(new RangeValue(this.chance * 100), "%").build(Lang.Description.CHANCE));
+            }
+        }).build();
     }
 
     public TradeLevelNode(IClientUtils utils, FriendlyByteBuf buf) {
         super(utils, buf);
         level = buf.readInt();
-        selectionCount = buf.readInt();
+        selectionCount = new RangeValue(buf);
+        chance = buf.readFloat();
         tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
     }
 
     @Override
     public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
         buf.writeInt(level);
-        buf.writeInt(selectionCount);
+        selectionCount.encode(buf);
+        buf.writeFloat(chance);
         buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
     }
 
