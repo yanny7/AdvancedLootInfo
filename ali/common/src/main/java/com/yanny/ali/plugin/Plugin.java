@@ -16,11 +16,16 @@ import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.*;
 import com.yanny.ali.plugin.common.trades.*;
 import com.yanny.ali.plugin.server.*;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.commands.arguments.NbtPathArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.component.*;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -31,7 +36,9 @@ import net.minecraft.world.entity.animal.CatVariant;
 import net.minecraft.world.entity.animal.FrogVariant;
 import net.minecraft.world.entity.animal.WolfVariant;
 import net.minecraft.world.entity.decoration.PaintingVariant;
+import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Instrument;
 import net.minecraft.world.item.Item;
@@ -61,6 +68,9 @@ import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.nbt.LootNbtProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.*;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+import java.util.Map;
 
 @AliEntrypoint
 public class Plugin implements IPlugin {
@@ -457,6 +467,60 @@ public class Plugin implements IPlugin {
         registry.registerItemListing(VillagerTrades.TreasureMapForEmeralds.class, TradeUtils::getNode);
         registry.registerItemListing(VillagerTrades.TypeSpecificTrade.class, TradeUtils::getNode);
 
+        registerVanillaTrades(registry);
+    }
+
+    // Villager#updateTrades picks 2 listings per level, WanderingTrader#updateTrades 5 from its first pool and 1 from its second
+    private static void registerVanillaTrades(IServerRegistry registry) {
+        boolean tradeRebalance = registry.getServerLevel().enabledFeatures().contains(FeatureFlags.TRADE_REBALANCE);
+
+        for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : BuiltInRegistries.VILLAGER_PROFESSION.entrySet()) {
+            registry.registerTrades(entry.getKey().location(), () -> villagerTrades(entry.getValue(), tradeRebalance), (level) -> 2);
+        }
+
+        registry.registerTrades(ResourceLocation.withDefaultNamespace("wandering_trader"), () -> wanderingTraderTrades(tradeRebalance), (level) -> wanderingTraderOffers(tradeRebalance, level));
+    }
+
+    private static Int2ObjectMap<VillagerTrades.ItemListing[]> villagerTrades(VillagerProfession profession, boolean tradeRebalance) {
+        if (tradeRebalance) {
+            Int2ObjectMap<VillagerTrades.ItemListing[]> itemListings = VillagerTrades.EXPERIMENTAL_TRADES.get(profession);
+
+            if (itemListings != null) {
+                return itemListings;
+            }
+        }
+
+        return VillagerTrades.TRADES.get(profession);
+    }
+
+    // the rebalanced wandering trader has no trade levels, only pools with their own pick count - keyed as levels here
+    private static Int2ObjectMap<VillagerTrades.ItemListing[]> wanderingTraderTrades(boolean tradeRebalance) {
+        if (tradeRebalance) {
+            List<org.apache.commons.lang3.tuple.Pair<VillagerTrades.ItemListing[], Integer>> pools = VillagerTrades.EXPERIMENTAL_WANDERING_TRADER_TRADES;
+            Int2ObjectMap<VillagerTrades.ItemListing[]> itemListings = new Int2ObjectOpenHashMap<>();
+
+            for (int i = 0; i < pools.size(); i++) {
+                itemListings.put(i + 1, pools.get(i).getLeft());
+            }
+
+            return itemListings;
+        }
+
+        return VillagerTrades.WANDERING_TRADER_TRADES;
+    }
+
+    private static int wanderingTraderOffers(boolean tradeRebalance, int level) {
+        if (tradeRebalance) {
+            List<org.apache.commons.lang3.tuple.Pair<VillagerTrades.ItemListing[], Integer>> pools = VillagerTrades.EXPERIMENTAL_WANDERING_TRADER_TRADES;
+
+            if (level >= 1 && level <= pools.size()) {
+                return pools.get(level - 1).getRight();
+            }
+
+            return 0;
+        }
+
+        return level == 2 ? 1 : 5;
     }
 
     @NotNull

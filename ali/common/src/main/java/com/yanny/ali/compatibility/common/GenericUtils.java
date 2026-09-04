@@ -435,14 +435,24 @@ public class GenericUtils {
     }
 
     @NotNull
-    public static Triplet<Component, Component, Rect> prepareTraderTitle(String path, int maxWidth) {
-        String key = path.equals("empty") ? "entity.minecraft.wandering_trader" : "entity.minecraft.villager." + path;
-        String id = path.equals("empty") ? "wandering_trader" : path;
-        Component text = GenericUtils.ellipsis(key, id, maxWidth);
-        Component fullText = Component.translatableWithFallback(key, id);
+    public static Triplet<Component, Component, Rect> prepareTraderTitle(ResourceLocation location, int maxWidth) {
+        String path = location.getPath();
+        String key = getTraderTranslationKey(location);
+        Component text = GenericUtils.ellipsis(key, path, maxWidth);
+        Component fullText = Component.translatableWithFallback(key, path);
         Rect rect = new Rect(0, 0, Minecraft.getInstance().font.width(text), 8);
 
         return new Triplet<>(text, fullText, rect);
+    }
+
+    // every villager profession, modded ones included, is named by a key under the vanilla villager prefix
+    @NotNull
+    private static String getTraderTranslationKey(ResourceLocation location) {
+        if (BuiltInRegistries.VILLAGER_PROFESSION.containsKey(location)) {
+            return "entity.minecraft.villager." + location.getPath();
+        }
+
+        return "entity." + location.getNamespace() + "." + location.getPath();
     }
 
     // split table path and make uppercased text
@@ -477,8 +487,5 @@ public class GenericUtils {
 
             tradeData.put(location, utils.getDataNodeFactory(TradeNode.ID).apply(utils, buf));
         }
-
-        // wandering trader
-        tradeData.put(ResourceLocation.withDefaultNamespace("empty"), utils.getDataNodeFactory(TradeNode.ID).apply(utils, buf));
     }
 }

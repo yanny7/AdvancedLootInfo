@@ -1,5 +1,8 @@
 ## []
 
+- A loot table referenced by another loot table no longer triggers entity scan
+- Added support for trades of custom entities
+- Added `IServerRegistry.getServerLevel`, so a plugin can read the level its data is collected from
 - Global loot modifier plugins are now declared by implementing `IGlobalLootModifierPlugin` on all loaders
 - Fixed global loot modifier plugins from other mods being ignored on NeoForge
 - Moved Farmer's Delight support into new mod `ALI Compat`

@@ -4,6 +4,7 @@ import com.yanny.ali.compatibility.common.TradeLootType;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 public class ReiTradeDisplay extends ReiBaseDisplay {
-    private final String id;
+    private final ResourceLocation id;
     private final CategoryIdentifier<ReiTradeDisplay> identifier;
     private final Set<Block> pois;
     private final Set<Item> accepts;
@@ -31,7 +32,7 @@ public class ReiTradeDisplay extends ReiBaseDisplay {
         return identifier;
     }
 
-    public String getId() {
+    public ResourceLocation getId() {
         return id;
     }
 

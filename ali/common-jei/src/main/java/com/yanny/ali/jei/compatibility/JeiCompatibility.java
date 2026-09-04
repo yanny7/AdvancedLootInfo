@@ -111,9 +111,9 @@ public class JeiCompatibility implements IModPlugin {
                     (node, location, outputs) ->
                             addRecipeType(gameplayCategories, gameplayRecipeTypes, location, () -> new GameplayLootType(node, location, outputs)),
                     (node, location, profession, inputs, outputs) ->
-                            addRecipeType(tradeCategories, tradeRecipeTypes, location, () -> new TradeLootType(profession, node, location.getPath(), inputs, outputs)),
+                            addRecipeType(tradeCategories, tradeRecipeTypes, location, () -> new TradeLootType(profession, node, location, inputs, outputs)),
                     (node, location, inputs, outputs) ->
-                            addRecipeType(tradeCategories, tradeRecipeTypes, location, () -> new TradeLootType(Set.of(), Set.of(), node, location.getPath(), inputs, outputs))
+                            addRecipeType(tradeCategories, tradeRecipeTypes, location, () -> new TradeLootType(Set.of(), Set.of(), node, location, inputs, outputs))
             );
 
             registerRecipes(registration, blockRecipeTypes);
