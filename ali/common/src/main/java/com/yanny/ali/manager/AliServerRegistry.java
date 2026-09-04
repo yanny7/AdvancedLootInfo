@@ -21,9 +21,11 @@ import com.yanny.ali.plugin.server.MissingTooltipUtils;
 import net.minecraft.advancements.criterion.EntitySubPredicate;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -53,6 +55,7 @@ import java.lang.reflect.Array;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRegistry, IServerUtils> implements IServerRegistry, IServerUtils, ICommonUtils {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
@@ -61,6 +64,8 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final ManagedRegistry<Class<?>, EntryFactory<?>> entryFactories = registerClassKeyed("entry factories", true, HashMap::new, BuiltInRegistries.LOOT_POOL_ENTRY_TYPE);
     // converters
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, NumberProvider, RangeValue>> numberConverters = registerClassKeyed("number converters", true, HashMap::new, BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE);
+    // traders
+    private final ManagedRegistry<Identifier, Supplier<Int2ObjectMap<ResourceKey<TradeSet>>>> trades = register("trades", false, HashMap::new, Identifier::toString, null);
     // collectors
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootPoolEntryContainer, List<Item>>> entryItemCollectors = registerClassKeyed("entry item collectors", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, List<Item>, LootItemFunction, List<Item>>> functionItemCollectors = registerClassKeyed("function item collectors", false, HashMap::new, null);
@@ -210,6 +215,15 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @Override
     public void registerLootModifiers(Function<IServerUtils, List<ILootModifier<?>>> getter) {
         lootModifierGetters.add(getter);
+    }
+
+    @Override
+    public void registerTrades(Identifier traderId, Supplier<Int2ObjectMap<ResourceKey<TradeSet>>> tradeSetsByLevel) {
+        trades.put(traderId, tradeSetsByLevel);
+    }
+
+    public Map<Identifier, Supplier<Int2ObjectMap<ResourceKey<TradeSet>>>> getTrades() {
+        return trades.entries();
     }
 
     @Deprecated(forRemoval = true, since = "2.2.0")
@@ -413,12 +427,8 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         return NodeUtils.getLootTableNode(modifiers);
     }
 
-    public IDataNode parseTrade(VillagerProfession profession, boolean isWanderingTrader) {
-        return new TradeNode(this, profession, isWanderingTrader);
-    }
-
-    public IDataNode parseTrade(List<TradeSet> trades, boolean isWanderingTrader) {
-        return new TradeNode(this, trades, isWanderingTrader);
+    public IDataNode parseTrade(Supplier<Int2ObjectMap<ResourceKey<TradeSet>>> tradeSetsByLevel) {
+        return new TradeNode(this, tradeSetsByLevel.get());
     }
 
     // hitCount != null means this table is referenced from another table's tree; the paramSet check

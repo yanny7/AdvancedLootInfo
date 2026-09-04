@@ -97,9 +97,9 @@ public class ReiCompatibility implements REIClientPlugin {
                     (node, location, outputs) ->
                             addLootType(gameplayCategories, gameplayRecipeTypes, location, () -> new GameplayLootType(node, location, outputs)),
                     (tradeEntry, location, profession, inputs, outputs) ->
-                            addLootType(tradeCategories, tradeRecipeTypes, location, () -> new TradeLootType(profession, tradeEntry, location.getPath(), inputs, outputs)),
+                            addLootType(tradeCategories, tradeRecipeTypes, location, () -> new TradeLootType(profession, tradeEntry, location, inputs, outputs)),
                     (tradeEntry, location, inputs, outputs) ->
-                            addLootType(tradeCategories, tradeRecipeTypes, location, () -> new TradeLootType(Set.of(), Set.of(), tradeEntry, location.getPath(), inputs, outputs))
+                            addLootType(tradeCategories, tradeRecipeTypes, location, () -> new TradeLootType(Set.of(), Set.of(), tradeEntry, location, inputs, outputs))
             );
 
             registerFiller(registry, blockRecipeTypes, ReiCompatibility::blockPredicate);

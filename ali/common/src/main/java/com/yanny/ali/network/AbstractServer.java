@@ -4,7 +4,6 @@ import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.network.NetworkUtils;
 import com.yanny.aci.tooltip.TooltipContext;
-import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IItemNode;
@@ -17,11 +16,10 @@ import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.common.EntityLootTableResolver;
 import com.yanny.ali.plugin.common.nodes.EntityLootTableNode;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
-import com.yanny.ali.plugin.common.nodes.MissingNode;
-import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.server.ItemCollectorUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -35,16 +33,17 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.npc.villager.VillagerProfession;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.TradeSet;
-import net.minecraft.world.item.trading.TradeSets;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.CompositeEntryBase;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -54,6 +53,7 @@ import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.Logger;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -100,22 +100,23 @@ public abstract class AbstractServer {
         List<ILootModifier<?>> entityLootModifiers = groupedTypes.getOrDefault(ILootModifier.IType.ENTITY, Collections.emptyList());
         List<ILootModifier<?>> lootTableLootModifiers = groupedTypes.getOrDefault(ILootModifier.IType.LOOT_TABLE, Collections.emptyList());
         Map<Identifier, IDataNode> tradeNodes;
-        IDataNode wanderingTraderNode = processWanderingTrader(serverRegistry, manager);
 
         lootTables.forEach(serverRegistry::addLootTable); // used for table references
         lootTableItems = collectLootTableItems(lootTables, fakeLootTables);
+
+        Set<Identifier> referencedLootTables = collectReferencedLootTables(lootTables, fakeLootTables);
 
         chunks.clear();
 
         // apply modifiers
         lootNodes.putAll(processBlocks(serverRegistry, config, unprocessedLootTables, fakeLootTables, blockLootModifiers, lootTableLootModifiers, lootTableItems));
-        lootNodes.putAll(processEntities(serverRegistry, config, serverRegistry.getServerLevel(), unprocessedLootTables, fakeLootTables, entityLootModifiers, lootTableLootModifiers, lootTableItems));
+        lootNodes.putAll(processEntities(serverRegistry, config, serverRegistry.getServerLevel(), unprocessedLootTables, fakeLootTables, entityLootModifiers, lootTableLootModifiers, lootTableItems, referencedLootTables));
         lootNodes.putAll(processLootTables(serverRegistry, config, unprocessedLootTables, fakeLootTables, lootTableLootModifiers, lootTableItems));
 
         lootNodes = removeEmptyLootTable(serverRegistry, lootNodes);
         tradeNodes = new HashMap<>(processTrades(serverRegistry, config));
 
-        LOGGER.info("Processing {} loot tables, {} fake loot tables and {} trades took {}ms", lootNodes.size(), fakeLootTables.size(), tradeNodes.size() + 1, System.currentTimeMillis() - startTime);
+        LOGGER.info("Processing {} loot tables, {} fake loot tables and {} trades took {}ms", lootNodes.size(), fakeLootTables.size(), tradeNodes.size(), System.currentTimeMillis() - startTime);
 
         ByteBuf rawBuf = Unpooled.buffer();
         RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(rawBuf, serverRegistry.getServerLevel().registryAccess());
@@ -124,10 +125,6 @@ public abstract class AbstractServer {
         serverRegistry.getTooltipCache().encode(serverRegistry, buf);
         writeLootData(serverRegistry, buf, lootNodes);
         NetworkUtils.writeMapData(Utils.MOD_ID, serverRegistry, buf, tradeNodes);
-
-        if (!NetworkUtils.writeNodeData(Utils.MOD_ID, serverRegistry, buf, Identifier.withDefaultNamespace("wandering_trader"), wanderingTraderNode)) {
-            new TradeNode(serverRegistry, Collections.emptyList(), true).encode(serverRegistry, buf);
-        }
 
         NetworkUtils.compressAndStoreData(Utils.MOD_ID, rawBuf, (i, data) -> chunks.add(new LootDataChunkMessage(i, data)));
 
@@ -333,9 +330,10 @@ public abstract class AbstractServer {
     @NotNull
     private static Map<Identifier, IDataNode> processEntities(AliServerRegistry serverRegistry, AliConfig config, ServerLevel level, Map<Identifier, LootTable> lootTables,
                                                               Map<Identifier, LootTable> fakeLootTables, List<ILootModifier<?>> entityLootModifiers,
-                                                              List<ILootModifier<?>> lootTableLootModifiers, Map<Identifier, List<Item>> lootTableItems) {
+                                                              List<ILootModifier<?>> lootTableLootModifiers, Map<Identifier, List<Item>> lootTableItems,
+                                                              Set<Identifier> referencedLootTables) {
         Map<Identifier, IDataNode> lootNodes = new HashMap<>();
-        EntityLootTableResolver resolver = new EntityLootTableResolver(serverRegistry, level);
+        EntityLootTableResolver resolver = new EntityLootTableResolver(serverRegistry, level, referencedLootTables);
         Set<Identifier> candidates = new HashSet<>(lootTables.keySet());
         Set<Identifier> disabledLootTables = new HashSet<>();
 
@@ -503,17 +501,22 @@ public abstract class AbstractServer {
     private static Map<Identifier, IDataNode> processTrades(AliServerRegistry serverRegistry, AliConfig config) {
         Map<Identifier, IDataNode> nodes = new HashMap<>();
 
-        for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : BuiltInRegistries.VILLAGER_PROFESSION.entrySet()) {
-            Identifier location = entry.getKey().identifier();
-            VillagerProfession profession = entry.getValue();
+        for (Map.Entry<Identifier, Supplier<Int2ObjectMap<ResourceKey<TradeSet>>>> entry : serverRegistry.getTrades().entrySet()) {
+            Identifier location = entry.getKey();
 
             TooltipContext.set(location);
 
             if (config.tradeCategories.stream().filter((f) -> f.validate(location)).findFirst().map((f) -> !f.isHidden()).orElse(false)) {
                 try {
-                    nodes.put(location, serverRegistry.parseTrade(profession, false));
+                    IDataNode node = serverRegistry.parseTrade(entry.getValue());
+
+                    if (((ListNode) node).nodes().isEmpty()) {
+                        LOGGER.warn("No trades defined for {}", location);
+                    } else {
+                        nodes.put(location, node);
+                    }
                 } catch (Throwable e) {
-                    LOGGER.warn("Failed to parse trade for villager {} with error {}", location, e.getMessage(), e);
+                    LOGGER.warn("Failed to parse trade for {} with error {}", location, e.getMessage(), e);
                 }
             }
 
@@ -521,23 +524,6 @@ public abstract class AbstractServer {
         }
 
         return nodes;
-    }
-
-    @NotNull
-    private static IDataNode processWanderingTrader(AliServerRegistry serverRegistry, ReloadableServerRegistries.Holder manager) {
-        try {
-            List<TradeSet> trades = new ArrayList<>();
-            Registry<TradeSet> registry = (Registry<TradeSet>)manager.lookup().lookup(Registries.TRADE_SET).orElseThrow();
-
-            registry.get(TradeSets.WANDERING_TRADER_BUYING).ifPresent((tradeSet) -> trades.add(tradeSet.value()));
-            registry.get(TradeSets.WANDERING_TRADER_COMMON).ifPresent((tradeSet) -> trades.add(tradeSet.value()));
-            registry.get(TradeSets.WANDERING_TRADER_UNCOMMON).ifPresent((tradeSet) -> trades.add(tradeSet.value()));
-
-            return serverRegistry.parseTrade(trades, true);
-        } catch (Throwable e) {
-            LOGGER.warn("Failed to parse wandering trader with error {}", e.getMessage(), e);
-            return new MissingNode(TooltipNode.empty());
-        }
     }
 
     private static <T> boolean predicateModifier(ILootModifier<?> modifier, T value, List<Item> items) {
@@ -572,6 +558,32 @@ public abstract class AbstractServer {
         }
 
         return itemStacks.stream().filter((f) -> !f.isEmpty()).toList();
+    }
+
+    @NotNull
+    private static Set<Identifier> collectReferencedLootTables(Map<Identifier, LootTable> lootTables, Map<Identifier, LootTable> fakeLootTables) {
+        Set<Identifier> referenced = new HashSet<>();
+
+        Stream.concat(lootTables.values().stream(), fakeLootTables.values().stream())
+                .forEach((lootTable) -> collectReferences(lootTable, referenced));
+
+        return referenced;
+    }
+
+    private static void collectReferences(LootTable lootTable, Set<Identifier> referenced) {
+        lootTable.pools.forEach((pool) -> collectReferences(pool.entries, referenced));
+    }
+
+    private static void collectReferences(List<LootPoolEntryContainer> entries, Set<Identifier> referenced) {
+        for (LootPoolEntryContainer entry : entries) {
+            if (entry instanceof NestedLootTable nested) {
+                nested.contents
+                        .ifLeft((key) -> referenced.add(key.identifier()))
+                        .ifRight((lootTable) -> collectReferences(lootTable, referenced));
+            } else if (entry instanceof CompositeEntryBase composite) {
+                collectReferences(composite.children, referenced);
+            }
+        }
     }
 
     private static Map<Identifier, List<Item>> collectLootTableItems(Map<Identifier, LootTable> lootTables, Map<Identifier, LootTable> fakeLootTables) {

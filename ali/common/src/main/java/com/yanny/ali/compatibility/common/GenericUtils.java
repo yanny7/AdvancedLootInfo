@@ -11,7 +11,6 @@ import com.yanny.ali.network.AbstractClient;
 import com.yanny.ali.network.RequestLootDataMessage;
 import com.yanny.ali.plugin.common.nodes.EntityLootTableNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
-import com.yanny.ali.plugin.common.ReflectionUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
@@ -328,18 +327,29 @@ public class GenericUtils {
             }
         }
 
-        for (Map.Entry<Identifier, IDataNode> entry : lootData.entrySet()) {
-            if (entry.getValue() instanceof EntityLootTableNode node) {
-                Identifier location = entry.getKey();
+        List<Map.Entry<Identifier, IDataNode>> entityEntries = lootData.entrySet()
+                .stream()
+                .filter((e) -> e.getValue() instanceof EntityLootTableNode)
+                .sorted(Comparator.<Map.Entry<Identifier, IDataNode>>comparingInt((e) -> BuiltInRegistries.ENTITY_TYPE.getId(((EntityLootTableNode) e.getValue()).getEntityType()))
+                        .thenComparing(Map.Entry::getKey))
+                .toList();
 
-                entityConsumer.accept(node, location, node.getEntityType(), collectItems(node));
-                claimedLootTables.add(location);
-            }
+        for (Map.Entry<Identifier, IDataNode> entry : entityEntries) {
+            EntityLootTableNode node = (EntityLootTableNode) entry.getValue();
+            Identifier location = entry.getKey();
+
+            entityConsumer.accept(node, location, node.getEntityType(), collectItems(node));
+            claimedLootTables.add(location);
         }
 
         lootData.keySet().removeAll(claimedLootTables);
 
-        for (Map.Entry<Identifier, IDataNode> entry : lootData.entrySet()) {
+        List<Map.Entry<Identifier, IDataNode>> gameplayEntries = lootData.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey())
+                .toList();
+
+        for (Map.Entry<Identifier, IDataNode> entry : gameplayEntries) {
             gameplayConsumer.accept(entry.getValue(), entry.getKey(), collectItems(entry.getValue()));
         }
 
@@ -418,17 +428,22 @@ public class GenericUtils {
     }
 
     public static Set<Block> getJobSites(@Nullable VillagerProfession profession) {
-        if (profession != null) {
-            //noinspection unchecked
-            List<ResourceKey<PoiType>> poi = (List<ResourceKey<PoiType>>) (Object) ReflectionUtils.getCapturedInstances(profession.acquirableJobSite(), ResourceKey.class);
-            Optional<Holder.Reference<PoiType>> poiType;
-
-            if (poi.size() == 1 && (poiType = BuiltInRegistries.POINT_OF_INTEREST_TYPE.get(poi.getFirst())).isPresent()) {
-                return poiType.get().value().matchingStates().stream().map(BlockBehaviour.BlockStateBase::getBlock).collect(Collectors.toSet());
-            }
+        if (profession == null) {
+            return Set.of();
         }
 
-        return Set.of();
+        Predicate<Holder<PoiType>> acquirableJobSite = profession.acquirableJobSite();
+
+        try {
+            return BuiltInRegistries.POINT_OF_INTEREST_TYPE.listElements()
+                    .filter(acquirableJobSite)
+                    .flatMap((holder) -> holder.value().matchingStates().stream())
+                    .map(BlockBehaviour.BlockStateBase::getBlock)
+                    .collect(Collectors.toSet());
+        } catch (Throwable e) {
+            LOGGER.warn("Failed to resolve job sites for profession {} with error {}", profession.name(), e.getMessage(), e);
+            return Set.of();
+        }
     }
 
     public static Set<Item> getRequestedItems(@Nullable VillagerProfession profession) {
@@ -450,14 +465,24 @@ public class GenericUtils {
     }
 
     @NotNull
-    public static Triplet<Component, Component, Rect> prepareTraderTitle(String path, int maxWidth) {
-        String key = path.equals("empty") ? "entity.minecraft.wandering_trader" : "entity.minecraft.villager." + path;
-        String id = path.equals("empty") ? "wandering_trader" : path;
-        Component text = GenericUtils.ellipsis(key, id, maxWidth);
-        Component fullText = Component.translatableWithFallback(key, id);
+    public static Triplet<Component, Component, Rect> prepareTraderTitle(Identifier location, int maxWidth) {
+        String path = location.getPath();
+        String key = getTraderTranslationKey(location);
+        Component text = GenericUtils.ellipsis(key, path, maxWidth);
+        Component fullText = Component.translatableWithFallback(key, path);
         Rect rect = new Rect(0, 0, Minecraft.getInstance().font.width(text), 8);
 
         return new Triplet<>(text, fullText, rect);
+    }
+
+    // every villager profession, modded ones included, is named by a key under the vanilla villager prefix
+    @NotNull
+    private static String getTraderTranslationKey(Identifier location) {
+        if (BuiltInRegistries.VILLAGER_PROFESSION.containsKey(location)) {
+            return "entity.minecraft.villager." + location.getPath();
+        }
+
+        return "entity." + location.getNamespace() + "." + location.getPath();
     }
 
     // split table path and make uppercased text
@@ -492,8 +517,5 @@ public class GenericUtils {
 
             tradeData.put(location, utils.getDataNodeFactory(TradeNode.ID).apply(utils, buf));
         }
-
-        // wandering trader
-        tradeData.put(Identifier.withDefaultNamespace("empty"), utils.getDataNodeFactory(TradeNode.ID).apply(utils, buf));
     }
 }

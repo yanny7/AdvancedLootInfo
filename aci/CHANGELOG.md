@@ -1,3 +1,7 @@
+## []
+
+- Added `ManagedRegistry.entries`, so a registry's whole content can be read back
+
 ## [1.1.0]
 
 - Added `TooltipStyle` and `TooltipColors`, so tooltip text, value, error and branch colors can be supplied by the calling mod

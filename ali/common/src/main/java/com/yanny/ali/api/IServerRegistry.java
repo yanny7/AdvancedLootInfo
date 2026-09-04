@@ -6,14 +6,18 @@ import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.plugin.server.EnchantedRanges;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.advancements.criterion.EntitySubPredicate;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.slot.SlotSource;
+import net.minecraft.world.item.trading.TradeSet;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -24,6 +28,7 @@ import org.apache.logging.log4j.util.TriConsumer;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
     <T extends LootPoolEntryContainer> void registerItemCollector(Class<T> type, BiFunction<IServerUtils, T, List<Item>> itemSupplier);
@@ -67,6 +72,13 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
     <T extends LootItemFunction> void registerItemStackModifier(Class<T> type, TriFunction<IServerUtils, T, ItemStack, ItemStack> consumer);
 
     void registerLootModifiers(Function<IServerUtils, List<ILootModifier<?>>> getter);
+
+    /**
+     * Registers a trader, so that its trades are scanned and listed under their own entry. The trade sets are looked
+     * up in the {@code minecraft:trade_set} registry when the scan runs, so the supplier may name sets that a datapack
+     * provides.
+     */
+    void registerTrades(Identifier traderId, Supplier<Int2ObjectMap<ResourceKey<TradeSet>>> tradeSetsByLevel);
 
     /**
      * @deprecated use {@link #registerEnumTranslation(Class, String, String)}

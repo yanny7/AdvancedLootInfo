@@ -163,6 +163,7 @@ accessible class net/minecraft/advancements/criterion/PlayerPredicate$Advancemen
 accessible class net/minecraft/advancements/criterion/PlayerPredicate$StatMatcher
 accessible class net/minecraft/advancements/criterion/LocationPredicate$PositionPredicate
 
+accessible field net/minecraft/world/item/trading/TradeSet amount Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
 accessible field net/minecraft/world/item/trading/VillagerTrade wants Lnet/minecraft/world/item/trading/TradeCost;
 accessible field net/minecraft/world/item/trading/VillagerTrade additionalWants Ljava/util/Optional;
 accessible field net/minecraft/world/item/trading/VillagerTrade gives Lnet/minecraft/world/item/ItemStackTemplate;
