@@ -1,4 +1,10 @@
 {
   "alicompat.type.function.copy_meal": "Copy Meal",
-  "alicompat.type.function.copy_skillet": "Copy Skillet"
+  "alicompat.type.function.copy_skillet": "Copy Skillet",
+  "alicompat.type.function.random_potion": "Random Potion",
+  "entity.ribbits.ribbit_fisherman": "Fisherman Ribbit",
+  "entity.ribbits.ribbit_gardener": "Gardener Ribbit",
+  "entity.ribbits.ribbit_merchant": "Merchant Ribbit",
+  "entity.ribbits.ribbit_nitwit": "Nitwit Ribbit",
+  "entity.ribbits.ribbit_sorcerer": "Sorcerer Ribbit"
 }
