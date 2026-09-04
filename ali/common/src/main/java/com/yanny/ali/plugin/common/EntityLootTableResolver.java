@@ -26,8 +26,9 @@ import java.util.*;
  * trailing segments off an unmatched {@code entities/} table finds the owning type without any variant registration.
  * <p>
  * A table that neither matches nor trims down to a known type falls back to {@link #scanNamespace}, which does build
- * entities, but only for the namespace of the table that could not be explained. An entity that is not found even that
- * way, or that is attributed to the wrong type, can be declared in the config's {@code entityLootTables}, which takes
+ * entities, but only for the namespace of the table that could not be explained. Tables another loot table references
+ * are excluded from that fallback - the reference already explains them. An entity that is not found even that way, or
+ * that is attributed to the wrong type, can be declared in the config's {@code entityLootTables}, which takes
  * precedence over everything derived here.
  */
 public class EntityLootTableResolver {
@@ -41,9 +42,12 @@ public class EntityLootTableResolver {
     private final ICommonUtils utils;
     private final Level level;
 
-    public EntityLootTableResolver(ICommonUtils utils, Level level) {
+    public EntityLootTableResolver(ICommonUtils utils, Level level, Collection<ResourceLocation> referencedLootTables) {
         this.utils = utils;
         this.level = level;
+
+        // a table another table pulls in is already explained by that reference, so it must not cost a namespace scan
+        excludedLootTables.addAll(referencedLootTables);
 
         // configured first, so a table claimed by the config is attributed to that entity even when it would resolve
         // to a different one on its own

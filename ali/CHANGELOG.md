@@ -1,5 +1,6 @@
 ## []
 
+- A loot table referenced by another loot table no longer triggers entity scan
 - Added support for trades of custom entities
 - Global loot modifier plugins are now declared by implementing `IGlobalLootModifierPlugin` on Forge
 - Fixed Plugins discovered multiple times on Fabric

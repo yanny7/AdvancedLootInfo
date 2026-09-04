@@ -34,7 +34,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.*;
+import net.minecraft.world.level.storage.loot.entries.CompositeEntryBase;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.entries.LootTableReference;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -89,11 +92,13 @@ public abstract class AbstractServer {
         lootTables.forEach(serverRegistry::addLootTable); // used for table references
         lootTableItems = collectLootTableItems(lootTables, fakeLootTables);
 
+        Set<ResourceLocation> referencedLootTables = collectReferencedLootTables(serverRegistry, lootTables, fakeLootTables);
+
         chunks.clear();
 
         // apply modifiers
         lootNodes.putAll(processBlocks(serverRegistry, config, unprocessedLootTables, fakeLootTables, blockLootModifiers, lootTableLootModifiers, lootTableItems));
-        lootNodes.putAll(processEntities(serverRegistry, config, serverRegistry.getServerLevel(), unprocessedLootTables, fakeLootTables, entityLootModifiers, lootTableLootModifiers, lootTableItems));
+        lootNodes.putAll(processEntities(serverRegistry, config, serverRegistry.getServerLevel(), unprocessedLootTables, fakeLootTables, entityLootModifiers, lootTableLootModifiers, lootTableItems, referencedLootTables));
         lootNodes.putAll(processLootTables(serverRegistry, config, unprocessedLootTables, fakeLootTables, lootTableLootModifiers, lootTableItems));
 
         lootNodes = removeEmptyLootTable(serverRegistry, lootNodes);
@@ -315,9 +320,10 @@ public abstract class AbstractServer {
     @NotNull
     private static Map<ResourceLocation, IDataNode> processEntities(AliServerRegistry serverRegistry, AliConfig config, ServerLevel level, Map<ResourceLocation, LootTable> lootTables,
                                                                     Map<ResourceLocation, LootTable> fakeLootTables, List<ILootModifier<?>> entityLootModifiers,
-                                                                    List<ILootModifier<?>> lootTableLootModifiers, Map<ResourceLocation, List<Item>> lootTableItems) {
+                                                                    List<ILootModifier<?>> lootTableLootModifiers, Map<ResourceLocation, List<Item>> lootTableItems,
+                                                                    Set<ResourceLocation> referencedLootTables) {
         Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();
-        EntityLootTableResolver resolver = new EntityLootTableResolver(serverRegistry, level);
+        EntityLootTableResolver resolver = new EntityLootTableResolver(serverRegistry, level, referencedLootTables);
         Set<ResourceLocation> candidates = new HashSet<>(lootTables.keySet());
         Set<ResourceLocation> disabledLootTables = new HashSet<>();
 
@@ -541,6 +547,27 @@ public abstract class AbstractServer {
         }
 
         return itemStacks;
+    }
+
+    @NotNull
+    private static Set<ResourceLocation> collectReferencedLootTables(AliServerRegistry serverRegistry, Map<ResourceLocation, LootTable> lootTables,
+                                                                    Map<ResourceLocation, LootTable> fakeLootTables) {
+        Set<ResourceLocation> referenced = new HashSet<>();
+
+        Stream.concat(lootTables.values().stream(), fakeLootTables.values().stream())
+                .forEach((lootTable) -> serverRegistry.getLootPools(lootTable).forEach((pool) -> collectReferences(pool.entries, referenced)));
+
+        return referenced;
+    }
+
+    private static void collectReferences(LootPoolEntryContainer[] entries, Set<ResourceLocation> referenced) {
+        for (LootPoolEntryContainer entry : entries) {
+            if (entry instanceof LootTableReference reference) {
+                referenced.add(reference.name);
+            } else if (entry instanceof CompositeEntryBase composite) {
+                collectReferences(composite.children, referenced);
+            }
+        }
     }
 
     private static Map<ResourceLocation, List<Item>> collectLootTableItems(Map<ResourceLocation, LootTable> lootTables, Map<ResourceLocation, LootTable> fakeLootTables) {
