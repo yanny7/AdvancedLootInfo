@@ -21,10 +21,10 @@ class GoblinTradeUtils {
     static RangeValue getCount(TradeCost cost) {
         BasePrice price = cost.count();
 
-        if (price instanceof ConstantPrice constantPrice) {
-            return new RangeValue(constantPrice.value());
-        } else if (price instanceof RangedPrice rangedPrice) {
-            return new RangeValue(rangedPrice.min(), rangedPrice.max());
+        if (price instanceof ConstantPrice(int value)) {
+            return new RangeValue(value);
+        } else if (price instanceof RangedPrice(int min, int max)) {
+            return new RangeValue(min, max);
         } else {
             return new RangeValue(false, true);
         }
