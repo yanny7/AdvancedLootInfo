@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.yanny.aci.api.ICoreServerRegistry;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
-import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.advancements.criterion.EntitySubPredicate;
