@@ -29,7 +29,7 @@ import java.util.Set;
 import java.util.function.BiFunction;
 
 public class EmiTradeLoot extends EmiBaseLoot {
-    private final String path;
+    private final ResourceLocation id;
     private final Set<Block> pois;
     private final Set<Item> accepts;
 
@@ -39,7 +39,7 @@ public class EmiTradeLoot extends EmiBaseLoot {
 
     public EmiTradeLoot(EmiRecipeCategory category, Identifier id, Set<Block> pois, Set<Item> accepts, IDataNode trade, List<ItemStack> inputs, List<ItemStack> outputs) {
         super(category, id, trade, 0, (pois.isEmpty() ? 10 : 20) + (accepts.isEmpty() ? 0 : 20), inputs, outputs);
-        this.path = id.getPath();
+        this.id = id;
         this.pois = pois;
         this.inputs.addAll(pois.stream().map(EmiStack::of).toList());
         this.inputs.addAll(accepts.stream().map(EmiStack::of).toList());
@@ -53,7 +53,7 @@ public class EmiTradeLoot extends EmiBaseLoot {
 
     @Override
     protected List<Widget> getAdditionalWidgets(WidgetHolder widgetHolder) {
-        Triplet<Component, Component, Rect> title = GenericUtils.prepareTraderTitle(path, CATEGORY_WIDTH - AbstractScrollWidget.getScrollbarExtraWidth());
+        Triplet<Component, Component, Rect> title = GenericUtils.prepareTraderTitle(id, CATEGORY_WIDTH - AbstractScrollWidget.getScrollbarExtraWidth());
         List<Widget> widgets = new ArrayList<>();
         Rect rect = title.getC();
 

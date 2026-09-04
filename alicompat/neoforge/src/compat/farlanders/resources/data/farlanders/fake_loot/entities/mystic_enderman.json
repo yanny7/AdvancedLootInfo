@@ -1,0 +1,32 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "conditions": [
+            {
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "equipment": {
+                  "mainhand": {
+                    "items": [
+                      "farlanders:mystic_wand_ore",
+                      "farlanders:mystic_wand_teleport",
+                      "farlanders:mystic_wand_regen",
+                      "farlanders:mystic_wand_invisible"
+                    ]
+                  }
+                }
+              }
+            }
+          ],
+          "name": "farlanders:entities/mystic_enderman_held_wands"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 package com.yanny.ali.plugin.common.trades;
 
+import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
@@ -18,18 +19,13 @@ public class TradeLevelNode extends ListNode {
     public static final Identifier ID = Utils.modLoc("trade_level");
 
     public final int level;
-    public final int selectionCount;
+    public final RangeValue selectionCount;
     private final TooltipNode tooltip;
 
-    // Vanilla picks a fixed number of trades at random from this level's pool at villager-spawn/level-up time
-    // (Villager#updateTrades / AbstractVillager#addOffersFromItemListings passes a literal `2`; the Wandering
-    // Trader's two pools use `5` and `1` respectively, see WanderingTrader#updateTrades) - clamped to the pool
-    // size since vanilla adds every entry instead of picking randomly when the pool is that small or smaller.
-    public TradeLevelNode(IServerUtils utils, int level, TradeSet tradeSet, boolean isWanderingTrader) {
+    // a trader adds every trade of the set instead of picking randomly once the set is no bigger than the number it picks
+    public TradeLevelNode(IServerUtils utils, int level, TradeSet tradeSet) {
         this.level = level;
-        this.selectionCount = isWanderingTrader
-                ? (level == 2 ? 1 : Math.min(5, tradeSet.getTrades().size()))
-                : Math.min(2, tradeSet.getTrades().size());
+        this.selectionCount = utils.convertNumber(utils, tradeSet.amount).clamp(0, tradeSet.getTrades().size());
 
         for (Holder<VillagerTrade> trade : tradeSet.getTrades()) {
             addChildren(TradeUtils.getNode(utils, trade.value()));
@@ -37,21 +33,21 @@ public class TradeLevelNode extends ListNode {
 
         tooltip = TooltipBuilder.branch((b) -> b
                 .add(TooltipBuilder.value(this.level).build(Lang.Value.LEVEL))
-                .add(TooltipBuilder.value(this.selectionCount).build(Lang.Description.RANDOM_TRADE_SELECTION))
+                .add(TooltipBuilder.value(this.selectionCount.toIntString()).build(Lang.Description.RANDOM_TRADE_SELECTION))
         ).build();
     }
 
     public TradeLevelNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
         level = buf.readInt();
-        selectionCount = buf.readInt();
+        selectionCount = new RangeValue(buf);
         tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
     }
 
     @Override
     public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         buf.writeInt(level);
-        buf.writeInt(selectionCount);
+        selectionCount.encode(buf);
         buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
     }
 

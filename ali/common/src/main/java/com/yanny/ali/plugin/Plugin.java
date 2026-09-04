@@ -17,6 +17,8 @@ import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.ali.plugin.common.trades.TradeLevelNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.server.*;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.advancements.predicates.*;
 import net.minecraft.advancements.predicates.entity.*;
 import net.minecraft.commands.arguments.NbtPathArgument;
@@ -25,6 +27,9 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.core.component.*;
 import net.minecraft.core.component.predicates.*;
 import net.minecraft.core.component.predicates.DamagePredicate;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.context.ContextKey;
@@ -50,6 +55,7 @@ import net.minecraft.world.entity.animal.pig.PigVariant;
 import net.minecraft.world.entity.animal.wolf.WolfSoundVariant;
 import net.minecraft.world.entity.animal.wolf.WolfVariant;
 import net.minecraft.world.entity.decoration.painting.PaintingVariant;
+import net.minecraft.world.entity.npc.villager.VillagerProfession;
 import net.minecraft.world.entity.npc.villager.VillagerType;
 import net.minecraft.world.inventory.SlotRange;
 import net.minecraft.world.item.*;
@@ -78,8 +84,12 @@ import net.minecraft.world.level.storage.loot.entries.*;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.nbt.NbtProvider;
+import net.minecraft.world.item.trading.TradeSet;
+import net.minecraft.world.item.trading.TradeSets;
 import net.minecraft.world.level.storage.loot.providers.number.*;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Map;
 
 @AliEntrypoint
 public class Plugin implements IPlugin {
@@ -568,6 +578,27 @@ public class Plugin implements IPlugin {
         registry.registerItemStackModifier(SetWrittenBookPagesFunction.class, TooltipUtils::applyItemStackModifier);
         registry.registerItemStackModifier(ToggleTooltips.class, TooltipUtils::applyItemStackModifier);
         registry.registerItemStackModifier(SetEnchantmentsFunction.class, TooltipUtils::applySetEnchantmentsItemStackModifier);
+
+        registerVanillaTrades(registry);
+    }
+
+    private static void registerVanillaTrades(IServerRegistry registry) {
+        for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : BuiltInRegistries.VILLAGER_PROFESSION.entrySet()) {
+            registry.registerTrades(entry.getKey().identifier(), () -> entry.getValue().tradeSetsByLevel());
+        }
+
+        registry.registerTrades(Identifier.withDefaultNamespace("wandering_trader"), Plugin::wanderingTraderTradeSets);
+    }
+
+    // the wandering trader has no trade levels, only the sets WanderingTrader#updateTrades adds - keyed as levels here
+    private static Int2ObjectMap<ResourceKey<TradeSet>> wanderingTraderTradeSets() {
+        Int2ObjectMap<ResourceKey<TradeSet>> tradeSets = new Int2ObjectOpenHashMap<>();
+
+        tradeSets.put(1, TradeSets.WANDERING_TRADER_BUYING);
+        tradeSets.put(2, TradeSets.WANDERING_TRADER_UNCOMMON);
+        tradeSets.put(3, TradeSets.WANDERING_TRADER_COMMON);
+
+        return tradeSets;
     }
 
     @NotNull

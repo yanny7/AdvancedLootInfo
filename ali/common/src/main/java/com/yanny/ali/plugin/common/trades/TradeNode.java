@@ -12,7 +12,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.entity.npc.villager.VillagerProfession;
 import net.minecraft.world.item.trading.TradeSet;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,8 +24,8 @@ public class TradeNode extends ListNode {
 
     private final TooltipNode tooltip;
 
-    public TradeNode(IServerUtils utils, VillagerProfession profession, boolean isWanderingTrader) {
-        List<Int2ObjectMap.Entry<ResourceKey<TradeSet>>> entries = profession.tradeSetsByLevel().int2ObjectEntrySet()
+    public TradeNode(IServerUtils utils, Int2ObjectMap<ResourceKey<TradeSet>> tradeSetsByLevel) {
+        List<Int2ObjectMap.Entry<ResourceKey<TradeSet>>> entries = tradeSetsByLevel.int2ObjectEntrySet()
                 .stream()
                 .sorted(Comparator.comparingInt(Int2ObjectMap.Entry::getIntKey))
                 .toList();
@@ -35,15 +34,7 @@ public class TradeNode extends ListNode {
         for (Int2ObjectMap.Entry<ResourceKey<TradeSet>> entry : entries) {
             Optional<Holder.Reference<TradeSet>> tradeSetReference = lookup.get(entry.getValue());
 
-            tradeSetReference.ifPresent((tradeSet) -> addChildren(new TradeLevelNode(utils, entry.getIntKey(), tradeSet.value(), isWanderingTrader)));
-        }
-
-        tooltip = TooltipNode.empty();
-    }
-
-    public TradeNode(IServerUtils utils, List<TradeSet> trades, boolean isWanderingTrader) {
-        for (int i = 0; i < trades.size(); i++) {
-            addChildren(new TradeLevelNode(utils, i, trades.get(i), isWanderingTrader));
+            tradeSetReference.ifPresent((tradeSet) -> addChildren(new TradeLevelNode(utils, entry.getIntKey(), tradeSet.value())));
         }
 
         tooltip = TooltipNode.empty();
