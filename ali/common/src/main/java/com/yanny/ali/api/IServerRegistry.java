@@ -5,6 +5,8 @@ import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.plugin.server.EnchantedRanges;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -19,6 +21,8 @@ import org.apache.logging.log4j.util.TriConsumer;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.IntUnaryOperator;
+import java.util.function.Supplier;
 
 public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
     <T extends LootPoolEntryContainer> void registerItemCollector(Class<T> type, BiFunction<IServerUtils, T, List<Item>> itemSupplier);
@@ -46,6 +50,8 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
     void registerLootModifiers(Function<IServerUtils, List<ILootModifier<?>>> getter);
 
     <T extends VillagerTrades.ItemListing> void registerItemListing(Class<T> type, TriFunction<IServerUtils, T, TooltipNode, IDataNode> supplier);
+
+    void registerTrades(ResourceLocation traderId, Supplier<Int2ObjectMap<VillagerTrades.ItemListing[]>> itemListings, IntUnaryOperator offersPerLevel);
 
     /**
      * @deprecated use {@link #registerEnumTranslation(Class, String, String)}

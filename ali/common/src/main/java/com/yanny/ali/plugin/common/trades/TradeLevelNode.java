@@ -19,15 +19,10 @@ public class TradeLevelNode extends ListNode {
     public final int selectionCount;
     private final TooltipNode tooltip;
 
-    // Vanilla picks a fixed number of trades at random from this level's pool at villager-spawn/level-up time
-    // (Villager#updateTrades / AbstractVillager#addOffersFromItemListings passes a literal `2`; the Wandering
-    // Trader's two pools use `5` and `1` respectively, see WanderingTrader#updateTrades) - clamped to the pool
-    // size since vanilla adds every entry instead of picking randomly when the pool is that small or smaller.
-    public TradeLevelNode(IServerUtils utils, int level, VillagerTrades.ItemListing[] itemListings, boolean isWanderingTrader) {
+    // a trader adds every entry instead of picking randomly once its pool is no bigger than the number it picks
+    public TradeLevelNode(IServerUtils utils, int level, VillagerTrades.ItemListing[] itemListings, int offers) {
         this.level = level;
-        this.selectionCount = isWanderingTrader
-                ? (level == 2 ? 1 : Math.min(5, itemListings.length))
-                : Math.min(2, itemListings.length);
+        this.selectionCount = Math.min(offers, itemListings.length);
 
         for (VillagerTrades.ItemListing itemListing : itemListings) {
             if (itemListing != null) {

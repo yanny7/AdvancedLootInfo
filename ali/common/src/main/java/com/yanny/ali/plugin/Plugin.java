@@ -18,9 +18,13 @@ import com.yanny.ali.plugin.common.trades.*;
 import com.yanny.ali.plugin.server.*;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -38,6 +42,8 @@ import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.nbt.LootNbtProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.*;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Map;
 
 @AliEntrypoint
 public class Plugin implements IPlugin {
@@ -263,6 +269,16 @@ public class Plugin implements IPlugin {
         registry.registerItemListing(VillagerTrades.TippedArrowForItemsAndEmeralds.class, TradeUtils::getNode);
         registry.registerItemListing(VillagerTrades.TreasureMapForEmeralds.class, TradeUtils::getNode);
 
+        registerVanillaTrades(registry);
+    }
+
+    // Villager#updateTrades picks 2 listings per level, WanderingTrader#updateTrades 5 from its first pool and 1 from its second
+    private static void registerVanillaTrades(IServerRegistry registry) {
+        for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : BuiltInRegistries.VILLAGER_PROFESSION.entrySet()) {
+            registry.registerTrades(entry.getKey().location(), () -> VillagerTrades.TRADES.get(entry.getValue()), (level) -> 2);
+        }
+
+        registry.registerTrades(new ResourceLocation("wandering_trader"), () -> VillagerTrades.WANDERING_TRADER_TRADES, (level) -> level == 2 ? 1 : 5);
     }
 
     @NotNull

@@ -5,6 +5,7 @@ import net.minecraft.core.Registry;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
@@ -46,6 +47,10 @@ public class ManagedRegistry<K, V> {
 
     public void put(K key, V value) {
         storage.put(key, value);
+    }
+
+    public Map<K, V> entries() {
+        return Collections.unmodifiableMap(storage);
     }
 
     public Optional<V> get(K key) {

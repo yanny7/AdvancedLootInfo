@@ -1,5 +1,6 @@
 ## []
 
+- Added support for trades of custom entities
 - Global loot modifier plugins are now declared by implementing `IGlobalLootModifierPlugin` on Forge
 - Fixed Plugins discovered multiple times on Fabric
 - Moved Farmer's Delight support into new mod `ALI Compat`

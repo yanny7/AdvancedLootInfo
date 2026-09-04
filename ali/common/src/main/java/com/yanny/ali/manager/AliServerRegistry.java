@@ -48,6 +48,8 @@ import java.lang.reflect.Array;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.IntUnaryOperator;
+import java.util.function.Supplier;
 
 public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRegistry, IServerUtils> implements IServerRegistry, IServerUtils, ICommonUtils {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
@@ -58,6 +60,8 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, NumberProvider, RangeValue>> numberConverters = registerClassKeyed("number converters", true, HashMap::new, BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE);
     // listings
     private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, VillagerTrades.ItemListing, TooltipNode, IDataNode>> tradeItemListings = registerClassKeyed("trade item listings", true, HashMap::new, null);
+    // traders
+    private final ManagedRegistry<ResourceLocation, Trades> trades = register("trades", false, HashMap::new, ResourceLocation::toString, null);
     // collectors
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootPoolEntryContainer, List<Item>>> entryItemCollectors = registerClassKeyed("entry item collectors", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, List<Item>, LootItemFunction, List<Item>>> functionItemCollectors = registerClassKeyed("function item collectors", false, HashMap::new, null);
@@ -180,6 +184,15 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @Override
     public <T extends VillagerTrades.ItemListing> void registerItemListing(Class<T> type, TriFunction<IServerUtils, T, TooltipNode, IDataNode> tradeFactory) {
         tradeItemListings.put(type, (u, i, c) -> tradeFactory.apply(u, type.cast(i), c));
+    }
+
+    @Override
+    public void registerTrades(ResourceLocation traderId, Supplier<Int2ObjectMap<VillagerTrades.ItemListing[]>> itemListings, IntUnaryOperator offersPerLevel) {
+        trades.put(traderId, new Trades(itemListings, offersPerLevel));
+    }
+
+    public Map<ResourceLocation, Trades> getTrades() {
+        return trades.entries();
     }
 
     @Deprecated(forRemoval = true, since = "2.2.0")
@@ -366,8 +379,8 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         return NodeUtils.getLootTableNode(modifiers);
     }
 
-    public IDataNode parseTrade(Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap, boolean isWanderingTrader) {
-        return new TradeNode(this, itemListingMap, isWanderingTrader);
+    public IDataNode parseTrade(Trades trades) {
+        return new TradeNode(this, trades.itemListings().get(), trades.offersPerLevel());
     }
 
     // hitCount != null means this table is referenced from another table's tree; the paramSet check
@@ -413,4 +426,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
             TooltipContext.clearPalette();
         }
     }
+
+    public record Trades(Supplier<Int2ObjectMap<VillagerTrades.ItemListing[]>> itemListings, IntUnaryOperator offersPerLevel) {}
 }
