@@ -1,8 +1,5 @@
 package com.yanny.alicompat.compat.ribbits;
 
-import com.yanny.aci.language.CoreLang;
-import com.yanny.aci.language.ITooltipKey;
-import com.yanny.aci.language.Translation;
 import com.yanny.alicompat.ICompatTranslations;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,26 +11,7 @@ public class RibbitsLang implements ICompatTranslations {
 
     public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 
-    public enum Functions implements ITooltipKey {
-        RANDOM_POTION("random_potion", "Random Potion"),
-        ;
-
-        private final Translation translation;
-
-        Functions(String k, String e) {
-            translation = new Translation("alicompat.type.function." + k, e);
-        }
-
-        @NotNull
-        @Override
-        public Translation getTranslation() {
-            return translation;
-        }
-    }
-
     static {
-        CoreLang.register(TRANSLATION_MAP, Functions.class);
-
         TRANSLATION_MAP.put("entity.ribbits.ribbit_nitwit", "Nitwit Ribbit");
         TRANSLATION_MAP.put("entity.ribbits.ribbit_gardener", "Gardener Ribbit");
         TRANSLATION_MAP.put("entity.ribbits.ribbit_sorcerer", "Sorcerer Ribbit");

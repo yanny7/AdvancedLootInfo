@@ -13,7 +13,6 @@ import com.yungnickyoung.minecraft.ribbits.entity.trade.EnchantedItemForAmethyst
 import com.yungnickyoung.minecraft.ribbits.entity.trade.ItemListing;
 import com.yungnickyoung.minecraft.ribbits.entity.trade.ItemsAndAmethystsToItems;
 import com.yungnickyoung.minecraft.ribbits.entity.trade.ItemsForAmethysts;
-import com.yungnickyoung.minecraft.ribbits.entity.trade.PotionForAmethyst;
 import com.yungnickyoung.minecraft.ribbits.module.RibbitProfessionModule;
 import com.yungnickyoung.minecraft.ribbits.module.RibbitTradeModule;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
@@ -51,11 +50,10 @@ public class RibbitsCompat implements IModCompat {
         registry.registerItemListing(AmethystForItemsAccessor.class, (utils, listing, condition) -> listing.getNode(utils, condition));
         registry.registerItemListing(ItemsAndAmethystsToItemsAccessor.class, (utils, listing, condition) -> listing.getNode(utils, condition));
         registry.registerItemListing(EnchantedItemForAmethystAccessor.class, (utils, listing, condition) -> listing.getNode(utils, condition));
-        registry.registerItemListing(PotionForAmethystAccessor.class, (utils, listing, condition) -> listing.getNode(utils, condition));
 
         RibbitTradeModule.TRADES_BY_PROFESSION.forEach((profession, listings) -> {
             ResourceLocation professionId = profession.getId();
-            ResourceLocation traderId = new ResourceLocation(professionId.getNamespace(), "ribbit_" + professionId.getPath());
+            ResourceLocation traderId = ResourceLocation.fromNamespaceAndPath(professionId.getNamespace(), "ribbit_" + professionId.getPath());
             int tradeCount = RibbitProfessionModule.MERCHANT.equals(profession) ? MERCHANT_TRADE_COUNT : TRADE_COUNT;
 
             registry.registerTrades(traderId, () -> getItemListings(profession), (level) -> new TradeLevelInfo(new RangeValue(tradeCount)));
@@ -108,7 +106,6 @@ public class RibbitsCompat implements IModCompat {
         wrappers.put(AmethystForItems.class, (l) -> ReflectionUtils.copyClassData(AmethystForItemsAccessor.class, l, AmethystForItems.class));
         wrappers.put(ItemsAndAmethystsToItems.class, (l) -> ReflectionUtils.copyClassData(ItemsAndAmethystsToItemsAccessor.class, l, ItemsAndAmethystsToItems.class));
         wrappers.put(EnchantedItemForAmethyst.class, (l) -> ReflectionUtils.copyClassData(EnchantedItemForAmethystAccessor.class, l, EnchantedItemForAmethyst.class));
-        wrappers.put(PotionForAmethyst.class, (l) -> ReflectionUtils.copyClassData(PotionForAmethystAccessor.class, l, PotionForAmethyst.class));
 
         return wrappers;
     }

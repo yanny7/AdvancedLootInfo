@@ -23,16 +23,16 @@ public class ItemsForAmethystsAccessor extends BaseAccessor<ItemsForAmethysts> i
     private ItemStack itemStack;
 
     @FieldAccessor
-    private int amethystCostMin;
+    private int costCountMin;
 
     @FieldAccessor
-    private int amethystCostMax;
+    private int costCountMax;
 
     @FieldAccessor
-    private int amountMin;
+    private int resultCountMin;
 
     @FieldAccessor
-    private int amountMax;
+    private int resultCountMax;
 
     @FieldAccessor
     private int maxUses;
@@ -55,9 +55,9 @@ public class ItemsForAmethystsAccessor extends BaseAccessor<ItemsForAmethysts> i
         return new ItemsToItemsNode(
                 utils,
                 Either.left(Items.AMETHYST_SHARD.getDefaultInstance()),
-                new RangeValue(amethystCostMin, amethystCostMax),
+                new RangeValue(costCountMin, costCountMax),
                 Either.left(itemStack.getItem().getDefaultInstance()),
-                new RangeValue(amountMin, amountMax),
+                new RangeValue(resultCountMin, resultCountMax),
                 maxUses,
                 0,
                 priceMultiplier,

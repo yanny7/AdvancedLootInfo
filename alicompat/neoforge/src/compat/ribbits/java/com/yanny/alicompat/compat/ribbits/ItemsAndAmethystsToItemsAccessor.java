@@ -9,30 +9,30 @@ import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.IItemListing;
-import com.yungnickyoung.minecraft.ribbits.entity.trade.AmethystForItems;
+import com.yungnickyoung.minecraft.ribbits.entity.trade.ItemsAndAmethystsToItems;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.VillagerTrades;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
 import org.jetbrains.annotations.Nullable;
 
-public class AmethystForItemsAccessor extends BaseAccessor<AmethystForItems> implements VillagerTrades.ItemListing, IItemListing {
+public class ItemsAndAmethystsToItemsAccessor extends BaseAccessor<ItemsAndAmethystsToItems> implements VillagerTrades.ItemListing, IItemListing {
     @FieldAccessor
-    private Item item;
+    private ItemStack itemCost;
 
     @FieldAccessor
-    private int countMin;
+    private int itemCostCount;
 
     @FieldAccessor
-    private int countMax;
+    private int amethystCostCount;
 
     @FieldAccessor
-    private int amethystMin;
+    private ItemStack result;
 
     @FieldAccessor
-    private int amethystMax;
+    private int resultCount;
 
     @FieldAccessor
     private int maxUses;
@@ -40,7 +40,7 @@ public class AmethystForItemsAccessor extends BaseAccessor<AmethystForItems> imp
     @FieldAccessor
     private float priceMultiplier;
 
-    public AmethystForItemsAccessor(AmethystForItems parent) {
+    public ItemsAndAmethystsToItemsAccessor(ItemsAndAmethystsToItems parent) {
         super(parent);
     }
 
@@ -54,10 +54,12 @@ public class AmethystForItemsAccessor extends BaseAccessor<AmethystForItems> imp
     public IDataNode getNode(IServerUtils utils, TooltipNode conditions) {
         return new ItemsToItemsNode(
                 utils,
-                Either.left(item.getDefaultInstance()),
-                new RangeValue(countMin, countMax),
+                Either.left(itemCost.getItem().getDefaultInstance()),
+                new RangeValue(itemCostCount),
                 Either.left(Items.AMETHYST_SHARD.getDefaultInstance()),
-                new RangeValue(amethystMin, amethystMax),
+                new RangeValue(amethystCostCount),
+                Either.left(result.getItem().getDefaultInstance()),
+                new RangeValue(resultCount),
                 maxUses,
                 0,
                 priceMultiplier,

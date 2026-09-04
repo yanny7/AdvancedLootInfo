@@ -20,19 +20,19 @@ import org.jetbrains.annotations.Nullable;
 
 public class ItemsAndAmethystsToItemsAccessor extends BaseAccessor<ItemsAndAmethystsToItems> implements VillagerTrades.ItemListing, IItemListing {
     @FieldAccessor
-    private ItemStack fromItem;
+    private ItemStack itemCost;
 
     @FieldAccessor
-    private int fromCount;
+    private int itemCostCount;
 
     @FieldAccessor
-    private int amethystCost;
+    private int amethystCostCount;
 
     @FieldAccessor
-    private ItemStack toItem;
+    private ItemStack result;
 
     @FieldAccessor
-    private int toCount;
+    private int resultCount;
 
     @FieldAccessor
     private int maxUses;
@@ -54,12 +54,12 @@ public class ItemsAndAmethystsToItemsAccessor extends BaseAccessor<ItemsAndAmeth
     public IDataNode getNode(IServerUtils utils, TooltipNode conditions) {
         return new ItemsToItemsNode(
                 utils,
+                Either.left(itemCost.getItem().getDefaultInstance()),
+                new RangeValue(itemCostCount),
                 Either.left(Items.AMETHYST_SHARD.getDefaultInstance()),
-                new RangeValue(amethystCost),
-                Either.left(fromItem.getItem().getDefaultInstance()),
-                new RangeValue(fromCount),
-                Either.left(toItem.getItem().getDefaultInstance()),
-                new RangeValue(toCount),
+                new RangeValue(amethystCostCount),
+                Either.left(result.getItem().getDefaultInstance()),
+                new RangeValue(resultCount),
                 maxUses,
                 0,
                 priceMultiplier,

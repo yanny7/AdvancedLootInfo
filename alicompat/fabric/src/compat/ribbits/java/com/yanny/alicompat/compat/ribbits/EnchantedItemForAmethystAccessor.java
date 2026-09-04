@@ -23,13 +23,13 @@ import org.jetbrains.annotations.Nullable;
 
 public class EnchantedItemForAmethystAccessor extends BaseAccessor<EnchantedItemForAmethyst> implements VillagerTrades.ItemListing, IItemListing {
     @FieldAccessor
-    private ItemStack itemStack;
+    private ItemStack result;
 
     @FieldAccessor
-    private int amethystCostMin;
+    private int costCountMin;
 
     @FieldAccessor
-    private int amethystCostMax;
+    private int costCountMax;
 
     @FieldAccessor
     private int maxUses;
@@ -58,12 +58,12 @@ public class EnchantedItemForAmethystAccessor extends BaseAccessor<EnchantedItem
         return new ItemsToItemsNode(
                 utils,
                 Either.left(Items.AMETHYST_SHARD.getDefaultInstance()),
-                new RangeValue(amethystCostMin, amethystCostMax),
+                new RangeValue(costCountMin, costCountMax),
                 TooltipNode.empty(),
                 Either.left(ItemStack.EMPTY),
                 new RangeValue(1),
                 TooltipNode.empty(),
-                Either.left(itemStack.getItem().getDefaultInstance()),
+                Either.left(result.getItem().getDefaultInstance()),
                 new RangeValue(1),
                 tooltip,
                 maxUses,
