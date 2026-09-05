@@ -1,6 +1,12 @@
 {
+  "alicompat.property.value.default_item": "Default Item: %s",
+  "alicompat.type.condition.giant_pick_used": "Giant Pick Used: %s",
+  "alicompat.type.condition.is_minion": "Is Minion: %s",
+  "alicompat.type.condition.mod_exists": "Mod Exists: %s",
+  "alicompat.type.condition.uncrafting_table_enabled": "Uncrafting Table Enabled",
   "alicompat.type.function.copy_meal": "Copy Meal",
   "alicompat.type.function.copy_skillet": "Copy Skillet",
+  "alicompat.type.function.mod_item_swap": "Mod Item Swap:",
   "alicompat.type.function.random_potion": "Random Potion",
   "entity.ribbits.ribbit_fisherman": "Fisherman Ribbit",
   "entity.ribbits.ribbit_gardener": "Gardener Ribbit",
