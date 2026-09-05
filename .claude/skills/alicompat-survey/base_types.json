@@ -1,0 +1,73 @@
+{
+  "_comment": "ALI registry hook -> the vanilla/loader base types a candidate must inherit from. Every name that exists in the scanned jars is used; a name absent on this Minecraft version is skipped, which is how one file covers every branch.",
+  "hooks": {
+    "function": {
+      "title": "Loot functions",
+      "registry": "registerFunctionTooltip / registerCountModifier / registerItemStackModifier / registerItemCollector",
+      "bases": ["net/minecraft/world/level/storage/loot/functions/LootItemFunction"]
+    },
+    "condition": {
+      "title": "Loot conditions",
+      "registry": "registerConditionTooltip / registerChanceModifier",
+      "bases": ["net/minecraft/world/level/storage/loot/predicates/LootItemCondition"]
+    },
+    "entry": {
+      "title": "Loot pool entries",
+      "registry": "registerEntry / registerEntryTooltip / registerItemCollector",
+      "bases": ["net/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer"]
+    },
+    "number_provider": {
+      "title": "Number providers",
+      "registry": "registerNumberProvider",
+      "bases": ["net/minecraft/world/level/storage/loot/providers/number/NumberProvider"]
+    },
+    "ingredient": {
+      "title": "Custom ingredients",
+      "registry": "registerIngredientTooltip",
+      "bases": [
+        "net/minecraft/world/item/crafting/Ingredient",
+        "net/neoforged/neoforge/common/crafting/ICustomIngredient",
+        "net/minecraftforge/common/crafting/AbstractIngredient",
+        "net/fabricmc/fabric/api/recipe/v1/ingredient/CustomIngredient"
+      ]
+    },
+    "item_sub_predicate": {
+      "title": "Item sub-predicates",
+      "registry": "item sub predicate tooltips",
+      "bases": ["net/minecraft/advancements/critereon/ItemSubPredicate"]
+    },
+    "item_listing": {
+      "title": "Trade item listings",
+      "registry": "registerItemListing",
+      "bases": ["net/minecraft/world/entity/npc/VillagerTrades$ItemListing"]
+    },
+    "trader_entity": {
+      "title": "Trading entities",
+      "registry": "registerTrades",
+      "bases": [
+        "net/minecraft/world/item/trading/Merchant",
+        "net/minecraft/world/entity/npc/AbstractVillager"
+      ]
+    },
+    "global_loot_modifier": {
+      "title": "Global Loot Modifiers",
+      "registry": "IGlmModCompat / registerGlobalLootModifier",
+      "bases": [
+        "net/neoforged/neoforge/common/loot/IGlobalLootModifier",
+        "net/minecraftforge/common/loot/IGlobalLootModifier",
+        "io/github/fabricators_of_create/porting_lib/loot/IGlobalLootModifier"
+      ]
+    }
+  },
+  "_excludedModIds": "This repo's own jars sit in the pack too, and every class ALI registers reaches an ALI hook by definition.",
+  "excludedModIds": ["ali", "aci", "awi", "alicompat"],
+  "_excludedPackageSegments": "A mixin lives in the target's hierarchy by construction, so every mixin on a vanilla loot or merchant class would otherwise show up as a candidate.",
+  "excludedPackageSegments": ["mixin", "mixins", "asm"],
+  "excludedRoots": [
+    "net/minecraft/",
+    "net/neoforged/",
+    "net/minecraftforge/",
+    "net/fabricmc/",
+    "com/mojang/"
+  ]
+}
