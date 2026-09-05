@@ -42,7 +42,6 @@ import net.minecraft.util.Unit;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.VillagerTrades;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
@@ -131,18 +130,6 @@ public class TooltipTestSuite {
             @Override
             public Destination getDestination(IServerUtils utils, LootItemCondition condition) {
                 return PluginManager.getInstance().serverRegistry.getDestination(utils, condition);
-            }
-
-            @NotNull
-            @Override
-            public <T extends LootPoolEntryContainer> List<Item> collectItems(IServerUtils utils, T entry) {
-                return PluginManager.getInstance().serverRegistry.collectItems(utils, entry);
-            }
-
-            @NotNull
-            @Override
-            public <T extends LootItemFunction> List<Item> collectItems(IServerUtils utils, List<Item> items, T function) {
-                return PluginManager.getInstance().serverRegistry.collectItems(utils, items, function);
             }
 
             @NotNull

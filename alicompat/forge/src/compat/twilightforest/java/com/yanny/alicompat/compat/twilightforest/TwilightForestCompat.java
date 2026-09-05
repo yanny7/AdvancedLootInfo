@@ -61,7 +61,6 @@ public class TwilightForestCompat implements IGlmModCompat {
 
         registry.registerFunctionTooltip(ModItemSwap.class, (utils, function) -> accessor(function).getTooltip(utils));
         registry.registerItemStackModifier(ModItemSwap.class, (utils, function, itemStack) -> accessor(function).applyItemStackModifier(utils, itemStack));
-        registry.registerItemCollector(ModItemSwap.class, (utils, items, function) -> accessor(function).collectItems(utils, items));
     }
 
     @Override

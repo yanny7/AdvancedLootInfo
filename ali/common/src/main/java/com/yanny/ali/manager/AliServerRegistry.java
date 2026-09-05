@@ -30,7 +30,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.VillagerTrades;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.trading.MerchantOffer;
@@ -64,9 +63,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, VillagerTrades.ItemListing, TooltipNode, IDataNode>> tradeItemListings = registerClassKeyed("trade item listings", true, HashMap::new, null);
     // traders
     private final ManagedRegistry<ResourceLocation, Trades> trades = register("trades", false, HashMap::new, ResourceLocation::toString, null);
-    // collectors
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootPoolEntryContainer, List<Item>>> entryItemCollectors = registerClassKeyed("entry item collectors", false, HashMap::new, null);
-    private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, List<Item>, LootItemFunction, List<Item>>> functionItemCollectors = registerClassKeyed("function item collectors", false, HashMap::new, null);
     // tooltips
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootPoolEntryContainer, TooltipBuilder>> entryTooltips = registerClassKeyed("entry tooltips", true, HashMap::new, BuiltInRegistries.LOOT_POOL_ENTRY_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemFunction, TooltipBuilder>> functionTooltips = registerClassKeyed("function tooltips", true, HashMap::new, BuiltInRegistries.LOOT_FUNCTION_TYPE);
@@ -118,16 +114,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     public List<ILootModifier<?>> getLootModifiers() {
         return lootModifierMap;
-    }
-
-    @Override
-    public <T extends LootPoolEntryContainer> void registerItemCollector(Class<T> type, BiFunction<IServerUtils, T, List<Item>> itemSupplier) {
-        entryItemCollectors.put(type, (u, e) -> itemSupplier.apply(u, type.cast(e)));
-    }
-
-    @Override
-    public <T extends LootItemFunction> void registerItemCollector(Class<T> type, TriFunction<IServerUtils, List<Item>, T, List<Item>> itemSupplier) {
-        functionItemCollectors.put(type, (u, l, f) -> itemSupplier.apply(u, l, type.cast(f)));
     }
 
     @Override
@@ -213,22 +199,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @Override
     public void registerEnumTranslation(Class<? extends Enum<?>> type, String modId, String owner) {
         enumValues.put(type, new EnumTranslation(modId, owner));
-    }
-
-    @NotNull
-    @Override
-    public <T extends LootPoolEntryContainer> List<Item> collectItems(IServerUtils utils, T entry) {
-        return entryItemCollectors.get(entry.getClass())
-                .map((e) -> e.apply(utils, entry))
-                .orElseGet(List::of);
-    }
-
-    @NotNull
-    @Override
-    public <T extends LootItemFunction> List<Item> collectItems(IServerUtils utils, List<Item> items, T function) {
-        return functionItemCollectors.get(function.getClass())
-                .map((e) -> e.apply(utils, items, function))
-                .orElseGet(List::of);
     }
 
     @NotNull

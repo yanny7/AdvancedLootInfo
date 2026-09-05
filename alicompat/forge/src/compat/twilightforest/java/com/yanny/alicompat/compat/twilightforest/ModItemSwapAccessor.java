@@ -5,16 +5,13 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
-import com.yanny.alicompat.accessor.IFunctionItemCollector;
 import com.yanny.alicompat.accessor.IFunctionTooltip;
 import com.yanny.alicompat.accessor.IItemStackModifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import twilightforest.loot.functions.ModItemSwap;
 
-import java.util.List;
-
-public class ModItemSwapAccessor extends BaseAccessor<ModItemSwap> implements IFunctionTooltip, IItemStackModifier, IFunctionItemCollector {
+public class ModItemSwapAccessor extends BaseAccessor<ModItemSwap> implements IFunctionTooltip, IItemStackModifier {
     @FieldAccessor
     private Item item;
     @FieldAccessor
@@ -39,10 +36,5 @@ public class ModItemSwapAccessor extends BaseAccessor<ModItemSwap> implements IF
 
         newStack.setTag(itemStack.getTag());
         return newStack;
-    }
-
-    @Override
-    public List<Item> collectItems(IServerUtils utils, List<Item> items) {
-        return List.of(item);
     }
 }

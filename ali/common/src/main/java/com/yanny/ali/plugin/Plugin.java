@@ -107,17 +107,6 @@ public class Plugin implements IPlugin {
 
         EnumTypes.TRANSLATED_ENUMS.forEach((type, owner) -> registry.registerEnumTranslation(type, Utils.MOD_ID, owner));
 
-        registry.registerItemCollector(LootItem.class, ItemCollectorUtils::collectItems);
-        registry.registerItemCollector(TagEntry.class, ItemCollectorUtils::collectTags);
-        registry.registerItemCollector(AlternativesEntry.class, ItemCollectorUtils::collectComposite);
-        registry.registerItemCollector(EntryGroup.class, ItemCollectorUtils::collectComposite);
-        registry.registerItemCollector(SequentialEntry.class, ItemCollectorUtils::collectComposite);
-        registry.registerItemCollector(EmptyLootItem.class, ItemCollectorUtils::collectSingleton);
-        registry.registerItemCollector(DynamicLoot.class, ItemCollectorUtils::collectSingleton);
-        registry.registerItemCollector(LootTableReference.class, ItemCollectorUtils::collectReference);
-
-        registry.registerItemCollector(SmeltItemFunction.class, ItemCollectorUtils::collectFurnaceSmelt);
-
         registry.registerNumberProvider(ConstantValue.class, Plugin::convertConstant);
         registry.registerNumberProvider(UniformGenerator.class, Plugin::convertUniform);
         registry.registerNumberProvider(BinomialDistributionGenerator.class, Plugin::convertBinomial);
