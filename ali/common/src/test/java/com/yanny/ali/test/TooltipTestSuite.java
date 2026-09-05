@@ -79,6 +79,7 @@ import java.util.concurrent.ExecutionException;
         TooltipTest.class,
         NodeTest.class,
         ServerUtilsTest.class,
+        GlobalLootModifierTest.class,
         ConfigTest.class
 })
 public class TooltipTestSuite {
@@ -99,6 +100,7 @@ public class TooltipTestSuite {
         TestUtils.LoadedLanguage loadedLanguage = TestUtils.loadDefaultLanguage(resourceManager, LanguageHolder.TRANSLATION_MAP);
 
         Language.inject(loadedLanguage.language());
+        TestUtils.bindVanillaTags();
         UNUSED = loadedLanguage.unusedKeys();
 
         PluginManager.getInstance().registerCommonEvent();
