@@ -10,7 +10,6 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.ModifiedNode;
-import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
@@ -40,7 +39,7 @@ public class FieryToolSmeltingModifierAccessor extends BaseAccessor<FieryToolSme
     }
 
     @Override
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils, ILootTableIdConditionPredicate ignoredPredicate) {
+    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
         List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
 
         return Optional.of(new ILootModifier<Block>() {

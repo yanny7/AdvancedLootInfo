@@ -1,5 +1,6 @@
 ## []
 
+- Global loot modifier conditions that carry more than the destination are kept in the tooltip
 - Entity and gameplay loot tables are listed in stable order
 - Job sites of modded villager professions are resolved from the POI registry
 - A loot table referenced by another loot table no longer triggers entity scan

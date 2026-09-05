@@ -15,6 +15,7 @@ import com.yanny.ali.plugin.common.EntityUtils;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.*;
 import com.yanny.ali.plugin.common.trades.*;
+import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.server.*;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
@@ -139,6 +140,9 @@ public class Plugin implements IPlugin {
         registry.registerEntryTooltip(EmptyLootItem.class, EntryTooltipUtils::getEmptyTooltip);
         registry.registerEntryTooltip(DynamicLoot.class, EntryTooltipUtils::getDynamicTooltip);
         registry.registerEntryTooltip(LootTableReference.class, EntryTooltipUtils::getReferenceTooltip);
+
+        registry.registerDestination(LootItemBlockStatePropertyCondition.class, GlobalLootModifierUtils::getBlockStateDestination);
+        registry.registerDestination(LootItemEntityPropertyCondition.class, GlobalLootModifierUtils::getEntityPropertyDestination);
 
         registry.registerConditionTooltip(AllOfCondition.class, ConditionTooltipUtils::getAllOfTooltip);
         registry.registerConditionTooltip(AnyOfCondition.class, ConditionTooltipUtils::getAnyOfTooltip);

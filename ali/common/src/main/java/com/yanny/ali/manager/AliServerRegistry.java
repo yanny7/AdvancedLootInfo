@@ -17,6 +17,8 @@ import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.common.trades.TradeUtils;
+import com.yanny.ali.plugin.glm.Destination;
+import com.yanny.ali.plugin.glm.IDestinationResolver;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.MissingTooltipUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -75,6 +77,8 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemCondition, EnchantedRanges>> chanceModifiers = registerClassKeyed("chance modifiers", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemFunction, EnchantedRanges>> countModifiers = registerClassKeyed("count modifiers", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifiers = registerClassKeyed("item stack modifiers", false, HashMap::new, null);
+    // destinations
+    private final ManagedRegistry<Class<?>, IDestinationResolver<LootItemCondition>> destinations = registerClassKeyed("global loot modifier destinations", false, HashMap::new, null);
     // translations
     private final ManagedRegistry<Class<?>, EnumTranslation> enumValues = registerClassKeyed("enum values", true, HashMap::new, null);
 
@@ -174,6 +178,11 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @Override
     public <T extends LootItemFunction> void registerItemStackModifier(Class<T> type, TriFunction<IServerUtils, T, ItemStack, ItemStack> consumer) {
         itemStackModifiers.put(type, (u, f, i) -> consumer.apply(u, type.cast(f), i));
+    }
+
+    @Override
+    public <T extends LootItemCondition> void registerDestination(Class<T> type, IDestinationResolver<T> resolver) {
+        destinations.put(type, (u, c) -> resolver.resolve(u, type.cast(c)));
     }
 
     @Override
@@ -369,6 +378,14 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @Override
     public List<LootPool> getLootPools(LootTable lootTable) {
         return Services.getPlatform().getLootPools(lootTable);
+    }
+
+    @Nullable
+    @Override
+    public Destination getDestination(IServerUtils utils, LootItemCondition condition) {
+        return destinations.get(condition.getClass())
+                .map((r) -> r.resolve(utils, condition))
+                .orElse(null);
     }
 
     public IDataNode parseTable(List<ILootModifier<?>> modifiers, LootTable lootTable) {

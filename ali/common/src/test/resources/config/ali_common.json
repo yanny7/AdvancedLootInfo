@@ -168,5 +168,6 @@
   },
   "logMoreStatistics": false,
   "showInGameNames": true,
-  "hideDefaultBlockLoot": true
+  "hideDefaultBlockLoot": true,
+  "showUnboundedGlobalLootModifiers": false
 }

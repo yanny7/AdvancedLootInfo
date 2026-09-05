@@ -1,21 +1,27 @@
 package com.yanny.ali.test;
 
 import com.yanny.ali.api.ILootModifier;
+import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.configuration.AliConfig;
+import com.yanny.ali.plugin.glm.Destination;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
-import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 import com.yanny.ali.plugin.server.LootConditionTypes;
 import net.minecraft.advancements.critereon.*;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.EntityTypeTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -24,29 +30,21 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 public class GlobalLootModifierTest {
     private static final String ENTITY = "ENTITY";
     private static final String BLOCK = "BLOCK";
     private static final String LOOT_TABLE = "LOOT_TABLE";
+    private static final String UNBOUNDED = "UNBOUNDED";
     private static final String NONE = "NONE";
 
     private static final ResourceLocation DUNGEON = new ResourceLocation("chests/simple_dungeon");
     private static final ResourceLocation FORTRESS = new ResourceLocation("chests/nether_bridge");
 
-    private static final ILootTableIdConditionPredicate TABLE_ID = new ILootTableIdConditionPredicate() {
-        @Override
-        public boolean isLootTableIdCondition(LootItemCondition condition) {
-            return condition instanceof TableIdCondition;
-        }
-
-        @Override
-        public ResourceLocation getTargetLootTableId(LootItemCondition condition) {
-            return ((TableIdCondition) condition).id();
-        }
-    };
+    private static final IServerUtils UTILS = serverUtils(false);
+    private static final IServerUtils UNBOUNDED_UTILS = serverUtils(true);
 
     @Test
     public void bareEntityConditionResolvesToEntity() {
@@ -116,34 +114,40 @@ public class GlobalLootModifierTest {
     }
 
     @Test
-    public void entityPredicateDetailIsDroppedFromTheTooltip_D1() {
+    public void entityPredicateDetailSurvivesIntoTheTooltip() {
         Result result = resolve(entity(LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity()
                 .entityType(EntityTypePredicate.of(EntityType.ZOMBIE))
                 .flags(EntityFlagsPredicate.Builder.flags().setIsBaby(true).build())));
 
         assertEquals(ENTITY, result.type());
         assertTrue(result.matches(entityOf(EntityType.ZOMBIE)));
-        assertEquals(List.of(), result.retained());
+        assertEquals(List.of("LootItemEntityPropertyCondition"), result.retained());
     }
 
     @Test
-    public void blockStatePropertiesAreDroppedFromTheTooltip_D1() {
+    public void blockStatePropertiesSurviveIntoTheTooltip() {
         Result result = resolve(blockWithAge(Blocks.WHEAT, 7));
 
         assertEquals(BLOCK, result.type());
         assertTrue(result.matches(Blocks.WHEAT));
-        assertEquals(List.of(), result.retained());
+        assertEquals(List.of("LootItemBlockStatePropertyCondition"), result.retained());
     }
 
     @Test
-    public void allOfIsNotDescendedInto_D2() {
-        assertEquals(NONE, resolve(allOf(entity(EntityType.ZOMBIE))).type());
-        assertEquals(NONE, resolve(allOf(block(Blocks.FURNACE))).type());
-        assertEquals(NONE, resolve(allOf(table(DUNGEON))).type());
-        assertEquals(NONE, resolve(allOf(
+    public void allOfIsDescendedInto() {
+        assertEquals(ENTITY, resolve(allOf(entity(EntityType.ZOMBIE))).type());
+        assertEquals(BLOCK, resolve(allOf(block(Blocks.FURNACE))).type());
+        assertEquals(LOOT_TABLE, resolve(allOf(table(DUNGEON))).type());
+
+        Result result = resolve(allOf(
                 MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.DIAMOND_PICKAXE)).build(),
                 block(Blocks.STONE)
-        )).type());
+        ));
+
+        assertEquals(BLOCK, result.type());
+        assertTrue(result.matches(Blocks.STONE));
+        assertFalse(result.matches(Blocks.DIRT));
+        assertEquals(List.of("AllOfCondition"), result.retained());
     }
 
     @Test
@@ -168,19 +172,17 @@ public class GlobalLootModifierTest {
     }
 
     @Test
-    public void anyOfAcrossKindsKeepsOnlyTheFirstKind_D3() {
-        List<LootItemCondition> conditions = List.of(anyOf(entity(EntityType.ZOMBIE), table(DUNGEON)));
-        Result result = resolve(conditions.toArray(new LootItemCondition[0]));
+    public void anyOfAcrossKindsKeepsOnlyTheFirstKind() {
+        Result result = resolve(anyOf(entity(EntityType.ZOMBIE), table(DUNGEON)));
 
         assertEquals(ENTITY, result.type());
         assertTrue(result.matches(entityOf(EntityType.ZOMBIE)));
-        assertTrue(GlobalLootModifierUtils.tablePredicate(conditions, TABLE_ID));
-        assertTrue(GlobalLootModifierUtils.tablePredicate(conditions, DUNGEON, TABLE_ID));
-        assertEquals(List.of(), result.retained());
+        assertEquals(LOOT_TABLE, resolve(anyOf(table(DUNGEON))).type());
+        assertEquals(List.of("AnyOfCondition"), result.retained());
     }
 
     @Test
-    public void andListTakesTheFirstKindByTypePriority_D4() {
+    public void andListTakesTheFirstKindByTypePriority() {
         assertEquals(BLOCK, resolve(block(Blocks.FURNACE), table(DUNGEON)).type());
         assertEquals(BLOCK, resolve(table(DUNGEON), block(Blocks.FURNACE)).type());
         assertEquals(ENTITY, resolve(block(Blocks.FURNACE), entity(EntityType.ZOMBIE)).type());
@@ -188,7 +190,7 @@ public class GlobalLootModifierTest {
     }
 
     @Test
-    public void andListOfContradictingEntitiesMatchesBoth_D4() {
+    public void andListOfContradictingEntitiesMatchesBoth() {
         Result result = resolve(entity(EntityType.ZOMBIE), entity(EntityType.CREEPER));
 
         assertEquals(ENTITY, result.type());
@@ -197,7 +199,7 @@ public class GlobalLootModifierTest {
     }
 
     @Test
-    public void andListOfContradictingBlocksMatchesBoth_D4() {
+    public void andListOfContradictingBlocksMatchesBoth() {
         Result result = resolve(block(Blocks.FURNACE), block(Blocks.STONE));
 
         assertEquals(BLOCK, result.type());
@@ -224,12 +226,57 @@ public class GlobalLootModifierTest {
     }
 
     @Test
-    public void unresolvableConditionsAreADeadEnd_D8() {
+    public void unresolvableConditionsAreADeadEnd() {
         assertEquals(NONE, resolve().type());
         assertEquals(NONE, resolve(MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.DIAMOND_PICKAXE)).build()).type());
         assertEquals(NONE, resolve(LootItemRandomChanceCondition.randomChance(0.5F).build()).type());
         assertEquals(NONE, resolve(LootItemKilledByPlayerCondition.killedByPlayer().build()).type());
         assertEquals(NONE, resolve(new ModCondition()).type());
+    }
+
+    @Test
+    public void unresolvableConditionsBecomeUnboundedWhenEnabled() {
+        Result result = resolveUnbounded(MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.DIAMOND_PICKAXE)).build());
+
+        assertEquals(UNBOUNDED, result.type());
+        assertTrue(result.matches(Blocks.FURNACE));
+        assertTrue(result.matches(entityOf(EntityType.ZOMBIE)));
+        assertTrue(result.matches(DUNGEON));
+        assertEquals(List.of("MatchTool"), result.retained());
+
+        assertEquals(UNBOUNDED, resolveUnbounded().type());
+        assertEquals(UNBOUNDED, resolveUnbounded(inverted(table(DUNGEON))).type());
+    }
+
+    @Test
+    public void resolvedDestinationsAreUnaffectedWhenUnboundedIsEnabled() {
+        assertEquals(ENTITY, resolveUnbounded(entity(EntityType.ZOMBIE)).type());
+        assertEquals(BLOCK, resolveUnbounded(block(Blocks.FURNACE)).type());
+        assertEquals(LOOT_TABLE, resolveUnbounded(table(DUNGEON)).type());
+    }
+
+    @Test
+    public void emptyConditionListIsADeadEnd() {
+        assertEquals(NONE, resolve().type());
+    }
+
+    @Test
+    public void matchToolShapesAreADeadEnd() {
+        assertEquals(NONE, resolve(MatchTool.toolMatches(ItemPredicate.Builder.item().of(ItemTags.PICKAXES)).build()).type());
+        assertEquals(NONE, resolve(MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.NETHERITE_PICKAXE)).build()).type());
+        assertEquals(NONE, resolve(MatchTool.toolMatches(ItemPredicate.Builder.item().hasNbt(new CompoundTag())).build()).type());
+    }
+
+    @Test
+    public void locationCheckOnDimensionIsADeadEnd() {
+        assertEquals(NONE, resolve(LocationCheck.checkLocation(LocationPredicate.Builder.location()
+                .setDimension(Level.NETHER)).build()).type());
+    }
+
+    @Test
+    public void modConditionOnlyIsADeadEnd() {
+        assertEquals(NONE, resolve(new ModCondition()).type());
+        assertEquals(NONE, resolve(new ModCondition(), MatchTool.toolMatches(ItemPredicate.Builder.item().of(ItemTags.PICKAXES)).build()).type());
     }
 
     @Test
@@ -241,13 +288,47 @@ public class GlobalLootModifierTest {
     }
 
     @NotNull
+    private static IServerUtils serverUtils(boolean showUnboundedGlobalLootModifiers) {
+        IServerUtils utils = mock(IServerUtils.class);
+        AliConfig config = new AliConfig();
+
+        config.showUnboundedGlobalLootModifiers = showUnboundedGlobalLootModifiers;
+        doAnswer((invocation) -> destination(invocation.getArgument(1))).when(utils).getDestination(any(), any());
+        doReturn(config).when(utils).getConfiguration();
+        return utils;
+    }
+
+    @Nullable
+    private static Destination destination(LootItemCondition condition) {
+        if (condition instanceof LootItemBlockStatePropertyCondition blockCondition) {
+            return GlobalLootModifierUtils.getBlockStateDestination(UTILS, blockCondition);
+        } else if (condition instanceof LootItemEntityPropertyCondition entityCondition) {
+            return GlobalLootModifierUtils.getEntityPropertyDestination(UTILS, entityCondition);
+        } else if (condition instanceof TableIdCondition tableCondition) {
+            return new Destination.Table(tableCondition.id(), true);
+        }
+
+        return null;
+    }
+
+    @NotNull
     private static Result resolve(LootItemCondition... conditions) {
+        return resolve(UTILS, conditions);
+    }
+
+    @NotNull
+    private static Result resolveUnbounded(LootItemCondition... conditions) {
+        return resolve(UNBOUNDED_UTILS, conditions);
+    }
+
+    @NotNull
+    private static Result resolve(IServerUtils utils, LootItemCondition... conditions) {
         List<String> retained = new ArrayList<>();
-        Optional<ILootModifier<?>> modifier = GlobalLootModifierUtils.getLootModifier(List.of(conditions), (c) -> {
+        Optional<ILootModifier<?>> modifier = GlobalLootModifierUtils.getLootModifier(utils, List.of(conditions), (c) -> {
             retained.clear();
             c.forEach((condition) -> retained.add(condition.getClass().getSimpleName()));
             return List.of();
-        }, TABLE_ID);
+        });
 
         modifier.ifPresent(ILootModifier::getOperations);
         return new Result(modifier, retained);
@@ -318,8 +399,10 @@ public class GlobalLootModifierTest {
                 return ENTITY;
             } else if (type instanceof ILootModifier.IType.BlockType) {
                 return BLOCK;
-            } else {
+            } else if (type instanceof ILootModifier.IType.LootTableType) {
                 return LOOT_TABLE;
+            } else {
+                return UNBOUNDED;
             }
         }
 

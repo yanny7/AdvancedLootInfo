@@ -4,6 +4,7 @@ import com.yanny.aci.api.ICoreServerUtils;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
+import com.yanny.ali.plugin.glm.Destination;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -68,4 +69,7 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
 
     @NotNull
     List<LootPool> getLootPools(LootTable lootTable);
+
+    @Nullable
+    Destination getDestination(IServerUtils utils, LootItemCondition condition);
 }

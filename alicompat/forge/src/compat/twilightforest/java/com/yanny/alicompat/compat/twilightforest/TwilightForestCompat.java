@@ -2,8 +2,8 @@ package com.yanny.alicompat.compat.twilightforest;
 
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerRegistry;
+import com.yanny.ali.plugin.glm.Destination;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
-import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 import com.yanny.alicompat.IGlmModCompat;
 import com.yanny.alicompat.accessor.GlmAccessorUtils;
 import com.yanny.alicompat.accessor.ReflectionUtils;
@@ -15,6 +15,8 @@ import twilightforest.loot.conditions.UncraftingTableEnabledCondition;
 import twilightforest.loot.functions.ModItemSwap;
 import twilightforest.loot.modifiers.FieryToolSmeltingModifier;
 import twilightforest.loot.modifiers.GiantToolGroupingModifier;
+
+import java.util.Set;
 
 public class TwilightForestCompat implements IGlmModCompat {
     @NotNull
@@ -34,15 +36,18 @@ public class TwilightForestCompat implements IGlmModCompat {
         registry.registerConditionTooltip(UncraftingTableEnabledCondition.class,
                 (ignoredUtils, ignoredCondition) -> TooltipBuilder.keyOnly(TwilightForestLang.Conditions.UNCRAFTING_TABLE_ENABLED));
 
+        registry.registerDestination(GiantPickUsedCondition.class, (ignoredUtils, ignoredCondition) ->
+                new Destination.Blocks(Set.copyOf(GiantToolGroupingModifier.CONVERSIONS.keySet()), false));
+
         registry.registerFunctionTooltip(ModItemSwap.class, (utils, function) -> accessor(function).getTooltip(utils));
         registry.registerItemStackModifier(ModItemSwap.class, (utils, function, itemStack) -> accessor(function).applyItemStackModifier(utils, itemStack));
         registry.registerItemCollector(ModItemSwap.class, (utils, items, function) -> accessor(function).collectItems(utils, items));
     }
 
     @Override
-    public void registerGlobalLootModifier(IGlobalLootModifierPlugin.IRegistry registry, ILootTableIdConditionPredicate predicate) {
-        GlmAccessorUtils.registerGlobalLootModifier(registry, FieryToolSmeltingModifier.class, FieryToolSmeltingModifierAccessor.class, predicate);
-        GlmAccessorUtils.registerGlobalLootModifier(registry, GiantToolGroupingModifier.class, GiantToolGroupingModifierAccessor.class, predicate);
+    public void registerGlobalLootModifier(IGlobalLootModifierPlugin.IRegistry registry) {
+        GlmAccessorUtils.registerGlobalLootModifier(registry, FieryToolSmeltingModifier.class, FieryToolSmeltingModifierAccessor.class);
+        GlmAccessorUtils.registerGlobalLootModifier(registry, GiantToolGroupingModifier.class, GiantToolGroupingModifierAccessor.class);
     }
 
     @NotNull

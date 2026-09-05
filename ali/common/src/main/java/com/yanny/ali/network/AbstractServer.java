@@ -8,6 +8,7 @@ import com.yanny.ali.Utils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.api.ILootModifier;
+import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.ListNode;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.AliServerRegistry;
@@ -16,7 +17,6 @@ import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.common.EntityLootTableResolver;
 import com.yanny.ali.plugin.common.nodes.EntityLootTableNode;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
-import com.yanny.ali.plugin.server.ItemCollectorUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -30,7 +30,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.*;
@@ -81,25 +80,29 @@ public abstract class AbstractServer {
         Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();
         Map<ResourceLocation, LootTable> unprocessedLootTables = new HashMap<>(lootTables);
         Map<ResourceLocation, LootTable> fakeLootTables = new HashMap<>(fakeLootDataManager.getLootTables());
-        Map<ResourceLocation, List<Item>> lootTableItems;
         List<ILootModifier<?>> lootModifiers = serverRegistry.getLootModifiers();
         Map<ILootModifier.IType<?>, List<ILootModifier<?>>> groupedTypes = lootModifiers.stream().collect(Collectors.groupingBy(ILootModifier::getType));
         List<ILootModifier<?>> blockLootModifiers = groupedTypes.getOrDefault(ILootModifier.IType.BLOCK, Collections.emptyList());
         List<ILootModifier<?>> entityLootModifiers = groupedTypes.getOrDefault(ILootModifier.IType.ENTITY, Collections.emptyList());
         List<ILootModifier<?>> lootTableLootModifiers = groupedTypes.getOrDefault(ILootModifier.IType.LOOT_TABLE, Collections.emptyList());
+        List<ILootModifier<?>> unboundedLootModifiers = groupedTypes.getOrDefault(ILootModifier.IType.UNBOUNDED, Collections.emptyList());
+        Set<ILootModifier<?>> attachedLootModifiers = Collections.newSetFromMap(new IdentityHashMap<>());
         Map<ResourceLocation, IDataNode> tradeNodes;
 
         lootTables.forEach(serverRegistry::addLootTable); // used for table references
-        lootTableItems = collectLootTableItems(lootTables, fakeLootTables);
 
         Set<ResourceLocation> referencedLootTables = collectReferencedLootTables(serverRegistry, lootTables, fakeLootTables);
 
         chunks.clear();
 
         // apply modifiers
-        lootNodes.putAll(processBlocks(serverRegistry, config, unprocessedLootTables, fakeLootTables, blockLootModifiers, lootTableLootModifiers, lootTableItems));
-        lootNodes.putAll(processEntities(serverRegistry, config, serverRegistry.getServerLevel(), unprocessedLootTables, fakeLootTables, entityLootModifiers, lootTableLootModifiers, lootTableItems, referencedLootTables));
-        lootNodes.putAll(processLootTables(serverRegistry, config, unprocessedLootTables, fakeLootTables, lootTableLootModifiers, lootTableItems));
+        lootNodes.putAll(processBlocks(serverRegistry, config, unprocessedLootTables, fakeLootTables, blockLootModifiers, lootTableLootModifiers, unboundedLootModifiers, attachedLootModifiers));
+        lootNodes.putAll(processEntities(serverRegistry, config, serverRegistry.getServerLevel(), unprocessedLootTables, fakeLootTables, entityLootModifiers, lootTableLootModifiers, unboundedLootModifiers, attachedLootModifiers, referencedLootTables));
+        lootNodes.putAll(processLootTables(serverRegistry, config, unprocessedLootTables, fakeLootTables, lootTableLootModifiers, unboundedLootModifiers, attachedLootModifiers));
+
+        if (lootModifiers.size() > attachedLootModifiers.size()) {
+            LOGGER.info("{} of {} loot modifiers ended up on no page", lootModifiers.size() - attachedLootModifiers.size(), lootModifiers.size());
+        }
 
         lootNodes = removeEmptyLootTable(serverRegistry, lootNodes);
         tradeNodes = new HashMap<>(processTrades(serverRegistry, config));
@@ -147,11 +150,6 @@ public abstract class AbstractServer {
 
     protected abstract void sendDoneMessage(ServerPlayer serverPlayer, DoneMessage message);
 
-    @NotNull
-    private static List<Item> getItems(Map.Entry<ResourceLocation, LootTable> lootTableMap) {
-        return ItemCollectorUtils.collectLootTable(PluginManager.getInstance().serverRegistry, lootTableMap.getValue());
-    }
-
     /**
      * The items a table produces are collected here only to tell an empty table from a real one - the client derives
      * its own from the very same node tree ({@code GenericUtils.collectItems}), so nothing item-shaped is sent.
@@ -194,7 +192,8 @@ public abstract class AbstractServer {
     @NotNull
     private static Map<ResourceLocation, IDataNode> processBlocks(AliServerRegistry serverRegistry, AliConfig config, Map<ResourceLocation, LootTable> lootTables,
                                                                   Map<ResourceLocation, LootTable> fakeLootTables, List<ILootModifier<?>> blockLootModifiers,
-                                                                  List<ILootModifier<?>> lootTableLootModifiers, Map<ResourceLocation, List<Item>> lootTableItems) {
+                                                                  List<ILootModifier<?>> lootTableLootModifiers, List<ILootModifier<?>> unboundedLootModifiers,
+                                                                  Set<ILootModifier<?>> attachedLootModifiers) {
         Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();
         Map<ResourceLocation, List<Block>> blocksByLootTable = new LinkedHashMap<>();
         int defaultDropLootTables = 0;
@@ -220,11 +219,10 @@ public abstract class AbstractServer {
             TooltipContext.set(location);
 
             if (!blocks.isEmpty()) {
-                List<Item> items = lootTableItems.getOrDefault(location, Collections.emptyList());
-                List<ILootModifier<?>> lootModifiers = Stream.concat(
-                        blockLootModifiers.stream().filter((m) -> blocks.stream().anyMatch((b) -> predicateModifier(m, b, items))),
-                        lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
-                ).toList();
+                List<ILootModifier<?>> lootModifiers = filterByItems(serverRegistry, Stream.concat(Stream.concat(
+                        blockLootModifiers.stream().filter((m) -> blocks.stream().anyMatch((b) -> predicateModifier(m, b))),
+                        lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location))
+                ), unboundedLootModifiers.stream()).toList(), lootTable, location, fakeLootTables, attachedLootModifiers);
 
                 if (config.hideDefaultBlockLoot && lootModifiers.isEmpty() && !fakeLootTables.containsKey(location)
                         && blocks.stream().anyMatch((b) -> isDefaultBlockDrop(serverRegistry, config, b, lootTable))) {
@@ -320,8 +318,8 @@ public abstract class AbstractServer {
     @NotNull
     private static Map<ResourceLocation, IDataNode> processEntities(AliServerRegistry serverRegistry, AliConfig config, ServerLevel level, Map<ResourceLocation, LootTable> lootTables,
                                                                     Map<ResourceLocation, LootTable> fakeLootTables, List<ILootModifier<?>> entityLootModifiers,
-                                                                    List<ILootModifier<?>> lootTableLootModifiers, Map<ResourceLocation, List<Item>> lootTableItems,
-                                                                    Set<ResourceLocation> referencedLootTables) {
+                                                                    List<ILootModifier<?>> lootTableLootModifiers, List<ILootModifier<?>> unboundedLootModifiers,
+                                                                    Set<ILootModifier<?>> attachedLootModifiers, Set<ResourceLocation> referencedLootTables) {
         Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();
         EntityLootTableResolver resolver = new EntityLootTableResolver(serverRegistry, level, referencedLootTables);
         Set<ResourceLocation> candidates = new HashSet<>(lootTables.keySet());
@@ -352,12 +350,11 @@ public abstract class AbstractServer {
             TooltipContext.set(location);
 
             if (!entityTypes.isEmpty()) {
-                List<Item> items = lootTableItems.getOrDefault(location, Collections.emptyList());
-                List<ILootModifier<?>> lootModifiers = Stream.concat(
+                List<ILootModifier<?>> lootModifiers = filterByItems(serverRegistry, Stream.concat(Stream.concat(
                         // the only step that still needs an instance, and only when global loot modifiers exist at all
-                        entityLootModifiers.stream().filter((m) -> entityTypes.stream().anyMatch((t) -> sampleEntities(resolver, t, location).stream().anyMatch((e) -> predicateModifier(m, e, items)))),
-                        lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
-                ).toList();
+                        entityLootModifiers.stream().filter((m) -> entityTypes.stream().anyMatch((t) -> sampleEntities(resolver, t, location).stream().anyMatch((e) -> predicateModifier(m, e)))),
+                        lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location))
+                ), unboundedLootModifiers.stream()).toList(), lootTable, location, fakeLootTables, attachedLootModifiers);
 
                 try {
                     if (lootTable != null) {
@@ -453,7 +450,7 @@ public abstract class AbstractServer {
     @NotNull
     private static Map<ResourceLocation, IDataNode> processLootTables(AliServerRegistry serverRegistry, AliConfig config, Map<ResourceLocation, LootTable> lootTables,
                                                                       Map<ResourceLocation, LootTable> fakeLootTables, List<ILootModifier<?>> lootTableLootModifiers,
-                                                                      Map<ResourceLocation, List<Item>> lootTableItems) {
+                                                                      List<ILootModifier<?>> unboundedLootModifiers, Set<ILootModifier<?>> attachedLootModifiers) {
         Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();
 
         for (Map.Entry<ResourceLocation, LootTable> entry : lootTables.entrySet()) {
@@ -463,8 +460,10 @@ public abstract class AbstractServer {
 
             if (config.gameplayCategories.stream().filter((f) -> f.validate(location)).findFirst().map((f) -> !f.isHidden()).orElse(false)) {
                 LootTable lootTable = entry.getValue();
-                List<Item> items = lootTableItems.get(location);
-                List<ILootModifier<?>> lootModifiers = lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items)).toList();
+                List<ILootModifier<?>> lootModifiers = filterByItems(serverRegistry, Stream.concat(
+                        lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location)),
+                        unboundedLootModifiers.stream()
+                ).toList(), lootTable, location, fakeLootTables, attachedLootModifiers);
 
                 try {
                     IDataNode node = serverRegistry.parseTable(lootModifiers, lootTable);
@@ -516,22 +515,76 @@ public abstract class AbstractServer {
         return nodes;
     }
 
-    private static <T> boolean predicateModifier(ILootModifier<?> modifier, T value, List<Item> items) {
+    private static <T> boolean predicateModifier(ILootModifier<?> modifier, T value) {
         try {
             //noinspection unchecked
-            return ((ILootModifier<T>) modifier).predicate(value) && predicateItem(modifier, items);
+            return ((ILootModifier<T>) modifier).predicate(value);
         } catch (Throwable e) {
             LOGGER.warn("Failed to evaluate loot modifier predicate for {}: {}", value, e.getMessage(), e);
             return false;
         }
     }
 
-    private static boolean predicateItem(ILootModifier<?> modifier, List<Item> items) { //FIXME ItemStack!
-        if (!items.isEmpty()) {
-            return items.stream().anyMatch((i) -> modifier.getOperations().stream().anyMatch(o -> o.predicate().test(i.getDefaultInstance())));
-        } else {
-            return true;
+    @NotNull
+    private static List<ILootModifier<?>> filterByItems(AliServerRegistry serverRegistry, List<ILootModifier<?>> modifiers, @Nullable LootTable lootTable,
+                                                        ResourceLocation location, Map<ResourceLocation, LootTable> fakeLootTables,
+                                                        Set<ILootModifier<?>> attachedLootModifiers) {
+        if (modifiers.isEmpty()) {
+            return modifiers;
         }
+
+        List<ItemStack> items = collectProducibleItems(serverRegistry, lootTable, location, fakeLootTables);
+        List<ILootModifier<?>> matched = modifiers.stream().filter((m) -> matchesItems(m, items)).toList();
+
+        attachedLootModifiers.addAll(matched);
+        return matched;
+    }
+
+    private static boolean matchesItems(ILootModifier<?> modifier, List<ItemStack> items) {
+        ItemMatch match = predicateItem(modifier, items);
+
+        if (modifier.getType() == ILootModifier.IType.UNBOUNDED) {
+            return match == ItemMatch.MATCHED;
+        }
+
+        return match != ItemMatch.NOT_MATCHED;
+    }
+
+    @NotNull
+    private static List<ItemStack> collectProducibleItems(AliServerRegistry serverRegistry, @Nullable LootTable lootTable, ResourceLocation location,
+                                                          Map<ResourceLocation, LootTable> fakeLootTables) {
+        List<ItemStack> items = new ArrayList<>();
+
+        try {
+            if (lootTable != null) {
+                items.addAll(collectItems(serverRegistry.parseTable(Collections.emptyList(), lootTable)));
+            }
+
+            getFakeLootPools(location, serverRegistry, fakeLootTables).forEach((node) -> items.addAll(collectItems(node)));
+        } catch (Throwable e) {
+            LOGGER.warn("Failed to collect items of loot table {} with error {}", location, e.getMessage(), e);
+        }
+
+        return items;
+    }
+
+    private static ItemMatch predicateItem(ILootModifier<?> modifier, List<ItemStack> items) {
+        if (items.isEmpty()) {
+            return ItemMatch.NO_CANDIDATES;
+        }
+
+        try {
+            List<IOperation> operations = modifier.getOperations();
+
+            if (items.stream().anyMatch((i) -> operations.stream().anyMatch((o) -> o.predicate().test(i)))) {
+                return ItemMatch.MATCHED;
+            }
+        } catch (Throwable e) {
+            LOGGER.warn("Failed to evaluate loot modifier operation predicate: {}", e.getMessage(), e);
+            return ItemMatch.NO_CANDIDATES;
+        }
+
+        return ItemMatch.NOT_MATCHED;
     }
 
     @NotNull
@@ -570,29 +623,6 @@ public abstract class AbstractServer {
         }
     }
 
-    private static Map<ResourceLocation, List<Item>> collectLootTableItems(Map<ResourceLocation, LootTable> lootTables, Map<ResourceLocation, LootTable> fakeLootTables) {
-        Map<ResourceLocation, List<Item>> items = lootTables.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, AbstractServer::getItems));
-
-        for (Map.Entry<ResourceLocation, LootTable> entry : lootTables.entrySet()) {
-            items.put(entry.getKey(), getItems(entry));
-        }
-
-        for (Map.Entry<ResourceLocation, LootTable> entry : fakeLootTables.entrySet()) {
-            items.compute(entry.getKey(), (key, value) -> {
-                List<Item> tableItems = getItems(entry);
-
-                if (value == null) {
-                    return tableItems;
-                } else {
-                    value.addAll(tableItems);
-                    return value;
-                }
-            });
-        }
-
-        return items;
-    }
-
     private static List<IDataNode> getFakeLootPools(ResourceLocation location, AliServerRegistry serverRegistry, Map<ResourceLocation, LootTable> fakeLootTables) {
         LootTable fakeLootTable = fakeLootTables.get(location);
 
@@ -605,5 +635,11 @@ public abstract class AbstractServer {
         }
 
         return Collections.emptyList();
+    }
+
+    private enum ItemMatch {
+        MATCHED,
+        NOT_MATCHED,
+        NO_CANDIDATES
     }
 }

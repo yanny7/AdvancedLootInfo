@@ -14,6 +14,7 @@ import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.datagen.LanguageHolder;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.server.EnchantedRanges;
+import com.yanny.ali.plugin.glm.Destination;
 import com.yanny.ali.plugin.server.LootConditionTypes;
 import com.yanny.ali.plugin.server.LootFunctionTypes;
 import net.minecraft.DetectedVersion;
@@ -124,6 +125,12 @@ public class TooltipTestSuite {
             @Override
             public List<LootPool> getLootPools(LootTable lootTable) {
                 return PluginManager.getInstance().serverRegistry.getLootPools(lootTable);
+            }
+
+            @Nullable
+            @Override
+            public Destination getDestination(IServerUtils utils, LootItemCondition condition) {
+                return PluginManager.getInstance().serverRegistry.getDestination(utils, condition);
             }
 
             @NotNull

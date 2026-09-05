@@ -2,7 +2,6 @@ package com.yanny.alicompat.compat.farmersdelight;
 
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
-import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 import com.yanny.alicompat.IGlmModCompat;
 import com.yanny.alicompat.accessor.GlmAccessorUtils;
 import com.yanny.alicompat.accessor.PluginUtils;
@@ -30,10 +29,10 @@ public class FarmersDelightCompat implements IGlmModCompat {
     }
 
     @Override
-    public void registerGlobalLootModifier(IGlobalLootModifierPlugin.IRegistry registry, ILootTableIdConditionPredicate predicate) {
-        GlmAccessorUtils.registerGlobalLootModifier(registry, AddItemModifier.class, AddItemModifierAccessor.class, predicate);
-        GlmAccessorUtils.registerGlobalLootModifier(registry, AddLootTableModifier.class, AddLootTableModifierAccessor.class, predicate);
-        GlmAccessorUtils.registerGlobalLootModifier(registry, PastrySlicingModifier.class, PastrySlicingModifierAccessor.class, predicate);
-        GlmAccessorUtils.registerGlobalLootModifier(registry, ReplaceItemModifier.class, ReplaceItemModifierAccessor.class, predicate);
+    public void registerGlobalLootModifier(IGlobalLootModifierPlugin.IRegistry registry) {
+        GlmAccessorUtils.registerGlobalLootModifier(registry, AddItemModifier.class, AddItemModifierAccessor.class);
+        GlmAccessorUtils.registerGlobalLootModifier(registry, AddLootTableModifier.class, AddLootTableModifierAccessor.class);
+        GlmAccessorUtils.registerGlobalLootModifier(registry, PastrySlicingModifier.class, PastrySlicingModifierAccessor.class);
+        GlmAccessorUtils.registerGlobalLootModifier(registry, ReplaceItemModifier.class, ReplaceItemModifierAccessor.class);
     }
 }

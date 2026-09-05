@@ -10,7 +10,7 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.ModifiedNode;
-import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
+import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
@@ -38,36 +38,18 @@ public class GiantToolGroupingModifierAccessor extends BaseAccessor<GiantToolGro
     }
 
     @Override
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils, ILootTableIdConditionPredicate ignoredPredicate) {
-        List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
+    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
         Map<Block, Item> conversions = Map.copyOf(GiantToolGroupingModifier.CONVERSIONS);
 
         if (conversions.isEmpty()) {
             return Optional.empty();
         }
 
-        return Optional.of(new ILootModifier<Block>() {
-            @Override
-            public boolean predicate(Block value) {
-                return conversions.containsKey(value);
-            }
-
-            @NotNull
-            @Override
-            public List<IOperation> getOperations() {
-                return conversions.entrySet().stream()
-                        .map((entry) -> (IOperation) new IOperation.ReplaceOperation(
-                                (itemStack) -> itemStack.getItem().equals(entry.getKey().asItem()),
-                                (src) -> groupNode(utils, conditionList, src, entry.getValue())))
-                        .toList();
-            }
-
-            @NotNull
-            @Override
-            public IType<Block> getType() {
-                return IType.BLOCK;
-            }
-        });
+        return GlobalLootModifierUtils.getLootModifier(utils, Arrays.asList(this.conditions), (c) -> conversions.entrySet().stream()
+                .map((entry) -> (IOperation) new IOperation.ReplaceOperation(
+                        (itemStack) -> itemStack.getItem().equals(entry.getKey().asItem()),
+                        (src) -> groupNode(utils, c, src, entry.getValue())))
+                .toList());
     }
 
     @NotNull
