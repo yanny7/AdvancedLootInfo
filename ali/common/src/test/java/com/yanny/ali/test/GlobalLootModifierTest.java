@@ -7,7 +7,10 @@ import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.plugin.glm.Destination;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.server.LootConditionTypes;
-import net.minecraft.advancements.criterion.*;
+import net.minecraft.advancements.predicates.*;
+import net.minecraft.advancements.predicates.entity.EntityFlagsPredicate;
+import net.minecraft.advancements.predicates.entity.EntityPredicate;
+import net.minecraft.advancements.predicates.entity.EntityTypePredicate;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -15,6 +18,7 @@ import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -51,11 +55,11 @@ public class GlobalLootModifierTest {
 
     @Test
     public void bareEntityConditionResolvesToEntity() {
-        Result result = resolve(entity(EntityType.ZOMBIE));
+        Result result = resolve(entity(EntityTypes.ZOMBIE));
 
         assertEquals(ENTITY, result.type());
-        assertTrue(result.matches(entityOf(EntityType.ZOMBIE)));
-        assertFalse(result.matches(entityOf(EntityType.CREEPER)));
+        assertTrue(result.matches(entityOf(EntityTypes.ZOMBIE)));
+        assertFalse(result.matches(entityOf(EntityTypes.CREEPER)));
         assertEquals(List.of(), result.retained());
     }
 
@@ -65,17 +69,17 @@ public class GlobalLootModifierTest {
                 .entityType(EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypeTags.SKELETONS))));
 
         assertEquals(ENTITY, result.type());
-        assertTrue(result.matches(entityOf(EntityType.SKELETON)));
-        assertTrue(result.matches(entityOf(EntityType.WITHER_SKELETON)));
-        assertTrue(result.matches(entityOf(EntityType.STRAY)));
-        assertFalse(result.matches(entityOf(EntityType.ZOMBIE)));
+        assertTrue(result.matches(entityOf(EntityTypes.SKELETON)));
+        assertTrue(result.matches(entityOf(EntityTypes.WITHER_SKELETON)));
+        assertTrue(result.matches(entityOf(EntityTypes.STRAY)));
+        assertFalse(result.matches(entityOf(EntityTypes.ZOMBIE)));
         assertEquals(List.of(), result.retained());
     }
 
     @Test
     public void entityConditionOnKillerIsNotADestination() {
         Result result = resolve(entity(LootContext.EntityTarget.ATTACKER, EntityPredicate.Builder.entity()
-                .entityType(EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.ZOMBIE))));
+                .entityType(EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypes.ZOMBIE))));
 
         assertEquals(NONE, result.type());
     }
@@ -110,7 +114,7 @@ public class GlobalLootModifierTest {
     @Test
     public void unrelatedConditionsSurviveIntoTheTooltip() {
         assertEquals(List.of("LootItemRandomChanceCondition"),
-                resolve(entity(EntityType.ZOMBIE), LootItemRandomChanceCondition.randomChance(0.5F).build()).retained());
+                resolve(entity(EntityTypes.ZOMBIE), LootItemRandomChanceCondition.randomChance(0.5F).build()).retained());
         assertEquals(List.of("MatchTool", "LootItemKilledByPlayerCondition"),
                 resolve(block(Blocks.WHEAT), MatchTool.toolMatches(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.DIAMOND_HOE)).build(),
                         LootItemKilledByPlayerCondition.killedByPlayer().build()).retained());
@@ -119,11 +123,11 @@ public class GlobalLootModifierTest {
     @Test
     public void entityPredicateDetailSurvivesIntoTheTooltip() {
         Result result = resolve(entity(LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity()
-                .entityType(EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.ZOMBIE))
+                .entityType(EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypes.ZOMBIE))
                 .flags(EntityFlagsPredicate.Builder.flags().setIsBaby(true))));
 
         assertEquals(ENTITY, result.type());
-        assertTrue(result.matches(entityOf(EntityType.ZOMBIE)));
+        assertTrue(result.matches(entityOf(EntityTypes.ZOMBIE)));
         assertEquals(List.of("LootItemEntityPropertyCondition"), result.retained());
     }
 
@@ -138,7 +142,7 @@ public class GlobalLootModifierTest {
 
     @Test
     public void allOfIsDescendedInto() {
-        assertEquals(ENTITY, resolve(allOf(entity(EntityType.ZOMBIE))).type());
+        assertEquals(ENTITY, resolve(allOf(entity(EntityTypes.ZOMBIE))).type());
         assertEquals(BLOCK, resolve(allOf(block(Blocks.FURNACE))).type());
         assertEquals(LOOT_TABLE, resolve(allOf(table(DUNGEON))).type());
 
@@ -155,12 +159,12 @@ public class GlobalLootModifierTest {
 
     @Test
     public void anyOfIsDescendedInto() {
-        Result result = resolve(anyOf(entity(EntityType.ZOMBIE), entity(EntityType.CREEPER)));
+        Result result = resolve(anyOf(entity(EntityTypes.ZOMBIE), entity(EntityTypes.CREEPER)));
 
         assertEquals(ENTITY, result.type());
-        assertTrue(result.matches(entityOf(EntityType.ZOMBIE)));
-        assertTrue(result.matches(entityOf(EntityType.CREEPER)));
-        assertFalse(result.matches(entityOf(EntityType.SKELETON)));
+        assertTrue(result.matches(entityOf(EntityTypes.ZOMBIE)));
+        assertTrue(result.matches(entityOf(EntityTypes.CREEPER)));
+        assertFalse(result.matches(entityOf(EntityTypes.SKELETON)));
         assertEquals(List.of(), result.retained());
     }
 
@@ -176,10 +180,10 @@ public class GlobalLootModifierTest {
 
     @Test
     public void anyOfAcrossKindsKeepsOnlyTheFirstKind() {
-        Result result = resolve(anyOf(entity(EntityType.ZOMBIE), table(DUNGEON)));
+        Result result = resolve(anyOf(entity(EntityTypes.ZOMBIE), table(DUNGEON)));
 
         assertEquals(ENTITY, result.type());
-        assertTrue(result.matches(entityOf(EntityType.ZOMBIE)));
+        assertTrue(result.matches(entityOf(EntityTypes.ZOMBIE)));
         assertEquals(LOOT_TABLE, resolve(anyOf(table(DUNGEON))).type());
         assertEquals(List.of("AnyOfCondition"), result.retained());
     }
@@ -188,17 +192,17 @@ public class GlobalLootModifierTest {
     public void andListTakesTheFirstKindByTypePriority() {
         assertEquals(BLOCK, resolve(block(Blocks.FURNACE), table(DUNGEON)).type());
         assertEquals(BLOCK, resolve(table(DUNGEON), block(Blocks.FURNACE)).type());
-        assertEquals(ENTITY, resolve(block(Blocks.FURNACE), entity(EntityType.ZOMBIE)).type());
-        assertEquals(ENTITY, resolve(table(DUNGEON), entity(EntityType.ZOMBIE)).type());
+        assertEquals(ENTITY, resolve(block(Blocks.FURNACE), entity(EntityTypes.ZOMBIE)).type());
+        assertEquals(ENTITY, resolve(table(DUNGEON), entity(EntityTypes.ZOMBIE)).type());
     }
 
     @Test
     public void andListOfContradictingEntitiesMatchesBoth() {
-        Result result = resolve(entity(EntityType.ZOMBIE), entity(EntityType.CREEPER));
+        Result result = resolve(entity(EntityTypes.ZOMBIE), entity(EntityTypes.CREEPER));
 
         assertEquals(ENTITY, result.type());
-        assertTrue(result.matches(entityOf(EntityType.ZOMBIE)));
-        assertTrue(result.matches(entityOf(EntityType.CREEPER)));
+        assertTrue(result.matches(entityOf(EntityTypes.ZOMBIE)));
+        assertTrue(result.matches(entityOf(EntityTypes.CREEPER)));
     }
 
     @Test
@@ -212,7 +216,7 @@ public class GlobalLootModifierTest {
 
     @Test
     public void invertedIsNotDescendedInto() {
-        assertEquals(NONE, resolve(inverted(entity(EntityType.ZOMBIE))).type());
+        assertEquals(NONE, resolve(inverted(entity(EntityTypes.ZOMBIE))).type());
         assertEquals(NONE, resolve(inverted(block(Blocks.FURNACE))).type());
         assertEquals(NONE, resolve(inverted(table(DUNGEON))).type());
     }
@@ -243,7 +247,7 @@ public class GlobalLootModifierTest {
 
         assertEquals(UNBOUNDED, result.type());
         assertTrue(result.matches(Blocks.FURNACE));
-        assertTrue(result.matches(entityOf(EntityType.ZOMBIE)));
+        assertTrue(result.matches(entityOf(EntityTypes.ZOMBIE)));
         assertTrue(result.matches(DUNGEON));
         assertEquals(List.of("MatchTool"), result.retained());
 
@@ -253,7 +257,7 @@ public class GlobalLootModifierTest {
 
     @Test
     public void resolvedDestinationsAreUnaffectedWhenUnboundedIsEnabled() {
-        assertEquals(ENTITY, resolveUnbounded(entity(EntityType.ZOMBIE)).type());
+        assertEquals(ENTITY, resolveUnbounded(entity(EntityTypes.ZOMBIE)).type());
         assertEquals(BLOCK, resolveUnbounded(block(Blocks.FURNACE)).type());
         assertEquals(LOOT_TABLE, resolveUnbounded(table(DUNGEON)).type());
     }

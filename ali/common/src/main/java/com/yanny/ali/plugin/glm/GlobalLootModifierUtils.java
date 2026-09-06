@@ -11,7 +11,6 @@ import com.yanny.ali.plugin.common.nodes.GlobalLootModifierNode;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.advancements.predicates.entity.EntityPredicate;
 import net.minecraft.advancements.predicates.entity.EntityTypePredicate;
-import net.minecraft.advancements.criterion.EntityPredicate;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Block;
@@ -134,13 +133,17 @@ public class GlobalLootModifierUtils {
 
     @Nullable
     public static Destination getEntityPropertyDestination(IServerUtils ignoredUtils, LootItemEntityPropertyCondition condition) {
-        if (condition.entityTarget() != LootContext.EntityTarget.THIS || condition.predicate().isEmpty() || condition.predicate().get().entityType().isEmpty()) {
+        if (condition.entityTarget() != LootContext.EntityTarget.THIS || condition.predicate().isEmpty()) {
             return null;
         }
 
         EntityPredicate predicate = condition.predicate().get();
 
-        return new Destination.Entities(predicate.entityType().get(), carriesOnlyEntityType(predicate));
+        if (!(predicate.parts.get(EntityTypePredicate.CODEC) instanceof EntityTypePredicate entityType)) {
+            return null;
+        }
+
+        return new Destination.Entities(entityType, predicate.parts.size() == 1);
     }
 
     public static Optional<ILootModifier<?>> getMissingGlobalLootModifier(IServerUtils utils, IGlobalLootModifierWrapper modifier) {
@@ -209,24 +212,5 @@ public class GlobalLootModifierUtils {
         return condition instanceof CompositeLootItemCondition composite
                 && !composite.terms.isEmpty()
                 && composite.terms.stream().allMatch((t) -> fullyExplained(utils, t, kind));
-    }
-
-    private static boolean carriesOnlyEntityType(EntityPredicate predicate) {
-        return predicate.distanceToPlayer().isEmpty()
-                && predicate.movement().isEmpty()
-                && predicate.location().located().isEmpty()
-                && predicate.location().steppingOn().isEmpty()
-                && predicate.location().affectsMovement().isEmpty()
-                && predicate.effects().isEmpty()
-                && predicate.nbt().isEmpty()
-                && predicate.flags().isEmpty()
-                && predicate.equipment().isEmpty()
-                && predicate.subPredicate().isEmpty()
-                && predicate.periodicTick().isEmpty()
-                && predicate.vehicle().isEmpty()
-                && predicate.passenger().isEmpty()
-                && predicate.targetedEntity().isEmpty()
-                && predicate.team().isEmpty()
-                && predicate.slots().isEmpty();
     }
 }

@@ -1,6 +1,6 @@
 package com.yanny.ali.plugin.glm;
 
-import net.minecraft.advancements.criterion.EntityTypePredicate;
+import net.minecraft.advancements.predicates.entity.EntityTypePredicate;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 
