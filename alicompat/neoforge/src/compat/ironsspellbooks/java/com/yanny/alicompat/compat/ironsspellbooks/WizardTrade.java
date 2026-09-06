@@ -7,13 +7,16 @@ import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.alicompat.accessor.IItemListing;
+import net.minecraft.core.component.DataComponentPredicate;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 public class WizardTrade implements VillagerTrades.ItemListing, IItemListing {
@@ -64,7 +67,7 @@ public class WizardTrade implements VillagerTrades.ItemListing, IItemListing {
     @NotNull
     @Override
     public MerchantOffer getOffer(Entity trader, RandomSource random) {
-        return new MerchantOffer(withCount(costA, costACount), withCount(costB, costBCount), withCount(result, resultCount), maxUses, xp, priceMultiplier);
+        return new MerchantOffer(cost(costA, costACount).orElseThrow(), cost(costB, costBCount), withCount(result, resultCount), maxUses, xp, priceMultiplier);
     }
 
     @NotNull
@@ -86,6 +89,15 @@ public class WizardTrade implements VillagerTrades.ItemListing, IItemListing {
                 priceMultiplier,
                 conditions
         );
+    }
+
+    @NotNull
+    private static Optional<ItemCost> cost(ItemStack itemStack, RangeValue count) {
+        if (itemStack.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(new ItemCost(itemStack.getItemHolder(), (int) count.min(), DataComponentPredicate.allOf(itemStack.getComponents())));
     }
 
     @NotNull

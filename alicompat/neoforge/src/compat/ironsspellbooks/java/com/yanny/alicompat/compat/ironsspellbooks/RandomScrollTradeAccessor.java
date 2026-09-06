@@ -10,11 +10,10 @@ import com.yanny.alicompat.accessor.ReflectionUtils;
 import io.redspace.ironsspellbooks.loot.SpellFilter;
 import io.redspace.ironsspellbooks.player.AdditionalWanderingTrades;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
 
 public class RandomScrollTradeAccessor extends BaseAccessor<AdditionalWanderingTrades.RandomScrollTrade> implements IItemListing {
-    @FieldAccessor
-    private ItemStack price;
     @FieldAccessor
     private ItemStack forSale;
     @FieldAccessor
@@ -42,7 +41,7 @@ public class RandomScrollTradeAccessor extends BaseAccessor<AdditionalWanderingT
     @NotNull
     @Override
     public IDataNode getNode(IServerUtils utils, TooltipNode conditions) {
-        return SpellScrollTrade.of(spellFilter, minQuality, maxQuality, new ItemStack(price.getItem()), forSale, maxTrades, xp, priceMult)
+        return SpellScrollTrade.of(spellFilter, minQuality, maxQuality, new ItemStack(Items.EMERALD), forSale, maxTrades, xp, priceMult)
                 .getNode(utils, conditions);
     }
 }

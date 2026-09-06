@@ -15,9 +15,10 @@ import io.redspace.ironsspellbooks.loot.SpellFilter;
 import io.redspace.ironsspellbooks.registries.ItemRegistry;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.IntList;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -26,10 +27,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.component.FireworkExplosion;
+import net.minecraft.world.item.component.Fireworks;
 import net.minecraft.world.item.trading.MerchantOffer;
-import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -40,10 +42,10 @@ import java.util.List;
 public class WizardTrades {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
-    public static final ResourceLocation APOTHECARIST = new ResourceLocation(IronsSpellbooksLang.MOD_ID, "apothecarist");
-    public static final ResourceLocation CRYOMANCER = new ResourceLocation(IronsSpellbooksLang.MOD_ID, "cryomancer");
-    public static final ResourceLocation PRIEST = new ResourceLocation(IronsSpellbooksLang.MOD_ID, "priest");
-    public static final ResourceLocation PYROMANCER = new ResourceLocation(IronsSpellbooksLang.MOD_ID, "pyromancer");
+    public static final ResourceLocation APOTHECARIST = ResourceLocation.fromNamespaceAndPath(IronsSpellbooksLang.MOD_ID, "apothecarist");
+    public static final ResourceLocation CRYOMANCER = ResourceLocation.fromNamespaceAndPath(IronsSpellbooksLang.MOD_ID, "cryomancer");
+    public static final ResourceLocation PRIEST = ResourceLocation.fromNamespaceAndPath(IronsSpellbooksLang.MOD_ID, "priest");
+    public static final ResourceLocation PYROMANCER = ResourceLocation.fromNamespaceAndPath(IronsSpellbooksLang.MOD_ID, "pyromancer");
 
     private static final TradeLevelInfo ALL = new TradeLevelInfo(new RangeValue(Integer.MAX_VALUE));
     private static final TradeLevelInfo ONE = new TradeLevelInfo(new RangeValue(1));
@@ -162,7 +164,7 @@ public class WizardTrades {
         listings.put(1, listings(
                 furledMap(24, "evoker_fort", "item.irons_spellbooks.evoker_fort_battle_plans"),
                 WizardTrade.of(stack(ItemRegistry.GREATER_HEALING_POTION), new RangeValue(1), emeralds(), new RangeValue(18), 3, 0, 0.2f),
-                WizardTrade.of(emeralds(), new RangeValue(6), PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.HEALING), new RangeValue(1), 2, 0, 0.2f),
+                WizardTrade.of(emeralds(), new RangeValue(6), potion(Potions.HEALING), new RangeValue(1), 2, 0, 0.2f),
                 WizardTrade.of(stack(ItemRegistry.TRANSLATED_ARCHEVOKER_LOGBOOK), new RangeValue(1), stack(ItemRegistry.VILLAGER_SPELL_BOOK), new RangeValue(1), 1, 5, 0.5f)
         ));
 
@@ -249,7 +251,7 @@ public class WizardTrades {
 
     @NotNull
     private static WizardTrade furledMap(int cost, String destination, String translation) {
-        ItemStack map = FurledMapItem.of(new ResourceLocation(IronsSpellbooksLang.MOD_ID, destination), FurledMapItem.OVERWORLD, Component.translatable(translation));
+        ItemStack map = FurledMapItem.of(ResourceLocation.fromNamespaceAndPath(IronsSpellbooksLang.MOD_ID, destination), FurledMapItem.OVERWORLD, Component.translatable(translation));
 
         return WizardTrade.of(emeralds(), new RangeValue(cost), map, new RangeValue(1), 1, 5, 10.0f);
     }
@@ -295,26 +297,27 @@ public class WizardTrades {
 
     @NotNull
     private static ItemStack fireworkStack() {
-        CompoundTag properties = new CompoundTag();
         ItemStack rocket = new ItemStack(Items.FIREWORK_ROCKET, 5);
-        ListTag explosions = new ListTag();
-        CompoundTag explosion = new CompoundTag();
+        FireworkExplosion explosion = new FireworkExplosion(FireworkExplosion.Shape.BURST,
+                IntList.of(11743535, 15435844, 14602026), IntList.of(), true, true);
 
-        explosion.putByte("Type", (byte) 4);
-        explosion.putByte("Trail", (byte) 1);
-        explosion.putByte("Flicker", (byte) 1);
-        explosion.putIntArray("Colors", new int[]{11743535, 15435844, 14602026});
-        explosions.add(explosion);
-        properties.put("Explosions", explosions);
-        properties.putByte("Flight", (byte) 3);
-        rocket.addTagElement("Fireworks", properties);
+        rocket.set(DataComponents.FIREWORKS, new Fireworks(3, List.of(explosion)));
 
         return rocket;
     }
 
     @NotNull
-    private static InkItem ink(RegistryObject<Item> item) {
-        return (InkItem) item.get();
+    private static ItemStack potion(Holder<Potion> potion) {
+        ItemStack stack = new ItemStack(Items.POTION);
+
+        stack.set(DataComponents.POTION_CONTENTS, new PotionContents(potion));
+
+        return stack;
+    }
+
+    @NotNull
+    private static InkItem ink(Holder<Item> item) {
+        return (InkItem) item.value();
     }
 
     @NotNull
@@ -323,8 +326,8 @@ public class WizardTrades {
     }
 
     @NotNull
-    private static ItemStack stack(RegistryObject<Item> item) {
-        return new ItemStack(item.get());
+    private static ItemStack stack(Holder<Item> item) {
+        return new ItemStack(item.value());
     }
 
     @NotNull

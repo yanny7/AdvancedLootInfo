@@ -1,5 +1,6 @@
 {
   "alicompat.property.branch.alternative": "Alternative:",
+  "alicompat.property.branch.applicable_spells": "Applicable Spells:",
   "alicompat.property.branch.spell_filter": "Spell Filter:",
   "alicompat.property.branch.spells": "Spells:",
   "alicompat.property.value.extra_count_per_player": "Extra Count Per Player: %s",
@@ -14,6 +15,10 @@
   "alicompat.type.function.copy_skillet": "Copy Skillet",
   "alicompat.type.function.multiplayer_addition": "Multiplayer Based Addition:",
   "alicompat.type.function.random_potion": "Random Potion",
+  "alicompat.type.function.random_spell_scroll": "Random Spell Scroll:",
+  "alicompat.type.function.randomize_ring_enhancement": "Randomize Ring Enhancement:",
+  "alicompat.type.function.randomize_spell": "Randomize Spell:",
+  "alicompat.type.function.set_furled_map": "Set Furled Map:",
   "alicompat.type.function.smoker_cook": "Smoker Cook",
   "alicompat.type.item_sub_predicate.item_color": "Item Color: %s",
   "entity.ribbits.ribbit_fisherman": "Fisherman Ribbit",

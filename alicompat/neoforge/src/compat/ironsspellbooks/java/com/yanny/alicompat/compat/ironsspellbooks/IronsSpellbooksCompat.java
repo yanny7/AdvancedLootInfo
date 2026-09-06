@@ -37,6 +37,7 @@ public class IronsSpellbooksCompat implements IGlmModCompat {
     @Override
     public void registerGlobalLootModifier(IGlobalLootModifierPlugin.IRegistry registry) {
         GlmAccessorUtils.registerGlobalLootModifier(registry, AppendLootModifier.class, AppendLootModifierAccessor.class);
+        GlmAccessorUtils.registerGlobalLootModifier(registry, ReplaceLootModifier.class, ReplaceLootModifierAccessor.class);
     }
 
     @NotNull

@@ -1,5 +1,6 @@
 package com.yanny.alicompat.compat.ironsspellbooks;
 
+import com.mojang.datafixers.util.Either;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipNode;
@@ -14,6 +15,7 @@ import com.yanny.alicompat.Utils;
 import io.redspace.ironsspellbooks.api.spells.SpellRarity;
 import io.redspace.ironsspellbooks.item.InkItem;
 import io.redspace.ironsspellbooks.player.AdditionalWanderingTrades;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
@@ -34,8 +36,8 @@ public class WanderingTrades {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     private static final String TRADES_CLASS = AdditionalWanderingTrades.class.getName();
-    private static final ResourceLocation BASIC_CURIOS = new ResourceLocation(IronsSpellbooksLang.MOD_ID, "magic_items/basic_curios");
-    private static final ResourceLocation SCROLL_POUCH = new ResourceLocation(IronsSpellbooksLang.MOD_ID, "magic_items/scroll_pouch");
+    private static final ResourceLocation BASIC_CURIOS = ResourceLocation.fromNamespaceAndPath(IronsSpellbooksLang.MOD_ID, "magic_items/basic_curios");
+    private static final ResourceLocation SCROLL_POUCH = ResourceLocation.fromNamespaceAndPath(IronsSpellbooksLang.MOD_ID, "magic_items/scroll_pouch");
 
     public static void register(IServerRegistry registry) {
         registry.registerItemListing(AdditionalWanderingTrades.RandomScrollTrade.class,
@@ -104,11 +106,11 @@ public class WanderingTrades {
 
     @NotNull
     private static RangeValue totalRolls(IServerUtils utils, ResourceLocation lootTable) {
-        LootTable table = utils.getLootTable(lootTable);
+        LootTable table = utils.getLootTable(Either.left(lootTable));
         RangeValue rolls = new RangeValue(0);
 
         if (table != null) {
-            for (LootPool pool : utils.getLootPools(table)) {
+            for (LootPool pool : table.pools) {
                 rolls.add(utils.convertNumber(utils, pool.rolls));
             }
         }
@@ -118,10 +120,10 @@ public class WanderingTrades {
 
     @NotNull
     private static ItemStack firstItem(IServerUtils utils, ResourceLocation lootTable) {
-        LootTable table = utils.getLootTable(lootTable);
+        LootTable table = utils.getLootTable(Either.left(lootTable));
 
         if (table != null) {
-            for (LootPool pool : utils.getLootPools(table)) {
+            for (LootPool pool : table.pools) {
                 for (LootPoolEntryContainer entry : pool.entries) {
                     if (entry instanceof LootItem lootItem) {
                         return new ItemStack(lootItem.item);
@@ -136,7 +138,11 @@ public class WanderingTrades {
 
     @NotNull
     private static ItemStack scrollPouch() {
-        return new ItemStack(Items.BUNDLE).setHoverName(Component.translatable("item." + IronsSpellbooksLang.MOD_ID + ".scroll_pouch"));
+        ItemStack stack = new ItemStack(Items.BUNDLE);
+
+        stack.set(DataComponents.ITEM_NAME, Component.translatable("item." + IronsSpellbooksLang.MOD_ID + ".scroll_pouch"));
+
+        return stack;
     }
 
     private static void registerNested(IServerRegistry registry, String name, NestedNode nodeFactory) {
