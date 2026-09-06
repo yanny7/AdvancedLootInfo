@@ -9,6 +9,7 @@
   "disabledEntities": [],
   "logMoreStatistics": false,
   "showInGameNames": true,
+  "showUnboundedGlobalLootModifiers": false,
   "entityCategories": [
     {
       "entityTypes": [],

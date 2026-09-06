@@ -14,6 +14,7 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.datagen.LanguageHolder;
 import com.yanny.ali.manager.PluginManager;
+import com.yanny.ali.plugin.glm.Destination;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.LootConditionTypes;
 import com.yanny.ali.plugin.server.LootFunctionTypes;
@@ -91,6 +92,7 @@ import java.util.concurrent.ExecutionException;
         NodeTest.class,
         ServerUtilsTest.class,
         SlotSourceTooltipTest.class,
+        GlobalLootModifierTest.class,
         ConfigTest.class
 })
 public class TooltipTestSuite {
@@ -112,6 +114,7 @@ public class TooltipTestSuite {
         TestUtils.LoadedLanguage loadedLanguage = TestUtils.loadDefaultLanguage(resourceManager, LanguageHolder.TRANSLATION_MAP);
 
         Language.inject(loadedLanguage.language());
+        TestUtils.bindVanillaTags();
         UNUSED = loadedLanguage.unusedKeys();
         LOOKUP = VanillaRegistries.createLookup();
 
@@ -134,16 +137,10 @@ public class TooltipTestSuite {
                 return PluginManager.getInstance().serverRegistry.createEntities(type, level);
             }
 
-            @NotNull
+            @Nullable
             @Override
-            public <T extends LootPoolEntryContainer> List<Item> collectItems(IServerUtils utils, T entry) {
-                return PluginManager.getInstance().serverRegistry.collectItems(utils, entry);
-            }
-
-            @NotNull
-            @Override
-            public <T extends LootItemFunction> List<Item> collectItems(IServerUtils utils, List<Item> items, T function) {
-                return PluginManager.getInstance().serverRegistry.collectItems(utils, items, function);
+            public Destination getDestination(IServerUtils utils, LootItemCondition condition) {
+                return PluginManager.getInstance().serverRegistry.getDestination(utils, condition);
             }
 
             @NotNull

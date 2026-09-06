@@ -6,13 +6,22 @@ import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.aci.tooltip.TooltipStyle;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.repository.PackRepository;
+import net.minecraft.server.packs.repository.ServerPacksSource;
+import net.minecraft.server.packs.resources.CloseableResourceManager;
+import net.minecraft.server.packs.resources.MultiPackResourceManager;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.tags.TagLoader;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.StringDecomposer;
 import org.jetbrains.annotations.NotNull;
@@ -28,6 +37,8 @@ import java.util.function.BiFunction;
 
 public class TestUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
+
+    private static boolean tagsBound;
 
     public static void assertTooltip(TooltipNode tooltip, List<String> expected) {
         assertTooltip(tooltip, true, expected);
@@ -126,6 +137,32 @@ public class TestUtils {
     @NotNull
     public static String componentToPlainString(Component component) {
         return componentToString(component, (style, text) -> text);
+    }
+
+    /**
+     * {@link net.minecraft.server.Bootstrap#bootStrap()} only fills the built-in registries with their elements - tags are
+     * datapack-driven and stay empty until {@code TagManager} runs, which never happens in tests. Since
+     * {@code VanillaRegistries.createLookup()} exposes built-in registries through {@code MappedRegistry#asLookup()} (a live
+     * view of {@code MappedRegistry#tags}), every {@code lookupOrThrow(Registries.BLOCK).getOrThrow(someTag)} fails.
+     * This loads the vanilla datapack and binds its tags into the built-in registries, mirroring what {@code TagManager} does.
+     */
+    public static synchronized void bindVanillaTags() {
+        if (tagsBound) {
+            return;
+        }
+
+        tagsBound = true;
+
+        PackRepository packRepository = ServerPacksSource.createVanillaTrustedRepository();
+
+        packRepository.reload();
+        packRepository.setSelected(List.of("vanilla"));
+
+        try (CloseableResourceManager resourceManager = new MultiPackResourceManager(PackType.SERVER_DATA, packRepository.openAllSelected())) {
+            RegistryAccess registryAccess = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
+
+            TagLoader.loadTagsForExistingRegistries(resourceManager, registryAccess).forEach(Registry.PendingTags::apply);
+        }
     }
 
     /** @param unusedKeys the keys of the mod's translation map that nothing asked for, filled in while tests run */

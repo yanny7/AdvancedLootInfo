@@ -9,18 +9,21 @@ import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.common.nodes.GlobalLootModifierNode;
 import com.yanny.ali.plugin.server.TooltipUtils;
+import net.minecraft.advancements.criterion.EntityPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
+import net.minecraft.world.level.storage.loot.predicates.CompositeLootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -28,18 +31,21 @@ import java.util.function.Function;
 public class GlobalLootModifierUtils {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
-    public static Optional<ILootModifier<?>> getLootModifier(List<LootItemCondition> conditions, Function<List<LootItemCondition>, List<IOperation>> operationSupplier, ILootTableIdConditionPredicate predicate) {
-        if (GlobalLootModifierUtils.entityPredicate(conditions)) {
+    public static Optional<ILootModifier<?>> getLootModifier(IServerUtils utils, List<LootItemCondition> conditions,
+                                                            Function<List<LootItemCondition>, List<IOperation>> operationSupplier) {
+        List<Destination.Entities> entities = collect(utils, conditions, Destination.Entities.class);
+
+        if (!entities.isEmpty()) {
             return Optional.of(new ILootModifier<Entity>() {
                 @Override
                 public boolean predicate(Entity value) {
-                    return GlobalLootModifierUtils.entityPredicate(conditions, value);
+                    return entities.stream().anyMatch((d) -> d.type().matches(value.getType()));
                 }
 
                 @NotNull
                 @Override
                 public List<IOperation> getOperations() {
-                    return operationSupplier.apply(conditions.stream().filter((c) -> !entityPredicate(c)).toList());
+                    return operationSupplier.apply(retain(utils, conditions, Destination.Entities.class));
                 }
 
                 @NotNull
@@ -48,17 +54,21 @@ public class GlobalLootModifierUtils {
                     return IType.ENTITY;
                 }
             });
-        } else if (GlobalLootModifierUtils.blockPredicate(conditions)) {
+        }
+
+        List<Destination.Blocks> blocks = collect(utils, conditions, Destination.Blocks.class);
+
+        if (!blocks.isEmpty()) {
             return Optional.of(new ILootModifier<Block>() {
                 @Override
                 public boolean predicate(Block value) {
-                    return GlobalLootModifierUtils.blockPredicate(conditions, value);
+                    return blocks.stream().anyMatch((d) -> d.blocks().contains(value));
                 }
 
                 @NotNull
                 @Override
                 public List<IOperation> getOperations() {
-                    return operationSupplier.apply(conditions.stream().filter((c) -> !blockPredicate(c)).toList());
+                    return operationSupplier.apply(retain(utils, conditions, Destination.Blocks.class));
                 }
 
                 @NotNull
@@ -67,17 +77,21 @@ public class GlobalLootModifierUtils {
                     return IType.BLOCK;
                 }
             });
-        } else if (GlobalLootModifierUtils.tablePredicate(conditions, predicate)) {
+        }
+
+        List<Destination.Table> tables = collect(utils, conditions, Destination.Table.class);
+
+        if (!tables.isEmpty()) {
             return Optional.of(new ILootModifier<Identifier>() {
                 @Override
                 public boolean predicate(Identifier value) {
-                    return GlobalLootModifierUtils.tablePredicate(conditions, value, predicate);
+                    return tables.stream().anyMatch((d) -> d.id().equals(value));
                 }
 
                 @NotNull
                 @Override
                 public List<IOperation> getOperations() {
-                    return operationSupplier.apply(conditions.stream().filter((c) -> !tablePredicate(c, predicate)).toList());
+                    return operationSupplier.apply(retain(utils, conditions, Destination.Table.class));
                 }
 
                 @NotNull
@@ -88,85 +102,49 @@ public class GlobalLootModifierUtils {
             });
         }
 
+        if (utils.getConfiguration().showUnboundedGlobalLootModifiers) {
+            return Optional.of(new ILootModifier<>() {
+                @Override
+                public boolean predicate(Object value) {
+                    return true;
+                }
+
+                @NotNull
+                @Override
+                public List<IOperation> getOperations() {
+                    return operationSupplier.apply(conditions);
+                }
+
+                @NotNull
+                @Override
+                public IType<Object> getType() {
+                    return IType.UNBOUNDED;
+                }
+            });
+        }
+
         return Optional.empty();
     }
 
-    public static boolean entityPredicate(LootItemCondition c) {
-        if (c instanceof LootItemEntityPropertyCondition condition
-                && condition.entityTarget() == LootContext.EntityTarget.THIS
-                && condition.predicate().isPresent()
-                && condition.predicate().get().entityType().isPresent()) {
-            return true;
-        } else {
-            return c instanceof AnyOfCondition condition && entityPredicate(condition.terms);
+    @NotNull
+    public static Destination getBlockStateDestination(IServerUtils ignoredUtils, LootItemBlockStatePropertyCondition condition) {
+        return new Destination.Blocks(List.of(condition.block().value()), condition.properties().map((p) -> p.properties().isEmpty()).orElse(true));
+    }
+
+    @Nullable
+    public static Destination getEntityPropertyDestination(IServerUtils ignoredUtils, LootItemEntityPropertyCondition condition) {
+        if (condition.entityTarget() != LootContext.EntityTarget.THIS || condition.predicate().isEmpty() || condition.predicate().get().entityType().isEmpty()) {
+            return null;
         }
+
+        EntityPredicate predicate = condition.predicate().get();
+
+        return new Destination.Entities(predicate.entityType().get(), carriesOnlyEntityType(predicate));
     }
 
-    public static boolean entityPredicate(List<LootItemCondition> conditions) {
-        return conditions.stream().anyMatch(GlobalLootModifierUtils::entityPredicate);
-    }
-
-    public static boolean entityPredicate(List<LootItemCondition> conditions, Entity entity) {
-        return conditions.stream().anyMatch((c) -> {
-            if (c instanceof LootItemEntityPropertyCondition condition
-                    && condition.entityTarget() == LootContext.EntityTarget.THIS
-                    && condition.predicate().isPresent()
-                    && condition.predicate().get().entityType().isPresent()
-                    && condition.predicate().get().entityType().get().matches(Holder.direct(entity.getType()))) {
-                return true;
-            } else {
-                return c instanceof AnyOfCondition condition && entityPredicate(condition.terms, entity);
-            }
-        });
-    }
-
-    public static boolean blockPredicate(LootItemCondition c) {
-        if (c instanceof LootItemBlockStatePropertyCondition) {
-            return true;
-        } else {
-            return c instanceof AnyOfCondition condition && blockPredicate(condition.terms);
-        }
-    }
-
-    public static boolean blockPredicate(List<LootItemCondition> conditions) {
-        return conditions.stream().anyMatch(GlobalLootModifierUtils::blockPredicate);
-    }
-
-    public static boolean blockPredicate(List<LootItemCondition> conditions, Block block) {
-        return conditions.stream().anyMatch((c) -> {
-            if (c instanceof LootItemBlockStatePropertyCondition condition && condition.block().equals(block)) {
-                return true;
-            } else {
-                return c instanceof AnyOfCondition condition && blockPredicate(condition.terms, block);
-            }
-        });
-    }
-
-    public static boolean tablePredicate(LootItemCondition c, ILootTableIdConditionPredicate predicate) {
-        if (predicate.isLootTableIdCondition(c)) {
-            return true;
-        } else {
-            return c instanceof AnyOfCondition condition && tablePredicate(condition.terms, predicate);
-        }
-    }
-
-    public static boolean tablePredicate(List<LootItemCondition> conditions, ILootTableIdConditionPredicate predicate) {
-        return conditions.stream().anyMatch((c) -> tablePredicate(c, predicate));
-    }
-
-    public static boolean tablePredicate(List<LootItemCondition> conditions, Identifier location, ILootTableIdConditionPredicate predicate) {
-        return  conditions.stream().anyMatch((c) -> {
-            if (predicate.isLootTableIdCondition(c) && predicate.getTargetLootTableId(c).equals(location)) {
-                return true;
-            } else {
-                return c instanceof AnyOfCondition condition && tablePredicate(condition.terms, location, predicate);
-            }
-        });
-    }
-
-    public static Optional<ILootModifier<?>> getMissingGlobalLootModifier(IServerUtils utils, IGlobalLootModifierWrapper modifier, ILootTableIdConditionPredicate predicate) {
+    public static Optional<ILootModifier<?>> getMissingGlobalLootModifier(IServerUtils utils, IGlobalLootModifierWrapper modifier) {
         if (modifier.isLootModifier()) {
-            return getLootModifier(modifier.getConditions(), (conditions) -> {
+            return getLootModifier(utils, modifier.getConditions(), (conditions) -> {
 
                 try {
                     TooltipBuilder tooltip = utils.getValueTooltip(utils, modifier.getName());
@@ -187,9 +165,67 @@ public class GlobalLootModifierUtils {
                     });
                     return List.of(new IOperation.AddOperation((i) -> true, new GlobalLootModifierNode(tooltip.build())));
                 }
-            }, predicate);
+            });
         }
 
         return Optional.empty();
+    }
+
+    @NotNull
+    private static <T extends Destination> List<T> collect(IServerUtils utils, List<LootItemCondition> conditions, Class<T> kind) {
+        List<T> destinations = new ArrayList<>();
+
+        conditions.forEach((c) -> collect(utils, c, kind, destinations));
+        return destinations;
+    }
+
+    private static <T extends Destination> void collect(IServerUtils utils, LootItemCondition condition, Class<T> kind, List<T> destinations) {
+        Destination destination = utils.getDestination(utils, condition);
+
+        if (destination != null) {
+            if (kind.isInstance(destination)) {
+                destinations.add(kind.cast(destination));
+            }
+        } else if (condition instanceof CompositeLootItemCondition composite) {
+            for (LootItemCondition term : composite.terms) {
+                collect(utils, term, kind, destinations);
+            }
+        }
+    }
+
+    @NotNull
+    private static List<LootItemCondition> retain(IServerUtils utils, List<LootItemCondition> conditions, Class<? extends Destination> kind) {
+        return conditions.stream().filter((c) -> !fullyExplained(utils, c, kind)).toList();
+    }
+
+    private static boolean fullyExplained(IServerUtils utils, LootItemCondition condition, Class<? extends Destination> kind) {
+        Destination destination = utils.getDestination(utils, condition);
+
+        if (destination != null) {
+            return kind.isInstance(destination) && destination.fullyExplained();
+        }
+
+        return condition instanceof CompositeLootItemCondition composite
+                && !composite.terms.isEmpty()
+                && composite.terms.stream().allMatch((t) -> fullyExplained(utils, t, kind));
+    }
+
+    private static boolean carriesOnlyEntityType(EntityPredicate predicate) {
+        return predicate.distanceToPlayer().isEmpty()
+                && predicate.movement().isEmpty()
+                && predicate.location().located().isEmpty()
+                && predicate.location().steppingOn().isEmpty()
+                && predicate.location().affectsMovement().isEmpty()
+                && predicate.effects().isEmpty()
+                && predicate.nbt().isEmpty()
+                && predicate.flags().isEmpty()
+                && predicate.equipment().isEmpty()
+                && predicate.subPredicate().isEmpty()
+                && predicate.periodicTick().isEmpty()
+                && predicate.vehicle().isEmpty()
+                && predicate.passenger().isEmpty()
+                && predicate.targetedEntity().isEmpty()
+                && predicate.team().isEmpty()
+                && predicate.slots().isEmpty();
     }
 }

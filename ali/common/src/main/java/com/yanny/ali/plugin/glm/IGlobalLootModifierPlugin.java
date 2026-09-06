@@ -8,13 +8,7 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 
 public interface IGlobalLootModifierPlugin extends IPlugin {
-    /**
-     * @deprecated use {@link #registerGlobalLootModifier(IRegistry, ILootTableIdConditionPredicate)} instead
-     */
-    @Deprecated(forRemoval = true, since = "2.2.0")
-    default void registerGlobalLootModifier(IRegistry registry) {}
-
-    void registerGlobalLootModifier(IRegistry registry, ILootTableIdConditionPredicate predicate);
+    void registerGlobalLootModifier(IRegistry registry);
 
     interface IRegistry {
         <T> void registerGlobalLootModifier(Class<T> type, BiFunction<IServerUtils, T, Optional<ILootModifier<?>>> getter);

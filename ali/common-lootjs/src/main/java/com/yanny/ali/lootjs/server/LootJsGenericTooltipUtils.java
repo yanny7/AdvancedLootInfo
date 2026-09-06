@@ -3,6 +3,7 @@ package com.yanny.ali.lootjs.server;
 import com.almostreliable.lootjs.core.filters.IdFilter;
 import com.almostreliable.lootjs.core.filters.ItemFilter;
 import com.almostreliable.lootjs.core.filters.ItemFilterImpl;
+import com.almostreliable.lootjs.core.filters.ItemFilterWrapper;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
@@ -25,7 +26,9 @@ import java.util.Optional;
 public class LootJsGenericTooltipUtils {
     @NotNull
     public static TooltipBuilder getItemFilterTooltip(IServerUtils utils, ItemFilter predicate) {
-        if (predicate == ItemFilter.NONE) {
+        if (predicate instanceof ItemFilterWrapper(ItemFilter filter)) {
+            return getItemFilterTooltip(utils, filter);
+        } else if (predicate == ItemFilter.NONE) {
             return TooltipBuilder.value("NONE");
         } else if (predicate == ItemFilter.ANY) {
             return TooltipBuilder.value("ANY");
@@ -88,6 +91,11 @@ public class LootJsGenericTooltipUtils {
         }
 
         return TooltipBuilder.value("UNKNOWN");
+    }
+
+    @NotNull
+    public static TooltipBuilder getItemFilterWrapperTooltip(IServerUtils utils, ItemFilterWrapper predicate) {
+        return getItemFilterTooltip(utils, predicate.filter()).key(Lang.Value.ITEM_FILTER);
     }
 
     @NotNull

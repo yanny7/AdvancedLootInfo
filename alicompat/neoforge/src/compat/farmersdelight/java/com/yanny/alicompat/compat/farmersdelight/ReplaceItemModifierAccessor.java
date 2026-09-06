@@ -12,7 +12,6 @@ import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.ModifiedNode;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.alicompat.accessor.IGlobalLootModifierAccessor;
-import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.ali.plugin.server.EnchantedRanges;
@@ -44,10 +43,10 @@ public class ReplaceItemModifierAccessor extends BaseAccessor<ReplaceItemModifie
         super(parent);
     }
 
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils, ILootTableIdConditionPredicate predicate) {
+    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
         List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
 
-        return GlobalLootModifierUtils.getLootModifier(conditionList, (c) -> {
+        return GlobalLootModifierUtils.getLootModifier(utils, conditionList, (c) -> {
             Function<IDataNode, List<IDataNode>> factory = (src) -> {
                 List<IDataNode> nodes = new ArrayList<>();
                 IItemNode node = (IItemNode) src;
@@ -65,6 +64,6 @@ public class ReplaceItemModifierAccessor extends BaseAccessor<ReplaceItemModifie
                 return nodes;
             };
             return Collections.singletonList(new IOperation.ReplaceOperation((itemStack) -> itemStack.getItem().equals(removedItem), factory));
-        }, predicate);
+        });
     }
 }

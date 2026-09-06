@@ -18,38 +18,6 @@ import org.slf4j.Logger;
 public class PluginUtils {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
-    public static <T extends BaseAccessor<?> & IEntryItemCollector> void registerEntryItemCollector(IServerRegistry registry, Class<T> clazz) {
-        ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
-
-        if (classAnnotation != null) {
-            try {
-                //noinspection unchecked
-                Class<LootPoolEntryContainer> itemCollectorClass = (Class<LootPoolEntryContainer>) Class.forName(classAnnotation.value());
-                registry.registerItemCollector(itemCollectorClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c).collectItems(u));
-            } catch (Throwable e) {
-                LOGGER.warn("Failed to register entry item collector for {} with error {}", classAnnotation.value(), e.getMessage(), e);
-            }
-        } else {
-            throw new IllegalStateException("Missing ClassAccessor annotation for entry item collector " + clazz.getName());
-        }
-    }
-
-    public static <T extends BaseAccessor<?> & IFunctionItemCollector> void registerFunctionItemCollector(IServerRegistry registry, Class<T> clazz) {
-        ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
-
-        if (classAnnotation != null) {
-            try {
-                //noinspection unchecked
-                Class<LootItemFunction> itemCollectorClass = (Class<LootItemFunction>) Class.forName(classAnnotation.value());
-                registry.registerItemCollector(itemCollectorClass, (u, i, c) -> ReflectionUtils.copyClassData(clazz, c).collectItems(u, i));
-            } catch (Throwable e) {
-                LOGGER.warn("Failed to register function item collector for {} with error {}", classAnnotation.value(), e.getMessage(), e);
-            }
-        } else {
-            throw new IllegalStateException("Missing ClassAccessor annotation for function item collector " + clazz.getName());
-        }
-    }
-
     public static <T extends BaseAccessor<?> & IEntry> void registerEntry(IServerRegistry registry, Class<T> clazz) {
         ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
 
