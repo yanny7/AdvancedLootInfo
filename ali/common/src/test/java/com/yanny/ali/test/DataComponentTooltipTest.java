@@ -152,7 +152,25 @@ public class DataComponentTooltipTest {
                 "      -> Tag: minecraft:beds",
                 "    -> Properties:",
                 "      -> part: foot",
-                "  -> Block: minecraft:bell"
+                "  -> Block: minecraft:bell",
+                "Tooltip:",
+                "  -> Red Bed",
+                "  -> Black Bed",
+                "  -> Blue Bed",
+                "  -> Brown Bed",
+                "  -> Cyan Bed",
+                "  -> Gray Bed",
+                "  -> Green Bed",
+                "  -> Light Blue Bed",
+                "  -> Light Gray Bed",
+                "  -> Lime Bed",
+                "  -> Magenta Bed",
+                "  -> Orange Bed",
+                "  -> Pink Bed",
+                "  -> Purple Bed",
+                "  -> White Bed",
+                "  -> Yellow Bed",
+                "  -> Bell"
         ));
     }
 

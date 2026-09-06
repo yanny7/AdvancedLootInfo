@@ -7,10 +7,10 @@ import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.platform.Services;
+import com.yanny.ali.plugin.glm.Destination;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierWrapper;
-import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 import com.yanny.alicompat.accessor.ReflectionUtils;
 import com.yanny.alicompat.IModCompat;
 import com.yanny.alicompat.Utils;
@@ -46,6 +46,9 @@ public class PortingLibLootCompat implements IModCompat {
         registry.registerConditionTooltip(LootTableIdCondition.class, (utils, condition) ->
                 ReflectionUtils.copyClassData(LootTableIdConditionAccessor.class, condition, LootTableIdCondition.class).getTooltip(utils));
 
+        registry.registerDestination(LootTableIdCondition.class, (utils, condition) -> new Destination.Table(
+                ReflectionUtils.copyClassData(LootTableIdConditionAccessor.class, condition, LootTableIdCondition.class).getTargetLootTableId(), true));
+
         registry.registerLootModifiers(PortingLibLootCompat::registerLootModifiers);
     }
 
@@ -54,12 +57,11 @@ public class PortingLibLootCompat implements IModCompat {
         Map<Class<?>, BiFunction<IServerUtils, Object, Optional<ILootModifier<?>>>> glmMap = new HashMap<>();
         Set<Class<?>> missingGLM = new HashSet<>();
         List<ILootModifier<?>> lootModifiers = new ArrayList<>();
-        ILootTableIdConditionPredicate tablePredicate = getLootTableIdConditionPredicate();
         IGlobalLootModifierPlugin.IRegistry glmRegistry = getRegistry(glmMap);
 
         for (IPlugin plugin : Services.getPlatform().getPlugins()) {
             if (plugin instanceof IGlobalLootModifierPlugin glmPlugin) {
-                glmPlugin.registerGlobalLootModifier(glmRegistry, tablePredicate);
+                glmPlugin.registerGlobalLootModifier(glmRegistry);
             }
         }
 
@@ -80,7 +82,7 @@ public class PortingLibLootCompat implements IModCompat {
                         LOGGER.warn("Unable to locate destination for GLM {}", wrapper.getName());
                     }
                 } else {
-                    Optional<ILootModifier<?>> modifier = GlobalLootModifierUtils.getMissingGlobalLootModifier(utils, wrapper, tablePredicate);
+                    Optional<ILootModifier<?>> modifier = GlobalLootModifierUtils.getMissingGlobalLootModifier(utils, wrapper);
 
                     missingGLM.add(globalLootModifier.getClass());
 
@@ -98,21 +100,6 @@ public class PortingLibLootCompat implements IModCompat {
         missingGLM.forEach((c) -> LOGGER.warn("Missing GLM for {}", c.getName()));
 
         return lootModifiers;
-    }
-
-    @NotNull
-    private static ILootTableIdConditionPredicate getLootTableIdConditionPredicate() {
-        return new ILootTableIdConditionPredicate() {
-            @Override
-            public boolean isLootTableIdCondition(LootItemCondition condition) {
-                return condition instanceof LootTableIdCondition;
-            }
-
-            @Override
-            public Identifier getTargetLootTableId(LootItemCondition condition) {
-                return ReflectionUtils.copyClassData(LootTableIdConditionAccessor.class, condition, LootTableIdCondition.class).getTargetLootTableId();
-            }
-        };
     }
 
     @NotNull

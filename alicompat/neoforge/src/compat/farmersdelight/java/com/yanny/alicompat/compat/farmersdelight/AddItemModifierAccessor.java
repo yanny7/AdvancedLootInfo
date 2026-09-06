@@ -10,7 +10,6 @@ import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.alicompat.accessor.IGlobalLootModifierAccessor;
-import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.ali.plugin.server.EnchantedRanges;
@@ -37,15 +36,15 @@ public class AddItemModifierAccessor extends BaseAccessor<AddItemModifier> imple
         super(parent);
     }
 
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils, ILootTableIdConditionPredicate predicate) {
+    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
         List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
 
-        return GlobalLootModifierUtils.getLootModifier(conditionList, (c) -> {
+        return GlobalLootModifierUtils.getLootModifier(utils, conditionList, (c) -> {
             EnchantedRanges chance = NodeUtils.getEnchantedChance(utils, c, 1);
             EnchantedRanges count = NodeUtils.getEnchantedCount(utils, Collections.emptyList());
             TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, count, Collections.emptyList(), c);
             IDataNode node = new ItemNode(1, new RangeValue(this.count), addedItem.getDefaultInstance(), tooltip.build(), Collections.emptyList(), c);
             return Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, node));
-        }, predicate);
+        });
     }
 }

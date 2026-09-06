@@ -14,10 +14,10 @@ import com.yanny.ali.neoforge.mixin.*;
 import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
+import com.yanny.ali.plugin.glm.Destination;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierWrapper;
-import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -49,6 +49,8 @@ public class NeoForgePlugin implements IPlugin {
     public void registerServer(IServerRegistry registry) {
         registry.registerConditionTooltip(CanItemPerformAbility.class, NeoForgePlugin::getCanToolPerformActionTooltip);
         registry.registerConditionTooltip(LootTableIdCondition.class, NeoForgePlugin::getLootTableIdTooltip);
+
+        registry.registerDestination(LootTableIdCondition.class, NeoForgePlugin::getLootTableIdDestination);
 
         registry.registerIngredientUnwrapper(NeoForgePlugin::unwrapCustomIngredient);
 
@@ -112,12 +114,11 @@ public class NeoForgePlugin implements IPlugin {
         Map<Class<?>, BiFunction<IServerUtils, IGlobalLootModifier, Optional<ILootModifier<?>>>> glmMap = new HashMap<>();
         Set<Class<?>> missingGLM = new HashSet<>();
         List<ILootModifier<?>> lootModifiers = new ArrayList<>();
-        ILootTableIdConditionPredicate tablePredicate = getLootTableIdConditionPredicate();
         IGlobalLootModifierPlugin.IRegistry forgeRegistry = getForgeRegistry(glmMap);
 
         for (IPlugin plugin : Services.getPlatform().getPlugins()) {
             if (plugin instanceof IGlobalLootModifierPlugin forgePlugin) {
-                forgePlugin.registerGlobalLootModifier(forgeRegistry, tablePredicate);
+                forgePlugin.registerGlobalLootModifier(forgeRegistry);
             }
         }
 
@@ -126,7 +127,7 @@ public class NeoForgePlugin implements IPlugin {
         forgeRegistry.registerGlobalLootModifier(AddTableLootModifier.class, (u, m) -> {
             List<LootItemCondition> conditionList = Arrays.asList(((MixinLootModifier) m).getAliConditions());
 
-            return GlobalLootModifierUtils.getLootModifier(conditionList, (c) -> {
+            return GlobalLootModifierUtils.getLootModifier(u, conditionList, (c) -> {
                 TooltipNode tooltip = TooltipBuilder.array((b) -> b
                                 .add(TooltipBuilder.keyOnly(Lang.Group.ALL))
                                 .add(utils.getValueTooltip(utils, c))
@@ -134,7 +135,7 @@ public class NeoForgePlugin implements IPlugin {
                         .build();
                 IDataNode node = NodeUtils.getReferenceNode(utils, ((MixinAddTableLootModifier) m).getTable().identifier(), c, tooltip);
                 return List.of(new IOperation.AddOperation((i) -> true, node));
-            }, tablePredicate);
+            });
         });
 
         for (IGlobalLootModifier globalLootModifier : lootModifierManager.getAllLootMods()) {
@@ -152,7 +153,7 @@ public class NeoForgePlugin implements IPlugin {
                         LOGGER.warn("Unable to locate destination for GLM {}", wrapper.getName());
                     }
                 } else {
-                    Optional<ILootModifier<?>> modifier = GlobalLootModifierUtils.getMissingGlobalLootModifier(utils, wrapper, tablePredicate);
+                    Optional<ILootModifier<?>> modifier = GlobalLootModifierUtils.getMissingGlobalLootModifier(utils, wrapper);
 
                     missingGLM.add(globalLootModifier.getClass());
 
@@ -173,18 +174,8 @@ public class NeoForgePlugin implements IPlugin {
     }
 
     @NotNull
-    private static ILootTableIdConditionPredicate getLootTableIdConditionPredicate() {
-        return new ILootTableIdConditionPredicate() {
-            @Override
-            public boolean isLootTableIdCondition(LootItemCondition condition) {
-                return condition instanceof LootTableIdCondition;
-            }
-
-            @Override
-            public Identifier getTargetLootTableId(LootItemCondition condition) {
-                return ((MixinLootTableIdCondition) condition).getTargetLootTableId();
-            }
-        };
+    private static Destination getLootTableIdDestination(IServerUtils ignoredUtils, LootTableIdCondition cond) {
+        return new Destination.Table(((MixinLootTableIdCondition) cond).getTargetLootTableId(), true);
     }
 
     @NotNull
