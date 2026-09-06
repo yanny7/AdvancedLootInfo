@@ -5,6 +5,7 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.storage.loot.functions.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,7 +45,7 @@ public class FunctionTooltipUtils {
     public static TooltipBuilder getCopyStateTooltip(IServerUtils utils, CopyBlockState fun) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, fun.block).build(Lang.Value.BLOCK));
-            b.add(utils.getValueTooltip(utils, fun.properties).build(Lang.Branch.PROPERTIES));
+            b.add(utils.getValueTooltip(utils, fun.properties.stream().sorted(Comparator.comparing(Property::getName)).toList()).build(Lang.Branch.PROPERTIES));
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.COPY_STATE);
     }

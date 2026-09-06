@@ -63,10 +63,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
-import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
 import static com.yanny.aci.test.utils.TestUtils.assertUnorderedTooltip;
+import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
+import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 
 public class DataComponentTooltipTest {
     @Test

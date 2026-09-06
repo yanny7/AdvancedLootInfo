@@ -5,12 +5,12 @@ import com.mojang.serialization.Codec;
 import com.yanny.aci.api.ICoreServerUtils;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.ali.plugin.glm.Destination;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import net.minecraft.advancements.predicates.entity.EntitySubPredicate;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -27,12 +27,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUtils {
-    @NotNull
-    <T extends LootPoolEntryContainer> List<Item> collectItems(IServerUtils utils, T entry);
-
-    @NotNull
-    <T extends LootItemFunction> List<Item> collectItems(IServerUtils utils, List<Item> items, T function);
-
     @NotNull
     <T extends LootPoolEntryContainer> IServerRegistry.EntryFactory<T> getEntryFactory(IServerUtils utils, T type);
 
@@ -79,4 +73,7 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
 
     @Nullable
     LootTable getLootTable(Either<Identifier, LootTable> either);
+
+    @Nullable
+    Destination getDestination(IServerUtils utils, LootItemCondition condition);
 }

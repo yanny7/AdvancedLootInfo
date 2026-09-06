@@ -16,14 +16,16 @@ public interface ILootModifier<T> {
     @NotNull
     IType<T> getType();
 
-    sealed interface IType<T> permits IType.BlockType, IType.EntityType, IType.LootTableType {
+    sealed interface IType<T> permits IType.BlockType, IType.EntityType, IType.LootTableType, IType.UnboundedType {
         IType<Block> BLOCK = new BlockType();
         IType<Entity> ENTITY = new EntityType();
         IType<Identifier> LOOT_TABLE = new LootTableType();
+        IType<Object> UNBOUNDED = new UnboundedType();
 
         final class BlockType implements IType<Block> {}
         final class EntityType implements IType<Entity> {}
         final class LootTableType implements IType<Identifier> {}
+        final class UnboundedType implements IType<Object> {}
     }
 
 }

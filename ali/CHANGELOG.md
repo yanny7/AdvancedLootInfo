@@ -2,6 +2,7 @@
 
 - Added `IServerRegistry.registerTrades`, so a plugin can list the trades of its own trader
 - Trade selection count is read from the trade set's own amount instead of being assumed
+- Improved GLM destination detection and loot table matching
 - Entity and gameplay loot tables are listed in stable order
 - Job sites of modded villager professions are resolved from the POI registry
 - A loot table referenced by another loot table no longer triggers entity scan

@@ -16,6 +16,8 @@ import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
+import com.yanny.ali.plugin.glm.Destination;
+import com.yanny.ali.plugin.glm.IDestinationResolver;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.MissingTooltipUtils;
 import net.minecraft.advancements.predicates.entity.EntitySubPredicate;
@@ -31,7 +33,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.villager.VillagerProfession;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -66,9 +67,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, NumberProvider, RangeValue>> numberConverters = registerClassKeyed("number converters", true, HashMap::new, BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE);
     // traders
     private final ManagedRegistry<Identifier, Supplier<Int2ObjectMap<ResourceKey<TradeSet>>>> trades = register("trades", false, HashMap::new, Identifier::toString, null);
-    // collectors
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootPoolEntryContainer, List<Item>>> entryItemCollectors = registerClassKeyed("entry item collectors", false, HashMap::new, null);
-    private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, List<Item>, LootItemFunction, List<Item>>> functionItemCollectors = registerClassKeyed("function item collectors", false, HashMap::new, null);
     // tooltips
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootPoolEntryContainer, TooltipBuilder>> entryTooltips = registerClassKeyed("entry tooltips", true, HashMap::new, BuiltInRegistries.LOOT_POOL_ENTRY_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemFunction, TooltipBuilder>> functionTooltips = registerClassKeyed("function tooltips", true, HashMap::new, BuiltInRegistries.LOOT_FUNCTION_TYPE);
@@ -84,6 +82,8 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemCondition, EnchantedRanges>> chanceModifiers = registerClassKeyed("chance modifiers", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemFunction, EnchantedRanges>> countModifiers = registerClassKeyed("count modifiers", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifiers = registerClassKeyed("item stack modifiers", false, HashMap::new, null);
+    // destinations
+    private final ManagedRegistry<Class<?>, IDestinationResolver<LootItemCondition>> destinations = registerClassKeyed("global loot modifier destinations", false, HashMap::new, null);
     // translations
     private final ManagedRegistry<Class<?>, EnumTranslation> enumValues = registerClassKeyed("enum values", true, HashMap::new, null);
 
@@ -118,16 +118,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     public List<ILootModifier<?>> getLootModifiers() {
         return lootModifierMap;
-    }
-
-    @Override
-    public <T extends LootPoolEntryContainer> void registerItemCollector(Class<T> type, BiFunction<IServerUtils, T, List<Item>> itemSupplier) {
-        entryItemCollectors.put(type, (u, e) -> itemSupplier.apply(u, type.cast(e)));
-    }
-
-    @Override
-    public <T extends LootItemFunction> void registerItemCollector(Class<T> type, TriFunction<IServerUtils, List<Item>, T, List<Item>> itemSupplier) {
-        functionItemCollectors.put(type, (u, l, f) -> itemSupplier.apply(u, l, type.cast(f)));
     }
 
     @Override
@@ -213,6 +203,11 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
+    public <T extends LootItemCondition> void registerDestination(Class<T> type, IDestinationResolver<T> resolver) {
+        destinations.put(type, (u, c) -> resolver.resolve(u, type.cast(c)));
+    }
+
+    @Override
     public void registerLootModifiers(Function<IServerUtils, List<ILootModifier<?>>> getter) {
         lootModifierGetters.add(getter);
     }
@@ -235,22 +230,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @Override
     public void registerEnumTranslation(Class<? extends Enum<?>> type, String modId, String owner) {
         enumValues.put(type, new EnumTranslation(modId, owner));
-    }
-
-    @NotNull
-    @Override
-    public <T extends LootPoolEntryContainer> List<Item> collectItems(IServerUtils utils, T entry) {
-        return entryItemCollectors.get(entry.getClass())
-                .map((e) -> e.apply(utils, entry))
-                .orElseGet(List::of);
-    }
-
-    @NotNull
-    @Override
-    public <T extends LootItemFunction> List<Item> collectItems(IServerUtils utils, List<Item> items, T function) {
-        return functionItemCollectors.get(function.getClass())
-                .map((e) -> e.apply(utils, items, function))
-                .orElseGet(List::of);
     }
 
     @NotNull
@@ -418,6 +397,14 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
             entry.ifPresent(e -> hitMap.compute(e.getKey(), (k, v) -> v == null ? 1 : v + 1));
         });
         return either.map(lootTableMap::get, lootTable -> lootTable);
+    }
+
+    @Nullable
+    @Override
+    public Destination getDestination(IServerUtils utils, LootItemCondition condition) {
+        return destinations.get(condition.getClass())
+                .map((r) -> r.resolve(utils, condition))
+                .orElse(null);
     }
 
     public IDataNode parseTable(List<ILootModifier<?>> modifiers, LootTable lootTable) {

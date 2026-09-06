@@ -7,13 +7,13 @@ import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.test.utils.TestUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipContext;
-import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.aci.tooltip.TooltipNodePalette;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.datagen.LanguageHolder;
 import com.yanny.ali.manager.PluginManager;
+import com.yanny.ali.plugin.glm.Destination;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.LootConditionTypes;
 import com.yanny.ali.plugin.server.LootFunctionTypes;
@@ -46,7 +46,6 @@ import net.minecraft.util.Unit;
 import net.minecraft.util.Util;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -91,6 +90,7 @@ import java.util.concurrent.ExecutionException;
         NodeTest.class,
         ServerUtilsTest.class,
         SlotSourceTooltipTest.class,
+        GlobalLootModifierTest.class,
         ConfigTest.class
 })
 public class TooltipTestSuite {
@@ -112,6 +112,7 @@ public class TooltipTestSuite {
         TestUtils.LoadedLanguage loadedLanguage = TestUtils.loadDefaultLanguage(resourceManager, LanguageHolder.TRANSLATION_MAP);
 
         Language.inject(loadedLanguage.language());
+        TestUtils.bindVanillaTags();
         UNUSED = loadedLanguage.unusedKeys();
         LOOKUP = VanillaRegistries.createLookup();
 
@@ -134,16 +135,10 @@ public class TooltipTestSuite {
                 return PluginManager.getInstance().serverRegistry.createEntities(type, level);
             }
 
-            @NotNull
+            @Nullable
             @Override
-            public <T extends LootPoolEntryContainer> List<Item> collectItems(IServerUtils utils, T entry) {
-                return PluginManager.getInstance().serverRegistry.collectItems(utils, entry);
-            }
-
-            @NotNull
-            @Override
-            public <T extends LootItemFunction> List<Item> collectItems(IServerUtils utils, List<Item> items, T function) {
-                return PluginManager.getInstance().serverRegistry.collectItems(utils, items, function);
+            public Destination getDestination(IServerUtils utils, LootItemCondition condition) {
+                return PluginManager.getInstance().serverRegistry.getDestination(utils, condition);
             }
 
             @NotNull

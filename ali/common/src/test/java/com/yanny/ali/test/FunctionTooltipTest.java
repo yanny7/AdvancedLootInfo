@@ -111,8 +111,8 @@ public class FunctionTooltipTest {
                 "Copy State:",
                 "  -> Block: minecraft:furnace",
                 "  -> Properties:",
-                "    -> lit",
-                "    -> facing"
+                "    -> facing",
+                "    -> lit"
         ));
         assertTooltip(FunctionTooltipUtils.getCopyStateTooltip(UTILS, (CopyBlockState) CopyBlockState.copyState(Blocks.FURNACE)
                 .copy(BlockStateProperties.LIT)

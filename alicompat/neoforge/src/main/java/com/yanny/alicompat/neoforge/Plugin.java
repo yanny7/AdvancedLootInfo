@@ -5,7 +5,6 @@ import com.yanny.ali.api.IClientRegistry;
 import com.yanny.ali.api.ICommonRegistry;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
-import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 import com.yanny.alicompat.ModCompatManager;
 import com.yanny.alicompat.Utils;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +33,7 @@ public class Plugin implements IGlobalLootModifierPlugin {
     }
 
     @Override
-    public void registerGlobalLootModifier(IGlobalLootModifierPlugin.IRegistry registry, ILootTableIdConditionPredicate predicate) {
-        ModCompatManager.registerGlobalLootModifier(registry, predicate);
+    public void registerGlobalLootModifier(IGlobalLootModifierPlugin.IRegistry registry) {
+        ModCompatManager.registerGlobalLootModifier(registry);
     }
 }

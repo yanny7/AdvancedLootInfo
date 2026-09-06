@@ -5,7 +5,6 @@ import com.yanny.ali.api.IClientRegistry;
 import com.yanny.ali.api.ICommonRegistry;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
-import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 import com.yanny.alicompat.platform.Services;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -60,10 +59,10 @@ public final class ModCompatManager {
         forEach("server", (compat) -> compat.registerServer(registry));
     }
 
-    public static void registerGlobalLootModifier(IGlobalLootModifierPlugin.IRegistry registry, ILootTableIdConditionPredicate predicate) {
+    public static void registerGlobalLootModifier(IGlobalLootModifierPlugin.IRegistry registry) {
         forEach("global loot modifier", (compat) -> {
             if (compat instanceof IGlmModCompat glmCompat) {
-                glmCompat.registerGlobalLootModifier(registry, predicate);
+                glmCompat.registerGlobalLootModifier(registry);
             }
         });
     }

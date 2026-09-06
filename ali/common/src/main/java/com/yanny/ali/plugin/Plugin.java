@@ -16,6 +16,7 @@ import com.yanny.ali.plugin.common.nodes.*;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.ali.plugin.common.trades.TradeLevelNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
+import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.server.*;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -152,19 +153,6 @@ public class Plugin implements IPlugin {
 
         EnumTypes.TRANSLATED_ENUMS.forEach((type, owner) -> registry.registerEnumTranslation(type, Utils.MOD_ID, owner));
 
-        registry.registerItemCollector(LootItem.class, ItemCollectorUtils::collectItems);
-        registry.registerItemCollector(TagEntry.class, ItemCollectorUtils::collectTags);
-        registry.registerItemCollector(AlternativesEntry.class, ItemCollectorUtils::collectComposite);
-        registry.registerItemCollector(EntryGroup.class, ItemCollectorUtils::collectComposite);
-        registry.registerItemCollector(SequentialEntry.class, ItemCollectorUtils::collectComposite);
-        registry.registerItemCollector(EmptyLootItem.class, ItemCollectorUtils::collectSingleton);
-        registry.registerItemCollector(DynamicLoot.class, ItemCollectorUtils::collectSingleton);
-        registry.registerItemCollector(NestedLootTable.class, ItemCollectorUtils::collectReference);
-        registry.registerItemCollector(SlotLoot.class, ItemCollectorUtils::collectSingleton);
-
-        registry.registerItemCollector(SmeltItemFunction.class, ItemCollectorUtils::collectFurnaceSmelt);
-        registry.registerItemCollector(SetItemFunction.class, ItemCollectorUtils::collectSetItem);
-
         registry.registerNumberProvider(ConstantValue.class, Plugin::convertConstant);
         registry.registerNumberProvider(UniformGenerator.class, Plugin::convertUniform);
         registry.registerNumberProvider(BinomialDistributionGenerator.class, Plugin::convertBinomial);
@@ -192,6 +180,9 @@ public class Plugin implements IPlugin {
         registry.registerEntryTooltip(EmptyLootItem.class, EntryTooltipUtils::getEmptyTooltip);
         registry.registerEntryTooltip(DynamicLoot.class, EntryTooltipUtils::getDynamicTooltip);
         registry.registerEntryTooltip(NestedLootTable.class, EntryTooltipUtils::getReferenceTooltip);
+
+        registry.registerDestination(LootItemBlockStatePropertyCondition.class, GlobalLootModifierUtils::getBlockStateDestination);
+        registry.registerDestination(LootItemEntityPropertyCondition.class, GlobalLootModifierUtils::getEntityPropertyDestination);
 
         registry.registerConditionTooltip(AllOfCondition.class, ConditionTooltipUtils::getAllOfTooltip);
         registry.registerConditionTooltip(AnyOfCondition.class, ConditionTooltipUtils::getAnyOfTooltip);
