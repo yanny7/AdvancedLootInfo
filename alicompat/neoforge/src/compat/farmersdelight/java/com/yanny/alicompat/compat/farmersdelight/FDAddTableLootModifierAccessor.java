@@ -10,7 +10,6 @@ import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.alicompat.accessor.IGlobalLootModifierAccessor;
-import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
@@ -34,10 +33,10 @@ public class FDAddTableLootModifierAccessor extends BaseAccessor<FDAddTableLootM
         super(parent);
     }
 
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils, ILootTableIdConditionPredicate predicate) {
+    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
         List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
 
-        return GlobalLootModifierUtils.getLootModifier(conditionList, (c) -> {
+        return GlobalLootModifierUtils.getLootModifier(utils, conditionList, (c) -> {
             TooltipNode tooltip = TooltipBuilder.array((b) -> b
                             .add(TooltipBuilder.keyOnly(Lang.Group.ALL))
                             .add(GenericTooltipUtils.getConditionsSectionTooltip(utils, c))
@@ -45,6 +44,6 @@ public class FDAddTableLootModifierAccessor extends BaseAccessor<FDAddTableLootM
                     .build();
             IDataNode node = NodeUtils.getReferenceNode(utils, lootTable.location(), c, tooltip);
             return Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, node));
-        }, predicate);
+        });
     }
 }

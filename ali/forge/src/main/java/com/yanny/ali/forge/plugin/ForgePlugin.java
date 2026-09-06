@@ -3,8 +3,6 @@ package com.yanny.ali.forge.plugin;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
-import com.yanny.aci.tooltip.TooltipBuilder;
-import com.mojang.serialization.JsonOps;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.Utils;
@@ -13,10 +11,10 @@ import com.yanny.ali.forge.mixin.MixinForgeInternalHandler;
 import com.yanny.ali.forge.mixin.MixinLootModifier;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.platform.Services;
+import com.yanny.ali.plugin.glm.Destination;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierWrapper;
-import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -54,6 +52,8 @@ public class ForgePlugin implements IPlugin {
         registry.registerIngredientTooltip(PartialNBTIngredient.class, ForgeIngredientTooltipUtils::getPartialNbtIngredientTooltip);
         registry.registerIngredientTooltip(StrictNBTIngredient.class, ForgeIngredientTooltipUtils::getStrictNbtIngredientTooltip);
 
+        registry.registerDestination(LootTableIdCondition.class, ForgePlugin::getLootTableIdDestination);
+
         registry.registerLootModifiers(ForgePlugin::registerLootModifiers);
     }
 
@@ -68,16 +68,20 @@ public class ForgePlugin implements IPlugin {
     }
 
     @NotNull
+    public static Destination getLootTableIdDestination(IServerUtils ignoredUtils, LootTableIdCondition cond) {
+        return new Destination.Table(cond.id(), true);
+    }
+
+    @NotNull
     private static List<ILootModifier<?>> registerLootModifiers(IServerUtils utils) {
         Map<Class<?>, BiFunction<IServerUtils, IGlobalLootModifier, Optional<ILootModifier<?>>>> glmMap = new HashMap<>();
         Set<Class<?>> missingGLM = new HashSet<>();
         List<ILootModifier<?>> lootModifiers = new ArrayList<>();
-        ILootTableIdConditionPredicate tablePredicate = getLootTableIdConditionPredicate();
         IGlobalLootModifierPlugin.IRegistry forgeRegistry = getForgeRegistry(glmMap);
 
         for (IPlugin plugin : Services.getPlatform().getPlugins()) {
             if (plugin instanceof IGlobalLootModifierPlugin forgePlugin) {
-                forgePlugin.registerGlobalLootModifier(forgeRegistry, tablePredicate);
+                forgePlugin.registerGlobalLootModifier(forgeRegistry);
             }
         }
 
@@ -98,7 +102,7 @@ public class ForgePlugin implements IPlugin {
                         LOGGER.warn("Unable to locate destination for GLM {}", wrapper.getName());
                     }
                 } else {
-                    Optional<ILootModifier<?>> modifier = GlobalLootModifierUtils.getMissingGlobalLootModifier(utils, wrapper, tablePredicate);
+                    Optional<ILootModifier<?>> modifier = GlobalLootModifierUtils.getMissingGlobalLootModifier(utils, wrapper);
 
                     missingGLM.add(globalLootModifier.getClass());
 
@@ -116,21 +120,6 @@ public class ForgePlugin implements IPlugin {
         missingGLM.forEach((c) -> LOGGER.warn("Missing GLM for {}", c.getName()));
 
         return lootModifiers;
-    }
-
-    @NotNull
-    private static ILootTableIdConditionPredicate getLootTableIdConditionPredicate() {
-        return new ILootTableIdConditionPredicate() {
-            @Override
-            public boolean isLootTableIdCondition(LootItemCondition condition) {
-                return condition instanceof LootTableIdCondition;
-            }
-
-            @Override
-            public ResourceLocation getTargetLootTableId(LootItemCondition condition) {
-                return ((LootTableIdCondition) condition).id();
-            }
-        };
     }
 
     @NotNull
