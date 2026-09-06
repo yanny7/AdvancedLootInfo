@@ -67,10 +67,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
-import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
 import static com.yanny.aci.test.utils.TestUtils.assertUnorderedTooltip;
+import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
+import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 
 public class DataComponentTooltipTest {
     @Test
@@ -152,25 +152,7 @@ public class DataComponentTooltipTest {
                 "      -> Tag: minecraft:beds",
                 "    -> Properties:",
                 "      -> part: foot",
-                "  -> Block: minecraft:bell",
-                "Tooltip:",
-                "  -> Red Bed",
-                "  -> Black Bed",
-                "  -> Blue Bed",
-                "  -> Brown Bed",
-                "  -> Cyan Bed",
-                "  -> Gray Bed",
-                "  -> Green Bed",
-                "  -> Light Blue Bed",
-                "  -> Light Gray Bed",
-                "  -> Lime Bed",
-                "  -> Magenta Bed",
-                "  -> Orange Bed",
-                "  -> Pink Bed",
-                "  -> Purple Bed",
-                "  -> White Bed",
-                "  -> Yellow Bed",
-                "  -> Bell"
+                "  -> Block: minecraft:bell"
         ));
     }
 

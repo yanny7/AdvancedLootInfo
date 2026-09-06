@@ -5,11 +5,7 @@ import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.network.NetworkUtils;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.ali.Utils;
-import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.IItemNode;
-import com.yanny.ali.api.ILootModifier;
-import com.yanny.ali.api.IOperation;
-import com.yanny.ali.api.ListNode;
+import com.yanny.ali.api.*;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.AliServerRegistry;
 import com.yanny.ali.manager.FakeLootDataManager;
@@ -26,7 +22,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.ReloadableServerRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -535,7 +530,7 @@ public abstract class AbstractServer {
 
     @NotNull
     private static List<ILootModifier<?>> filterByItems(AliServerRegistry serverRegistry, List<ILootModifier<?>> modifiers, @Nullable LootTable lootTable,
-                                                        ResourceLocation location, Map<ResourceLocation, LootTable> fakeLootTables,
+                                                        Identifier location, Map<Identifier, LootTable> fakeLootTables,
                                                         Set<ILootModifier<?>> attachedLootModifiers) {
         if (modifiers.isEmpty()) {
             return modifiers;
@@ -559,8 +554,8 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static List<ItemStack> collectProducibleItems(AliServerRegistry serverRegistry, @Nullable LootTable lootTable, ResourceLocation location,
-                                                          Map<ResourceLocation, LootTable> fakeLootTables) {
+    private static List<ItemStack> collectProducibleItems(AliServerRegistry serverRegistry, @Nullable LootTable lootTable, Identifier location,
+                                                          Map<Identifier, LootTable> fakeLootTables) {
         List<ItemStack> items = new ArrayList<>();
 
         try {

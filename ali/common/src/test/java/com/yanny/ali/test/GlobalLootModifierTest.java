@@ -6,10 +6,10 @@ import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.plugin.glm.Destination;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.server.LootConditionTypes;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.criterion.*;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.Entity;
@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -41,8 +42,8 @@ public class GlobalLootModifierTest {
     private static final String UNBOUNDED = "UNBOUNDED";
     private static final String NONE = "NONE";
 
-    private static final ResourceLocation DUNGEON = ResourceLocation.withDefaultNamespace("chests/simple_dungeon");
-    private static final ResourceLocation FORTRESS = ResourceLocation.withDefaultNamespace("chests/nether_bridge");
+    private static final Identifier DUNGEON = Identifier.withDefaultNamespace("chests/simple_dungeon");
+    private static final Identifier FORTRESS = Identifier.withDefaultNamespace("chests/nether_bridge");
 
     private static final IServerUtils UTILS = serverUtils(false);
     private static final IServerUtils UNBOUNDED_UTILS = serverUtils(true);
@@ -60,7 +61,7 @@ public class GlobalLootModifierTest {
     @Test
     public void entityTagConditionResolvesToEntity() {
         Result result = resolve(entity(LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity()
-                .entityType(EntityTypePredicate.of(EntityTypeTags.SKELETONS))));
+                .entityType(EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypeTags.SKELETONS))));
 
         assertEquals(ENTITY, result.type());
         assertTrue(result.matches(entityOf(EntityType.SKELETON)));
@@ -73,7 +74,7 @@ public class GlobalLootModifierTest {
     @Test
     public void entityConditionOnKillerIsNotADestination() {
         Result result = resolve(entity(LootContext.EntityTarget.ATTACKER, EntityPredicate.Builder.entity()
-                .entityType(EntityTypePredicate.of(EntityType.ZOMBIE))));
+                .entityType(EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.ZOMBIE))));
 
         assertEquals(NONE, result.type());
     }
@@ -110,14 +111,14 @@ public class GlobalLootModifierTest {
         assertEquals(List.of("LootItemRandomChanceCondition"),
                 resolve(entity(EntityType.ZOMBIE), LootItemRandomChanceCondition.randomChance(0.5F).build()).retained());
         assertEquals(List.of("MatchTool", "LootItemKilledByPlayerCondition"),
-                resolve(block(Blocks.WHEAT), MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.DIAMOND_HOE)).build(),
+                resolve(block(Blocks.WHEAT), MatchTool.toolMatches(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.DIAMOND_HOE)).build(),
                         LootItemKilledByPlayerCondition.killedByPlayer().build()).retained());
     }
 
     @Test
     public void entityPredicateDetailSurvivesIntoTheTooltip() {
         Result result = resolve(entity(LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity()
-                .entityType(EntityTypePredicate.of(EntityType.ZOMBIE))
+                .entityType(EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.ZOMBIE))
                 .flags(EntityFlagsPredicate.Builder.flags().setIsBaby(true))));
 
         assertEquals(ENTITY, result.type());
@@ -141,7 +142,7 @@ public class GlobalLootModifierTest {
         assertEquals(LOOT_TABLE, resolve(allOf(table(DUNGEON))).type());
 
         Result result = resolve(allOf(
-                MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.DIAMOND_PICKAXE)).build(),
+                MatchTool.toolMatches(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.DIAMOND_PICKAXE)).build(),
                 block(Blocks.STONE)
         ));
 
@@ -218,18 +219,18 @@ public class GlobalLootModifierTest {
     @Test
     public void locationCheckIsNotADestination() {
         assertEquals(NONE, resolve(LocationCheck.checkLocation(LocationPredicate.Builder.location()
-                .setBlock(net.minecraft.advancements.critereon.BlockPredicate.Builder.block().of(Blocks.DEEPSLATE))).build()).type());
+                .setBlock(BlockPredicate.Builder.block().of(LOOKUP.lookupOrThrow(Registries.BLOCK), Blocks.DEEPSLATE))).build()).type());
     }
 
     @Test
     public void conditionReferenceIsNotADestination() {
-        assertEquals(NONE, resolve(ConditionReference.conditionReference(ResourceKey.create(Registries.PREDICATE, ResourceLocation.withDefaultNamespace("test"))).build()).type());
+        assertEquals(NONE, resolve(ConditionReference.conditionReference(ResourceKey.create(Registries.PREDICATE, Identifier.withDefaultNamespace("test"))).build()).type());
     }
 
     @Test
     public void unresolvableConditionsAreADeadEnd() {
         assertEquals(NONE, resolve().type());
-        assertEquals(NONE, resolve(MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.DIAMOND_PICKAXE)).build()).type());
+        assertEquals(NONE, resolve(MatchTool.toolMatches(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.DIAMOND_PICKAXE)).build()).type());
         assertEquals(NONE, resolve(LootItemRandomChanceCondition.randomChance(0.5F).build()).type());
         assertEquals(NONE, resolve(LootItemKilledByPlayerCondition.killedByPlayer().build()).type());
         assertEquals(NONE, resolve(new ModCondition()).type());
@@ -237,7 +238,7 @@ public class GlobalLootModifierTest {
 
     @Test
     public void unresolvableConditionsBecomeUnboundedWhenEnabled() {
-        Result result = resolveUnbounded(MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.DIAMOND_PICKAXE)).build());
+        Result result = resolveUnbounded(MatchTool.toolMatches(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.DIAMOND_PICKAXE)).build());
 
         assertEquals(UNBOUNDED, result.type());
         assertTrue(result.matches(Blocks.FURNACE));
@@ -263,8 +264,8 @@ public class GlobalLootModifierTest {
 
     @Test
     public void matchToolShapesAreADeadEnd() {
-        assertEquals(NONE, resolve(MatchTool.toolMatches(ItemPredicate.Builder.item().of(ItemTags.PICKAXES)).build()).type());
-        assertEquals(NONE, resolve(MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.NETHERITE_PICKAXE)).build()).type());
+        assertEquals(NONE, resolve(MatchTool.toolMatches(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), ItemTags.PICKAXES)).build()).type());
+        assertEquals(NONE, resolve(MatchTool.toolMatches(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.NETHERITE_PICKAXE)).build()).type());
         assertEquals(NONE, resolve(MatchTool.toolMatches(ItemPredicate.Builder.item().withCount(MinMaxBounds.Ints.atLeast(1))).build()).type());
     }
 
@@ -277,7 +278,7 @@ public class GlobalLootModifierTest {
     @Test
     public void modConditionOnlyIsADeadEnd() {
         assertEquals(NONE, resolve(new ModCondition()).type());
-        assertEquals(NONE, resolve(new ModCondition(), MatchTool.toolMatches(ItemPredicate.Builder.item().of(ItemTags.PICKAXES)).build()).type());
+        assertEquals(NONE, resolve(new ModCondition(), MatchTool.toolMatches(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), ItemTags.PICKAXES)).build()).type());
     }
 
     @Test
@@ -301,15 +302,13 @@ public class GlobalLootModifierTest {
 
     @Nullable
     private static Destination destination(LootItemCondition condition) {
-        if (condition instanceof LootItemBlockStatePropertyCondition blockCondition) {
-            return GlobalLootModifierUtils.getBlockStateDestination(UTILS, blockCondition);
-        } else if (condition instanceof LootItemEntityPropertyCondition entityCondition) {
-            return GlobalLootModifierUtils.getEntityPropertyDestination(UTILS, entityCondition);
-        } else if (condition instanceof TableIdCondition tableCondition) {
-            return new Destination.Table(tableCondition.id(), true);
-        }
+        return switch (condition) {
+            case LootItemBlockStatePropertyCondition blockCondition -> GlobalLootModifierUtils.getBlockStateDestination(UTILS, blockCondition);
+            case LootItemEntityPropertyCondition entityCondition -> GlobalLootModifierUtils.getEntityPropertyDestination(UTILS, entityCondition);
+            case TableIdCondition(Identifier id) -> new Destination.Table(id, true);
+            default -> null;
+        };
 
-        return null;
     }
 
     @NotNull
@@ -337,7 +336,7 @@ public class GlobalLootModifierTest {
 
     @NotNull
     private static LootItemCondition entity(EntityType<?> type) {
-        return entity(LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(type)));
+        return entity(LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), type)));
     }
 
     @NotNull
@@ -358,7 +357,7 @@ public class GlobalLootModifierTest {
     }
 
     @NotNull
-    private static LootItemCondition table(ResourceLocation id) {
+    private static LootItemCondition table(Identifier id) {
         return new TableIdCondition(id);
     }
 
@@ -396,15 +395,12 @@ public class GlobalLootModifierTest {
 
             ILootModifier.IType<?> type = modifier.get().getType();
 
-            if (type instanceof ILootModifier.IType.EntityType) {
-                return ENTITY;
-            } else if (type instanceof ILootModifier.IType.BlockType) {
-                return BLOCK;
-            } else if (type instanceof ILootModifier.IType.LootTableType) {
-                return LOOT_TABLE;
-            } else {
-                return UNBOUNDED;
-            }
+            return switch (type) {
+                case ILootModifier.IType.EntityType ignored -> ENTITY;
+                case ILootModifier.IType.BlockType ignored -> BLOCK;
+                case ILootModifier.IType.LootTableType ignored -> LOOT_TABLE;
+                default -> UNBOUNDED;
+            };
         }
 
         boolean matches(Object value) {
@@ -413,7 +409,7 @@ public class GlobalLootModifierTest {
         }
     }
 
-    private record TableIdCondition(ResourceLocation id) implements LootItemCondition {
+    private record TableIdCondition(Identifier id) implements LootItemCondition {
         @NotNull
         @Override
         public LootItemConditionType getType() {

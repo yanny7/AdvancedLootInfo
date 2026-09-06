@@ -9,7 +9,7 @@ import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.common.nodes.GlobalLootModifierNode;
 import com.yanny.ali.plugin.server.TooltipUtils;
-import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.criterion.EntityPredicate;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Block;
@@ -102,7 +102,7 @@ public class GlobalLootModifierUtils {
         }
 
         if (utils.getConfiguration().showUnboundedGlobalLootModifiers) {
-            return Optional.of(new ILootModifier<Object>() {
+            return Optional.of(new ILootModifier<>() {
                 @Override
                 public boolean predicate(Object value) {
                     return true;
