@@ -1,5 +1,12 @@
 {
+  "alicompat.property.branch.alternative": "Alternative:",
+  "alicompat.property.branch.spell_filter": "Spell Filter:",
+  "alicompat.property.branch.spells": "Spells:",
   "alicompat.property.value.extra_count_per_player": "Extra Count Per Player: %s",
+  "alicompat.property.value.force": "Force: %s",
+  "alicompat.property.value.school": "School: %s",
+  "alicompat.property.value.spell": "Spell: %s",
+  "alicompat.property.value.spell_level": "Spell Level: %s",
   "alicompat.type.condition.giant_pick_used": "Giant Pick Used: %s",
   "alicompat.type.condition.is_minion": "Is Minion: %s",
   "alicompat.type.condition.mod_exists": "Mod Exists: %s",
