@@ -18,6 +18,7 @@
 - Fixed LootJS custom player action not shown on the loot it applies to
 - LootJS entries ALI can not read no longer discard whole loot table
 - Fixed loot entries with an empty tag matching every LootJS item filter
+- Added support for LootJS item filters used as item predicates
 
 ## [2.1.0]
 

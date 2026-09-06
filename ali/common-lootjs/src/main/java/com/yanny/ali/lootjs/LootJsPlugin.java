@@ -2,6 +2,7 @@ package com.yanny.ali.lootjs;
 
 import com.almostreliable.lootjs.core.filters.IdFilter;
 import com.almostreliable.lootjs.core.filters.ItemFilter;
+import com.almostreliable.lootjs.core.filters.ItemFilterWrapper;
 import com.almostreliable.lootjs.loot.condition.*;
 import com.almostreliable.lootjs.loot.modifier.LootModifier;
 import com.yanny.aci.CommonLogUtils;
@@ -94,6 +95,8 @@ public class LootJsPlugin implements IPlugin {
         registry.registerValueTooltip(ItemFilter.class, LootJsGenericTooltipUtils::getItemFilterTooltip);
         registry.registerValueTooltip(IdFilter.class, LootJsGenericTooltipUtils::getIdFilterTooltip);
         registry.registerValueTooltip(ItemAbility.class, LootJsGenericTooltipUtils::getItemAbilityTooltip);
+
+        registry.registerItemSubPredicateTooltip(ItemFilterWrapper.class, LootJsGenericTooltipUtils::getItemFilterWrapperTooltip);
 
         registry.registerLootModifiers(LootJsPlugin::registerModifiers);
     }
