@@ -400,7 +400,7 @@
   "ali.type.entity_sub_predicate.player": "玩家：",
   "ali.type.entity_sub_predicate.raider": "突襲者：",
   "ali.type.entity_sub_predicate.sheep": "綿羊：",
-  "ali.type.entity_sub_predicate.stepping_on": "踩踏方塊：",
+  "ali.type.entity_sub_predicate.stepping_on": "立足位置：",
   "ali.type.entity_sub_predicate.targeted_entity": "目標實體：",
   "ali.type.entity_sub_predicate.team": "隊伍：%s",
   "ali.type.entity_sub_predicate.vehicle": "載具：",
