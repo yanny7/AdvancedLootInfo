@@ -10,7 +10,6 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.common.nodes.GlobalLootModifierNode;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.advancements.criterion.EntityPredicate;
-import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Block;
@@ -39,7 +38,7 @@ public class GlobalLootModifierUtils {
             return Optional.of(new ILootModifier<Entity>() {
                 @Override
                 public boolean predicate(Entity value) {
-                    return entities.stream().anyMatch((d) -> d.type().matches(value.getType()));
+                    return entities.stream().anyMatch((d) -> d.type().matches(value.typeHolder()));
                 }
 
                 @NotNull

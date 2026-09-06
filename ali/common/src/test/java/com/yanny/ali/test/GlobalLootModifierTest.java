@@ -1,5 +1,6 @@
 package com.yanny.ali.test;
 
+import com.mojang.serialization.MapCodec;
 import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.configuration.AliConfig;
@@ -384,6 +385,7 @@ public class GlobalLootModifierTest {
         Entity entity = mock(Entity.class);
 
         doReturn(type).when(entity).getType();
+        doReturn(type.builtInRegistryHolder()).when(entity).typeHolder();
         return entity;
     }
 
@@ -410,28 +412,28 @@ public class GlobalLootModifierTest {
     }
 
     private record TableIdCondition(Identifier id) implements LootItemCondition {
-        @NotNull
-        @Override
-        public LootItemConditionType getType() {
-            return LootConditionTypes.UNUSED;
-        }
-
         @Override
         public boolean test(LootContext lootContext) {
             return true;
+        }
+
+        @NotNull
+        @Override
+        public MapCodec<? extends LootItemCondition> codec() {
+            return LootConditionTypes.UNUSED;
         }
     }
 
     private record ModCondition() implements LootItemCondition {
-        @NotNull
-        @Override
-        public LootItemConditionType getType() {
-            return LootConditionTypes.UNUSED;
-        }
-
         @Override
         public boolean test(LootContext lootContext) {
             return true;
+        }
+
+        @NotNull
+        @Override
+        public MapCodec<? extends LootItemCondition> codec() {
+            return LootConditionTypes.UNUSED;
         }
     }
 }

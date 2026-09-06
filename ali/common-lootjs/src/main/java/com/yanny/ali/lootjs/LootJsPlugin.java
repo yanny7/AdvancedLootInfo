@@ -98,7 +98,7 @@ public class LootJsPlugin implements IPlugin {
         registry.registerValueTooltip(IdFilter.class, LootJsGenericTooltipUtils::getIdFilterTooltip);
         registry.registerValueTooltip(ItemAbility.class, LootJsGenericTooltipUtils::getItemAbilityTooltip);
 
-        registry.registerItemSubPredicateTooltip(ItemFilterWrapper.class, LootJsGenericTooltipUtils::getItemFilterWrapperTooltip);
+        registry.registerDataComponentPredicateTooltip(ItemFilterWrapper.class, LootJsGenericTooltipUtils::getItemFilterWrapperTooltip);
 
         registry.registerLootModifiers(LootJsPlugin::registerModifiers);
     }
