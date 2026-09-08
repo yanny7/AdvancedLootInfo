@@ -10,7 +10,7 @@ architectury {
 loom {
     runs {
         data {
-            data()
+            clientData()
             programArgs "--all", "--mod", "${aci_mod_id}"
             programArgs "--output", "${file('src/main/generated/')}"
             programArgs "--existing", "${file("src/main/resources").absolutePath}"
