@@ -4,7 +4,7 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
-import com.yanny.alicompat.accessor.ReflectionUtils;
+import com.yanny.alicompat.accessor.IValueTooltip;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import io.redspace.ironsspellbooks.api.spells.SchoolType;
 import io.redspace.ironsspellbooks.loot.SpellFilter;
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class SpellFilterAccessor extends BaseAccessor<SpellFilter> {
+public class SpellFilterAccessor extends BaseAccessor<SpellFilter> implements IValueTooltip {
     @FieldAccessor
     private SchoolType schoolType;
     @FieldAccessor
@@ -25,23 +25,22 @@ public class SpellFilterAccessor extends BaseAccessor<SpellFilter> {
     }
 
     @NotNull
-    public static TooltipBuilder getTooltip(IServerUtils utils, SpellFilter spellFilter) {
-        SpellFilterAccessor accessor = ReflectionUtils.copyClassData(SpellFilterAccessor.class, spellFilter, SpellFilter.class);
-
+    @Override
+    public TooltipBuilder getTooltip(IServerUtils utils) {
         return TooltipBuilder.array((b) -> {
-            if (accessor.schoolType != null) {
-                b.add(utils.getValueTooltip(utils, accessor.schoolType.getDisplayName()).build(IronsSpellbooksLang.Value.SCHOOL));
+            if (schoolType != null) {
+                b.add(utils.getValueTooltip(utils, schoolType.getDisplayName()).build(IronsSpellbooksLang.Value.SCHOOL));
             }
 
-            if (!accessor.spells.isEmpty()) {
+            if (!spells.isEmpty()) {
                 b.add(TooltipBuilder.array((s) -> {
-                    for (AbstractSpell spell : accessor.spells) {
+                    for (AbstractSpell spell : spells) {
                         s.add(utils.getValueTooltip(utils, TooltipBuilder.translate("spell." + IronsSpellbooksLang.MOD_ID + "." + spell.getSpellName())).build(IronsSpellbooksLang.Value.SPELL));
                     }
                 }, IronsSpellbooksLang.Branch.SPELLS));
             }
 
-            b.add(utils.getValueTooltip(utils, accessor.force).build(IronsSpellbooksLang.Value.FORCE));
+            b.add(utils.getValueTooltip(utils, force).build(IronsSpellbooksLang.Value.FORCE));
         });
     }
 }

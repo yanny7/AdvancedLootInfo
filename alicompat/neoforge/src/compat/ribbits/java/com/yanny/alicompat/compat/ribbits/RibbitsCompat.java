@@ -6,6 +6,7 @@ import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.TradeLevelInfo;
 import com.yanny.alicompat.IModCompat;
 import com.yanny.alicompat.Utils;
+import com.yanny.alicompat.accessor.PluginUtils;
 import com.yanny.alicompat.accessor.ReflectionUtils;
 import com.yungnickyoung.minecraft.ribbits.data.RibbitProfession;
 import com.yungnickyoung.minecraft.ribbits.entity.trade.AmethystForItems;
@@ -46,10 +47,10 @@ public class RibbitsCompat implements IModCompat {
 
     @Override
     public void registerServer(IServerRegistry registry) {
-        registry.registerItemListing(ItemsForAmethystsAccessor.class, (utils, listing, condition) -> listing.getNode(utils, condition));
-        registry.registerItemListing(AmethystForItemsAccessor.class, (utils, listing, condition) -> listing.getNode(utils, condition));
-        registry.registerItemListing(ItemsAndAmethystsToItemsAccessor.class, (utils, listing, condition) -> listing.getNode(utils, condition));
-        registry.registerItemListing(EnchantedItemForAmethystAccessor.class, (utils, listing, condition) -> listing.getNode(utils, condition));
+        PluginUtils.registerSelfItemListing(registry, ItemsForAmethystsAccessor.class);
+        PluginUtils.registerSelfItemListing(registry, AmethystForItemsAccessor.class);
+        PluginUtils.registerSelfItemListing(registry, ItemsAndAmethystsToItemsAccessor.class);
+        PluginUtils.registerSelfItemListing(registry, EnchantedItemForAmethystAccessor.class);
 
         RibbitTradeModule.TRADES_BY_PROFESSION.forEach((profession, listings) -> {
             ResourceLocation professionId = profession.getId();

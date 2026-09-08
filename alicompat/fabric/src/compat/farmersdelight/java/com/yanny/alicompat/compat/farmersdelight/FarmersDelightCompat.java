@@ -20,8 +20,8 @@ public class FarmersDelightCompat implements IModCompat {
 
     @Override
     public void registerServer(IServerRegistry registry) {
-        registry.registerFunctionTooltip(CopySkilletFunction.class, (utils, function) -> new CopySkilletFunctionAccessor(function).getTooltip(utils));
-        registry.registerFunctionTooltip(SmokerCookFunction.class, (utils, function) -> new SmokerCookFunctionAccessor(function).getTooltip(utils));
+        PluginUtils.registerFunctionTooltip(registry, CopySkilletFunction.class, CopySkilletFunctionAccessor::new);
+        PluginUtils.registerFunctionTooltip(registry, SmokerCookFunction.class, SmokerCookFunctionAccessor::new);
 
         registry.registerEnumTranslation(ItemAbility.class, Utils.MOD_ID, FarmersDelightLang.ITEM_ABILITY);
         registry.registerConditionTooltip(CanItemPerformAbility.class, (utils, condition) -> utils.getValueTooltip(utils, condition.ability()).key(Lang.Conditions.CAN_ITEM_PERFORM_ABILITY));

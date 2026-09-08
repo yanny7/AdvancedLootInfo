@@ -1,15 +1,22 @@
 ---
 name: alicompat-shim
-description: Write one ALICompat compatibility shim for a target mod — fetch that mod's jar for the current branch's Minecraft version, decompile the loot/trade classes named in the survey, and produce the source set, accessors, services fragments, gradle.properties wiring, tooltip keys and changelog entry, then compile it. Use when the user names a mod to support ("start twilight forest", "add Apotheosis support", "write the shim for irons_spellbooks"), points at a row of an ALICompat work tracker (SB4_WRK.md), or asks to cover a specific loot function/condition/GLM/trading entity from another mod.
+description: Write one ALICompat compatibility shim for a target mod — fetch that mod's jar for the current branch's Minecraft version, decompile the loot/trade classes named in the survey, and produce the source set, accessors, services fragments, gradle.properties wiring, tooltip keys and changelog entry, then compile it. Use when the user names a mod to support ("start twilight forest", "add Apotheosis support", "write the shim for irons_spellbooks"), points at a row of the ALICompat tracker (COMPATIBILITY.md / compatibility/<mod id>.md), or asks to cover a specific loot function/condition/GLM/trading entity from another mod.
 ---
 
 # Writing one ALICompat shim
 
 Takes one target mod from plan to compiling code. The plan comes from the `alicompat-survey` skill
-(`SB4.md` + `SB4_WRK.md`); this skill is what runs per row of that queue. Read `alicompat/CLAUDE.md`
+(`COMPATIBILITY.md` and its `compatibility/<mod id>.md` files); this skill is what runs per row of
+that queue. Read only the target mod's file — the index is a link list, and the other 90-odd files
+are irrelevant to the shim in hand. Read `alicompat/CLAUDE.md`
 first — "Adding a target mod", "Writing a shim" and "Translations" are the contract, and this skill
 only adds the parts that document does not: how to get the target's bytecode, what the survey gets
 wrong, and the traps that cost a compile round-trip.
+
+`alicompat/CLAUDE.md`'s **"Tooltip code style"** is the shape the code takes — method signature, the
+single `return`, delegation through `getValueTooltip`, null and `Optional`, key placement, method
+references over lambdas, the `Lang` enum, comments. Read that section before writing the first line
+of Java; nothing about code shape is repeated here.
 
 ## Step 1 — the survey's class list is for a different Minecraft version
 
@@ -210,6 +217,15 @@ condition with several values uses `TooltipBuilder.array((b) -> …, KEY)` with 
 `TooltipBuilder.keyOnly(KEY)`. Reuse `Lang.Value` / `Lang.Branch` from `ali/common` wherever a key
 already exists; only add to the shim's own `Value` enum for something genuinely new.
 
+**A value the tooltip renders as its own object gets `registerValueTooltip`, not an inline helper.**
+When a function, condition or listing has to print a nested object — a formula, a modifier, a filter,
+a range type — register a renderer for that object's class and let `getValueTooltip` dispatch to it,
+even when exactly one caller uses it. That is what `ali/common`'s `Plugin` does: fifty
+`registerValueTooltip` calls, among them `ApplyBonusCount.Formula` and `SetAttributesFunction.Modifier`,
+each read by a single function. Calling a private helper instead works only for the caller that knows
+about it, and the same object rendered from a GLM, a trade or another shim silently falls back to a
+bare `toString`. `forge`/`ironsspellbooks` registers `SpellFilter` this way.
+
 Check whether the key already exists before adding one: translations from every shim merge into one
 `HashMap`, so two shims may ship the same key with the same value (Ribbits and MoreJS both declare
 `alicompat.type.function.random_potion`) and the generated JSON does not change at all. Each shim
@@ -252,9 +268,10 @@ decision, not this shim.
 
 ## Step 7 — the tracker
 
-Tick the row and its per-finding checkboxes in `SB4_WRK.md`, annotate each finding the branch's jar
-does not have, add the ones it has that the survey missed, and put the version-specific reasoning
-(why a GLM was hand-rolled, which loaders exist) in that row's `Notes:` block. The tracker is
+Tick the per-finding checkboxes in `compatibility/<mod id>.md`, update its `- Done:` line, tick the
+mod's `Done` cell in `COMPATIBILITY.md`, annotate each finding the branch's jar does not have, add
+the ones it has that the survey missed, and put the version-specific reasoning (why a GLM was
+hand-rolled, which loaders exist) in that file's `Notes:` block. The tracker is
 hand-maintained — never re-run `worklist.py` over a file with ticked boxes.
 
 Porting to another branch starts from Step 1 again: the same mod on `1.21.1` is a different class

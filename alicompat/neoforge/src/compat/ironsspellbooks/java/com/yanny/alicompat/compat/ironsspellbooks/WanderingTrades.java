@@ -12,6 +12,7 @@ import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.trades.TradeUtils;
 import com.yanny.ali.plugin.server.MissingTooltipUtils;
 import com.yanny.alicompat.Utils;
+import com.yanny.alicompat.accessor.PluginUtils;
 import io.redspace.ironsspellbooks.api.spells.SpellRarity;
 import io.redspace.ironsspellbooks.item.InkItem;
 import io.redspace.ironsspellbooks.player.AdditionalWanderingTrades;
@@ -40,8 +41,7 @@ public class WanderingTrades {
     private static final ResourceLocation SCROLL_POUCH = ResourceLocation.fromNamespaceAndPath(IronsSpellbooksLang.MOD_ID, "magic_items/scroll_pouch");
 
     public static void register(IServerRegistry registry) {
-        registry.registerItemListing(AdditionalWanderingTrades.RandomScrollTrade.class,
-                (utils, listing, condition) -> RandomScrollTradeAccessor.of(listing).getNode(utils, condition));
+        PluginUtils.registerItemListing(registry, AdditionalWanderingTrades.RandomScrollTrade.class, RandomScrollTradeAccessor.class);
         registry.registerItemListing(AdditionalWanderingTrades.InkBuyTrade.class,
                 (utils, listing, condition) -> inkNode(utils, listing, condition, true));
         registry.registerItemListing(AdditionalWanderingTrades.InkSellTrade.class,

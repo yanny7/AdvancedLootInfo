@@ -6,7 +6,6 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.IItemListing;
-import com.yanny.alicompat.accessor.ReflectionUtils;
 import io.redspace.ironsspellbooks.loot.SpellFilter;
 import io.redspace.ironsspellbooks.player.AdditionalWanderingTrades;
 import net.minecraft.world.item.ItemStack;
@@ -31,11 +30,6 @@ public class RandomScrollTradeAccessor extends BaseAccessor<AdditionalWanderingT
 
     public RandomScrollTradeAccessor(AdditionalWanderingTrades.RandomScrollTrade parent) {
         super(parent);
-    }
-
-    @NotNull
-    public static RandomScrollTradeAccessor of(AdditionalWanderingTrades.RandomScrollTrade listing) {
-        return ReflectionUtils.copyClassData(RandomScrollTradeAccessor.class, listing, AdditionalWanderingTrades.RandomScrollTrade.class);
     }
 
     @NotNull

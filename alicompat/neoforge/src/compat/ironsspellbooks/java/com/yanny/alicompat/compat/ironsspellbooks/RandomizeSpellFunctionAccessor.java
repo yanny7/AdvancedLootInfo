@@ -6,10 +6,10 @@ import com.yanny.ali.language.Lang;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.IFunctionTooltip;
-import com.yanny.alicompat.accessor.ReflectionUtils;
 import io.redspace.ironsspellbooks.loot.RandomizeSpellFunction;
 import io.redspace.ironsspellbooks.loot.SpellFilter;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import org.jetbrains.annotations.NotNull;
 
 public class RandomizeSpellFunctionAccessor extends BaseAccessor<RandomizeSpellFunction> implements IFunctionTooltip {
     @FieldAccessor
@@ -21,6 +21,7 @@ public class RandomizeSpellFunctionAccessor extends BaseAccessor<RandomizeSpellF
         super(parent);
     }
 
+    @NotNull
     @Override
     public TooltipBuilder getTooltip(IServerUtils utils) {
         return TooltipBuilder.array((b) -> {
@@ -28,9 +29,5 @@ public class RandomizeSpellFunctionAccessor extends BaseAccessor<RandomizeSpellF
             b.add(utils.getValueTooltip(utils, applicableSpells).build(IronsSpellbooksLang.Branch.APPLICABLE_SPELLS));
             b.add(utils.getValueTooltip(utils, parent.predicates).build(Lang.Branch.PREDICATES));
         }, IronsSpellbooksLang.Functions.RANDOMIZE_SPELL);
-    }
-
-    public static TooltipBuilder getTooltip(IServerUtils utils, RandomizeSpellFunction function) {
-        return ReflectionUtils.copyClassData(RandomizeSpellFunctionAccessor.class, function, RandomizeSpellFunction.class).getTooltip(utils);
     }
 }

@@ -7,13 +7,13 @@ import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.platform.Services;
-import com.yanny.ali.plugin.glm.Destination;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierWrapper;
-import com.yanny.alicompat.accessor.ReflectionUtils;
 import com.yanny.alicompat.IModCompat;
 import com.yanny.alicompat.Utils;
+import com.yanny.alicompat.accessor.PluginUtils;
+import com.yanny.alicompat.accessor.ReflectionUtils;
 import io.github.fabricators_of_create.porting_lib.loot.IGlobalLootModifier;
 import io.github.fabricators_of_create.porting_lib.loot.LootModifier;
 import io.github.fabricators_of_create.porting_lib.loot.LootTableIdCondition;
@@ -22,14 +22,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiFunction;
 
 public class PortingLibLootCompat implements IModCompat {
@@ -43,11 +36,9 @@ public class PortingLibLootCompat implements IModCompat {
 
     @Override
     public void registerServer(IServerRegistry registry) {
-        registry.registerConditionTooltip(LootTableIdCondition.class, (utils, condition) ->
-                ReflectionUtils.copyClassData(LootTableIdConditionAccessor.class, condition, LootTableIdCondition.class).getTooltip(utils));
+        PluginUtils.registerConditionTooltip(registry, LootTableIdCondition.class, LootTableIdConditionAccessor.class);
 
-        registry.registerDestination(LootTableIdCondition.class, (utils, condition) -> new Destination.Table(
-                ReflectionUtils.copyClassData(LootTableIdConditionAccessor.class, condition, LootTableIdCondition.class).getTargetLootTableId(), true));
+        PluginUtils.registerDestination(registry, LootTableIdCondition.class, LootTableIdConditionAccessor.class);
 
         registry.registerLootModifiers(PortingLibLootCompat::registerLootModifiers);
     }

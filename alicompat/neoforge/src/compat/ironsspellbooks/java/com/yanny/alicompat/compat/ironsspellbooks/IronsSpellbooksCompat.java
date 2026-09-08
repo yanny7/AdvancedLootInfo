@@ -7,6 +7,7 @@ import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.alicompat.IGlmModCompat;
 import com.yanny.alicompat.accessor.GlmAccessorUtils;
+import com.yanny.alicompat.accessor.PluginUtils;
 import io.redspace.ironsspellbooks.loot.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,10 +21,10 @@ public class IronsSpellbooksCompat implements IGlmModCompat {
     @Override
     public void registerServer(IServerRegistry registry) {
         registry.registerFunctionTooltip(FurledMapLootFunction.class, IronsSpellbooksCompat::furledMapLootTooltip);
-        registry.registerFunctionTooltip(RandomizeSpellFunction.class, RandomizeSpellFunctionAccessor::getTooltip);
-        registry.registerFunctionTooltip(RandomizeRingEnhancementFunction.class, RandomizeRingEnhancementFunctionAccessor::getTooltip);
+        PluginUtils.registerFunctionTooltip(registry, RandomizeSpellFunction.class, RandomizeSpellFunctionAccessor.class);
+        PluginUtils.registerFunctionTooltip(registry, RandomizeRingEnhancementFunction.class, RandomizeRingEnhancementFunctionAccessor.class);
 
-        registry.registerItemListing(WizardTrade.class, (utils, listing, condition) -> listing.getNode(utils, condition));
+        PluginUtils.registerSelfItemListing(registry, WizardTrade.class);
         WanderingTrades.register(registry);
 
         registry.registerTrades(WizardTrades.APOTHECARIST, WizardTrades::apothecarist, WizardTrades::apothecaristLevel);
@@ -31,7 +32,7 @@ public class IronsSpellbooksCompat implements IGlmModCompat {
         registry.registerTrades(WizardTrades.PRIEST, WizardTrades::priest, WizardTrades::priestLevel);
         registry.registerTrades(WizardTrades.PYROMANCER, WizardTrades::pyromancer, WizardTrades::pyromancerLevel);
 
-        registry.registerValueTooltip(SpellFilter.class, SpellFilterAccessor::getTooltip);
+        PluginUtils.registerValueTooltip(registry, SpellFilter.class, SpellFilterAccessor.class);
     }
 
     @Override
