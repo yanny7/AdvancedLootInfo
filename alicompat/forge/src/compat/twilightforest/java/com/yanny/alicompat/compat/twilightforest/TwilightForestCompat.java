@@ -4,12 +4,13 @@ import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.ICommonRegistry;
 import com.yanny.ali.api.IServerRegistry;
+import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.Destination;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.alicompat.IGlmModCompat;
 import com.yanny.alicompat.Utils;
 import com.yanny.alicompat.accessor.GlmAccessorUtils;
-import com.yanny.alicompat.accessor.ReflectionUtils;
+import com.yanny.alicompat.accessor.PluginUtils;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.DyeColor;
@@ -47,26 +48,37 @@ public class TwilightForestCompat implements IGlmModCompat {
 
     @Override
     public void registerServer(IServerRegistry registry) {
-        registry.registerConditionTooltip(GiantPickUsedCondition.class,
-                (utils, condition) -> ReflectionUtils.copyClassData(GiantPickUsedConditionAccessor.class, condition, GiantPickUsedCondition.class).getTooltip(utils));
-        registry.registerConditionTooltip(ModExistsCondition.class,
-                (utils, condition) -> ReflectionUtils.copyClassData(ModExistsConditionAccessor.class, condition, ModExistsCondition.class).getTooltip(utils));
-        registry.registerConditionTooltip(IsMinionCondition.class,
-                (utils, condition) -> utils.getValueTooltip(utils, !condition.inverse()).key(TwilightForestLang.Conditions.IS_MINION));
-        registry.registerConditionTooltip(UncraftingTableEnabledCondition.class,
-                (ignoredUtils, ignoredCondition) -> TooltipBuilder.keyOnly(TwilightForestLang.Conditions.UNCRAFTING_TABLE_ENABLED));
+        PluginUtils.registerConditionTooltip(registry, GiantPickUsedCondition.class, GiantPickUsedConditionAccessor.class);
+        PluginUtils.registerConditionTooltip(registry, ModExistsCondition.class, ModExistsConditionAccessor.class);
+        registry.registerConditionTooltip(IsMinionCondition.class, TwilightForestCompat::getIsMinionTooltip);
+        registry.registerConditionTooltip(UncraftingTableEnabledCondition.class, TwilightForestCompat::getUncraftingTableEnabledTooltip);
 
-        registry.registerDestination(GiantPickUsedCondition.class, (ignoredUtils, ignoredCondition) ->
-                new Destination.Blocks(Set.copyOf(GiantToolGroupingModifier.CONVERSIONS.keySet()), false));
+        registry.registerDestination(GiantPickUsedCondition.class, TwilightForestCompat::getGiantPickUsedDestination);
 
-        registry.registerFunctionTooltip(ModItemSwap.class, (utils, function) -> accessor(function).getTooltip(utils));
-        registry.registerItemStackModifier(ModItemSwap.class, (utils, function, itemStack) -> accessor(function).applyItemStackModifier(utils, itemStack));
+        PluginUtils.registerFunctionTooltip(registry, ModItemSwap.class, ModItemSwapAccessor.class);
+
+        PluginUtils.registerItemStackModifier(registry, ModItemSwap.class, ModItemSwapAccessor.class);
     }
 
     @Override
     public void registerGlobalLootModifier(IGlobalLootModifierPlugin.IRegistry registry) {
         GlmAccessorUtils.registerGlobalLootModifier(registry, FieryToolSmeltingModifier.class, FieryToolSmeltingModifierAccessor.class);
         GlmAccessorUtils.registerGlobalLootModifier(registry, GiantToolGroupingModifier.class, GiantToolGroupingModifierAccessor.class);
+    }
+
+    @NotNull
+    private static TooltipBuilder getIsMinionTooltip(IServerUtils utils, IsMinionCondition cond) {
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, !cond.inverse())), TwilightForestLang.Conditions.IS_MINION);
+    }
+
+    @NotNull
+    private static TooltipBuilder getUncraftingTableEnabledTooltip(IServerUtils ignoredUtils, UncraftingTableEnabledCondition ignoredCond) {
+        return TooltipBuilder.array(TooltipBuilder::showEmpty, TwilightForestLang.Conditions.UNCRAFTING_TABLE_ENABLED);
+    }
+
+    @NotNull
+    private static Destination getGiantPickUsedDestination(IServerUtils ignoredUtils, GiantPickUsedCondition ignoredCond) {
+        return new Destination.Blocks(Set.copyOf(GiantToolGroupingModifier.CONVERSIONS.keySet()), false);
     }
 
     @NotNull
@@ -101,10 +113,5 @@ public class TwilightForestCompat implements IGlmModCompat {
             LOGGER.warn("Failed to create bighorn sheep: {}", e.getMessage(), e);
             return null;
         }
-    }
-
-    @NotNull
-    private static ModItemSwapAccessor accessor(ModItemSwap function) {
-        return ReflectionUtils.copyClassData(ModItemSwapAccessor.class, function, ModItemSwap.class);
     }
 }

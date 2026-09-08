@@ -6,12 +6,14 @@ import com.yanny.ali.language.Lang;
 import com.yanny.alicompat.accessor.ConditionalFunction;
 import com.yanny.alicompat.accessor.IFunctionTooltip;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
+import org.jetbrains.annotations.NotNull;
 
 public class CopyMealFunctionAccessor extends ConditionalFunction implements IFunctionTooltip {
     public CopyMealFunctionAccessor(LootItemConditionalFunction conditionalFunction) {
         super(conditionalFunction);
     }
 
+    @NotNull
     @Override
     public TooltipBuilder getTooltip(IServerUtils utils) {
         return TooltipBuilder.array((b) -> {

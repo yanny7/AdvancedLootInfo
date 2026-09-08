@@ -9,6 +9,7 @@ import com.yanny.alicompat.accessor.IFunctionTooltip;
 import com.yanny.alicompat.accessor.IItemStackModifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import twilightforest.loot.functions.ModItemSwap;
 
 public class ModItemSwapAccessor extends BaseAccessor<ModItemSwap> implements IFunctionTooltip, IItemStackModifier {
@@ -21,6 +22,7 @@ public class ModItemSwapAccessor extends BaseAccessor<ModItemSwap> implements IF
         super(parent);
     }
 
+    @NotNull
     @Override
     public TooltipBuilder getTooltip(IServerUtils utils) {
         return TooltipBuilder.array((b) -> {

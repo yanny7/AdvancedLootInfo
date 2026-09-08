@@ -22,8 +22,8 @@ public class FarmersDelightCompat implements IGlmModCompat {
 
     @Override
     public void registerServer(IServerRegistry registry) {
-        registry.registerFunctionTooltip(CopySkilletFunction.class, (utils, function) -> new CopySkilletFunctionAccessor(function).getTooltip(utils));
-        registry.registerFunctionTooltip(CopyMealFunction.class, (utils, function) -> new CopyMealFunctionAccessor(function).getTooltip(utils));
+        PluginUtils.registerFunctionTooltip(registry, CopySkilletFunction.class, CopySkilletFunctionAccessor::new);
+        PluginUtils.registerFunctionTooltip(registry, CopyMealFunction.class, CopyMealFunctionAccessor::new);
 
         PluginUtils.registerItemListing(registry, FDItemListingAccessor.class);
     }

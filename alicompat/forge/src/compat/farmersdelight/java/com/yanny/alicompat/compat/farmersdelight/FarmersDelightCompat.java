@@ -4,6 +4,7 @@ import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.alicompat.IGlmModCompat;
 import com.yanny.alicompat.accessor.GlmAccessorUtils;
+import com.yanny.alicompat.accessor.PluginUtils;
 import org.jetbrains.annotations.NotNull;
 import vectorwing.farmersdelight.common.loot.function.CopyMealFunction;
 import vectorwing.farmersdelight.common.loot.function.CopySkilletFunction;
@@ -21,8 +22,8 @@ public class FarmersDelightCompat implements IGlmModCompat {
 
     @Override
     public void registerServer(IServerRegistry registry) {
-        registry.registerFunctionTooltip(CopySkilletFunction.class, (utils, function) -> new CopySkilletFunctionAccessor(function).getTooltip(utils));
-        registry.registerFunctionTooltip(CopyMealFunction.class, (utils, function) -> new CopyMealFunctionAccessor(function).getTooltip(utils));
+        PluginUtils.registerFunctionTooltip(registry, CopySkilletFunction.class, CopySkilletFunctionAccessor::new);
+        PluginUtils.registerFunctionTooltip(registry, CopyMealFunction.class, CopyMealFunctionAccessor::new);
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.IConditionTooltip;
 import net.minecraft.world.level.storage.loot.LootContext;
+import org.jetbrains.annotations.NotNull;
 import twilightforest.loot.conditions.GiantPickUsedCondition;
 
 public class GiantPickUsedConditionAccessor extends BaseAccessor<GiantPickUsedCondition> implements IConditionTooltip {
@@ -16,8 +17,9 @@ public class GiantPickUsedConditionAccessor extends BaseAccessor<GiantPickUsedCo
         super(parent);
     }
 
+    @NotNull
     @Override
     public TooltipBuilder getTooltip(IServerUtils utils) {
-        return utils.getValueTooltip(utils, entityTarget).key(TwilightForestLang.Conditions.GIANT_PICK_USED);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, entityTarget)), TwilightForestLang.Conditions.GIANT_PICK_USED);
     }
 }
