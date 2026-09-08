@@ -37,7 +37,7 @@ public class ItemSubPredicateTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getItemContainerPredicateTooltip(IServerUtils utils, ItemContainerPredicate predicate) {
-        return utils.getValueTooltip(utils, predicate.items()).key(Lang.ItemSubPredicates.CONTAINER);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.items()).build(Lang.Branch.ITEMS)),Lang.ItemSubPredicates.CONTAINER);
     }
 
     @NotNull

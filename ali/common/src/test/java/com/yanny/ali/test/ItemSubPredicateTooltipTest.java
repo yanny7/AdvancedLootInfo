@@ -24,9 +24,9 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Optional;
 
+import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
 import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
-import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
 
 public class ItemSubPredicateTooltipTest {
     @Test
@@ -104,13 +104,14 @@ public class ItemSubPredicateTooltipTest {
                 Optional.of(MinMaxBounds.Ints.atLeast(4))
         )))).build(), List.of(
                 "Container:",
-                "  -> Contains:",
-                "    -> Item: minecraft:andesite",
-                "  -> Counts:",
-                "    -> Items:",
-                "      -> Tag: minecraft:arrows",
-                "    -> Count: 1-5",
-                "  -> Size: ≥4"
+                "  -> Items:",
+                "    -> Contains:",
+                "      -> Item: minecraft:andesite",
+                "    -> Counts:",
+                "      -> Items:",
+                "        -> Tag: minecraft:arrows",
+                "      -> Count: 1-5",
+                "    -> Size: ≥4"
         ));
     }
 
