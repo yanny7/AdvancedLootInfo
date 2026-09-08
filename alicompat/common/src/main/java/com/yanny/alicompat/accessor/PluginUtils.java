@@ -10,6 +10,7 @@ import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.slot.SlotSource;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -232,6 +233,30 @@ public class PluginUtils {
 
     public static <U extends ConsumeEffect, T extends IConsumeEffectTooltip> void registerConsumeEffectTooltip(IServerRegistry registry, Class<U> targetClass, Function<U, T> factory) {
         registry.registerConsumeEffectTooltip(targetClass, (u, c) -> factory.apply(c).getTooltip(u));
+    }
+
+    public static <U extends SlotSource, T extends BaseAccessor<?> & ISlotSourceTooltip> void registerSlotSourceTooltip(IServerRegistry registry, Class<U> targetClass, Class<T> clazz) {
+        registry.registerSlotSourceTooltip(targetClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c, targetClass).getTooltip(u));
+    }
+
+    public static <T extends BaseAccessor<?> & ISlotSourceTooltip> void registerSlotSourceTooltip(IServerRegistry registry, Class<T> clazz) {
+        ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
+
+        if (classAnnotation != null) {
+            try {
+                //noinspection unchecked
+                Class<SlotSource> slotSourceClass = (Class<SlotSource>) Class.forName(classAnnotation.value());
+                registry.registerSlotSourceTooltip(slotSourceClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c).getTooltip(u));
+            } catch (Throwable e) {
+                LOGGER.warn("Failed to register slot source tooltip for {} with error {}", classAnnotation.value(), e.getMessage(), e);
+            }
+        } else {
+            throw new IllegalStateException("Missing ClassAccessor annotation for slot source tooltip " + clazz.getName());
+        }
+    }
+
+    public static <U extends SlotSource, T extends ISlotSourceTooltip> void registerSlotSourceTooltip(IServerRegistry registry, Class<U> targetClass, Function<U, T> factory) {
+        registry.registerSlotSourceTooltip(targetClass, (u, c) -> factory.apply(c).getTooltip(u));
     }
 
     public static <U extends NumberProvider, T extends BaseAccessor<?> & INumberProvider> void registerNumberProvider(IServerRegistry registry, Class<U> targetClass, Class<T> clazz) {
