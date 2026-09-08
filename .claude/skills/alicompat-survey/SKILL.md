@@ -1,6 +1,6 @@
 ---
 name: alicompat-survey
-description: Survey a modpack for everything ALI cannot render — from its log and from a static scan of every jar — resolve each finding to the owning mod and its CurseForge maven coordinates per Minecraft version, subtract what this repo already registers, and write one markdown report that plans ALICompat work. Use when the user supplies a modpack directory or a pack log ("StoneBlock", "SB4.txt", "make support for all mods in this pack"), asks which mods need ALICompat shims, asks which trading entities are unsupported, or asks for the curse.maven dep lines for a set of mods.
+description: Survey a modpack for everything ALI cannot render — from its log and from a static scan of every jar — resolve each finding to the owning mod and its CurseForge maven coordinates per Minecraft version, subtract what this repo already registers, and write a per-mod compatibility tracker that plans ALICompat work. Use when the user supplies a modpack directory or a pack log ("StoneBlock", "SB4.txt", "make support for all mods in this pack"), asks which mods need ALICompat shims, asks which trading entities are unsupported, or asks for the curse.maven dep lines for a set of mods.
 ---
 
 # ALICompat modpack survey
@@ -18,8 +18,11 @@ round-trips; the 100k-class static scan is fifteen seconds.
 ```bash
 .claude/skills/alicompat-survey/scripts/run.sh \
   --pack-dir "$HOME/.local/share/PrismLauncher/instances/<pack>" \
-  --out SB4.md
+  --work W --out W/survey.md
 ```
+
+The survey markdown is an intermediate; the deliverable is what `worklist.py` writes from the same
+JSON (see below), so keep both in the working directory `--work` names.
 
 One path is enough. `packdir.py` reads the launcher's own metadata for the rest: `mods/`, the
 Minecraft version and loader (`flame/manifest.json`, else Prism's `mmc-pack.json`), the log
@@ -91,18 +94,31 @@ stays in the work directory (`--work`, else a temp dir) — that is the interfac
    `POST /v1/fingerprints` maps jar → project + file id, `POST /v1/mods` fetches slug and url, and one
    `GET /v1/mods/{id}/files?gameVersion=&modLoaderType=` per version/loader picks the newest file by
    `fileDate`. `modLoaderType` is `1` Forge, `4` Fabric, `5` Quilt, `6` NeoForge.
-7. `build_report.py` → the markdown: trading-entity table, availability matrix, per-mod findings
-   grouped by confidence, a "not ALICompat's business" section, and a paste-ready
-   `gradle.properties` block per Minecraft version.
+7. `build_report.py` → one markdown survey: trading-entity table, availability matrix, per-mod
+   findings grouped by confidence, a "not ALICompat's business" section, and a paste-ready
+   `gradle.properties` block per Minecraft version. It is an intermediate — keep it in the working
+   directory and hand the user the tracker `worklist.py` writes from the same JSON.
 
-`worklist.py` (not part of `run.sh`) seeds a hand-maintained work tracker from the same JSON —
-a priority-ordered queue with a checkbox per finding and a place for gotchas:
+`worklist.py` (not part of `run.sh`) turns the same JSON into the deliverable — a hand-maintained
+tracker split one file per mod, so reading one mod costs one small file instead of a 130 KB report:
 
 ```bash
 python3 scripts/worklist.py --gaps W/gaps.json --candidates W/candidates.json \
   --coverage W/coverage.json --projects W/projects.json --owners W/owners.json \
-  --pack W/pack.json --report SB4.md --out SB4_WRK.md
+  --pack W/pack.json --out ../COMPATIBILITY.md
 ```
+
+It writes, relative to `--out` (override the directory with `--dir`):
+
+- `COMPATIBILITY.md` — the index: priority-ordered queue, one linked row per mod, and Gotchas.
+  Keep it a link list; per-mod detail belongs in the mod's own file.
+- `compatibility/<mod id>.md` — one per mod: priority/availability header, trading-entity table,
+  the work checklist, and that mod's survey findings under `## Survey findings`.
+- `compatibility/survey-notes.md` — what belongs to no single mod: pack metadata, "not ALICompat's
+  business", the mods with nothing to do, and the `gradle.properties` blocks per Minecraft version.
+
+Both scripts render per-mod findings and the dependency blocks through `build_report.mod_body` /
+`dependency_blocks`, so the tracker and the survey never drift apart.
 
 Priority is P1 confirmed gaps with a `1.20.1` file (port upward from there), P2 confirmed without one,
 P3 trading entities, P4 dormant types only. Run it **once**: it is a seed, and re-running overwrites

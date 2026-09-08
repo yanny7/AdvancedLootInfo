@@ -28,9 +28,9 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Optional;
 
+import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
 import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
-import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
 
 public class DataComponentPredicateTooltipTest {
     @Test
