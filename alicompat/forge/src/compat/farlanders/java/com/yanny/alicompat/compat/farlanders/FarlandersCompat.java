@@ -5,7 +5,7 @@ import com.yanny.aci.api.RangeValue;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.TradeLevelInfo;
 import com.yanny.alicompat.IModCompat;
-import com.yanny.alicompat.accessor.ReflectionUtils;
+import com.yanny.alicompat.accessor.PluginUtils;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,8 +20,7 @@ public class FarlandersCompat implements IModCompat {
 
     @Override
     public void registerServer(IServerRegistry registry) {
-        registry.registerItemListing(FarlanderTrades.Trade.class, (utils, listing, condition) ->
-                ReflectionUtils.copyClassData(TradeAccessor.class, listing, FarlanderTrades.Trade.class).getNode(utils, condition));
+        PluginUtils.registerItemListing(registry, FarlanderTrades.Trade.class, TradeAccessor.class);
 
         registry.registerTrades(new ResourceLocation(MOD_ID, "farlander"), () -> FarlanderTrades.FARLANDER_TRADES, (level) -> new TradeLevelInfo(new RangeValue(2)));
         registry.registerTrades(new ResourceLocation(MOD_ID, "elder_farlander"), () -> FarlanderTrades.ELDER_TRADES, (level) -> new TradeLevelInfo(new RangeValue(2)));

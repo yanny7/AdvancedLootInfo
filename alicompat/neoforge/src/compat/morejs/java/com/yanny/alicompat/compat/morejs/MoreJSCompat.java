@@ -11,7 +11,7 @@ import com.yanny.ali.plugin.common.trades.TradeUtils;
 import com.yanny.ali.plugin.server.MissingTooltipUtils;
 import com.yanny.alicompat.IModCompat;
 import com.yanny.alicompat.Utils;
-import com.yanny.alicompat.accessor.ReflectionUtils;
+import com.yanny.alicompat.accessor.PluginUtils;
 import net.minecraft.world.item.trading.MerchantOffer;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -27,16 +27,11 @@ public class MoreJSCompat implements IModCompat {
 
     @Override
     public void registerServer(IServerRegistry registry) {
-        registry.registerItemListing(SimpleTrade.class, (utils, listing, condition) ->
-                ReflectionUtils.copyClassData(SimpleTradeAccessor.class, listing, SimpleTrade.class).getNode(utils, condition));
-        registry.registerItemListing(StewTrade.class, (utils, listing, condition) ->
-                ReflectionUtils.copyClassData(StewTradeAccessor.class, listing, StewTrade.class).getNode(utils, condition));
-        registry.registerItemListing(EnchantedItemTrade.class, (utils, listing, condition) ->
-                ReflectionUtils.copyClassData(EnchantedItemTradeAccessor.class, listing, EnchantedItemTrade.class).getNode(utils, condition));
-        registry.registerItemListing(PotionTrade.class, (utils, listing, condition) ->
-                ReflectionUtils.copyClassData(PotionTradeAccessor.class, listing, PotionTrade.class).getNode(utils, condition));
-        registry.registerItemListing(TreasureMapTrade.class, (utils, listing, condition) ->
-                ReflectionUtils.copyClassData(TreasureMapTradeAccessor.class, listing, TreasureMapTrade.class).getNode(utils, condition));
+        PluginUtils.registerItemListing(registry, SimpleTrade.class, SimpleTradeAccessor.class);
+        PluginUtils.registerItemListing(registry, StewTrade.class, StewTradeAccessor.class);
+        PluginUtils.registerItemListing(registry, EnchantedItemTrade.class, EnchantedItemTradeAccessor.class);
+        PluginUtils.registerItemListing(registry, PotionTrade.class, PotionTradeAccessor.class);
+        PluginUtils.registerItemListing(registry, TreasureMapTrade.class, TreasureMapTradeAccessor.class);
         registry.registerItemListing(CustomTrade.class, MoreJSCompat::getCustomTradeNode);
     }
 

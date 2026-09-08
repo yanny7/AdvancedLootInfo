@@ -5,7 +5,7 @@ Inputs: gaps.json (what the run logged), candidates.json (what the jars could pr
 coverage.json (what this repo already registers), projects.json (CurseForge).
 
 Usage: build_report.py --gaps g --candidates c --coverage v --projects p --owners o
-                       --pack pack.json --out SB4.md
+                       --pack pack.json --out W/survey.md
 """
 import argparse
 import json
@@ -163,6 +163,91 @@ def trader_rows(mods, candidates, coverage):
     return rows
 
 
+def property_slug(mod_id):
+    return re.sub(r"[^a-z0-9]", "", (mod_id or "").lower())
+
+
+def mod_body(jar, meta, project, data, versions):
+    """The survey's per-mod findings, without its heading — shared with the work tracker."""
+    lines = []
+    add = lines.append
+    add(f"- Jar in pack: `{jar}`" + (f" (version `{meta['version']}`)" if meta.get("version") else ""))
+    if project:
+        add(f"- CurseForge: `{project['slug']}` project `{project['projectId']}` — {project.get('url', '')}")
+        for version, loaders in project.get("maven", {}).items():
+            for loader, coordinate in sorted(loaders.items()):
+                add(f"  - `{version}` / {loader}: `{coordinate}`")
+        missing = [v for v in versions if not project.get("versions", {}).get(v)]
+        if missing:
+            add(f"  - no file for: {', '.join(f'`{v}`' for v in missing)}")
+    else:
+        add("- CurseForge: **not matched by fingerprint** — needs a manual project id")
+    add("")
+
+    grouped = OrderedDict((c, []) for c in CONFIDENCE_ORDER)
+    for item in data["items"].values():
+        grouped[item["confidence"]].append(item)
+    for confidence, items in grouped.items():
+        if not items:
+            continue
+        add(f"**{CONFIDENCE_TITLE[confidence]}**")
+        add("")
+        for item in sorted(items, key=lambda i: i["subject"]):
+            hooks = ", ".join(sorted(item["hooks"])) or "—"
+            notes = []
+            if "lambda" in item["flags"]:
+                notes.append("synthetic lambda, no class to register")
+            for flag in ("abstract", "interface", "non-public", "enum"):
+                if flag in item["flags"]:
+                    notes.append(flag)
+            if item["status"] == "maybe":
+                notes.append(f"same simple name registered by {item['coveredBy']}")
+            elif item["status"] == "covered":
+                notes.append(f"registered by {item['coveredBy']}")
+            if item["evidence"] == {"log"}:
+                notes.append("log only")
+            elif item["evidence"] == {"static"}:
+                notes.append("static only")
+            suffix = f" — {'; '.join(notes)}" if notes else ""
+            add(f"- `{item['subject']}` [{hooks}]{suffix}")
+        add("")
+
+    for category, subjects in data["idOnly"].items():
+        _, title = LOG_CATEGORIES.get(category, (None, category))
+        add(f"**{title}** (from the log, by id)")
+        add("")
+        for subject in sorted(subjects):
+            add(f"- `{subject}`")
+        add("")
+    return lines
+
+
+def dependency_blocks(targets, order, meta_of, project_of):
+    lines = []
+    add = lines.append
+    for version, loaders in targets:
+        rows = []
+        for jar in order:
+            project = project_of(jar)
+            if not project:
+                continue
+            found = project.get("maven", {}).get(version, {})
+            slug = property_slug(meta_of(jar).get("modId"))
+            for loader in loaders:
+                if loader in found:
+                    rows.append(f"{slug}_{loader}_dep={found[loader]}")
+        add(f"### `{version}`")
+        add("")
+        if rows:
+            add("```properties")
+            lines.extend(sorted(rows))
+            add("```")
+        else:
+            add("No mod in this survey has a file for this version.")
+        add("")
+    return lines
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--gaps", required=True)
@@ -283,54 +368,7 @@ def main():
         name = meta.get("displayName") or meta.get("modId") or jar
         add(f"### {name} (`{meta.get('modId', '')}`)")
         add("")
-        add(f"- Jar in pack: `{jar}`" + (f" (version `{meta['version']}`)" if meta.get("version") else ""))
-        if project:
-            add(f"- CurseForge: `{project['slug']}` project `{project['projectId']}` — {project.get('url', '')}")
-            for version, loaders in project.get("maven", {}).items():
-                for loader, coordinate in sorted(loaders.items()):
-                    add(f"  - `{version}` / {loader}: `{coordinate}`")
-            missing = [v for v in versions if not project.get("versions", {}).get(v)]
-            if missing:
-                add(f"  - no file for: {', '.join(f'`{v}`' for v in missing)}")
-        else:
-            add("- CurseForge: **not matched by fingerprint** — needs a manual project id")
-        add("")
-
-        grouped = OrderedDict((c, []) for c in CONFIDENCE_ORDER)
-        for item in mods[jar]["items"].values():
-            grouped[item["confidence"]].append(item)
-        for confidence, items in grouped.items():
-            if not items:
-                continue
-            add(f"**{CONFIDENCE_TITLE[confidence]}**")
-            add("")
-            for item in sorted(items, key=lambda i: i["subject"]):
-                hooks = ", ".join(sorted(item["hooks"])) or "—"
-                notes = []
-                if "lambda" in item["flags"]:
-                    notes.append("synthetic lambda, no class to register")
-                for flag in ("abstract", "interface", "non-public", "enum"):
-                    if flag in item["flags"]:
-                        notes.append(flag)
-                if item["status"] == "maybe":
-                    notes.append(f"same simple name registered by {item['coveredBy']}")
-                elif item["status"] == "covered":
-                    notes.append(f"registered by {item['coveredBy']}")
-                if item["evidence"] == {"log"}:
-                    notes.append("log only")
-                elif item["evidence"] == {"static"}:
-                    notes.append("static only")
-                suffix = f" — {'; '.join(notes)}" if notes else ""
-                add(f"- `{item['subject']}` [{hooks}]{suffix}")
-            add("")
-
-        for category, subjects in mods[jar]["idOnly"].items():
-            _, title = LOG_CATEGORIES.get(category, (None, category))
-            add(f"**{title}** (from the log, by id)")
-            add("")
-            for subject in sorted(subjects):
-                add(f"- `{subject}`")
-            add("")
+        lines.extend(mod_body(jar, meta_of(jar), project_of(jar), mods[jar], versions))
 
     if foreign["idOnly"]:
         add("## Not ALICompat's business")
@@ -367,26 +405,7 @@ def main():
     add("Suggested property names (mod id with separators stripped); a slug already in `compat_mods`")
     add("keeps its existing name. Pick the block for the branch you are on.")
     add("")
-    for version, loaders in targets:
-        rows = []
-        for jar in order:
-            project = project_of(jar)
-            if not project:
-                continue
-            found = project.get("maven", {}).get(version, {})
-            slug = re.sub(r"[^a-z0-9]", "", (meta_of(jar).get("modId") or "").lower())
-            for loader in loaders:
-                if loader in found:
-                    rows.append(f"{slug}_{loader}_dep={found[loader]}")
-        add(f"### `{version}`")
-        add("")
-        if rows:
-            add("```properties")
-            lines.extend(sorted(rows))
-            add("```")
-        else:
-            add("No mod in this survey has a file for this version.")
-        add("")
+    lines.extend(dependency_blocks(targets, order, meta_of, project_of))
 
     with open(args.out, "w", encoding="utf-8") as handle:
         handle.write("\n".join(lines).rstrip() + "\n")

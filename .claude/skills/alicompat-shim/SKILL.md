@@ -1,15 +1,22 @@
 ---
 name: alicompat-shim
-description: Write one ALICompat compatibility shim for a target mod — fetch that mod's jar for the current branch's Minecraft version, decompile the loot/trade classes named in the survey, and produce the source set, accessors, services fragments, gradle.properties wiring, tooltip keys and changelog entry, then compile it. Use when the user names a mod to support ("start twilight forest", "add Apotheosis support", "write the shim for irons_spellbooks"), points at a row of an ALICompat work tracker (SB4_WRK.md), or asks to cover a specific loot function/condition/GLM/trading entity from another mod.
+description: Write one ALICompat compatibility shim for a target mod — fetch that mod's jar for the current branch's Minecraft version, decompile the loot/trade classes named in the survey, and produce the source set, accessors, services fragments, gradle.properties wiring, tooltip keys and changelog entry, then compile it. Use when the user names a mod to support ("start twilight forest", "add Apotheosis support", "write the shim for irons_spellbooks"), points at a row of the ALICompat tracker (COMPATIBILITY.md / compatibility/<mod id>.md), or asks to cover a specific loot function/condition/GLM/trading entity from another mod.
 ---
 
 # Writing one ALICompat shim
 
 Takes one target mod from plan to compiling code. The plan comes from the `alicompat-survey` skill
-(`SB4.md` + `SB4_WRK.md`); this skill is what runs per row of that queue. Read `alicompat/CLAUDE.md`
+(`COMPATIBILITY.md` and its `compatibility/<mod id>.md` files); this skill is what runs per row of
+that queue. Read only the target mod's file — the index is a link list, and the other 90-odd files
+are irrelevant to the shim in hand. Read `alicompat/CLAUDE.md`
 first — "Adding a target mod", "Writing a shim" and "Translations" are the contract, and this skill
 only adds the parts that document does not: how to get the target's bytecode, what the survey gets
 wrong, and the traps that cost a compile round-trip.
+
+`alicompat/CLAUDE.md`'s **"Tooltip code style"** is the shape the code takes — method signature, the
+single `return`, delegation through `getValueTooltip`, null and `Optional`, key placement, method
+references over lambdas, the `Lang` enum, comments. Read that section before writing the first line
+of Java; nothing about code shape is repeated here.
 
 ## Step 1 — the survey's class list is for a different Minecraft version
 
@@ -48,6 +55,20 @@ java -jar ~/.gradle/caches/forge_gradle/maven_downloader/org/vineflower/vineflow
 types); decompile when you need the behaviour — what a GLM's `doApply` actually returns, whether a
 function's `run` replaces the stack or edits it, what a condition tests.
 
+A production Forge jar is SRG-named for vanilla members, so the decompile is full of `Items.f_42616_`
+and `random.m_216332_(2, 3)` and you cannot transcribe an offer without resolving them. Join Mojang's
+proguard map with the SRG one once, then grep it — worth doing up front if the shim mirrors any
+vanilla-item data:
+
+```bash
+python3 .claude/skills/alicompat-shim/scripts/srg_to_mojmap.py 1.20.1 > srg2moj.txt
+grep -m1 "^f_42616_ " srg2moj.txt   # -> net.minecraft.world.item.Items.EMERALD
+```
+
+`m_216332_(a, b)` is `nextIntBetweenInclusive`, i.e. an inclusive `[a, b]` — read those as ranges when
+turning a rolled offer into a `RangeValue`, and mind integer division (`5 * rarity / 2`) when the
+target computes a price.
+
 Read the mod's own data files too: `data/<modid>/loot_modifiers/*.json` says which conditions each
 GLM is registered with, which is what decides Step 4. Also grep the jar for who populates a public
 static map a GLM reads (`grep -rla CONVERSIONS`) — that map is usually filled in mod setup and is
@@ -82,6 +103,16 @@ the swapped item) and `registerItemCollector` (so the recipe-viewer index finds 
 
 ## Step 3b — trade item listings
 
+Before writing anything, work out **which listing classes actually reach ALI**. ALI reads
+`VillagerTrades.VILLAGER_TRADES` / `WANDERING_TRADER_TRADES` and whatever a `registerTrades` supplier
+hands it — a listing class the target only instantiates inside its own entity's `getOffers()` to pull
+one `MerchantOffer` out of never arrives, and registering it is dead code. The survey cannot tell the
+difference and lists those too (usually as "likely"): grep the target for who *adds* the listing to a
+trade list. On Forge, `VillagerTradingManager.postWandererEvent` writes the `WandererTradesEvent`
+result back into `VillagerTrades.WANDERING_TRADER_TRADES`, so a mod's wandering-trader additions do
+reach ALI and only a renderer is missing. Lookup is by **exact class**
+(`tradeItemListings.get(entry.getClass())`), so every subclass needs its own `registerItemListing`.
+
 An `item_listing` finding is registered by class like any other hook, and the shape depends on what
 the target's trade already is:
 
@@ -97,11 +128,52 @@ back to `entry.getOffer(null, null)` rendered through `TradeUtils.getNode`, and 
 tooltip when that throws. A shim earns its place by reading the listing's fields — which gives count
 *ranges* and survives a listing that needs a trader — not by re-deriving one rolled offer.
 
+**A listing that keeps its data in a lambda** has no fields to read — a base class holding one
+`BiFunction<Entity, RandomSource, MerchantOffer>` (Iron's Spellbooks' `AdditionalWanderingTrades`)
+puts every constructor argument in the lambda's capture. Work down this list:
+
+- Real fields on the subclass → ordinary `BaseAccessor`, nothing special. Beware a listing that
+  mutates its own stacks per `getOffer` (`RandomScrollTrade` writes the rolled spell into `forSale`
+  and the price into `price`): copy the item, ignore the stored count, and never sample it.
+- Captured arguments → `com.yanny.ali.plugin.common.ReflectionUtils.getCapturedInstances(lambda,
+  Class<T>)` pulls them **by type** off the lambda's synthetic fields. Type-keyed, so it survives a
+  recompile as long as the capture is unique in its type; two captures of the same type come back in
+  capture order and that ordering is the fragile part. A captured `null` yields no entry at all.
+- Captures nothing but rolls a loot table → render *from that table* instead of rolling it: ALI's
+  access widener opens `LootPool.entries` and `LootItem.item`, so a representative stack and the
+  table id (`Lang.Value.LOOT_TABLE`) cost ten lines and stay correct when the table changes.
+  `utils.getLootTable` / `getLootPools` / `convertNumber` give the rolls for a cost bound.
+- Captures nothing and two instances are indistinguishable → one roll, but pass a real
+  `RandomSource.create()`. ALI's own fallback fails on these only because it passes `null` for both
+  arguments; most such lambdas never touch the trader, so supplying the random alone revives them.
+
 Build the node with `ItemsToItemsNode`; `TradeUtils` in `ali/common` is the worked example for every
 vanilla listing, including the tooltip conventions for a random result (`ENCHANT_RANDOMLY`, and
 `Lang.Value.POTION` / `EFFECT` / `DURATION`). A field defaulting to a whole registry
 (all enchantments, all potions) must not be listed line by line — render the label alone and list the
 entries only once a script or config has narrowed them.
+
+## Step 3c — trading entities with no `ItemListing[]`
+
+`registerTrades` wants an `Int2ObjectMap<ItemListing[]>`, but a custom trader often has none: it fills
+a `MerchantOffers` inline in `getOffers()`, behind `random.nextFloat() < 0.25` gates and private
+static filler lists. Mirror that list with **shim-owned** listings — one class implementing
+`VillagerTrades.ItemListing` *and* `IItemListing`, carrying `RangeValue` counts and an optional
+result tooltip — rather than reusing the target's listing objects. You then know every constructor
+argument, because you are the one passing it, and the same builders serve the wandering-trader path.
+
+`TradeLevelInfo` carries one chance for a whole level, so **each RNG gate becomes its own level**:
+`new TradeLevelInfo(new RangeValue(1), 0.25f)` reads as "selects 1 of these, 25% chance", and a
+`RangeValue(3, 4)` over a filler pool reads as "selects 3-4 of these". Ten small levels on a trader
+with no real levels is the honest encoding; one level loses every probability. A private static
+`List<MerchantOffer>` of fillers is worth reading by plain reflection (survives target updates); a
+private static `List<ItemListing>` of lambda-backed entries is not, since the entries are unreadable
+anyway — hand-write those.
+
+A trade whose result varies between two items (pay in emeralds *or* the mod's own currency) gets the
+common item in the slot and the other under a shim `Branch.ALTERNATIVE` key with its own count —
+`ItemsToItemsNode` has one stack per slot, and `requiresAllChildren()` means an empty result silently
+drops the whole trade.
 
 ## Step 4 — Global Loot Modifiers: check the destination resolves
 
@@ -145,6 +217,15 @@ condition with several values uses `TooltipBuilder.array((b) -> …, KEY)` with 
 `TooltipBuilder.keyOnly(KEY)`. Reuse `Lang.Value` / `Lang.Branch` from `ali/common` wherever a key
 already exists; only add to the shim's own `Value` enum for something genuinely new.
 
+**A value the tooltip renders as its own object gets `registerValueTooltip`, not an inline helper.**
+When a function, condition or listing has to print a nested object — a formula, a modifier, a filter,
+a range type — register a renderer for that object's class and let `getValueTooltip` dispatch to it,
+even when exactly one caller uses it. That is what `ali/common`'s `Plugin` does: fifty
+`registerValueTooltip` calls, among them `ApplyBonusCount.Formula` and `SetAttributesFunction.Modifier`,
+each read by a single function. Calling a private helper instead works only for the caller that knows
+about it, and the same object rendered from a GLM, a trade or another shim silently falls back to a
+bare `toString`. `forge`/`ironsspellbooks` registers `SpellFilter` this way.
+
 Check whether the key already exists before adding one: translations from every shim merge into one
 `HashMap`, so two shims may ship the same key with the same value (Ribbits and MoreJS both declare
 `alicompat.type.function.random_potion`) and the generated JSON does not change at all. Each shim
@@ -187,9 +268,10 @@ decision, not this shim.
 
 ## Step 7 — the tracker
 
-Tick the row and its per-finding checkboxes in `SB4_WRK.md`, annotate each finding the branch's jar
-does not have, add the ones it has that the survey missed, and put the version-specific reasoning
-(why a GLM was hand-rolled, which loaders exist) in that row's `Notes:` block. The tracker is
+Tick the per-finding checkboxes in `compatibility/<mod id>.md`, update its `- Done:` line, tick the
+mod's `Done` cell in `COMPATIBILITY.md`, annotate each finding the branch's jar does not have, add
+the ones it has that the survey missed, and put the version-specific reasoning (why a GLM was
+hand-rolled, which loaders exist) in that file's `Notes:` block. The tracker is
 hand-maintained — never re-run `worklist.py` over a file with ticked boxes.
 
 Porting to another branch starts from Step 1 again: the same mod on `1.21.1` is a different class
