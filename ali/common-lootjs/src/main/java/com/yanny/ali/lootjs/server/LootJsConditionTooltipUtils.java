@@ -19,7 +19,7 @@ public class LootJsConditionTooltipUtils {
         //noinspection unchecked
         List<LootItemCondition> conditions = (List<LootItemCondition>)(List<?>)List.of(((MixinAndCondition) condition).getConditions());
 
-        return utils.getValueTooltip(utils, conditions).key(Lang.Conditions.AND);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, conditions)), Lang.Conditions.AND);
     }
 
     @NotNull
@@ -29,15 +29,14 @@ public class LootJsConditionTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, cond.getBiomes()).build(Lang.Branch.BIOMES));
             b.add(utils.getValueTooltip(utils, cond.getTags()).build(Lang.Branch.TAGS));
-        }).key(Lang.Conditions.ANY_BIOME);
+        }, Lang.Conditions.ANY_BIOME);
     }
 
     @NotNull
     public static TooltipBuilder anyDimensionTooltip(IServerUtils utils, AnyDimension condition) {
         MixinAnyDimension cond = (MixinAnyDimension) condition;
 
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.getDimensions()).build(Lang.Branch.DIMENSIONS)))
-                .key(Lang.Conditions.ANY_DIMENSION);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.getDimensions()).build(Lang.Branch.DIMENSIONS)), Lang.Conditions.ANY_DIMENSION);
     }
 
     @NotNull
@@ -47,7 +46,7 @@ public class LootJsConditionTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, cond.getStructureLocators()).build(Lang.Branch.STRUCTURES));
             b.add(utils.getValueTooltip(utils, cond.getExact()).build(Lang.Value.EXACT));
-        }).key(Lang.Conditions.ANY_STRUCTURE);
+        }, Lang.Conditions.ANY_STRUCTURE);
     }
 
     @NotNull
@@ -57,7 +56,7 @@ public class LootJsConditionTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, cond.getBiomes()).build(Lang.Branch.BIOMES));
             b.add(utils.getValueTooltip(utils, cond.getTags()).build(Lang.Branch.TAGS));
-        }).key(Lang.Conditions.BIOME);
+        }, Lang.Conditions.BIOME);
     }
 
     @NotNull
@@ -67,7 +66,7 @@ public class LootJsConditionTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(LootJsGenericTooltipUtils.getItemFilterTooltip(utils, cond.getPredicate()).build(Lang.Value.ITEM_FILTER));
             b.add(utils.getValueTooltip(utils, cond.getExact()).build(Lang.Value.EXACT));
-        }).key(Lang.Conditions.MATCH_LOOT);
+        }, Lang.Conditions.MATCH_LOOT);
     }
 
     @NotNull
@@ -75,17 +74,13 @@ public class LootJsConditionTooltipUtils {
         MixinCustomParamPredicate<?> cond = (MixinCustomParamPredicate<?>) condition;
 
         if (cond.getParam() == LootContextParams.THIS_ENTITY) {
-            return TooltipBuilder.array((b) -> b.add(TooltipBuilder.keyOnly(Lang.Error.DETAIL_NOT_AVAILABLE)))
-                    .key(Lang.Conditions.ENTITY_PREDICATE);
+            return TooltipBuilder.array((b) -> b.add(TooltipBuilder.keyOnly(Lang.Error.DETAIL_NOT_AVAILABLE)), Lang.Conditions.ENTITY_PREDICATE);
         } else if (cond.getParam() == LootContextParams.KILLER_ENTITY) {
-            return TooltipBuilder.array((b) -> b.add(TooltipBuilder.keyOnly(Lang.Error.DETAIL_NOT_AVAILABLE)))
-                    .key(Lang.Conditions.KILLER_PREDICATE);
+            return TooltipBuilder.array((b) -> b.add(TooltipBuilder.keyOnly(Lang.Error.DETAIL_NOT_AVAILABLE)), Lang.Conditions.KILLER_PREDICATE);
         } else if (cond.getParam() == LootContextParams.DIRECT_KILLER_ENTITY) {
-            return TooltipBuilder.array((b) -> b.add(TooltipBuilder.keyOnly(Lang.Error.DETAIL_NOT_AVAILABLE)))
-                    .key(Lang.Conditions.DIRECT_KILLER_PREDICATE);
+            return TooltipBuilder.array((b) -> b.add(TooltipBuilder.keyOnly(Lang.Error.DETAIL_NOT_AVAILABLE)), Lang.Conditions.DIRECT_KILLER_PREDICATE);
         } else if (cond.getParam() == LootContextParams.BLOCK_ENTITY) {
-            return TooltipBuilder.array((b) -> b.add(TooltipBuilder.keyOnly(Lang.Error.DETAIL_NOT_AVAILABLE)))
-                    .key(Lang.Conditions.BLOCK_PREDICATE);
+            return TooltipBuilder.array((b) -> b.add(TooltipBuilder.keyOnly(Lang.Error.DETAIL_NOT_AVAILABLE)), Lang.Conditions.BLOCK_PREDICATE);
         } else {
             return TooltipBuilder.empty();
         }
@@ -95,8 +90,7 @@ public class LootJsConditionTooltipUtils {
     public static TooltipBuilder isLightLevelTooltip(IServerUtils utils, IsLightLevel condition) {
         MixinIsLightLevel cond = (MixinIsLightLevel) condition;
 
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, IntRange.range(cond.getMin(), cond.getMax())).build(Lang.Value.VALUE)))
-                .key(Lang.Conditions.LIGHT_LEVEL);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, IntRange.range(cond.getMin(), cond.getMax())).build(Lang.Value.VALUE)), Lang.Conditions.LIGHT_LEVEL);
     }
 
     @NotNull
@@ -111,7 +105,7 @@ public class LootJsConditionTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, cond.getEnchantment()).build(Lang.Value.ENCHANTMENT));
             b.add(utils.getValueTooltip(utils, Arrays.toString(cond.getValues())).build(Lang.Value.VALUES));
-        }).key(Lang.Conditions.RANDOM_CHANCE_WITH_ENCHANTMENT);
+        }, Lang.Conditions.RANDOM_CHANCE_WITH_ENCHANTMENT);
     }
 
     @NotNull
@@ -120,18 +114,18 @@ public class LootJsConditionTooltipUtils {
 
         switch (cond.getSlot()) {
             case MAINHAND -> {
-                return TooltipBuilder.array((b) -> b.add(LootJsGenericTooltipUtils.getItemFilterTooltip(utils, cond.getPredicate()).build(Lang.Value.ITEM_FILTER)))
-                        .key(Lang.Conditions.MATCH_MAINHAND);
+                return TooltipBuilder.array((b) -> b.add(LootJsGenericTooltipUtils.getItemFilterTooltip(utils, cond.getPredicate()).build(Lang.Value.ITEM_FILTER)),
+                        Lang.Conditions.MATCH_MAINHAND);
             }
             case OFFHAND -> {
-                return TooltipBuilder.array((b) -> b.add(LootJsGenericTooltipUtils.getItemFilterTooltip(utils, cond.getPredicate()).build(Lang.Value.ITEM_FILTER)))
-                        .key(Lang.Conditions.MATCH_OFFHAND);
+                return TooltipBuilder.array((b) -> b.add(LootJsGenericTooltipUtils.getItemFilterTooltip(utils, cond.getPredicate()).build(Lang.Value.ITEM_FILTER)),
+                        Lang.Conditions.MATCH_OFFHAND);
             }
             default -> {
                 return TooltipBuilder.array((b) -> {
                     b.add(LootJsGenericTooltipUtils.getItemFilterTooltip(utils, cond.getPredicate()).build(Lang.Value.ITEM_FILTER));
                     b.add(utils.getValueTooltip(utils, cond.getSlot()).build(Lang.Value.SLOT));
-                }).key(Lang.Conditions.MATCH_EQUIPMENT_SLOT);
+                }, Lang.Conditions.MATCH_EQUIPMENT_SLOT);
             }
         }
     }
@@ -140,24 +134,21 @@ public class LootJsConditionTooltipUtils {
     public static TooltipBuilder matchKillerDistanceTooltip(IServerUtils utils, MatchKillerDistance condition) {
         MixinMatchKillerDistance cond = (MixinMatchKillerDistance) condition;
 
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.getPredicate()).build(Lang.Branch.PREDICATE)))
-                .key(Lang.Conditions.DISTANCE_TO_KILLER);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.getPredicate()).build(Lang.Branch.PREDICATE)), Lang.Conditions.DISTANCE_TO_KILLER);
     }
 
     @NotNull
     public static TooltipBuilder matchPlayerTooltip(IServerUtils utils, MatchPlayer condition) {
         MixinMatchPlayer cond = (MixinMatchPlayer) condition;
 
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.getPredicate()).build(Lang.Branch.PREDICATE)))
-                .key(Lang.Conditions.MATCH_PLAYER);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.getPredicate()).build(Lang.Branch.PREDICATE)), Lang.Conditions.MATCH_PLAYER);
     }
 
     @NotNull
     public static TooltipBuilder notConditionTooltip(IServerUtils utils, NotCondition condition) {
         MixinNotCondition cond = (MixinNotCondition) condition;
 
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, (LootItemCondition) cond.getCondition())))
-                .key(Lang.Conditions.NOT);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, (LootItemCondition) cond.getCondition())), Lang.Conditions.NOT);
     }
 
     @NotNull
@@ -165,13 +156,12 @@ public class LootJsConditionTooltipUtils {
         //noinspection unchecked
         List<LootItemCondition> conditions = (List<LootItemCondition>)(List<?>)List.of(((MixinOrCondition) condition).getConditions());
 
-        return utils.getValueTooltip(utils, conditions).key(Lang.Conditions.OR);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, conditions)), Lang.Conditions.OR);
     }
 
     @NotNull
     public static TooltipBuilder playerParamPredicateTooltip(IServerUtils ignoredUtils, PlayerParamPredicate ignoredCondition) {
-        return TooltipBuilder.array((b) -> b.add(TooltipBuilder.keyOnly(Lang.Error.DETAIL_NOT_AVAILABLE)))
-                .key(Lang.Conditions.PLAYER_PREDICATE);
+        return TooltipBuilder.array((b) -> b.add(TooltipBuilder.keyOnly(Lang.Error.DETAIL_NOT_AVAILABLE)), Lang.Conditions.PLAYER_PREDICATE);
     }
 
     @NotNull
@@ -181,6 +171,6 @@ public class LootJsConditionTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, cond.getPredicate()).build(Lang.Branch.PREDICATE));
             b.add(utils.getValueTooltip(utils, cond.getSourceNames()).build(Lang.Branch.SOURCE_NAMES));
-        }).key(Lang.Conditions.MATCH_DAMAGE_SOURCE);
+        }, Lang.Conditions.MATCH_DAMAGE_SOURCE);
     }
 }

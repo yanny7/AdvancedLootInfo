@@ -87,12 +87,12 @@ public class ForgePlugin implements IPlugin {
 
     @NotNull
     public static TooltipBuilder getCanToolPerformActionTooltip(IServerUtils utils, CanToolPerformAction cond) {
-        return utils.getValueTooltip(utils, ((MixinCanToolPerformAction) cond).getAction().name()).key(Lang.Conditions.CAN_TOOL_PERFORM_ACTION);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, ((MixinCanToolPerformAction) cond).getAction().name())), Lang.Conditions.CAN_TOOL_PERFORM_ACTION);
     }
 
     @NotNull
     public static TooltipBuilder getLootTableIdTooltip(IServerUtils utils, LootTableIdCondition cond) {
-        return utils.getValueTooltip(utils, ((MixinLootTableIdCondition) cond).getTargetLootTableId()).key(Lang.Conditions.LOOT_TABLE_ID);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, ((MixinLootTableIdCondition) cond).getTargetLootTableId())), Lang.Conditions.LOOT_TABLE_ID);
     }
 
     @NotNull

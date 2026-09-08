@@ -10,8 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public class LootJsFunctionTooltipUtils {
     @NotNull
     public static TooltipBuilder customPlayerTooltip(IServerUtils ignoredUtils, CustomPlayerFunction ignoredFunction) {
-        return TooltipBuilder.array((b) -> b.add(TooltipBuilder.error(TooltipBuilder.translate(Lang.Error.DETAIL_NOT_AVAILABLE.singular()))))
-                .key(Lang.Functions.CUSTOM_PLAYER);
+        return TooltipBuilder.array((b) -> b.add(TooltipBuilder.error(TooltipBuilder.translate(Lang.Error.DETAIL_NOT_AVAILABLE.singular()))), Lang.Functions.CUSTOM_PLAYER);
     }
 
     @NotNull
