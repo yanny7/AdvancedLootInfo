@@ -1,5 +1,6 @@
 {
   "alicompat.property.branch.alternative": "Alternative:",
+  "alicompat.property.branch.applicable_spells": "Applicable Spells:",
   "alicompat.property.branch.spell_filter": "Spell Filter:",
   "alicompat.property.branch.spells": "Spells:",
   "alicompat.property.value.default_item": "Default Item: %s",
