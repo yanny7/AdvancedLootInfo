@@ -44,24 +44,25 @@ configurations {
     common
     shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
     compileClasspath.extendsFrom common
-    runtimeClasspath.extendsFrom common
     developmentForge.extendsFrom common
 }
 
 dependencies {
     forge "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    common(project(path: ":aci:common")) { transitive false }
-    runtimeOnly project(":aci:forge")
+    common(project(path: ":aci:common", configuration: "namedElements")) { transitive false }
+    runtimeOnly rootProject.project(":aci:common").sourceSets.main.output.classesDirs
+    runtimeOnly project(path: ":aci:forge", configuration: "namedElements")
 
     project.ext.commonProjects.each { p ->
         common(project(path: p, configuration: "namedElements")) { transitive false }
+        runtimeOnly rootProject.project(p).sourceSets.main.output.classesDirs
         shadowCommon(project(path: p, configuration: "transformProductionForge")) { transitive false }
     }
 
     // LootJS
-//    compileOnly fg.deobf("curse.maven:kubejs-238086:5853326")
-//    compileOnly fg.deobf("curse.maven:rhino-416294:6186971")
-//    compileOnly fg.deobf("curse.maven:lootjs-570630:5404565")
+//    modCompileOnly fg.deobf("curse.maven:kubejs-238086:5853326")
+//    modCompileOnly fg.deobf("curse.maven:rhino-416294:6186971")
+//    modCompileOnly fg.deobf("curse.maven:lootjs-570630:5404565")
 }
 
 shadowJar {
