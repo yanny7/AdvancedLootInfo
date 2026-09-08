@@ -33,6 +33,6 @@ public class FarmersDelightCompat implements IModCompat {
 
     @NotNull
     private static TooltipBuilder getCanItemPerformAbilityTooltip(IServerUtils utils, CanItemPerformAbility cond) {
-        return utils.getValueTooltip(utils, cond.ability()).key(Lang.Conditions.CAN_ITEM_PERFORM_ABILITY);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.ability())), Lang.Conditions.CAN_ITEM_PERFORM_ABILITY);
     }
 }

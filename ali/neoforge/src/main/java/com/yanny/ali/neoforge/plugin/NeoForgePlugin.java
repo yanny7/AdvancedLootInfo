@@ -95,14 +95,14 @@ public class NeoForgePlugin implements IPlugin {
     @NotNull
     public static TooltipBuilder getCanToolPerformActionTooltip(IServerUtils utils, CanItemPerformAbility condition) {
         MixinCanItemPerformAbility cond = (MixinCanItemPerformAbility) condition;
-        return utils.getValueTooltip(utils, cond.getAbility()).key(Lang.Conditions.CAN_ITEM_PERFORM_ABILITY);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.getAbility())), Lang.Conditions.CAN_ITEM_PERFORM_ABILITY);
     }
 
     @Unmodifiable
     @NotNull
     public static TooltipBuilder getLootTableIdTooltip(IServerUtils utils, LootTableIdCondition condition) {
         MixinLootTableIdCondition cond = (MixinLootTableIdCondition) condition;
-        return utils.getValueTooltip(utils, cond.getTargetLootTableId()).key(Lang.Conditions.LOOT_TABLE_ID);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.getTargetLootTableId())), Lang.Conditions.LOOT_TABLE_ID);
     }
 
     private static TooltipBuilder getItemAbilityTooltip(IServerUtils utils, ItemAbility ability) {
