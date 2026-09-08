@@ -1,6 +1,8 @@
 package com.yanny.alicompat.compat.farmersdelight;
 
+import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerRegistry;
+import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import com.yanny.alicompat.IModCompat;
 import com.yanny.alicompat.Utils;
@@ -24,8 +26,13 @@ public class FarmersDelightCompat implements IModCompat {
         PluginUtils.registerFunctionTooltip(registry, SmokerCookFunction.class, SmokerCookFunctionAccessor::new);
 
         registry.registerEnumTranslation(ItemAbility.class, Utils.MOD_ID, FarmersDelightLang.ITEM_ABILITY);
-        registry.registerConditionTooltip(CanItemPerformAbility.class, (utils, condition) -> utils.getValueTooltip(utils, condition.ability()).key(Lang.Conditions.CAN_ITEM_PERFORM_ABILITY));
+        registry.registerConditionTooltip(CanItemPerformAbility.class, FarmersDelightCompat::getCanItemPerformAbilityTooltip);
 
         PluginUtils.registerItemListing(registry, FDItemListingAccessor.class);
+    }
+
+    @NotNull
+    private static TooltipBuilder getCanItemPerformAbilityTooltip(IServerUtils utils, CanItemPerformAbility cond) {
+        return utils.getValueTooltip(utils, cond.ability()).key(Lang.Conditions.CAN_ITEM_PERFORM_ABILITY);
     }
 }

@@ -140,6 +140,10 @@ public class PluginUtils {
         registry.registerIngredientTooltip(targetClass, (u, c) -> factory.apply(c).getTooltip(u));
     }
 
+    public static <U extends ItemSubPredicate, T extends BaseAccessor<?> & IItemSubPredicateTooltip> void registerItemSubPredicateTooltip(IServerRegistry registry, Class<U> targetClass, Class<T> clazz) {
+        registry.registerItemSubPredicateTooltip(targetClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c, targetClass).getTooltip(u));
+    }
+
     public static <T extends BaseAccessor<?> & IItemSubPredicateTooltip> void registerItemSubPredicateTooltip(IServerRegistry registry, Class<T> clazz) {
         ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
 
@@ -154,6 +158,14 @@ public class PluginUtils {
         } else {
             throw new IllegalStateException("Missing ClassAccessor annotation for item sub predicate " + clazz.getName());
         }
+    }
+
+    public static <U extends ItemSubPredicate, T extends IItemSubPredicateTooltip> void registerItemSubPredicateTooltip(IServerRegistry registry, Class<U> targetClass, Function<U, T> factory) {
+        registry.registerItemSubPredicateTooltip(targetClass, (u, c) -> factory.apply(c).getTooltip(u));
+    }
+
+    public static <U extends EntitySubPredicate, T extends BaseAccessor<?> & IEntitySubPredicateTooltip> void registerEntitySubPredicateTooltip(IServerRegistry registry, MapCodec<U> codec, Class<U> targetClass, Class<T> clazz) {
+        registry.registerEntitySubPredicateTooltip(codec, (u, c) -> ReflectionUtils.copyClassData(clazz, c, targetClass).getTooltip(u));
     }
 
     public static <T extends BaseAccessor<?> & IEntitySubPredicateTooltip> void registerEntitySubPredicateTooltip(IServerRegistry registry, Class<T> clazz, MapCodec<T> codec) {
@@ -171,6 +183,14 @@ public class PluginUtils {
         }
     }
 
+    public static <U extends EntitySubPredicate, T extends IEntitySubPredicateTooltip> void registerEntitySubPredicateTooltip(IServerRegistry registry, MapCodec<U> codec, Function<U, T> factory) {
+        registry.registerEntitySubPredicateTooltip(codec, (u, c) -> factory.apply(c).getTooltip(u));
+    }
+
+    public static <U, T extends BaseAccessor<?> & IDataComponentTypeTooltip> void registerDataComponentTypeTooltip(IServerRegistry registry, DataComponentType<U> type, Class<U> targetClass, Class<T> clazz) {
+        registry.registerDataComponentTypeTooltip(type, (u, c) -> ReflectionUtils.copyClassData(clazz, c, targetClass).getTooltip(u));
+    }
+
     public static <T extends BaseAccessor<?> & IDataComponentTypeTooltip> void registerDataComponentTypeTooltip(IServerRegistry registry, Class<T> clazz, DataComponentType<T> type) {
         ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
 
@@ -183,6 +203,10 @@ public class PluginUtils {
         } else {
             throw new IllegalStateException("Missing ClassAccessor annotation for data component type tooltip " + clazz.getName());
         }
+    }
+
+    public static <U, T extends IDataComponentTypeTooltip> void registerDataComponentTypeTooltip(IServerRegistry registry, DataComponentType<U> type, Function<U, T> factory) {
+        registry.registerDataComponentTypeTooltip(type, (u, c) -> factory.apply(c).getTooltip(u));
     }
 
     public static <U extends NumberProvider, T extends BaseAccessor<?> & INumberProvider> void registerNumberProvider(IServerRegistry registry, Class<U> targetClass, Class<T> clazz) {
