@@ -219,14 +219,41 @@ one of three shapes: a `LootItemEntityPropertyCondition` on `THIS` with a concre
 
 Conditions like `match_tool`, or the target mod's own conditions, constrain *how* loot is obtained,
 not *what* the loot belongs to, so they resolve to nothing. The survey reports these as "Auto-GLM
-without a resolvable destination". When the mod's own code tells you the real destination, build the
-`ILootModifier<Block>` (or `<Entity>`) by hand instead of calling `getLootModifier`:
+without a resolvable destination". `Optional.empty()` does not mean the modifier has to be written by
+hand — it means nobody registered a destination resolver for that condition. Work down this list:
+
+1. **`registerDestination` first.** When the unresolvable condition is the *target mod's own* and it
+   names the destination, register a resolver for it and the auto-GLM path starts working by itself —
+   `registry.registerDestination(GiantPickUsedCondition.class, …)` in `TwilightForestCompat`,
+   `LootTableIdCondition` in `PortingLibLootCompat`. `Destination` has three shapes,
+   `Blocks(Collection<Block>, fullyExplained)`, `Entities(EntityTypePredicate, fullyExplained)` and
+   `Table(ResourceLocation, fullyExplained)`; `fullyExplained` is `false` when the condition only
+   narrows the destination and its other parts still have to appear in the tooltip. Never register a
+   resolver for a **vanilla** condition class from a shim — that answer would speak for every mod.
+2. **Then the registration itself**, one line per modifier:
+   `GlmAccessorUtils.registerGlobalLootModifier(registry, X.class, XAccessor.class)`.
+3. **A hand-built `ILootModifier` only when no condition can carry the answer** — the GLM is
+   registered with an empty `conditions` array, or the destination lives in the mod's code or config
+   rather than in a condition.
+
+`data/<modid>/loot_modifiers/*.json` in the jar says which conditions each GLM is registered with,
+and that is what decides between the three. When the mod's own code tells you the real destination,
+build the `ILootModifier<Block>` (or `<Entity>`, or `<ResourceLocation>`) by hand:
 
 - A GLM keyed on a known set of blocks → `predicate` is that set's `containsKey`, and emit one
   operation per entry.
 - A GLM that transforms whatever it is given → `predicate` returns `true` and the *operation's* item
   predicate does the filtering. That is safe: `AbstractServer.predicateItem` only attaches a modifier
   to a loot table when some operation predicate matches an item that table can produce.
+- A GLM keyed on the loot table id (a path substring, a regex over the id, a stored table name) →
+  `IType.LOOT_TABLE` and `predicate(ResourceLocation)`. `getOperations()` is handed no location, but
+  it runs inside the `TooltipContext.set(location)` that `AbstractServer` brackets each table with, so
+  `TooltipContext.get()` is how an operation whose count or chance differs per table reads the table
+  it is being built for. Guard for `null` and emit nothing.
+- A GLM that deletes loot → a `RemoveOperation` whose factory returns `null` when the modifier is
+  unconditional and, when it is not, an `ItemNode` with `NOT(AllOf(<the GLM conditions>))` appended to
+  the source node's conditions — the shape `ali/common-lootjs` uses for a conditional
+  `RemoveLootAction`. Return nodes that are not plain `ItemNode`s unchanged.
 
 Wrap a replacement in `ModifiedNode(utils, src, replacement)` whenever the modifier is conditional,
 so the original drop stays visible as the alternative. Build the replacement's tooltip with
