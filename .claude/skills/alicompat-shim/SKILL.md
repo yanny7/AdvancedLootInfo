@@ -120,6 +120,17 @@ each accessor redeclares that base's fields itself. Typing the base on a type va
 (`BaseAccessor<T>`) makes it worse — `resolveTarget` gives up and the processor skips validation with
 a NOTE instead of an error.
 
+**Only the value-tooltip registry resolves superclasses; every other one is keyed on the exact class.**
+`valueTooltips` is a `ClassKeyedMap`, so a subclass reaches its base type's renderer — which is why an
+`ItemPredicate` subclass carrying no vanilla fields renders *empty* rather than missing, and looks covered
+when it is not. Entries, functions, conditions and ingredients are plain `HashMap`s: a subclass of a
+registered type reaches nothing and falls to the missing tooltip, so an `ingredient` finding whose values
+ALI could already render is fixed by registering the concrete class against ALI's own
+`IngredientTooltipUtils::getIngredientTooltip` — no accessor and no new key.
+
+An `item_sub_predicate` finding on a branch before `1.20.5` is an `ItemPredicate` subclass, not a sub-predicate:
+there is no `registerItemSubPredicate`, and the hook is `registerValueTooltip` on that class.
+
 One accessor may implement several hooks. A function that swaps the stack is worth registering three
 times: `registerFunctionTooltip` (what it says), `registerItemStackModifier` (so the drop renders as
 the swapped item) and `registerItemCollector` (so the recipe-viewer index finds it).
