@@ -1,4 +1,7 @@
 {
+  "alicompat.type.condition.block_named": "Block Is Named",
+  "alicompat.type.condition.has_computer_id": "Has Computer Id",
+  "alicompat.type.condition.player_creative": "Player In Creative Mode",
   "alicompat.type.function.copy_meal": "Copy Meal",
   "alicompat.type.function.copy_skillet": "Copy Skillet",
   "alicompat.type.function.random_potion": "Random Potion",

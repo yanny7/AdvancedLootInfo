@@ -37,6 +37,29 @@ exist on `1.20.1` and one class that mattered (`ModItemSwap`) was not listed at 
 directions in the tracker (`— not in the <version> jar`, `— <version> only, not in the survey`)
 rather than silently covering a different set than the row claims.
 
+Match findings by **simple class name**, not by the package the survey printed: a mod may rename its root package
+between versions (Applied Cooking's `sebastrn.appliedcooking` is `dev.smolinacadena.appliedcooking` on `1.20.1`), and a
+grep for the fully-qualified name reports a class that is right there as missing.
+
+Read `targetModId()` out of the downloaded jar's `META-INF/mods.toml` / `fabric.mod.json`, never off the tracker's slug
+or the mod's display name. An older branch's CurseForge file can be a different major version of the mod with a
+different mod id and different code entirely — `bonsai-trees` on `1.20.1` is Bonsai Trees 3, mod id `bonsaitrees3`,
+with no loot code at all — and a wrong id makes `isModLoaded` false, so the whole shim silently never registers.
+
+The jar's own loot tables are the inventory the class list only approximates. Grep them for every non-vanilla type:
+
+```bash
+unzip -oq target.jar -d t 'data/<modid>/loot_tables/*'
+grep -rhoE '"(condition|function|type)": *"[a-z_]+:[a-z_]*"' t/ | sort -u
+```
+
+Only `minecraft:` values means there is nothing to shim on this branch, whatever the survey lists, and each other value
+is a hook to cover — including ones the survey missed. Do this whenever the class names do not line up: a mod whose
+major version differs between branches keeps the mod id but renames everything (`refinedstorage` on `1.20.1` is RS 1.12,
+`com.refinedmods.refinedstorage.loottable.StorageBlockLootFunction`, against RS 2.x's
+`…refinedstorage.common.storage.storageblock.StorageBlockLootItemFunction`), so matching by name finds nothing and the
+row looks empty when four functions need rendering.
+
 Which loaders exist for this mod on this branch also comes from the tracker's version list — a
 `1.20.1` Forge-only mod gets a source set in `alicompat/forge` and nothing in `alicompat/fabric`.
 
