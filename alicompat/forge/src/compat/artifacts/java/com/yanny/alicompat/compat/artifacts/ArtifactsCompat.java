@@ -31,6 +31,8 @@ public class ArtifactsCompat implements IGlmModCompat {
         PluginUtils.registerConditionTooltip(registry, ConfigValueChance.class, ConfigValueChanceAccessor.class);
 
         PluginUtils.registerChanceModifier(registry, ConfigValueChance.class, ConfigValueChanceAccessor.class);
+
+        PluginUtils.registerDestination(registry, SmeltOresWithPickaxeHeaterModifier.class, SmeltOresWithPickaxeHeaterModifierAccessor.class);
     }
 
     @Override

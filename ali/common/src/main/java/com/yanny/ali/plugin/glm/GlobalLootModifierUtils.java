@@ -62,7 +62,7 @@ public class GlobalLootModifierUtils {
             return Optional.of(new ILootModifier<Block>() {
                 @Override
                 public boolean predicate(Block value) {
-                    return blocks.stream().anyMatch((d) -> d.blocks().contains(value));
+                    return blocks.stream().anyMatch((d) -> d.matcher().test(value));
                 }
 
                 @NotNull
@@ -128,7 +128,7 @@ public class GlobalLootModifierUtils {
 
     @NotNull
     public static Destination getBlockStateDestination(IServerUtils ignoredUtils, LootItemBlockStatePropertyCondition condition) {
-        return new Destination.Blocks(List.of(condition.block), condition.properties.properties.isEmpty());
+        return new Destination.Blocks(condition.block::equals, condition.properties.properties.isEmpty());
     }
 
     @Nullable

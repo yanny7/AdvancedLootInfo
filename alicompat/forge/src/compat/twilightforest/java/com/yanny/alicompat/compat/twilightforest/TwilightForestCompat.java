@@ -54,6 +54,7 @@ public class TwilightForestCompat implements IGlmModCompat {
         registry.registerConditionTooltip(UncraftingTableEnabledCondition.class, TwilightForestCompat::getUncraftingTableEnabledTooltip);
 
         registry.registerDestination(GiantPickUsedCondition.class, TwilightForestCompat::getGiantPickUsedDestination);
+        PluginUtils.registerDestination(registry, FieryToolSmeltingModifier.class, FieryToolSmeltingModifierAccessor.class);
 
         PluginUtils.registerFunctionTooltip(registry, ModItemSwap.class, ModItemSwapAccessor.class);
 
@@ -78,7 +79,7 @@ public class TwilightForestCompat implements IGlmModCompat {
 
     @NotNull
     private static Destination getGiantPickUsedDestination(IServerUtils ignoredUtils, GiantPickUsedCondition ignoredCond) {
-        return new Destination.Blocks(Set.copyOf(GiantToolGroupingModifier.CONVERSIONS.keySet()), false);
+        return new Destination.Blocks(Set.copyOf(GiantToolGroupingModifier.CONVERSIONS.keySet())::contains, false);
     }
 
     @NotNull

@@ -4,27 +4,20 @@ import com.hollingsworth.arsnouveau.api.loot.DungeonLootEnhancerModifier;
 import com.hollingsworth.arsnouveau.api.loot.DungeonLootTables;
 import com.hollingsworth.arsnouveau.setup.config.Config;
 import com.yanny.aci.api.RangeValue;
-import com.yanny.aci.tooltip.TooltipBuilder;
-import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.plugin.common.NodeUtils;
-import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
-import com.yanny.ali.plugin.server.EnchantedRanges;
-import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
+import com.yanny.alicompat.accessor.GlmNodeUtils;
 import com.yanny.alicompat.accessor.IGlobalLootModifierAccessor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -56,7 +49,10 @@ public class DungeonLootEnhancerModifierAccessor extends BaseAccessor<DungeonLoo
         }
 
         return GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions),
-                (c) -> drops.stream().map((d) -> (IOperation) new IOperation.AddOperation((itemStack) -> true, addedNode(utils, c, d))).toList());
+                (c) -> drops.stream()
+                        .map((d) -> (IOperation) new IOperation.AddOperation((itemStack) -> true,
+                                GlmNodeUtils.addedNode(utils, c, d.stack(), d.chance(), d.count())))
+                        .toList());
     }
 
     private static void collect(List<Drop> drops, List<Supplier<ItemStack>> pool, double chance, int rolls) {
@@ -93,15 +89,6 @@ public class DungeonLootEnhancerModifierAccessor extends BaseAccessor<DungeonLoo
         }
 
         return samples;
-    }
-
-    @NotNull
-    private static IDataNode addedNode(IServerUtils utils, List<LootItemCondition> conditions, Drop drop) {
-        EnchantedRanges chance = NodeUtils.getEnchantedChance(utils, conditions, drop.chance());
-        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, new EnchantedRanges(new RangeValue(drop.count())),
-                Collections.emptyList(), conditions);
-
-        return new ItemNode(drop.chance(), new RangeValue(drop.count()), drop.stack(), tooltip.build(), Collections.emptyList(), conditions);
     }
 
     private record Drop(ItemStack stack, RangeValue count, float chance) {}

@@ -1,24 +1,18 @@
 package com.yanny.alicompat.compat.relics;
 
 import com.yanny.aci.api.RangeValue;
-import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipContext;
-import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.plugin.common.NodeUtils;
-import com.yanny.ali.plugin.common.nodes.ItemNode;
-import com.yanny.ali.plugin.server.EnchantedRanges;
-import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
+import com.yanny.alicompat.accessor.GlmNodeUtils;
 import com.yanny.alicompat.accessor.IGlobalLootModifierAccessor;
 import it.hurts.sskirillss.relics.items.relics.base.IRelicItem;
 import it.hurts.sskirillss.relics.items.relics.base.data.RelicStorage;
 import it.hurts.sskirillss.relics.level.RelicLootModifier;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -66,7 +60,8 @@ public class RelicLootModifierAccessor extends BaseAccessor<RelicLootModifier> i
                         Float chance = getChance(patterns, location);
 
                         if (chance != null) {
-                            operations.add(new IOperation.AddOperation((itemStack) -> true, relicNode(utils, conditionList, relic, chance)));
+                            operations.add(new IOperation.AddOperation((itemStack) -> true,
+                                    GlmNodeUtils.addedNode(utils, conditionList, relic.getItem().getDefaultInstance(), chance, new RangeValue(1))));
                         }
                     });
                 }
@@ -119,14 +114,5 @@ public class RelicLootModifierAccessor extends BaseAccessor<RelicLootModifier> i
         }
 
         return null;
-    }
-
-    @NotNull
-    private static IDataNode relicNode(IServerUtils utils, List<LootItemCondition> conditions, IRelicItem relic, float rawChance) {
-        EnchantedRanges chance = NodeUtils.getEnchantedChance(utils, conditions, rawChance);
-        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, new EnchantedRanges(new RangeValue(1)),
-                List.of(), conditions);
-
-        return new ItemNode(rawChance, new RangeValue(1), relic.getItem().getDefaultInstance(), tooltip.build(), List.of(), conditions);
     }
 }

@@ -1,9 +1,11 @@
 package com.yanny.alicompat.compat.dimdungeons;
 
 import com.catastrophe573.dimdungeons.utils.LootModifierNoDrops;
+import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.alicompat.IGlmModCompat;
 import com.yanny.alicompat.accessor.GlmAccessorUtils;
+import com.yanny.alicompat.accessor.PluginUtils;
 import org.jetbrains.annotations.NotNull;
 
 public class DimDungeonsCompat implements IGlmModCompat {
@@ -13,6 +15,11 @@ public class DimDungeonsCompat implements IGlmModCompat {
     @Override
     public String targetModId() {
         return MOD_ID;
+    }
+
+    @Override
+    public void registerServer(IServerRegistry registry) {
+        PluginUtils.registerDestination(registry, LootModifierNoDrops.class, LootModifierNoDropsAccessor.class);
     }
 
     @Override
