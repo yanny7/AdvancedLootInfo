@@ -129,6 +129,14 @@ registered type reaches nothing and falls to the missing tooltip, so an `ingredi
 ALI could already render is fixed by registering the concrete class against ALI's own
 `IngredientTooltipUtils::getIngredientTooltip` — no accessor and no new key.
 
+**Only the target mod's own jar is on the compile classpath, never its libraries.** `modCompileOnly` adds the one
+coordinate from `<slug>_<loader>_dep` and nothing it depends on, so an expression javac has to resolve through a
+third-party type fails to compile — Ender IO's `EIOItems.BROKEN_SPAWNER` needs Registrate's `ItemEntry`, Artifacts'
+`Artifacts.CONFIG.common` needs Cloth `autoconfig`'s `ConfigData`. Reach the same value another way instead of adding
+the library: an item through `BuiltInRegistries.ITEM`, a config value through a reflective accessor over the field
+that holds it. When neither works, drop that part of the tooltip and label what is left by the field it actually
+reads (`Default Probability:`, not `Probability:`) rather than implying the applied value.
+
 An `item_sub_predicate` finding on a branch before `1.20.5` is an `ItemPredicate` subclass, not a sub-predicate:
 there is no `registerItemSubPredicate`, and the hook is `registerValueTooltip` on that class.
 
