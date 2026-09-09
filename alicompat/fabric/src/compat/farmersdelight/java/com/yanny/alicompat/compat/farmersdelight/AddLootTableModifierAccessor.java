@@ -35,7 +35,7 @@ public class AddLootTableModifierAccessor extends BaseAccessor<AddLootTableModif
     public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
         List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
 
-        return GlobalLootModifierUtils.getLootModifier(utils, conditionList, (c) -> {
+        return GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList, (c) -> {
             TooltipNode tooltip = TooltipBuilder.array((b) -> b
                             .add(TooltipBuilder.keyOnly(Lang.Group.ALL))
                             .add(GenericTooltipUtils.getConditionsSectionTooltip(utils, c))

@@ -45,7 +45,7 @@ public class GiantToolGroupingModifierAccessor extends BaseAccessor<GiantToolGro
             return Optional.empty();
         }
 
-        return GlobalLootModifierUtils.getLootModifier(utils, Arrays.asList(this.conditions), (c) -> conversions.entrySet().stream()
+        return GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions), (c) -> conversions.entrySet().stream()
                 .map((entry) -> (IOperation) new IOperation.ReplaceOperation(
                         (itemStack) -> itemStack.getItem().equals(entry.getKey().asItem()),
                         (src) -> groupNode(utils, c, src, entry.getValue())))

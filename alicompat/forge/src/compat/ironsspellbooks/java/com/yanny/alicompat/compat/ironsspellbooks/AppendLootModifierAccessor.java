@@ -37,7 +37,7 @@ public class AppendLootModifierAccessor extends BaseAccessor<AppendLootModifier>
         List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
         ResourceLocation lootTable = new ResourceLocation(resourceLocationKey);
 
-        return GlobalLootModifierUtils.getLootModifier(utils, conditionList, (c) -> {
+        return GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList, (c) -> {
             TooltipNode tooltip = TooltipBuilder.array((b) -> {
                 b.add(TooltipBuilder.keyOnly(Lang.Group.ALL));
                 b.add(GenericTooltipUtils.getConditionsSectionTooltip(utils, c));

@@ -37,7 +37,7 @@ public class PastrySlicingModifierAccessor extends BaseAccessor<PastrySlicingMod
     public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
         List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
 
-        return GlobalLootModifierUtils.getLootModifier(utils, conditionList, (c) -> {
+        return GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList, (c) -> {
             EnchantedRanges chance = NodeUtils.getEnchantedChance(utils, c, 1);
             EnchantedRanges count = new EnchantedRanges(1, 7);
 

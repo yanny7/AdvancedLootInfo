@@ -9,12 +9,14 @@ import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
+import com.yanny.ali.plugin.glm.Destination;
+import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
+import com.yanny.alicompat.accessor.IDestination;
 import com.yanny.alicompat.accessor.IGlobalLootModifierAccessor;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -25,7 +27,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class AddSingleItemAccessor extends BaseAccessor<AddSingleItem> implements IGlobalLootModifierAccessor {
+public class AddSingleItemAccessor extends BaseAccessor<AddSingleItem> implements IGlobalLootModifierAccessor, IDestination {
     @FieldAccessor
     protected LootItemCondition[] conditions;
 
@@ -35,30 +37,20 @@ public class AddSingleItemAccessor extends BaseAccessor<AddSingleItem> implement
 
     @Override
     public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
-        List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
-        String path = parent.path;
         Item item = parent.item;
         float appearChance = parent.appearChance;
         RangeValue count = new RangeValue(parent.min, parent.max);
 
-        return Optional.of(new ILootModifier<ResourceLocation>() {
-            @Override
-            public boolean predicate(ResourceLocation value) {
-                return value.getPath().contains(path);
-            }
+        return GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions),
+                (c) -> List.of(new IOperation.AddOperation((itemStack) -> true, addedNode(utils, c, item, appearChance, count))));
+    }
 
-            @NotNull
-            @Override
-            public List<IOperation> getOperations() {
-                return List.of(new IOperation.AddOperation((itemStack) -> true, addedNode(utils, conditionList, item, appearChance, count)));
-            }
+    @NotNull
+    @Override
+    public Destination getDestination(IServerUtils ignoredUtils) {
+        String path = parent.path;
 
-            @NotNull
-            @Override
-            public IType<ResourceLocation> getType() {
-                return IType.LOOT_TABLE;
-            }
-        });
+        return new Destination.Table((id) -> id.getPath().contains(path), false);
     }
 
     @NotNull

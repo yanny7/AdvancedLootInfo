@@ -74,7 +74,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemFunction, EnchantedRanges>> countModifiers = registerClassKeyed("count modifiers", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifiers = registerClassKeyed("item stack modifiers", false, HashMap::new, null);
     // destinations
-    private final ManagedRegistry<Class<?>, IDestinationResolver<LootItemCondition>> destinations = registerClassKeyed("global loot modifier destinations", false, HashMap::new, null);
+    private final ManagedRegistry<Class<?>, IDestinationResolver<Object>> destinations = registerClassKeyed("global loot modifier destinations", false, HashMap::new, null);
     // translations
     private final ManagedRegistry<Class<?>, EnumTranslation> enumValues = registerClassKeyed("enum values", true, HashMap::new, null);
 
@@ -167,7 +167,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
-    public <T extends LootItemCondition> void registerDestination(Class<T> type, IDestinationResolver<T> resolver) {
+    public <T> void registerDestination(Class<T> type, IDestinationResolver<T> resolver) {
         destinations.put(type, (u, c) -> resolver.resolve(u, type.cast(c)));
     }
 
@@ -352,9 +352,9 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     @Nullable
     @Override
-    public Destination getDestination(IServerUtils utils, LootItemCondition condition) {
-        return destinations.get(condition.getClass())
-                .map((r) -> r.resolve(utils, condition))
+    public Destination getDestination(IServerUtils utils, Object value) {
+        return destinations.get(value.getClass())
+                .map((r) -> r.resolve(utils, value))
                 .orElse(null);
     }
 

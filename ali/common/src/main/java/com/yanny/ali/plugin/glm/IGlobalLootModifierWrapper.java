@@ -9,6 +9,8 @@ import java.util.List;
 public interface IGlobalLootModifierWrapper {
     ResourceLocation getName();
 
+    Object getLootModifier();
+
     Class<?> getLootModifierClass();
 
     boolean isLootModifier();

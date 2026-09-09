@@ -5,6 +5,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 
 import java.util.Collection;
+import java.util.function.Predicate;
 
 public sealed interface Destination {
     boolean fullyExplained();
@@ -13,5 +14,5 @@ public sealed interface Destination {
 
     record Entities(EntityTypePredicate type, boolean fullyExplained) implements Destination {}
 
-    record Table(ResourceLocation id, boolean fullyExplained) implements Destination {}
+    record Table(Predicate<ResourceLocation> matcher, boolean fullyExplained) implements Destination {}
 }

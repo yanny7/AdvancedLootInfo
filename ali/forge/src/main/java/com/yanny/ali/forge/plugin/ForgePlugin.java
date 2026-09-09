@@ -97,7 +97,7 @@ public class ForgePlugin implements IPlugin {
 
     @NotNull
     public static Destination getLootTableIdDestination(IServerUtils ignoredUtils, LootTableIdCondition cond) {
-        return new Destination.Table(((MixinLootTableIdCondition) cond).getTargetLootTableId(), true);
+        return new Destination.Table(((MixinLootTableIdCondition) cond).getTargetLootTableId()::equals, true);
     }
 
     @NotNull
@@ -156,6 +156,11 @@ public class ForgePlugin implements IPlugin {
             @Override
             public ResourceLocation getName() {
                 return ForgeRegistries.GLOBAL_LOOT_MODIFIER_SERIALIZERS.get().getKey(modifier.codec());
+            }
+
+            @Override
+            public Object getLootModifier() {
+                return modifier;
             }
 
             @Override
