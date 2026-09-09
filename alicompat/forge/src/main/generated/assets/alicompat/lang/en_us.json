@@ -17,6 +17,7 @@
   "alicompat.type.condition.mod_exists": "Mod Exists: %s",
   "alicompat.type.condition.player_creative": "Player In Creative Mode",
   "alicompat.type.condition.uncrafting_table_enabled": "Uncrafting Table Enabled",
+  "alicompat.type.entry.stack": "Stack:",
   "alicompat.type.function.copy_crafter_name": "Copy Crafter Name",
   "alicompat.type.function.copy_meal": "Copy Meal",
   "alicompat.type.function.copy_personal_storage_contents": "Copy Personal Storage Contents",

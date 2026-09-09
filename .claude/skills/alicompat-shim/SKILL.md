@@ -107,8 +107,9 @@ readable from the shim at server-registry time.
   hands you `predicates` through ALI's access widener.
 
 **The `@FieldAccessor` processor validates names against the accessor's type parameter.** Extending
-`ConditionalFunction` types the accessor on `LootItemConditionalFunction`, so a `@FieldAccessor`
-naming a field of the *target* fails the build with `No field named x in LootItemConditionalFunction`.
+`ConditionalFunction` types the accessor on `LootItemConditionalFunction`, and `SingletonContainer` on
+`LootPoolSingletonContainer`, so a `@FieldAccessor` naming a field of the *target* fails the build with
+`No field named x in LootItemConditionalFunction`.
 When you need both the target's fields and its predicates, extend `BaseAccessor<Target>` and read
 `parent.predicates` — the access widener opens it either way.
 
@@ -130,6 +131,14 @@ ALI could already render is fixed by registering the concrete class against ALI'
 
 An `item_sub_predicate` finding on a branch before `1.20.5` is an `ItemPredicate` subclass, not a sub-predicate:
 there is no `registerItemSubPredicate`, and the hook is `registerValueTooltip` on that class.
+
+**An entry that carries its own count reports `1` unless you seed the range yourself.**
+`NodeUtils.getEnchantedCount` starts from `RangeValue(1)` and lets the entry's functions modify it, which is right
+only for an entry whose count comes from a `SetItemCountFunction`. A `LootPoolSingletonContainer` holding its own
+`min`/`max` (Placebo's `StackLootEntry`) must build `new EnchantedRanges(new RangeValue(min, max))` and run
+`utils.applyCountModifier` over the functions itself, then hand that to both `ItemNode` and
+`TooltipUtils.getTooltip`. `weight`, `quality`, `conditions` and `functions` are read off `parent` — the access
+widener opens all four — and `IEntry` and `IEntryTooltip` sit on the one accessor.
 
 One accessor may implement several hooks. A function that swaps the stack is worth registering three
 times: `registerFunctionTooltip` (what it says), `registerItemStackModifier` (so the drop renders as
