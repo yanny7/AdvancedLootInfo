@@ -186,6 +186,10 @@ puts every constructor argument in the lambda's capture. Work down this list:
 - Real fields on the subclass → ordinary `BaseAccessor`, nothing special. Beware a listing that
   mutates its own stacks per `getOffer` (`RandomScrollTrade` writes the rolled spell into `forSale`
   and the price into `price`): copy the item, ignore the stored count, and never sample it.
+  A field holding a lazy, memoising resolver (Immersive Engineering's `Villages$LazyItemStack` over a
+  `Function<Level, ItemStack>`) is never called either — the shim has no level to pass, and the first
+  call caches whatever the `null` level yields, so the trade stays wrong for the rest of the session.
+  Read the resolver's captures instead.
 - Captured arguments → `com.yanny.ali.plugin.common.ReflectionUtils.getCapturedInstances(lambda,
   Class<T>)` pulls them **by type** off the lambda's synthetic fields. Type-keyed, so it survives a
   recompile as long as the capture is unique in its type; two captures of the same type come back in
