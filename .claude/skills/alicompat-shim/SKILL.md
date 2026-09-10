@@ -249,12 +249,17 @@ hand — it means nobody registered a destination resolver for that condition. W
    resolver for a **vanilla** condition class from a shim — that answer would speak for every mod.
 2. **Then the registration itself**, one line per modifier:
    `GlmAccessorUtils.registerGlobalLootModifier(registry, X.class, XAccessor.class)`.
-3. **A hand-built `ILootModifier` only when no condition can carry the answer** — the GLM is
-   registered with an empty `conditions` array, or the destination lives in the mod's code or config
-   rather than in a condition.
+3. **A destination on the modifier class itself when it has no conditions at all.** `collect` asks
+   `utils.getDestination` about the modifier instance as well as about each condition, so a GLM shipped with
+   `"conditions": []` still reaches the auto path once `registerDestination(XLootModifier.class, XAccessor.class)`
+   answers for it — Apotheosis' four config-driven modifiers match the table id against a `List` in the mod's own
+   config that way. The accessor implements `IDestination` beside `IGlobalLootModifierAccessor` and its
+   `getOperations()` runs inside `TooltipContext.set(location)`, so the same list also yields the per-table chance.
+4. **A hand-built `ILootModifier` only when no destination can carry the answer** — neither a condition nor the
+   modifier class names where the loot belongs.
 
 `data/<modid>/loot_modifiers/*.json` in the jar says which conditions each GLM is registered with,
-and that is what decides between the three. A **library** mod ships none — its GLMs are registered by the mods that
+and that is what decides between the four. A **library** mod ships none — its GLMs are registered by the mods that
 depend on it, so pull one dependent's jar and read its `loot_modifiers` instead; that is the only place the real
 condition sets exist. Read them before concluding anything from the survey's "no resolvable destination" line: when the
 condition that fails to resolve is a **vanilla** one ALI declines on purpose — an `entity_properties` whose predicate
