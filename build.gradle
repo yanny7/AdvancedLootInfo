@@ -137,7 +137,7 @@ subprojects {
                 apply plugin: "lol.bai.explosion"
             }
 
-            def compatMods = (project.findProperty("compat_mods") ?: "").split(",").findAll { it }
+            def compatMods = (project.findProperty("compat_mods") ?: "").split(",")*.trim().findAll { it }
 
             // ServiceLoader reads one file per name, so the per-mod fragments have to be merged
             def generateCompatServices = tasks.register("generateCompatServices") {
