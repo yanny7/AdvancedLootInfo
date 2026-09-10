@@ -136,6 +136,10 @@ third-party type fails to compile — Ender IO's `EIOItems.BROKEN_SPAWNER` needs
 the library: an item through `BuiltInRegistries.ITEM`, a config value through a reflective accessor over the field
 that holds it. When neither works, drop that part of the tooltip and label what is left by the field it actually
 reads (`Default Probability:`, not `Probability:`) rather than implying the applied value.
+The one exception is a library that is itself a slug in `compat_mods`: every target's `modCompileOnly` lands on the
+loader module's single compile classpath, so a shim may name that library's types directly (Supplementaries' listings
+are Moonlight's `ModItemListing`) without reflection, and at runtime the target mod's own hard dependency guarantees
+it is there.
 
 An `item_sub_predicate` finding on a branch before `1.20.5` is an `ItemPredicate` subclass, not a sub-predicate:
 there is no `registerItemSubPredicate`, and the hook is `registerValueTooltip` on that class.
@@ -183,8 +187,10 @@ tooltip when that throws. A shim earns its place by reading the listing's fields
 `BiFunction<Entity, RandomSource, MerchantOffer>` (Iron's Spellbooks' `AdditionalWanderingTrades`)
 puts every constructor argument in the lambda's capture. Work down this list:
 
-- Real fields on the subclass → ordinary `BaseAccessor`, nothing special. Beware a listing that
-  mutates its own stacks per `getOffer` (`RandomScrollTrade` writes the rolled spell into `forSale`
+- Real fields on the subclass → ordinary `BaseAccessor`, nothing special. A stored field is not proof the offer
+  uses it: read the `MerchantOffer` constructor call, not the record component beside it — Supplementaries'
+  `RocketItemListing` keeps an `xp` field and then passes `ModItemListing.defaultXp(true, level)` instead.
+  Beware a listing that mutates its own stacks per `getOffer` (`RandomScrollTrade` writes the rolled spell into `forSale`
   and the price into `price`): copy the item, ignore the stored count, and never sample it.
   A field holding a lazy, memoising resolver (Immersive Engineering's `Villages$LazyItemStack` over a
   `Function<Level, ItemStack>`) is never called either — the shim has no level to pass, and the first
@@ -262,6 +268,15 @@ hand — it means nobody registered a destination resolver for that condition. W
 4. **A hand-built `ILootModifier` only when no destination can carry the answer** — neither a condition nor the
    modifier class names where the loot belongs.
 
+**Never hand-build the unbounded case.** `GlobalLootModifierUtils.getLootModifier` already ends in exactly that
+anonymous class — `predicate` true, `IType.UNBOUNDED`, the operations you supplied — behind the user's
+`showUnboundedGlobalLootModifiers`. Writing it out again in an accessor copies that branch verbatim and its only
+effect is to ignore the setting whose whole job is deciding whether unbound modifiers appear. Item precision is not
+a reason: it lives in the operation's `Predicate<ItemStack>`, which `getLootModifier` takes from you either way, and
+`AbstractServer` requires an unbounded modifier to match an item before attaching it. Going through
+`getLootModifier` also means a datapack that later adds a `loot_table_id` condition upgrades the modifier to a real
+`IType.LOOT_TABLE` on its own.
+
 `data/<modid>/loot_modifiers/*.json` in the jar says which conditions each GLM is registered with,
 and that is what decides between the four. A **library** mod ships none — its GLMs are registered by the mods that
 depend on it, so pull one dependent's jar and read its `loot_modifiers` instead; that is the only place the real
@@ -294,7 +309,11 @@ so the original drop stays visible as the alternative. Build the replacement's t
 concatenation of the modifier's conditions and the source node's, and take `chance` from
 `node.getChance()` rather than `1` so the percentage stays honest.
 
-`new ILootModifier<>() { … }` does not compile — an anonymous class needs the explicit type argument.
+`new ILootModifier<>() { … }` infers its type argument from the target type, which inside
+`Optional<ILootModifier<?>>` is `Object` — so the diamond compiles only for an `IType.UNBOUNDED` modifier
+(that is what `GlobalLootModifierUtils` itself writes). A `BLOCK`, `ENTITY` or `LOOT_TABLE` one must name the
+argument, `new ILootModifier<ResourceLocation>() { … }`, or every override fails with "does not override or
+implement a method from a supertype".
 
 ## Step 5 — tooltip keys
 
