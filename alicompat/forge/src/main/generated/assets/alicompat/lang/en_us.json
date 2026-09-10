@@ -36,6 +36,7 @@
   "alicompat.type.condition.giant_pick_used": "Giant Pick Used: %s",
   "alicompat.type.condition.has_computer_id": "Has Computer Id",
   "alicompat.type.condition.has_direct_upgrade": "Has Direct Upgrade",
+  "alicompat.type.condition.has_loot_context_set": "Has Loot Context Set:",
   "alicompat.type.condition.is_april_fools": "Is April Fools",
   "alicompat.type.condition.is_minion": "Is Minion: %s",
   "alicompat.type.condition.loot_enabled": "Chest Loot Enabled",

@@ -4,6 +4,11 @@
 Reads the ALI / ALICompat sources rather than a log: every `register<Hook>(X.class, ...)`
 call, every `registerTrades(<id>, ...)`, every mixin target, and the `compat_mods` list.
 
+A shim over a target class that is not visible on the compile classpath registers its accessor
+instead, and names the target only in the accessor's `@ClassAccessor("<binary name>")`. Those
+two halves sit in different files, so the annotation is collected on its own and folded into
+the hooks afterwards - without that every reflective shim reads as an uncovered gap.
+
 Usage: coverage.py --repo <repo root> [--out coverage.json]
 """
 import argparse
@@ -38,6 +43,7 @@ TRADES = re.compile(r"registerTrades\s*\((.{0,300}?);", re.S)
 DECLARATION = re.compile(r"^\s*[\w.<>\[\]]+\s+\w+\s*(?:,|$)")
 RL_TWO = re.compile(r'ResourceLocation\s*(?:\.\s*fromNamespaceAndPath)?\s*\(\s*([A-Za-z_$][\w$.]*|"[^"]*")\s*,\s*"([^"]+)"')
 RL_ONE = re.compile(r'ResourceLocation\s*(?:\.\s*parse)?\s*\(\s*"([^"]+)"\s*\)')
+CLASS_ACCESSOR = re.compile(r'@ClassAccessor\s*\(\s*"([^"]+)"\s*\)[\s\S]{0,400}?\bclass\s+(\w+)')
 MIXIN = re.compile(r'@Mixin\s*\(\s*(?:value\s*=\s*)?\{?([^)]*?)\}?\s*\)', re.S)
 SKIP_DIRS = {"build", ".git", ".gradle", "run", "generated", ".idea"}
 
@@ -101,6 +107,9 @@ def scan_file(path, out):
         else:
             out["dynamicTraders"].setdefault(os.path.basename(path), []).append(argument.strip()[:80])
 
+    for target, accessor in CLASS_ACCESSOR.findall(text):
+        out["classAccessors"][f"{package}.{accessor}" if package else accessor] = target
+
     for group in MIXIN.findall(text):
         for literal in CLASS_LITERAL.findall(group):
             for binary in resolve(literal, imports, wildcards, package):
@@ -117,12 +126,19 @@ def main():
     args = parser.parse_args()
 
     out = {"byHook": {}, "simpleNames": {}, "traders": {}, "dynamicTraders": {},
-           "mixins": {}, "compatMods": []}
+           "mixins": {}, "classAccessors": {}, "compatMods": []}
     for root, dirs, files in os.walk(args.repo):
         dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
         for name in files:
             if name.endswith(".java"):
                 scan_file(os.path.join(root, name), out)
+
+    for hook, entries in out["byHook"].items():
+        for accessor, method in list(entries.items()):
+            target = out["classAccessors"].get(accessor)
+            if target:
+                entries[target] = method
+                out["simpleNames"].setdefault(hook, {})[target.rsplit(".", 1)[-1].split("$")[-1]] = method
 
     properties = os.path.join(args.repo, "gradle.properties")
     if os.path.isfile(properties):
@@ -138,7 +154,8 @@ def main():
     else:
         with open(args.out, "w", encoding="utf-8") as handle:
             handle.write(text)
-        print(f"covered classes={len(out['covered'])} traders={len(out['traders'])} "
+        print(f"covered classes={len(out['covered'])} accessors={len(out['classAccessors'])} "
+              f"traders={len(out['traders'])} "
               f"hooks={','.join(f'{k}:{len(v)}' for k, v in sorted(out['byHook'].items()))}")
 
 

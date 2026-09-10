@@ -16,6 +16,7 @@ public class MantleLang implements ICompatTranslations {
 
     public enum Conditions implements ITooltipKey {
         BLOCK_TAG("block_tag", "Block Tag:"),
+        HAS_LOOT_CONTEXT_SET("has_loot_context_set", "Has Loot Context Set:"),
         ;
 
         private final Translation translation;

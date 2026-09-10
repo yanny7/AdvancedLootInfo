@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HybridAquaticLang implements ICompatTranslations {
-    static final String MOD_ID = "hybrid-aquatic";
+    static final String MOD_ID = "hybrid_aquatic";
 
     public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 

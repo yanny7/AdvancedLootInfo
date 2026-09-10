@@ -89,7 +89,11 @@ stays in the work directory (`--work`, else a temp dir) — that is the interfac
    `registerTrades(<id>, …)`, every `@Mixin` target and `compat_mods`, read from this repo's sources.
    Wildcard imports make a simple name ambiguous, so both the resolved binary names and the bare
    simple names are kept — an exact match is `covered`, a simple-name-only match is downgraded to
-   `informational` rather than claimed as covered.
+   `informational` rather than claimed as covered. A shim whose target is not on the compile
+   classpath registers its accessor and names the target only in that accessor's
+   `@ClassAccessor("<binary name>")`, in a different file from the `register` call — those
+   annotations are collected into `classAccessors` and folded into the hooks before `covered` is
+   built, so a reflective shim counts as coverage of its target rather than reading as a gap.
 6. `cf_lookup.py --owners --candidates --mods-dir [--overrides]` → `projects.json`.
    `POST /v1/fingerprints` maps jar → project + file id, `POST /v1/mods` fetches slug and url, and one
    `GET /v1/mods/{id}/files?gameVersion=&modLoaderType=` per version/loader picks the newest file by

@@ -10,7 +10,7 @@ import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.alicompat.accessor.IEntry;
 import com.yanny.alicompat.accessor.IEntryTooltip;
 import com.yanny.alicompat.accessor.SingletonContainer;
-import dev.hybridlabs.aquatic.item.HybridAquaticItems;
+import dev.hybridlabs.aquatic.item.HAItems;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
@@ -44,6 +44,6 @@ public class MessageInABottleItemEntryAccessor extends SingletonContainer implem
 
     @NotNull
     private static ItemStack getItemStack() {
-        return HybridAquaticItems.INSTANCE.getMESSAGE_IN_A_BOTTLE().getDefaultInstance();
+        return HAItems.INSTANCE.getMESSAGE_IN_A_BOTTLE().get().getDefaultInstance();
     }
 }
