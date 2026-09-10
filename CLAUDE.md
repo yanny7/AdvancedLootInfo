@@ -137,6 +137,13 @@ Tests are organized behind JUnit Platform `@Suite`/`@SelectClasses` runners (`To
 
 Generate data (recipes/loot/lang, per loader) via the IDE run configurations in `.idea/runConfigurations/Minecraft_Data_*.xml`, or the equivalent `run<Platform><Loader>Datagen`-style Gradle tasks wired by the `architectury-loom` plugin. All four mods have datagen; ACI's generates only its four `aci.util.*` language keys, ALICompat's only the tooltip keys of the compat shims that are built into it. Fabric datagen initialises the `fabric-datagen` entrypoint of every loaded mod, so a broken ACI datagen class breaks ALI's and AWI's datagen runs too.
 
+Manual testing against the real target mods runs out of a generated modpack rather than a dev run. `modpack.py` at the repo root reads every `<mod>_<loader>_dep` line from `gradle.properties`, keeps only the CurseForge project id (the pinned file id is the compile target, not what the pack uses), resolves the newest release-or-beta file for `minecraft_version` plus that loader, pulls in required dependencies recursively, adds the recipe viewer and — on Fabric — Fabric API, and writes a CurseForge-format zip to `build/modpack/` with the locally built ACI/ALI/ALICompat jars in `overrides/mods/`. Prism Launcher imports that zip directly. It needs the mods built (`./gradlew build`) and `CURSEFORGE_API_KEY` in the environment, the same key `upload.py` uses:
+```
+python3 modpack.py --loader forge
+python3 modpack.py --loader fabric --viewer jei
+```
+Mods with no matching file, and mods whose author disabled third-party downloads (Prism asks for those by hand), are listed at the end of the run instead of failing it. IDE run configurations come from `./gradlew generateModpackRunConfigs`, which writes one `.idea/runConfigurations/Modpack_<Loader>.xml` per entry in `enabled_platforms`.
+
 ## Versioning
 
 ALI, AWI, ACI and ALICompat version independently (`ali_version` / `awi_version` / `aci_version` / `alicompat_version` in `gradle.properties`), each with its own `CHANGELOG.md` (`ali/CHANGELOG.md`, `awi/CHANGELOG.md`, `aci/CHANGELOG.md`, `alicompat/CHANGELOG.md`). Every change to a mod gets a changelog entry there. Because the same fix/feature is typically ported across the active version branches, the same entry and version property commonly land on several branches — check whether a change belongs on other branches too, not just the one you're on.

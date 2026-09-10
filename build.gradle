@@ -448,3 +448,52 @@ tasks.register("generateUploadRunConfigs") {
     description = "Writes the IntelliJ Python run configurations for all upload targets"
     dependsOn uploadRunConfigTasks
 }
+
+def modpackRunConfigTasks = enabled_platforms.split(",").collect { platform ->
+    tasks.register("generateModpackRunConfig${platform.capitalize()}") {
+        group = "ide"
+        description = "Writes an IntelliJ Python run configuration that builds the ${platform} ALICompat modpack"
+
+        def parameters = ["--loader=${platform}", "--viewer=rei"].join(" ")
+        def configName = "Modpack ${platform.capitalize()} (${project.property("alicompat_mod_name")})"
+        def outputFile = file(".idea/runConfigurations/Modpack_${platform.capitalize()}.xml")
+
+        outputs.file(outputFile)
+
+        doLast {
+            outputFile.parentFile.mkdirs()
+            outputFile.text = """<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="${configName}" type="PythonConfigurationType" factoryName="Python" folderName="Modpack">
+    <module name="MultiLoader-AdvancedLootInfo"/>
+    <option name="ENV_FILES" value=""/>
+    <option name="INTERPRETER_OPTIONS" value=""/>
+    <option name="PARENT_ENVS" value="true"/>
+    <envs>
+      <env name="PYTHONUNBUFFERED" value="1"/>
+    </envs>
+    <option name="SDK_HOME" value=""/>
+    <option name="WORKING_DIRECTORY" value="\$PROJECT_DIR\$"/>
+    <option name="IS_MODULE_SDK" value="true"/>
+    <option name="ADD_CONTENT_ROOTS" value="true"/>
+    <option name="ADD_SOURCE_ROOTS" value="true"/>
+    <option name="SCRIPT_NAME" value="\$PROJECT_DIR\$/modpack.py"/>
+    <option name="PARAMETERS" value="${parameters}"/>
+    <option name="SHOW_COMMAND_LINE" value="false"/>
+    <option name="EMULATE_TERMINAL" value="false"/>
+    <option name="MODULE_MODE" value="false"/>
+    <option name="REDIRECT_INPUT" value="false"/>
+    <option name="INPUT_FILE" value=""/>
+    <method v="2"/>
+  </configuration>
+</component>
+"""
+            logger.lifecycle("Wrote ${outputFile}")
+        }
+    }
+}
+
+tasks.register("generateModpackRunConfigs") {
+    group = "ide"
+    description = "Writes the IntelliJ Python run configurations for all modpack loaders"
+    dependsOn modpackRunConfigTasks
+}
