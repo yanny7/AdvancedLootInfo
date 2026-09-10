@@ -254,8 +254,15 @@ hand — it means nobody registered a destination resolver for that condition. W
    rather than in a condition.
 
 `data/<modid>/loot_modifiers/*.json` in the jar says which conditions each GLM is registered with,
-and that is what decides between the three. When the mod's own code tells you the real destination,
-build the `ILootModifier<Block>` (or `<Entity>`, or `<ResourceLocation>`) by hand:
+and that is what decides between the three. A **library** mod ships none — its GLMs are registered by the mods that
+depend on it, so pull one dependent's jar and read its `loot_modifiers` instead; that is the only place the real
+condition sets exist. Read them before concluding anything from the survey's "no resolvable destination" line: when the
+condition that fails to resolve is a **vanilla** one ALI declines on purpose — an `entity_properties` whose predicate
+carries no entity type, say — no shim can fix it. Registering a resolver for a vanilla class is out of bounds, and a
+hand-built `ILootModifier` would have to invent a destination that exists only in the pack's data. Leave the auto path
+alone, and say so in the tracker; the modifier belongs to `showUnboundedGlobalLootModifiers`, not to the shim.
+
+When the mod's own code tells you the real destination, build the `ILootModifier<Block>` (or `<Entity>`, or `<ResourceLocation>`) by hand:
 
 - A GLM keyed on a known set of blocks → `predicate` is that set's `containsKey`, and emit one
   operation per entry.
