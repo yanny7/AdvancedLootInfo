@@ -1,6 +1,8 @@
 ## []
 
 - Added `ManagedRegistry.entries`, so a registry's whole content can be read back
+- Added `ManagedRegistry.classKeyName`, reporting a lambda class under its host class instead of its runtime address
+- Missing class-keyed entries are reported once per class name, so lambda implementations no longer produce one line each
 
 ## [1.1.0]
 

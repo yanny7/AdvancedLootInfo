@@ -78,7 +78,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     // translations
     private final ManagedRegistry<Class<?>, EnumTranslation> enumValues = registerClassKeyed("enum values", true, HashMap::new, null);
 
-    private final Set<Class<?>> fallbackItemListings = new HashSet<>();
+    private final Set<String> fallbackItemListings = new HashSet<>();
     private final Map<ResourceLocation, LootTable> lootTableMap = new HashMap<>();
     private final Map<ResourceLocation, Integer> hitMap = new HashMap<>();
     private final List<Function<IServerUtils, List<ILootModifier<?>>>> lootModifierGetters = new LinkedList<>();
@@ -293,8 +293,10 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
                         MerchantOffer offer = entry.getOffer(null, null);
 
                         if (offer != null) {
-                            if (fallbackItemListings.add(entry.getClass())) {
-                                LOGGER.info("Using MerchantOffer fallback for trade item listing {}, reported values can be inaccurate", entry.getClass().getName());
+                            String name = ManagedRegistry.classKeyName(entry.getClass());
+
+                            if (fallbackItemListings.add(name)) {
+                                LOGGER.info("Using MerchantOffer fallback for trade item listing {}, reported values can be inaccurate", name);
                             }
 
                             return TradeUtils.getNode(utils, offer, condition);
