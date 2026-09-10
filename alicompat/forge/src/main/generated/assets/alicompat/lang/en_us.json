@@ -7,6 +7,7 @@
   "alicompat.property.branch.spells": "Spells:",
   "alicompat.property.value.any_wood_type": "Any wood type",
   "alicompat.property.value.config": "Config: %s",
+  "alicompat.property.value.cost_scale": "Cost Scale: %s",
   "alicompat.property.value.default_item": "Default Item: %s",
   "alicompat.property.value.default_probability": "Default Probability: %s",
   "alicompat.property.value.firework_stars": "Firework Stars: %s",
