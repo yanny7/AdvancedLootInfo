@@ -64,7 +64,7 @@ Supporting types for the translation-key model (not the whole wiring mechanism, 
 
 ### `tooltip`
 
-`TooltipBuilder`, `TooltipNode`, `RawTooltipNode`, `TooltipNodePalette`, `TooltipContext`, `TooltipStyle`, `CacheKey`, `CommonValueTooltip`, `CoreTooltipUtils` — the tree model described in full below. A `TooltipNodePalette` is built for one mod and carries its id (`getModId()`).
+`TooltipBuilder`, `TooltipNode`, `RawTooltipNode`, `TooltipNodePalette`, `TooltipContext`, `TooltipStyle`, `CacheKey`, `CommonValueTooltip`, `CoreTooltipUtils` — the tree model described in full below. A `TooltipNodePalette` is built for one mod and logs under that mod's id.
 
 ## Logging
 
@@ -73,7 +73,7 @@ Loggers come from `CommonLogUtils.getLogger(modId)` (root package, next to `Util
 ACI's shared code logs under the mod it works for, not under `aci`, so the mod id has to reach every log site:
 - classes owned by one mod's registry tree — `CorePluginManager`, `CoreCommonRegistry`, `CoreClientRegistry`, `ManagedRegistry`, `DataReceiver`, `TooltipNodePalette` — take the mod id as a constructor argument and keep an instance `logger` field;
 - static helpers `CoreConfigUtils` and `NetworkUtils` resolve the logger from their `String modId` parameter;
-- code reached through a utils instance uses `utils.getModId()` (`CoreListNode.encode`, `TooltipNode.decodeRaw`), and `TooltipBuilder.build` uses `TooltipContext.getPalette().getModId()`.
+- code reached through a utils instance uses `utils.getModId()` (`CoreListNode.encode`, `TooltipNode.decodeRaw`); `TooltipBuilder.build` has no mod id of its own and reports through `TooltipContext.getPalette()`, which already logs under the mod it was built for.
 
 `getModId()` is declared three times — on `ICoreCommonUtils`, `ICoreServerUtils` and `ICoreClientUtils`. The latter two cannot inherit it from `ICoreCommonUtils<TConfig>`, because a mod's `IServerUtils`/`IClientUtils` already extends that interface with its concrete config type and a second, wildcarded inheritance is a type-argument clash. `BaseRegistry` implements it once for all three.
 

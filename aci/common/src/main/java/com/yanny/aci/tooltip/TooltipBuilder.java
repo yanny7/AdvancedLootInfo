@@ -1,6 +1,5 @@
 package com.yanny.aci.tooltip;
 
-import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.language.IMultiKey;
 import net.minecraft.network.chat.Component;
@@ -244,8 +243,7 @@ public class TooltipBuilder {
                 finalChildren.clear();
             } else {
                 if (potentiallyMergeable && !isArray && !hasMultiKey) {
-                    CommonLogUtils.getLogger(TooltipContext.getPalette().getModId())
-                            .info("Tooltip {} could be merged if defined singular form in {}", translatableKey.plural(), TooltipContext.get());
+                    TooltipContext.getPalette().reportMergeable(translatableKey.plural(), TooltipContext.get());
                 }
 
                 if (hasMultiKey && (finalChildren.isEmpty() || values != null)) {
