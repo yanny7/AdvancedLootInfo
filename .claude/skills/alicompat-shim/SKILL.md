@@ -389,11 +389,11 @@ can hang the session. Add the new keys to that JSON by hand (alphabetically sort
 ## Step 6 — wiring, and what the user must be told
 
 Per `alicompat/CLAUDE.md`: the mod gets an entry in `supported_mods.json` (slug, name, runtime mod
-ids, CurseForge slug and project id per loader), its slug goes into `compat_mods`, and
-`python3 check_versions.py --update` then writes the `<slug>_<loader>_dep` lines and the rest of the
-generated block — never write that block by hand, the next run overwrites it. For a mod whose source
-set does not exist yet the same run scaffolds a compiling skeleton (`package-info.java`, an
-`IModCompat` returning the mod id, `services/com.yanny.alicompat.IModCompat`) to build on. The source
+ids, CurseForge slug and project id per loader), and `python3 check_versions.py --scaffold <slug>`
+then pins it, puts the slug into `compat_mods` and writes the `<slug>_<loader>_dep` lines — never
+write that block by hand, the next run overwrites it. The same command scaffolds a compiling skeleton
+(`package-info.java`, an `IModCompat` returning the mod id, `services/com.yanny.alicompat.IModCompat`)
+for every loader that has a file but no source set, which is what Step 1 onwards is filled into. The source
 set carries `services/com.yanny.alicompat.IModCompat` plus, when there are keys,
 `services/com.yanny.alicompat.ICompatTranslations` — one fully-qualified class per line.
 

@@ -95,7 +95,8 @@ python3 check_versions.py --update
 ```
 
 `--update` regenerates the block for the shims this branch already has active, and skips every
-dormant one. It does not check that anything still compiles — build after it.
+dormant one. It does not check that anything still compiles — build after it. **Never `--init` here**:
+that switches every dormant shim on at once, which is the opposite of what phase 2 is for.
 
 ### What is dormant
 
@@ -103,9 +104,11 @@ dormant one. It does not check that anything still compiles — build after it.
 python3 check_versions.py --loader <loader>
 ```
 
-Its "Dormant, present in the tree but not in `compat_mods`" section is the list. The script leaves
-those entries strictly alone — it neither pins nor scaffolds them — so a `--update` run after the
-merge cannot switch on a shim nobody has ported.
+Its "Dormant, present in the tree but not in `compat_mods`" section is the list, and each row says
+which loaders that target mod has a file on for this Minecraft version — the rows marked *port it*
+are phase 2's worklist, the rest cannot be written here at all. The script leaves those entries
+strictly alone — it neither pins nor scaffolds them — so a `--update` run after the merge cannot
+switch on a shim nobody has ported.
 
 ### Take them in groups, not in bulk
 

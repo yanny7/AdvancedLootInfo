@@ -43,6 +43,11 @@ def describe(file: dict):
 
 
 def class_name(entry: dict):
+    sibling = sorted(PROJECT_DIR.glob(f"alicompat/*/src/compat/{entry['key']}/java/**/*Compat.java"))
+
+    if sibling:
+        return sibling[0].stem[:-len("Compat")]
+
     name = re.sub(r"^The\s+", "", entry["name"])
     name = re.sub(r"[^0-9A-Za-z ]", " ", name)
     return "".join(word[0].upper() + word[1:] for word in name.split()) or entry["key"].capitalize()
@@ -133,20 +138,33 @@ def render_block(deps: dict, entries: dict):
     return "\n".join(lines)
 
 
-def write_block(block: str):
+def write_block(block: str, init: bool):
     path = PROJECT_DIR / "gradle.properties"
     lines = path.read_text(encoding="utf-8").splitlines()
+    anchors = [index for index, line in enumerate(lines) if line.startswith("alicompat_")]
+    lead = []
+    trail = []
 
     if BLOCK_START in lines:
         start, end = lines.index(BLOCK_START), lines.index(BLOCK_END)
     elif LEGACY_BLOCK_START in lines:
         start = lines.index(LEGACY_BLOCK_START)
         end = max(index for index, line in enumerate(lines) if re.match(r"\w+_\w+_dep=", line))
+    elif init:
+        start = (max(anchors) + 1) if anchors else len(lines)
+
+        while start < len(lines) and not lines[start].strip():
+            lines.pop(start)
+
+        lines.insert(start, "")
+        end = start
+        lead = [""]
+        trail = [""] if start + 1 < len(lines) else []
     else:
-        print("Error: found neither the generated block nor the legacy one in gradle.properties.")
+        print("Error: found neither the generated block nor the legacy one in gradle.properties, use --init to write a new one.")
         return False
 
-    path.write_text("\n".join(lines[:start] + block.splitlines() + lines[end + 1:]) + "\n", encoding="utf-8")
+    path.write_text("\n".join(lines[:start] + lead + block.splitlines() + trail + lines[end + 1:]) + "\n", encoding="utf-8")
     return True
 
 
@@ -154,6 +172,8 @@ def main():
     parser = argparse.ArgumentParser(description="Resolves the supported_mods.json registry against CurseForge.")
     parser.add_argument("--loader", choices=sorted(MOD_LOADER_TYPE), help="Mod loader to check (default: every enabled platform)")
     parser.add_argument("--update", action="store_true", help="Regenerate the block in gradle.properties and scaffold missing shims")
+    parser.add_argument("--init", action="store_true", help="Pin and enable every registry mod, ignoring the current compat_mods; implies --update")
+    parser.add_argument("--scaffold", metavar="MOD", help="Do all of that for one registry mod only: scaffold its missing source sets, pin it, enable it; implies --update")
     parser.add_argument("--curseforge-api-key", help="CurseForge API Key (default: $CURSEFORGE_API_KEY)")
     args = parser.parse_args()
 
@@ -171,13 +191,21 @@ def main():
 
     minecraft_version = properties["minecraft_version"]
     entries = {entry["key"]: entry for entry in read_supported_mods()}
-    enabled = set(read_enabled_mods(properties))
+
+    if args.scaffold and args.scaffold not in entries:
+        print(f"Error: '{args.scaffold}' is not in {SUPPORTED_MODS_FILE}, add it there first.")
+        return 1
+
+    enabled = set(entries) if args.init else set(read_enabled_mods(properties)) | ({args.scaffold} if args.scaffold else set())
+    activated = sorted(set(entries) - set(read_enabled_mods(properties))) if args.init else []
+    args.update = args.update or args.init or bool(args.scaffold)
     checked_loaders = [args.loader] if args.loader else platforms
     pinned = {loader: read_pinned_deps(properties, loader) for loader in platforms}
     clients = {loader: CurseForge(api_key, minecraft_version, loader) for loader in checked_loaders}
 
     deps = {}
     dormant = []
+    available = {}
     orphans = []
     results = []
 
@@ -185,23 +213,34 @@ def main():
         for key, dep in pinned[loader].items():
             if key not in entries:
                 orphans.append((key, loader, dep))
-            elif loader not in checked_loaders or (key not in enabled and has_source_set(platforms, key)):
+            elif loader not in checked_loaders or (args.scaffold and key != args.scaffold) or (key not in enabled and has_source_set(platforms, key)):
                 deps[(key, loader)] = dep
 
     pending = []
 
     for key, entry in sorted(entries.items()):
-        if key not in enabled and has_source_set(platforms, key):
-            dormant.append(entry)
+        if args.scaffold and key != args.scaffold:
             continue
 
-        pending += [(entry, loader) for loader in checked_loaders if loader in entry["curseforge"]]
+        probe = key not in enabled and has_source_set(platforms, key)
+
+        if probe:
+            dormant.append(entry)
+
+        pending += [(entry, loader, probe) for loader in checked_loaders if loader in entry["curseforge"]]
 
     print(f"Resolving {len(pending)} mod/loader pairs for {minecraft_version} ({', '.join(checked_loaders)})")
 
-    for index, (entry, loader) in enumerate(pending, start=1):
+    for index, (entry, loader, probe) in enumerate(pending, start=1):
         progress(index, len(pending), f"{entry['key']} ({loader})")
         result = resolve(clients[loader], entry, loader, pinned[loader])
+
+        if probe:
+            if "latest" in result:
+                available.setdefault(entry["key"], []).append(loader)
+
+            continue
+
         results.append(result)
 
         if result["state"] in ("new", "outdated", "current"):
@@ -235,10 +274,22 @@ def main():
             print(f"  {result['key']} ({result['loader']})")
 
     if dormant:
-        print("\nDormant, present in the tree but not in compat_mods, port it before pinning:")
+        width = max(len(entry["key"]) for entry in dormant)
+        print("\nDormant, present in the tree but not in compat_mods:")
 
         for entry in dormant:
-            print(f"  {entry['key']}")
+            loaders = available.get(entry["key"], [])
+
+            if loaders:
+                print(f"  {entry['key']:<{width}}  available on {', '.join(loaders)} — port it, then add it to compat_mods")
+            else:
+                print(f"  {entry['key']:<{width}}  no {minecraft_version} file on {', '.join(checked_loaders)} — nothing to do here")
+
+    if activated:
+        print("\nSwitched on by --init, each one has to compile against this Minecraft version:")
+
+        for key in activated:
+            print(f"  {key}")
 
     if orphans:
         print(f"\nPinned but missing from {SUPPORTED_MODS_FILE}, the pin is dropped:")
@@ -250,14 +301,14 @@ def main():
         for result in missing_source:
             print(f"\nScaffolded {scaffold(result['loader'], result['entry'])}")
 
-        if not write_block(render_block(deps, entries)):
+        if not write_block(render_block(deps, entries), args.init):
             return 1
 
         print(f"\nWrote {len(deps)} dependency lines and {len({key for key, _ in deps})} compat_mods entries to gradle.properties")
 
     counts = {state: len([result for result in results if result["state"] == state]) for state in ("current", "outdated", "new", "gone", "unavailable")}
     print(f"\n{counts['current']}/{len(results)} up to date, {counts['outdated']} outdated, {counts['new']} new, "
-          f"{counts['gone'] + counts['unavailable']} unresolved, {len(dormant)} dormant")
+          f"{counts['gone'] + counts['unavailable']} unresolved, {len(dormant)} dormant ({len(available)} portable)")
     return 0
 
 
