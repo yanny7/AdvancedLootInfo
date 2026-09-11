@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/yanny7/AdvancedLootInfo/blob/master/supported_mods.schema.json",
+  "title": "ALICompat Supported Mods Schema",
+  "description": "Minecraft-version-agnostic registry of every mod ALICompat provides support for (supported_mods.json). check_versions.py and modpack.py read it as their source of truth; gradle.properties holds only what the current branch resolves from it.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["key", "name", "mod_ids", "curseforge"],
+    "properties": {
+      "key": {
+        "type": "string",
+        "description": "Identifier of the shim within this repository: the '<key>_<loader>_dep' property prefix, the 'compat_mods' entry, the 'src/compat/<key>' source set and the 'com.yanny.alicompat.compat.<key>' package.",
+        "pattern": "^[a-z0-9]+$"
+      },
+      "name": {
+        "type": "string",
+        "description": "Human readable mod name, used in the generated gradle.properties comments and in reports."
+      },
+      "mod_ids": {
+        "type": "array",
+        "description": "Runtime mod ids the shim gates on. More than one when a single CurseForge project ships several mod ids (Porting Lib).",
+        "minItems": 1,
+        "items": { "type": "string", "pattern": "^[a-z0-9_.-]+$" }
+      },
+      "curseforge": {
+        "type": "object",
+        "description": "CurseForge project per mod loader. Separate entries are required because some mods ship one project per loader; a mod absent for a loader simply has no entry here.",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "fabric": { "$ref": "#/definitions/CurseForgeProject" },
+          "forge": { "$ref": "#/definitions/CurseForgeProject" },
+          "neoforge": { "$ref": "#/definitions/CurseForgeProject" },
+          "quilt": { "$ref": "#/definitions/CurseForgeProject" }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "CurseForgeProject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slug", "project_id"],
+      "description": "A CurseForge project. No file id is stored here: the pinned file is Minecraft-version specific and lives in gradle.properties.",
+      "properties": {
+        "slug": {
+          "type": "string",
+          "description": "CurseForge slug, the last segment of the project URL and the artifact name of the 'curse.maven' coordinate.",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "project_id": {
+          "type": "integer",
+          "description": "Numeric CurseForge project id.",
+          "minimum": 1
+        }
+      }
+    }
+  }
+}

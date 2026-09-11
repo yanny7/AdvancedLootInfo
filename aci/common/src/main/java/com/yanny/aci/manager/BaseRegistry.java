@@ -37,7 +37,7 @@ abstract class BaseRegistry {
 
     @NotNull
     protected <V> ManagedRegistry<Class<?>, V> registerClassKeyed(String label, boolean reportMissing, Supplier<Map<Class<?>, V>> mapSupplier, @Nullable Registry<?> registry) {
-        return register(label, reportMissing, mapSupplier, Class::getTypeName, registry);
+        return register(label, reportMissing, mapSupplier, ManagedRegistry::classKeyName, registry);
     }
 
     @NotNull

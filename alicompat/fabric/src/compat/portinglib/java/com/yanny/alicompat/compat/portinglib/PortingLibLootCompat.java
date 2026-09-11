@@ -113,6 +113,11 @@ public class PortingLibLootCompat implements IModCompat {
             }
 
             @Override
+            public Object getLootModifier() {
+                return modifier;
+            }
+
+            @Override
             public Class<?> getLootModifierClass() {
                 return LootModifier.class;
             }

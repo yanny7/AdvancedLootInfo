@@ -63,7 +63,7 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     <T extends LootItemFunction> void registerItemStackModifier(Class<T> type, TriFunction<IServerUtils, T, ItemStack, ItemStack> consumer);
 
-    <T extends LootItemCondition> void registerDestination(Class<T> type, IDestinationResolver<T> resolver);
+    <T> void registerDestination(Class<T> type, IDestinationResolver<T> resolver);
 
     void registerLootModifiers(Function<IServerUtils, List<ILootModifier<?>>> getter);
 

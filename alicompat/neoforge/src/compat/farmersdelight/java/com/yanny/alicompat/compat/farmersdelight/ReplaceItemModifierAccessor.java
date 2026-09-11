@@ -46,7 +46,7 @@ public class ReplaceItemModifierAccessor extends BaseAccessor<ReplaceItemModifie
     public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
         List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
 
-        return GlobalLootModifierUtils.getLootModifier(utils, conditionList, (c) -> {
+        return GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList, (c) -> {
             Function<IDataNode, List<IDataNode>> factory = (src) -> {
                 List<IDataNode> nodes = new ArrayList<>();
                 IItemNode node = (IItemNode) src;

@@ -139,7 +139,7 @@ def build_items(gaps, candidates, owners, coverage):
 
 def trader_rows(mods, candidates, coverage):
     rows = []
-    compat = set(coverage.get("compatMods", []))
+    compat = set(coverage.get("compatModIds", []))
     registered = set(coverage.get("traders", {}))
     for jar, data in mods.items():
         modid = candidates.get("jars", {}).get(jar, {}).get("modId", "")
@@ -402,7 +402,7 @@ def main():
 
     add("## `gradle.properties` dependency block")
     add("")
-    add("Suggested property names (mod id with separators stripped); a slug already in `compat_mods`")
+    add("Suggested property names (mod id with separators stripped); a slug already in `supported_mods.json`")
     add("keeps its existing name. Pick the block for the branch you are on.")
     add("")
     lines.extend(dependency_blocks(targets, order, meta_of, project_of))

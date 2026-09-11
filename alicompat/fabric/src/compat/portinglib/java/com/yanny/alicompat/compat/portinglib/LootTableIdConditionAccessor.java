@@ -29,6 +29,6 @@ public class LootTableIdConditionAccessor extends BaseAccessor<LootTableIdCondit
     @NotNull
     @Override
     public Destination getDestination(IServerUtils utils) {
-        return new Destination.Table(targetLootTableId, true);
+        return new Destination.Table(targetLootTableId::equals, true);
     }
 }

@@ -9,7 +9,7 @@ import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.common.nodes.GlobalLootModifierNode;
 import com.yanny.ali.plugin.server.TooltipUtils;
-import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Block;
@@ -30,9 +30,9 @@ import java.util.function.Function;
 public class GlobalLootModifierUtils {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
-    public static Optional<ILootModifier<?>> getLootModifier(IServerUtils utils, List<LootItemCondition> conditions,
+    public static Optional<ILootModifier<?>> getLootModifier(IServerUtils utils, @Nullable Object modifier, List<LootItemCondition> conditions,
                                                             Function<List<LootItemCondition>, List<IOperation>> operationSupplier) {
-        List<Destination.Entities> entities = collect(utils, conditions, Destination.Entities.class);
+        List<Destination.Entities> entities = collect(utils, modifier, conditions, Destination.Entities.class);
 
         if (!entities.isEmpty()) {
             return Optional.of(new ILootModifier<Entity>() {
@@ -55,13 +55,13 @@ public class GlobalLootModifierUtils {
             });
         }
 
-        List<Destination.Blocks> blocks = collect(utils, conditions, Destination.Blocks.class);
+        List<Destination.Blocks> blocks = collect(utils, modifier, conditions, Destination.Blocks.class);
 
         if (!blocks.isEmpty()) {
             return Optional.of(new ILootModifier<Block>() {
                 @Override
                 public boolean predicate(Block value) {
-                    return blocks.stream().anyMatch((d) -> d.blocks().contains(value));
+                    return blocks.stream().anyMatch((d) -> d.matcher().test(value));
                 }
 
                 @NotNull
@@ -78,13 +78,13 @@ public class GlobalLootModifierUtils {
             });
         }
 
-        List<Destination.Table> tables = collect(utils, conditions, Destination.Table.class);
+        List<Destination.Table> tables = collect(utils, modifier, conditions, Destination.Table.class);
 
         if (!tables.isEmpty()) {
             return Optional.of(new ILootModifier<ResourceLocation>() {
                 @Override
                 public boolean predicate(ResourceLocation value) {
-                    return tables.stream().anyMatch((d) -> d.id().equals(value));
+                    return tables.stream().anyMatch((d) -> d.matcher().test(value));
                 }
 
                 @NotNull
@@ -102,7 +102,7 @@ public class GlobalLootModifierUtils {
         }
 
         if (utils.getConfiguration().showUnboundedGlobalLootModifiers) {
-            return Optional.of(new ILootModifier<Object>() {
+            return Optional.of(new ILootModifier<>() {
                 @Override
                 public boolean predicate(Object value) {
                     return true;
@@ -127,7 +127,7 @@ public class GlobalLootModifierUtils {
 
     @NotNull
     public static Destination getBlockStateDestination(IServerUtils ignoredUtils, LootItemBlockStatePropertyCondition condition) {
-        return new Destination.Blocks(List.of(condition.block().value()), condition.properties().map((p) -> p.properties().isEmpty()).orElse(true));
+        return new Destination.Blocks(condition.block().value::equals, condition.properties.properties.isEmpty());
     }
 
     @Nullable
@@ -143,7 +143,7 @@ public class GlobalLootModifierUtils {
 
     public static Optional<ILootModifier<?>> getMissingGlobalLootModifier(IServerUtils utils, IGlobalLootModifierWrapper modifier) {
         if (modifier.isLootModifier()) {
-            return getLootModifier(utils, modifier.getConditions(), (conditions) -> {
+            return getLootModifier(utils, modifier.getLootModifier(), modifier.getConditions(), (conditions) -> {
 
                 try {
                     TooltipBuilder tooltip = utils.getValueTooltip(utils, modifier.getName());
@@ -158,7 +158,7 @@ public class GlobalLootModifierUtils {
                     TooltipBuilder tooltip = TooltipBuilder.array((b) -> {
                         TooltipBuilder fieldsTooltip = utils.getValueTooltip(utils, modifier.getName());
 
-                        TooltipUtils.addObjectFields(utils, fieldsTooltip, modifier, modifier.getLootModifierClass());
+                        TooltipUtils.addObjectFields(utils, fieldsTooltip, modifier.getLootModifier(), modifier.getLootModifierClass());
                         b.add(fieldsTooltip.build(CoreLang.Utils.AUTO_DETECTED));
                         b.add(utils.getValueTooltip(utils, conditions));
                     });
@@ -171,21 +171,25 @@ public class GlobalLootModifierUtils {
     }
 
     @NotNull
-    private static <T extends Destination> List<T> collect(IServerUtils utils, List<LootItemCondition> conditions, Class<T> kind) {
+    private static <T extends Destination> List<T> collect(IServerUtils utils, @Nullable Object modifier, List<LootItemCondition> conditions, Class<T> kind) {
         List<T> destinations = new ArrayList<>();
+
+        if (modifier != null) {
+            collect(utils, modifier, kind, destinations);
+        }
 
         conditions.forEach((c) -> collect(utils, c, kind, destinations));
         return destinations;
     }
 
-    private static <T extends Destination> void collect(IServerUtils utils, LootItemCondition condition, Class<T> kind, List<T> destinations) {
-        Destination destination = utils.getDestination(utils, condition);
+    private static <T extends Destination> void collect(IServerUtils utils, Object value, Class<T> kind, List<T> destinations) {
+        Destination destination = utils.getDestination(utils, value);
 
         if (destination != null) {
             if (kind.isInstance(destination)) {
                 destinations.add(kind.cast(destination));
             }
-        } else if (condition instanceof CompositeLootItemCondition composite) {
+        } else if (value instanceof CompositeLootItemCondition composite) {
             for (LootItemCondition term : composite.terms) {
                 collect(utils, term, kind, destinations);
             }
