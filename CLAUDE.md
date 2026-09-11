@@ -36,6 +36,18 @@ The mod's architecture, package layout, and plugin model described across this d
 - Loader/dependency versions in `gradle.properties` (`minecraft_version`, `forge_version`, `fabric_version`, `neoforge_version`, EMI/JEI/REI/architectury versions, etc.).
 - Minor Minecraft-API glue inside `fabric`/`forge`/`neoforge` modules and datagen.
 
+### Porting between branches
+
+Changes travel **one step up the chain at a time** — each branch merges from the one below it (`git merge origin/<lower>`), never by skipping. Which branch sits below which follows the Minecraft version order; read `minecraft_version` in each checkout rather than assuming a fixed list, since branches are added and archived over time.
+
+A merge moves code, not decisions. It is finished when ACI, ALI and AWI compile on the target branch and the user has committed it — **shim work is not part of it**:
+
+- In `gradle.properties`, the target-mod block — `compat_mods` and the `<mod>_<loader>_dep` lines — is resolved silently in favour of the target branch (`ours`), with no attempt to reconcile it. Every `_dep` pins a CurseForge file id for one specific Minecraft version, so a value merged down from a lower branch is wrong here by construction, and `compat_mods` states what this branch has actually ported. The rest of the file (loader versions, viewer versions, enabled platforms) conflicts like any other code and is resolved on its merits.
+- An ALICompat shim whose source arrives this way is **dormant**: its files are present, its slug is absent from `compat_mods`, and nothing compiles it. That is the correct end state of a merge (see `alicompat/CLAUDE.md`).
+- Activating those shims is a separate pass, run after the merge commit exists. It starts by repinning the target mods (`check_versions.py --update`) and then re-deriving each shim's class list against the jar for *this* Minecraft version — target-mod classes move, get renamed and disappear between versions, so only the shape of a shim ports, never its contents.
+
+Doing both in one step hides which failure came from the merge and which from a target mod's API change, and leaves no commit to fall back to.
+
 ## Project overview
 
 This is a Minecraft mod monorepo built on the **Architectury MultiLoader template**. It produces two related but independently-versioned recipe-viewer mods:
@@ -143,6 +155,13 @@ python3 modpack.py --loader forge
 python3 modpack.py --loader fabric --viewer jei
 ```
 Mods with no matching file, and mods whose author disabled third-party downloads (Prism asks for those by hand), are listed at the end of the run instead of failing it. IDE run configurations come from `./gradlew generateModpackRunConfigs`, which writes one `.idea/runConfigurations/Modpack_<Loader>.xml` per entry in `enabled_platforms`.
+
+`check_versions.py` answers the other half of that question — which pinned target mods are behind. It reads the same `<mod>_<loader>_dep` lines, resolves the newest file for `minecraft_version` plus that loader, and reports what is outdated; `--update` rewrites the file ids in place:
+```
+python3 check_versions.py --loader forge
+python3 check_versions.py --update
+```
+Repinning only swaps the file id — it does not check that the shim still compiles against the new jar, so a build and a class-by-class diff belong after every `--update`. It is also the first step after merging into a branch, where the pinned ids arrived from a lower branch and name files for the wrong Minecraft version.
 
 ## Versioning
 

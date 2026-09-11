@@ -90,7 +90,7 @@ A registration names things; it never carries a body. **An accessor is registere
 
 A `Lang` enum constant is `SCREAMING_SNAKE` over a `snake_case` key, with the prefix applied in the constructor and a trailing comma plus semicolon on their own line so adding the next constant touches no existing one. The English text ends in a colon when children follow (`"Match Tool:"`), carries `%s` when it is one value (`"Loot Table Id: %s"`), and ends in neither when it is a whole sentence (`"Killed by player"`). A key that already exists in `ali/common`'s `Lang` is imported, never redeclared.
 
-Shims carry no comments. All of `ali/common`'s `plugin/server` holds one comment across two thousand lines; what needs explaining goes in the work tracker's `Notes:` block, not in the source.
+Shims carry no comments. All of `ali/common`'s `plugin/server` holds one comment across two thousand lines; what needs explaining goes in the summary handed to the user, not in the source.
 
 ## Translations
 
