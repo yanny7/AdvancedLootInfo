@@ -165,12 +165,14 @@ python3 modpack.py --loader fabric --viewer jei
 ```
 Mods with no matching file, and mods whose author disabled third-party downloads (Prism asks for those by hand), are listed at the end of the run instead of failing it. IDE run configurations come from `./gradlew generateModpackRunConfigs`, which writes one `.idea/runConfigurations/Modpack_<Loader>.xml` per entry in `enabled_platforms`.
 
-`check_versions.py` resolves the registry against CurseForge for `minecraft_version` and each enabled loader, and reports what is outdated, what has become newly available, what no longer has a file, which registry entries are dormant (source set present, slug absent from `compat_mods` — a shim merged down but not ported yet, left untouched) and which pinned mods are no longer in the registry. `--update` regenerates the whole block in `gradle.properties` from that resolution — file ids, `compat_mods`, the per-mod comments — drops what disappeared, and scaffolds a compiling `IModCompat` skeleton for a registry entry whose shim source set does not exist yet:
+`check_versions.py` resolves the registry against CurseForge for `minecraft_version` and each enabled loader, and reports what is outdated, what has become newly available, what no longer has a file, which registry entries are dormant (source set present, slug absent from `compat_mods` — a shim merged down but not ported yet, left untouched, but resolved anyway so the report says which loaders it has a file on here, i.e. which ones are worth porting) and which pinned mods are no longer in the registry. `--update` regenerates the whole block in `gradle.properties` from that resolution — file ids, `compat_mods`, the per-mod comments — drops what disappeared, and scaffolds a compiling `IModCompat` skeleton for a registry entry whose shim source set does not exist yet:
 ```
 python3 check_versions.py --loader forge
 python3 check_versions.py --update
+python3 check_versions.py --init
+python3 check_versions.py --scaffold twilightforest
 ```
-Repinning only swaps the file id — it does not check that the shim still compiles against the new jar, so a build and a class-by-class diff belong after every `--update`. It is also the first step after merging into a branch, where the pinned ids arrived from a lower branch and name files for the wrong Minecraft version.
+`--init` is the from-scratch variant: it ignores `compat_mods` entirely, pins and enables every registry mod that has a file here, and writes the block even when the file has none — for setting a branch up, never on a fresh merge, where it would switch on every dormant shim at once. `--scaffold <mod>` is the same thing narrowed to one registry entry: it creates that mod's missing source sets, pins it, enables it, and leaves every other line of the block untouched — the way a new shim is started. Repinning only swaps the file id — it does not check that the shim still compiles against the new jar, so a build and a class-by-class diff belong after every `--update`. It is also the first step after merging into a branch, where the pinned ids arrived from a lower branch and name files for the wrong Minecraft version.
 
 ## Versioning
 
