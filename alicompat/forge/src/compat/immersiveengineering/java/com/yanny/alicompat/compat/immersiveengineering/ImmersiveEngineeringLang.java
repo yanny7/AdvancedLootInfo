@@ -54,14 +54,31 @@ public class ImmersiveEngineeringLang implements ICompatTranslations {
         }
     }
 
-    public enum Branch implements ITooltipKey {
-        ALTERNATIVE("alternative", "Alternative:"),
+    public enum Value implements ITooltipKey {
+        ALTERNATIVE("alternative", "Alternative: %s"),
         ;
 
         private final Translation translation;
 
-        Branch(String k, String e) {
-            translation = new Translation("alicompat.property.branch." + k, e);
+        Value(String k, String e) {
+            this.translation = new Translation("alicompat.property.value." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
+    public enum Branch implements ITooltipKey {
+        ALTERNATIVE(Value.ALTERNATIVE, "alternative", "Alternative:"),
+        ;
+
+        private final Translation translation;
+
+        Branch(ITooltipKey s, String k, String e) {
+            this.translation = new Translation(s.singular(), "ali.property.branch." + k, s.englishSingular(), e);
         }
 
         @NotNull
@@ -74,6 +91,7 @@ public class ImmersiveEngineeringLang implements ICompatTranslations {
     static {
         CoreLang.register(TRANSLATION_MAP, Entry.class);
         CoreLang.register(TRANSLATION_MAP, Functions.class);
+        CoreLang.register(TRANSLATION_MAP, Value.class);
         CoreLang.register(TRANSLATION_MAP, Branch.class);
     }
 

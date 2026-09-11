@@ -14,6 +14,23 @@ public class ApotheosisLang implements ICompatTranslations {
 
     public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 
+    public enum Conditions implements ITooltipKey {
+        REQUIRES_PLAYER("requires_player", "Requires a player"),
+        ;
+
+        private final Translation translation;
+
+        Conditions(String k, String e) {
+            translation = new Translation("alicompat.type.condition." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
     public enum Entry implements ITooltipKey {
         RANDOM_AFFIX_ITEM("random_affix_item", "Random Affix Item:"),
         RANDOM_GEM("random_gem", "Random Gem:"),
@@ -70,6 +87,7 @@ public class ApotheosisLang implements ICompatTranslations {
 
     public enum Branch implements ITooltipKey {
         RARITY("rarity", "Rarity:"),
+        STAGES("stages", "Stages:"),
         ;
 
         private final Translation translation;
@@ -105,6 +123,7 @@ public class ApotheosisLang implements ICompatTranslations {
     }
 
     static {
+        CoreLang.register(TRANSLATION_MAP, Conditions.class);
         CoreLang.register(TRANSLATION_MAP, Entry.class);
         CoreLang.register(TRANSLATION_MAP, Ingredient.class);
         CoreLang.register(TRANSLATION_MAP, GlobalLootModifier.class);
