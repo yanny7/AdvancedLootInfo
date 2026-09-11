@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Builds a CurseForge-format modpack zip (importable by Prism Launcher) out of the
-ALICompat target mods declared in gradle.properties."""
+ALICompat target mods listed in supported_mods.json and enabled in gradle.properties."""
 
 import argparse
 import html
@@ -19,6 +19,7 @@ RELEASE_TYPES = {1: "release", 2: "beta"}
 REQUIRED_RELATION_TYPE = 3
 VIEWER_SLUGS = {"rei": "roughly-enough-items", "jei": "jei", "emi": "emi"}
 OWN_MODS = ["aci", "ali", "alicompat"]
+SUPPORTED_MODS_FILE = "supported_mods.json"
 
 PROJECT_DIR = Path(__file__).resolve().parent
 
@@ -50,8 +51,26 @@ def read_gradle_properties():
     return properties
 
 
-def read_compat_mods(properties: dict, loader: str):
-    mods = {}
+def progress(index: int, total: int, label: str):
+    if sys.stdout.isatty():
+        print(f"\r[{index:>{len(str(total))}}/{total}] {label}".ljust(72)[:72], end="", flush=True)
+
+
+def progress_done():
+    if sys.stdout.isatty():
+        print("\r".ljust(73), end="\r")
+
+
+def read_supported_mods():
+    return json.loads((PROJECT_DIR / SUPPORTED_MODS_FILE).read_text(encoding="utf-8"))
+
+
+def read_enabled_mods(properties: dict):
+    return [mod.strip() for mod in properties.get("compat_mods", "").split(",") if mod.strip()]
+
+
+def read_pinned_deps(properties: dict, loader: str):
+    pinned = {}
 
     for key, value in properties.items():
         match = re.fullmatch(rf"(\w+)_{loader}_dep", key)
@@ -59,15 +78,29 @@ def read_compat_mods(properties: dict, loader: str):
         if not match:
             continue
 
-        coordinates = re.fullmatch(r"curse\.maven:.+-(\d+):(\d+)", value)
+        coordinates = re.fullmatch(r"curse\.maven:(.+)-(\d+):(\d+)", value)
 
         if not coordinates:
             print(f"Warning: cannot parse '{key}={value}', skipping.")
             continue
 
-        mods[match.group(1)] = int(coordinates.group(1))
+        pinned[match.group(1)] = {
+            "slug": coordinates.group(1),
+            "project_id": int(coordinates.group(2)),
+            "file_id": int(coordinates.group(3)),
+        }
 
-    return mods
+    return pinned
+
+
+def read_compat_mods(properties: dict, loader: str):
+    enabled = set(read_enabled_mods(properties))
+
+    return {
+        entry["key"]: entry["curseforge"][loader]["project_id"]
+        for entry in read_supported_mods()
+        if entry["key"] in enabled and loader in entry["curseforge"]
+    }
 
 
 class CurseForge:
@@ -149,6 +182,7 @@ def resolve(client: CurseForge, pinned: dict):
             continue
 
         seen.add(project_id)
+        progress(len(seen), len(seen) + len({queued for _, queued in pending} - seen), slug)
         file = client.pick_file(project_id)
 
         if file is None:
@@ -161,6 +195,7 @@ def resolve(client: CurseForge, pinned: dict):
             if dependency["relationType"] == REQUIRED_RELATION_TYPE and dependency["modId"] not in seen:
                 pending.append((f"{slug} -> dependency", dependency["modId"]))
 
+    progress_done()
     return resolved, missing
 
 

@@ -1,81 +1,159 @@
 #!/usr/bin/env python3
-"""Reports which of the ALICompat target mods pinned in gradle.properties are behind the
-newest CurseForge file for this branch's Minecraft version, and can repin them."""
+"""Resolves the mods listed in supported_mods.json against CurseForge for this branch's
+Minecraft version, reports what is outdated, newly available or gone, and can regenerate
+the generated ALICompat block in gradle.properties together with missing shim skeletons."""
 
 import argparse
 import re
 import sys
+from pathlib import Path
 
-from modpack import MOD_LOADER_TYPE, PROJECT_DIR, RELEASE_TYPES, CurseForge, read_env_secret, read_gradle_properties
+from modpack import (
+    MOD_LOADER_TYPE,
+    PROJECT_DIR,
+    RELEASE_TYPES,
+    SUPPORTED_MODS_FILE,
+    CurseForge,
+    progress,
+    progress_done,
+    read_enabled_mods,
+    read_env_secret,
+    read_gradle_properties,
+    read_pinned_deps,
+    read_supported_mods,
+)
+
+BLOCK_START = "# --- generated from supported_mods.json by check_versions.py, do not edit by hand ---"
+BLOCK_END = "# --- end of generated block ---"
+LEGACY_BLOCK_START = "# ALICompat target mods"
+CURSEFORGE_URL = "https://www.curseforge.com/minecraft/mc-mods"
+SERVICE_FILE = "com.yanny.alicompat.IModCompat"
 
 
-def read_pinned(properties: dict, loader: str):
-    pinned = []
+def source_set(loader: str, key: str):
+    return PROJECT_DIR / "alicompat" / loader / "src" / "compat" / key
 
-    for key, value in properties.items():
-        match = re.fullmatch(rf"(\w+)_{loader}_dep", key)
 
-        if not match:
-            continue
-
-        coordinates = re.fullmatch(r"curse\.maven:(.+)-(\d+):(\d+)", value)
-
-        if not coordinates:
-            print(f"Warning: cannot parse '{key}={value}', skipping.")
-            continue
-
-        pinned.append({
-            "key": key,
-            "mod": match.group(1),
-            "loader": loader,
-            "slug": coordinates.group(1),
-            "project_id": int(coordinates.group(2)),
-            "file_id": int(coordinates.group(3)),
-        })
-
-    return sorted(pinned, key=lambda entry: entry["mod"])
+def has_source_set(platforms: list, key: str):
+    return any(source_set(loader, key).is_dir() for loader in platforms)
 
 
 def describe(file: dict):
     return f"{file['id']} {RELEASE_TYPES.get(file['releaseType'], 'unknown'):7} {file['fileDate'][:10]}  {file['displayName']}"
 
 
-def check(client: CurseForge, entry: dict):
-    latest = client.pick_file(entry["project_id"])
+def class_name(entry: dict):
+    name = re.sub(r"^The\s+", "", entry["name"])
+    name = re.sub(r"[^0-9A-Za-z ]", " ", name)
+    return "".join(word[0].upper() + word[1:] for word in name.split()) or entry["key"].capitalize()
+
+
+def scaffold(loader: str, entry: dict):
+    key = entry["key"]
+    root = source_set(loader, key)
+    package = f"com.yanny.alicompat.compat.{key}"
+    java = root / "java" / Path(package.replace(".", "/"))
+    compat = f"{class_name(entry)}Compat"
+
+    java.mkdir(parents=True, exist_ok=True)
+    (java / "package-info.java").write_text(
+        f"@ParametersAreNonnullByDefault\npackage {package};\n\nimport javax.annotation.ParametersAreNonnullByDefault;\n",
+        encoding="utf-8")
+    (java / f"{compat}.java").write_text(
+        f"package {package};\n\n"
+        "import com.yanny.alicompat.IModCompat;\n"
+        "import org.jetbrains.annotations.NotNull;\n\n"
+        f"public class {compat} implements IModCompat {{\n"
+        f'    static final String MOD_ID = "{entry["mod_ids"][0]}";\n\n'
+        "    @NotNull\n"
+        "    @Override\n"
+        "    public String targetModId() {\n"
+        "        return MOD_ID;\n"
+        "    }\n"
+        "}\n",
+        encoding="utf-8")
+
+    services = root / "services"
+    services.mkdir(parents=True, exist_ok=True)
+    (services / SERVICE_FILE).write_text(f"{package}.{compat}\n", encoding="utf-8")
+
+    return root.relative_to(PROJECT_DIR)
+
+
+def resolve(client: CurseForge, entry: dict, loader: str, pinned: dict):
+    project = entry["curseforge"][loader]
+    result = {"key": entry["key"], "loader": loader, "entry": entry, "slug": project["slug"], "project_id": project["project_id"]}
+    latest = client.pick_file(project["project_id"])
+    current = pinned.get(entry["key"])
 
     if latest is None:
-        entry["problem"] = f"no {client.minecraft_version}/{client.loader} release or beta file"
-        return entry
+        result["state"] = "unavailable" if current is None else "gone"
+        return result
 
-    entry["latest"] = latest
+    result["latest"] = latest
 
-    if latest["id"] != entry["file_id"]:
-        entry["current"] = client.get(f"/mods/{entry['project_id']}/files/{entry['file_id']}")
+    if current is None:
+        result["state"] = "new"
+    elif current["file_id"] != latest["id"]:
+        result["state"] = "outdated"
+        result["current"] = client.get(f"/mods/{project['project_id']}/files/{current['file_id']}")
+    else:
+        result["state"] = "current"
 
-    return entry
+    return result
 
 
-def repin(outdated: list):
+def render_block(deps: dict, entries: dict):
+    mods = sorted({key for key, _ in deps})
+    lines = [BLOCK_START]
+
+    if mods:
+        lines.append("compat_mods=\\")
+        lines += [f"  {mod},\\" for mod in mods[:-1]]
+        lines.append(f"  {mods[-1]}")
+    else:
+        lines.append("compat_mods=")
+
+    lines.append("")
+
+    for key in mods:
+        entry = entries[key]
+        rendered = {}
+
+        for loader in sorted(loader for mod, loader in deps if mod == key):
+            dep = deps[(key, loader)]
+
+            if dep["slug"] not in rendered:
+                lines.append(f"# {entry['name']} {CURSEFORGE_URL}/{dep['slug']}")
+                rendered[dep["slug"]] = True
+
+            lines.append(f"{key}_{loader}_dep=curse.maven:{dep['slug']}-{dep['project_id']}:{dep['file_id']}")
+
+    lines.append(BLOCK_END)
+    return "\n".join(lines)
+
+
+def write_block(block: str):
     path = PROJECT_DIR / "gradle.properties"
-    text = path.read_text(encoding="utf-8")
+    lines = path.read_text(encoding="utf-8").splitlines()
 
-    for entry in outdated:
-        old = f"{entry['key']}=curse.maven:{entry['slug']}-{entry['project_id']}:{entry['file_id']}"
-        new = f"{entry['key']}=curse.maven:{entry['slug']}-{entry['project_id']}:{entry['latest']['id']}"
+    if BLOCK_START in lines:
+        start, end = lines.index(BLOCK_START), lines.index(BLOCK_END)
+    elif LEGACY_BLOCK_START in lines:
+        start = lines.index(LEGACY_BLOCK_START)
+        end = max(index for index, line in enumerate(lines) if re.match(r"\w+_\w+_dep=", line))
+    else:
+        print("Error: found neither the generated block nor the legacy one in gradle.properties.")
+        return False
 
-        if old not in text:
-            print(f"Warning: cannot find '{old}' in gradle.properties, left untouched.")
-            continue
-
-        text = text.replace(old, new)
-
-    path.write_text(text, encoding="utf-8")
+    path.write_text("\n".join(lines[:start] + block.splitlines() + lines[end + 1:]) + "\n", encoding="utf-8")
+    return True
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Reports outdated ALICompat target mod versions.")
+    parser = argparse.ArgumentParser(description="Resolves the supported_mods.json registry against CurseForge.")
     parser.add_argument("--loader", choices=sorted(MOD_LOADER_TYPE), help="Mod loader to check (default: every enabled platform)")
-    parser.add_argument("--update", action="store_true", help="Repin the outdated file ids in gradle.properties")
+    parser.add_argument("--update", action="store_true", help="Regenerate the block in gradle.properties and scaffold missing shims")
     parser.add_argument("--curseforge-api-key", help="CurseForge API Key (default: $CURSEFORGE_API_KEY)")
     args = parser.parse_args()
 
@@ -85,48 +163,101 @@ def main():
         return 1
 
     properties = read_gradle_properties()
-    platforms = properties.get("enabled_platforms", "").split(",")
+    platforms = [platform.strip() for platform in properties.get("enabled_platforms", "").split(",") if platform.strip()]
 
     if args.loader and args.loader not in platforms:
         print(f"Error: loader '{args.loader}' is not in enabled_platforms ({properties.get('enabled_platforms')}).")
         return 1
 
     minecraft_version = properties["minecraft_version"]
-    checked = []
+    entries = {entry["key"]: entry for entry in read_supported_mods()}
+    enabled = set(read_enabled_mods(properties))
+    checked_loaders = [args.loader] if args.loader else platforms
+    pinned = {loader: read_pinned_deps(properties, loader) for loader in platforms}
+    clients = {loader: CurseForge(api_key, minecraft_version, loader) for loader in checked_loaders}
 
-    for loader in [args.loader] if args.loader else platforms:
-        pinned = read_pinned(properties, loader)
+    deps = {}
+    dormant = []
+    orphans = []
+    results = []
 
-        if not pinned:
-            print(f"Error: no <mod>_{loader}_dep entries in gradle.properties.")
+    for loader in platforms:
+        for key, dep in pinned[loader].items():
+            if key not in entries:
+                orphans.append((key, loader, dep))
+            elif loader not in checked_loaders or (key not in enabled and has_source_set(platforms, key)):
+                deps[(key, loader)] = dep
+
+    pending = []
+
+    for key, entry in sorted(entries.items()):
+        if key not in enabled and has_source_set(platforms, key):
+            dormant.append(entry)
+            continue
+
+        pending += [(entry, loader) for loader in checked_loaders if loader in entry["curseforge"]]
+
+    print(f"Resolving {len(pending)} mod/loader pairs for {minecraft_version} ({', '.join(checked_loaders)})")
+
+    for index, (entry, loader) in enumerate(pending, start=1):
+        progress(index, len(pending), f"{entry['key']} ({loader})")
+        result = resolve(clients[loader], entry, loader, pinned[loader])
+        results.append(result)
+
+        if result["state"] in ("new", "outdated", "current"):
+            deps[(entry["key"], loader)] = {"slug": result["slug"], "project_id": result["project_id"], "file_id": result["latest"]["id"]}
+
+    progress_done()
+    missing_source = [result for result in results if result["state"] in ("new", "outdated", "current") and not source_set(result["loader"], result["key"]).is_dir()]
+
+    for state, title in (("outdated", "Outdated, newer file on CurseForge:"), ("new", "Newly available, not pinned yet:"),
+                         ("gone", "No release or beta file any more, the pin is dropped:"), ("unavailable", "Not available for this Minecraft version:")):
+        selected = [result for result in results if result["state"] == state]
+
+        if not selected:
+            continue
+
+        print(f"\n{title}")
+
+        for result in selected:
+            print(f"  {result['key']} ({result['loader']})")
+
+            if "current" in result:
+                print(f"    pinned {describe(result['current'])}")
+
+            if "latest" in result:
+                print(f"    latest {describe(result['latest'])}")
+
+    if missing_source:
+        print(f"\nNo shim source set{' yet' if args.update else ', run with --update to scaffold'}:")
+
+        for result in missing_source:
+            print(f"  {result['key']} ({result['loader']})")
+
+    if dormant:
+        print("\nDormant, present in the tree but not in compat_mods, port it before pinning:")
+
+        for entry in dormant:
+            print(f"  {entry['key']}")
+
+    if orphans:
+        print(f"\nPinned but missing from {SUPPORTED_MODS_FILE}, the pin is dropped:")
+
+        for key, loader, dep in orphans:
+            print(f"  {key} ({loader}) curse.maven:{dep['slug']}-{dep['project_id']}:{dep['file_id']}")
+
+    if args.update:
+        for result in missing_source:
+            print(f"\nScaffolded {scaffold(result['loader'], result['entry'])}")
+
+        if not write_block(render_block(deps, entries)):
             return 1
 
-        print(f"Checking {len(pinned)} mods for {loader} {minecraft_version}...")
-        client = CurseForge(api_key, minecraft_version, loader)
-        checked += [check(client, entry) for entry in pinned]
+        print(f"\nWrote {len(deps)} dependency lines and {len({key for key, _ in deps})} compat_mods entries to gradle.properties")
 
-    outdated = [entry for entry in checked if "current" in entry]
-    problems = [entry for entry in checked if "problem" in entry]
-
-    if outdated:
-        print(f"\nOutdated, newer file on CurseForge:")
-
-        for entry in outdated:
-            print(f"  {entry['mod']} ({entry['loader']})")
-            print(f"    pinned {describe(entry['current'])}")
-            print(f"    latest {describe(entry['latest'])}")
-
-    if problems:
-        print(f"\nCannot be checked:")
-
-        for entry in problems:
-            print(f"  {entry['mod']} ({entry['loader']}): {entry['problem']}")
-
-    if args.update and outdated:
-        repin(outdated)
-        print(f"\nRepinned {len(outdated)} file ids in gradle.properties")
-
-    print(f"\n{len(checked) - len(outdated) - len(problems)}/{len(checked)} up to date, {len(outdated)} outdated, {len(problems)} unresolved")
+    counts = {state: len([result for result in results if result["state"] == state]) for state in ("current", "outdated", "new", "gone", "unavailable")}
+    print(f"\n{counts['current']}/{len(results)} up to date, {counts['outdated']} outdated, {counts['new']} new, "
+          f"{counts['gone'] + counts['unavailable']} unresolved, {len(dormant)} dormant")
     return 0
 
 

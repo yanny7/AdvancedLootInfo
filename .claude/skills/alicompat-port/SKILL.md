@@ -34,11 +34,12 @@ git fetch origin
 git merge origin/<lower>
 ```
 
-**The target-mod block in `gradle.properties` is resolved as `ours`, silently.** That is
+**The generated target-mod block in `gradle.properties` is resolved as `ours`, silently.** That is
 `compat_mods` and every `<mod>_<loader>_dep` line: each `_dep` pins a CurseForge file id for one
 specific Minecraft version, so anything merged up from below names a file for the wrong version, and
 `compat_mods` states what this branch has actually ported. Do not try to reconcile them and do not
-ask about them. The rest of the file — loader versions, viewer versions, enabled platforms —
+ask about them. `supported_mods.json` is the opposite case — it holds no Minecraft-version-specific
+data, so it merges like any other file and a new entry arriving from below is kept. The rest of the file — loader versions, viewer versions, enabled platforms —
 conflicts like any other code and is resolved on its merits.
 
 New shim source sets arrive as new files. That is expected and they stay: a slug whose files are
@@ -93,17 +94,18 @@ python3 check_versions.py --loader <loader>
 python3 check_versions.py --update
 ```
 
-`--update` swaps file ids and nothing else — it does not check that anything still compiles. Build
-after it.
+`--update` regenerates the block for the shims this branch already has active, and skips every
+dormant one. It does not check that anything still compiles — build after it.
 
 ### What is dormant
 
 ```bash
-act=$(sed -n '/^compat_mods=/,/[^\\]$/p' gradle.properties | tr -d '\\ \n' | sed 's/^compat_mods=//')
-ls alicompat/*/src/compat 2>/dev/null | grep -v ':' | grep -v '^$' | sort -u | while read s; do
-  echo "$act" | tr ',' '\n' | grep -qx "$s" || echo "dormant: $s"
-done
+python3 check_versions.py --loader <loader>
 ```
+
+Its "Dormant, present in the tree but not in `compat_mods`" section is the list. The script leaves
+those entries strictly alone — it neither pins nor scaffolds them — so a `--update` run after the
+merge cannot switch on a shim nobody has ported.
 
 ### Take them in groups, not in bulk
 
@@ -137,7 +139,8 @@ This is a full port, not a merge. It runs `alicompat-shim` from its Step 0:
 - fetch the jar for **this** Minecraft version and loader, and diff the classes the shim uses against
   what the jar contains — classes move, get renamed and disappear between versions
 - adjust the shim; only its shape ports, never its contents
-- add the slug to `compat_mods` (one per line, alphabetical)
+- add the slug to `compat_mods`, then `python3 check_versions.py --update` to pin its `_dep` lines
+  and rewrite the block (the slug's order in the list is the script's business, not yours)
 - if the mod has no file for this version or loader, write no shim, delete no source set, and say why
 
 ## Done when

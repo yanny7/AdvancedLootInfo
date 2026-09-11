@@ -2,7 +2,7 @@
 """What this repo already registers, so a static candidate can be told from a real gap.
 
 Reads the ALI / ALICompat sources rather than a log: every `register<Hook>(X.class, ...)`
-call, every `registerTrades(<id>, ...)`, every mixin target, and the `compat_mods` list.
+call, every `registerTrades(<id>, ...)`, every mixin target, and the `supported_mods.json` registry.
 
 A shim over a target class that is not visible on the compile classpath registers its accessor
 instead, and names the target only in the accessor's `@ClassAccessor("<binary name>")`. Those
@@ -126,7 +126,7 @@ def main():
     args = parser.parse_args()
 
     out = {"byHook": {}, "simpleNames": {}, "traders": {}, "dynamicTraders": {},
-           "mixins": {}, "classAccessors": {}, "compatMods": []}
+           "mixins": {}, "classAccessors": {}, "compatMods": [], "compatModIds": []}
     for root, dirs, files in os.walk(args.repo):
         dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
         for name in files:
@@ -140,12 +140,12 @@ def main():
                 entries[target] = method
                 out["simpleNames"].setdefault(hook, {})[target.rsplit(".", 1)[-1].split("$")[-1]] = method
 
-    properties = os.path.join(args.repo, "gradle.properties")
-    if os.path.isfile(properties):
-        with open(properties, encoding="utf-8") as handle:
-            match = re.search(r"^compat_mods=(.*)$", handle.read(), re.M)
-        if match:
-            out["compatMods"] = [s for s in match.group(1).strip().split(",") if s]
+    registry = os.path.join(args.repo, "supported_mods.json")
+    if os.path.isfile(registry):
+        with open(registry, encoding="utf-8") as handle:
+            entries = json.load(handle)
+        out["compatMods"] = sorted(entry["key"] for entry in entries)
+        out["compatModIds"] = sorted({mod_id for entry in entries for mod_id in entry["mod_ids"]})
 
     out["covered"] = sorted({c for hook in out["byHook"].values() for c in hook} | set(out["mixins"]))
     text = json.dumps(out, indent=2) + "\n"

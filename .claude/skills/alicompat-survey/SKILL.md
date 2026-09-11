@@ -170,9 +170,10 @@ project publishes nothing for the target versions, while the shim must compile a
 - **`unresolved_entity_loot_table` is not a shim.** Those are `entityLootTables` entries in ALI's
   datapack configuration (`ali_config.schema.json`), a config change, not Java.
 
-Then follow `alicompat/CLAUDE.md`'s "Adding a target mod" for each mod picked up: `compat_mods`, the
-`<slug>_<loader>_dep` property from the report, the source set, the `IModCompat` implementation and
-its `services` fragment.
+Then follow `alicompat/CLAUDE.md`'s "Adding a target mod" for each mod picked up: the
+`supported_mods.json` entry (the report's maven coordinates carry the slug and project id it needs),
+`compat_mods`, then `python3 check_versions.py --update` for the `<slug>_<loader>_dep` lines and the
+scaffolded source set, and finally the real `IModCompat` implementation and its `services` fragment.
 
 ## Extending this skill
 
