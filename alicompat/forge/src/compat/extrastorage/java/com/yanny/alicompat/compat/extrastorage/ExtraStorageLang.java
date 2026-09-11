@@ -15,8 +15,8 @@ public class ExtraStorageLang implements ICompatTranslations {
     public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 
     public enum Functions implements ITooltipKey {
-        COPY_CRAFTER_NAME("copy_crafter_name", "Copy Crafter Name"),
-        COPY_STORAGE_ID("copy_storage_id", "Copy Storage Id"),
+        COPY_CRAFTER_NAME("copy_crafter_name", "Copy Crafter Name:"),
+        COPY_STORAGE_ID("copy_storage_id", "Copy Storage Id:"),
         ;
 
         private final Translation translation;

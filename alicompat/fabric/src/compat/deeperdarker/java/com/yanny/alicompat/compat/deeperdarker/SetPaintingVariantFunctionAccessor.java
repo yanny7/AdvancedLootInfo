@@ -27,6 +27,7 @@ public class SetPaintingVariantFunctionAccessor extends BaseAccessor<SetPainting
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, validPaintings).build(Lang.Value.TAG));
             b.add(utils.getValueTooltip(utils, parent.predicates).build(Lang.Branch.PREDICATES));
+            b.showEmpty();
         }, DeeperDarkerLang.Functions.SET_PAINTING_VARIANT);
     }
 }

@@ -15,7 +15,7 @@ public class AppliedCookingLang implements ICompatTranslations {
     public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 
     public enum Functions implements ITooltipKey {
-        KITCHEN_STATION("kitchen_station", "Copy Kitchen Station Data"),
+        KITCHEN_STATION("kitchen_station", "Copy Kitchen Station Data:"),
         ;
 
         private final Translation translation;

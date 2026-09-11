@@ -67,12 +67,18 @@ public class MoonlightCompat implements IGlmModCompat {
 
     @NotNull
     private static TooltipBuilder getDataConditionsTooltip(IServerUtils utils, ModLootConditions.IConditionLootCondition cond) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.conditions())), MoonlightLang.Conditions.DATA_CONDITIONS);
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, cond.conditions()));
+            b.showEmpty();
+        }, MoonlightLang.Conditions.DATA_CONDITIONS);
     }
 
     @NotNull
     private static TooltipBuilder getPatternMatchTooltip(IServerUtils utils, ModLootConditions.PatternMatchCondition cond) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.patterns())), MoonlightLang.Conditions.LOOT_TABLE_ID_PATTERN);
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, cond.patterns()));
+            b.showEmpty();
+        }, MoonlightLang.Conditions.LOOT_TABLE_ID_PATTERN);
     }
 
     @NotNull

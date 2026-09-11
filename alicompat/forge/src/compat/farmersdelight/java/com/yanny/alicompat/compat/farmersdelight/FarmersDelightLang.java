@@ -15,8 +15,8 @@ public class FarmersDelightLang implements ICompatTranslations {
     public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 
     public enum Functions implements ITooltipKey {
-        COPY_MEAL("copy_meal", "Copy Meal"),
-        COPY_SKILLET("copy_skillet", "Copy Skillet"),
+        COPY_MEAL("copy_meal", "Copy Meal:"),
+        COPY_SKILLET("copy_skillet", "Copy Skillet:"),
         ;
 
         private final Translation translation;

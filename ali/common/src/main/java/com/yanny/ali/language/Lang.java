@@ -25,8 +25,8 @@ public final class Lang {
         VALUE_CHECK("value_check", "Value Check:"),
         WEATHER_CHECK("weather_check", "Weather Check:"),
         // Forge
-        CAN_TOOL_PERFORM_ACTION("can_tool_perform_action", "Can Tool Perform Action: %s"),
-        LOOT_TABLE_ID("loot_table_id", "Loot Table Id: %s"),
+        CAN_TOOL_PERFORM_ACTION("can_tool_perform_action", "Can Tool Perform Action:"),
+        LOOT_TABLE_ID("loot_table_id", "Loot Table Id:"),
         // LootJS
         AND("and", "And:"),
         ANY_BIOME("any_biome", "Any Biome:"),
@@ -271,6 +271,7 @@ public final class Lang {
         ENTRIES(Value.ENTRY, "entries", "Entries:"),
         EQUIPMENT_SLOTS(Value.EQUIPMENT_SLOT, "equipment_slots", "Equipment Slots:"),
         FEET("feet", "Feet:"),
+        FLUID(Value.FLUID, "fluid", "Fluid:"),
         FLUID_PREDICATE("fluid_predicate", "Fluid Predicate:"),
         HEAD("head", "Head:"),
         ITEM("item", "Item:"),

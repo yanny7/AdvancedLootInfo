@@ -46,6 +46,7 @@ public class SnowRealMagicCompat implements IModCompat {
             b.add(TooltipUtils.getQualityTooltip(entry.quality));
             b.add(utils.getValueTooltip(utils, entry.conditions).build(Lang.Branch.PREDICATES));
             b.add(utils.getValueTooltip(utils, entry.functions).build(Lang.Branch.MODIFIERS));
+            b.showEmpty();
         }, SnowRealMagicLang.Entry.NORMALIZE);
     }
 }

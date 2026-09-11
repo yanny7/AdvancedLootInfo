@@ -175,7 +175,28 @@ subprojects {
                 resources.srcDir generateCompatServices
             }
 
+            sourceSets.test {
+                java.srcDirs += compatMods.collect { "src/compat/$it/test" }
+            }
+
+            // loom puts the remapped target-mod jars straight on the main classpaths, so tests inherit them from there
+            sourceSets.test.compileClasspath += sourceSets.main.compileClasspath
+            sourceSets.test.runtimeClasspath += sourceSets.main.compileClasspath + sourceSets.main.runtimeClasspath
+
+            // only the suite bootstraps Minecraft, so a per-mod test class must not also be run on its own
+            test {
+                useJUnitPlatform {
+                    includeEngines "junit-platform-suite"
+                }
+            }
+
             dependencies {
+                testImplementation 'org.junit.platform:junit-platform-suite:1.12.0'
+                testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+                testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
+                testImplementation 'org.mockito:mockito-core:5.11.0'
+                testImplementation project(path: ":aci:common", configuration: "testArtifacts")
+
                 compatMods.each { mod ->
                     def dep = project.findProperty("${mod}_${project.name}_dep")
 

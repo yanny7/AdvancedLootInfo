@@ -22,7 +22,7 @@ public class SetFluidLootFunctionAccessor extends BaseAccessor<SetFluidLootFunct
     @Override
     public TooltipBuilder getTooltip(IServerUtils utils) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, fluid).build(Lang.Value.FLUID));
+            b.add(utils.getValueTooltip(utils, fluid).build(Lang.Branch.FLUID));
             b.add(utils.getValueTooltip(utils, parent.predicates).build(Lang.Branch.PREDICATES));
         }, MantleLang.Functions.SET_FLUID);
     }
