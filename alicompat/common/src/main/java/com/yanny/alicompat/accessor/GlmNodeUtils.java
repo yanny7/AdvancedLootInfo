@@ -69,7 +69,7 @@ public class GlmNodeUtils {
 
         List<LootItemCondition> allConditions = new ArrayList<>(node.getConditions());
 
-        allConditions.add(new InvertedLootItemCondition(new AllOfCondition(conditions.toArray(LootItemCondition[]::new))));
+        allConditions.add(new InvertedLootItemCondition(new AllOfCondition(conditions)));
 
         EnchantedRanges chance = NodeUtils.getEnchantedChance(utils, allConditions, node.getChance());
         TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, new EnchantedRanges(new RangeValue(node.getCount())), node.getFunctions(), allConditions);

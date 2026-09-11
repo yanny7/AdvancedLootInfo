@@ -8,6 +8,7 @@ import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.datagen.LanguageHolder;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.alicompat.ModCompatManager;
+import cpw.mods.modlauncher.api.IModuleLayerManager;
 import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.MappedRegistry;
@@ -25,7 +26,10 @@ import net.minecraft.server.packs.resources.ReloadInstance;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.Unit;
+import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.loading.FMLLoader;
+import net.minecraftforge.fml.loading.LoadingModList;
 import org.jetbrains.annotations.NotNull;
 import org.junit.platform.suite.api.AfterSuite;
 import org.junit.platform.suite.api.BeforeSuite;
@@ -41,11 +45,12 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-@Suite
+@Suite(failIfNoTests = false)
 @SelectPackages("com.yanny.alicompat.compat")
 @IncludeClassNamePatterns(".*TooltipTest")
 public class CompatTooltipSuite {
@@ -58,7 +63,8 @@ public class CompatTooltipSuite {
     @BeforeSuite
     public static void beforeAllTests() {
         SharedConstants.setVersion(DetectedVersion.BUILT_IN);
-        bootStrapWithoutForge();
+        installFmlLoaderState();
+        Bootstrap.bootStrap();
         unfreezeRegistries();
         installModList();
 
@@ -123,24 +129,36 @@ public class CompatTooltipSuite {
         }
     }
 
-    // Forge's bootStrap tail calls NetworkHooks#init, needing an ASM transformer only an FML launch installs
-    private static void bootStrapWithoutForge() {
+    // Forge's item bootstrap reaches ModLoader, whose constructor dereferences a mod list only an FML launch fills in
+    private static void installFmlLoaderState() {
+        IModuleLayerManager moduleLayerManager = Mockito.mock(IModuleLayerManager.class);
+
+        Mockito.when(moduleLayerManager.getLayer(Mockito.any())).thenReturn(Optional.of(ModuleLayer.boot()));
+
         try {
-            Bootstrap.bootStrap();
-        } catch (Throwable e) {
-            LOGGER.info("Forge part of bootstrap failed as expected: {}", e.toString());
+            setStaticField("loadingModList", Mockito.mock(LoadingModList.class));
+            setStaticField("moduleLayerManager", moduleLayerManager);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException("Failed to install test FMLLoader state", e);
         }
+    }
+
+    private static void setStaticField(String name, Object value) throws NoSuchFieldException, IllegalAccessException {
+        Field field = FMLLoader.class.getDeclaredField(name);
+
+        field.setAccessible(true);
+        field.set(null, value);
     }
 
     @NotNull
     private static ResourceManager loadClientResources() {
-        LanguageManager languageManager = new LanguageManager(LanguageManager.DEFAULT_LANGUAGE_CODE);
+        LanguageManager languageManager = new LanguageManager("en_us", (lang) -> {});
         ReloadableResourceManager resourceManager = new ReloadableResourceManager(PackType.CLIENT_RESOURCES);
 
         resourceManager.registerReloadListener(languageManager);
 
         Path resourcePackDirectory = new File("src/test/resources").toPath();
-        ClientPackSource clientpacksource = new ClientPackSource(resourcePackDirectory.resolve("assets"));
+        ClientPackSource clientpacksource = new ClientPackSource(resourcePackDirectory.resolve("assets"), LevelStorageSource.parseValidator(resourcePackDirectory.resolve("allowed_symlinks.txt")));
         PackRepository resourcePackRepository = new PackRepository(clientpacksource);
 
         resourcePackRepository.reload();

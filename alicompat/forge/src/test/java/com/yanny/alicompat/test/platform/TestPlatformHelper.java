@@ -1,24 +1,15 @@
 package com.yanny.alicompat.test.platform;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.platform.services.IPlatformHelper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.SpawnEggItem;
-import net.minecraft.world.level.storage.loot.LootPool;
-import net.minecraft.world.level.storage.loot.LootTable;
 
 import java.nio.file.Path;
 import java.util.List;
 
 public class TestPlatformHelper implements IPlatformHelper {
-    @Override
-    public List<LootPool> getLootPools(LootTable table) {
-        return List.of();
-    }
-
     @Override
     public List<IPlugin> getPlugins() {
         return List.of(new com.yanny.ali.plugin.Plugin(), new com.yanny.alicompat.forge.Plugin());
@@ -30,12 +21,12 @@ public class TestPlatformHelper implements IPlatformHelper {
     }
 
     @Override
-    public SpawnEggItem getSpawnEggItem(EntityType<?> entityType) {
+    public HolderLookup.Provider getLookupProvider() {
         return null;
     }
 
     @Override
-    public LootTable getLootTable(Gson gson, ResourceLocation location, JsonElement json) {
+    public SpawnEggItem getSpawnEggItem(EntityType<?> entityType) {
         return null;
     }
 }

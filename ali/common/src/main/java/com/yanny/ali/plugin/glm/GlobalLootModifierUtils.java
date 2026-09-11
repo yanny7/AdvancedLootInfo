@@ -9,7 +9,7 @@ import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.common.nodes.GlobalLootModifierNode;
 import com.yanny.ali.plugin.server.TooltipUtils;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Block;
@@ -127,7 +127,7 @@ public class GlobalLootModifierUtils {
 
     @NotNull
     public static Destination getBlockStateDestination(IServerUtils ignoredUtils, LootItemBlockStatePropertyCondition condition) {
-        return new Destination.Blocks(condition.block().value::equals, condition.properties.properties.isEmpty());
+        return new Destination.Blocks((b) -> condition.block().value().equals(b), condition.properties().isEmpty());
     }
 
     @Nullable

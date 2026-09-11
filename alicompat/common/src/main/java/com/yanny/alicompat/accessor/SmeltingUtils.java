@@ -5,9 +5,9 @@ import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.api.IServerUtils;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,8 +19,8 @@ public class SmeltingUtils {
     public static Optional<ItemStack> smelt(IServerUtils utils, ItemStack itemStack) {
         ServerLevel level = utils.getServerLevel();
 
-        return level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SimpleContainer(itemStack), level)
-                .map((recipe) -> recipe.getResultItem(level.registryAccess()))
+        return level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(itemStack), level)
+                .map((recipe) -> recipe.value().getResultItem(level.registryAccess()))
                 .filter((stack) -> !stack.isEmpty());
     }
 
