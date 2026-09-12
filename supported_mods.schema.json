@@ -7,7 +7,12 @@
   "items": {
     "type": "object",
     "additionalProperties": false,
-    "required": ["key", "name", "mod_ids", "curseforge"],
+    "required": [
+      "key",
+      "name",
+      "mod_ids",
+      "curseforge"
+    ],
     "properties": {
       "key": {
         "type": "string",
@@ -22,38 +27,19 @@
         "type": "array",
         "description": "Runtime mod ids the shim gates on. More than one when a single CurseForge project ships several mod ids (Porting Lib).",
         "minItems": 1,
-        "items": { "type": "string", "pattern": "^[a-z0-9_.-]+$" }
+        "items": {
+          "type": "string",
+          "pattern": "^[a-z0-9_.-]+$"
+        }
       },
       "curseforge": {
-        "type": "object",
-        "description": "CurseForge project per mod loader. Separate entries are required because some mods ship one project per loader; a mod absent for a loader simply has no entry here.",
-        "minProperties": 1,
-        "additionalProperties": false,
-        "properties": {
-          "fabric": { "$ref": "#/definitions/CurseForgeProject" },
-          "forge": { "$ref": "#/definitions/CurseForgeProject" },
-          "neoforge": { "$ref": "#/definitions/CurseForgeProject" },
-          "quilt": { "$ref": "#/definitions/CurseForgeProject" }
-        }
-      }
-    }
-  },
-  "definitions": {
-    "CurseForgeProject": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["slug", "project_id"],
-      "description": "A CurseForge project. No file id is stored here: the pinned file is Minecraft-version specific and lives in gradle.properties.",
-      "properties": {
-        "slug": {
+        "type": "array",
+        "description": "CurseForge projects for this mod, as '<slug>-<project id>' (the artifact half of the 'curse.maven' coordinate). Usually one; a second entry is for mods published as a separate project per loader. Which project serves which loader is derived from CurseForge per Minecraft version, not declared here.",
+        "minItems": 1,
+        "items": {
           "type": "string",
-          "description": "CurseForge slug, the last segment of the project URL and the artifact name of the 'curse.maven' coordinate.",
-          "pattern": "^[a-z0-9-]+$"
-        },
-        "project_id": {
-          "type": "integer",
-          "description": "Numeric CurseForge project id.",
-          "minimum": 1
+          "description": "'<slug>-<project id>', e.g. 'the-bumblezone-forge-362479'. The slug is the last segment of the project URL. No file id: the pinned file is Minecraft-version specific and lives in gradle.properties.",
+          "pattern": "^[a-z0-9-]+-[0-9]+$"
         }
       }
     }

@@ -389,7 +389,7 @@ can hang the session. Add the new keys to that JSON by hand (alphabetically sort
 ## Step 6 — wiring, and what the user must be told
 
 Per `alicompat/CLAUDE.md`: the mod gets an entry in `supported_mods.json` (slug, name, runtime mod
-ids, CurseForge slug and project id per loader), and `python3 check_versions.py --scaffold <slug>`
+ids, and its CurseForge projects as `<slug>-<project id>`), and `python3 check_versions.py --scaffold <slug>`
 then pins it, puts the slug into `compat_mods` and writes the `<slug>_<loader>_dep` lines — never
 write that block by hand, the next run overwrites it. The same command scaffolds a compiling skeleton
 (`package-info.java`, an `IModCompat` returning the mod id, `services/com.yanny.alicompat.IModCompat`)
