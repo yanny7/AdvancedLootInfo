@@ -1,22 +1,24 @@
 package com.yanny.alicompat.compat.goblintraders;
 
-import com.mrcrayfish.goblintraders.trades.GoblinTrade;
+import com.mrcrayfish.goblintraders.trades.TradeCost;
+import com.mrcrayfish.goblintraders.trades.type.BasicTrade;
 import com.yanny.aci.tooltip.TooltipNode;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
 import static com.yanny.alicompat.test.CompatTooltipSuite.UTILS;
 
 public class GoblinTradersTooltipTest {
     @Test
-    public void testGoblinTradeListing() {
-        GoblinTrade trade = new GoblinTrade(new ItemStack(Items.DIAMOND, 2), new ItemStack(Items.EMERALD, 6), ItemStack.EMPTY, 5, 4, 0.75F);
+    public void testBasicTradeListing() {
+        BasicTrade trade = new BasicTrade(new ItemStack(Items.DIAMOND, 2), new TradeCost(Items.EMERALD, 6), Optional.empty(), 0.75F, 5, 4);
 
-        assertTooltip(UTILS.getItemListing(UTILS, trade, TooltipNode.empty()).getTooltip(), List.of(
+        assertTooltip(UTILS.getItemListing(UTILS, new GoblinTradeListing(trade), TooltipNode.empty()).getTooltip(), List.of(
                 "Uses: 5",
                 "XP: 4",
                 "Price Multiplier: 0.75"

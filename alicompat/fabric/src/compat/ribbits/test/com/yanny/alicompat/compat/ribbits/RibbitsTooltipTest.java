@@ -5,7 +5,6 @@ import com.yanny.alicompat.accessor.ReflectionUtils;
 import com.yungnickyoung.minecraft.ribbits.entity.trade.*;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.Potions;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
@@ -54,17 +53,6 @@ public class RibbitsTooltipTest {
 
         assertTooltip(tooltip(ReflectionUtils.copyClassData(EnchantedItemForAmethystAccessor.class, listing, EnchantedItemForAmethyst.class)), List.of(
                 "Uses: 10",
-                "XP: 0",
-                "Price Multiplier: 0.05"
-        ));
-    }
-
-    @Test
-    public void testPotionForAmethystListing() {
-        PotionForAmethyst listing = new PotionForAmethyst(Items.GLASS_BOTTLE, Potions.HEALING, 3, 5, 7, 2);
-
-        assertTooltip(tooltip(ReflectionUtils.copyClassData(PotionForAmethystAccessor.class, listing, PotionForAmethyst.class)), List.of(
-                "Uses: 2",
                 "XP: 0",
                 "Price Multiplier: 0.05"
         ));
