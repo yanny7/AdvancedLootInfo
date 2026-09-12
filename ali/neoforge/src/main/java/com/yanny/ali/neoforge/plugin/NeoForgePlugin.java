@@ -113,7 +113,7 @@ public class NeoForgePlugin implements IPlugin {
         forgeRegistry.registerGlobalLootModifier(AddTableLootModifier.class, (u, m) -> {
             List<LootItemCondition> conditionList = Arrays.asList(((MixinLootModifier) m).getAliConditions());
 
-            return GlobalLootModifierUtils.getLootModifier(u, conditionList, (c) -> {
+            return GlobalLootModifierUtils.getLootModifier(u, m, conditionList, (c) -> {
                 TooltipNode tooltip = TooltipBuilder.array((b) -> b
                                 .add(TooltipBuilder.keyOnly(Lang.Group.ALL))
                                 .add(utils.getValueTooltip(utils, c))
@@ -161,7 +161,7 @@ public class NeoForgePlugin implements IPlugin {
 
     @NotNull
     private static Destination getLootTableIdDestination(IServerUtils ignoredUtils, LootTableIdCondition cond) {
-        return new Destination.Table(((MixinLootTableIdCondition) cond).getTargetLootTableId(), true);
+        return new Destination.Table(((MixinLootTableIdCondition) cond).getTargetLootTableId()::equals, true);
     }
 
     @NotNull
@@ -170,6 +170,11 @@ public class NeoForgePlugin implements IPlugin {
             @Override
             public Identifier getName() {
                 return NeoForgeRegistries.GLOBAL_LOOT_MODIFIER_SERIALIZERS.getKey(modifier.codec());
+            }
+
+            @Override
+            public Object getLootModifier() {
+                return modifier;
             }
 
             @Override

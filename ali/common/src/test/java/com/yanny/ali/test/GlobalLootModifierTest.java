@@ -306,14 +306,16 @@ public class GlobalLootModifierTest {
     }
 
     @Nullable
-    private static Destination destination(LootItemCondition condition) {
-        return switch (condition) {
-            case LootItemBlockStatePropertyCondition blockCondition -> GlobalLootModifierUtils.getBlockStateDestination(UTILS, blockCondition);
-            case LootItemEntityPropertyCondition entityCondition -> GlobalLootModifierUtils.getEntityPropertyDestination(UTILS, entityCondition);
-            case TableIdCondition(Identifier id) -> new Destination.Table(id, true);
-            default -> null;
-        };
+    private static Destination destination(Object value) {
+        if (value instanceof LootItemBlockStatePropertyCondition blockCondition) {
+            return GlobalLootModifierUtils.getBlockStateDestination(UTILS, blockCondition);
+        } else if (value instanceof LootItemEntityPropertyCondition entityCondition) {
+            return GlobalLootModifierUtils.getEntityPropertyDestination(UTILS, entityCondition);
+        } else if (value instanceof TableIdCondition tableCondition) {
+            return new Destination.Table(tableCondition.id()::equals, true);
+        }
 
+        return null;
     }
 
     @NotNull
@@ -329,7 +331,7 @@ public class GlobalLootModifierTest {
     @NotNull
     private static Result resolve(IServerUtils utils, LootItemCondition... conditions) {
         List<String> retained = new ArrayList<>();
-        Optional<ILootModifier<?>> modifier = GlobalLootModifierUtils.getLootModifier(utils, List.of(conditions), (c) -> {
+        Optional<ILootModifier<?>> modifier = GlobalLootModifierUtils.getLootModifier(utils, null, List.of(conditions), (c) -> {
             retained.clear();
             c.forEach((condition) -> retained.add(condition.getClass().getSimpleName()));
             return List.of();

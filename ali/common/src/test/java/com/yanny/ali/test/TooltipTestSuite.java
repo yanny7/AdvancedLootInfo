@@ -137,8 +137,8 @@ public class TooltipTestSuite {
 
             @Nullable
             @Override
-            public Destination getDestination(IServerUtils utils, LootItemCondition condition) {
-                return PluginManager.getInstance().serverRegistry.getDestination(utils, condition);
+            public Destination getDestination(IServerUtils utils, Object value) {
+                return PluginManager.getInstance().serverRegistry.getDestination(utils, value);
             }
 
             @NotNull

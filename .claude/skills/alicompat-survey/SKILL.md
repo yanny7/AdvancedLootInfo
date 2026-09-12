@@ -89,7 +89,11 @@ stays in the work directory (`--work`, else a temp dir) — that is the interfac
    `registerTrades(<id>, …)`, every `@Mixin` target and `compat_mods`, read from this repo's sources.
    Wildcard imports make a simple name ambiguous, so both the resolved binary names and the bare
    simple names are kept — an exact match is `covered`, a simple-name-only match is downgraded to
-   `informational` rather than claimed as covered.
+   `informational` rather than claimed as covered. A shim whose target is not on the compile
+   classpath registers its accessor and names the target only in that accessor's
+   `@ClassAccessor("<binary name>")`, in a different file from the `register` call — those
+   annotations are collected into `classAccessors` and folded into the hooks before `covered` is
+   built, so a reflective shim counts as coverage of its target rather than reading as a gap.
 6. `cf_lookup.py --owners --candidates --mods-dir [--overrides]` → `projects.json`.
    `POST /v1/fingerprints` maps jar → project + file id, `POST /v1/mods` fetches slug and url, and one
    `GET /v1/mods/{id}/files?gameVersion=&modLoaderType=` per version/loader picks the newest file by
@@ -166,9 +170,10 @@ project publishes nothing for the target versions, while the shim must compile a
 - **`unresolved_entity_loot_table` is not a shim.** Those are `entityLootTables` entries in ALI's
   datapack configuration (`ali_config.schema.json`), a config change, not Java.
 
-Then follow `alicompat/CLAUDE.md`'s "Adding a target mod" for each mod picked up: `compat_mods`, the
-`<slug>_<loader>_dep` property from the report, the source set, the `IModCompat` implementation and
-its `services` fragment.
+Then follow `alicompat/CLAUDE.md`'s "Adding a target mod" for each mod picked up: the
+`supported_mods.json` entry (the report's maven coordinates carry the slug and project id it needs),
+`compat_mods`, then `python3 check_versions.py --update` for the `<slug>_<loader>_dep` lines and the
+scaffolded source set, and finally the real `IModCompat` implementation and its `services` fragment.
 
 ## Extending this skill
 

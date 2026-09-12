@@ -69,6 +69,7 @@ public class TwilightForestCompat implements IGlmModCompat {
         registry.registerItemSubPredicateTooltip(ItemColorPredicate.class, TwilightForestCompat::getItemColorTooltip);
 
         registry.registerDestination(GiantPickUsedCondition.class, TwilightForestCompat::getGiantPickUsedDestination);
+        PluginUtils.registerDestination(registry, FieryToolSmeltingModifier.class, FieryToolSmeltingModifierAccessor.class);
     }
 
     @Override
@@ -99,7 +100,7 @@ public class TwilightForestCompat implements IGlmModCompat {
 
     @NotNull
     private static Destination getGiantPickUsedDestination(IServerUtils ignoredUtils, GiantPickUsedCondition ignoredCond) {
-        return new Destination.Blocks(Set.copyOf(GiantToolGroupingModifier.CONVERSIONS.keySet()), false);
+        return new Destination.Blocks(Set.copyOf(GiantToolGroupingModifier.CONVERSIONS.keySet())::contains, false);
     }
 
     @NotNull

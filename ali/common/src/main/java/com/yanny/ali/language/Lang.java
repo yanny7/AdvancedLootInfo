@@ -28,7 +28,7 @@ public final class Lang {
         WEATHER_CHECK("weather_check", "Weather Check:"),
         // Forge
         CAN_ITEM_PERFORM_ABILITY("can_item_perform_ability", "Can Item Perform Ability: %s"),
-        LOOT_TABLE_ID("loot_table_id", "Loot Table Id: %s"),
+        LOOT_TABLE_ID("loot_table_id", "Loot Table Id:"),
         // LootJS
         BLOCK_ENTITY("block_entity", "Block Entity:"),
         IS_LIGHT_LEVEL("is_light_level", "Is Light Level:"),
@@ -308,6 +308,7 @@ public final class Lang {
         ENCHANTMENT("enchantment", "Enchantment: %s"),
         ENTITY_DATA("entity_data", "Entity Data: %s"),
         ENTITY_TYPE("entity_type", "Entity Type: %s"),
+        ENTRY("entry", "Entry: %s"),
         EQUIPMENT_SLOT("equipment_slot", "Equipment Slot: %s"),
         EQUIP_ON_INTERACT("equip_on_interact", "Equip On Interact: %s"),
         EQUIP_SOUND("equip_sound", "Equip Sound: %s"),
@@ -533,7 +534,7 @@ public final class Lang {
         ENTITY_FLAGS("entity_flags", "Entity Flags:"),
         ENTITY_SUB_PREDICATE("entity_sub_predicate", "Entity Sub Predicate:"),
         ENTITY_TYPES(Value.ENTITY_TYPE, "entity_types", "Entity Types:"),
-        ENTRIES("entries", "Entries:"),
+        ENTRIES(Value.ENTRY, "entries", "Entries:"),
         EQUIPMENT_SLOTS(Value.EQUIPMENT_SLOT, "equipment_slots", "Equipment Slots:"),
         EXCLUDE(Value.EXCLUDE, "exclude", "Exclude:"),
         EXPECTED_COMPONENTS("expected_components", "Expected Components:"),
