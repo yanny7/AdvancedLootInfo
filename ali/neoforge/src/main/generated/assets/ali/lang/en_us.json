@@ -237,6 +237,7 @@
   "ali.property.value.enchantment": "Enchantment: %s",
   "ali.property.value.entity_data": "Entity Data: %s",
   "ali.property.value.entity_type": "Entity Type: %s",
+  "ali.property.value.entry": "Entry: %s",
   "ali.property.value.equipment_slot": "Equipment Slot: %s",
   "ali.property.value.exact": "Exact: %s",
   "ali.property.value.exclude": "Exclude: %s",
