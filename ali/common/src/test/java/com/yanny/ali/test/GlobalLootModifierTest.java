@@ -310,6 +310,7 @@ public class GlobalLootModifierTest {
             return new Destination.Table(tableCondition.id()::equals, true);
         }
 
+        return null;
     }
 
     @NotNull

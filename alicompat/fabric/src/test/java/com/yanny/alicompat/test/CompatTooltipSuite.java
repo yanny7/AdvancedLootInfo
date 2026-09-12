@@ -10,7 +10,7 @@ import com.yanny.ali.manager.PluginManager;
 import com.yanny.alicompat.ModCompatManager;
 import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.client.resources.ClientPackSource;
 import net.minecraft.client.resources.language.LanguageManager;
 import net.minecraft.locale.Language;

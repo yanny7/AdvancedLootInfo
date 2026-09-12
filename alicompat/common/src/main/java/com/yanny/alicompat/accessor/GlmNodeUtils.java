@@ -13,7 +13,7 @@ import com.yanny.ali.plugin.common.nodes.ModifiedNode;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.predicates.AllOfCondition;
@@ -37,7 +37,7 @@ public class GlmNodeUtils {
     }
 
     @NotNull
-    public static IDataNode referenceNode(IServerUtils utils, List<LootItemCondition> conditions, ResourceLocation lootTable) {
+    public static IDataNode referenceNode(IServerUtils utils, List<LootItemCondition> conditions, Identifier lootTable) {
         TooltipNode tooltip = TooltipBuilder.array((b) -> {
             b.add(TooltipBuilder.keyOnly(Lang.Group.ALL));
             b.add(GenericTooltipUtils.getConditionsSectionTooltip(utils, conditions));

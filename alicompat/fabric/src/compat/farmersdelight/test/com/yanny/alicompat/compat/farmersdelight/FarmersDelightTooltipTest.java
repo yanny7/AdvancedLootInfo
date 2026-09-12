@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.farmersdelight;
 
 import com.yanny.aci.tooltip.TooltipNode;
-import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;

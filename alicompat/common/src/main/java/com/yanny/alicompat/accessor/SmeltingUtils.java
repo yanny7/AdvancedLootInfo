@@ -18,9 +18,10 @@ public class SmeltingUtils {
     @NotNull
     public static Optional<ItemStack> smelt(IServerUtils utils, ItemStack itemStack) {
         ServerLevel level = utils.getServerLevel();
+        SingleRecipeInput input = new SingleRecipeInput(itemStack);
 
-        return level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(itemStack), level)
-                .map((recipe) -> recipe.value().getResultItem(level.registryAccess()))
+        return level.recipeAccess().getRecipeFor(RecipeType.SMELTING, input, level)
+                .map((recipe) -> recipe.value().assemble(input, level.registryAccess()))
                 .filter((stack) -> !stack.isEmpty());
     }
 

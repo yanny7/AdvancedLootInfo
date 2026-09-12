@@ -2,7 +2,6 @@ package com.yanny.alicompat.test.platform;
 
 import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.platform.services.IPlatformHelper;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.SpawnEggItem;
 
@@ -17,11 +16,6 @@ public class TestPlatformHelper implements IPlatformHelper {
 
     @Override
     public Path getConfiguration() {
-        return null;
-    }
-
-    @Override
-    public HolderLookup.Provider getLookupProvider() {
         return null;
     }
 
