@@ -218,6 +218,13 @@ subprojects {
                     }
                 }
             }
+
+            tasks.register("run${project.parent.name.capitalize()}${project.name.capitalize()}Datagen", GradleBuild) {
+                group = "launchers"
+                description = "Generate ${project.parent.name.capitalize()} ${project.name.toUpperCase()} data"
+                setTasks([":${project.parent.name}:${project.name}:runData".toString()])
+                startParameter.projectProperties = ["recipe_viewer": "none"]
+            }
         }
 
         if (!isAci && !isAliCompat) {
