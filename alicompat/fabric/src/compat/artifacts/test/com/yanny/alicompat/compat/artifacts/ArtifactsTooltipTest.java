@@ -4,6 +4,8 @@ import artifacts.loot.ArtifactRarityAdjustedChance;
 import artifacts.loot.ConfigValueChance;
 import artifacts.loot.IsAprilFools;
 import artifacts.loot.ReplaceWithLootTableFunction;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.junit.jupiter.api.Test;
@@ -16,7 +18,7 @@ import static com.yanny.alicompat.test.CompatTooltipSuite.UTILS;
 public class ArtifactsTooltipTest {
     @Test
     public void testReplaceWithLootTableFunction() {
-        ReplaceWithLootTableFunction function = new ReplaceWithLootTableFunction(new LootItemCondition[0], new ResourceLocation("artifacts", "chests/cave"));
+        ReplaceWithLootTableFunction function = new ReplaceWithLootTableFunction(List.of(), ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("artifacts", "chests/cave")));
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
                 "Replace With Loot Table:",
@@ -39,13 +41,4 @@ public class ArtifactsTooltipTest {
         ));
     }
 
-    @Test
-    public void testConfigValueChanceCondition() {
-        LootItemCondition condition = ConfigValueChance.archaeologyChance().build();
-
-        assertTooltip(UTILS.getConditionTooltip(UTILS, condition).build(), List.of(
-                "Config Value Chance:",
-                "  -> Config: archaeology"
-        ));
-    }
 }

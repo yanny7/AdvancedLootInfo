@@ -10,11 +10,15 @@ import com.aetherteam.aether.loot.modifiers.EnchantedGrassModifier;
 import com.aetherteam.aether.loot.modifiers.GlovesLootModifier;
 import com.aetherteam.aether.loot.modifiers.PigDropsModifier;
 import com.aetherteam.aether.loot.modifiers.RemoveSeedsModifier;
+import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerRegistry;
+import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.alicompat.IGlmModCompat;
 import com.yanny.alicompat.accessor.GlmAccessorUtils;
 import com.yanny.alicompat.accessor.PluginUtils;
+import net.minecraft.util.valueproviders.IntProvider;
 import org.jetbrains.annotations.NotNull;
 
 public class AetherCompat implements IGlmModCompat {
@@ -31,6 +35,8 @@ public class AetherCompat implements IGlmModCompat {
         PluginUtils.registerFunctionTooltip(registry, SpawnTNT.class, SpawnTNTAccessor::new);
         PluginUtils.registerFunctionTooltip(registry, SpawnXP.class, SpawnXPAccessor::new);
         PluginUtils.registerFunctionTooltip(registry, WhirlwindSpawnEntity.class, WhirlwindSpawnEntityAccessor.class);
+
+        registry.registerValueTooltip(IntProvider.class, AetherCompat::getIntProviderTooltip);
     }
 
     @Override
@@ -40,5 +46,10 @@ public class AetherCompat implements IGlmModCompat {
         GlmAccessorUtils.registerGlobalLootModifier(registry, GlovesLootModifier.class, GlovesLootModifierAccessor.class);
         GlmAccessorUtils.registerGlobalLootModifier(registry, PigDropsModifier.class, PigDropsModifierAccessor.class);
         GlmAccessorUtils.registerGlobalLootModifier(registry, RemoveSeedsModifier.class, RemoveSeedsModifierAccessor.class);
+    }
+
+    @NotNull
+    private static TooltipBuilder getIntProviderTooltip(IServerUtils utils, IntProvider provider) {
+        return utils.getValueTooltip(utils, new RangeValue(provider.getMinValue(), provider.getMaxValue()));
     }
 }

@@ -11,9 +11,9 @@ import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.IItemListing;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
-import svenhjol.charmony.helper.GenericTradeOffers;
+import svenhjol.charm.charmony.common.villages.GenericTrades;
 
-public class ItemsForItemsAccessor extends BaseAccessor<GenericTradeOffers.ItemsForItems> implements IItemListing {
+public class ItemsForItemsAccessor extends BaseAccessor<GenericTrades.ItemsForItems> implements IItemListing {
     @FieldAccessor
     private ItemLike inputItem;
     @FieldAccessor
@@ -31,7 +31,7 @@ public class ItemsForItemsAccessor extends BaseAccessor<GenericTradeOffers.Items
     @FieldAccessor
     private int villagerXp;
 
-    public ItemsForItemsAccessor(GenericTradeOffers.ItemsForItems parent) {
+    public ItemsForItemsAccessor(GenericTrades.ItemsForItems parent) {
         super(parent);
     }
 

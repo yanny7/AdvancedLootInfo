@@ -47,6 +47,7 @@ public class CommonValueTooltip<
         registry.registerValueTooltip(Property.class, this::getPropertyTooltip);
         registry.registerValueTooltip(RangeValue.class, this::getRangeValueTooltip);
         registry.registerValueTooltip(HolderSet.class, this::getHolderSetTooltip);
+        registry.registerValueTooltip(Either.class, this::getEitherTooltip);
     }
 
     private TooltipBuilder getCollectionTooltip(TServerUtils utils, Collection<?> collection) {
@@ -192,5 +193,10 @@ public class CommonValueTooltip<
                         list.forEach((holder) -> b.add(TooltipBuilder.asElement(utils.getValueTooltip(utils, holder), list.size())));
                     }
                 }));
+    }
+
+    @NotNull
+    private TooltipBuilder getEitherTooltip(TServerUtils utils, Either<?, ?> either) {
+        return either.map((l) -> utils.getValueTooltip(utils, l), (r) -> utils.getValueTooltip(utils, r));
     }
 }

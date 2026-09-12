@@ -50,7 +50,7 @@
   {
     "key": "cognition",
     "name": "Cognition",
-    "mod_ids": ["experienceobelisk"],
+    "mod_ids": ["experienceobelisk", "cognition"],
     "curseforge": ["cognition-mod-579484"]
   },
   {

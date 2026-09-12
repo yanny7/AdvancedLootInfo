@@ -21,15 +21,20 @@ import net.mehvahdjukaar.supplementaries.common.entities.trades.RandomAdventurer
 import net.mehvahdjukaar.supplementaries.common.entities.trades.RocketItemListing;
 import net.mehvahdjukaar.supplementaries.common.entities.trades.StarItemListing;
 import net.mehvahdjukaar.supplementaries.common.entities.trades.StructureMapListing;
-import net.mehvahdjukaar.supplementaries.common.items.loot.CurseLootFunction;
 import net.mehvahdjukaar.supplementaries.common.items.loot.RandomArrowFunction;
+import net.mehvahdjukaar.supplementaries.common.items.loot.SetChargesFunction;
 import net.mehvahdjukaar.supplementaries.reg.ModTags;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.trading.ItemCost;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 public class SupplementariesCompat implements IModCompat {
     private static final int RED_MERCHANT_TRADE_COUNT = 7;
@@ -47,8 +52,8 @@ public class SupplementariesCompat implements IModCompat {
 
     @Override
     public void registerServer(IServerRegistry registry) {
-        PluginUtils.registerFunctionTooltip(registry, CurseLootFunction.class, CurseLootFunctionAccessor.class);
         PluginUtils.registerFunctionTooltip(registry, RandomArrowFunction.class, RandomArrowFunctionAccessor.class);
+        PluginUtils.registerFunctionTooltip(registry, SetChargesFunction.class, SetChargesFunctionAccessor.class);
 
         registry.registerItemListing(PresentItemListing.class, SupplementariesCompat::getPresentListingNode);
         registry.registerItemListing(StarItemListing.class, SupplementariesCompat::getStarListingNode);
@@ -57,17 +62,17 @@ public class SupplementariesCompat implements IModCompat {
         registry.registerItemListing(RandomAdventurerMapListing.class, SupplementariesCompat::getAdventurerMapListingNode);
 
         registry.registerTrades(
-                new ResourceLocation(SupplementariesLang.MOD_ID, "red_merchant"),
-                SupplementariesCompat::getRedMerchantTrades,
+                ResourceLocation.fromNamespaceAndPath(SupplementariesLang.MOD_ID, "red_merchant"),
+                () -> getRedMerchantTrades(registry.getServerLevel().registryAccess()),
                 (level) -> new TradeLevelInfo(new RangeValue(RED_MERCHANT_TRADE_COUNT))
         );
     }
 
     @NotNull
-    private static Int2ObjectMap<VillagerTrades.ItemListing[]> getRedMerchantTrades() {
+    private static Int2ObjectMap<VillagerTrades.ItemListing[]> getRedMerchantTrades(HolderLookup.Provider provider) {
         Int2ObjectMap<VillagerTrades.ItemListing[]> itemListings = new Int2ObjectArrayMap<>();
 
-        itemListings.put(RED_MERCHANT_LEVEL, ModVillagerTrades.getRedMerchantTrades());
+        itemListings.put(RED_MERCHANT_LEVEL, ModVillagerTrades.getRedMerchantTrades(provider));
         return itemListings;
     }
 
@@ -80,11 +85,11 @@ public class SupplementariesCompat implements IModCompat {
     private static IDataNode getStarListingNode(IServerUtils utils, StarItemListing listing, TooltipNode condition) {
         return new ItemsToItemsNode(
                 utils,
-                Either.left(listing.emeralds()),
-                new RangeValue(listing.emeralds().getCount()),
+                Either.left(listing.emeralds().itemStack()),
+                new RangeValue(listing.emeralds().itemStack().getCount()),
                 TooltipNode.empty(),
-                Either.left(listing.priceSecondary()),
-                new RangeValue(Math.max(1, listing.priceSecondary().getCount())),
+                Either.left(getSecondaryPrice(listing.priceSecondary())),
+                new RangeValue(Math.max(1, getSecondaryPrice(listing.priceSecondary()).getCount())),
                 TooltipNode.empty(),
                 Either.left(Items.FIREWORK_STAR.getDefaultInstance()),
                 new RangeValue(listing.stars()),
@@ -100,11 +105,11 @@ public class SupplementariesCompat implements IModCompat {
     private static IDataNode getRocketListingNode(IServerUtils utils, RocketItemListing listing, TooltipNode condition) {
         return new ItemsToItemsNode(
                 utils,
-                Either.left(listing.emeralds()),
-                new RangeValue(listing.emeralds().getCount()),
+                Either.left(listing.emeralds().itemStack()),
+                new RangeValue(listing.emeralds().itemStack().getCount()),
                 TooltipNode.empty(),
-                Either.left(listing.priceSecondary()),
-                new RangeValue(Math.max(1, listing.priceSecondary().getCount())),
+                Either.left(getSecondaryPrice(listing.priceSecondary())),
+                new RangeValue(Math.max(1, getSecondaryPrice(listing.priceSecondary()).getCount())),
                 TooltipNode.empty(),
                 Either.left(Items.FIREWORK_ROCKET.getDefaultInstance()),
                 new RangeValue(listing.rockets()),
@@ -126,8 +131,8 @@ public class SupplementariesCompat implements IModCompat {
                 Either.left(listing.cost().getDefaultInstance()),
                 getPriceRange(listing.minPrice(), listing.maxPrice() - 1),
                 TooltipNode.empty(),
-                Either.left(listing.cost2()),
-                new RangeValue(Math.max(1, listing.cost2().getCount())),
+                Either.left(getSecondaryPrice(listing.cost2())),
+                new RangeValue(Math.max(1, getSecondaryPrice(listing.cost2()).getCount())),
                 TooltipNode.empty(),
                 Either.left(getMapStack(listing.mapName())),
                 new RangeValue(1),
@@ -152,8 +157,8 @@ public class SupplementariesCompat implements IModCompat {
                 Either.left(listing.emerald().getDefaultInstance()),
                 getPriceRange(listing.priceMax(), 2 * listing.priceMax() - listing.priceMin()),
                 TooltipNode.empty(),
-                Either.left(listing.priceSecondary()),
-                new RangeValue(Math.max(1, listing.priceSecondary().getCount())),
+                Either.left(getSecondaryPrice(listing.priceSecondary())),
+                new RangeValue(Math.max(1, getSecondaryPrice(listing.priceSecondary()).getCount())),
                 TooltipNode.empty(),
                 Either.left(getMapStack(ADVENTURER_MAP_NAME)),
                 new RangeValue(1),
@@ -171,6 +176,11 @@ public class SupplementariesCompat implements IModCompat {
     }
 
     @NotNull
+    private static ItemStack getSecondaryPrice(Optional<ItemCost> price) {
+        return price.map(ItemCost::itemStack).orElse(ItemStack.EMPTY);
+    }
+
+    @NotNull
     private static RangeValue getPriceRange(int min, int max) {
         return new RangeValue(Math.max(1, min), Math.max(Math.max(1, min), max));
     }
@@ -180,7 +190,7 @@ public class SupplementariesCompat implements IModCompat {
         ItemStack stack = Items.FILLED_MAP.getDefaultInstance();
 
         if (!name.isEmpty()) {
-            stack.setHoverName(Component.translatable(name));
+            stack.set(DataComponents.CUSTOM_NAME, Component.translatable(name));
         }
 
         return stack;
