@@ -1,0 +1,242 @@
+[
+  {
+    "key": "advancedperipherals",
+    "name": "Advanced Peripherals",
+    "mod_ids": ["advancedperipherals"],
+    "curseforge": ["advanced-peripherals-431725"]
+  },
+  {
+    "key": "aether",
+    "name": "The Aether",
+    "mod_ids": ["aether"],
+    "curseforge": ["aether-255308"]
+  },
+  {
+    "key": "apotheosis",
+    "name": "Apotheosis",
+    "mod_ids": ["apotheosis"],
+    "curseforge": ["apotheosis-313970"]
+  },
+  {
+    "key": "appliedcooking",
+    "name": "Applied Cooking",
+    "mod_ids": ["appliedcooking"],
+    "curseforge": ["applied-cooking-689579"]
+  },
+  {
+    "key": "arsnouveau",
+    "name": "Ars Nouveau",
+    "mod_ids": ["ars_nouveau"],
+    "curseforge": ["ars-nouveau-401955"]
+  },
+  {
+    "key": "artifacts",
+    "name": "Artifacts",
+    "mod_ids": ["artifacts"],
+    "curseforge": ["artifacts-312353"]
+  },
+  {
+    "key": "bumblezone",
+    "name": "The Bumblezone",
+    "mod_ids": ["the_bumblezone"],
+    "curseforge": ["the-bumblezone-fabric-363949", "the-bumblezone-forge-362479"]
+  },
+  {
+    "key": "charm",
+    "name": "Charm Forked",
+    "mod_ids": ["charm"],
+    "curseforge": ["charm-forked-1016482"]
+  },
+  {
+    "key": "cognition",
+    "name": "Cognition",
+    "mod_ids": ["experienceobelisk"],
+    "curseforge": ["cognition-mod-579484"]
+  },
+  {
+    "key": "computercraft",
+    "name": "CC: Tweaked",
+    "mod_ids": ["computercraft"],
+    "curseforge": ["cc-tweaked-282001"]
+  },
+  {
+    "key": "deeperdarker",
+    "name": "Deeper and Darker",
+    "mod_ids": ["deeperdarker"],
+    "curseforge": ["deeperdarker-659011"]
+  },
+  {
+    "key": "dimdungeons",
+    "name": "Dimensional Dungeons",
+    "mod_ids": ["dimdungeons"],
+    "curseforge": ["dimensional-dungeons-352222"]
+  },
+  {
+    "key": "enderio",
+    "name": "Ender IO",
+    "mod_ids": ["enderio"],
+    "curseforge": ["ender-io-64578"]
+  },
+  {
+    "key": "extrastorage",
+    "name": "ExtraStorage",
+    "mod_ids": ["extrastorage"],
+    "curseforge": ["extrastorage-410168"]
+  },
+  {
+    "key": "farlanders",
+    "name": "The Farlanders",
+    "mod_ids": ["farlanders"],
+    "curseforge": ["farlanders-336432"]
+  },
+  {
+    "key": "farmersdelight",
+    "name": "Farmer's Delight",
+    "mod_ids": ["farmersdelight"],
+    "curseforge": ["farmers-delight-398521", "farmers-delight-refabricated-993166"]
+  },
+  {
+    "key": "goblintraders",
+    "name": "Goblin Traders",
+    "mod_ids": ["goblintraders"],
+    "curseforge": ["goblin-traders-363703"]
+  },
+  {
+    "key": "hybridaquatic",
+    "name": "Hybrid Aquatic",
+    "mod_ids": ["hybrid_aquatic"],
+    "curseforge": ["hybrid-aquatic-834427"]
+  },
+  {
+    "key": "immersiveengineering",
+    "name": "Immersive Engineering",
+    "mod_ids": ["immersiveengineering"],
+    "curseforge": ["immersive-engineering-231951"]
+  },
+  {
+    "key": "ironsspellbooks",
+    "name": "Iron's Spells 'n Spellbooks",
+    "mod_ids": ["irons_spellbooks"],
+    "curseforge": ["irons-spells-n-spellbooks-855414"]
+  },
+  {
+    "key": "mantle",
+    "name": "Mantle",
+    "mod_ids": ["mantle"],
+    "curseforge": ["mantle-74924"]
+  },
+  {
+    "key": "mekanism",
+    "name": "Mekanism",
+    "mod_ids": ["mekanism"],
+    "curseforge": ["mekanism-268560"]
+  },
+  {
+    "key": "moonlight",
+    "name": "Moonlight",
+    "mod_ids": ["moonlight"],
+    "curseforge": ["selene-499980"]
+  },
+  {
+    "key": "morejs",
+    "name": "MoreJS",
+    "mod_ids": ["morejs"],
+    "curseforge": ["morejs-666198"]
+  },
+  {
+    "key": "morered",
+    "name": "More Red",
+    "mod_ids": ["morered"],
+    "curseforge": ["more-red-387638"]
+  },
+  {
+    "key": "occultism",
+    "name": "Occultism",
+    "mod_ids": ["occultism"],
+    "curseforge": ["occultism-361026"]
+  },
+  {
+    "key": "placebo",
+    "name": "Placebo",
+    "mod_ids": ["placebo"],
+    "curseforge": ["placebo-283644"]
+  },
+  {
+    "key": "portinglib",
+    "name": "Porting Lib",
+    "mod_ids": ["porting_lib_loot", "porting_lib_tool_actions"],
+    "curseforge": ["porting-lib-696251"]
+  },
+  {
+    "key": "refinedstorage",
+    "name": "Refined Storage",
+    "mod_ids": ["refinedstorage"],
+    "curseforge": ["refined-storage-243076"]
+  },
+  {
+    "key": "relics",
+    "name": "Relics",
+    "mod_ids": ["relics"],
+    "curseforge": ["relics-mod-445274"]
+  },
+  {
+    "key": "repurposedstructures",
+    "name": "Repurposed Structures",
+    "mod_ids": ["repurposed_structures"],
+    "curseforge": ["repurposed-structures-368293", "repurposed-structures-fabric-391366"]
+  },
+  {
+    "key": "ribbits",
+    "name": "Ribbits",
+    "mod_ids": ["ribbits"],
+    "curseforge": ["ribbits-622967"]
+  },
+  {
+    "key": "sawmill",
+    "name": "Sawmill",
+    "mod_ids": ["sawmill"],
+    "curseforge": ["sawmill-964817"]
+  },
+  {
+    "key": "snowrealmagic",
+    "name": "Snow! Real Magic!",
+    "mod_ids": ["snowrealmagic"],
+    "curseforge": ["snow-real-magic-308663", "snow-real-magic-fabric-560441"]
+  },
+  {
+    "key": "sophisticatedbackpacks",
+    "name": "Sophisticated Backpacks",
+    "mod_ids": ["sophisticatedbackpacks"],
+    "curseforge": ["sophisticated-backpacks-422301"]
+  },
+  {
+    "key": "sophisticatedstorage",
+    "name": "Sophisticated Storage",
+    "mod_ids": ["sophisticatedstorage"],
+    "curseforge": ["sophisticated-storage-619320"]
+  },
+  {
+    "key": "supplementaries",
+    "name": "Supplementaries",
+    "mod_ids": ["supplementaries"],
+    "curseforge": ["supplementaries-412082"]
+  },
+  {
+    "key": "twilightforest",
+    "name": "The Twilight Forest",
+    "mod_ids": ["twilightforest"],
+    "curseforge": ["the-twilight-forest-227639"]
+  },
+  {
+    "key": "villagertradingplus",
+    "name": "VillagerTradingPlus",
+    "mod_ids": ["villagertradingplus"],
+    "curseforge": ["villagerstradingplus-1635301"]
+  },
+  {
+    "key": "xycraftmachines",
+    "name": "XyCraft Machines",
+    "mod_ids": ["xycraft_machines"],
+    "curseforge": ["xycraft-machines-653791"]
+  }
+]

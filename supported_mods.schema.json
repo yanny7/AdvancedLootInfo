@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/yanny7/AdvancedLootInfo/blob/master/supported_mods.schema.json",
+  "title": "ALICompat Supported Mods Schema",
+  "description": "Minecraft-version-agnostic registry of every mod ALICompat provides support for (supported_mods.json). check_versions.py and modpack.py read it as their source of truth; gradle.properties holds only what the current branch resolves from it.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "key",
+      "name",
+      "mod_ids",
+      "curseforge"
+    ],
+    "properties": {
+      "key": {
+        "type": "string",
+        "description": "Identifier of the shim within this repository: the '<key>_<loader>_dep' property prefix, the 'compat_mods' entry, the 'src/compat/<key>' source set and the 'com.yanny.alicompat.compat.<key>' package.",
+        "pattern": "^[a-z0-9]+$"
+      },
+      "name": {
+        "type": "string",
+        "description": "Human readable mod name, used in the generated gradle.properties comments and in reports."
+      },
+      "mod_ids": {
+        "type": "array",
+        "description": "Runtime mod ids the shim gates on. More than one when a single CurseForge project ships several mod ids (Porting Lib).",
+        "minItems": 1,
+        "items": {
+          "type": "string",
+          "pattern": "^[a-z0-9_.-]+$"
+        }
+      },
+      "curseforge": {
+        "type": "array",
+        "description": "CurseForge projects for this mod, as '<slug>-<project id>' (the artifact half of the 'curse.maven' coordinate). Usually one; a second entry is for mods published as a separate project per loader. Which project serves which loader is derived from CurseForge per Minecraft version, not declared here.",
+        "minItems": 1,
+        "items": {
+          "type": "string",
+          "description": "'<slug>-<project id>', e.g. 'the-bumblezone-forge-362479'. The slug is the last segment of the project URL. No file id: the pinned file is Minecraft-version specific and lives in gradle.properties.",
+          "pattern": "^[a-z0-9-]+-[0-9]+$"
+        }
+      }
+    }
+  }
+}

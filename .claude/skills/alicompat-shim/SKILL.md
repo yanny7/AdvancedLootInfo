@@ -1,31 +1,65 @@
 ---
 name: alicompat-shim
-description: Write one ALICompat compatibility shim for a target mod — fetch that mod's jar for the current branch's Minecraft version, decompile the loot/trade classes named in the survey, and produce the source set, accessors, services fragments, gradle.properties wiring, tooltip keys and changelog entry, then compile it. Use when the user names a mod to support ("start twilight forest", "add Apotheosis support", "write the shim for irons_spellbooks"), points at a row of the ALICompat tracker (COMPATIBILITY.md / compatibility/<mod id>.md), or asks to cover a specific loot function/condition/GLM/trading entity from another mod.
+description: Write or update one ALICompat compatibility shim for a target mod — fetch that mod's jar for this checkout's Minecraft version, work out which of its loot/trade classes ALI cannot render, and produce the source set, accessors, services fragments, gradle.properties wiring, tooltip keys and changelog entry, then compile it. Use when the user names a mod to support ("start twilight forest", "add Apotheosis support", "write the shim for irons_spellbooks"), asks to cover a specific loot function/condition/GLM/trading entity from another mod, or asks to update an existing shim after its target mod released a new version.
 ---
 
 # Writing one ALICompat shim
 
-Takes one target mod from plan to compiling code. The plan comes from the `alicompat-survey` skill
-(`COMPATIBILITY.md` and its `compatibility/<mod id>.md` files); this skill is what runs per row of
-that queue. Read only the target mod's file — the index is a link list, and the other 90-odd files
-are irrelevant to the shim in hand. Read `alicompat/CLAUDE.md`
-first — "Adding a target mod", "Writing a shim" and "Translations" are the contract, and this skill
-only adds the parts that document does not: how to get the target's bytecode, what the survey gets
-wrong, and the traps that cost a compile round-trip.
+Takes one target mod from nothing to compiling code. Read `alicompat/CLAUDE.md` first — "Adding a
+target mod", "Writing a shim" and "Translations" are the contract, and this skill only adds the parts
+that document does not: how to get the target's bytecode, how to decide what is worth registering,
+and the traps that cost a compile round-trip.
+
+`references/patterns.md` next to this file indexes every shim already in the repo by the hook it
+registers. Open the one whose shape matches the target before deriving anything from a decompile;
+it is cheaper than rediscovering the conventions.
 
 `alicompat/CLAUDE.md`'s **"Tooltip code style"** is the shape the code takes — method signature, the
 single `return`, delegation through `getValueTooltip`, null and `Optional`, key placement, method
 references over lambdas, the `Lang` enum, comments. Read that section before writing the first line
 of Java; nothing about code shape is repeated here.
 
-## Step 1 — the survey's class list is for a different Minecraft version
+## Step 0 — where the finding list comes from
 
-The survey scanned the jars **in the modpack**, which is one Minecraft version. The checkout you are
-in is another (read `minecraft_version` from the repo-root `gradle.properties`). Loot classes move,
-get added and get deleted between versions, so the finding list is a hypothesis, not an inventory.
+Three starting points, and they decide how much of Step 1 applies.
 
-Get the jar for *this* branch's version before writing anything. The tracker gives the CurseForge
-project and file id per version; cursemaven serves it directly:
+**The user points at a finding list.** The `alicompat-survey` skill produces one per mod when it is
+run against a modpack. Read only the file for the mod in hand. Its list is a hypothesis — it was
+produced against whatever Minecraft version that pack ran, so Step 1 still applies in full.
+
+**Nothing exists for this mod.** Derive the list yourself from the jar, then Step 1 is already done
+because you scanned the right version:
+
+```bash
+unzip -l mod.jar | grep -E 'loot/|predicate|condition|function|trade|Listing'
+unzip -l mod.jar | grep -E 'data/[a-z0-9_]+/loot_modifiers/'
+```
+
+What matters is what inherits from `LootItemCondition`, `LootItemFunction`, `LootPoolEntryContainer`,
+`NumberProvider`, `Ingredient`, `VillagerTrades.ItemListing` or `IGlobalLootModifier`, plus any
+`EntityType` the mod registers as a merchant. Confirm the hierarchy with `javap -p`, never from the
+class name. A scan that finds nothing is a valid answer: say so and write no shim.
+
+**The shim exists and the target mod moved on.** Repin first, then treat the new jar as an unknown:
+
+```bash
+python3 check_versions.py --loader <loader>          # what is behind
+python3 check_versions.py --update                   # repin the file ids
+```
+
+`--update` only swaps the file id; it does not check that the shim still compiles. Build immediately
+after, and diff the class list the shim uses against what the new jar actually contains — a target
+mod's refactor shows up here as a missing class, not as a broken tooltip.
+
+## Step 1 — a finding list is for one Minecraft version only
+
+A list that came from anywhere but this checkout's own jar describes a different Minecraft version
+(read `minecraft_version` from the repo-root `gradle.properties` for this one). Loot classes move,
+get added and get deleted between versions, so such a list is a hypothesis, not an inventory.
+
+Get the jar for *this* branch's version before writing anything. A `<slug>_<loader>_dep` line in
+`gradle.properties` already names the project and file id when the mod is pinned; otherwise look the
+project up on CurseForge. Cursemaven serves a file directly:
 
 ```bash
 curl -sL -o /tmp/.../tf.jar "https://cursemaven.com/curse/maven/O-<projectId>/<fileId>/O-<projectId>-<fileId>.jar"
@@ -33,12 +67,37 @@ unzip -l tf.jar | grep -E "loot/|predicate|trade"
 ```
 
 Diff that against the findings. On the Twilight Forest row, four of the ten listed classes did not
-exist on `1.20.1` and one class that mattered (`ModItemSwap`) was not listed at all. Record both
-directions in the tracker (`— not in the <version> jar`, `— <version> only, not in the survey`)
-rather than silently covering a different set than the row claims.
+exist on `1.20.1` and one class that mattered (`ModItemSwap`) was not listed at all. Report both
+directions in your summary — what the list named and the jar lacks, and what the jar has that the
+list missed — rather than silently covering a different set than the list claims.
 
-Which loaders exist for this mod on this branch also comes from the tracker's version list — a
-`1.20.1` Forge-only mod gets a source set in `alicompat/forge` and nothing in `alicompat/fabric`.
+Match findings by **simple class name**, not by the package a finding list printed: a mod may rename its root package
+between versions (Applied Cooking's `sebastrn.appliedcooking` is `dev.smolinacadena.appliedcooking` on `1.20.1`), and a
+grep for the fully-qualified name reports a class that is right there as missing.
+
+Read `targetModId()` out of the downloaded jar's `META-INF/mods.toml` / `fabric.mod.json`, never off the CurseForge slug
+or the mod's display name. An older branch's CurseForge file can be a different major version of the mod with a
+different mod id and different code entirely — `bonsai-trees` on `1.20.1` is Bonsai Trees 3, mod id `bonsaitrees3`,
+with no loot code at all — and a wrong id makes `isModLoaded` false, so the whole shim silently never registers.
+
+The jar's own loot tables are the inventory the class list only approximates. Grep them for every non-vanilla type:
+
+```bash
+unzip -oq target.jar -d t 'data/<modid>/loot_tables/*'
+grep -rhoE '"(condition|function|type)": *"[a-z_]+:[a-z_]*"' t/ | sort -u
+```
+
+Only `minecraft:` values means there is nothing to shim on this branch, whatever a list claims, and each other value
+is a hook to cover — including ones no list mentioned. Do this whenever the class names do not line up: a mod whose
+major version differs between branches keeps the mod id but renames everything (`refinedstorage` on `1.20.1` is RS 1.12,
+`com.refinedmods.refinedstorage.loottable.StorageBlockLootFunction`, against RS 2.x's
+`…refinedstorage.common.storage.storageblock.StorageBlockLootItemFunction`), so matching by name finds nothing and the
+row looks empty when four functions need rendering.
+
+Which loaders this mod actually ships for this Minecraft version decides where the source set goes:
+a mod with no file for a loader gets no source set under it and no `_dep` line for it, and that is
+how a single-loader shim is expressed. Which loaders the branch itself has is in `settings.gradle`
+and the `<loader>_enabled` properties — never assume.
 
 ## Step 2 — decompile, do not guess semantics
 
@@ -61,7 +120,7 @@ proguard map with the SRG one once, then grep it — worth doing up front if the
 vanilla-item data:
 
 ```bash
-python3 .claude/skills/alicompat-shim/scripts/srg_to_mojmap.py 1.20.1 > srg2moj.txt
+python3 .claude/skills/alicompat-shim/scripts/srg_to_mojmap.py $(grep -m1 '^minecraft_version=' gradle.properties | cut -d= -f2) > srg2moj.txt
 grep -m1 "^f_42616_ " srg2moj.txt   # -> net.minecraft.world.item.Items.EMERALD
 ```
 
@@ -84,8 +143,9 @@ readable from the shim at server-registry time.
   hands you `predicates` through ALI's access widener.
 
 **The `@FieldAccessor` processor validates names against the accessor's type parameter.** Extending
-`ConditionalFunction` types the accessor on `LootItemConditionalFunction`, so a `@FieldAccessor`
-naming a field of the *target* fails the build with `No field named x in LootItemConditionalFunction`.
+`ConditionalFunction` types the accessor on `LootItemConditionalFunction`, and `SingletonContainer` on
+`LootPoolSingletonContainer`, so a `@FieldAccessor` naming a field of the *target* fails the build with
+`No field named x in LootItemConditionalFunction`.
 When you need both the target's fields and its predicates, extend `BaseAccessor<Target>` and read
 `parent.predicates` — the access widener opens it either way.
 
@@ -97,6 +157,37 @@ each accessor redeclares that base's fields itself. Typing the base on a type va
 (`BaseAccessor<T>`) makes it worse — `resolveTarget` gives up and the processor skips validation with
 a NOTE instead of an error.
 
+**Only the value-tooltip registry resolves superclasses; every other one is keyed on the exact class.**
+`valueTooltips` is a `ClassKeyedMap`, so a subclass reaches its base type's renderer — which is why an
+`ItemPredicate` subclass carrying no vanilla fields renders *empty* rather than missing, and looks covered
+when it is not. Entries, functions, conditions and ingredients are plain `HashMap`s: a subclass of a
+registered type reaches nothing and falls to the missing tooltip, so an `ingredient` finding whose values
+ALI could already render is fixed by registering the concrete class against ALI's own
+`IngredientTooltipUtils::getIngredientTooltip` — no accessor and no new key.
+
+**Only the target mod's own jar is on the compile classpath, never its libraries.** `modCompileOnly` adds the one
+coordinate from `<slug>_<loader>_dep` and nothing it depends on, so an expression javac has to resolve through a
+third-party type fails to compile — Ender IO's `EIOItems.BROKEN_SPAWNER` needs Registrate's `ItemEntry`, Artifacts'
+`Artifacts.CONFIG.common` needs Cloth `autoconfig`'s `ConfigData`. Reach the same value another way instead of adding
+the library: an item through `BuiltInRegistries.ITEM`, a config value through a reflective accessor over the field
+that holds it. When neither works, drop that part of the tooltip and label what is left by the field it actually
+reads (`Default Probability:`, not `Probability:`) rather than implying the applied value.
+The one exception is a library that is itself a slug in `compat_mods`: every target's `modCompileOnly` lands on the
+loader module's single compile classpath, so a shim may name that library's types directly (Supplementaries' listings
+are Moonlight's `ModItemListing`) without reflection, and at runtime the target mod's own hard dependency guarantees
+it is there.
+
+An `item_sub_predicate` finding on a branch before `1.20.5` is an `ItemPredicate` subclass, not a sub-predicate:
+there is no `registerItemSubPredicate`, and the hook is `registerValueTooltip` on that class.
+
+**An entry that carries its own count reports `1` unless you seed the range yourself.**
+`NodeUtils.getEnchantedCount` starts from `RangeValue(1)` and lets the entry's functions modify it, which is right
+only for an entry whose count comes from a `SetItemCountFunction`. A `LootPoolSingletonContainer` holding its own
+`min`/`max` (Placebo's `StackLootEntry`) must build `new EnchantedRanges(new RangeValue(min, max))` and run
+`utils.applyCountModifier` over the functions itself, then hand that to both `ItemNode` and
+`TooltipUtils.getTooltip`. `weight`, `quality`, `conditions` and `functions` are read off `parent` — the access
+widener opens all four — and `IEntry` and `IEntryTooltip` sit on the one accessor.
+
 One accessor may implement several hooks. A function that swaps the stack is worth registering three
 times: `registerFunctionTooltip` (what it says), `registerItemStackModifier` (so the drop renders as
 the swapped item) and `registerItemCollector` (so the recipe-viewer index finds it).
@@ -106,8 +197,8 @@ the swapped item) and `registerItemCollector` (so the recipe-viewer index finds 
 Before writing anything, work out **which listing classes actually reach ALI**. ALI reads
 `VillagerTrades.VILLAGER_TRADES` / `WANDERING_TRADER_TRADES` and whatever a `registerTrades` supplier
 hands it — a listing class the target only instantiates inside its own entity's `getOffers()` to pull
-one `MerchantOffer` out of never arrives, and registering it is dead code. The survey cannot tell the
-difference and lists those too (usually as "likely"): grep the target for who *adds* the listing to a
+one `MerchantOffer` out of never arrives, and registering it is dead code. A finding list cannot tell the
+difference and names those too (usually as "likely"): grep the target for who *adds* the listing to a
 trade list. On Forge, `VillagerTradingManager.postWandererEvent` writes the `WandererTradesEvent`
 result back into `VillagerTrades.WANDERING_TRADER_TRADES`, so a mod's wandering-trader additions do
 reach ALI and only a renderer is missing. Lookup is by **exact class**
@@ -132,9 +223,15 @@ tooltip when that throws. A shim earns its place by reading the listing's fields
 `BiFunction<Entity, RandomSource, MerchantOffer>` (Iron's Spellbooks' `AdditionalWanderingTrades`)
 puts every constructor argument in the lambda's capture. Work down this list:
 
-- Real fields on the subclass → ordinary `BaseAccessor`, nothing special. Beware a listing that
-  mutates its own stacks per `getOffer` (`RandomScrollTrade` writes the rolled spell into `forSale`
+- Real fields on the subclass → ordinary `BaseAccessor`, nothing special. A stored field is not proof the offer
+  uses it: read the `MerchantOffer` constructor call, not the record component beside it — Supplementaries'
+  `RocketItemListing` keeps an `xp` field and then passes `ModItemListing.defaultXp(true, level)` instead.
+  Beware a listing that mutates its own stacks per `getOffer` (`RandomScrollTrade` writes the rolled spell into `forSale`
   and the price into `price`): copy the item, ignore the stored count, and never sample it.
+  A field holding a lazy, memoising resolver (Immersive Engineering's `Villages$LazyItemStack` over a
+  `Function<Level, ItemStack>`) is never called either — the shim has no level to pass, and the first
+  call caches whatever the `null` level yields, so the trade stays wrong for the rest of the session.
+  Read the resolver's captures instead.
 - Captured arguments → `com.yanny.ali.plugin.common.ReflectionUtils.getCapturedInstances(lambda,
   Class<T>)` pulls them **by type** off the lambda's synthetic fields. Type-keyed, so it survives a
   recompile as long as the capture is unique in its type; two captures of the same type come back in
@@ -184,15 +281,63 @@ one of three shapes: a `LootItemEntityPropertyCondition` on `THIS` with a concre
 `Optional.empty()` and the Forge plugin logs `Unable to locate destination`.
 
 Conditions like `match_tool`, or the target mod's own conditions, constrain *how* loot is obtained,
-not *what* the loot belongs to, so they resolve to nothing. The survey reports these as "Auto-GLM
-without a resolvable destination". When the mod's own code tells you the real destination, build the
-`ILootModifier<Block>` (or `<Entity>`) by hand instead of calling `getLootModifier`:
+not *what* the loot belongs to, so they resolve to nothing. A survey reports these as "Auto-GLM
+without a resolvable destination"; a hand scan simply will not show a destination either. `Optional.empty()` does not mean the modifier has to be written by
+hand — it means nobody registered a destination resolver for that condition. Work down this list:
+
+1. **`registerDestination` first.** When the unresolvable condition is the *target mod's own* and it
+   names the destination, register a resolver for it and the auto-GLM path starts working by itself —
+   `registry.registerDestination(GiantPickUsedCondition.class, …)` in `TwilightForestCompat`,
+   `LootTableIdCondition` in `PortingLibLootCompat`. `Destination` has three shapes,
+   `Blocks(Collection<Block>, fullyExplained)`, `Entities(EntityTypePredicate, fullyExplained)` and
+   `Table(ResourceLocation, fullyExplained)`; `fullyExplained` is `false` when the condition only
+   narrows the destination and its other parts still have to appear in the tooltip. Never register a
+   resolver for a **vanilla** condition class from a shim — that answer would speak for every mod.
+2. **Then the registration itself**, one line per modifier:
+   `GlmAccessorUtils.registerGlobalLootModifier(registry, X.class, XAccessor.class)`.
+3. **A destination on the modifier class itself when it has no conditions at all.** `collect` asks
+   `utils.getDestination` about the modifier instance as well as about each condition, so a GLM shipped with
+   `"conditions": []` still reaches the auto path once `registerDestination(XLootModifier.class, XAccessor.class)`
+   answers for it — Apotheosis' four config-driven modifiers match the table id against a `List` in the mod's own
+   config that way. The accessor implements `IDestination` beside `IGlobalLootModifierAccessor` and its
+   `getOperations()` runs inside `TooltipContext.set(location)`, so the same list also yields the per-table chance.
+4. **A hand-built `ILootModifier` only when no destination can carry the answer** — neither a condition nor the
+   modifier class names where the loot belongs.
+
+**Never hand-build the unbounded case.** `GlobalLootModifierUtils.getLootModifier` already ends in exactly that
+anonymous class — `predicate` true, `IType.UNBOUNDED`, the operations you supplied — behind the user's
+`showUnboundedGlobalLootModifiers`. Writing it out again in an accessor copies that branch verbatim and its only
+effect is to ignore the setting whose whole job is deciding whether unbound modifiers appear. Item precision is not
+a reason: it lives in the operation's `Predicate<ItemStack>`, which `getLootModifier` takes from you either way, and
+`AbstractServer` requires an unbounded modifier to match an item before attaching it. Going through
+`getLootModifier` also means a datapack that later adds a `loot_table_id` condition upgrades the modifier to a real
+`IType.LOOT_TABLE` on its own.
+
+`data/<modid>/loot_modifiers/*.json` in the jar says which conditions each GLM is registered with,
+and that is what decides between the four. A **library** mod ships none — its GLMs are registered by the mods that
+depend on it, so pull one dependent's jar and read its `loot_modifiers` instead; that is the only place the real
+condition sets exist. Read them before concluding a destination cannot be resolved: when the
+condition that fails to resolve is a **vanilla** one ALI declines on purpose — an `entity_properties` whose predicate
+carries no entity type, say — no shim can fix it. Registering a resolver for a vanilla class is out of bounds, and a
+hand-built `ILootModifier` would have to invent a destination that exists only in the pack's data. Leave the auto path
+alone, and say so in your summary; the modifier belongs to `showUnboundedGlobalLootModifiers`, not to the shim.
+
+When the mod's own code tells you the real destination, build the `ILootModifier<Block>` (or `<Entity>`, or `<ResourceLocation>`) by hand:
 
 - A GLM keyed on a known set of blocks → `predicate` is that set's `containsKey`, and emit one
   operation per entry.
 - A GLM that transforms whatever it is given → `predicate` returns `true` and the *operation's* item
   predicate does the filtering. That is safe: `AbstractServer.predicateItem` only attaches a modifier
   to a loot table when some operation predicate matches an item that table can produce.
+- A GLM keyed on the loot table id (a path substring, a regex over the id, a stored table name) →
+  `IType.LOOT_TABLE` and `predicate(ResourceLocation)`. `getOperations()` is handed no location, but
+  it runs inside the `TooltipContext.set(location)` that `AbstractServer` brackets each table with, so
+  `TooltipContext.get()` is how an operation whose count or chance differs per table reads the table
+  it is being built for. Guard for `null` and emit nothing.
+- A GLM that deletes loot → a `RemoveOperation` whose factory returns `null` when the modifier is
+  unconditional and, when it is not, an `ItemNode` with `NOT(AllOf(<the GLM conditions>))` appended to
+  the source node's conditions — the shape `ali/common-lootjs` uses for a conditional
+  `RemoveLootAction`. Return nodes that are not plain `ItemNode`s unchanged.
 
 Wrap a replacement in `ModifiedNode(utils, src, replacement)` whenever the modifier is conditional,
 so the original drop stays visible as the alternative. Build the replacement's tooltip with
@@ -200,7 +345,11 @@ so the original drop stays visible as the alternative. Build the replacement's t
 concatenation of the modifier's conditions and the source node's, and take `chance` from
 `node.getChance()` rather than `1` so the percentage stays honest.
 
-`new ILootModifier<>() { … }` does not compile — an anonymous class needs the explicit type argument.
+`new ILootModifier<>() { … }` infers its type argument from the target type, which inside
+`Optional<ILootModifier<?>>` is `Object` — so the diamond compiles only for an `IType.UNBOUNDED` modifier
+(that is what `GlobalLootModifierUtils` itself writes). A `BLOCK`, `ENTITY` or `LOOT_TABLE` one must name the
+argument, `new ILootModifier<ResourceLocation>() { … }`, or every override fails with "does not override or
+implement a method from a supertype".
 
 ## Step 5 — tooltip keys
 
@@ -239,18 +388,21 @@ can hang the session. Add the new keys to that JSON by hand (alphabetically sort
 
 ## Step 6 — wiring, and what the user must be told
 
-Per `alicompat/CLAUDE.md`: `compat_mods` gains the slug, a `<slug>_<loader>_dep` line goes next to
-the other active targets (the commented-out block below them is for mods with no shim yet), and the
-source set carries `services/com.yanny.alicompat.IModCompat` plus, when there are keys,
-`services/com.yanny.alicompat.ICompatTranslations` — one fully-qualified class per line. Copy a
-`package-info.java` from a sibling shim.
+Per `alicompat/CLAUDE.md`: the mod gets an entry in `supported_mods.json` (slug, name, runtime mod
+ids, and its CurseForge projects as `<slug>-<project id>`), and `python3 check_versions.py --scaffold <slug>`
+then pins it, puts the slug into `compat_mods` and writes the `<slug>_<loader>_dep` lines — never
+write that block by hand, the next run overwrites it. The same command scaffolds a compiling skeleton
+(`package-info.java`, an `IModCompat` returning the mod id, `services/com.yanny.alicompat.IModCompat`)
+for every loader that has a file but no source set, which is what Step 1 onwards is filled into. The source
+set carries `services/com.yanny.alicompat.IModCompat` plus, when there are keys,
+`services/com.yanny.alicompat.ICompatTranslations` — one fully-qualified class per line.
 
 `alicompat/CHANGELOG.md`: while ALICompat is unreleased — the top section is `## []` reading
 `Initial release` — a new shim gets **no** entry; that section already covers every shim shipped in
 it, and neither the Ribbits nor the Twilight Forest commit touched the file. Once a numbered version
 has been published, the normal rule applies: append to `## []` if it exists, else open one above the
 newest version; `alicompat_version` moves only when opening a new section. Say in the summary which
-of the two applied, since the tracker row carries a `changelog entry` checkbox either way.
+of the two applied.
 
 Verify with `./gradlew :alicompat:<loader>:build` and check the merged services files in the jar:
 
@@ -266,13 +418,11 @@ only they may edit; that the wiki's supported-mods page drifts; and what the row
 an `entityLootTables` config entry is an `ali_config` change, not Java, and belongs to the user's
 decision, not this shim.
 
-## Step 7 — the tracker
+## Step 7 — what does not fit in code
 
-Tick the per-finding checkboxes in `compatibility/<mod id>.md`, update its `- Done:` line, tick the
-mod's `Done` cell in `COMPATIBILITY.md`, annotate each finding the branch's jar does not have, add
-the ones it has that the survey missed, and put the version-specific reasoning (why a GLM was
-hand-rolled, which loaders exist) in that file's `Notes:` block. The tracker is
-hand-maintained — never re-run `worklist.py` over a file with ticked boxes.
+Anything version-specific you had to decide — why a GLM was hand-rolled, which loaders the mod
+actually ships, which listed class the jar does not have, which class it has that no list mentioned
+— goes into the summary you hand the user, not into a comment. Shims carry no comments.
 
-Porting to another branch starts from Step 1 again: the same mod on `1.21.1` is a different class
-list, and only the shape of the shim ports, not its contents.
+Porting to another branch starts from Step 0 again: the same mod on another Minecraft version is a
+different class list, and only the shape of the shim ports, not its contents.

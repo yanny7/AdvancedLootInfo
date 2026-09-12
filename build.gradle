@@ -141,7 +141,8 @@ subprojects {
                 apply plugin: "lol.bai.explosion"
             }
 
-            def compatMods = (project.findProperty("compat_mods") ?: "").split(",").findAll { it }.findAll { project.findProperty("${it}_${project.name}_dep") }
+            // a slug enabled on another loader keeps its sources here, so without a dependency none of them can compile
+            def compatMods = (project.findProperty("compat_mods") ?: "").split(",")*.trim().findAll { project.findProperty("${it}_${project.name}_dep") }
 
             // ServiceLoader reads one file per name, so the per-mod fragments have to be merged
             def generateCompatServices = tasks.register("generateCompatServices") {
@@ -179,7 +180,28 @@ subprojects {
                 resources.srcDir generateCompatServices
             }
 
+            sourceSets.test {
+                java.srcDirs += compatMods.collect { "src/compat/$it/test" }
+            }
+
+            // loom puts the remapped target-mod jars straight on the main classpaths, so tests inherit them from there
+            sourceSets.test.compileClasspath += sourceSets.main.compileClasspath
+            sourceSets.test.runtimeClasspath += sourceSets.main.compileClasspath + sourceSets.main.runtimeClasspath
+
+            // only the suite bootstraps Minecraft, so a per-mod test class must not also be run on its own
+            test {
+                useJUnitPlatform {
+                    includeEngines "junit-platform-suite"
+                }
+            }
+
             dependencies {
+                testImplementation 'org.junit.platform:junit-platform-suite:1.12.0'
+                testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+                testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
+                testImplementation 'org.mockito:mockito-core:5.11.0'
+                testImplementation project(path: ":aci:common", configuration: "testArtifacts")
+
                 compatMods.each { mod ->
                     def dep = project.findProperty("${mod}_${project.name}_dep")
 
@@ -460,4 +482,104 @@ tasks.register("generateUploadRunConfigs") {
     group = "ide"
     description = "Writes the IntelliJ Python run configurations for all upload targets"
     dependsOn uploadRunConfigTasks
+}
+
+def modpackRunConfigTasks = enabled_platforms.split(",").collect { platform ->
+    tasks.register("generateModpackRunConfig${platform.capitalize()}") {
+        group = "ide"
+        description = "Writes an IntelliJ Python run configuration that builds the ${platform} ALICompat modpack"
+
+        def parameters = ["--loader=${platform}", "--viewer=rei"].join(" ")
+        def configName = "Modpack ${platform.capitalize()} (${project.property("alicompat_mod_name")})"
+        def outputFile = file(".idea/runConfigurations/Modpack_${platform.capitalize()}.xml")
+
+        outputs.file(outputFile)
+
+        doLast {
+            outputFile.parentFile.mkdirs()
+            outputFile.text = """<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="${configName}" type="PythonConfigurationType" factoryName="Python" folderName="Modpack">
+    <module name="MultiLoader-AdvancedLootInfo"/>
+    <option name="ENV_FILES" value=""/>
+    <option name="INTERPRETER_OPTIONS" value=""/>
+    <option name="PARENT_ENVS" value="true"/>
+    <envs>
+      <env name="PYTHONUNBUFFERED" value="1"/>
+    </envs>
+    <option name="SDK_HOME" value=""/>
+    <option name="WORKING_DIRECTORY" value="\$PROJECT_DIR\$"/>
+    <option name="IS_MODULE_SDK" value="true"/>
+    <option name="ADD_CONTENT_ROOTS" value="true"/>
+    <option name="ADD_SOURCE_ROOTS" value="true"/>
+    <option name="SCRIPT_NAME" value="\$PROJECT_DIR\$/modpack.py"/>
+    <option name="PARAMETERS" value="${parameters}"/>
+    <option name="SHOW_COMMAND_LINE" value="false"/>
+    <option name="EMULATE_TERMINAL" value="false"/>
+    <option name="MODULE_MODE" value="false"/>
+    <option name="REDIRECT_INPUT" value="false"/>
+    <option name="INPUT_FILE" value=""/>
+    <method v="2"/>
+  </configuration>
+</component>
+"""
+            logger.lifecycle("Wrote ${outputFile}")
+        }
+    }
+}
+
+tasks.register("generateModpackRunConfigs") {
+    group = "ide"
+    description = "Writes the IntelliJ Python run configurations for all modpack loaders"
+    dependsOn modpackRunConfigTasks
+}
+
+def checkVersionsTargets = ["": "reports the outdated", "Update": "repins the outdated"]
+
+def checkVersionsRunConfigTasks = checkVersionsTargets.collect { suffix, label ->
+    tasks.register("generateCheckVersionsRunConfig${suffix}") {
+        group = "ide"
+        description = "Writes an IntelliJ Python run configuration that ${label} ${project.property("alicompat_mod_name")} target mod versions"
+
+        def parameters = suffix.isEmpty() ? "" : "--update"
+        def configName = "Check Versions${suffix.isEmpty() ? "" : " (repin)"} (${project.property("alicompat_mod_name")})"
+        def outputFile = file(".idea/runConfigurations/Check_Versions${suffix.isEmpty() ? "" : "_${suffix}"}.xml")
+
+        outputs.file(outputFile)
+
+        doLast {
+            outputFile.parentFile.mkdirs()
+            outputFile.text = """<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="${configName}" type="PythonConfigurationType" factoryName="Python" folderName="Modpack">
+    <module name="MultiLoader-AdvancedLootInfo"/>
+    <option name="ENV_FILES" value=""/>
+    <option name="INTERPRETER_OPTIONS" value=""/>
+    <option name="PARENT_ENVS" value="true"/>
+    <envs>
+      <env name="PYTHONUNBUFFERED" value="1"/>
+    </envs>
+    <option name="SDK_HOME" value=""/>
+    <option name="WORKING_DIRECTORY" value="\$PROJECT_DIR\$"/>
+    <option name="IS_MODULE_SDK" value="true"/>
+    <option name="ADD_CONTENT_ROOTS" value="true"/>
+    <option name="ADD_SOURCE_ROOTS" value="true"/>
+    <option name="SCRIPT_NAME" value="\$PROJECT_DIR\$/check_versions.py"/>
+    <option name="PARAMETERS" value="${parameters}"/>
+    <option name="SHOW_COMMAND_LINE" value="false"/>
+    <option name="EMULATE_TERMINAL" value="false"/>
+    <option name="MODULE_MODE" value="false"/>
+    <option name="REDIRECT_INPUT" value="false"/>
+    <option name="INPUT_FILE" value=""/>
+    <method v="2"/>
+  </configuration>
+</component>
+"""
+            logger.lifecycle("Wrote ${outputFile}")
+        }
+    }
+}
+
+tasks.register("generateCheckVersionsRunConfigs") {
+    group = "ide"
+    description = "Writes the IntelliJ Python run configurations that check the ${project.property("alicompat_mod_name")} target mod versions"
+    dependsOn checkVersionsRunConfigTasks
 }
