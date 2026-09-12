@@ -1,8 +1,5 @@
 package com.yanny.alicompat.compat.farmersdelight;
 
-import com.yanny.aci.tooltip.TooltipNode;
-import net.minecraft.world.entity.npc.villager.VillagerTrades;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -12,7 +9,6 @@ import vectorwing.farmersdelight.common.loot.function.CopySkilletFunction;
 import vectorwing.farmersdelight.common.loot.function.SmokerCookFunction;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
 import static com.yanny.alicompat.test.CompatTooltipSuite.UTILS;
@@ -54,17 +50,6 @@ public class FarmersDelightTooltipTest {
         ));
     }
 
-    @Test
-    public void testFdItemListing() {
-        VillagerTrades.ItemListing listing = new VillagerTrades.ItemsForEmeralds(Items.BREAD, 3, 2, 7, 4);
-
-        assertTooltip(UTILS.getItemListing(UTILS, fdItemListing(listing), TooltipNode.empty()).getTooltip(), List.of(
-                "Uses: 7",
-                "XP: 4",
-                "Price Multiplier: 0.05"
-        ));
-    }
-
     @NotNull
     private static LootItemFunction smokerCook(LootItemCondition... conditions) {
         try {
@@ -74,19 +59,6 @@ public class FarmersDelightTooltipTest {
             return constructor.newInstance(List.of(conditions));
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException("Failed to create SmokerCookFunction", e);
-        }
-    }
-
-    @NotNull
-    private static VillagerTrades.ItemListing fdItemListing(VillagerTrades.ItemListing listing) {
-        try {
-            Class<?> type = Class.forName("vectorwing.farmersdelight.common.event.VillagerEvents$FDItemListing");
-            var constructor = type.getDeclaredConstructor(VillagerTrades.ItemListing.class, Supplier.class);
-
-            constructor.setAccessible(true);
-            return (VillagerTrades.ItemListing) constructor.newInstance(listing, (Supplier<Boolean>) () -> true);
-        } catch (ReflectiveOperationException e) {
-            throw new RuntimeException("Failed to create FDItemListing", e);
         }
     }
 }

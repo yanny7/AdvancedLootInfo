@@ -21,7 +21,7 @@ public class SmeltingUtils {
         SingleRecipeInput input = new SingleRecipeInput(itemStack);
 
         return level.recipeAccess().getRecipeFor(RecipeType.SMELTING, input, level)
-                .map((recipe) -> recipe.value().assemble(input, level.registryAccess()))
+                .map((recipe) -> recipe.value().assemble(input))
                 .filter((stack) -> !stack.isEmpty());
     }
 
