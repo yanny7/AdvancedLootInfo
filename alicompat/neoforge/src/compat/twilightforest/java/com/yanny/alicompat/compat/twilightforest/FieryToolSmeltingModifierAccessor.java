@@ -1,36 +1,24 @@
 package com.yanny.alicompat.compat.twilightforest;
 
-import com.yanny.aci.api.RangeValue;
-import com.yanny.aci.tooltip.TooltipBuilder;
-import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.plugin.common.NodeUtils;
-import com.yanny.ali.plugin.common.nodes.ItemNode;
-import com.yanny.ali.plugin.common.nodes.ModifiedNode;
-import com.yanny.ali.plugin.server.EnchantedRanges;
-import com.yanny.ali.plugin.server.TooltipUtils;
+import com.yanny.ali.plugin.glm.Destination;
+import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
+import com.yanny.alicompat.accessor.IDestination;
 import com.yanny.alicompat.accessor.IGlobalLootModifierAccessor;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SingleRecipeInput;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
+import com.yanny.alicompat.accessor.SmeltingUtils;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 import twilightforest.loot.modifiers.FieryToolSmeltingModifier;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collections;
 import java.util.Optional;
-import java.util.stream.Stream;
 
-public class FieryToolSmeltingModifierAccessor extends BaseAccessor<FieryToolSmeltingModifier> implements IGlobalLootModifierAccessor {
+public class FieryToolSmeltingModifierAccessor extends BaseAccessor<FieryToolSmeltingModifier> implements IGlobalLootModifierAccessor, IDestination {
     @FieldAccessor
     protected LootItemCondition[] conditions;
 
@@ -40,54 +28,15 @@ public class FieryToolSmeltingModifierAccessor extends BaseAccessor<FieryToolSme
 
     @Override
     public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
-        List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
-
-        return Optional.of(new ILootModifier<Block>() {
-            @Override
-            public boolean predicate(Block value) {
-                return true;
-            }
-
-            @NotNull
-            @Override
-            public List<IOperation> getOperations() {
-                return List.of(new IOperation.ReplaceOperation((itemStack) -> smelt(utils, itemStack).isPresent(), (src) -> smeltNode(utils, conditionList, src)));
-            }
-
-            @NotNull
-            @Override
-            public IType<Block> getType() {
-                return IType.BLOCK;
-            }
-        });
+        return GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions),
+                (c) -> Collections.singletonList(new IOperation.ReplaceOperation(
+                        (itemStack) -> SmeltingUtils.smelt(utils, itemStack).isPresent(),
+                        (src) -> SmeltingUtils.smeltedNode(utils, c, src))));
     }
 
     @NotNull
-    private static List<IDataNode> smeltNode(IServerUtils utils, List<LootItemCondition> conditions, IDataNode src) {
-        IItemNode node = (IItemNode) src;
-        Optional<ItemStack> result = node.getItem().left().flatMap((stack) -> smelt(utils, stack));
-
-        if (result.isEmpty()) {
-            return List.of(src);
-        }
-
-        ItemStack smelted = result.get();
-        List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), node.getConditions().stream()).toList();
-        RangeValue count = new RangeValue(node.getCount()).multiply(smelted.getCount());
-        EnchantedRanges chance = NodeUtils.getEnchantedChance(utils, allConditions, node.getChance());
-        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, new EnchantedRanges(new RangeValue(count)),
-                node.getFunctions(), allConditions);
-        ItemNode smeltedNode = new ItemNode(node.getChance(), count, smelted, tooltip.build(), node.getFunctions(), allConditions);
-
-        return List.of(new ModifiedNode(utils, src, smeltedNode));
-    }
-
-    @NotNull
-    private static Optional<ItemStack> smelt(IServerUtils utils, ItemStack itemStack) {
-        ServerLevel level = utils.getServerLevel();
-
-        return level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(itemStack), level)
-                .map((recipe) -> recipe.value().getResultItem(level.registryAccess()))
-                .filter((stack) -> !stack.isEmpty());
+    @Override
+    public Destination getDestination(IServerUtils ignoredUtils) {
+        return new Destination.Blocks((block) -> true, false);
     }
 }

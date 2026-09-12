@@ -77,5 +77,5 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
     LootTable getLootTable(Either<Identifier, LootTable> either);
 
     @Nullable
-    Destination getDestination(IServerUtils utils, LootItemCondition condition);
+    Destination getDestination(IServerUtils utils, Object value);
 }

@@ -354,7 +354,7 @@ public class PluginUtils {
         registry.registerItemStackModifier(targetClass, (u, c, m) -> factory.apply(c).applyItemStackModifier(u, m));
     }
 
-    public static <U extends LootItemCondition, T extends BaseAccessor<?> & IDestination> void registerDestination(IServerRegistry registry, Class<U> targetClass, Class<T> clazz) {
+    public static <U, T extends BaseAccessor<?> & IDestination> void registerDestination(IServerRegistry registry, Class<U> targetClass, Class<T> clazz) {
         registry.registerDestination(targetClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c, targetClass).getDestination(u));
     }
 
@@ -363,9 +363,8 @@ public class PluginUtils {
 
         if (classAnnotation != null) {
             try {
-                //noinspection unchecked
-                Class<LootItemCondition> conditionClass = (Class<LootItemCondition>) Class.forName(classAnnotation.value());
-                registry.registerDestination(conditionClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c).getDestination(u));
+                Class<?> targetClass = Class.forName(classAnnotation.value());
+                registry.registerDestination(targetClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c).getDestination(u));
             } catch (Throwable e) {
                 LOGGER.warn("Failed to register destination for {} with error {}", classAnnotation.value(), e.getMessage(), e);
             }
@@ -374,7 +373,7 @@ public class PluginUtils {
         }
     }
 
-    public static <U extends LootItemCondition, T extends IDestination> void registerDestination(IServerRegistry registry, Class<U> targetClass, Function<U, T> factory) {
+    public static <U, T extends IDestination> void registerDestination(IServerRegistry registry, Class<U> targetClass, Function<U, T> factory) {
         registry.registerDestination(targetClass, (u, c) -> factory.apply(c).getDestination(u));
     }
 

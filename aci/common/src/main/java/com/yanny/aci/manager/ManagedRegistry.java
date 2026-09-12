@@ -2,18 +2,17 @@ package com.yanny.aci.manager;
 
 import com.yanny.aci.CommonLogUtils;
 import net.minecraft.core.Registry;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class ManagedRegistry<K, V> {
+    private static final String LAMBDA_MARKER = "$$Lambda";
+
     private final Logger logger;
     private final Map<K, V> storage;
     @Nullable
@@ -21,7 +20,7 @@ public class ManagedRegistry<K, V> {
     private final Function<K, String> keyNameGetter;
     private final String label;
     @Nullable
-    private final Set<K> missing;
+    private final Set<String> missing;
 
     public ManagedRegistry(String modId, String label, boolean reportMissing, Supplier<Map<K, V>> mapSupplier, Function<K, String> keyNameGetter, @Nullable Registry<?> registry) {
         this.logger = CommonLogUtils.getLogger(modId);
@@ -61,7 +60,7 @@ public class ManagedRegistry<K, V> {
         }
 
         if (missing != null) {
-            missing.add(key);
+            missing.add(keyNameGetter.apply(key));
         }
         
         return Optional.empty();
@@ -69,7 +68,7 @@ public class ManagedRegistry<K, V> {
 
     public void logMissing() {
         if (missing != null) {
-            missing.forEach((t) -> logger.warn("Missing {} for {}", label, keyNameGetter.apply(t)));
+            missing.forEach((t) -> logger.warn("Missing {} for {}", label, t));
         }
     }
 
@@ -79,5 +78,17 @@ public class ManagedRegistry<K, V> {
         } else {
             logger.info("Registered {} {}", storage.size(), label);
         }
+    }
+
+    @NotNull
+    public static String classKeyName(Class<?> clazz) {
+        String name = clazz.getTypeName();
+        int index = name.indexOf(LAMBDA_MARKER);
+
+        if (index >= 0) {
+            return name.substring(0, index + LAMBDA_MARKER.length());
+        }
+
+        return name;
     }
 }

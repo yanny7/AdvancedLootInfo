@@ -43,6 +43,9 @@ dependencies {
 
     runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
 
+    // MoreJS' trade classes extend KubeJS types no shim imports, so nothing else pulls KubeJS in and they fail to load
+    modCompileOnly "curse.maven:kubejs-238086:5810100"
+
     project.ext.commonProjects.each { p ->
         common(project(path: p)) { transitive false }
         shadowCommon(project(path: p, configuration: "transformProductionNeoForge")) { transitive false }

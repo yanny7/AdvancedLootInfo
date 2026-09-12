@@ -1,21 +1,15 @@
 package com.yanny.alicompat.compat.farmersdelight;
 
 import com.yanny.aci.api.RangeValue;
-import com.yanny.aci.tooltip.TooltipBuilder;
-import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.plugin.common.NodeUtils;
-import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
-import com.yanny.alicompat.accessor.IGlobalLootModifierAccessor;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
-import com.yanny.ali.plugin.server.EnchantedRanges;
-import com.yanny.ali.plugin.server.TooltipUtils;
+import com.yanny.alicompat.accessor.GlmNodeUtils;
+import com.yanny.alicompat.accessor.IGlobalLootModifierAccessor;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import vectorwing.farmersdelight.common.loot.modifier.AddItemModifier;
 
@@ -39,12 +33,8 @@ public class AddItemModifierAccessor extends BaseAccessor<AddItemModifier> imple
     public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
         List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
 
-        return GlobalLootModifierUtils.getLootModifier(utils, conditionList, (c) -> {
-            EnchantedRanges chance = NodeUtils.getEnchantedChance(utils, c, 1);
-            EnchantedRanges count = NodeUtils.getEnchantedCount(utils, Collections.emptyList());
-            TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, count, Collections.emptyList(), c);
-            IDataNode node = new ItemNode(1, new RangeValue(this.count), addedItem.getDefaultInstance(), tooltip.build(), Collections.emptyList(), c);
-            return Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, node));
-        });
+        return GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
+                (c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true,
+                        GlmNodeUtils.addedNode(utils, c, addedItem.getDefaultInstance(), 1, new RangeValue(count)))));
     }
 }
