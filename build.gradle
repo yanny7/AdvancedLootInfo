@@ -137,7 +137,8 @@ subprojects {
                 apply plugin: "lol.bai.explosion"
             }
 
-            def compatMods = (project.findProperty("compat_mods") ?: "").split(",")*.trim().findAll { it }
+            // a slug enabled on another loader keeps its sources here, so without a dependency none of them can compile
+            def compatMods = (project.findProperty("compat_mods") ?: "").split(",")*.trim().findAll { project.findProperty("${it}_${project.name}_dep") }
 
             // ServiceLoader reads one file per name, so the per-mod fragments have to be merged
             def generateCompatServices = tasks.register("generateCompatServices") {
