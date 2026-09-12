@@ -14,6 +14,8 @@ from modpack import (
     RELEASE_TYPES,
     SUPPORTED_MODS_FILE,
     CurseForge,
+    parse_project,
+    pick_project,
     progress,
     progress_done,
     read_enabled_mods,
@@ -85,23 +87,29 @@ def scaffold(loader: str, entry: dict):
     return root.relative_to(PROJECT_DIR)
 
 
-def resolve(client: CurseForge, entry: dict, loader: str, pinned: dict):
-    project = entry["curseforge"][loader]
-    result = {"key": entry["key"], "loader": loader, "entry": entry, "slug": project["slug"], "project_id": project["project_id"]}
-    latest = client.pick_file(project["project_id"])
+def resolve(client: CurseForge, entry: dict, pinned: dict):
+    result = {"key": entry["key"], "loader": client.loader, "entry": entry}
+    matches = pick_project(client, entry)
     current = pinned.get(entry["key"])
 
-    if latest is None:
+    if not matches:
         result["state"] = "unavailable" if current is None else "gone"
+        result["untagged"] = [
+            slug for slug, project_id in map(parse_project, entry["curseforge"])
+            if client.pick_untagged_file(project_id)
+        ]
         return result
 
-    result["latest"] = latest
+    if len(matches) > 1:
+        result["ambiguous"] = [slug for slug, _, _ in matches]
+
+    result["slug"], result["project_id"], result["latest"] = matches[0]
 
     if current is None:
         result["state"] = "new"
-    elif current["file_id"] != latest["id"]:
+    elif current["file_id"] != result["latest"]["id"]:
         result["state"] = "outdated"
-        result["current"] = client.get(f"/mods/{project['project_id']}/files/{current['file_id']}")
+        result["current"] = client.get(f"/mods/{result['project_id']}/files/{current['file_id']}")
     else:
         result["state"] = "current"
 
@@ -208,6 +216,8 @@ def main():
     available = {}
     orphans = []
     results = []
+    extendable = []
+    scaffolds = []
 
     for loader in platforms:
         for key, dep in pinned[loader].items():
@@ -227,13 +237,13 @@ def main():
         if probe:
             dormant.append(entry)
 
-        pending += [(entry, loader, probe) for loader in checked_loaders if loader in entry["curseforge"]]
+        pending += [(entry, loader, probe) for loader in checked_loaders]
 
     print(f"Resolving {len(pending)} mod/loader pairs for {minecraft_version} ({', '.join(checked_loaders)})")
 
     for index, (entry, loader, probe) in enumerate(pending, start=1):
         progress(index, len(pending), f"{entry['key']} ({loader})")
-        result = resolve(clients[loader], entry, loader, pinned[loader])
+        result = resolve(clients[loader], entry, pinned[loader])
 
         if probe:
             if "latest" in result:
@@ -243,15 +253,28 @@ def main():
 
         results.append(result)
 
-        if result["state"] in ("new", "outdated", "current"):
-            deps[(entry["key"], loader)] = {"slug": result["slug"], "project_id": result["project_id"], "file_id": result["latest"]["id"]}
+        if result["state"] not in ("new", "outdated", "current"):
+            continue
+
+        pin = {"slug": result["slug"], "project_id": result["project_id"], "file_id": result["latest"]["id"]}
+
+        if source_set(loader, entry["key"]).is_dir():
+            deps[(entry["key"], loader)] = pin
+        elif has_source_set(platforms, entry["key"]) and args.scaffold != entry["key"]:
+            result["extendable"] = True
+            extendable.append(result)
+
+            if entry["key"] in pinned[loader]:
+                deps[(entry["key"], loader)] = pin
+        else:
+            deps[(entry["key"], loader)] = pin
+            scaffolds.append(result)
 
     progress_done()
-    missing_source = [result for result in results if result["state"] in ("new", "outdated", "current") and not source_set(result["loader"], result["key"]).is_dir()]
 
     for state, title in (("outdated", "Outdated, newer file on CurseForge:"), ("new", "Newly available, not pinned yet:"),
-                         ("gone", "No release or beta file any more, the pin is dropped:"), ("unavailable", "Not available for this Minecraft version:")):
-        selected = [result for result in results if result["state"] == state]
+                         ("gone", "No release or beta file any more, the pin is dropped:")):
+        selected = [result for result in results if result["state"] == state and not result.get("extendable")]
 
         if not selected:
             continue
@@ -267,11 +290,33 @@ def main():
             if "latest" in result:
                 print(f"    latest {describe(result['latest'])}")
 
-    if missing_source:
+    if scaffolds:
         print(f"\nNo shim source set{' yet' if args.update else ', run with --update to scaffold'}:")
 
-        for result in missing_source:
+        for result in scaffolds:
             print(f"  {result['key']} ({result['loader']})")
+
+    if extendable:
+        print("\nAvailable on a loader this shim does not cover, left alone — write the source set by hand to take it:")
+
+        for result in extendable:
+            print(f"  {result['key']} ({result['loader']}) {result['latest']['displayName']}")
+
+    ambiguous = [result for result in results if "ambiguous" in result]
+
+    if ambiguous:
+        print("\nSeveral projects have a file for the same loader, the newest one was taken:")
+
+        for result in ambiguous:
+            print(f"  {result['key']} ({result['loader']}): {', '.join(result['ambiguous'])}")
+
+    untagged = [result for result in results if result.get("untagged")]
+
+    if untagged:
+        print("\nOnly files that name no loader at all, so nothing was assigned:")
+
+        for result in untagged:
+            print(f"  {result['key']} ({result['loader']}): {', '.join(result['untagged'])}")
 
     if dormant:
         width = max(len(entry["key"]) for entry in dormant)
@@ -298,7 +343,7 @@ def main():
             print(f"  {key} ({loader}) curse.maven:{dep['slug']}-{dep['project_id']}:{dep['file_id']}")
 
     if args.update:
-        for result in missing_source:
+        for result in scaffolds:
             print(f"\nScaffolded {scaffold(result['loader'], result['entry'])}")
 
         if not write_block(render_block(deps, entries), args.init):
@@ -307,8 +352,8 @@ def main():
         print(f"\nWrote {len(deps)} dependency lines and {len({key for key, _ in deps})} compat_mods entries to gradle.properties")
 
     counts = {state: len([result for result in results if result["state"] == state]) for state in ("current", "outdated", "new", "gone", "unavailable")}
-    print(f"\n{counts['current']}/{len(results)} up to date, {counts['outdated']} outdated, {counts['new']} new, "
-          f"{counts['gone'] + counts['unavailable']} unresolved, {len(dormant)} dormant ({len(available)} portable)")
+    print(f"\n{counts['current']} up to date, {counts['outdated']} outdated, {counts['new']} new, {counts['gone']} gone, "
+          f"{counts['unavailable']} without a file on the loader asked, {len(dormant)} dormant ({len(available)} portable)")
     return 0
 
 

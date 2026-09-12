@@ -52,8 +52,12 @@ def read_gradle_properties():
 
 
 def progress(index: int, total: int, label: str):
+    counter = f"[{index:>{len(str(total))}}/{total}] {label}"
+
     if sys.stdout.isatty():
-        print(f"\r[{index:>{len(str(total))}}/{total}] {label}".ljust(72)[:72], end="", flush=True)
+        print(f"\r{counter}".ljust(72)[:72], end="", flush=True)
+    else:
+        print(counter, flush=True)
 
 
 def progress_done():
@@ -93,14 +97,24 @@ def read_pinned_deps(properties: dict, loader: str):
     return pinned
 
 
-def read_compat_mods(properties: dict, loader: str):
-    enabled = set(read_enabled_mods(properties))
+def parse_project(coordinate: str):
+    slug, _, project_id = coordinate.rpartition("-")
+    return slug, int(project_id)
 
-    return {
-        entry["key"]: entry["curseforge"][loader]["project_id"]
-        for entry in read_supported_mods()
-        if entry["key"] in enabled and loader in entry["curseforge"]
-    }
+
+def pick_project(client, entry: dict):
+    matches = [
+        (slug, project_id, file)
+        for slug, project_id in map(parse_project, entry["curseforge"])
+        for file in [client.pick_tagged_file(project_id)]
+        if file
+    ]
+    matches.sort(key=lambda match: match[2]["fileDate"], reverse=True)
+    return matches
+
+
+def read_compat_mods(properties: dict, loader: str):
+    return {key: dep["project_id"] for key, dep in read_pinned_deps(properties, loader).items()}
 
 
 class CurseForge:
@@ -142,26 +156,31 @@ class CurseForge:
         return [self.mod_cache[project_id] for project_id in project_ids if project_id in self.mod_cache]
 
     def pick_file(self, project_id: int):
-        if project_id in self.file_cache:
-            return self.file_cache[project_id]
+        return self.pick_tagged_file(project_id) or self.pick_untagged_file(project_id)
 
+    def pick_tagged_file(self, project_id: int):
         params = {
             "gameVersion": self.minecraft_version,
             "modLoaderType": MOD_LOADER_TYPE[self.loader],
             "pageSize": 50,
         }
-        candidates = self.get(f"/mods/{project_id}/files", params)
+        return self.newest(("tagged", project_id), f"/mods/{project_id}/files", params)
 
-        if not candidates:
-            candidates = [
-                candidate for candidate in self.get(f"/mods/{project_id}/files", {"gameVersion": self.minecraft_version, "pageSize": 50})
-                if not self.tagged_with_other_loader(candidate)
-            ]
+    def pick_untagged_file(self, project_id: int):
+        params = {"gameVersion": self.minecraft_version, "pageSize": 50}
+        return self.newest(("untagged", project_id), f"/mods/{project_id}/files", params, self.tagged_with_other_loader)
 
-        candidates = [candidate for candidate in candidates if candidate["releaseType"] in RELEASE_TYPES]
+    def newest(self, cache_key, path: str, params: dict, reject=None):
+        if cache_key in self.file_cache:
+            return self.file_cache[cache_key]
+
+        candidates = [
+            candidate for candidate in self.get(path, params)
+            if candidate["releaseType"] in RELEASE_TYPES and not (reject and reject(candidate))
+        ]
         candidates.sort(key=lambda candidate: candidate["fileDate"], reverse=True)
         chosen = candidates[0] if candidates else None
-        self.file_cache[project_id] = chosen
+        self.file_cache[cache_key] = chosen
         return chosen
 
     def tagged_with_other_loader(self, file: dict):
@@ -292,7 +311,7 @@ def main():
     pinned = read_compat_mods(properties, loader)
 
     if not pinned:
-        print(f"Error: no <mod>_{loader}_dep entries in gradle.properties.")
+        print(f"Error: no <mod>_{loader}_dep entries in gradle.properties, run check_versions.py --update first.")
         return 1
 
     viewer_id = client.find_project_id(VIEWER_SLUGS[args.viewer])
