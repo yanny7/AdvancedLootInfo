@@ -2,7 +2,7 @@
 """What this repo already registers, so a static candidate can be told from a real gap.
 
 Reads the ALI / ALICompat sources rather than a log: every `register<Hook>(X.class, ...)`
-call, every `registerTrades(<id>, ...)`, every mixin target, and the `scripts/supported_mods.json` registry.
+call (`X.CODEC` for a hook keyed on a codec), every `registerTrades(<id>, ...)`, every mixin target, and the `scripts/supported_mods.json` registry.
 
 A shim over a target class that is not visible on the compile classpath registers its accessor
 instead, and names the target only in the accessor's `@ClassAccessor("<binary name>")`. Those
@@ -26,12 +26,16 @@ HOOK_OF_METHOD = {
     "registerEntryTooltip": ["entry"],
     "registerNumberProvider": ["number_provider"],
     "registerIngredientTooltip": ["ingredient"],
+    "registerItemSubPredicateTooltip": ["item_sub_predicate"],
+    "registerEntitySubPredicateTooltip": ["entity_sub_predicate"],
     "registerItemListing": ["item_listing"],
     "registerGlobalLootModifier": ["global_loot_modifier"],
 }
+CODEC_KEYED = {"registerEntitySubPredicateTooltip"}
 
 CALL = re.compile(r"\b(" + "|".join(HOOK_OF_METHOD) + r")\s*\(([^;]{0,400}?)\)\s*;", re.S)
 CLASS_LITERAL = re.compile(r"([A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*)\.class")
+CODEC_OWNER = re.compile(r"\b([A-Z][\w$]*(?:\.[A-Z][\w$]*)*)\.[A-Z][A-Z0-9_]*\b")
 IMPORT = re.compile(r"^import\s+(?:static\s+)?([\w.$]+);", re.M)
 IMPORT_WILDCARD = re.compile(r"^import\s+(?:static\s+)?([\w.$]+)\.\*;", re.M)
 MODID_CONST = re.compile(r'(?:MOD_ID|MODID)\s*=\s*"([^"]+)"')
@@ -76,6 +80,8 @@ def scan_file(path, out):
 
     for method, arguments in CALL.findall(text):
         literal = CLASS_LITERAL.search(arguments)
+        if not literal and method in CODEC_KEYED:
+            literal = CODEC_OWNER.search(arguments)
         if not literal:
             continue
         simple = literal.group(1).rsplit(".", 1)[-1]

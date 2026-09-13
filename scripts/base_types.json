@@ -31,6 +31,16 @@
         "net/fabricmc/fabric/api/recipe/v1/ingredient/CustomIngredient"
       ]
     },
+    "item_sub_predicate": {
+      "title": "Item sub-predicates",
+      "registry": "registerItemSubPredicateTooltip",
+      "bases": ["net/minecraft/advancements/critereon/ItemSubPredicate"]
+    },
+    "entity_sub_predicate": {
+      "title": "Entity sub-predicates",
+      "registry": "registerEntitySubPredicateTooltip",
+      "bases": ["net/minecraft/advancements/critereon/EntitySubPredicate"]
+    },
     "item_listing": {
       "title": "Trade item listings",
       "registry": "registerItemListing",

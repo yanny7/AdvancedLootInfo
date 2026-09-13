@@ -1,15 +1,11 @@
 package com.yanny.alicompat.compat.farmersdelight;
 
-import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerRegistry;
-import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.alicompat.IGlmModCompat;
 import com.yanny.alicompat.accessor.GlmAccessorUtils;
 import com.yanny.alicompat.accessor.PluginUtils;
 import org.jetbrains.annotations.NotNull;
-import vectorwing.farmersdelight.common.crafting.ingredient.ToolActionIngredient;
-import vectorwing.farmersdelight.common.loot.function.CopyMealFunction;
 import vectorwing.farmersdelight.common.loot.function.CopySkilletFunction;
 import vectorwing.farmersdelight.common.loot.function.SmokerCookFunction;
 import vectorwing.farmersdelight.common.loot.modifier.AddItemModifier;
@@ -28,9 +24,6 @@ public class FarmersDelightCompat implements IGlmModCompat {
     public void registerServer(IServerRegistry registry) {
         PluginUtils.registerFunctionTooltip(registry, CopySkilletFunction.class, CopySkilletFunctionAccessor::new);
         PluginUtils.registerFunctionTooltip(registry, SmokerCookFunction.class, SmokerCookFunctionAccessor::new);
-        PluginUtils.registerFunctionTooltip(registry, SmokerCookFunction.class, SmokerCookFunctionAccessor::new);
-
-        registry.registerIngredientTooltip(ToolActionIngredient.class, FarmersDelightCompat::getToolActionTooltip);
     }
 
     @Override
@@ -39,10 +32,5 @@ public class FarmersDelightCompat implements IGlmModCompat {
         GlmAccessorUtils.registerGlobalLootModifier(registry, FDAddTableLootModifier.class, FDAddTableLootModifierAccessor.class);
         GlmAccessorUtils.registerGlobalLootModifier(registry, PastrySlicingModifier.class, PastrySlicingModifierAccessor.class);
         GlmAccessorUtils.registerGlobalLootModifier(registry, ReplaceItemModifier.class, ReplaceItemModifierAccessor.class);
-    }
-
-    @NotNull
-    public static TooltipBuilder getToolActionTooltip(IServerUtils utils, ToolActionIngredient ingredient) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, ingredient.toolAction.name())), FarmersDelightLang.Ingredient.TOOL_ACTION);
     }
 }

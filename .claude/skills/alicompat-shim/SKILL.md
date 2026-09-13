@@ -191,6 +191,11 @@ One accessor may implement several hooks. A function that swaps the stack is wor
 `registerFunctionTooltip` (what it says) and `registerItemStackModifier` (so the drop renders as
 the swapped item).
 
+Two hooks are not keyed on a class. An `entity_sub_predicate` finding registers by the type's
+`MapCodec` (`registerEntitySubPredicateTooltip(<Type>.CODEC, …)`), and a data component type — which
+only the log names — by its `DataComponentType` instance. An `item_sub_predicate` finding is keyed on
+its exact class like the other hooks.
+
 ## Step 3b — trade item listings
 
 Before writing anything, work out **which listing classes actually reach ALI**. ALI reads

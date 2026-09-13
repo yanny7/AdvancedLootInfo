@@ -142,8 +142,9 @@ loader's type.
 hierarchy by construction, so every mixin on a vanilla loot or merchant class would otherwise be
 reported as a candidate.
 
-One hook kind has no static counterpart and comes only from the log: value tooltips (any object can
-appear as a trade value).
+Two hook kinds have no static counterpart and come only from the log: value tooltips (any object can
+appear as a trade value) and data component types (mods create `DataComponentType` *instances*, not
+subclasses, so there is no hierarchy to walk).
 
 ## `overrides.json`
 
@@ -167,7 +168,8 @@ project publishes nothing for the target versions, while the shim must compile a
   own rules.
 - **Gap kind sets the hook.** `global_loot_modifier` means an `IGlmModCompat` and a
   `GlmAccessorUtils.registerGlobalLootModifier` call; `function` / `condition` / `entry` /
-  `item_listing` / `number_provider` / `ingredient` mean the matching `IServerRegistry` hook. See
+  `item_listing` / `number_provider` / `ingredient` / `item_sub_predicate` / `entity_sub_predicate`
+  mean the matching `IServerRegistry` hook. See
   `alicompat/CLAUDE.md` for which registry each one lives in.
 - **Synthetic lambdas cannot be registered.** A `$$Lambda` subject has no stable class to key on; it
   needs an accessor over the enclosing type or an upstream change, and the report flags each one.

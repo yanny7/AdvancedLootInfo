@@ -38,12 +38,16 @@ HOOK_OF_METHOD = {
     "registerEntryTooltip": ["entry"],
     "registerNumberProvider": ["number_provider"],
     "registerIngredientTooltip": ["ingredient"],
+    "registerItemSubPredicateTooltip": ["item_sub_predicate"],
+    "registerEntitySubPredicateTooltip": ["entity_sub_predicate"],
     "registerItemListing": ["item_listing"],
     "registerGlobalLootModifier": ["global_loot_modifier"],
 }
+CODEC_KEYED = {"registerEntitySubPredicateTooltip"}
 
 CALL = re.compile(r"\b(" + "|".join(HOOK_OF_METHOD) + r")\s*\(([^;]{0,400}?)\)\s*;", re.S)
 CLASS_LITERAL = re.compile(r"([A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*)\.class")
+CODEC_OWNER = re.compile(r"\b([A-Z][\w$]*(?:\.[A-Z][\w$]*)*)\.[A-Z][A-Z0-9_]*\b")
 CLASS_ACCESSOR = re.compile(r'@ClassAccessor\s*\(\s*"([^"]+)"\s*\)[\s\S]{0,400}?\bclass\s+(\w+)')
 IMPORT = re.compile(r"^import\s+(?:static\s+)?([\w.$]+);", re.M)
 IMPORT_WILDCARD = re.compile(r"^import\s+(?:static\s+)?([\w.$]+)\.\*;", re.M)
@@ -99,6 +103,9 @@ def read_registrations(loader: str, key: str):
 
         for method, arguments in CALL.findall(text):
             literal = CLASS_LITERAL.search(arguments)
+
+            if not literal and method in CODEC_KEYED:
+                literal = CODEC_OWNER.search(arguments)
 
             if not literal:
                 continue

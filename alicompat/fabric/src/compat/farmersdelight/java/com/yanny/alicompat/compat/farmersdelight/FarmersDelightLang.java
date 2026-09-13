@@ -35,26 +35,8 @@ public class FarmersDelightLang implements ICompatTranslations {
         }
     }
 
-    public enum Ingredient implements ITooltipKey {
-        TOOL_ACTION("tool_action", "Tool Action:"),
-        ;
-
-        private final Translation translation;
-
-        Ingredient(String k, String e) {
-            translation = new Translation("alicompat.type.ingredient." + k, e);
-        }
-
-        @NotNull
-        @Override
-        public Translation getTranslation() {
-            return translation;
-        }
-    }
-
     static {
         CoreLang.register(TRANSLATION_MAP, Functions.class);
-        CoreLang.register(TRANSLATION_MAP, Ingredient.class);
 
         putItemAbility("SWORD_DIG", "Sword Dig");
         putItemAbility("SHOVEL_DIG", "Shovel Dig");

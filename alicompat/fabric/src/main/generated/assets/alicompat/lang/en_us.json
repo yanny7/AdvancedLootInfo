@@ -64,7 +64,6 @@
   "alicompat.type.function.tag_item_removals": "Tag Item Removals:",
   "alicompat.type.function.uniquify_if_has_items": "Uniquify If Has Items:",
   "alicompat.type.function.whirlwind_spawn_entity": "Whirlwind Spawn Entity:",
-  "alicompat.type.ingredient.tool_action": "Tool Action:",
   "alicompat.type.item_sub_predicate.item_color": "Item Color: %s",
   "entity.ribbits.ribbit_fisherman": "Fisherman Ribbit",
   "entity.ribbits.ribbit_gardener": "Gardener Ribbit",
