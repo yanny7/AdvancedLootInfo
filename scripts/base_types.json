@@ -1,9 +1,9 @@
 {
-  "_comment": "ALI registry hook -> the vanilla/loader base types a candidate must inherit from. Every name that exists in the scanned jars is used; a name absent on this Minecraft version is skipped, which is how one file covers every branch.",
+  "_comment": "ALI registry hook -> the vanilla/loader base types a candidate must inherit from. Lists only the hooks ALI declares on this branch. Every base name that exists in the scanned jars is used; a name absent from them (another loader's type) is skipped.",
   "hooks": {
     "function": {
       "title": "Loot functions",
-      "registry": "registerFunctionTooltip / registerCountModifier / registerItemStackModifier / registerItemCollector",
+      "registry": "registerFunctionTooltip / registerCountModifier / registerItemStackModifier",
       "bases": ["net/minecraft/world/level/storage/loot/functions/LootItemFunction"]
     },
     "condition": {
@@ -13,7 +13,7 @@
     },
     "entry": {
       "title": "Loot pool entries",
-      "registry": "registerEntry / registerEntryTooltip / registerItemCollector",
+      "registry": "registerEntry / registerEntryTooltip",
       "bases": ["net/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer"]
     },
     "number_provider": {
@@ -30,11 +30,6 @@
         "net/minecraftforge/common/crafting/AbstractIngredient",
         "net/fabricmc/fabric/api/recipe/v1/ingredient/CustomIngredient"
       ]
-    },
-    "item_sub_predicate": {
-      "title": "Item sub-predicates",
-      "registry": "item sub predicate tooltips",
-      "bases": ["net/minecraft/advancements/critereon/ItemSubPredicate"]
     },
     "item_listing": {
       "title": "Trade item listings",

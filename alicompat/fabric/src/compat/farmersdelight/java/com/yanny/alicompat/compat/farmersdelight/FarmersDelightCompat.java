@@ -8,6 +8,7 @@ import com.yanny.alicompat.IModCompat;
 import com.yanny.alicompat.Utils;
 import com.yanny.alicompat.accessor.PluginUtils;
 import org.jetbrains.annotations.NotNull;
+import vectorwing.farmersdelight.common.crafting.ingredient.ToolActionIngredient;
 import vectorwing.farmersdelight.common.loot.function.CopySkilletFunction;
 import vectorwing.farmersdelight.common.loot.function.SmokerCookFunction;
 import vectorwing.farmersdelight.refabricated.CanItemPerformAbility;
@@ -23,7 +24,10 @@ public class FarmersDelightCompat implements IModCompat {
     @Override
     public void registerServer(IServerRegistry registry) {
         PluginUtils.registerFunctionTooltip(registry, CopySkilletFunction.class, CopySkilletFunctionAccessor::new);
+        PluginUtils.registerFunctionTooltip(registry, CopyMealFunction.class, CopyMealFunctionAccessor::new);
         PluginUtils.registerFunctionTooltip(registry, SmokerCookFunction.class, SmokerCookFunctionAccessor::new);
+
+        registry.registerIngredientTooltip(ToolActionIngredient.class, FarmersDelightCompat::getToolActionTooltip);
 
         registry.registerEnumTranslation(ItemAbility.class, Utils.MOD_ID, FarmersDelightLang.ITEM_ABILITY);
         registry.registerConditionTooltip(CanItemPerformAbility.class, FarmersDelightCompat::getCanItemPerformAbilityTooltip);
@@ -34,5 +38,10 @@ public class FarmersDelightCompat implements IModCompat {
     @NotNull
     private static TooltipBuilder getCanItemPerformAbilityTooltip(IServerUtils utils, CanItemPerformAbility cond) {
         return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.ability())), Lang.Conditions.CAN_ITEM_PERFORM_ABILITY);
+    }
+
+    @NotNull
+    public static TooltipBuilder getToolActionTooltip(IServerUtils utils, ToolActionIngredient ingredient) {
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, ingredient.toolAction.name())), FarmersDelightLang.Ingredient.TOOL_ACTION);
     }
 }

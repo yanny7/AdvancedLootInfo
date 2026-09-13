@@ -38,7 +38,7 @@ git merge origin/<lower>
 `compat_mods` and every `<mod>_<loader>_dep` line: each `_dep` pins a CurseForge file id for one
 specific Minecraft version, so anything merged up from below names a file for the wrong version, and
 `compat_mods` states what this branch has actually ported. Do not try to reconcile them and do not
-ask about them. `supported_mods.json` is the opposite case — it holds no Minecraft-version-specific
+ask about them. `scripts/supported_mods.json` is the opposite case — it holds no Minecraft-version-specific
 data, so it merges like any other file and a new entry arriving from below is kept. The rest of the file — loader versions, viewer versions, enabled platforms —
 conflicts like any other code and is resolved on its merits.
 
@@ -90,18 +90,24 @@ The pinned file ids came up from a lower branch and name files for the wrong Min
 every later step would be reading the wrong jar:
 
 ```bash
-python3 check_versions.py --loader <loader>
-python3 check_versions.py --update
+python3 scripts/check_versions.py --loader <loader>
+python3 scripts/check_versions.py --update
 ```
 
 `--update` regenerates the block for the shims this branch already has active, and skips every
 dormant one. It does not check that anything still compiles — build after it. **Never `--init` here**:
 that switches every dormant shim on at once, which is the opposite of what phase 2 is for.
 
+The same run then diffs every active shim against its newly pinned jar and writes
+`build/compat_scan.txt`. That report is the re-derivation this phase would otherwise do by hand: `-`
+and `!` rows are the classes this Minecraft version moved, renamed or re-parented out from under the
+shim, `+` rows are what it gained. Work that list before building — the `-` rows are exactly the
+compile errors the build is about to print, with the reason attached.
+
 ### What is dormant
 
 ```bash
-python3 check_versions.py --loader <loader>
+python3 scripts/check_versions.py --loader <loader>
 ```
 
 Its "Dormant, present in the tree but not in `compat_mods`" section is the list, and each row says
@@ -142,7 +148,7 @@ This is a full port, not a merge. It runs `alicompat-shim` from its Step 0:
 - fetch the jar for **this** Minecraft version and loader, and diff the classes the shim uses against
   what the jar contains — classes move, get renamed and disappear between versions
 - adjust the shim; only its shape ports, never its contents
-- add the slug to `compat_mods`, then `python3 check_versions.py --update` to pin its `_dep` lines
+- add the slug to `compat_mods`, then `python3 scripts/check_versions.py --update` to pin its `_dep` lines
   and rewrite the block (the slug's order in the list is the script's business, not yours)
 - if the mod has no file for this version or loader, write no shim, delete no source set, and say why
 

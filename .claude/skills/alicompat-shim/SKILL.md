@@ -43,13 +43,15 @@ class name. A scan that finds nothing is a valid answer: say so and write no shi
 **The shim exists and the target mod moved on.** Repin first, then treat the new jar as an unknown:
 
 ```bash
-python3 check_versions.py --loader <loader>          # what is behind
-python3 check_versions.py --update                   # repin the file ids
+python3 scripts/check_versions.py --loader <loader>          # what is behind
+python3 scripts/check_versions.py --update                   # repin the file ids
 ```
 
-`--update` only swaps the file id; it does not check that the shim still compiles. Build immediately
-after, and diff the class list the shim uses against what the new jar actually contains — a target
-mod's refactor shows up here as a missing class, not as a broken tooltip.
+`--update` only swaps the file id; it does not check that the shim still compiles. The scan at the end
+of the run does the class-list diff for you — find the shim's rows in the output or in
+`build/compat_scan.txt`: `-` is a class the new jar no longer has, `!` is one it still has but
+re-parented away from the hook, `+` is one it gained. A target mod's refactor shows up there as a
+missing class, not as a broken tooltip. Build immediately after.
 
 ## Step 1 — a finding list is for one Minecraft version only
 
@@ -177,9 +179,6 @@ loader module's single compile classpath, so a shim may name that library's type
 are Moonlight's `ModItemListing`) without reflection, and at runtime the target mod's own hard dependency guarantees
 it is there.
 
-An `item_sub_predicate` finding on a branch before `1.20.5` is an `ItemPredicate` subclass, not a sub-predicate:
-there is no `registerItemSubPredicate`, and the hook is `registerValueTooltip` on that class.
-
 **An entry that carries its own count reports `1` unless you seed the range yourself.**
 `NodeUtils.getEnchantedCount` starts from `RangeValue(1)` and lets the entry's functions modify it, which is right
 only for an entry whose count comes from a `SetItemCountFunction`. A `LootPoolSingletonContainer` holding its own
@@ -188,9 +187,9 @@ only for an entry whose count comes from a `SetItemCountFunction`. A `LootPoolSi
 `TooltipUtils.getTooltip`. `weight`, `quality`, `conditions` and `functions` are read off `parent` — the access
 widener opens all four — and `IEntry` and `IEntryTooltip` sit on the one accessor.
 
-One accessor may implement several hooks. A function that swaps the stack is worth registering three
-times: `registerFunctionTooltip` (what it says), `registerItemStackModifier` (so the drop renders as
-the swapped item) and `registerItemCollector` (so the recipe-viewer index finds it).
+One accessor may implement several hooks. A function that swaps the stack is worth registering twice:
+`registerFunctionTooltip` (what it says) and `registerItemStackModifier` (so the drop renders as
+the swapped item).
 
 ## Step 3b — trade item listings
 
@@ -388,8 +387,8 @@ can hang the session. Add the new keys to that JSON by hand (alphabetically sort
 
 ## Step 6 — wiring, and what the user must be told
 
-Per `alicompat/CLAUDE.md`: the mod gets an entry in `supported_mods.json` (slug, name, runtime mod
-ids, and its CurseForge projects as `<slug>-<project id>`), and `python3 check_versions.py --scaffold <slug>`
+Per `alicompat/CLAUDE.md`: the mod gets an entry in `scripts/supported_mods.json` (slug, name, runtime mod
+ids, and its CurseForge projects as `<slug>-<project id>`), and `python3 scripts/check_versions.py --scaffold <slug>`
 then pins it, puts the slug into `compat_mods` and writes the `<slug>_<loader>_dep` lines — never
 write that block by hand, the next run overwrites it. The same command scaffolds a compiling skeleton
 (`package-info.java`, an `IModCompat` returning the mod id, `services/com.yanny.alicompat.IModCompat`)

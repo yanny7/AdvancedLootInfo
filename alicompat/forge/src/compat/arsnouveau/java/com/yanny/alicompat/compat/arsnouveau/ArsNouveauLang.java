@@ -1,4 +1,4 @@
-package com.yanny.alicompat.compat.farmersdelight;
+package com.yanny.alicompat.compat.arsnouveau;
 
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.language.ITooltipKey;
@@ -9,31 +9,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FarmersDelightLang implements ICompatTranslations {
-    static final String MOD_ID = "farmersdelight";
+public class ArsNouveauLang implements ICompatTranslations {
+    static final String MOD_ID = "ars_nouveau";
 
     public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 
-    public enum Functions implements ITooltipKey {
-        COPY_SKILLET("copy_skillet", "Copy Skillet:"),
-        SMOKER_COOK("smoker_cook", "Smoker Cook:"),
-        ;
-
-        private final Translation translation;
-
-        Functions(String k, String e) {
-            translation = new Translation("alicompat.type.function." + k, e);
-        }
-
-        @NotNull
-        @Override
-        public Translation getTranslation() {
-            return translation;
-        }
-    }
-
     public enum Ingredient implements ITooltipKey {
-        TOOL_ACTION("tool_action", "Tool Action:"),
+        POTION("potion", "Potion Ingredient:"),
         ;
 
         private final Translation translation;
@@ -50,7 +32,6 @@ public class FarmersDelightLang implements ICompatTranslations {
     }
 
     static {
-        CoreLang.register(TRANSLATION_MAP, Functions.class);
         CoreLang.register(TRANSLATION_MAP, Ingredient.class);
     }
 

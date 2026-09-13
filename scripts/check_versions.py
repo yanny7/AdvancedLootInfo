@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Resolves the mods listed in supported_mods.json against CurseForge for this branch's
+"""Resolves the mods listed in scripts/supported_mods.json against CurseForge for this branch's
 Minecraft version, reports what is outdated, newly available or gone, and can regenerate
 the generated ALICompat block in gradle.properties together with missing shim skeletons."""
 
@@ -7,6 +7,8 @@ import argparse
 import re
 import sys
 from pathlib import Path
+
+import shimscan
 
 from modpack import (
     MOD_LOADER_TYPE,
@@ -30,6 +32,7 @@ BLOCK_END = "# --- end of generated block ---"
 LEGACY_BLOCK_START = "# ALICompat target mods"
 CURSEFORGE_URL = "https://www.curseforge.com/minecraft/mc-mods"
 SERVICE_FILE = "com.yanny.alicompat.IModCompat"
+REPORT_FILE = PROJECT_DIR / "build" / "compat_scan.txt"
 
 
 def source_set(loader: str, key: str):
@@ -85,6 +88,136 @@ def scaffold(loader: str, entry: dict):
     (services / SERVICE_FILE).write_text(f"{package}.{compat}\n", encoding="utf-8")
 
     return root.relative_to(PROJECT_DIR)
+
+
+def scanned_file(result: dict, update: bool):
+    """The file the shim source set is measured against: what it is pinned to, or what
+    --update has just repinned it to."""
+    if update or "current" not in result:
+        return result.get("latest")
+
+    return result["current"]
+
+
+def download(client: CurseForge, pin: dict, file: dict):
+    jar = shimscan.cached_jar(pin)
+
+    if jar or not file or not file.get("downloadUrl"):
+        return jar
+
+    return shimscan.download_jar(client.session, pin, file["downloadUrl"])
+
+
+def shim_jars(args, clients, results, deps, pinned, rows):
+    """The jar every shim in `rows` is measured against, downloaded once per file id, plus the
+    (pinned, newest) pair of whatever has a newer file than the one it is pinned to."""
+    resolved = {(result["key"], result["loader"]): result for result in results}
+    jars = {}
+    versions = {}
+
+    for index, (key, loader) in enumerate(rows, start=1):
+        progress(index, len(rows), f"{key} ({loader})")
+        pin = deps.get((key, loader)) if args.update else pinned[loader].get(key) or deps.get((key, loader))
+        result = resolved.get((key, loader))
+
+        if pin:
+            jars[(key, loader)] = download(clients[loader], pin, scanned_file(result, args.update) if result else None)
+
+        if not result or result["state"] != "outdated" or key not in pinned[loader]:
+            continue
+
+        old_jar = download(clients[loader], pinned[loader][key], result.get("current"))
+        new_jar = download(clients[loader], {"slug": result["slug"], "project_id": result["project_id"],
+                                             "file_id": result["latest"]["id"]}, result["latest"])
+
+        if old_jar and new_jar:
+            versions[(key, loader)] = (old_jar, new_jar)
+
+    progress_done()
+    return jars, versions
+
+
+def scan_shims(args, entries, enabled, checked_loaders, clients, results, deps, pinned, minecraft_version):
+    base_types = shimscan.load_base_types()
+    titles = {hook: spec["title"] for hook, spec in base_types["hooks"].items()}
+    rows = [
+        (key, loader) for key in sorted(entries) for loader in checked_loaders
+        if source_set(loader, key).is_dir() and key in enabled
+    ]
+    dormant = [
+        (key, loader) for key in sorted(entries) for loader in checked_loaders
+        if source_set(loader, key).is_dir() and key not in enabled
+    ]
+    width = max((len(f"{key} ({loader})") for key, loader in rows + dormant), default=0)
+    jars, versions = shim_jars(args, clients, results, deps, pinned, rows)
+    renames = shimscan.intermediary_names(minecraft_version)
+    lines = []
+    counts = {"ok": 0, "changed": 0, "skipped": len(dormant)}
+
+    for loader in checked_loaders:
+        minecraft = shimscan.minecraft_jar(loader, minecraft_version)
+        loaded = [jar for (_, owner), jar in jars.items() if owner == loader and jar]
+
+        if not minecraft:
+            lines.append(f"! no {loader} Minecraft jar under .gradle/loom-cache — run a gradle sync first, "
+                         f"every hook reached through a vanilla class is invisible without it")
+
+        index, owned = shimscan.build_index(loaded + ([minecraft] if minecraft else []))
+        bases = shimscan.hook_map(base_types, index)
+        cache = {}
+        unreachable = [hook for hook in base_types["hooks"] if hook not in {h for hs in bases.values() for h in hs}]
+
+        if unreachable:
+            lines.append(f"! {loader}: no base type on the classpath for {', '.join(sorted(unreachable))} — "
+                         f"those hooks are not checked here")
+
+        for key, owner in rows:
+            if owner != loader:
+                continue
+
+            label = f"{key} ({loader})".ljust(width)
+            jar = jars.get((key, loader))
+
+            if not jar:
+                counts["skipped"] += 1
+                lines.append(f"{label}  [NO JAR]   nothing pinned for this loader, or the file is not downloadable")
+                continue
+
+            found = shimscan.scan(loader, key, owned[jar], index, bases, cache, base_types, renames,
+                                  versions.get((key, loader)))
+            sections = [
+                ("+", "not registered", found["new"]),
+                ("-", "registered, gone from the jar", found["missing"]),
+                ("!", "registered, no longer inherits the base type", found["detached"]),
+            ]
+
+            if not any(hooks for _, _, hooks in sections) and not found["changed"]:
+                counts["ok"] += 1
+                lines.append(f"{label}  [OK]")
+                continue
+
+            counts["changed"] += 1
+            lines.append(f"{label}  [CHANGED]")
+
+            for marker, note, hooks in sections:
+                for hook, names in sorted(hooks.items()):
+                    lines.append(f"  {marker} {titles.get(hook, hook)} ({note}):")
+                    lines += [f"      {name}" for name in sorted(names)]
+
+            for hook, classes in sorted(found["changed"].items()):
+                lines.append(f"  ~ {titles.get(hook, hook)} (registered, fields differ in the newest file):")
+
+                for name, (added, removed) in sorted(classes.items()):
+                    lines.append(f"      {name}")
+                    lines += [f"        + {field}" for field in added]
+                    lines += [f"        - {field}" for field in removed]
+
+    for key, loader in dormant:
+        lines.append(f"{f'{key} ({loader})'.ljust(width)}  [DORMANT]  not in compat_mods, nothing compiles it")
+
+    lines.append("")
+    lines.append(f"{counts['ok']} clean, {counts['changed']} changed, {counts['skipped']} not scanned")
+    return lines
 
 
 def resolve(client: CurseForge, entry: dict, pinned: dict):
@@ -182,6 +315,7 @@ def main():
     parser.add_argument("--update", action="store_true", help="Regenerate the block in gradle.properties and scaffold missing shims")
     parser.add_argument("--init", action="store_true", help="Pin and enable every registry mod, ignoring the current compat_mods; implies --update")
     parser.add_argument("--scaffold", metavar="MOD", help="Do all of that for one registry mod only: scaffold its missing source sets, pin it, enable it; implies --update")
+    parser.add_argument("--no-scan", action="store_true", help="Skip the shim scan, only resolve versions")
     parser.add_argument("--curseforge-api-key", help="CurseForge API Key (default: $CURSEFORGE_API_KEY)")
     args = parser.parse_args()
 
@@ -350,6 +484,14 @@ def main():
             return 1
 
         print(f"\nWrote {len(deps)} dependency lines and {len({key for key, _ in deps})} compat_mods entries to gradle.properties")
+
+    if not args.no_scan:
+        print(f"\nScanning shim source sets against their {'newly pinned' if args.update else 'pinned'} jars")
+        lines = scan_shims(args, entries, enabled, checked_loaders, clients, results, deps, pinned, minecraft_version)
+        print("\n".join(lines))
+        REPORT_FILE.parent.mkdir(parents=True, exist_ok=True)
+        REPORT_FILE.write_text("\n".join(lines) + "\n", encoding="utf-8")
+        print(f"\nReport written to {REPORT_FILE.relative_to(PROJECT_DIR)}")
 
     counts = {state: len([result for result in results if result["state"] == state]) for state in ("current", "outdated", "new", "gone", "unavailable")}
     print(f"\n{counts['current']} up to date, {counts['outdated']} outdated, {counts['new']} new, {counts['gone']} gone, "
