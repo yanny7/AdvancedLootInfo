@@ -2,7 +2,7 @@
 """What this repo already registers, so a static candidate can be told from a real gap.
 
 Reads the ALI / ALICompat sources rather than a log: every `register<Hook>(X.class, ...)`
-call, every `registerTrades(<id>, ...)`, every mixin target, and the `supported_mods.json` registry.
+call, every `registerTrades(<id>, ...)`, every mixin target, and the `scripts/supported_mods.json` registry.
 
 A shim over a target class that is not visible on the compile classpath registers its accessor
 instead, and names the target only in the accessor's `@ClassAccessor("<binary name>")`. Those
@@ -140,7 +140,7 @@ def main():
                 entries[target] = method
                 out["simpleNames"].setdefault(hook, {})[target.rsplit(".", 1)[-1].split("$")[-1]] = method
 
-    registry = os.path.join(args.repo, "supported_mods.json")
+    registry = os.path.join(args.repo, "scripts", "supported_mods.json")
     if os.path.isfile(registry):
         with open(registry, encoding="utf-8") as handle:
             entries = json.load(handle)

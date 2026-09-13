@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Builds a CurseForge-format modpack zip (importable by Prism Launcher) out of the
-ALICompat target mods listed in supported_mods.json and enabled in gradle.properties."""
+ALICompat target mods listed in scripts/supported_mods.json and enabled in gradle.properties."""
 
 import argparse
 import html
@@ -21,7 +21,8 @@ VIEWER_SLUGS = {"rei": "roughly-enough-items", "jei": "jei", "emi": "emi"}
 OWN_MODS = ["aci", "ali", "alicompat"]
 SUPPORTED_MODS_FILE = "supported_mods.json"
 
-PROJECT_DIR = Path(__file__).resolve().parent
+SCRIPT_DIR = Path(__file__).resolve().parent
+PROJECT_DIR = SCRIPT_DIR.parent
 
 
 def read_env_secret(env_name: str):
@@ -66,7 +67,7 @@ def progress_done():
 
 
 def read_supported_mods():
-    return json.loads((PROJECT_DIR / SUPPORTED_MODS_FILE).read_text(encoding="utf-8"))
+    return json.loads((SCRIPT_DIR / SUPPORTED_MODS_FILE).read_text(encoding="utf-8"))
 
 
 def read_enabled_mods(properties: dict):

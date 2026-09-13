@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://github.com/yanny7/AdvancedLootInfo/blob/master/supported_mods.schema.json",
+  "$id": "https://github.com/yanny7/AdvancedLootInfo/blob/master/scripts/supported_mods.schema.json",
   "title": "ALICompat Supported Mods Schema",
-  "description": "Minecraft-version-agnostic registry of every mod ALICompat provides support for (supported_mods.json). check_versions.py and modpack.py read it as their source of truth; gradle.properties holds only what the current branch resolves from it.",
+  "description": "Minecraft-version-agnostic registry of every mod ALICompat provides support for (scripts/supported_mods.json). scripts/check_versions.py and scripts/modpack.py read it as their source of truth; gradle.properties holds only what the current branch resolves from it.",
   "type": "array",
   "items": {
     "type": "object",

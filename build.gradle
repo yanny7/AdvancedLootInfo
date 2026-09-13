@@ -455,7 +455,7 @@ def uploadRunConfigTasks = ["ali", "awi", "aci"].collectMany { modId ->
     <option name="IS_MODULE_SDK" value="true"/>
     <option name="ADD_CONTENT_ROOTS" value="true"/>
     <option name="ADD_SOURCE_ROOTS" value="true"/>
-    <option name="SCRIPT_NAME" value="\$PROJECT_DIR\$/upload.py"/>
+    <option name="SCRIPT_NAME" value="\$PROJECT_DIR\$/scripts/upload.py"/>
     <option name="PARAMETERS" value="${parameters}"/>
     <option name="SHOW_COMMAND_LINE" value="false"/>
     <option name="EMULATE_TERMINAL" value="false"/>
@@ -505,7 +505,7 @@ def modpackRunConfigTasks = enabled_platforms.split(",").collect { platform ->
     <option name="IS_MODULE_SDK" value="true"/>
     <option name="ADD_CONTENT_ROOTS" value="true"/>
     <option name="ADD_SOURCE_ROOTS" value="true"/>
-    <option name="SCRIPT_NAME" value="\$PROJECT_DIR\$/modpack.py"/>
+    <option name="SCRIPT_NAME" value="\$PROJECT_DIR\$/scripts/modpack.py"/>
     <option name="PARAMETERS" value="${parameters}"/>
     <option name="SHOW_COMMAND_LINE" value="false"/>
     <option name="EMULATE_TERMINAL" value="false"/>
@@ -556,7 +556,7 @@ def checkVersionsRunConfigTasks = checkVersionsTargets.collect { suffix, label -
     <option name="IS_MODULE_SDK" value="true"/>
     <option name="ADD_CONTENT_ROOTS" value="true"/>
     <option name="ADD_SOURCE_ROOTS" value="true"/>
-    <option name="SCRIPT_NAME" value="\$PROJECT_DIR\$/check_versions.py"/>
+    <option name="SCRIPT_NAME" value="\$PROJECT_DIR\$/scripts/check_versions.py"/>
     <option name="PARAMETERS" value="${parameters}"/>
     <option name="SHOW_COMMAND_LINE" value="false"/>
     <option name="EMULATE_TERMINAL" value="false"/>

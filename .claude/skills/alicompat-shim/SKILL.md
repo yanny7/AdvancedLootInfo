@@ -43,13 +43,15 @@ class name. A scan that finds nothing is a valid answer: say so and write no shi
 **The shim exists and the target mod moved on.** Repin first, then treat the new jar as an unknown:
 
 ```bash
-python3 check_versions.py --loader <loader>          # what is behind
-python3 check_versions.py --update                   # repin the file ids
+python3 scripts/check_versions.py --loader <loader>          # what is behind
+python3 scripts/check_versions.py --update                   # repin the file ids
 ```
 
-`--update` only swaps the file id; it does not check that the shim still compiles. Build immediately
-after, and diff the class list the shim uses against what the new jar actually contains — a target
-mod's refactor shows up here as a missing class, not as a broken tooltip.
+`--update` only swaps the file id; it does not check that the shim still compiles. The scan at the end
+of the run does the class-list diff for you — find the shim's rows in the output or in
+`build/compat_scan.txt`: `-` is a class the new jar no longer has, `!` is one it still has but
+re-parented away from the hook, `+` is one it gained. A target mod's refactor shows up there as a
+missing class, not as a broken tooltip. Build immediately after.
 
 ## Step 1 — a finding list is for one Minecraft version only
 
@@ -388,8 +390,8 @@ can hang the session. Add the new keys to that JSON by hand (alphabetically sort
 
 ## Step 6 — wiring, and what the user must be told
 
-Per `alicompat/CLAUDE.md`: the mod gets an entry in `supported_mods.json` (slug, name, runtime mod
-ids, and its CurseForge projects as `<slug>-<project id>`), and `python3 check_versions.py --scaffold <slug>`
+Per `alicompat/CLAUDE.md`: the mod gets an entry in `scripts/supported_mods.json` (slug, name, runtime mod
+ids, and its CurseForge projects as `<slug>-<project id>`), and `python3 scripts/check_versions.py --scaffold <slug>`
 then pins it, puts the slug into `compat_mods` and writes the `<slug>_<loader>_dep` lines — never
 write that block by hand, the next run overwrites it. The same command scaffolds a compiling skeleton
 (`package-info.java`, an `IModCompat` returning the mod id, `services/com.yanny.alicompat.IModCompat`)
