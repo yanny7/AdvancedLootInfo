@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Diffs every built ALICompat shim against the target-mod jar it is pinned to.
 
-Three findings per shim: a class the jar has and the shim does not register, a class the
-shim registers that the jar no longer has, and a class the shim registers that no longer
-inherits the hook's base type - the last one still compiles and silently does nothing.
+Four findings per shim: a class the jar has and the shim does not register, a class the
+shim registers that the jar no longer has, a class the shim registers that no longer
+inherits the hook's base type, and a registered class whose instance fields differ between
+the pinned jar and the newest one - the last two still compile and silently render nothing
+or too little.
 
 The hooks and their base types come from base_types.json, the same file the alicompat-survey
 skill scans modpacks with.
@@ -311,6 +313,79 @@ def _binary_variants(name: str):
             else "/".join(parts)
 
 
+PRIMITIVES = {"B": "byte", "C": "char", "D": "double", "F": "float", "I": "int", "J": "long",
+              "S": "short", "Z": "boolean", "V": "void"}
+
+
+def type_name(descriptor: str):
+    arrays = len(descriptor) - len(descriptor.lstrip("["))
+    element = descriptor[arrays:]
+
+    if element.startswith("L"):
+        element = element[1:-1].rsplit("/", 1)[-1].replace("$", ".")
+    else:
+        element = PRIMITIVES.get(element, element)
+
+    return element + "[]" * arrays
+
+
+def _jar_classes(jar: Path):
+    with zipfile.ZipFile(jar) as archive:
+        return {entry[:-len(".class")] for entry in archive.namelist() if entry.endswith(".class")}
+
+
+def _read_fields(jar: Path, names: set):
+    fields = {}
+
+    with zipfile.ZipFile(jar) as archive:
+        for name in names:
+            try:
+                fields[name] = classfile.field_types(classfile.parse(archive.read(f"{name}.class")))
+            except (classfile.ClassFileError, KeyError, OSError, struct.error):
+                continue
+
+    return fields
+
+
+def diff_fields(registered: dict, old_jar: Path, new_jar: Path):
+    """{hook: {class: (added, removed)}} for registered classes whose instance fields moved.
+
+    A class that keeps its name and its base type is invisible to the other three findings, so
+    a field the target mod adds to one is a tooltip that silently stops being complete."""
+    old_classes = _jar_classes(old_jar)
+    new_classes = _jar_classes(new_jar)
+    wanted = {}
+
+    for hook, groups in registered.items():
+        for alternatives in groups:
+            found = next((variant for name in alternatives for variant in _binary_variants(name)
+                          if variant in new_classes or variant in old_classes), None)
+
+            if found:
+                wanted.setdefault(hook, set()).add(found)
+
+    names = {name for hooked in wanted.values() for name in hooked}
+    before = _read_fields(old_jar, names & old_classes)
+    after = _read_fields(new_jar, names & new_classes)
+    changed = {}
+
+    for hook, hooked in wanted.items():
+        for name in hooked:
+            if name not in before or name not in after:
+                continue
+
+            gone = set(before[name]) - set(after[name])
+            fresh = set(after[name]) - set(before[name])
+
+            if gone or fresh:
+                changed.setdefault(hook, {})[name.replace("/", ".")] = (
+                    sorted(f"{field} {type_name(descriptor)}" for field, descriptor in fresh),
+                    sorted(f"{field} {type_name(descriptor)}" for field, descriptor in gone),
+                )
+
+    return changed
+
+
 def build_index(jars: list):
     """One class index for a whole loader: every pinned target jar plus Minecraft.
 
@@ -329,8 +404,10 @@ def build_index(jars: list):
 
 
 def scan(loader: str, key: str, owned: set, index: dict, bases: dict, cache: dict, base_types: dict,
-         renames: dict = None):
-    """Diffs one shim source set against the jar it is pinned to."""
+         renames: dict = None, versions: tuple = None):
+    """Diffs one shim source set against the jar it is pinned to.
+
+    `versions` is the (pinned jar, newest jar) pair, when the two differ."""
     roots = {name.split("/")[0] for name in owned}
     ignored = read_ignored(loader, key)
     registered = read_registrations(loader, key)
@@ -383,7 +460,8 @@ def scan(loader: str, key: str, owned: set, index: dict, bases: dict, cache: dic
             if wanted and found in owned and not supertypes(found, index, cache, renames) & wanted:
                 detached.setdefault(hook, set()).add(found.replace("/", "."))
 
-    return {"new": new, "missing": missing, "detached": detached}
+    changed = diff_fields(registered, *versions) if versions else {}
+    return {"new": new, "missing": missing, "detached": detached, "changed": changed}
 
 
 def _dotted_variants(name: str):
