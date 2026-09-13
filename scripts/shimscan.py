@@ -48,6 +48,7 @@ CLASS_ACCESSOR = re.compile(r'@ClassAccessor\s*\(\s*"([^"]+)"\s*\)[\s\S]{0,400}?
 IMPORT = re.compile(r"^import\s+(?:static\s+)?([\w.$]+);", re.M)
 IMPORT_WILDCARD = re.compile(r"^import\s+(?:static\s+)?([\w.$]+)\.\*;", re.M)
 PACKAGE = re.compile(r"^package\s+([\w.]+);", re.M)
+DECLARATION = re.compile(r"\b(?:class|record|interface|enum)\s+([A-Z]\w*)")
 TRADES = re.compile(r"\bregisterTrades\s*\(")
 TRADES_PATH = re.compile(r'ResourceLocation\s*\([^,)]+,\s*"([^"]+)"\s*\)')
 TRADER_ENTITY_HOOK = "trader_entity"
@@ -118,6 +119,18 @@ def read_registrations(loader: str, key: str):
             alternatives[:] = targets
 
     return hooks
+
+
+def read_declared(loader: str, key: str):
+    declared = set()
+
+    for path in source_set(loader, key).rglob("*.java"):
+        text = path.read_text(encoding="utf-8", errors="replace")
+        package_match = PACKAGE.search(text)
+        package = package_match.group(1) if package_match else ""
+        declared |= {f"{package}.{name}" if package else name for name in DECLARATION.findall(text)}
+
+    return declared
 
 
 def _first_argument(text: str, start: int):
@@ -445,6 +458,7 @@ def scan(loader: str, key: str, owned: set, index: dict, bases: dict, cache: dic
     roots = {name.split("/")[0] for name in owned}
     ignored = read_ignored(loader, key)
     registered = read_registrations(loader, key)
+    declared = read_declared(loader, key)
     covered = {
         hook: {spelling for group in groups for name in group for spelling in (name, name.replace(".", "$"))}
         for hook, groups in registered.items()
@@ -486,7 +500,7 @@ def scan(loader: str, key: str, owned: set, index: dict, bases: dict, cache: dic
                           for variant in _binary_variants(name) if variant in index), None)
 
             if found is None:
-                if any(name.split(".")[0] in roots for name in alternatives):
+                if not declared & set(alternatives) and any(name.split(".")[0] in roots for name in alternatives):
                     missing.setdefault(hook, set()).add(alternatives[0])
 
                 continue
