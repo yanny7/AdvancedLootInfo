@@ -346,7 +346,16 @@ def type_name(descriptor: str):
 
 def _jar_classes(jar: Path):
     with zipfile.ZipFile(jar) as archive:
-        return {entry[:-len(".class")] for entry in archive.namelist() if entry.endswith(".class")}
+        classes = {entry[:-len(".class")] for entry in archive.namelist() if entry.endswith(".class")}
+
+        for entry in archive.namelist():
+            if entry.startswith("META-INF/jars/") and entry.endswith(".jar"):
+                try:
+                    classes |= _jar_classes(io.BytesIO(archive.read(entry)))
+                except zipfile.BadZipFile:
+                    continue
+
+    return classes
 
 
 def _read_fields(jar: Path, names: set):
@@ -358,6 +367,18 @@ def _read_fields(jar: Path, names: set):
                 fields[name] = classfile.field_types(classfile.parse(archive.read(f"{name}.class")))
             except (classfile.ClassFileError, KeyError, OSError, struct.error):
                 continue
+
+        for entry in archive.namelist():
+            rest = names - fields.keys()
+
+            if not rest:
+                break
+
+            if entry.startswith("META-INF/jars/") and entry.endswith(".jar"):
+                try:
+                    fields.update(_read_fields(io.BytesIO(archive.read(entry)), rest))
+                except zipfile.BadZipFile:
+                    continue
 
     return fields
 
