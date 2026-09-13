@@ -44,7 +44,7 @@ A shim is never widened on its own: when a mod turns out to have a file on a loa
 
 ```json
 {
-  "dev.shadowsoffire.placebo.recipe.NBTIngredient": "vanilla Ingredient rendering covers it"
+  "dev.shadowsoffire.placebo.recipe.NBTIngredient": "only built in code by Apotheosis.potionIngredient for crafting recipes; it inherits PartialNBTIngredient's serializer, so data never yields this class"
 }
 ```
 

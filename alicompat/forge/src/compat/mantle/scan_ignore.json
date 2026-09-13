@@ -1,0 +1,3 @@
+{
+  "slimeknights.mantle.recipe.helper.TagEmptyCondition": "deprecated for removal and never instantiated; the tag_empty serializer builds recipe.condition.TagEmptyCondition"
+}

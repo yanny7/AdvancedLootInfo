@@ -17,6 +17,7 @@ public class FarmersDelightLang implements ICompatTranslations {
     public enum Functions implements ITooltipKey {
         COPY_MEAL("copy_meal", "Copy Meal:"),
         COPY_SKILLET("copy_skillet", "Copy Skillet:"),
+        SMOKER_COOK("smoker_cook", "Smoker Cook:"),
         ;
 
         private final Translation translation;
@@ -32,8 +33,26 @@ public class FarmersDelightLang implements ICompatTranslations {
         }
     }
 
+    public enum Ingredient implements ITooltipKey {
+        TOOL_ACTION("tool_action", "Tool Action:"),
+        ;
+
+        private final Translation translation;
+
+        Ingredient(String k, String e) {
+            translation = new Translation("alicompat.type.ingredient." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
     static {
         CoreLang.register(TRANSLATION_MAP, Functions.class);
+        CoreLang.register(TRANSLATION_MAP, Ingredient.class);
     }
 
     @NotNull

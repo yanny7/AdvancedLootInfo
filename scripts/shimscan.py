@@ -10,6 +10,7 @@ or too little.
 The hooks and their base types come from base_types.json, the same file the alicompat-survey
 skill scans modpacks with.
 """
+import io
 import json
 import re
 import struct
@@ -241,6 +242,20 @@ def index_jar(path: Path, index: dict, owned: set = None):
     """name -> (supername, interfaces, access) for every class in one jar."""
     with zipfile.ZipFile(path) as archive:
         for entry in archive.namelist():
+            # bundled libraries feed the hierarchy only; owning them would list their classes as the host mod's findings
+            if entry.startswith("META-INF/jars/") and entry.endswith(".jar"):
+                nested = {}
+
+                try:
+                    index_jar(io.BytesIO(archive.read(entry)), nested)
+                except zipfile.BadZipFile:
+                    continue
+
+                for name, value in nested.items():
+                    index.setdefault(name, value)
+
+                continue
+
             if not entry.endswith(".class"):
                 continue
 
