@@ -24,13 +24,10 @@ HOOK_OF_METHOD = {
     "registerChanceModifier": ["condition"],
     "registerEntry": ["entry"],
     "registerEntryTooltip": ["entry"],
-    "registerItemCollector": ["function", "entry"],
     "registerNumberProvider": ["number_provider"],
     "registerIngredientTooltip": ["ingredient"],
-    "registerItemSubPredicateTooltip": ["item_sub_predicate"],
     "registerItemListing": ["item_listing"],
     "registerGlobalLootModifier": ["global_loot_modifier"],
-    "registerDataComponentType": ["data_component_type"],
 }
 
 CALL = re.compile(r"\b(" + "|".join(HOOK_OF_METHOD) + r")\s*\(([^;]{0,400}?)\)\s*;", re.S)

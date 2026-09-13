@@ -179,9 +179,6 @@ loader module's single compile classpath, so a shim may name that library's type
 are Moonlight's `ModItemListing`) without reflection, and at runtime the target mod's own hard dependency guarantees
 it is there.
 
-An `item_sub_predicate` finding on a branch before `1.20.5` is an `ItemPredicate` subclass, not a sub-predicate:
-there is no `registerItemSubPredicate`, and the hook is `registerValueTooltip` on that class.
-
 **An entry that carries its own count reports `1` unless you seed the range yourself.**
 `NodeUtils.getEnchantedCount` starts from `RangeValue(1)` and lets the entry's functions modify it, which is right
 only for an entry whose count comes from a `SetItemCountFunction`. A `LootPoolSingletonContainer` holding its own
@@ -190,9 +187,9 @@ only for an entry whose count comes from a `SetItemCountFunction`. A `LootPoolSi
 `TooltipUtils.getTooltip`. `weight`, `quality`, `conditions` and `functions` are read off `parent` — the access
 widener opens all four — and `IEntry` and `IEntryTooltip` sit on the one accessor.
 
-One accessor may implement several hooks. A function that swaps the stack is worth registering three
-times: `registerFunctionTooltip` (what it says), `registerItemStackModifier` (so the drop renders as
-the swapped item) and `registerItemCollector` (so the recipe-viewer index finds it).
+One accessor may implement several hooks. A function that swaps the stack is worth registering twice:
+`registerFunctionTooltip` (what it says) and `registerItemStackModifier` (so the drop renders as
+the swapped item).
 
 ## Step 3b — trade item listings
 

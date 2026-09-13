@@ -133,16 +133,17 @@ ticked boxes and notes.
 Lives in the repo, not in this skill: `scripts/check_versions.py --scan` reads the same file to diff
 the existing shims against their pinned jars, and `scripts/classfile.py` is the class reader both use.
 
-Maps each ALI registry hook to the vanilla or loader base types a candidate must inherit from. Every
-listed name that exists in the scanned jars is used and the rest are skipped, so one file covers all
-branches — add a name when a version renames or moves a type rather than forking the file.
+Maps each ALI registry hook to the vanilla or loader base types a candidate must inherit from. It
+lists only the hooks ALI declares on this branch, so its hook set differs between branches — a hook
+is added on the branch where ALI gains the registration, never merged down. Every listed base name
+that exists in the scanned jars is used and the rest are skipped, which is how one hook covers every
+loader's type.
 `excludedPackageSegments` drops `mixin`/`mixins`/`asm` packages: a mixin sits in its target's
 hierarchy by construction, so every mixin on a vanilla loot or merchant class would otherwise be
 reported as a candidate.
 
-Two hook kinds have no static counterpart and come only from the log: value tooltips (any object can
-appear as a trade value) and data component types (mods create `DataComponentType` *instances*, not
-subclasses, so there is no hierarchy to walk).
+One hook kind has no static counterpart and comes only from the log: value tooltips (any object can
+appear as a trade value).
 
 ## `overrides.json`
 
