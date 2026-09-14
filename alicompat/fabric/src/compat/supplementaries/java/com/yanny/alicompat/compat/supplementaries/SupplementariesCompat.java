@@ -22,6 +22,7 @@ import net.mehvahdjukaar.supplementaries.common.entities.trades.RocketItemListin
 import net.mehvahdjukaar.supplementaries.common.entities.trades.StarItemListing;
 import net.mehvahdjukaar.supplementaries.common.entities.trades.StructureMapListing;
 import net.mehvahdjukaar.supplementaries.common.items.loot.RandomArrowFunction;
+import net.mehvahdjukaar.supplementaries.common.items.loot.RandomEnchantFunction;
 import net.mehvahdjukaar.supplementaries.common.items.loot.SetChargesFunction;
 import net.mehvahdjukaar.supplementaries.reg.ModTags;
 import net.minecraft.core.HolderLookup;
@@ -53,6 +54,7 @@ public class SupplementariesCompat implements IModCompat {
     @Override
     public void registerServer(IServerRegistry registry) {
         PluginUtils.registerFunctionTooltip(registry, RandomArrowFunction.class, RandomArrowFunctionAccessor.class);
+        PluginUtils.registerFunctionTooltip(registry, RandomEnchantFunction.class, RandomEnchantFunctionAccessor.class);
         PluginUtils.registerFunctionTooltip(registry, SetChargesFunction.class, SetChargesFunctionAccessor.class);
 
         registry.registerItemListing(PresentItemListing.class, SupplementariesCompat::getPresentListingNode);

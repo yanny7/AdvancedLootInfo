@@ -60,7 +60,8 @@
       "bases": [
         "net/neoforged/neoforge/common/loot/IGlobalLootModifier",
         "net/minecraftforge/common/loot/IGlobalLootModifier",
-        "io/github/fabricators_of_create/porting_lib/loot/IGlobalLootModifier"
+        "io/github/fabricators_of_create/porting_lib/loot/IGlobalLootModifier",
+        "com/aetherteam/aetherfabric/common/loot/IGlobalLootModifier"
       ]
     }
   },

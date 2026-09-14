@@ -15,6 +15,7 @@ public class SupplementariesLang implements ICompatTranslations {
     public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 
     public enum Functions implements ITooltipKey {
+        CURSE_LOOT("curse_loot", "Curse Loot:"),
         RANDOM_ARROWS("random_arrows", "Random Arrows:"),
         SET_CHARGES("set_charges", "Set Charges:"),
         ;

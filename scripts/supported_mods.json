@@ -164,7 +164,7 @@
   {
     "key": "portinglib",
     "name": "Porting Lib",
-    "mod_ids": ["porting_lib_loot", "porting_lib_tool_actions"],
+    "mod_ids": ["porting_lib_loot", "porting_lib_tool_actions", "porting_lib_item_abilities"],
     "curseforge": ["porting-lib-696251"],
     "maven": [
       {

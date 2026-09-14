@@ -3,27 +3,21 @@ package com.yanny.ali.forge.plugin;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
-import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
-import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.forge.mixin.MixinForgeInternalHandler;
 import com.yanny.ali.forge.mixin.MixinLootModifier;
 import com.yanny.ali.language.Lang;
-import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.glm.Destination;
 import com.yanny.ali.plugin.glm.GlobalLootModifierCollector;
 import com.yanny.ali.plugin.glm.GlobalLootModifierWrapper;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierWrapper;
 import net.minecraft.resources.RegistryOps;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.crafting.ingredients.CompoundIngredient;
-import net.minecraftforge.common.crafting.ingredients.DifferenceIngredient;
-import net.minecraftforge.common.crafting.ingredients.IntersectionIngredient;
-import net.minecraftforge.common.crafting.ingredients.PartialNBTIngredient;
-import net.minecraftforge.common.crafting.ingredients.StrictNBTIngredient;
-import net.minecraftforge.common.loot.*;
+import net.minecraftforge.common.crafting.ingredients.*;
+import net.minecraftforge.common.loot.CanToolPerformAction;
+import net.minecraftforge.common.loot.IGlobalLootModifier;
+import net.minecraftforge.common.loot.LootModifier;
+import net.minecraftforge.common.loot.LootTableIdCondition;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
@@ -71,7 +65,7 @@ public class ForgePlugin implements IPlugin {
 
     @NotNull
     private static List<ILootModifier<?>> registerLootModifiers(IServerUtils utils) {
-        return GlobalLootModifierCollector.collect(utils, MixinForgeInternalHandler.getLootModifierManager().getAllLootMods().stream().map(ForgePlugin::wrap).toList());
+        return GlobalLootModifierCollector.collect(utils, MixinForgeInternalHandler.getLootModifierManager().getAllLootMods().stream().map((m) -> wrap(utils, m)).toList());
     }
 
     @NotNull
@@ -81,12 +75,12 @@ public class ForgePlugin implements IPlugin {
                 modifier,
                 LootModifier.class,
                 () -> Arrays.asList(((MixinLootModifier) modifier).getAliConditions()),
-                () -> serialize(modifier)
+                () -> serialize(utils, modifier)
         );
     }
 
     @NotNull
-    private static JsonElement serialize(IGlobalLootModifier modifier) {
+    private static JsonElement serialize(IServerUtils utils, IGlobalLootModifier modifier) {
         RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
                 //noinspection unchecked
                 MapCodec<IGlobalLootModifier> codec = ((MapCodec<IGlobalLootModifier>) modifier.codec());

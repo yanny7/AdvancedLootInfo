@@ -9,6 +9,7 @@ import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
+import com.yanny.ali.plugin.common.trades.SubTradesNode;
 import com.yanny.ali.plugin.glm.Destination;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.ali.plugin.server.TooltipUtils;
@@ -16,6 +17,8 @@ import com.yanny.alicompat.IGlmModCompat;
 import com.yanny.alicompat.accessor.GlmAccessorUtils;
 import com.yanny.alicompat.accessor.PluginUtils;
 import net.mehvahdjukaar.moonlight.api.resources.recipe.platform.BlockTypeSwapIngredientImpl;
+import net.mehvahdjukaar.moonlight.api.trades.BiomeVariantItemListing;
+import net.mehvahdjukaar.moonlight.api.trades.ModItemListing;
 import net.mehvahdjukaar.moonlight.api.trades.SimpleItemListing;
 import net.mehvahdjukaar.moonlight.core.loot.ConfigItemPoolEntry;
 import net.mehvahdjukaar.moonlight.core.loot.OptionalItemPoolEntry;
@@ -23,12 +26,15 @@ import net.mehvahdjukaar.moonlight.core.loot.OptionalPropertyCondition;
 import net.mehvahdjukaar.moonlight.core.loot.PatternMatchLootItemCondition;
 import net.mehvahdjukaar.moonlight.core.loot.ResourceLootItemCondition;
 import net.mehvahdjukaar.moonlight.core.misc.platform.ModLootModifiers;
+import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class MoonlightCompat implements IGlmModCompat {
@@ -56,6 +62,7 @@ public class MoonlightCompat implements IGlmModCompat {
         registry.registerDestination(PatternMatchLootItemCondition.class, MoonlightCompat::getPatternMatchDestination);
 
         registry.registerItemListing(SimpleItemListing.class, MoonlightCompat::getSimpleItemListingNode);
+        registry.registerItemListing(BiomeVariantItemListing.class, MoonlightCompat::getBiomeVariantItemListingNode);
         PluginUtils.registerItemListing(registry, SpecialListingAccessor.class);
     }
 
@@ -120,6 +127,25 @@ public class MoonlightCompat implements IGlmModCompat {
                 listing.priceMult(),
                 condition
         );
+    }
+
+    @NotNull
+    private static IDataNode getBiomeVariantItemListingNode(IServerUtils utils, BiomeVariantItemListing listing, TooltipNode condition) {
+        return new SubTradesNode<>(utils, listing, condition) {
+            @Override
+            public List<IDataNode> getSubTrades(IServerUtils utils, BiomeVariantItemListing listing) {
+                List<IDataNode> nodes = new ArrayList<>();
+
+                for (Map.Entry<VillagerType, ModItemListing> entry : listing.listingMap().entrySet()) {
+                    TooltipNode cond = utils.getValueTooltip(utils, entry.getKey().toString()).build(Lang.Value.VILLAGER_TYPE);
+
+                    nodes.add(utils.getItemListing(utils, entry.getValue(), cond));
+                }
+
+                nodes.add(utils.getItemListing(utils, listing.defaultListing(), TooltipBuilder.keyOnly(Lang.Branch.FALLBACK).build()));
+                return nodes;
+            }
+        };
     }
 
     @NotNull
