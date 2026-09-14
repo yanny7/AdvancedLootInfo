@@ -165,7 +165,19 @@
     "key": "portinglib",
     "name": "Porting Lib",
     "mod_ids": ["porting_lib_loot", "porting_lib_tool_actions"],
-    "curseforge": ["porting-lib-696251"]
+    "curseforge": ["porting-lib-696251"],
+    "maven": [
+      {
+        "repo": "https://mvn.devos.one/releases/",
+        "loaders": ["fabric"],
+        "artifacts": ["io.github.fabricators_of_create.Porting-Lib:loot", "io.github.fabricators_of_create.Porting-Lib:tool_actions"]
+      },
+      {
+        "repo": "https://mvn.devos.one/snapshots/",
+        "loaders": ["fabric"],
+        "artifacts": ["io.github.fabricators_of_create.Porting-Lib:loot", "io.github.fabricators_of_create.Porting-Lib:item_abilities"]
+      }
+    ]
   },
   {
     "key": "refinedstorage",

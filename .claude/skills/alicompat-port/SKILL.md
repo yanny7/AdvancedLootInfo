@@ -35,8 +35,8 @@ git merge origin/<lower>
 ```
 
 **The generated target-mod block in `gradle.properties` is resolved as `ours`, silently.** That is
-`compat_mods` and every `<mod>_<loader>_dep` line: each `_dep` pins a CurseForge file id for one
-specific Minecraft version, so anything merged up from below names a file for the wrong version, and
+`compat_mods` and every `<mod>_<loader>_dep` line: each `_dep` pins a CurseForge file id or maven artifact
+versions for one specific Minecraft version, so anything merged up from below names a file for the wrong version, and
 `compat_mods` states what this branch has actually ported. Do not try to reconcile them and do not
 ask about them. `scripts/supported_mods.json` is the opposite case — it holds no Minecraft-version-specific
 data, so it merges like any other file and a new entry arriving from below is kept. The rest of the file — loader versions, viewer versions, enabled platforms —
@@ -86,7 +86,7 @@ Run this only on a committed merge.
 
 ### Repin first
 
-The pinned file ids came up from a lower branch and name files for the wrong Minecraft version, so
+The pinned file ids and artifact versions came up from a lower branch and name files for the wrong Minecraft version, so
 every later step would be reading the wrong jar:
 
 ```bash
@@ -155,7 +155,7 @@ This is a full port, not a merge. It runs `alicompat-shim` from its Step 0:
 ## Done when
 
 - the merge is a commit of the user's making, with ACI/ALI/AWI/ALICompat building
-- activated slugs are in `compat_mods` with file ids resolved for **this** version
+- activated slugs are in `compat_mods` with file ids or artifact versions resolved for **this** version
 - `META-INF/services/com.yanny.alicompat.IModCompat` in the built jars lists the new shims
 - no source set was deleted to express dormancy
 

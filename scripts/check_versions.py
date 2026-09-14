@@ -16,6 +16,8 @@ from modpack import (
     RELEASE_TYPES,
     SUPPORTED_MODS_FILE,
     CurseForge,
+    Maven,
+    maven_file,
     parse_project,
     pick_project,
     progress,
@@ -44,6 +46,9 @@ def has_source_set(platforms: list, key: str):
 
 
 def describe(file: dict):
+    if "coordinates" in file:
+        return f"{file['version']} maven   {file['repo'] or 'no listed repository serves it'}"
+
     return f"{file['id']} {RELEASE_TYPES.get(file['releaseType'], 'unknown'):7} {file['fileDate'][:10]}  {file['displayName']}"
 
 
@@ -99,16 +104,41 @@ def scanned_file(result: dict, update: bool):
     return result["current"]
 
 
-def download(client: CurseForge, pin: dict, file: dict):
+def download(client: CurseForge, maven: Maven, entry: dict, pin: dict, file: dict):
+    if "coordinates" in pin:
+        if file and file.get("coordinates") == pin["coordinates"] and file["repo"]:
+            located = file
+        else:
+            located = maven.locate(entry, pin["coordinates"])
+
+        if not located:
+            return None
+
+        return [shimscan.maven_jar(maven.session, located["repo"], coordinate) for coordinate in pin["coordinates"]]
+
     jar = shimscan.cached_jar(pin)
 
-    if jar or not file or not file.get("downloadUrl"):
-        return jar
+    if not jar and file and file.get("downloadUrl"):
+        jar = shimscan.download_jar(client.session, pin, file["downloadUrl"])
 
-    return shimscan.download_jar(client.session, pin, file["downloadUrl"])
+    return [jar] if jar else None
 
 
-def shim_jars(args, clients, results, deps, pinned, rows):
+def pin_of(result: dict):
+    if "coordinates" in result["latest"]:
+        return {"coordinates": result["latest"]["coordinates"]}
+
+    return {"slug": result["slug"], "project_id": result["project_id"], "file_id": result["latest"]["id"]}
+
+
+def render_dep(dep: dict):
+    if "coordinates" in dep:
+        return ",".join(dep["coordinates"])
+
+    return f"curse.maven:{dep['slug']}-{dep['project_id']}:{dep['file_id']}"
+
+
+def shim_jars(args, clients, mavens, entries, results, deps, pinned, rows):
     """The jar every shim in `rows` is measured against, downloaded once per file id, plus the
     (pinned, newest) pair of whatever has a newer file than the one it is pinned to."""
     resolved = {(result["key"], result["loader"]): result for result in results}
@@ -120,24 +150,26 @@ def shim_jars(args, clients, results, deps, pinned, rows):
         pin = deps.get((key, loader)) if args.update else pinned[loader].get(key) or deps.get((key, loader))
         result = resolved.get((key, loader))
 
+        entry = entries[key]
+
         if pin:
-            jars[(key, loader)] = download(clients[loader], pin, scanned_file(result, args.update) if result else None)
+            jars[(key, loader)] = download(clients[loader], mavens[loader], entry, pin,
+                                           scanned_file(result, args.update) if result else None)
 
         if not result or result["state"] != "outdated" or key not in pinned[loader]:
             continue
 
-        old_jar = download(clients[loader], pinned[loader][key], result.get("current"))
-        new_jar = download(clients[loader], {"slug": result["slug"], "project_id": result["project_id"],
-                                             "file_id": result["latest"]["id"]}, result["latest"])
+        old_jars = download(clients[loader], mavens[loader], entry, pinned[loader][key], result.get("current"))
+        new_jars = download(clients[loader], mavens[loader], entry, pin_of(result), result["latest"])
 
-        if old_jar and new_jar:
-            versions[(key, loader)] = (old_jar, new_jar)
+        if old_jars and new_jars:
+            versions[(key, loader)] = (old_jars, new_jars)
 
     progress_done()
     return jars, versions
 
 
-def scan_shims(args, entries, enabled, checked_loaders, clients, results, deps, pinned, minecraft_version):
+def scan_shims(args, entries, enabled, checked_loaders, clients, mavens, results, deps, pinned, minecraft_version):
     base_types = shimscan.load_base_types()
     titles = {hook: spec["title"] for hook, spec in base_types["hooks"].items()}
     rows = [
@@ -149,14 +181,14 @@ def scan_shims(args, entries, enabled, checked_loaders, clients, results, deps, 
         if source_set(loader, key).is_dir() and key not in enabled
     ]
     width = max((len(f"{key} ({loader})") for key, loader in rows + dormant), default=0)
-    jars, versions = shim_jars(args, clients, results, deps, pinned, rows)
+    jars, versions = shim_jars(args, clients, mavens, entries, results, deps, pinned, rows)
     renames = shimscan.intermediary_names(minecraft_version)
     lines = []
     counts = {"ok": 0, "changed": 0, "skipped": len(dormant)}
 
     for loader in checked_loaders:
         minecraft = shimscan.minecraft_jar(loader, minecraft_version)
-        loaded = [jar for (_, owner), jar in jars.items() if owner == loader and jar]
+        loaded = [jar for (_, owner), found_jars in jars.items() if owner == loader and found_jars for jar in found_jars]
 
         if not minecraft:
             lines.append(f"! no {loader} Minecraft jar under .gradle/loom-cache — run a gradle sync first, "
@@ -176,15 +208,15 @@ def scan_shims(args, entries, enabled, checked_loaders, clients, results, deps, 
                 continue
 
             label = f"{key} ({loader})".ljust(width)
-            jar = jars.get((key, loader))
+            target_jars = jars.get((key, loader))
 
-            if not jar:
+            if not target_jars:
                 counts["skipped"] += 1
                 lines.append(f"{label}  [NO JAR]   nothing pinned for this loader, or the file is not downloadable")
                 continue
 
-            found = shimscan.scan(loader, key, owned[jar], index, bases, cache, base_types, renames,
-                                  versions.get((key, loader)))
+            found = shimscan.scan(loader, key, set().union(*(owned[jar] for jar in target_jars)), index, bases, cache,
+                                  base_types, renames, versions.get((key, loader)))
             sections = [
                 ("+", "not registered", found["new"]),
                 ("-", "registered, gone from the jar", found["missing"]),
@@ -220,15 +252,16 @@ def scan_shims(args, entries, enabled, checked_loaders, clients, results, deps, 
     return lines
 
 
-def resolve(client: CurseForge, entry: dict, pinned: dict):
+def resolve(client: CurseForge, maven: Maven, entry: dict, pinned: dict):
     result = {"key": entry["key"], "loader": client.loader, "entry": entry}
     matches = pick_project(client, entry)
     current = pinned.get(entry["key"])
+    picked = None if matches else maven.pick(entry)
 
-    if not matches:
+    if not matches and not picked:
         result["state"] = "unavailable" if current is None else "gone"
         result["untagged"] = [
-            slug for slug, project_id in map(parse_project, entry["curseforge"])
+            slug for slug, project_id in map(parse_project, entry.get("curseforge", []))
             if client.pick_untagged_file(project_id)
         ]
         return result
@@ -236,17 +269,29 @@ def resolve(client: CurseForge, entry: dict, pinned: dict):
     if len(matches) > 1:
         result["ambiguous"] = [slug for slug, _, _ in matches]
 
-    result["slug"], result["project_id"], result["latest"] = matches[0]
+    if matches:
+        result["slug"], result["project_id"], result["latest"] = matches[0]
+    else:
+        result["latest"] = picked
+
+    pin = pin_of(result)
 
     if current is None:
         result["state"] = "new"
-    elif current["file_id"] != result["latest"]["id"]:
+    elif current.get("coordinates", current.get("file_id")) != pin.get("coordinates", pin.get("file_id")):
         result["state"] = "outdated"
-        result["current"] = client.get(f"/mods/{result['project_id']}/files/{current['file_id']}")
+        result["current"] = current_file(client, maven, entry, current)
     else:
         result["state"] = "current"
 
     return result
+
+
+def current_file(client: CurseForge, maven: Maven, entry: dict, current: dict):
+    if "coordinates" in current:
+        return maven.locate(entry, current["coordinates"]) or maven_file(None, current["coordinates"])
+
+    return client.get(f"/mods/{current['project_id']}/files/{current['file_id']}")
 
 
 def render_block(deps: dict, entries: dict):
@@ -268,12 +313,13 @@ def render_block(deps: dict, entries: dict):
 
         for loader in sorted(loader for mod, loader in deps if mod == key):
             dep = deps[(key, loader)]
+            source = f"{CURSEFORGE_URL}/{dep['slug']}" if "slug" in dep else "maven"
 
-            if dep["slug"] not in rendered:
-                lines.append(f"# {entry['name']} {CURSEFORGE_URL}/{dep['slug']}")
-                rendered[dep["slug"]] = True
+            if source not in rendered:
+                lines.append(f"# {entry['name']} {source}")
+                rendered[source] = True
 
-            lines.append(f"{key}_{loader}_dep=curse.maven:{dep['slug']}-{dep['project_id']}:{dep['file_id']}")
+            lines.append(f"{key}_{loader}_dep={render_dep(dep)}")
 
     lines.append(BLOCK_END)
     return "\n".join(lines)
@@ -310,7 +356,7 @@ def write_block(block: str, init: bool):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Resolves the supported_mods.json registry against CurseForge.")
+    parser = argparse.ArgumentParser(description="Resolves the supported_mods.json registry against CurseForge, then the maven repositories it lists.")
     parser.add_argument("--loader", choices=sorted(MOD_LOADER_TYPE), help="Mod loader to check (default: every enabled platform)")
     parser.add_argument("--update", action="store_true", help="Regenerate the block in gradle.properties and scaffold missing shims")
     parser.add_argument("--init", action="store_true", help="Pin and enable every registry mod, ignoring the current compat_mods; implies --update")
@@ -344,6 +390,7 @@ def main():
     checked_loaders = [args.loader] if args.loader else platforms
     pinned = {loader: read_pinned_deps(properties, loader) for loader in platforms}
     clients = {loader: CurseForge(api_key, minecraft_version, loader) for loader in checked_loaders}
+    mavens = {loader: Maven(minecraft_version, loader) for loader in checked_loaders}
 
     deps = {}
     dormant = []
@@ -377,7 +424,7 @@ def main():
 
     for index, (entry, loader, probe) in enumerate(pending, start=1):
         progress(index, len(pending), f"{entry['key']} ({loader})")
-        result = resolve(clients[loader], entry, pinned[loader])
+        result = resolve(clients[loader], mavens[loader], entry, pinned[loader])
 
         if probe:
             if "latest" in result:
@@ -390,7 +437,7 @@ def main():
         if result["state"] not in ("new", "outdated", "current"):
             continue
 
-        pin = {"slug": result["slug"], "project_id": result["project_id"], "file_id": result["latest"]["id"]}
+        pin = pin_of(result)
 
         if source_set(loader, entry["key"]).is_dir():
             deps[(entry["key"], loader)] = pin
@@ -406,7 +453,7 @@ def main():
 
     progress_done()
 
-    for state, title in (("outdated", "Outdated, newer file on CurseForge:"), ("new", "Newly available, not pinned yet:"),
+    for state, title in (("outdated", "Outdated, newer file available:"), ("new", "Newly available, not pinned yet:"),
                          ("gone", "No release or beta file any more, the pin is dropped:")):
         selected = [result for result in results if result["state"] == state and not result.get("extendable")]
 
@@ -474,7 +521,7 @@ def main():
         print(f"\nPinned but missing from {SUPPORTED_MODS_FILE}, the pin is dropped:")
 
         for key, loader, dep in orphans:
-            print(f"  {key} ({loader}) curse.maven:{dep['slug']}-{dep['project_id']}:{dep['file_id']}")
+            print(f"  {key} ({loader}) {render_dep(dep)}")
 
     if args.update:
         for result in scaffolds:
@@ -487,7 +534,7 @@ def main():
 
     if not args.no_scan:
         print(f"\nScanning shim source sets against their {'newly pinned' if args.update else 'pinned'} jars")
-        lines = scan_shims(args, entries, enabled, checked_loaders, clients, results, deps, pinned, minecraft_version)
+        lines = scan_shims(args, entries, enabled, checked_loaders, clients, mavens, results, deps, pinned, minecraft_version)
         print("\n".join(lines))
         REPORT_FILE.parent.mkdir(parents=True, exist_ok=True)
         REPORT_FILE.write_text("\n".join(lines) + "\n", encoding="utf-8")

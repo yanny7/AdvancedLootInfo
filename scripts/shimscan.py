@@ -24,7 +24,8 @@ PROJECT_DIR = SCRIPT_DIR.parent
 BASE_TYPES_FILE = SCRIPT_DIR / "base_types.json"
 IGNORE_FILE = "scan_ignore.json"
 JAR_CACHE = PROJECT_DIR / "build" / "compat_jars"
-GRADLE_CACHE = Path.home() / ".gradle" / "caches" / "modules-2" / "files-2.1" / "curse.maven"
+GRADLE_FILES = Path.home() / ".gradle" / "caches" / "modules-2" / "files-2.1"
+GRADLE_CACHE = GRADLE_FILES / "curse.maven"
 LOOM_CACHE = PROJECT_DIR / ".gradle" / "loom-cache" / "minecraftMaven" / "net" / "minecraft"
 MAPPINGS_CACHE = Path.home() / ".gradle" / "caches" / "fabric-loom"
 
@@ -205,6 +206,25 @@ def download_jar(session, pin: dict, url: str):
     response = session.get(url, timeout=120)
     response.raise_for_status()
     jar.write_bytes(response.content)
+    return jar
+
+
+def maven_jar(session, repo: str, coordinate: str):
+    """One `group:artifact:version` jar: from gradle's cache, from an earlier scan, or downloaded from `repo`."""
+    group, artifact, version = coordinate.split(":")
+    name = f"{artifact}-{version}.jar"
+
+    for jar in sorted((GRADLE_FILES / group / artifact / version).glob(f"*/{name}")):
+        return jar
+
+    jar = JAR_CACHE / group / name
+
+    if not jar.is_file():
+        response = session.get(f"{repo.rstrip('/')}/{group.replace('.', '/')}/{artifact}/{version}/{name}", timeout=120)
+        response.raise_for_status()
+        jar.parent.mkdir(parents=True, exist_ok=True)
+        jar.write_bytes(response.content)
+
     return jar
 
 
@@ -394,13 +414,13 @@ def _read_fields(jar: Path, names: set):
     return fields
 
 
-def diff_fields(registered: dict, old_jar: Path, new_jar: Path):
+def diff_fields(registered: dict, old_jars: list, new_jars: list):
     """{hook: {class: (added, removed)}} for registered classes whose instance fields moved.
 
     A class that keeps its name and its base type is invisible to the other three findings, so
     a field the target mod adds to one is a tooltip that silently stops being complete."""
-    old_classes = _jar_classes(old_jar)
-    new_classes = _jar_classes(new_jar)
+    old_classes = set().union(*map(_jar_classes, old_jars))
+    new_classes = set().union(*map(_jar_classes, new_jars))
     wanted = {}
 
     for hook, groups in registered.items():
@@ -412,8 +432,15 @@ def diff_fields(registered: dict, old_jar: Path, new_jar: Path):
                 wanted.setdefault(hook, set()).add(found)
 
     names = {name for hooked in wanted.values() for name in hooked}
-    before = _read_fields(old_jar, names & old_classes)
-    after = _read_fields(new_jar, names & new_classes)
+    before = {}
+    after = {}
+
+    for jar in old_jars:
+        before.update(_read_fields(jar, names & old_classes - before.keys()))
+
+    for jar in new_jars:
+        after.update(_read_fields(jar, names & new_classes - after.keys()))
+
     changed = {}
 
     for hook, hooked in wanted.items():
@@ -452,9 +479,9 @@ def build_index(jars: list):
 
 def scan(loader: str, key: str, owned: set, index: dict, bases: dict, cache: dict, base_types: dict,
          renames: dict = None, versions: tuple = None):
-    """Diffs one shim source set against the jar it is pinned to.
+    """Diffs one shim source set against the jars it is pinned to.
 
-    `versions` is the (pinned jar, newest jar) pair, when the two differ."""
+    `versions` is the (pinned jars, newest jars) pair, when the two differ."""
     roots = {name.split("/")[0] for name in owned}
     ignored = read_ignored(loader, key)
     registered = read_registrations(loader, key)

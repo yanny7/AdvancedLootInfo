@@ -199,11 +199,13 @@ subprojects {
                 testImplementation project(path: ":aci:common", configuration: "testArtifacts")
 
                 compatMods.each { mod ->
-                    def dep = project.findProperty("${mod}_${project.name}_dep")
+                    def deps = project.findProperty("${mod}_${project.name}_dep")
 
                     // compile-only on purpose: a target mod on the run classpath drags its own datagen entrypoint into ours
-                    if (dep) {
-                        modCompileOnly project.name == "fabric" ? project.explosion.fabric(dep) : dep
+                    if (deps) {
+                        deps.split(",")*.trim().each { dep ->
+                            modCompileOnly project.name == "fabric" ? project.explosion.fabric(dep) : dep
+                        }
                     }
                 }
             }
@@ -393,6 +395,20 @@ allprojects {
             url = "https://maven.saps.dev/minecraft"
             content {
                 includeGroup "dev.latvian.mods"
+            }
+        }
+        maven {
+            name = "Porting Lib releases"
+            url = "https://mvn.devos.one/releases/"
+            content {
+                includeGroup "io.github.fabricators_of_create.Porting-Lib"
+            }
+        }
+        maven {
+            name = "Porting Lib snapshots"
+            url = "https://mvn.devos.one/snapshots/"
+            content {
+                includeGroup "io.github.fabricators_of_create.Porting-Lib"
             }
         }
         maven { // CurseForge
