@@ -19,6 +19,8 @@ import com.yanny.alicompat.accessor.PluginUtils;
 import net.mehvahdjukaar.moonlight.api.resources.recipe.platform.BlockTypeSwapIngredientImpl;
 import net.mehvahdjukaar.moonlight.api.trades.BiomeVariantItemListing;
 import net.mehvahdjukaar.moonlight.api.trades.ModItemListing;
+import net.mehvahdjukaar.moonlight.api.trades.NoOpListing;
+import net.mehvahdjukaar.moonlight.api.trades.RemoveNonDataListingListing;
 import net.mehvahdjukaar.moonlight.api.trades.SimpleItemListing;
 import net.mehvahdjukaar.moonlight.core.loot.ConfigItemPoolEntry;
 import net.mehvahdjukaar.moonlight.core.loot.OptionalItemPoolEntry;
@@ -137,15 +139,26 @@ public class MoonlightCompat implements IGlmModCompat {
                 List<IDataNode> nodes = new ArrayList<>();
 
                 for (Map.Entry<VillagerType, ModItemListing> entry : listing.listingMap().entrySet()) {
+                    if (isPlaceholder(entry.getValue())) {
+                        continue;
+                    }
+
                     TooltipNode cond = utils.getValueTooltip(utils, entry.getKey().toString()).build(Lang.Value.VILLAGER_TYPE);
 
                     nodes.add(utils.getItemListing(utils, entry.getValue(), cond));
                 }
 
-                nodes.add(utils.getItemListing(utils, listing.defaultListing(), TooltipBuilder.keyOnly(Lang.Branch.FALLBACK).build()));
+                if (!isPlaceholder(listing.defaultListing())) {
+                    nodes.add(utils.getItemListing(utils, listing.defaultListing(), TooltipBuilder.keyOnly(Lang.Branch.FALLBACK).build()));
+                }
+
                 return nodes;
             }
         };
+    }
+
+    private static boolean isPlaceholder(ModItemListing listing) {
+        return listing instanceof NoOpListing || listing instanceof RemoveNonDataListingListing;
     }
 
     @NotNull

@@ -1,4 +1,4 @@
-package com.yanny.alicompat.compat.farmersdelight;
+package com.yanny.alicompat.compat.arsnouveau;
 
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.language.ITooltipKey;
@@ -9,20 +9,19 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FarmersDelightLang implements ICompatTranslations {
-    static final String MOD_ID = "farmersdelight";
+public class ArsNouveauLang implements ICompatTranslations {
+    static final String MOD_ID = "ars_nouveau";
 
     public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 
-    public enum Functions implements ITooltipKey {
-        COPY_SKILLET("copy_skillet", "Copy Skillet:"),
-        SMOKER_COOK("smoker_cook", "Smoker Cook:"),
+    public enum EntitySubPredicates implements ITooltipKey {
+        PERCENT_HEALTH_EQUAL_OR_LOWER("percent_health_equal_or_lower", "Percent Health Equal Or Lower:"),
         ;
 
         private final Translation translation;
 
-        Functions(String k, String e) {
-            translation = new Translation("alicompat.type.function." + k, e);
+        EntitySubPredicates(String k, String e) {
+            translation = new Translation("alicompat.type.entity_sub_predicate." + k, e);
         }
 
         @NotNull
@@ -32,14 +31,14 @@ public class FarmersDelightLang implements ICompatTranslations {
         }
     }
 
-    public enum Ingredient implements ITooltipKey {
-        ITEM_ABILITY("item_ability", "Any Item With Ability:"),
+    public enum Value implements ITooltipKey {
+        THRESHOLD("threshold", "Threshold: %s"),
         ;
 
         private final Translation translation;
 
-        Ingredient(String k, String e) {
-            translation = new Translation("alicompat.type.ingredient." + k, e);
+        Value(String k, String e) {
+            translation = new Translation("alicompat.property.value." + k, e);
         }
 
         @NotNull
@@ -50,8 +49,8 @@ public class FarmersDelightLang implements ICompatTranslations {
     }
 
     static {
-        CoreLang.register(TRANSLATION_MAP, Functions.class);
-        CoreLang.register(TRANSLATION_MAP, Ingredient.class);
+        CoreLang.register(TRANSLATION_MAP, EntitySubPredicates.class);
+        CoreLang.register(TRANSLATION_MAP, Value.class);
     }
 
     @NotNull

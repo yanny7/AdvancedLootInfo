@@ -14,6 +14,23 @@ public class ImmersiveEngineeringLang implements ICompatTranslations {
 
     public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 
+    public enum Conditions implements ITooltipKey {
+        BLOCK_STATE_FROM_LOCATION("block_state_from_location", "Block State At Location:"),
+        ;
+
+        private final Translation translation;
+
+        Conditions(String k, String e) {
+            translation = new Translation("alicompat.type.condition." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
     public enum Entry implements ITooltipKey {
         DROP_INVENTORY("drop_inventory", "Drop Inventory:"),
         MULTIBLOCK_DROPS("multiblock_drops", "Multiblock Drops:"),
@@ -45,6 +62,23 @@ public class ImmersiveEngineeringLang implements ICompatTranslations {
 
         Functions(String k, String e) {
             translation = new Translation("alicompat.type.function." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
+    public enum ItemSubPredicates implements ITooltipKey {
+        BLUEPRINT("blueprint", "Blueprint:"),
+        ;
+
+        private final Translation translation;
+
+        ItemSubPredicates(String k, String e) {
+            translation = new Translation("alicompat.type.item_sub_predicate." + k, e);
         }
 
         @NotNull
@@ -89,8 +123,10 @@ public class ImmersiveEngineeringLang implements ICompatTranslations {
     }
 
     static {
+        CoreLang.register(TRANSLATION_MAP, Conditions.class);
         CoreLang.register(TRANSLATION_MAP, Entry.class);
         CoreLang.register(TRANSLATION_MAP, Functions.class);
+        CoreLang.register(TRANSLATION_MAP, ItemSubPredicates.class);
         CoreLang.register(TRANSLATION_MAP, Value.class);
         CoreLang.register(TRANSLATION_MAP, Branch.class);
     }

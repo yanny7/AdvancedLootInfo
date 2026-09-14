@@ -2,6 +2,7 @@ package com.yanny.alicompat.compat.immersiveengineering;
 
 import blusunrize.immersiveengineering.api.IEApiDataComponents;
 import blusunrize.immersiveengineering.common.crafting.fluidaware.IngredientFluidStack;
+import blusunrize.immersiveengineering.common.register.IEItemSubPredicates;
 import blusunrize.immersiveengineering.common.register.IEItems;
 import blusunrize.immersiveengineering.common.util.loot.*;
 import blusunrize.immersiveengineering.common.world.Villages;
@@ -15,6 +16,7 @@ import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.DynamicNode;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
+import com.yanny.ali.plugin.glm.Destination;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.ali.plugin.server.MissingTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
@@ -53,6 +55,12 @@ public class ImmersiveEngineeringCompat implements IGlmModCompat {
         registry.registerFunctionTooltip(RevolverperkLootFunction.class, ImmersiveEngineeringCompat::getRevolverperkTooltip);
         registry.registerFunctionTooltip(WindmillLootFunction.class, ImmersiveEngineeringCompat::getWindmillTooltip);
         PluginUtils.registerFunctionTooltip(registry, PropertyCountLootFunction.class, PropertyCountLootFunctionAccessor.class);
+
+        registry.registerConditionTooltip(LootBlockStateFromLocationPredicate.class, ImmersiveEngineeringCompat::getBlockStateFromLocationTooltip);
+
+        registry.registerDestination(LootBlockStateFromLocationPredicate.class, ImmersiveEngineeringCompat::getBlockStateFromLocationDestination);
+
+        registry.registerItemSubPredicateTooltip(IEItemSubPredicates.ItemBlueprintPredicate.class, ImmersiveEngineeringCompat::getItemBlueprintPredicateTooltip);
 
         registry.registerValueTooltip(IngredientFluidStack.class, ImmersiveEngineeringCompat::getFluidStackIngredientTooltip);
         registry.registerValueTooltip(IEItems.ItemRegObject.class, ImmersiveEngineeringCompat::getItemRegObjectTooltip);
@@ -145,6 +153,24 @@ public class ImmersiveEngineeringCompat implements IGlmModCompat {
             b.add(utils.getValueTooltip(utils, predicates).build(Lang.Branch.PREDICATES));
             b.showEmpty();
         }, key);
+    }
+
+    @NotNull
+    private static TooltipBuilder getBlockStateFromLocationTooltip(IServerUtils utils, LootBlockStateFromLocationPredicate cond) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, cond.block()).build(Lang.Value.BLOCK));
+            b.add(utils.getValueTooltip(utils, cond.properties()).build(Lang.Branch.PROPERTIES));
+        }, ImmersiveEngineeringLang.Conditions.BLOCK_STATE_FROM_LOCATION);
+    }
+
+    @NotNull
+    private static Destination getBlockStateFromLocationDestination(IServerUtils ignoredUtils, LootBlockStateFromLocationPredicate cond) {
+        return new Destination.Blocks((b) -> cond.block().value().equals(b), cond.properties().isEmpty());
+    }
+
+    @NotNull
+    private static TooltipBuilder getItemBlueprintPredicateTooltip(IServerUtils utils, IEItemSubPredicates.ItemBlueprintPredicate predicate) {
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.blueprint()).build(Lang.Value.VALUE)), ImmersiveEngineeringLang.ItemSubPredicates.BLUEPRINT);
     }
 
     @NotNull

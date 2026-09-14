@@ -32,6 +32,26 @@ public class EnderIoLang implements ICompatTranslations {
         }
     }
 
+    public enum Ingredient implements ITooltipKey {
+        ANY_SOUL_STORAGE("any_soul_storage", "Soul Storage (Empty Or Filled):"),
+        CONDUIT("conduit", "Conduit:"),
+        EMPTY_SOUL_STORAGE("empty_soul_storage", "Empty Soul Storage:"),
+        FILLED_SOUL_STORAGE("filled_soul_storage", "Filled Soul Storage:"),
+        ;
+
+        private final Translation translation;
+
+        Ingredient(String k, String e) {
+            translation = new Translation("alicompat.type.ingredient." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
     public enum Value implements ITooltipKey {
         COPY_PRIMARY("copy_primary", "Copy Primary: %s"),
         ;
@@ -51,6 +71,7 @@ public class EnderIoLang implements ICompatTranslations {
 
     static {
         CoreLang.register(TRANSLATION_MAP, Functions.class);
+        CoreLang.register(TRANSLATION_MAP, Ingredient.class);
         CoreLang.register(TRANSLATION_MAP, Value.class);
     }
 
