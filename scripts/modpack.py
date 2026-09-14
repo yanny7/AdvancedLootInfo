@@ -13,6 +13,8 @@ from pathlib import Path
 
 import requests
 
+import shimscan
+
 API_URL = "https://api.curseforge.com/v1"
 MOD_LOADER_TYPE = {"forge": 1, "fabric": 4, "neoforge": 6, "quilt": 5}
 RELEASE_TYPES = {1: "release", 2: "beta"}
@@ -84,16 +86,18 @@ def read_pinned_deps(properties: dict, loader: str):
             continue
 
         coordinates = re.fullmatch(r"curse\.maven:(.+)-(\d+):(\d+)", value)
+        artifacts = [artifact.strip() for artifact in value.split(",")]
 
-        if not coordinates:
+        if coordinates:
+            pinned[match.group(1)] = {
+                "slug": coordinates.group(1),
+                "project_id": int(coordinates.group(2)),
+                "file_id": int(coordinates.group(3)),
+            }
+        elif all(re.fullmatch(r"[\w.-]+:[\w.-]+:[^:\s]+", artifact) for artifact in artifacts):
+            pinned[match.group(1)] = {"coordinates": artifacts}
+        else:
             print(f"Warning: cannot parse '{key}={value}', skipping.")
-            continue
-
-        pinned[match.group(1)] = {
-            "slug": coordinates.group(1),
-            "project_id": int(coordinates.group(2)),
-            "file_id": int(coordinates.group(3)),
-        }
 
     return pinned
 
@@ -106,7 +110,7 @@ def parse_project(coordinate: str):
 def pick_project(client, entry: dict):
     matches = [
         (slug, project_id, file)
-        for slug, project_id in map(parse_project, entry["curseforge"])
+        for slug, project_id in map(parse_project, entry.get("curseforge", []))
         for file in [client.pick_tagged_file(project_id)]
         if file
     ]
@@ -115,7 +119,83 @@ def pick_project(client, entry: dict):
 
 
 def read_compat_mods(properties: dict, loader: str):
-    return {key: dep["project_id"] for key, dep in read_pinned_deps(properties, loader).items()}
+    return {key: dep["project_id"] for key, dep in read_pinned_deps(properties, loader).items() if "project_id" in dep}
+
+
+def version_key(version: str):
+    release, _, prerelease = version.split("+", 1)[0].partition("-")
+    return _version_tokens(release), not prerelease, _version_tokens(prerelease)
+
+
+def _version_tokens(text: str):
+    return [(0, int(token)) if token.isdigit() else (1, token) for token in re.findall(r"\d+|[A-Za-z]+", text)]
+
+
+def maven_file(repo, coordinates: list):
+    return {"repo": repo, "coordinates": coordinates, "version": coordinates[0].rsplit(":", 1)[1],
+            "displayName": ", ".join(coordinates)}
+
+
+class Maven:
+    def __init__(self, minecraft_version: str, loader: str):
+        self.session = requests.Session()
+        self.minecraft_version = minecraft_version
+        self.loader = loader
+        self.version_cache = {}
+
+    def fetch(self, repo: str, artifact: str, path: str):
+        group, name = artifact.split(":")
+        response = self.session.get(f"{repo.rstrip('/')}/{group.replace('.', '/')}/{name}/{path}", timeout=60)
+        return response.text if response.ok else ""
+
+    def versions(self, repo: str, artifact: str):
+        if (repo, artifact) not in self.version_cache:
+            metadata = self.fetch(repo, artifact, "maven-metadata.xml")
+            self.version_cache[(repo, artifact)] = set(re.findall(r"<version>([^<]+)</version>", metadata))
+
+        return self.version_cache[(repo, artifact)]
+
+    def sources(self, entry: dict):
+        return [source for source in entry.get("maven", []) if self.loader in source["loaders"]]
+
+    def pick(self, entry: dict):
+        """The newest version naming this Minecraft version that every artifact of the first such source has."""
+        pattern = re.compile(rf"(?<![\d.]){re.escape(self.minecraft_version)}(?![\d.])")
+
+        for source in self.sources(entry):
+            shared = set.intersection(*(self.versions(source["repo"], artifact) for artifact in source["artifacts"]))
+            matching = [version for version in shared if pattern.search(version)]
+
+            if matching:
+                version = max(matching, key=version_key)
+                return maven_file(source["repo"], [f"{artifact}:{version}" for artifact in source["artifacts"]])
+
+        return None
+
+    def locate(self, entry: dict, coordinates: list):
+        """Pinned coordinates described the way `pick` describes them, with a repository that still serves them."""
+        for source in self.sources(entry):
+            artifacts = [coordinate.rsplit(":", 1) for coordinate in coordinates]
+
+            if all(artifact in source["artifacts"] and version in self.versions(source["repo"], artifact)
+                   for artifact, version in artifacts):
+                return maven_file(source["repo"], coordinates)
+
+        return None
+
+    def dependencies(self, repo: str, coordinate: str):
+        """The compile-scope dependencies the artifact's POM declares."""
+        artifact, version = coordinate.rsplit(":", 1)
+        pom = self.fetch(repo, artifact, f"{version}/{artifact.split(':')[1]}-{version}.pom")
+        found = []
+
+        for block in re.findall(r"<dependency>(.*?)</dependency>", pom, re.S):
+            fields = dict(re.findall(r"<(groupId|artifactId|version|scope)>([^<]*)</", block))
+
+            if fields.get("scope", "compile") == "compile" and {"groupId", "artifactId", "version"} <= fields.keys():
+                found.append(f"{fields['groupId']}:{fields['artifactId']}:{fields['version']}")
+
+        return found
 
 
 class CurseForge:
@@ -219,6 +299,39 @@ def resolve(client: CurseForge, pinned: dict):
     return resolved, missing
 
 
+def resolve_maven(maven: Maven, entries: list):
+    """The newest jars of every maven-pinned mod, plus what their POMs require from the same repository."""
+    jars = []
+    missing = []
+    seen = set()
+
+    for entry in entries:
+        picked = maven.pick(entry)
+
+        if picked is None:
+            missing.append(entry["key"])
+            continue
+
+        pending = list(picked["coordinates"])
+
+        while pending:
+            coordinate = pending.pop(0)
+
+            if coordinate in seen:
+                continue
+
+            seen.add(coordinate)
+            progress(len(seen), len(seen) + len(pending), coordinate)
+            jars.append(shimscan.maven_jar(maven.session, picked["repo"], coordinate))
+            pending += [
+                dependency for dependency in maven.dependencies(picked["repo"], coordinate)
+                if dependency.rsplit(":", 1)[1] in maven.versions(picked["repo"], dependency.rsplit(":", 1)[0])
+            ]
+
+    progress_done()
+    return jars, missing
+
+
 def collect_own_jars(properties: dict, loader: str):
     jars = []
     problems = []
@@ -310,8 +423,9 @@ def main():
 
     client = CurseForge(api_key, properties["minecraft_version"], loader)
     pinned = read_compat_mods(properties, loader)
+    maven_pinned = [key for key, dep in read_pinned_deps(properties, loader).items() if "coordinates" in dep]
 
-    if not pinned:
+    if not pinned and not maven_pinned:
         print(f"Error: no <mod>_{loader}_dep entries in gradle.properties, run check_versions.py --update first.")
         return 1
 
@@ -336,6 +450,10 @@ def main():
     resolved, missing = resolve(client, pinned)
     mods = client.get_mods(sorted(resolved))
     blocked = [mod for mod in mods if resolved[mod["id"]].get("downloadUrl") is None]
+    entries = {entry["key"]: entry for entry in read_supported_mods()}
+    maven_jars, maven_missing = resolve_maven(Maven(properties["minecraft_version"], loader),
+                                              [entries[key] for key in maven_pinned if key in entries])
+    jars += maven_jars
 
     output = Path(args.output) if args.output else PROJECT_DIR / "build" / "modpack" / f"{properties['alicompat_mod_name']}-{loader}-{properties['minecraft_version']}.zip"
     write_zip(output, build_manifest(properties, loader, resolved.values()), build_modlist(mods), jars)
@@ -344,11 +462,17 @@ def main():
         file = resolved[mod["id"]]
         print(f"  {mod['name']}: {file['displayName']} ({RELEASE_TYPES[file['releaseType']]})")
 
-    if missing:
+    for jar in maven_jars:
+        print(f"  {jar.name} (maven)")
+
+    if missing or maven_missing:
         print(f"\nNo {properties['minecraft_version']}/{loader} release or beta file, left out of the pack:")
 
         for slug, project_id in missing:
             print(f"  {slug} (project {project_id})")
+
+        for key in maven_missing:
+            print(f"  {key} (maven)")
 
     if blocked:
         print("\nThird-party downloads disabled by the author, Prism will ask you to download these by hand:")
