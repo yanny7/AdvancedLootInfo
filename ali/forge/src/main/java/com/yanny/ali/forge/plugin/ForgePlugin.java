@@ -12,8 +12,8 @@ import com.yanny.ali.forge.mixin.MixinLootModifier;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.glm.Destination;
-import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
-import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
+import com.yanny.ali.plugin.glm.GlobalLootModifierCollector;
+import com.yanny.ali.plugin.glm.GlobalLootModifierWrapper;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierWrapper;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
@@ -26,15 +26,12 @@ import net.minecraftforge.common.crafting.ingredients.StrictNBTIngredient;
 import net.minecraftforge.common.loot.*;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
 
-import java.util.*;
-import java.util.function.BiFunction;
+import java.util.Arrays;
+import java.util.List;
 
 @AliEntrypoint
 public class ForgePlugin implements IPlugin {
-    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
-
     @NotNull
     @Override
     public String getModId() {
@@ -74,100 +71,25 @@ public class ForgePlugin implements IPlugin {
 
     @NotNull
     private static List<ILootModifier<?>> registerLootModifiers(IServerUtils utils) {
-        Map<Class<?>, BiFunction<IServerUtils, IGlobalLootModifier, Optional<ILootModifier<?>>>> glmMap = new HashMap<>();
-        Set<Class<?>> missingGLM = new HashSet<>();
-        List<ILootModifier<?>> lootModifiers = new ArrayList<>();
-        IGlobalLootModifierPlugin.IRegistry forgeRegistry = getForgeRegistry(glmMap);
-
-        for (IPlugin plugin : Services.getPlatform().getPlugins()) {
-            if (plugin instanceof IGlobalLootModifierPlugin forgePlugin) {
-                forgePlugin.registerGlobalLootModifier(forgeRegistry);
-            }
-        }
-
-        LootModifierManager lootModifierManager = MixinForgeInternalHandler.getLootModifierManager();
-
-        for (IGlobalLootModifier globalLootModifier : lootModifierManager.getAllLootMods()) {
-            IGlobalLootModifierWrapper wrapper = wrap(utils, globalLootModifier);
-
-            try {
-                BiFunction<IServerUtils, IGlobalLootModifier, Optional<ILootModifier<?>>> getter = glmMap.get(globalLootModifier.getClass());
-
-                if (getter != null) {
-                    Optional<ILootModifier<?>> lootModifier = getter.apply(utils, globalLootModifier);
-
-                    if (lootModifier.isPresent()) {
-                        lootModifiers.add(lootModifier.get());
-                    } else {
-                        LOGGER.warn("Unable to locate destination for GLM {}", wrapper.getName());
-                    }
-                } else {
-                    Optional<ILootModifier<?>> modifier = GlobalLootModifierUtils.getMissingGlobalLootModifier(utils, wrapper);
-
-                    missingGLM.add(globalLootModifier.getClass());
-
-                    if (modifier.isPresent()) {
-                        lootModifiers.add(modifier.get());
-                    } else {
-                        LOGGER.warn("Unable to locate destination for auto GLM {}", wrapper.getName());
-                    }
-                }
-            } catch (Throwable e) {
-                LOGGER.warn("Failed to add GLM with error {}", e.getMessage(), e);
-            }
-        }
-
-        missingGLM.forEach((c) -> LOGGER.warn("Missing GLM for {}", c.getName()));
-
-        return lootModifiers;
+        return GlobalLootModifierCollector.collect(utils, MixinForgeInternalHandler.getLootModifierManager().getAllLootMods().stream().map(ForgePlugin::wrap).toList());
     }
 
     @NotNull
     private static IGlobalLootModifierWrapper wrap(IServerUtils utils, IGlobalLootModifier modifier) {
-        return new IGlobalLootModifierWrapper() {
-            @Override
-            public ResourceLocation getName() {
-                return ForgeRegistries.GLOBAL_LOOT_MODIFIER_SERIALIZERS.get().getKey(modifier.codec());
-            }
-
-            @Override
-            public Object getLootModifier() {
-                return modifier;
-            }
-
-            @Override
-            public Class<?> getLootModifierClass() {
-                return LootModifier.class;
-            }
-
-            @Override
-            public boolean isLootModifier() {
-                return modifier instanceof LootModifier;
-            }
-
-            @Override
-            public List<LootItemCondition> getConditions() {
-                return Arrays.asList(((MixinLootModifier) modifier).getAliConditions());
-            }
-
-            @Override
-            public JsonElement serialize() {
-                RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
-                //noinspection unchecked
-                MapCodec<IGlobalLootModifier> codec = ((MapCodec<IGlobalLootModifier>) modifier.codec());
-                return codec.codec().encodeStart(registryOps, modifier).getPartialOrThrow();
-            }
-        };
+        return new GlobalLootModifierWrapper(
+                ForgeRegistries.GLOBAL_LOOT_MODIFIER_SERIALIZERS.get().getKey(modifier.codec()),
+                modifier,
+                LootModifier.class,
+                () -> Arrays.asList(((MixinLootModifier) modifier).getAliConditions()),
+                () -> serialize(modifier)
+        );
     }
 
     @NotNull
-    private static IGlobalLootModifierPlugin.IRegistry getForgeRegistry(Map<Class<?>, BiFunction<IServerUtils, IGlobalLootModifier, Optional<ILootModifier<?>>>> glmMap) {
-        return new IGlobalLootModifierPlugin.IRegistry() {
-            @Override
-            public <T> void registerGlobalLootModifier(Class<T> type, BiFunction<IServerUtils, T, Optional<ILootModifier<?>>> getter) {
+    private static JsonElement serialize(IGlobalLootModifier modifier) {
+        RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
                 //noinspection unchecked
-                glmMap.put(type, (u, t) -> getter.apply(u, (T) t));
-            }
-        };
+                MapCodec<IGlobalLootModifier> codec = ((MapCodec<IGlobalLootModifier>) modifier.codec());
+        return codec.codec().encodeStart(registryOps, modifier).getPartialOrThrow();
     }
 }
