@@ -240,7 +240,7 @@ def minecraft_jar(loader: str, minecraft_version: str):
     if not LOOM_CACHE.is_dir():
         return None
 
-    prefix = "minecraft-merged-" if loader == "fabric" else f"{loader}-{minecraft_version}-"
+    prefix = "minecraft-merged-" if loader == "fabric" else f"{loader}-"
     candidates = [
         jar for directory in LOOM_CACHE.glob(f"{prefix}*")
         for jar in directory.glob("*/*.jar")
