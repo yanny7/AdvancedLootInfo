@@ -352,10 +352,10 @@ if __name__ == "__main__":
         if not curseforge_api_token or not curseforge_api_key:
             raise SystemExit(1)
 
-    props = read_properties(keys_to_find=["ali_version", "awi_version", "aci_version", "minecraft_version", "ali_mod_name", "awi_mod_name", "aci_mod_name", "enabled_platforms"])
+    props = read_properties(keys_to_find=["ali_version", "awi_version", "aci_version", "minecraft_version", "ali_mod_name", "awi_mod_name", "aci_mod_name", "enabled_platforms", "fabric_enabled", "forge_enabled", "neoforge_enabled"])
     version_changelog = read_changelog(filename=f"{args.mod_id}/CHANGELOG.md")
 
-    mod_loaders = [[platform] for platform in props["enabled_platforms"].split(",")]
+    mod_loaders = [[platform] for platform in props["enabled_platforms"].split(",") if props.get(f"{platform}_enabled") == "true"]
 
     # branches without a neoforge module ship one Forge jar that NeoForge loads too
     if ["forge"] in mod_loaders and ["neoforge"] not in mod_loaders:
