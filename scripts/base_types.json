@@ -31,27 +31,37 @@
         "net/fabricmc/fabric/api/recipe/v1/ingredient/CustomIngredient"
       ]
     },
-    "item_sub_predicate": {
-      "title": "Item sub-predicates",
-      "registry": "registerItemSubPredicateTooltip",
-      "bases": ["net/minecraft/advancements/critereon/ItemSubPredicate"]
+    "data_component_predicate": {
+      "title": "Data component predicates",
+      "registry": "registerDataComponentPredicateTooltip",
+      "bases": ["net/minecraft/core/component/predicates/DataComponentPredicate"]
     },
     "entity_sub_predicate": {
       "title": "Entity sub-predicates",
       "registry": "registerEntitySubPredicateTooltip",
-      "bases": ["net/minecraft/advancements/critereon/EntitySubPredicate"]
+      "bases": ["net/minecraft/advancements/criterion/EntitySubPredicate"]
+    },
+    "consume_effect": {
+      "title": "Consume effects",
+      "registry": "registerConsumeEffectTooltip",
+      "bases": ["net/minecraft/world/item/consume_effects/ConsumeEffect"]
+    },
+    "slot_source": {
+      "title": "Slot sources",
+      "registry": "registerSlotSourceTooltip",
+      "bases": ["net/minecraft/world/item/slot/SlotSource"]
     },
     "item_listing": {
       "title": "Trade item listings",
       "registry": "registerItemListing",
-      "bases": ["net/minecraft/world/entity/npc/VillagerTrades$ItemListing"]
+      "bases": ["net/minecraft/world/entity/npc/villager/VillagerTrades$ItemListing"]
     },
     "trader_entity": {
       "title": "Trading entities",
       "registry": "registerTrades",
       "bases": [
         "net/minecraft/world/item/trading/Merchant",
-        "net/minecraft/world/entity/npc/AbstractVillager"
+        "net/minecraft/world/entity/npc/villager/AbstractVillager"
       ]
     },
     "global_loot_modifier": {

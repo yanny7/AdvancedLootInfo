@@ -26,8 +26,10 @@ HOOK_OF_METHOD = {
     "registerEntryTooltip": ["entry"],
     "registerNumberProvider": ["number_provider"],
     "registerIngredientTooltip": ["ingredient"],
-    "registerItemSubPredicateTooltip": ["item_sub_predicate"],
+    "registerDataComponentPredicateTooltip": ["data_component_predicate"],
     "registerEntitySubPredicateTooltip": ["entity_sub_predicate"],
+    "registerConsumeEffectTooltip": ["consume_effect"],
+    "registerSlotSourceTooltip": ["slot_source"],
     "registerItemListing": ["item_listing"],
     "registerGlobalLootModifier": ["global_loot_modifier"],
 }

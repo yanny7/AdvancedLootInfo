@@ -42,7 +42,7 @@ public class PortingLibLootCompat implements IModCompat {
     }
 
     @NotNull
-    private static IGlobalLootModifierWrapper wrap(Map.Entry<ResourceLocation, IGlobalLootModifier> entry) {
+    private static IGlobalLootModifierWrapper wrap(Map.Entry<Identifier, IGlobalLootModifier> entry) {
         IGlobalLootModifier modifier = entry.getValue();
 
         return new GlobalLootModifierWrapper(

@@ -18,13 +18,29 @@ public class ArtifactsLang implements ICompatTranslations {
         ARTIFACT_RARITY_ADJUSTED_CHANCE("artifact_rarity_adjusted_chance", "Artifact Rarity Adjusted Chance:"),
         CONFIG_VALUE("config_value", "Config Value:"),
         CONFIG_VALUE_CHANCE("config_value_chance", "Config Value Chance:"),
-        IS_APRIL_FOOLS("is_april_fools", "Is April Fools"),
         ;
 
         private final Translation translation;
 
         Conditions(String k, String e) {
             translation = new Translation("alicompat.type.condition." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
+    public enum ConsumeEffects implements ITooltipKey {
+        HEAL("heal", "Heal:"),
+        ;
+
+        private final Translation translation;
+
+        ConsumeEffects(String k, String e) {
+            translation = new Translation("alicompat.type.consume_effect." + k, e);
         }
 
         @NotNull
@@ -71,6 +87,7 @@ public class ArtifactsLang implements ICompatTranslations {
 
     static {
         CoreLang.register(TRANSLATION_MAP, Conditions.class);
+        CoreLang.register(TRANSLATION_MAP, ConsumeEffects.class);
         CoreLang.register(TRANSLATION_MAP, Functions.class);
         CoreLang.register(TRANSLATION_MAP, Value.class);
     }

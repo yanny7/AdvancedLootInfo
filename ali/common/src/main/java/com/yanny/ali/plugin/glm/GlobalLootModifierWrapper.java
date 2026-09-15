@@ -1,20 +1,20 @@
 package com.yanny.ali.plugin.glm;
 
 import com.google.gson.JsonElement;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import java.util.List;
 import java.util.function.Supplier;
 
 public final class GlobalLootModifierWrapper implements IGlobalLootModifierWrapper {
-    private final ResourceLocation name;
+    private final Identifier name;
     private final Object modifier;
     private final Class<?> lootModifierClass;
     private final Supplier<List<LootItemCondition>> conditions;
     private final Supplier<JsonElement> serializer;
 
-    public GlobalLootModifierWrapper(ResourceLocation name, Object modifier, Class<?> lootModifierClass, Supplier<List<LootItemCondition>> conditions, Supplier<JsonElement> serializer) {
+    public GlobalLootModifierWrapper(Identifier name, Object modifier, Class<?> lootModifierClass, Supplier<List<LootItemCondition>> conditions, Supplier<JsonElement> serializer) {
         this.name = name;
         this.modifier = modifier;
         this.lootModifierClass = lootModifierClass;
@@ -23,7 +23,7 @@ public final class GlobalLootModifierWrapper implements IGlobalLootModifierWrapp
     }
 
     @Override
-    public ResourceLocation getName() {
+    public Identifier getName() {
         return name;
     }
 
