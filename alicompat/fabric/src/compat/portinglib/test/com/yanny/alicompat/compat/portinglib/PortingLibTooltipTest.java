@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.portinglib;
 
-import io.github.fabricators_of_create.porting_lib.tool.ToolActions;
-import io.github.fabricators_of_create.porting_lib.tool.loot.CanToolPerformAction;
+import io.github.fabricators_of_create.porting_lib.tool.ItemAbilities;
+import io.github.fabricators_of_create.porting_lib.tool.loot.CanItemPerformAbility;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -11,9 +11,9 @@ import static com.yanny.alicompat.test.CompatTooltipSuite.UTILS;
 
 public class PortingLibTooltipTest {
     @Test
-    public void testCanToolPerformActionCondition() {
-        assertTooltip(UTILS.getConditionTooltip(UTILS, new CanToolPerformAction(ToolActions.AXE_STRIP)).build(), List.of(
-                "Can Tool Perform Action:",
+    public void testCanItemPerformAbilityCondition() {
+        assertTooltip(UTILS.getConditionTooltip(UTILS, new CanItemPerformAbility(ItemAbilities.AXE_STRIP)).build(), List.of(
+                "Can Item Perform Ability:",
                 "  -> axe_strip"
         ));
     }

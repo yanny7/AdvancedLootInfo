@@ -12,9 +12,9 @@ import com.yanny.alicompat.accessor.IItemListing;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
-import svenhjol.charmony.helper.GenericTradeOffers;
+import svenhjol.charm.charmony.common.villages.GenericTrades;
 
-public class EmeraldsForItemsAccessor extends BaseAccessor<GenericTradeOffers.EmeraldsForItems> implements IItemListing {
+public class EmeraldsForItemsAccessor extends BaseAccessor<GenericTrades.EmeraldsForItems> implements IItemListing {
     @FieldAccessor
     private ItemLike itemLike;
     @FieldAccessor
@@ -30,7 +30,7 @@ public class EmeraldsForItemsAccessor extends BaseAccessor<GenericTradeOffers.Em
     @FieldAccessor
     private int villagerXp;
 
-    public EmeraldsForItemsAccessor(GenericTradeOffers.EmeraldsForItems parent) {
+    public EmeraldsForItemsAccessor(GenericTrades.EmeraldsForItems parent) {
         super(parent);
     }
 

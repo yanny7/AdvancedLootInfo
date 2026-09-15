@@ -5,7 +5,9 @@ import com.aetherteam.aether.loot.functions.DoubleDrops;
 import com.aetherteam.aether.loot.functions.SpawnTNT;
 import com.aetherteam.aether.loot.functions.SpawnXP;
 import com.aetherteam.aether.loot.functions.WhirlwindSpawnEntity;
-import io.github.fabricators_of_create.porting_lib.config.ModConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.minecraft.advancements.critereon.EntityTypePredicate;
+import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
@@ -73,7 +75,7 @@ public class AetherTooltipTest {
 
     @Test
     public void testWhirlwindSpawnEntityFunction() {
-        LootItemFunction function = WhirlwindSpawnEntity.builder(EntityType.PIG, 3).build();
+        LootItemFunction function = WhirlwindSpawnEntity.builder(EntityTypePredicate.of(EntityType.PIG), ConstantInt.of(3)).build();
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
                 "Whirlwind Spawn Entity:",

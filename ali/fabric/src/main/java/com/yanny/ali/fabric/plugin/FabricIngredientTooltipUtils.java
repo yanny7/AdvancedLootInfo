@@ -9,6 +9,7 @@ import com.yanny.ali.fabric.mixin.MixinComponentsIngredient;
 import com.yanny.ali.fabric.mixin.MixinCustomDataIngredient;
 import com.yanny.ali.fabric.mixin.MixinDifferenceIngredient;
 import com.yanny.ali.language.Lang;
+import com.yanny.ali.plugin.server.MissingTooltipUtils;
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient;
 import net.fabricmc.fabric.impl.recipe.ingredient.CustomIngredientImpl;
 import net.fabricmc.fabric.impl.recipe.ingredient.builtin.AllIngredient;
@@ -55,13 +56,14 @@ public class FabricIngredientTooltipUtils {
                     .add(utils.getValueTooltip(utils, accessor.getBase()).build(Lang.Branch.BASE))
                     .add(utils.getValueTooltip(utils, accessor.getNbt()).build(Lang.Value.NBT))
             );
+        } else if ((Object) i instanceof Ingredient inner) {
+            return utils.getIngredientTooltip(utils, inner);
         } else if (i == null) {
             LOGGER.warn("NULL custom ingredient");
-        } else {
-            LOGGER.warn("Missing tooltip for fabric custom ingredient {}", i.getClass().getCanonicalName());
+            return TooltipBuilder.empty();
         }
 
-        return TooltipBuilder.empty();
+        return MissingTooltipUtils.getMissingIngredientTooltip(utils, ingredient);
     }
 
     @NotNull

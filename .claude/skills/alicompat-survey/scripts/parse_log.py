@@ -26,6 +26,7 @@ CATEGORY_SLUG = {
     "condition tooltips": "condition_tooltip",
     "value tooltips": "value_tooltip",
     "item sub predicate tooltips": "item_sub_predicate_tooltip",
+    "entity sub predicate tooltips": "entity_sub_predicate_tooltip",
     "data component type tooltips": "data_component_type_tooltip",
 }
 

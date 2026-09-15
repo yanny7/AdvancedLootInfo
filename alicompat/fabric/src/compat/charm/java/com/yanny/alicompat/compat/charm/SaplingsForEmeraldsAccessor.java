@@ -13,11 +13,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
-import svenhjol.charm.feature.lumberjacks.LumberjackTradeOffers;
+import svenhjol.charm.feature.lumberjacks.common.Trades;
 
 import java.util.List;
 
-public class SaplingsForEmeraldsAccessor extends BaseAccessor<LumberjackTradeOffers.SaplingsForEmeralds> implements IItemListing {
+public class SaplingsForEmeraldsAccessor extends BaseAccessor<Trades.SaplingsForEmeralds> implements IItemListing {
     @FieldAccessor
     private List<Item> saplings;
     @FieldAccessor
@@ -29,7 +29,7 @@ public class SaplingsForEmeraldsAccessor extends BaseAccessor<LumberjackTradeOff
     @FieldAccessor
     private int villagerXp;
 
-    public SaplingsForEmeraldsAccessor(LumberjackTradeOffers.SaplingsForEmeralds parent) {
+    public SaplingsForEmeraldsAccessor(Trades.SaplingsForEmeralds parent) {
         super(parent);
     }
 

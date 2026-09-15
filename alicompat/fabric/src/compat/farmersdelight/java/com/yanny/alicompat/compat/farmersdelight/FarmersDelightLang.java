@@ -17,6 +17,25 @@ public class FarmersDelightLang implements ICompatTranslations {
 
     public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 
+    public enum ConsumeEffects implements ITooltipKey {
+        EXTINGUISH("extinguish", "Extinguish"),
+        HEAL("heal", "Heal:"),
+        REMOVE_RANDOM_EFFECTS("remove_random_effects", "Remove Random Effects:"),
+        ;
+
+        private final Translation translation;
+
+        ConsumeEffects(String k, String e) {
+            translation = new Translation("alicompat.type.consume_effect." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
     public enum Functions implements ITooltipKey {
         COPY_SKILLET("copy_skillet", "Copy Skillet:"),
         SMOKER_COOK("smoker_cook", "Smoker Cook:"),
@@ -35,8 +54,27 @@ public class FarmersDelightLang implements ICompatTranslations {
         }
     }
 
+    public enum Value implements ITooltipKey {
+        HARMFUL_ONLY("harmful_only", "Harmful Only: %s"),
+        ;
+
+        private final Translation translation;
+
+        Value(String k, String e) {
+            translation = new Translation("alicompat.property.value." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
     static {
+        CoreLang.register(TRANSLATION_MAP, ConsumeEffects.class);
         CoreLang.register(TRANSLATION_MAP, Functions.class);
+        CoreLang.register(TRANSLATION_MAP, Value.class);
 
         putItemAbility("SWORD_DIG", "Sword Dig");
         putItemAbility("SHOVEL_DIG", "Shovel Dig");

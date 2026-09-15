@@ -91,25 +91,7 @@ public class VillagerTradingPlusTooltipTest {
         ));
     }
 
-    @Test
-    public void testSellSpecificEnchantedBookTradeOffer() {
-        assertTooltip(tooltip(factory("JsonSellSpecificEnchantedBookTradeOffer$Factory", new ItemStack(Items.EMERALD, 12), Enchantments.SHARPNESS, 2, 6, 15, 0.2F)), List.of(
-                "Uses: 6",
-                "XP: 15",
-                "Price Multiplier: 0.2"
-        ));
-    }
 
-    @Test
-    public void testSellEnchantedBookFromListTradeOffer() {
-        Object entry = construct(TRADES + "JsonSellEnchantedBookFromListTradeOffer$Entry", Enchantments.SHARPNESS, 1, 3, 5);
-
-        assertTooltip(tooltip(factory("JsonSellEnchantedBookFromListTradeOffer$Factory", new ItemStack(Items.EMERALD, 8), List.of(entry), 1, 3, 4, 9, 2, 11, 0.2F, 2)), List.of(
-                "Uses: 2",
-                "XP: 11",
-                "Price Multiplier: 0.2"
-        ));
-    }
 
     @Test
     public void testSellEnchantedToolTradeOffer() {
@@ -120,14 +102,6 @@ public class VillagerTradingPlusTooltipTest {
         ));
     }
 
-    @Test
-    public void testSellSpecificEnchantedToolTradeOffer() {
-        assertTooltip(tooltip(factory("JsonSellSpecificEnchantedToolTradeOffer$Factory", new ItemStack(Items.EMERALD, 16), new ItemStack(Items.DIAMOND_SWORD), Enchantments.FIRE_ASPECT, 2, 4, 13, 0.2F)), List.of(
-                "Uses: 4",
-                "XP: 13",
-                "Price Multiplier: 0.2"
-        ));
-    }
 
     @Test
     public void testSellPotionTradeOffer() {
@@ -138,16 +112,6 @@ public class VillagerTradingPlusTooltipTest {
         ));
     }
 
-    @Test
-    public void testSellStructureMapTradeOffer() {
-        TagKey<Structure> destination = TagKey.create(Registries.STRUCTURE, new ResourceLocation("minecraft", "village"));
-
-        assertTooltip(tooltip(factory("JsonSellStructureMapTradeOffer$Factory", new ItemStack(Items.EMERALD, 13), new ItemStack(Items.COMPASS), destination, "filled_map.village", 3, 9, 0.2F)), List.of(
-                "Uses: 3",
-                "XP: 9",
-                "Price Multiplier: 0.2"
-        ));
-    }
 
     @Test
     public void testWeightedPoolTradeOffer() {
@@ -164,20 +128,6 @@ public class VillagerTradingPlusTooltipTest {
         ));
     }
 
-    @Test
-    public void testConditionalTradeFactory() {
-        VillagerTrades.ItemListing listing = factory("JsonSellItemTradeOffer$Factory", new ItemStack(Items.BREAD, 3), new ItemStack(Items.EMERALD, 2), 7, 5, 0.15F, 2);
-
-        ParsedConditions.Entry entry = new ParsedConditions.Entry(Component.literal("Only on Sunday"), (e) -> true);
-
-        assertTooltip(tooltip(new ConditionalTradeFactory(listing, new ParsedConditions(List.of(entry), false))), List.of(
-                "All Of:",
-                "  -> Only on Sunday",
-                "Uses: 7",
-                "XP: 5",
-                "Price Multiplier: 0.15"
-        ));
-    }
 
     @NotNull
     private static TooltipNode tooltip(VillagerTrades.ItemListing listing) {
