@@ -12,11 +12,11 @@ import com.yanny.alicompat.accessor.IItemListing;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.NotNull;
-import svenhjol.charm.feature.lumberjacks.LumberjackTradeOffers;
+import svenhjol.charm.feature.lumberjacks.common.Trades;
 
 import java.util.List;
 
-public class BarkForLogsAccessor extends BaseAccessor<LumberjackTradeOffers.BarkForLogs> implements IItemListing {
+public class BarkForLogsAccessor extends BaseAccessor<Trades.BarkForLogs> implements IItemListing {
     @FieldAccessor
     private int baseCost;
     @FieldAccessor
@@ -26,7 +26,7 @@ public class BarkForLogsAccessor extends BaseAccessor<LumberjackTradeOffers.Bark
     @FieldAccessor
     private int villagerXp;
 
-    public BarkForLogsAccessor(LumberjackTradeOffers.BarkForLogs parent) {
+    public BarkForLogsAccessor(Trades.BarkForLogs parent) {
         super(parent);
     }
 

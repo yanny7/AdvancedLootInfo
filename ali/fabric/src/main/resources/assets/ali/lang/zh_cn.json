@@ -295,7 +295,7 @@
   "ali.type.condition.block_entity": "方块实体：",
   "ali.type.condition.block_state_property": "方块状态属性：",
   "ali.type.condition.block_tag": "方块标签",
-  "ali.type.condition.can_item_perform_ability": "物品能否执行能力：%s",
+  "ali.type.condition.can_item_perform_ability": "物品能否执行能力：",
   "ali.type.condition.can_tool_perform_action": "工具能否执行操作：",
   "ali.type.condition.config_enabled": "必须在配置中启用",
   "ali.type.condition.contains_item": "包含物品",

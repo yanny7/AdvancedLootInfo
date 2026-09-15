@@ -1,0 +1,84 @@
+{
+  "_comment": "ALI registry hook -> the vanilla/loader base types a candidate must inherit from. Lists only the hooks ALI declares on this branch. Every base name that exists in the scanned jars is used; a name absent from them (another loader's type) is skipped.",
+  "hooks": {
+    "function": {
+      "title": "Loot functions",
+      "registry": "registerFunctionTooltip / registerCountModifier / registerItemStackModifier",
+      "bases": ["net/minecraft/world/level/storage/loot/functions/LootItemFunction"]
+    },
+    "condition": {
+      "title": "Loot conditions",
+      "registry": "registerConditionTooltip / registerChanceModifier",
+      "bases": ["net/minecraft/world/level/storage/loot/predicates/LootItemCondition"]
+    },
+    "entry": {
+      "title": "Loot pool entries",
+      "registry": "registerEntry / registerEntryTooltip",
+      "bases": ["net/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer"]
+    },
+    "number_provider": {
+      "title": "Number providers",
+      "registry": "registerNumberProvider",
+      "bases": ["net/minecraft/world/level/storage/loot/providers/number/NumberProvider"]
+    },
+    "ingredient": {
+      "title": "Custom ingredients",
+      "registry": "registerIngredientTooltip",
+      "bases": [
+        "net/minecraft/world/item/crafting/Ingredient",
+        "net/neoforged/neoforge/common/crafting/ICustomIngredient",
+        "net/minecraftforge/common/crafting/AbstractIngredient",
+        "net/fabricmc/fabric/api/recipe/v1/ingredient/CustomIngredient"
+      ]
+    },
+    "data_component_predicate": {
+      "title": "Data component predicates",
+      "registry": "registerDataComponentPredicateTooltip",
+      "bases": ["net/minecraft/core/component/predicates/DataComponentPredicate"]
+    },
+    "entity_sub_predicate": {
+      "title": "Entity sub-predicates",
+      "registry": "registerEntitySubPredicateTooltip",
+      "bases": ["net/minecraft/advancements/criterion/EntitySubPredicate"]
+    },
+    "consume_effect": {
+      "title": "Consume effects",
+      "registry": "registerConsumeEffectTooltip",
+      "bases": ["net/minecraft/world/item/consume_effects/ConsumeEffect"]
+    },
+    "slot_source": {
+      "title": "Slot sources",
+      "registry": "registerSlotSourceTooltip",
+      "bases": ["net/minecraft/world/item/slot/SlotSource"]
+    },
+    "trader_entity": {
+      "title": "Trading entities",
+      "registry": "registerTrades",
+      "bases": [
+        "net/minecraft/world/item/trading/Merchant",
+        "net/minecraft/world/entity/npc/villager/AbstractVillager"
+      ]
+    },
+    "global_loot_modifier": {
+      "title": "Global Loot Modifiers",
+      "registry": "IGlmModCompat / registerGlobalLootModifier",
+      "bases": [
+        "net/neoforged/neoforge/common/loot/IGlobalLootModifier",
+        "net/minecraftforge/common/loot/IGlobalLootModifier",
+        "io/github/fabricators_of_create/porting_lib/loot/IGlobalLootModifier",
+        "com/aetherteam/aetherfabric/common/loot/IGlobalLootModifier"
+      ]
+    }
+  },
+  "_excludedModIds": "This repo's own jars sit in the pack too, and every class ALI registers reaches an ALI hook by definition.",
+  "excludedModIds": ["ali", "aci", "awi", "alicompat"],
+  "_excludedPackageSegments": "A mixin lives in the target's hierarchy by construction, so every mixin on a vanilla loot or merchant class would otherwise show up as a candidate.",
+  "excludedPackageSegments": ["mixin", "mixins", "asm"],
+  "excludedRoots": [
+    "net/minecraft/",
+    "net/neoforged/",
+    "net/minecraftforge/",
+    "net/fabricmc/",
+    "com/mojang/"
+  ]
+}

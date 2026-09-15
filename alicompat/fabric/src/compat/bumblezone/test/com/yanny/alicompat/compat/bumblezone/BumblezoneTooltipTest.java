@@ -1,11 +1,11 @@
 package com.yanny.alicompat.compat.bumblezone;
 
 import com.telepathicgrunt.the_bumblezone.loot.conditions.EssenceOnlySpawn;
-import com.telepathicgrunt.the_bumblezone.loot.functions.DropContainerItems;
+import com.telepathicgrunt.the_bumblezone.entities.BasicItemTrade;
+import com.telepathicgrunt.the_bumblezone.loot.functions.DropContainerLoot;
 import com.telepathicgrunt.the_bumblezone.loot.functions.HoneyCompassLocateStructure;
 import com.telepathicgrunt.the_bumblezone.loot.functions.TagItemRemovals;
 import com.telepathicgrunt.the_bumblezone.loot.functions.UniquifyIfHasItems;
-import com.telepathicgrunt.the_bumblezone.utils.GeneralUtils;
 import com.yanny.aci.tooltip.TooltipNode;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.StructureTags;
@@ -29,16 +29,16 @@ public class BumblezoneTooltipTest {
     }
 
     @Test
-    public void testDropContainerItemsFunction() {
-        assertTooltip(UTILS.getFunctionTooltip(UTILS, new DropContainerItems(new LootItemCondition[0])).build(), List.of(
+    public void testDropContainerLootFunction() {
+        assertTooltip(UTILS.getFunctionTooltip(UTILS, new DropContainerLoot(List.of())).build(), List.of(
                 "Drop Container Items:"
         ));
     }
 
     @Test
-    public void testDropContainerItemsFunctionWithPredicate() {
-        LootItemCondition[] conditions = {ExplosionCondition.survivesExplosion().build()};
-        LootItemFunction function = new DropContainerItems(conditions);
+    public void testDropContainerLootFunctionWithPredicate() {
+        List<LootItemCondition> conditions = List.of(ExplosionCondition.survivesExplosion().build());
+        LootItemFunction function = new DropContainerLoot(conditions);
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
                 "Drop Container Items:",
@@ -49,14 +49,14 @@ public class BumblezoneTooltipTest {
 
     @Test
     public void testUniquifyIfHasItemsFunction() {
-        assertTooltip(UTILS.getFunctionTooltip(UTILS, new UniquifyIfHasItems(new LootItemCondition[0])).build(), List.of(
+        assertTooltip(UTILS.getFunctionTooltip(UTILS, new UniquifyIfHasItems(List.of())).build(), List.of(
                 "Uniquify If Has Items:"
         ));
     }
 
     @Test
     public void testUniquifyIfHasItemsFunctionWithPredicate() {
-        LootItemCondition[] conditions = {ExplosionCondition.survivesExplosion().build()};
+        List<LootItemCondition> conditions = List.of(ExplosionCondition.survivesExplosion().build());
         LootItemFunction function = new UniquifyIfHasItems(conditions);
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
@@ -68,7 +68,7 @@ public class BumblezoneTooltipTest {
 
     @Test
     public void testTagItemRemovalsFunction() {
-        TagItemRemovals function = new TagItemRemovals(new LootItemCondition[0], ItemTags.BEACON_PAYMENT_ITEMS);
+        TagItemRemovals function = new TagItemRemovals(List.of(), ItemTags.BEACON_PAYMENT_ITEMS);
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
                 "Tag Item Removals:",
@@ -78,7 +78,7 @@ public class BumblezoneTooltipTest {
 
     @Test
     public void testHoneyCompassLocateStructureFunction() {
-        HoneyCompassLocateStructure function = new HoneyCompassLocateStructure(new LootItemCondition[0], StructureTags.VILLAGE, 50, true);
+        HoneyCompassLocateStructure function = new HoneyCompassLocateStructure(List.of(), StructureTags.VILLAGE, 50, true);
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
                 "Honey Compass Locate Structure:",
@@ -90,7 +90,7 @@ public class BumblezoneTooltipTest {
 
     @Test
     public void testBasicItemTradeListing() {
-        GeneralUtils.BasicItemTrade trade = new GeneralUtils.BasicItemTrade(Items.EMERALD, Items.HONEYCOMB, 2, 3, 9, 4, 0.5F);
+        BasicItemTrade trade = new BasicItemTrade(Items.EMERALD, Items.HONEYCOMB, 2, 3, 9, 4, 0.5F);
 
         assertTooltip(UTILS.getItemListing(UTILS, trade, TooltipNode.empty()).getTooltip(), List.of(
                 "Uses: 9",

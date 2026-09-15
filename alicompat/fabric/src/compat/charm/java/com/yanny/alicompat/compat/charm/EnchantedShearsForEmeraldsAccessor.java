@@ -15,9 +15,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import org.jetbrains.annotations.NotNull;
-import svenhjol.charm.feature.beekeepers.BeekeeperTradeOffers;
+import svenhjol.charm.feature.beekeepers.common.Trades;
 
-public class EnchantedShearsForEmeraldsAccessor extends BaseAccessor<BeekeeperTradeOffers.EnchantedShearsForEmeralds> implements IItemListing {
+public class EnchantedShearsForEmeraldsAccessor extends BaseAccessor<Trades.EnchantedShearsForEmeralds> implements IItemListing {
     @FieldAccessor
     private int baseEmeralds;
     @FieldAccessor
@@ -27,7 +27,7 @@ public class EnchantedShearsForEmeraldsAccessor extends BaseAccessor<BeekeeperTr
     @FieldAccessor
     private int villagerXp;
 
-    public EnchantedShearsForEmeraldsAccessor(BeekeeperTradeOffers.EnchantedShearsForEmeralds parent) {
+    public EnchantedShearsForEmeraldsAccessor(Trades.EnchantedShearsForEmeralds parent) {
         super(parent);
     }
 

@@ -43,13 +43,15 @@ class name. A scan that finds nothing is a valid answer: say so and write no shi
 **The shim exists and the target mod moved on.** Repin first, then treat the new jar as an unknown:
 
 ```bash
-python3 check_versions.py --loader <loader>          # what is behind
-python3 check_versions.py --update                   # repin the file ids
+python3 scripts/check_versions.py --loader <loader>          # what is behind
+python3 scripts/check_versions.py --update                   # repin the file ids / artifact versions
 ```
 
-`--update` only swaps the file id; it does not check that the shim still compiles. Build immediately
-after, and diff the class list the shim uses against what the new jar actually contains — a target
-mod's refactor shows up here as a missing class, not as a broken tooltip.
+`--update` only swaps the file id or artifact version; it does not check that the shim still compiles. The scan at the end
+of the run does the class-list diff for you — find the shim's rows in the output or in
+`build/compat_scan.txt`: `-` is a class the new jar no longer has, `!` is one it still has but
+re-parented away from the hook, `+` is one it gained. A target mod's refactor shows up there as a
+missing class, not as a broken tooltip. Build immediately after.
 
 ## Step 1 — a finding list is for one Minecraft version only
 
@@ -58,11 +60,14 @@ A list that came from anywhere but this checkout's own jar describes a different
 get added and get deleted between versions, so such a list is a hypothesis, not an inventory.
 
 Get the jar for *this* branch's version before writing anything. A `<slug>_<loader>_dep` line in
-`gradle.properties` already names the project and file id when the mod is pinned; otherwise look the
-project up on CurseForge. Cursemaven serves a file directly:
+`gradle.properties` already names the project and file id (or the `<group>:<artifact>:<version>` list) when the
+mod is pinned; otherwise look the project up on CurseForge, and only when it has no file for this version and loader,
+in the repositories the registry entry's `maven` sources list. Cursemaven serves a file directly, a maven repository
+by its standard layout:
 
 ```bash
 curl -sL -o /tmp/.../tf.jar "https://cursemaven.com/curse/maven/O-<projectId>/<fileId>/O-<projectId>-<fileId>.jar"
+curl -sL -o /tmp/.../loot.jar "<repo>/<group with / for .>/<artifact>/<version>/<artifact>-<version>.jar"
 unzip -l tf.jar | grep -E "loot/|predicate|trade"
 ```
 
@@ -165,8 +170,9 @@ registered type reaches nothing and falls to the missing tooltip, so an `ingredi
 ALI could already render is fixed by registering the concrete class against ALI's own
 `IngredientTooltipUtils::getIngredientTooltip` — no accessor and no new key.
 
-**Only the target mod's own jar is on the compile classpath, never its libraries.** `modCompileOnly` adds the one
-coordinate from `<slug>_<loader>_dep` and nothing it depends on, so an expression javac has to resolve through a
+**Only the target mod's own jar is on the compile classpath, never its libraries.** `modCompileOnly` adds the
+coordinates from `<slug>_<loader>_dep` and, for a curse.maven pin, nothing it depends on — a maven pin brings only the
+compile-scope dependencies its POM declares — so an expression javac has to resolve through a
 third-party type fails to compile — Ender IO's `EIOItems.BROKEN_SPAWNER` needs Registrate's `ItemEntry`, Artifacts'
 `Artifacts.CONFIG.common` needs Cloth `autoconfig`'s `ConfigData`. Reach the same value another way instead of adding
 the library: an item through `BuiltInRegistries.ITEM`, a config value through a reflective accessor over the field
@@ -177,9 +183,6 @@ loader module's single compile classpath, so a shim may name that library's type
 are Moonlight's `ModItemListing`) without reflection, and at runtime the target mod's own hard dependency guarantees
 it is there.
 
-An `item_sub_predicate` finding on a branch before `1.20.5` is an `ItemPredicate` subclass, not a sub-predicate:
-there is no `registerItemSubPredicate`, and the hook is `registerValueTooltip` on that class.
-
 **An entry that carries its own count reports `1` unless you seed the range yourself.**
 `NodeUtils.getEnchantedCount` starts from `RangeValue(1)` and lets the entry's functions modify it, which is right
 only for an entry whose count comes from a `SetItemCountFunction`. A `LootPoolSingletonContainer` holding its own
@@ -188,9 +191,14 @@ only for an entry whose count comes from a `SetItemCountFunction`. A `LootPoolSi
 `TooltipUtils.getTooltip`. `weight`, `quality`, `conditions` and `functions` are read off `parent` — the access
 widener opens all four — and `IEntry` and `IEntryTooltip` sit on the one accessor.
 
-One accessor may implement several hooks. A function that swaps the stack is worth registering three
-times: `registerFunctionTooltip` (what it says), `registerItemStackModifier` (so the drop renders as
-the swapped item) and `registerItemCollector` (so the recipe-viewer index finds it).
+One accessor may implement several hooks. A function that swaps the stack is worth registering twice:
+`registerFunctionTooltip` (what it says) and `registerItemStackModifier` (so the drop renders as
+the swapped item).
+
+Two hooks are not keyed on a class. An `entity_sub_predicate` finding registers by the type's
+`MapCodec` (`registerEntitySubPredicateTooltip(<Type>.CODEC, …)`), and a data component type — which
+only the log names — by its `DataComponentType` instance. An `item_sub_predicate` finding is keyed on
+its exact class like the other hooks.
 
 ## Step 3b — trade item listings
 
@@ -388,8 +396,9 @@ can hang the session. Add the new keys to that JSON by hand (alphabetically sort
 
 ## Step 6 — wiring, and what the user must be told
 
-Per `alicompat/CLAUDE.md`: the mod gets an entry in `supported_mods.json` (slug, name, runtime mod
-ids, and its CurseForge projects as `<slug>-<project id>`), and `python3 check_versions.py --scaffold <slug>`
+Per `alicompat/CLAUDE.md`: the mod gets an entry in `scripts/supported_mods.json` (slug, name, runtime mod
+ids, its CurseForge projects as `<slug>-<project id>`, and `maven` sources only for versions CurseForge lacks — each
+of whose repositories also goes into the root `build.gradle` by hand), and `python3 scripts/check_versions.py --scaffold <slug>`
 then pins it, puts the slug into `compat_mods` and writes the `<slug>_<loader>_dep` lines — never
 write that block by hand, the next run overwrites it. The same command scaffolds a compiling skeleton
 (`package-info.java`, an `IModCompat` returning the mod id, `services/com.yanny.alicompat.IModCompat`)

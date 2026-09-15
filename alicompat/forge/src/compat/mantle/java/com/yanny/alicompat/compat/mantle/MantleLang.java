@@ -14,9 +14,28 @@ public class MantleLang implements ICompatTranslations {
 
     public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 
+    public enum Branch implements ITooltipKey {
+        CONTAINER("container", "Container:"),
+        ;
+
+        private final Translation translation;
+
+        Branch(String k, String e) {
+            translation = new Translation("alicompat.property.branch." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
     public enum Conditions implements ITooltipKey {
         BLOCK_TAG("block_tag", "Block Tag:"),
         HAS_LOOT_CONTEXT_SET("has_loot_context_set", "Has Loot Context Set:"),
+        TAG_EMPTY("tag_empty", "Tag Empty:"),
+        TAG_FILLED("tag_filled", "Tag Filled:"),
         ;
 
         private final Translation translation;
@@ -67,10 +86,33 @@ public class MantleLang implements ICompatTranslations {
         }
     }
 
+    public enum Ingredient implements ITooltipKey {
+        FLUID_CONTAINER("fluid_container", "Fluid Container:"),
+        ITEM_NAME("item_name", "Item Name:"),
+        NBT_NAME("nbt_name", "Item With NBT:"),
+        POTION("potion", "Potion Ingredient:"),
+        POTION_DISPLAY("potion_display", "Any Potion:"),
+        ;
+
+        private final Translation translation;
+
+        Ingredient(String k, String e) {
+            translation = new Translation("alicompat.type.ingredient." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
     static {
+        CoreLang.register(TRANSLATION_MAP, Branch.class);
         CoreLang.register(TRANSLATION_MAP, Conditions.class);
         CoreLang.register(TRANSLATION_MAP, Entry.class);
         CoreLang.register(TRANSLATION_MAP, Functions.class);
+        CoreLang.register(TRANSLATION_MAP, Ingredient.class);
     }
 
     @NotNull
