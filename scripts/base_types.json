@@ -39,7 +39,7 @@
     "entity_sub_predicate": {
       "title": "Entity sub-predicates",
       "registry": "registerEntitySubPredicateTooltip",
-      "bases": ["net/minecraft/advancements/criterion/EntitySubPredicate"]
+      "bases": ["net/minecraft/advancements/predicates/entity/EntitySubPredicate"]
     },
     "consume_effect": {
       "title": "Consume effects",
