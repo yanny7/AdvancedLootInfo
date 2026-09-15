@@ -473,7 +473,7 @@ def pythonRunConfigs = []
     }
 }
 
-enabled_platforms.split(",").each { platform ->
+enabled_platforms.split(",").findAll { project.findProperty("${it}_enabled") == "true" }.each { platform ->
     pythonRunConfigs << [
             task       : "generateModpackRunConfig${platform.capitalize()}",
             group      : "Modpack",

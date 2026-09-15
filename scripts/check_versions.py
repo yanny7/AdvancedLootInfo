@@ -22,6 +22,7 @@ from modpack import (
     pick_project,
     progress,
     progress_done,
+    read_enabled_loaders,
     read_enabled_mods,
     read_env_secret,
     read_gradle_properties,
@@ -371,10 +372,10 @@ def main():
         return 1
 
     properties = read_gradle_properties()
-    platforms = [platform.strip() for platform in properties.get("enabled_platforms", "").split(",") if platform.strip()]
+    platforms = read_enabled_loaders(properties)
 
     if args.loader and args.loader not in platforms:
-        print(f"Error: loader '{args.loader}' is not in enabled_platforms ({properties.get('enabled_platforms')}).")
+        print(f"Error: loader '{args.loader}' is not enabled ({', '.join(platforms)}).")
         return 1
 
     minecraft_version = properties["minecraft_version"]
