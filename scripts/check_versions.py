@@ -41,8 +41,8 @@ def source_set(loader: str, key: str):
     return PROJECT_DIR / "alicompat" / loader / "src" / "compat" / key
 
 
-def has_source_set(platforms: list, key: str):
-    return any(source_set(loader, key).is_dir() for loader in platforms)
+def has_source_set(key: str):
+    return any(path.is_dir() for path in PROJECT_DIR.glob(f"alicompat/*/src/compat/{key}"))
 
 
 def describe(file: dict):
@@ -404,7 +404,7 @@ def main():
         for key, dep in pinned[loader].items():
             if key not in entries:
                 orphans.append((key, loader, dep))
-            elif loader not in checked_loaders or (args.scaffold and key != args.scaffold) or (key not in enabled and has_source_set(platforms, key)):
+            elif loader not in checked_loaders or (args.scaffold and key != args.scaffold) or (key not in enabled and has_source_set(key)):
                 deps[(key, loader)] = dep
 
     pending = []
@@ -413,7 +413,7 @@ def main():
         if args.scaffold and key != args.scaffold:
             continue
 
-        probe = key not in enabled and has_source_set(platforms, key)
+        probe = key not in enabled and has_source_set(key)
 
         if probe:
             dormant.append(entry)
@@ -441,7 +441,7 @@ def main():
 
         if source_set(loader, entry["key"]).is_dir():
             deps[(entry["key"], loader)] = pin
-        elif has_source_set(platforms, entry["key"]) and args.scaffold != entry["key"]:
+        elif has_source_set(entry["key"]) and args.scaffold != entry["key"]:
             result["extendable"] = True
             extendable.append(result)
 
