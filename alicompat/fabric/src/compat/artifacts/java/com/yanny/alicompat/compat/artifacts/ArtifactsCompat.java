@@ -1,7 +1,10 @@
 package com.yanny.alicompat.compat.artifacts;
 
+import artifacts.config.value.ConfigValue;
+import artifacts.config.value.Value;
 import artifacts.loot.ArtifactRarityAdjustedChance;
 import artifacts.loot.ConfigValueChance;
+import artifacts.loot.ConfigValueCondition;
 import artifacts.loot.IsAprilFools;
 import artifacts.loot.ReplaceWithLootTableFunction;
 import com.yanny.aci.tooltip.TooltipBuilder;
@@ -25,8 +28,22 @@ public class ArtifactsCompat implements IModCompat {
         registry.registerConditionTooltip(ArtifactRarityAdjustedChance.class, ArtifactsCompat::getRarityAdjustedChanceTooltip);
         registry.registerConditionTooltip(IsAprilFools.class, ArtifactsCompat::getAprilFoolsTooltip);
         PluginUtils.registerConditionTooltip(registry, ConfigValueChance.class, ConfigValueChanceAccessor.class);
+        PluginUtils.registerConditionTooltip(registry, ConfigValueCondition.class, ConfigValueConditionAccessor.class);
 
         PluginUtils.registerChanceModifier(registry, ConfigValueChance.class, ConfigValueChanceAccessor.class);
+
+        registry.registerValueTooltip(ConfigValue.class, ArtifactsCompat::getConfigValueTooltip);
+        registry.registerValueTooltip(Value.Constant.class, ArtifactsCompat::getConstantValueTooltip);
+    }
+
+    @NotNull
+    private static TooltipBuilder getConfigValueTooltip(IServerUtils utils, ConfigValue<?> value) {
+        return utils.getValueTooltip(utils, value.getId());
+    }
+
+    @NotNull
+    private static TooltipBuilder getConstantValueTooltip(IServerUtils utils, Value.Constant<?> value) {
+        return utils.getValueTooltip(utils, value.get());
     }
 
     @NotNull

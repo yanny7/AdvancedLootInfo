@@ -1,33 +1,26 @@
 package com.yanny.alicompat.compat.portinglib;
 
 import com.google.gson.JsonElement;
-import com.yanny.aci.CommonLogUtils;
 import com.yanny.ali.api.ILootModifier;
-import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.platform.Services;
-import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
-import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
+import com.yanny.ali.plugin.glm.GlobalLootModifierCollector;
+import com.yanny.ali.plugin.glm.GlobalLootModifierWrapper;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierWrapper;
 import com.yanny.alicompat.IModCompat;
-import com.yanny.alicompat.Utils;
 import com.yanny.alicompat.accessor.PluginUtils;
 import com.yanny.alicompat.accessor.ReflectionUtils;
 import io.github.fabricators_of_create.porting_lib.loot.IGlobalLootModifier;
 import io.github.fabricators_of_create.porting_lib.loot.LootModifier;
 import io.github.fabricators_of_create.porting_lib.loot.LootTableIdCondition;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
 
-import java.util.*;
-import java.util.function.BiFunction;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 public class PortingLibLootCompat implements IModCompat {
-    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
-
     @NotNull
     @Override
     public String targetModId() {
@@ -45,97 +38,24 @@ public class PortingLibLootCompat implements IModCompat {
 
     @NotNull
     private static List<ILootModifier<?>> registerLootModifiers(IServerUtils utils) {
-        Map<Class<?>, BiFunction<IServerUtils, Object, Optional<ILootModifier<?>>>> glmMap = new HashMap<>();
-        Set<Class<?>> missingGLM = new HashSet<>();
-        List<ILootModifier<?>> lootModifiers = new ArrayList<>();
-        IGlobalLootModifierPlugin.IRegistry glmRegistry = getRegistry(glmMap);
-
-        for (IPlugin plugin : Services.getPlatform().getPlugins()) {
-            if (plugin instanceof IGlobalLootModifierPlugin glmPlugin) {
-                glmPlugin.registerGlobalLootModifier(glmRegistry);
-            }
-        }
-
-        for (Map.Entry<Identifier, IGlobalLootModifier> entry : LootModifierManagerAccessor.getAllLootMods().entrySet()) {
-            Identifier location = entry.getKey();
-            IGlobalLootModifier globalLootModifier = entry.getValue();
-            IGlobalLootModifierWrapper wrapper = wrap(globalLootModifier, location);
-
-            try {
-                BiFunction<IServerUtils, Object, Optional<ILootModifier<?>>> getter = glmMap.get(globalLootModifier.getClass());
-
-                if (getter != null) {
-                    Optional<ILootModifier<?>> lootModifier = getter.apply(utils, globalLootModifier);
-
-                    if (lootModifier.isPresent()) {
-                        lootModifiers.add(lootModifier.get());
-                    } else {
-                        LOGGER.warn("Unable to locate destination for GLM {}", wrapper.getName());
-                    }
-                } else {
-                    Optional<ILootModifier<?>> modifier = GlobalLootModifierUtils.getMissingGlobalLootModifier(utils, wrapper);
-
-                    missingGLM.add(globalLootModifier.getClass());
-
-                    if (modifier.isPresent()) {
-                        lootModifiers.add(modifier.get());
-                    } else {
-                        LOGGER.warn("Unable to locate destination for auto GLM {}", wrapper.getName());
-                    }
-                }
-            } catch (Throwable e) {
-                LOGGER.warn("Failed to add GLM with error {}", e.getMessage(), e);
-            }
-        }
-
-        missingGLM.forEach((c) -> LOGGER.warn("Missing GLM for {}", c.getName()));
-
-        return lootModifiers;
+        return GlobalLootModifierCollector.collect(utils, LootModifierManagerAccessor.getAllLootMods().entrySet().stream().map(PortingLibLootCompat::wrap).toList());
     }
 
     @NotNull
-    private static IGlobalLootModifierPlugin.IRegistry getRegistry(Map<Class<?>, BiFunction<IServerUtils, Object, Optional<ILootModifier<?>>>> glmMap) {
-        return new IGlobalLootModifierPlugin.IRegistry() {
-            @Override
-            public <T> void registerGlobalLootModifier(Class<T> type, BiFunction<IServerUtils, T, Optional<ILootModifier<?>>> getter) {
-                //noinspection unchecked
-                glmMap.put(type, (u, t) -> getter.apply(u, (T) t));
-            }
-        };
+    private static IGlobalLootModifierWrapper wrap(Map.Entry<ResourceLocation, IGlobalLootModifier> entry) {
+        IGlobalLootModifier modifier = entry.getValue();
+
+        return new GlobalLootModifierWrapper(
+                entry.getKey(),
+                modifier,
+                LootModifier.class,
+                () -> Arrays.asList(ReflectionUtils.copyClassData(LootModifierAccessor.class, modifier, LootModifier.class).getConditions()),
+                PortingLibLootCompat::serialize
+        );
     }
 
     @NotNull
-    private static IGlobalLootModifierWrapper wrap(IGlobalLootModifier modifier, Identifier location) {
-        return new IGlobalLootModifierWrapper() {
-            @Override
-            public Identifier getName() {
-                return location;
-            }
-
-            @Override
-            public Object getLootModifier() {
-                return modifier;
-            }
-
-            @Override
-            public Class<?> getLootModifierClass() {
-                return LootModifier.class;
-            }
-
-            @Override
-            public boolean isLootModifier() {
-                return modifier instanceof LootModifier;
-            }
-
-            @Override
-            public List<LootItemCondition> getConditions() {
-                return Arrays.asList(ReflectionUtils.copyClassData(LootModifierAccessor.class, modifier, LootModifier.class).getConditions());
-            }
-
-            @Override
-            public JsonElement serialize() {
-                throw new IllegalStateException("Not implemented");
-            }
-        };
+    private static JsonElement serialize() {
+        throw new IllegalStateException("Not implemented");
     }
 }

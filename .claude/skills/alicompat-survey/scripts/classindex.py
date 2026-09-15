@@ -19,6 +19,9 @@ import os
 import re
 import sys
 import zipfile
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[4] / "scripts"))
 
 import classfile
 from scan_jars import read_metadata

@@ -12,11 +12,11 @@ import com.yanny.alicompat.accessor.IItemListing;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
-import svenhjol.charm.feature.beekeepers.BeekeeperTradeOffers;
+import svenhjol.charm.feature.beekeepers.common.Trades;
 
 import java.util.List;
 
-public class TallFlowerForEmeraldsAccessor extends BaseAccessor<BeekeeperTradeOffers.TallFlowerForEmeralds> implements IItemListing {
+public class TallFlowerForEmeraldsAccessor extends BaseAccessor<Trades.TallFlowerForEmeralds> implements IItemListing {
     @FieldAccessor
     private int baseEmeralds;
     @FieldAccessor
@@ -26,7 +26,7 @@ public class TallFlowerForEmeraldsAccessor extends BaseAccessor<BeekeeperTradeOf
     @FieldAccessor
     private int villagerXp;
 
-    public TallFlowerForEmeraldsAccessor(BeekeeperTradeOffers.TallFlowerForEmeralds parent) {
+    public TallFlowerForEmeraldsAccessor(Trades.TallFlowerForEmeralds parent) {
         super(parent);
     }
 

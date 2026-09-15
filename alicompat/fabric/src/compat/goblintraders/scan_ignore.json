@@ -1,0 +1,3 @@
+{
+  "com.mrcrayfish.goblintraders.trades.GoblinTrade": "never referenced; trades come from TradeManager as BaseTrade, which GoblinTradeListing covers"
+}

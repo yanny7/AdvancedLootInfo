@@ -38,7 +38,7 @@ branches build:
 26.1.2:fabric,neoforge   26.2:fabric,neoforge
 ```
 
-Needs `CURSEFORGE_API_KEY` (the key `upload.py` uses). The pack works without a log — the static
+Needs `CURSEFORGE_API_KEY` (the key `scripts/upload.py` uses). The pack works without a log — the static
 scan is the larger half.
 
 ## The two kinds of evidence
@@ -81,7 +81,7 @@ stays in the work directory (`--work`, else a temp dir) — that is the interfac
 4. `classindex.py --pack --base-types` → `candidates.json`. The static scan. Parses the hierarchy
    header of every class in every jar — mods plus the Minecraft and loader jars, which supply the
    vanilla half of each chain — then keeps mod classes whose supertype closure reaches a base type in
-   `base_types.json`. A second pass re-reads only the candidates for field descriptors, constructor
+   `scripts/base_types.json`. A second pass re-reads only the candidates for field descriptors, constructor
    descriptors and namespaced string constants. **Those shapes are written to the JSON and
    deliberately kept out of the report**: they are what a shim generator needs, not what a human
    reading the plan needs.
@@ -128,11 +128,16 @@ Priority is P1 confirmed gaps with a `1.20.1` file (port upward from there), P2 
 P3 trading entities, P4 dormant types only. Run it **once**: it is a seed, and re-running overwrites
 ticked boxes and notes.
 
-## `base_types.json`
+## `scripts/base_types.json`
 
-Maps each ALI registry hook to the vanilla or loader base types a candidate must inherit from. Every
-listed name that exists in the scanned jars is used and the rest are skipped, so one file covers all
-branches — add a name when a version renames or moves a type rather than forking the file.
+Lives in the repo, not in this skill: `scripts/check_versions.py --scan` reads the same file to diff
+the existing shims against their pinned jars, and `scripts/classfile.py` is the class reader both use.
+
+Maps each ALI registry hook to the vanilla or loader base types a candidate must inherit from. It
+lists only the hooks ALI declares on this branch, so its hook set differs between branches — a hook
+is added on the branch where ALI gains the registration, never merged down. Every listed base name
+that exists in the scanned jars is used and the rest are skipped, which is how one hook covers every
+loader's type.
 `excludedPackageSegments` drops `mixin`/`mixins`/`asm` packages: a mixin sits in its target's
 hierarchy by construction, so every mixin on a vanilla loot or merchant class would otherwise be
 reported as a candidate.
@@ -163,7 +168,8 @@ project publishes nothing for the target versions, while the shim must compile a
   own rules.
 - **Gap kind sets the hook.** `global_loot_modifier` means an `IGlmModCompat` and a
   `GlmAccessorUtils.registerGlobalLootModifier` call; `function` / `condition` / `entry` /
-  `item_listing` / `number_provider` / `ingredient` mean the matching `IServerRegistry` hook. See
+  `item_listing` / `number_provider` / `ingredient` / `item_sub_predicate` / `entity_sub_predicate`
+  mean the matching `IServerRegistry` hook. See
   `alicompat/CLAUDE.md` for which registry each one lives in.
 - **Synthetic lambdas cannot be registered.** A `$$Lambda` subject has no stable class to key on; it
   needs an accessor over the enclosing type or an upstream change, and the report flags each one.
@@ -171,8 +177,8 @@ project publishes nothing for the target versions, while the shim must compile a
   datapack configuration (`ali_config.schema.json`), a config change, not Java.
 
 Then follow `alicompat/CLAUDE.md`'s "Adding a target mod" for each mod picked up: the
-`supported_mods.json` entry (the report's maven coordinates carry the slug and project id it needs),
-`compat_mods`, then `python3 check_versions.py --update` for the `<slug>_<loader>_dep` lines and the
+`scripts/supported_mods.json` entry (the report's maven coordinates carry the slug and project id it needs),
+`compat_mods`, then `python3 scripts/check_versions.py --update` for the `<slug>_<loader>_dep` lines and the
 scaffolded source set, and finally the real `IModCompat` implementation and its `services` fragment.
 
 ## Extending this skill

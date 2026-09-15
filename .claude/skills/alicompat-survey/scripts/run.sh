@@ -49,7 +49,7 @@ else
 fi
 
 python3 "$HERE/scan_jars.py" --gaps "$WORK/gaps.json" --mods-dir "$MODS" --out "$WORK/owners.json"
-python3 "$HERE/classindex.py" --pack "$WORK/pack.json" --base-types "$SKILL/base_types.json" \
+python3 "$HERE/classindex.py" --pack "$WORK/pack.json" --base-types "$REPO/scripts/base_types.json" \
         --out "$WORK/candidates.json"
 python3 "$HERE/coverage.py" --repo "$REPO" --out "$WORK/coverage.json"
 

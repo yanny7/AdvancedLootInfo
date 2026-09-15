@@ -26,7 +26,7 @@ public final class Lang {
         VALUE_CHECK("value_check", "Value Check:"),
         WEATHER_CHECK("weather_check", "Weather Check:"),
         // Forge
-        CAN_ITEM_PERFORM_ABILITY("can_item_perform_ability", "Can Item Perform Ability: %s"),
+        CAN_ITEM_PERFORM_ABILITY("can_item_perform_ability", "Can Item Perform Ability:"),
         LOOT_TABLE_ID("loot_table_id", "Loot Table Id:"),
         ;
 

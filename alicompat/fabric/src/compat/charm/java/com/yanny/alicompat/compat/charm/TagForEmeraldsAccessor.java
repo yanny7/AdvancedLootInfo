@@ -13,9 +13,9 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
-import svenhjol.charmony.helper.GenericTradeOffers;
+import svenhjol.charm.charmony.common.villages.GenericTrades;
 
-public class TagForEmeraldsAccessor extends BaseAccessor<GenericTradeOffers.TagForEmeralds<?>> implements IItemListing {
+public class TagForEmeraldsAccessor extends BaseAccessor<GenericTrades.TagForEmeralds<?>> implements IItemListing {
     @FieldAccessor
     private TagKey<? extends ItemLike> tag;
     @FieldAccessor
@@ -31,7 +31,7 @@ public class TagForEmeraldsAccessor extends BaseAccessor<GenericTradeOffers.TagF
     @FieldAccessor
     private int villagerXp;
 
-    public TagForEmeraldsAccessor(GenericTradeOffers.TagForEmeralds<?> parent) {
+    public TagForEmeraldsAccessor(GenericTrades.TagForEmeralds<?> parent) {
         super(parent);
     }
 
