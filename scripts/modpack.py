@@ -76,6 +76,11 @@ def read_enabled_mods(properties: dict):
     return [mod.strip() for mod in properties.get("compat_mods", "").split(",") if mod.strip()]
 
 
+def read_enabled_loaders(properties: dict):
+    platforms = [platform.strip() for platform in properties.get("enabled_platforms", "").split(",") if platform.strip()]
+    return [platform for platform in platforms if properties.get(f"{platform}_enabled") == "true"]
+
+
 def read_pinned_deps(properties: dict, loader: str):
     pinned = {}
 
@@ -407,8 +412,8 @@ def main():
     properties = read_gradle_properties()
     loader = args.loader
 
-    if loader not in properties.get("enabled_platforms", "").split(","):
-        print(f"Error: loader '{loader}' is not in enabled_platforms ({properties.get('enabled_platforms')}).")
+    if loader not in read_enabled_loaders(properties):
+        print(f"Error: loader '{loader}' is not enabled ({', '.join(read_enabled_loaders(properties))}).")
         return 1
 
     jars, jar_problems = collect_own_jars(properties, loader)
