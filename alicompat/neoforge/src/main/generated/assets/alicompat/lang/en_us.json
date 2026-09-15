@@ -1,9 +1,4 @@
 {
-  "alicompat.property.value.config": "Config: %s",
-  "alicompat.property.value.default_probability": "Default Probability: %s",
-  "alicompat.type.condition.artifact_rarity_adjusted_chance": "Artifact Rarity Adjusted Chance:",
-  "alicompat.type.condition.config_value": "Config Value:",
-  "alicompat.type.condition.config_value_chance": "Config Value Chance:",
-  "alicompat.type.consume_effect.heal": "Heal:",
-  "alicompat.type.function.replace_with_loot_table": "Replace With Loot Table:"
+  "alicompat.property.value.durability_scale": "Durability Scale: %s",
+  "alicompat.type.function.increase_durability": "Increase Durability:"
 }

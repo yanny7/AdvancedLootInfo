@@ -1,10 +1,8 @@
 package com.yanny.ali.neoforge.plugin;
 
 import com.google.gson.JsonElement;
-import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
-import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.*;
@@ -14,9 +12,7 @@ import com.yanny.ali.neoforge.mixin.MixinCanItemPerformAbility;
 import com.yanny.ali.neoforge.mixin.MixinLootModifier;
 import com.yanny.ali.neoforge.mixin.MixinLootTableIdCondition;
 import com.yanny.ali.plugin.common.NodeUtils;
-import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.ali.plugin.glm.*;
-import net.minecraft.resources.Identifier;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -32,6 +28,7 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 @AliEntrypoint
 public class NeoForgePlugin implements IGlobalLootModifierPlugin {
@@ -91,7 +88,13 @@ public class NeoForgePlugin implements IGlobalLootModifierPlugin {
 
     @NotNull
     private static List<ILootModifier<?>> registerLootModifiers(IServerUtils utils) {
-        return GlobalLootModifierCollector.collect(utils, MixinNeoForgeEventHandler.getLootModifierManager().getAllLootMods().stream().map((m) -> wrap(utils, m)).toList());
+        LootModifierManager lootModifierManager = utils.getServerLevel()
+                .getServer()
+                .getServerResources()
+                .managers()
+                .getListener(NeoForgeReloadListeners.LOOT_MODIFIERS_KEY);
+
+        return GlobalLootModifierCollector.collect(utils, StreamSupport.stream(lootModifierManager.getSortedModifiers().spliterator(), false).map((m) -> wrap(utils, m)).toList());
     }
 
     @NotNull

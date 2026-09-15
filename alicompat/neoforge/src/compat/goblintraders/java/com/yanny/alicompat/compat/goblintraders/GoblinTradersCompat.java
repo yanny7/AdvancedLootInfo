@@ -1,7 +1,9 @@
 package com.yanny.alicompat.compat.goblintraders;
 
+import com.mrcrayfish.goblintraders.loot_functions.IncreaseDurabilityFunction;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.alicompat.IModCompat;
+import com.yanny.alicompat.accessor.PluginUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.core.registries.Registries;
@@ -22,6 +24,8 @@ public class GoblinTradersCompat implements IModCompat {
 
     @Override
     public void registerServer(IServerRegistry registry) {
+        PluginUtils.registerFunctionTooltip(registry, IncreaseDurabilityFunction.class, IncreaseDurabilityFunctionAccessor.class);
+
         registry.registerTrades(id("goblin_trader"), () -> tradeSets("goblin_trader"));
         registry.registerTrades(id("vein_goblin_trader"), () -> tradeSets("vein_goblin_trader"));
     }

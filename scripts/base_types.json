@@ -51,11 +51,6 @@
       "registry": "registerSlotSourceTooltip",
       "bases": ["net/minecraft/world/item/slot/SlotSource"]
     },
-    "item_listing": {
-      "title": "Trade item listings",
-      "registry": "registerItemListing",
-      "bases": ["net/minecraft/world/entity/npc/villager/VillagerTrades$ItemListing"]
-    },
     "trader_entity": {
       "title": "Trading entities",
       "registry": "registerTrades",
