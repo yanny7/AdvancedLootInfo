@@ -1,5 +1,6 @@
 ## []
 
+- Fixed errors from JEI when using REI Plugin 
 - Global loot modifiers are shown only on loot tables where all their conditions can pass
 - Entity and gameplay loot tables are listed in stable order
 - Job sites of modded villager professions are resolved from the POI registry
