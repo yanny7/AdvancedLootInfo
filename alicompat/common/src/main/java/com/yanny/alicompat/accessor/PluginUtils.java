@@ -336,6 +336,36 @@ public class PluginUtils {
         registry.registerPageResolver(targetClass, (u, c, p) -> factory.apply(c).test(u, p));
     }
 
+    public static <U extends EntitySubPredicate, T extends BaseAccessor<?> & IEntitySubPredicateResolverAccessor> void registerEntitySubPredicateResolver(IServerRegistry registry, Class<U> targetClass, Class<T> clazz) {
+        Map<Object, T> accessors = new IdentityHashMap<>();
+
+        registry.registerCacheCleaner(accessors::clear);
+        registry.registerEntitySubPredicateResolver(targetClass, (u, c, p) -> accessors.computeIfAbsent(c, (t) -> ReflectionUtils.copyClassData(clazz, t, targetClass)).test(u, p));
+    }
+
+    public static <T extends BaseAccessor<?> & IEntitySubPredicateResolverAccessor> void registerEntitySubPredicateResolver(IServerRegistry registry, Class<T> clazz) {
+        ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
+
+        if (classAnnotation != null) {
+            try {
+                //noinspection unchecked
+                Class<EntitySubPredicate> predicateClass = (Class<EntitySubPredicate>) Class.forName(classAnnotation.value());
+                Map<Object, T> accessors = new IdentityHashMap<>();
+
+                registry.registerCacheCleaner(accessors::clear);
+                registry.registerEntitySubPredicateResolver(predicateClass, (u, c, p) -> accessors.computeIfAbsent(c, (t) -> ReflectionUtils.copyClassData(clazz, t)).test(u, p));
+            } catch (Throwable e) {
+                LOGGER.warn("Failed to register entity sub predicate resolver for {} with error {}", classAnnotation.value(), e.getMessage(), e);
+            }
+        } else {
+            throw new IllegalStateException("Missing ClassAccessor annotation for entity sub predicate resolver " + clazz.getName());
+        }
+    }
+
+    public static <U extends EntitySubPredicate, T extends IEntitySubPredicateResolverAccessor> void registerEntitySubPredicateResolver(IServerRegistry registry, Class<U> targetClass, Function<U, T> factory) {
+        registry.registerEntitySubPredicateResolver(targetClass, (u, c, p) -> factory.apply(c).test(u, p));
+    }
+
     public static <U, T extends BaseAccessor<?> & IValueTooltip> void registerValueTooltip(IServerRegistry registry, Class<U> targetClass, Class<T> clazz) {
         registry.registerValueTooltip(targetClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c, targetClass).getTooltip(u));
     }
@@ -375,7 +405,7 @@ public class PluginUtils {
                 LOGGER.warn("Failed to register item listing for {} with error {}", classAnnotation.value(), e.getMessage(), e);
             }
         } else {
-            throw new IllegalStateException("Missing ClassAccessor annotation for item listing {}" + clazz.getName());
+            throw new IllegalStateException("Missing ClassAccessor annotation for item listing " + clazz.getName());
         }
     }
 
