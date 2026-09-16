@@ -11,6 +11,8 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.slf4j.Logger;
 
+import java.util.IdentityHashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 public class PluginUtils {
@@ -233,7 +235,10 @@ public class PluginUtils {
     }
 
     public static <U, T extends BaseAccessor<?> & IPageResolverAccessor> void registerPageResolver(IServerRegistry registry, Class<U> targetClass, Class<T> clazz) {
-        registry.registerPageResolver(targetClass, (u, c, p) -> ReflectionUtils.copyClassData(clazz, c, targetClass).test(u, p));
+        Map<Object, T> accessors = new IdentityHashMap<>();
+
+        registry.registerCacheCleaner(accessors::clear);
+        registry.registerPageResolver(targetClass, (u, c, p) -> accessors.computeIfAbsent(c, (t) -> ReflectionUtils.copyClassData(clazz, t, targetClass)).test(u, p));
     }
 
     public static <T extends BaseAccessor<?> & IPageResolverAccessor> void registerPageResolver(IServerRegistry registry, Class<T> clazz) {
@@ -242,7 +247,10 @@ public class PluginUtils {
         if (classAnnotation != null) {
             try {
                 Class<?> targetClass = Class.forName(classAnnotation.value());
-                registry.registerPageResolver(targetClass, (u, c, p) -> ReflectionUtils.copyClassData(clazz, c).test(u, p));
+                Map<Object, T> accessors = new IdentityHashMap<>();
+
+                registry.registerCacheCleaner(accessors::clear);
+                registry.registerPageResolver(targetClass, (u, c, p) -> accessors.computeIfAbsent(c, (t) -> ReflectionUtils.copyClassData(clazz, t)).test(u, p));
             } catch (Throwable e) {
                 LOGGER.warn("Failed to register page resolver for {} with error {}", classAnnotation.value(), e.getMessage(), e);
             }

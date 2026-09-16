@@ -575,17 +575,19 @@ public class GlobalLootModifierTest {
 
     @NotNull
     private static Match utilsMatch(IServerUtils utils, LootPage page, @Nullable Object modifier, LootItemCondition... conditions) {
-        return GlobalLootModifierUtils.getLootModifier(utils, modifier, List.of(conditions), (c) -> List.of()).test(page);
+        return GlobalLootModifierUtils.getLootModifier(utils, modifier, List.of(conditions), (c) -> List.of()).test(page).match();
     }
 
     @NotNull
     private static List<String> retained(LootPage page, LootItemCondition... conditions) {
         List<String> retained = new ArrayList<>();
 
-        GlobalLootModifierUtils.getLootModifier(UTILS, null, List.of(conditions), (c) -> {
+        IPageLootModifier modifier = GlobalLootModifierUtils.getLootModifier(UTILS, null, List.of(conditions), (c) -> {
             c.forEach((condition) -> retained.add(condition.getClass().getSimpleName()));
             return List.of();
-        }).getOperations(page);
+        });
+
+        modifier.getOperations(page, modifier.test(page));
         return retained;
     }
 

@@ -116,7 +116,9 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         lootTableMap.put(resourceLocation, lootTable);
     }
 
-    public void clearLootTables() {
+    @Override
+    public void clearCaches() {
+        super.clearCaches();
         lootTableMap.clear();
     }
 

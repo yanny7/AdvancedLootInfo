@@ -21,6 +21,7 @@ import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.ali.plugin.glm.LootPage;
 import com.yanny.ali.plugin.glm.Match;
+import com.yanny.ali.plugin.glm.PageMatch;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -73,6 +74,8 @@ public abstract class AbstractServer {
         try {
             readLootTables(manager, serverRegistry);
         } finally {
+            fakeLootDataManager.clearLootTables();
+            serverRegistry.clearCaches();
             TooltipContext.clearPalette();
         }
     }
@@ -109,7 +112,11 @@ public abstract class AbstractServer {
                 unboundedLootModifiers, !pageLootModifiers.isEmpty(), referencedLootTables, pages);
         collectGameplayPages(config, unprocessedLootTables, lootTableLootModifiers, unboundedLootModifiers, pages);
 
+        long evaluationStart = System.currentTimeMillis();
+
         Set<IPageLootModifier> boundLootModifiers = evaluatePages(config, pages, pageLootModifiers);
+
+        LOGGER.info("Evaluating {} global loot modifiers against {} pages took {}ms", pageLootModifiers.size(), pages.size(), System.currentTimeMillis() - evaluationStart);
 
         // apply modifiers
         lootNodes = buildPages(serverRegistry, config, pages, fakeLootTables, boundLootModifiers, attachedLootModifiers);
@@ -136,10 +143,6 @@ public abstract class AbstractServer {
         NetworkUtils.compressAndStoreData(Utils.MOD_ID, rawBuf, (i, data) -> chunks.add(new LootDataChunkMessage(i, data)));
 
         serverRegistry.printRuntimeInfo();
-
-        fakeLootDataManager.clearLootTables();
-        serverRegistry.clearLootTables(); // not needed anymore
-        serverRegistry.getTooltipCache().clear();
     }
 
     public final void syncLootTables(Player player) {
@@ -404,13 +407,13 @@ public abstract class AbstractServer {
 
         for (PendingPage pending : pages) {
             for (IPageLootModifier modifier : pageLootModifiers) {
-                Match match = testModifier(modifier, pending.page());
+                PageMatch match = testModifier(modifier, pending.page());
 
-                if (match == Match.YES) {
-                    pending.boundLootModifiers().add(modifier);
+                if (match.match() == Match.YES) {
+                    pending.boundLootModifiers().add(new MatchedModifier(modifier, match));
                     boundLootModifiers.add(modifier);
-                } else if (match == Match.UNKNOWN && config.showUnboundedGlobalLootModifiers) {
-                    pending.unknownLootModifiers().add(modifier);
+                } else if (match.match() == Match.UNKNOWN && config.showUnboundedGlobalLootModifiers) {
+                    pending.unknownLootModifiers().add(new MatchedModifier(modifier, match));
                 }
             }
         }
@@ -419,12 +422,12 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static Match testModifier(IPageLootModifier modifier, LootPage page) {
+    private static PageMatch testModifier(IPageLootModifier modifier, LootPage page) {
         try {
             return modifier.test(page);
         } catch (Throwable e) {
             LOGGER.warn("Failed to evaluate loot modifier for {}: {}", page.tableId(), e.getMessage(), e);
-            return Match.NO;
+            return PageMatch.NO;
         }
     }
 
@@ -442,7 +445,8 @@ public abstract class AbstractServer {
             TooltipContext.set(location);
 
             try {
-                List<Candidate> lootModifiers = filterByItems(serverRegistry, getCandidates(pending, boundLootModifiers), pending.lootTable(), location, fakeLootTables, attachedLootModifiers);
+                PageTable table = new PageTable(serverRegistry, pending.lootTable(), location, fakeLootTables);
+                List<Candidate> lootModifiers = filterByItems(getCandidates(pending, boundLootModifiers), table, attachedLootModifiers);
 
                 if (pending.kind() == PageKind.BLOCK && config.hideDefaultBlockLoot && lootModifiers.isEmpty() && !fakeLootTables.containsKey(location)
                         && page.blocks().stream().anyMatch((b) -> isDefaultBlockDrop(serverRegistry, config, b, pending.lootTable()))) {
@@ -450,7 +454,7 @@ public abstract class AbstractServer {
                     continue;
                 }
 
-                IDataNode node = parseNode(serverRegistry, lootModifiers, pending.lootTable(), location, fakeLootTables);
+                IDataNode node = parseNode(serverRegistry, lootModifiers, table);
 
                 if (node != null) {
                     lootNodes.put(location, pending.kind() == PageKind.ENTITY ? asEntityNode(node, page.entityTypes()) : node);
@@ -475,23 +479,22 @@ public abstract class AbstractServer {
     }
 
     @Nullable
-    private static IDataNode parseNode(AliServerRegistry serverRegistry, List<Candidate> lootModifiers, @Nullable LootTable lootTable, ResourceLocation location,
-                                       Map<ResourceLocation, LootTable> fakeLootTables) {
+    private static IDataNode parseNode(AliServerRegistry serverRegistry, List<Candidate> lootModifiers, PageTable table) {
         List<IOperation> operations = lootModifiers.stream().flatMap((m) -> m.operations().stream()).toList();
         IDataNode node;
 
-        if (lootTable != null) {
-            node = serverRegistry.parseTable(operations, lootTable);
+        if (table.lootTable() != null) {
+            node = operations.isEmpty() ? table.getPlainNode() : serverRegistry.parseTable(operations, table.lootTable());
         } else if (!lootModifiers.isEmpty()) {
             node = serverRegistry.parseTable(operations);
         } else {
-            LootTable fakeLootTable = fakeLootTables.get(location);
+            LootTable fakeLootTable = table.fakeLootTables().get(table.location());
 
             return fakeLootTable != null ? serverRegistry.parseTable(Collections.emptyList(), fakeLootTable) : null;
         }
 
         if (node instanceof LootTableNode lootTableNode) {
-            getFakeLootPools(location, serverRegistry, fakeLootTables).forEach(lootTableNode::addChildren);
+            table.getFakePools().forEach(lootTableNode::addChildren);
         }
 
         return node;
@@ -541,10 +544,10 @@ public abstract class AbstractServer {
         List<Candidate> candidates = new ArrayList<>();
 
         pending.lootModifiers().forEach((m) -> addCandidate(candidates, m, m::getOperations, m.getType() == ILootModifier.IType.UNBOUNDED));
-        pending.boundLootModifiers().forEach((m) -> addCandidate(candidates, m, () -> m.getOperations(pending.page()), false));
+        pending.boundLootModifiers().forEach((m) -> addCandidate(candidates, m.modifier(), () -> m.modifier().getOperations(pending.page(), m.match()), false));
         pending.unknownLootModifiers().stream()
-                .filter((m) -> !boundLootModifiers.contains(m))
-                .forEach((m) -> addCandidate(candidates, m, () -> m.getOperations(pending.page()), true));
+                .filter((m) -> !boundLootModifiers.contains(m.modifier()))
+                .forEach((m) -> addCandidate(candidates, m.modifier(), () -> m.modifier().getOperations(pending.page(), m.match()), true));
         return candidates;
     }
 
@@ -557,14 +560,12 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static List<Candidate> filterByItems(AliServerRegistry serverRegistry, List<Candidate> candidates, @Nullable LootTable lootTable,
-                                                 ResourceLocation location, Map<ResourceLocation, LootTable> fakeLootTables,
-                                                 Set<Object> attachedLootModifiers) {
+    private static List<Candidate> filterByItems(List<Candidate> candidates, PageTable table, Set<Object> attachedLootModifiers) {
         if (candidates.isEmpty()) {
             return candidates;
         }
 
-        List<ItemStack> items = collectProducibleItems(serverRegistry, lootTable, location, fakeLootTables);
+        List<ItemStack> items = table.getItems();
         List<Candidate> matched = candidates.stream().filter((c) -> matchesItems(c, items)).toList();
 
         matched.forEach((c) -> attachedLootModifiers.add(c.source()));
@@ -582,24 +583,6 @@ public abstract class AbstractServer {
             LOGGER.warn("Failed to evaluate loot modifier operation predicate: {}", e.getMessage(), e);
             return !candidate.unbounded();
         }
-    }
-
-    @NotNull
-    private static List<ItemStack> collectProducibleItems(AliServerRegistry serverRegistry, @Nullable LootTable lootTable, ResourceLocation location,
-                                                          Map<ResourceLocation, LootTable> fakeLootTables) {
-        List<ItemStack> items = new ArrayList<>();
-
-        try {
-            if (lootTable != null) {
-                items.addAll(collectItems(serverRegistry.parseTable(Collections.emptyList(), lootTable)));
-            }
-
-            getFakeLootPools(location, serverRegistry, fakeLootTables).forEach((node) -> items.addAll(collectItems(node)));
-        } catch (Throwable e) {
-            LOGGER.warn("Failed to collect items of loot table {} with error {}", location, e.getMessage(), e);
-        }
-
-        return items;
     }
 
     @NotNull
@@ -659,11 +642,84 @@ public abstract class AbstractServer {
     }
 
     private record PendingPage(PageKind kind, LootPage page, @Nullable LootTable lootTable, List<ILootModifier<?>> lootModifiers,
-                               List<IPageLootModifier> boundLootModifiers, List<IPageLootModifier> unknownLootModifiers) {
+                               List<MatchedModifier> boundLootModifiers, List<MatchedModifier> unknownLootModifiers) {
         private PendingPage(PageKind kind, LootPage page, @Nullable LootTable lootTable, List<ILootModifier<?>> lootModifiers) {
             this(kind, page, lootTable, lootModifiers, new ArrayList<>(), new ArrayList<>());
         }
     }
 
     private record Candidate(Object source, List<IOperation> operations, boolean unbounded) {}
+
+    private record MatchedModifier(IPageLootModifier modifier, PageMatch match) {}
+
+    private static final class PageTable {
+        private final AliServerRegistry serverRegistry;
+        @Nullable
+        private final LootTable lootTable;
+        private final ResourceLocation location;
+        private final Map<ResourceLocation, LootTable> fakeLootTables;
+        @Nullable
+        private IDataNode plainNode;
+        @Nullable
+        private List<IDataNode> fakePools;
+        @Nullable
+        private List<ItemStack> items;
+
+        private PageTable(AliServerRegistry serverRegistry, @Nullable LootTable lootTable, ResourceLocation location, Map<ResourceLocation, LootTable> fakeLootTables) {
+            this.serverRegistry = serverRegistry;
+            this.lootTable = lootTable;
+            this.location = location;
+            this.fakeLootTables = fakeLootTables;
+        }
+
+        @Nullable
+        private LootTable lootTable() {
+            return lootTable;
+        }
+
+        private ResourceLocation location() {
+            return location;
+        }
+
+        private Map<ResourceLocation, LootTable> fakeLootTables() {
+            return fakeLootTables;
+        }
+
+        @NotNull
+        private IDataNode getPlainNode() {
+            if (plainNode == null) {
+                plainNode = serverRegistry.parseTable(Collections.emptyList(), Objects.requireNonNull(lootTable));
+            }
+
+            return plainNode;
+        }
+
+        @NotNull
+        private List<IDataNode> getFakePools() {
+            if (fakePools == null) {
+                fakePools = getFakeLootPools(location, serverRegistry, fakeLootTables);
+            }
+
+            return fakePools;
+        }
+
+        @NotNull
+        private List<ItemStack> getItems() {
+            if (items == null) {
+                items = new ArrayList<>();
+
+                try {
+                    if (lootTable != null) {
+                        items.addAll(collectItems(getPlainNode()));
+                    }
+
+                    getFakePools().forEach((node) -> items.addAll(collectItems(node)));
+                } catch (Throwable e) {
+                    LOGGER.warn("Failed to collect items of loot table {} with error {}", location, e.getMessage(), e);
+                }
+            }
+
+            return items;
+        }
+    }
 }

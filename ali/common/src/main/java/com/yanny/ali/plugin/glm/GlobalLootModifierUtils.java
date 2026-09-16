@@ -35,6 +35,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class GlobalLootModifierUtils {
@@ -44,30 +45,43 @@ public class GlobalLootModifierUtils {
     public static IPageLootModifier getLootModifier(IServerUtils utils, @Nullable Object modifier, List<LootItemCondition> conditions,
                                                     Function<List<LootItemCondition>, List<IOperation>> operationSupplier) {
         List<Object> terms = Stream.concat(Stream.ofNullable(modifier), conditions.stream()).toList();
+        int conditionOffset = terms.size() - conditions.size();
+        // evaluation order is mutated by every test, so a modifier must not be tested from several threads at once
+        int[] order = IntStream.range(0, terms.size()).toArray();
 
         return new IPageLootModifier() {
             @NotNull
             @Override
-            public Match test(LootPage page) {
+            public PageMatch test(LootPage page) {
+                boolean[] explained = new boolean[conditions.size()];
+                int explainedCount = 0;
                 Match result = Match.UNKNOWN;
 
-                for (Object term : terms) {
-                    Match match = utils.testPage(utils, term, page).match();
+                for (int i = 0; i < order.length; i++) {
+                    int index = order[i];
+                    Verdict verdict = utils.testPage(utils, terms.get(index), page);
 
-                    if (match == Match.NO) {
-                        return Match.NO;
-                    } else if (match == Match.YES) {
+                    if (verdict.match() == Match.NO) {
+                        System.arraycopy(order, 0, order, 1, i);
+                        order[0] = index;
+                        return PageMatch.NO;
+                    } else if (verdict.match() == Match.YES) {
                         result = Match.YES;
+                    }
+
+                    if (index >= conditionOffset && verdict.explained()) {
+                        explained[index - conditionOffset] = true;
+                        explainedCount++;
                     }
                 }
 
-                return result;
+                return new PageMatch(result, getUnexplained(conditions, explained, explainedCount));
             }
 
             @NotNull
             @Override
-            public List<IOperation> getOperations(LootPage page) {
-                return operationSupplier.apply(conditions.stream().filter((c) -> !utils.testPage(utils, c, page).explained()).toList());
+            public List<IOperation> getOperations(LootPage page, PageMatch match) {
+                return operationSupplier.apply(match.unexplained());
             }
         };
     }
@@ -206,6 +220,25 @@ public class GlobalLootModifierUtils {
     @Nullable
     public static Verdict testDamageSource(IServerUtils utils, DamageSourceCondition ignoredCondition, LootPage page) {
         return utils.getParamState(page, LootContextParams.DAMAGE_SOURCE) == ParamState.DISALLOWED ? Verdict.NO : null;
+    }
+
+    @NotNull
+    private static List<LootItemCondition> getUnexplained(List<LootItemCondition> conditions, boolean[] explained, int explainedCount) {
+        if (explainedCount == 0) {
+            return conditions;
+        } else if (explainedCount == conditions.size()) {
+            return List.of();
+        }
+
+        List<LootItemCondition> unexplained = new ArrayList<>(conditions.size() - explainedCount);
+
+        for (int i = 0; i < conditions.size(); i++) {
+            if (!explained[i]) {
+                unexplained.add(conditions.get(i));
+            }
+        }
+
+        return unexplained;
     }
 
     @NotNull

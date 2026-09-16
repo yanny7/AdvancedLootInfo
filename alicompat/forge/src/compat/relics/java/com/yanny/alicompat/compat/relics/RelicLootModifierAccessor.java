@@ -6,6 +6,7 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.ali.plugin.glm.LootPage;
 import com.yanny.ali.plugin.glm.Match;
+import com.yanny.ali.plugin.glm.PageMatch;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.GlmNodeUtils;
@@ -47,13 +48,13 @@ public class RelicLootModifierAccessor extends BaseAccessor<RelicLootModifier> i
         return Optional.of(new IPageLootModifier() {
             @NotNull
             @Override
-            public Match test(LootPage page) {
-                return relics.values().stream().anyMatch((patterns) -> getChance(patterns, page.tableId()) != null) ? Match.YES : Match.NO;
+            public PageMatch test(LootPage page) {
+                return relics.values().stream().anyMatch((patterns) -> getChance(patterns, page.tableId()) != null) ? new PageMatch(Match.YES, conditionList) : PageMatch.NO;
             }
 
             @NotNull
             @Override
-            public List<IOperation> getOperations(LootPage page) {
+            public List<IOperation> getOperations(LootPage page, PageMatch match) {
                 List<IOperation> operations = new ArrayList<>();
 
                 relics.forEach((relic, patterns) -> {

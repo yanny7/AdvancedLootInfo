@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface IPageLootModifier {
     @NotNull
-    Match test(LootPage page);
+    PageMatch test(LootPage page);
 
     @NotNull
-    List<IOperation> getOperations(LootPage page);
+    List<IOperation> getOperations(LootPage page, PageMatch match);
 }
