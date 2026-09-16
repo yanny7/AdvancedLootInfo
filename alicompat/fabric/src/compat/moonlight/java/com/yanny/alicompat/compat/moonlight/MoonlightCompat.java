@@ -33,7 +33,7 @@ public class MoonlightCompat implements IModCompat {
 
         PluginUtils.registerConditionTooltip(registry, OptionalPropertyCondition.class, OptionalPropertyConditionAccessor.class);
 
-        PluginUtils.registerDestination(registry, OptionalPropertyCondition.class, OptionalPropertyConditionAccessor.class);
+        PluginUtils.registerPageResolver(registry, OptionalPropertyCondition.class, OptionalPropertyConditionAccessor.class);
 
         registry.registerItemListing(SimpleItemListing.class, MoonlightCompat::getSimpleItemListingNode);
         PluginUtils.registerItemListing(registry, SpecialListingAccessor.class);

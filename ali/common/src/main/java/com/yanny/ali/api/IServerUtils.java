@@ -4,8 +4,11 @@ import com.yanny.aci.api.ICoreServerUtils;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
-import com.yanny.ali.plugin.glm.Destination;
+import com.yanny.ali.plugin.glm.LootPage;
+import com.yanny.ali.plugin.glm.ParamState;
+import com.yanny.ali.plugin.glm.Verdict;
 import com.yanny.ali.plugin.server.EnchantedRanges;
+import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
@@ -15,6 +18,7 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
@@ -63,6 +67,12 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
     @NotNull
     List<LootPool> getLootPools(LootTable lootTable);
 
+    @NotNull
+    Verdict testPage(IServerUtils utils, Object value, LootPage page);
+
+    @NotNull
+    ParamState getParamState(LootPage page, LootContextParam<?> param);
+
     @Nullable
-    Destination getDestination(IServerUtils utils, Object value);
+    Verdict testEntitySubPredicate(IServerUtils utils, EntitySubPredicate predicate, LootPage page);
 }

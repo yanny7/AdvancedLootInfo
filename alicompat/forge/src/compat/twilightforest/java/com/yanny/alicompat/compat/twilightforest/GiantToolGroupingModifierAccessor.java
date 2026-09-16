@@ -1,10 +1,10 @@
 package com.yanny.alicompat.compat.twilightforest;
 
 import com.yanny.aci.api.RangeValue;
-import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
+import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.GlmNodeUtils;
@@ -27,17 +27,17 @@ public class GiantToolGroupingModifierAccessor extends BaseAccessor<GiantToolGro
     }
 
     @Override
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
+    public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
         Map<Block, Item> conversions = Map.copyOf(GiantToolGroupingModifier.CONVERSIONS);
 
         if (conversions.isEmpty()) {
             return Optional.empty();
         }
 
-        return GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions), (c) -> conversions.entrySet().stream()
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions), (c) -> conversions.entrySet().stream()
                 .map((entry) -> (IOperation) new IOperation.ReplaceOperation(
                         (itemStack) -> itemStack.getItem().equals(entry.getKey().asItem()),
                         (src) -> GlmNodeUtils.replacedNode(utils, c, src, entry.getValue().getDefaultInstance(), new RangeValue(1))))
-                .toList());
+                .toList()));
     }
 }

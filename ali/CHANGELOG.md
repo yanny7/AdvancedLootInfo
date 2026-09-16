@@ -1,6 +1,6 @@
 ## []
 
-- Improved GLM destination detection and loot table matching
+- Global loot modifiers are shown only on loot tables where all their conditions can pass
 - Entity and gameplay loot tables are listed in stable order
 - Job sites of modded villager professions are resolved from the POI registry
 - A loot table referenced by another loot table no longer triggers entity scan

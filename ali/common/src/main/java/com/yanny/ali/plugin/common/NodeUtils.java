@@ -151,29 +151,23 @@ public class NodeUtils {
     }
 
     @NotNull
-    public static LootTableNode getLootTableNode(List<ILootModifier<?>> modifiers) {
+    public static LootTableNode getLootTableNode(List<IOperation> operations) {
         TooltipNode tooltip = TooltipUtils.getLootTableTooltip().build();
         List<IDataNode> children = new ArrayList<>();
         LootTableNode node = new LootTableNode(children, tooltip);
 
-        for (ILootModifier<?> modifier : modifiers) {
-            processLootModifier(modifier, node);
-        }
-
+        processOperations(operations, node);
         return node;
     }
 
     @NotNull
-    public static LootTableNode getLootTableNode(List<ILootModifier<?>> modifiers, IServerUtils utils, LootTable entry, float rawChance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public static LootTableNode getLootTableNode(List<IOperation> operations, IServerUtils utils, LootTable entry, float rawChance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), Arrays.stream(entry.functions)).toList();
         TooltipNode tooltip = TooltipUtils.getLootTableTooltip().build();
         List<IDataNode> children = utils.getLootPools(entry).stream().map((lootPool) -> (IDataNode) getLootPoolNode(utils, lootPool, rawChance, allFunctions, conditions)).toList();
         LootTableNode node = new LootTableNode(children, tooltip);
 
-        for (ILootModifier<?> modifier : modifiers) {
-            processLootModifier(modifier, node);
-        }
-
+        processOperations(operations, node);
         return node;
     }
 
@@ -247,9 +241,7 @@ public class NodeUtils {
         return sum;
     }
 
-    public static void processLootModifier(ILootModifier<?> modifier, LootTableNode node) {
-        List<IOperation> operations = modifier.getOperations();
-
+    public static void processOperations(List<IOperation> operations, LootTableNode node) {
         for (IOperation operation : operations) {
             if (operation instanceof IOperation.AddOperation addOperation) {
                 node.addChildren(addOperation.node());

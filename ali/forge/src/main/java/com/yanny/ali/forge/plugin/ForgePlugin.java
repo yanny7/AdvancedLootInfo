@@ -15,10 +15,12 @@ import com.yanny.ali.forge.mixin.MixinLootModifier;
 import com.yanny.ali.forge.mixin.MixinLootTableIdCondition;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
-import com.yanny.ali.plugin.glm.Destination;
 import com.yanny.ali.plugin.glm.GlobalLootModifierCollector;
 import com.yanny.ali.plugin.glm.GlobalLootModifierWrapper;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierWrapper;
+import com.yanny.ali.plugin.glm.IPageLootModifier;
+import com.yanny.ali.plugin.glm.LootPage;
+import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraftforge.common.BasicItemListing;
 import net.minecraftforge.common.crafting.CompoundIngredient;
 import net.minecraftforge.common.crafting.DifferenceIngredient;
@@ -51,11 +53,11 @@ public class ForgePlugin implements IPlugin {
         registry.registerIngredientTooltip(PartialNBTIngredient.class, ForgeIngredientTooltipUtils::getPartialNbtIngredientTooltip);
         registry.registerIngredientTooltip(StrictNBTIngredient.class, ForgeIngredientTooltipUtils::getStrictNbtIngredientTooltip);
 
-        registry.registerDestination(LootTableIdCondition.class, ForgePlugin::getLootTableIdDestination);
+        registry.registerLootContextPreparer(ForgePlugin::prepareLootContext);
 
         registry.registerItemListing(BasicItemListing.class, ForgePlugin::getBasicItemListingNode);
 
-        registry.registerLootModifiers(ForgePlugin::registerLootModifiers);
+        registry.registerGlobalLootModifiers(ForgePlugin::registerLootModifiers);
     }
 
     @NotNull
@@ -87,13 +89,12 @@ public class ForgePlugin implements IPlugin {
         return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, ((MixinLootTableIdCondition) cond).getTargetLootTableId())), Lang.Conditions.LOOT_TABLE_ID);
     }
 
-    @NotNull
-    public static Destination getLootTableIdDestination(IServerUtils ignoredUtils, LootTableIdCondition cond) {
-        return new Destination.Table(((MixinLootTableIdCondition) cond).getTargetLootTableId()::equals, true);
+    private static void prepareLootContext(IServerUtils ignoredUtils, LootContext context, LootPage page) {
+        context.setQueriedLootTableId(page.tableId());
     }
 
     @NotNull
-    private static List<ILootModifier<?>> registerLootModifiers(IServerUtils utils) {
+    private static List<IPageLootModifier> registerLootModifiers(IServerUtils utils) {
         return GlobalLootModifierCollector.collect(utils, MixinForgeInternalHandler.getLootModifierManager().getAllLootMods().stream().map(ForgePlugin::wrap).toList());
     }
 

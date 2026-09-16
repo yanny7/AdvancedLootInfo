@@ -275,68 +275,73 @@ common item in the slot and the other under a shim `Branch.ALTERNATIVE` key with
 `ItemsToItemsNode` has one stack per slot, and `requiresAllChildren()` means an empty result silently
 drops the whole trade.
 
-## Step 4 — Global Loot Modifiers: check the destination resolves
+## Step 4 — Global Loot Modifiers: check where the modifier lands
 
-`GlobalLootModifierUtils.getLootModifier` returns a modifier only when the GLM's conditions contain
-one of three shapes: a `LootItemEntityPropertyCondition` on `THIS` with a concrete entity type
-(→ `IType.ENTITY`), a `LootItemBlockStatePropertyCondition` (→ `IType.BLOCK`), or a condition the
-`ILootTableIdConditionPredicate` recognises (→ `IType.LOOT_TABLE`). Anything else yields
-`Optional.empty()` and the Forge plugin logs `Unable to locate destination`.
+`GlobalLootModifierUtils.getLootModifier` always hands back an `IPageLootModifier`, and ALI judges it
+against every page it shows — each block, mob and loot table page. Per page every term (each
+condition, plus the modifier object itself) answers `Match.NO` (can never apply here), `Match.YES`
+(this page selects it) or `Match.UNKNOWN`. The modifier is **bound** where nothing says `NO` and
+something says `YES`; one that is bound nowhere falls to the user's `showUnboundedGlobalLootModifiers`.
 
-Conditions like `match_tool`, or the target mod's own conditions, constrain *how* loot is obtained,
-not *what* the loot belongs to, so they resolve to nothing. A survey reports these as "Auto-GLM
-without a resolvable destination"; a hand scan simply will not show a destination either. `Optional.empty()` does not mean the modifier has to be written by
-hand — it means nobody registered a destination resolver for that condition. Work down this list:
+Most conditions need no shim at all. A condition ALI has no resolver for is run against a context
+built for the page, which answers that page's loot parameters and its table id and refuses every other
+read: `match_tool` rules the modifier out on a chest page by itself, and `AllOf` / `AnyOf` / `inverted`
+are descended into. Work down this list:
 
-1. **`registerDestination` first.** When the unresolvable condition is the *target mod's own* and it
-   names the destination, register a resolver for it and the auto-GLM path starts working by itself —
-   `registry.registerDestination(GiantPickUsedCondition.class, …)` in `TwilightForestCompat`,
-   `LootTableIdCondition` in `PortingLibLootCompat`. `Destination` has three shapes,
-   `Blocks(Collection<Block>, fullyExplained)`, `Entities(EntityTypePredicate, fullyExplained)` and
-   `Table(ResourceLocation, fullyExplained)`; `fullyExplained` is `false` when the condition only
-   narrows the destination and its other parts still have to appear in the tooltip. Never register a
-   resolver for a **vanilla** condition class from a shim — that answer would speak for every mod.
-2. **Then the registration itself**, one line per modifier:
+1. **Nothing, first.** Read `data/<modid>/loot_modifiers/*.json` and ask whether running those
+   conditions already answers them. Vanilla conditions, `match_tool` and the loaders' `loot_table_id`
+   all decide themselves; only a condition reading the *target mod's own* runtime state is opaque.
+2. **The registration itself**, one line per modifier:
    `GlmAccessorUtils.registerGlobalLootModifier(registry, X.class, XAccessor.class)`.
-3. **A destination on the modifier class itself when it has no conditions at all.** `collect` asks
-   `utils.getDestination` about the modifier instance as well as about each condition, so a GLM shipped with
-   `"conditions": []` still reaches the auto path once `registerDestination(XLootModifier.class, XAccessor.class)`
-   answers for it — Apotheosis' four config-driven modifiers match the table id against a `List` in the mod's own
-   config that way. The accessor implements `IDestination` beside `IGlobalLootModifierAccessor` and its
-   `getOperations()` runs inside `TooltipContext.set(location)`, so the same list also yields the per-table chance.
-4. **A hand-built `ILootModifier` only when no destination can carry the answer** — neither a condition nor the
-   modifier class names where the loot belongs.
+3. **A page resolver when the target lives in the modifier's own fields.** ALI asks about the modifier
+   instance as well as each condition, so a GLM shipped with `"conditions": []` still lands correctly once
+   `PluginUtils.registerPageResolver(registry, XLootModifier.class, XAccessor.class)` answers for it —
+   Apotheosis' four config-driven modifiers match the table id against a `List` in the mod's own config that
+   way. The accessor implements `IPageResolverAccessor` beside `IGlobalLootModifierAccessor` and writes its
+   answer with `GlobalLootModifierUtils.testBlocks` / `testEntityTypes` / `testTable`; `getOperations(page)`
+   reads `page.tableId()`, so the same list also yields the per-table chance.
+4. **A page resolver for the mod's own condition** when running it cannot answer — it reads a capability, a
+   player attachment or world state: `registry.registerPageResolver(GiantPickUsedCondition.class, …)` in
+   `TwilightForestCompat`. The `explained` flag those helpers take is `false` when the condition only narrows
+   the page and its other parts still have to appear in the tooltip. Never register a resolver for a
+   **vanilla** condition class from a shim — that answer would speak for every mod.
+5. **An `ILootContextPreparer` when the condition reads a queried table id out of its own carrier** — that is
+   all Porting Lib's `LootTableIdCondition` needs (`registry.registerLootContextPreparer(…)` writing
+   `page.tableId()` into it); the condition then decides itself.
+6. **A hand-built `IPageLootModifier` only when none of those can carry the answer** — neither a condition nor
+   the modifier class says where the loot belongs.
 
-**Never hand-build the unbounded case.** `GlobalLootModifierUtils.getLootModifier` already ends in exactly that
-anonymous class — `predicate` true, `IType.UNBOUNDED`, the operations you supplied — behind the user's
-`showUnboundedGlobalLootModifiers`. Writing it out again in an accessor copies that branch verbatim and its only
-effect is to ignore the setting whose whole job is deciding whether unbound modifiers appear. Item precision is not
-a reason: it lives in the operation's `Predicate<ItemStack>`, which `getLootModifier` takes from you either way, and
-`AbstractServer` requires an unbounded modifier to match an item before attaching it. Going through
-`getLootModifier` also means a datapack that later adds a `loot_table_id` condition upgrades the modifier to a real
-`IType.LOOT_TABLE` on its own.
+**Never hand-build the unbounded case.** `GlobalLootModifierUtils.getLootModifier` already produces exactly that —
+every term `UNKNOWN`, the operations you supplied — behind the user's `showUnboundedGlobalLootModifiers`. Writing it
+out again in an accessor copies that branch verbatim and its only effect is to ignore the setting whose whole job is
+deciding whether unbound modifiers appear. Item precision is not a reason: it lives in the operation's
+`Predicate<ItemStack>`, which `getLootModifier` takes from you either way, and `AbstractServer` requires an unbounded
+modifier to match an item before attaching it. Going through `getLootModifier` also means a datapack that later adds
+a `loot_table_id` condition binds the modifier to that table on its own.
 
 `data/<modid>/loot_modifiers/*.json` in the jar says which conditions each GLM is registered with,
-and that is what decides between the four. A **library** mod ships none — its GLMs are registered by the mods that
-depend on it, so pull one dependent's jar and read its `loot_modifiers` instead; that is the only place the real
-condition sets exist. Read them before concluding a destination cannot be resolved: when the
-condition that fails to resolve is a **vanilla** one ALI declines on purpose — an `entity_properties` whose predicate
-carries no entity type, say — no shim can fix it. Registering a resolver for a vanilla class is out of bounds, and a
-hand-built `ILootModifier` would have to invent a destination that exists only in the pack's data. Leave the auto path
-alone, and say so in your summary; the modifier belongs to `showUnboundedGlobalLootModifiers`, not to the shim.
+and that is what decides between the steps above. A **library** mod ships none — its GLMs are registered by the mods
+that depend on it, so pull one dependent's jar and read its `loot_modifiers` instead; that is the only place the real
+condition sets exist. Read them before concluding a shim is needed: when the term that stays `UNKNOWN` is a
+**vanilla** one whose answer is genuinely unknowable — an `entity_properties` carrying an unregistered
+`type_specific`, say — registering a resolver for that vanilla class is out of bounds. The one exception is an entity
+sub-predicate belonging to the *target mod*, which goes through `registerEntitySubPredicateResolver`, and only where
+the predicate is a function of the entity class: samples carry no spawn-time state, so a resolver reading state off
+one produces wrong answers. Otherwise leave the auto path alone, and say so in your summary; the modifier belongs to
+`showUnboundedGlobalLootModifiers`, not to the shim.
 
-When the mod's own code tells you the real destination, build the `ILootModifier<Block>` (or `<Entity>`, or `<ResourceLocation>`) by hand:
+When the mod's own code tells you where the loot belongs, build the `IPageLootModifier` by hand — `Match test(LootPage)`
+plus `List<IOperation> getOperations(LootPage)`:
 
-- A GLM keyed on a known set of blocks → `predicate` is that set's `containsKey`, and emit one
-  operation per entry.
-- A GLM that transforms whatever it is given → `predicate` returns `true` and the *operation's* item
-  predicate does the filtering. That is safe: `AbstractServer.predicateItem` only attaches a modifier
-  to a loot table when some operation predicate matches an item that table can produce.
+- A GLM keyed on a known set of blocks → `test` is `GlobalLootModifierUtils.testBlocks(page, blocks::contains,
+  false)`, and emit one operation per entry.
+- A GLM that transforms whatever it is given → `test` answers `Match.YES` and the *operation's* item
+  predicate does the filtering. That is safe: `AbstractServer` only attaches a modifier to a page when
+  some operation predicate matches an item that page can produce.
 - A GLM keyed on the loot table id (a path substring, a regex over the id, a stored table name) →
-  `IType.LOOT_TABLE` and `predicate(ResourceLocation)`. `getOperations()` is handed no location, but
-  it runs inside the `TooltipContext.set(location)` that `AbstractServer` brackets each table with, so
-  `TooltipContext.get()` is how an operation whose count or chance differs per table reads the table
-  it is being built for. Guard for `null` and emit nothing.
+  `GlobalLootModifierUtils.testTable(page, matcher, …)`, and an operation whose count or chance differs
+  per table reads `page.tableId()` — the page is handed to `getOperations`, so there is no
+  `TooltipContext` lookup and no `null` to guard.
 - A GLM that deletes loot → a `RemoveOperation` whose factory returns `null` when the modifier is
   unconditional and, when it is not, an `ItemNode` with `NOT(AllOf(<the GLM conditions>))` appended to
   the source node's conditions — the shape `ali/common-lootjs` uses for a conditional
@@ -347,12 +352,6 @@ so the original drop stays visible as the alternative. Build the replacement's t
 `TooltipUtils.getTooltip(utils, DEFAULT_QUALITY, chance, count, functions, conditions)` over the
 concatenation of the modifier's conditions and the source node's, and take `chance` from
 `node.getChance()` rather than `1` so the percentage stays honest.
-
-`new ILootModifier<>() { … }` infers its type argument from the target type, which inside
-`Optional<ILootModifier<?>>` is `Object` — so the diamond compiles only for an `IType.UNBOUNDED` modifier
-(that is what `GlobalLootModifierUtils` itself writes). A `BLOCK`, `ENTITY` or `LOOT_TABLE` one must name the
-argument, `new ILootModifier<ResourceLocation>() { … }`, or every override fails with "does not override or
-implement a method from a supertype".
 
 ## Step 5 — tooltip keys
 

@@ -10,6 +10,7 @@ import sys
 from collections import OrderedDict
 
 PATTERNS = [
+    (re.compile(r"No loot modifier produced for auto GLM (\S+)"), "auto_glm_unresolved"),
     (re.compile(r"Unable to locate destination for auto GLM (\S+)"), "auto_glm_unresolved"),
     (re.compile(r"Missing GLM for (\S+)"), "global_loot_modifier"),
     (re.compile(r"Skipping unexpected loot action (\S+)"), "unexpected_loot_action"),

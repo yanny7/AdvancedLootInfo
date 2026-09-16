@@ -17,7 +17,7 @@ Larger set than Fabric's: `MixinLootTableForge`, `MixinMinecraftServer` (calls `
 
 ## Forge-only compat plugins
 
-`compatibility.ReiCompatibilityWrapper` and `plugin.{ForgePlugin, GlobalLootModifier, IForgePlugin}` — Forge-specific REI/GLM glue mirroring `ali/fabric`'s `plugin/` package, but targeting Forge's native GLM API (`ali/CLAUDE.md`'s `plugin/glm` package is the loader-agnostic half of this). `ForgePlugin` also registers the destination resolver for Forge's `LootTableIdCondition` (read through `MixinLootTableIdCondition`) — the condition is loader-specific, so `ali/common` cannot register it.
+`compatibility.ReiCompatibilityWrapper` and `plugin.{ForgePlugin, GlobalLootModifier, IForgePlugin}` — Forge-specific REI/GLM glue mirroring `ali/fabric`'s `plugin/` package, but targeting Forge's native GLM API (`ali/CLAUDE.md`'s `plugin/glm` package is the loader-agnostic half of this). `ForgePlugin` also registers the loot-context preparer that writes the page's table id through `LootContext.setQueriedLootTableId`, which is what lets the probe decide Forge's `LootTableIdCondition` (whose tooltip reads the target id through `MixinLootTableIdCondition`) — the carrier is loader-specific, so `ali/common` cannot register it.
 
 ## Boilerplate vs genuine glue
 

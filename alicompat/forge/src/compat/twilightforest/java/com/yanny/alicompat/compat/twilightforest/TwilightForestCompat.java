@@ -5,8 +5,10 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.ICommonRegistry;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.plugin.glm.Destination;
+import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
+import com.yanny.ali.plugin.glm.LootPage;
+import com.yanny.ali.plugin.glm.Verdict;
 import com.yanny.alicompat.IGlmModCompat;
 import com.yanny.alicompat.Utils;
 import com.yanny.alicompat.accessor.GlmAccessorUtils;
@@ -30,7 +32,6 @@ import twilightforest.loot.modifiers.GiantToolGroupingModifier;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class TwilightForestCompat implements IGlmModCompat {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
@@ -53,8 +54,8 @@ public class TwilightForestCompat implements IGlmModCompat {
         registry.registerConditionTooltip(IsMinionCondition.class, TwilightForestCompat::getIsMinionTooltip);
         registry.registerConditionTooltip(UncraftingTableEnabledCondition.class, TwilightForestCompat::getUncraftingTableEnabledTooltip);
 
-        registry.registerDestination(GiantPickUsedCondition.class, TwilightForestCompat::getGiantPickUsedDestination);
-        PluginUtils.registerDestination(registry, FieryToolSmeltingModifier.class, FieryToolSmeltingModifierAccessor.class);
+        registry.registerPageResolver(GiantPickUsedCondition.class, TwilightForestCompat::testGiantPickUsed);
+        PluginUtils.registerPageResolver(registry, FieryToolSmeltingModifier.class, FieryToolSmeltingModifierAccessor.class);
 
         PluginUtils.registerFunctionTooltip(registry, ModItemSwap.class, ModItemSwapAccessor.class);
 
@@ -78,8 +79,8 @@ public class TwilightForestCompat implements IGlmModCompat {
     }
 
     @NotNull
-    private static Destination getGiantPickUsedDestination(IServerUtils ignoredUtils, GiantPickUsedCondition ignoredCond) {
-        return new Destination.Blocks(Set.copyOf(GiantToolGroupingModifier.CONVERSIONS.keySet())::contains, false);
+    private static Verdict testGiantPickUsed(IServerUtils ignoredUtils, GiantPickUsedCondition ignoredCond, LootPage page) {
+        return GlobalLootModifierUtils.testBlocks(page, GiantToolGroupingModifier.CONVERSIONS::containsKey, false);
     }
 
     @NotNull
