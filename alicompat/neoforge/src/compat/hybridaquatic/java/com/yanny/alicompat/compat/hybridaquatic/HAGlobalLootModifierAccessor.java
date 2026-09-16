@@ -3,20 +3,21 @@ package com.yanny.alicompat.compat.hybridaquatic;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
-import com.yanny.ali.plugin.glm.Destination;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
+import com.yanny.ali.plugin.glm.IPageLootModifier;
+import com.yanny.ali.plugin.glm.LootPage;
+import com.yanny.ali.plugin.glm.Verdict;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.GlmNodeUtils;
-import com.yanny.alicompat.accessor.IDestination;
 import com.yanny.alicompat.accessor.IGlobalLootModifierAccessor;
+import com.yanny.alicompat.accessor.IPageResolverAccessor;
 import dev.hybridlabs.aquatic.loot.HAGlobalLootModifier;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.random.WeightedEntry;
@@ -32,7 +33,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class HAGlobalLootModifierAccessor extends BaseAccessor<HAGlobalLootModifier> implements IGlobalLootModifierAccessor, IDestination {
+public class HAGlobalLootModifierAccessor extends BaseAccessor<HAGlobalLootModifier> implements IGlobalLootModifierAccessor, IPageResolverAccessor {
     @FieldAccessor
     protected LootItemCondition[] conditions;
 
@@ -41,8 +42,8 @@ public class HAGlobalLootModifierAccessor extends BaseAccessor<HAGlobalLootModif
     }
 
     @Override
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
-        return GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions), (c) -> {
+    public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions), (c) -> {
             List<IOperation> operations = new ArrayList<>();
             List<WeightedEntry.Wrapper<ResourceLocation>> tables = parent.getTables().unwrap();
             int totalWeight = Math.max(1, tables.stream().mapToInt((t) -> t.getWeight().asInt()).sum());
@@ -57,13 +58,13 @@ public class HAGlobalLootModifierAccessor extends BaseAccessor<HAGlobalLootModif
             }
 
             return operations;
-        });
+        }));
     }
 
     @NotNull
     @Override
-    public Destination getDestination(IServerUtils ignoredUtils) {
-        return new Destination.Table(parent.getTarget()::equals, true);
+    public Verdict test(IServerUtils ignoredUtils, LootPage page) {
+        return GlobalLootModifierUtils.testTable(page, parent.getTarget()::equals, true);
     }
 
     private boolean isReplaced(ItemStack stack) {

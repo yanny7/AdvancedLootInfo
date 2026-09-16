@@ -68,7 +68,7 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     <T> void registerPageResolver(Class<T> type, IPageResolver<T> resolver);
 
-    <T extends EntitySubPredicate> void registerEntitySubPredicateResolver(Class<T> type, IEntitySubPredicateResolver<T> resolver);
+    <T extends EntitySubPredicate> void registerEntitySubPredicateResolver(MapCodec<T> type, IEntitySubPredicateResolver<T> resolver);
 
     void registerLootContextPreparer(ILootContextPreparer preparer);
 

@@ -23,7 +23,7 @@ public class RepurposedStructuresCompat implements IGlmModCompat {
 
         PluginUtils.registerConditionTooltip(registry, DetectRSLootTables.class, DetectRSLootTablesAccessor.class);
 
-        PluginUtils.registerDestination(registry, StructureModdedLootImporterApplier.class, StructureModdedLootImporterApplierAccessor.class);
+        PluginUtils.registerPageResolver(registry, StructureModdedLootImporterApplier.class, StructureModdedLootImporterApplierAccessor.class);
     }
 
     @Override

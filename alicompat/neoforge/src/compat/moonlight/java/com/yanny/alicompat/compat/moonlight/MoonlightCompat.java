@@ -10,7 +10,6 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.ali.plugin.common.trades.SubTradesNode;
-import com.yanny.ali.plugin.glm.Destination;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.alicompat.IGlmModCompat;
@@ -60,8 +59,7 @@ public class MoonlightCompat implements IGlmModCompat {
         registry.registerValueTooltip(BlockTypeSwapIngredientImpl.class, MoonlightCompat::getBlockTypeSwapIngredientTooltip);
         registry.registerValueTooltip(Pattern.class, MoonlightCompat::getPatternTooltip);
 
-        PluginUtils.registerDestination(registry, OptionalPropertyCondition.class, OptionalPropertyConditionAccessor.class);
-        registry.registerDestination(PatternMatchLootItemCondition.class, MoonlightCompat::getPatternMatchDestination);
+        PluginUtils.registerPageResolver(registry, OptionalPropertyCondition.class, OptionalPropertyConditionAccessor.class);
 
         registry.registerItemListing(SimpleItemListing.class, MoonlightCompat::getSimpleItemListingNode);
         registry.registerItemListing(BiomeVariantItemListing.class, MoonlightCompat::getBiomeVariantItemListingNode);
@@ -97,15 +95,6 @@ public class MoonlightCompat implements IGlmModCompat {
     @NotNull
     private static TooltipBuilder getPatternTooltip(IServerUtils ignoredUtils, Pattern pattern) {
         return TooltipBuilder.value(pattern.pattern());
-    }
-
-    @NotNull
-    private static Destination getPatternMatchDestination(IServerUtils ignoredUtils, PatternMatchLootItemCondition cond) {
-        return new Destination.Table((id) -> matches(cond.patterns(), id.toString()), true);
-    }
-
-    private static boolean matches(List<Pattern> patterns, String id) {
-        return patterns.stream().anyMatch((p) -> id.equals(p.pattern()) || p.matcher(id).find());
     }
 
     @NotNull

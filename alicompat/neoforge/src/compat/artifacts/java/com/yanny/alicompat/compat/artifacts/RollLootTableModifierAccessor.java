@@ -1,10 +1,10 @@
 package com.yanny.alicompat.compat.artifacts;
 
 import artifacts.neoforge.loot.RollLootTableModifier;
-import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
+import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.GlmNodeUtils;
@@ -31,8 +31,8 @@ public class RollLootTableModifierAccessor extends BaseAccessor<RollLootTableMod
     }
 
     @Override
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
-        return GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions), (c) -> {
+    public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions), (c) -> {
             List<IOperation> operations = new ArrayList<>();
 
             if (replace) {
@@ -41,6 +41,6 @@ public class RollLootTableModifierAccessor extends BaseAccessor<RollLootTableMod
 
             operations.add(new IOperation.AddOperation((itemStack) -> true, GlmNodeUtils.referenceNode(utils, c, lootTable.location())));
             return operations;
-        });
+        }));
     }
 }

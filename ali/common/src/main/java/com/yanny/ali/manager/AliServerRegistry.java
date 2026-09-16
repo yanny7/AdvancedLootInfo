@@ -24,6 +24,7 @@ import com.yanny.ali.plugin.server.MissingTooltipUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.advancements.critereon.ItemSubPredicate;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -84,7 +85,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifiers = registerClassKeyed("item stack modifiers", false, HashMap::new, null);
     // global loot modifier pages
     private final ManagedRegistry<Class<?>, IPageResolver<Object>> pageResolvers = registerClassKeyed("global loot modifier page resolvers", false, HashMap::new, null);
-    private final ManagedRegistry<Class<?>, IEntitySubPredicateResolver<EntitySubPredicate>> entitySubPredicateResolvers = registerClassKeyed("entity sub-predicate resolvers", false, HashMap::new, null);
+    private final ManagedRegistry<MapCodec<?>, IEntitySubPredicateResolver<EntitySubPredicate>> entitySubPredicateResolvers = register("entity sub-predicate resolvers", false, HashMap::new, AliServerRegistry::mapCodecNameGetter, null);
     // translations
     private final ManagedRegistry<Class<?>, EnumTranslation> enumValues = registerClassKeyed("enum values", true, HashMap::new, null);
 
@@ -213,8 +214,9 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
-    public <T extends EntitySubPredicate> void registerEntitySubPredicateResolver(Class<T> type, IEntitySubPredicateResolver<T> resolver) {
-        entitySubPredicateResolvers.put(type, (u, s, p) -> resolver.test(u, type.cast(s), p));
+    public <T extends EntitySubPredicate> void registerEntitySubPredicateResolver(MapCodec<T> type, IEntitySubPredicateResolver<T> resolver) {
+        //noinspection unchecked
+        entitySubPredicateResolvers.put(type, (u, s, p) -> resolver.test(u, (T) s, p));
     }
 
     @Override
@@ -442,7 +444,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @NotNull
     @Override
     public Verdict testPage(IServerUtils utils, Object value, LootPage page) {
-        LootDataResolver lootData = utils.getServerLevel().getServer().getLootData();
+        HolderGetter.Provider lootData = utils.getServerLevel().getServer().reloadableRegistries().lookup();
 
         return GlobalLootModifierUtils.testPage(utils, value, page, pageResolvers.get(value.getClass()).orElse(null), lootContextPreparers, lootData);
     }
@@ -456,7 +458,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @Nullable
     @Override
     public Verdict testEntitySubPredicate(IServerUtils utils, EntitySubPredicate predicate, LootPage page) {
-        return entitySubPredicateResolvers.get(predicate.getClass())
+        return entitySubPredicateResolvers.get(predicate.codec())
                 .map((r) -> r.test(utils, predicate, page))
                 .orElse(null);
     }

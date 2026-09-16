@@ -15,6 +15,7 @@ import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.ali.plugin.glm.*;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.neoforged.neoforge.common.BasicItemListing;
 import net.neoforged.neoforge.common.ItemAbility;
@@ -42,7 +43,7 @@ public class NeoForgePlugin implements IGlobalLootModifierPlugin {
         registry.registerConditionTooltip(CanItemPerformAbility.class, NeoForgePlugin::getCanToolPerformActionTooltip);
         registry.registerConditionTooltip(LootTableIdCondition.class, NeoForgePlugin::getLootTableIdTooltip);
 
-        registry.registerDestination(LootTableIdCondition.class, NeoForgePlugin::getLootTableIdDestination);
+        registry.registerLootContextPreparer(NeoForgePlugin::prepareLootContext);
 
         registry.registerIngredientUnwrapper(NeoForgePlugin::unwrapCustomIngredient);
 
@@ -54,7 +55,7 @@ public class NeoForgePlugin implements IGlobalLootModifierPlugin {
 
         registry.registerItemListing(BasicItemListing.class, NeoForgePlugin::getBasicItemListingNode);
 
-        registry.registerLootModifiers(NeoForgePlugin::registerLootModifiers);
+        registry.registerGlobalLootModifiers(NeoForgePlugin::registerLootModifiers);
 
         registry.registerValueTooltip(ItemAbility.class, NeoForgePlugin::getItemAbilityTooltip);
     }
@@ -107,15 +108,15 @@ public class NeoForgePlugin implements IGlobalLootModifierPlugin {
     }
 
     @NotNull
-    private static List<ILootModifier<?>> registerLootModifiers(IServerUtils utils) {
+    private static List<IPageLootModifier> registerLootModifiers(IServerUtils utils) {
         return GlobalLootModifierCollector.collect(utils, MixinNeoForgeEventHandler.getLootModifierManager().getAllLootMods().stream().map((m) -> wrap(utils, m)).toList());
     }
 
     @NotNull
-    private static Optional<ILootModifier<?>> getAddTableLootModifier(IServerUtils utils, AddTableLootModifier modifier) {
+    private static Optional<IPageLootModifier> getAddTableLootModifier(IServerUtils utils, AddTableLootModifier modifier) {
         List<LootItemCondition> conditionList = Arrays.asList(((MixinLootModifier) modifier).getAliConditions());
 
-        return GlobalLootModifierUtils.getLootModifier(utils, modifier, conditionList, (c) -> {
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, modifier, conditionList, (c) -> {
             TooltipNode tooltip = TooltipBuilder.array((b) -> b
                             .add(TooltipBuilder.keyOnly(Lang.Group.ALL))
                             .add(utils.getValueTooltip(utils, c))
@@ -123,12 +124,11 @@ public class NeoForgePlugin implements IGlobalLootModifierPlugin {
                     .build();
             IDataNode node = NodeUtils.getReferenceNode(utils, ((MixinAddTableLootModifier) modifier).getTable().location(), c, tooltip);
             return List.of(new IOperation.AddOperation((i) -> true, node));
-        });
+        }));
     }
 
-    @NotNull
-    private static Destination getLootTableIdDestination(IServerUtils ignoredUtils, LootTableIdCondition cond) {
-        return new Destination.Table(((MixinLootTableIdCondition) cond).getTargetLootTableId()::equals, true);
+    private static void prepareLootContext(IServerUtils ignoredUtils, LootContext context, LootPage page) {
+        context.setQueriedLootTableId(page.tableId());
     }
 
     @NotNull

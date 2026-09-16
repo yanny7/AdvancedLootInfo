@@ -8,14 +8,13 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.forge.mixin.MixinForgeInternalHandler;
 import com.yanny.ali.forge.mixin.MixinLootModifier;
 import com.yanny.ali.language.Lang;
-import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.ali.plugin.glm.GlobalLootModifierCollector;
 import com.yanny.ali.plugin.glm.GlobalLootModifierWrapper;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierWrapper;
 import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.ali.plugin.glm.LootPage;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.resources.RegistryOps;
+import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraftforge.common.crafting.ingredients.*;
 import net.minecraftforge.common.loot.CanToolPerformAction;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
@@ -67,7 +66,7 @@ public class ForgePlugin implements IPlugin {
 
     @NotNull
     private static List<IPageLootModifier> registerLootModifiers(IServerUtils utils) {
-        return GlobalLootModifierCollector.collect(utils, MixinForgeInternalHandler.getLootModifierManager().getAllLootMods().stream().map(ForgePlugin::wrap).toList());
+        return GlobalLootModifierCollector.collect(utils, MixinForgeInternalHandler.getLootModifierManager().getAllLootMods().stream().map((m) -> wrap(utils, m)).toList());
     }
 
     @NotNull

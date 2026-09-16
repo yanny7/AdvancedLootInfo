@@ -1,10 +1,10 @@
 package com.yanny.alicompat.compat.moonlight;
 
 import com.yanny.aci.api.RangeValue;
-import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
+import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.GlmNodeUtils;
@@ -29,11 +29,11 @@ public class ReplaceItemModifierAccessor extends BaseAccessor<ModLootModifiers.R
         super(parent);
     }
 
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
+    public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
         List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
 
-        return GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
                 (c) -> Collections.singletonList(new IOperation.ReplaceOperation((itemStack) -> true,
-                        (src) -> GlmNodeUtils.replacedNode(utils, c, src, itemStack.copy(), new RangeValue(itemStack.getCount())))));
+                        (src) -> GlmNodeUtils.replacedNode(utils, c, src, itemStack.copy(), new RangeValue(itemStack.getCount()))))));
     }
 }

@@ -170,13 +170,12 @@ public class PluginUtils {
         registry.registerEntitySubPredicateTooltip(codec, (u, c) -> ReflectionUtils.copyClassData(clazz, c, targetClass).getTooltip(u));
     }
 
-    public static <T extends BaseAccessor<?> & IEntitySubPredicateTooltip> void registerEntitySubPredicateTooltip(IServerRegistry registry, Class<T> clazz, MapCodec<T> codec) {
+    public static <U extends EntitySubPredicate, T extends BaseAccessor<?> & IEntitySubPredicateTooltip> void registerEntitySubPredicateTooltip(IServerRegistry registry, Class<T> clazz, MapCodec<U> codec) {
         ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
 
         if (classAnnotation != null) {
             try {
-                //noinspection unchecked
-                registry.registerEntitySubPredicateTooltip((MapCodec<? extends EntitySubPredicate>) codec, (u, c) -> ReflectionUtils.copyClassData(clazz, c).getTooltip(u));
+                registry.registerEntitySubPredicateTooltip(codec, (u, c) -> ReflectionUtils.copyClassData(clazz, c).getTooltip(u));
             } catch (Throwable e) {
                 LOGGER.warn("Failed to register entity sub predicate tooltip for {} with error {}", classAnnotation.value(), e.getMessage(), e);
             }
@@ -336,24 +335,22 @@ public class PluginUtils {
         registry.registerPageResolver(targetClass, (u, c, p) -> factory.apply(c).test(u, p));
     }
 
-    public static <U extends EntitySubPredicate, T extends BaseAccessor<?> & IEntitySubPredicateResolverAccessor> void registerEntitySubPredicateResolver(IServerRegistry registry, Class<U> targetClass, Class<T> clazz) {
+    public static <U extends EntitySubPredicate, T extends BaseAccessor<?> & IEntitySubPredicateResolverAccessor> void registerEntitySubPredicateResolver(IServerRegistry registry, MapCodec<U> codec, Class<U> targetClass, Class<T> clazz) {
         Map<Object, T> accessors = new IdentityHashMap<>();
 
         registry.registerCacheCleaner(accessors::clear);
-        registry.registerEntitySubPredicateResolver(targetClass, (u, c, p) -> accessors.computeIfAbsent(c, (t) -> ReflectionUtils.copyClassData(clazz, t, targetClass)).test(u, p));
+        registry.registerEntitySubPredicateResolver(codec, (u, c, p) -> accessors.computeIfAbsent(c, (t) -> ReflectionUtils.copyClassData(clazz, t, targetClass)).test(u, p));
     }
 
-    public static <T extends BaseAccessor<?> & IEntitySubPredicateResolverAccessor> void registerEntitySubPredicateResolver(IServerRegistry registry, Class<T> clazz) {
+    public static <U extends EntitySubPredicate, T extends BaseAccessor<?> & IEntitySubPredicateResolverAccessor> void registerEntitySubPredicateResolver(IServerRegistry registry, Class<T> clazz, MapCodec<U> codec) {
         ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
 
         if (classAnnotation != null) {
             try {
-                //noinspection unchecked
-                Class<EntitySubPredicate> predicateClass = (Class<EntitySubPredicate>) Class.forName(classAnnotation.value());
                 Map<Object, T> accessors = new IdentityHashMap<>();
 
                 registry.registerCacheCleaner(accessors::clear);
-                registry.registerEntitySubPredicateResolver(predicateClass, (u, c, p) -> accessors.computeIfAbsent(c, (t) -> ReflectionUtils.copyClassData(clazz, t)).test(u, p));
+                registry.registerEntitySubPredicateResolver(codec, (u, c, p) -> accessors.computeIfAbsent(c, (t) -> ReflectionUtils.copyClassData(clazz, t)).test(u, p));
             } catch (Throwable e) {
                 LOGGER.warn("Failed to register entity sub predicate resolver for {} with error {}", classAnnotation.value(), e.getMessage(), e);
             }
@@ -362,8 +359,8 @@ public class PluginUtils {
         }
     }
 
-    public static <U extends EntitySubPredicate, T extends IEntitySubPredicateResolverAccessor> void registerEntitySubPredicateResolver(IServerRegistry registry, Class<U> targetClass, Function<U, T> factory) {
-        registry.registerEntitySubPredicateResolver(targetClass, (u, c, p) -> factory.apply(c).test(u, p));
+    public static <U extends EntitySubPredicate, T extends IEntitySubPredicateResolverAccessor> void registerEntitySubPredicateResolver(IServerRegistry registry, MapCodec<U> codec, Function<U, T> factory) {
+        registry.registerEntitySubPredicateResolver(codec, (u, c, p) -> factory.apply(c).test(u, p));
     }
 
     public static <U, T extends BaseAccessor<?> & IValueTooltip> void registerValueTooltip(IServerRegistry registry, Class<U> targetClass, Class<T> clazz) {

@@ -4,10 +4,10 @@ import com.hollingsworth.arsnouveau.api.loot.DungeonLootEnhancerModifier;
 import com.hollingsworth.arsnouveau.api.loot.DungeonLootTables;
 import com.hollingsworth.arsnouveau.setup.config.Config;
 import com.yanny.aci.api.RangeValue;
-import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
+import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.GlmNodeUtils;
@@ -33,7 +33,7 @@ public class DungeonLootEnhancerModifierAccessor extends BaseAccessor<DungeonLoo
     }
 
     @Override
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
+    public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
         List<Drop> drops = new ArrayList<>();
 
         collect(drops, DungeonLootTables.BASIC_LOOT, parent.commonChance, parent.commonRolls);
@@ -48,11 +48,11 @@ public class DungeonLootEnhancerModifierAccessor extends BaseAccessor<DungeonLoo
             return Optional.empty();
         }
 
-        return GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions),
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions),
                 (c) -> drops.stream()
                         .map((d) -> (IOperation) new IOperation.AddOperation((itemStack) -> true,
                                 GlmNodeUtils.addedNode(utils, c, d.stack(), d.chance(), d.count())))
-                        .toList());
+                        .toList()));
     }
 
     private static void collect(List<Drop> drops, List<Supplier<ItemStack>> pool, double chance, int rolls) {

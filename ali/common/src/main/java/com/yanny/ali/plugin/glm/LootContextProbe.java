@@ -1,10 +1,10 @@
 package com.yanny.ali.plugin.glm;
 
 import com.yanny.ali.api.IServerUtils;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootDataResolver;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -19,7 +19,7 @@ final class LootContextProbe {
     private static final Trap TRAP = new Trap();
 
     @NotNull
-    static Verdict probe(IServerUtils utils, LootItemCondition condition, LootPage page, List<ILootContextPreparer> preparers, LootDataResolver lootData) {
+    static Verdict probe(IServerUtils utils, LootItemCondition condition, LootPage page, List<ILootContextPreparer> preparers, HolderGetter.Provider lootData) {
         try {
             //noinspection DataFlowIssue
             LootContext context = new LootContext(new LootParams(null, new ParamMap(page), Map.of(), 0F), TrapRandom.INSTANCE, lootData);
