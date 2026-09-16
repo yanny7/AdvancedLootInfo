@@ -37,11 +37,13 @@ This file only says *where to look*.
 | Shape | Example |
 |---|---|
 | Registration | `GlmAccessorUtils.registerGlobalLootModifier(registry, Modifier.class, ModifierAccessor.class)` — `twilightforest`, `farmersdelight` (five in a row) |
-| Destination from a mod constant | `twilightforest` → `getGiantPickUsedDestination` returns `new Destination.Blocks(Set.copyOf(GiantToolGroupingModifier.CONVERSIONS.keySet()), false)`; no accessor, the method reads a static map |
-| Destination from an instance field | `portinglib` → `LootTableIdConditionAccessor` implements `IConditionTooltip` **and** `IDestination`, registered twice through `PluginUtils` |
+| Page resolver from a mod constant | `twilightforest` → `testGiantPickUsed` returns `GlobalLootModifierUtils.testBlocks(page, GiantToolGroupingModifier.CONVERSIONS::containsKey, false)`; no accessor, the method reads a static map |
+| Page resolver from an instance field | `moonlight` → `OptionalPropertyConditionAccessor` implements `IConditionTooltip` **and** `IPageResolverAccessor`, registered twice through `PluginUtils` |
+| Page resolver on the modifier class | `apotheosis` → `GemLootModifierAccessor` answers `testTable` from the mod's own config list, beside its `IGlobalLootModifierAccessor` half |
+| Table id read from a mod carrier | `portinglib` → `registerLootContextPreparer` writes `page.tableId()` into Porting Lib's `LootContextExtensions`; its `LootTableIdCondition` then decides itself and needs no resolver |
 
-An "auto-GLM without a resolvable destination" is usually a missing `registerDestination` for the
-mod's own condition, not a reason to hand-roll `ILootModifier`. See `alicompat/CLAUDE.md`.
+A GLM the plugin produced nothing for usually wants a page resolver for the mod's own condition — or
+nothing at all, since conditions ALI can run decide themselves. See `alicompat/CLAUDE.md`.
 
 ## Entries, ingredients, values
 
@@ -67,7 +69,7 @@ mod's own condition, not a reason to hand-roll `ILootModifier`. See `alicompat/C
 
 - `farmersdelight` — two functions, five GLMs and one listing, in both loaders. The smallest shim
   that shows more than one hook kind.
-- `twilightforest` — conditions, a function, an item-stack modifier, GLMs, a destination and entity
+- `twilightforest` — conditions, a function, an item-stack modifier, GLMs, a page resolver and entity
   variants in one file.
 - `ironsspellbooks` — the trade-heavy end: custom traders, lambda captures, a value tooltip, a GLM.
 

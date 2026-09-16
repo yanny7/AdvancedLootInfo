@@ -11,7 +11,6 @@ import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.plugin.common.nodes.BaseLayoutScanner;
 import com.yanny.awi.plugin.common.nodes.LevelStemNode;
 import com.yanny.awi.plugin.common.nodes.WorldgenNodeCache;
-import com.yanny.awi.plugin.server.FeatureBytecodeScanner;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.Registry;
@@ -46,6 +45,8 @@ public abstract class AbstractServer {
         try {
             readWorldgenInfo(level, serverRegistry);
         } finally {
+            serverRegistry.clearCaches();
+            serverRegistry.clearData();
             TooltipContext.clearPalette();
         }
     }
@@ -73,7 +74,6 @@ public abstract class AbstractServer {
             }
         }
 
-        FeatureBytecodeScanner.clearCaches();
         worldgenNodes = removeEmptyNodes(worldgenNodes);
 
         BaseLayoutScanner.Stats baseLayoutStats = baseLayoutScanner.getStats();
@@ -107,9 +107,6 @@ public abstract class AbstractServer {
         NetworkUtils.compressAndStoreData(Utils.MOD_ID, rawBuf, (i, data) -> chunks.add(new WorldgenDataChunkMessage(i, data)));
 
         serverRegistry.printRuntimeInfo();
-
-        serverRegistry.clearData();
-        serverRegistry.getTooltipCache().clear();
     }
 
     public final void syncLootTables(Player player) {

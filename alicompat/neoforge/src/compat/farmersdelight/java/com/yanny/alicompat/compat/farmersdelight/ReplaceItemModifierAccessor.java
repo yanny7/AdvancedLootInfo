@@ -11,6 +11,7 @@ import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.ModifiedNode;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
+import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.alicompat.accessor.IGlobalLootModifierAccessor;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
@@ -43,10 +44,10 @@ public class ReplaceItemModifierAccessor extends BaseAccessor<ReplaceItemModifie
         super(parent);
     }
 
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
+    public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
         List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
 
-        return GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList, (c) -> {
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList, (c) -> {
             Function<IDataNode, List<IDataNode>> factory = (src) -> {
                 List<IDataNode> nodes = new ArrayList<>();
                 IItemNode node = (IItemNode) src;
@@ -64,6 +65,6 @@ public class ReplaceItemModifierAccessor extends BaseAccessor<ReplaceItemModifie
                 return nodes;
             };
             return Collections.singletonList(new IOperation.ReplaceOperation((itemStack) -> itemStack.getItem().equals(removedItem), factory));
-        });
+        }));
     }
 }

@@ -32,7 +32,7 @@ public class ArtifactsCompat implements IGlmModCompat {
 
         PluginUtils.registerChanceModifier(registry, ConfigValueChance.class, ConfigValueChanceAccessor.class);
 
-        PluginUtils.registerDestination(registry, SmeltOresWithPickaxeHeaterModifier.class, SmeltOresWithPickaxeHeaterModifierAccessor.class);
+        PluginUtils.registerPageResolver(registry, SmeltOresWithPickaxeHeaterModifier.class, SmeltOresWithPickaxeHeaterModifierAccessor.class);
     }
 
     @Override

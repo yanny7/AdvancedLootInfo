@@ -20,7 +20,7 @@ FOREIGN_PREFIXES = ("net.minecraft.", "net.neoforged.", "net.minecraftforge.", "
 # counterpart: the scan cannot enumerate those, only the log can name them.
 LOG_CATEGORIES = OrderedDict([
     ("global_loot_modifier", ("global_loot_modifier", "Global Loot Modifiers")),
-    ("auto_glm_unresolved", (None, "Auto-GLM without a resolvable destination")),
+    ("auto_glm_unresolved", (None, "Auto-GLM the plugin produced nothing for")),
     ("entry_factory", ("entry", "Loot entry factories")),
     ("function_tooltip", ("function", "Loot function tooltips")),
     ("condition_tooltip", ("condition", "Loot condition tooltips")),

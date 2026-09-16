@@ -1,10 +1,10 @@
 package com.yanny.alicompat.compat.mantle;
 
 import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
+import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.IGlobalLootModifierAccessor;
@@ -34,11 +34,11 @@ public class AddEntryLootModifierAccessor extends BaseAccessor<AddEntryLootModif
         super(parent);
     }
 
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
+    public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
         List<LootItemCondition> conditionList = Arrays.asList(conditions);
 
-        return GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
-                (c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, getEntryNode(utils, c))));
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
+                (c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, getEntryNode(utils, c)))));
     }
 
     @NotNull
