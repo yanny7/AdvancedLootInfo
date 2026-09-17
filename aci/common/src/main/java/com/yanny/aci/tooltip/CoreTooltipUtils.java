@@ -10,13 +10,6 @@ import java.util.List;
 import java.util.Locale;
 
 public class CoreTooltipUtils {
-    /** @deprecated use {@link #toComponents(List, int, boolean, TooltipStyle)} */
-    @Deprecated(forRemoval = true, since = "1.1.0")
-    @NotNull
-    public static List<Component> toComponents(List<TooltipNode> tooltip, int pad, boolean showAdvancedTooltip) {
-        return toComponents(tooltip, pad, showAdvancedTooltip, TooltipStyle.DEFAULT);
-    }
-
     @NotNull
     public static List<Component> toComponents(List<TooltipNode> tooltip, int pad, boolean showAdvancedTooltip, TooltipStyle style) {
         List<Component> components = new ArrayList<>();
@@ -26,13 +19,6 @@ public class CoreTooltipUtils {
         }
 
         return components;
-    }
-
-    /** @deprecated use {@link #toComponents(TooltipNode, int, boolean, TooltipStyle)} */
-    @Deprecated(forRemoval = true, since = "1.1.0")
-    @NotNull
-    public static List<Component> toComponents(TooltipNode tooltip, int pad, boolean showAdvancedTooltip) {
-        return toComponents(tooltip, pad, showAdvancedTooltip, TooltipStyle.DEFAULT);
     }
 
     @NotNull
