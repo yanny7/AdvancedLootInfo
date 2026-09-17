@@ -175,8 +175,9 @@ public class PluginUtils {
 
         if (classAnnotation != null) {
             try {
-                //noinspection unchecked
-                registry.registerEntitySubPredicateTooltip((Class<? extends EntitySubPredicate>) clazz, (u, c) -> ReflectionUtils.copyClassData(clazz, c).getTooltip(u));
+                Class<? extends EntitySubPredicate> targetClass = Class.forName(classAnnotation.value()).asSubclass(EntitySubPredicate.class);
+
+                registry.registerEntitySubPredicateTooltip(targetClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c).getTooltip(u));
             } catch (Throwable e) {
                 LOGGER.warn("Failed to register entity sub predicate tooltip for {} with error {}", classAnnotation.value(), e.getMessage(), e);
             }
