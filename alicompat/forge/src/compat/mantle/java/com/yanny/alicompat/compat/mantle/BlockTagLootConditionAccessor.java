@@ -3,11 +3,13 @@ package com.yanny.alicompat.compat.mantle;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
-import com.yanny.ali.plugin.glm.Destination;
+import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
+import com.yanny.ali.plugin.glm.LootPage;
+import com.yanny.ali.plugin.glm.Verdict;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.IConditionTooltip;
-import com.yanny.alicompat.accessor.IDestination;
+import com.yanny.alicompat.accessor.IPageResolverAccessor;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
@@ -15,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import slimeknights.mantle.loot.condition.BlockTagLootCondition;
 
-public class BlockTagLootConditionAccessor extends BaseAccessor<BlockTagLootCondition> implements IConditionTooltip, IDestination {
+public class BlockTagLootConditionAccessor extends BaseAccessor<BlockTagLootCondition> implements IConditionTooltip, IPageResolverAccessor {
     @FieldAccessor
     private TagKey<Block> tag;
 
@@ -37,11 +39,11 @@ public class BlockTagLootConditionAccessor extends BaseAccessor<BlockTagLootCond
 
     @Nullable
     @Override
-    public Destination getDestination(IServerUtils utils) {
-        if (tag == null) {
+    public Verdict test(IServerUtils utils, LootPage page) {
+        if (tag == null || page.blocks().isEmpty()) {
             return null;
         }
 
-        return new Destination.Blocks((block) -> block.builtInRegistryHolder().is(tag), properties.properties.isEmpty());
+        return GlobalLootModifierUtils.testBlocks(page, (block) -> block.builtInRegistryHolder().is(tag), properties.properties.isEmpty());
     }
 }

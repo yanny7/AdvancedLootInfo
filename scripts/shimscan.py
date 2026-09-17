@@ -245,7 +245,9 @@ def minecraft_jar(loader: str, minecraft_version: str):
     prefix = "minecraft-merged-" if loader == "fabric" else f"{loader}-"
     candidates = [
         jar for directory in LOOM_CACHE.glob(f"{prefix}*")
-        for jar in directory.glob("*/*.jar")
+        for version in directory.iterdir()
+        if version.name == minecraft_version or version.name.startswith(f"{minecraft_version}-")
+        for jar in version.glob("*.jar")
         if not jar.name.endswith("-sources.jar")
     ]
 

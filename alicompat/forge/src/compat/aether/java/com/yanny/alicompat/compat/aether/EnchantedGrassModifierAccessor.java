@@ -3,10 +3,10 @@ package com.yanny.alicompat.compat.aether;
 import com.aetherteam.aether.loot.modifiers.EnchantedGrassModifier;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.ali.api.IItemNode;
-import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
+import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.IGlobalLootModifierAccessor;
@@ -28,13 +28,13 @@ public class EnchantedGrassModifierAccessor extends BaseAccessor<EnchantedGrassM
 
     @NotNull
     @Override
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
+    public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
         List<LootItemCondition> conditionList = Arrays.asList(conditions);
 
-        return GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
                 (c) -> Collections.singletonList(new IOperation.ReplaceOperation(
                         (itemStack) -> itemStack.is(parent.item.getItem()),
                         (src) -> AetherNodeUtils.countedNode(utils, AetherNodeUtils.withChance(c, 0.5F), src,
-                                new RangeValue(((IItemNode) src).getCount()).add(1)))));
+                                new RangeValue(((IItemNode) src).getCount()).add(1))))));
     }
 }

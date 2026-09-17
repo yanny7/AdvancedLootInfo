@@ -133,7 +133,7 @@ Sensible batches, cheapest first:
 1. **One accessor, tooltip only** — a single `FunctionTooltip`, `ConditionTooltip`, `EntryTooltip`,
    `IngredientTooltip` or `ValueTooltip`. Start here: it rebuilds the wiring and shows what this
    Minecraft version changed, on the shims where a mistake costs least.
-2. **Global loot modifiers** — `GlobalLootModifier`, usually with `Destination`.
+2. **Global loot modifiers** — `GlobalLootModifier`, often with a `PageResolver` or a `LootContextPreparer`.
 3. **Trade listings and traders** — `ItemListing`, `SelfItemListing`, `Trades`.
 4. **Mixed** — an accessor plus a GLM in one mod.
 5. **The large ones** — five or more hook kinds. Each alone.

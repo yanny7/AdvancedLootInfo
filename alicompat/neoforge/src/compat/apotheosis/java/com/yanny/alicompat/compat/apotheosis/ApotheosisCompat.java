@@ -3,22 +3,15 @@ package com.yanny.alicompat.compat.apotheosis;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.trades.SubTradesNode;
-import com.yanny.ali.plugin.glm.Destination;
-import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
+import com.yanny.ali.plugin.glm.*;
 import com.yanny.alicompat.IGlmModCompat;
 import com.yanny.alicompat.accessor.GlmAccessorUtils;
 import com.yanny.alicompat.accessor.PluginUtils;
-import dev.shadowsoffire.apotheosis.advancements.predicates.AffixItemPredicate;
-import dev.shadowsoffire.apotheosis.advancements.predicates.InvaderPredicate;
-import dev.shadowsoffire.apotheosis.advancements.predicates.MonsterPredicate;
-import dev.shadowsoffire.apotheosis.advancements.predicates.PurityItemPredicate;
-import dev.shadowsoffire.apotheosis.advancements.predicates.RarityItemPredicate;
-import dev.shadowsoffire.apotheosis.advancements.predicates.SocketItemPredicate;
+import dev.shadowsoffire.apotheosis.advancements.predicates.*;
 import dev.shadowsoffire.apotheosis.affix.trades.AffixTrade;
 import dev.shadowsoffire.apotheosis.affix.trades.AutomaticAffixTrade;
 import dev.shadowsoffire.apotheosis.affix.trades.TieredTrade;
@@ -42,7 +35,10 @@ import dev.shadowsoffire.apotheosis.util.LootPatternMatcher;
 import dev.shadowsoffire.apotheosis.util.SpawnEggIngredient;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import dev.shadowsoffire.placebo.systems.wanderer.WandererTrade;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.monster.Monster;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,11 +87,12 @@ public class ApotheosisCompat implements IGlmModCompat {
         PluginUtils.registerItemListing(registry, AutomaticAffixTrade.class, AutomaticAffixTradeAccessor.class);
         registry.registerItemListing(TieredTrade.class, ApotheosisCompat::getTieredTradeNode);
 
-        PluginUtils.registerDestination(registry, AffixLootModifier.class, AffixLootModifierAccessor.class);
-        PluginUtils.registerDestination(registry, AffixConvertLootModifier.class, AffixConvertLootModifierAccessor.class);
-        PluginUtils.registerDestination(registry, GemLootModifier.class, GemLootModifierAccessor.class);
-        registry.registerDestination(MatchesBlockCondition.class, ApotheosisCompat::getMatchesBlockDestination);
-        registry.registerDestination(LootPatternMatcher.class, ApotheosisCompat::getLootPatternMatcherDestination);
+        PluginUtils.registerPageResolver(registry, AffixLootModifier.class, AffixLootModifierAccessor.class);
+        PluginUtils.registerPageResolver(registry, AffixConvertLootModifier.class, AffixConvertLootModifierAccessor.class);
+        PluginUtils.registerPageResolver(registry, GemLootModifier.class, GemLootModifierAccessor.class);
+        registry.registerPageResolver(MatchesBlockCondition.class, ApotheosisCompat::testMatchesBlock);
+
+        registry.registerEntitySubPredicateResolver(MonsterPredicate.CODEC, ApotheosisCompat::testMonsterPredicate);
     }
 
     @Override
@@ -108,7 +105,7 @@ public class ApotheosisCompat implements IGlmModCompat {
     }
 
     @NotNull
-    private static Optional<ILootModifier<?>> getAffixHookLootModifier(IServerUtils ignoredUtils, AffixHookLootModifier ignoredModifier) {
+    private static Optional<IPageLootModifier> getAffixHookLootModifier(IServerUtils ignoredUtils, AffixHookLootModifier ignoredModifier) {
         return Optional.empty();
     }
 
@@ -168,14 +165,30 @@ public class ApotheosisCompat implements IGlmModCompat {
         }, ApotheosisLang.Conditions.LOOT_TABLE_ID_PATTERN);
     }
 
-    @NotNull
-    private static Destination getMatchesBlockDestination(IServerUtils ignoredUtils, MatchesBlockCondition cond) {
-        return new Destination.Blocks((block) -> cond.blocks().contains(block.builtInRegistryHolder()), true);
+    @Nullable
+    private static Verdict testMatchesBlock(IServerUtils ignoredUtils, MatchesBlockCondition cond, LootPage page) {
+        if (page.blocks().isEmpty()) {
+            return null;
+        }
+
+        return GlobalLootModifierUtils.testBlocks(page, (block) -> cond.blocks().contains(block.builtInRegistryHolder()), true);
     }
 
-    @NotNull
-    private static Destination getLootPatternMatcherDestination(IServerUtils ignoredUtils, LootPatternMatcher cond) {
-        return new Destination.Table(cond::matches, true);
+    @Nullable
+    private static Verdict testMonsterPredicate(IServerUtils ignoredUtils, MonsterPredicate ignoredPredicate, LootPage page) {
+        List<Entity> samples = page.samples().get();
+
+        if (samples.isEmpty()) {
+            return null;
+        }
+
+        long matching = samples.stream().filter(Monster.class::isInstance).count();
+
+        if (matching == 0) {
+            return Verdict.NO;
+        }
+
+        return Verdict.yes(matching == samples.size());
     }
 
     @NotNull

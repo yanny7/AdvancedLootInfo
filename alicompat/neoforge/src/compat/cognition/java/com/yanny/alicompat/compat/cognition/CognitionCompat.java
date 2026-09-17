@@ -19,7 +19,7 @@ public class CognitionCompat implements IGlmModCompat {
 
     @Override
     public void registerServer(IServerRegistry registry) {
-        PluginUtils.registerDestination(registry, AddSingleItem.class, AddSingleItemAccessor.class);
+        PluginUtils.registerPageResolver(registry, AddSingleItem.class, AddSingleItemAccessor.class);
     }
 
     @Override

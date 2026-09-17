@@ -13,17 +13,19 @@ import com.aetherteam.aether.loot.modifiers.PigDropsModifier;
 import com.aetherteam.aether.loot.modifiers.RemoveSeedsModifier;
 import com.aetherteam.aetherfabric.common.loot.IGlobalLootModifier;
 import com.aetherteam.aetherfabric.common.loot.LootModifier;
+import com.aetherteam.aetherfabric.pond.LootContextExtension;
 import com.google.gson.JsonElement;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
-import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierCollector;
 import com.yanny.ali.plugin.glm.GlobalLootModifierWrapper;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierWrapper;
+import com.yanny.ali.plugin.glm.IPageLootModifier;
+import com.yanny.ali.plugin.glm.LootPage;
 import com.yanny.alicompat.IGlmModCompat;
 import com.yanny.alicompat.Utils;
 import com.yanny.alicompat.accessor.GlmAccessorUtils;
@@ -31,6 +33,7 @@ import com.yanny.alicompat.accessor.PluginUtils;
 import com.yanny.alicompat.accessor.ReflectionUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.world.level.storage.loot.LootContext;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -56,11 +59,11 @@ public class AetherCompat implements IGlmModCompat {
         PluginUtils.registerFunctionTooltip(registry, SpawnXP.class, SpawnXPAccessor::new);
         PluginUtils.registerFunctionTooltip(registry, WhirlwindSpawnEntity.class, WhirlwindSpawnEntityAccessor.class);
 
-        PluginUtils.registerDestination(registry, AetherLootTableModifications.LootTableCondition.class, LootTableConditionAccessor.class);
+        registry.registerLootContextPreparer(AetherCompat::prepareLootContext);
 
         registry.registerValueTooltip(IntProvider.class, AetherCompat::getIntProviderTooltip);
 
-        registry.registerLootModifiers(AetherCompat::registerLootModifiers);
+        registry.registerGlobalLootModifiers(AetherCompat::registerLootModifiers);
     }
 
     @Override
@@ -77,8 +80,12 @@ public class AetherCompat implements IGlmModCompat {
         return utils.getValueTooltip(utils, new RangeValue(provider.getMinValue(), provider.getMaxValue()));
     }
 
+    private static void prepareLootContext(IServerUtils ignoredUtils, LootContext context, LootPage page) {
+        ((LootContextExtension) context).pushTableId(page.tableId());
+    }
+
     @NotNull
-    private static List<ILootModifier<?>> registerLootModifiers(IServerUtils utils) {
+    private static List<IPageLootModifier> registerLootModifiers(IServerUtils utils) {
         List<IGlobalLootModifierWrapper> modifiers = new ArrayList<>();
 
         AetherLootTableModifications.LOOT_MODIFIERS.forEach((id, factory) -> {

@@ -72,6 +72,9 @@ public class Plugin implements IPlugin {
 
     @Override
     public void registerServer(IServerRegistry registry) {
+        registry.registerCacheCleaner(FeatureBytecodeScanner::clearCaches);
+        registry.registerCacheCleaner(SurfaceRuleSpecializer::clearLoggedRules);
+
         new CommonValueTooltip<IServerUtils, IServerRegistry>().registerAll(registry);
 
         EnumTypes.TRANSLATED_ENUMS.forEach((type, owner) -> registry.registerEnumTranslation(type, Utils.MOD_ID, owner));

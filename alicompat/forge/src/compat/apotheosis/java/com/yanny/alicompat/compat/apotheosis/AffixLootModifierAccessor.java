@@ -4,21 +4,22 @@ import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.LootPoolNode;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
-import com.yanny.ali.plugin.glm.Destination;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
+import com.yanny.ali.plugin.glm.IPageLootModifier;
+import com.yanny.ali.plugin.glm.LootPage;
+import com.yanny.ali.plugin.glm.Verdict;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
-import com.yanny.alicompat.accessor.IDestination;
 import com.yanny.alicompat.accessor.IGlobalLootModifierAccessor;
+import com.yanny.alicompat.accessor.IPageResolverAccessor;
 import dev.shadowsoffire.apotheosis.adventure.AdventureConfig;
 import dev.shadowsoffire.apotheosis.adventure.loot.AffixLootEntry;
 import dev.shadowsoffire.apotheosis.adventure.loot.AffixLootModifier;
@@ -33,7 +34,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class AffixLootModifierAccessor extends BaseAccessor<AffixLootModifier> implements IGlobalLootModifierAccessor, IDestination {
+public class AffixLootModifierAccessor extends BaseAccessor<AffixLootModifier> implements IGlobalLootModifierAccessor, IPageResolverAccessor {
     @FieldAccessor
     protected LootItemCondition[] conditions;
 
@@ -42,15 +43,15 @@ public class AffixLootModifierAccessor extends BaseAccessor<AffixLootModifier> i
     }
 
     @Override
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
-        return GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions),
-                (c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, getNode(utils, c))));
+    public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions),
+                (c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, getNode(utils, c)))));
     }
 
     @NotNull
     @Override
-    public Destination getDestination(IServerUtils ignoredUtils) {
-        return new Destination.Table((location) -> ApotheosisUtils.matches(AdventureConfig.AFFIX_ITEM_LOOT_RULES, location), true);
+    public Verdict test(IServerUtils ignoredUtils, LootPage page) {
+        return GlobalLootModifierUtils.testTable(page, (location) -> ApotheosisUtils.matches(AdventureConfig.AFFIX_ITEM_LOOT_RULES, location), true);
     }
 
     @NotNull

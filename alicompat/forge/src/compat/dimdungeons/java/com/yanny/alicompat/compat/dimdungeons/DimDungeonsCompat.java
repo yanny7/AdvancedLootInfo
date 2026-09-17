@@ -19,7 +19,7 @@ public class DimDungeonsCompat implements IGlmModCompat {
 
     @Override
     public void registerServer(IServerRegistry registry) {
-        PluginUtils.registerDestination(registry, LootModifierNoDrops.class, LootModifierNoDropsAccessor.class);
+        PluginUtils.registerPageResolver(registry, LootModifierNoDrops.class, LootModifierNoDropsAccessor.class);
     }
 
     @Override

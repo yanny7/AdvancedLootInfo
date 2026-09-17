@@ -2,10 +2,10 @@ package com.yanny.alicompat.compat.deeperdarker;
 
 import com.kyanite.deeperdarker.content.misc.AddItemModifier;
 import com.yanny.aci.api.RangeValue;
-import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
+import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.GlmNodeUtils;
@@ -35,11 +35,11 @@ public class AddItemModifierAccessor extends BaseAccessor<AddItemModifier> imple
         super(parent);
     }
 
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
+    public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
         List<LootItemCondition> conditionList = Arrays.asList(conditions);
 
-        return GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
                 (c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true,
-                        GlmNodeUtils.addedNode(utils, c, item.getDefaultInstance(), 1, new RangeValue(min, max)))));
+                        GlmNodeUtils.addedNode(utils, c, item.getDefaultInstance(), 1, new RangeValue(min, max))))));
     }
 }

@@ -1,8 +1,8 @@
 package com.yanny.alicompat.compat.relics;
 
-import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
+import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.alicompat.IGlmModCompat;
 import com.yanny.alicompat.accessor.GlmAccessorUtils;
 import it.hurts.sskirillss.relics.level.GreedLootModifier;
@@ -28,7 +28,7 @@ public class RelicsCompat implements IGlmModCompat {
     }
 
     @NotNull
-    private static Optional<ILootModifier<?>> getGreedLootModifier(IServerUtils ignoredUtils, GreedLootModifier ignoredModifier) {
+    private static Optional<IPageLootModifier> getGreedLootModifier(IServerUtils ignoredUtils, GreedLootModifier ignoredModifier) {
         return Optional.empty();
     }
 }

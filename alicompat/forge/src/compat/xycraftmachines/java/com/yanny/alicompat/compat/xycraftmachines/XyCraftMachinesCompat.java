@@ -21,7 +21,7 @@ public class XyCraftMachinesCompat implements IGlmModCompat {
 
     @Override
     public void registerServer(IServerRegistry registry) {
-        PluginUtils.registerDestination(registry, AutoSmeltLootModifier.class, AutoSmeltLootModifierAccessor.class);
+        PluginUtils.registerPageResolver(registry, AutoSmeltLootModifier.class, AutoSmeltLootModifierAccessor.class);
 
         registry.registerIngredientTooltip(BlockIngredient.BlockIngredientList.class, XyCraftMachinesCompat::getBlockIngredientListTooltip);
         registry.registerIngredientTooltip(BlockIngredient.TaggedBlockIngredient.class, XyCraftMachinesCompat::getTaggedBlockIngredientTooltip);
