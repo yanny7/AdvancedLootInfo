@@ -4,7 +4,6 @@ import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.ICoreClientUtils;
 import com.yanny.aci.api.ICoreServerUtils;
 import com.yanny.aci.language.CoreLang;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -16,16 +15,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class TooltipNode {
-    /** @deprecated use {@link TooltipStyle#text()} of the style the tooltip is rendered with */
-    @Deprecated(forRemoval = true, since = "1.1.0")
-    public static final ChatFormatting TEXT_STYLE = ChatFormatting.GOLD;
-    /** @deprecated use {@link TooltipStyle#value()} of the style the tooltip is rendered with */
-    @Deprecated(forRemoval = true, since = "1.1.0")
-    public static final ChatFormatting VALUE_STYLE = ChatFormatting.AQUA;
-    /** @deprecated use {@link TooltipStyle#error()} of the style the tooltip is rendered with */
-    @Deprecated(forRemoval = true, since = "1.1.0")
-    public static final ChatFormatting ERROR_STYLE = ChatFormatting.RED;
-
     public static final short FLAG_ARRAY     = 1;
     public static final short FLAG_ADVANCED  = 1 << 1;
     public static final short FLAG_ERROR     = 1 << 2;
@@ -121,12 +110,6 @@ public class TooltipNode {
         }
 
         return !is(FLAG_HAS_KEY) || !children.isEmpty();
-    }
-
-    /** @deprecated use {@link #getComponents(int, boolean, TooltipStyle)} */
-    @Deprecated(forRemoval = true, since = "1.1.0")
-    public List<Component> getComponents(int indentLevel, boolean isAdvanced) {
-        return getComponents(indentLevel, isAdvanced, TooltipStyle.DEFAULT);
     }
 
     public List<Component> getComponents(int indentLevel, boolean isAdvanced, TooltipStyle style) {
