@@ -1,6 +1,5 @@
 package com.yanny.ali.plugin.glm;
 
-import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.api.IServerUtils;
 
@@ -11,6 +10,6 @@ public interface IGlobalLootModifierPlugin extends IPlugin {
     void registerGlobalLootModifier(IRegistry registry);
 
     interface IRegistry {
-        <T> void registerGlobalLootModifier(Class<T> type, BiFunction<IServerUtils, T, Optional<ILootModifier<?>>> getter);
+        <T> void registerGlobalLootModifier(Class<T> type, BiFunction<IServerUtils, T, Optional<IPageLootModifier>> getter);
     }
 }

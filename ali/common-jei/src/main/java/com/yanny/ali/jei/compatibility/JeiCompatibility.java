@@ -54,6 +54,10 @@ public class JeiCompatibility implements IModPlugin {
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
+        if (isReiCompatibilityLayer(registration)) {
+            return;
+        }
+
         AliConfig config = PluginManager.getInstance().commonRegistry.getConfiguration();
         IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
 
@@ -83,6 +87,10 @@ public class JeiCompatibility implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
+        if (isReiCompatibilityLayer(registration)) {
+            return;
+        }
+
         GenericUtils.register(registration, this::registerData);
     }
 
@@ -130,6 +138,11 @@ public class JeiCompatibility implements IModPlugin {
     @Override
     public Identifier getPluginUid() {
         return Utils.modLoc("jei_plugin");
+    }
+
+    // REI Plugin Compatibilities runs JEI plugins against its own older JEI API; ALI registers with REI natively
+    private static boolean isReiCompatibilityLayer(Object registration) {
+        return registration.getClass().getName().startsWith("me.shedaniel.rei.");
     }
 
     private static <T, U, V extends IType> T createCategory(IGuiHelper guiHelper, LootCategory<U> e, LootConstructor<T, U, V> constructor) {

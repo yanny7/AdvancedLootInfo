@@ -6,4 +6,6 @@ import java.util.function.BiFunction;
 
 public interface ICoreServerRegistry<TServerUtils extends ICoreServerUtils<?>> {
     <T> void registerValueTooltip(Class<T> clazz, BiFunction<TServerUtils, T, TooltipBuilder> getter);
+
+    void registerCacheCleaner(Runnable cleaner);
 }

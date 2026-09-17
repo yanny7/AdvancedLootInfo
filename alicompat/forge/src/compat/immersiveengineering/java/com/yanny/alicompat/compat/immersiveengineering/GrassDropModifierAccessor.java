@@ -3,10 +3,10 @@ package com.yanny.alicompat.compat.immersiveengineering;
 import blusunrize.immersiveengineering.common.register.IEItems.Misc;
 import blusunrize.immersiveengineering.common.util.loot.GrassDropModifier;
 import com.yanny.aci.api.RangeValue;
-import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
+import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.GlmNodeUtils;
@@ -28,11 +28,11 @@ public class GrassDropModifierAccessor extends BaseAccessor<GrassDropModifier> i
     }
 
     @Override
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
+    public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
         List<LootItemCondition> conditionList = Arrays.asList(conditions);
 
-        return GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
                 (c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true,
-                        GlmNodeUtils.addedNode(utils, c, new ItemStack(Misc.HEMP_SEEDS), 1, new RangeValue(1)))));
+                        GlmNodeUtils.addedNode(utils, c, new ItemStack(Misc.HEMP_SEEDS), 1, new RangeValue(1))))));
     }
 }

@@ -128,6 +128,7 @@ accessible field net/minecraft/world/level/storage/loot/functions/EnchantRandoml
 accessible field net/minecraft/world/item/crafting/Ingredient values Lnet/minecraft/core/HolderSet;
 
 accessible method net/minecraft/world/level/storage/loot/LootContext <init> (Lnet/minecraft/world/level/storage/loot/LootParams;Lnet/minecraft/util/RandomSource;Lnet/minecraft/core/HolderGetter$Provider;)V
+accessible method net/minecraft/util/context/ContextMap <init> (Ljava/util/Map;)V
 accessible method net/minecraft/world/level/storage/loot/functions/SetItemFunction <init> (Ljava/util/List;Lnet/minecraft/core/Holder;)V
 accessible method net/minecraft/world/level/storage/loot/functions/ModifyContainerContents <init> (Ljava/util/List;Lnet/minecraft/world/level/storage/loot/ContainerComponentManipulator;Lnet/minecraft/world/level/storage/loot/functions/LootItemFunction;)V
 accessible method net/minecraft/world/level/storage/loot/functions/FilteredFunction <init> (Ljava/util/List;Lnet/minecraft/advancements/criterion/ItemPredicate;Ljava/util/Optional;Ljava/util/Optional;)V

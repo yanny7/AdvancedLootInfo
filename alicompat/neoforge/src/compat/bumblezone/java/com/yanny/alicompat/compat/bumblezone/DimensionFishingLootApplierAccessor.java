@@ -3,10 +3,10 @@ package com.yanny.alicompat.compat.bumblezone;
 import com.telepathicgrunt.the_bumblezone.loot.NewLootInjectorApplier;
 import com.telepathicgrunt.the_bumblezone.loot.neoforge.DimensionFishingLootApplier;
 import com.telepathicgrunt.the_bumblezone.modinit.BzDimension;
-import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
+import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.GlmNodeUtils;
@@ -31,10 +31,10 @@ public class DimensionFishingLootApplierAccessor extends BaseAccessor<DimensionF
 
     @NotNull
     @Override
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
+    public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
         List<LootItemCondition> conditionList = Arrays.asList(conditions);
 
-        return GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList, (c) -> {
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList, (c) -> {
             List<LootItemCondition> inDimension = new ArrayList<>(c);
 
             inDimension.add(LocationCheck.checkLocation(LocationPredicate.Builder.location().setDimension(BzDimension.BZ_WORLD_KEY)).build());
@@ -43,6 +43,6 @@ public class DimensionFishingLootApplierAccessor extends BaseAccessor<DimensionF
                             GlmNodeUtils.referenceNode(utils, inDimension, NewLootInjectorApplier.BZ_DIMENSION_FISHING_LOOT_TABLE_RL)),
                     new IOperation.RemoveOperation((itemStack) -> true,
                             (src) -> GlmNodeUtils.keptNode(utils, inDimension, src)));
-        });
+        }));
     }
 }

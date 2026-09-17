@@ -16,8 +16,10 @@ import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.DynamicNode;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
-import com.yanny.ali.plugin.glm.Destination;
+import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
+import com.yanny.ali.plugin.glm.LootPage;
+import com.yanny.ali.plugin.glm.Verdict;
 import com.yanny.ali.plugin.server.MissingTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.alicompat.IGlmModCompat;
@@ -28,6 +30,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -58,7 +61,7 @@ public class ImmersiveEngineeringCompat implements IGlmModCompat {
 
         registry.registerConditionTooltip(LootBlockStateFromLocationPredicate.class, ImmersiveEngineeringCompat::getBlockStateFromLocationTooltip);
 
-        registry.registerDestination(LootBlockStateFromLocationPredicate.class, ImmersiveEngineeringCompat::getBlockStateFromLocationDestination);
+        registry.registerPageResolver(LootBlockStateFromLocationPredicate.class, ImmersiveEngineeringCompat::testBlockStateFromLocation);
 
         registry.registerItemSubPredicateTooltip(IEItemSubPredicates.ItemBlueprintPredicate.class, ImmersiveEngineeringCompat::getItemBlueprintPredicateTooltip);
 
@@ -163,9 +166,13 @@ public class ImmersiveEngineeringCompat implements IGlmModCompat {
         }, ImmersiveEngineeringLang.Conditions.BLOCK_STATE_FROM_LOCATION);
     }
 
-    @NotNull
-    private static Destination getBlockStateFromLocationDestination(IServerUtils ignoredUtils, LootBlockStateFromLocationPredicate cond) {
-        return new Destination.Blocks((b) -> cond.block().value().equals(b), cond.properties().isEmpty());
+    @Nullable
+    private static Verdict testBlockStateFromLocation(IServerUtils ignoredUtils, LootBlockStateFromLocationPredicate cond, LootPage page) {
+        if (page.blocks().isEmpty()) {
+            return null;
+        }
+
+        return GlobalLootModifierUtils.testBlocks(page, (b) -> cond.block().value().equals(b), cond.properties().isEmpty());
     }
 
     @NotNull

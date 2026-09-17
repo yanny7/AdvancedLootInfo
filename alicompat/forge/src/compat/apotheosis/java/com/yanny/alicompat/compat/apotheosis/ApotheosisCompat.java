@@ -1,10 +1,10 @@
 package com.yanny.alicompat.compat.apotheosis;
 
 import com.yanny.aci.tooltip.TooltipBuilder;
-import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
+import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.alicompat.IGlmModCompat;
 import com.yanny.alicompat.accessor.GlmAccessorUtils;
 import com.yanny.alicompat.accessor.PluginUtils;
@@ -51,10 +51,10 @@ public class ApotheosisCompat implements IGlmModCompat {
         PluginUtils.registerItemListing(registry, AffixTrade.class, AffixTradeAccessor.class);
         PluginUtils.registerItemListing(registry, WandererTrade.class, WandererTradeAccessor.class);
 
-        PluginUtils.registerDestination(registry, AffixLootModifier.class, AffixLootModifierAccessor.class);
-        PluginUtils.registerDestination(registry, AffixConvertLootModifier.class, AffixConvertLootModifierAccessor.class);
-        PluginUtils.registerDestination(registry, GemLootModifier.class, GemLootModifierAccessor.class);
-        PluginUtils.registerDestination(registry, WardenLootModifier.class, WardenLootModifierAccessor.class);
+        PluginUtils.registerPageResolver(registry, AffixLootModifier.class, AffixLootModifierAccessor.class);
+        PluginUtils.registerPageResolver(registry, AffixConvertLootModifier.class, AffixConvertLootModifierAccessor.class);
+        PluginUtils.registerPageResolver(registry, GemLootModifier.class, GemLootModifierAccessor.class);
+        PluginUtils.registerPageResolver(registry, WardenLootModifier.class, WardenLootModifierAccessor.class);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class ApotheosisCompat implements IGlmModCompat {
     }
 
     @NotNull
-    private static Optional<ILootModifier<?>> getAffixHookLootModifier(IServerUtils ignoredUtils, AffixHookLootModifier ignoredModifier) {
+    private static Optional<IPageLootModifier> getAffixHookLootModifier(IServerUtils ignoredUtils, AffixHookLootModifier ignoredModifier) {
         return Optional.empty();
     }
 

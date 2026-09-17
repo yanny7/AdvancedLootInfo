@@ -3,10 +3,10 @@ package com.yanny.alicompat.compat.enderio;
 import com.enderio.enderio.config.base.BaseConfig;
 import com.enderio.enderio.content.broken_spawner.BrokenSpawnerLootModifier;
 import com.yanny.aci.api.RangeValue;
-import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
+import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.GlmNodeUtils;
@@ -32,12 +32,12 @@ public class BrokenSpawnerLootModifierAccessor extends BaseAccessor<BrokenSpawne
     }
 
     @Override
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
+    public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
         float dropChance = BaseConfig.COMMON.BLOCKS.BROKEN_SPAWNER_DROP_CHANCE.get().floatValue();
 
-        return GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions),
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions),
                 (c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true,
-                        GlmNodeUtils.addedNode(utils, c, brokenSpawner(), dropChance, new RangeValue(1)))));
+                        GlmNodeUtils.addedNode(utils, c, brokenSpawner(), dropChance, new RangeValue(1))))));
     }
 
     @NotNull

@@ -1,10 +1,10 @@
 package com.yanny.alicompat.compat.aether;
 
 import com.aetherteam.aether.loot.modifiers.RemoveSeedsModifier;
-import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
+import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.GlmNodeUtils;
@@ -28,12 +28,12 @@ public class RemoveSeedsModifierAccessor extends BaseAccessor<RemoveSeedsModifie
 
     @NotNull
     @Override
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
+    public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
         List<LootItemCondition> conditionList = Arrays.asList(conditions);
 
-        return GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
                 (c) -> Collections.singletonList(new IOperation.RemoveOperation(
                         (itemStack) -> itemStack.is(Items.WHEAT_SEEDS),
-                        (src) -> GlmNodeUtils.keptNode(utils, c, src))));
+                        (src) -> GlmNodeUtils.keptNode(utils, c, src)))));
     }
 }

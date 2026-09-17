@@ -1,10 +1,10 @@
 package com.yanny.alicompat.compat.sophisticatedbackpacks;
 
 import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
+import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.GlmNodeUtils;
@@ -29,11 +29,11 @@ public class InjectLootModifierAccessor extends BaseAccessor<SBLootModifierProvi
     }
 
     @Override
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
-        return GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions), (c) -> {
+    public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions), (c) -> {
             IDataNode node = GlmNodeUtils.referenceNode(utils, c, lootTable.location());
 
             return Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, node));
-        });
+        }));
     }
 }

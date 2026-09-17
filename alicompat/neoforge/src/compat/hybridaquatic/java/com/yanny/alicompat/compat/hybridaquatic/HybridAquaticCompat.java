@@ -21,7 +21,7 @@ public class HybridAquaticCompat implements IGlmModCompat {
         PluginUtils.registerEntry(registry, MessageInABottleItemEntry.class, MessageInABottleItemEntryAccessor::new);
         PluginUtils.registerEntryTooltip(registry, MessageInABottleItemEntry.class, MessageInABottleItemEntryAccessor::new);
 
-        PluginUtils.registerDestination(registry, HAGlobalLootModifier.class, HAGlobalLootModifierAccessor.class);
+        PluginUtils.registerPageResolver(registry, HAGlobalLootModifier.class, HAGlobalLootModifierAccessor.class);
     }
 
     @Override

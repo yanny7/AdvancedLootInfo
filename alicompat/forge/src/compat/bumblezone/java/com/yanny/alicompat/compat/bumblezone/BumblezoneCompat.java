@@ -34,6 +34,8 @@ public class BumblezoneCompat implements IGlmModCompat {
         PluginUtils.registerFunctionTooltip(registry, HoneyCompassLocateStructure.class, HoneyCompassLocateStructureAccessor.class);
 
         PluginUtils.registerItemListing(registry, GeneralUtils.BasicItemTrade.class, BasicItemTradeAccessor.class);
+
+        PluginUtils.registerPageResolver(registry, BeeStingerLootApplier.class, BeeStingerLootApplierAccessor.class);
     }
 
     @Override

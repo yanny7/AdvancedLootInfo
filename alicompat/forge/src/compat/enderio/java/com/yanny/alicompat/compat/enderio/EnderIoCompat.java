@@ -27,7 +27,7 @@ public class EnderIoCompat implements IGlmModCompat {
 
         registry.registerConditionTooltip(DirectUpgradeLootCondition.class, EnderIoCompat::getDirectUpgradeTooltip);
 
-        PluginUtils.registerDestination(registry, AutoSmeltModifier.class, AutoSmeltModifierAccessor.class);
+        PluginUtils.registerPageResolver(registry, AutoSmeltModifier.class, AutoSmeltModifierAccessor.class);
     }
 
     @Override
