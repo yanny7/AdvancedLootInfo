@@ -4,10 +4,10 @@ import com.aetherteam.aether.AetherTags;
 import com.aetherteam.aether.loot.modifiers.DoubleDropsModifier;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.ali.api.IItemNode;
-import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
+import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.IGlobalLootModifierAccessor;
@@ -29,12 +29,12 @@ public class DoubleDropsModifierAccessor extends BaseAccessor<DoubleDropsModifie
 
     @NotNull
     @Override
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
+    public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
         List<LootItemCondition> conditionList = Arrays.asList(conditions);
 
-        return GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
                 (c) -> Collections.singletonList(new IOperation.ReplaceOperation(
                         (itemStack) -> !itemStack.is(AetherTags.Items.NO_SKYROOT_DOUBLE_DROPS),
-                        (src) -> AetherNodeUtils.countedNode(utils, c, src, new RangeValue(((IItemNode) src).getCount()).multiply(2)))));
+                        (src) -> AetherNodeUtils.countedNode(utils, c, src, new RangeValue(((IItemNode) src).getCount()).multiply(2))))));
     }
 }

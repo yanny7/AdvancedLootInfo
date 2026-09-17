@@ -1,16 +1,18 @@
 package com.yanny.alicompat.compat.relics;
 
 import com.yanny.aci.api.RangeValue;
-import com.yanny.aci.tooltip.TooltipContext;
-import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.plugin.glm.IPageLootModifier;
+import com.yanny.ali.plugin.glm.LootPage;
+import com.yanny.ali.plugin.glm.Match;
+import com.yanny.ali.plugin.glm.PageMatch;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.GlmNodeUtils;
 import com.yanny.alicompat.accessor.IGlobalLootModifierAccessor;
-import it.hurts.sskirillss.relics.api.relics.IRelicItem;
 import com.yanny.alicompat.accessor.ReflectionUtils;
+import it.hurts.sskirillss.relics.api.relics.IRelicItem;
 import it.hurts.sskirillss.relics.init.RelicsConfigs;
 import it.hurts.sskirillss.relics.items.relics.base.data.loot.LootEntry;
 import it.hurts.sskirillss.relics.items.relics.base.data.loot.LootTemplate;
@@ -37,7 +39,7 @@ public class RelicLootModifierAccessor extends BaseAccessor<RelicLootModifier> i
     }
 
     @Override
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
+    public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
         List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
         List<Drop> drops = collectDrops();
 
@@ -45,38 +47,29 @@ public class RelicLootModifierAccessor extends BaseAccessor<RelicLootModifier> i
             return Optional.empty();
         }
 
-        return Optional.of(new ILootModifier<ResourceLocation>() {
+        return Optional.of(new IPageLootModifier() {
+            @NotNull
             @Override
-            public boolean predicate(ResourceLocation value) {
-                return drops.stream().anyMatch((drop) -> drop.matches(value));
+            public PageMatch test(LootPage page) {
+                return drops.stream().anyMatch((drop) -> drop.matches(page.tableId())) ? new PageMatch(Match.YES, conditionList) : PageMatch.NO;
             }
 
             @NotNull
             @Override
-            public List<IOperation> getOperations() {
-                ResourceLocation location = TooltipContext.get();
+            public List<IOperation> getOperations(LootPage page, PageMatch match) {
                 List<IOperation> operations = new ArrayList<>();
+                List<Drop> matching = drops.stream().filter((drop) -> drop.matches(page.tableId())).toList();
+                double totalWeight = matching.stream().mapToInt(Drop::weight).sum();
 
-                if (location != null) {
-                    List<Drop> matching = drops.stream().filter((drop) -> drop.matches(location)).toList();
-                    double totalWeight = matching.stream().mapToInt(Drop::weight).sum();
+                if (totalWeight > 0) {
+                    double genChance = ReflectionUtils.copyClassData(LootConfigDataAccessor.class, RelicsConfigs.LOOT_CONFIG).relicGenChance;
 
-                    if (totalWeight > 0) {
-                        double genChance = ReflectionUtils.copyClassData(LootConfigDataAccessor.class, RelicsConfigs.LOOT_CONFIG).relicGenChance;
-
-                        matching.forEach((drop) -> operations.add(new IOperation.AddOperation((itemStack) -> true,
-                                GlmNodeUtils.addedNode(utils, conditionList, drop.item().getDefaultInstance(),
-                                        (float) (genChance * drop.weight() / totalWeight), new RangeValue(1)))));
-                    }
+                    matching.forEach((drop) -> operations.add(new IOperation.AddOperation((itemStack) -> true,
+                            GlmNodeUtils.addedNode(utils, conditionList, drop.item().getDefaultInstance(),
+                                    (float) (genChance * drop.weight() / totalWeight), new RangeValue(1)))));
                 }
 
                 return operations;
-            }
-
-            @NotNull
-            @Override
-            public IType<ResourceLocation> getType() {
-                return IType.LOOT_TABLE;
             }
         });
     }

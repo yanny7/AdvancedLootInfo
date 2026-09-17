@@ -1,10 +1,10 @@
 package com.yanny.alicompat.compat.ironsspellbooks;
 
 import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
+import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.GlmNodeUtils;
@@ -29,14 +29,14 @@ public class AppendLootModifierAccessor extends BaseAccessor<AppendLootModifier>
     }
 
     @Override
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
+    public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
         List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
         ResourceLocation lootTable = ResourceLocation.parse(resourceLocationKey);
 
-        return GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList, (c) -> {
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList, (c) -> {
             IDataNode node = GlmNodeUtils.referenceNode(utils, c, lootTable);
 
             return Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, node));
-        });
+        }));
     }
 }

@@ -1,10 +1,12 @@
 package com.yanny.alicompat.compat.relics;
 
 import com.yanny.aci.api.RangeValue;
-import com.yanny.aci.tooltip.TooltipContext;
-import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.plugin.glm.IPageLootModifier;
+import com.yanny.ali.plugin.glm.LootPage;
+import com.yanny.ali.plugin.glm.Match;
+import com.yanny.ali.plugin.glm.PageMatch;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.GlmNodeUtils;
@@ -35,7 +37,7 @@ public class RelicLootModifierAccessor extends BaseAccessor<RelicLootModifier> i
     }
 
     @Override
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
+    public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
         List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
         Map<IRelicItem, Map<Pattern, Float>> relics = collectRelics();
 
@@ -43,36 +45,28 @@ public class RelicLootModifierAccessor extends BaseAccessor<RelicLootModifier> i
             return Optional.empty();
         }
 
-        return Optional.of(new ILootModifier<ResourceLocation>() {
+        return Optional.of(new IPageLootModifier() {
+            @NotNull
             @Override
-            public boolean predicate(ResourceLocation value) {
-                return relics.values().stream().anyMatch((patterns) -> getChance(patterns, value) != null);
+            public PageMatch test(LootPage page) {
+                return relics.values().stream().anyMatch((patterns) -> getChance(patterns, page.tableId()) != null) ? new PageMatch(Match.YES, conditionList) : PageMatch.NO;
             }
 
             @NotNull
             @Override
-            public List<IOperation> getOperations() {
-                ResourceLocation location = TooltipContext.get();
+            public List<IOperation> getOperations(LootPage page, PageMatch match) {
                 List<IOperation> operations = new ArrayList<>();
 
-                if (location != null) {
-                    relics.forEach((relic, patterns) -> {
-                        Float chance = getChance(patterns, location);
+                relics.forEach((relic, patterns) -> {
+                    Float chance = getChance(patterns, page.tableId());
 
-                        if (chance != null) {
-                            operations.add(new IOperation.AddOperation((itemStack) -> true,
-                                    GlmNodeUtils.addedNode(utils, conditionList, relic.getItem().getDefaultInstance(), chance, new RangeValue(1))));
-                        }
-                    });
-                }
+                    if (chance != null) {
+                        operations.add(new IOperation.AddOperation((itemStack) -> true,
+                                GlmNodeUtils.addedNode(utils, conditionList, relic.getItem().getDefaultInstance(), chance, new RangeValue(1))));
+                    }
+                });
 
                 return operations;
-            }
-
-            @NotNull
-            @Override
-            public IType<ResourceLocation> getType() {
-                return IType.LOOT_TABLE;
             }
         });
     }

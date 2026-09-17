@@ -40,7 +40,7 @@ public class MantleCompat implements IGlmModCompat {
         PluginUtils.registerEntryTooltip(registry, TagPreferenceLootEntry.class, TagPreferenceLootEntryAccessor.class);
 
         PluginUtils.registerConditionTooltip(registry, BlockTagLootCondition.class, BlockTagLootConditionAccessor.class);
-        PluginUtils.registerDestination(registry, BlockTagLootCondition.class, BlockTagLootConditionAccessor.class);
+        PluginUtils.registerPageResolver(registry, BlockTagLootCondition.class, BlockTagLootConditionAccessor.class);
         PluginUtils.registerConditionTooltip(registry, HasLootContextSetCondition.class, HasLootContextSetConditionAccessor::new);
         registry.registerConditionTooltip(TagEmptyCondition.class, MantleCompat::getTagEmptyTooltip);
         registry.registerConditionTooltip(TagFilledCondition.class, MantleCompat::getTagFilledTooltip);

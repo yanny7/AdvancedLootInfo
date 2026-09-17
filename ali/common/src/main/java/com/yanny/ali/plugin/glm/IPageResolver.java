@@ -4,7 +4,7 @@ import com.yanny.ali.api.IServerUtils;
 import org.jetbrains.annotations.Nullable;
 
 @FunctionalInterface
-public interface IDestinationResolver<T> {
+public interface IPageResolver<T> {
     @Nullable
-    Destination resolve(IServerUtils utils, T value);
+    Verdict test(IServerUtils utils, T value, LootPage page);
 }

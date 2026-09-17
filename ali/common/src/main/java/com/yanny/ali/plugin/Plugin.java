@@ -181,8 +181,9 @@ public class Plugin implements IPlugin {
         registry.registerEntryTooltip(DynamicLoot.class, EntryTooltipUtils::getDynamicTooltip);
         registry.registerEntryTooltip(NestedLootTable.class, EntryTooltipUtils::getReferenceTooltip);
 
-        registry.registerDestination(LootItemBlockStatePropertyCondition.class, GlobalLootModifierUtils::getBlockStateDestination);
-        registry.registerDestination(LootItemEntityPropertyCondition.class, GlobalLootModifierUtils::getEntityPropertyDestination);
+        registry.registerPageResolver(LootItemBlockStatePropertyCondition.class, GlobalLootModifierUtils::testBlockStateProperty);
+        registry.registerPageResolver(LootItemEntityPropertyCondition.class, GlobalLootModifierUtils::testEntityProperty);
+        registry.registerPageResolver(DamageSourceCondition.class, GlobalLootModifierUtils::testDamageSource);
 
         registry.registerConditionTooltip(AllOfCondition.class, ConditionTooltipUtils::getAllOfTooltip);
         registry.registerConditionTooltip(AnyOfCondition.class, ConditionTooltipUtils::getAnyOfTooltip);

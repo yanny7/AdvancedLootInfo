@@ -7,18 +7,19 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.NodeUtils;
-import com.yanny.ali.plugin.glm.Destination;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
+import com.yanny.ali.plugin.glm.IPageLootModifier;
+import com.yanny.ali.plugin.glm.LootPage;
+import com.yanny.ali.plugin.glm.Verdict;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
-import com.yanny.alicompat.accessor.IDestination;
 import com.yanny.alicompat.accessor.IGlobalLootModifierAccessor;
+import com.yanny.alicompat.accessor.IPageResolverAccessor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +29,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class StructureModdedLootImporterApplierAccessor extends BaseAccessor<StructureModdedLootImporterApplier> implements IGlobalLootModifierAccessor, IDestination {
+public class StructureModdedLootImporterApplierAccessor extends BaseAccessor<StructureModdedLootImporterApplier> implements IGlobalLootModifierAccessor, IPageResolverAccessor {
     @FieldAccessor
     protected LootItemCondition[] conditions;
 
@@ -37,14 +38,14 @@ public class StructureModdedLootImporterApplierAccessor extends BaseAccessor<Str
     }
 
     @Override
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
-        return GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(conditions), (c) -> getOperations(utils, c));
+    public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(conditions), (c) -> getOperations(utils, c)));
     }
 
     @NotNull
     @Override
-    public Destination getDestination(IServerUtils ignoredUtils) {
-        return new Destination.Table(StructureModdedLootImporterApplierAccessor::isImported, false);
+    public Verdict test(IServerUtils ignoredUtils, LootPage page) {
+        return GlobalLootModifierUtils.testTable(page, StructureModdedLootImporterApplierAccessor::isImported, false);
     }
 
     @NotNull

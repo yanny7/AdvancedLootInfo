@@ -48,6 +48,8 @@ public class BumblezoneCompat implements IGlmModCompat {
         registry.registerDataComponentTypeTooltip(getDataComponentType("honey_compass_base_data"), BumblezoneCompat::getHoneyCompassBaseDataTooltip);
         registry.registerDataComponentTypeTooltip(getDataComponentType("honey_compass_state_data"), BumblezoneCompat::getHoneyCompassStateDataTooltip);
         registry.registerDataComponentTypeTooltip(getDataComponentType("honey_crystal_shield_current_level_data"), BumblezoneCompat::getHoneyCrystalShieldCurrentLevelDataTooltip);
+
+        PluginUtils.registerPageResolver(registry, BeeStingerLootApplier.class, BeeStingerLootApplierAccessor.class);
     }
 
     @Override

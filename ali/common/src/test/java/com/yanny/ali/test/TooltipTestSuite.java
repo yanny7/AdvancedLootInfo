@@ -13,7 +13,9 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.datagen.LanguageHolder;
 import com.yanny.ali.manager.PluginManager;
-import com.yanny.ali.plugin.glm.Destination;
+import com.yanny.ali.plugin.glm.LootPage;
+import com.yanny.ali.plugin.glm.ParamState;
+import com.yanny.ali.plugin.glm.Verdict;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.LootConditionTypes;
 import com.yanny.ali.plugin.server.LootFunctionTypes;
@@ -56,6 +58,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
@@ -135,10 +138,22 @@ public class TooltipTestSuite {
                 return PluginManager.getInstance().serverRegistry.createEntities(type, level);
             }
 
+            @NotNull
+            @Override
+            public Verdict testPage(IServerUtils utils, Object value, LootPage page) {
+                return PluginManager.getInstance().serverRegistry.testPage(utils, value, page);
+            }
+
+            @NotNull
+            @Override
+            public ParamState getParamState(LootPage page, ContextKey<?> param) {
+                return PluginManager.getInstance().serverRegistry.getParamState(page, param);
+            }
+
             @Nullable
             @Override
-            public Destination getDestination(IServerUtils utils, Object value) {
-                return PluginManager.getInstance().serverRegistry.getDestination(utils, value);
+            public Verdict testEntitySubPredicate(IServerUtils utils, EntitySubPredicate predicate, LootPage page) {
+                return PluginManager.getInstance().serverRegistry.testEntitySubPredicate(utils, predicate, page);
             }
 
             @NotNull

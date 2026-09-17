@@ -4,7 +4,6 @@ import com.mojang.datafixers.util.Either;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
@@ -12,6 +11,7 @@ import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.nodes.ReferenceNode;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
+import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
@@ -41,12 +41,12 @@ public class ReplaceLootModifierAccessor extends BaseAccessor<ReplaceLootModifie
     }
 
     @Override
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
+    public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
         List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
         ResourceLocation lootTable = ResourceLocation.parse(resourceLocationKey);
         float chance = (float) chanceToReplace;
 
-        return GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList, (c) -> {
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList, (c) -> {
             TooltipNode tooltip = TooltipBuilder.array((b) -> {
                 b.add(TooltipBuilder.keyOnly(Lang.Group.ALL));
                 b.add(TooltipUtils.getChanceTooltip(new EnchantedRanges(chance * 100)));
@@ -64,6 +64,6 @@ public class ReplaceLootModifierAccessor extends BaseAccessor<ReplaceLootModifie
             IDataNode node = new ReferenceNode(Collections.singletonList(child), chance, tooltip);
 
             return Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, node));
-        });
+        }));
     }
 }
