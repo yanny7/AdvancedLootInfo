@@ -1,4 +1,4 @@
-## []
+## [1.2.0]
 
 - Added `ManagedRegistry.entries`, so a registry's whole content can be read back
 - Added `ManagedRegistry.classKeyName`, reporting a lambda class under its host class instead of its runtime address
