@@ -15,10 +15,10 @@ Single `AwiMod` (`@Mod`). Its constructor statically builds the `SimpleChannel` 
 
 ## Mixins
 
-`mixin.MixinMinecraftServer` only — hooks `reloadResources` TAIL to re-run `PluginManager.reloadServer()` + `SERVER.readWorldgenInfo(server.overworld())` after a successful `/reload`. Forge has no `END_DATA_PACK_RELOAD` event equivalent, which is why this is a mixin here and an event handler in `awi/fabric`.
+None — `awi/forge` has no `mixin` package and no mixin config of its own; only the shared `awi.mixins.json` and the EMI-only `awi.emi.mixins.json` are registered.
 
 ## Viewer wiring
 
 `compatibility.ReiCompatibilityWrapper` (`@REIPluginClient` subclass of `awi/common-rei`'s `ReiCompatibility`) is the only viewer glue Forge needs — EMI (`@EmiEntrypoint`) and JEI (`@JeiPlugin`) discover their plugin classes from the shadowed common modules by annotation.
 
-Mixin-config registration on Forge happens twice over, which is worth knowing when adding a config: `loom { forge { mixinConfig "..." } }` in `build.gradle` writes every listed config into the jar's `MANIFEST.MF` `MixinConfigs` attribute (and into the dev-run launch args), while `META-INF/mods.toml`'s `[[mixins]]` blocks list only `awi.mixins.json`/`awi.forge.mixins.json`. The EMI-only config `awi.emi.mixins.json` is therefore active in production purely via the manifest — a new config added to `build.gradle` needs no `mods.toml` entry. When EMI is absent, `MixinRecipeScreen`'s missing `@Mixin` target only produces a `@Mixin target ... was not found` WARN (Mixin skips it; `"required": true` does not make that fatal), so no `IMixinConfigPlugin` gate is needed.
+Mixin-config registration on Forge happens twice over, which is worth knowing when adding a config: `loom { forge { mixinConfig "..." } }` in `build.gradle` writes every listed config into the jar's `MANIFEST.MF` `MixinConfigs` attribute (and into the dev-run launch args), while `META-INF/mods.toml`'s `[[mixins]]` blocks list only `awi.mixins.json`. The EMI-only config `awi.emi.mixins.json` is therefore active in production purely via the manifest — a new config added to `build.gradle` needs no `mods.toml` entry. When EMI is absent, `MixinRecipeScreen`'s missing `@Mixin` target only produces a `@Mixin target ... was not found` WARN (Mixin skips it; `"required": true` does not make that fatal), so no `IMixinConfigPlugin` gate is needed.

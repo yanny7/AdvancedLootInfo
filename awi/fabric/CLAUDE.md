@@ -13,4 +13,4 @@ Guidance for `awi/fabric` (`com.yanny.awi.fabric`) — AWI's Fabric loader entry
 
 ## Mixins
 
-The `mixin` package is empty except for `package-info.java` — no Fabric mixins are needed for AWI (`awi/forge` does need one, `MixinMinecraftServer`, because Forge has no `END_DATA_PACK_RELOAD` event equivalent) (contrast with `ali/fabric`'s `MixinLootTableFabric`/`MixinCombinedIngredient`, which exist because ALI needs to reach into loot-table internals AWI has no equivalent of).
+The `mixin` package is empty except for `package-info.java` — no Fabric mixins are needed for AWI (contrast with `ali/fabric`'s `MixinLootTableFabric`/`MixinCombinedIngredient`, which exist because ALI needs to reach into loot-table internals AWI has no equivalent of).

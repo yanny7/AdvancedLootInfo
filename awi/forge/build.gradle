@@ -15,7 +15,6 @@ loom {
         extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
 
         mixinConfig "awi.mixins.json"
-        mixinConfig "awi.forge.mixins.json"
 
         if (emi_enabled == "true" && forge_emi_enabled == "true") {
             mixinConfig "awi.emi.mixins.json"
