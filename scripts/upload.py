@@ -11,6 +11,7 @@ MODRINTH_USER_AGENT = "Modrinth-Uploader-Script/1.0 (Yanny/AdvancedLootInfo)"
 MODRINTH_VIEWER_PROJECT_IDS = ["fRiHVvU7", "u6dRKJwZ", "nfn13YXA"] # EMI JEI REI
 MODRINTH_LOOTJS_PROJECT_ID = "fJFETWDN"
 MODRINTH_ACI_PROJECT_ID = "BaR4ijFC"
+MODRINTH_ALI_PROJECT_ID = "PEPVViac"
 MODRINTH_ENVIRONMENT = "client_and_server"
 CURSEFORGE_USER_AGENT = "CurseForge-Uploader-Script/1.0 (Yanny/AdvancedLootInfo)"
 
@@ -327,7 +328,7 @@ if __name__ == "__main__":
     parser.add_argument("--curseforge-api-token", help="CurseForge API Token (default: $CURSEFORGE_API_TOKEN)")
     parser.add_argument("--curseforge-api-key", help="CurseForge API Key (default: $CURSEFORGE_API_KEY)")
     parser.add_argument("--release-type", required=True, help="Mod release type (release|beta|alpha)")
-    parser.add_argument("--mod-id", required=True, help="Mod ID (ali|awi|aci)")
+    parser.add_argument("--mod-id", required=True, help="Mod ID (ali|awi|aci|alicompat)")
     parser.add_argument("--modrinth-project-id", required=True, help="Modrinth project ID")
     parser.add_argument("--curseforge-project-id", required=True, help="CurseForge project ID")
     parser.add_argument("--target", default="all", choices=["all", "modrinth", "curseforge"], help="Which platform to upload to (default: all)")
@@ -352,7 +353,7 @@ if __name__ == "__main__":
         if not curseforge_api_token or not curseforge_api_key:
             raise SystemExit(1)
 
-    props = read_properties(keys_to_find=["ali_version", "awi_version", "aci_version", "minecraft_version", "ali_mod_name", "awi_mod_name", "aci_mod_name", "enabled_platforms", "fabric_enabled", "forge_enabled", "neoforge_enabled"])
+    props = read_properties(keys_to_find=["ali_version", "awi_version", "aci_version", "alicompat_version", "minecraft_version", "ali_mod_name", "awi_mod_name", "aci_mod_name", "alicompat_mod_name", "enabled_platforms", "fabric_enabled", "forge_enabled", "neoforge_enabled"])
     version_changelog = read_changelog(filename=f"{args.mod_id}/CHANGELOG.md")
 
     mod_loaders = [[platform] for platform in props["enabled_platforms"].split(",") if props.get(f"{platform}_enabled") == "true"]
@@ -363,6 +364,11 @@ if __name__ == "__main__":
 
     if args.mod_id == "aci":
         mod_dependencies = []
+    elif args.mod_id == "alicompat":
+        mod_dependencies = [
+            prepare_dependency(MODRINTH_ACI_PROJECT_ID, "required"),
+            prepare_dependency(MODRINTH_ALI_PROJECT_ID, "required"),
+        ]
     else:
         mod_dependencies = list(map(prepare_dependency, MODRINTH_VIEWER_PROJECT_IDS))
         mod_dependencies.append(prepare_dependency(MODRINTH_ACI_PROJECT_ID, "required"))

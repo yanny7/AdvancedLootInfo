@@ -438,7 +438,7 @@ def uploadTargets = [
 
 def pythonRunConfigs = []
 
-["ali", "awi", "aci"].each { modId ->
+["ali", "awi", "aci", "alicompat"].each { modId ->
     uploadTargets.each { target, targetInfo ->
         pythonRunConfigs << [
                 task       : "generateUploadRunConfig${modId.capitalize()}${targetInfo.suffix}",
