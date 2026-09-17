@@ -1,4 +1,4 @@
-## []
+## [2.2.0]
 
 - Added `IServerRegistry.registerTrades`, so a plugin can list the trades of its own trader
 - Trade selection count is read from the trade set's own amount instead of being assumed
