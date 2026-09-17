@@ -453,7 +453,23 @@ def uploadTargets = [
 
 def pythonRunConfigs = []
 
-["ali", "awi", "aci"].each { modId ->
+uploadTargets.each { target, targetInfo ->
+    pythonRunConfigs << [
+            task       : "generateUploadRunConfigAll${targetInfo.suffix}",
+            group      : "Upload",
+            description: "Writes an IntelliJ Python run configuration that uploads every mod to ${targetInfo.label}",
+            name       : "Upload ALL${targetInfo.suffix.isEmpty() ? "" : " ${targetInfo.label}"}",
+            script     : "scripts/upload.py",
+            parameters : [
+                    "--mod-id=all",
+                    "--release-type=beta",
+                    "--target=${target}",
+            ].join(" "),
+            file       : file(".idea/runConfigurations/Upload_ALL${targetInfo.suffix.isEmpty() ? "" : "_${targetInfo.suffix}"}.xml"),
+    ]
+}
+
+["ali", "awi", "aci", "alicompat"].each { modId ->
     uploadTargets.each { target, targetInfo ->
         pythonRunConfigs << [
                 task       : "generateUploadRunConfig${modId.capitalize()}${targetInfo.suffix}",

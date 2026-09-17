@@ -1,4 +1,4 @@
-## []
+## [2.2.0]
 
 - Fixed errors from JEI when using REI Plugin 
 - Global loot modifiers are shown only on loot tables where all their conditions can pass
