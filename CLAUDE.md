@@ -98,7 +98,7 @@ Core flow, per mod (see `ali/CLAUDE.md` / `awi/CLAUDE.md` for the concrete insta
 - `plugin/client` — client-side widget/rendering utilities.
 - ALI additionally has `plugin/glm` (Global Loot Modifier compatibility) — see `ali/CLAUDE.md`. The reflective accessor toolkit third-party compat shims are written against lives in `alicompat/common`'s `accessor` package — see `alicompat/CLAUDE.md`.
 
-Server-collected data is sent to the client over custom networking (`network` package). **Only the transfer is on demand**: the whole data tree is built eagerly on the server thread at server start (and on datapack/tag reload) by `AbstractServer.readLootTables`/`readWorldgenInfo`, and the recipe viewer's `RequestLootDataMessage`/`RequestWorldgenDataMessage` merely starts streaming the already-built, gzipped chunks to that client. Scan cost is therefore server-startup cost — it is never deferred until a viewer asks. See `ali/CLAUDE.md`'s networking section (canonical) and `awi/CLAUDE.md`'s (the same pattern, diffed).
+Server-collected data is sent to the client over custom networking (`network` package). **Only the transfer is on demand**: the whole data tree is built eagerly on the server thread at server start by `AbstractServer.readLootTables`/`readWorldgenInfo`, and ALI rebuilds it on datapack/tag reload, and the recipe viewer's `RequestLootDataMessage`/`RequestWorldgenDataMessage` merely starts streaming the already-built, gzipped chunks to that client. Scan cost is therefore server-startup cost — it is never deferred until a viewer asks. See `ali/CLAUDE.md`'s networking section (canonical) and `awi/CLAUDE.md`'s (the same pattern, diffed).
 
 Mod compatibility for ALI's built-in loot categories is data-driven: `ali_config.schema.json` documents the datapack-based configuration format (loot categories, ingredients, tags) that ALI's `configuration`/`datagen` packages read and generate — see `ali/CLAUDE.md`. AWI's config surface is much smaller: `AwiConfig` (`configVersion`, `tooltipColors`, `logMoreStatistics`, `showInGameNames`, `showConfigConditionalBlocks`) in `awi/common`'s `configuration` package, documented by `awi_config.schema.json` — no datapack-driven categories.
 
@@ -203,15 +203,15 @@ So: if the top section carries a version number, open a new `## []` section abov
 ACI ships as its own jar and is a **mandatory** dependency of both ALI and AWI, so `com.yanny.aci.api`, `com.yanny.aci.tooltip` and `com.yanny.aci.manager` are published API — a breaking change there is not free.
 
 1. `aci_version` is `MAJOR.MINOR.PATCH`.
-2. **MAJOR** — source- or binary-incompatible change to those three packages: a removed or renamed public type/method, a changed signature or return type, a new abstract method on an interface others implement.
-3. **MINOR** — additive only: new public types/methods, new default methods, new tooltip node kinds. Existing callers keep compiling and keep running.
+2. **MAJOR** — reserved for a fundamental change to the mod as a whole (on the scale of splitting ACI out as a mandatory dependency), decided by the user. An API break alone never raises it.
+3. **MINOR** — any change to those three packages' API surface: additive (new public types/methods, new default methods, new tooltip node kinds) or source-/binary-incompatible (a removed or renamed public type/method, a changed signature or return type, a new abstract method on an interface others implement).
 4. **PATCH** — internal fixes with no API surface change.
-5. A MAJOR bump also raises the **lower** bound in both mods' metadata: `aci_version_range=[<new major>.0,)` and `aci_version_range_fabric=>=<new major>.0`. A MINOR bump raises them only once the mods actually use the new API; PATCH never touches them.
+5. An incompatible MINOR (or MAJOR) bump also raises the **lower** bound in both mods' metadata: `aci_version_range=[<new major>.<new minor>,)` and `aci_version_range_fabric=>=<new major>.<new minor>`. An additive MINOR bump raises them only once the mods actually use the new API; PATCH never touches them.
 6. Never widen a range to paper over a breakage — the point of the mandatory dependency is that the loader refuses a mismatched pair instead of failing later with `NoSuchMethodError`.
-7. The network protocol in `aci.network` follows the same number: a wire-format change is a MAJOR bump even when the Java signatures are untouched.
+7. The network protocol in `aci.network` follows the same number: a wire-format change is an incompatible MINOR bump even when the Java signatures are untouched.
 8. Release order is always ACI first, then ALI/AWI, so their required-dependency reference never dangles.
 
-Anything that stays only to keep older callers working — a superseded method or overload, a constant no longer read, a type left in place after its replacement landed — is marked `@Deprecated(forRemoval = true, since = "<the version the deprecation ships in>")` (with the replacement named in a `@deprecated` Javadoc line) instead of being changed or dropped, and no code in this repo calls it any more. Those annotations are the removal list — never keep a second one in a doc — and the members go away in the next MAJOR release and nowhere else.
+Anything that stays only to keep older callers working — a superseded method or overload, a constant no longer read, a type left in place after its replacement landed — is marked `@Deprecated(forRemoval = true, since = "<the version the deprecation ships in>")` (with the replacement named in a `@deprecated` Javadoc line) instead of being changed or dropped, and no code in this repo calls it any more. Those annotations are the removal list — never keep a second one in a doc — and the members go away in a MINOR or MAJOR release later than the one named in `since`, never in a PATCH.
 
 The `testArtifacts` configuration on `aci:common` (the shared `TestUtils`) is not published API — it never leaves the repo, so its shape can change without touching `aci_version`.
 
@@ -231,4 +231,4 @@ Before a release, list what is queued for removal:
 grep -rn "forRemoval = true" --include=*.java --exclude-dir=build .
 ```
 
-On a MAJOR bump of the mod that owns them, delete everything that prints — `since` says how long each has been carried. On any other release just read it, and check nothing in the repo calls those members: `./gradlew build 2>&1 | grep -i "deprecated and marked for removal"`, ignoring the hits from vanilla/loader classes.
+On a MINOR or MAJOR bump of the mod that owns them, delete everything that prints whose `since` is an older minor than the one being released. On a PATCH release just read it, and check nothing in the repo calls those members: `./gradlew build 2>&1 | grep -i "deprecated and marked for removal"`, ignoring the hits from vanilla/loader classes.

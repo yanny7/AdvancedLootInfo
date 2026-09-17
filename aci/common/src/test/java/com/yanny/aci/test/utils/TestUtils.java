@@ -88,7 +88,7 @@ public class TestUtils {
     }
 
     public static void assertUnorderedTooltip(TooltipNode tooltip, List<Object> expected) {
-        List<Component> components = CoreTooltipUtils.toComponents(tooltip, 0, true);
+        List<Component> components = CoreTooltipUtils.toComponents(tooltip, 0, true, TooltipStyle.DEFAULT);
         int cmpIndex = 0;
         int expIndex = 0;
 

@@ -18,8 +18,6 @@ description = '''${awi_description}''' #mandatory (Supports multiline text)
 config = "awi.mixins.json"
 [[mixins]]
 config = "awi.emi.mixins.json"
-[[mixins]]
-config = "awi.neoforge.mixins.json"
 
 [[dependencies.awi]] #optional
 modId = "neoforge" #mandatory

@@ -9,8 +9,6 @@ issueTrackerURL="https://github.com/yanny7/advancedlootinfo/issues" #optional
 
 [[mixins]]
 config = "awi.mixins.json"
-[[mixins]]
-config = "awi.forge.mixins.json"
 
 # A list of mods - how many allowed here is determined by the individual mod loader
 [[mods]] #mandatory

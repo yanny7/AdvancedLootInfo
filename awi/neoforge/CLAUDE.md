@@ -15,7 +15,7 @@ Single `AwiMod` (`@Mod`, constructor takes the mod `IEventBus`). Unlike Forge it
 
 ## Mixins
 
-`mixin.MixinMinecraftServer` only, same as `awi/forge`: `reloadResources` TAIL → `PluginManager.reloadServer()` + `SERVER.readWorldgenInfo(server.overworld())`. Mixin configs are declared **once** here, in `META-INF/neoforge.mods.toml`'s `[[mixins]]` blocks (`awi.mixins.json`, `awi.emi.mixins.json`, `awi.neoforge.mixins.json`) — there is no `loom { forge { mixinConfig ... } }`/manifest duplication like on Forge. The toml lists `awi.emi.mixins.json` unconditionally, so it assumes `neoforge_emi_enabled=true`; flipping that flag off would leave the toml pointing at a config that is no longer shadowed in (`ali/neoforge`'s toml has the same assumption).
+None — `awi/neoforge` has no `mixin` package and no mixin config of its own, same as `awi/forge`. Mixin configs are declared **once** here, in `META-INF/neoforge.mods.toml`'s `[[mixins]]` blocks (`awi.mixins.json`, `awi.emi.mixins.json`) — there is no `loom { forge { mixinConfig ... } }`/manifest duplication like on Forge. The toml lists `awi.emi.mixins.json` unconditionally, so it assumes `neoforge_emi_enabled=true`; flipping that flag off would leave the toml pointing at a config that is no longer shadowed in (`ali/neoforge`'s toml has the same assumption).
 
 ## Access transformers
 
