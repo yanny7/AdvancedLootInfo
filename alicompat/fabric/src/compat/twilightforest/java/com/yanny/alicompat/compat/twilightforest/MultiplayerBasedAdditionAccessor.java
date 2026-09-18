@@ -7,6 +7,7 @@ import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.IFunctionTooltip;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import org.jetbrains.annotations.NotNull;
 import twilightforest.loot.MultiplayerBasedAdditionLootFunction;
 
 public class MultiplayerBasedAdditionAccessor extends BaseAccessor<MultiplayerBasedAdditionLootFunction> implements IFunctionTooltip {
@@ -17,6 +18,7 @@ public class MultiplayerBasedAdditionAccessor extends BaseAccessor<MultiplayerBa
         super(parent);
     }
 
+    @NotNull
     @Override
     public TooltipBuilder getTooltip(IServerUtils utils) {
         return TooltipBuilder.array((b) -> b

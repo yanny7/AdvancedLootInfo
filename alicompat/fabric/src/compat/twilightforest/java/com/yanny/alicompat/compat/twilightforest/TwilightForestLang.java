@@ -15,9 +15,9 @@ public class TwilightForestLang implements ICompatTranslations {
     public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 
     public enum Conditions implements ITooltipKey {
-        GIANT_PICK_USED("giant_pick_used", "Giant Pick Used: %s"),
-        IS_MINION("is_minion", "Is Minion: %s"),
-        MOD_EXISTS("mod_exists", "Mod Exists: %s"),
+        GIANT_PICK_USED("giant_pick_used", "Giant Pick Used:"),
+        IS_MINION("is_minion", "Is Minion:"),
+        MOD_EXISTS("mod_exists", "Mod Exists:"),
         UNCRAFTING_TABLE_ENABLED("uncrafting_table_enabled", "Uncrafting Table Enabled"),
         ;
 

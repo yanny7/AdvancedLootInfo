@@ -27,9 +27,8 @@ There is no longer a `ReloadableServerResourceMixin`: it existed only to capture
 
 ## Fabric-only compat plugins
 
-`plugin/FabricPlugin` (mod id `fabric`) registers an ingredient tooltip for Fabric API's `CustomIngredientImpl`, which `FabricIngredientTooltipUtils` unwraps into its Any/All/Difference/Components/Custom-Data builtins. It is the only loader where custom ingredients are `Ingredient` subclasses and can therefore be dispatched by class; see `ali/neoforge/CLAUDE.md` for the unwrapper hook NeoForge needs instead. It is an `@AliEntrypoint` class **and** listed in `fabric.mod.json`'s `ali` entrypoint array (on Fabric the annotation alone does nothing).
-
-Per-target-mod compatibility is **not** here — it ships in the separate ALICompat jar, see `alicompat/CLAUDE.md`. So does Fabric's Global Loot Modifier path, which rides on Porting Lib and therefore is not built on this branch at all (`alicompat/CLAUDE.md`'s target list says why): a Fabric client here shows loot unmodified by any GLM.
+`plugin/` holds third-party compatibility that's genuinely Fabric-only because it targets Fabric-specific APIs — don't try to port these to `ali/forge`/`ali/neoforge` without checking whether the target API even has an equivalent there:
+- `FabricPlugin` + `FabricIngredientTooltipUtils` — registers a tooltip for Fabric API's `CustomIngredientImpl`, the wrapper every custom ingredient loaded from JSON or a packet arrives in (`CustomIngredient.toVanilla`). It renders the Any/All/Difference/Components/Custom-Data builtins itself, hands a wrapped custom ingredient that is also an `Ingredient` back to `getIngredientTooltip` so a tooltip registered for its own class applies, and falls back to the auto-detected JSON tooltip for anything else. A custom ingredient that implements only `CustomIngredient` has no registration of its own: `registerIngredientTooltip` is bound to `Ingredient`. LootJS compat itself lives in `ali/common-lootjs` (see `ali/common-lootjs/CLAUDE.md`).
 
 Per-target-mod compatibility is **not** here — it ships in the separate ALICompat jar, see `alicompat/CLAUDE.md`. Neither is the Global Loot Modifier path: Fabric has no GLM machinery of its own, so ALI reads Porting Lib's, and that whole driver lives in ALICompat's `portinglib` source set. Without that optional jar a Fabric client shows loot unmodified by any GLM.
 

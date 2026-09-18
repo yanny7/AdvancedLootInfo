@@ -6,12 +6,14 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.ICommonRegistry;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.plugin.glm.Destination;
+import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
+import com.yanny.ali.plugin.glm.LootPage;
+import com.yanny.ali.plugin.glm.Verdict;
 import com.yanny.alicompat.IGlmModCompat;
 import com.yanny.alicompat.Utils;
 import com.yanny.alicompat.accessor.GlmAccessorUtils;
-import com.yanny.alicompat.accessor.ReflectionUtils;
+import com.yanny.alicompat.accessor.PluginUtils;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Sheep;
@@ -34,7 +36,6 @@ import twilightforest.loot.modifiers.GiantToolGroupingModifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 public class TwilightForestCompat implements IGlmModCompat {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
@@ -56,33 +57,51 @@ public class TwilightForestCompat implements IGlmModCompat {
 
     @Override
     public void registerServer(IServerRegistry registry) {
-        registry.registerConditionTooltip(GiantPickUsedCondition.class,
-                (utils, condition) -> utils.getValueTooltip(utils, condition.target()).key(TwilightForestLang.Conditions.GIANT_PICK_USED));
-        registry.registerConditionTooltip(IsMinionCondition.class,
-                (utils, condition) -> utils.getValueTooltip(utils, !condition.inverse()).key(TwilightForestLang.Conditions.IS_MINION));
-        registry.registerConditionTooltip(ModExistsCondition.class,
-                (utils, condition) -> ReflectionUtils.copyClassData(ModExistsConditionAccessor.class, condition, ModExistsCondition.class).getTooltip(utils));
-        registry.registerConditionTooltip(UncraftingTableEnabledCondition.class,
-                (ignoredUtils, ignoredCondition) -> TooltipBuilder.keyOnly(TwilightForestLang.Conditions.UNCRAFTING_TABLE_ENABLED));
+        registry.registerConditionTooltip(GiantPickUsedCondition.class, TwilightForestCompat::getGiantPickUsedTooltip);
+        registry.registerConditionTooltip(IsMinionCondition.class, TwilightForestCompat::getIsMinionTooltip);
+        PluginUtils.registerConditionTooltip(registry, ModExistsCondition.class, ModExistsConditionAccessor.class);
+        registry.registerConditionTooltip(UncraftingTableEnabledCondition.class, TwilightForestCompat::getUncraftingTableEnabledTooltip);
 
-        registry.registerFunctionTooltip(MultiplayerBasedAdditionLootFunction.class, (utils, function) ->
-                ReflectionUtils.copyClassData(MultiplayerBasedAdditionAccessor.class, function, MultiplayerBasedAdditionLootFunction.class).getTooltip(utils));
+        PluginUtils.registerFunctionTooltip(registry, MultiplayerBasedAdditionLootFunction.class, MultiplayerBasedAdditionAccessor.class);
 
         registry.registerNumberProvider(MultiplayerBasedNumberProvider.class, TwilightForestCompat::convertMultiplayerRolls);
-        registry.registerNumberProvider(LootingEnchantNumberProvider.class, (utils, provider) ->
-                ReflectionUtils.copyClassData(LootingEnchantNumberProviderAccessor.class, provider, LootingEnchantNumberProvider.class).convertNumber(utils));
+        PluginUtils.registerNumberProvider(registry, LootingEnchantNumberProvider.class, LootingEnchantNumberProviderAccessor.class);
 
-        registry.registerItemSubPredicateTooltip(ItemColorPredicate.class,
-                (utils, predicate) -> utils.getValueTooltip(utils, predicate.color()).key(TwilightForestLang.ItemSubPredicates.ITEM_COLOR));
+        registry.registerItemSubPredicateTooltip(ItemColorPredicate.class, TwilightForestCompat::getItemColorTooltip);
 
-        registry.registerDestination(GiantPickUsedCondition.class, (ignoredUtils, ignoredCondition) ->
-                new Destination.Blocks(Set.copyOf(GiantToolGroupingModifier.CONVERSIONS.keySet()), false));
+        registry.registerPageResolver(GiantPickUsedCondition.class, TwilightForestCompat::testGiantPickUsed);
+        PluginUtils.registerPageResolver(registry, FieryToolSmeltingModifier.class, FieryToolSmeltingModifierAccessor.class);
     }
 
     @Override
     public void registerGlobalLootModifier(IGlobalLootModifierPlugin.IRegistry registry) {
         GlmAccessorUtils.registerGlobalLootModifier(registry, FieryToolSmeltingModifier.class, FieryToolSmeltingModifierAccessor.class);
         GlmAccessorUtils.registerGlobalLootModifier(registry, GiantToolGroupingModifier.class, GiantToolGroupingModifierAccessor.class);
+    }
+
+    @NotNull
+    private static TooltipBuilder getGiantPickUsedTooltip(IServerUtils utils, GiantPickUsedCondition cond) {
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.target())), TwilightForestLang.Conditions.GIANT_PICK_USED);
+    }
+
+    @NotNull
+    private static TooltipBuilder getIsMinionTooltip(IServerUtils utils, IsMinionCondition cond) {
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, !cond.inverse())), TwilightForestLang.Conditions.IS_MINION);
+    }
+
+    @NotNull
+    private static TooltipBuilder getUncraftingTableEnabledTooltip(IServerUtils ignoredUtils, UncraftingTableEnabledCondition ignoredCond) {
+        return TooltipBuilder.array(TooltipBuilder::showEmpty, TwilightForestLang.Conditions.UNCRAFTING_TABLE_ENABLED);
+    }
+
+    @NotNull
+    private static TooltipBuilder getItemColorTooltip(IServerUtils utils, ItemColorPredicate predicate) {
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.color())), TwilightForestLang.ItemSubPredicates.ITEM_COLOR);
+    }
+
+    @NotNull
+    private static Verdict testGiantPickUsed(IServerUtils ignoredUtils, GiantPickUsedCondition ignoredCond, LootPage page) {
+        return GlobalLootModifierUtils.testBlocks(page, GiantToolGroupingModifier.CONVERSIONS::containsKey, false);
     }
 
     @NotNull

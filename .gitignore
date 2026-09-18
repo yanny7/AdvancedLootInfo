@@ -26,3 +26,6 @@ run
 run-data
 logs
 .architectury-transformer
+
+# python
+__pycache__

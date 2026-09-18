@@ -1,0 +1,5 @@
+{
+  "net.mehvahdjukaar.moonlight.api.misc.ModItemListing": "deprecated for removal and never instantiated; getOffer reads only fields, so ALI's MerchantOffer fallback renders it exactly",
+  "net.mehvahdjukaar.moonlight.api.trades.NoOpListing": "ItemListingRegistry.parse drops it; never added to a trade map",
+  "net.mehvahdjukaar.moonlight.api.trades.RemoveNonDataListingListing": "ItemListingRegistry.parse consumes it as a removal instruction; never added to a trade map"
+}

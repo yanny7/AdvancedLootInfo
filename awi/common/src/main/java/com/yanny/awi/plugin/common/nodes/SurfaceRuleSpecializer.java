@@ -117,6 +117,12 @@ public class SurfaceRuleSpecializer {
         }
     }
 
+    public static void clearLoggedRules() {
+        synchronized (LOGGED_RULES) {
+            LOGGED_RULES.clear();
+        }
+    }
+
     /** Takes the trees rather than their sizes: counting them walks the whole JSON, which must not happen when off. */
     private void log(String what, JsonElement before, @Nullable JsonElement after) {
         if (!logStatistics) {

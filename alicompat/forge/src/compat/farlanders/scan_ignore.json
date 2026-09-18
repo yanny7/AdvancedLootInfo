@@ -1,0 +1,5 @@
+{
+  "com.legacy.farlanders.entity.util.FarlanderTrades$EmeraldFromItemsTrade": "never instantiated; every trade list is built through Trade.Builder",
+  "com.legacy.farlanders.entity.util.FarlanderTrades$ItemsForEmeraldsAndItemsTrade": "never instantiated; every trade list is built through Trade.Builder",
+  "com.legacy.farlanders.entity.util.FarlanderTrades$ItemsForEmeraldsTrade": "never instantiated; every trade list is built through Trade.Builder"
+}

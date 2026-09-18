@@ -136,7 +136,8 @@ subprojects {
                 apply plugin: "lol.bai.explosion"
             }
 
-            def compatMods = (project.findProperty("compat_mods") ?: "").split(",").findAll { it }.findAll { project.findProperty("${it}_${project.name}_dep") }
+            // a slug enabled on another loader keeps its sources here, so without a dependency none of them can compile
+            def compatMods = (project.findProperty("compat_mods") ?: "").split(",")*.trim().findAll { project.findProperty("${it}_${project.name}_dep") }
 
             // ServiceLoader reads one file per name, so the per-mod fragments have to be merged
             def generateCompatServices = tasks.register("generateCompatServices") {
@@ -174,12 +175,37 @@ subprojects {
                 resources.srcDir generateCompatServices
             }
 
+            sourceSets.test {
+                java.srcDirs += compatMods.collect { "src/compat/$it/test" }
+            }
+
+            // loom puts the remapped target-mod jars straight on the main classpaths, so tests inherit them from there
+            sourceSets.test.compileClasspath += sourceSets.main.compileClasspath
+            sourceSets.test.runtimeClasspath += sourceSets.main.compileClasspath + sourceSets.main.runtimeClasspath
+
+            // only the suite bootstraps Minecraft, so a per-mod test class must not also be run on its own
+            test {
+                useJUnitPlatform {
+                    includeEngines "junit-platform-suite"
+                }
+            }
+
             dependencies {
+                testImplementation 'org.junit.platform:junit-platform-suite:1.12.0'
+                testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+                testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
+                testImplementation 'org.mockito:mockito-core:5.11.0'
+                testImplementation project(path: ":aci:common", configuration: "testArtifacts")
+
                 compatMods.each { mod ->
-                    def dep = project.findProperty("${mod}_${project.name}_dep")
+                    def deps = project.findProperty("${mod}_${project.name}_dep")
 
                     // compile-only on purpose: a target mod on the run classpath drags its own datagen entrypoint into ours
-                    compileOnly project.name == "fabric" ? project.explosion.fabric(dep) : dep
+                    if (deps) {
+                        deps.split(",")*.trim().each { dep ->
+                            compileOnly project.name == "fabric" ? project.explosion.fabric(dep) : dep
+                        }
+                    }
                 }
             }
 
@@ -192,6 +218,13 @@ subprojects {
                         source(sourceSets.main)
                     }
                 }
+            }
+
+            tasks.register("run${project.parent.name.capitalize()}${project.name.capitalize()}Datagen", GradleBuild) {
+                group = "launchers"
+                description = "Generate ${project.parent.name.capitalize()} ${project.name.toUpperCase()} data"
+                setTasks([":${project.parent.name}:${project.name}:runData".toString()])
+                startParameter.projectProperties = ["recipe_viewer": "none"]
             }
         }
 
@@ -367,6 +400,20 @@ allprojects {
                 includeGroup "dev.latvian.mods"
             }
         }
+        maven {
+            name = "Porting Lib releases"
+            url = "https://mvn.devos.one/releases/"
+            content {
+                includeGroup "io.github.fabricators_of_create.Porting-Lib"
+            }
+        }
+        maven {
+            name = "Porting Lib snapshots"
+            url = "https://mvn.devos.one/snapshots/"
+            content {
+                includeGroup "io.github.fabricators_of_create.Porting-Lib"
+            }
+        }
         maven { // CurseForge
             url "https://www.cursemaven.com"
             content {
@@ -399,29 +446,72 @@ def uploadTargets = [
         curseforge: ["suffix": "Curseforge", "label": "CurseForge"],
 ]
 
-def uploadRunConfigTasks = ["ali", "awi", "aci"].collectMany { modId ->
-    uploadTargets.collect { target, targetInfo ->
-        tasks.register("generateUploadRunConfig${modId.capitalize()}${targetInfo.suffix}") {
-            group = "ide"
-            description = "Writes an IntelliJ Python run configuration that uploads ${project.property("${modId}_mod_name")} to ${targetInfo.label}"
+def pythonRunConfigs = []
 
-            def modName = project.property("${modId}_mod_name")
-            def parameters = [
-                    "--mod-id=${modId}",
-                    "--modrinth-project-id=${project.property("${modId}_modrinth_project_id")}",
-                    "--curseforge-project-id=${project.property("${modId}_curseforge_project_id")}",
+uploadTargets.each { target, targetInfo ->
+    pythonRunConfigs << [
+            task       : "generateUploadRunConfigAll${targetInfo.suffix}",
+            group      : "Upload",
+            description: "Writes an IntelliJ Python run configuration that uploads every mod to ${targetInfo.label}",
+            name       : "Upload ALL${targetInfo.suffix.isEmpty() ? "" : " ${targetInfo.label}"}",
+            script     : "scripts/upload.py",
+            parameters : [
+                    "--mod-id=all",
                     "--release-type=beta",
                     "--target=${target}",
-            ].join(" ")
-            def configName = "Upload ${modId.toUpperCase()}${targetInfo.suffix.isEmpty() ? "" : " ${targetInfo.label}"} (${modName})"
-            def outputFile = file(".idea/runConfigurations/Upload_${modId.toUpperCase()}${targetInfo.suffix.isEmpty() ? "" : "_${targetInfo.suffix}"}.xml")
+            ].join(" "),
+            file       : file(".idea/runConfigurations/Upload_ALL${targetInfo.suffix.isEmpty() ? "" : "_${targetInfo.suffix}"}.xml"),
+    ]
+}
 
-            outputs.file(outputFile)
+["ali", "awi", "aci", "alicompat"].each { modId ->
+    uploadTargets.each { target, targetInfo ->
+        pythonRunConfigs << [
+                task       : "generateUploadRunConfig${modId.capitalize()}${targetInfo.suffix}",
+                group      : "Upload",
+                description: "Writes an IntelliJ Python run configuration that uploads ${project.property("${modId}_mod_name")} to ${targetInfo.label}",
+                name       : "Upload ${modId.toUpperCase()}${targetInfo.suffix.isEmpty() ? "" : " ${targetInfo.label}"} (${project.property("${modId}_mod_name")})",
+                script     : "scripts/upload.py",
+                parameters : [
+                        "--mod-id=${modId}",
+                        "--modrinth-project-id=${project.property("${modId}_modrinth_project_id")}",
+                        "--curseforge-project-id=${project.property("${modId}_curseforge_project_id")}",
+                        "--release-type=beta",
+                        "--target=${target}",
+                ].join(" "),
+                file       : file(".idea/runConfigurations/Upload_${modId.toUpperCase()}${targetInfo.suffix.isEmpty() ? "" : "_${targetInfo.suffix}"}.xml"),
+        ]
+    }
+}
 
-            doLast {
-                outputFile.parentFile.mkdirs()
-                outputFile.text = """<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="${configName}" type="PythonConfigurationType" factoryName="Python" folderName="Upload">
+enabled_platforms.split(",").findAll { project.findProperty("${it}_enabled") == "true" }.each { platform ->
+    pythonRunConfigs << [
+            task       : "generateModpackRunConfig${platform.capitalize()}",
+            group      : "Modpack",
+            description: "Writes an IntelliJ Python run configuration that builds the ${platform} ALICompat modpack",
+            name       : "Modpack ${platform.capitalize()} (${project.property("alicompat_mod_name")})",
+            script     : "scripts/modpack.py",
+            parameters : ["--loader=${platform}", "--viewer=rei"].join(" "),
+            file       : file(".idea/runConfigurations/Modpack_${platform.capitalize()}.xml"),
+    ]
+}
+
+["": "reports the outdated", "Update": "repins the outdated"].each { suffix, label ->
+    pythonRunConfigs << [
+            task       : "generateCheckVersionsRunConfig${suffix}",
+            group      : "Modpack",
+            description: "Writes an IntelliJ Python run configuration that ${label} ${project.property("alicompat_mod_name")} target mod versions",
+            name       : "Check Versions${suffix.isEmpty() ? "" : " (repin)"} (${project.property("alicompat_mod_name")})",
+            script     : "scripts/check_versions.py",
+            parameters : suffix.isEmpty() ? "" : "--update",
+            file       : file(".idea/runConfigurations/Check_Versions${suffix.isEmpty() ? "" : "_${suffix}"}.xml"),
+    ]
+}
+
+def writePythonRunConfig = { spec ->
+    spec.file.parentFile.mkdirs()
+    spec.file.text = """<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="${spec.name}" type="PythonConfigurationType" factoryName="Python" folderName="${spec.group}">
     <module name="MultiLoader-AdvancedLootInfo"/>
     <option name="ENV_FILES" value=""/>
     <option name="INTERPRETER_OPTIONS" value=""/>
@@ -434,8 +524,8 @@ def uploadRunConfigTasks = ["ali", "awi", "aci"].collectMany { modId ->
     <option name="IS_MODULE_SDK" value="true"/>
     <option name="ADD_CONTENT_ROOTS" value="true"/>
     <option name="ADD_SOURCE_ROOTS" value="true"/>
-    <option name="SCRIPT_NAME" value="\$PROJECT_DIR\$/upload.py"/>
-    <option name="PARAMETERS" value="${parameters}"/>
+    <option name="SCRIPT_NAME" value="\$PROJECT_DIR\$/${spec.script}"/>
+    <option name="PARAMETERS" value="${spec.parameters}"/>
     <option name="SHOW_COMMAND_LINE" value="false"/>
     <option name="EMULATE_TERMINAL" value="false"/>
     <option name="MODULE_MODE" value="false"/>
@@ -445,14 +535,29 @@ def uploadRunConfigTasks = ["ali", "awi", "aci"].collectMany { modId ->
   </configuration>
 </component>
 """
-                logger.lifecycle("Wrote ${outputFile}")
-            }
+}
+
+def pythonRunConfigTasks = pythonRunConfigs.collect { spec ->
+    tasks.register(spec.task) {
+        group = "ide"
+        description = spec.description
+
+        outputs.file(spec.file)
+
+        doLast {
+            writePythonRunConfig(spec)
+            logger.lifecycle("Wrote ${spec.file}")
         }
     }
 }
 
-tasks.register("generateUploadRunConfigs") {
+tasks.register("generatePythonRunConfigs") {
     group = "ide"
-    description = "Writes the IntelliJ Python run configurations for all upload targets"
-    dependsOn uploadRunConfigTasks
+    description = "Writes every IntelliJ Python run configuration"
+    dependsOn pythonRunConfigTasks
+}
+
+// IntelliJ only configures the build on a refresh, so a task cannot do this - the files are written here.
+if (Boolean.getBoolean("idea.sync.active")) {
+    pythonRunConfigs.each(writePythonRunConfig)
 }

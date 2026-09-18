@@ -3,7 +3,10 @@ package com.yanny.ali.api;
 import com.yanny.aci.api.ICoreServerRegistry;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
-import com.yanny.ali.plugin.glm.IDestinationResolver;
+import com.yanny.ali.plugin.glm.IEntitySubPredicateResolver;
+import com.yanny.ali.plugin.glm.ILootContextPreparer;
+import com.yanny.ali.plugin.glm.IPageLootModifier;
+import com.yanny.ali.plugin.glm.IPageResolver;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.advancements.predicates.entity.EntitySubPredicate;
@@ -65,9 +68,15 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     <T extends LootItemFunction> void registerItemStackModifier(Class<T> type, TriFunction<IServerUtils, T, ItemStack, ItemStack> consumer);
 
-    <T extends LootItemCondition> void registerDestination(Class<T> type, IDestinationResolver<T> resolver);
+    <T> void registerPageResolver(Class<T> type, IPageResolver<T> resolver);
+
+    <T extends EntitySubPredicate> void registerEntitySubPredicateResolver(Class<T> type, IEntitySubPredicateResolver<T> resolver);
+
+    void registerLootContextPreparer(ILootContextPreparer preparer);
 
     void registerLootModifiers(Function<IServerUtils, List<ILootModifier<?>>> getter);
+
+    void registerGlobalLootModifiers(Function<IServerUtils, List<IPageLootModifier>> getter);
 
     /**
      * Registers a trader, so that its trades are scanned and listed under their own entry. The trade sets are looked

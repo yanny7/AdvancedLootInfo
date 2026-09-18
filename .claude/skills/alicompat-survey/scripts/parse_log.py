@@ -10,6 +10,7 @@ import sys
 from collections import OrderedDict
 
 PATTERNS = [
+    (re.compile(r"No loot modifier produced for auto GLM (\S+)"), "auto_glm_unresolved"),
     (re.compile(r"Unable to locate destination for auto GLM (\S+)"), "auto_glm_unresolved"),
     (re.compile(r"Missing GLM for (\S+)"), "global_loot_modifier"),
     (re.compile(r"Skipping unexpected loot action (\S+)"), "unexpected_loot_action"),
@@ -26,6 +27,7 @@ CATEGORY_SLUG = {
     "condition tooltips": "condition_tooltip",
     "value tooltips": "value_tooltip",
     "item sub predicate tooltips": "item_sub_predicate_tooltip",
+    "entity sub predicate tooltips": "entity_sub_predicate_tooltip",
     "data component type tooltips": "data_component_type_tooltip",
 }
 

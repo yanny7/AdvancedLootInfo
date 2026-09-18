@@ -1,0 +1,47 @@
+package com.yanny.alicompat.compat.mantle;
+
+import com.mojang.datafixers.util.Either;
+import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.language.Lang;
+import com.yanny.ali.plugin.common.NodeUtils;
+import com.yanny.ali.plugin.server.TooltipUtils;
+import com.yanny.alicompat.accessor.BaseAccessor;
+import com.yanny.alicompat.accessor.FieldAccessor;
+import com.yanny.alicompat.accessor.IEntry;
+import com.yanny.alicompat.accessor.IEntryTooltip;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import org.jetbrains.annotations.NotNull;
+import slimeknights.mantle.loot.entry.TagPreferenceLootEntry;
+
+import java.util.List;
+
+public class TagPreferenceLootEntryAccessor extends BaseAccessor<TagPreferenceLootEntry> implements IEntry, IEntryTooltip {
+    @FieldAccessor
+    private TagKey<Item> tag;
+
+    public TagPreferenceLootEntryAccessor(TagPreferenceLootEntry parent) {
+        super(parent);
+    }
+
+    @Override
+    public IDataNode create(IServerUtils utils, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        return NodeUtils.getItemNode(utils, parent, (f) -> Either.right(tag), chance, sumWeight, functions, conditions);
+    }
+
+    @NotNull
+    @Override
+    public TooltipBuilder getTooltip(IServerUtils utils) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, tag).build(Lang.Value.TAG));
+            b.add(TooltipUtils.getWeightTooltip(parent.weight));
+            b.add(TooltipUtils.getQualityTooltip(parent.quality));
+            b.add(utils.getValueTooltip(utils, parent.conditions).build(Lang.Branch.PREDICATES));
+            b.add(utils.getValueTooltip(utils, parent.functions).build(Lang.Branch.MODIFIERS));
+        }, MantleLang.Entry.TAG_PREFERENCE);
+    }
+}

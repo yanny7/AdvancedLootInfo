@@ -1,0 +1,5 @@
+{
+  "vectorwing.farmersdelight.common.CommonSetup$2": "anonymous CompoundIngredient swapped into Chicken.FOOD_ITEMS at setup; never part of loot",
+  "vectorwing.farmersdelight.common.CommonSetup$3": "anonymous CompoundIngredient swapped into Pig.FOOD_ITEMS at setup; never part of loot",
+  "vectorwing.farmersdelight.common.CommonSetup$4": "anonymous CompoundIngredient swapped into Cat.TEMPT_INGREDIENT at setup; never part of loot"
+}

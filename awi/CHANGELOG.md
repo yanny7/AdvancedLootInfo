@@ -1,6 +1,7 @@
-## []
+## [1.1.1]
 
 - Fixed Plugins discovered multiple times on Fabric
+- `/reload` no longer rebuilds worldgen data
 
 ## [1.1.0]
 

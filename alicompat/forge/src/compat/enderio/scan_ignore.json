@@ -1,0 +1,3 @@
+{
+  "com.enderio.armory.common.item.darksteel.upgrades.direct.DirectUpgradeLootModifier": "only moves drops into the player's inventory via Player.addItem; the loot itself is unchanged"
+}

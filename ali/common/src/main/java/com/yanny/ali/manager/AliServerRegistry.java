@@ -16,11 +16,11 @@ import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
-import com.yanny.ali.plugin.glm.Destination;
-import com.yanny.ali.plugin.glm.IDestinationResolver;
+import com.yanny.ali.plugin.glm.*;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.MissingTooltipUtils;
 import net.minecraft.advancements.predicates.entity.EntitySubPredicate;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -30,6 +30,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.villager.VillagerProfession;
@@ -82,8 +83,9 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemCondition, EnchantedRanges>> chanceModifiers = registerClassKeyed("chance modifiers", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemFunction, EnchantedRanges>> countModifiers = registerClassKeyed("count modifiers", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifiers = registerClassKeyed("item stack modifiers", false, HashMap::new, null);
-    // destinations
-    private final ManagedRegistry<Class<?>, IDestinationResolver<LootItemCondition>> destinations = registerClassKeyed("global loot modifier destinations", false, HashMap::new, null);
+    // global loot modifier pages
+    private final ManagedRegistry<Class<?>, IPageResolver<Object>> pageResolvers = registerClassKeyed("global loot modifier page resolvers", false, HashMap::new, null);
+    private final ManagedRegistry<Class<?>, IEntitySubPredicateResolver<EntitySubPredicate>> entitySubPredicateResolvers = registerClassKeyed("entity sub-predicate resolvers", false, HashMap::new, null);
     // translations
     private final ManagedRegistry<Class<?>, EnumTranslation> enumValues = registerClassKeyed("enum values", true, HashMap::new, null);
 
@@ -92,6 +94,9 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final List<Function<IServerUtils, List<ILootModifier<?>>>> lootModifierGetters = new LinkedList<>();
     private final List<Function<Ingredient, Object>> ingredientUnwrappers = new LinkedList<>();
     private final List<ILootModifier<?>> lootModifierMap = new LinkedList<>();
+    private final List<Function<IServerUtils, List<IPageLootModifier>>> pageLootModifierGetters = new LinkedList<>();
+    private final List<IPageLootModifier> pageLootModifiers = new LinkedList<>();
+    private final List<ILootContextPreparer> lootContextPreparers = new ArrayList<>();
 
     private final LootContext lootContext;
 
@@ -106,18 +111,27 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         ingredientUnwrappers.clear();
         lootModifierGetters.clear();
         lootModifierMap.clear();
+        pageLootModifierGetters.clear();
+        pageLootModifiers.clear();
+        lootContextPreparers.clear();
     }
 
     public void addLootTable(Identifier identifier, LootTable lootTable) {
         lootTableMap.put(identifier, lootTable);
     }
 
-    public void clearTemporaryMaps() {
+    @Override
+    public void clearCaches() {
+        super.clearCaches();
         lootTableMap.clear();
     }
 
     public List<ILootModifier<?>> getLootModifiers() {
         return lootModifierMap;
+    }
+
+    public List<IPageLootModifier> getPageLootModifiers() {
+        return pageLootModifiers;
     }
 
     @Override
@@ -203,13 +217,28 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
-    public <T extends LootItemCondition> void registerDestination(Class<T> type, IDestinationResolver<T> resolver) {
-        destinations.put(type, (u, c) -> resolver.resolve(u, type.cast(c)));
+    public <T> void registerPageResolver(Class<T> type, IPageResolver<T> resolver) {
+        pageResolvers.put(type, (u, v, p) -> resolver.test(u, type.cast(v), p));
+    }
+
+    @Override
+    public <T extends EntitySubPredicate> void registerEntitySubPredicateResolver(Class<T> type, IEntitySubPredicateResolver<T> resolver) {
+        entitySubPredicateResolvers.put(type, (u, s, p) -> resolver.test(u, type.cast(s), p));
+    }
+
+    @Override
+    public void registerLootContextPreparer(ILootContextPreparer preparer) {
+        lootContextPreparers.add(preparer);
     }
 
     @Override
     public void registerLootModifiers(Function<IServerUtils, List<ILootModifier<?>>> getter) {
         lootModifierGetters.add(getter);
+    }
+
+    @Override
+    public void registerGlobalLootModifiers(Function<IServerUtils, List<IPageLootModifier>> getter) {
+        pageLootModifierGetters.add(getter);
     }
 
     @Override
@@ -399,20 +428,34 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         return either.map(lootTableMap::get, lootTable -> lootTable);
     }
 
+    @NotNull
+    @Override
+    public Verdict testPage(IServerUtils utils, Object value, LootPage page) {
+        HolderGetter.Provider lootData = utils.getServerLevel().getServer().reloadableRegistries().lookup();
+
+        return GlobalLootModifierUtils.testPage(utils, value, page, pageResolvers.get(value.getClass()).orElse(null), lootContextPreparers, lootData);
+    }
+
+    @NotNull
+    @Override
+    public ParamState getParamState(LootPage page, ContextKey<?> param) {
+        return GlobalLootModifierUtils.getParamState(page, param);
+    }
+
     @Nullable
     @Override
-    public Destination getDestination(IServerUtils utils, LootItemCondition condition) {
-        return destinations.get(condition.getClass())
-                .map((r) -> r.resolve(utils, condition))
+    public Verdict testEntitySubPredicate(IServerUtils utils, EntitySubPredicate predicate, LootPage page) {
+        return entitySubPredicateResolvers.get(predicate.getClass())
+                .map((r) -> r.test(utils, predicate, page))
                 .orElse(null);
     }
 
-    public IDataNode parseTable(List<ILootModifier<?>> modifiers, LootTable lootTable) {
-        return NodeUtils.getLootTableNode(modifiers, this, lootTable, 1, Collections.emptyList(), Collections.emptyList());
+    public IDataNode parseTable(List<IOperation> operations, LootTable lootTable) {
+        return NodeUtils.getLootTableNode(operations, this, lootTable, 1, Collections.emptyList(), Collections.emptyList());
     }
 
-    public IDataNode parseTable(List<ILootModifier<?>> modifiers) {
-        return NodeUtils.getLootTableNode(modifiers);
+    public IDataNode parseTable(List<IOperation> operations) {
+        return NodeUtils.getLootTableNode(operations);
     }
 
     public IDataNode parseTrade(Supplier<Int2ObjectMap<ResourceKey<TradeSet>>> tradeSetsByLevel) {
@@ -439,7 +482,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     public void printRegistrationInfo() {
         super.printRegistrationInfo();
         prepareLootModifiers();
-        LOGGER.info("Registered {} loot modifiers", lootModifierMap.size());
+        LOGGER.info("Registered {} loot modifiers", lootModifierMap.size() + pageLootModifiers.size());
     }
 
     @Override
@@ -457,6 +500,10 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         try {
             for (Function<IServerUtils, List<ILootModifier<?>>> lootModifierGetter : lootModifierGetters) {
                 lootModifierMap.addAll(lootModifierGetter.apply(this));
+            }
+
+            for (Function<IServerUtils, List<IPageLootModifier>> pageLootModifierGetter : pageLootModifierGetters) {
+                pageLootModifiers.addAll(pageLootModifierGetter.apply(this));
             }
         } finally {
             TooltipContext.clearPalette();

@@ -1,6 +1,6 @@
 ---
 name: alicompat-survey
-description: Survey a modpack for everything ALI cannot render — from its log and from a static scan of every jar — resolve each finding to the owning mod and its CurseForge maven coordinates per Minecraft version, subtract what this repo already registers, and write one markdown report that plans ALICompat work. Use when the user supplies a modpack directory or a pack log ("StoneBlock", "SB4.txt", "make support for all mods in this pack"), asks which mods need ALICompat shims, asks which trading entities are unsupported, or asks for the curse.maven dep lines for a set of mods.
+description: Survey a modpack for everything ALI cannot render — from its log and from a static scan of every jar — resolve each finding to the owning mod and its CurseForge maven coordinates per Minecraft version, subtract what this repo already registers, and write a per-mod compatibility tracker that plans ALICompat work. Use when the user supplies a modpack directory or a pack log ("StoneBlock", "SB4.txt", "make support for all mods in this pack"), asks which mods need ALICompat shims, asks which trading entities are unsupported, or asks for the curse.maven dep lines for a set of mods.
 ---
 
 # ALICompat modpack survey
@@ -18,8 +18,11 @@ round-trips; the 100k-class static scan is fifteen seconds.
 ```bash
 .claude/skills/alicompat-survey/scripts/run.sh \
   --pack-dir "$HOME/.local/share/PrismLauncher/instances/<pack>" \
-  --out SB4.md
+  --work W --out W/survey.md
 ```
+
+The survey markdown is an intermediate; the deliverable is what `worklist.py` writes from the same
+JSON (see below), so keep both in the working directory `--work` names.
 
 One path is enough. `packdir.py` reads the launcher's own metadata for the rest: `mods/`, the
 Minecraft version and loader (`flame/manifest.json`, else Prism's `mmc-pack.json`), the log
@@ -35,7 +38,7 @@ branches build:
 26.1.2:fabric,neoforge   26.2:fabric,neoforge
 ```
 
-Needs `CURSEFORGE_API_KEY` (the key `upload.py` uses). The pack works without a log — the static
+Needs `CURSEFORGE_API_KEY` (the key `scripts/upload.py` uses). The pack works without a log — the static
 scan is the larger half.
 
 ## The two kinds of evidence
@@ -78,7 +81,7 @@ stays in the work directory (`--work`, else a temp dir) — that is the interfac
 4. `classindex.py --pack --base-types` → `candidates.json`. The static scan. Parses the hierarchy
    header of every class in every jar — mods plus the Minecraft and loader jars, which supply the
    vanilla half of each chain — then keeps mod classes whose supertype closure reaches a base type in
-   `base_types.json`. A second pass re-reads only the candidates for field descriptors, constructor
+   `scripts/base_types.json`. A second pass re-reads only the candidates for field descriptors, constructor
    descriptors and namespaced string constants. **Those shapes are written to the JSON and
    deliberately kept out of the report**: they are what a shim generator needs, not what a human
    reading the plan needs.
@@ -86,33 +89,55 @@ stays in the work directory (`--work`, else a temp dir) — that is the interfac
    `registerTrades(<id>, …)`, every `@Mixin` target and `compat_mods`, read from this repo's sources.
    Wildcard imports make a simple name ambiguous, so both the resolved binary names and the bare
    simple names are kept — an exact match is `covered`, a simple-name-only match is downgraded to
-   `informational` rather than claimed as covered.
+   `informational` rather than claimed as covered. A shim whose target is not on the compile
+   classpath registers its accessor and names the target only in that accessor's
+   `@ClassAccessor("<binary name>")`, in a different file from the `register` call — those
+   annotations are collected into `classAccessors` and folded into the hooks before `covered` is
+   built, so a reflective shim counts as coverage of its target rather than reading as a gap.
 6. `cf_lookup.py --owners --candidates --mods-dir [--overrides]` → `projects.json`.
    `POST /v1/fingerprints` maps jar → project + file id, `POST /v1/mods` fetches slug and url, and one
    `GET /v1/mods/{id}/files?gameVersion=&modLoaderType=` per version/loader picks the newest file by
    `fileDate`. `modLoaderType` is `1` Forge, `4` Fabric, `5` Quilt, `6` NeoForge.
-7. `build_report.py` → the markdown: trading-entity table, availability matrix, per-mod findings
-   grouped by confidence, a "not ALICompat's business" section, and a paste-ready
-   `gradle.properties` block per Minecraft version.
+7. `build_report.py` → one markdown survey: trading-entity table, availability matrix, per-mod
+   findings grouped by confidence, a "not ALICompat's business" section, and a paste-ready
+   `gradle.properties` block per Minecraft version. It is an intermediate — keep it in the working
+   directory and hand the user the tracker `worklist.py` writes from the same JSON.
 
-`worklist.py` (not part of `run.sh`) seeds a hand-maintained work tracker from the same JSON —
-a priority-ordered queue with a checkbox per finding and a place for gotchas:
+`worklist.py` (not part of `run.sh`) turns the same JSON into the deliverable — a hand-maintained
+tracker split one file per mod, so reading one mod costs one small file instead of a 130 KB report:
 
 ```bash
 python3 scripts/worklist.py --gaps W/gaps.json --candidates W/candidates.json \
   --coverage W/coverage.json --projects W/projects.json --owners W/owners.json \
-  --pack W/pack.json --report SB4.md --out SB4_WRK.md
+  --pack W/pack.json --out ../COMPATIBILITY.md
 ```
+
+It writes, relative to `--out` (override the directory with `--dir`):
+
+- `COMPATIBILITY.md` — the index: priority-ordered queue, one linked row per mod, and Gotchas.
+  Keep it a link list; per-mod detail belongs in the mod's own file.
+- `compatibility/<mod id>.md` — one per mod: priority/availability header, trading-entity table,
+  the work checklist, and that mod's survey findings under `## Survey findings`.
+- `compatibility/survey-notes.md` — what belongs to no single mod: pack metadata, "not ALICompat's
+  business", the mods with nothing to do, and the `gradle.properties` blocks per Minecraft version.
+
+Both scripts render per-mod findings and the dependency blocks through `build_report.mod_body` /
+`dependency_blocks`, so the tracker and the survey never drift apart.
 
 Priority is P1 confirmed gaps with a `1.20.1` file (port upward from there), P2 confirmed without one,
 P3 trading entities, P4 dormant types only. Run it **once**: it is a seed, and re-running overwrites
 ticked boxes and notes.
 
-## `base_types.json`
+## `scripts/base_types.json`
 
-Maps each ALI registry hook to the vanilla or loader base types a candidate must inherit from. Every
-listed name that exists in the scanned jars is used and the rest are skipped, so one file covers all
-branches — add a name when a version renames or moves a type rather than forking the file.
+Lives in the repo, not in this skill: `scripts/check_versions.py --scan` reads the same file to diff
+the existing shims against their pinned jars, and `scripts/classfile.py` is the class reader both use.
+
+Maps each ALI registry hook to the vanilla or loader base types a candidate must inherit from. It
+lists only the hooks ALI declares on this branch, so its hook set differs between branches — a hook
+is added on the branch where ALI gains the registration, never merged down. Every listed base name
+that exists in the scanned jars is used and the rest are skipped, which is how one hook covers every
+loader's type.
 `excludedPackageSegments` drops `mixin`/`mixins`/`asm` packages: a mixin sits in its target's
 hierarchy by construction, so every mixin on a vanilla loot or merchant class would otherwise be
 reported as a candidate.
@@ -143,16 +168,18 @@ project publishes nothing for the target versions, while the shim must compile a
   own rules.
 - **Gap kind sets the hook.** `global_loot_modifier` means an `IGlmModCompat` and a
   `GlmAccessorUtils.registerGlobalLootModifier` call; `function` / `condition` / `entry` /
-  `item_listing` / `number_provider` / `ingredient` mean the matching `IServerRegistry` hook. See
+  `item_listing` / `number_provider` / `ingredient` / `item_sub_predicate` / `entity_sub_predicate`
+  mean the matching `IServerRegistry` hook. See
   `alicompat/CLAUDE.md` for which registry each one lives in.
 - **Synthetic lambdas cannot be registered.** A `$$Lambda` subject has no stable class to key on; it
   needs an accessor over the enclosing type or an upstream change, and the report flags each one.
 - **`unresolved_entity_loot_table` is not a shim.** Those are `entityLootTables` entries in ALI's
   datapack configuration (`ali_config.schema.json`), a config change, not Java.
 
-Then follow `alicompat/CLAUDE.md`'s "Adding a target mod" for each mod picked up: `compat_mods`, the
-`<slug>_<loader>_dep` property from the report, the source set, the `IModCompat` implementation and
-its `services` fragment.
+Then follow `alicompat/CLAUDE.md`'s "Adding a target mod" for each mod picked up: the
+`scripts/supported_mods.json` entry (the report's maven coordinates carry the slug and project id it needs),
+`compat_mods`, then `python3 scripts/check_versions.py --update` for the `<slug>_<loader>_dep` lines and the
+scaffolded source set, and finally the real `IModCompat` implementation and its `services` fragment.
 
 ## Extending this skill
 

@@ -8,6 +8,7 @@ import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.IConditionTooltip;
 import io.github.fabricators_of_create.porting_lib.loot.LootTableIdCondition;
 import net.minecraft.resources.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 public class LootTableIdConditionAccessor extends BaseAccessor<LootTableIdCondition> implements IConditionTooltip {
     @FieldAccessor
@@ -17,12 +18,9 @@ public class LootTableIdConditionAccessor extends BaseAccessor<LootTableIdCondit
         super(parent);
     }
 
-    public Identifier getTargetLootTableId() {
-        return targetLootTableId;
-    }
-
+    @NotNull
     @Override
     public TooltipBuilder getTooltip(IServerUtils utils) {
-        return utils.getValueTooltip(utils, targetLootTableId).key(Lang.Conditions.LOOT_TABLE_ID);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, targetLootTableId)), Lang.Conditions.LOOT_TABLE_ID);
     }
 }

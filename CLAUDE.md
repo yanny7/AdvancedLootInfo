@@ -42,6 +42,18 @@ The mod's architecture, package layout, and plugin model described across this d
 - Loader/dependency versions in `gradle.properties` (`minecraft_version`, `forge_version`, `fabric_version`, `neoforge_version`, EMI/JEI/REI/architectury versions, etc.).
 - Minor Minecraft-API glue inside `fabric`/`forge`/`neoforge` modules and datagen.
 
+### Porting between branches
+
+Changes travel **one step up the chain at a time** — each branch merges from the one below it (`git merge origin/<lower>`), never by skipping. Which branch sits below which follows the Minecraft version order; read `minecraft_version` in each checkout rather than assuming a fixed list, since branches are added and archived over time.
+
+A merge moves code, not decisions. It is finished when ACI, ALI and AWI compile on the target branch and the user has committed it — **shim work is not part of it**:
+
+- In `gradle.properties`, the generated target-mod block — `compat_mods` and the `<mod>_<loader>_dep` lines — is resolved silently in favour of the target branch (`ours`), with no attempt to reconcile it. `scripts/supported_mods.json`, which lists the mods themselves, is Minecraft-version-agnostic and merges like any other file. Every `_dep` pins a CurseForge file id or maven artifact versions for one specific Minecraft version, so a value merged down from a lower branch is wrong here by construction, and `compat_mods` states what this branch has actually ported. The rest of the file (loader versions, viewer versions, enabled platforms) conflicts like any other code and is resolved on its merits.
+- An ALICompat shim whose source arrives this way is **dormant**: its files are present, its slug is absent from `compat_mods`, and nothing compiles it. That is the correct end state of a merge (see `alicompat/CLAUDE.md`).
+- Activating those shims is a separate pass, run after the merge commit exists. It starts by repinning the target mods (`check_versions.py --update`) and then re-deriving each shim's class list against the jar for *this* Minecraft version — target-mod classes move, get renamed and disappear between versions, so only the shape of a shim ports, never its contents.
+
+Doing both in one step hides which failure came from the merge and which from a target mod's API change, and leaves no commit to fall back to.
+
 ## Project overview
 
 This is a Minecraft mod monorepo built on the **Architectury MultiLoader template**. It produces two related but independently-versioned recipe-viewer mods:
@@ -66,7 +78,7 @@ Each mod (`ali/`, `awi/`, `aci/`) follows the same subproject pattern:
 
 `aci` has only `common` + the loader modules — no viewer or compat subprojects, since it registers nothing with a recipe viewer. Its loader modules carry no mod logic at all (no mixins, no access widener, no platform-service implementation); they exist to shadow `aci:common` into a loadable jar. `ali:common`/`awi:common` compile against `aci:common` directly (`configuration: "namedElements"`), while the ALI/AWI loader modules take `modImplementation project(":aci:<loader>")` for the runtime — `aci:common` is deliberately **not** in their `commonProjects` list, so `com.yanny.aci.*` is not duplicated inside their jars.
 
-Which optional subprojects get included is controlled entirely by `settings.gradle` reading flags from `gradle.properties` (e.g. `emi_enabled`, `jei_enabled`, `rei_enabled`, `lootjs_enabled`, `fabric_enabled`, `forge_enabled`, `neoforge_enabled`). The root `build.gradle` further gates per-project availability with `<platform>_<viewer>_enabled` properties and wires in the correct `commonProjects` dependency list for each loader module.
+Which optional subprojects get included is controlled entirely by `settings.gradle` reading flags from `gradle.properties` (e.g. `emi_enabled`, `jei_enabled`, `rei_enabled`, `lootjs_enabled`, `fabric_enabled`, `forge_enabled`, `neoforge_enabled`). A loader is enabled only when it is listed in `enabled_platforms` **and** its `<loader>_enabled` is `true` — `enabled_platforms` may keep naming a loader a branch no longer builds, and the python scripts and generated run configurations below follow the same rule. The root `build.gradle` further gates per-project availability with `<platform>_<viewer>_enabled` properties and wires in the correct `commonProjects` dependency list for each loader module.
 
 ## Platform abstraction pattern
 
@@ -88,7 +100,7 @@ Core flow, per mod (see `ali/CLAUDE.md` / `awi/CLAUDE.md` for the concrete insta
 - `plugin/client` — client-side widget/rendering utilities.
 - ALI additionally has `plugin/glm` (Global Loot Modifier compatibility) — see `ali/CLAUDE.md`. The reflective accessor toolkit third-party compat shims are written against lives in `alicompat/common`'s `accessor` package — see `alicompat/CLAUDE.md`.
 
-Server-collected data is sent to the client over custom networking (`network` package). **Only the transfer is on demand**: the whole data tree is built eagerly on the server thread at server start (and on datapack/tag reload) by `AbstractServer.readLootTables`/`readWorldgenInfo`, and the recipe viewer's `RequestLootDataMessage`/`RequestWorldgenDataMessage` merely starts streaming the already-built, gzipped chunks to that client. Scan cost is therefore server-startup cost — it is never deferred until a viewer asks. See `ali/CLAUDE.md`'s networking section (canonical) and `awi/CLAUDE.md`'s (the same pattern, diffed).
+Server-collected data is sent to the client over custom networking (`network` package). **Only the transfer is on demand**: the whole data tree is built eagerly on the server thread at server start by `AbstractServer.readLootTables`/`readWorldgenInfo`, and ALI rebuilds it on datapack/tag reload, and the recipe viewer's `RequestLootDataMessage`/`RequestWorldgenDataMessage` merely starts streaming the already-built, gzipped chunks to that client. Scan cost is therefore server-startup cost — it is never deferred until a viewer asks. See `ali/CLAUDE.md`'s networking section (canonical) and `awi/CLAUDE.md`'s (the same pattern, diffed).
 
 Mod compatibility for ALI's built-in loot categories is data-driven: `ali_config.schema.json` documents the datapack-based configuration format (loot categories, ingredients, tags) that ALI's `configuration`/`datagen` packages read and generate — see `ali/CLAUDE.md`. AWI's config surface is much smaller: `AwiConfig` (`configVersion`, `tooltipColors`, `logMoreStatistics`, `showInGameNames`, `showConfigConditionalBlocks`) in `awi/common`'s `configuration` package, documented by `awi_config.schema.json` — no datapack-driven categories.
 
@@ -147,6 +159,35 @@ Tests are organized behind JUnit Platform `@Suite`/`@SelectClasses` runners (`To
 
 Generate data (recipes/loot/lang, per loader) via the IDE run configurations in `.idea/runConfigurations/Minecraft_Data_*.xml`, or the equivalent `run<Platform><Loader>Datagen`-style Gradle tasks wired by the `architectury-loom` plugin. All four mods have datagen; ACI's generates only its `aci.util.*` language keys, ALICompat's only the tooltip keys of the compat shims that are built into it. Fabric datagen initialises the `fabric-datagen` entrypoint of every loaded mod, so a broken ACI datagen class breaks ALI's and AWI's datagen runs too.
 
+The mods ALICompat supports are listed in `scripts/supported_mods.json` (schema: `scripts/supported_mods.schema.json`): one entry per mod with its repo-wide slug, display name, runtime mod ids and its CurseForge projects as `<slug>-<project id>` — usually one, a second only for mods published as a separate project per loader. Which project serves which loader is not written down: `scripts/check_versions.py` asks CurseForge per Minecraft version, so a branch that adds a loader needs no edit here. A mod that CurseForge does not carry for some Minecraft version additionally lists `maven` sources — a repository, the loaders it builds for and `<group>:<artifact>` names — which are consulted, in order, only for a loader on which no CurseForge project has a file; the first source whose artifacts all share a version naming this Minecraft version wins, with its newest such version. Artifacts renamed between Minecraft versions get a source of their own. Each repository has to be declared in the root `build.gradle` `repositories` by hand as well. The file holds no Minecraft-version-specific data at all. It is the source of truth both python scripts below read; `gradle.properties` carries only what this branch resolves from it, in a block generated by `scripts/check_versions.py`. See `alicompat/CLAUDE.md` for how an entry turns into a shim.
+
+Manual testing against the real target mods runs out of a generated modpack rather than a dev run. `scripts/modpack.py` takes the mods that `scripts/supported_mods.json` lists for the chosen loader and `compat_mods` enables on this branch, keeps only the CurseForge project id (the pinned file id is the compile target, not what the pack uses), resolves the newest release-or-beta file for `minecraft_version` plus that loader, pulls in required dependencies recursively, adds the recipe viewer and — on Fabric — Fabric API, and writes a CurseForge-format zip to `build/modpack/` with the locally built ACI/ALI/ALICompat jars in `overrides/mods/`. A mod pinned from maven cannot be a manifest entry: its newest artifacts, plus the compile-scope dependencies their POMs declare from the same repository, recursively, go into `overrides/mods/` too. Prism Launcher imports that zip directly. It needs the mods built (`./gradlew build`) and `CURSEFORGE_API_KEY` in the environment, the same key `scripts/upload.py` uses:
+```
+python3 scripts/modpack.py --loader forge
+python3 scripts/modpack.py --loader fabric --viewer jei
+```
+Mods with no matching file, and mods whose author disabled third-party downloads (Prism asks for those by hand), are listed at the end of the run instead of failing it. IDE run configurations for it, for `scripts/check_versions.py` and for `scripts/upload.py` are written on every Gradle refresh — IntelliJ only configures the build then, so the root `build.gradle` writes the files under `idea.sync.active` rather than from a task — and `./gradlew generatePythonRunConfigs` writes the same set on demand. The modpack ones are one `.idea/runConfigurations/Modpack_<Loader>.xml` per enabled loader.
+
+`scripts/check_versions.py` resolves the registry against CurseForge, then the entry's maven sources, for `minecraft_version` and each enabled loader, and reports what is outdated, what has become newly available, what no longer has a file, which registry entries are dormant (source set present, slug absent from `compat_mods` — a shim merged down but not ported yet, left untouched, but resolved anyway so the report says which loaders it has a file on here, i.e. which ones are worth porting) and which pinned mods are no longer in the registry. `--update` regenerates the whole block in `gradle.properties` from that resolution — file ids or comma-separated `<group>:<artifact>:<version>` lists, `compat_mods`, the per-mod comments — drops what disappeared, and scaffolds a compiling `IModCompat` skeleton for a registry entry whose shim source set does not exist yet:
+```
+python3 scripts/check_versions.py --loader forge
+python3 scripts/check_versions.py --update
+python3 scripts/check_versions.py --init
+python3 scripts/check_versions.py --scaffold twilightforest
+```
+`--init` is the from-scratch variant: it ignores `compat_mods` entirely, pins and enables every registry mod that has a file here, and writes the block even when the file has none — for setting a branch up, never on a fresh merge, where it would switch on every dormant shim at once. `--scaffold <mod>` is the same thing narrowed to one registry entry: it creates that mod's missing source sets, pins it, enables it, and leaves every other line of the block untouched — the way a new shim is started. Repinning only swaps the file id or artifact version, so a build belongs after every `--update`. It is also the first step after merging into a branch, where the pinned ids arrived from a lower branch and name files for the wrong Minecraft version.
+
+Every run then diffs each built shim against the jar it is measured against — the one it is pinned to, or, under `--update`, the one it has just been repinned to — and prints one line per shim and loader plus a report in `build/compat_scan.txt`. `--no-scan` skips it. Findings come in four kinds; `+` and `~` are judgement calls, `-` and `!` are always defects:
+
+| | |
+|---|---|
+| `+` | the jar has a class that reaches an ALI hook and the shim does not register it |
+| `-` | the shim registers a class the jar no longer has — it will not compile |
+| `!` | the shim registers a class that no longer inherits the hook's base type — it compiles and silently renders nothing |
+| `~` | the shim registers a class whose instance fields differ between the pinned file and the newest one — it compiles, and any field the tooltip should show is silently missing |
+
+A `~` exists only while a newer file than the pin is out: it compares those two jars, so it is reported identically by a plain run and by the `--update` that repins, and disappears once the pin is the newest file — act on it in that run. A field that is internal state rather than loot data needs nothing, and there is no ignore list for it, since the finding clears itself. Every `+` is either work to do or noise to record in that shim's `scan_ignore.json` (see `alicompat/CLAUDE.md`); a scan whose `+` findings are all either registered or ignored prints `[OK]`. A maven pin is measured against all of its artifacts together. Jars come from the gradle cache when the pinned file is already there and are downloaded into `build/compat_jars/` otherwise, so a re-run of an unchanged branch touches no network. The hierarchy is walked against `scripts/base_types.json`, the Minecraft jar from `.gradle/loom-cache`, every other pinned target jar and the libraries those jars bundle under `META-INF/jars/` — a shim's supertype chain routinely leaves its own jar — with Fabric's intermediary class names translated through loom's `mappings.tiny`. A bundled library never counts as the bundling mod's own classes, so it yields no `+` of its own, but a registered class that lives in one is located, parents resolved and its fields diffed for `-`, `!` and `~` like any other, the jar's own copy of a class taking precedence. A hook whose base type is absent on this Minecraft version, or whose loader half is not on the classpath, is reported as unchecked rather than guessed at.
+
 ## Versioning
 
 ALI, AWI, ACI and ALICompat version independently (`ali_version` / `awi_version` / `aci_version` / `alicompat_version` in `gradle.properties`), each with its own `CHANGELOG.md` (`ali/CHANGELOG.md`, `awi/CHANGELOG.md`, `aci/CHANGELOG.md`, `alicompat/CHANGELOG.md`). Every change to a mod gets a changelog entry there. Because the same fix/feature is typically ported across the active version branches, the same entry and version property commonly land on several branches — check whether a change belongs on other branches too, not just the one you're on.
@@ -165,15 +206,15 @@ So: if the top section carries a version number, open a new `## []` section abov
 ACI ships as its own jar and is a **mandatory** dependency of both ALI and AWI, so `com.yanny.aci.api`, `com.yanny.aci.tooltip` and `com.yanny.aci.manager` are published API — a breaking change there is not free.
 
 1. `aci_version` is `MAJOR.MINOR.PATCH`.
-2. **MAJOR** — source- or binary-incompatible change to those three packages: a removed or renamed public type/method, a changed signature or return type, a new abstract method on an interface others implement.
-3. **MINOR** — additive only: new public types/methods, new default methods, new tooltip node kinds. Existing callers keep compiling and keep running.
+2. **MAJOR** — reserved for a fundamental change to the mod as a whole (on the scale of splitting ACI out as a mandatory dependency), decided by the user. An API break alone never raises it.
+3. **MINOR** — any change to those three packages' API surface: additive (new public types/methods, new default methods, new tooltip node kinds) or source-/binary-incompatible (a removed or renamed public type/method, a changed signature or return type, a new abstract method on an interface others implement).
 4. **PATCH** — internal fixes with no API surface change.
-5. A MAJOR bump also raises the **lower** bound in both mods' metadata: `aci_version_range=[<new major>.0,)` and `aci_version_range_fabric=>=<new major>.0`. A MINOR bump raises them only once the mods actually use the new API; PATCH never touches them.
+5. An incompatible MINOR (or MAJOR) bump also raises the **lower** bound in both mods' metadata: `aci_version_range=[<new major>.<new minor>,)` and `aci_version_range_fabric=>=<new major>.<new minor>`. An additive MINOR bump raises them only once the mods actually use the new API; PATCH never touches them.
 6. Never widen a range to paper over a breakage — the point of the mandatory dependency is that the loader refuses a mismatched pair instead of failing later with `NoSuchMethodError`.
-7. The network protocol in `aci.network` follows the same number: a wire-format change is a MAJOR bump even when the Java signatures are untouched.
+7. The network protocol in `aci.network` follows the same number: a wire-format change is an incompatible MINOR bump even when the Java signatures are untouched.
 8. Release order is always ACI first, then ALI/AWI, so their required-dependency reference never dangles.
 
-Anything that stays only to keep older callers working — a superseded method or overload, a constant no longer read, a type left in place after its replacement landed — is marked `@Deprecated(forRemoval = true, since = "<the version the deprecation ships in>")` (with the replacement named in a `@deprecated` Javadoc line) instead of being changed or dropped, and no code in this repo calls it any more. Those annotations are the removal list — never keep a second one in a doc — and the members go away in the next MAJOR release and nowhere else.
+Anything that stays only to keep older callers working — a superseded method or overload, a constant no longer read, a type left in place after its replacement landed — is marked `@Deprecated(forRemoval = true, since = "<the version the deprecation ships in>")` (with the replacement named in a `@deprecated` Javadoc line) instead of being changed or dropped, and no code in this repo calls it any more. Those annotations are the removal list — never keep a second one in a doc — and the members go away in a MINOR or MAJOR release later than the one named in `since`, never in a PATCH.
 
 The `testArtifacts` configuration on `aci:common` (the shared `TestUtils`) is not published API — it never leaves the repo, so its shape can change without touching `aci_version`.
 
@@ -181,11 +222,11 @@ The `testArtifacts` configuration on `aci:common` (the shared `TestUtils`) is no
 
 The user-facing documentation is the project's GitHub wiki — a separate repository, not part of this one. It is a single wiki covering **all** supported Minecraft versions, split into a `Users/` section (no implementation details — no Gson/codecs/registries/API names there) and a `Developers/` section (plugin API). Version-specific behaviour is marked inline per Minecraft version; mod versions are never mentioned, only current behaviour is documented.
 
-**Whenever a change adds, removes or alters user-visible behaviour, a config option, the config format, the datapack format (`fake_loot`), or the plugin API — tell the user explicitly that the wiki needs updating, and name which page(s).** Do not silently assume the wiki is fine; it is not part of this repo, so nothing else will catch the drift. The same applies to the two published schemas the wiki links to: `ali_config.schema.json`, which must stay in sync with `configuration/AliConfig` and the `LootCategory` subclasses, and `awi_config.schema.json`, which must stay in sync with `configuration/AwiConfig`.
+**Whenever a change adds, removes or alters user-visible behaviour, a config option, the config format, the datapack format (`fake_loot`), or the plugin API — tell the user explicitly that the wiki needs updating, and name which page(s).** A change to `compat_mods` counts: the `Users/ALI Compat` page lists the supported mods per Minecraft version and per loader, so activating, porting or dropping a shim leaves it wrong. Do not silently assume the wiki is fine; it is not part of this repo, so nothing else will catch the drift. The same applies to the two published schemas the wiki links to: `ali_config.schema.json`, which must stay in sync with `configuration/AliConfig` and the `LootCategory` subclasses, and `awi_config.schema.json`, which must stay in sync with `configuration/AwiConfig`.
 
 ## Publishing
 
-`upload.py` at the repo root pushes built jars to Modrinth and CurseForge; it reads mod metadata from `gradle.properties`. Treat running it as a release action, not something to invoke incidentally. ACI is published as its own project and must go out **before** ALI/AWI, which declare it as a required dependency.
+`scripts/upload.py` pushes built jars to Modrinth and CurseForge; it reads mod metadata from `gradle.properties`. Treat running it as a release action, not something to invoke incidentally. ACI is published as its own project and must go out **before** ALI/AWI, which declare it as a required dependency.
 
 Before a release, list what is queued for removal:
 
@@ -193,4 +234,4 @@ Before a release, list what is queued for removal:
 grep -rn "forRemoval = true" --include=*.java --exclude-dir=build .
 ```
 
-On a MAJOR bump of the mod that owns them, delete everything that prints — `since` says how long each has been carried. On any other release just read it, and check nothing in the repo calls those members: `./gradlew build 2>&1 | grep -i "deprecated and marked for removal"`, ignoring the hits from vanilla/loader classes.
+On a MINOR or MAJOR bump of the mod that owns them, delete everything that prints whose `since` is an older minor than the one being released. On a PATCH release just read it, and check nothing in the repo calls those members: `./gradlew build 2>&1 | grep -i "deprecated and marked for removal"`, ignoring the hits from vanilla/loader classes.

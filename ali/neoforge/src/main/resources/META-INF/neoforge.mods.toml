@@ -19,8 +19,6 @@ description = '''${ali_description}''' #mandatory (Supports multiline text)
 config = "ali.mixins.json"
 [[mixins]]
 config = "ali.neoforge.mixins.json"
-[[mixins]]
-config = "ali.lootjs.mixins.json"
 
 [[dependencies.ali]] #optional
 modId = "neoforge" #mandatory

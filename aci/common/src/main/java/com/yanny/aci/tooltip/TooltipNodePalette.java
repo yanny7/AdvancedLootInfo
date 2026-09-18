@@ -4,30 +4,23 @@ import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.ICoreClientUtils;
 import com.yanny.aci.api.ICoreServerUtils;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.util.*;
 
 public class TooltipNodePalette {
     private final Logger logger;
-    private final String modId;
 
     private final Map<CacheKey, TooltipNode> pool = new HashMap<>();
     private final List<TooltipNode> idToNode = new ArrayList<>();
     private final Map<TooltipNode, Integer> nodeToId = new IdentityHashMap<>();
+    private final Set<String> reportedMergeableKeys = new HashSet<>();
 
     private int hits = 0;
     private int misses = 0;
 
     public TooltipNodePalette(String modId) {
         this.logger = CommonLogUtils.getLogger(modId);
-        this.modId = modId;
-    }
-
-    @NotNull
-    public String getModId() {
-        return modId;
     }
 
     public TooltipNode getOrCreate(CacheKey key) {
@@ -45,6 +38,12 @@ public class TooltipNodePalette {
         nodeToId.put(newNode, idToNode.size());
         idToNode.add(newNode);
         return newNode;
+    }
+
+    public void reportMergeable(String pluralKey, Object context) {
+        if (reportedMergeableKeys.add(pluralKey)) {
+            logger.info("Tooltip {} could be merged if defined singular form in {}", pluralKey, context);
+        }
     }
 
     public int getNodeId(TooltipNode node) {
@@ -105,6 +104,7 @@ public class TooltipNodePalette {
         idToNode.clear();
         pool.clear();
         nodeToId.clear();
+        reportedMergeableKeys.clear();
         hits = 0;
         misses = 0;
     }
