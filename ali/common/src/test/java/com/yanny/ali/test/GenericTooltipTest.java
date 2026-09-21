@@ -1,5 +1,7 @@
 package com.yanny.ali.test;
 
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProviders;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import com.mojang.authlib.properties.Property;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.yanny.aci.api.RangeValue;
@@ -54,8 +56,6 @@ import net.minecraft.world.level.storage.loot.ContainerComponentManipulators;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.util.LinkedHashMap;
@@ -161,7 +161,7 @@ public class GenericTooltipTest {
                 Identifier.withDefaultNamespace("armor"),
                 Attributes.ARMOR,
                 AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL,
-                UniformGenerator.between(1, 5))
+                ContextFloatProviders.between(1, 5))
                 .forSlot(EquipmentSlotGroup.HEAD)
                 .forSlot(EquipmentSlotGroup.CHEST)
                 .forSlot(EquipmentSlotGroup.LEGS)
@@ -210,8 +210,8 @@ public class GenericTooltipTest {
     @Test
     void testDamageSourcePredicateTooltip() {
         assertTooltip(ValueTooltipUtils.getDamageSourcePredicateTooltip(UTILS, DamageSourcePredicate.Builder.damageType()
-                .tag(TagPredicate.is(DamageTypeTags.BYPASSES_ARMOR))
-                .tag(TagPredicate.isNot(DamageTypeTags.IS_EXPLOSION))
+                .tag(TagPredicate.is(LOOKUP.lookupOrThrow(Registries.DAMAGE_TYPE), DamageTypeTags.BYPASSES_ARMOR))
+                .tag(TagPredicate.isNot(LOOKUP.lookupOrThrow(Registries.DAMAGE_TYPE), DamageTypeTags.IS_EXPLOSION))
                 .source(EntityPredicate.Builder.entity().of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypes.BAT))
                 .direct(EntityPredicate.Builder.entity().of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypes.ARROW))
                 .isDirect(false)
@@ -230,8 +230,8 @@ public class GenericTooltipTest {
 
     @Test
     public void testTagPredicateTooltip() {
-        assertTooltip(ValueTooltipUtils.getTagPredicateTooltip(UTILS, TagPredicate.is(DamageTypeTags.BYPASSES_ARMOR)).build(), List.of("minecraft:bypasses_armor: true"));
-        assertTooltip(ValueTooltipUtils.getTagPredicateTooltip(UTILS, TagPredicate.isNot(DamageTypeTags.BYPASSES_ARMOR)).build(), List.of("minecraft:bypasses_armor: false"));
+        assertTooltip(ValueTooltipUtils.getTagPredicateTooltip(UTILS, TagPredicate.is(LOOKUP.lookupOrThrow(Registries.DAMAGE_TYPE), DamageTypeTags.BYPASSES_ARMOR)).build(), List.of("minecraft:bypasses_armor: true"));
+        assertTooltip(ValueTooltipUtils.getTagPredicateTooltip(UTILS, TagPredicate.isNot(LOOKUP.lookupOrThrow(Registries.DAMAGE_TYPE), DamageTypeTags.BYPASSES_ARMOR)).build(), List.of("minecraft:bypasses_armor: false"));
     }
 
     @Test
@@ -584,7 +584,7 @@ public class GenericTooltipTest {
                         .partial(DataComponentPredicates.STORED_ENCHANTMENTS, EnchantmentsPredicate.storedEnchantments(List.of(
                                 new EnchantmentPredicate(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.BREACH), MinMaxBounds.Ints.between(1, 2))
                         )))
-                        .partial(DataComponentPredicates.POTIONS, new PotionsPredicate(HolderSet.direct(Potions.HEALING)))
+                        .partial(DataComponentPredicates.POTIONS, PotionsPredicate.ofPotions(HolderSet.direct(Potions.HEALING)))
                         .partial(DataComponentPredicates.CUSTOM_DATA, new CustomDataPredicate(new NbtPredicate(compoundTag)))
                         .partial(DataComponentPredicates.CONTAINER, new ContainerPredicate(Optional.of(
                                 new CollectionPredicate<>(
@@ -750,7 +750,7 @@ public class GenericTooltipTest {
                 "      -> minecraft:jukebox_playable",
                 "        -> minecraft:pigstep",
                 "      -> minecraft:potion_contents",
-                "        -> minecraft:healing",
+                "        -> Potion: minecraft:healing",
                 "      -> minecraft:stored_enchantments",
                 "        -> Enchantment: minecraft:breach",
                 "        -> Level: 1-2",
@@ -1160,7 +1160,7 @@ public class GenericTooltipTest {
     public void testEffectEntryTooltip() {
         assertTooltip(ValueTooltipUtils.getEffectEntryTooltip(UTILS, new SetStewEffectFunction.EffectEntry(
                 MobEffects.LUCK,
-                ConstantValue.exactly(3)
+                ContextIntProviders.exactly(3)
         )).build(Lang.Value.EFFECT), List.of(
                 "Effect: minecraft:luck",
                 "  -> Duration: 3"

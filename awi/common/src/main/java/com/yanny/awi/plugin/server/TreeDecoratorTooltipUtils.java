@@ -34,6 +34,11 @@ public class TreeDecoratorTooltipUtils {
     }
 
     @NotNull
+    public static TooltipBuilder getShelfMushroomDecoratorTooltip(IServerUtils utils, ShelfMushroomDecorator decorator) {
+        return array((b) -> b.add(utils.getValueTooltip(utils, decorator.placementProbability).build(Lang.Value.PLACEMENT_CHANCE)), Lang.TreeDecorator.SHELF_MUSHROOM);
+    }
+
+    @NotNull
     public static TooltipBuilder getCocoaDecoratorTooltip(IServerUtils utils, CocoaDecorator decorator) {
         return array((b) -> b.add(utils.getValueTooltip(utils, decorator.probability).build(Lang.Value.PROBABILITY)), Lang.TreeDecorator.COCOA);
     }

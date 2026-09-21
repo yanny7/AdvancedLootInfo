@@ -64,7 +64,7 @@ public class TreeDecoratorTooltipTest {
 
     @Test
     public void testAlterGroundDecoratorTooltip() {
-        assertTooltip(TreeDecoratorTooltipUtils.getAlterGroundDecoratorTooltip(UTILS, new AlterGroundDecorator(BlockStateProvider.simple(Blocks.PODZOL))).build(), List.of(
+        assertTooltip(TreeDecoratorTooltipUtils.getAlterGroundDecoratorTooltip(UTILS, new AlterGroundDecorator(BlockStateProvider.holderOf(Blocks.PODZOL))).build(), List.of(
                 "Alter Ground:",
                 "  -> Provider:",
                 "    -> Simple:",
@@ -81,7 +81,7 @@ public class TreeDecoratorTooltipTest {
                 0.1f,
                 2,
                 1,
-                BlockStateProvider.simple(Blocks.CHERRY_LEAVES),
+                BlockStateProvider.holderOf(Blocks.CHERRY_LEAVES),
                 2,
                 List.of(Direction.UP, Direction.DOWN)
         )).build(), List.of(
@@ -110,7 +110,7 @@ public class TreeDecoratorTooltipTest {
                 3,
                 2,
                 1,
-                BlockStateProvider.simple(Blocks.CHERRY_LEAVES)
+                BlockStateProvider.holderOf(Blocks.CHERRY_LEAVES)
         )).build(), List.of(
                 "Place On Ground:",
                 "  -> Tries: 3",
@@ -131,7 +131,7 @@ public class TreeDecoratorTooltipTest {
     public void testAttachedToLogsDecoratorTooltip() {
         assertTooltip(TreeDecoratorTooltipUtils.getAttachedToLogsDecoratorTooltip(UTILS, new AttachedToLogsDecorator(
                 0.1f,
-                BlockStateProvider.simple(Blocks.CHERRY_LEAVES),
+                BlockStateProvider.holderOf(Blocks.CHERRY_LEAVES),
                 List.of(Direction.UP, Direction.DOWN)
         )).build(), List.of(
                 "Attached To Logs:",
@@ -147,6 +147,14 @@ public class TreeDecoratorTooltipTest {
                 "  -> Directions:",
                 "    -> Up",
                 "    -> Down"
+        ));
+    }
+
+    @Test
+    public void testShelfMushroomDecoratorTooltip() {
+        assertTooltip(TreeDecoratorTooltipUtils.getShelfMushroomDecoratorTooltip(UTILS, new ShelfMushroomDecorator(0.4f)).build(), List.of(
+                "Shelf Mushroom:",
+                "  -> Placement Chance: 0.4"
         ));
     }
 }

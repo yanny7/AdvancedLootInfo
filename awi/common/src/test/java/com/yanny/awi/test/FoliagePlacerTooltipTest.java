@@ -2,6 +2,7 @@ package com.yanny.awi.test;
 
 import com.yanny.awi.plugin.server.FoliagePlacerTooltipUtils;
 import net.minecraft.util.valueproviders.ConstantInt;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.*;
 import org.junit.jupiter.api.Test;
 
@@ -183,6 +184,23 @@ public class FoliagePlacerTooltipTest {
                 "  -> Corner Hole Chance: 0.3",
                 "  -> Hanging Leaves Chance: 0.1",
                 "  -> Hanging Leaves Extension Chance: 0.05"
+        ));
+    }
+
+    @Test
+    public void testPoplarFoliagePlacerTooltip() {
+        assertTooltip(FoliagePlacerTooltipUtils.getPoplarFoliagePlacerTooltip(UTILS, new PoplarFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), UniformInt.of(4, 6), 0.25f)).build(), List.of(
+                "Poplar:",
+                "  -> Radius:",
+                "    -> Constant:",
+                "      -> Value: 2",
+                "  -> Offset:",
+                "    -> Constant:",
+                "      -> Value: 0",
+                "  -> Height:",
+                "    -> Uniform:",
+                "      -> Range: 4-6",
+                "  -> Side Hole Chance: 0.25"
         ));
     }
 }

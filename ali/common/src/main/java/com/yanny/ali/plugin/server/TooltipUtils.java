@@ -22,14 +22,14 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.network.chat.contents.TranslatableContents;
-import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
+import net.minecraft.world.level.storage.loot.entries.UniformContainerBase;
 import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithEnchantedBonusCondition;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ConstantValue;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
@@ -48,7 +48,7 @@ public class TooltipUtils {
     }
 
     public static void applyRandomChance(IServerUtils utils, LootItemRandomChanceCondition condition, EnchantedRanges chance) {
-        chance.modifyAllEntries((range) -> range.multiply(utils.convertNumber(utils, condition.chance())));
+        chance.modifyAllEntries((range) -> range.multiply(utils.convertFloat(utils, condition.chance())));
     }
 
     public static void applyRandomChanceWithLooting(IServerUtils ignoredUtils, LootItemRandomChanceWithEnchantedBonusCondition condition, EnchantedRanges chance) {
@@ -76,7 +76,7 @@ public class TooltipUtils {
     }
 
     public static void applySetCount(IServerUtils utils, SetItemCountFunction function, EnchantedRanges count) {
-        RangeValue modifierValue = utils.convertNumber(utils, function.count);
+        RangeValue modifierValue = utils.convertInt(utils, function.count);
         boolean isConditional = isConditional(function);
 
         count.modifyAllEntries((value) -> {
@@ -97,8 +97,8 @@ public class TooltipUtils {
     }
 
     public static void applyLimitCount(IServerUtils utils, LimitCount function, EnchantedRanges bonusCount) {
-        RangeValue limitMin = utils.convertNumber(utils, function.limit.min);
-        RangeValue limitMax = utils.convertNumber(utils, function.limit.max);
+        RangeValue limitMin = utils.convertInt(utils, function.limit.min.orElse(null));
+        RangeValue limitMax = utils.convertInt(utils, function.limit.max.orElse(null));
         boolean isConditional = isConditional(function);
 
         bonusCount.modifyAllEntries((value) -> {
@@ -109,7 +109,7 @@ public class TooltipUtils {
     }
 
     public static void applyLootingEnchant(IServerUtils utils, EnchantedCountIncreaseFunction function, EnchantedRanges count) {
-        RangeValue modifierBonus = utils.convertNumber(utils, function.count);
+        RangeValue modifierBonus = utils.convertFloat(utils, function.count);
         RangeValue floorLimit = new RangeValue(false, true);
         RangeValue ceilLimit = function.limit > 0 ? new RangeValue(function.limit) : null;
         boolean isConditional = isConditional(function);
@@ -130,12 +130,12 @@ public class TooltipUtils {
      * outcomes - the unmodified value being the other one. Such a modifier widens the range instead of replacing it.
      */
     public static boolean isConditional(LootItemConditionalFunction function) {
-        return !function.predicates.isEmpty();
+        return function.condition.isPresent();
     }
 
     @NotNull
     public static ItemStack applyEnchantRandomlyItemStackModifier(IServerUtils utils, EnchantRandomlyFunction function, ItemStack itemStack) {
-        if (itemStack.isEnchantable() && function.predicates.isEmpty()) {
+        if (itemStack.isEnchantable() && function.condition.isEmpty()) {
             boolean isBook = itemStack.is(Items.BOOK);
             boolean compatible = !isBook && function.onlyCompatible;
             ItemStack finalItemStack = itemStack;
@@ -164,7 +164,7 @@ public class TooltipUtils {
 
     @NotNull
     public static ItemStack applyEnchantWithLevelsItemStackModifier(IServerUtils ignoredUtils, EnchantWithLevelsFunction function, ItemStack itemStack) {
-        if (itemStack.isEnchantable() && function.predicates.isEmpty()) {
+        if (itemStack.isEnchantable() && function.condition.isEmpty()) {
             if (itemStack.is(Items.BOOK)) {
                 itemStack = Items.ENCHANTED_BOOK.getDefaultInstance();
             } else {
@@ -176,7 +176,7 @@ public class TooltipUtils {
     }
 
     public static ItemStack applySetAttributesItemStackModifier(IServerUtils ignoredUtils, SetAttributesFunction function, ItemStack itemStack) {
-        if (function.predicates.isEmpty()) {
+        if (function.condition.isEmpty()) {
             if (function.replace) {
                 itemStack.set(DataComponents.ATTRIBUTE_MODIFIERS, updateModifiers(function.modifiers, ItemAttributeModifiers.EMPTY));
             } else {
@@ -188,7 +188,7 @@ public class TooltipUtils {
     }
 
     public static ItemStack applySetNameItemStackModifier(IServerUtils ignoredUtils, SetNameFunction function, ItemStack itemStack) {
-        if (function.predicates.isEmpty() && function.name.isPresent()) {
+        if (function.condition.isEmpty() && function.name.isPresent()) {
             itemStack.set(function.target.component(), function.name.get());
         }
 
@@ -197,7 +197,7 @@ public class TooltipUtils {
 
     @NotNull
     public static ItemStack applySetEnchantmentsItemStackModifier(IServerUtils ignoredUtils, SetEnchantmentsFunction function, ItemStack itemStack) {
-        if (itemStack.isEnchantable() && function.predicates.isEmpty()) {
+        if (itemStack.isEnchantable() && function.condition.isEmpty()) {
             if (itemStack.is(Items.BOOK)) {
                 itemStack = Items.ENCHANTED_BOOK.getDefaultInstance();
             } else {
@@ -209,7 +209,7 @@ public class TooltipUtils {
     }
 
     public static ItemStack applyItemStackModifier(IServerUtils ignoredUtils, LootItemFunction function, ItemStack itemStack) {
-        if (function instanceof LootItemConditionalFunction conditional && !conditional.predicates.isEmpty()) {
+        if (function instanceof LootItemConditionalFunction conditional && conditional.condition.isPresent()) {
             return itemStack;
         }
 
@@ -335,7 +335,7 @@ public class TooltipUtils {
 
     @NotNull
     public static TooltipBuilder getWeightTooltip(int weight) {
-        if (weight != LootPoolSingletonContainer.DEFAULT_WEIGHT) {
+        if (weight != UniformContainerBase.DEFAULT_WEIGHT) {
             return TooltipBuilder.value(weight).key(Lang.Value.WEIGHT);
         }
 
@@ -344,7 +344,7 @@ public class TooltipUtils {
 
     @NotNull
     public static TooltipBuilder getQualityTooltip(int quality) {
-        if (quality != LootPoolSingletonContainer.DEFAULT_QUALITY) {
+        if (quality != UniformContainerBase.DEFAULT_QUALITY) {
             return TooltipBuilder.value(quality).key(Lang.Description.QUALITY);
         }
 
@@ -488,11 +488,10 @@ public class TooltipUtils {
         for (SetAttributesFunction.Modifier modifier : modifiers) {
             Identifier id = modifier.id();
 
-            if (modifier.slots().size() == 1 && modifier.amount().codec() == ConstantValue.MAP_CODEC) {
+            if (modifier.slots().size() == 1 && modifier.amount().isBound() && modifier.amount().value() instanceof ConstantValue value) {
                 EquipmentSlotGroup equipmentSlot = Util.getRandom(modifier.slots(), RandomSource.create());
-                ConstantValue value = (ConstantValue) modifier.amount();
 
-                itemAttributeModifiers = itemAttributeModifiers.withModifierAdded(modifier.attribute(), new AttributeModifier(id, value.getFloat(null), modifier.operation()), equipmentSlot);
+                itemAttributeModifiers = itemAttributeModifiers.withModifierAdded(modifier.attribute(), new AttributeModifier(id, value.value(), modifier.operation()), equipmentSlot);
             }
         }
 

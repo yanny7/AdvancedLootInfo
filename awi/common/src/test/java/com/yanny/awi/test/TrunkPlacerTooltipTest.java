@@ -145,4 +145,20 @@ public class TrunkPlacerTooltipTest {
                 "      -> Value: 1"
         ));
     }
+
+    @Test
+    public void testPoplarTrunkPlacerTooltip() {
+        assertTooltip(TrunkPlacerTooltipUtils.getPoplarTrunkPlacerTooltip(UTILS, new PoplarTrunkPlacer(7, 2, 1, UniformInt.of(2, 4), ConstantInt.of(3))).build(), List.of(
+                "Poplar:",
+                "  -> Base Height: 7",
+                "  -> Height Rand A: 2",
+                "  -> Height Rand B: 1",
+                "  -> Trunk Height Above Branches:",
+                "    -> Uniform:",
+                "      -> Range: 2-4",
+                "  -> Branch Amount:",
+                "    -> Constant:",
+                "      -> Value: 3"
+        ));
+    }
 }

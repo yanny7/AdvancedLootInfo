@@ -12,6 +12,7 @@ import com.yanny.ali.manager.AliServerRegistry;
 import com.yanny.ali.manager.FakeLootDataManager;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.common.EntityLootTableResolver;
+import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.EntityLootTableNode;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.glm.IPageLootModifier;
@@ -21,6 +22,7 @@ import com.yanny.ali.plugin.glm.PageMatch;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -48,7 +50,6 @@ import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -248,7 +249,7 @@ public abstract class AbstractServer {
     }
 
     private static boolean isDefaultBlockDrop(AliServerRegistry serverRegistry, AliConfig config, Block block, @Nullable LootTable lootTable) {
-        if (lootTable == null || !isIgnoredFunctions(config, lootTable.functions)) {
+        if (lootTable == null || !isIgnoredFunctions(config, NodeUtils.unwrapFunctions(lootTable.modifier))) {
             return false;
         }
 
@@ -261,16 +262,16 @@ public abstract class AbstractServer {
 
         LootPool pool = pools.getFirst();
 
-        if (pool.entries.size() != 1 || !isIgnoredFunctions(config, pool.functions) || !isIgnoredConditions(config, pool.conditions)
-                || !isConstant(serverRegistry, pool.rolls, 1) || !isConstant(serverRegistry, pool.bonusRolls, 0)) {
+        if (pool.entries.size() != 1 || !isIgnoredFunctions(config, NodeUtils.unwrapFunctions(pool.modifier)) || !isIgnoredConditions(config, NodeUtils.unwrapConditions(pool.condition))
+                || !isConstant(serverRegistry.convertInt(serverRegistry, pool.rolls), 1) || !isConstant(serverRegistry.convertFloat(serverRegistry, pool.bonusRolls), 0)) {
             return false;
         }
 
-        if (!(pool.entries.getFirst() instanceof LootItem lootItem) || lootItem.item.value() != block.asItem() || !isIgnoredFunctions(config, lootItem.functions)) {
+        if (!(pool.entries.getFirst() instanceof LootItem lootItem) || lootItem.item.value() != block.asItem() || !isIgnoredFunctions(config, NodeUtils.unwrapFunctions(lootItem.modifier))) {
             return false;
         }
 
-        return isIgnoredConditions(config, lootItem.conditions);
+        return isIgnoredConditions(config, NodeUtils.unwrapConditions(lootItem.condition));
     }
 
     private static boolean isIgnoredFunctions(AliConfig config, List<LootItemFunction> functions) {
@@ -281,9 +282,7 @@ public abstract class AbstractServer {
         return conditions.stream().allMatch((c) -> config.defaultBlockLootConditions.contains(BuiltInRegistries.LOOT_CONDITION_TYPE.getKey(c.codec())));
     }
 
-    private static boolean isConstant(AliServerRegistry serverRegistry, NumberProvider numberProvider, float value) {
-        RangeValue range = serverRegistry.convertNumber(serverRegistry, numberProvider);
-
+    private static boolean isConstant(RangeValue range, float value) {
         return !range.isUnknown() && range.min() == value && range.max() == value;
     }
 
@@ -623,9 +622,9 @@ public abstract class AbstractServer {
     private static void collectReferences(List<LootPoolEntryContainer> entries, Set<Identifier> referenced) {
         for (LootPoolEntryContainer entry : entries) {
             if (entry instanceof NestedLootTable nested) {
-                nested.contents
-                        .ifLeft((key) -> referenced.add(key.identifier()))
-                        .ifRight((lootTable) -> collectReferences(lootTable, referenced));
+                for (Holder<LootTable> holder : nested.value) {
+                    holder.unwrapKey().ifPresentOrElse((key) -> referenced.add(key.identifier()), () -> collectReferences(holder.value(), referenced));
+                }
             } else if (entry instanceof CompositeEntryBase composite) {
                 collectReferences(composite.children, referenced);
             }

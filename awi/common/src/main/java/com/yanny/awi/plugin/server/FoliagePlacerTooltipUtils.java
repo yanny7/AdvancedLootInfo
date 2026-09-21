@@ -29,6 +29,15 @@ public class FoliagePlacerTooltipUtils {
     }
 
     @NotNull
+    public static TooltipBuilder getPoplarFoliagePlacerTooltip(IServerUtils utils, PoplarFoliagePlacer placer) {
+        return TooltipBuilder.array((b) -> {
+            addBaseFoliagePlacerTooltip(utils, b, placer);
+            b.add(utils.getValueTooltip(utils, placer.height).build(Lang.Branch.HEIGHT));
+            b.add(utils.getValueTooltip(utils, placer.sideHoleChance).build(Lang.Value.SIDE_HOLE_CHANCE));
+        }, Lang.FoliagePlacer.POPLAR);
+    }
+
+    @NotNull
     public static TooltipBuilder getAcaciaFoliagePlacerTooltip(IServerUtils utils, AcaciaFoliagePlacer placer) {
         return TooltipBuilder.array((b) -> addBaseFoliagePlacerTooltip(utils, b, placer), Lang.FoliagePlacer.ACACIA);
     }

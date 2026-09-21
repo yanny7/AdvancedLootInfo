@@ -22,17 +22,17 @@ public class RootPlacerTooltipTest {
     public void testMangroveRootPlacerTooltip() {
         assertTooltip(RootPlacerTooltipUtils.getMangroveRootPlacerTooltip(UTILS, new MangroveRootPlacer(
                 ConstantInt.of(2),
-                BlockStateProvider.simple(Blocks.MANGROVE_ROOTS),
+                BlockStateProvider.holderOf(Blocks.MANGROVE_ROOTS),
                 Optional.of(
                         new AboveRootPlacement(
-                                BlockStateProvider.simple(Blocks.AMETHYST_BLOCK),
+                                BlockStateProvider.holderOf(Blocks.AMETHYST_BLOCK),
                                 0.5f
                         )
                 ),
                 new MangroveRootPlacement(
                         HolderSet.direct(Holder.direct(Blocks.MUD), Holder.direct(Blocks.MUDDY_MANGROVE_ROOTS)),
                         HolderSet.direct(Holder.direct(Blocks.MUD), Holder.direct(Blocks.MANGROVE_ROOTS)),
-                        BlockStateProvider.simple(Blocks.MUDDY_MANGROVE_ROOTS),
+                        BlockStateProvider.holderOf(Blocks.MUDDY_MANGROVE_ROOTS),
                         8,
                         15,
                         0.5f

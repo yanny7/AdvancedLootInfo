@@ -13,13 +13,12 @@ import net.minecraft.world.level.levelgen.GeodeBlockSettings;
 import net.minecraft.world.level.levelgen.GeodeCrackSettings;
 import net.minecraft.world.level.levelgen.GeodeLayerSettings;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.BlockColumnFeature;
+import net.minecraft.world.level.levelgen.feature.BlockReplacement;
 import net.minecraft.world.level.levelgen.feature.EndSpikeFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.TemplateFeature;
 import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
-import net.minecraft.world.level.levelgen.feature.configurations.BlockColumnConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.TemplateFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSize;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.rootplacers.AboveRootPlacement;
@@ -109,15 +108,15 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getFeatureConfigurationTooltip(IServerUtils utils, FeatureConfiguration value) {
+    public static TooltipBuilder getFeatureTooltip(IServerUtils utils, Feature value) {
         return utils.getFeatureTooltip(utils, value);
     }
 
     @NotNull
-    public static TooltipBuilder getTargetBlockStateTooltip(IServerUtils utils, OreConfiguration.TargetBlockState value) {
+    public static TooltipBuilder getBlockReplacementTooltip(IServerUtils utils, BlockReplacement value) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, value.state).build(Lang.Branch.STATE));
-            b.add(utils.getValueTooltip(utils, value.target).build(Lang.Branch.TARGET));
+            b.add(utils.getValueTooltip(utils, value.state()).build(Lang.Branch.STATE));
+            b.add(utils.getValueTooltip(utils, value.target()).build(Lang.Branch.TARGET));
         });
     }
 
@@ -165,7 +164,7 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getBlockColumnConfigurationLayerTooltip(IServerUtils utils, BlockColumnConfiguration.Layer value) {
+    public static TooltipBuilder getBlockColumnLayerTooltip(IServerUtils utils, BlockColumnFeature.Layer value) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, value.height()).build(Lang.Branch.HEIGHT));
             b.add(utils.getValueTooltip(utils, value.state()).build(Lang.Branch.STATE));
@@ -233,14 +232,6 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getConfiguredFeatureTooltip(IServerUtils utils, ConfiguredFeature<?, ?> value) {
-        return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, value.feature()).build(Lang.Value.FEATURE));
-            b.add(utils.getValueTooltip(utils, value.config()).build(Lang.Branch.CONFIG));
-        });
-    }
-
-    @NotNull
     public static TooltipBuilder getRuleBasedBlockStateProviderRuleTooltip(IServerUtils utils, RuleBasedStateProvider.Rule value) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, value.ifTrue()).build(Lang.Branch.IF_TRUE));
@@ -303,7 +294,7 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getTemplateEntryTooltip(IServerUtils utils, TemplateFeatureConfiguration.TemplateEntry value) {
+    public static TooltipBuilder getTemplateEntryTooltip(IServerUtils utils, TemplateFeature.TemplateEntry value) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, value.template()).build(Lang.Value.TEMPLATE));
             b.add(utils.getValueTooltip(utils, value.rotations()).build(Lang.Branch.ROTATIONS));

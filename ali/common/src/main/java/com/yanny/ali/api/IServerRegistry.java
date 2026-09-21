@@ -22,7 +22,8 @@ import net.minecraft.world.item.trading.TradeSet;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 import org.apache.commons.lang3.function.TriFunction;
 import org.apache.logging.log4j.util.TriConsumer;
 
@@ -60,7 +61,9 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     <T extends SlotSource> void registerSlotSourceTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter);
 
-    <T extends NumberProvider> void registerNumberProvider(Class<T> type, BiFunction<IServerUtils, T, RangeValue> converter);
+    <T extends ContextIntProvider> void registerIntProvider(Class<T> type, BiFunction<IServerUtils, T, RangeValue> converter);
+
+    <T extends ContextFloatProvider> void registerFloatProvider(Class<T> type, BiFunction<IServerUtils, T, RangeValue> converter);
 
     <T extends LootItemFunction> void registerCountModifier(Class<T> type, TriConsumer<IServerUtils, T, EnchantedRanges> consumer);
 

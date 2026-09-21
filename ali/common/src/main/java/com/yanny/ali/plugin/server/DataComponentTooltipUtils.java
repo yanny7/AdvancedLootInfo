@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Unit;
 import net.minecraft.world.LockCode;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.food.VillagerFood;
 import net.minecraft.world.item.AdventureModePredicate;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.JukeboxPlayable;
@@ -28,6 +29,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import net.minecraft.world.level.block.entity.PotDecorations;
+import net.minecraft.world.level.block.entity.SignText;
 import net.minecraft.world.level.saveddata.maps.MapId;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -235,12 +237,6 @@ public class DataComponentTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static TooltipBuilder getMapColorTooltip(IServerUtils utils, MapItemColor value) {
-        return utils.getValueTooltip(utils, value.rgb()).key(Lang.Value.RGB);
-    }
-
-    @Unmodifiable
-    @NotNull
     public static TooltipBuilder getMapIdTooltip(IServerUtils utils, MapId value) {
         return utils.getValueTooltip(utils, value.id()).key(Lang.Value.VALUE);
     }
@@ -398,12 +394,63 @@ public class DataComponentTooltipUtils {
     }
 
     @NotNull
+    public static TooltipBuilder getCookingFuelTooltip(IServerUtils utils, CookingFuel value) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, value.burnTime()).build(Lang.Value.BURN_TIME));
+            b.add(utils.getValueTooltip(utils, value.speedMultiplier()).build(Lang.Value.SPEED_MULTIPLIER));
+        });
+    }
+
+    @NotNull
+    public static TooltipBuilder getBrewingFuelTooltip(IServerUtils utils, BrewingFuel value) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, value.uses()).build(Lang.Value.USES));
+            b.add(utils.getValueTooltip(utils, value.speedMultiplier()).build(Lang.Value.SPEED_MULTIPLIER));
+        });
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static TooltipBuilder getCompostableTooltip(IServerUtils utils, Compostable value) {
+        return utils.getValueTooltip(utils, value.layers()).key(Lang.Value.LAYERS);
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static TooltipBuilder getVillagerFoodTooltip(IServerUtils utils, VillagerFood value) {
+        return utils.getValueTooltip(utils, value.nutrition()).key(Lang.Value.NUTRITION);
+    }
+
+    @NotNull
+    public static TooltipBuilder getMobVisibilityTooltip(IServerUtils utils, MobVisibility value) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, value.targetingEntityTypes()).build(Lang.Branch.ENTITY_TYPES));
+            b.add(utils.getValueTooltip(utils, value.visibility()).build(Lang.Value.VISIBILITY));
+        });
+    }
+
+    @NotNull
+    public static TooltipBuilder getSignTextTooltip(IServerUtils utils, SignText value) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, value.getMessages(false)).build(Lang.Branch.MESSAGES));
+            b.add(utils.getValueTooltip(utils, value.getMessages(true)).build(Lang.Branch.FILTERED_MESSAGES));
+            b.add(utils.getValueTooltip(utils, value.getColor()).build(Lang.Value.COLOR));
+            b.add(utils.getValueTooltip(utils, value.hasGlowingText()).build(Lang.Value.HAS_GLOWING_TEXT));
+        });
+    }
+
+    @NotNull
+    public static TooltipBuilder getSulfurCubeContentTooltip(IServerUtils utils, SulfurCubeContent value) {
+        return utils.getValueTooltip(utils, value.absorbedBlockItemStack()).key(Lang.Branch.ITEM);
+    }
+
+    @NotNull
     public static TooltipBuilder getPotDecorationsTooltip(IServerUtils utils, PotDecorations value) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, value.back()).build(Lang.Value.BACK));
-            b.add(utils.getValueTooltip(utils, value.left()).build(Lang.Value.LEFT));
-            b.add(utils.getValueTooltip(utils, value.right()).build(Lang.Value.RIGHT));
-            b.add(utils.getValueTooltip(utils, value.front()).build(Lang.Value.FRONT));
+            b.add(utils.getValueTooltip(utils, value.back()).build(Lang.Branch.BACK));
+            b.add(utils.getValueTooltip(utils, value.left()).build(Lang.Branch.LEFT));
+            b.add(utils.getValueTooltip(utils, value.right()).build(Lang.Branch.RIGHT));
+            b.add(utils.getValueTooltip(utils, value.front()).build(Lang.Branch.FRONT));
         });
     }
 

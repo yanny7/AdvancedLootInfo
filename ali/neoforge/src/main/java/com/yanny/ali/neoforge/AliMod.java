@@ -54,6 +54,6 @@ public class AliMod {
 
     @SubscribeEvent
     public void onAddReloadListener(AddServerReloadListenersEvent event) {
-        event.addListener(Identifier.fromNamespaceAndPath(Utils.MOD_ID, "fake_loot_manager"), SERVER.getFakeLootDataManager(event.getRegistryAccess()));
+        event.addListener(Identifier.fromNamespaceAndPath(Utils.MOD_ID, "fake_loot_manager"), SERVER.getFakeLootDataManager(event.getServerResources().fullRegistries().lookup()));
     }
 }

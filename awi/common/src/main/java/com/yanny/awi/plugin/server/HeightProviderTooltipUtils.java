@@ -56,15 +56,15 @@ public class HeightProviderTooltipUtils {
     }
 
     @NotNull
-    private static TooltipBuilder getVerticalAnchorTooltip(IServerUtils utils, VerticalAnchor anchor) {
-        if (anchor instanceof VerticalAnchor.Absolute absolute) {
-            return array((b) -> b.add(utils.getValueTooltip(utils, absolute.y()).build(Lang.Value.ABSOLUTE_Y)));
-        } else if (anchor instanceof VerticalAnchor.AboveBottom aboveBottom) {
-            return array((b) -> b.add(utils.getValueTooltip(utils, aboveBottom.offset()).build(Lang.Value.ABOVE_BOTTOM)));
-        } else if (anchor instanceof VerticalAnchor.BelowTop belowTop) {
-            return array((b) -> b.add(utils.getValueTooltip(utils, belowTop.offset()).build(Lang.Value.BELOW_TOP)));
-        } else {
-            return array((b) -> b.add(utils.getValueTooltip(utils, anchor.toString())));
-        }
+    public static TooltipBuilder getVerticalAnchorTooltip(IServerUtils utils, VerticalAnchor anchor) {
+        return switch (anchor) {
+            case VerticalAnchor.Absolute(int y) ->
+                    array((b) -> b.add(utils.getValueTooltip(utils, y).build(Lang.Value.ABSOLUTE_Y)));
+            case VerticalAnchor.AboveBottom(int offset) ->
+                    array((b) -> b.add(utils.getValueTooltip(utils, offset).build(Lang.Value.ABOVE_BOTTOM)));
+            case VerticalAnchor.BelowTop(int offset) ->
+                    array((b) -> b.add(utils.getValueTooltip(utils, offset).build(Lang.Value.BELOW_TOP)));
+            default -> array((b) -> b.add(utils.getValueTooltip(utils, anchor.toString())));
+        };
     }
 }

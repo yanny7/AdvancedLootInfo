@@ -1,5 +1,7 @@
 package com.yanny.ali.plugin.server;
 
+import net.minecraft.world.level.storage.loot.providers.number.floats.ResolvableFloat;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ResolvableInt;
 import com.mojang.authlib.properties.Property;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
@@ -35,12 +37,15 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.storage.loot.ContainerComponentManipulator;
-import net.minecraft.world.level.storage.loot.IntRange;
+import net.minecraft.world.level.storage.loot.FloatRangePredicate;
+import net.minecraft.world.level.storage.loot.IntLimit;
+import net.minecraft.world.level.storage.loot.IntRangePredicate;
 import net.minecraft.world.level.storage.loot.LootContextArg;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -135,7 +140,9 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static <T> TooltipBuilder getTagPredicateTooltip(IServerUtils ignoredUtils, TagPredicate<T> tagPredicate) {
-        return TooltipBuilder.keyValue(tagPredicate.tag().location().toString(), Boolean.toString(tagPredicate.expected()));
+        return tagPredicate.tag().unwrapKey()
+                .map((tag) -> TooltipBuilder.keyValue(tag.location().toString(), Boolean.toString(tagPredicate.expected())))
+                .orElseGet(() -> TooltipBuilder.keyValue(tagPredicate.tag().toString(), Boolean.toString(tagPredicate.expected())));
     }
 
     @NotNull
@@ -304,13 +311,50 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getNumberProviderTooltip(IServerUtils utils, NumberProvider value) {
-        return TooltipBuilder.value(utils.convertNumber(utils, value));
+    public static TooltipBuilder getIntProviderTooltip(IServerUtils utils, ContextIntProvider value) {
+        return TooltipBuilder.value(utils.convertInt(utils, Holder.direct(value)));
     }
 
     @NotNull
-    public static TooltipBuilder getIntRangeTooltip(IServerUtils utils, IntRange range) {
-        return TooltipBuilder.value(RangeValue.rangeToString(utils.convertNumber(utils, range.min), utils.convertNumber(utils, range.max)));
+    public static TooltipBuilder getFloatProviderTooltip(IServerUtils utils, ContextFloatProvider value) {
+        return TooltipBuilder.value(utils.convertFloat(utils, Holder.direct(value)));
+    }
+
+    @NotNull
+    public static TooltipBuilder getResolvableIntTooltip(IServerUtils utils, ResolvableInt value) {
+        return switch (value) {
+            case ResolvableInt.Constant constant -> utils.getValueTooltip(utils, constant.value());
+            case ResolvableInt.Reference reference -> utils.getValueTooltip(utils, reference.key().identifier());
+        };
+    }
+
+    @NotNull
+    public static TooltipBuilder getResolvableFloatTooltip(IServerUtils utils, ResolvableFloat value) {
+        return switch (value) {
+            case ResolvableFloat.Constant constant -> utils.getValueTooltip(utils, constant.value());
+            case ResolvableFloat.Reference reference -> utils.getValueTooltip(utils, reference.key().identifier());
+        };
+    }
+
+    @NotNull
+    public static TooltipBuilder getIntLimitTooltip(IServerUtils utils, IntLimit limit) {
+        return TooltipBuilder.value(RangeValue.rangeToString(utils.convertInt(utils, limit.min.orElse(null)), utils.convertInt(utils, limit.max.orElse(null))));
+    }
+
+    @NotNull
+    public static TooltipBuilder getIntRangePredicateTooltip(IServerUtils utils, IntRangePredicate range) {
+        return switch (range) {
+            case IntRangePredicate.Point point -> TooltipBuilder.value(utils.convertInt(utils, point.value()));
+            case IntRangePredicate.Line line -> TooltipBuilder.value(RangeValue.rangeToString(utils.convertInt(utils, line.min.orElse(null)), utils.convertInt(utils, line.max.orElse(null))));
+        };
+    }
+
+    @NotNull
+    public static TooltipBuilder getFloatRangePredicateTooltip(IServerUtils utils, FloatRangePredicate range) {
+        return switch (range) {
+            case FloatRangePredicate.Point point -> TooltipBuilder.value(utils.convertFloat(utils, point.value()));
+            case FloatRangePredicate.Line line -> TooltipBuilder.value(RangeValue.rangeToString(utils.convertFloat(utils, line.min.orElse(null)), utils.convertFloat(utils, line.max.orElse(null))));
+        };
     }
 
     @NotNull
@@ -454,7 +498,12 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getDataComponentPatchTooltip(IServerUtils utils, DataComponentPatch data) {
-        return getMapTooltip(utils, data.map, Comparator.comparing(BuiltInRegistries.DATA_COMPONENT_TYPE::getKey), GenericTooltipUtils::getDataComponentPatchEntryTooltip);
+        DataComponentPatch.SplitResult split = data.split();
+        Map<DataComponentType<?>, Optional<?>> map = new HashMap<>();
+
+        split.added().forEach((component) -> map.put(component.type(), Optional.of(component.value())));
+        split.removed().forEach((type) -> map.put(type, Optional.empty()));
+        return getMapTooltip(utils, map, Comparator.comparing(BuiltInRegistries.DATA_COMPONENT_TYPE::getKey), GenericTooltipUtils::getDataComponentPatchEntryTooltip);
     }
 
     @NotNull

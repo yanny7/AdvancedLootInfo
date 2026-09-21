@@ -1,5 +1,12 @@
 package com.yanny.ali.test;
 
+import net.minecraft.world.level.storage.loot.providers.number.floats.ResolvableFloat;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProviders;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ResolvableInt;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
+import net.minecraft.world.level.block.entity.DecoratedPotPatterns;
+import net.minecraft.world.level.block.entity.SignText;
+import net.minecraft.world.food.VillagerFood;
 import com.yanny.ali.plugin.server.DataComponentTooltipUtils;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
@@ -256,7 +263,7 @@ public class DataComponentTooltipTest {
                 Holder.direct(SoundEvents.ALLAY_HURT),
                 true,
                 List.of(
-                        new TeleportRandomlyConsumeEffect(20),
+                        new TeleportRandomlyConsumeEffect(20, true),
                         new ClearAllStatusEffectsConsumeEffect()
                 )
         )).build(), List.of(
@@ -267,6 +274,7 @@ public class DataComponentTooltipTest {
                 "On Consume Effects:",
                 "  -> Teleport Randomly:",
                 "    -> Diameter: 20.0",
+                "    -> Directional Particles: true",
                 "  -> Clear All Effects"
         ));
     }
@@ -400,12 +408,13 @@ public class DataComponentTooltipTest {
     @Test
     public void testDeathProtectionTooltip() {
         assertTooltip(DataComponentTooltipUtils.getDeathProtectionTooltip(UTILS, new DeathProtection(List.of(
-                new TeleportRandomlyConsumeEffect(30),
+                new TeleportRandomlyConsumeEffect(30, true),
                 new ClearAllStatusEffectsConsumeEffect()
         ))).build(), List.of(
                 "Death Effects:",
                 "  -> Teleport Randomly:",
                 "    -> Diameter: 30.0",
+                "    -> Directional Particles: true",
                 "  -> Clear All Effects"
         ));
     }
@@ -449,11 +458,6 @@ public class DataComponentTooltipTest {
     @Test
     public void testDyedColorTooltip() {
         assertTooltip(DataComponentTooltipUtils.getDyedColorTooltip(UTILS, new DyedItemColor(12345)).build(), List.of("RGB: 12345"));
-    }
-
-    @Test
-    public void testMapColorTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getMapColorTooltip(UTILS, new MapItemColor(54321)).build(), List.of("RGB: 54321"));
     }
 
     @Test
@@ -767,15 +771,23 @@ public class DataComponentTooltipTest {
     @Test
     public void testPotDecorationsTooltip() {
         assertTooltip(DataComponentTooltipUtils.getPotDecorationsTooltip(UTILS, new PotDecorations(
-                Items.SHELTER_POTTERY_SHERD,
-                Items.SHEAF_POTTERY_SHERD,
-                Items.ARMS_UP_POTTERY_SHERD,
-                Items.BLADE_POTTERY_SHERD
+                Optional.of(new ItemStackTemplate(Items.SHELTER_POTTERY_SHERD)),
+                Optional.of(new ItemStackTemplate(Items.SHEAF_POTTERY_SHERD)),
+                Optional.of(new ItemStackTemplate(Items.ARMS_UP_POTTERY_SHERD)),
+                Optional.of(new ItemStackTemplate(Items.BLADE_POTTERY_SHERD))
         )).build(), List.of(
-                "Back: minecraft:shelter_pottery_sherd",
-                "Left: minecraft:sheaf_pottery_sherd",
-                "Right: minecraft:arms_up_pottery_sherd",
-                "Front: minecraft:blade_pottery_sherd"
+                "Back:",
+                "  -> Item: minecraft:shelter_pottery_sherd",
+                "  -> Count: 1",
+                "Left:",
+                "  -> Item: minecraft:sheaf_pottery_sherd",
+                "  -> Count: 1",
+                "Right:",
+                "  -> Item: minecraft:arms_up_pottery_sherd",
+                "  -> Count: 1",
+                "Front:",
+                "  -> Item: minecraft:blade_pottery_sherd",
+                "  -> Count: 1"
         ));
     }
 
@@ -955,5 +967,84 @@ public class DataComponentTooltipTest {
                 "Sound: minecraft:ambient.cave",
                 "Hit Sound: minecraft:entity.allay.hurt"
         ));
+    }
+
+    @Test
+    public void testCookingFuelTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getCookingFuelTooltip(UTILS, new CookingFuel(
+                ResolvableInt.fromKey(ContextIntProviders.COOKING_TIME_COAL),
+                new ResolvableFloat.Constant(1.5F)
+        )).build(), List.of(
+                "Burn Time: minecraft:cooking/time_coal",
+                "Speed Multiplier: 1.5"
+        ));
+    }
+
+    @Test
+    public void testBrewingFuelTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getBrewingFuelTooltip(UTILS, new BrewingFuel(
+                new ResolvableInt.Constant(20),
+                ResolvableFloat.fromKey(ContextFloatProviders.BREWING_DEFAULT_SPEED_MULTIPLIER)
+        )).build(), List.of(
+                "Uses: 20",
+                "Speed Multiplier: minecraft:brewing/speed_default"
+        ));
+    }
+
+    @Test
+    public void testCompostableTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getCompostableTooltip(UTILS, new Compostable(new ResolvableInt.Constant(1))).build(), List.of("Layers: 1"));
+    }
+
+    @Test
+    public void testVillagerFoodTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getVillagerFoodTooltip(UTILS, new VillagerFood(4)).build(), List.of("Nutrition: 4"));
+    }
+
+    @Test
+    public void testMobVisibilityTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getMobVisibilityTooltip(UTILS, new MobVisibility(
+                HolderSet.direct(EntityTypes.ZOMBIE.builtInRegistryHolder(), EntityTypes.SKELETON.builtInRegistryHolder()),
+                0.5F
+        )).build(), List.of(
+                "Entity Types:",
+                "  -> minecraft:zombie",
+                "  -> minecraft:skeleton",
+                "Visibility: 0.5"
+        ));
+    }
+
+    @Test
+    public void testSignTextTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getSignTextTooltip(UTILS, new SignText(
+                List.of(Component.literal("Hello"), Component.literal("World"), Component.empty(), Component.empty()),
+                List.of(Component.literal("Hello"), Component.literal("****"), Component.empty(), Component.empty()),
+                DyeColor.RED,
+                true
+        )).build(), List.of(
+                "Messages:",
+                "  -> Hello",
+                "  -> World",
+                "Filtered Messages:",
+                "  -> Hello",
+                "  -> ****",
+                "Color: Red",
+                "Has Glowing Text: true"
+        ));
+    }
+
+    @Test
+    public void testSulfurCubeContentTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getSulfurCubeContentTooltip(UTILS, new SulfurCubeContent(new ItemStackTemplate(Items.STONE))).build(), List.of(
+                "Item:",
+                "  -> Item: minecraft:stone",
+                "  -> Count: 1"
+        ));
+    }
+
+    @Test
+    public void testProvidesPotteryPatternTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getHolderTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.DECORATED_POT_PATTERN).getOrThrow(DecoratedPotPatterns.ANGLER)).build(),
+                List.of("Value: minecraft:angler"));
     }
 }

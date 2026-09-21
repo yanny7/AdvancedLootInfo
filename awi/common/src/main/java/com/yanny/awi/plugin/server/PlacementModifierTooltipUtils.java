@@ -4,6 +4,7 @@ import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.language.Lang;
+import net.minecraft.world.level.levelgen.feature.CuboidPlacement;
 import net.minecraft.world.level.levelgen.placement.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -75,16 +76,37 @@ public class PlacementModifierTooltipUtils {
     }
 
     @NotNull
+    public static TooltipBuilder getCuboidPlacementTooltip(IServerUtils utils, CuboidPlacement placement) {
+        return array((b) -> {
+            b.add(utils.getValueTooltip(utils, placement.xzSize()).build(Lang.Branch.XZ_SIZE));
+            b.add(utils.getValueTooltip(utils, placement.ySize()).build(Lang.Branch.Y_SIZE));
+            b.add(utils.getValueTooltip(utils, placement.includeEdges()).build(Lang.Value.INCLUDE_EDGES));
+            b.add(utils.getValueTooltip(utils, placement.includeInterior()).build(Lang.Value.INCLUDE_INTERIOR));
+        }, Lang.PlacementModifier.CUBOID);
+    }
+
+    @NotNull
+    public static TooltipBuilder getRandomChancePlacementTooltip(IServerUtils utils, RandomChancePlacement placement) {
+        return array((b) -> b.add(utils.getValueTooltip(utils, placement.chance()).build(Lang.Value.CHANCE)), Lang.PlacementModifier.RANDOM_CHANCE);
+    }
+
+    @NotNull
+    public static TooltipBuilder getRandomlySelectedPlacementTooltip(IServerUtils utils, RandomlySelectedPlacement placement) {
+        return array((b) -> b.add(utils.getValueTooltip(utils, placement.placements()).build(Lang.Branch.PLACEMENTS)), Lang.PlacementModifier.RANDOMLY_SELECTED);
+    }
+
+    @NotNull
     public static TooltipBuilder getRarityFilterTooltip(IServerUtils utils, RarityFilter placement) {
         return array((b) -> b.add(utils.getValueTooltip(utils, placement.chance).build(Lang.Value.CHANCE)), Lang.PlacementModifier.RARITY_FILTER);
     }
 
     @NotNull
-    public static TooltipBuilder getRandomOffsetPlacementTooltip(IServerUtils utils, RandomOffsetPlacement placement) {
+    public static TooltipBuilder getOffsetPlacementTooltip(IServerUtils utils, OffsetPlacement placement) {
         return array((b) -> {
-            b.add(utils.getValueTooltip(utils, placement.xzSpread).build(Lang.Branch.XZ_SPREAD));
-            b.add(utils.getValueTooltip(utils, placement.ySpread).build(Lang.Branch.Y_SPREAD));
-        }, Lang.PlacementModifier.RANDOM_OFFSET);
+            b.add(utils.getValueTooltip(utils, placement.x()).build(Lang.Branch.X));
+            b.add(utils.getValueTooltip(utils, placement.y()).build(Lang.Branch.Y));
+            b.add(utils.getValueTooltip(utils, placement.z()).build(Lang.Branch.Z));
+        }, Lang.PlacementModifier.OFFSET);
     }
 
     @NotNull

@@ -2,7 +2,6 @@ package com.yanny.ali.network;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.Utils;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -10,7 +9,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -27,26 +25,23 @@ public record InfoSyncLootTableMessage(ResourceKey<LootTable> location, LootTabl
                     (b, l) -> {
                         int fallbackIndex = b.writerIndex();
                         try {
-                            ByteBufCodecs.fromCodecWithRegistries(LootDataType.TABLE.codec()).encode(b, l);
+                            ByteBufCodecs.fromCodecWithRegistries(LootTable.DIRECT_CODEC).encode(b, l);
                         } catch (Throwable e) {
                             LOGGER.error("Failed to encode loot table with error: {}", e.getMessage(), e);
                             b.writerIndex(fallbackIndex);
-                            ByteBufCodecs.fromCodecWithRegistries(LootDataType.TABLE.codec()).encode(b, LootTable.EMPTY);
+                            ByteBufCodecs.fromCodecWithRegistries(LootTable.DIRECT_CODEC).encode(b, LootTable.EMPTY);
                         }
                     },
                     (b) -> {
                         try {
-                            return ByteBufCodecs.fromCodecWithRegistries(LootDataType.TABLE.codec()).decode(b);
+                            return ByteBufCodecs.fromCodecWithRegistries(LootTable.DIRECT_CODEC).decode(b);
                         } catch (Throwable e) {
                             LOGGER.error("Failed to decode loot table with error: {}", e.getMessage(), e);
                             return LootTable.EMPTY;
                         }
                     }),
             (l) -> l.lootTable,
-            StreamCodec.of(
-                    (b, l) -> b.writeCollection(l, (a, i) -> a.writeIdentifier(BuiltInRegistries.ITEM.getKey(i))),
-                    (b) -> b.readList((a) -> BuiltInRegistries.ITEM.getValue(a.readIdentifier()))
-            ), (l) -> l.items,
+            ByteBufCodecs.registry(Registries.ITEM).apply(ByteBufCodecs.list()), (l) -> l.items,
             InfoSyncLootTableMessage::new
     );
 

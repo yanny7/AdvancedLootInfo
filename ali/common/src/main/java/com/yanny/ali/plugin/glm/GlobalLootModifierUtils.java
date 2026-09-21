@@ -8,9 +8,11 @@ import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.common.nodes.GlobalLootModifierNode;
 import com.yanny.ali.plugin.server.TooltipUtils;
+import net.minecraft.advancements.predicates.BlockPredicate;
 import net.minecraft.advancements.predicates.entity.EntityPredicate;
 import net.minecraft.advancements.predicates.entity.EntitySubPredicate;
 import net.minecraft.advancements.predicates.entity.EntityTypePredicate;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.context.ContextKey;
@@ -20,13 +22,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.level.storage.loot.predicates.AllOfCondition;
-import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
-import net.minecraft.world.level.storage.loot.predicates.DamageSourceCondition;
-import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
+import net.minecraft.world.level.storage.loot.predicates.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -129,11 +125,11 @@ public class GlobalLootModifierUtils {
         }
 
         if (value instanceof AllOfCondition allOf) {
-            return testAllOf(utils, allOf.terms, page);
+            return testAllOf(utils, allOf.terms.stream().map(Holder::value).toList(), page);
         } else if (value instanceof AnyOfCondition anyOf) {
-            return testAnyOf(utils, anyOf.terms, page);
-        } else if (value instanceof InvertedLootItemCondition inverted) {
-            return invert(utils.testPage(utils, inverted.term(), page));
+            return testAnyOf(utils, anyOf.terms.stream().map(Holder::value).toList(), page);
+        } else if (value instanceof InvertedLootItemCondition(Holder<LootItemCondition> term)) {
+            return invert(utils.testPage(utils, term.value(), page));
         } else if (value instanceof LootItemCondition condition) {
             return LootContextProbe.probe(utils, condition, page, preparers, lootData);
         }
@@ -182,12 +178,17 @@ public class GlobalLootModifierUtils {
     }
 
     @Nullable
-    public static Verdict testBlockStateProperty(IServerUtils ignoredUtils, LootItemBlockStatePropertyCondition condition, LootPage page) {
+    public static Verdict testMatchBlock(IServerUtils ignoredUtils, MatchBlock condition, LootPage page) {
         if (page.blocks().isEmpty()) {
             return null;
         }
 
-        return testBlocks(page, (b) -> condition.block().value().equals(b), condition.properties().map((p) -> p.properties().isEmpty()).orElse(true));
+        BlockPredicate predicate = condition.predicate();
+        boolean explained = predicate.properties().map((p) -> p.properties().isEmpty()).orElse(true)
+                && predicate.nbt().isEmpty()
+                && predicate.components().isEmpty();
+
+        return testBlocks(page, (b) -> predicate.blocks().map((blocks) -> blocks.contains(b.builtInRegistryHolder())).orElse(true), explained);
     }
 
     @NotNull

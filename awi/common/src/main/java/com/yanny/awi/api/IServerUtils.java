@@ -12,7 +12,7 @@ import net.minecraft.util.valueproviders.FloatProvider;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSize;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.rootplacers.RootPlacer;
@@ -29,7 +29,7 @@ import java.util.List;
 
 public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUtils {
     @NotNull
-    <T extends FeatureConfiguration> List<Either<Block, TagKey<Block>>> collectBlocks(IServerUtils utils, T entry);
+    <T extends Feature> List<Either<Block, TagKey<Block>>> collectBlocks(IServerUtils utils, T entry);
 
     @NotNull
     <T extends BlockStateProvider> List<Block> collectBlocks(IServerUtils utils, T entry);
@@ -41,7 +41,7 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
     <T extends TreeDecorator> List<Block> collectBlocks(IServerUtils utils, T entry);
 
     @NotNull
-    <T extends FeatureConfiguration> TooltipBuilder getFeatureTooltip(IServerUtils utils, T entry);
+    <T extends Feature> TooltipBuilder getFeatureTooltip(IServerUtils utils, T entry);
 
     @NotNull
     <T extends PlacementModifier> TooltipBuilder getPlacementModifierTooltip(IServerUtils utils, T entry);

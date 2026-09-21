@@ -8,8 +8,6 @@ import net.minecraft.advancements.predicates.entity.EntityTypePredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.clock.WorldClocks;
@@ -18,23 +16,25 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.storage.loot.IntRange;
+import net.minecraft.world.level.storage.loot.FloatRangePredicate;
+import net.minecraft.world.level.storage.loot.IntRangePredicate;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.*;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProviders;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
 import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
-import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
 
 public class ConditionTooltipTest {
     @Test
     public void testAllOfTooltip() {
         assertTooltip(ConditionTooltipUtils.getAllOfTooltip(UTILS, (AllOfCondition) AllOfCondition.allOf(
-                TimeCheck.time(LOOKUP.lookupOrThrow(Registries.WORLD_CLOCK).getOrThrow(WorldClocks.OVERWORLD), IntRange.range(1, 8)).setPeriod(10),
+                TimeCheck.time(LOOKUP.lookupOrThrow(Registries.WORLD_CLOCK).getOrThrow(WorldClocks.OVERWORLD), IntRangePredicate.range(1, 8)).setPeriod(10),
                 WeatherCheck.weather().setRaining(true)
         ).build()).build(), List.of(
                 "All Of:",
@@ -56,7 +56,7 @@ public class ConditionTooltipTest {
     @Test
     public void testAnyOfTooltip() {
         assertTooltip(ConditionTooltipUtils.getAnyOfTooltip(UTILS, (AnyOfCondition) AnyOfCondition.anyOf(
-                TimeCheck.time(LOOKUP.lookupOrThrow(Registries.WORLD_CLOCK).getOrThrow(WorldClocks.OVERWORLD), IntRange.range(1, 8)).setPeriod(10),
+                TimeCheck.time(LOOKUP.lookupOrThrow(Registries.WORLD_CLOCK).getOrThrow(WorldClocks.OVERWORLD), IntRangePredicate.range(1, 8)).setPeriod(10),
                 WeatherCheck.weather().setRaining(true)
         ).build()).build(), List.of(
                 "Any Of:",
@@ -70,14 +70,14 @@ public class ConditionTooltipTest {
     }
 
     @Test
-    public void testBlockStatePropertyTooltip() {
-        assertTooltip(ConditionTooltipUtils.getBlockStatePropertyTooltip(UTILS, (LootItemBlockStatePropertyCondition) LootItemBlockStatePropertyCondition.hasBlockStateProperties(Blocks.FURNACE).build()).build(), List.of(
-                "Block State Property:",
+    public void testMatchBlockTooltip() {
+        assertTooltip(ConditionTooltipUtils.getMatchBlockTooltip(UTILS, (MatchBlock) MatchBlock.blockMatches(LOOKUP.lookupOrThrow(Registries.BLOCK), Blocks.FURNACE).build()).build(), List.of(
+                "Match Block:",
                 "  -> Block: minecraft:furnace"
         ));
-        assertTooltip(ConditionTooltipUtils.getBlockStatePropertyTooltip(UTILS, (LootItemBlockStatePropertyCondition) LootItemBlockStatePropertyCondition.hasBlockStateProperties(Blocks.BAMBOO)
-                .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.FACING, Direction.EAST)).build()).build(), List.of(
-                "Block State Property:",
+        assertTooltip(ConditionTooltipUtils.getMatchBlockTooltip(UTILS, (MatchBlock) MatchBlock.blockMatches(LOOKUP.lookupOrThrow(Registries.BLOCK), Blocks.BAMBOO,
+                StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.FACING, Direction.EAST)).build()).build(), List.of(
+                "Match Block:",
                 "  -> Block: minecraft:bamboo",
                 "  -> Properties:",
                 "    -> facing: east"
@@ -88,8 +88,8 @@ public class ConditionTooltipTest {
     public void testDamageSourceProperties() {
         assertTooltip(ConditionTooltipUtils.getDamageSourcePropertiesTooltip(UTILS, (DamageSourceCondition) DamageSourceCondition.hasDamageSource(
                 DamageSourcePredicate.Builder.damageType()
-                        .tag(TagPredicate.is(DamageTypeTags.BYPASSES_ARMOR))
-                        .tag(TagPredicate.isNot(DamageTypeTags.IS_EXPLOSION))
+                        .tag(TagPredicate.is(LOOKUP.lookupOrThrow(Registries.DAMAGE_TYPE), DamageTypeTags.BYPASSES_ARMOR))
+                        .tag(TagPredicate.isNot(LOOKUP.lookupOrThrow(Registries.DAMAGE_TYPE), DamageTypeTags.IS_EXPLOSION))
                         .direct(EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypes.WARDEN)))
                         .source(EntityPredicate.Builder.entity().team("Blue"))
                         .isDirect(true)
@@ -145,8 +145,8 @@ public class ConditionTooltipTest {
                 "  -> Target: Direct Attacker"
         ));
         assertTooltip(ConditionTooltipUtils.getEntityScoresTooltip(UTILS, (EntityHasScoreCondition) EntityHasScoreCondition.hasScores(LootContext.EntityTarget.DIRECT_ATTACKER)
-                .withScore("single", IntRange.range(2, 5))
-                .withScore("double", IntRange.range(1, 7))
+                .withScore("single", IntRangePredicate.range(2, 5))
+                .withScore("double", IntRangePredicate.range(1, 7))
                 .build()
         ).build(), List.of(
                 "Entity Scores:",
@@ -162,7 +162,7 @@ public class ConditionTooltipTest {
     @Test
     public void testInvertedTooltip() {
         assertTooltip(ConditionTooltipUtils.getInvertedTooltip(UTILS, (InvertedLootItemCondition) InvertedLootItemCondition.invert(
-                TimeCheck.time(LOOKUP.lookupOrThrow(Registries.WORLD_CLOCK).getOrThrow(WorldClocks.OVERWORLD), IntRange.range(1, 8)).setPeriod(10)
+                TimeCheck.time(LOOKUP.lookupOrThrow(Registries.WORLD_CLOCK).getOrThrow(WorldClocks.OVERWORLD), IntRangePredicate.range(1, 8)).setPeriod(10)
         ).build()).build(), List.of(
                 "Inverted:",
                 "  -> Time Check:",
@@ -230,7 +230,7 @@ public class ConditionTooltipTest {
 
     @Test
     public void testRandomChanceWithLootingTooltip() {
-        assertTooltip(ConditionTooltipUtils.getRandomChanceWithEnchantedBonusTooltip(UTILS, (LootItemRandomChanceWithEnchantedBonusCondition) LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(LOOKUP, 0.25F, 5F).build()).build(), List.of(
+        assertTooltip(ConditionTooltipUtils.getRandomChanceWithEnchantedBonusTooltip(UTILS, (LootItemRandomChanceWithEnchantedBonusCondition) LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT), 0.25F, 5F).build()).build(), List.of(
                 "Random Chance With Enchanted Bonus:",
                 "  -> Unenchanted Chance: 0.25",
                 "  -> Enchanted Chance:",
@@ -238,14 +238,6 @@ public class ConditionTooltipTest {
                 "      -> Base: 5.25",
                 "      -> Per Level: 5.0",
                 "  -> Enchantment: minecraft:looting"
-        ));
-    }
-
-    @Test
-    public void testReferenceTooltip() {
-        assertTooltip(ConditionTooltipUtils.getReferenceTooltip(UTILS, (ConditionReference) ConditionReference.conditionReference(ResourceKey.create(Registries.PREDICATE, Identifier.withDefaultNamespace("test"))).build()).build(), List.of(
-                "Reference:",
-                "  -> Loot Table: minecraft:test"
         ));
     }
 
@@ -265,7 +257,7 @@ public class ConditionTooltipTest {
 
     @Test
     public void testTimeCheckTooltip() {
-        assertTooltip(ConditionTooltipUtils.getTimeCheckTooltip(UTILS, TimeCheck.time(LOOKUP.lookupOrThrow(Registries.WORLD_CLOCK).getOrThrow(WorldClocks.OVERWORLD), IntRange.range(5, 10)).setPeriod(24000).build()).build(), List.of(
+        assertTooltip(ConditionTooltipUtils.getTimeCheckTooltip(UTILS, TimeCheck.time(LOOKUP.lookupOrThrow(Registries.WORLD_CLOCK).getOrThrow(WorldClocks.OVERWORLD), IntRangePredicate.range(5, 10)).setPeriod(24000).build()).build(), List.of(
                 "Time Check:",
                 "  -> Clock: minecraft:overworld",
                 "  -> Period: 24000",
@@ -274,11 +266,20 @@ public class ConditionTooltipTest {
     }
 
     @Test
-    public void testValueCheckTooltip() {
-        assertTooltip(ConditionTooltipUtils.getValueCheckTooltip(UTILS, (ValueCheckCondition) ValueCheckCondition.hasValue(UniformGenerator.between(1, 20), IntRange.range(1, 10)).build()).build(), List.of(
-                "Value Check:",
+    public void testIntValueCheckTooltip() {
+        assertTooltip(ConditionTooltipUtils.getIntValueCheckTooltip(UTILS, (IntValueCheck) IntValueCheck.hasValue(ContextIntProviders.between(1, 20), IntRangePredicate.range(1, 10)).build()).build(), List.of(
+                "Int Value Check:",
                 "  -> Value: 1-20",
                 "  -> Range: 1 - 10"
+        ));
+    }
+
+    @Test
+    public void testFloatValueCheckTooltip() {
+        assertTooltip(ConditionTooltipUtils.getFloatValueCheckTooltip(UTILS, new FloatValueCheck(ContextFloatProviders.between(0.5F, 2.5F), FloatRangePredicate.exact(1.5F))).build(), List.of(
+                "Float Value Check:",
+                "  -> Value: 0.50-2.50",
+                "  -> Range: 1.50"
         ));
     }
 
@@ -302,10 +303,10 @@ public class ConditionTooltipTest {
 
     @Test
     public void testEnvironmentAttributeCheckTooltip() {
-        assertTooltip(ConditionTooltipUtils.getEnvironmentAttributeCheckTooltip(UTILS, (EnvironmentAttributeCheck<?>) EnvironmentAttributeCheck.environmentAttribute(EnvironmentAttributes.AMBIENT_LIGHT_COLOR, 5).build()).build(), List.of(
+        assertTooltip(ConditionTooltipUtils.getEnvironmentAttributeCheckTooltip(UTILS, (EnvironmentAttributeCheck<?>) EnvironmentAttributeCheck.environmentAttribute(EnvironmentAttributes.FOG_START_DISTANCE, 5F).build()).build(), List.of(
                 "Environment Attribute Check:",
-                "  -> Attribute: minecraft:visual/ambient_light_color",
-                "  -> Value: 5"
+                "  -> Attribute: minecraft:visual/fog_start_distance",
+                "  -> Value: 5.0"
         ));
     }
 }

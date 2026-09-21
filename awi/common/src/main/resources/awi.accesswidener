@@ -6,17 +6,14 @@ accessible field net/minecraft/world/level/levelgen/feature/stateproviders/Noise
 accessible field net/minecraft/world/level/levelgen/feature/stateproviders/NoiseThresholdProvider defaultState Lnet/minecraft/world/level/block/state/BlockState;
 accessible field net/minecraft/world/level/levelgen/feature/stateproviders/NoiseThresholdProvider lowStates Ljava/util/List;
 accessible field net/minecraft/world/level/levelgen/feature/stateproviders/NoiseThresholdProvider highStates Ljava/util/List;
-accessible field net/minecraft/world/level/levelgen/feature/stateproviders/RandomizedIntStateProvider source Lnet/minecraft/world/level/levelgen/feature/stateproviders/BlockStateProvider;
-accessible field net/minecraft/world/level/levelgen/feature/stateproviders/RotatedBlockProvider block Lnet/minecraft/world/level/block/Block;
+accessible field net/minecraft/world/level/levelgen/feature/stateproviders/RandomizedIntStateProvider source Lnet/minecraft/core/Holder;
 accessible field net/minecraft/world/level/levelgen/feature/stateproviders/WeightedStateProvider weightedList Lnet/minecraft/util/random/WeightedList;
 # worldgen
-accessible method net/minecraft/world/level/levelgen/SurfaceRules$Context <init> (Lnet/minecraft/world/level/levelgen/SurfaceSystem;Lnet/minecraft/world/level/levelgen/RandomState;Lnet/minecraft/world/level/chunk/ChunkAccess;Lnet/minecraft/world/level/levelgen/NoiseChunk;Ljava/util/function/Function;Lnet/minecraft/world/level/levelgen/WorldGenerationContext;Ljava/util/Set;)V
-accessible method net/minecraft/world/level/levelgen/SurfaceRules$Context updateXZ (II)V
-accessible method net/minecraft/world/level/levelgen/SurfaceRules$Context updateY (IIII)V
-accessible method net/minecraft/world/level/levelgen/SurfaceRules$SurfaceRule tryApply (III)Lnet/minecraft/world/level/block/state/BlockState;
+accessible method net/minecraft/world/level/levelgen/material/MaterialRuleContext <init> (Lnet/minecraft/world/level/levelgen/material/MaterialSystem;Lnet/minecraft/world/level/levelgen/RandomState;Lnet/minecraft/world/level/levelgen/densityfunction/DensityVolume;Lnet/minecraft/world/level/levelgen/densityfunction/DensitySamplerSet;Ljava/util/function/Function;Lnet/minecraft/world/level/levelgen/WorldGenerationContext;Ljava/util/Set;)V
+accessible method net/minecraft/world/level/levelgen/material/MaterialRuleContext updateXZ (IIII)V
+accessible method net/minecraft/world/level/levelgen/material/MaterialRuleContext updateY (IIII)V
 accessible method net/minecraft/world/level/biome/MultiNoiseBiomeSource parameters ()Lnet/minecraft/world/level/biome/Climate$ParameterList;
 accessible method net/minecraft/world/level/levelgen/structure/templatesystem/RuleTest getType ()Lnet/minecraft/world/level/levelgen/structure/templatesystem/RuleTestType;
-accessible method net/minecraft/world/level/levelgen/feature/stateproviders/BlockStateProvider type ()Lnet/minecraft/world/level/levelgen/feature/stateproviders/BlockStateProviderType;
 accessible method net/minecraft/world/level/levelgen/feature/treedecorators/TreeDecorator type ()Lnet/minecraft/world/level/levelgen/feature/treedecorators/TreeDecoratorType;
 accessible method net/minecraft/world/level/levelgen/feature/featuresize/FeatureSize type ()Lnet/minecraft/world/level/levelgen/feature/featuresize/FeatureSizeType;
 accessible method net/minecraft/world/level/levelgen/feature/rootplacers/RootPlacer type ()Lnet/minecraft/world/level/levelgen/feature/rootplacers/RootPlacerType;
@@ -25,18 +22,9 @@ accessible method net/minecraft/world/level/levelgen/feature/trunkplacers/TrunkP
 accessible method net/minecraft/world/level/levelgen/structure/templatesystem/PosRuleTest getType ()Lnet/minecraft/world/level/levelgen/structure/templatesystem/PosRuleTestType;
 accessible method net/minecraft/world/level/levelgen/blockpredicates/UnobstructedPredicate <init> (Lnet/minecraft/core/Vec3i;)V
 
-accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context surfaceDepth I
-accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context stoneDepthAbove I
-accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context stoneDepthBelow I
-accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context blockX I
-accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context blockZ I
-accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context context Lnet/minecraft/world/level/levelgen/WorldGenerationContext;
-accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context randomState Lnet/minecraft/world/level/levelgen/RandomState;
-accessible field net/minecraft/world/level/levelgen/SurfaceSystem defaultBlock Lnet/minecraft/world/level/block/state/BlockState;
-accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context lastMinSurfaceLevelUpdate J
-accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context lastUpdateXZ J
-accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context minSurfaceLevel I
-accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context lastUpdateY J
+accessible field net/minecraft/world/level/levelgen/material/MaterialRuleContext lastMinSurfaceLevelUpdate J
+accessible field net/minecraft/world/level/levelgen/material/MaterialRuleContext lastUpdateXZ J
+accessible field net/minecraft/world/level/levelgen/material/MaterialRuleContext minSurfaceLevel I
 
 accessible field net/minecraft/world/level/levelgen/placement/HeightmapPlacement heightmap Lnet/minecraft/world/level/levelgen/Heightmap$Types;
 accessible field net/minecraft/world/level/levelgen/placement/CountPlacement count Lnet/minecraft/util/valueproviders/IntProvider;
@@ -121,7 +109,7 @@ accessible field net/minecraft/world/level/levelgen/feature/featuresize/ThreeLay
 accessible field net/minecraft/world/level/levelgen/feature/featuresize/ThreeLayersFeatureSize middleSize I
 accessible field net/minecraft/world/level/levelgen/feature/featuresize/ThreeLayersFeatureSize upperSize I
 accessible field net/minecraft/world/level/levelgen/feature/rootplacers/RootPlacer trunkOffsetY Lnet/minecraft/util/valueproviders/IntProvider;
-accessible field net/minecraft/world/level/levelgen/feature/rootplacers/RootPlacer rootProvider Lnet/minecraft/world/level/levelgen/feature/stateproviders/BlockStateProvider;
+accessible field net/minecraft/world/level/levelgen/feature/rootplacers/RootPlacer rootProvider Lnet/minecraft/core/Holder;
 accessible field net/minecraft/world/level/levelgen/feature/rootplacers/RootPlacer aboveRootPlacement Ljava/util/Optional;
 accessible field net/minecraft/world/level/levelgen/feature/rootplacers/MangroveRootPlacer mangroveRootPlacement Lnet/minecraft/world/level/levelgen/feature/rootplacers/MangroveRootPlacement;
 accessible field net/minecraft/world/level/levelgen/feature/stateproviders/NoiseThresholdProvider threshold F
@@ -131,11 +119,11 @@ accessible field net/minecraft/world/level/levelgen/feature/stateproviders/Rando
 accessible field net/minecraft/world/level/levelgen/feature/treedecorators/LeaveVineDecorator probability F
 accessible field net/minecraft/world/level/levelgen/feature/treedecorators/CocoaDecorator probability F
 accessible field net/minecraft/world/level/levelgen/feature/treedecorators/BeehiveDecorator probability F
-accessible field net/minecraft/world/level/levelgen/feature/treedecorators/AlterGroundDecorator provider Lnet/minecraft/world/level/levelgen/feature/stateproviders/BlockStateProvider;
+accessible field net/minecraft/world/level/levelgen/feature/treedecorators/AlterGroundDecorator provider Lnet/minecraft/core/Holder;
 accessible field net/minecraft/world/level/levelgen/feature/treedecorators/AttachedToLeavesDecorator probability F
 accessible field net/minecraft/world/level/levelgen/feature/treedecorators/AttachedToLeavesDecorator exclusionRadiusXZ I
 accessible field net/minecraft/world/level/levelgen/feature/treedecorators/AttachedToLeavesDecorator exclusionRadiusY I
-accessible field net/minecraft/world/level/levelgen/feature/treedecorators/AttachedToLeavesDecorator blockProvider Lnet/minecraft/world/level/levelgen/feature/stateproviders/BlockStateProvider;
+accessible field net/minecraft/world/level/levelgen/feature/treedecorators/AttachedToLeavesDecorator blockProvider Lnet/minecraft/core/Holder;
 accessible field net/minecraft/world/level/levelgen/feature/treedecorators/AttachedToLeavesDecorator requiredEmptyBlocks I
 accessible field net/minecraft/world/level/levelgen/feature/treedecorators/AttachedToLeavesDecorator directions Ljava/util/List;
 accessible field net/minecraft/world/level/levelgen/structure/templatesystem/BlockAgeProcessor mossiness F
@@ -177,8 +165,6 @@ accessible field net/minecraft/world/level/levelgen/feature/foliageplacers/Cherr
 accessible field net/minecraft/world/level/levelgen/feature/foliageplacers/CherryFoliagePlacer cornerHoleChance F
 accessible field net/minecraft/world/level/levelgen/feature/foliageplacers/CherryFoliagePlacer hangingLeavesChance F
 accessible field net/minecraft/world/level/levelgen/feature/foliageplacers/CherryFoliagePlacer hangingLeavesExtensionChance F
-accessible field net/minecraft/world/level/levelgen/placement/RandomOffsetPlacement xzSpread Lnet/minecraft/util/valueproviders/IntProvider;
-accessible field net/minecraft/world/level/levelgen/placement/RandomOffsetPlacement ySpread Lnet/minecraft/util/valueproviders/IntProvider;
 accessible field net/minecraft/world/level/levelgen/placement/FixedPlacement positions Ljava/util/List;
 accessible field net/minecraft/world/level/levelgen/feature/treedecorators/PaleMossDecorator leavesProbability F
 accessible field net/minecraft/world/level/levelgen/feature/treedecorators/PaleMossDecorator trunkProbability F
@@ -187,19 +173,24 @@ accessible field net/minecraft/world/level/levelgen/feature/treedecorators/Creak
 accessible field net/minecraft/world/level/levelgen/feature/treedecorators/PlaceOnGroundDecorator tries I
 accessible field net/minecraft/world/level/levelgen/feature/treedecorators/PlaceOnGroundDecorator radius I
 accessible field net/minecraft/world/level/levelgen/feature/treedecorators/PlaceOnGroundDecorator height I
-accessible field net/minecraft/world/level/levelgen/feature/treedecorators/PlaceOnGroundDecorator blockStateProvider Lnet/minecraft/world/level/levelgen/feature/stateproviders/BlockStateProvider;
+accessible field net/minecraft/world/level/levelgen/feature/treedecorators/PlaceOnGroundDecorator blockStateProvider Lnet/minecraft/core/Holder;
 accessible field net/minecraft/world/level/levelgen/feature/treedecorators/AttachedToLogsDecorator probability F
-accessible field net/minecraft/world/level/levelgen/feature/treedecorators/AttachedToLogsDecorator blockProvider Lnet/minecraft/world/level/levelgen/feature/stateproviders/BlockStateProvider;
+accessible field net/minecraft/world/level/levelgen/feature/treedecorators/AttachedToLogsDecorator blockProvider Lnet/minecraft/core/Holder;
 accessible field net/minecraft/world/level/levelgen/feature/treedecorators/AttachedToLogsDecorator directions Ljava/util/List;
-accessible field net/minecraft/world/level/levelgen/feature/stateproviders/RuleBasedStateProvider fallback Lnet/minecraft/world/level/levelgen/feature/stateproviders/BlockStateProvider;
+accessible field net/minecraft/world/level/levelgen/feature/stateproviders/RuleBasedStateProvider fallback Lnet/minecraft/core/Holder;
 accessible field net/minecraft/world/level/levelgen/feature/stateproviders/RuleBasedStateProvider rules Ljava/util/List;
-accessible field net/minecraft/world/level/levelgen/feature/configurations/EndSpikeConfiguration crystalInvulnerable Z
-accessible field net/minecraft/world/level/levelgen/feature/configurations/EndSpikeConfiguration spikes Ljava/util/List;
-accessible field net/minecraft/world/level/levelgen/feature/configurations/EndSpikeConfiguration crystalBeamTarget Lnet/minecraft/core/BlockPos;
 accessible field net/minecraft/world/level/levelgen/blockpredicates/MatchingBiomesPredicate biomes Lnet/minecraft/core/HolderSet;
+accessible field net/minecraft/world/level/levelgen/feature/VegetationPatchFeature replaceable Lnet/minecraft/core/HolderSet;
+accessible field net/minecraft/world/level/levelgen/feature/VegetationPatchFeature groundState Lnet/minecraft/core/Holder;
+accessible field net/minecraft/world/level/levelgen/feature/VegetationPatchFeature vegetationFeature Lnet/minecraft/core/Holder;
+accessible field net/minecraft/world/level/levelgen/feature/VegetationPatchFeature surface Lnet/minecraft/world/level/levelgen/placement/CaveSurface;
+accessible field net/minecraft/world/level/levelgen/feature/VegetationPatchFeature depth Lnet/minecraft/util/valueproviders/IntProvider;
+accessible field net/minecraft/world/level/levelgen/feature/VegetationPatchFeature extraBottomBlockChance F
+accessible field net/minecraft/world/level/levelgen/feature/VegetationPatchFeature verticalRange I
+accessible field net/minecraft/world/level/levelgen/feature/VegetationPatchFeature vegetationChance F
+accessible field net/minecraft/world/level/levelgen/feature/VegetationPatchFeature xzRadius Lnet/minecraft/util/valueproviders/IntProvider;
+accessible field net/minecraft/world/level/levelgen/feature/VegetationPatchFeature extraEdgeColumnChance F
 
-accessible class net/minecraft/world/level/levelgen/SurfaceRules$SurfaceRule
-accessible class net/minecraft/world/level/levelgen/DensityFunctions$BeardifierMarker
 accessible class net/minecraft/world/level/levelgen/blockpredicates/MatchingBlocksPredicate
 accessible class net/minecraft/world/level/levelgen/blockpredicates/MatchingFluidsPredicate
 accessible class net/minecraft/world/level/levelgen/blockpredicates/CombiningPredicate
@@ -213,3 +204,13 @@ accessible class net/minecraft/world/level/levelgen/blockpredicates/Unobstructed
 # fossil structure templates
 accessible field net/minecraft/world/level/levelgen/structure/templatesystem/StructureTemplate palettes Ljava/util/List;
 accessible field net/minecraft/client/renderer/entity/EntityRenderDispatcher blockModelResolver Lnet/minecraft/client/renderer/block/BlockModelResolver;
+accessible field net/minecraft/world/level/levelgen/structure/templatesystem/AllOfRuleTest rules Ljava/util/List;
+accessible field net/minecraft/world/level/levelgen/structure/templatesystem/AnyOfRuleTest rules Ljava/util/List;
+accessible field net/minecraft/world/level/levelgen/structure/templatesystem/NotRuleTest rule Lnet/minecraft/world/level/levelgen/structure/templatesystem/RuleTest;
+accessible field net/minecraft/world/level/levelgen/structure/templatesystem/HeightMatchTest minInclusive I
+accessible field net/minecraft/world/level/levelgen/structure/templatesystem/HeightMatchTest maxInclusive I
+accessible field net/minecraft/world/level/levelgen/feature/treedecorators/ShelfMushroomDecorator placementProbability F
+accessible field net/minecraft/world/level/levelgen/feature/foliageplacers/PoplarFoliagePlacer height Lnet/minecraft/util/valueproviders/IntProvider;
+accessible field net/minecraft/world/level/levelgen/feature/foliageplacers/PoplarFoliagePlacer sideHoleChance F
+accessible field net/minecraft/world/level/levelgen/feature/trunkplacers/PoplarTrunkPlacer trunkHeightAboveBranches Lnet/minecraft/util/valueproviders/IntProvider;
+accessible field net/minecraft/world/level/levelgen/feature/trunkplacers/PoplarTrunkPlacer branchAmount Lnet/minecraft/util/valueproviders/IntProvider;

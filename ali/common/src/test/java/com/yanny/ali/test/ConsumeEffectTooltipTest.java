@@ -60,9 +60,10 @@ public class ConsumeEffectTooltipTest {
 
     @Test
     public void testTeleportRandomlyTooltip() {
-        assertTooltip(ConsumeEffectTooltipUtils.getTeleportRandomlyTooltip(UTILS, new TeleportRandomlyConsumeEffect(30)).build(), List.of(
+        assertTooltip(ConsumeEffectTooltipUtils.getTeleportRandomlyTooltip(UTILS, new TeleportRandomlyConsumeEffect(30, false)).build(), List.of(
                 "Teleport Randomly:",
-                "  -> Diameter: 30.0"
+                "  -> Diameter: 30.0",
+                "  -> Directional Particles: false"
         ));
     }
 

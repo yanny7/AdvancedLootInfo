@@ -8,7 +8,7 @@ import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ListNode;
 import com.yanny.awi.language.Lang;
-import com.yanny.awi.plugin.server.FeatureConfigurationCollectorUtils;
+import com.yanny.awi.plugin.server.FeatureCollectorUtils;
 import com.yanny.awi.plugin.server.summary.ColumnContext;
 import com.yanny.awi.plugin.server.summary.PlacementSummaryUtils;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -16,8 +16,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import org.jetbrains.annotations.NotNull;
@@ -36,25 +35,21 @@ public class PlacedFeatureNode extends ListNode {
     public PlacedFeatureNode(IServerUtils utils, PlacedFeature placedFeature, ColumnContext columnContext, @Nullable Identifier featureId) {
         // -> PlacedFeatureNode
         //   -> Count / Chance / Height (top-level summary)
-        //   -> ConfiguredFeature:
-        //     -> FeatureConfiguration (items)
-        //     -> Feature
+        //   -> Feature: (items)
         //   -> Placement: (conditions)
 
         this.featureId = featureId;
 
-        ConfiguredFeature<?, ?> configuredFeature = placedFeature.feature().value();
-        FeatureConfiguration featureConfiguration = configuredFeature.config(); // values
-        Set<Either<Block, TagKey<Block>>> blocks = new LinkedHashSet<>(FeatureConfigurationCollectorUtils.collectConfiguredFeatureBlocks(utils, configuredFeature));
+        Feature feature = placedFeature.feature().value();
+        Set<Either<Block, TagKey<Block>>> blocks = new LinkedHashSet<>(FeatureCollectorUtils.collectFeatureBlocks(utils, feature));
 
         tooltip = TooltipBuilder.branch((b) -> {
             PlacementSummaryUtils.appendSummary(b, utils, placedFeature.placement(), columnContext);
 
             b.add(TooltipBuilder.array((c) -> {
-                c.add(utils.getValueTooltip(utils, configuredFeature.feature()).build(Lang.Value.FEATURE));
-                c.add(utils.getValueTooltip(utils, featureConfiguration));
+                c.add(utils.getFeatureTooltip(utils, feature));
                 c.isAdvancedTooltip();
-            }, Lang.Branch.CONFIGURED_FEATURE));
+            }, Lang.Branch.FEATURE));
 
             b.add(TooltipBuilder.array((c) -> {
                 for (PlacementModifier placementModifier : placedFeature.placement()) {

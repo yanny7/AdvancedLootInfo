@@ -1,5 +1,7 @@
 package com.yanny.ali.plugin.server;
 
+import net.minecraft.core.component.BlockTransformer;
+import net.minecraft.world.level.block.entity.DecoratedPotPattern;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.Utils;
@@ -184,6 +186,16 @@ public class RegistriesTooltipUtils {
     @NotNull
     public static TooltipBuilder getDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type) {
         return getBuiltInRegistryTooltip(utils, BuiltInRegistries.DATA_COMPONENT_TYPE, type);
+    }
+
+    @NotNull
+    public static TooltipBuilder getBlockTransformerTooltip(IServerUtils utils, BlockTransformer value) {
+        return getRegistryTooltip(utils, Registries.BLOCK_TRANSFORMER, value);
+    }
+
+    @NotNull
+    public static TooltipBuilder getDecoratedPotPatternTooltip(IServerUtils utils, DecoratedPotPattern value) {
+        return getRegistryTooltip(utils, Registries.DECORATED_POT_PATTERN, value);
     }
 
     @NotNull

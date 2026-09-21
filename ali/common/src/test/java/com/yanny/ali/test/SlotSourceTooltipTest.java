@@ -1,5 +1,7 @@
 package com.yanny.ali.test;
 
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.Holder;
 import com.yanny.ali.plugin.server.SlotSourceTooltipUtils;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.advancements.predicates.ItemPredicate;
@@ -26,7 +28,7 @@ public class SlotSourceTooltipTest {
 
     @Test
     public void testContentsTooltip() {
-        assertTooltip(SlotSourceTooltipUtils.getContentsTooltip(UTILS, new ContentsSlotSource(new EmptySlotSource(), ContainerComponentManipulators.CONTAINER)).build(), List.of(
+        assertTooltip(SlotSourceTooltipUtils.getContentsTooltip(UTILS, new ContentsSlotSource(Holder.direct(new EmptySlotSource()), ContainerComponentManipulators.CONTAINER)).build(), List.of(
                 "Contents:",
                 "  -> Component: minecraft:container",
                 "  -> Slot Source:",
@@ -52,7 +54,7 @@ public class SlotSourceTooltipTest {
 
     @Test
     public void testLimitSlotsTooltip() {
-        assertTooltip(SlotSourceTooltipUtils.getLimitSlotsTooltip(UTILS, new LimitSlotSource(new EmptySlotSource(), 1)).build(), List.of(
+        assertTooltip(SlotSourceTooltipUtils.getLimitSlotsTooltip(UTILS, new LimitSlotSource(Holder.direct(new EmptySlotSource()), 1)).build(), List.of(
                 "Limit Slots:",
                 "  -> Limit: 1",
                 "  -> Slot Source:",
@@ -62,7 +64,7 @@ public class SlotSourceTooltipTest {
 
     @Test
     public void testFilteredTooltip() {
-        assertTooltip(SlotSourceTooltipUtils.getFilteredTooltip(UTILS, new FilteredSlotSource(new EmptySlotSource(), ItemPredicate.Builder.item().withCount(MinMaxBounds.Ints.atLeast(3)).build())).build(), List.of(
+        assertTooltip(SlotSourceTooltipUtils.getFilteredTooltip(UTILS, new FilteredSlotSource(Holder.direct(new EmptySlotSource()), ItemPredicate.Builder.item().withCount(MinMaxBounds.Ints.atLeast(3)).build())).build(), List.of(
                 "Filtered:",
                 "  -> Filter:",
                 "    -> Count: ≥3",
@@ -73,7 +75,7 @@ public class SlotSourceTooltipTest {
 
     @Test
     public void testGroupTooltip() {
-        assertTooltip(SlotSourceTooltipUtils.getGroupTooltip(UTILS, new GroupSlotSource(List.of((SlotSource) new EmptySlotSource(), new EmptySlotSource()))).build(), List.of(
+        assertTooltip(SlotSourceTooltipUtils.getGroupTooltip(UTILS, new GroupSlotSource(HolderSet.direct(Holder.direct((SlotSource) new EmptySlotSource()), Holder.direct((SlotSource) new EmptySlotSource())))).build(), List.of(
                 "Slots:",
                 "  -> Empty Slot",
                 "  -> Empty Slot"

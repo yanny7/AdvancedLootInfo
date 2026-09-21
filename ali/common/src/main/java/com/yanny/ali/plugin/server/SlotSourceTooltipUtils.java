@@ -3,6 +3,7 @@ package com.yanny.ali.plugin.server;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.slot.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,7 +19,7 @@ public class SlotSourceTooltipUtils {
     public static TooltipBuilder getContentsTooltip(IServerUtils utils, ContentsSlotSource slot) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, slot.component).build(Lang.Value.COMPONENT));
-            b.add(TooltipBuilder.array((c) -> c.add(utils.getSlotSourceTooltip(utils, slot.slotSource))).build(Lang.Branch.SLOT_SOURCE));
+            b.add(TooltipBuilder.array((c) -> c.add(utils.getSlotSourceTooltip(utils, slot.slotSource.value()))).build(Lang.Branch.SLOT_SOURCE));
         }, Lang.SlotSource.CONTENTS);
     }
 
@@ -34,7 +35,7 @@ public class SlotSourceTooltipUtils {
     public static TooltipBuilder getLimitSlotsTooltip(IServerUtils utils, LimitSlotSource slot) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, slot.limit).build(Lang.Value.LIMIT));
-            b.add(TooltipBuilder.array((c) -> c.add(utils.getSlotSourceTooltip(utils, slot.slotSource))).build(Lang.Branch.SLOT_SOURCE));
+            b.add(TooltipBuilder.array((c) -> c.add(utils.getSlotSourceTooltip(utils, slot.slotSource.value()))).build(Lang.Branch.SLOT_SOURCE));
         }, Lang.SlotSource.LIMIT_SLOTS);
     }
 
@@ -42,12 +43,12 @@ public class SlotSourceTooltipUtils {
     public static TooltipBuilder getFilteredTooltip(IServerUtils utils, FilteredSlotSource slot) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, slot.filter).build(Lang.Branch.FILTER));
-            b.add(TooltipBuilder.array((c) -> c.add(utils.getSlotSourceTooltip(utils, slot.slotSource))).build(Lang.Branch.SLOT_SOURCE));
+            b.add(TooltipBuilder.array((c) -> c.add(utils.getSlotSourceTooltip(utils, slot.slotSource.value()))).build(Lang.Branch.SLOT_SOURCE));
         }, Lang.SlotSource.FILTERED);
     }
 
     @NotNull
     public static TooltipBuilder getGroupTooltip(IServerUtils utils, GroupSlotSource slot) {
-        return TooltipBuilder.array((b) -> b.add(getSlotListTooltip(utils, slot.terms)).build(Lang.Branch.SLOTS), Lang.SlotSource.GROUP);
+        return TooltipBuilder.array((b) -> b.add(getSlotListTooltip(utils, slot.terms.stream().map(Holder::value).toList())).build(Lang.Branch.SLOTS), Lang.SlotSource.GROUP);
     }
 }

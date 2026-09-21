@@ -85,7 +85,7 @@ public class CompatTooltipSuite {
 
     @NotNull
     private static ResourceManager loadClientResources() {
-        LanguageManager languageManager = new LanguageManager("en_us", (lang) -> {});
+        LanguageManager languageManager = new LanguageManager(null, "en_us", (lang) -> {});
         ReloadableResourceManager resourceManager = new ReloadableResourceManager(PackType.CLIENT_RESOURCES);
 
         resourceManager.registerReloadListener(languageManager);

@@ -13,9 +13,11 @@ import com.yanny.ali.plugin.common.nodes.ModifiedNode;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
+import net.minecraft.world.level.storage.loot.entries.UniformContainerBase;
 import net.minecraft.world.level.storage.loot.predicates.AllOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -31,7 +33,7 @@ public class GlmNodeUtils {
     @NotNull
     public static IDataNode addedNode(IServerUtils utils, List<LootItemCondition> conditions, ItemStack item, float rawChance, RangeValue count) {
         EnchantedRanges chance = NodeUtils.getEnchantedChance(utils, conditions, rawChance);
-        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, new EnchantedRanges(new RangeValue(count)), Collections.emptyList(), conditions);
+        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, UniformContainerBase.DEFAULT_QUALITY, chance, new EnchantedRanges(new RangeValue(count)), Collections.emptyList(), conditions);
 
         return new ItemNode(rawChance, new RangeValue(count), item, tooltip.build(), Collections.emptyList(), conditions);
     }
@@ -51,7 +53,7 @@ public class GlmNodeUtils {
         IItemNode node = (IItemNode) src;
         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), node.getConditions().stream()).toList();
         EnchantedRanges chance = NodeUtils.getEnchantedChance(utils, allConditions, node.getChance());
-        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, new EnchantedRanges(new RangeValue(count)), node.getFunctions(), allConditions);
+        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, UniformContainerBase.DEFAULT_QUALITY, chance, new EnchantedRanges(new RangeValue(count)), node.getFunctions(), allConditions);
         ItemNode replacement = new ItemNode(node.getChance(), count, item, tooltip.build(), node.getFunctions(), allConditions);
 
         return List.of(new ModifiedNode(utils, src, replacement));
@@ -69,10 +71,10 @@ public class GlmNodeUtils {
 
         List<LootItemCondition> allConditions = new ArrayList<>(node.getConditions());
 
-        allConditions.add(new InvertedLootItemCondition(new AllOfCondition(conditions)));
+        allConditions.add(new InvertedLootItemCondition(Holder.direct(AllOfCondition.allOf(HolderSet.direct(conditions.stream().<Holder<LootItemCondition>>map(Holder::direct).toList())))));
 
         EnchantedRanges chance = NodeUtils.getEnchantedChance(utils, allConditions, node.getChance());
-        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, new EnchantedRanges(new RangeValue(node.getCount())), node.getFunctions(), allConditions);
+        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, UniformContainerBase.DEFAULT_QUALITY, chance, new EnchantedRanges(new RangeValue(node.getCount())), node.getFunctions(), allConditions);
 
         return new ItemNode(node.getChance(), new RangeValue(node.getCount()), node.getItem(), tooltip.build(), node.getFunctions(), allConditions);
     }

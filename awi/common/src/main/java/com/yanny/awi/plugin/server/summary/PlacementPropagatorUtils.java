@@ -3,8 +3,10 @@ package com.yanny.awi.plugin.server.summary;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.api.IServerUtils;
+import net.minecraft.world.level.levelgen.feature.CuboidPlacement;
 import net.minecraft.world.level.levelgen.placement.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * One method per {@code PlacementModifier} type that carries count/chance/height information. Each returns
@@ -31,6 +33,54 @@ public class PlacementPropagatorUtils {
     @NotNull
     public static PlacementContribution getNoiseThresholdCountPlacement(IServerUtils utils, NoiseThresholdCountPlacement placement, ColumnContext ignoredCtx) {
         return PlacementContribution.ofCount(new CountSpan(markUnknown(), Kind.UNKNOWN, unknownDetails(utils, placement)));
+    }
+
+    @NotNull
+    public static PlacementContribution getCuboidPlacement(IServerUtils utils, CuboidPlacement placement, ColumnContext ignoredCtx) {
+        return PlacementContribution.ofCount(new CountSpan(markUnknown(), Kind.UNKNOWN, unknownDetails(utils, placement)));
+    }
+
+    @NotNull
+    public static PlacementContribution getRandomChancePlacement(IServerUtils ignoredUtils, RandomChancePlacement placement, ColumnContext ignoredCtx) {
+        return PlacementContribution.ofChance(new RangeValue(placement.chance() * 100f));
+    }
+
+    /** Only one of the nested modifiers runs, so every axis spans the union of what they contribute. */
+    @NotNull
+    public static PlacementContribution getRandomlySelectedPlacement(IServerUtils utils, RandomlySelectedPlacement placement, ColumnContext ctx) {
+        CountSpan count = null;
+        RangeValue chancePercent = null;
+        HeightSpan height = null;
+
+        for (PlacementModifier modifier : placement.placements()) {
+            PlacementContribution contribution = utils.getPlacementContribution(utils, modifier, ctx);
+
+            count = mergeCount(count, contribution.count());
+            chancePercent = (chancePercent == null || contribution.chancePercent() == null)
+                    ? (chancePercent != null ? chancePercent : contribution.chancePercent())
+                    : chancePercent.union(contribution.chancePercent());
+            height = mergeHeight(height, contribution.height());
+        }
+
+        return new PlacementContribution(count, chancePercent, height);
+    }
+
+    @Nullable
+    private static CountSpan mergeCount(@Nullable CountSpan current, @Nullable CountSpan next) {
+        if (current == null || next == null) {
+            return current != null ? current : next;
+        }
+
+        return new CountSpan(current.range().union(next.range()), Kind.UNKNOWN);
+    }
+
+    @Nullable
+    private static HeightSpan mergeHeight(@Nullable HeightSpan current, @Nullable HeightSpan next) {
+        if (current == null || next == null) {
+            return current != null ? current : next;
+        }
+
+        return HeightSpan.unknown();
     }
 
     @NotNull

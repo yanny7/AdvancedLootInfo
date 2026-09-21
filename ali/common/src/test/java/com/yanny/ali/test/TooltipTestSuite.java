@@ -19,6 +19,7 @@ import com.yanny.ali.plugin.glm.Verdict;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.LootConditionTypes;
 import com.yanny.ali.plugin.server.LootFunctionTypes;
+import net.minecraft.core.Holder;
 import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
 import net.minecraft.advancements.predicates.entity.EntitySubPredicate;
@@ -60,7 +61,8 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.platform.suite.api.AfterSuite;
@@ -84,6 +86,8 @@ import java.util.concurrent.ExecutionException;
         ConditionTooltipTest.class,
         FunctionTooltipTest.class,
         EntryTooltipTest.class,
+        IntProviderTest.class,
+        FloatProviderTest.class,
         EntitySubPredicateTooltipTest.class,
         DataComponentPredicateTooltipTest.class,
         DataComponentTooltipTest.class,
@@ -117,7 +121,7 @@ public class TooltipTestSuite {
         Language.inject(loadedLanguage.language());
         TestUtils.bindVanillaTags();
         UNUSED = loadedLanguage.unusedKeys();
-        LOOKUP = VanillaRegistries.createLookup();
+        LOOKUP = VanillaRegistries.createReloadableLookup(VanillaRegistries.createWorldLookup());
 
         BuiltInRegistries.DATA_COMPONENT_INITIALIZERS.build(LOOKUP).forEach(DataComponentInitializers.PendingComponents::apply);
 
@@ -244,8 +248,14 @@ public class TooltipTestSuite {
 
             @NotNull
             @Override
-            public RangeValue convertNumber(IServerUtils utils, @Nullable NumberProvider numberProvider) {
-                return PluginManager.getInstance().serverRegistry.convertNumber(utils, numberProvider);
+            public RangeValue convertInt(IServerUtils utils, @Nullable Holder<ContextIntProvider> provider) {
+                return PluginManager.getInstance().serverRegistry.convertInt(utils, provider);
+            }
+
+            @NotNull
+            @Override
+            public RangeValue convertFloat(IServerUtils utils, @Nullable Holder<ContextFloatProvider> provider) {
+                return PluginManager.getInstance().serverRegistry.convertFloat(utils, provider);
             }
 
             @NotNull
@@ -302,7 +312,7 @@ public class TooltipTestSuite {
 
     @NotNull
     private static ResourceManager loadClientResources() {
-        LanguageManager languageManager = new LanguageManager("en_us", (lang) -> {});
+        LanguageManager languageManager = new LanguageManager(null, "en_us", (lang) -> {});
         ReloadableResourceManager resourceManager = new ReloadableResourceManager(PackType.CLIENT_RESOURCES);
 
         resourceManager.registerReloadListener(languageManager);

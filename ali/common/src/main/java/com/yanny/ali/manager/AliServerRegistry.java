@@ -19,11 +19,12 @@ import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.glm.*;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.MissingTooltipUtils;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.advancements.predicates.entity.EntitySubPredicate;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -33,7 +34,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.npc.villager.VillagerProfession;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -46,7 +46,8 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 import org.apache.commons.lang3.function.TriFunction;
 import org.apache.logging.log4j.util.TriConsumer;
 import org.jetbrains.annotations.NotNull;
@@ -65,7 +66,8 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     // factories
     private final ManagedRegistry<Class<?>, EntryFactory<?>> entryFactories = registerClassKeyed("entry factories", true, HashMap::new, BuiltInRegistries.LOOT_POOL_ENTRY_TYPE);
     // converters
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, NumberProvider, RangeValue>> numberConverters = registerClassKeyed("number converters", true, HashMap::new, BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, ContextIntProvider, RangeValue>> intConverters = registerClassKeyed("int converters", true, HashMap::new, BuiltInRegistries.CONTEXT_INT_PROVIDER_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, ContextFloatProvider, RangeValue>> floatConverters = registerClassKeyed("float converters", true, HashMap::new, BuiltInRegistries.CONTEXT_FLOAT_PROVIDER_TYPE);
     // traders
     private final ManagedRegistry<Identifier, Supplier<Int2ObjectMap<ResourceKey<TradeSet>>>> trades = register("trades", false, HashMap::new, Identifier::toString, null);
     // tooltips
@@ -192,8 +194,13 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
-    public <T extends NumberProvider> void registerNumberProvider(Class<T> type, BiFunction<IServerUtils, T, RangeValue> converter) {
-        numberConverters.put(type, (u, n) -> converter.apply(u, type.cast(n)));
+    public <T extends ContextIntProvider> void registerIntProvider(Class<T> type, BiFunction<IServerUtils, T, RangeValue> converter) {
+        intConverters.put(type, (u, n) -> converter.apply(u, type.cast(n)));
+    }
+
+    @Override
+    public <T extends ContextFloatProvider> void registerFloatProvider(Class<T> type, BiFunction<IServerUtils, T, RangeValue> converter) {
+        floatConverters.put(type, (u, n) -> converter.apply(u, type.cast(n)));
     }
 
     @Override
@@ -400,14 +407,14 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     @NotNull
     @Override
-    public RangeValue convertNumber(IServerUtils utils, @Nullable NumberProvider numberProvider) {
-        if (numberProvider != null) {
-            return numberConverters.get(numberProvider.getClass())
-                    .map((c) -> c.apply(utils, numberProvider))
-                    .orElseGet(() -> new RangeValue(false, true));
-        }
+    public RangeValue convertInt(IServerUtils utils, @Nullable Holder<ContextIntProvider> provider) {
+        return convert(utils, provider, intConverters);
+    }
 
-        return new RangeValue(false, true);
+    @NotNull
+    @Override
+    public RangeValue convertFloat(IServerUtils utils, @Nullable Holder<ContextFloatProvider> provider) {
+        return convert(utils, provider, floatConverters);
     }
 
     @Nullable
@@ -518,5 +525,18 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         } else {
             return dataComponentType.getClass().getTypeName();
         }
+    }
+
+    @NotNull
+    private static <T> RangeValue convert(IServerUtils utils, @Nullable Holder<T> provider, ManagedRegistry<Class<?>, BiFunction<IServerUtils, T, RangeValue>> converters) {
+        if (provider != null && provider.isBound()) {
+            T value = provider.value();
+
+            return converters.get(value.getClass())
+                    .map((c) -> c.apply(utils, value))
+                    .orElseGet(() -> new RangeValue(false, true));
+        }
+
+        return new RangeValue(false, true);
     }
 }

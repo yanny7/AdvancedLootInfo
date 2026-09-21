@@ -15,7 +15,7 @@ public class RootPlacerCollectorUtils {
         List<Block> blocks = new ArrayList<>();
 
         blocks.addAll(placer.mangroveRootPlacement.muddyRootsIn().stream().map(Holder::value).toList());
-        blocks.addAll(utils.collectBlocks(utils, placer.mangroveRootPlacement.muddyRootsProvider()));
+        blocks.addAll(BlockStateProviderCollectorUtils.collectHolder(utils, placer.mangroveRootPlacement.muddyRootsProvider()));
         return blocks;
     }
 }

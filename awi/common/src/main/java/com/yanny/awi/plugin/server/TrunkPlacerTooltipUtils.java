@@ -30,6 +30,15 @@ public class TrunkPlacerTooltipUtils {
     }
 
     @NotNull
+    public static TooltipBuilder getPoplarTrunkPlacerTooltip(IServerUtils utils, PoplarTrunkPlacer placer) {
+        return array((b) -> {
+            addBaseTrunkPlacerTooltip(utils, b, placer);
+            b.add(utils.getValueTooltip(utils, placer.trunkHeightAboveBranches).build(Lang.Branch.TRUNK_HEIGHT_ABOVE_BRANCHES));
+            b.add(utils.getValueTooltip(utils, placer.branchAmount).build(Lang.Branch.BRANCH_AMOUNT));
+        }, Lang.TrunkPlacer.POPLAR);
+    }
+
+    @NotNull
     public static TooltipBuilder getDarkOakTrunkPlacerTooltip(IServerUtils utils, DarkOakTrunkPlacer placer) {
         return array((b) -> addBaseTrunkPlacerTooltip(utils, b, placer), Lang.TrunkPlacer.DARK_OAK);
     }

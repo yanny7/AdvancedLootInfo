@@ -3,6 +3,7 @@ package com.yanny.awi.plugin.common.nodes;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import com.yanny.aci.CommonLogUtils;
@@ -12,7 +13,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.levelgen.SurfaceRules;
+import net.minecraft.world.level.levelgen.material.condition.MaterialCondition;
+import net.minecraft.world.level.levelgen.material.rule.MaterialRule;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -23,10 +25,14 @@ import java.util.*;
  * Rewrites a dimension's surface rule into the subset that can fire for one specific biome. One instance per dimension
  * (the encode and the {@link RegistryOps} are done once and reused for every biome of that dimension).
  * <p>
- * The rewrite goes through {@link SurfaceRules.RuleSource#CODEC} rather than over the object graph: the node classes
- * ({@code SequenceRuleSource}, {@code TestRuleSource}, {@code BiomeConditionSource}) are package-private records, so
- * reaching them means reflection over names that remap in production. Serialized form is keyed by registry ids, which
- * do not.
+ * The rewrite goes through {@link MaterialRule#CODEC} rather than over the object graph: the node classes
+ * ({@code SequenceRule}, {@code ConditionRule}, {@code BiomeCondition}) are records whose field and method names remap
+ * in production. Serialized form is keyed by registry ids, which do not.
+ * <p>
+ * A rule or condition held in the {@code worldgen/material_rule} / {@code worldgen/material_condition} registry
+ * serializes as a bare id, so a branch worth pruning can sit behind a reference. References in a known rule or
+ * condition position are therefore resolved, pruned, and inlined - but only when pruning actually changed them, so an
+ * untouched reference stays a reference.
  * <p>
  * <b>Unknown node types are descended into but never restructured.</b> Inside an unknown node a dead branch is
  * replaced <i>in place</i> with an empty {@code minecraft:sequence} (a valid rule that never fires) instead of being
@@ -38,7 +44,7 @@ import java.util.*;
  */
 public class SurfaceRuleSpecializer {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
-    private static final Set<SurfaceRules.RuleSource> LOGGED_RULES = Collections.newSetFromMap(new IdentityHashMap<>());
+    private static final Set<MaterialRule> LOGGED_RULES = Collections.newSetFromMap(new IdentityHashMap<>());
 
     private static final String TYPE = "type";
     private static final String SEQUENCE = "minecraft:sequence";
@@ -52,7 +58,7 @@ public class SurfaceRuleSpecializer {
     private static final String TAG_PREFIX = "#";
     private static final String INVERT_FIELD = "invert";
 
-    private final SurfaceRules.RuleSource original;
+    private final MaterialRule original;
     private final DynamicOps<JsonElement> ops;
     @Nullable
     private final JsonElement encoded;
@@ -65,7 +71,7 @@ public class SurfaceRuleSpecializer {
      *                    equal values still fails the codec's ownership check and turns specialization off. In game
      *                    that is the level's {@code RegistryAccess}.
      */
-    public SurfaceRuleSpecializer(SurfaceRules.RuleSource original, HolderLookup.Provider codecLookup, boolean logStatistics) {
+    public SurfaceRuleSpecializer(MaterialRule original, HolderLookup.Provider codecLookup, boolean logStatistics) {
         JsonElement json = null;
         // Not RegistryOps.create(ops, provider): that adapter derives each registry's HolderOwner from the lookup it
         // hands out, while a provider may serialize under a different owner than it looks up under (a datapack-registry
@@ -73,7 +79,7 @@ public class SurfaceRuleSpecializer {
         DynamicOps<JsonElement> dynamicOps = codecLookup.createSerializationContext(JsonOps.INSTANCE);
 
         try {
-            json = SurfaceRules.RuleSource.CODEC.encodeStart(dynamicOps, original).getOrThrow();
+            json = MaterialRule.CODEC.encodeStart(dynamicOps, original).getOrThrow();
         } catch (Throwable t) {
             LOGGER.warn("Could not encode the surface rule, per-biome specialization is off for this dimension", t);
         }
@@ -86,7 +92,7 @@ public class SurfaceRuleSpecializer {
 
     /** The rule with every branch that cannot fire for {@code biome} removed, or the original rule if none can be. */
     @NotNull
-    public SurfaceRules.RuleSource specialize(Holder<Biome> biome) {
+    public MaterialRule specialize(Holder<Biome> biome) {
         Optional<ResourceKey<Biome>> key = biome.unwrapKey();
 
         if (!effective || encoded == null || key.isEmpty()) {
@@ -94,7 +100,7 @@ public class SurfaceRuleSpecializer {
         }
 
         try {
-            JsonElement pruned = prune(encoded, key.get().identifier().toString(), false);
+            JsonElement pruned = prune(encoded, key.get().identifier().toString(), false, true, new HashMap<>());
 
             if (pruned == null || pruned.equals(encoded)) {
                 // Nothing in this rule is decidable per biome.
@@ -104,7 +110,7 @@ public class SurfaceRuleSpecializer {
                 return original;
             }
 
-            SurfaceRules.RuleSource result = SurfaceRules.RuleSource.CODEC.parse(ops, pruned).getOrThrow();
+            MaterialRule result = MaterialRule.CODEC.parse(ops, pruned).getOrThrow();
 
             log("specialized", encoded, pruned);
 
@@ -139,9 +145,16 @@ public class SurfaceRuleSpecializer {
 
         if (after == null) {
             LOGGER.info("Surface rule {} ({} nodes)", what, nodesBefore);
-        } else {
-            int nodesAfter = nodeCount(after);
+            return;
+        }
 
+        int nodesAfter = nodeCount(after);
+
+        // A resolved reference is one node before and its whole body after, so the serialized form can grow while the
+        // compiled rule still shrinks - reporting a "% removed" for that would read as a regression it is not.
+        if (nodesAfter > nodesBefore) {
+            LOGGER.info("Surface rule {}: {} -> {} nodes (references inlined)", what, nodesBefore, nodesAfter);
+        } else {
             LOGGER.info("Surface rule {}: {} -> {} nodes ({}% removed)", what, nodesBefore, nodesAfter,
                     100 - (nodesAfter * 100 / Math.max(1, nodesBefore)));
         }
@@ -151,17 +164,23 @@ public class SurfaceRuleSpecializer {
      * Returns the rule with branches that cannot fire for {@code biomeId} pruned. {@code canDrop} says whether the
      * caller may cope with the node disappearing entirely (only a {@code minecraft:sequence} can); everywhere else a
      * dead branch is replaced in place by an empty sequence, which never fires but keeps the structure intact.
+     * {@code isRule} marks the positions known to hold a {@link MaterialRule}, the only ones where a bare id may be
+     * resolved into the rule it references.
      */
     @Nullable
-    private static JsonElement prune(JsonElement element, String biomeId, boolean canDrop) {
+    private JsonElement prune(JsonElement element, String biomeId, boolean canDrop, boolean isRule, Map<String, JsonElement> resolved) {
         if (element.isJsonArray()) {
             JsonArray pruned = new JsonArray();
 
             for (JsonElement child : element.getAsJsonArray()) {
-                pruned.add(prune(child, biomeId, false));
+                pruned.add(prune(child, biomeId, false, false, resolved));
             }
 
             return pruned;
+        }
+
+        if (isRule && element.isJsonPrimitive() && element.getAsJsonPrimitive().isString()) {
+            return pruneReferencedRule(element, biomeId, resolved);
         }
 
         if (!element.isJsonObject()) {
@@ -175,7 +194,7 @@ public class SurfaceRuleSpecializer {
             JsonArray kept = new JsonArray();
 
             for (JsonElement child : object.getAsJsonArray(SEQUENCE_FIELD)) {
-                JsonElement prunedChild = prune(child, biomeId, true);
+                JsonElement prunedChild = prune(child, biomeId, true, true, resolved);
 
                 if (prunedChild != null) {
                     kept.add(prunedChild);
@@ -195,13 +214,13 @@ public class SurfaceRuleSpecializer {
 
         if (CONDITION.equals(type) && object.has(IF_TRUE_FIELD) && object.has(THEN_RUN_FIELD)) {
             JsonElement condition = object.get(IF_TRUE_FIELD);
-            Boolean matches = biomeVerdict(condition, biomeId);
+            Boolean matches = biomeVerdict(resolveCondition(condition), biomeId);
 
             if (Boolean.FALSE.equals(matches)) {
                 return canDrop ? null : emptySequence();
             }
 
-            JsonElement thenRun = prune(object.get(THEN_RUN_FIELD), biomeId, false);
+            JsonElement thenRun = prune(object.get(THEN_RUN_FIELD), biomeId, false, true, resolved);
 
             if (isEmptySequence(thenRun)) {
                 return canDrop ? null : emptySequence();
@@ -224,10 +243,68 @@ public class SurfaceRuleSpecializer {
         JsonObject copy = new JsonObject();
 
         for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
-            copy.add(entry.getKey(), prune(entry.getValue(), biomeId, false));
+            copy.add(entry.getKey(), prune(entry.getValue(), biomeId, false, false, resolved));
         }
 
         return copy;
+    }
+
+    /**
+     * Resolves a condition given as a bare registry id into its serialized form; anything else is handed back as is.
+     * Only shapes {@link #biomeVerdict} can decide matter, so a failure to resolve is simply "undecidable".
+     */
+    @Nullable
+    private JsonElement resolveCondition(@Nullable JsonElement condition) {
+        if (condition == null || !condition.isJsonPrimitive() || !condition.getAsJsonPrimitive().isString()) {
+            return condition;
+        }
+
+        try {
+            MaterialCondition parsed = MaterialCondition.CODEC.parse(ops, condition).getOrThrow();
+
+            if (parsed instanceof MaterialCondition.HolderHolder reference) {
+                return MaterialCondition.CODEC.encodeStart(ops, reference.holder().value()).getOrThrow();
+            }
+        } catch (Throwable t) {
+            return null;
+        }
+
+        return null;
+    }
+
+    /**
+     * Prunes the rule a bare registry id refers to, inlining the result only when pruning changed it - an untouched
+     * reference stays a reference, which keeps the rule from being expanded for nothing.
+     */
+    @NotNull
+    private JsonElement pruneReferencedRule(JsonElement reference, String biomeId, Map<String, JsonElement> resolved) {
+        String id = reference.getAsString();
+        JsonElement cached = resolved.get(id);
+
+        if (cached != null) {
+            return cached;
+        }
+
+        JsonElement inlined;
+
+        try {
+            MaterialRule parsed = MaterialRule.CODEC.parse(ops, reference).getOrThrow();
+
+            if (!(parsed instanceof MaterialRule.HolderHolder holder)) {
+                return reference;
+            }
+
+            inlined = MaterialRule.CODEC.encodeStart(ops, holder.holder().value()).getOrThrow();
+        } catch (Throwable t) {
+            return reference;
+        }
+
+        JsonElement pruned = prune(inlined, biomeId, false, false, resolved);
+        JsonElement result = pruned == null || pruned.equals(inlined) ? reference : pruned;
+
+        resolved.put(id, result);
+
+        return result;
     }
 
     /** {@code TRUE}/{@code FALSE} when the condition is a biome test that always/never matches, {@code null} otherwise. */

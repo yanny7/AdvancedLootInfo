@@ -24,7 +24,7 @@ public class LanguageHolder {
     public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 
     static {
-        CoreLang.register(TRANSLATION_MAP, Lang.FeatureConfiguration.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.Feature.class);
         CoreLang.register(TRANSLATION_MAP, Lang.RuleTest.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Value.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Branch.class);

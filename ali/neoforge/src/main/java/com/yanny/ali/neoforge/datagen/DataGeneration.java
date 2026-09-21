@@ -12,7 +12,7 @@ public class DataGeneration {
     public static void generate(GatherDataEvent.Client event) {
         DataGenerator generator = event.getGenerator();
         PackOutput packOutput = generator.getPackOutput();
-        CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
+        CompletableFuture<HolderLookup.Provider> lookupProvider = event.getReloadableLookupProvider();
 
         generator.addProvider(true, new LanguageProvider(packOutput, "en_us"));
         generator.addProvider(true, new FakeLootProvider(packOutput, lookupProvider));

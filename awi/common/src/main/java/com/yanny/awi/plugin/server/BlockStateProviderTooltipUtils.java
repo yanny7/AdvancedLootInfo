@@ -43,7 +43,10 @@ public class BlockStateProviderTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getRotatedBlockProviderTooltip(IServerUtils utils, RotatedBlockProvider provider) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, provider.block).build(Lang.Value.BLOCK)), Lang.BlockStateProvider.ROTATED_BLOCK);
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, provider.state()).build(Lang.Branch.STATE));
+            b.add(utils.getValueTooltip(utils, provider.direction()).build(Lang.Value.DIRECTION));
+        }, Lang.BlockStateProvider.ROTATED_BLOCK);
     }
 
     @NotNull
@@ -58,8 +61,8 @@ public class BlockStateProviderTooltipUtils {
     @NotNull
     public static TooltipBuilder getRuleBasedStateProviderTooltip(IServerUtils utils, RuleBasedStateProvider placer) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, placer.fallback).build(Lang.Branch.FALLBACK));
-            b.add(utils.getValueTooltip(utils, placer.rules).build(Lang.Branch.RULES));
+            b.add(utils.getValueTooltip(utils, placer.fallback()).build(Lang.Branch.FALLBACK));
+            b.add(utils.getValueTooltip(utils, placer.rules()).build(Lang.Branch.RULES));
         }, Lang.BlockStateProvider.RULE_BASED);
     }
 }

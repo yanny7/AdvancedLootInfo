@@ -62,4 +62,47 @@ public class RuleTestTooltipTest {
                 "  -> Probability: 0.5"
         ));
     }
+
+    @Test
+    public void testAllOfRuleTestTooltip() {
+        assertTooltip(RuleTestTooltipUtils.getAllOfRuleTestTooltip(UTILS, new AllOfRuleTest(List.of(new BlockMatchTest(Blocks.STONE), new TagMatchTest(BlockTags.WOOL)))).build(), List.of(
+                "All Of:",
+                "  -> Rules:",
+                "    -> Block Match:",
+                "      -> Block: Stone",
+                "    -> Tag Match:",
+                "      -> Tag: minecraft:wool"
+        ));
+    }
+
+    @Test
+    public void testAnyOfRuleTestTooltip() {
+        assertTooltip(RuleTestTooltipUtils.getAnyOfRuleTestTooltip(UTILS, new AnyOfRuleTest(List.of(new BlockMatchTest(Blocks.STONE), new TagMatchTest(BlockTags.WOOL)))).build(), List.of(
+                "Any Of:",
+                "  -> Rules:",
+                "    -> Block Match:",
+                "      -> Block: Stone",
+                "    -> Tag Match:",
+                "      -> Tag: minecraft:wool"
+        ));
+    }
+
+    @Test
+    public void testNotRuleTestTooltip() {
+        assertTooltip(RuleTestTooltipUtils.getNotRuleTestTooltip(UTILS, new NotRuleTest(new BlockMatchTest(Blocks.STONE))).build(), List.of(
+                "Not:",
+                "  -> Rule:",
+                "    -> Block Match:",
+                "      -> Block: Stone"
+        ));
+    }
+
+    @Test
+    public void testHeightMatchTestTooltip() {
+        assertTooltip(RuleTestTooltipUtils.getHeightMatchTestTooltip(UTILS, new HeightMatchTest(-16, 48)).build(), List.of(
+                "Height Match:",
+                "  -> Min: -16",
+                "  -> Max: 48"
+        ));
+    }
 }

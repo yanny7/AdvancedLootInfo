@@ -27,7 +27,10 @@ public class DataComponentPredicateTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getPotionsPredicateTooltip(IServerUtils utils, PotionsPredicate predicate) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.potions())));
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, predicate.potions()).build(Lang.Branch.POTIONS));
+            b.add(utils.getValueTooltip(utils, predicate.effects()).build(Lang.Branch.EFFECTS));
+        });
     }
 
     @NotNull

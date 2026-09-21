@@ -9,6 +9,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.blockpredicates.*;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.levelgen.VerticalAnchor;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -20,7 +21,7 @@ import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
 public class BlockPredicateTooltipTest {
     @Test
     public void testMatchingBlocksPredicateTooltip() {
-        assertTooltip(BlockPredicateTooltipUtils.getMatchingBlocksPredicateTooltip(UTILS, (MatchingBlocksPredicate) BlockPredicate.matchesBlocks(new Vec3i(1, 0, 0), Blocks.STONE, Blocks.DIRT)).build(), List.of(
+        assertTooltip(BlockPredicateTooltipUtils.getMatchingBlocksPredicateTooltip(UTILS, (MatchingBlocksPredicate) BlockPredicate.matchesBlocks(new Vec3i(1, 0, 0), List.of(Blocks.STONE, Blocks.DIRT))).build(), List.of(
                 "Matching Blocks:",
                 "  -> Blocks:",
                 "    -> Stone",
@@ -76,7 +77,7 @@ public class BlockPredicateTooltipTest {
 
     @Test
     public void testWouldSurvivePredicateTooltip() {
-        assertTooltip(BlockPredicateTooltipUtils.getWouldSurvivePredicateTooltip(UTILS, (WouldSurvivePredicate) BlockPredicate.wouldSurvive(Blocks.STONE.defaultBlockState(), Vec3i.ZERO)).build(), List.of(
+        assertTooltip(BlockPredicateTooltipUtils.getWouldSurvivePredicateTooltip(UTILS, (WouldSurvivePredicate) BlockPredicate.wouldSurvive(Blocks.STONE)).build(), List.of(
                 "Would Survive:",
                 "  -> State:",
                 "    -> Block: Stone"
@@ -144,6 +145,29 @@ public class BlockPredicateTooltipTest {
                 "Matching Biomes:",
                 "  -> Biomes:",
                 "    -> Tag: minecraft:has_structure/igloo"
+        ));
+    }
+
+    @Test
+    public void testHeightRangePredicateTooltip() {
+        assertTooltip(BlockPredicateTooltipUtils.getHeightRangePredicateTooltip(UTILS, new HeightRangePredicate(VerticalAnchor.absolute(-16), VerticalAnchor.belowTop(8))).build(), List.of(
+                "Height Range:",
+                "  -> Min:",
+                "    -> Absolute Y: -16",
+                "  -> Max:",
+                "    -> Below Top: 8"
+        ));
+    }
+
+    @Test
+    public void testVolumeMatchPredicateTooltip() {
+        assertTooltip(BlockPredicateTooltipUtils.getVolumeMatchPredicateTooltip(UTILS, new VolumeMatchPredicate(new Vec3i(-1, 0, -1), new Vec3i(1, 2, 1), BlockPredicate.matchesBlocks(Blocks.STONE))).build(), List.of(
+                "Volume Match:",
+                "  -> Min: [-1,0,-1]",
+                "  -> Max: [1,2,1]",
+                "  -> Match:",
+                "    -> Matching Blocks:",
+                "      -> Block: Stone"
         ));
     }
 }

@@ -5,10 +5,8 @@ import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.SubmitNodeStorage;
 import net.minecraft.client.renderer.block.BlockModelRenderState;
 import net.minecraft.client.renderer.block.model.BlockDisplayContext;
-import net.minecraft.client.renderer.feature.FeatureRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.cuboid.ItemTransform;
 import net.minecraft.util.LightCoordsUtil;
@@ -24,20 +22,13 @@ public final class BlockPictureInPictureRenderer extends PictureInPictureRendere
     );
     private static final Quaternionfc LIGHT_FIX_ROT = Axis.YP.rotationDegrees(285);
 
-    private FeatureRenderDispatcher featureRenderDispatcher = null;
-
     public BlockPictureInPictureRenderer() {
         super();
     }
 
     @Override
     protected void renderToTexture(BlockRenderState renderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector) {
-        if (featureRenderDispatcher == null) {
-            featureRenderDispatcher = Minecraft.getInstance().gameRenderer.featureRenderDispatcher();
-        }
-
         BlockState state = renderState.state();
-        SubmitNodeStorage collector = new SubmitNodeStorage();
 
         // PictureInPictureRenderer#prepare has already scaled the pose by the render state's scale - multiplying it in
         // again here would square it (which is why a state with scale != 1 came out the wrong size).
@@ -51,8 +42,7 @@ public final class BlockPictureInPictureRenderer extends PictureInPictureRendere
         BlockDisplayContext context = BlockDisplayContext.create();
         BlockModelRenderState s = new BlockModelRenderState();
         Minecraft.getInstance().getEntityRenderDispatcher().blockModelResolver.update(s, state, context);
-        s.submit(poseStack, collector, LightCoordsUtil.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0);
-        featureRenderDispatcher.renderAllFeatures(collector);
+        s.submit(poseStack, submitNodeCollector, LightCoordsUtil.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0);
     }
 
     @Override

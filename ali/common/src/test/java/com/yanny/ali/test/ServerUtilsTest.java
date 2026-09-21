@@ -1,5 +1,8 @@
 package com.yanny.ali.test;
 
+import net.minecraft.core.Holder;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProviders;
 import com.mojang.serialization.MapCodec;
 import com.yanny.aci.language.CoreLang;
 import com.yanny.ali.language.Lang;
@@ -18,10 +21,7 @@ import net.minecraft.world.level.storage.loot.functions.SetItemDamageFunction;
 import net.minecraft.world.level.storage.loot.functions.SetStewEffectFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
-import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
@@ -33,12 +33,12 @@ import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
 public class ServerUtilsTest {
     @Test
     public void testGetFunctionTooltip() {
-        assertTooltip(UTILS.getFunctionTooltip(UTILS, SetItemCountFunction.setCount(BinomialDistributionGenerator.binomial(5, 0.5f)).build()).build(), List.of(
+        assertTooltip(UTILS.getFunctionTooltip(UTILS, SetItemCountFunction.setCount(ContextIntProviders.binomial(5, 0.5f)).build()).build(), List.of(
                 "Set Count:",
                 "  -> Count: 0-5",
                 "  -> Add: false"
         ));
-        assertTooltip(UTILS.getFunctionTooltip(UTILS, new UnknownFunction(Items.ANDESITE, BinomialDistributionGenerator.binomial(5, 0.3f))).build(), List.of(
+        assertTooltip(UTILS.getFunctionTooltip(UTILS, new UnknownFunction(Items.ANDESITE, ContextIntProviders.binomial(5, 0.3f))).build(), List.of(
                 "Auto-detected: minecraft:unknown"
         ));
     }
@@ -79,21 +79,21 @@ public class ServerUtilsTest {
                 new StringBuilder("hello"),
                 new boolean[]{true, false},
                 new Boolean[]{false, true},
-                new LootItemFunction[]{new UnknownFunction(Items.ITEM_FRAME, UniformGenerator.between(1, 4)), SetItemDamageFunction.setDamage(ConstantValue.exactly(0.5f)).build()},
+                new LootItemFunction[]{new UnknownFunction(Items.ITEM_FRAME, ContextIntProviders.between(1, 4)), SetItemDamageFunction.setDamage(ContextFloatProviders.exactly(0.5f)).build()},
                 new UnknownCondition[0],
                 new StringBuilder[]{new StringBuilder("a"), new StringBuilder("b")},
                 new int[0],
                 BlockStateProperties.ATTACHED,
                 true,
                 false,
-                SetStewEffectFunction.stewEffect().withEffect(MobEffects.ABSORPTION, ConstantValue.exactly(2)).build(),
+                SetStewEffectFunction.stewEffect().withEffect(MobEffects.ABSORPTION, ContextIntProviders.exactly(2)).build(),
                 LootItemRandomChanceCondition.randomChance(0.3f).build()
         )).build(), List.of(
             "Auto-detected: minecraft:unknown"
         ));
     }
 
-    private record UnknownFunction(Item item, NumberProvider value) implements LootItemFunction {
+    private record UnknownFunction(Item item, Holder<ContextIntProvider> value) implements LootItemFunction {
         @Override
         public ItemStack apply(ItemStack itemStack, LootContext lootContext) {
             return itemStack;

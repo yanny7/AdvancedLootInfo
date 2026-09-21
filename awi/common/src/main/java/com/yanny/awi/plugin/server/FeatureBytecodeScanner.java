@@ -7,11 +7,10 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelWriter;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.material.FluidState;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Handle;
@@ -48,8 +47,8 @@ import java.util.function.Predicate;
  * abstract call that is not a self-call is dispatched to the block classes implementing it ({@link #queueImplementors}).
  *
  * <p>{@link ScanResult#configConditionalBlocks()} is the subset of the result whose every placement is reached only
- * through a test on the {@code FeatureConfiguration}, so whether those blocks are placed at all depends on which
- * configuration the feature is used with.
+ * through a test on one of the feature's own fields, so whether those blocks are placed at all depends on how the
+ * feature is configured.
  */
 public final class FeatureBytecodeScanner {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
@@ -66,7 +65,7 @@ public final class FeatureBytecodeScanner {
     private static final Map<String, Class<?>> CLASS_CACHE = new ConcurrentHashMap<>();
     private static final Map<String, Set<String>> IMPLEMENTOR_CACHE = new ConcurrentHashMap<>();
 
-    // Runtime name+descriptor of Feature#place(FeaturePlaceContext), resolved reflectively (mapping-agnostic).
+    // Runtime name+descriptor of Feature#place(WorldGenLevel, ChunkGenerator, RandomSource, BlockPos), resolved reflectively (mapping-agnostic).
     private static final String PLACE_NAME;
     private static final String PLACE_DESC;
 
@@ -74,8 +73,8 @@ public final class FeatureBytecodeScanner {
         Method place = null;
 
         for (Method m : Feature.class.getDeclaredMethods()) {
-            if (Modifier.isAbstract(m.getModifiers()) && m.getParameterCount() == 1
-                    && m.getParameterTypes()[0] == FeaturePlaceContext.class && m.getReturnType() == boolean.class) {
+            if (Modifier.isAbstract(m.getModifiers()) && m.getParameterCount() == 4
+                    && m.getParameterTypes()[0] == WorldGenLevel.class && m.getReturnType() == boolean.class) {
                 place = m;
                 break;
             }
@@ -899,7 +898,7 @@ public final class FeatureBytecodeScanner {
 
 
     /**
-     * Instructions that only run when a test on the {@code FeatureConfiguration} passed, by control dependence per
+     * Instructions that only run when a test on one of the feature's own fields passed, by control dependence per
      * conditional jump: what is reachable from one successor but not from the other runs only when that branch was
      * taken. Nested regions need no extra work, since an outer region already contains them.
      */
@@ -1043,10 +1042,10 @@ public final class FeatureBytecodeScanner {
     }
 
     /**
-     * Whether a stack value was computed from the {@code FeatureConfiguration}. Backwards over the same producer graph
-     * {@link #resolve} walks, but collecting a yes/no instead of blocks. A configuration is recognized by type, never by
-     * name: reading a field <i>of</i> one, calling a method <i>on</i> one (a record accessor), or receiving one as a
-     * declared parameter or return value ({@code FeaturePlaceContext#config()}) all count.
+     * Whether a stack value was computed from one of the feature's own fields. Backwards over the same producer graph
+     * {@link #resolve} walks, but collecting a yes/no instead of blocks. A feature is recognized by type, never by
+     * name: reading a field <i>of</i> one (a record component), calling a method <i>on</i> one (a record accessor), or
+     * receiving one as a declared parameter or return value all count.
      */
     private boolean isConfigDerived(SourceValue value, Frame<SourceValue>[] frames, MethodNode method, ClassLoader cl,
                                     Set<AbstractInsnNode> guard, int depth) {
@@ -1060,7 +1059,7 @@ public final class FeatureBytecodeScanner {
             }
 
             if (producer instanceof FieldInsnNode field) {
-                if (isConfiguration(cl, Type.getObjectType(field.owner)) || isConfiguration(cl, Type.getType(field.desc))) {
+                if (isFeatureType(cl, Type.getObjectType(field.owner)) || isFeatureType(cl, Type.getType(field.desc))) {
                     return true;
                 }
 
@@ -1069,7 +1068,7 @@ public final class FeatureBytecodeScanner {
                     return true;
                 }
             } else if (producer instanceof MethodInsnNode call) {
-                if (isConfiguration(cl, Type.getObjectType(call.owner)) || isConfiguration(cl, Type.getReturnType(call.desc))) {
+                if (isFeatureType(cl, Type.getObjectType(call.owner)) || isFeatureType(cl, Type.getReturnType(call.desc))) {
                     return true;
                 }
 
@@ -1114,7 +1113,7 @@ public final class FeatureBytecodeScanner {
     private static boolean isConfigParameter(ClassLoader cl, VarInsnNode local, MethodNode method) {
         int index = parameterIndex(method, local.var);
 
-        return index >= 0 && isConfiguration(cl, Type.getArgumentTypes(method.desc)[index]);
+        return index >= 0 && isFeatureType(cl, Type.getArgumentTypes(method.desc)[index]);
     }
 
     /** Whether a slot holds a {@code boolean} parameter that call sites fill with a config-selective test's result. */
@@ -1151,14 +1150,14 @@ public final class FeatureBytecodeScanner {
         }
     }
 
-    private static boolean isConfiguration(ClassLoader cl, Type type) {
+    private static boolean isFeatureType(ClassLoader cl, Type type) {
         if (type.getSort() != Type.OBJECT) {
             return false;
         }
 
         Class<?> candidate = loadClass(cl, type.getInternalName());
 
-        return candidate != null && FeatureConfiguration.class.isAssignableFrom(candidate);
+        return candidate != null && Feature.class.isAssignableFrom(candidate);
     }
 
 
@@ -1424,8 +1423,8 @@ public final class FeatureBytecodeScanner {
     /**
      * @param blocks                  blocks that flow into a placement sink
      * @param configConditionalBlocks the subset of {@code blocks} whose every placement is reached only through a test
-     *                                on the {@code FeatureConfiguration} - so whether they are placed at all depends on
-     *                                which configuration the feature is used with
+     *                                on one of the feature's own fields - so whether they are placed at all depends on
+     *                                how the feature is configured
      *                                (see {@link #configGuardedInstructions})
      * @param tags                    block tags that flow into a placement sink, left unexpanded so a caller can either
      *                                display the tag itself or resolve its current members

@@ -36,6 +36,12 @@ public class TreeDecoratorCollectorUtils {
 
     @Unmodifiable
     @NotNull
+    public static List<Block> collectShelfMushroom(IServerUtils ignoredUtils, ShelfMushroomDecorator ignoredDecorator) {
+        return Collections.emptyList();
+    }
+
+    @Unmodifiable
+    @NotNull
     public static List<Block> collectCocoa(IServerUtils ignoredUtils, CocoaDecorator ignoredDecorator) {
         return Collections.emptyList();
     }
@@ -48,24 +54,21 @@ public class TreeDecoratorCollectorUtils {
 
     @NotNull
     public static List<Block> collectAlterGround(IServerUtils utils, AlterGroundDecorator decorator) {
-        return utils.collectBlocks(utils, decorator.provider);
+        return BlockStateProviderCollectorUtils.collectHolder(utils, decorator.provider);
     }
 
-    @Unmodifiable
     @NotNull
     public static List<Block> collectAttachedToLeaves(IServerUtils utils, AttachedToLeavesDecorator decorator) {
-        return utils.collectBlocks(utils, decorator.blockProvider);
+        return BlockStateProviderCollectorUtils.collectHolder(utils, decorator.blockProvider);
     }
 
-    @Unmodifiable
     @NotNull
     public static List<Block> collectPlaceOnGround(IServerUtils utils, PlaceOnGroundDecorator decorator) {
-        return utils.collectBlocks(utils, decorator.blockStateProvider);
+        return BlockStateProviderCollectorUtils.collectHolder(utils, decorator.blockStateProvider);
     }
 
-    @Unmodifiable
     @NotNull
     public static List<Block> collectAttachedToLogs(IServerUtils utils, AttachedToLogsDecorator decorator) {
-        return utils.collectBlocks(utils, decorator.blockProvider);
+        return BlockStateProviderCollectorUtils.collectHolder(utils, decorator.blockProvider);
     }
 }

@@ -3,7 +3,6 @@ package com.yanny.awi.plugin.server;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.JsonOps;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
@@ -16,7 +15,7 @@ import net.minecraft.resources.RegistryOps;
 import net.minecraft.util.valueproviders.FloatProvider;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSize;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.rootplacers.RootPlacer;
@@ -36,26 +35,39 @@ public class MissingTooltipUtils {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     @NotNull
-    public static TooltipBuilder getMissingFeatureConfigurationTooltip(IServerUtils utils, FeatureConfiguration configuration) {
-//        LOGGER.warn("FeatureConfiguration {} not implemented", configuration.getClass().getSimpleName());
-        //TODO auto detected placed feature
-        return TooltipBuilder.error("Not implemented");
-    }
-
-    @NotNull
-    public static TooltipBuilder getMissingPlacementModifierTooltip(IServerUtils utils, PlacementModifier placement) {
-        TooltipBuilder tooltip = utils.getValueTooltip(utils, placement.type());
+    public static TooltipBuilder getMissingFeatureTooltip(IServerUtils utils, Feature feature) {
+        TooltipBuilder tooltip = CoreTooltipUtils.getBuiltInRegistryTooltip(utils, BuiltInRegistries.FEATURE_TYPE, feature.codec());
 
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
-            MapCodec<PlacementModifier> codec = ((MapCodec<PlacementModifier>) placement.type().codec());
+            MapCodec<Feature> codec = ((MapCodec<Feature>) feature.codec());
+            JsonElement jsonElement = codec.codec().encodeStart(registryOps, feature).getOrThrow();
+
+            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
+        } catch (Throwable e) {
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get feature from serialized data for {} in {}", BuiltInRegistries.FEATURE_TYPE.getKey(feature.codec()), TooltipContext.get(), e);
+            }
+        }
+
+        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
+    }
+
+    @NotNull
+    public static TooltipBuilder getMissingPlacementModifierTooltip(IServerUtils utils, PlacementModifier placement) {
+        TooltipBuilder tooltip = CoreTooltipUtils.getBuiltInRegistryTooltip(utils, BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, placement.codec());
+
+        try {
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
+            //noinspection unchecked
+            MapCodec<PlacementModifier> codec = ((MapCodec<PlacementModifier>) placement.codec());
             JsonElement jsonElement = codec.codec().encodeStart(registryOps, placement).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
             if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get placement modifier from serialized data for {} in {}", BuiltInRegistries.PLACEMENT_MODIFIER_TYPE.getKey(placement.type()), TooltipContext.get(), e);
+                LOGGER.warn("Failed to get placement modifier from serialized data for {} in {}", BuiltInRegistries.PLACEMENT_MODIFIER_TYPE.getKey(placement.codec()), TooltipContext.get(), e);
             }
 
 //            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
@@ -154,18 +166,18 @@ public class MissingTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getMissingBlockStateProviderTooltip(IServerUtils utils, BlockStateProvider provider) {
-        TooltipBuilder tooltip = utils.getValueTooltip(utils, provider.type());
+        TooltipBuilder tooltip = CoreTooltipUtils.getBuiltInRegistryTooltip(utils, BuiltInRegistries.BLOCK_STATE_PROVIDER_TYPE, provider.codec());
 
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
-            MapCodec<BlockStateProvider> codec = ((MapCodec<BlockStateProvider>) provider.type().codec());
+            MapCodec<BlockStateProvider> codec = ((MapCodec<BlockStateProvider>) provider.codec());
             JsonElement jsonElement = codec.codec().encodeStart(registryOps, provider).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
             if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get block state provider from serialized data for {} in {}", BuiltInRegistries.BLOCKSTATE_PROVIDER_TYPE.getKey(provider.type()), TooltipContext.get(), e);
+                LOGGER.warn("Failed to get block state provider from serialized data for {} in {}", BuiltInRegistries.BLOCK_STATE_PROVIDER_TYPE.getKey(provider.codec()), TooltipContext.get(), e);
             }
 
 //            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME

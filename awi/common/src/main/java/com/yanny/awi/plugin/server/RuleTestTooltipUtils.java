@@ -15,6 +15,29 @@ public class RuleTestTooltipUtils {
     }
 
     @NotNull
+    public static TooltipBuilder getAllOfRuleTestTooltip(IServerUtils utils, AllOfRuleTest test) {
+        return array((b) -> b.add(utils.getValueTooltip(utils, test.rules).build(Lang.Branch.RULES)), Lang.RuleTest.ALL_OF);
+    }
+
+    @NotNull
+    public static TooltipBuilder getAnyOfRuleTestTooltip(IServerUtils utils, AnyOfRuleTest test) {
+        return array((b) -> b.add(utils.getValueTooltip(utils, test.rules).build(Lang.Branch.RULES)), Lang.RuleTest.ANY_OF);
+    }
+
+    @NotNull
+    public static TooltipBuilder getNotRuleTestTooltip(IServerUtils utils, NotRuleTest test) {
+        return array((b) -> b.add(utils.getValueTooltip(utils, test.rule).build(Lang.Branch.RULE)), Lang.RuleTest.NOT);
+    }
+
+    @NotNull
+    public static TooltipBuilder getHeightMatchTestTooltip(IServerUtils utils, HeightMatchTest test) {
+        return array((b) -> {
+            b.add(utils.getValueTooltip(utils, test.minInclusive).build(Lang.Value.MIN));
+            b.add(utils.getValueTooltip(utils, test.maxInclusive).build(Lang.Value.MAX));
+        }, Lang.RuleTest.HEIGHT_MATCH);
+    }
+
+    @NotNull
     public static TooltipBuilder getBlockMatchTestTooltip(IServerUtils utils, BlockMatchTest test) {
         return array((b) -> b.add(utils.getValueTooltip(utils, test.block).build(Lang.Value.BLOCK)), Lang.RuleTest.BLOCK_MATCH);
     }

@@ -1,7 +1,6 @@
 package com.yanny.ali.plugin;
 
 import com.mojang.datafixers.util.Pair;
-import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.CommonValueTooltip;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
@@ -69,25 +68,23 @@ import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import net.minecraft.world.item.equipment.trim.TrimPattern;
 import net.minecraft.world.item.slot.*;
+import net.minecraft.world.item.trading.TradeSet;
+import net.minecraft.world.item.trading.TradeSets;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BannerPattern;
-import net.minecraft.world.level.block.entity.BannerPatternLayers;
-import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.saveddata.maps.MapDecorationType;
-import net.minecraft.world.level.storage.loot.ContainerComponentManipulator;
-import net.minecraft.world.level.storage.loot.IntRange;
-import net.minecraft.world.level.storage.loot.LootContextArg;
+import net.minecraft.world.level.storage.loot.*;
 import net.minecraft.world.level.storage.loot.entries.*;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.nbt.NbtProvider;
-import net.minecraft.world.item.trading.TradeSet;
-import net.minecraft.world.item.trading.TradeSets;
-import net.minecraft.world.level.storage.loot.providers.number.*;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProvider;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ResolvableFloat;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ResolvableInt;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -153,14 +150,8 @@ public class Plugin implements IPlugin {
 
         EnumTypes.TRANSLATED_ENUMS.forEach((type, owner) -> registry.registerEnumTranslation(type, Utils.MOD_ID, owner));
 
-        registry.registerNumberProvider(ConstantValue.class, Plugin::convertConstant);
-        registry.registerNumberProvider(UniformGenerator.class, Plugin::convertUniform);
-        registry.registerNumberProvider(BinomialDistributionGenerator.class, Plugin::convertBinomial);
-        registry.registerNumberProvider(ScoreboardValue.class, Plugin::convertScore);
-        registry.registerNumberProvider(StorageValue.class, Plugin::convertStorage);
-        registry.registerNumberProvider(EnchantmentLevelProvider.class, Plugin::convertEnchantmentLevel);
-        registry.registerNumberProvider(EnvironmentAttributeValue.class, Plugin::convertEnvironmentAttribute);
-        registry.registerNumberProvider(Sum.class, Plugin::convertSum);
+        IntProviderUtils.register(registry);
+        FloatProviderUtils.register(registry);
 
         registry.registerEntry(LootItem.class, NodeUtils::getItemNode);
         registry.registerEntry(TagEntry.class, NodeUtils::getTagNode);
@@ -181,13 +172,12 @@ public class Plugin implements IPlugin {
         registry.registerEntryTooltip(DynamicLoot.class, EntryTooltipUtils::getDynamicTooltip);
         registry.registerEntryTooltip(NestedLootTable.class, EntryTooltipUtils::getReferenceTooltip);
 
-        registry.registerPageResolver(LootItemBlockStatePropertyCondition.class, GlobalLootModifierUtils::testBlockStateProperty);
+        registry.registerPageResolver(MatchBlock.class, GlobalLootModifierUtils::testMatchBlock);
         registry.registerPageResolver(LootItemEntityPropertyCondition.class, GlobalLootModifierUtils::testEntityProperty);
         registry.registerPageResolver(DamageSourceCondition.class, GlobalLootModifierUtils::testDamageSource);
 
         registry.registerConditionTooltip(AllOfCondition.class, ConditionTooltipUtils::getAllOfTooltip);
         registry.registerConditionTooltip(AnyOfCondition.class, ConditionTooltipUtils::getAnyOfTooltip);
-        registry.registerConditionTooltip(LootItemBlockStatePropertyCondition.class, ConditionTooltipUtils::getBlockStatePropertyTooltip);
         registry.registerConditionTooltip(DamageSourceCondition.class, ConditionTooltipUtils::getDamageSourcePropertiesTooltip);
         registry.registerConditionTooltip(EnchantmentActiveCheck.class, ConditionTooltipUtils::getEnchantActiveCheckTooltip);
         registry.registerConditionTooltip(LootItemEntityPropertyCondition.class, ConditionTooltipUtils::getEntityPropertiesTooltip);
@@ -198,11 +188,12 @@ public class Plugin implements IPlugin {
         registry.registerConditionTooltip(MatchTool.class, ConditionTooltipUtils::getMatchToolTooltip);
         registry.registerConditionTooltip(LootItemRandomChanceCondition.class, ConditionTooltipUtils::getRandomChanceTooltip);
         registry.registerConditionTooltip(LootItemRandomChanceWithEnchantedBonusCondition.class, ConditionTooltipUtils::getRandomChanceWithEnchantedBonusTooltip);
-        registry.registerConditionTooltip(ConditionReference.class, ConditionTooltipUtils::getReferenceTooltip);
         registry.registerConditionTooltip(ExplosionCondition.class, ConditionTooltipUtils::getSurvivesExplosionTooltip);
         registry.registerConditionTooltip(BonusLevelTableCondition.class, ConditionTooltipUtils::getTableBonusTooltip);
         registry.registerConditionTooltip(TimeCheck.class, ConditionTooltipUtils::getTimeCheckTooltip);
-        registry.registerConditionTooltip(ValueCheckCondition.class, ConditionTooltipUtils::getValueCheckTooltip);
+        registry.registerConditionTooltip(IntValueCheck.class, ConditionTooltipUtils::getIntValueCheckTooltip);
+        registry.registerConditionTooltip(FloatValueCheck.class, ConditionTooltipUtils::getFloatValueCheckTooltip);
+        registry.registerConditionTooltip(MatchBlock.class, ConditionTooltipUtils::getMatchBlockTooltip);
         registry.registerConditionTooltip(WeatherCheck.class, ConditionTooltipUtils::getWeatherCheckTooltip);
         registry.registerConditionTooltip(EnvironmentAttributeCheck.class, ConditionTooltipUtils::getEnvironmentAttributeCheckTooltip);
 
@@ -218,7 +209,6 @@ public class Plugin implements IPlugin {
         registry.registerFunctionTooltip(SmeltItemFunction.class, FunctionTooltipUtils::getFurnaceSmeltTooltip);
         registry.registerFunctionTooltip(LimitCount.class, FunctionTooltipUtils::getLimitCountTooltip);
         registry.registerFunctionTooltip(EnchantedCountIncreaseFunction.class, FunctionTooltipUtils::getEnchantedCountIncreaseTooltip);
-        registry.registerFunctionTooltip(FunctionReference.class, FunctionTooltipUtils::getReferenceTooltip);
         registry.registerFunctionTooltip(SequenceFunction.class, FunctionTooltipUtils::getSequenceTooltip);
         registry.registerFunctionTooltip(SetAttributesFunction.class, FunctionTooltipUtils::getSetAttributesTooltip);
         registry.registerFunctionTooltip(SetBannerPatternFunction.class, FunctionTooltipUtils::getSetBannerPatternTooltip);
@@ -332,12 +322,12 @@ public class Plugin implements IPlugin {
         registry.registerDataComponentTypeTooltip(DataComponents.BLOCKS_ATTACKS, DataComponentTooltipUtils::getBlockAttacksTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.PIERCING_WEAPON, DataComponentTooltipUtils::getPiercingWeaponTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.KINETIC_WEAPON, DataComponentTooltipUtils::getKineticWeaponTooltip);
-        registry.registerDataComponentTypeTooltip(DataComponents.SWING_ANIMATION, DataComponentTooltipUtils::getSwingAnimationTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.ATTACK_ANIMATION, DataComponentTooltipUtils::getSwingAnimationTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.INTERACT_ANIMATION, DataComponentTooltipUtils::getSwingAnimationTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.ADDITIONAL_TRADE_COST, DataComponentTooltipUtils::getIntTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.STORED_ENCHANTMENTS, DataComponentTooltipUtils::getItemEnchantmentsTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.DYE, DataComponentTooltipUtils::getEnumTypeTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.DYED_COLOR, DataComponentTooltipUtils::getDyedColorTooltip);
-        registry.registerDataComponentTypeTooltip(DataComponents.MAP_COLOR, DataComponentTooltipUtils::getMapColorTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.MAP_ID, DataComponentTooltipUtils::getMapIdTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.MAP_DECORATIONS, DataComponentTooltipUtils::getMapDecorationsTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.MAP_POST_PROCESSING, DataComponentTooltipUtils::getMapPostProcessingTooltip);
@@ -367,6 +357,18 @@ public class Plugin implements IPlugin {
         registry.registerDataComponentTypeTooltip(DataComponents.BANNER_PATTERNS, DataComponentTooltipUtils::getBannerPatternsTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.BASE_COLOR, DataComponentTooltipUtils::getDyeColorTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.POT_DECORATIONS, DataComponentTooltipUtils::getPotDecorationsTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.PROVIDES_POTTERY_PATTERN, DataComponentTooltipUtils::getHolderTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.BLOCK_TRANSFORMER, DataComponentTooltipUtils::getHolderTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.COOKING_FUEL, DataComponentTooltipUtils::getCookingFuelTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.BREWING_FUEL, DataComponentTooltipUtils::getBrewingFuelTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.COMPOSTABLE, DataComponentTooltipUtils::getCompostableTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.VILLAGER_FOOD, DataComponentTooltipUtils::getVillagerFoodTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.MOB_VISIBILITY, DataComponentTooltipUtils::getMobVisibilityTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.SIGN_TEXT_FRONT, DataComponentTooltipUtils::getSignTextTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.SIGN_TEXT_BACK, DataComponentTooltipUtils::getSignTextTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.WAXED, DataComponentTooltipUtils::getEmptyTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.CUSHION_COLOR, DataComponentTooltipUtils::getDyeColorTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.SULFUR_CUBE_CONTENT, DataComponentTooltipUtils::getSulfurCubeContentTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.CONTAINER, DataComponentTooltipUtils::getContainerTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.BLOCK_STATE, DataComponentTooltipUtils::getBlockStateTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.BEES, DataComponentTooltipUtils::getBeesTooltip);
@@ -435,6 +437,10 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(Biome.class, RegistriesTooltipUtils::getBiomeTooltip);
         registry.registerValueTooltip(Structure.class, RegistriesTooltipUtils::getStructureTooltip);
         registry.registerValueTooltip(TrimMaterial.class, RegistriesTooltipUtils::getTrimMaterialTooltip);
+        registry.registerValueTooltip(BlockTransformer.class, RegistriesTooltipUtils::getBlockTransformerTooltip);
+        registry.registerValueTooltip(DecoratedPotPattern.class, RegistriesTooltipUtils::getDecoratedPotPatternTooltip);
+        registry.registerValueTooltip(ResolvableInt.class, ValueTooltipUtils::getResolvableIntTooltip);
+        registry.registerValueTooltip(ResolvableFloat.class, ValueTooltipUtils::getResolvableFloatTooltip);
         registry.registerValueTooltip(TrimPattern.class, RegistriesTooltipUtils::getTrimPatternTooltip);
         registry.registerValueTooltip(JukeboxSong.class, RegistriesTooltipUtils::getJukeboxSongTooltip);
         registry.registerValueTooltip(SoundEvent.class, RegistriesTooltipUtils::getSoundEventTooltip);
@@ -487,8 +493,11 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(MinMaxBounds.Doubles.class, ValueTooltipUtils::getMinMaxBoundsTooltip);
         registry.registerValueTooltip(ApplyBonusCount.Formula.class, ValueTooltipUtils::getFormulaTooltip);
         registry.registerValueTooltip(SetAttributesFunction.Modifier.class, ValueTooltipUtils::getModifierTooltip);
-        registry.registerValueTooltip(NumberProvider.class, ValueTooltipUtils::getNumberProviderTooltip);
-        registry.registerValueTooltip(IntRange.class, ValueTooltipUtils::getIntRangeTooltip);
+        registry.registerValueTooltip(ContextIntProvider.class, ValueTooltipUtils::getIntProviderTooltip);
+        registry.registerValueTooltip(ContextFloatProvider.class, ValueTooltipUtils::getFloatProviderTooltip);
+        registry.registerValueTooltip(IntLimit.class, ValueTooltipUtils::getIntLimitTooltip);
+        registry.registerValueTooltip(IntRangePredicate.class, ValueTooltipUtils::getIntRangePredicateTooltip);
+        registry.registerValueTooltip(FloatRangePredicate.class, ValueTooltipUtils::getFloatRangePredicateTooltip);
         registry.registerValueTooltip(StatePropertiesPredicate.PropertyMatcher.class, ValueTooltipUtils::getPropertyMatcherTooltip);
         registry.registerValueTooltip(PlayerPredicate.StatMatcher.class, ValueTooltipUtils::getStatMatcherTooltip);
         registry.registerValueTooltip(LocationPredicate.PositionPredicate.class, ValueTooltipUtils::getPositionPredicateTooltip);
@@ -591,54 +600,5 @@ public class Plugin implements IPlugin {
         tradeSets.put(3, TradeSets.WANDERING_TRADER_COMMON);
 
         return tradeSets;
-    }
-
-    @NotNull
-    private static RangeValue convertConstant(IServerUtils utils, ConstantValue numberProvider) {
-        return new RangeValue(numberProvider.getFloat(utils.getLootContext()));
-    }
-
-    @NotNull
-    private static RangeValue convertUniform(IServerUtils utils, UniformGenerator numberProvider) {
-        return new RangeValue(utils.convertNumber(utils, numberProvider.min()).min(),
-                utils.convertNumber(utils, numberProvider.max()).max());
-    }
-
-    @NotNull
-    private static RangeValue convertBinomial(IServerUtils utils, BinomialDistributionGenerator numberProvider) {
-        return new RangeValue(0, numberProvider.n().getFloat(utils.getLootContext()));
-    }
-
-    @NotNull
-    private static RangeValue convertScore(IServerUtils utils, ScoreboardValue numberProvider) {
-        return new RangeValue(true, false);
-    }
-
-    @NotNull
-    private static RangeValue convertStorage(IServerUtils utils, StorageValue numberProvider) {
-        return new RangeValue(false, true);
-    }
-
-    @NotNull
-    private static RangeValue convertEnchantmentLevel(IServerUtils utils, EnchantmentLevelProvider numberProvider) {
-        //TODO
-        return new RangeValue(false, true);
-    }
-
-    @NotNull
-    private static RangeValue convertEnvironmentAttribute(IServerUtils utils, EnvironmentAttributeValue numberProvider) {
-        //TODO
-        return new RangeValue(false, true);
-    }
-
-    @NotNull
-    private static RangeValue convertSum(IServerUtils utils, Sum numberProvider) {
-        RangeValue value = new RangeValue(0);
-
-        for (NumberProvider summand : numberProvider.summands()) {
-            value.add(utils.convertNumber(utils, summand));
-        }
-
-        return value;
     }
 }

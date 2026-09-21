@@ -42,6 +42,23 @@ public class BlockPredicateTooltipUtils {
     }
 
     @NotNull
+    public static TooltipBuilder getHeightRangePredicateTooltip(IServerUtils utils, HeightRangePredicate predicate) {
+        return array((b) -> {
+            b.add(HeightProviderTooltipUtils.getVerticalAnchorTooltip(utils, predicate.minInclusive()).build(Lang.Branch.MIN));
+            b.add(HeightProviderTooltipUtils.getVerticalAnchorTooltip(utils, predicate.maxInclusive()).build(Lang.Branch.MAX));
+        }, Lang.BlockPredicate.HEIGHT_RANGE);
+    }
+
+    @NotNull
+    public static TooltipBuilder getVolumeMatchPredicateTooltip(IServerUtils utils, VolumeMatchPredicate predicate) {
+        return array((b) -> {
+            b.add(utils.getValueTooltip(utils, predicate.min()).build(Lang.Value.MIN));
+            b.add(utils.getValueTooltip(utils, predicate.max()).build(Lang.Value.MAX));
+            b.add(utils.getValueTooltip(utils, predicate.match()).build(Lang.Branch.MATCH));
+        }, Lang.BlockPredicate.VOLUME_MATCH);
+    }
+
+    @NotNull
     public static TooltipBuilder getSolidPredicateTooltip(IServerUtils utils, SolidPredicate predicate) {
         return array((b) -> b.add(utils.getValueTooltip(utils, predicate.offset).build(Lang.Value.OFFSET)).showEmpty(), Lang.BlockPredicate.SOLID);
     }

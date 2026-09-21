@@ -5,16 +5,17 @@ import com.yanny.aci.api.RangeValue;
 import com.yanny.awi.Utils;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.PalettedContainerFactory;
-import net.minecraft.world.level.chunk.ProtoChunk;
-import net.minecraft.world.level.chunk.UpgradeData;
 import net.minecraft.world.level.levelgen.*;
-import net.minecraft.world.level.levelgen.blending.Blender;
+import net.minecraft.world.level.levelgen.densityfunction.DensitySamplerSet;
+import net.minecraft.world.level.levelgen.densityfunction.DensityVolume;
+import net.minecraft.world.level.levelgen.densityfunction.SamplerContext;
+import net.minecraft.world.level.levelgen.material.MaterialRuleContext;
+import net.minecraft.world.level.levelgen.material.rule.MaterialRule;
+import net.minecraft.world.level.levelgen.material.rule.RuleEvaluator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -43,7 +44,7 @@ import java.util.function.Function;
 public class NodeUtils {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
-    // How far below the preliminary surface vanilla builds surface (SurfaceRules.Context constant), used to derive minSurfaceLevel.
+    // How far below the preliminary surface vanilla builds surface (MaterialRuleContext constant), used to derive minSurfaceLevel.
     private static final int SURFACE_BUILD_DEPTH = 8;
 
     /**
@@ -88,9 +89,9 @@ public class NodeUtils {
 
     public static class DimensionContext {
         private final HolderLookup.Provider codecLookup;
-        private final SurfaceRules.RuleSource masterSurfaceRule;
-        private final SurfaceRules.Context context;
-        private SurfaceRules.SurfaceRule compiledRule;
+        private final MaterialRule masterMaterialRule;
+        private final MaterialRuleContext context;
+        private RuleEvaluator compiledRule;
         /** Built on first use and reused for every biome of this dimension — the encode behind it is not free. */
         @Nullable
         private SurfaceRuleSpecializer specializer;
@@ -103,13 +104,11 @@ public class NodeUtils {
         private final BiomeHolderWrapper biomeWrapper = new BiomeHolderWrapper();
 
         /** @param codecLookup see {@link SurfaceRuleSpecializer}; {@code registryAccess} in game, a test's own provider otherwise. */
-        public DimensionContext(RegistryAccess registryAccess, PalettedContainerFactory palettedContainerFactory, HolderLookup.Provider codecLookup, NoiseBasedChunkGenerator noiseGenerator,
-                                RandomState randomState) {
-            Registry<Biome> biomeRegistry = registryAccess.lookupOrThrow(Registries.BIOME);
+        public DimensionContext(HolderLookup.Provider codecLookup, NoiseBasedChunkGenerator noiseGenerator, RandomState randomState) {
             NoiseGeneratorSettings settings = noiseGenerator.generatorSettings().value();
 
             this.codecLookup = codecLookup;
-            this.masterSurfaceRule = settings.surfaceRule();
+            this.masterMaterialRule = settings.materialRule().value();
 
             LevelHeightAccessor heightAccessor = new LevelHeightAccessor() {
                 @Override
@@ -129,22 +128,15 @@ public class NodeUtils {
             this.defaultBlock = settings.defaultBlock();
             this.defaultFluid = settings.defaultFluid();
 
-            ProtoChunk mockChunk = new ProtoChunk(new ChunkPos(0, 0), UpgradeData.EMPTY, heightAccessor, palettedContainerFactory, null);
             WorldGenerationContext genContext = new WorldGenerationContext(noiseGenerator, heightAccessor);
+            DensityVolume volume = new DensityVolume(1, 1, 1, 0, 0, 0);
+            DensitySamplerSet samplers = randomState.samplersWithContext(SamplerContext.EMPTY_UNCACHED);
 
-            NoiseChunk dummyNoiseChunk = NoiseChunk.forChunk(
-                    mockChunk, randomState,
-                    DensityFunctions.BeardifierMarker.INSTANCE,
-                    settings,
-                    (i, j, k) -> new Aquifer.FluidStatus(seaLevel, defaultFluid),
-                    Blender.empty()
+            this.context = new MaterialRuleContext(
+                    randomState.surfaceSystem(), randomState, volume, samplers,
+                    biomeWrapper, genContext, null
             );
-
-            this.context = new SurfaceRules.Context(
-                    randomState.surfaceSystem(), randomState, mockChunk,
-                    dummyNoiseChunk, biomeWrapper, genContext, null
-            );
-            this.compiledRule = this.masterSurfaceRule.apply(this.context);
+            this.compiledRule = this.masterMaterialRule.compile(this.context);
         }
 
         /** Points the context at the biome about to be scanned, compiling a rule specialized for it when asked to. */
@@ -153,10 +145,10 @@ public class NodeUtils {
 
             if (options.settings().specializeRulePerBiome()) {
                 if (specializer == null) {
-                    specializer = new SurfaceRuleSpecializer(masterSurfaceRule, codecLookup, options.logStatistics());
+                    specializer = new SurfaceRuleSpecializer(masterMaterialRule, codecLookup, options.logStatistics());
                 }
 
-                compiledRule = specializer.specialize(biome).apply(context);
+                compiledRule = specializer.specialize(biome).compile(context);
             }
         }
 
@@ -467,17 +459,17 @@ public class NodeUtils {
      * </ul>
      * {@code walkBottom} is where the walk stops evaluating, which is not necessarily where the modelled stone run ends:
      * the run's shape (and with it {@code stoneDepthBelow}) still comes from {@code stoneBottom}. The caller must have
-     * called {@link SurfaceRules.Context#updateXZ} for {@code posX}/{@code posZ}.
+     * called {@link MaterialRuleContext#updateXZ} for {@code posX}/{@code posZ}.
      */
     private static void walkColumn(DimensionContext dimCtx, LayerHolder holder, int posX, int posZ,
                                    int surfaceTop, int stoneBottom, int walkBottom, boolean hasWaterAbove) {
-        SurfaceRules.Context context = dimCtx.context;
-        SurfaceRules.SurfaceRule rule = dimCtx.compiledRule;
+        MaterialRuleContext context = dimCtx.context;
+        RuleEvaluator rule = dimCtx.compiledRule;
         int seaLevel = dimCtx.seaLevel;
 
         // Pin the preliminary surface to the assumed surface height so that surface-relative conditions
         // (above_preliminary_surface) resolve against it, exactly as vanilla derives minSurfaceLevel.
-        context.minSurfaceLevel = surfaceTop + context.surfaceDepth - SURFACE_BUILD_DEPTH;
+        context.minSurfaceLevel = surfaceTop + context.surfaceDepth() - SURFACE_BUILD_DEPTH;
         context.lastMinSurfaceLevelUpdate = context.lastUpdateXZ;
 
         boolean water = hasWaterAbove && surfaceTop < seaLevel;
@@ -544,7 +536,7 @@ public class NodeUtils {
                     int posZ = (int) xz[1];
 
                     // Once per column: every walk below shares these 2D noise values.
-                    dimCtx.context.updateXZ(posX, posZ);
+                    dimCtx.context.updateXZ(posX, posZ, 0, 0);
 
                     for (int h = dimCtx.maxBuildHeight - heightPhase; h >= dimCtx.minBuildHeight; h -= settings.surfaceHeightStep()) {
                         // Normal surface: solid stone from the world bottom up to h. The walk itself may stop early

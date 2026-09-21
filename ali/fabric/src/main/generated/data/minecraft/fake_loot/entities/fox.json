@@ -7,127 +7,113 @@
           "children": [
             {
               "type": "minecraft:item",
-              "conditions": [
-                {
-                  "condition": "minecraft:entity_properties",
-                  "entity": "this",
-                  "predicate": {
-                    "minecraft:equipment": {
-                      "mainhand": {
-                        "items": "minecraft:emerald"
-                      }
+              "condition": {
+                "type": "minecraft:entity_properties",
+                "entity": "this",
+                "predicate": {
+                  "minecraft:equipment": {
+                    "mainhand": {
+                      "items": "minecraft:emerald"
                     }
                   }
                 }
-              ],
+              },
               "name": "minecraft:emerald"
             },
             {
               "type": "minecraft:item",
-              "conditions": [
-                {
-                  "condition": "minecraft:entity_properties",
-                  "entity": "this",
-                  "predicate": {
-                    "minecraft:equipment": {
-                      "mainhand": {
-                        "items": "minecraft:rabbit_foot"
-                      }
+              "condition": {
+                "type": "minecraft:entity_properties",
+                "entity": "this",
+                "predicate": {
+                  "minecraft:equipment": {
+                    "mainhand": {
+                      "items": "minecraft:rabbit_foot"
                     }
                   }
                 }
-              ],
+              },
               "name": "minecraft:rabbit_foot"
             },
             {
               "type": "minecraft:item",
-              "conditions": [
-                {
-                  "condition": "minecraft:entity_properties",
-                  "entity": "this",
-                  "predicate": {
-                    "minecraft:equipment": {
-                      "mainhand": {
-                        "items": "minecraft:rabbit_hide"
-                      }
+              "condition": {
+                "type": "minecraft:entity_properties",
+                "entity": "this",
+                "predicate": {
+                  "minecraft:equipment": {
+                    "mainhand": {
+                      "items": "minecraft:rabbit_hide"
                     }
                   }
                 }
-              ],
+              },
               "name": "minecraft:rabbit_hide"
             },
             {
               "type": "minecraft:item",
-              "conditions": [
-                {
-                  "condition": "minecraft:entity_properties",
-                  "entity": "this",
-                  "predicate": {
-                    "minecraft:equipment": {
-                      "mainhand": {
-                        "items": "minecraft:egg"
-                      }
+              "condition": {
+                "type": "minecraft:entity_properties",
+                "entity": "this",
+                "predicate": {
+                  "minecraft:equipment": {
+                    "mainhand": {
+                      "items": "minecraft:egg"
                     }
                   }
                 }
-              ],
+              },
               "name": "minecraft:egg"
             },
             {
               "type": "minecraft:item",
-              "conditions": [
-                {
-                  "condition": "minecraft:entity_properties",
-                  "entity": "this",
-                  "predicate": {
-                    "minecraft:equipment": {
-                      "mainhand": {
-                        "items": "minecraft:wheat"
-                      }
+              "condition": {
+                "type": "minecraft:entity_properties",
+                "entity": "this",
+                "predicate": {
+                  "minecraft:equipment": {
+                    "mainhand": {
+                      "items": "minecraft:wheat"
                     }
                   }
                 }
-              ],
+              },
               "name": "minecraft:wheat"
             },
             {
               "type": "minecraft:item",
-              "conditions": [
-                {
-                  "condition": "minecraft:entity_properties",
-                  "entity": "this",
-                  "predicate": {
-                    "minecraft:equipment": {
-                      "mainhand": {
-                        "items": "minecraft:leather"
-                      }
+              "condition": {
+                "type": "minecraft:entity_properties",
+                "entity": "this",
+                "predicate": {
+                  "minecraft:equipment": {
+                    "mainhand": {
+                      "items": "minecraft:leather"
                     }
                   }
                 }
-              ],
+              },
               "name": "minecraft:leather"
             },
             {
               "type": "minecraft:item",
-              "conditions": [
-                {
-                  "condition": "minecraft:entity_properties",
-                  "entity": "this",
-                  "predicate": {
-                    "minecraft:equipment": {
-                      "mainhand": {
-                        "items": "minecraft:feather"
-                      }
+              "condition": {
+                "type": "minecraft:entity_properties",
+                "entity": "this",
+                "predicate": {
+                  "minecraft:equipment": {
+                    "mainhand": {
+                      "items": "minecraft:feather"
                     }
                   }
                 }
-              ],
+              },
               "name": "minecraft:feather"
             }
           ]
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     }
   ]
 }

@@ -30,7 +30,10 @@ public class ConsumeEffectTooltipUtils {
     @Unmodifiable
     @NotNull
     public static TooltipBuilder getTeleportRandomlyTooltip(IServerUtils utils, TeleportRandomlyConsumeEffect effect) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, effect.diameter()).build(Lang.Value.DIAMETER)), Lang.ConsumeEffects.TELEPORT_RANDOMLY);
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, effect.diameter()).build(Lang.Value.DIAMETER));
+            b.add(utils.getValueTooltip(utils, effect.directionalParticles()).build(Lang.Value.DIRECTIONAL_PARTICLES));
+        }, Lang.ConsumeEffects.TELEPORT_RANDOMLY);
     }
 
     @Unmodifiable

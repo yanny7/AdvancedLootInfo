@@ -10,12 +10,11 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.chunk.PalettedContainerFactory;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import net.minecraft.world.level.levelgen.RandomState;
-import net.minecraft.world.level.levelgen.SurfaceRules;
+import net.minecraft.world.level.levelgen.material.rule.MaterialRule;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -66,13 +65,13 @@ public class BaseLayoutScanner {
 
     @NotNull
     public static BaseLayoutScanner scan(ServerLevel level, Registry<LevelStem> levelStemRegistry, boolean logStatistics) {
-        return scan(level.registryAccess(), level.palettedContainerFactory(), level.registryAccess(), level.getSeed(), levelStemRegistry,
+        return scan(level.registryAccess(), level.registryAccess(), level.getSeed(), levelStemRegistry,
                 NodeUtils.ScanSettings.DEFAULT, logStatistics);
     }
 
     /** @param codecLookup see {@link SurfaceRuleSpecializer}; the same object as {@code registryAccess} in game. */
     @NotNull
-    public static BaseLayoutScanner scan(RegistryAccess registryAccess, PalettedContainerFactory palettedContainerFactory, HolderLookup.Provider codecLookup, long seed,
+    public static BaseLayoutScanner scan(RegistryAccess registryAccess, HolderLookup.Provider codecLookup, long seed,
                                          Registry<LevelStem> levelStemRegistry, NodeUtils.ScanSettings scanSettings,
                                          boolean logStatistics) {
         List<Task> tasks = new ArrayList<>();
@@ -90,16 +89,16 @@ public class BaseLayoutScanner {
 
         // Per dimension, not per task: a structural HashSet of rules hashes whole rule trees. The identity set filters
         // first, so equals/hashCode runs a handful of times instead of once per biome.
-        Set<SurfaceRules.RuleSource> distinctRuleInstances = Collections.newSetFromMap(new IdentityHashMap<>());
+        Set<MaterialRule> distinctRuleInstances = Collections.newSetFromMap(new IdentityHashMap<>());
         Set<Identifier> scannedDimensions = new HashSet<>();
 
         for (Task task : tasks) {
             if (scannedDimensions.add(task.dimension())) {
-                distinctRuleInstances.add(task.generator().generatorSettings().value().surfaceRule());
+                distinctRuleInstances.add(task.generator().generatorSettings().value().materialRule().value());
             }
         }
 
-        Set<SurfaceRules.RuleSource> distinctRules = new HashSet<>(distinctRuleInstances);
+        Set<MaterialRule> distinctRules = new HashSet<>(distinctRuleInstances);
 
         Map<CacheKey, NodeUtils.LayerHolder> cache = new ConcurrentHashMap<>();
         ThreadLocal<ContextCache> threadLocalCtx = ThreadLocal.withInitial(ContextCache::new);
@@ -114,7 +113,7 @@ public class BaseLayoutScanner {
 
         try {
             List<Future<TaskResult>> futures = tasks.stream()
-                    .map((task) -> executor.submit(() -> runTask(task, registryAccess, palettedContainerFactory, codecLookup, seed, cache, threadLocalCtx.get(), scanOptions)))
+                    .map((task) -> executor.submit(() -> runTask(task, registryAccess, codecLookup, seed, cache, threadLocalCtx.get(), scanOptions)))
                     .toList();
 
             for (int i = 0; i < futures.size(); i++) {
@@ -159,7 +158,7 @@ public class BaseLayoutScanner {
     }
 
     @NotNull
-    private static TaskResult runTask(Task task, RegistryAccess registryAccess, PalettedContainerFactory palettedContainerFactory, HolderLookup.Provider codecLookup, long seed,
+    private static TaskResult runTask(Task task, RegistryAccess registryAccess, HolderLookup.Provider codecLookup, long seed,
                                       Map<CacheKey, NodeUtils.LayerHolder> cache, ContextCache contextCache,
                                       NodeUtils.ScanOptions scanOptions) {
         CacheKey key = new CacheKey(settingsKey(task.generator()), biomeKey(task.biome()));
@@ -169,7 +168,7 @@ public class BaseLayoutScanner {
             return new TaskResult(task, cached, 0, true);
         }
 
-        NodeUtils.DimensionContext ctx = contextCache.get(task, registryAccess, palettedContainerFactory, codecLookup, seed);
+        NodeUtils.DimensionContext ctx = contextCache.get(task, registryAccess, codecLookup, seed);
         long startTime = System.nanoTime();
         NodeUtils.LayerHolder layers = NodeUtils.getBaseBlocksForBiome(ctx, task.biome(), scanOptions);
         long duration = System.nanoTime() - startTime;
@@ -220,23 +219,23 @@ public class BaseLayoutScanner {
     /**
      * Per-thread {@link NodeUtils.DimensionContext} holder. Building one creates a {@link RandomState}, so it is kept
      * for as long as the worker keeps receiving tasks of the same dimension; only one context per thread is alive at a
-     * time, which bounds the memory the mock chunks hold.
+     * time, which bounds the memory the material-rule contexts hold.
      */
     private static class ContextCache {
         private Identifier dimension;
         private NodeUtils.DimensionContext context;
 
         @NotNull
-        NodeUtils.DimensionContext get(Task task, RegistryAccess registryAccess, PalettedContainerFactory palettedContainerFactory, HolderLookup.Provider codecLookup, long seed) {
+        NodeUtils.DimensionContext get(Task task, RegistryAccess registryAccess, HolderLookup.Provider codecLookup, long seed) {
             if (context == null || !task.dimension().equals(dimension)) {
                 RandomState randomState = RandomState.create(
-                        task.generator().generatorSettings().value(),
                         registryAccess.lookupOrThrow(Registries.NOISE),
-                        seed
+                        seed,
+                        task.generator().generatorSettings().value()
                 );
 
                 dimension = task.dimension();
-                context = new NodeUtils.DimensionContext(registryAccess, palettedContainerFactory, codecLookup, task.generator(), randomState);
+                context = new NodeUtils.DimensionContext(codecLookup, task.generator(), randomState);
             }
 
             return context;

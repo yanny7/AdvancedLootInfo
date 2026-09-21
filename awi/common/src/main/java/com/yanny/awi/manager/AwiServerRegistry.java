@@ -1,6 +1,7 @@
 package com.yanny.awi.manager;
 
 import com.mojang.datafixers.util.Either;
+import com.mojang.serialization.MapCodec;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.manager.ClassKeyedMap;
 import com.yanny.aci.manager.CoreServerRegistry;
@@ -16,13 +17,14 @@ import com.yanny.awi.plugin.server.MissingTooltipUtils;
 import com.yanny.awi.plugin.server.summary.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.valueproviders.FloatProvider;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSize;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.rootplacers.RootPlacer;
@@ -43,19 +45,19 @@ import java.util.function.BiFunction;
 
 public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRegistry, IServerUtils> implements IServerRegistry, IServerUtils, ICommonUtils {
     // collectors
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FeatureConfiguration, List<Either<Block, TagKey<Block>>>>> featureBlockCollector = registerClassKeyed("feature block collectors", false, HashMap::new, null);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, BlockStateProvider, List<Block>>> stateProviderBlockCollector = registerClassKeyed("state provider block collectors", false, HashMap::new, BuiltInRegistries.BLOCKSTATE_PROVIDER_TYPE);
+    private final ManagedRegistry<MapCodec<? extends Feature>, BiFunction<IServerUtils, Feature, List<Either<Block, TagKey<Block>>>>> featureBlockCollector = register("feature block collectors", false, HashMap::new, AwiServerRegistry::featureTypeName, BuiltInRegistries.FEATURE_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, BlockStateProvider, List<Block>>> stateProviderBlockCollector = registerClassKeyed("state provider block collectors", false, HashMap::new, BuiltInRegistries.BLOCK_STATE_PROVIDER_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, RootPlacer, List<Block>>> rootPlacerBlockCollector = registerClassKeyed("root placer block collectors", false, HashMap::new, BuiltInRegistries.ROOT_PLACER_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, TreeDecorator, List<Block>>> treeDecoratorBlockCollector = registerClassKeyed("tree decorator block collectors", false, HashMap::new, BuiltInRegistries.TREE_DECORATOR_TYPE);
     // tooltips
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FeatureConfiguration, TooltipBuilder>> featureTooltips = registerClassKeyed("feature tooltips", true, HashMap::new, null);
+    private final ManagedRegistry<MapCodec<? extends Feature>, BiFunction<IServerUtils, Feature, TooltipBuilder>> featureTooltips = register("feature tooltips", true, HashMap::new, AwiServerRegistry::featureTypeName, BuiltInRegistries.FEATURE_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, PlacementModifier, TooltipBuilder>> placementModifierTooltips = registerClassKeyed("placement modifier tooltips", true, HashMap::new, BuiltInRegistries.PLACEMENT_MODIFIER_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, IntProvider, TooltipBuilder>> intProviderTooltips = registerClassKeyed("int provider tooltips", true, HashMap::new, BuiltInRegistries.INT_PROVIDER_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, RuleTest, TooltipBuilder>> ruleTestTooltips = registerClassKeyed("rule test tooltips", true, HashMap::new, BuiltInRegistries.RULE_TEST);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Object, TooltipBuilder>> valueTooltips = registerClassKeyed("value tooltips", true, ClassKeyedMap::new, null);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, HeightProvider, TooltipBuilder>> heightProviderTooltips = registerClassKeyed("height provider tooltips", true, HashMap::new, BuiltInRegistries.HEIGHT_PROVIDER_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, BlockPredicate, TooltipBuilder>> blockPredicateTooltips = registerClassKeyed("block predicate tooltips", true, HashMap::new, BuiltInRegistries.BLOCK_PREDICATE_TYPE);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, BlockStateProvider, TooltipBuilder>> blockStateProviderTooltips = registerClassKeyed("block state provider tooltips", true, HashMap::new, BuiltInRegistries.BLOCKSTATE_PROVIDER_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, BlockStateProvider, TooltipBuilder>> blockStateProviderTooltips = registerClassKeyed("block state provider tooltips", true, HashMap::new, BuiltInRegistries.BLOCK_STATE_PROVIDER_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, TreeDecorator, TooltipBuilder>> treeDecoratorTooltips = registerClassKeyed("tree decorator tooltips", true, HashMap::new, BuiltInRegistries.TREE_DECORATOR_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FeatureSize, TooltipBuilder>> featureSizeTooltips = registerClassKeyed("feature size tooltips", true, HashMap::new, BuiltInRegistries.FEATURE_SIZE_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, RootPlacer, TooltipBuilder>> rootPlacerTooltips = registerClassKeyed("root placer tooltips", true, HashMap::new, BuiltInRegistries.ROOT_PLACER_TYPE);
@@ -75,9 +77,9 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
     }
 
     @Override
-    public <T extends FeatureConfiguration> void registerFeatureBlockCollector(Class<T> type, BiFunction<IServerUtils, T, List<Either<Block, TagKey<Block>>>> getter) {
+    public <T extends Feature> void registerFeatureBlockCollector(MapCodec<T> codec, BiFunction<IServerUtils, T, List<Either<Block, TagKey<Block>>>> getter) {
         //noinspection unchecked
-        featureBlockCollector.put(type, (u, t) -> getter.apply(u, (T) t));
+        featureBlockCollector.put(codec, (u, t) -> getter.apply(u, (T) t));
     }
 
     @Override
@@ -99,9 +101,9 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
     }
 
     @Override
-    public <T extends FeatureConfiguration> void registerFeatureTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
+    public <T extends Feature> void registerFeatureTooltip(MapCodec<T> codec, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
         //noinspection unchecked
-        featureTooltips.put(type, (u, t) -> getter.apply(u, (T) t));
+        featureTooltips.put(codec, (u, t) -> getter.apply(u, (T) t));
     }
 
     @Override
@@ -218,8 +220,8 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
 
     @NotNull
     @Override
-    public <T extends FeatureConfiguration> List<Either<Block, TagKey<Block>>> collectBlocks(IServerUtils utils, T entry) {
-        return featureBlockCollector.get(entry.getClass())
+    public <T extends Feature> List<Either<Block, TagKey<Block>>> collectBlocks(IServerUtils utils, T entry) {
+        return featureBlockCollector.get(entry.codec())
                 .map((e) -> e.apply(utils, entry))
                 .orElseGet(List::of); //TODO log missing collector ?
     }
@@ -247,10 +249,10 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
     }
 
     @Override
-    public @NotNull <T extends FeatureConfiguration> TooltipBuilder getFeatureTooltip(IServerUtils utils, T entry) {
-        return featureTooltips.get(entry.getClass())
+    public @NotNull <T extends Feature> TooltipBuilder getFeatureTooltip(IServerUtils utils, T entry) {
+        return featureTooltips.get(entry.codec())
                 .map((e) -> e.apply(utils, entry))
-                .orElseGet(() -> MissingTooltipUtils.getMissingFeatureConfigurationTooltip(utils, entry));
+                .orElseGet(() -> MissingTooltipUtils.getMissingFeatureTooltip(utils, entry));
     }
 
     @Override
@@ -409,6 +411,12 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
         String key = CoreTooltipUtils.enumKey(translation.modId(), translation.owner(), value.name());
 
         return TooltipBuilder.component(utils.lookupProvider(), Component.translatableWithFallback(key, value.name()));
+    }
+
+    @NotNull
+    private static String featureTypeName(MapCodec<? extends Feature> codec) {
+        Identifier key = BuiltInRegistries.FEATURE_TYPE.getKey(codec);
+        return key != null ? key.toString() : codec.toString();
     }
 
     @Override

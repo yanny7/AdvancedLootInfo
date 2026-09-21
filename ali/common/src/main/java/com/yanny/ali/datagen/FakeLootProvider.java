@@ -21,19 +21,18 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
+import net.minecraft.world.level.storage.loot.entries.UniformContainerBase;
 import net.minecraft.world.level.storage.loot.functions.EnchantRandomlyFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemDamageFunction;
 import net.minecraft.world.level.storage.loot.functions.SetPotionFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithEnchantedBonusCondition;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProviders;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -63,7 +62,7 @@ public class FakeLootProvider implements DataProvider {
             tables.forEach((location, builder) -> {
                 Path path = pathProvider.json(location);
 
-                futures.add(DataProvider.saveStable(cachedOutput, LootDataType.TABLE.codec().encodeStart(registryOps, builder.build()).getOrThrow(), path));
+                futures.add(DataProvider.saveStable(cachedOutput, LootTable.DIRECT_CODEC.encodeStart(registryOps, builder.build()).getOrThrow(), path));
             });
 
             return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new));
@@ -365,12 +364,12 @@ public class FakeLootProvider implements DataProvider {
     }
 
     @NotNull
-    private static LootPoolSingletonContainer.Builder<?> addItem(HolderLookup.Provider provider, ItemLike item) {
-        return LootItem.lootTableItem(item).when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(provider, 0.085F, 0.01F));
+    private static UniformContainerBase.Builder<?> addItem(HolderLookup.Provider provider, ItemLike item) {
+        return LootItem.lootTableItem(item).when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(provider.lookupOrThrow(Registries.ENCHANTMENT), 0.085F, 0.01F));
     }
 
     @NotNull
-    private static LootPoolSingletonContainer.Builder<?> addEquippedAlwaysDropItem(HolderLookup.Provider provider, ItemLike item) {
+    private static UniformContainerBase.Builder<?> addEquippedAlwaysDropItem(HolderLookup.Provider provider, ItemLike item) {
         return LootItem.lootTableItem(item).when(
                 LootItemEntityPropertyCondition.hasProperties(
                         LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().equipment(
@@ -383,7 +382,7 @@ public class FakeLootProvider implements DataProvider {
     }
 
     @NotNull
-    private static LootPoolSingletonContainer.Builder<?> addEquippedItem(HolderLookup.Provider provider, ItemLike item, EquipmentSlot slot) {
+    private static UniformContainerBase.Builder<?> addEquippedItem(HolderLookup.Provider provider, ItemLike item, EquipmentSlot slot) {
         ItemPredicate.Builder predicate = ItemPredicate.Builder.item().of(provider.lookupOrThrow(Registries.ITEM), item);
 
         return addItem(provider, item).when(
@@ -405,16 +404,16 @@ public class FakeLootProvider implements DataProvider {
     }
 
     @NotNull
-    private static LootPoolSingletonContainer.Builder<?> addEquippedEnchantedAndDamagedItem(HolderLookup.Provider provider, ItemLike item, EquipmentSlot slot) {
+    private static UniformContainerBase.Builder<?> addEquippedEnchantedAndDamagedItem(HolderLookup.Provider provider, ItemLike item, EquipmentSlot slot) {
         float enchantChance = slot == EquipmentSlot.MAINHAND || slot == EquipmentSlot.OFFHAND ? 0.25F : 0.5F;
 
         return addEquippedItem(provider, item, slot)
                 .apply(EnchantRandomlyFunction.randomEnchantment().when(LootItemRandomChanceCondition.randomChance(enchantChance)))
-                .apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.0F, 1.0F)));
+                .apply(SetItemDamageFunction.setDamage(ContextFloatProviders.between(0.0F, 1.0F)));
     }
 
     @NotNull
-    private static LootPoolSingletonContainer.Builder<?> addChargedCreeperDropItem(HolderLookup.Provider provider, ItemLike item) {
+    private static UniformContainerBase.Builder<?> addChargedCreeperDropItem(HolderLookup.Provider provider, ItemLike item) {
         CompoundTag powered = new CompoundTag();
 
         powered.putBoolean("powered", true);

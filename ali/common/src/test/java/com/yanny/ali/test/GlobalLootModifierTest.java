@@ -195,7 +195,7 @@ public class GlobalLootModifierTest {
         LootItemCondition condition = blockWithAge(Blocks.WHEAT, 7);
 
         assertEquals(Match.YES, match(blockPage(Blocks.WHEAT), condition));
-        assertEquals(List.of("LootItemBlockStatePropertyCondition"), retained(blockPage(Blocks.WHEAT), condition));
+        assertEquals(List.of("MatchBlock"), retained(blockPage(Blocks.WHEAT), condition));
     }
 
     @Test
@@ -289,12 +289,6 @@ public class GlobalLootModifierTest {
 
         assertEquals(Verdict.NO, verdict(page(DUNGEON, LootContextParamSets.CHEST), condition));
         assertEquals(Verdict.UNKNOWN, verdict(entityPage(EntityTypes.ZOMBIE), condition));
-    }
-
-    @Test
-    public void conditionReferenceResolvesStaticData() {
-        assertEquals(Verdict.UNKNOWN, verdict(page(DUNGEON, LootContextParamSets.CHEST), ConditionReference.conditionReference(ResourceKey.create(Registries.PREDICATE, PREDICATE)).build()));
-        assertEquals(Verdict.NO, verdict(page(DUNGEON, LootContextParamSets.CHEST), ConditionReference.conditionReference(ResourceKey.create(Registries.PREDICATE, Identifier.fromNamespaceAndPath("test", "missing"))).build()));
     }
 
     @Test
@@ -511,7 +505,7 @@ public class GlobalLootModifierTest {
                 .equipment(EntityEquipmentPredicate.Builder.equipment().mainhand(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.IRON_SWORD))));
         LootItemCondition onFire = entity(LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity()
                 .flags(EntityFlagsPredicate.Builder.flags().setOnFire(true)));
-        LootItemCondition chance = LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(LOOKUP, 0.5F, 0.1F).build();
+        LootItemCondition chance = LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT), 0.5F, 0.1F).build();
         LootItemCondition[] conditions = {knife, entity(EntityTypes.PIG), onFire, chance};
 
         assertEquals(Match.YES, match(entityPage(EntityTypes.PIG), (Object[]) conditions));
@@ -524,7 +518,7 @@ public class GlobalLootModifierTest {
 
     @Test
     public void burningMobDropIsExcludedByItsBlacklistAndOffEntityPages() {
-        LootItemCondition fire = DamageSourceCondition.hasDamageSource(DamageSourcePredicate.Builder.damageType().tag(TagPredicate.is(DamageTypeTags.IS_FIRE))).build();
+        LootItemCondition fire = DamageSourceCondition.hasDamageSource(DamageSourcePredicate.Builder.damageType().tag(TagPredicate.is(LOOKUP.lookupOrThrow(Registries.DAMAGE_TYPE), DamageTypeTags.IS_FIRE))).build();
         LootItemCondition blacklist = inverted(entity(LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypes.SKELETON))));
         LootItemCondition onFire = entity(LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity()
                 .flags(EntityFlagsPredicate.Builder.flags().setOnFire(true)));
@@ -555,8 +549,8 @@ public class GlobalLootModifierTest {
 
     @Nullable
     private static IPageResolver<Object> resolver(Object value) {
-        if (value instanceof LootItemBlockStatePropertyCondition) {
-            return (u, v, p) -> GlobalLootModifierUtils.testBlockStateProperty(u, (LootItemBlockStatePropertyCondition) v, p);
+        if (value instanceof MatchBlock) {
+            return (u, v, p) -> GlobalLootModifierUtils.testMatchBlock(u, (MatchBlock) v, p);
         } else if (value instanceof LootItemEntityPropertyCondition) {
             return (u, v, p) -> GlobalLootModifierUtils.testEntityProperty(u, (LootItemEntityPropertyCondition) v, p);
         } else if (value instanceof DamageSourceCondition) {
@@ -638,14 +632,12 @@ public class GlobalLootModifierTest {
 
     @NotNull
     private static LootItemCondition block(Block block) {
-        return LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).build();
+        return MatchBlock.blockMatches(LOOKUP.lookupOrThrow(Registries.BLOCK), block).build();
     }
 
     @NotNull
     private static LootItemCondition blockWithAge(Block block, int age) {
-        return LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
-                .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.AGE_7, age))
-                .build();
+        return MatchBlock.blockMatches(LOOKUP.lookupOrThrow(Registries.BLOCK), block, StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.AGE_7, age)).build();
     }
 
     @NotNull
@@ -753,7 +745,7 @@ public class GlobalLootModifierTest {
         public boolean test(LootContext lootContext) {
             return lootContext.hasParameter(LootContextParams.TOOL)
                     && lootContext.hasParameter(LootContextParams.THIS_ENTITY)
-                    && lootContext.getParameter(LootContextParams.TOOL).is(Items.DIAMOND_PICKAXE);
+                    && lootContext.getOptional(LootContextParams.TOOL).is(Items.DIAMOND_PICKAXE);
         }
     }
 
@@ -766,7 +758,7 @@ public class GlobalLootModifierTest {
 
         @Override
         public boolean test(LootContext lootContext) {
-            return lootContext.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof Nameable nameable && nameable.hasCustomName();
+            return lootContext.getOptional(LootContextParams.BLOCK_ENTITY) instanceof Nameable nameable && nameable.hasCustomName();
         }
     }
 
@@ -779,7 +771,7 @@ public class GlobalLootModifierTest {
 
         @Override
         public boolean test(LootContext lootContext) {
-            return lootContext.getOptionalParameter(LootContextParams.ATTACKING_ENTITY) instanceof Player;
+            return lootContext.getOptional(LootContextParams.ATTACKING_ENTITY) instanceof Player;
         }
     }
 
@@ -818,7 +810,7 @@ public class GlobalLootModifierTest {
 
         @Override
         public boolean test(LootContext lootContext) {
-            return lootContext.getParameter(LootContextParams.BLOCK_STATE).is(block);
+            return lootContext.getOptional(LootContextParams.BLOCK_STATE).is(block);
         }
     }
 
@@ -888,7 +880,7 @@ public class GlobalLootModifierTest {
 
         @Override
         public boolean test(LootContext lootContext) {
-            BlockState state = lootContext.getOptionalParameter(LootContextParams.BLOCK_STATE);
+            BlockState state = lootContext.getOptional(LootContextParams.BLOCK_STATE);
             return state != null && blocks.contains(state.getBlock());
         }
     }

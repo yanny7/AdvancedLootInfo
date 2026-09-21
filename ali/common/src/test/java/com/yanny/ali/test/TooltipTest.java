@@ -1,17 +1,18 @@
 package com.yanny.ali.test;
 
+import net.minecraft.world.level.storage.loot.providers.number.floats.FromInt;
+import net.minecraft.core.Holder;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProviders;
+import net.minecraft.world.level.storage.loot.IntLimit;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
-import net.minecraft.world.level.storage.loot.IntRange;
-import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
+import net.minecraft.world.level.storage.loot.entries.UniformContainerBase;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.*;
-import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
@@ -33,13 +34,13 @@ public class TooltipTest {
         assertTooltip(getChanceTooltip(getEnchantedChance(UTILS, List.of(LootItemRandomChanceCondition.randomChance(0.25f).build()), 1)).build(), List.of("Chance: 25%"));
         assertTooltip(getChanceTooltip(getEnchantedChance(UTILS, List.of(LootItemRandomChanceCondition.randomChance(0.25f).build()), 0.5f)).build(), List.of("Chance: 12.50%"));
 
-        assertTooltip(getChanceTooltip(getEnchantedChance(UTILS, List.of(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(LOOKUP, 0.1f, 0.2f).build()), 1)).build(), List.of(
+        assertTooltip(getChanceTooltip(getEnchantedChance(UTILS, List.of(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT), 0.1f, 0.2f).build()), 1)).build(), List.of(
                 "Chance: 10%",
                 "  -> 30% (Looting I)",
                 "  -> 50% (Looting II)",
                 "  -> 70% (Looting III)"
         ));
-        assertTooltip(getChanceTooltip(getEnchantedChance(UTILS, List.of(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(LOOKUP, 0.1f, 0.2f).build()), 0.5f)).build(), List.of(
+        assertTooltip(getChanceTooltip(getEnchantedChance(UTILS, List.of(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT), 0.1f, 0.2f).build()), 0.5f)).build(), List.of(
                 "Chance: 5%",
                 "  -> 15% (Looting I)",
                 "  -> 25% (Looting II)",
@@ -74,20 +75,20 @@ public class TooltipTest {
     public void testCountTooltip() {
         assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of())).build(), List.of("Count: 1"));
 
-        assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(SetItemCountFunction.setCount(ConstantValue.exactly(10)).build()))).build(), List.of("Count: 10"));
+        assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(SetItemCountFunction.setCount(ContextIntProviders.exactly(10)).build()))).build(), List.of("Count: 10"));
         assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(
-                SetItemCountFunction.setCount(ConstantValue.exactly(5), false).build(),
-                SetItemCountFunction.setCount(ConstantValue.exactly(5), true).build()
+                SetItemCountFunction.setCount(ContextIntProviders.exactly(5), false).build(),
+                SetItemCountFunction.setCount(ContextIntProviders.exactly(5), true).build()
         ))).build(), List.of("Count: 10"));
-        assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(SetItemCountFunction.setCount(BinomialDistributionGenerator.binomial(5, 0.5f)).build()))).build(), List.of("Count: 0-5"));
-        assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(SetItemCountFunction.setCount(UniformGenerator.between(1, 9)).build()))).build(), List.of("Count: 1-9"));
+        assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(SetItemCountFunction.setCount(ContextIntProviders.binomial(5, 0.5f)).build()))).build(), List.of("Count: 0-5"));
+        assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(SetItemCountFunction.setCount(ContextIntProviders.between(1, 9)).build()))).build(), List.of("Count: 1-9"));
         assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(
-                SetItemCountFunction.setCount(UniformGenerator.between(1, 4)).build(),
-                SetItemCountFunction.setCount(ConstantValue.exactly(2), true).build()
+                SetItemCountFunction.setCount(ContextIntProviders.between(1, 4)).build(),
+                SetItemCountFunction.setCount(ContextIntProviders.exactly(2), true).build()
         ))).build(), List.of("Count: 3-6"));
         assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(
-                SetItemCountFunction.setCount(UniformGenerator.between(1, 4)).build(),
-                SetItemCountFunction.setCount(UniformGenerator.between(2, 4), true).build()
+                SetItemCountFunction.setCount(ContextIntProviders.between(1, 4)).build(),
+                SetItemCountFunction.setCount(ContextIntProviders.between(2, 4), true).build()
         ))).build(), List.of("Count: 3-8"));
 
         assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(ApplyBonusCount.addOreBonusCount(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.FORTUNE).orElseThrow()).build()))).build(), List.of(
@@ -115,14 +116,14 @@ public class TooltipTest {
                 "  -> 1-7 (Fortune III)"
         ));
 
-        assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(LimitCount.limitCount(IntRange.range(1, 5)).build()))).build(), List.of("Count: 1"));
-        assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(LimitCount.limitCount(IntRange.range(2, 5)).build()))).build(), List.of("Count: 2"));
-        assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(LimitCount.limitCount(IntRange.exact(3)).build()))).build(), List.of("Count: 3"));
-        assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(LimitCount.limitCount(IntRange.lowerBound(4)).build()))).build(), List.of("Count: 4"));
-        assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(LimitCount.limitCount(IntRange.upperBound(0)).build()))).build(), List.of("Count: 0"));
+        assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(LimitCount.limitCount(IntLimit.range(1, 5)).build()))).build(), List.of("Count: 1"));
+        assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(LimitCount.limitCount(IntLimit.range(2, 5)).build()))).build(), List.of("Count: 2"));
+        assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(LimitCount.limitCount(IntLimit.range(3, 3)).build()))).build(), List.of("Count: 3"));
+        assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(LimitCount.limitCount(IntLimit.lowerBound(4)).build()))).build(), List.of("Count: 4"));
+        assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(LimitCount.limitCount(IntLimit.upperBound(0)).build()))).build(), List.of("Count: 0"));
         assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(
                 ApplyBonusCount.addUniformBonusCount(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.FORTUNE).orElseThrow(), 2).build(),
-                LimitCount.limitCount(IntRange.upperBound(6)).build()
+                LimitCount.limitCount(IntLimit.upperBound(6)).build()
         ))).build(), List.of(
                 "Count: 1",
                 "  -> 1-3 (Fortune I)",
@@ -131,7 +132,7 @@ public class TooltipTest {
         ));
         assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(
                 ApplyBonusCount.addUniformBonusCount(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.FORTUNE).orElseThrow(), 2).build(),
-                LimitCount.limitCount(IntRange.lowerBound(2)).build()
+                LimitCount.limitCount(IntLimit.lowerBound(2)).build()
         ))).build(), List.of(
                 "Count: 2",
                 "  -> 2-3 (Fortune I)",
@@ -140,7 +141,7 @@ public class TooltipTest {
         ));
         assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(
                 ApplyBonusCount.addUniformBonusCount(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.FORTUNE).orElseThrow(), 2).build(),
-                LimitCount.limitCount(IntRange.range(2, 6)).build()
+                LimitCount.limitCount(IntLimit.range(2, 6)).build()
         ))).build(), List.of(
                 "Count: 2",
                 "  -> 2-3 (Fortune I)",
@@ -148,25 +149,25 @@ public class TooltipTest {
                 "  -> 2-6 (Fortune III)"
         ));
 
-        assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(EnchantedCountIncreaseFunction.lootingMultiplier(LOOKUP, ConstantValue.exactly(2)).build()))).build(), List.of(
+        assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(EnchantedCountIncreaseFunction.lootingMultiplier(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT), ContextFloatProviders.exactly(2)).build()))).build(), List.of(
                 "Count: 1",
                 "  -> 3 (Looting I)",
                 "  -> 5 (Looting II)",
                 "  -> 7 (Looting III)"
         ));
-        assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(EnchantedCountIncreaseFunction.lootingMultiplier(LOOKUP, BinomialDistributionGenerator.binomial(3, 0.5f)).build()))).build(), List.of(
+        assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(EnchantedCountIncreaseFunction.lootingMultiplier(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT), Holder.direct(new FromInt(ContextIntProviders.binomial(3, 0.5f)))).build()))).build(), List.of(
                 "Count: 1",
                 "  -> 1-4 (Looting I)",
                 "  -> 1-7 (Looting II)",
                 "  -> 1-10 (Looting III)"
         ));
-        assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(EnchantedCountIncreaseFunction.lootingMultiplier(LOOKUP, UniformGenerator.between(1, 4)).build()))).build(), List.of(
+        assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(EnchantedCountIncreaseFunction.lootingMultiplier(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT), ContextFloatProviders.between(1, 4)).build()))).build(), List.of(
                 "Count: 1",
                 "  -> 2-5 (Looting I)",
                 "  -> 3-9 (Looting II)",
                 "  -> 4-13 (Looting III)"
         ));
-        assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(EnchantedCountIncreaseFunction.lootingMultiplier(LOOKUP, UniformGenerator.between(1, 4)).setLimit(12).build()))).build(), List.of(
+        assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(EnchantedCountIncreaseFunction.lootingMultiplier(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT), ContextFloatProviders.between(1, 4)).setLimit(12).build()))).build(), List.of(
                 "Count: 1",
                 "  -> 2-5 (Looting I)",
                 "  -> 3-9 (Looting II)",
@@ -176,7 +177,7 @@ public class TooltipTest {
 
     @Test
     public void testItemTooltipHidesFoldedFunctions() {
-        List<LootItemFunction> functions = List.of(SetItemCountFunction.setCount(ConstantValue.exactly(10)).build());
+        List<LootItemFunction> functions = List.of(SetItemCountFunction.setCount(ContextIntProviders.exactly(10)).build());
 
         assertTooltip(itemTooltip(functions, List.of()), false, List.of(
                 "Count: 10"
@@ -209,7 +210,7 @@ public class TooltipTest {
 
     @Test
     public void testItemTooltipKeepsConditionalFunctions() {
-        List<LootItemFunction> functions = List.of(SetItemCountFunction.setCount(ConstantValue.exactly(10))
+        List<LootItemFunction> functions = List.of(SetItemCountFunction.setCount(ContextIntProviders.exactly(10))
                 .when(ExplosionCondition.survivesExplosion()).build());
 
         assertTooltip(itemTooltip(functions, List.of()), false, List.of(
@@ -226,17 +227,17 @@ public class TooltipTest {
     @Test
     public void testConditionalCountUnion() {
         assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(
-                SetItemCountFunction.setCount(ConstantValue.exactly(10)).when(ExplosionCondition.survivesExplosion()).build()
+                SetItemCountFunction.setCount(ContextIntProviders.exactly(10)).when(ExplosionCondition.survivesExplosion()).build()
         ))).build(), List.of("Count: 1-10"));
 
         assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(
-                SetItemCountFunction.setCount(ConstantValue.exactly(5)).build(),
-                SetItemCountFunction.setCount(ConstantValue.exactly(2), true).when(ExplosionCondition.survivesExplosion()).build()
+                SetItemCountFunction.setCount(ContextIntProviders.exactly(5)).build(),
+                SetItemCountFunction.setCount(ContextIntProviders.exactly(2), true).when(ExplosionCondition.survivesExplosion()).build()
         ))).build(), List.of("Count: 5-7"));
 
         assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(
-                SetItemCountFunction.setCount(UniformGenerator.between(4, 8)).build(),
-                LimitCount.limitCount(IntRange.upperBound(6)).when(ExplosionCondition.survivesExplosion()).build()
+                SetItemCountFunction.setCount(ContextIntProviders.between(4, 8)).build(),
+                LimitCount.limitCount(IntLimit.upperBound(6)).when(ExplosionCondition.survivesExplosion()).build()
         ))).build(), List.of("Count: 4-8"));
 
         assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(
@@ -251,7 +252,7 @@ public class TooltipTest {
 
     @NotNull
     private static TooltipNode itemTooltip(List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        return TooltipUtils.getTooltip(UTILS, LootPoolSingletonContainer.DEFAULT_QUALITY,
+        return TooltipUtils.getTooltip(UTILS, UniformContainerBase.DEFAULT_QUALITY,
                 getEnchantedChance(UTILS, conditions, 1), getEnchantedCount(UTILS, functions), functions, conditions).build();
     }
 }

@@ -79,12 +79,13 @@ public class DataComponentPredicateTooltipTest {
 
     @Test
     public void testPotionsPredicateTooltip() {
-        assertTooltip(DataComponentPredicateTooltipUtils.getPotionsPredicateTooltip(UTILS, (PotionsPredicate) PotionsPredicate.potions(
+        assertTooltip(DataComponentPredicateTooltipUtils.getPotionsPredicateTooltip(UTILS, PotionsPredicate.ofPotions(
                 HolderSet.direct(Potions.HEALING, Potions.INFESTED)
         )).build(Lang.Branch.PREDICATE), List.of(
                 "Predicate:",
-                "  -> minecraft:healing",
-                "  -> minecraft:infested"
+                "  -> Potions:",
+                "    -> minecraft:healing",
+                "    -> minecraft:infested"
         ));
     }
 

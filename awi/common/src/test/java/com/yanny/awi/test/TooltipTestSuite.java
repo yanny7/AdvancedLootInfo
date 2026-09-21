@@ -36,7 +36,7 @@ import net.minecraft.util.valueproviders.FloatProvider;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSize;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.rootplacers.RootPlacer;
@@ -65,7 +65,7 @@ import java.util.concurrent.ExecutionException;
 
 @Suite
 @SelectClasses({
-        FeatureConfigurationTooltipTest.class,
+        FeatureTooltipTest.class,
         PlacementModifierTooltipTest.class,
         HeightProviderTooltipTest.class,
         BlockPredicateTooltipTest.class,
@@ -83,6 +83,7 @@ import java.util.concurrent.ExecutionException;
         TooltipUtilsTest.class,
         ConfigTest.class,
         BaseLayoutTest.class,
+        BaseLayoutSweepTest.class,
         FeatureBytecodeScanTest.class
 })
 public class TooltipTestSuite {
@@ -102,7 +103,7 @@ public class TooltipTestSuite {
 
         Language.inject(loadedLanguage.language());
         TestUtils.bindVanillaTags();
-        LOOKUP = VanillaRegistries.createLookup();
+        LOOKUP = VanillaRegistries.createReloadableLookup(VanillaRegistries.createWorldLookup());
         UNUSED = loadedLanguage.unusedKeys();
 
         PluginManager.getInstance().registerCommonEvent();
@@ -143,7 +144,7 @@ public class TooltipTestSuite {
             }
 
             @Override
-            public @NotNull <T extends FeatureConfiguration> List<Either<Block, TagKey<Block>>> collectBlocks(IServerUtils utils, T entry) {
+            public @NotNull <T extends Feature> List<Either<Block, TagKey<Block>>> collectBlocks(IServerUtils utils, T entry) {
                 return PluginManager.getInstance().serverRegistry.collectBlocks(utils, entry);
             }
 
@@ -164,7 +165,7 @@ public class TooltipTestSuite {
             }
 
             @Override
-            public @NotNull <T extends FeatureConfiguration> TooltipBuilder getFeatureTooltip(IServerUtils utils, T entry) {
+            public @NotNull <T extends Feature> TooltipBuilder getFeatureTooltip(IServerUtils utils, T entry) {
                 return PluginManager.getInstance().serverRegistry.getFeatureTooltip(utils, entry);
             }
 
@@ -270,7 +271,7 @@ public class TooltipTestSuite {
 
     @NotNull
     private static ResourceManager loadClientResources() {
-        LanguageManager languageManager = new LanguageManager("en_us", (lang) -> {});
+        LanguageManager languageManager = new LanguageManager(null, "en_us", (lang) -> {});
         ReloadableResourceManager resourceManager = new ReloadableResourceManager(PackType.CLIENT_RESOURCES);
 
         resourceManager.registerReloadListener(languageManager);

@@ -10,6 +10,7 @@ import com.yanny.ali.plugin.glm.ParamState;
 import com.yanny.ali.plugin.glm.Verdict;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import net.minecraft.advancements.predicates.entity.EntitySubPredicate;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.resources.Identifier;
@@ -23,7 +24,8 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -69,7 +71,10 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
     TooltipBuilder getEnumTranslation(IServerUtils utils, Enum<?> value);
 
     @NotNull
-    RangeValue convertNumber(IServerUtils utils, @Nullable NumberProvider numberProvider);
+    RangeValue convertInt(IServerUtils utils, @Nullable Holder<ContextIntProvider> provider);
+
+    @NotNull
+    RangeValue convertFloat(IServerUtils utils, @Nullable Holder<ContextFloatProvider> provider);
 
     @Nullable
     LootContext getLootContext();

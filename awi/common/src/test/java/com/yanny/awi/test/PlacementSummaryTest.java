@@ -8,6 +8,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.heightproviders.*;
 import net.minecraft.world.level.levelgen.placement.*;
+import net.minecraft.world.level.levelgen.feature.CuboidPlacement;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -195,5 +196,50 @@ public class PlacementSummaryTest {
 
     private static com.yanny.aci.tooltip.TooltipNode renderSummary(List<PlacementModifier> modifiers) {
         return TooltipBuilder.branch((b) -> PlacementSummaryUtils.appendSummary(b, UTILS, modifiers, CTX)).build();
+    }
+
+    @Test
+    public void testCuboidPlacementContributionIsUnknown() {
+        PlacementContribution contribution = UTILS.getPlacementContribution(UTILS, new CuboidPlacement(UniformInt.of(3, 5), ConstantInt.of(2), false, false), CTX);
+        assertEquals(Kind.UNKNOWN, contribution.count().kind());
+        assertTrue(contribution.count().range().isUnknown());
+        assertNotNull(contribution.count().details());
+    }
+
+    @Test
+    public void testRandomChancePlacementContribution() {
+        PlacementContribution contribution = UTILS.getPlacementContribution(UTILS, new RandomChancePlacement(0.9F), CTX);
+        assertNull(contribution.count());
+        assertNull(contribution.height());
+        assertEquals("90", contribution.chancePercent().toIntString());
+    }
+
+    @Test
+    public void testRandomlySelectedPlacementContributesNothingForOffsetsOnly() {
+        PlacementContribution contribution = UTILS.getPlacementContribution(UTILS, new RandomlySelectedPlacement(List.<PlacementModifier>of(
+                OffsetPlacement.of(0, -1, 0),
+                OffsetPlacement.of(-1, -1, 0)
+        )), CTX);
+        assertNull(contribution.count());
+        assertNull(contribution.chancePercent());
+        assertNull(contribution.height());
+    }
+
+    @Test
+    public void testRandomlySelectedPlacementUnionsNestedCounts() {
+        PlacementContribution contribution = UTILS.getPlacementContribution(UTILS, new RandomlySelectedPlacement(List.<PlacementModifier>of(
+                CountPlacement.of(3),
+                CountPlacement.of(UniformInt.of(6, 8))
+        )), CTX);
+        assertEquals(Kind.UNKNOWN, contribution.count().kind());
+        assertEquals("3-8", contribution.count().range().toIntString());
+    }
+
+    @Test
+    public void testVeryBiasedToBottomHeightSpanPeaksAtBottom() {
+        HeightSpan span = UTILS.getHeightSpan(UTILS, VeryBiasedToBottomHeight.of(VerticalAnchor.absolute(0), VerticalAnchor.absolute(64), 8), CTX);
+        assertEquals(Kind.VERY_BIASED_TO_BOTTOM, span.kind());
+        assertEquals("0-64", span.range().toIntString());
+        assertEquals("0", span.bestBand().toIntString());
     }
 }

@@ -11,6 +11,7 @@ import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.heightproviders.ConstantHeight;
 import net.minecraft.world.level.levelgen.heightproviders.UniformHeight;
 import net.minecraft.world.level.levelgen.placement.*;
+import net.minecraft.world.level.levelgen.feature.CuboidPlacement;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -143,15 +144,18 @@ public class PlacementModifierTooltipTest {
     }
 
     @Test
-    public void testRandomOffsetPlacementTooltip() {
-        assertTooltip(PlacementModifierTooltipUtils.getRandomOffsetPlacementTooltip(UTILS, RandomOffsetPlacement.of(ConstantInt.of(1), ConstantInt.of(2))).build(), List.of(
-                "Random Offset:",
-                "  -> XZ Spread:",
+    public void testOffsetPlacementTooltip() {
+        assertTooltip(PlacementModifierTooltipUtils.getOffsetPlacementTooltip(UTILS, OffsetPlacement.of(1, 2, 3)).build(), List.of(
+                "Offset:",
+                "  -> X:",
                 "    -> Constant:",
                 "      -> Value: 1",
-                "  -> Y Spread:",
+                "  -> Y:",
                 "    -> Constant:",
-                "      -> Value: 2"
+                "      -> Value: 2",
+                "  -> Z:",
+                "    -> Constant:",
+                "      -> Value: 3"
         ));
     }
 
@@ -196,6 +200,54 @@ public class PlacementModifierTooltipTest {
                 "  -> Positions:",
                 "    -> [1,2,3]",
                 "    -> [3,2,1]"
+        ));
+    }
+
+    @Test
+    public void testCuboidPlacementTooltip() {
+        assertTooltip(PlacementModifierTooltipUtils.getCuboidPlacementTooltip(UTILS, new CuboidPlacement(UniformInt.of(3, 5), ConstantInt.of(2), false, true)).build(), List.of(
+                "Cuboid:",
+                "  -> XZ Size:",
+                "    -> Uniform:",
+                "      -> Range: 3-5",
+                "  -> Y Size:",
+                "    -> Constant:",
+                "      -> Value: 2",
+                "  -> Include Edges: false",
+                "  -> Include Interior: true"
+        ));
+    }
+
+    @Test
+    public void testRandomChancePlacementTooltip() {
+        assertTooltip(PlacementModifierTooltipUtils.getRandomChancePlacementTooltip(UTILS, new RandomChancePlacement(0.9F)).build(), List.of(
+                "Random Chance:",
+                "  -> Chance: 0.9"
+        ));
+    }
+
+    @Test
+    public void testRandomlySelectedPlacementTooltip() {
+        assertTooltip(PlacementModifierTooltipUtils.getRandomlySelectedPlacementTooltip(UTILS, new RandomlySelectedPlacement(List.<PlacementModifier>of(
+                OffsetPlacement.of(0, -1, 0),
+                CountPlacement.of(3)
+        ))).build(), List.of(
+                "Randomly Selected:",
+                "  -> Placements:",
+                "    -> Offset:",
+                "      -> X:",
+                "        -> Constant:",
+                "          -> Value: 0",
+                "      -> Y:",
+                "        -> Constant:",
+                "          -> Value: -1",
+                "      -> Z:",
+                "        -> Constant:",
+                "          -> Value: 0",
+                "    -> Count Placement:",
+                "      -> Count:",
+                "        -> Constant:",
+                "          -> Value: 3"
         ));
     }
 }

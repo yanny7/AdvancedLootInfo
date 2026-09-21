@@ -18,7 +18,7 @@ ali/common-lootjs/CLAUDE.md    — optional LootJS compatibility module (not bui
 ali/fabric/CLAUDE.md           — ALI's Fabric loader glue
 ali/forge/CLAUDE.md            — ALI's Forge loader glue (not built on this branch)
 ali/neoforge/CLAUDE.md         — ALI's NeoForge loader glue (incl. the GLM bridge and the loom-generated accesswidener → accesstransformer conversion)
-awi/CLAUDE.md                  — AWI mod: worldgen data-scan (incl. surface-rule reverse engineering), plugin wiring, networking (mirrors ali/CLAUDE.md)
+awi/CLAUDE.md                  — AWI mod: worldgen data-scan (incl. material-rule reverse engineering), plugin wiring, networking (mirrors ali/CLAUDE.md)
 awi/common-emi/CLAUDE.md       — EMI specifics for AWI (references ali/common-emi/CLAUDE.md)
 awi/common-jei/CLAUDE.md       — JEI specifics for AWI
 awi/common-rei/CLAUDE.md       — REI specifics for AWI
@@ -28,16 +28,16 @@ awi/neoforge/CLAUDE.md         — AWI's NeoForge loader glue (references ali/ne
 alicompat/CLAUDE.md            — ALICompat mod: ALI compatibility for mods that ship no ALI plugin of their own
 ```
 
-On this `1.21.5` branch `forge_enabled`, `emi_enabled` and `lootjs_enabled` are all `false`, so `ali/forge`, `awi/forge`, `ali/common-emi`, `awi/common-emi` and `ali/common-lootjs` are **not part of the build** (see "Module layout" below). Their sources and docs are still in the tree; the Forge ones in particular have *not* been ported to 1.21.5 and would not compile as-is.
+On this `master` branch `forge_enabled`, `emi_enabled`, `rei_enabled` and `lootjs_enabled` are all `false`, so `ali/forge`, `awi/forge`, `ali/common-emi`, `awi/common-emi`, `ali/common-rei`, `awi/common-rei` and `ali/common-lootjs` are **not part of the build** (see "Module layout" below). Their sources and docs are still in the tree; the Forge ones in particular have *not* been ported and would not compile as-is.
 
 Cross-cutting mechanisms are documented **once**, in whichever doc owns them, and referenced (not restated) everywhere else: the tooltip tree system lives in `aci/CLAUDE.md`; the recipe-viewer integration pattern lives in `ali/common-emi/CLAUDE.md`; the networking pattern lives in `ali/CLAUDE.md` (AWI's is a byte-for-byte structural mirror, documented as a diff in `awi/CLAUDE.md`). When editing one of these, check whether the change belongs in the canonical doc or a per-instance one before writing anything.
 
 ## Repo/branch layout
 
-This is a single mod (source: `https://github.com/yanny7/AdvancedLootInfo`) developed across multiple Minecraft versions in parallel, one version per git branch (`1.20.1`, `1.21.1`, `1.21.5`, `1.21.8`, `1.21.10`, `1.21.11`, `26.1.2`, `master` for the latest/in-development version, plus archived `archive/1.2x.y` branches). Branches are typically worked on as separate checkouts, one per Minecraft version — read `minecraft_version` in the repo-root `gradle.properties` to know which version the current checkout is (this one, `ali_1_21_5/`, is the `1.21.5` branch).
+This is a single mod (source: `https://github.com/yanny7/AdvancedLootInfo`) developed across multiple Minecraft versions in parallel, one version per git branch (`1.20.1`, `1.21.1`, `1.21.5`, `1.21.8`, `1.21.10`, `1.21.11`, `26.1.2`, `master` for the latest/in-development version, plus archived `archive/1.2x.y` branches). Branches are typically worked on as separate checkouts, one per Minecraft version — read `minecraft_version` in the repo-root `gradle.properties` to know which version the current checkout is (this one, `ali_master/`, is the `master` branch, currently Minecraft `26.3`).
 
 The mod's architecture, package layout, and plugin model described across this doc tree are identical across all these branches — they should stay accurate regardless of which version branch they're read from. What legitimately differs per branch:
-- Which loaders are available/enabled (see Module layout below): Fabric on every branch, Forge from `1.20.1` on, NeoForge from `1.21.1` on (Forge support has been getting phased out on newer branches in favor of NeoForge). On this `1.21.1` branch, ALI, AWI, ACI and ALICompat all ship `fabric`+`forge`+`neoforge`.
+- Which loaders are available/enabled (see Module layout below): Fabric on every branch, Forge from `1.20.1` on, NeoForge from `1.21.1` on (Forge support has been getting phased out on newer branches in favor of NeoForge). On this `master` branch, ALI, AWI, ACI and ALICompat ship `fabric`+`neoforge` only.
 - Which ALICompat target mods have a build for the branch's Minecraft version, hence `compat_mods` and the `<slug>_<loader>_dep` coordinates in `gradle.properties`.
 - Loader/dependency versions in `gradle.properties` (`minecraft_version`, `forge_version`, `fabric_version`, `neoforge_version`, EMI/JEI/REI/architectury versions, etc.).
 - Minor Minecraft-API glue inside `fabric`/`forge`/`neoforge` modules and datagen.
@@ -126,14 +126,12 @@ After editing `aci`, a dev run may keep loading a stale copy: loom caches remapp
 
 Run the game (client) with a given loader/viewer combination — generated per-platform tasks follow the pattern `run<Ali|Awi><Fabric|Forge|NeoForge><Emi|Jei|Rei>Client`:
 ```
+./gradlew runAliFabricJeiClient
 ./gradlew runAliNeoforgeJeiClient
-./gradlew runAliNeoforgeReiClient
-./gradlew runAliFabricReiClient
+./gradlew runAwiFabricJeiClient
 ./gradlew runAwiNeoforgeJeiClient
-./gradlew runAwiNeoforgeReiClient
-./gradlew runAwiFabricReiClient
 ```
-(Only combinations enabled via `gradle.properties` flags on the current branch are registered as tasks. On this branch that is exactly the six above: Fabric has only REI enabled (`fabric_rei_enabled=true`, `fabric_jei_enabled`/`fabric_emi_enabled=false`) and NeoForge has JEI+REI (`neoforge_emi_enabled=false`); no `run*Forge*` or `run*Emi*` task exists.)
+(Only combinations enabled via `gradle.properties` flags on the current branch are registered as tasks. On this branch that is exactly the four above: JEI is the only viewer enabled (`emi_enabled`/`rei_enabled=false`), on Fabric and NeoForge; no `run*Forge*`, `run*Emi*` or `run*Rei*` task exists.)
 
 Run all tests (JUnit 5 via `junit-platform-suite`, in `common` modules only — recipe-viewer modules have empty/placeholder test dirs):
 ```
@@ -142,15 +140,18 @@ Run all tests (JUnit 5 via `junit-platform-suite`, in `common` modules only — 
 ./gradlew :awi:common:test
 ```
 
-Run a single test class:
+`ali:common` and `awi:common` declare `includeEngines 'junit-platform-suite'`, so **only `@Suite` classes are runnable there** — a `--tests` filter naming an individual test class matches nothing and fails the task with `No tests found for given includes`. Narrow to the suite instead, and use the IDE (which runs the JUnit engine directly) to execute a single class:
 ```
-./gradlew :ali:common:test --tests "com.yanny.ali.test.NodeTest"
+./gradlew :ali:common:test --tests "com.yanny.ali.test.TooltipTestSuite"
+./gradlew :aci:common:test --tests "com.yanny.aci.test.CoreTestSuite"
 ```
+`aci:common` uses a plain `useJUnitPlatform()`, so a single class does work there.
 
-AWI's base-layout scan is guarded by a golden file instead of unit assertions, with two opt-in switches (see `awi/CLAUDE.md`'s test-harness section):
+AWI's base-layout scan and feature bytecode scan are guarded by golden files instead of unit assertions, with three opt-in switches (see `awi/CLAUDE.md`'s test-harness section). All three go through the suite, and every class they gate has to be listed in its `@SelectClasses` to be reachable at all:
 ```
-./gradlew :awi:common:test --tests "com.yanny.awi.test.BaseLayoutTest" -Dawi.baselayout.regenerate=true
-./gradlew :awi:common:test --tests "com.yanny.awi.test.BaseLayoutSweepTest" -Dawi.baselayout.sweep=true
+./gradlew :awi:common:test --tests "com.yanny.awi.test.TooltipTestSuite" -Dawi.baselayout.regenerate=true
+./gradlew :awi:common:test --tests "com.yanny.awi.test.TooltipTestSuite" -Dawi.featurescan.regenerate=true
+./gradlew :awi:common:test --tests "com.yanny.awi.test.TooltipTestSuite" -Dawi.baselayout.sweep=true
 ```
 
 `aci:common` has its own small suite (`CoreTestSuite`) covering the mod-agnostic machinery — anything shared by both mods is tested there once rather than twice in ALI and AWI. It deliberately needs no Minecraft bootstrap, so it runs in a couple of seconds.

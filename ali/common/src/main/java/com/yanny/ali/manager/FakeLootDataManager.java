@@ -1,12 +1,12 @@
 package com.yanny.ali.manager;
 
+import com.mojang.serialization.JsonOps;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,7 +19,7 @@ public class FakeLootDataManager extends SimpleJsonResourceReloadListener<LootTa
     private final Map<Identifier, LootTable> fakeTables = new HashMap<>();
 
     public FakeLootDataManager(HolderLookup.Provider provider) {
-        super(provider, LootDataType.TABLE.codec(), ResourceKey.createRegistryKey(Identifier.withDefaultNamespace(FOLDER)));
+        super(provider.createSerializationContext(JsonOps.INSTANCE), LootTable.DIRECT_CODEC, FileToIdConverter.json(FOLDER));
     }
 
     @Override

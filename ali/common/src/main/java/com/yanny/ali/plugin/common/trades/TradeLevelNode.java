@@ -25,9 +25,9 @@ public class TradeLevelNode extends ListNode {
     // a trader adds every trade of the set instead of picking randomly once the set is no bigger than the number it picks
     public TradeLevelNode(IServerUtils utils, int level, TradeSet tradeSet) {
         this.level = level;
-        this.selectionCount = utils.convertNumber(utils, tradeSet.amount).clamp(0, tradeSet.getTrades().size());
+        this.selectionCount = utils.convertInt(utils, tradeSet.amount()).clamp(0, tradeSet.trades().size());
 
-        for (Holder<VillagerTrade> trade : tradeSet.getTrades()) {
+        for (Holder<VillagerTrade> trade : tradeSet.trades()) {
             addChildren(TradeUtils.getNode(utils, trade.value()));
         }
 

@@ -4,7 +4,10 @@
       "minecraft:badlands": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
         "minecraft:brown_terracotta LAYERED [58-62, 67-69, 82-87, 126-130, 144-155, 161-169, 171-176, 192-195, 250-261, 274-279, 318] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
         "minecraft:light_gray_terracotta LAYERED [54-55, 68-72, 85-90, 97-100, 129-132, 191-194, 198-203, 217-224, 229-232, 244-247, 259-264, 277-282, 289-292] ANY ANY",
         "minecraft:orange_terracotta LAYERED [-63-83, 93-98, 103-112, 114-117, 119-126, 140-145, 156-161, 164-167, 170-173, 178-185, 188-191, 194-199, 202-216, 225-228, 231-243, 247-250, 256-319] ANY ANY",
@@ -12,105 +15,173 @@
         "minecraft:red_sandstone RELATIVE [0] DRY CEILING",
         "minecraft:red_terracotta LAYERED [88-92, 132-142, 218-221, 280-284] DRY ANY",
         "minecraft:terracotta LAYERED [54-60, 62, 67, 70-259, 262-276, 282-318] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY",
         "minecraft:white_terracotta LAYERED [-63-60, 68-71, 78-81, 86-89, 98-101, 111-114, 130-133, 146-149, 190-193, 199-202, 216-223, 230-233, 243-246, 260-263, 270-273, 278-281, 290-293, 303-306] ANY ANY",
         "minecraft:yellow_terracotta LAYERED [159-163, 174-178, 184-188, 238-242] DRY ANY"
       ],
       "minecraft:bamboo_jungle": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:beach": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
         "minecraft:sand RELATIVE [0-4] ANY FLOOR",
         "minecraft:sandstone RELATIVE [0-6] ANY CEILING",
-        "minecraft:sandstone RELATIVE [1-6] ANY FLOOR"
+        "minecraft:sandstone RELATIVE [1-6] ANY FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:birch_forest": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:cherry_grove": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:cold_ocean": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
+      ],
+      "minecraft:dappled_forest": [
+        "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:coarse_dirt RELATIVE [0] DRY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
+        "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
+        "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
+        "minecraft:grass_block RELATIVE [0] DRY ANY",
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:dark_forest": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:deep_cold_ocean": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:deep_dark": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:deep_frozen_ocean": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:deep_lukewarm_ocean": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
         "minecraft:sand RELATIVE [0] UNDERWATER FLOOR",
-        "minecraft:sandstone RELATIVE [0] UNDERWATER CEILING"
+        "minecraft:sandstone RELATIVE [0] UNDERWATER CEILING",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:deep_ocean": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:desert": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
         "minecraft:sand RELATIVE [0-4] ANY FLOOR",
         "minecraft:sandstone RELATIVE [0-7] ANY CEILING",
-        "minecraft:sandstone RELATIVE [1-8] ANY FLOOR"
+        "minecraft:sandstone RELATIVE [1-8] ANY FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:dripstone_caves": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:eroded_badlands": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
         "minecraft:brown_terracotta LAYERED [58-62, 67-69, 82-87, 126-130, 144-155, 161-169, 171-176, 192-195, 250-261, 274-279, 318] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
         "minecraft:light_gray_terracotta LAYERED [54-55, 68-72, 85-90, 97-100, 129-132, 191-194, 198-203, 217-224, 229-232, 244-247, 259-264, 277-282, 289-292] ANY ANY",
         "minecraft:orange_terracotta LAYERED [-63-83, 93-98, 103-112, 114-117, 119-126, 140-145, 156-161, 164-167, 170-173, 178-185, 188-191, 194-199, 202-216, 225-228, 231-243, 247-250, 256-319] ANY ANY",
@@ -118,249 +189,386 @@
         "minecraft:red_sandstone RELATIVE [0] DRY CEILING",
         "minecraft:red_terracotta LAYERED [88-92, 132-142, 218-221, 280-284] DRY ANY",
         "minecraft:terracotta LAYERED [54-60, 62, 67, 70-259, 262-276, 282-318] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY",
         "minecraft:white_terracotta LAYERED [-63-60, 68-71, 78-81, 86-89, 98-101, 111-114, 130-133, 146-149, 190-193, 199-202, 216-223, 230-233, 243-246, 260-263, 270-273, 278-281, 290-293, 303-306] ANY ANY",
         "minecraft:yellow_terracotta LAYERED [159-163, 174-178, 184-188, 238-242] DRY ANY"
       ],
       "minecraft:flower_forest": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:forest": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:frozen_ocean": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:frozen_peaks": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] UNDERWATER ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:ice RELATIVE [0-3] ANY ANY",
         "minecraft:packed_ice RELATIVE [0-4] ANY ANY",
-        "minecraft:snow_block RELATIVE [0-4] DRY ANY"
+        "minecraft:snow_block RELATIVE [0-4] DRY ANY",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:frozen_river": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:grove": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
-        "minecraft:powder_snow RELATIVE [0-3] DRY ANY",
-        "minecraft:snow_block RELATIVE [0] DRY ANY"
+        "minecraft:powder_snow RELATIVE [0-4] DRY ANY",
+        "minecraft:snow_block RELATIVE [0] DRY ANY",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:ice_spikes": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
-        "minecraft:snow_block RELATIVE [0] DRY ANY"
+        "minecraft:snow_block RELATIVE [0] DRY ANY",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:jagged_peaks": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
-        "minecraft:snow_block RELATIVE [0] DRY ANY"
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
+        "minecraft:snow_block RELATIVE [0] DRY ANY",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:jungle": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:lukewarm_ocean": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
         "minecraft:sand RELATIVE [0] UNDERWATER FLOOR",
-        "minecraft:sandstone RELATIVE [0] UNDERWATER CEILING"
+        "minecraft:sandstone RELATIVE [0] UNDERWATER CEILING",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:lush_caves": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:mangrove_swamp": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
-        "minecraft:mud RELATIVE [0-4] ANY ANY"
+        "minecraft:mud RELATIVE [0-4] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:meadow": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:mushroom_fields": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
-        "minecraft:mycelium RELATIVE [0] DRY ANY"
+        "minecraft:mycelium RELATIVE [0] DRY ANY",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:ocean": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:old_growth_birch_forest": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:old_growth_pine_taiga": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
         "minecraft:coarse_dirt RELATIVE [0] DRY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
-        "minecraft:podzol RELATIVE [0] DRY ANY"
+        "minecraft:podzol RELATIVE [0] DRY ANY",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:old_growth_spruce_taiga": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
         "minecraft:coarse_dirt RELATIVE [0] DRY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
-        "minecraft:podzol RELATIVE [0] DRY ANY"
+        "minecraft:podzol RELATIVE [0] DRY ANY",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:pale_garden": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:plains": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:river": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:savanna": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:savanna_plateau": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:snowy_beach": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
         "minecraft:sand RELATIVE [0-4] ANY FLOOR",
         "minecraft:sandstone RELATIVE [0-6] ANY CEILING",
-        "minecraft:sandstone RELATIVE [1-6] ANY FLOOR"
+        "minecraft:sandstone RELATIVE [1-6] ANY FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:snowy_plains": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:snowy_slopes": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] UNDERWATER ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
-        "minecraft:powder_snow RELATIVE [0-3] DRY ANY",
-        "minecraft:snow_block RELATIVE [0-4] DRY ANY"
+        "minecraft:powder_snow RELATIVE [0-4] DRY ANY",
+        "minecraft:snow_block RELATIVE [0-4] DRY ANY",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:snowy_taiga": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:sparse_jungle": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:stony_peaks": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
         "minecraft:calcite RELATIVE [0-3] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:stony_shore": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
-        "minecraft:gravel RELATIVE [0-4] ANY FLOOR"
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
+        "minecraft:gravel RELATIVE [0-4] ANY FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:sulfur_caves": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
         "minecraft:cinnabar ABSOLUTE [-63-319] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
-        "minecraft:sulfur ABSOLUTE [-63-319] ANY ANY"
+        "minecraft:sulfur ABSOLUTE [-63-319] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:sunflower_plains": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:swamp": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:taiga": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:warm_ocean": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
@@ -371,38 +579,57 @@
       ],
       "minecraft:windswept_forest": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:windswept_gravelly_hills": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-3] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0-4] ANY FLOOR"
+        "minecraft:gravel RELATIVE [0-4] ANY FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:windswept_hills": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-3] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:windswept_savanna": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
         "minecraft:coarse_dirt RELATIVE [0] DRY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
         "minecraft:dirt RELATIVE [0-3] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY"
       ],
       "minecraft:wooded_badlands": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
         "minecraft:brown_terracotta LAYERED [58-62, 67-69, 82-87, 126-130, 144-155, 161-169, 171-176, 192-195, 250-261, 274-279, 318] ANY ANY",
         "minecraft:coarse_dirt RELATIVE [0] DRY ANY",
+        "minecraft:copper_ore ABSOLUTE [28] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-60, -52--48, -46--44, -33--30, -15] ANY ANY",
+        "minecraft:granite ABSOLUTE [21] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
         "minecraft:light_gray_terracotta LAYERED [54-55, 68-72, 85-90, 97-100, 129-132, 191-194, 198-203, 217-224, 229-232, 244-247, 259-264, 277-282, 289-292] ANY ANY",
@@ -411,6 +638,7 @@
         "minecraft:red_sandstone RELATIVE [0] DRY CEILING",
         "minecraft:red_terracotta LAYERED [88-92, 132-142, 218-221, 280-284] DRY ANY",
         "minecraft:terracotta LAYERED [54-60, 62, 67, 70-134, 141-146, 148-151, 153-160, 163-172, 176-218, 222-252, 254-259, 262-276, 282-318] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-59--57, -55--53, -51--49, -47, -45--39, -37, -35--27, -25, -15--13] ANY ANY",
         "minecraft:white_terracotta LAYERED [-63-60, 68-71, 78-81, 86-89, 98-101, 111-114, 130-133, 146-149, 190-193, 199-202, 216-223, 230-233, 243-246, 260-263, 270-273, 278-281, 290-293, 303-306] ANY ANY",
         "minecraft:yellow_terracotta LAYERED [159-163, 174-178, 184-188, 238-242] DRY ANY"
       ]
@@ -454,412 +682,701 @@
     "minecraft:overworld": {
       "minecraft:badlands": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
-        "minecraft:brown_terracotta LAYERED [67-69, 85-88, 90-94, 128-133, 140-149, 158-163, 209-213, 226-229, 258-262, 277-280, 282-286] DRY ANY",
+        "minecraft:brown_terracotta LAYERED [67-69, 84-95, 127-134, 139-150, 157-164, 208-214, 225-230, 257-263, 276-287] DRY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
-        "minecraft:light_gray_terracotta LAYERED [56-61, 70-73, 84-87, 98-107, 120-123, 201-204, 220-223, 236-241, 248-253, 262-265, 276-279, 290-299, 312-315] ANY ANY",
-        "minecraft:orange_terracotta LAYERED [-63-76, 78-81, 97-104, 109-112, 114-120, 123-130, 132-135, 147-150, 153-156, 161-169, 176-179, 181-189, 195-200, 202-209, 215-220, 222-225, 230-233, 252-319] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
+        "minecraft:light_gray_terracotta LAYERED [55-62, 70-74, 83-88, 97-108, 119-124, 200-205, 219-224, 235-242, 247-254, 261-266, 275-280, 289-300, 311-316] ANY ANY",
+        "minecraft:orange_terracotta LAYERED [-63-82, 96-105, 108-136, 146-157, 160-170, 175-190, 194-210, 214-226, 229-234, 251-319] ANY ANY",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
         "minecraft:red_sand RELATIVE [0] DRY FLOOR",
         "minecraft:red_sandstone RELATIVE [0] DRY CEILING",
-        "minecraft:red_terracotta LAYERED [54-55, 61-62, 110-115, 124-128, 138-146, 150-160, 184-187, 199-202, 207-216, 225-228, 242-247, 253-258, 302-307, 316-318] ANY ANY",
-        "minecraft:terracotta LAYERED [59-62, 68-277, 280-284, 287-291, 297-303, 305-318] ANY ANY",
-        "minecraft:white_terracotta LAYERED [-63-60, 69-72, 83-86, 99-106, 121-124, 191-194, 200-203, 219-222, 237-240, 249-252, 261-264, 275-278, 291-298, 313-316] ANY ANY",
-        "minecraft:yellow_terracotta LAYERED [54-58, 86-90, 92-97, 133-138, 172-182, 188-192, 221-224, 232-236, 239-242, 245-250, 278-282, 284-289] ANY ANY"
+        "minecraft:red_terracotta LAYERED [54-55, 60-62, 109-116, 123-129, 137-147, 149-161, 183-188, 198-203, 206-217, 224-229, 241-248, 252-259, 301-308, 315-318] ANY ANY",
+        "minecraft:terracotta LAYERED [58-62, 68-292, 296-318] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY",
+        "minecraft:white_terracotta LAYERED [-63-61, 69-73, 82-87, 98-107, 120-125, 190-195, 199-204, 218-223, 236-241, 248-253, 260-265, 274-279, 290-299, 312-317] ANY ANY",
+        "minecraft:yellow_terracotta LAYERED [54-59, 85-98, 132-139, 171-183, 187-193, 220-225, 231-251, 277-290] ANY ANY"
       ],
       "minecraft:bamboo_jungle": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:beach": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
         "minecraft:sand RELATIVE [0-4] ANY FLOOR",
         "minecraft:sandstone RELATIVE [0-6] ANY CEILING",
-        "minecraft:sandstone RELATIVE [2-6] ANY FLOOR"
+        "minecraft:sandstone RELATIVE [2-6] ANY FLOOR",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:birch_forest": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:cherry_grove": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:cold_ocean": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
+      ],
+      "minecraft:dappled_forest": [
+        "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:coarse_dirt RELATIVE [0] DRY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
+        "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
+        "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
+        "minecraft:grass_block RELATIVE [0] DRY ANY",
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:dark_forest": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:deep_cold_ocean": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:deep_dark": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:deep_frozen_ocean": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:deep_lukewarm_ocean": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
         "minecraft:sand RELATIVE [0] UNDERWATER FLOOR",
-        "minecraft:sandstone RELATIVE [0] UNDERWATER CEILING"
+        "minecraft:sandstone RELATIVE [0] UNDERWATER CEILING",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:deep_ocean": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:desert": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
         "minecraft:sand RELATIVE [0-4] ANY FLOOR",
         "minecraft:sandstone RELATIVE [0-7] ANY CEILING",
-        "minecraft:sandstone RELATIVE [2-7] ANY FLOOR"
+        "minecraft:sandstone RELATIVE [2-7] ANY FLOOR",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:dripstone_caves": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:eroded_badlands": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
-        "minecraft:brown_terracotta LAYERED [67-69, 85-88, 90-94, 128-133, 140-149, 158-163, 209-213, 226-229, 258-262, 277-280, 282-286] DRY ANY",
+        "minecraft:brown_terracotta LAYERED [67-69, 84-95, 127-134, 139-150, 157-164, 208-214, 225-230, 257-263, 276-287] DRY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
-        "minecraft:light_gray_terracotta LAYERED [56-61, 70-73, 84-87, 98-107, 120-123, 201-204, 220-223, 236-241, 248-253, 262-265, 276-279, 290-299, 312-315] ANY ANY",
-        "minecraft:orange_terracotta LAYERED [-63-76, 78-81, 97-104, 109-112, 114-120, 123-130, 132-135, 147-150, 153-156, 161-169, 176-179, 181-189, 195-200, 202-209, 215-220, 222-225, 230-233, 252-319] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
+        "minecraft:light_gray_terracotta LAYERED [55-62, 70-74, 83-88, 97-108, 119-124, 200-205, 219-224, 235-242, 247-254, 261-266, 275-280, 289-300, 311-316] ANY ANY",
+        "minecraft:orange_terracotta LAYERED [-63-82, 96-105, 108-136, 146-157, 160-170, 175-190, 194-210, 214-226, 229-234, 251-319] ANY ANY",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
         "minecraft:red_sand RELATIVE [0] DRY FLOOR",
         "minecraft:red_sandstone RELATIVE [0] DRY CEILING",
-        "minecraft:red_terracotta LAYERED [54-55, 61-62, 110-115, 124-128, 138-146, 150-160, 184-187, 199-202, 207-216, 225-228, 242-247, 253-258, 302-307, 316-318] ANY ANY",
-        "minecraft:terracotta LAYERED [59-62, 68-277, 280-284, 287-291, 297-303, 305-318] ANY ANY",
-        "minecraft:white_terracotta LAYERED [-63-60, 69-72, 83-86, 99-106, 121-124, 191-194, 200-203, 219-222, 237-240, 249-252, 261-264, 275-278, 291-298, 313-316] ANY ANY",
-        "minecraft:yellow_terracotta LAYERED [54-58, 86-90, 92-97, 133-138, 172-182, 188-192, 221-224, 232-236, 239-242, 245-250, 278-282, 284-289] ANY ANY"
+        "minecraft:red_terracotta LAYERED [54-55, 60-62, 109-116, 123-129, 137-147, 149-161, 183-188, 198-203, 206-217, 224-229, 241-248, 252-259, 301-308, 315-318] ANY ANY",
+        "minecraft:terracotta LAYERED [58-62, 68-292, 296-318] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY",
+        "minecraft:white_terracotta LAYERED [-63-61, 69-73, 82-87, 98-107, 120-125, 190-195, 199-204, 218-223, 236-241, 248-253, 260-265, 274-279, 290-299, 312-317] ANY ANY",
+        "minecraft:yellow_terracotta LAYERED [54-59, 85-98, 132-139, 171-183, 187-193, 220-225, 231-251, 277-290] ANY ANY"
       ],
       "minecraft:flower_forest": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:forest": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:frozen_ocean": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:frozen_peaks": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] UNDERWATER ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:ice RELATIVE [0-4] ANY ANY",
         "minecraft:packed_ice RELATIVE [0-4] ANY ANY",
-        "minecraft:snow_block RELATIVE [0-4] DRY ANY"
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:snow_block RELATIVE [0-4] DRY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:frozen_river": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:grove": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
-        "minecraft:powder_snow RELATIVE [0-3] DRY ANY",
-        "minecraft:snow_block RELATIVE [0] DRY ANY"
+        "minecraft:powder_snow RELATIVE [0-4] DRY ANY",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:snow_block RELATIVE [0] DRY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:ice_spikes": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
-        "minecraft:snow_block RELATIVE [0] DRY ANY"
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:snow_block RELATIVE [0] DRY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:jagged_peaks": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
-        "minecraft:snow_block RELATIVE [0] DRY ANY"
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:snow_block RELATIVE [0] DRY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:jungle": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:lukewarm_ocean": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
         "minecraft:sand RELATIVE [0] UNDERWATER FLOOR",
-        "minecraft:sandstone RELATIVE [0] UNDERWATER CEILING"
+        "minecraft:sandstone RELATIVE [0] UNDERWATER CEILING",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:lush_caves": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:mangrove_swamp": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
-        "minecraft:mud RELATIVE [0-4] ANY ANY"
+        "minecraft:mud RELATIVE [0-4] ANY ANY",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:meadow": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:mushroom_fields": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
-        "minecraft:mycelium RELATIVE [0] DRY ANY"
+        "minecraft:mycelium RELATIVE [0] DRY ANY",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:ocean": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:old_growth_birch_forest": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:old_growth_pine_taiga": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
         "minecraft:coarse_dirt RELATIVE [0] DRY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
-        "minecraft:podzol RELATIVE [0] DRY ANY"
+        "minecraft:podzol RELATIVE [0] DRY ANY",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:old_growth_spruce_taiga": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
         "minecraft:coarse_dirt RELATIVE [0] DRY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
-        "minecraft:podzol RELATIVE [0] DRY ANY"
+        "minecraft:podzol RELATIVE [0] DRY ANY",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:pale_garden": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:plains": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:river": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:savanna": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:savanna_plateau": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:snowy_beach": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
         "minecraft:sand RELATIVE [0-4] ANY FLOOR",
         "minecraft:sandstone RELATIVE [0-6] ANY CEILING",
-        "minecraft:sandstone RELATIVE [2-6] ANY FLOOR"
+        "minecraft:sandstone RELATIVE [2-6] ANY FLOOR",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:snowy_plains": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:snowy_slopes": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] UNDERWATER ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
-        "minecraft:powder_snow RELATIVE [0-3] DRY ANY",
-        "minecraft:snow_block RELATIVE [0-4] DRY ANY"
+        "minecraft:powder_snow RELATIVE [0-4] DRY ANY",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:snow_block RELATIVE [0-4] DRY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:snowy_taiga": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:sparse_jungle": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:stony_peaks": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:calcite RELATIVE [0-3] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:stony_shore": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
-        "minecraft:gravel RELATIVE [0-3] ANY FLOOR"
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
+        "minecraft:gravel RELATIVE [0-4] ANY FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:sulfur_caves": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
         "minecraft:cinnabar ABSOLUTE [-63-319] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
-        "minecraft:sulfur ABSOLUTE [-63-319] ANY ANY"
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:sulfur ABSOLUTE [-63-319] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:sunflower_plains": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:swamp": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:taiga": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:warm_ocean": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
         "minecraft:sand RELATIVE [0-4] ANY FLOOR",
         "minecraft:sandstone RELATIVE [0-6] ANY CEILING",
-        "minecraft:sandstone RELATIVE [2-6] ANY FLOOR"
+        "minecraft:sandstone RELATIVE [2-6] ANY FLOOR",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:windswept_forest": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:windswept_gravelly_hills": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-3] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0-4] ANY FLOOR"
+        "minecraft:gravel RELATIVE [0-4] ANY FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:windswept_hills": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-3] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:windswept_savanna": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
         "minecraft:coarse_dirt RELATIVE [0] DRY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
         "minecraft:dirt RELATIVE [0-3] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY"
       ],
       "minecraft:wooded_badlands": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
-        "minecraft:brown_terracotta LAYERED [67-69, 85-88, 90-94, 128-133, 140-149, 158-163, 209-213, 226-229, 258-262, 277-280, 282-286] DRY ANY",
+        "minecraft:brown_terracotta LAYERED [67-69, 84-95, 127-134, 139-150, 157-164, 208-214, 225-230, 257-263, 276-287] DRY ANY",
         "minecraft:coarse_dirt RELATIVE [0] DRY ANY",
+        "minecraft:copper_ore ABSOLUTE [26, 28, 30] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-47--46, -44, -42, -35--31, -29, -26, -22, -20, -18--17, -13] ANY ANY",
+        "minecraft:granite ABSOLUTE [20, 22-24, 29-31, 33-35, 49] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:light_gray_terracotta LAYERED [56-61, 70-73, 84-87, 98-107, 120-123, 201-204, 220-223, 236-241, 248-253, 262-265, 276-279, 290-299, 312-315] ANY ANY",
-        "minecraft:orange_terracotta LAYERED [-63-76, 78-81, 97-104, 109-112, 114-120, 123-130, 132-135, 147-150, 153-156, 161-169, 176-179, 181-189, 195-200, 202-209, 215-220, 222-225, 230-233, 252-255, 257-260, 263-268, 270-273, 289-296, 301-304, 306-312, 315-318] ANY ANY",
+        "minecraft:light_gray_terracotta LAYERED [55-62, 70-74, 83-88, 97-108, 119-124, 200-205, 219-224, 235-242, 247-254, 261-266, 275-280, 289-300, 311-316] ANY ANY",
+        "minecraft:orange_terracotta LAYERED [-63-82, 96-105, 108-136, 146-157, 160-170, 175-190, 194-210, 214-226, 229-234, 251-274, 288-297, 300-318] ANY ANY",
+        "minecraft:raw_iron_block ABSOLUTE [-53] ANY ANY",
         "minecraft:red_sand RELATIVE [0] DRY FLOOR",
         "minecraft:red_sandstone RELATIVE [0] DRY CEILING",
-        "minecraft:red_terracotta LAYERED [54-55, 61-62, 110-115, 124-128, 138-146, 150-160, 184-187, 199-202, 207-216, 225-228, 242-247, 253-258, 302-307, 316-318] ANY ANY",
-        "minecraft:terracotta LAYERED [59-62, 68-111, 113-129, 131-134, 136-142, 148-152, 154-158, 162-178, 180-201, 203-208, 214-221, 223-238, 240-244, 251-254, 256-277, 280-284, 287-291, 297-303, 305-318] ANY ANY",
-        "minecraft:white_terracotta LAYERED [-63-60, 69-72, 83-86, 99-106, 121-124, 191-194, 200-203, 219-222, 237-240, 249-252, 261-264, 275-278, 291-298, 313-316] ANY ANY",
-        "minecraft:yellow_terracotta LAYERED [54-58, 86-90, 92-97, 133-138, 172-182, 188-192, 221-224, 232-236, 239-242, 245-250, 278-282, 284-289] ANY ANY"
+        "minecraft:red_terracotta LAYERED [54-55, 60-62, 109-116, 123-129, 137-147, 149-161, 183-188, 198-203, 206-217, 224-229, 241-248, 252-259, 301-308, 315-318] ANY ANY",
+        "minecraft:terracotta LAYERED [58-62, 68-143, 147-159, 161-209, 213-245, 250-292, 296-318] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-55--47, -45--31, -29, -27--23, -21--17, -14] ANY ANY",
+        "minecraft:white_terracotta LAYERED [-63-61, 69-73, 82-87, 98-107, 120-125, 190-195, 199-204, 218-223, 236-241, 248-253, 260-265, 274-279, 290-299, 312-317] ANY ANY",
+        "minecraft:yellow_terracotta LAYERED [54-59, 85-98, 132-139, 171-183, 187-193, 220-225, 231-251, 277-290] ANY ANY"
       ]
     },
     "minecraft:the_end": {
@@ -900,412 +1417,648 @@
     "minecraft:overworld": {
       "minecraft:badlands": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
-        "minecraft:brown_terracotta LAYERED [58-62, 69-73, 89-94, 98-101, 106-112, 125-129, 137-140, 150-154, 162-167, 182-187, 193-198, 220-224, 250-255, 260-265, 281-286, 290-293, 298-304, 317-318] ANY ANY",
+        "minecraft:brown_terracotta LAYERED [58-62, 68-74, 89-95, 98-102, 106-113, 125-130, 137-141, 150-155, 162-168, 182-188, 193-199, 220-225, 250-256, 260-266, 281-287, 290-294, 298-305, 317-318] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
-        "minecraft:light_gray_terracotta LAYERED [55-58, 78-81, 93-96, 192-201, 208-213, 217-222, 235-238, 247-250, 270-273, 285-288] ANY ANY",
-        "minecraft:orange_terracotta LAYERED [-63-75, 79-82, 105-108, 111-114, 120-123, 130-133, 142-145, 147-150, 156-159, 166-169, 171-181, 187-190, 214-217, 222-228, 231-234, 237-240, 243-246, 255-319] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:light_gray_terracotta LAYERED [55-59, 78-82, 93-97, 192-202, 208-214, 217-223, 235-239, 247-251, 270-274, 285-289] ANY ANY",
+        "minecraft:orange_terracotta LAYERED [-63-75, 79-83, 105-109, 111-115, 120-124, 130-134, 142-151, 156-160, 166-182, 187-191, 214-218, 222-229, 231-235, 237-241, 243-247, 255-319] ANY ANY",
         "minecraft:red_sand RELATIVE [0] DRY FLOOR",
         "minecraft:red_sandstone RELATIVE [0] DRY CEILING",
-        "minecraft:red_terracotta LAYERED [68-70, 99-105, 116-120, 136-143, 152-157, 159-164, 188-192, 215-218, 232-239, 258-262, 291-297, 308-312] DRY ANY",
-        "minecraft:terracotta LAYERED [54-60, 62, 67, 72-260, 264-267, 272-292, 295-299, 302-318] ANY ANY",
-        "minecraft:white_terracotta LAYERED [-63-59, 61-62, 77-80, 94-97, 191-194, 197-200, 209-212, 218-221, 234-237, 248-251, 253-256, 269-272, 286-289] ANY ANY",
-        "minecraft:yellow_terracotta LAYERED [71-79, 81-86, 127-136, 145-148, 204-208, 230-233, 263-271, 273-278] DRY ANY"
+        "minecraft:red_terracotta LAYERED [66-71, 99-106, 116-121, 136-144, 152-165, 188-193, 215-219, 232-240, 258-263, 291-298, 308-313] DRY ANY",
+        "minecraft:terracotta LAYERED [54-62, 67-69, 72-261, 264-268, 272-293, 295-300, 302-318] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY",
+        "minecraft:white_terracotta LAYERED [-63-62, 77-81, 94-98, 191-195, 197-201, 209-213, 218-222, 234-238, 248-257, 269-273, 286-290] ANY ANY",
+        "minecraft:yellow_terracotta LAYERED [71-87, 127-137, 145-149, 204-209, 230-234, 263-279] DRY ANY"
       ],
       "minecraft:bamboo_jungle": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:beach": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
         "minecraft:sand RELATIVE [0-4] ANY FLOOR",
         "minecraft:sandstone RELATIVE [0-6] ANY CEILING",
-        "minecraft:sandstone RELATIVE [2-6] ANY FLOOR"
+        "minecraft:sandstone RELATIVE [1-6] ANY FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:birch_forest": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:cherry_grove": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:cold_ocean": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
+      ],
+      "minecraft:dappled_forest": [
+        "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:coarse_dirt RELATIVE [0] DRY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
+        "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
+        "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
+        "minecraft:grass_block RELATIVE [0] DRY ANY",
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:dark_forest": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:deep_cold_ocean": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:deep_dark": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:deep_frozen_ocean": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:deep_lukewarm_ocean": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
         "minecraft:sand RELATIVE [0] UNDERWATER FLOOR",
-        "minecraft:sandstone RELATIVE [0] UNDERWATER CEILING"
+        "minecraft:sandstone RELATIVE [0] UNDERWATER CEILING",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:deep_ocean": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:desert": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
         "minecraft:sand RELATIVE [0-4] ANY FLOOR",
         "minecraft:sandstone RELATIVE [0-7] ANY CEILING",
-        "minecraft:sandstone RELATIVE [2-7] ANY FLOOR"
+        "minecraft:sandstone RELATIVE [1-8] ANY FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:dripstone_caves": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:eroded_badlands": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
-        "minecraft:brown_terracotta LAYERED [58-62, 69-73, 89-94, 98-101, 106-112, 125-129, 137-140, 150-154, 162-167, 182-187, 193-198, 220-224, 250-255, 260-265, 281-286, 290-293, 298-304, 317-318] ANY ANY",
+        "minecraft:brown_terracotta LAYERED [58-62, 68-74, 89-95, 98-102, 106-113, 125-130, 137-141, 150-155, 162-168, 182-188, 193-199, 220-225, 250-256, 260-266, 281-287, 290-294, 298-305, 317-318] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
-        "minecraft:light_gray_terracotta LAYERED [55-58, 78-81, 93-96, 192-201, 208-213, 217-222, 235-238, 247-250, 270-273, 285-288] ANY ANY",
-        "minecraft:orange_terracotta LAYERED [-63-75, 79-82, 105-108, 111-114, 120-123, 130-133, 142-145, 147-150, 156-159, 166-169, 171-181, 187-190, 214-217, 222-228, 231-234, 237-240, 243-246, 255-319] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:light_gray_terracotta LAYERED [55-59, 78-82, 93-97, 192-202, 208-214, 217-223, 235-239, 247-251, 270-274, 285-289] ANY ANY",
+        "minecraft:orange_terracotta LAYERED [-63-75, 79-83, 105-109, 111-115, 120-124, 130-134, 142-151, 156-160, 166-182, 187-191, 214-218, 222-229, 231-235, 237-241, 243-247, 255-319] ANY ANY",
         "minecraft:red_sand RELATIVE [0] DRY FLOOR",
         "minecraft:red_sandstone RELATIVE [0] DRY CEILING",
-        "minecraft:red_terracotta LAYERED [68-70, 99-105, 116-120, 136-143, 152-157, 159-164, 188-192, 215-218, 232-239, 258-262, 291-297, 308-312] DRY ANY",
-        "minecraft:terracotta LAYERED [54-60, 62, 67, 72-260, 264-267, 272-292, 295-299, 302-318] ANY ANY",
-        "minecraft:white_terracotta LAYERED [-63-59, 61-62, 77-80, 94-97, 191-194, 197-200, 209-212, 218-221, 234-237, 248-251, 253-256, 269-272, 286-289] ANY ANY",
-        "minecraft:yellow_terracotta LAYERED [71-79, 81-86, 127-136, 145-148, 204-208, 230-233, 263-271, 273-278] DRY ANY"
+        "minecraft:red_terracotta LAYERED [66-71, 99-106, 116-121, 136-144, 152-165, 188-193, 215-219, 232-240, 258-263, 291-298, 308-313] DRY ANY",
+        "minecraft:terracotta LAYERED [54-62, 67-69, 72-261, 264-268, 272-293, 295-300, 302-318] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY",
+        "minecraft:white_terracotta LAYERED [-63-62, 77-81, 94-98, 191-195, 197-201, 209-213, 218-222, 234-238, 248-257, 269-273, 286-290] ANY ANY",
+        "minecraft:yellow_terracotta LAYERED [71-87, 127-137, 145-149, 204-209, 230-234, 263-279] DRY ANY"
       ],
       "minecraft:flower_forest": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:forest": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:frozen_ocean": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:frozen_peaks": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] UNDERWATER ANY",
-        "minecraft:ice RELATIVE [0-2] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
+        "minecraft:ice RELATIVE [0-4] ANY ANY",
         "minecraft:packed_ice RELATIVE [0-4] ANY ANY",
-        "minecraft:snow_block RELATIVE [0-4] DRY ANY"
+        "minecraft:snow_block RELATIVE [0-4] DRY ANY",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:frozen_river": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:grove": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
         "minecraft:powder_snow RELATIVE [0-4] DRY ANY",
-        "minecraft:snow_block RELATIVE [0] DRY ANY"
+        "minecraft:snow_block RELATIVE [0] DRY ANY",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:ice_spikes": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
-        "minecraft:snow_block RELATIVE [0] DRY ANY"
+        "minecraft:snow_block RELATIVE [0] DRY ANY",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:jagged_peaks": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
-        "minecraft:snow_block RELATIVE [0] DRY ANY"
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
+        "minecraft:snow_block RELATIVE [0] DRY ANY",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:jungle": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:lukewarm_ocean": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
         "minecraft:sand RELATIVE [0] UNDERWATER FLOOR",
-        "minecraft:sandstone RELATIVE [0] UNDERWATER CEILING"
+        "minecraft:sandstone RELATIVE [0] UNDERWATER CEILING",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:lush_caves": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:mangrove_swamp": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
-        "minecraft:mud RELATIVE [0-4] ANY ANY"
+        "minecraft:mud RELATIVE [0-4] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:meadow": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:mushroom_fields": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
-        "minecraft:mycelium RELATIVE [0] DRY ANY"
+        "minecraft:mycelium RELATIVE [0] DRY ANY",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:ocean": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:old_growth_birch_forest": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:old_growth_pine_taiga": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
         "minecraft:coarse_dirt RELATIVE [0] DRY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
-        "minecraft:podzol RELATIVE [0] DRY ANY"
+        "minecraft:podzol RELATIVE [0] DRY ANY",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:old_growth_spruce_taiga": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
         "minecraft:coarse_dirt RELATIVE [0] DRY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
-        "minecraft:podzol RELATIVE [0] DRY ANY"
+        "minecraft:podzol RELATIVE [0] DRY ANY",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:pale_garden": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:plains": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:river": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:savanna": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:savanna_plateau": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:snowy_beach": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
         "minecraft:sand RELATIVE [0-4] ANY FLOOR",
         "minecraft:sandstone RELATIVE [0-6] ANY CEILING",
-        "minecraft:sandstone RELATIVE [2-6] ANY FLOOR"
+        "minecraft:sandstone RELATIVE [1-6] ANY FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:snowy_plains": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:snowy_slopes": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] UNDERWATER ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
         "minecraft:powder_snow RELATIVE [0-4] DRY ANY",
-        "minecraft:snow_block RELATIVE [0-4] DRY ANY"
+        "minecraft:snow_block RELATIVE [0-4] DRY ANY",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:snowy_taiga": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:sparse_jungle": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:stony_peaks": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:calcite RELATIVE [0-4] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:stony_shore": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
-        "minecraft:gravel RELATIVE [0-4] ANY FLOOR"
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
+        "minecraft:gravel RELATIVE [0-4] ANY FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:sulfur_caves": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
         "minecraft:cinnabar ABSOLUTE [-63-319] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
-        "minecraft:sulfur ABSOLUTE [-63-319] ANY ANY"
+        "minecraft:sulfur ABSOLUTE [-63-319] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:sunflower_plains": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:swamp": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:taiga": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:warm_ocean": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:sand RELATIVE [0-4] ANY FLOOR",
         "minecraft:sandstone RELATIVE [0-6] ANY CEILING",
-        "minecraft:sandstone RELATIVE [2-6] ANY FLOOR"
+        "minecraft:sandstone RELATIVE [1-6] ANY FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:windswept_forest": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:windswept_gravelly_hills": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-3] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0-4] ANY FLOOR"
+        "minecraft:gravel RELATIVE [0-4] ANY FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:windswept_hills": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-3] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:windswept_savanna": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
         "minecraft:coarse_dirt RELATIVE [0] DRY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
         "minecraft:dirt RELATIVE [0-3] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY"
       ],
       "minecraft:wooded_badlands": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
-        "minecraft:brown_terracotta LAYERED [58-62, 69-73, 89-94, 98-101, 106-112, 125-129, 137-140, 150-154, 162-167, 182-187, 193-198, 220-224, 250-255, 260-265, 281-286, 290-293, 298-304, 317-318] ANY ANY",
+        "minecraft:brown_terracotta LAYERED [58-62, 68-74, 89-95, 98-102, 106-113, 125-130, 137-141, 150-155, 162-168, 182-188, 193-199, 220-225, 250-256, 260-266, 281-287, 290-294, 298-305, 317-318] ANY ANY",
         "minecraft:coarse_dirt RELATIVE [0] DRY ANY",
+        "minecraft:copper_ore ABSOLUTE [16, 18-19, 23-24, 27, 46, 49] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate_iron_ore ABSOLUTE [-43, -37--36, -32--31, -29] ANY ANY",
+        "minecraft:granite ABSOLUTE [0-1, 7-8, 10-12, 14-23, 25-35, 44, 47] ANY ANY",
         "minecraft:grass_block RELATIVE [0] DRY ANY",
-        "minecraft:light_gray_terracotta LAYERED [55-58, 78-81, 93-96, 192-201, 208-213, 217-222, 235-238, 247-250, 270-273, 285-288] ANY ANY",
-        "minecraft:orange_terracotta LAYERED [-63-75, 79-82, 105-108, 111-114, 120-123, 130-133, 142-145, 147-150, 156-159, 166-169, 171-181, 187-190, 214-217, 222-228, 231-234, 237-240, 243-246, 255-258, 271-274, 297-300, 303-306, 312-315] ANY ANY",
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:light_gray_terracotta LAYERED [55-59, 78-82, 93-97, 192-202, 208-214, 217-223, 235-239, 247-251, 270-274, 285-289] ANY ANY",
+        "minecraft:orange_terracotta LAYERED [-63-75, 79-83, 105-109, 111-115, 120-124, 130-134, 142-151, 156-160, 166-182, 187-191, 214-218, 222-229, 231-235, 237-241, 243-247, 255-259, 271-275, 297-301, 303-307, 312-315] ANY ANY",
         "minecraft:red_sand RELATIVE [0] DRY FLOOR",
         "minecraft:red_sandstone RELATIVE [0] DRY CEILING",
-        "minecraft:red_terracotta LAYERED [68-70, 99-105, 116-120, 136-143, 152-157, 159-164, 188-192, 215-218, 232-239, 258-262, 291-297, 308-312] DRY ANY",
-        "minecraft:terracotta LAYERED [54-60, 62, 67, 72-107, 110-127, 134-138, 141-152, 155-161, 165-193, 199-219, 223-232, 238-252, 254-260, 264-267, 272-292, 295-299, 302-318] ANY ANY",
-        "minecraft:white_terracotta LAYERED [-63-59, 61-62, 77-80, 94-97, 191-194, 197-200, 209-212, 218-221, 234-237, 248-251, 253-256, 269-272, 286-289] ANY ANY",
-        "minecraft:yellow_terracotta LAYERED [71-79, 81-86, 127-136, 145-148, 204-208, 230-233, 263-271, 273-278] DRY ANY"
+        "minecraft:red_terracotta LAYERED [66-71, 99-106, 116-121, 136-144, 152-165, 188-193, 215-219, 232-240, 258-263, 291-298, 308-313] DRY ANY",
+        "minecraft:terracotta LAYERED [54-62, 67-69, 72-108, 110-128, 134-139, 141-153, 155-162, 165-194, 199-220, 223-233, 238-261, 264-268, 272-293, 295-300, 302-318] ANY ANY",
+        "minecraft:tuff ABSOLUTE [-45, -40--38, -35--33, -29--27] ANY ANY",
+        "minecraft:white_terracotta LAYERED [-63-62, 77-81, 94-98, 191-195, 197-201, 209-213, 218-222, 234-238, 248-257, 269-273, 286-290] ANY ANY",
+        "minecraft:yellow_terracotta LAYERED [71-87, 127-137, 145-149, 204-209, 230-234, 263-279] DRY ANY"
       ]
     },
     "minecraft:the_end": {

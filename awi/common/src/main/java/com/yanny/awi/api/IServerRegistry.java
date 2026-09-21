@@ -1,6 +1,7 @@
 package com.yanny.awi.api;
 
 import com.mojang.datafixers.util.Either;
+import com.mojang.serialization.MapCodec;
 import com.yanny.aci.api.ICoreServerRegistry;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.awi.plugin.server.summary.CountSpan;
@@ -11,7 +12,7 @@ import net.minecraft.util.valueproviders.FloatProvider;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSize;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.rootplacers.RootPlacer;
@@ -27,7 +28,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
-    <T extends FeatureConfiguration> void registerFeatureBlockCollector(Class<T> type, BiFunction<IServerUtils, T, List<Either<Block, TagKey<Block>>>> getter);
+    <T extends Feature> void registerFeatureBlockCollector(MapCodec<T> codec, BiFunction<IServerUtils, T, List<Either<Block, TagKey<Block>>>> getter);
 
     <T extends BlockStateProvider> void registerStateProviderBlockCollector(Class<T> type, BiFunction<IServerUtils, T, List<Block>> getter);
 
@@ -35,7 +36,7 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     <T extends TreeDecorator> void registerTreeDecoratorBlockCollector(Class<T> type, BiFunction<IServerUtils, T, List<Block>> getter);
 
-    <T extends FeatureConfiguration> void registerFeatureTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter);
+    <T extends Feature> void registerFeatureTooltip(MapCodec<T> codec, BiFunction<IServerUtils, T, TooltipBuilder> getter);
 
     <T extends PlacementModifier> void registerPlacementModifierTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter);
 

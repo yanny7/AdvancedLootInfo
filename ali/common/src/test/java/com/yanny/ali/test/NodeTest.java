@@ -1,5 +1,7 @@
 package com.yanny.ali.test;
 
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProviders;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.plugin.common.NodeUtils;
 import net.minecraft.core.registries.Registries;
@@ -11,7 +13,6 @@ import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -27,8 +28,8 @@ public class NodeTest {
         IDataNode node = NodeUtils.getItemNode(
                 UTILS,
                 (LootItem) LootItem.lootTableItem(Items.STRING)
-                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 2)))
-                        .apply(EnchantedCountIncreaseFunction.lootingMultiplier(LOOKUP, UniformGenerator.between(0, 1)))
+                        .apply(SetItemCountFunction.setCount(ContextIntProviders.between(0, 2)))
+                        .apply(EnchantedCountIncreaseFunction.lootingMultiplier(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT), ContextFloatProviders.between(0, 1)))
                         .build(),
                 1,
                 1,
@@ -57,8 +58,8 @@ public class NodeTest {
                 UTILS,
                 (LootItem) LootItem.lootTableItem(Items.SPIDER_EYE)
                         .when(LootItemKilledByPlayerCondition.killedByPlayer())
-                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(-1, 1)))
-                        .apply(EnchantedCountIncreaseFunction.lootingMultiplier(LOOKUP, UniformGenerator.between(0, 1)))
+                        .apply(SetItemCountFunction.setCount(ContextIntProviders.between(-1, 1)))
+                        .apply(EnchantedCountIncreaseFunction.lootingMultiplier(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT), ContextFloatProviders.between(0, 1)))
                         .build(),
                 1,
                 1,

@@ -27,14 +27,6 @@ public class ConditionTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getBlockStatePropertyTooltip(IServerUtils utils, LootItemBlockStatePropertyCondition cond) {
-        return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, cond.block()).build(Lang.Value.BLOCK));
-            b.add(utils.getValueTooltip(utils, cond.properties()).build(Lang.Branch.PROPERTIES));
-        }, Lang.Conditions.BLOCK_STATE_PROPERTY);
-    }
-
-    @NotNull
     public static TooltipBuilder getDamageSourcePropertiesTooltip(IServerUtils utils, DamageSourceCondition cond) {
         return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.predicate())), Lang.Conditions.DAMAGE_SOURCE_PROPERTIES);
     }
@@ -82,6 +74,11 @@ public class ConditionTooltipUtils {
     }
 
     @NotNull
+    public static TooltipBuilder getMatchBlockTooltip(IServerUtils utils, MatchBlock cond) {
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.predicate())), Lang.Conditions.MATCH_BLOCK);
+    }
+
+    @NotNull
     public static TooltipBuilder getMatchToolTooltip(IServerUtils utils, MatchTool cond) {
         return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.predicate())), Lang.Conditions.MATCH_TOOL);
     }
@@ -99,11 +96,6 @@ public class ConditionTooltipUtils {
             b.add(utils.getValueTooltip(utils, cond.enchantedChance()).build(Lang.Branch.ENCHANTED_CHANCE));
             b.add(utils.getValueTooltip(utils, cond.enchantment()).build(Lang.Value.ENCHANTMENT));
         }, Lang.Conditions.RANDOM_CHANCE_WITH_ENCHANTED_BONUS).isAdvancedTooltip();
-    }
-
-    @NotNull
-    public static TooltipBuilder getReferenceTooltip(IServerUtils utils, ConditionReference cond) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.name()).build(Lang.Value.LOOT_TABLE)), Lang.Conditions.REFERENCE);
     }
 
     @NotNull
@@ -131,11 +123,19 @@ public class ConditionTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getValueCheckTooltip(IServerUtils utils, ValueCheckCondition cond) {
+    public static TooltipBuilder getIntValueCheckTooltip(IServerUtils utils, IntValueCheck cond) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, cond.value()).build(Lang.Value.VALUE));
             b.add(utils.getValueTooltip(utils, cond.range()).build(Lang.Value.RANGE));
-        }, Lang.Conditions.VALUE_CHECK);
+        }, Lang.Conditions.INT_VALUE_CHECK);
+    }
+
+    @NotNull
+    public static TooltipBuilder getFloatValueCheckTooltip(IServerUtils utils, FloatValueCheck cond) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, cond.value()).build(Lang.Value.VALUE));
+            b.add(utils.getValueTooltip(utils, cond.range()).build(Lang.Value.RANGE));
+        }, Lang.Conditions.FLOAT_VALUE_CHECK);
     }
 
     @NotNull

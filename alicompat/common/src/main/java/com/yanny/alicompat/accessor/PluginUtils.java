@@ -12,7 +12,8 @@ import net.minecraft.world.item.slot.SlotSource;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 import org.slf4j.Logger;
 
 import java.util.IdentityHashMap;
@@ -260,8 +261,12 @@ public class PluginUtils {
         registry.registerSlotSourceTooltip(targetClass, (u, c) -> factory.apply(c).getTooltip(u));
     }
 
-    public static <U extends NumberProvider, T extends BaseAccessor<?> & INumberProvider> void registerNumberProvider(IServerRegistry registry, Class<U> targetClass, Class<T> clazz) {
-        registry.registerNumberProvider(targetClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c, targetClass).convertNumber(u));
+    public static <U extends ContextIntProvider, T extends BaseAccessor<?> & INumberProvider> void registerIntProvider(IServerRegistry registry, Class<U> targetClass, Class<T> clazz) {
+        registry.registerIntProvider(targetClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c, targetClass).convertNumber(u));
+    }
+
+    public static <U extends ContextFloatProvider, T extends BaseAccessor<?> & INumberProvider> void registerFloatProvider(IServerRegistry registry, Class<U> targetClass, Class<T> clazz) {
+        registry.registerFloatProvider(targetClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c, targetClass).convertNumber(u));
     }
 
     public static <T extends BaseAccessor<?> & INumberProvider> void registerNumberProvider(IServerRegistry registry, Class<T> clazz) {
@@ -269,9 +274,13 @@ public class PluginUtils {
 
         if (classAnnotation != null) {
             try {
-                //noinspection unchecked
-                Class<NumberProvider> numberProviderClass = (Class<NumberProvider>) Class.forName(classAnnotation.value());
-                registry.registerNumberProvider(numberProviderClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c).convertNumber(u));
+                Class<?> numberProviderClass = Class.forName(classAnnotation.value());
+
+                if (ContextIntProvider.class.isAssignableFrom(numberProviderClass)) {
+                    registry.registerIntProvider(numberProviderClass.asSubclass(ContextIntProvider.class), (u, c) -> ReflectionUtils.copyClassData(clazz, c).convertNumber(u));
+                } else {
+                    registry.registerFloatProvider(numberProviderClass.asSubclass(ContextFloatProvider.class), (u, c) -> ReflectionUtils.copyClassData(clazz, c).convertNumber(u));
+                }
             } catch (Throwable e) {
                 LOGGER.warn("Failed to register number provider for {} with error {}", classAnnotation.value(), e.getMessage(), e);
             }
@@ -280,8 +289,12 @@ public class PluginUtils {
         }
     }
 
-    public static <U extends NumberProvider, T extends INumberProvider> void registerNumberProvider(IServerRegistry registry, Class<U> targetClass, Function<U, T> factory) {
-        registry.registerNumberProvider(targetClass, (u, c) -> factory.apply(c).convertNumber(u));
+    public static <U extends ContextIntProvider, T extends INumberProvider> void registerIntProvider(IServerRegistry registry, Class<U> targetClass, Function<U, T> factory) {
+        registry.registerIntProvider(targetClass, (u, c) -> factory.apply(c).convertNumber(u));
+    }
+
+    public static <U extends ContextFloatProvider, T extends INumberProvider> void registerFloatProvider(IServerRegistry registry, Class<U> targetClass, Function<U, T> factory) {
+        registry.registerFloatProvider(targetClass, (u, c) -> factory.apply(c).convertNumber(u));
     }
 
     public static <U extends LootItemFunction, T extends BaseAccessor<?> & ICountModifier> void registerCountModifier(IServerRegistry registry, Class<U> targetClass, Class<T> clazz) {

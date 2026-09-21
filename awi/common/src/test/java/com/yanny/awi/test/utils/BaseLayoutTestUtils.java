@@ -12,7 +12,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.chunk.PalettedContainerFactory;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.presets.WorldPreset;
 import net.minecraft.world.level.levelgen.presets.WorldPresets;
@@ -42,16 +41,22 @@ public class BaseLayoutTestUtils {
         SharedConstants.setVersion(DetectedVersion.BUILT_IN);
         Bootstrap.bootStrap();
 
-        lookup = VanillaRegistries.createLookup();
+        lookup = VanillaRegistries.createWorldLookup();
 
-        // The scan only ever asks for BIOME (the ProtoChunk biome palette) and NOISE (RandomState).
-        registryAccess = new RegistryAccess.ImmutableRegistryAccess(List.of(copy(Registries.BIOME), copy(Registries.NOISE)));
+        // The scan only ever asks for NOISE (RandomState); the material rules resolve through `lookup` instead.
+        registryAccess = new RegistryAccess.ImmutableRegistryAccess(List.of(copy(Registries.NOISE)));
 
         WorldPreset preset = lookup.lookupOrThrow(Registries.WORLD_PRESET).getOrThrow(WorldPresets.NORMAL).value();
         MappedRegistry<LevelStem> registry = new MappedRegistry<>(Registries.LEVEL_STEM, Lifecycle.stable());
 
         preset.createWorldDimensions().dimensions().forEach((key, stem) -> Registry.register(registry, key, stem));
         levelStems = registry.freeze();
+    }
+
+    /** The vanilla worldgen provider the scan resolves holders against. */
+    @NotNull
+    public static HolderLookup.Provider lookup() {
+        return lookup;
     }
 
     /**
@@ -62,7 +67,7 @@ public class BaseLayoutTestUtils {
     public static Map<String, Map<String, List<String>>> scan(long seed, NodeUtils.ScanSettings settings) {
         // The copied registries are a different HolderOwner than the one the surface rules' holders came from, so the
         // codec ops have to go through the original lookup or the specializer's encode fails its ownership check.
-        BaseLayoutScanner scanner = BaseLayoutScanner.scan(registryAccess, PalettedContainerFactory.create(registryAccess), lookup, seed, levelStems, settings, true);
+        BaseLayoutScanner scanner = BaseLayoutScanner.scan(registryAccess, lookup, seed, levelStems, settings, true);
         Map<String, Map<String, List<String>>> result = new TreeMap<>();
 
         for (LevelStem levelStem : levelStems) {

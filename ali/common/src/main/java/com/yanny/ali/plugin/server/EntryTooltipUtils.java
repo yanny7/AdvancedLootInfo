@@ -60,7 +60,8 @@ public class EntryTooltipUtils {
     @NotNull
     public static TooltipBuilder getReferenceTooltip(IServerUtils utils, NestedLootTable entry) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, entry.contents).build(Lang.Value.LOOT_TABLE));
+            b.add(utils.getValueTooltip(utils, entry.value).build(Lang.Value.LOOT_TABLE));
+            b.add(utils.getValueTooltip(utils, entry.expand).build(Lang.Value.EXPAND));
             addSingleton(b, utils, entry);
         }, Lang.Entry.LOOT_TABLE);
     }
@@ -80,11 +81,11 @@ public class EntryTooltipUtils {
         return TooltipBuilder.array((b) -> addComposite(b, utils, entry), Lang.Entry.SEQUENCE);
     }
 
-    private static void addSingleton(TooltipBuilder builder, IServerUtils utils, LootPoolSingletonContainer entry) {
+    private static void addSingleton(TooltipBuilder builder, IServerUtils utils, UniformContainerBase entry) {
         builder.add(TooltipUtils.getWeightTooltip(entry.weight));
         builder.add(getQualityTooltip(entry.quality));
-        builder.add(utils.getValueTooltip(utils, entry.conditions).build(Lang.Branch.PREDICATES));
-        builder.add(utils.getValueTooltip(utils, entry.functions).build(Lang.Branch.MODIFIERS));
+        builder.add(utils.getValueTooltip(utils, entry.condition).build(Lang.Branch.PREDICATES));
+        builder.add(utils.getValueTooltip(utils, entry.modifier).build(Lang.Branch.MODIFIERS));
     }
 
     private static void addComposite(TooltipBuilder builder, IServerUtils utils, CompositeEntryBase entry) {
@@ -93,6 +94,7 @@ public class EntryTooltipUtils {
                 b.add(utils.getEntryTooltip(utils, child));
             }
         }, Lang.Branch.ENTRIES));
-        builder.add(utils.getValueTooltip(utils, entry.conditions).build(Lang.Branch.PREDICATES));
+        builder.add(utils.getValueTooltip(utils, entry.condition).build(Lang.Branch.PREDICATES));
+        builder.add(utils.getValueTooltip(utils, entry.modifier).build(Lang.Branch.MODIFIERS));
     }
 }

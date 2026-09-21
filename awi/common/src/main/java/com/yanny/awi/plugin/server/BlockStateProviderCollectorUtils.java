@@ -1,10 +1,12 @@
 package com.yanny.awi.plugin.server;
 
 import com.yanny.awi.api.IServerUtils;
+import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.levelgen.feature.stateproviders.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.ArrayList;
@@ -12,6 +14,15 @@ import java.util.Collections;
 import java.util.List;
 
 public class BlockStateProviderCollectorUtils {
+    @NotNull
+    public static List<Block> collectHolder(IServerUtils utils, @Nullable Holder<BlockStateProvider> holder) {
+        if (holder == null || !holder.isBound()) {
+            return List.of();
+        }
+
+        return utils.collectBlocks(utils, holder.value());
+    }
+
     @Unmodifiable
     @NotNull
     public static List<Block> collectSimple(IServerUtils ignoredUtils, SimpleStateProvider provider) {
@@ -42,13 +53,12 @@ public class BlockStateProviderCollectorUtils {
 
     @NotNull
     public static List<Block> collectRandomized(IServerUtils utils, RandomizedIntStateProvider provider) {
-        return utils.collectBlocks(utils, provider.source);
+        return collectHolder(utils, provider.source);
     }
 
-    @Unmodifiable
     @NotNull
-    public static List<Block> collectRotated(IServerUtils ignoredUtils, RotatedBlockProvider provider) {
-        return Collections.singletonList(provider.block);
+    public static List<Block> collectRotated(IServerUtils utils, RotatedBlockProvider provider) {
+        return collectHolder(utils, provider.state());
     }
 
     @Unmodifiable
@@ -57,13 +67,8 @@ public class BlockStateProviderCollectorUtils {
         return provider.weightedList.unwrap().stream().map((entry) -> entry.value().getBlock()).toList();
     }
 
-    @Unmodifiable
     @NotNull
     public static List<Block> collectRuleBased(IServerUtils utils, RuleBasedStateProvider provider) {
-        if (provider.fallback != null) {
-            return utils.collectBlocks(utils, provider.fallback);
-        }
-
-        return Collections.emptyList();
+        return collectHolder(utils, provider.fallback());
     }
 }

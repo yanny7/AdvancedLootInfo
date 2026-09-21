@@ -1,6 +1,6 @@
 {
   "minecraft:bamboo": {
-    "visitedMethods": 33,
+    "visitedMethods": 29,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:bamboo",
@@ -9,47 +9,29 @@
     "configConditionalBlocks": [],
     "tags": []
   },
-  "minecraft:basalt_columns": {
-    "visitedMethods": 51,
-    "methodLimitReached": false,
-    "blocks": [
-      "minecraft:basalt"
-    ],
-    "configConditionalBlocks": [],
-    "tags": []
-  },
-  "minecraft:basalt_pillar": {
-    "visitedMethods": 41,
-    "methodLimitReached": false,
-    "blocks": [
-      "minecraft:basalt"
-    ],
-    "configConditionalBlocks": [],
-    "tags": []
-  },
   "minecraft:block_blob": {
-    "visitedMethods": 29,
+    "visitedMethods": 23,
     "methodLimitReached": false,
     "blocks": [],
     "configConditionalBlocks": [],
     "tags": []
   },
   "minecraft:block_column": {
-    "visitedMethods": 38,
+    "visitedMethods": 30,
     "methodLimitReached": false,
     "blocks": [],
     "configConditionalBlocks": [],
     "tags": []
   },
   "minecraft:block_pile": {
-    "visitedMethods": 33,
+    "visitedMethods": 29,
     "methodLimitReached": false,
     "blocks": [],
     "configConditionalBlocks": [],
     "tags": []
   },
   "minecraft:blue_ice": {
-    "visitedMethods": 21,
+    "visitedMethods": 18,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:blue_ice"
@@ -58,7 +40,7 @@
     "tags": []
   },
   "minecraft:bonus_chest": {
-    "visitedMethods": 55,
+    "visitedMethods": 52,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:chest",
@@ -68,7 +50,7 @@
     "tags": []
   },
   "minecraft:chorus_plant": {
-    "visitedMethods": 42,
+    "visitedMethods": 39,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:chorus_flower",
@@ -78,73 +60,35 @@
     "tags": []
   },
   "minecraft:coral_claw": {
-    "visitedMethods": 51,
-    "methodLimitReached": false,
-    "blocks": [
-      "minecraft:sea_pickle"
-    ],
-    "configConditionalBlocks": [],
-    "tags": [
-      "#minecraft:coral_blocks",
-      "#minecraft:corals",
-      "#minecraft:wall_corals"
-    ]
-  },
-  "minecraft:coral_mushroom": {
-    "visitedMethods": 40,
-    "methodLimitReached": false,
-    "blocks": [
-      "minecraft:sea_pickle"
-    ],
-    "configConditionalBlocks": [],
-    "tags": [
-      "#minecraft:coral_blocks",
-      "#minecraft:corals",
-      "#minecraft:wall_corals"
-    ]
-  },
-  "minecraft:coral_tree": {
-    "visitedMethods": 47,
-    "methodLimitReached": false,
-    "blocks": [
-      "minecraft:sea_pickle"
-    ],
-    "configConditionalBlocks": [],
-    "tags": [
-      "#minecraft:coral_blocks",
-      "#minecraft:corals",
-      "#minecraft:wall_corals"
-    ]
-  },
-  "minecraft:delta_feature": {
-    "visitedMethods": 33,
+    "visitedMethods": 45,
     "methodLimitReached": false,
     "blocks": [],
     "configConditionalBlocks": [],
     "tags": []
   },
-  "minecraft:desert_well": {
-    "visitedMethods": 41,
+  "minecraft:coral_tree": {
+    "visitedMethods": 40,
     "methodLimitReached": false,
-    "blocks": [
-      "minecraft:sand",
-      "minecraft:sandstone",
-      "minecraft:sandstone_slab",
-      "minecraft:suspicious_sand",
-      "minecraft:water"
-    ],
+    "blocks": [],
+    "configConditionalBlocks": [],
+    "tags": []
+  },
+  "minecraft:delta_feature": {
+    "visitedMethods": 24,
+    "methodLimitReached": false,
+    "blocks": [],
     "configConditionalBlocks": [],
     "tags": []
   },
   "minecraft:disk": {
-    "visitedMethods": 46,
+    "visitedMethods": 26,
     "methodLimitReached": false,
     "blocks": [],
     "configConditionalBlocks": [],
     "tags": []
   },
   "minecraft:end_gateway": {
-    "visitedMethods": 132,
+    "visitedMethods": 125,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:air",
@@ -155,7 +99,7 @@
     "tags": []
   },
   "minecraft:end_island": {
-    "visitedMethods": 15,
+    "visitedMethods": 10,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:end_stone"
@@ -164,7 +108,7 @@
     "tags": []
   },
   "minecraft:end_platform": {
-    "visitedMethods": 27,
+    "visitedMethods": 25,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:air",
@@ -173,8 +117,21 @@
     "configConditionalBlocks": [],
     "tags": []
   },
+  "minecraft:end_podium": {
+    "visitedMethods": 31,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:air",
+      "minecraft:bedrock",
+      "minecraft:end_portal",
+      "minecraft:end_stone",
+      "minecraft:wall_torch"
+    ],
+    "configConditionalBlocks": [],
+    "tags": []
+  },
   "minecraft:end_spike": {
-    "visitedMethods": 159,
+    "visitedMethods": 151,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:air",
@@ -188,21 +145,21 @@
     "tags": []
   },
   "minecraft:fallen_tree": {
-    "visitedMethods": 70,
+    "visitedMethods": 63,
     "methodLimitReached": false,
     "blocks": [],
     "configConditionalBlocks": [],
     "tags": []
   },
   "minecraft:fill_layer": {
-    "visitedMethods": 18,
+    "visitedMethods": 15,
     "methodLimitReached": false,
     "blocks": [],
     "configConditionalBlocks": [],
     "tags": []
   },
   "minecraft:fossil": {
-    "visitedMethods": 433,
+    "visitedMethods": 448,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:barrier"
@@ -211,7 +168,7 @@
     "tags": []
   },
   "minecraft:freeze_top_layer": {
-    "visitedMethods": 62,
+    "visitedMethods": 54,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:ice",
@@ -221,7 +178,7 @@
     "tags": []
   },
   "minecraft:geode": {
-    "visitedMethods": 166,
+    "visitedMethods": 142,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:air"
@@ -229,24 +186,15 @@
     "configConditionalBlocks": [],
     "tags": []
   },
-  "minecraft:glowstone_blob": {
-    "visitedMethods": 21,
-    "methodLimitReached": false,
-    "blocks": [
-      "minecraft:glowstone"
-    ],
-    "configConditionalBlocks": [],
-    "tags": []
-  },
   "minecraft:huge_brown_mushroom": {
-    "visitedMethods": 51,
+    "visitedMethods": 0,
     "methodLimitReached": false,
     "blocks": [],
     "configConditionalBlocks": [],
     "tags": []
   },
   "minecraft:huge_fungus": {
-    "visitedMethods": 77,
+    "visitedMethods": 71,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:air",
@@ -257,14 +205,14 @@
     "tags": []
   },
   "minecraft:huge_red_mushroom": {
-    "visitedMethods": 51,
+    "visitedMethods": 0,
     "methodLimitReached": false,
     "blocks": [],
     "configConditionalBlocks": [],
     "tags": []
   },
   "minecraft:iceberg": {
-    "visitedMethods": 45,
+    "visitedMethods": 38,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:air",
@@ -274,18 +222,8 @@
     "configConditionalBlocks": [],
     "tags": []
   },
-  "minecraft:kelp": {
-    "visitedMethods": 25,
-    "methodLimitReached": false,
-    "blocks": [
-      "minecraft:kelp",
-      "minecraft:kelp_plant"
-    ],
-    "configConditionalBlocks": [],
-    "tags": []
-  },
   "minecraft:lake": {
-    "visitedMethods": 62,
+    "visitedMethods": 34,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:cave_air",
@@ -297,7 +235,7 @@
     "tags": []
   },
   "minecraft:large_dripstone": {
-    "visitedMethods": 77,
+    "visitedMethods": 73,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:dripstone_block"
@@ -306,7 +244,7 @@
     "tags": []
   },
   "minecraft:monster_room": {
-    "visitedMethods": 163,
+    "visitedMethods": 158,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:cave_air",
@@ -319,21 +257,14 @@
     "tags": []
   },
   "minecraft:multiface_growth": {
-    "visitedMethods": 108,
-    "methodLimitReached": false,
-    "blocks": [],
-    "configConditionalBlocks": [],
-    "tags": []
-  },
-  "minecraft:nether_forest_vegetation": {
-    "visitedMethods": 22,
+    "visitedMethods": 107,
     "methodLimitReached": false,
     "blocks": [],
     "configConditionalBlocks": [],
     "tags": []
   },
   "minecraft:netherrack_replace_blobs": {
-    "visitedMethods": 43,
+    "visitedMethods": 37,
     "methodLimitReached": false,
     "blocks": [],
     "configConditionalBlocks": [],
@@ -347,54 +278,74 @@
     "tags": []
   },
   "minecraft:ore": {
-    "visitedMethods": 138,
+    "visitedMethods": 136,
+    "methodLimitReached": false,
+    "blocks": [],
+    "configConditionalBlocks": [],
+    "tags": []
+  },
+  "minecraft:overlay": {
+    "visitedMethods": 9,
+    "methodLimitReached": false,
+    "blocks": [],
+    "configConditionalBlocks": [],
+    "tags": []
+  },
+  "minecraft:projected_random_patchy_square": {
+    "visitedMethods": 28,
     "methodLimitReached": false,
     "blocks": [],
     "configConditionalBlocks": [],
     "tags": []
   },
   "minecraft:random_boolean_selector": {
-    "visitedMethods": 19,
+    "visitedMethods": 10,
+    "methodLimitReached": false,
+    "blocks": [],
+    "configConditionalBlocks": [],
+    "tags": []
+  },
+  "minecraft:random_neighbor_spread": {
+    "visitedMethods": 20,
     "methodLimitReached": false,
     "blocks": [],
     "configConditionalBlocks": [],
     "tags": []
   },
   "minecraft:random_selector": {
-    "visitedMethods": 23,
+    "visitedMethods": 12,
     "methodLimitReached": false,
     "blocks": [],
     "configConditionalBlocks": [],
     "tags": []
   },
   "minecraft:replace_single_block": {
-    "visitedMethods": 5,
+    "visitedMethods": 3,
     "methodLimitReached": false,
     "blocks": [],
     "configConditionalBlocks": [],
     "tags": []
   },
   "minecraft:root_system": {
-    "visitedMethods": 95,
+    "visitedMethods": 70,
     "methodLimitReached": false,
     "blocks": [],
     "configConditionalBlocks": [],
     "tags": []
   },
   "minecraft:scattered_ore": {
-    "visitedMethods": 32,
+    "visitedMethods": 30,
     "methodLimitReached": false,
     "blocks": [],
     "configConditionalBlocks": [],
     "tags": []
   },
   "minecraft:sculk_patch": {
-    "visitedMethods": 325,
+    "visitedMethods": 315,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:air",
       "minecraft:sculk",
-      "minecraft:sculk_catalyst",
       "minecraft:sculk_sensor",
       "minecraft:sculk_shrieker",
       "minecraft:water"
@@ -402,34 +353,15 @@
     "configConditionalBlocks": [],
     "tags": []
   },
-  "minecraft:sea_pickle": {
-    "visitedMethods": 17,
-    "methodLimitReached": false,
-    "blocks": [
-      "minecraft:sea_pickle"
-    ],
-    "configConditionalBlocks": [],
-    "tags": []
-  },
-  "minecraft:seagrass": {
-    "visitedMethods": 25,
-    "methodLimitReached": false,
-    "blocks": [
-      "minecraft:seagrass",
-      "minecraft:tall_seagrass"
-    ],
-    "configConditionalBlocks": [],
-    "tags": []
-  },
   "minecraft:sequence": {
-    "visitedMethods": 20,
+    "visitedMethods": 9,
     "methodLimitReached": false,
     "blocks": [],
     "configConditionalBlocks": [],
     "tags": []
   },
   "minecraft:simple_block": {
-    "visitedMethods": 86,
+    "visitedMethods": 83,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:air",
@@ -442,21 +374,28 @@
     "tags": []
   },
   "minecraft:simple_random_selector": {
-    "visitedMethods": 20,
+    "visitedMethods": 10,
+    "methodLimitReached": false,
+    "blocks": [],
+    "configConditionalBlocks": [],
+    "tags": []
+  },
+  "minecraft:single_block_pillar": {
+    "visitedMethods": 39,
     "methodLimitReached": false,
     "blocks": [],
     "configConditionalBlocks": [],
     "tags": []
   },
   "minecraft:speleothem": {
-    "visitedMethods": 61,
+    "visitedMethods": 50,
     "methodLimitReached": false,
     "blocks": [],
     "configConditionalBlocks": [],
     "tags": []
   },
   "minecraft:speleothem_cluster": {
-    "visitedMethods": 101,
+    "visitedMethods": 83,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:water"
@@ -465,21 +404,28 @@
     "tags": []
   },
   "minecraft:spike": {
-    "visitedMethods": 30,
+    "visitedMethods": 21,
     "methodLimitReached": false,
     "blocks": [],
     "configConditionalBlocks": [],
     "tags": []
   },
   "minecraft:spring_feature": {
-    "visitedMethods": 25,
+    "visitedMethods": 22,
+    "methodLimitReached": false,
+    "blocks": [],
+    "configConditionalBlocks": [],
+    "tags": []
+  },
+  "minecraft:stepped_column_cluster": {
+    "visitedMethods": 39,
     "methodLimitReached": false,
     "blocks": [],
     "configConditionalBlocks": [],
     "tags": []
   },
   "minecraft:template": {
-    "visitedMethods": 418,
+    "visitedMethods": 430,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:barrier"
@@ -488,24 +434,14 @@
     "tags": []
   },
   "minecraft:tree": {
-    "visitedMethods": 102,
+    "visitedMethods": 98,
     "methodLimitReached": false,
     "blocks": [],
     "configConditionalBlocks": [],
     "tags": []
   },
-  "minecraft:twisting_vines": {
-    "visitedMethods": 47,
-    "methodLimitReached": false,
-    "blocks": [
-      "minecraft:twisting_vines",
-      "minecraft:twisting_vines_plant"
-    ],
-    "configConditionalBlocks": [],
-    "tags": []
-  },
   "minecraft:underwater_magma": {
-    "visitedMethods": 82,
+    "visitedMethods": 78,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:magma_block"
@@ -514,14 +450,14 @@
     "tags": []
   },
   "minecraft:vegetation_patch": {
-    "visitedMethods": 79,
+    "visitedMethods": 59,
     "methodLimitReached": false,
     "blocks": [],
     "configConditionalBlocks": [],
     "tags": []
   },
   "minecraft:vines": {
-    "visitedMethods": 62,
+    "visitedMethods": 61,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:vine"
@@ -530,7 +466,7 @@
     "tags": []
   },
   "minecraft:void_start_platform": {
-    "visitedMethods": 37,
+    "visitedMethods": 35,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:cobblestone",
@@ -540,25 +476,14 @@
     "tags": []
   },
   "minecraft:waterlogged_vegetation_patch": {
-    "visitedMethods": 79,
+    "visitedMethods": 59,
     "methodLimitReached": false,
     "blocks": [],
     "configConditionalBlocks": [],
     "tags": []
   },
-  "minecraft:weeping_vines": {
-    "visitedMethods": 43,
-    "methodLimitReached": false,
-    "blocks": [
-      "minecraft:nether_wart_block",
-      "minecraft:weeping_vines",
-      "minecraft:weeping_vines_plant"
-    ],
-    "configConditionalBlocks": [],
-    "tags": []
-  },
   "minecraft:weighted_random_selector": {
-    "visitedMethods": 22,
+    "visitedMethods": 12,
     "methodLimitReached": false,
     "blocks": [],
     "configConditionalBlocks": [],
