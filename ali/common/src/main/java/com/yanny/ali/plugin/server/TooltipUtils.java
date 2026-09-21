@@ -15,23 +15,22 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.storage.loot.LootDataId;
+import net.minecraft.world.level.storage.loot.LootDataManager;
+import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.entries.LootTableReference;
 import net.minecraft.world.level.storage.loot.functions.*;
-import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithLootingCondition;
+import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class TooltipUtils {
     public static ItemStack getItemStack(IServerUtils utils, ItemStack itemStack, List<LootItemFunction> functions) {
@@ -123,6 +122,39 @@ public class TooltipUtils {
      */
     public static boolean isConditional(LootItemConditionalFunction function) {
         return function.predicates.length != 0;
+    }
+
+    @NotNull
+    public static List<LootItemCondition> unwrapAllOf(IServerUtils ignoredUtils, AllOfCondition condition) {
+        return Arrays.asList(condition.terms);
+    }
+
+    @NotNull
+    public static List<LootItemCondition> unwrapCompositePredicate(IServerUtils ignoredUtils, LootDataManager.CompositePredicate condition) {
+        return Arrays.asList(condition.terms);
+    }
+
+    @Unmodifiable
+    @Nullable
+    public static List<LootItemCondition> unwrapConditionReference(IServerUtils utils, ConditionReference condition) {
+        LootItemCondition referenced = utils.getServerLevel().getServer().getLootData().getElement(new LootDataId<>(LootDataType.PREDICATE, condition.name));
+        return referenced != null ? Collections.singletonList(referenced) : null;
+    }
+
+    @NotNull
+    public static List<LootItemFunction> unwrapFunctionSequence(IServerUtils ignoredUtils, LootDataManager.FunctionSequence function) {
+        return Arrays.asList(function.functions);
+    }
+
+    @Unmodifiable
+    @Nullable
+    public static List<LootItemFunction> unwrapFunctionReference(IServerUtils utils, FunctionReference function) {
+        if (isConditional(function)) {
+            return null;
+        }
+
+        LootItemFunction referenced = utils.getServerLevel().getServer().getLootData().getElement(new LootDataId<>(LootDataType.MODIFIER, function.name));
+        return referenced != null ? Collections.singletonList(referenced) : null;
     }
 
     @NotNull

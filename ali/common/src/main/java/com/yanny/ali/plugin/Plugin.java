@@ -37,6 +37,7 @@ import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.loot.IntRange;
+import net.minecraft.world.level.storage.loot.LootDataManager;
 import net.minecraft.world.level.storage.loot.entries.*;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.*;
@@ -251,6 +252,13 @@ public class Plugin implements IPlugin {
         registry.registerItemStackModifier(SetNameFunction.class, TooltipUtils::applySetNameItemStackModifier);
         registry.registerItemStackModifier(SetNbtFunction.class, TooltipUtils::applyItemStackModifier);
         registry.registerItemStackModifier(SetPotionFunction.class, TooltipUtils::applyItemStackModifier);
+
+        registry.registerConditionUnwrapper(AllOfCondition.class, TooltipUtils::unwrapAllOf);
+        registry.registerConditionUnwrapper(ConditionReference.class, TooltipUtils::unwrapConditionReference);
+        registry.registerConditionUnwrapper(LootDataManager.CompositePredicate.class, TooltipUtils::unwrapCompositePredicate);
+
+        registry.registerFunctionUnwrapper(FunctionReference.class, TooltipUtils::unwrapFunctionReference);
+        registry.registerFunctionUnwrapper(LootDataManager.FunctionSequence.class, TooltipUtils::unwrapFunctionSequence);
 
         registry.registerItemListing(VillagerTrades.DyedArmorForEmeralds.class, TradeUtils::getNode);
         registry.registerItemListing(VillagerTrades.EmeraldForItems.class, TradeUtils::getNode);

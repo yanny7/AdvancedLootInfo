@@ -1,6 +1,7 @@
 ## []
 
 - Added support for custom ingredients that are not Ingredient subclasses
+- Improved count and chance detection
 
 ## [2.2.0]
 

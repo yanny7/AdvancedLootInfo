@@ -3,12 +3,12 @@
   "hooks": {
     "function": {
       "title": "Loot functions",
-      "registry": "registerFunctionTooltip / registerCountModifier / registerItemStackModifier",
+      "registry": "registerFunctionTooltip / registerCountModifier / registerItemStackModifier / registerFunctionUnwrapper",
       "bases": ["net/minecraft/world/level/storage/loot/functions/LootItemFunction"]
     },
     "condition": {
       "title": "Loot conditions",
-      "registry": "registerConditionTooltip / registerChanceModifier",
+      "registry": "registerConditionTooltip / registerChanceModifier / registerConditionUnwrapper",
       "bases": ["net/minecraft/world/level/storage/loot/predicates/LootItemCondition"]
     },
     "entry": {

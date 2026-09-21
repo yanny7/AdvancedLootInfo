@@ -82,6 +82,7 @@ import java.util.concurrent.ExecutionException;
         IngredientTooltipTest.class,
         TooltipTest.class,
         NodeTest.class,
+        UnwrapperTest.class,
         ServerUtilsTest.class,
         GlobalLootModifierTest.class,
         ConfigTest.class
@@ -198,6 +199,18 @@ public class TooltipTestSuite {
             @Override
             public <T extends LootItemFunction> ItemStack applyItemStackModifier(IServerUtils utils, T function, ItemStack itemStack) {
                 return PluginManager.getInstance().serverRegistry.applyItemStackModifier(utils, function, itemStack);
+            }
+
+            @NotNull
+            @Override
+            public List<LootItemFunction> unwrapFunction(IServerUtils utils, LootItemFunction function) {
+                return PluginManager.getInstance().serverRegistry.unwrapFunction(utils, function);
+            }
+
+            @NotNull
+            @Override
+            public List<LootItemCondition> unwrapCondition(IServerUtils utils, LootItemCondition condition) {
+                return PluginManager.getInstance().serverRegistry.unwrapCondition(utils, condition);
             }
 
             @NotNull

@@ -206,6 +206,10 @@ accessible field net/minecraft/world/item/crafting/Ingredient$TagValue tag Lnet/
 
 accessible method net/minecraft/world/level/storage/loot/LootContext <init> (Lnet/minecraft/world/level/storage/loot/LootParams;Lnet/minecraft/util/RandomSource;Lnet/minecraft/world/level/storage/loot/LootDataResolver;)V
 accessible method net/minecraft/world/level/storage/loot/LootDataManager apply (Ljava/util/Map;)V
+accessible class net/minecraft/world/level/storage/loot/LootDataManager$CompositePredicate
+accessible field net/minecraft/world/level/storage/loot/LootDataManager$CompositePredicate terms [Lnet/minecraft/world/level/storage/loot/predicates/LootItemCondition;
+accessible class net/minecraft/world/level/storage/loot/LootDataManager$FunctionSequence
+accessible field net/minecraft/world/level/storage/loot/LootDataManager$FunctionSequence functions [Lnet/minecraft/world/level/storage/loot/functions/LootItemFunction;
 accessible method net/minecraft/world/level/storage/loot/predicates/InvertedLootItemCondition <init> (Lnet/minecraft/world/level/storage/loot/predicates/LootItemCondition;)V
 accessible method net/minecraft/world/level/storage/loot/predicates/AllOfCondition <init> ([Lnet/minecraft/world/level/storage/loot/predicates/LootItemCondition;)V
 
