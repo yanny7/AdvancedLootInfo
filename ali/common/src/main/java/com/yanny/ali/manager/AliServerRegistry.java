@@ -84,6 +84,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final Map<ResourceLocation, LootTable> lootTableMap = new HashMap<>();
     private final Map<ResourceLocation, Integer> hitMap = new HashMap<>();
     private final List<Function<IServerUtils, List<ILootModifier<?>>>> lootModifierGetters = new LinkedList<>();
+    private final List<Function<Ingredient, Object>> ingredientUnwrappers = new LinkedList<>();
     private final List<ILootModifier<?>> lootModifierMap = new LinkedList<>();
     private final List<Function<IServerUtils, List<IPageLootModifier>>> pageLootModifierGetters = new LinkedList<>();
     private final List<IPageLootModifier> pageLootModifiers = new LinkedList<>();
@@ -105,6 +106,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         super.clearData();
         fallbackItemListings.clear();
         lootTableMap.clear();
+        ingredientUnwrappers.clear();
         lootModifierGetters.clear();
         lootModifierMap.clear();
         pageLootModifierGetters.clear();
@@ -178,6 +180,11 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @Override
     public <T extends LootItemFunction> void registerItemStackModifier(Class<T> type, TriFunction<IServerUtils, T, ItemStack, ItemStack> consumer) {
         itemStackModifiers.put(type, (u, f, i) -> consumer.apply(u, type.cast(f), i));
+    }
+
+    @Override
+    public void registerIngredientUnwrapper(Function<Ingredient, Object> unwrapper) {
+        ingredientUnwrappers.add(unwrapper);
     }
 
     @Override
@@ -265,6 +272,16 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @NotNull
     @Override
     public <T extends Ingredient> TooltipBuilder getIngredientTooltip(IServerUtils utils, T ingredient) {
+        for (Function<Ingredient, Object> unwrapper : ingredientUnwrappers) {
+            Object unwrapped = unwrapper.apply(ingredient);
+
+            if (unwrapped != null) {
+                return valueTooltips.get(unwrapped.getClass())
+                        .map((v) -> v.apply(utils, unwrapped))
+                        .orElseGet(() -> MissingTooltipUtils.getMissingIngredientTooltip(utils, ingredient));
+            }
+        }
+
         return ingredientTooltips.get(ingredient.getClass())
                 .map((i) -> i.apply(utils, ingredient))
                 .orElseGet(() -> MissingTooltipUtils.getMissingIngredientTooltip(utils, ingredient));

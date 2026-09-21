@@ -1,3 +1,7 @@
+## []
+
+- Added support for custom ingredients that are not Ingredient subclasses
+
 ## [2.2.0]
 
 - Fixed errors from JEI when using REI Plugin 

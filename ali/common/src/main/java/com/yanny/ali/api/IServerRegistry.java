@@ -39,6 +39,8 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     <T extends Ingredient> void registerIngredientTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter);
 
+    void registerIngredientUnwrapper(Function<Ingredient, Object> unwrapper);
+
     <T extends NumberProvider> void registerNumberProvider(Class<T> type, BiFunction<IServerUtils, T, RangeValue> converter);
 
     <T extends LootItemFunction> void registerCountModifier(Class<T> type, TriConsumer<IServerUtils, T, EnchantedRanges> consumer);
