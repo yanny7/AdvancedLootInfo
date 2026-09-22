@@ -59,6 +59,16 @@ public class BlockStateProviderTooltipUtils {
     }
 
     @NotNull
+    public static TooltipBuilder getRandomBlockProviderTooltip(IServerUtils utils, RandomBlockProvider provider) {
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, provider.blocks()).build(Lang.Branch.BLOCKS)), Lang.BlockStateProvider.RANDOM_BLOCK);
+    }
+
+    @NotNull
+    public static TooltipBuilder getCopyPropertiesProviderTooltip(IServerUtils utils, CopyPropertiesProvider provider) {
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, provider.source()).build(Lang.Branch.SOURCE)), Lang.BlockStateProvider.COPY_PROPERTIES);
+    }
+
+    @NotNull
     public static TooltipBuilder getRuleBasedStateProviderTooltip(IServerUtils utils, RuleBasedStateProvider placer) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, placer.fallback()).build(Lang.Branch.FALLBACK));

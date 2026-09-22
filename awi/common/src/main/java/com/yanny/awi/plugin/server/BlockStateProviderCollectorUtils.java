@@ -67,6 +67,17 @@ public class BlockStateProviderCollectorUtils {
         return provider.weightedList.unwrap().stream().map((entry) -> entry.value().getBlock()).toList();
     }
 
+    @Unmodifiable
+    @NotNull
+    public static List<Block> collectRandomBlock(IServerUtils ignoredUtils, RandomBlockProvider provider) {
+        return provider.blocks().stream().filter(Holder::isBound).map(Holder::value).toList();
+    }
+
+    @NotNull
+    public static List<Block> collectCopyProperties(IServerUtils utils, CopyPropertiesProvider provider) {
+        return collectHolder(utils, provider.source());
+    }
+
     @NotNull
     public static List<Block> collectRuleBased(IServerUtils utils, RuleBasedStateProvider provider) {
         return collectHolder(utils, provider.fallback());

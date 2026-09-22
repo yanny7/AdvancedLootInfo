@@ -28,6 +28,11 @@ public class IntSpanPropagatorUtils {
     }
 
     @NotNull
+    public static CountSpan getVeryBiasedToBottomInt(IServerUtils ignoredUtils, VeryBiasedToBottomInt provider) {
+        return new CountSpan(new RangeValue(provider.minInclusive(), provider.maxInclusive()), Kind.VERY_BIASED_TO_BOTTOM);
+    }
+
+    @NotNull
     public static CountSpan getClampedNormalInt(IServerUtils ignoredUtils, ClampedNormalInt provider) {
         return new CountSpan(new RangeValue(provider.minInclusive(), provider.maxInclusive()), Kind.CLAMPED_NORMAL);
     }

@@ -26,6 +26,11 @@ public class IntProviderTooltipUtils {
     }
 
     @NotNull
+    public static TooltipBuilder getVeryBiasedToBottomIntTooltip(IServerUtils utils, VeryBiasedToBottomInt provider) {
+        return array((b) -> b.add(utils.getValueTooltip(utils, new RangeValue(provider.minInclusive(), provider.maxInclusive()).toIntString()).build(Lang.Value.RANGE)), Lang.IntProvider.VERY_BIASED_TO_BOTTOM);
+    }
+
+    @NotNull
     public static TooltipBuilder getClampedIntTooltip(IServerUtils utils, ClampedInt provider) {
         return array((b) -> {
             b.add(utils.getValueTooltip(utils, provider.source).build(Lang.Branch.SOURCE));

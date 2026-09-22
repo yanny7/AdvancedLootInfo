@@ -193,6 +193,7 @@ public class Plugin implements IPlugin {
         registry.registerIntProviderTooltip(WeightedListInt.class, IntProviderTooltipUtils::getWeightedListIntTooltip);
         registry.registerIntProviderTooltip(ClampedNormalInt.class, IntProviderTooltipUtils::getClampedNormalIntTooltip);
         registry.registerIntProviderTooltip(TrapezoidInt.class, IntProviderTooltipUtils::getTrapezoidIntTooltip);
+        registry.registerIntProviderTooltip(VeryBiasedToBottomInt.class, IntProviderTooltipUtils::getVeryBiasedToBottomIntTooltip);
 
         registry.registerFloatProviderTooltip(ConstantFloat.class, FloatProviderTooltipUtils::getConstantFloatTooltip);
         registry.registerFloatProviderTooltip(UniformFloat.class, FloatProviderTooltipUtils::getUniformFloatTooltip);
@@ -260,6 +261,7 @@ public class Plugin implements IPlugin {
         registry.registerIntSpanPropagator(ClampedNormalInt.class, IntSpanPropagatorUtils::getClampedNormalInt);
         registry.registerIntSpanPropagator(WeightedListInt.class, IntSpanPropagatorUtils::getWeightedListInt);
         registry.registerIntSpanPropagator(TrapezoidInt.class, IntSpanPropagatorUtils::getTrapezoidInt);
+        registry.registerIntSpanPropagator(VeryBiasedToBottomInt.class, IntSpanPropagatorUtils::getVeryBiasedToBottomInt);
 
         registry.registerHeightSpanPropagator(ConstantHeight.class, HeightSpanPropagatorUtils::getConstantHeight);
         registry.registerHeightSpanPropagator(UniformHeight.class, HeightSpanPropagatorUtils::getUniformHeight);
@@ -348,6 +350,8 @@ public class Plugin implements IPlugin {
         registry.registerStateProviderBlockCollector(RotatedBlockProvider.class, BlockStateProviderCollectorUtils::collectRotated);
         registry.registerStateProviderBlockCollector(WeightedStateProvider.class, BlockStateProviderCollectorUtils::collectWeighted);
         registry.registerStateProviderBlockCollector(RuleBasedStateProvider.class, BlockStateProviderCollectorUtils::collectRuleBased);
+        registry.registerStateProviderBlockCollector(RandomBlockProvider.class, BlockStateProviderCollectorUtils::collectRandomBlock);
+        registry.registerStateProviderBlockCollector(CopyPropertiesProvider.class, BlockStateProviderCollectorUtils::collectCopyProperties);
 
         registry.registerTreeDecoratorBlockCollector(TrunkVineDecorator.class, TreeDecoratorCollectorUtils::collectTrunkVine);
         registry.registerTreeDecoratorBlockCollector(LeaveVineDecorator.class, TreeDecoratorCollectorUtils::collectLeaveVine);
@@ -371,6 +375,8 @@ public class Plugin implements IPlugin {
         registry.registerBlockStateProviderTooltip(RotatedBlockProvider.class, BlockStateProviderTooltipUtils::getRotatedBlockProviderTooltip);
         registry.registerBlockStateProviderTooltip(RandomizedIntStateProvider.class, BlockStateProviderTooltipUtils::getRandomizedIntStateProviderTooltip);
         registry.registerBlockStateProviderTooltip(RuleBasedStateProvider.class, BlockStateProviderTooltipUtils::getRuleBasedStateProviderTooltip);
+        registry.registerBlockStateProviderTooltip(RandomBlockProvider.class, BlockStateProviderTooltipUtils::getRandomBlockProviderTooltip);
+        registry.registerBlockStateProviderTooltip(CopyPropertiesProvider.class, BlockStateProviderTooltipUtils::getCopyPropertiesProviderTooltip);
 
         registry.registerTrunkPlacerTooltip(StraightTrunkPlacer.class, TrunkPlacerTooltipUtils::getStraightTrunkPlacerTooltip);
         registry.registerTrunkPlacerTooltip(ForkingTrunkPlacer.class, TrunkPlacerTooltipUtils::getForkingTrunkPlacerTooltip);

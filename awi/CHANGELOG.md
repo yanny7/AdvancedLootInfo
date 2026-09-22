@@ -1,3 +1,8 @@
+## []
+
+- Added tooltips for the `random_block` and `copy_properties` block state providers
+- Added tooltip and placement summary support for the `very_biased_to_bottom` int provider
+
 ## [1.1.1]
 
 - Fixed Plugins discovered multiple times on Fabric

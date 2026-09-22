@@ -634,9 +634,11 @@ public final class Lang {
     }
 
     public enum BlockStateProvider implements ITooltipKey {
+        COPY_PROPERTIES("copy_properties", "Copy Properties:"),
         DUAL_NOISE_PROVIDER("dual_noise_provider", "Dual Noise Provider:"),
         NOISE_PROVIDER("noise_provider", "Noise Provider:"),
         NOISE_THRESHOLD("noise_threshold", "Noise Threshold:"),
+        RANDOM_BLOCK("random_block", "Random Block:"),
         RANDOMIZED_INT_STATE("randomized_int", "Randomized Int State:"),
         ROTATED_BLOCK("rotated_block", "Rotated Block:"),
         RULE_BASED("rule_based",  "Rule Based:"),
@@ -722,6 +724,7 @@ public final class Lang {
         CONSTANT("constant", "Constant:"),
         TRAPEZOID("trapezoid", "Trapezoid:"),
         UNIFORM("uniform", "Uniform:"),
+        VERY_BIASED_TO_BOTTOM("very_biased_to_bottom", "Very Biased To Bottom:"),
         WEIGHTED_LIST("weighted_list", "Weighted List:"),
         ;
 
