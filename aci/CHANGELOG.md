@@ -1,7 +1,3 @@
-## []
-
-- `CommonValueTooltip` renders `Vec3i`, so every mod gets it without registering its own handler
-
 ## [1.2.0]
 
 - Added `ManagedRegistry.entries`, so a registry's whole content can be read back

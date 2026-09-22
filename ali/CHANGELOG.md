@@ -1,7 +1,3 @@
-## []
-
-- Fixed missing Vec3i value tooltip
-
 ## [2.2.0]
 
 - Added `IServerRegistry.registerTrades`, so a plugin can list the trades of its own trader
