@@ -56,8 +56,8 @@ IMPORT = re.compile(r"^import\s+(?:static\s+)?([\w.$]+);", re.M)
 IMPORT_WILDCARD = re.compile(r"^import\s+(?:static\s+)?([\w.$]+)\.\*;", re.M)
 PACKAGE = re.compile(r"^package\s+([\w.]+);", re.M)
 DECLARATION = re.compile(r"\b(?:class|record|interface|enum)\s+([A-Z]\w*)")
-TRADES = re.compile(r"\bregisterTrades\s*\(")
-TRADES_PATH = re.compile(r'ResourceLocation\s*\([^,)]+,\s*"([^"]+)"\s*\)')
+TRADES = re.compile(r"\bregisterTrade(?:s|Levels)\s*\(")
+TRADES_PATH = re.compile(r'(?:ResourceLocation|Identifier)(?:\.fromNamespaceAndPath)?\s*\([^,)]+,\s*"([^"]+)"\s*\)')
 TRADER_ENTITY_HOOK = "trader_entity"
 
 
@@ -164,7 +164,7 @@ def _first_argument(text: str, start: int):
 
 
 def read_trades(loader: str, key: str):
-    """The entity ids a shim hands `registerTrades`, and whether any of them is not a literal.
+    """The entity ids a shim hands `registerTrades`/`registerTradeLevels`, and whether any is not a literal.
 
     Trading entities are the one hook keyed on an entity id rather than on a class, so a shim
     covering one never names its class anywhere."""

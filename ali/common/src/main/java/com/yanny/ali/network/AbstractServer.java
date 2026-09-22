@@ -56,6 +56,7 @@ import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.Logger;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -508,7 +509,7 @@ public abstract class AbstractServer {
     private static Map<Identifier, IDataNode> processTrades(AliServerRegistry serverRegistry, AliConfig config) {
         Map<Identifier, IDataNode> nodes = new HashMap<>();
 
-        for (Map.Entry<Identifier, Supplier<Int2ObjectMap<ResourceKey<TradeSet>>>> entry : serverRegistry.getTrades().entrySet()) {
+        for (Map.Entry<Identifier, Function<IServerUtils, Int2ObjectMap<TradeLevel>>> entry : serverRegistry.getTrades().entrySet()) {
             Identifier location = entry.getKey();
 
             TooltipContext.set(location);

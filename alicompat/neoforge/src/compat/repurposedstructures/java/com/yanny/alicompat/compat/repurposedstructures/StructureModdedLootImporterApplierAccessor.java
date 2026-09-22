@@ -20,18 +20,21 @@ import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.IGlobalLootModifierAccessor;
 import com.yanny.alicompat.accessor.IPageResolverAccessor;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 public class StructureModdedLootImporterApplierAccessor extends BaseAccessor<StructureModdedLootImporterApplier> implements IGlobalLootModifierAccessor, IPageResolverAccessor {
     @FieldAccessor
-    protected LootItemCondition[] conditions;
+    protected Optional<Holder<LootItemCondition>> condition;
 
     public StructureModdedLootImporterApplierAccessor(StructureModdedLootImporterApplier parent) {
         super(parent);
@@ -39,7 +42,7 @@ public class StructureModdedLootImporterApplierAccessor extends BaseAccessor<Str
 
     @Override
     public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
-        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(conditions), (c) -> getOperations(utils, c)));
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, NodeUtils.unwrapConditions(condition), (c) -> getOperations(utils, c)));
     }
 
     @NotNull
@@ -50,18 +53,18 @@ public class StructureModdedLootImporterApplierAccessor extends BaseAccessor<Str
 
     @NotNull
     private static List<IOperation> getOperations(IServerUtils utils, List<LootItemCondition> conditions) {
-        ResourceLocation location = TooltipContext.get();
-        ResourceLocation imported = location == null ? null : StructureModdedLootImporter.TABLE_IMPORTS.get(location);
+        Identifier location = TooltipContext.get();
+        ResourceKey<LootTable> imported = location == null ? null : StructureModdedLootImporter.TABLE_IMPORTS.get(tableKey(location));
 
         if (imported == null) {
             return Collections.emptyList();
         }
 
-        return Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, getImportNode(utils, conditions, imported)));
+        return Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, getImportNode(utils, conditions, imported.identifier())));
     }
 
     @NotNull
-    private static IDataNode getImportNode(IServerUtils utils, List<LootItemCondition> conditions, ResourceLocation imported) {
+    private static IDataNode getImportNode(IServerUtils utils, List<LootItemCondition> conditions, Identifier imported) {
         TooltipNode tooltip = TooltipBuilder.array((b) -> {
             b.add(TooltipBuilder.keyOnly(Lang.Group.ALL));
             b.add(TooltipBuilder.keyOnly(RepurposedStructuresLang.Value.MODDED_ITEMS_ONLY));
@@ -71,7 +74,14 @@ public class StructureModdedLootImporterApplierAccessor extends BaseAccessor<Str
         return NodeUtils.getReferenceNode(utils, imported, conditions, tooltip);
     }
 
-    private static boolean isImported(ResourceLocation location) {
-        return RSModdedLootConfig.importModdedItems.get() && StructureModdedLootImporter.TABLE_IMPORTS.containsKey(location) && !StructureModdedLootImporter.isInBlacklist(location);
+    private static boolean isImported(Identifier location) {
+        ResourceKey<LootTable> key = tableKey(location);
+
+        return RSModdedLootConfig.importModdedItems.get() && StructureModdedLootImporter.TABLE_IMPORTS.containsKey(key) && !StructureModdedLootImporter.isInBlacklist(key);
+    }
+
+    @NotNull
+    private static ResourceKey<LootTable> tableKey(Identifier location) {
+        return ResourceKey.create(Registries.LOOT_TABLE, location);
     }
 }

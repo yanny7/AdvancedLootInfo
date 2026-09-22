@@ -53,7 +53,7 @@
     },
     "trader_entity": {
       "title": "Trading entities",
-      "registry": "registerTrades",
+      "registry": "registerTrades / registerTradeLevels",
       "bases": [
         "net/minecraft/world/item/trading/Merchant",
         "net/minecraft/world/entity/npc/villager/AbstractVillager"

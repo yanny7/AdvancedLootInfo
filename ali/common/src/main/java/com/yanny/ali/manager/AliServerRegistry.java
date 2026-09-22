@@ -20,12 +20,15 @@ import com.yanny.ali.plugin.glm.*;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.MissingTooltipUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.advancements.predicates.entity.EntitySubPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -69,7 +72,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, ContextIntProvider, RangeValue>> intConverters = registerClassKeyed("int converters", true, HashMap::new, BuiltInRegistries.CONTEXT_INT_PROVIDER_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, ContextFloatProvider, RangeValue>> floatConverters = registerClassKeyed("float converters", true, HashMap::new, BuiltInRegistries.CONTEXT_FLOAT_PROVIDER_TYPE);
     // traders
-    private final ManagedRegistry<Identifier, Supplier<Int2ObjectMap<ResourceKey<TradeSet>>>> trades = register("trades", false, HashMap::new, Identifier::toString, null);
+    private final ManagedRegistry<Identifier, Function<IServerUtils, Int2ObjectMap<TradeLevel>>> trades = register("trades", false, HashMap::new, Identifier::toString, null);
     // tooltips
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootPoolEntryContainer, TooltipBuilder>> entryTooltips = registerClassKeyed("entry tooltips", true, HashMap::new, BuiltInRegistries.LOOT_POOL_ENTRY_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemFunction, TooltipBuilder>> functionTooltips = registerClassKeyed("function tooltips", true, HashMap::new, BuiltInRegistries.LOOT_FUNCTION_TYPE);
@@ -250,10 +253,15 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     @Override
     public void registerTrades(Identifier traderId, Supplier<Int2ObjectMap<ResourceKey<TradeSet>>> tradeSetsByLevel) {
-        trades.put(traderId, tradeSetsByLevel);
+        registerTradeLevels(traderId, (utils) -> resolveTradeSets(utils, tradeSetsByLevel.get()));
     }
 
-    public Map<Identifier, Supplier<Int2ObjectMap<ResourceKey<TradeSet>>>> getTrades() {
+    @Override
+    public void registerTradeLevels(Identifier traderId, Function<IServerUtils, Int2ObjectMap<TradeLevel>> levels) {
+        trades.put(traderId, levels);
+    }
+
+    public Map<Identifier, Function<IServerUtils, Int2ObjectMap<TradeLevel>>> getTrades() {
         return trades.entries();
     }
 
@@ -465,8 +473,19 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         return NodeUtils.getLootTableNode(operations);
     }
 
-    public IDataNode parseTrade(Supplier<Int2ObjectMap<ResourceKey<TradeSet>>> tradeSetsByLevel) {
-        return new TradeNode(this, tradeSetsByLevel.get());
+    public IDataNode parseTrade(Function<IServerUtils, Int2ObjectMap<TradeLevel>> levels) {
+        return new TradeNode(this, levels.apply(this));
+    }
+
+    @NotNull
+    private static Int2ObjectMap<TradeLevel> resolveTradeSets(IServerUtils utils, Int2ObjectMap<ResourceKey<TradeSet>> tradeSetKeysByLevel) {
+        HolderLookup.RegistryLookup<TradeSet> lookup = utils.lookupProvider().lookup(Registries.TRADE_SET).orElseThrow();
+        Int2ObjectMap<TradeLevel> levels = new Int2ObjectOpenHashMap<>();
+
+        tradeSetKeysByLevel.int2ObjectEntrySet()
+                .forEach((entry) -> lookup.get(entry.getValue()).ifPresent((tradeSet) -> levels.put(entry.getIntKey(), new TradeLevel(tradeSet.value()))));
+
+        return levels;
     }
 
     // hitCount != null means this table is referenced from another table's tree; the paramSet check

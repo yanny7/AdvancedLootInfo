@@ -1,4 +1,4 @@
-package com.yanny.alicompat.compat.occultism;
+package com.yanny.alicompat.compat.repurposedstructures;
 
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.language.ITooltipKey;
@@ -9,31 +9,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public class OccultismLang implements ICompatTranslations {
-    static final String MOD_ID = "occultism";
+public class RepurposedStructuresLang implements ICompatTranslations {
+    static final String MOD_ID = "repurposed_structures";
 
     public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 
-    public enum ConsumeEffects implements ITooltipKey {
-        DAMAGE_ITEM("damage_item", "Damage Item:"),
-        ;
-
-        private final Translation translation;
-
-        ConsumeEffects(String k, String e) {
-            translation = new Translation("alicompat.type.consume_effect." + k, e);
-        }
-
-        @NotNull
-        @Override
-        public Translation getTranslation() {
-            return translation;
-        }
-    }
-
     public enum Value implements ITooltipKey {
-        WITH_THIRD_EYE("with_third_eye", "Requires Third Eye, Otherworld Goggles or True Sight Staff"),
-        WITHOUT_THIRD_EYE("without_third_eye", "Without Third Eye, Otherworld Goggles or True Sight Staff"),
+        MODDED_ITEMS_ONLY("modded_items_only", "Only items added by other mods"),
         ;
 
         private final Translation translation;
@@ -50,7 +32,6 @@ public class OccultismLang implements ICompatTranslations {
     }
 
     static {
-        CoreLang.register(TRANSLATION_MAP, ConsumeEffects.class);
         CoreLang.register(TRANSLATION_MAP, Value.class);
     }
 

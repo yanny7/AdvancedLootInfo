@@ -45,7 +45,9 @@ dependencies {
         common(project(path: p)) { transitive false }
     }
 
-    runtimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
+    if (rei_enabled == "true" && fabric_rei_enabled == "true") {
+        runtimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
+    }
 
     project.ext.commonProjects.each { p ->
         common(project(path: p)) { transitive false }

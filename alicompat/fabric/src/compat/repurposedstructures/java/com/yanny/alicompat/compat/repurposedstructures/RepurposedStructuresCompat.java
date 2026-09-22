@@ -1,22 +1,28 @@
 package com.yanny.alicompat.compat.repurposedstructures;
 
-import com.telepathicgrunt.repurposedstructures.misc.maptrades.StructureSpecificMaps;
 import com.yanny.ali.api.IServerRegistry;
+import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.alicompat.IModCompat;
-import com.yanny.alicompat.accessor.PluginUtils;
 import org.jetbrains.annotations.NotNull;
 
-public class RepurposedStructuresCompat implements IModCompat {
-    static final String MOD_ID = "repurposed_structures";
+import java.util.Collections;
+import java.util.List;
 
+public class RepurposedStructuresCompat implements IModCompat {
     @NotNull
     @Override
     public String targetModId() {
-        return MOD_ID;
+        return RepurposedStructuresLang.MOD_ID;
     }
 
     @Override
     public void registerServer(IServerRegistry registry) {
-        PluginUtils.registerItemListing(registry, StructureSpecificMaps.TreasureMapForEmeralds.class, TreasureMapForEmeraldsAccessor.class);
+        registry.registerGlobalLootModifiers(RepurposedStructuresCompat::registerLootModifiers);
+    }
+
+    @NotNull
+    private static List<IPageLootModifier> registerLootModifiers(IServerUtils utils) {
+        return Collections.singletonList(new StructureModdedLootImportModifier(utils));
     }
 }

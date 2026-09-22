@@ -88,6 +88,9 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
      */
     void registerTrades(Identifier traderId, Supplier<Int2ObjectMap<ResourceKey<TradeSet>>> tradeSetsByLevel);
 
+    /** Registers a trader that builds its levels in code; the getter runs during the scan, so it may use {@link IServerUtils#lookupProvider()}. */
+    void registerTradeLevels(Identifier traderId, Function<IServerUtils, Int2ObjectMap<TradeLevel>> levels);
+
     /**
      * @deprecated use {@link #registerEnumTranslation(Class, String, String)}
      */

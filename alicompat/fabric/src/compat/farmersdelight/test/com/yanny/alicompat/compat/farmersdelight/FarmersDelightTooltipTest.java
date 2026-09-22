@@ -1,5 +1,6 @@
 package com.yanny.alicompat.compat.farmersdelight;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
@@ -7,6 +8,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 import vectorwing.farmersdelight.common.item.component.consumable.ExtinguishConsumeEffect;
 import vectorwing.farmersdelight.common.item.component.consumable.HealConsumeEffect;
@@ -15,6 +17,7 @@ import vectorwing.farmersdelight.common.loot.function.CopySkilletFunction;
 import vectorwing.farmersdelight.common.loot.function.SmokerCookFunction;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
 import static com.yanny.alicompat.test.CompatTooltipSuite.UTILS;
@@ -22,7 +25,7 @@ import static com.yanny.alicompat.test.CompatTooltipSuite.UTILS;
 public class FarmersDelightTooltipTest {
     @Test
     public void testSmokerCookFunction() {
-        assertTooltip(UTILS.getFunctionTooltip(UTILS, smokerCook()).build(), List.of(
+        assertTooltip(UTILS.getFunctionTooltip(UTILS, smokerCook(null)).build(), List.of(
                 "Smoker Cook:"
         ));
     }
@@ -83,12 +86,12 @@ public class FarmersDelightTooltipTest {
     }
 
     @NotNull
-    private static LootItemFunction smokerCook(LootItemCondition... conditions) {
+    private static LootItemFunction smokerCook(@Nullable LootItemCondition condition) {
         try {
-            var constructor = SmokerCookFunction.class.getDeclaredConstructor(List.class);
+            var constructor = SmokerCookFunction.class.getDeclaredConstructor(Optional.class);
 
             constructor.setAccessible(true);
-            return constructor.newInstance(List.of(conditions));
+            return constructor.newInstance(Optional.ofNullable(condition).map(Holder::direct));
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException("Failed to create SmokerCookFunction", e);
         }
