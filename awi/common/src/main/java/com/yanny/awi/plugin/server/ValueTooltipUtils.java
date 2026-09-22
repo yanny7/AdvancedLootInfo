@@ -3,7 +3,6 @@ package com.yanny.awi.plugin.server;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.language.Lang;
-import net.minecraft.core.Vec3i;
 import net.minecraft.util.random.Weighted;
 import net.minecraft.util.random.WeightedList;
 import net.minecraft.util.valueproviders.FloatProvider;
@@ -144,15 +143,6 @@ public class ValueTooltipUtils {
 
             b.add(array.build(Lang.Branch.PROPERTIES));
         });
-    }
-
-    @NotNull
-    public static TooltipBuilder getVec3iTooltip(IServerUtils utils, Vec3i value) {
-        if (value.getX() == 0 && value.getY() == 0 && value.getZ() == 0) {
-            return TooltipBuilder.empty();
-        }
-
-        return utils.getValueTooltip(utils, "[" + value.getX() + "," + value.getY() + "," + value.getZ() + "]");
     }
 
     @NotNull

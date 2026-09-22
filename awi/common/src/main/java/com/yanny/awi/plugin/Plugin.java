@@ -10,7 +10,6 @@ import com.yanny.awi.plugin.server.*;
 import com.yanny.awi.plugin.server.summary.HeightSpanPropagatorUtils;
 import com.yanny.awi.plugin.server.summary.IntSpanPropagatorUtils;
 import com.yanny.awi.plugin.server.summary.PlacementPropagatorUtils;
-import net.minecraft.core.Vec3i;
 import net.minecraft.util.random.Weighted;
 import net.minecraft.util.random.WeightedList;
 import net.minecraft.util.valueproviders.*;
@@ -96,7 +95,6 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(BlockReplacement.class, ValueTooltipUtils::getBlockReplacementTooltip);
         registry.registerValueTooltip(BlockState.class, ValueTooltipUtils::getBlockStateTooltip);
         registry.registerValueTooltip(FluidState.class, ValueTooltipUtils::getFluidStateTooltip);
-        registry.registerValueTooltip(Vec3i.class, ValueTooltipUtils::getVec3iTooltip);
         registry.registerValueTooltip(Weighted.class, ValueTooltipUtils::getWeightedTooltip);
         registry.registerValueTooltip(BlockColumnFeature.Layer.class, ValueTooltipUtils::getBlockColumnLayerTooltip);
         registry.registerValueTooltip(GeodeBlockSettings.class, ValueTooltipUtils::getGeodeBlockSettingsTooltip);

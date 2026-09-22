@@ -8,6 +8,7 @@ import com.yanny.aci.language.CoreLang;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -46,6 +47,7 @@ public class CommonValueTooltip<
         registry.registerValueTooltip(RangeValue.class, this::getRangeValueTooltip);
         registry.registerValueTooltip(HolderSet.class, this::getHolderSetTooltip);
         registry.registerValueTooltip(Either.class, this::getEitherTooltip);
+        registry.registerValueTooltip(Vec3i.class, this::getVec3iTooltip);
     }
 
     private TooltipBuilder getCollectionTooltip(TServerUtils utils, Collection<?> collection) {
@@ -191,5 +193,14 @@ public class CommonValueTooltip<
     @NotNull
     private TooltipBuilder getEitherTooltip(TServerUtils utils, Either<?, ?> either) {
         return either.map((l) -> utils.getValueTooltip(utils, l), (r) -> utils.getValueTooltip(utils, r));
+    }
+
+    @NotNull
+    private TooltipBuilder getVec3iTooltip(TServerUtils utils, Vec3i value) {
+        if (value.getX() == 0 && value.getY() == 0 && value.getZ() == 0) {
+            return TooltipBuilder.empty();
+        }
+
+        return utils.getValueTooltip(utils, "[" + value.getX() + "," + value.getY() + "," + value.getZ() + "]");
     }
 }
