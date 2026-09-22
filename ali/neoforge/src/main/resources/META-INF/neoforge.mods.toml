@@ -10,8 +10,7 @@ displayName = "${ali_mod_name}" #mandatory
 displayTest = "IGNORE_ALL_VERSION"
 #updateJSONURL="https://change.me.example.invalid/updates.json" #optional (see https://docs.neoforged.net/docs/misc/updatechecker/)
 #displayURL="https://change.me.to.your.mods.homepage.example.invalid/" #optional (displayed in the mod UI)
-logoFile="logo.png" #optional
-logoBlur = false
+iconFile="logo.png" #optional
 authors = "${mod_author}" #optional
 description = '''${ali_description}''' #mandatory (Supports multiline text)
 
