@@ -7,21 +7,21 @@ import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.awi.Utils;
+import com.yanny.awi.api.ISurfaceRuleHandler;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LightBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.SurfaceRules;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-import java.util.Collections;
-import java.util.IdentityHashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Rewrites a dimension's surface rule into the subset that can fire for one specific biome. One instance per dimension
@@ -37,8 +37,13 @@ import java.util.Set;
  * removed, so arity and element order stay intact whether the wrapper indexes its children or pairs them with data of
  * its own. Elements are only really dropped inside a {@code minecraft:sequence}, whose semantics are known.
  * <p>
- * Any failure falls back to the original rule, and a dimension whose first biome prunes nothing turns specialization
- * off for itself.
+ * Before any pruning, every node of a rule type AWI has a {@link ISurfaceRuleHandler} for is replaced by a ghost block, once
+ * per dimension; the walk measures where the ghost lands and the handler expands that into what the rule really places.
+ * Every {@code minecraft:noise_threshold} and {@code minecraft:hole} gate is replaced by a coin that is true for about
+ * half of all blocks.
+ * <p>
+ * Any failure falls back to the rule with its ghosts (or to the original rule, if replacing failed), and a dimension
+ * whose first biome prunes nothing turns pruning off for itself.
  */
 public class SurfaceRuleSpecializer {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
@@ -55,22 +60,39 @@ public class SurfaceRuleSpecializer {
     private static final String BIOME_IS_FIELD = "biome_is";
     private static final String INVERT_FIELD = "invert";
 
+    private static final String BLOCK = "minecraft:block";
+    private static final String RESULT_STATE_FIELD = "result_state";
+    private static final String NAME_FIELD = "Name";
+    private static final String GHOST_BLOCK = "minecraft:light";
+    private static final int GHOST_COUNT = LightBlock.MAX_LEVEL + 1;
+    private static final String NOISE_THRESHOLD = "minecraft:noise_threshold";
+    private static final String HOLE = "minecraft:hole";
+    private static final String VERTICAL_GRADIENT = "minecraft:vertical_gradient";
+    private static final int COIN_ANCHOR = 2000;
+
     private final SurfaceRules.RuleSource original;
     private final DynamicOps<JsonElement> ops;
     @Nullable
-    private final JsonElement encoded;
+    private final JsonElement base;
+    private final SurfaceRules.RuleSource baseRule;
+    private final List<Ghost> ghosts;
     private final boolean logStatistics;
 
-    private boolean effective = true;
+    private boolean pruningEffective = true;
+
+    public record Ghost(BlockState state, ISurfaceRuleHandler handler, JsonObject definition) {}
 
     /**
      * @param codecLookup the provider that <i>owns</i> the holders the rule references — a different provider holding
      *                    equal values still fails the codec's ownership check and turns specialization off. In game
      *                    that is the level's {@code RegistryAccess}.
      */
-    public SurfaceRuleSpecializer(SurfaceRules.RuleSource original, HolderLookup.Provider codecLookup, boolean logStatistics) {
+    public SurfaceRuleSpecializer(SurfaceRules.RuleSource original, HolderLookup.Provider codecLookup,
+                                  Map<String, ISurfaceRuleHandler> handlers, boolean logStatistics) {
         JsonElement json = null;
         DynamicOps<JsonElement> dynamicOps = RegistryOps.create(JsonOps.INSTANCE, codecLookup);
+        List<Ghost> replaced = new ArrayList<>();
+        SurfaceRules.RuleSource rule = original;
 
         try {
             json = SurfaceRules.RuleSource.CODEC.encodeStart(dynamicOps, original).getOrThrow(false, (error) -> {});
@@ -78,42 +100,75 @@ public class SurfaceRuleSpecializer {
             LOGGER.warn("Could not encode the surface rule, per-biome specialization is off for this dimension", t);
         }
 
+        if (json != null) {
+            boolean ghostsAllowed = !handlers.isEmpty() && !placesBlock(json, GHOST_BLOCK);
+
+            if (!handlers.isEmpty() && !ghostsAllowed) {
+                LOGGER.warn("The surface rule places {} itself, rules AWI knows are measured instead", GHOST_BLOCK);
+            }
+
+            try {
+                Rewrite rewrite = new Rewrite(ghostsAllowed ? handlers : Map.of(), replaced);
+                JsonElement substituted = rewrite.apply(json);
+
+                if (!replaced.isEmpty() || rewrite.coins > 0) {
+                    rule = SurfaceRules.RuleSource.CODEC.parse(dynamicOps, substituted).getOrThrow(false, (error) -> {});
+                    json = substituted;
+                }
+            } catch (Throwable t) {
+                LOGGER.warn("Could not rewrite the surface rule for scanning, it is scanned unchanged", t);
+                replaced.clear();
+            }
+        }
+
         this.original = original;
         this.ops = dynamicOps;
-        this.encoded = json;
+        this.base = json;
+        this.baseRule = rule;
+        this.ghosts = List.copyOf(replaced);
         this.logStatistics = logStatistics;
     }
 
-    /** The rule with every branch that cannot fire for {@code biome} removed, or the original rule if none can be. */
+    @NotNull
+    public SurfaceRules.RuleSource baseRule() {
+        return baseRule;
+    }
+
+    @NotNull
+    public List<Ghost> ghosts() {
+        return ghosts;
+    }
+
+    /** The base rule with every branch that cannot fire for {@code biome} removed, or the base rule if none can be. */
     @NotNull
     public SurfaceRules.RuleSource specialize(Holder<Biome> biome) {
         Optional<ResourceKey<Biome>> key = biome.unwrapKey();
 
-        if (!effective || encoded == null || key.isEmpty()) {
-            return original;
+        if (!pruningEffective || base == null || key.isEmpty()) {
+            return baseRule;
         }
 
         try {
-            JsonElement pruned = prune(encoded, key.get().location().toString(), false);
+            JsonElement pruned = prune(base, key.get().location().toString(), false);
 
-            if (pruned == null || pruned.equals(encoded)) {
+            if (pruned == null || pruned.equals(base)) {
                 // Nothing in this rule is decidable per biome.
-                effective = false;
-                log("not specializable, no biome-gated branch could be pruned", encoded, null);
+                pruningEffective = false;
+                log("not specializable, no biome-gated branch could be pruned", base, null);
 
-                return original;
+                return baseRule;
             }
 
             SurfaceRules.RuleSource result = SurfaceRules.RuleSource.CODEC.parse(ops, pruned).getOrThrow(false, (error) -> {});
 
-            log("specialized", encoded, pruned);
+            log("specialized", base, pruned);
 
             return result;
         } catch (Throwable t) {
-            effective = false;
+            pruningEffective = false;
             LOGGER.warn("Could not specialize the surface rule per biome, using it unchanged for this dimension", t);
 
-            return original;
+            return baseRule;
         }
     }
 
@@ -257,6 +312,135 @@ public class SurfaceRuleSpecializer {
         }
 
         return null;
+    }
+
+    private static class Rewrite {
+        private final Map<String, ISurfaceRuleHandler> handlers;
+        private final List<Ghost> ghosts;
+        private final Map<List<Object>, BlockState> ghostStates = new HashMap<>();
+        private int coins;
+
+        Rewrite(Map<String, ISurfaceRuleHandler> handlers, List<Ghost> ghosts) {
+            this.handlers = handlers;
+            this.ghosts = ghosts;
+        }
+
+        @NotNull
+        JsonElement apply(JsonElement element) {
+            if (element.isJsonArray()) {
+                JsonArray copy = new JsonArray();
+
+                for (JsonElement child : element.getAsJsonArray()) {
+                    copy.add(apply(child));
+                }
+
+                return copy;
+            }
+
+            if (!element.isJsonObject()) {
+                return element;
+            }
+
+            JsonObject object = element.getAsJsonObject();
+            String type = typeOf(object);
+            ISurfaceRuleHandler handler = type != null ? handlers.get(type) : null;
+
+            if (handler != null) {
+                BlockState state = ghostState(handler, object);
+
+                if (state != null) {
+                    return ghost(state);
+                }
+            }
+
+            if (NOISE_THRESHOLD.equals(type) || HOLE.equals(type)) {
+                return coin();
+            }
+
+            JsonObject copy = new JsonObject();
+
+            for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+                copy.add(entry.getKey(), apply(entry.getValue()));
+            }
+
+            return copy;
+        }
+
+        @Nullable
+        private BlockState ghostState(ISurfaceRuleHandler handler, JsonObject definition) {
+            List<Object> rule = List.of(handler, definition);
+            BlockState state = ghostStates.get(rule);
+
+            if (state == null && ghosts.size() < GHOST_COUNT) {
+                state = Blocks.LIGHT.defaultBlockState().setValue(LightBlock.LEVEL, ghosts.size());
+                ghosts.add(new Ghost(state, handler, definition.deepCopy()));
+                ghostStates.put(rule, state);
+            }
+
+            return state;
+        }
+
+        @NotNull
+        private static JsonObject ghost(BlockState state) {
+            JsonObject ghost = new JsonObject();
+
+            ghost.addProperty(TYPE, BLOCK);
+            ghost.add(RESULT_STATE_FIELD, BlockState.CODEC.encodeStart(JsonOps.INSTANCE, state).getOrThrow(false, (error) -> {}));
+
+            return ghost;
+        }
+
+        // Never a constant true: an always-open gate shadows its sequence siblings and every not(gate) branch.
+        @NotNull
+        private JsonObject coin() {
+            JsonObject coin = new JsonObject();
+
+            coin.addProperty(TYPE, VERTICAL_GRADIENT);
+            coin.addProperty("random_name", Utils.modLoc("coin_" + coins++).toString());
+            coin.add("true_at_and_below", anchor(-COIN_ANCHOR));
+            coin.add("false_at_and_above", anchor(COIN_ANCHOR));
+
+            return coin;
+        }
+
+        @NotNull
+        private static JsonObject anchor(int y) {
+            JsonObject anchor = new JsonObject();
+
+            anchor.addProperty("absolute", y);
+
+            return anchor;
+        }
+    }
+
+    private static boolean placesBlock(JsonElement element, String blockId) {
+        if (element.isJsonArray()) {
+            for (JsonElement child : element.getAsJsonArray()) {
+                if (placesBlock(child, blockId)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        if (!element.isJsonObject()) {
+            return false;
+        }
+
+        JsonObject object = element.getAsJsonObject();
+
+        if (object.has(NAME_FIELD) && object.get(NAME_FIELD).isJsonPrimitive() && blockId.equals(object.get(NAME_FIELD).getAsString())) {
+            return true;
+        }
+
+        for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+            if (placesBlock(entry.getValue(), blockId)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @NotNull

@@ -11,16 +11,19 @@ import com.yanny.awi.Utils;
 import com.yanny.awi.api.ICommonUtils;
 import com.yanny.awi.api.IServerRegistry;
 import com.yanny.awi.api.IServerUtils;
+import com.yanny.awi.api.ISurfaceRuleHandler;
 import com.yanny.awi.configuration.AwiConfig;
 import com.yanny.awi.plugin.server.MissingTooltipUtils;
 import com.yanny.awi.plugin.server.summary.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.valueproviders.FloatProvider;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSize;
@@ -39,7 +42,9 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRegistry, IServerUtils> implements IServerRegistry, IServerUtils, ICommonUtils {
     // collectors
@@ -67,6 +72,8 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, IntProvider, CountSpan>> intSpanPropagators = registerClassKeyed("int span propagators", true, HashMap::new, BuiltInRegistries.INT_PROVIDER_TYPE);
     private final ManagedRegistry<Class<?>, HeightSpanPropagator<HeightProvider>> heightSpanPropagators = registerClassKeyed("height span propagators", true, HashMap::new, BuiltInRegistries.HEIGHT_PROVIDER_TYPE);
     private final ManagedRegistry<Class<?>, PlacementPropagator<PlacementModifier>> placementPropagators = registerClassKeyed("placement propagators", false, HashMap::new, BuiltInRegistries.PLACEMENT_MODIFIER_TYPE);
+    // surface rules
+    private final ManagedRegistry<ResourceLocation, Function<RandomState, ISurfaceRuleHandler>> surfaceRuleHandlers = register("surface rule handlers", false, HashMap::new, ResourceLocation::toString, BuiltInRegistries.MATERIAL_RULE);
     // translations
     private final ManagedRegistry<Class<?>, EnumTranslation> enumValues = registerClassKeyed("enum values", true, HashMap::new, null);
 
@@ -96,6 +103,11 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
     public <T extends TreeDecorator> void registerTreeDecoratorBlockCollector(Class<T> type, BiFunction<IServerUtils, T, List<Block>> getter) {
         //noinspection unchecked
         treeDecoratorBlockCollector.put(type, (u, t) -> getter.apply(u, (T) t));
+    }
+
+    @Override
+    public void registerSurfaceRuleHandler(ResourceLocation ruleType, Function<RandomState, @Nullable ISurfaceRuleHandler> factory) {
+        surfaceRuleHandlers.put(ruleType, factory);
     }
 
     @Override
@@ -304,6 +316,10 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
         return treeDecoratorTooltips.get(entry.getClass())
                 .map((e) -> e.apply(utils, entry))
                 .orElseGet(() -> MissingTooltipUtils.getMissingTreeDecoratorTooltip(utils, entry));
+    }
+
+    public Map<ResourceLocation, Function<RandomState, ISurfaceRuleHandler>> getSurfaceRuleHandlers() {
+        return surfaceRuleHandlers.entries();
     }
 
     @NotNull

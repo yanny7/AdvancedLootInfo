@@ -2,6 +2,7 @@ package com.yanny.awi.plugin.common.nodes;
 
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.Utils;
+import com.yanny.awi.api.BlockInfo;
 import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ListNode;
@@ -26,8 +27,8 @@ public class BaseTerrainNode extends ListNode {
 
     private final TooltipNode tooltip;
 
-    public BaseTerrainNode(IServerUtils utils, Set<NodeUtils.BlockInfo> baseBlocks, Block defaultBlock, Fluid defaultFluid) {
-        Set<Block> detectedBlocks = baseBlocks.stream().map(NodeUtils.BlockInfo::block).collect(Collectors.toSet());
+    public BaseTerrainNode(IServerUtils utils, Set<BlockInfo> baseBlocks, Block defaultBlock, Fluid defaultFluid) {
+        Set<Block> detectedBlocks = baseBlocks.stream().map(BlockInfo::block).collect(Collectors.toSet());
 
         // The surface rule never places the generator's default block/fluid, so the scan cannot observe them — add them
         // explicitly, otherwise the bulk of the terrain would be missing from the list.
@@ -44,8 +45,10 @@ public class BaseTerrainNode extends ListNode {
         }
 
         baseBlocks.stream()
-                .sorted(Comparator.comparing((info) -> BuiltInRegistries.BLOCK.getKey(info.block()).getPath()))
-                .forEach((info) -> addChildren(new BlockNode(utils, info.block(), TooltipUtils.getBlockInfoTooltip(utils, info).build())));
+                .collect(Collectors.groupingBy(BlockInfo::block))
+                .entrySet().stream()
+                .sorted(Comparator.comparing((entry) -> BuiltInRegistries.BLOCK.getKey(entry.getKey()).getPath()))
+                .forEach((entry) -> addChildren(new BlockNode(utils, entry.getKey(), TooltipUtils.getBlockInfosTooltip(utils, entry.getValue()).build())));
 
         tooltip = array((b) -> b.add(value(translate(Lang.GenerationStep.BASE_TERRAIN.singular())).build(Lang.Value.GENERATION_STEP))).build();
     }

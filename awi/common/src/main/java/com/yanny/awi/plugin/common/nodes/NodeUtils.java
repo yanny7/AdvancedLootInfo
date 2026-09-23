@@ -3,12 +3,15 @@ package com.yanny.awi.plugin.common.nodes;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.awi.Utils;
+import com.yanny.awi.api.BlockInfo;
+import com.yanny.awi.api.ISurfaceRuleHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.biome.Biome;
@@ -24,6 +27,8 @@ import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.IntConsumer;
+import java.util.function.Supplier;
 
 /**
  * Determines, per biome, which blocks the dimension's surface rules place and at what vertical position.
@@ -54,13 +59,13 @@ public class NodeUtils {
      * {@code BaseLayoutSweepTest}. {@link #DEFAULT} is what production uses.
      * <p>
      * The scan converges: each round samples a fresh batch of horizontal points and a shifted surface-height phase; it
-     * repeats while rounds keep discovering new (block, position) observations and stops once a full phase cycle adds
-     * nothing.
+     * repeats while rounds keep discovering new (block, reported position) observations and stops once a full phase
+     * cycle adds nothing.
      *
      * @param columnsPerRound     horizontal sample columns added per round
      * @param surfaceHeightStep   vertical stride between assumed surface heights within one round; consecutive rounds
      *                            shift the phase so a full cycle of {@code surfaceHeightStep} rounds retries every height
-     * @param stableRounds        stop after this many consecutive rounds add nothing new
+     * @param stableRounds        stop after this many consecutive rounds add nothing new to what would be reported
      * @param maxRounds           hard safety cap so a pathological rule cannot loop forever; hitting it is logged, never
      *                            silently truncated
      * @param maxCeilingThickness besides the solid column, each surface height is also probed as a thin floating stone
@@ -81,7 +86,7 @@ public class NodeUtils {
      */
     public record ScanSettings(int columnsPerRound, int surfaceHeightStep, int stableRounds, int extentStableRounds,
                                int maxRounds, int maxCeilingThickness, int deepWalkWindow, boolean specializeRulePerBiome) {
-        public static final ScanSettings DEFAULT = new ScanSettings(8, 4, 8, 12, 40, 8, 32, true);
+        public static final ScanSettings DEFAULT = new ScanSettings(8, 4, 6, 12, 40, 8, 32, true);
     }
 
     /** The sampling knobs plus the run-time switches that are not part of them — currently only diagnostic logging. */
@@ -97,21 +102,27 @@ public class NodeUtils {
         /** Built on first use and reused for every biome of this dimension — the encode behind it is not free. */
         @Nullable
         private SurfaceRuleSpecializer specializer;
+        @Nullable
+        private SurfaceRules.SurfaceRule compiledBaseRule;
+        private Map<BlockState, SurfaceRuleSpecializer.Ghost> ghosts = Map.of();
+        private final Map<String, ISurfaceRuleHandler> handlers;
         private final int minBuildHeight;
         private final int maxBuildHeight;
         private final int seaLevel;
         private final BlockState defaultBlock;
         private final BlockState defaultFluid;
         private final BiomeHolderWrapper biomeWrapper = new BiomeHolderWrapper();
+        private Supplier<Holder<Biome>> biomeSupplier = () -> biomeWrapper.currentBiome;
 
         /** @param codecLookup see {@link SurfaceRuleSpecializer}; {@code registryAccess} in game, a test's own provider otherwise. */
         public DimensionContext(RegistryAccess registryAccess, HolderLookup.Provider codecLookup, NoiseBasedChunkGenerator noiseGenerator,
-                                RandomState randomState) {
+                                RandomState randomState, Map<ResourceLocation, Function<RandomState, ISurfaceRuleHandler>> handlerFactories) {
             Registry<Biome> biomeRegistry = registryAccess.registryOrThrow(Registries.BIOME);
             NoiseGeneratorSettings settings = noiseGenerator.generatorSettings().value();
 
             this.codecLookup = codecLookup;
             this.masterSurfaceRule = settings.surfaceRule();
+            this.handlers = bind(handlerFactories, randomState);
 
             LevelHeightAccessor heightAccessor = new LevelHeightAccessor() {
                 @Override
@@ -152,14 +163,43 @@ public class NodeUtils {
         /** Points the context at the biome about to be scanned, compiling a rule specialized for it when asked to. */
         void useBiome(Holder<Biome> biome, ScanOptions options) {
             biomeWrapper.currentBiome = biome;
+            biomeSupplier = () -> biome;
+
+            if (specializer == null) {
+                specializer = new SurfaceRuleSpecializer(masterSurfaceRule, codecLookup, handlers, options.logStatistics());
+                ghosts = new IdentityHashMap<>();
+                specializer.ghosts().forEach((ghost) -> ghosts.put(ghost.state(), ghost));
+            }
 
             if (options.settings().specializeRulePerBiome()) {
-                if (specializer == null) {
-                    specializer = new SurfaceRuleSpecializer(masterSurfaceRule, codecLookup, options.logStatistics());
+                compiledRule = specializer.specialize(biome).apply(context);
+            } else {
+                if (compiledBaseRule == null) {
+                    compiledBaseRule = specializer.baseRule().apply(context);
                 }
 
-                compiledRule = specializer.specialize(biome).apply(context);
+                compiledRule = compiledBaseRule;
             }
+        }
+
+        @NotNull
+        private static Map<String, ISurfaceRuleHandler> bind(Map<ResourceLocation, Function<RandomState, ISurfaceRuleHandler>> factories,
+                                                            RandomState randomState) {
+            Map<String, ISurfaceRuleHandler> handlers = new HashMap<>();
+
+            factories.forEach((type, factory) -> {
+                try {
+                    ISurfaceRuleHandler handler = factory.apply(randomState);
+
+                    if (handler != null) {
+                        handlers.put(type.toString(), handler);
+                    }
+                } catch (Throwable t) {
+                    LOGGER.warn("Surface rule handler for {} failed to start, the rule is measured instead", type, t);
+                }
+            });
+
+            return handlers;
         }
 
         private static class BiomeHolderWrapper implements Function<BlockPos, Holder<Biome>> {
@@ -174,28 +214,53 @@ public class NodeUtils {
 
     /** Collects a set of integer positions and compacts them into contiguous ranges. */
     public static class RangeHolder {
-        private final Set<Integer> positions = new HashSet<>();
+        private final BitSet nonNegative = new BitSet();
+        private final BitSet negative = new BitSet();
+        private int size;
         // Tracked on insert: the convergence check reads them once per round per block.
         private int min = Integer.MAX_VALUE;
         private int max = Integer.MIN_VALUE;
 
         public boolean add(int position) {
-            if (positions.add(position)) {
-                min = Math.min(min, position);
-                max = Math.max(max, position);
-                return true;
+            BitSet bits = position >= 0 ? nonNegative : negative;
+            int index = position >= 0 ? position : -position - 1;
+
+            if (bits.get(index)) {
+                return false;
             }
 
-            return false;
+            bits.set(index);
+            size++;
+            min = Math.min(min, position);
+            max = Math.max(max, position);
+            return true;
         }
 
         public int size() {
-            return positions.size();
+            return size;
         }
 
-        /** Whether two holders recorded exactly the same set of positions (used to detect floor==ceiling depths). */
-        public boolean sameValuesAs(RangeHolder other) {
-            return positions.equals(other.positions);
+        public NavigableSet<Integer> values() {
+            NavigableSet<Integer> values = new TreeSet<>();
+
+            forEachAscending(values::add);
+
+            return values;
+        }
+
+        /** Whether both recorded the same positions below {@code limit}: the ceiling probe cannot reach deeper. */
+        public boolean sameValuesBelow(RangeHolder other, int limit) {
+            return nonNegative.get(0, limit).equals(other.nonNegative.get(0, limit)) && negative.equals(other.negative);
+        }
+
+        private void forEachAscending(IntConsumer consumer) {
+            for (int i = negative.length() - 1; i >= 0; i = negative.previousSetBit(i - 1)) {
+                consumer.accept(-i - 1);
+            }
+
+            for (int i = nonNegative.nextSetBit(0); i >= 0; i = nonNegative.nextSetBit(i + 1)) {
+                consumer.accept(i);
+            }
         }
 
         /** Number of disjoint contiguous ranges the recorded positions collapse into (1 == a single solid band). */
@@ -215,34 +280,27 @@ public class NodeUtils {
 
         /** Span between the lowest and highest recorded position (0 when empty or single-valued). */
         public int spread() {
-            return positions.isEmpty() ? 0 : max - min;
+            return size == 0 ? 0 : max - min;
         }
 
         public List<RangeValue> buildRanges() {
-            if (positions.isEmpty()) {
+            if (size == 0) {
                 return Collections.emptyList();
             }
 
-            List<Integer> sorted = new ArrayList<>(positions);
-
-            Collections.sort(sorted);
-
             List<RangeValue> ranges = new ArrayList<>();
-            int start = sorted.get(0);
-            int end = start;
+            int[] run = {min, min};
 
-            for (int i = 1; i < sorted.size(); i++) {
-                int current = sorted.get(i);
-
-                if (current != end + 1) {
-                    ranges.add(new RangeValue(start, end));
-                    start = current;
+            forEachAscending((current) -> {
+                if (current > run[1] + 1) {
+                    ranges.add(new RangeValue(run[0], run[1]));
+                    run[0] = current;
                 }
 
-                end = current;
-            }
+                run[1] = current;
+            });
 
-            ranges.add(new RangeValue(start, end));
+            ranges.add(new RangeValue(run[0], run[1]));
             return ranges;
         }
     }
@@ -253,6 +311,8 @@ public class NodeUtils {
         // "layered" rather than "depth below surface": its identity is a periodic function of absolute Y (e.g. the
         // badlands banded-terracotta strata, clay bands mod 192).
         private static final int LAYERED_MIN_BANDS = 3;
+        // Strata leave most of their span empty; a block covering more is continuous, its gaps are sampling holes.
+        private static final double LAYERED_MAX_COVERAGE = 0.75;
 
         final RangeHolder depths = new RangeHolder();
         final RangeHolder absolute = new RangeHolder();
@@ -276,13 +336,28 @@ public class NodeUtils {
             }
         }
 
-        /** Whether this block requires water above it, dry land above it, or occurs regardless of the water level. */
-        WaterConstraint waterConstraint() {
-            if (seenUnderwater && seenDry) {
-                return WaterConstraint.ANY;
+        long reportedSize(ScanSettings settings) {
+            long flags = (seenUnderwater ? 1 : 0) + (seenDry ? 1 : 0);
+
+            if (classify(settings) == Kind.SURFACE) {
+                return floorDepths.size() + ceilingDepths.size() + flags;
             }
 
-            return seenUnderwater ? WaterConstraint.UNDERWATER : WaterConstraint.DRY;
+            return absolute.size() + flags;
+        }
+
+        long extentSize() {
+            return absolute.spread() + depths.spread() + (seenUnderwater ? 1 : 0) + (seenDry ? 1 : 0)
+                    + (floorDepths.size() > 0 ? 1 : 0) + (ceilingDepths.size() > 0 ? 1 : 0) + 1;
+        }
+
+        /** Whether this block requires water above it, dry land above it, or occurs regardless of the water level. */
+        BlockInfo.WaterConstraint waterConstraint() {
+            if (seenUnderwater && seenDry) {
+                return BlockInfo.WaterConstraint.ANY;
+            }
+
+            return seenUnderwater ? BlockInfo.WaterConstraint.UNDERWATER : BlockInfo.WaterConstraint.DRY;
         }
 
         /**
@@ -290,15 +365,15 @@ public class NodeUtils {
          * badlands red_sandstone, or occurs both ways. Ceiling-only blocks are the ones the "depth below surface"
          * framing does not fit — they only exist on the underside of an overhang.
          */
-        Placement placement() {
+        BlockInfo.Placement placement() {
             boolean floor = floorDepths.size() > 0;
             boolean ceiling = ceilingDepths.size() > 0;
 
             if (floor && ceiling) {
-                return Placement.ANY;
+                return BlockInfo.Placement.ANY;
             }
 
-            return ceiling ? Placement.CEILING : Placement.FLOOR;
+            return ceiling ? BlockInfo.Placement.CEILING : BlockInfo.Placement.FLOOR;
         }
 
         /**
@@ -329,7 +404,8 @@ public class NodeUtils {
             // Layered strata recur at many separated absolute-Y bands AND span a depth window at least as thick as
             // the surface-height sampling step. Below that thickness the absolute-Y fragmentation is a sampling
             // artifact: the block is recorded once per swept surface height, so its Ys fall on a regular grid.
-            if (depths.spread() >= settings.surfaceHeightStep() && absolute.clusterCount() >= LAYERED_MIN_BANDS) {
+            if (depths.spread() >= settings.surfaceHeightStep() && absolute.clusterCount() >= LAYERED_MIN_BANDS
+                    && absolute.size() < LAYERED_MAX_COVERAGE * (absolute.spread() + 1)) {
                 return Kind.LAYERED;
             }
 
@@ -339,43 +415,52 @@ public class NodeUtils {
 
     private enum Kind { SURFACE, ABSOLUTE, LAYERED }
 
-    /**
-     * How a block's vertical positions are stored/reported.
-     * <ul>
-     *     <li>{@link #RELATIVE} — depth below the surface (grass, dirt, sand); {@link BlockInfo#ranges} are depths.</li>
-     *     <li>{@link #ABSOLUTE} — a stable absolute Y band (deepslate, bedrock); {@link BlockInfo#ranges} are absolute Ys.</li>
-     *     <li>{@link #LAYERED} — recurring absolute-Y strata (badlands bands); {@link BlockInfo#ranges} are absolute Ys.</li>
-     * </ul>
-     */
-    public enum StorageType { RELATIVE, ABSOLUTE, LAYERED }
-
-    /** Whether a placed block needs water above it, dry land above it, or is indifferent to the water level. */
-    public enum WaterConstraint { UNDERWATER, DRY, ANY }
-
-    /** Whether a block is a normal below-surface placement, an overhang/ceiling-only placement, or occurs both ways. */
-    public enum Placement { FLOOR, CEILING, ANY }
-
-    /**
-     * Structured result for a single surface block: the block itself, how its positions are stored
-     * ({@link StorageType}), the value {@link RangeValue}s in that storage's units, its {@link WaterConstraint}, and
-     * its {@link Placement} (floor vs. ceiling/overhang).
-     */
-    public record BlockInfo(Block block, StorageType storageType, List<RangeValue> ranges, WaterConstraint water, Placement placement) {}
-
     public static class LayerHolder {
-        private final Map<Block, BlockObservation> blocks = new HashMap<>();
+        // Absolute Y of a coin-gated block is sampled sparsely: a gap up to 1/this of the column is a hole.
+        private static final int HEIGHT_GAP_DIVISOR = 8;
+
+        private final Map<Block, BlockObservation> blocks = new IdentityHashMap<>();
+        private final Map<BlockState, BlockObservation> ghosts = new IdentityHashMap<>();
+        private final List<BlockInfo> expanded = new ArrayList<>();
         /** The settings the observations were collected with — {@link BlockObservation#classify} is relative to them. */
         private final ScanSettings settings;
+        private final int minY;
+        private final int maxY;
+        private final int seaLevel;
         /** How the scan ended, for diagnostics: rounds used, and whether it stopped only because of the safety cap. */
         private int rounds;
         private boolean hitRoundCap;
 
-        LayerHolder(ScanSettings settings) {
+        LayerHolder(ScanSettings settings, int minY, int maxY, int seaLevel) {
             this.settings = settings;
+            this.minY = minY;
+            this.maxY = maxY;
+            this.seaLevel = seaLevel;
+        }
+
+        private List<RangeValue> heights(BlockObservation obs) {
+            int gap = (maxY - minY) / HEIGHT_GAP_DIVISOR;
+            List<RangeValue> merged = new ArrayList<>();
+
+            for (RangeValue range : obs.absolute.buildRanges()) {
+                RangeValue last = merged.isEmpty() ? null : merged.get(merged.size() - 1);
+
+                if (last != null && range.min() - last.max() - 1 <= gap) {
+                    merged.set(merged.size() - 1, new RangeValue(last.min(), range.max()));
+                } else {
+                    merged.add(range);
+                }
+            }
+
+            int top = obs.waterConstraint() == BlockInfo.WaterConstraint.UNDERWATER ? seaLevel - 1 : maxY - 1;
+            boolean everywhere = merged.size() == 1 && merged.get(0).min() <= minY + 1 + gap
+                    && merged.get(0).max() >= top - obs.depths.max() - gap;
+
+            return everywhere ? List.of() : merged;
         }
 
         public boolean isEmpty() {
-            return blocks.isEmpty();
+            return blocks.isEmpty() && expanded.isEmpty();
         }
 
         public int rounds() {
@@ -390,12 +475,35 @@ public class NodeUtils {
             blocks.computeIfAbsent(block, k -> new BlockObservation()).record(assumedSurface - y, y, underwater, ceiling);
         }
 
-        /** Total number of distinct (block, depth) and (block, absoluteY) observations collected so far. */
+        void recordGhost(BlockState ghost, int assumedSurface, int y, boolean underwater, boolean ceiling) {
+            ghosts.computeIfAbsent(ghost, k -> new BlockObservation()).record(assumedSurface - y, y, underwater, ceiling);
+        }
+
+        void expandGhosts(Map<BlockState, SurfaceRuleSpecializer.Ghost> known) {
+            ghosts.forEach((state, observation) -> {
+                SurfaceRuleSpecializer.Ghost ghost = known.get(state);
+                ISurfaceRuleHandler.GhostObservation window = new ISurfaceRuleHandler.GhostObservation(
+                        observation.absolute.values(), observation.waterConstraint(), observation.placement());
+
+                try {
+                    expanded.addAll(ghost.handler().expand(ghost.definition(), window));
+                } catch (Throwable t) {
+                    LOGGER.warn("Surface rule handler failed to expand {}, it is left out", ghost.definition(), t);
+                }
+            });
+        }
+
+        /** Number of distinct observations collected so far, counting for each block only the axis it is reported on. */
         long observationCount() {
             long total = 0;
 
             for (BlockObservation obs : blocks.values()) {
-                total += obs.depths.size() + obs.absolute.size();
+                total += obs.reportedSize(settings);
+            }
+
+            // A handler reads only a ghost's bounds; its interior trickles in for rounds and would keep the scan alive.
+            for (BlockObservation obs : ghosts.values()) {
+                total += obs.extentSize();
             }
 
             return total;
@@ -406,6 +514,10 @@ public class NodeUtils {
             long total = 0;
 
             for (Map.Entry<Block, BlockObservation> entry : blocks.entrySet()) {
+                total += entry.getKey().hashCode() * 31L + entry.getValue().extentSignature();
+            }
+
+            for (Map.Entry<BlockState, BlockObservation> entry : ghosts.entrySet()) {
                 total += entry.getKey().hashCode() * 31L + entry.getValue().extentSignature();
             }
 
@@ -427,30 +539,33 @@ public class NodeUtils {
             for (Map.Entry<Block, BlockObservation> entry : blocks.entrySet()) {
                 Block block = entry.getKey();
                 BlockObservation obs = entry.getValue();
-                WaterConstraint water = obs.waterConstraint();
+                BlockInfo.WaterConstraint water = obs.waterConstraint();
 
                 switch (obs.classify(settings)) {
                     case SURFACE -> {
+                        List<RangeValue> heights = heights(obs);
                         boolean hasFloor = obs.floorDepths.size() > 0;
                         boolean hasCeiling = obs.ceilingDepths.size() > 0;
 
-                        if (hasFloor && hasCeiling && !obs.floorDepths.sameValuesAs(obs.ceilingDepths)) {
+                        if (hasFloor && hasCeiling && !obs.floorDepths.sameValuesBelow(obs.ceilingDepths, settings.maxCeilingThickness())) {
                             // Genuinely two placement modes with different depths — keep both.
-                            infos.add(new BlockInfo(block, StorageType.RELATIVE, obs.floorDepths.buildRanges(), water, Placement.FLOOR));
-                            infos.add(new BlockInfo(block, StorageType.RELATIVE, obs.ceilingDepths.buildRanges(), water, Placement.CEILING));
+                            infos.add(new BlockInfo(block, BlockInfo.StorageType.RELATIVE, obs.floorDepths.buildRanges(), 0, water, BlockInfo.Placement.FLOOR, heights));
+                            infos.add(new BlockInfo(block, BlockInfo.StorageType.RELATIVE, obs.ceilingDepths.buildRanges(), 0, water, BlockInfo.Placement.CEILING, heights));
                         } else if (hasCeiling && !hasFloor) {
                             // Overhang-only block (badlands red_sandstone).
-                            infos.add(new BlockInfo(block, StorageType.RELATIVE, obs.ceilingDepths.buildRanges(), water, Placement.CEILING));
+                            infos.add(new BlockInfo(block, BlockInfo.StorageType.RELATIVE, obs.ceilingDepths.buildRanges(), 0, water, BlockInfo.Placement.CEILING, heights));
                         } else {
-                            // Floor-only, or floor and ceiling identical: one entry (ANY == no overhang annotation).
-                            infos.add(new BlockInfo(block, StorageType.RELATIVE, obs.floorDepths.buildRanges(), water, obs.placement()));
+                            // Floor-only, or floor == ceiling as far as probed: one entry (ANY = no overhang line).
+                            infos.add(new BlockInfo(block, BlockInfo.StorageType.RELATIVE, obs.floorDepths.buildRanges(), 0, water, obs.placement(), heights));
                         }
                     }
-                    case ABSOLUTE -> infos.add(new BlockInfo(block, StorageType.ABSOLUTE, obs.absolute.buildRanges(), water, obs.placement()));
-                    case LAYERED -> infos.add(new BlockInfo(block, StorageType.LAYERED, obs.absolute.buildRanges(), water, obs.placement()));
+                    case ABSOLUTE -> infos.add(new BlockInfo(block, BlockInfo.StorageType.ABSOLUTE, obs.absolute.buildRanges(), 0, water, obs.placement(), List.of()));
+                    case LAYERED -> infos.add(new BlockInfo(block, BlockInfo.StorageType.LAYERED, obs.absolute.buildRanges(), 0, water, obs.placement(), List.of()));
                     default -> throw new IllegalStateException("Unknown kind for block " + block);
                 }
             }
+
+            infos.addAll(expanded);
 
             return infos;
         }
@@ -504,7 +619,13 @@ public class NodeUtils {
 
             stoneDepthAbove++;
             int stoneDepthBelow = y - stoneBottom + 1;
-            context.updateY(stoneDepthAbove, stoneDepthBelow, waterHeight, posX, y, posZ);
+            // Mirrors Context.updateY field by field, minus its per-row biome memoize; re-check it on every port.
+            context.lastUpdateY++;
+            context.biome = dimCtx.biomeSupplier;
+            context.blockY = y;
+            context.waterHeight = waterHeight;
+            context.stoneDepthBelow = stoneDepthBelow;
+            context.stoneDepthAbove = stoneDepthAbove;
 
             BlockState result = rule.tryApply(posX, y, posZ);
 
@@ -512,7 +633,12 @@ public class NodeUtils {
                 // A block placed at the underside of the stone run (stoneDepthBelow<=1, ON_CEILING) is an overhang/
                 // ceiling placement (badlands red_sandstone), distinct from a normal below-surface floor placement.
                 boolean ceiling = stoneDepthBelow <= 1;
-                holder.record(result.getBlock(), surfaceTop, y, water, ceiling);
+
+                if (!dimCtx.ghosts.isEmpty() && dimCtx.ghosts.containsKey(result)) {
+                    holder.recordGhost(result, surfaceTop, y, water, ceiling);
+                } else {
+                    holder.record(result.getBlock(), surfaceTop, y, water, ceiling);
+                }
             }
         }
     }
@@ -520,7 +646,7 @@ public class NodeUtils {
     @NotNull
     public static LayerHolder getBaseBlocksForBiome(DimensionContext dimCtx, Holder<Biome> targetBiome, ScanOptions options) {
         ScanSettings settings = options.settings();
-        LayerHolder discoveredBlocks = new LayerHolder(settings);
+        LayerHolder discoveredBlocks = new LayerHolder(settings, dimCtx.minBuildHeight, dimCtx.maxBuildHeight, dimCtx.seaLevel);
         int round = 0;
         int stableRounds = 0;
         int extentStableRounds = 0;
@@ -582,6 +708,8 @@ public class NodeUtils {
                 extentStableRounds = (extent == beforeExtent) ? extentStableRounds + 1 : 0;
                 round++;
             }
+
+            discoveredBlocks.expandGhosts(dimCtx.ghosts);
         } catch (Throwable t) {
             LOGGER.warn("Surface scan failed for biome {}", targetBiome.unwrapKey().map(Object::toString).orElse("?"), t);
         }

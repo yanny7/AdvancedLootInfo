@@ -58,7 +58,7 @@ public abstract class AbstractServer {
         RegistryAccess registryAccess = level.registryAccess();
         Registry<LevelStem> levelStemRegistry = registryAccess.registryOrThrow(Registries.LEVEL_STEM);
         Map<ResourceLocation, IDataNode> worldgenNodes = new HashMap<>();
-        BaseLayoutScanner baseLayoutScanner = BaseLayoutScanner.scan(level, levelStemRegistry, serverRegistry.getConfiguration().logMoreStatistics);
+        BaseLayoutScanner baseLayoutScanner = BaseLayoutScanner.scan(level, levelStemRegistry, serverRegistry.getSurfaceRuleHandlers(), serverRegistry.getConfiguration().logMoreStatistics);
         WorldgenNodeCache nodeCache = new WorldgenNodeCache();
 
         for (LevelStem levelStem : levelStemRegistry) {

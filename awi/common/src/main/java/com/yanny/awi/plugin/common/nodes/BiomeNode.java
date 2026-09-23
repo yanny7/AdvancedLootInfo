@@ -2,6 +2,7 @@ package com.yanny.awi.plugin.common.nodes;
 
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.Utils;
+import com.yanny.awi.api.BlockInfo;
 import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ListNode;
@@ -27,7 +28,7 @@ public class BiomeNode extends ListNode {
     private final TooltipNode tooltip;
     private final ResourceLocation biomeId;
 
-    public BiomeNode(IServerUtils utils, Biome biome, TooltipNode tooltip, Set<NodeUtils.BlockInfo> blocks, Block defaultBlock, Fluid defaultFluid,
+    public BiomeNode(IServerUtils utils, Biome biome, TooltipNode tooltip, Set<BlockInfo> blocks, Block defaultBlock, Fluid defaultFluid,
                      ColumnContext columnContext, WorldgenNodeCache nodeCache) {
         BiomeGenerationSettings settings = biome.getGenerationSettings();
         List<HolderSet<PlacedFeature>> features = settings.features();

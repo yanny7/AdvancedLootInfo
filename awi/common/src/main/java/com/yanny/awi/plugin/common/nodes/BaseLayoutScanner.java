@@ -2,6 +2,7 @@ package com.yanny.awi.plugin.common.nodes;
 
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.awi.Utils;
+import com.yanny.awi.api.ISurfaceRuleHandler;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
@@ -32,6 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.function.Function;
 
 /**
  * Runs {@link NodeUtils#getBaseBlocksForBiome} for every (dimension, biome) pair of a world up front, on one shared
@@ -72,16 +74,19 @@ public class BaseLayoutScanner {
     }
 
     @NotNull
-    public static BaseLayoutScanner scan(ServerLevel level, Registry<LevelStem> levelStemRegistry, boolean logStatistics) {
-        return scan(level.registryAccess(), level.registryAccess(), level.getSeed(), levelStemRegistry,
+    public static BaseLayoutScanner scan(ServerLevel level, Registry<LevelStem> levelStemRegistry,
+                                         Map<ResourceLocation, Function<RandomState, ISurfaceRuleHandler>> handlerFactories,
+                                         boolean logStatistics) {
+        return scan(level.registryAccess(), level.registryAccess(), level.getSeed(), levelStemRegistry, handlerFactories,
                 NodeUtils.ScanSettings.DEFAULT, logStatistics);
     }
 
     /** @param codecLookup see {@link SurfaceRuleSpecializer}; the same object as {@code registryAccess} in game. */
     @NotNull
     public static BaseLayoutScanner scan(RegistryAccess registryAccess, HolderLookup.Provider codecLookup, long seed,
-                                         Registry<LevelStem> levelStemRegistry, NodeUtils.ScanSettings scanSettings,
-                                         boolean logStatistics) {
+                                         Registry<LevelStem> levelStemRegistry,
+                                         Map<ResourceLocation, Function<RandomState, ISurfaceRuleHandler>> handlerFactories,
+                                         NodeUtils.ScanSettings scanSettings, boolean logStatistics) {
         List<Task> tasks = new ArrayList<>();
 
         // Grouped by dimension so each worker keeps reusing the DimensionContext it already built (see ContextCache).
@@ -121,7 +126,7 @@ public class BaseLayoutScanner {
 
         try {
             List<Future<TaskResult>> futures = tasks.stream()
-                    .map((task) -> executor.submit(() -> runTask(task, registryAccess, codecLookup, seed, cache, threadLocalCtx.get(), scanOptions)))
+                    .map((task) -> executor.submit(() -> runTask(task, registryAccess, codecLookup, seed, handlerFactories, cache, threadLocalCtx.get(), scanOptions)))
                     .toList();
 
             for (int i = 0; i < futures.size(); i++) {
@@ -167,6 +172,7 @@ public class BaseLayoutScanner {
 
     @NotNull
     private static TaskResult runTask(Task task, RegistryAccess registryAccess, HolderLookup.Provider codecLookup, long seed,
+                                      Map<ResourceLocation, Function<RandomState, ISurfaceRuleHandler>> handlerFactories,
                                       Map<CacheKey, NodeUtils.LayerHolder> cache, ContextCache contextCache,
                                       NodeUtils.ScanOptions scanOptions) {
         CacheKey key = new CacheKey(settingsKey(task.generator()), biomeKey(task.biome()));
@@ -176,7 +182,7 @@ public class BaseLayoutScanner {
             return new TaskResult(task, cached, 0, true);
         }
 
-        NodeUtils.DimensionContext ctx = contextCache.get(task, registryAccess, codecLookup, seed);
+        NodeUtils.DimensionContext ctx = contextCache.get(task, registryAccess, codecLookup, seed, handlerFactories);
         long startTime = System.nanoTime();
         NodeUtils.LayerHolder layers = NodeUtils.getBaseBlocksForBiome(ctx, task.biome(), scanOptions);
         long duration = System.nanoTime() - startTime;
@@ -234,7 +240,8 @@ public class BaseLayoutScanner {
         private NodeUtils.DimensionContext context;
 
         @NotNull
-        NodeUtils.DimensionContext get(Task task, RegistryAccess registryAccess, HolderLookup.Provider codecLookup, long seed) {
+        NodeUtils.DimensionContext get(Task task, RegistryAccess registryAccess, HolderLookup.Provider codecLookup, long seed,
+                                       Map<ResourceLocation, Function<RandomState, ISurfaceRuleHandler>> handlerFactories) {
             if (context == null || !task.dimension().equals(dimension)) {
                 RandomState randomState = RandomState.create(
                         task.generator().generatorSettings().value(),
@@ -243,7 +250,7 @@ public class BaseLayoutScanner {
                 );
 
                 dimension = task.dimension();
-                context = new NodeUtils.DimensionContext(registryAccess, codecLookup, task.generator(), randomState);
+                context = new NodeUtils.DimensionContext(registryAccess, codecLookup, task.generator(), randomState, handlerFactories);
             }
 
             return context;
