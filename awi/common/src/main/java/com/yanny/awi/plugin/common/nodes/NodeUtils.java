@@ -101,6 +101,7 @@ public class NodeUtils {
         @Nullable
         private SurfaceRules.SurfaceRule compiledBaseRule;
         private Map<BlockState, SurfaceRuleSpecializer.Ghost> ghosts = Map.of();
+        private List<SurfaceRuleSpecializer.Ghost> markers = List.of();
         private final Map<String, ISurfaceRuleHandler> handlers;
         private final int minBuildHeight;
         /** Inclusive top of the build range ({@link LevelHeightAccessor#getMaxY()}). */
@@ -168,7 +169,9 @@ public class NodeUtils {
 
             if (options.settings().specializeRulePerBiome()) {
                 compiledRule = specializer.specialize(biome).apply(context);
+                markers = specializer.markers(biome);
             } else {
+                markers = specializer.markers();
                 if (compiledBaseRule == null) {
                     compiledBaseRule = specializer.baseRule().apply(context);
                 }
@@ -474,6 +477,28 @@ public class NodeUtils {
             ghosts.computeIfAbsent(ghost, k -> new BlockObservation()).record(assumedSurface - y, y, underwater, ceiling);
         }
 
+        void expandMarkers(List<SurfaceRuleSpecializer.Ghost> markers) {
+            if (markers.isEmpty()) {
+                return;
+            }
+
+            NavigableSet<Integer> height = new TreeSet<>();
+
+            for (int y = minY; y <= maxY; y++) {
+                height.add(y);
+            }
+
+            ISurfaceRuleHandler.GhostObservation window = new ISurfaceRuleHandler.GhostObservation(height, BlockInfo.WaterConstraint.ANY, BlockInfo.Placement.ANY);
+
+            for (SurfaceRuleSpecializer.Ghost marker : markers) {
+                try {
+                    expanded.addAll(marker.handler().expand(marker.definition(), window));
+                } catch (Throwable t) {
+                    LOGGER.warn("Surface rule handler failed to expand {}, it is left out", marker.definition(), t);
+                }
+            }
+        }
+
         void expandGhosts(Map<BlockState, SurfaceRuleSpecializer.Ghost> known) {
             ghosts.forEach((state, observation) -> {
                 SurfaceRuleSpecializer.Ghost ghost = known.get(state);
@@ -699,6 +724,7 @@ public class NodeUtils {
             }
 
             discoveredBlocks.expandGhosts(dimCtx.ghosts);
+            discoveredBlocks.expandMarkers(dimCtx.markers);
         } catch (Throwable t) {
             LOGGER.warn("Surface scan failed for biome {}", targetBiome.unwrapKey().map(Object::toString).orElse("?"), t);
         }

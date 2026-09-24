@@ -7,7 +7,6 @@ import net.minecraft.advancements.predicates.entity.EntitySubPredicate;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.world.item.consume_effects.ConsumeEffect;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.slot.SlotSource;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
@@ -116,30 +115,6 @@ public class PluginUtils {
 
     public static <U extends LootItemCondition, T extends IConditionTooltip> void registerConditionTooltip(IServerRegistry registry, Class<U> targetClass, Function<U, T> factory) {
         registry.registerConditionTooltip(targetClass, (u, c) -> factory.apply(c).getTooltip(u));
-    }
-
-    public static <U extends Ingredient, T extends BaseAccessor<?> & IIngredientTooltip> void registerIngredientTooltip(IServerRegistry registry, Class<U> targetClass, Class<T> clazz) {
-        registry.registerIngredientTooltip(targetClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c, targetClass).getTooltip(u));
-    }
-
-    public static <T extends BaseAccessor<?> & IIngredientTooltip> void registerIngredientTooltip(IServerRegistry registry, Class<T> clazz) {
-        ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
-
-        if (classAnnotation != null) {
-            try {
-                //noinspection unchecked
-                Class<Ingredient> ingredientClass = (Class<Ingredient>) Class.forName(classAnnotation.value());
-                registry.registerIngredientTooltip(ingredientClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c).getTooltip(u));
-            } catch (Throwable e) {
-                LOGGER.warn("Failed to register ingredient tooltip for {} with error {}", classAnnotation.value(), e.getMessage(), e);
-            }
-        } else {
-            throw new IllegalStateException("Missing ClassAccessor annotation for ingredient tooltip " + clazz.getName());
-        }
-    }
-
-    public static <U extends Ingredient, T extends IIngredientTooltip> void registerIngredientTooltip(IServerRegistry registry, Class<U> targetClass, Function<U, T> factory) {
-        registry.registerIngredientTooltip(targetClass, (u, c) -> factory.apply(c).getTooltip(u));
     }
 
     public static <U extends DataComponentPredicate, T extends BaseAccessor<?> & IDataComponentPredicateTooltip> void registerDataComponentPredicateTooltip(IServerRegistry registry, Class<U> targetClass, Class<T> clazz) {
