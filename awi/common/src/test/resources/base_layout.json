@@ -151,7 +151,7 @@
       "minecraft:frozen_peaks": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
-        "minecraft:dirt RELATIVE [0-4] UNDERWATER ANY y=[49-62]",
+        "minecraft:dirt RELATIVE [0-4] UNDERWATER ANY y=[50-62]",
         "minecraft:ice RELATIVE [0-4] ANY ANY",
         "minecraft:packed_ice RELATIVE [0-4] ANY ANY",
         "minecraft:snow_block RELATIVE [0-4] DRY ANY"
@@ -343,7 +343,7 @@
       "minecraft:sulfur_caves": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
         "minecraft:cinnabar ABSOLUTE [-63-319] ANY ANY",
-        "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:deepslate ABSOLUTE [-61-3] ANY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
         "minecraft:sulfur ABSOLUTE [-63-319] ANY ANY"
       ],
@@ -613,7 +613,7 @@
       "minecraft:frozen_peaks": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
-        "minecraft:dirt RELATIVE [0-4] UNDERWATER ANY y=[49-62]",
+        "minecraft:dirt RELATIVE [0-4] UNDERWATER ANY y=[50-62]",
         "minecraft:ice RELATIVE [0-4] ANY ANY",
         "minecraft:packed_ice RELATIVE [0-4] ANY ANY",
         "minecraft:snow_block RELATIVE [0-4] DRY ANY"
@@ -1075,7 +1075,7 @@
       "minecraft:frozen_peaks": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
-        "minecraft:dirt RELATIVE [0-4] UNDERWATER ANY y=[49-62]",
+        "minecraft:dirt RELATIVE [0-4] UNDERWATER ANY y=[50-62]",
         "minecraft:ice RELATIVE [0-4] ANY ANY",
         "minecraft:packed_ice RELATIVE [0-4] ANY ANY",
         "minecraft:snow_block RELATIVE [0-4] DRY ANY"

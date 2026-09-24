@@ -21,9 +21,9 @@ import static com.yanny.awi.test.TooltipTestSuite.UTILS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BaseTerrainNodeTest {
-    private static final BlockInfo ORANGE_BANDS = new BlockInfo(Blocks.ORANGE_TERRACOTTA, BlockInfo.StorageType.LAYERED,
+    private static final BlockInfo ORANGE_BANDS = new BlockInfo(Blocks.DYED_TERRACOTTA.orange(), BlockInfo.StorageType.LAYERED,
             List.of(new RangeValue(57), new RangeValue(74)), 4, BlockInfo.WaterConstraint.ANY, BlockInfo.Placement.ANY, List.of());
-    private static final BlockInfo ORANGE_SURFACE = new BlockInfo(Blocks.ORANGE_TERRACOTTA, BlockInfo.StorageType.RELATIVE,
+    private static final BlockInfo ORANGE_SURFACE = new BlockInfo(Blocks.DYED_TERRACOTTA.orange(), BlockInfo.StorageType.RELATIVE,
             List.of(new RangeValue(0, 8)), 0, BlockInfo.WaterConstraint.ANY, BlockInfo.Placement.ANY, List.of());
     private static final BlockInfo RED_SAND = new BlockInfo(Blocks.RED_SAND, BlockInfo.StorageType.RELATIVE,
             List.of(new RangeValue(0)), 0, BlockInfo.WaterConstraint.DRY, BlockInfo.Placement.FLOOR, List.of());
@@ -39,7 +39,7 @@ public class BaseTerrainNodeTest {
     public void testOneSlotPerBlockAfterDefaults() {
         List<BlockNode> nodes = blockNodes(new BaseTerrainNode(UTILS, Set.of(RED_SAND, ORANGE_SURFACE, ORANGE_BANDS), Blocks.STONE, Fluids.WATER));
 
-        assertEquals(List.of(Blocks.STONE, Blocks.WATER, Blocks.ORANGE_TERRACOTTA, Blocks.RED_SAND),
+        assertEquals(List.of(Blocks.STONE, Blocks.WATER, Blocks.DYED_TERRACOTTA.orange(), Blocks.RED_SAND),
                 nodes.stream().map(BaseTerrainNodeTest::block).toList());
         assertTooltip(nodes.get(0).getTooltip(), List.of("Default Block"));
         assertTooltip(nodes.get(1).getTooltip(), List.of("Default Fluid"));
@@ -50,7 +50,7 @@ public class BaseTerrainNodeTest {
     public void testSameBlockEntriesShareOneSlot() {
         List<BlockNode> nodes = blockNodes(new BaseTerrainNode(UTILS, Set.of(ORANGE_SURFACE, ORANGE_BANDS), Blocks.AIR, Fluids.EMPTY));
 
-        assertEquals(List.of(Blocks.ORANGE_TERRACOTTA), nodes.stream().map(BaseTerrainNodeTest::block).toList());
+        assertEquals(List.of(Blocks.DYED_TERRACOTTA.orange()), nodes.stream().map(BaseTerrainNodeTest::block).toList());
         assertEquals(List.of(
                 "Layers At Y: 57, 74",
                 "Layer Shift: ±4",

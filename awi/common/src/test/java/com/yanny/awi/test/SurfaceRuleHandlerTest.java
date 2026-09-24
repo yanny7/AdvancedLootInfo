@@ -51,7 +51,7 @@ public class SurfaceRuleHandlerTest {
         assertEquals("{\"type\":\"minecraft:bandlands\"}", definitions.get(0).toString());
         assertEquals("54-318", diamond.ranges().get(0).toIntString());
         assertTrue(infos.stream().noneMatch((info) -> info.block() == Blocks.LIGHT), "a ghost leaked into the result");
-        assertTrue(infos.stream().noneMatch((info) -> info.block() == Blocks.YELLOW_TERRACOTTA), "bands still measured");
+        assertTrue(infos.stream().noneMatch((info) -> info.block() == Blocks.DYED_TERRACOTTA.yellow()), "bands still measured");
     }
 
     @Test
@@ -77,7 +77,7 @@ public class SurfaceRuleHandlerTest {
     }
 
     private static void assertMeasured(Set<BlockInfo> infos) {
-        assertTrue(infos.stream().anyMatch((info) -> info.block() == Blocks.YELLOW_TERRACOTTA && info.layerShift() == 0));
+        assertTrue(infos.stream().anyMatch((info) -> info.block() == Blocks.DYED_TERRACOTTA.yellow() && info.layerShift() == 0));
         assertTrue(infos.stream().noneMatch((info) -> info.layerShift() > 0));
     }
 

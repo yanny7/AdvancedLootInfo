@@ -45,7 +45,7 @@ public class BaseLayoutBandsTest {
     static void setUp() {
         BaseLayoutTestUtils.bootstrap();
         BIOMES = List.of(Biomes.BADLANDS, Biomes.ERODED_BADLANDS, Biomes.WOODED_BADLANDS);
-        BAND_ONLY = Set.of(Blocks.YELLOW_TERRACOTTA, Blocks.BROWN_TERRACOTTA, Blocks.RED_TERRACOTTA, Blocks.LIGHT_GRAY_TERRACOTTA);
+        BAND_ONLY = Set.of(Blocks.DYED_TERRACOTTA.yellow(), Blocks.DYED_TERRACOTTA.brown(), Blocks.DYED_TERRACOTTA.red(), Blocks.DYED_TERRACOTTA.lightGray());
     }
 
     @Test

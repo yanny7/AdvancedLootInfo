@@ -13,7 +13,6 @@ import com.yanny.awi.plugin.common.nodes.SurfaceRuleSpecializer;
 import com.yanny.awi.test.utils.BaseLayoutTestUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.dimension.LevelStem;
@@ -110,7 +109,7 @@ public class BaseLayoutTest {
 
     @Test
     public void testSpecializationPrunesEveryBiomeTest() {
-        DynamicOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, BaseLayoutTestUtils.lookup());
+        DynamicOps<JsonElement> ops = BaseLayoutTestUtils.lookup().createSerializationContext(JsonOps.INSTANCE);
         List<Executable> checks = new ArrayList<>();
         List<String> specializedDimensions = new ArrayList<>();
 
@@ -146,7 +145,7 @@ public class BaseLayoutTest {
 
     @Test
     public void testBandlandsReplacedByGhosts() {
-        DynamicOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, BaseLayoutTestUtils.lookup());
+        DynamicOps<JsonElement> ops = BaseLayoutTestUtils.lookup().createSerializationContext(JsonOps.INSTANCE);
         NoiseBasedChunkGenerator generator = (NoiseBasedChunkGenerator) BaseLayoutTestUtils.levelStems().getValueOrThrow(LevelStem.OVERWORLD).generator();
         SurfaceRules.RuleSource rule = generator.generatorSettings().value().surfaceRule();
         RandomState randomState = RandomState.create(generator.generatorSettings().value(),
@@ -172,7 +171,7 @@ public class BaseLayoutTest {
 
     @Test
     public void testNoiseGatesReplacedByCoins() {
-        DynamicOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, BaseLayoutTestUtils.lookup());
+        DynamicOps<JsonElement> ops = BaseLayoutTestUtils.lookup().createSerializationContext(JsonOps.INSTANCE);
         List<Executable> checks = new ArrayList<>();
 
         for (LevelStem levelStem : BaseLayoutTestUtils.levelStems()) {

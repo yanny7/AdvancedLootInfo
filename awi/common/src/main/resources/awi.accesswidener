@@ -28,9 +28,6 @@ accessible method net/minecraft/world/level/levelgen/blockpredicates/Unobstructe
 accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context surfaceDepth I
 accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context stoneDepthAbove I
 accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context stoneDepthBelow I
-accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context blockY I
-accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context waterHeight I
-accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context biome Ljava/util/function/Supplier;
 accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context blockX I
 accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context blockZ I
 accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context context Lnet/minecraft/world/level/levelgen/WorldGenerationContext;

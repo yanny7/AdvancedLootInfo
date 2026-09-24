@@ -125,7 +125,7 @@ public class TooltipUtilsTest {
     @Test
     public void testLayeredDryWithShiftBlockInfoTooltip() {
         assertTooltip(TooltipUtils.getBlockInfoTooltip(UTILS, new BlockInfo(
-                Blocks.RED_TERRACOTTA, BlockInfo.StorageType.LAYERED, List.of(new RangeValue(88, 92), new RangeValue(132, 142)), 4, BlockInfo.WaterConstraint.DRY, BlockInfo.Placement.ANY, List.of()
+                Blocks.DYED_TERRACOTTA.red(), BlockInfo.StorageType.LAYERED, List.of(new RangeValue(88, 92), new RangeValue(132, 142)), 4, BlockInfo.WaterConstraint.DRY, BlockInfo.Placement.ANY, List.of()
         )).build(), List.of(
                 "Layers At Y: 88-92, 132-142 (On Land)",
                 "Layer Shift: ±4"
@@ -137,7 +137,7 @@ public class TooltipUtilsTest {
         List<RangeValue> levels = Stream.of(57, 74, 79, 82, 95, 97, 105, 109, 111, 116, 121, 123, 125, 142, 144, 158, 160, 166).map(RangeValue::new).toList();
 
         assertTooltip(TooltipUtils.getBlockInfoTooltip(UTILS, new BlockInfo(
-                Blocks.ORANGE_TERRACOTTA, BlockInfo.StorageType.LAYERED, levels, 4, BlockInfo.WaterConstraint.DRY, BlockInfo.Placement.ANY, List.of()
+                Blocks.DYED_TERRACOTTA.orange(), BlockInfo.StorageType.LAYERED, levels, 4, BlockInfo.WaterConstraint.DRY, BlockInfo.Placement.ANY, List.of()
         )).build(), List.of(
                 "Layers At Y:",
                 "  57, 74, 79, 82, 95, 97, 105, 109, 111,",
@@ -169,7 +169,7 @@ public class TooltipUtilsTest {
     @Test
     public void testHeightsLineAfterTheDepth() {
         assertTooltip(TooltipUtils.getBlockInfoTooltip(UTILS, new BlockInfo(
-                Blocks.WHITE_TERRACOTTA, BlockInfo.StorageType.RELATIVE, List.of(new RangeValue(0, 4)), 0, BlockInfo.WaterConstraint.UNDERWATER, BlockInfo.Placement.ANY,
+                Blocks.DYED_TERRACOTTA.white(), BlockInfo.StorageType.RELATIVE, List.of(new RangeValue(0, 4)), 0, BlockInfo.WaterConstraint.UNDERWATER, BlockInfo.Placement.ANY,
                 List.of(new RangeValue(-63, 62))
         )).build(), List.of(
                 "Depth Below Surface: 0-4 (Underwater)",
@@ -180,7 +180,7 @@ public class TooltipUtilsTest {
     @Test
     public void testSeveralHeightRanges() {
         assertTooltip(TooltipUtils.getBlockInfoTooltip(UTILS, new BlockInfo(
-                Blocks.ORANGE_TERRACOTTA, BlockInfo.StorageType.RELATIVE, List.of(new RangeValue(0, 8)), 0, BlockInfo.WaterConstraint.ANY, BlockInfo.Placement.ANY,
+                Blocks.DYED_TERRACOTTA.orange(), BlockInfo.StorageType.RELATIVE, List.of(new RangeValue(0, 8)), 0, BlockInfo.WaterConstraint.ANY, BlockInfo.Placement.ANY,
                 List.of(new RangeValue(-63, 76), new RangeValue(256, 319))
         )).build(), List.of(
                 "Depth Below Surface: 0-8",
