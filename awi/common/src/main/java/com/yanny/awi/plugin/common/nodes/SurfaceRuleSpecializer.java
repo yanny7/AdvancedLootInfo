@@ -39,6 +39,8 @@ import java.util.*;
  * <p>
  * Before any pruning, every node of a rule type AWI has a {@link ISurfaceRuleHandler} for is replaced by a ghost block, once
  * per dimension; the walk measures where the ghost lands and the handler expands that into what the rule really places.
+ * A rule that does not always place would shadow every rule after it as a ghost, so it becomes a marker that never fires
+ * instead; pruning alone tells whether it applies to a biome, and its handler is given the whole height of the dimension.
  * Every {@code minecraft:noise_threshold} and {@code minecraft:hole} gate is replaced by a coin that is true for about
  * half of all blocks.
  * <p>
@@ -69,6 +71,7 @@ public class SurfaceRuleSpecializer {
     private static final String HOLE = "minecraft:hole";
     private static final String VERTICAL_GRADIENT = "minecraft:vertical_gradient";
     private static final int COIN_ANCHOR = 2000;
+    private static final String Y_ABOVE = "minecraft:y_above";
 
     private final SurfaceRules.RuleSource original;
     private final DynamicOps<JsonElement> ops;
@@ -76,6 +79,8 @@ public class SurfaceRuleSpecializer {
     private final JsonElement base;
     private final SurfaceRules.RuleSource baseRule;
     private final List<Ghost> ghosts;
+    private final List<Ghost> markers;
+    private final Map<Holder<Biome>, List<Ghost>> markersByBiome = new HashMap<>();
     private final boolean logStatistics;
 
     private boolean pruningEffective = true;
@@ -126,6 +131,7 @@ public class SurfaceRuleSpecializer {
         this.base = json;
         this.baseRule = rule;
         this.ghosts = List.copyOf(replaced);
+        this.markers = replaced.stream().filter((ghost) -> !ghost.handler().alwaysPlaces()).toList();
         this.logStatistics = logStatistics;
     }
 
@@ -137,6 +143,16 @@ public class SurfaceRuleSpecializer {
     @NotNull
     public List<Ghost> ghosts() {
         return ghosts;
+    }
+
+    @NotNull
+    public List<Ghost> markers() {
+        return markers;
+    }
+
+    @NotNull
+    public List<Ghost> markers(Holder<Biome> biome) {
+        return markersByBiome.getOrDefault(biome, markers);
     }
 
     /** The base rule with every branch that cannot fire for {@code biome} removed, or the base rule if none can be. */
@@ -161,6 +177,7 @@ public class SurfaceRuleSpecializer {
 
             SurfaceRules.RuleSource result = SurfaceRules.RuleSource.CODEC.parse(ops, pruned).getOrThrow(false, (error) -> {});
 
+            markersByBiome.put(biome, markers.stream().filter((marker) -> contains(pruned, encode(marker.state()))).toList());
             log("specialized", base, pruned);
 
             return result;
@@ -349,7 +366,7 @@ public class SurfaceRuleSpecializer {
                 BlockState state = ghostState(handler, object);
 
                 if (state != null) {
-                    return handler.alwaysPlaces() ? ghost(state) : gated(ghost(state));
+                    return handler.alwaysPlaces() ? ghost(state) : marker(ghost(state));
                 }
             }
 
@@ -385,20 +402,25 @@ public class SurfaceRuleSpecializer {
             JsonObject ghost = new JsonObject();
 
             ghost.addProperty(TYPE, BLOCK);
-            ghost.add(RESULT_STATE_FIELD, BlockState.CODEC.encodeStart(JsonOps.INSTANCE, state).getOrThrow(false, (error) -> {}));
+            ghost.add(RESULT_STATE_FIELD, encode(state));
 
             return ghost;
         }
 
         @NotNull
-        private JsonObject gated(JsonObject rule) {
-            JsonObject gated = new JsonObject();
+        private static JsonObject marker(JsonObject ghost) {
+            JsonObject never = new JsonObject();
+            JsonObject marker = new JsonObject();
 
-            gated.addProperty(TYPE, CONDITION);
-            gated.add(IF_TRUE_FIELD, coin());
-            gated.add(THEN_RUN_FIELD, rule);
+            never.addProperty(TYPE, Y_ABOVE);
+            never.add("anchor", anchor(COIN_ANCHOR));
+            never.addProperty("surface_depth_multiplier", 0);
+            never.addProperty("add_stone_depth", false);
+            marker.addProperty(TYPE, CONDITION);
+            marker.add(IF_TRUE_FIELD, never);
+            marker.add(THEN_RUN_FIELD, ghost);
 
-            return gated;
+            return marker;
         }
 
         // Never a constant true: an always-open gate shadows its sequence siblings and every not(gate) branch.
@@ -422,6 +444,33 @@ public class SurfaceRuleSpecializer {
 
             return anchor;
         }
+    }
+
+    @NotNull
+    private static JsonElement encode(BlockState state) {
+        return BlockState.CODEC.encodeStart(JsonOps.INSTANCE, state).getOrThrow(false, (error) -> {});
+    }
+
+    private static boolean contains(JsonElement element, JsonElement needle) {
+        if (element.equals(needle)) {
+            return true;
+        }
+
+        if (element.isJsonArray()) {
+            for (JsonElement child : element.getAsJsonArray()) {
+                if (contains(child, needle)) {
+                    return true;
+                }
+            }
+        } else if (element.isJsonObject()) {
+            for (Map.Entry<String, JsonElement> entry : element.getAsJsonObject().entrySet()) {
+                if (contains(entry.getValue(), needle)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private static boolean placesBlock(JsonElement element, String blockId) {
