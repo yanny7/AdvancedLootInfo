@@ -3,6 +3,9 @@ package com.yanny.awi.configuration;
 import com.yanny.aci.configuration.ICoreConfig;
 import com.yanny.aci.configuration.TooltipColors;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AwiConfig implements ICoreConfig {
     public static final int CURRENT_VERSION = 1;
 
@@ -20,6 +23,8 @@ public class AwiConfig implements ICoreConfig {
      * bytecode scan found, at the cost of those blocks being wrong for some configurations.
      */
     public boolean showConfigConditionalBlocks = false;
+
+    public List<String> dimensions = new ArrayList<>();
 
     @Override
     public int getConfigVersion() {
@@ -40,6 +45,10 @@ public class AwiConfig implements ICoreConfig {
     public void normalize() {
         if (tooltipColors == null) {
             tooltipColors = new TooltipColors();
+        }
+
+        if (dimensions == null) {
+            dimensions = new ArrayList<>();
         }
     }
 }

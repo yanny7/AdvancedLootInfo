@@ -54,6 +54,15 @@
       "type": "boolean",
       "description": "If true, shows blocks that a feature's code only places depending on the configuration it was given. Those blocks are wrong for some configurations, so they are hidden by default.",
       "default": false
+    },
+    "dimensions": {
+      "type": "array",
+      "description": "Which dimensions are shown. Entries are dimension ids (minecraft:the_end) or dimension tags (#mymod:hidden); a leading ! hides what the entry matches. If any entry has no !, only matching dimensions are shown (whitelist); if every entry has !, all other dimensions are shown (blacklist). Empty shows everything. Tags are resolved on the server only.",
+      "items": {
+        "type": "string",
+        "pattern": "^!?#?[a-z0-9_.-]+:[a-z0-9_./-]+$"
+      },
+      "default": []
     }
   },
   "additionalProperties": false

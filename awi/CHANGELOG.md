@@ -1,3 +1,7 @@
+## []
+
+- Added `dimensions` configuration to hide dimensions
+
 ## [1.1.1]
 
 - Fixed Plugins discovered multiple times on Fabric

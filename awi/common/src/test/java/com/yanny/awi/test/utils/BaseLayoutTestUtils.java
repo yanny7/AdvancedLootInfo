@@ -73,7 +73,7 @@ public class BaseLayoutTestUtils {
     public static BaseLayoutScanner scanner(long seed, NodeUtils.ScanSettings settings, boolean logStatistics) {
         // The copied registries are a different HolderOwner than the one the surface rules' holders came from, so the
         // codec ops have to go through the original lookup or the specializer's encode fails its ownership check.
-        return BaseLayoutScanner.scan(registryAccess, lookup, seed, levelStems, SURFACE_RULE_HANDLERS, settings, logStatistics);
+        return BaseLayoutScanner.scan(registryAccess, lookup, seed, levelStems, (dimension) -> true, SURFACE_RULE_HANDLERS, settings, logStatistics);
     }
 
     @NotNull

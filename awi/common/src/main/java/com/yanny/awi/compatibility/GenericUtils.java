@@ -6,6 +6,7 @@ import com.yanny.awi.api.IBlockNode;
 import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.api.ListNode;
+import com.yanny.awi.configuration.DimensionFilter;
 import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.network.AbstractClient;
 import com.yanny.awi.network.RequestWorldgenDataMessage;
@@ -71,6 +72,9 @@ public class GenericUtils {
             buf.release();
         }
 
+        DimensionFilter dimensionFilter = new DimensionFilter(utils.getConfiguration().dimensions);
+
+        worldgenData.keySet().removeIf((dimension) -> !dimensionFilter.isVisible(dimension));
         return worldgenData;
     }
 

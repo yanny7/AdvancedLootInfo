@@ -34,6 +34,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * Runs {@link NodeUtils#getBaseBlocksForBiome} for every (dimension, biome) pair of a world up front, on one shared
@@ -74,26 +75,26 @@ public class BaseLayoutScanner {
     }
 
     @NotNull
-    public static BaseLayoutScanner scan(ServerLevel level, Registry<LevelStem> levelStemRegistry,
+    public static BaseLayoutScanner scan(ServerLevel level, Registry<LevelStem> levelStemRegistry, Predicate<ResourceLocation> isDimensionVisible,
                                          Map<ResourceLocation, Function<RandomState, ISurfaceRuleHandler>> handlerFactories,
                                          boolean logStatistics) {
-        return scan(level.registryAccess(), level.registryAccess(), level.getSeed(), levelStemRegistry, handlerFactories,
+        return scan(level.registryAccess(), level.registryAccess(), level.getSeed(), levelStemRegistry, isDimensionVisible, handlerFactories,
                 NodeUtils.ScanSettings.DEFAULT, logStatistics);
     }
 
     /** @param codecLookup see {@link SurfaceRuleSpecializer}; the same object as {@code registryAccess} in game. */
     @NotNull
     public static BaseLayoutScanner scan(RegistryAccess registryAccess, HolderLookup.Provider codecLookup, long seed,
-                                         Registry<LevelStem> levelStemRegistry,
+                                         Registry<LevelStem> levelStemRegistry, Predicate<ResourceLocation> isDimensionVisible,
                                          Map<ResourceLocation, Function<RandomState, ISurfaceRuleHandler>> handlerFactories,
                                          NodeUtils.ScanSettings scanSettings, boolean logStatistics) {
         List<Task> tasks = new ArrayList<>();
 
         // Grouped by dimension so each worker keeps reusing the DimensionContext it already built (see ContextCache).
         for (LevelStem levelStem : levelStemRegistry) {
-            if (levelStem.generator() instanceof NoiseBasedChunkGenerator generator) {
-                ResourceLocation dimension = levelStemRegistry.getKey(levelStem);
+            ResourceLocation dimension = levelStemRegistry.getKey(levelStem);
 
+            if (levelStem.generator() instanceof NoiseBasedChunkGenerator generator && isDimensionVisible.test(dimension)) {
                 for (Holder<Biome> biome : generator.getBiomeSource().possibleBiomes()) {
                     tasks.add(new Task(dimension, generator, biome));
                 }
@@ -143,13 +144,10 @@ public class BaseLayoutScanner {
                         scanDurations.add(result.durationNanos());
                     }
 
-                    DimensionCost previous = costs.get(task.dimension());
                     int capped = result.layers().hitRoundCap() ? 1 : 0;
+                    DimensionCost cost = new DimensionCost(task.dimension(), result.durationNanos() / 1_000_000L, 1, capped);
 
-                    costs.put(task.dimension(), previous == null
-                            ? new DimensionCost(task.dimension(), result.durationNanos() / 1_000_000L, 1, capped)
-                            : new DimensionCost(task.dimension(), previous.timeMs() + result.durationNanos() / 1_000_000L,
-                                    previous.biomeCount() + 1, previous.roundCappedCount() + capped));
+                    costs.merge(task.dimension(), cost, BaseLayoutScanner::addCosts);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     LOGGER.error("Base layout scan interrupted for biome {} in {}", biomeName(task.biome()), task.dimension(), e);
@@ -168,6 +166,11 @@ public class BaseLayoutScanner {
 
         return new BaseLayoutScanner(results, buildStats(System.nanoTime() - startTime, scanDurations, cachedCount,
                 scannedDimensions.size(), distinctRules.size(), distinctRuleInstances.size(), costliest));
+    }
+
+    @NotNull
+    private static DimensionCost addCosts(DimensionCost a, DimensionCost b) {
+        return new DimensionCost(a.dimension(), a.timeMs() + b.timeMs(), a.biomeCount() + b.biomeCount(), a.roundCappedCount() + b.roundCappedCount());
     }
 
     @NotNull
