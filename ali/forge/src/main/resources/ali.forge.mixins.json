@@ -8,6 +8,7 @@
     "MixinForgeInternalHandler",
     "MixinIntersectionIngredient",
     "MixinLootModifier",
+    "MixinLootModifierManager",
     "MixinMinecraftServer",
     "MixinPartialNBTIngredient",
     "MixinStrictNBTIngredient"

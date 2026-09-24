@@ -1,0 +1,6 @@
+{
+  "com.enderio.enderio.api.conduits.ConduitIngredient": "handled: NeoForge ICustomIngredient is not an Ingredient subclass, registered through registerValueTooltip and reached via ALI's ingredient unwrapper",
+  "com.enderio.enderio.api.soul.binding.ingredients.AnySoulBindableIngredient": "handled: NeoForge ICustomIngredient is not an Ingredient subclass, registered through registerValueTooltip and reached via ALI's ingredient unwrapper",
+  "com.enderio.enderio.api.soul.binding.ingredients.EmptySoulBindableIngredient": "handled: NeoForge ICustomIngredient is not an Ingredient subclass, registered through registerValueTooltip and reached via ALI's ingredient unwrapper",
+  "com.enderio.enderio.api.soul.binding.ingredients.FilledSoulStorageIngredient": "handled: NeoForge ICustomIngredient is not an Ingredient subclass, registered through registerValueTooltip and reached via ALI's ingredient unwrapper"
+}
