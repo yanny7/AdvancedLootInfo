@@ -15,6 +15,7 @@ import net.minecraft.world.level.levelgen.densityfunction.SamplerContext;
 import net.minecraft.world.level.levelgen.material.rule.MaterialRule;
 import net.minecraft.world.level.levelgen.material.rule.OreVeinRule;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -53,11 +54,16 @@ public class OreVeinLayout implements ISurfaceRuleHandler {
     private List<BlockInfo> compute(JsonObject definition, GhostObservation ghost) {
         OreVeinRule rule = (OreVeinRule) MaterialRule.CODEC.parse(ops, definition).getOrThrow();
         DensitySampler.Bound density = randomState.samplersWithContext(SamplerContext.EMPTY_UNCACHED).get(rule.density());
+        OreVeinRule.VeinType veinType = findVeinType(rule);
         NodeUtils.RangeHolder heights = new NodeUtils.RangeHolder();
 
-        for (int y = ghost.absoluteY().first(); y <= ghost.absoluteY().last(); y++) {
-            if (isVeinAt(density, y)) {
-                heights.add(y);
+        if (veinType != null && hasBounds(density, veinType)) {
+            ghost.absoluteY().subSet(veinType.minY, true, veinType.maxY, false).forEach(heights::add);
+        } else {
+            for (int y = ghost.absoluteY().first(); y <= ghost.absoluteY().last(); y++) {
+                if (isVeinAt(density, y)) {
+                    heights.add(y);
+                }
             }
         }
 
@@ -78,6 +84,25 @@ public class OreVeinLayout implements ISurfaceRuleHandler {
 
         return blocks.stream().map((block) -> new BlockInfo(block, BlockInfo.StorageType.ABSOLUTE, ranges, 0, ghost.water(),
                 ghost.placement(), List.of())).toList();
+    }
+
+    @Nullable
+    private static OreVeinRule.VeinType findVeinType(OreVeinRule rule) {
+        for (OreVeinRule.VeinType type : OreVeinRule.VeinType.values()) {
+            OreVeinRule vanilla = type.create(rule.density(), rule.richness(), rule.fillerGap());
+
+            if (vanilla.oreBlock() == rule.oreBlock() && vanilla.rawOreBlock() == rule.rawOreBlock() && vanilla.fillerBlock() == rule.fillerBlock()) {
+                return type;
+            }
+        }
+
+        return null;
+    }
+
+    private static boolean hasBounds(DensitySampler.Bound density, OreVeinRule.VeinType type) {
+        // VeinType.maxY is exclusive: vanilla's density data uses it as the range_choice max_exclusive.
+        return isVeinAt(density, type.minY) && isVeinAt(density, type.maxY - 1)
+                && !isVeinAt(density, type.minY - 1) && !isVeinAt(density, type.maxY);
     }
 
     private static boolean isVeinAt(DensitySampler.Bound density, int y) {
