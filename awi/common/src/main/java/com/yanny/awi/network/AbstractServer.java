@@ -61,7 +61,7 @@ public abstract class AbstractServer {
         Registry<LevelStem> levelStemRegistry = registryAccess.lookupOrThrow(Registries.LEVEL_STEM);
         Map<Identifier, IDataNode> worldgenNodes = new HashMap<>();
         DimensionFilter dimensionFilter = new DimensionFilter(serverRegistry.getConfiguration().dimensions);
-        Predicate<ResourceLocation> isDimensionVisible = (dimension) -> dimensionFilter.isVisible(levelStemRegistry, dimension);
+        Predicate<Identifier> isDimensionVisible = (dimension) -> dimensionFilter.isVisible(levelStemRegistry, dimension);
         BaseLayoutScanner baseLayoutScanner = BaseLayoutScanner.scan(level, levelStemRegistry, isDimensionVisible, serverRegistry.getSurfaceRuleHandlers(), serverRegistry.getConfiguration().logMoreStatistics);
         WorldgenNodeCache nodeCache = new WorldgenNodeCache();
 

@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.awi.api.BlockInfo;
 import com.yanny.awi.api.ISurfaceRuleHandler;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Noises;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 public class BandlandsLayout implements ISurfaceRuleHandler {
-    public static final ResourceLocation TYPE = ResourceLocation.withDefaultNamespace("bandlands");
+    public static final Identifier TYPE = Identifier.withDefaultNamespace("bandlands");
 
     private static final double OFFSET_SCALE = 4.0;
     private static final int OFFSET_SAMPLE_RADIUS = 4096;

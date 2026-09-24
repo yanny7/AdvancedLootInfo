@@ -147,7 +147,7 @@ public class BaseLayoutTest {
     @Test
     public void testBandlandsReplacedByGhosts() {
         DynamicOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, BaseLayoutTestUtils.lookup());
-        NoiseBasedChunkGenerator generator = (NoiseBasedChunkGenerator) BaseLayoutTestUtils.levelStems().getOrThrow(LevelStem.OVERWORLD).generator();
+        NoiseBasedChunkGenerator generator = (NoiseBasedChunkGenerator) BaseLayoutTestUtils.levelStems().getValueOrThrow(LevelStem.OVERWORLD).generator();
         SurfaceRules.RuleSource rule = generator.generatorSettings().value().surfaceRule();
         RandomState randomState = RandomState.create(generator.generatorSettings().value(),
                 BaseLayoutTestUtils.registryAccess().lookupOrThrow(Registries.NOISE), SEEDS.get(0));

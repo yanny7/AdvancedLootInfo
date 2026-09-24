@@ -7,7 +7,7 @@ import com.yanny.awi.api.BlockInfo;
 import com.yanny.awi.api.ISurfaceRuleHandler;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.biome.Biome;
@@ -114,7 +114,7 @@ public class NodeUtils {
 
         /** @param codecLookup see {@link SurfaceRuleSpecializer}; {@code registryAccess} in game, a test's own provider otherwise. */
         public DimensionContext(RegistryAccess registryAccess, PalettedContainerFactory palettedContainerFactory, HolderLookup.Provider codecLookup, NoiseBasedChunkGenerator noiseGenerator,
-                                RandomState randomState, Map<ResourceLocation, Function<RandomState, ISurfaceRuleHandler>> handlerFactories) {
+                                RandomState randomState, Map<Identifier, Function<RandomState, ISurfaceRuleHandler>> handlerFactories) {
             Registry<Biome> biomeRegistry = registryAccess.lookupOrThrow(Registries.BIOME);
             NoiseGeneratorSettings settings = noiseGenerator.generatorSettings().value();
 
@@ -181,7 +181,7 @@ public class NodeUtils {
         }
 
         @NotNull
-        private static Map<String, ISurfaceRuleHandler> bind(Map<ResourceLocation, Function<RandomState, ISurfaceRuleHandler>> factories,
+        private static Map<String, ISurfaceRuleHandler> bind(Map<Identifier, Function<RandomState, ISurfaceRuleHandler>> factories,
                                                             RandomState randomState) {
             Map<String, ISurfaceRuleHandler> handlers = new HashMap<>();
 

@@ -3,7 +3,7 @@ package com.yanny.awi.test;
 import com.yanny.awi.plugin.common.nodes.BaseLayoutScanner;
 import com.yanny.awi.plugin.common.nodes.NodeUtils;
 import com.yanny.awi.test.utils.BaseLayoutTestUtils;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.dimension.LevelStem;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -87,7 +87,7 @@ public class BaseLayoutPerfTest {
 
         for (BaseLayoutScanner scanner : scanners.values()) {
             for (LevelStem levelStem : BaseLayoutTestUtils.levelStems()) {
-                ResourceLocation dimension = BaseLayoutTestUtils.levelStems().getKey(levelStem);
+                Identifier dimension = BaseLayoutTestUtils.levelStems().getKey(levelStem);
 
                 scanner.getBaseLayouts(dimension).forEach((biome, layers) -> {
                     String name = "%s %s".formatted(dimension, BaseLayoutTestUtils.biomeName(biome));

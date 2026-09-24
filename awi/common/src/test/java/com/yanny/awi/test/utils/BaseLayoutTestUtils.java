@@ -35,7 +35,7 @@ import java.util.function.Function;
  * same dimensions/biome sources/noise settings it sees in game.
  */
 public class BaseLayoutTestUtils {
-    public static final Map<ResourceLocation, Function<RandomState, ISurfaceRuleHandler>> SURFACE_RULE_HANDLERS =
+    public static final Map<Identifier, Function<RandomState, ISurfaceRuleHandler>> SURFACE_RULE_HANDLERS =
             Map.of(BandlandsLayout.TYPE, BandlandsLayout::create);
 
     private static HolderLookup.Provider lookup;

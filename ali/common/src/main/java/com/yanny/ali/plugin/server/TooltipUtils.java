@@ -141,7 +141,7 @@ public class TooltipUtils {
     @Unmodifiable
     @Nullable
     public static List<LootItemCondition> unwrapConditionReference(IServerUtils utils, ConditionReference condition) {
-        return utils.getServerLevel().getServer().reloadableRegistries().lookup().get(Registries.PREDICATE, condition.name())
+        return utils.getServerLevel().getServer().reloadableRegistries().lookup().get(condition.name())
                 .map((holder) -> Collections.singletonList(holder.value()))
                 .orElse(null);
     }
@@ -158,7 +158,7 @@ public class TooltipUtils {
             return null;
         }
 
-        return utils.getServerLevel().getServer().reloadableRegistries().lookup().get(Registries.ITEM_MODIFIER, function.name)
+        return utils.getServerLevel().getServer().reloadableRegistries().lookup().get(function.name)
                 .map((holder) -> Collections.singletonList(holder.value()))
                 .orElse(null);
     }

@@ -4,11 +4,11 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.ReloadableServerRegistries;
 import net.minecraft.server.level.ServerLevel;
@@ -35,11 +35,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class UnwrapperTest {
-    private static final ResourceKey<LootItemCondition> PREDICATE = ResourceKey.create(Registries.PREDICATE, ResourceLocation.fromNamespaceAndPath("test", "predicate"));
-    private static final ResourceKey<LootItemCondition> CYCLIC_PREDICATE = ResourceKey.create(Registries.PREDICATE, ResourceLocation.fromNamespaceAndPath("test", "cyclic_predicate"));
-    private static final ResourceKey<LootItemCondition> MISSING_PREDICATE = ResourceKey.create(Registries.PREDICATE, ResourceLocation.fromNamespaceAndPath("test", "missing"));
-    private static final ResourceKey<LootItemFunction> MODIFIER = ResourceKey.create(Registries.ITEM_MODIFIER, ResourceLocation.fromNamespaceAndPath("test", "modifier"));
-    private static final ResourceKey<LootItemFunction> MISSING_MODIFIER = ResourceKey.create(Registries.ITEM_MODIFIER, ResourceLocation.fromNamespaceAndPath("test", "missing"));
+    private static final ResourceKey<LootItemCondition> PREDICATE = ResourceKey.create(Registries.PREDICATE, Identifier.fromNamespaceAndPath("test", "predicate"));
+    private static final ResourceKey<LootItemCondition> CYCLIC_PREDICATE = ResourceKey.create(Registries.PREDICATE, Identifier.fromNamespaceAndPath("test", "cyclic_predicate"));
+    private static final ResourceKey<LootItemCondition> MISSING_PREDICATE = ResourceKey.create(Registries.PREDICATE, Identifier.fromNamespaceAndPath("test", "missing"));
+    private static final ResourceKey<LootItemFunction> MODIFIER = ResourceKey.create(Registries.ITEM_MODIFIER, Identifier.fromNamespaceAndPath("test", "modifier"));
+    private static final ResourceKey<LootItemFunction> MISSING_MODIFIER = ResourceKey.create(Registries.ITEM_MODIFIER, Identifier.fromNamespaceAndPath("test", "missing"));
 
     @Test
     public void testAllOfChance() {
@@ -123,13 +123,13 @@ public class UnwrapperTest {
                 CYCLIC_PREDICATE, ConditionReference.conditionReference(CYCLIC_PREDICATE).build(),
                 MODIFIER, SetItemCountFunction.setCount(ConstantValue.exactly(10)).build()
         );
-        HolderGetter.Provider lookup = mock(HolderGetter.Provider.class);
+        HolderLookup.Provider lookup = mock(HolderLookup.Provider.class);
         ReloadableServerRegistries.Holder registries = mock(ReloadableServerRegistries.Holder.class);
         MinecraftServer server = mock(MinecraftServer.class);
         ServerLevel level = mock(ServerLevel.class);
         IServerUtils utils = spy(UTILS);
 
-        doAnswer((i) -> Optional.ofNullable(elements.get(i.<ResourceKey<?>>getArgument(1))).map(UnwrapperTest::reference)).when(lookup).get(any(), any());
+        doAnswer((i) -> Optional.ofNullable(elements.get(i.<ResourceKey<?>>getArgument(0))).map(UnwrapperTest::reference)).when(lookup).get(any());
         doReturn(lookup).when(registries).lookup();
         doReturn(registries).when(server).reloadableRegistries();
         doReturn(server).when(level).getServer();

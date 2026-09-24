@@ -9,10 +9,11 @@ import com.yanny.awi.plugin.common.nodes.NodeUtils;
 import com.yanny.awi.test.utils.BaseLayoutTestUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.chunk.PalettedContainerFactory;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.RandomState;
@@ -80,13 +81,13 @@ public class SurfaceRuleHandlerTest {
         assertTrue(infos.stream().noneMatch((info) -> info.layerShift() > 0));
     }
 
-    private static Set<BlockInfo> scan(Map<ResourceLocation, Function<RandomState, ISurfaceRuleHandler>> factories) {
-        NoiseBasedChunkGenerator generator = (NoiseBasedChunkGenerator) BaseLayoutTestUtils.levelStems().getOrThrow(LevelStem.OVERWORLD).generator();
+    private static Set<BlockInfo> scan(Map<Identifier, Function<RandomState, ISurfaceRuleHandler>> factories) {
+        NoiseBasedChunkGenerator generator = (NoiseBasedChunkGenerator) BaseLayoutTestUtils.levelStems().getValueOrThrow(LevelStem.OVERWORLD).generator();
         RandomState randomState = RandomState.create(generator.generatorSettings().value(),
                 BaseLayoutTestUtils.registryAccess().lookupOrThrow(Registries.NOISE), SEED);
         NodeUtils.DimensionContext context = new NodeUtils.DimensionContext(BaseLayoutTestUtils.registryAccess(),
-                BaseLayoutTestUtils.lookup(), generator, randomState, factories);
-        Holder<Biome> biome = BaseLayoutTestUtils.registryAccess().registryOrThrow(Registries.BIOME).getHolderOrThrow(Biomes.BADLANDS);
+                PalettedContainerFactory.create(BaseLayoutTestUtils.registryAccess()), BaseLayoutTestUtils.lookup(), generator, randomState, factories);
+        Holder<Biome> biome = BaseLayoutTestUtils.registryAccess().lookupOrThrow(Registries.BIOME).getOrThrow(Biomes.BADLANDS);
 
         return NodeUtils.getBaseBlocksForBiome(context, biome, NodeUtils.ScanOptions.DEFAULT).getBlockInfos();
     }

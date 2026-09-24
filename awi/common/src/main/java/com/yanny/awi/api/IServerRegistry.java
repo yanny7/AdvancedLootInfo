@@ -6,7 +6,7 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.awi.plugin.server.summary.CountSpan;
 import com.yanny.awi.plugin.server.summary.HeightSpanPropagator;
 import com.yanny.awi.plugin.server.summary.PlacementPropagator;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.valueproviders.FloatProvider;
 import net.minecraft.util.valueproviders.IntProvider;
@@ -73,7 +73,7 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     <T extends PlacementModifier> void registerPlacementPropagator(Class<T> type, PlacementPropagator<T> getter);
 
-    void registerSurfaceRuleHandler(ResourceLocation ruleType, Function<RandomState, @Nullable ISurfaceRuleHandler> factory);
+    void registerSurfaceRuleHandler(Identifier ruleType, Function<RandomState, @Nullable ISurfaceRuleHandler> factory);
 
     /**
      * @deprecated use {@link #registerEnumTranslation(Class, String, String)}

@@ -12,6 +12,7 @@ import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.PalettedContainerFactory;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.RandomState;
@@ -55,7 +56,7 @@ public class BaseLayoutBandsTest {
             BlockState[] palette = randomState(seed).surfaceSystem().clayBands;
 
             for (ResourceKey<Biome> biome : BIOMES) {
-                String name = "seed=%d %s".formatted(seed, biome.location());
+                String name = "seed=%d %s".formatted(seed, biome.identifier());
                 Set<BlockInfo> infos = scan(seed, biome, NodeUtils.ScanSettings.DEFAULT);
                 Map<Block, NavigableSet<Integer>> bands = bands(infos);
                 NavigableSet<Integer> window = window(infos);
@@ -84,7 +85,7 @@ public class BaseLayoutBandsTest {
 
         for (long seed : SEEDS) {
             for (ResourceKey<Biome> biome : BIOMES) {
-                String name = "seed=%d %s".formatted(seed, biome.location());
+                String name = "seed=%d %s".formatted(seed, biome.identifier());
                 NavigableSet<Integer> fast = window(scan(seed, biome, NodeUtils.ScanSettings.DEFAULT));
                 NavigableSet<Integer> dense = window(scan(seed, biome, DENSE));
 
@@ -98,8 +99,8 @@ public class BaseLayoutBandsTest {
 
     private static Set<BlockInfo> scan(long seed, ResourceKey<Biome> biomeKey, NodeUtils.ScanSettings settings) {
         NodeUtils.DimensionContext context = new NodeUtils.DimensionContext(BaseLayoutTestUtils.registryAccess(),
-                BaseLayoutTestUtils.lookup(), generator(), randomState(seed), BaseLayoutTestUtils.SURFACE_RULE_HANDLERS);
-        Holder<Biome> biome = BaseLayoutTestUtils.registryAccess().registryOrThrow(Registries.BIOME).getHolderOrThrow(biomeKey);
+                PalettedContainerFactory.create(BaseLayoutTestUtils.registryAccess()), BaseLayoutTestUtils.lookup(), generator(), randomState(seed), BaseLayoutTestUtils.SURFACE_RULE_HANDLERS);
+        Holder<Biome> biome = BaseLayoutTestUtils.registryAccess().lookupOrThrow(Registries.BIOME).getOrThrow(biomeKey);
 
         return NodeUtils.getBaseBlocksForBiome(context, biome, new NodeUtils.ScanOptions(settings, false)).getBlockInfos();
     }
@@ -135,7 +136,7 @@ public class BaseLayoutBandsTest {
     }
 
     private static NoiseBasedChunkGenerator generator() {
-        return (NoiseBasedChunkGenerator) BaseLayoutTestUtils.levelStems().getOrThrow(LevelStem.OVERWORLD).generator();
+        return (NoiseBasedChunkGenerator) BaseLayoutTestUtils.levelStems().getValueOrThrow(LevelStem.OVERWORLD).generator();
     }
 
     private static RandomState randomState(long seed) {

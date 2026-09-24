@@ -187,14 +187,14 @@ public class GenericUtils {
     }
 
     @NotNull
-    public static Item getCategoryIcon(IClientUtils utils, ResourceLocation dimension) {
+    public static Item getCategoryIcon(IClientUtils utils, Identifier dimension) {
         String itemId = utils.getConfiguration().dimensionIcons.get(dimension.toString());
 
         if (itemId == null) {
             return Items.GLOBE_BANNER_PATTERN;
         }
 
-        ResourceLocation location = ResourceLocation.tryParse(itemId);
+        Identifier location = Identifier.tryParse(itemId);
         Item item = location != null ? BuiltInRegistries.ITEM.getOptional(location).orElse(Items.AIR) : Items.AIR;
 
         if (item == Items.AIR) {
