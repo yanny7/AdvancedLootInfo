@@ -14,6 +14,23 @@ public class MoreRedLang implements ICompatTranslations {
 
     public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 
+    public enum Entry implements ITooltipKey {
+        GEARS("gears", "Gears:"),
+        ;
+
+        private final Translation translation;
+
+        Entry(String k, String e) {
+            translation = new Translation("alicompat.type.entry." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
     public enum Functions implements ITooltipKey {
         SET_WIRE_COUNT("set_wire_count", "Set Wire Count"),
         ;
@@ -32,6 +49,7 @@ public class MoreRedLang implements ICompatTranslations {
     }
 
     static {
+        CoreLang.register(TRANSLATION_MAP, Entry.class);
         CoreLang.register(TRANSLATION_MAP, Functions.class);
     }
 

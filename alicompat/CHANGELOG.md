@@ -1,7 +1,9 @@
 ## []
 
-- Added GregTech CEu Modern support
-- Added Kaleidoscope Cookery support
+- Added More Red support
+- Added Repurposed Structures support
+- Added Sophisticated Backpacks support
+- Added Sophisticated Storage support
 
 ## [1.0.0]
 
