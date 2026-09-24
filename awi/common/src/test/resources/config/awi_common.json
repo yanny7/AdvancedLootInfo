@@ -8,5 +8,7 @@
   },
   "logMoreStatistics": false,
   "showInGameNames": true,
-  "showConfigConditionalBlocks": false
+  "showConfigConditionalBlocks": false,
+  "dimensions": [],
+  "dimensionIcons": {}
 }
