@@ -1,0 +1,5 @@
+{
+  "dev.shadowsoffire.apotheosis.util.AffixItemIngredient": "handled: NeoForge ICustomIngredient is not an Ingredient subclass, registered through registerValueTooltip and reached via ALI's ingredient unwrapper",
+  "dev.shadowsoffire.apotheosis.util.GemIngredient": "handled: NeoForge ICustomIngredient is not an Ingredient subclass, registered through registerValueTooltip and reached via ALI's ingredient unwrapper",
+  "dev.shadowsoffire.apotheosis.util.SpawnEggIngredient": "handled: NeoForge ICustomIngredient is not an Ingredient subclass, registered through registerValueTooltip and reached via ALI's ingredient unwrapper"
+}

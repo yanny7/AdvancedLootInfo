@@ -1,6 +1,8 @@
 package com.yanny.alicompat.compat.artifacts;
 
+import artifacts.config.value.ConfigValue;
 import artifacts.config.value.Value;
+import artifacts.item.consumeeffects.DamageItemConsumeEffect;
 import artifacts.item.consumeeffects.HealConsumeEffect;
 import artifacts.loot.ArtifactRarityAdjustedChance;
 import artifacts.loot.ConfigValueChance;
@@ -31,15 +33,16 @@ public class ArtifactsCompat implements IModCompat {
 
         PluginUtils.registerChanceModifier(registry, ConfigValueChance.class, ConfigValueChanceAccessor.class);
 
+        registry.registerConsumeEffectTooltip(DamageItemConsumeEffect.class, ArtifactsCompat::getDamageItemTooltip);
         registry.registerConsumeEffectTooltip(HealConsumeEffect.class, ArtifactsCompat::getHealTooltip);
 
-        registry.registerValueTooltip(Value.ConfigValue.class, ArtifactsCompat::getConfigValueTooltip);
+        registry.registerValueTooltip(ConfigValue.class, ArtifactsCompat::getConfigValueTooltip);
         registry.registerValueTooltip(Value.Constant.class, ArtifactsCompat::getConstantValueTooltip);
     }
 
     @NotNull
-    private static TooltipBuilder getConfigValueTooltip(IServerUtils utils, Value.ConfigValue<?> value) {
-        return utils.getValueTooltip(utils, value.getId());
+    private static TooltipBuilder getConfigValueTooltip(IServerUtils utils, ConfigValue<?> value) {
+        return utils.getValueTooltip(utils, value.getSerializedName());
     }
 
     @NotNull
@@ -51,6 +54,11 @@ public class ArtifactsCompat implements IModCompat {
     private static TooltipBuilder getRarityAdjustedChanceTooltip(IServerUtils utils, ArtifactRarityAdjustedChance cond) {
         return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.defaultProbability()).build(ArtifactsLang.Value.DEFAULT_PROBABILITY)),
                 ArtifactsLang.Conditions.ARTIFACT_RARITY_ADJUSTED_CHANCE);
+    }
+
+    @NotNull
+    private static TooltipBuilder getDamageItemTooltip(IServerUtils utils, DamageItemConsumeEffect effect) {
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, effect.amount()).build(Lang.Value.AMOUNT)), ArtifactsLang.ConsumeEffects.DAMAGE_ITEM);
     }
 
     @NotNull

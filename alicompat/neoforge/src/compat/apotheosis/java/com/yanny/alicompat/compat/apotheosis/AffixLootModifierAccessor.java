@@ -20,7 +20,7 @@ import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.IGlobalLootModifierAccessor;
 import com.yanny.alicompat.accessor.IPageResolverAccessor;
 import dev.shadowsoffire.apotheosis.loot.modifiers.AffixLootModifier;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
@@ -77,7 +77,7 @@ public class AffixLootModifierAccessor extends BaseAccessor<AffixLootModifier> i
     }
 
     @Nullable
-    private AffixLootModifier.AffixTableEntry matching(@Nullable ResourceLocation location) {
+    private AffixLootModifier.AffixTableEntry matching(@Nullable Identifier location) {
         if (location == null) {
             return null;
         }

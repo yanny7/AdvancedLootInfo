@@ -22,7 +22,7 @@ import com.yanny.alicompat.accessor.IGlobalLootModifierAccessor;
 import com.yanny.alicompat.accessor.IPageResolverAccessor;
 import dev.shadowsoffire.apotheosis.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.loot.modifiers.AffixConvertLootModifier;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
@@ -87,7 +87,7 @@ public class AffixConvertLootModifierAccessor extends BaseAccessor<AffixConvertL
     }
 
     @Nullable
-    private AffixConvertLootModifier.AffixConversionEntry matching(@Nullable ResourceLocation location) {
+    private AffixConvertLootModifier.AffixConversionEntry matching(@Nullable Identifier location) {
         if (location == null) {
             return null;
         }

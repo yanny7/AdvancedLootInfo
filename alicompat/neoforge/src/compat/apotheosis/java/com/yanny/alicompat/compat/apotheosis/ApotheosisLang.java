@@ -72,7 +72,9 @@ public class ApotheosisLang implements ICompatTranslations {
     }
 
     public enum Functions implements ITooltipKey {
+        AUTOMATIC_AFFIX_TRADE("automatic_affix_trade", "Random Affix Item:"),
         REFORGE_ITEM("reforge_item", "Reforge Item:"),
+        TIER_GATED_TRADE("tier_gated_trade", "Tier Gated Trade:"),
         ;
 
         private final Translation translation;
@@ -169,6 +171,7 @@ public class ApotheosisLang implements ICompatTranslations {
         DOMAIN("domain", "Domain: %s"),
         MAX_RARITY("max_rarity", "Max Rarity: %s"),
         MIN_RARITY("min_rarity", "Min Rarity: %s"),
+        MIN_WORLD_TIER("min_world_tier", "Min World Tier: %s"),
         PURITY("purity", "Purity: %s"),
         RARITY("rarity", "Rarity: %s"),
         WORLD_TIER("world_tier", "World Tier: %s"),

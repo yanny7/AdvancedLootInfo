@@ -1,4 +1,4 @@
-package com.yanny.alicompat.compat.placebo;
+package com.yanny.alicompat.compat.gtceu;
 
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.language.ITooltipKey;
@@ -9,19 +9,19 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PlaceboLang implements ICompatTranslations {
-    static final String MOD_ID = "placebo";
+public class GregTechCEuModernLang implements ICompatTranslations {
+    static final String MOD_ID = "gtceu";
 
     public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 
-    public enum Entry implements ITooltipKey {
-        STACK("stack", "Stack:"),
+    public enum Functions implements ITooltipKey {
+        RANDOM_WEIGHT("random_weight", "Random Weight:"),
         ;
 
         private final Translation translation;
 
-        Entry(String k, String e) {
-            translation = new Translation("alicompat.type.entry." + k, e);
+        Functions(String k, String e) {
+            translation = new Translation("alicompat.type.function." + k, e);
         }
 
         @NotNull
@@ -32,7 +32,7 @@ public class PlaceboLang implements ICompatTranslations {
     }
 
     static {
-        CoreLang.register(TRANSLATION_MAP, Entry.class);
+        CoreLang.register(TRANSLATION_MAP, Functions.class);
     }
 
     @NotNull
