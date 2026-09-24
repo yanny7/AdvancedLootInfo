@@ -69,7 +69,7 @@ public class BaseLayoutScanner {
 
     @NotNull
     public static BaseLayoutScanner scan(ServerLevel level, Registry<LevelStem> levelStemRegistry, Predicate<Identifier> isDimensionVisible,
-                                         Map<Identifier, Function<RandomState, ISurfaceRuleHandler>> handlerFactories,
+                                         Map<Identifier, Function<ISurfaceRuleHandler.Context, ISurfaceRuleHandler>> handlerFactories,
                                          boolean logStatistics) {
         return scan(level.registryAccess(), level.palettedContainerFactory(), level.registryAccess(), level.getSeed(), levelStemRegistry, isDimensionVisible, handlerFactories,
                 NodeUtils.ScanSettings.DEFAULT, logStatistics);
@@ -79,7 +79,7 @@ public class BaseLayoutScanner {
     @NotNull
     public static BaseLayoutScanner scan(RegistryAccess registryAccess, PalettedContainerFactory palettedContainerFactory, HolderLookup.Provider codecLookup, long seed,
                                          Registry<LevelStem> levelStemRegistry, Predicate<Identifier> isDimensionVisible,
-                                         Map<Identifier, Function<RandomState, ISurfaceRuleHandler>> handlerFactories,
+                                         Map<Identifier, Function<ISurfaceRuleHandler.Context, ISurfaceRuleHandler>> handlerFactories,
                                          NodeUtils.ScanSettings scanSettings, boolean logStatistics) {
         List<Task> tasks = new ArrayList<>();
 
@@ -168,7 +168,7 @@ public class BaseLayoutScanner {
 
     @NotNull
     private static TaskResult runTask(Task task, RegistryAccess registryAccess, PalettedContainerFactory palettedContainerFactory, HolderLookup.Provider codecLookup, long seed,
-                                      Map<Identifier, Function<RandomState, ISurfaceRuleHandler>> handlerFactories,
+                                      Map<Identifier, Function<ISurfaceRuleHandler.Context, ISurfaceRuleHandler>> handlerFactories,
                                       Map<CacheKey, NodeUtils.LayerHolder> cache, ContextCache contextCache,
                                       NodeUtils.ScanOptions scanOptions) {
         CacheKey key = new CacheKey(settingsKey(task.generator()), biomeKey(task.biome()));
@@ -237,7 +237,7 @@ public class BaseLayoutScanner {
 
         @NotNull
         NodeUtils.DimensionContext get(Task task, RegistryAccess registryAccess, PalettedContainerFactory palettedContainerFactory, HolderLookup.Provider codecLookup, long seed,
-                                       Map<Identifier, Function<RandomState, ISurfaceRuleHandler>> handlerFactories) {
+                                       Map<Identifier, Function<ISurfaceRuleHandler.Context, ISurfaceRuleHandler>> handlerFactories) {
             if (context == null || !task.dimension().equals(dimension)) {
                 RandomState randomState = RandomState.create(
                         task.generator().generatorSettings().value(),

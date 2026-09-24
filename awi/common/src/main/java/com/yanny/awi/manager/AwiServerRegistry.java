@@ -23,7 +23,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.valueproviders.FloatProvider;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSize;
@@ -73,7 +72,7 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
     private final ManagedRegistry<Class<?>, HeightSpanPropagator<HeightProvider>> heightSpanPropagators = registerClassKeyed("height span propagators", true, HashMap::new, BuiltInRegistries.HEIGHT_PROVIDER_TYPE);
     private final ManagedRegistry<Class<?>, PlacementPropagator<PlacementModifier>> placementPropagators = registerClassKeyed("placement propagators", false, HashMap::new, BuiltInRegistries.PLACEMENT_MODIFIER_TYPE);
     // surface rules
-    private final ManagedRegistry<Identifier, Function<RandomState, ISurfaceRuleHandler>> surfaceRuleHandlers = register("surface rule handlers", false, HashMap::new, Identifier::toString, BuiltInRegistries.MATERIAL_RULE);
+    private final ManagedRegistry<Identifier, Function<ISurfaceRuleHandler.Context, ISurfaceRuleHandler>> surfaceRuleHandlers = register("surface rule handlers", false, HashMap::new, Identifier::toString, BuiltInRegistries.MATERIAL_RULE);
     // translations
     private final ManagedRegistry<Class<?>, EnumTranslation> enumValues = registerClassKeyed("enum values", true, HashMap::new, null);
 
@@ -106,7 +105,7 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
     }
 
     @Override
-    public void registerSurfaceRuleHandler(Identifier ruleType, Function<RandomState, @Nullable ISurfaceRuleHandler> factory) {
+    public void registerSurfaceRuleHandler(Identifier ruleType, Function<ISurfaceRuleHandler.Context, @Nullable ISurfaceRuleHandler> factory) {
         surfaceRuleHandlers.put(ruleType, factory);
     }
 
@@ -318,7 +317,7 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
                 .orElseGet(() -> MissingTooltipUtils.getMissingTreeDecoratorTooltip(utils, entry));
     }
 
-    public Map<Identifier, Function<RandomState, ISurfaceRuleHandler>> getSurfaceRuleHandlers() {
+    public Map<Identifier, Function<ISurfaceRuleHandler.Context, ISurfaceRuleHandler>> getSurfaceRuleHandlers() {
         return surfaceRuleHandlers.entries();
     }
 
