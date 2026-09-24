@@ -5,6 +5,7 @@ import com.yanny.aci.network.NetworkUtils;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.awi.Utils;
 import com.yanny.awi.api.IDataNode;
+import com.yanny.awi.configuration.DimensionFilter;
 import com.yanny.awi.api.ListNode;
 import com.yanny.awi.manager.AwiServerRegistry;
 import com.yanny.awi.manager.PluginManager;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public abstract class AbstractServer {
     private static final DecimalFormat DOUBLE_FORMAT = new DecimalFormat("#0.00");
@@ -58,11 +60,17 @@ public abstract class AbstractServer {
         RegistryAccess registryAccess = level.registryAccess();
         Registry<LevelStem> levelStemRegistry = registryAccess.lookupOrThrow(Registries.LEVEL_STEM);
         Map<Identifier, IDataNode> worldgenNodes = new HashMap<>();
-        BaseLayoutScanner baseLayoutScanner = BaseLayoutScanner.scan(level, levelStemRegistry, serverRegistry.getConfiguration().logMoreStatistics);
+        DimensionFilter dimensionFilter = new DimensionFilter(serverRegistry.getConfiguration().dimensions);
+        Predicate<ResourceLocation> isDimensionVisible = (dimension) -> dimensionFilter.isVisible(levelStemRegistry, dimension);
+        BaseLayoutScanner baseLayoutScanner = BaseLayoutScanner.scan(level, levelStemRegistry, isDimensionVisible, serverRegistry.getSurfaceRuleHandlers(), serverRegistry.getConfiguration().logMoreStatistics);
         WorldgenNodeCache nodeCache = new WorldgenNodeCache();
 
         for (LevelStem levelStem : levelStemRegistry) {
             Identifier location = levelStemRegistry.getKey(levelStem);
+
+            if (!isDimensionVisible.test(location)) {
+                continue;
+            }
 
             try {
                 TooltipContext.set(location);

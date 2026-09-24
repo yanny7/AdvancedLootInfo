@@ -9,8 +9,8 @@ import me.shedaniel.rei.api.client.gui.widgets.Widgets;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -20,10 +20,10 @@ public class ReiBiomeCategory extends ReiBaseCategory<ReiBiomeDisplay> {
     private final Component title;
     private final ItemStack icon;
 
-    public ReiBiomeCategory(CategoryIdentifier<ReiBiomeDisplay> identifier, Component title) {
+    public ReiBiomeCategory(CategoryIdentifier<ReiBiomeDisplay> identifier, Component title, Item icon) {
         this.identifier = identifier;
         this.title = title;
-        this.icon = Items.GLOBE_BANNER_PATTERN.getDefaultInstance();
+        this.icon = icon.getDefaultInstance();
     }
 
     @Override

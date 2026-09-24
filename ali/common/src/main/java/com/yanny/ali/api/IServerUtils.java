@@ -67,6 +67,12 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
     <T extends LootItemFunction> ItemStack applyItemStackModifier(IServerUtils utils, T function, ItemStack itemStack);
 
     @NotNull
+    List<LootItemFunction> unwrapFunction(IServerUtils utils, LootItemFunction function);
+
+    @NotNull
+    List<LootItemCondition> unwrapCondition(IServerUtils utils, LootItemCondition condition);
+
+    @NotNull
     <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, TooltipNode condition);
 
     @NotNull

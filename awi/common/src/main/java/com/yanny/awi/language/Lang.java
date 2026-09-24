@@ -112,9 +112,11 @@ public final class Lang {
         ABOVE_BOTTOM("above_bottom", "Above Bottom: %s"),
         ABOVE_NOISE("above_noise", "Above Noise: %s"),
         ABSOLUTE_Y("absolute_y", "Absolute Y: %s"),
+        ABSOLUTE_Y_QUALIFIED("absolute_y_qualified", "Absolute Y: %s (%s)"),
         ALLOWED_VERTICAL_WATER_FOR_TREE("allowed_vertical_water_for_tree", "Allowed Vertical Water For Tree: %s"),
         ALTERNATE_LAYER_CHANCE("alternate_layer_chance", "Alternate Layer Chance: %s"),
         AMOUNT_PER_CHARGE("amount_per_charge", "Amount Per Charge: %s"),
+        AT_Y("at_y", "At Y: %s"),
         ATTEMPTS_PER_CHUNK("attempts_per_chunk", "Attempts Per Chunk: %s"),
         ATTEMPTS_PER_CHUNK_DIST("attempts_per_chunk_dist", "Attempts Per Chunk: %s (%s)"),
         BASE_CRACK_SIZE("base_crack_size", "Base Crack Size: %s"),
@@ -141,10 +143,13 @@ public final class Lang {
         CHANCE_OF_TALLER_DRIPSTONE("chance_of_taller_dripstone", "Chance Of Taller Dripstone: %s"),
         CHANCE_RADIUS("chance_radius", "Chance Radius: %s"),
         CHARGE_COUNT("charge_count", "Charge Count: %s"),
+        CONTINUATION("continuation", "  %s"),
+        CONTINUATION_QUALIFIED("continuation_qualified", "  %s (%s)"),
         CORNER_HOLE_CHANCE("corner_hole_chance", "Corner Hole Chance: %s"),
         CRACK_POINT_OFFSET("crack_point_offset", "Crack Point Offset: %s"),
         CRYSTAL_BEAM_TARGET("crystal_beam_target", "Crystal Beam Target: %s"),
         DEPTH_BELOW_SURFACE("depth_below_surface", "Depth Below Surface: %s"),
+        DEPTH_BELOW_SURFACE_QUALIFIED("depth_below_surface_qualified", "Depth Below Surface: %s (%s)"),
         DEVIATION("deviation", "Deviation: %s"),
         DIRECTION("direction", "Direction: %s"),
         DIRECTION_OF_SEARCH("direction_of_search", "Direction Of Search: %s"),
@@ -191,7 +196,9 @@ public final class Lang {
         INVALID_BLOCKS_THRESHOLD("invalid_blocks_threshold", "Invalid Blocks Threshold: %s"),
         IS_CRYSTAL_INVULNERABLE("is_crystal_invulnerable", "Is Crystal Invulnerable: %s"),
         IS_GUARDED("is_guarded", "Is Guarded: %s"),
-        LAYER_AT_Y("layer_at_y", "Layer At Y: %s"),
+        LAYERS_AT_Y("layers_at_y", "Layers At Y: %s"),
+        LAYERS_AT_Y_QUALIFIED("layers_at_y_qualified", "Layers At Y: %s (%s)"),
+        LAYER_SHIFT("layer_shift", "Layer Shift: %s"),
         LEAF_PLACEMENT_ATTEMPTS("leaf_placement_attempts", "Leaf Placement Attempts: %s"),
         LEAVES_PROBABILITY("leaves_probability", "Leaves Probability: %s"),
         LIMIT("limit", "Limit: %s"),
@@ -222,7 +229,6 @@ public final class Lang {
         OFFSET("offset", "Offset: %s"),
         OUTER_LAYER("outer_layer", "Outer Layer: %s"),
         OVERLAY_STRUCTURE("overlay_structure", "Overlay Structure: %s"),
-        PLACEMENT("placement", "Placement: %s"),
         PLACEMENT_CHANCE("placement_chance", "Placement Chance: %s"),
         PLACEMENT_RADIUS_AROUND_FLOOR("placement_radius_around_floor", "Placement Radius Around Floor: %s"),
         PLACE_BLOCK("place_block", "Place Block: %s"),
@@ -293,7 +299,6 @@ public final class Lang {
     public enum Branch implements ITooltipKey {
         ABOVE_ROOT_PLACEMENT("above_root_placement", "Above Root Placement:"),
         ABOVE_ROOT_PROVIDER("above_root_provider", "Above Root Provider:"),
-        ABSOLUTE_Y(Value.ABSOLUTE_Y, "absolute_y", "Absolute Y:"),
         ALLOWED_PLACEMENT("allowed_placement", "Allowed Placement:"),
         ALLOWED_SEARCH_CONDITION("allowed_search_condition", "Allowed Search Condition:"),
         ALLOWED_TREE_POSITION("allowed_tree_position", "Allowed Tree Position:"),
@@ -357,7 +362,6 @@ public final class Lang {
         INPUT_PREDICATE("input_predicate", "Input Predicate:"),
         ITEMS("items", "Items:"),
         LAYERS("layers", "Layers:"),
-        LAYERS_AT_Y(Value.LAYER_AT_Y, "layers_at_y", "Layers At Y:"),
         LAYER_THICKNESS("layer_thickness", "Layer Thickness:"),
         LIMIT(Value.LIMIT, "limit", "Limit:"),
         LOCATION_PREDICATE("location_predicate", "Location Predicate:"),
@@ -450,8 +454,13 @@ public final class Lang {
     }
 
     public enum BaseTerrain implements ITooltipKey {
+        ABSOLUTE_Y("absolute_y", "Absolute Y:"),
+        AT_Y("at_y", "At Y:"),
         DEFAULT_BLOCK("default_block", "Default Block"),
         DEFAULT_FLUID("default_fluid", "Default Fluid"),
+        DEPTH_BELOW_SURFACE("depth_below_surface", "Depth Below Surface:"),
+        ENTRY_SEPARATOR("entry_separator", "----------"),
+        LAYERS_AT_Y("layers_at_y", "Layers At Y:"),
         ;
 
         private final Translation translation;
@@ -470,7 +479,9 @@ public final class Lang {
     public enum Placement implements ITooltipKey {
         ON_CEILING("on_ceiling", "On Ceiling"),
         ON_LAND("on_land", "On Land"),
+        ON_LAND_ON_CEILING("on_land_on_ceiling", "On Land, On Ceiling"),
         UNDERWATER("underwater", "Underwater"),
+        UNDERWATER_ON_CEILING("underwater_on_ceiling", "Underwater, On Ceiling"),
         ;
 
         private final Translation translation;

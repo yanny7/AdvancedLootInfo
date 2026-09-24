@@ -6,6 +6,7 @@ import com.yanny.awi.api.IBlockNode;
 import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.api.ListNode;
+import com.yanny.awi.configuration.DimensionFilter;
 import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.network.AbstractClient;
 import com.yanny.awi.network.RequestWorldgenDataMessage;
@@ -13,9 +14,11 @@ import com.yanny.awi.plugin.common.nodes.LevelStemNode;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
@@ -68,6 +71,9 @@ public class GenericUtils {
             buf.release();
         }
 
+        DimensionFilter dimensionFilter = new DimensionFilter(utils.getConfiguration().dimensions);
+
+        worldgenData.keySet().removeIf((dimension) -> !dimensionFilter.isVisible(dimension));
         return worldgenData;
     }
 
@@ -178,6 +184,25 @@ public class GenericUtils {
         }
 
         return blocks;
+    }
+
+    @NotNull
+    public static Item getCategoryIcon(IClientUtils utils, ResourceLocation dimension) {
+        String itemId = utils.getConfiguration().dimensionIcons.get(dimension.toString());
+
+        if (itemId == null) {
+            return Items.GLOBE_BANNER_PATTERN;
+        }
+
+        ResourceLocation location = ResourceLocation.tryParse(itemId);
+        Item item = location != null ? BuiltInRegistries.ITEM.getOptional(location).orElse(Items.AIR) : Items.AIR;
+
+        if (item == Items.AIR) {
+            LOGGER.warn("Unknown icon item '{}' for dimension {}, using the default icon", itemId, dimension);
+            return Items.GLOBE_BANNER_PATTERN;
+        }
+
+        return item;
     }
 
     public static Component getFormattedCategoryTitle(Identifier location) {
