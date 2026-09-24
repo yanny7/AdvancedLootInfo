@@ -87,12 +87,6 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
     @NotNull
     ServerLevel getServerLevel();
 
-    /**
-     * @deprecated use {@link #registerEnumTranslation(Class, String, String)}
-     */
-    @Deprecated(forRemoval = true, since = "2.2.0")
-    void registerEnumTranslation(Class<? extends Enum<?>> type, String owner);
-
     void registerEnumTranslation(Class<? extends Enum<?>> type, String modId, String owner);
 
     @FunctionalInterface
