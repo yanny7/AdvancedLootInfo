@@ -39,7 +39,7 @@ test {
 
     // Forwarded to the test JVM: base-layout golden regeneration and the scan-settings sweep (see BaseLayoutTest),
     // and the feature bytecode-scan golden regeneration (see FeatureBytecodeScanTest).
-    ["awi.baselayout.regenerate", "awi.baselayout.sweep", "awi.featurescan.regenerate"].each { property ->
+    ["awi.baselayout.regenerate", "awi.baselayout.sweep", "awi.baselayout.perf", "awi.baselayout.bands", "awi.featurescan.regenerate"].each { property ->
         if (System.getProperty(property) != null) {
             systemProperty property, System.getProperty(property)
         }

@@ -1,3 +1,8 @@
+## []
+
+- Added support for custom ingredients that are not Ingredient subclasses
+- Improved count and chance detection
+
 ## [2.2.0]
 
 - Added `IServerRegistry.registerTrades`, so a plugin can list the trades of its own trader

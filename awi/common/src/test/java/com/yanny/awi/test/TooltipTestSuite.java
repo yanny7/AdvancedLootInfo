@@ -81,9 +81,12 @@ import java.util.concurrent.ExecutionException;
         StructureProcessorTooltipTest.class,
         PlacementSummaryTest.class,
         TooltipUtilsTest.class,
+        BaseTerrainNodeTest.class,
         ConfigTest.class,
         BaseLayoutTest.class,
         BaseLayoutSweepTest.class,
+        BaseLayoutBandsTest.class,
+        SurfaceRuleHandlerTest.class,
         FeatureBytecodeScanTest.class
 })
 public class TooltipTestSuite {

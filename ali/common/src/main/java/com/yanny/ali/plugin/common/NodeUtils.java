@@ -277,7 +277,9 @@ public class NodeUtils {
     public static boolean hasPredicates(IServerUtils utils, List<LootItemCondition> conditions) {
         List<Identifier> ignored = utils.getConfiguration().ignoredPredicateConditions;
 
-        return conditions.stream().anyMatch((c) -> !ignored.contains(BuiltInRegistries.LOOT_CONDITION_TYPE.getKey(c.codec())));
+        return conditions.stream()
+                .flatMap((c) -> utils.unwrapCondition(utils, c).stream())
+                .anyMatch((c) -> !ignored.contains(BuiltInRegistries.LOOT_CONDITION_TYPE.getKey(c.codec())));
     }
 
     @NotNull

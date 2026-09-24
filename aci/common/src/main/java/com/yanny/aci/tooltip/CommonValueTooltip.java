@@ -64,7 +64,11 @@ public class CommonValueTooltip<
 
     @NotNull
     private TooltipBuilder getHolderTooltip(TServerUtils utils, Holder<?> holder) {
-        return utils.getValueTooltip(utils, holder.value());
+        if (holder.isBound()) {
+            return utils.getValueTooltip(utils, holder.value());
+        }
+
+        return holder.unwrapKey().map((key) -> utils.getValueTooltip(utils, key)).orElse(TooltipBuilder.empty());
     }
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")

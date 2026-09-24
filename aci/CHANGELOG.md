@@ -1,3 +1,7 @@
+## []
+
+- Unbound Holder is rendered as its registry key instead of throwing
+
 ## [1.2.0]
 
 - Added `ManagedRegistry.entries`, so a registry's whole content can be read back

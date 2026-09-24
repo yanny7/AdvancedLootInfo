@@ -68,6 +68,12 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
     <T extends LootItemFunction> ItemStack applyItemStackModifier(IServerUtils utils, T function, ItemStack itemStack);
 
     @NotNull
+    List<LootItemFunction> unwrapFunction(IServerUtils utils, LootItemFunction function);
+
+    @NotNull
+    List<LootItemCondition> unwrapCondition(IServerUtils utils, LootItemCondition condition);
+
+    @NotNull
     TooltipBuilder getEnumTranslation(IServerUtils utils, Enum<?> value);
 
     @NotNull
