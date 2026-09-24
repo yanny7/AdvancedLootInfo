@@ -14,15 +14,14 @@ public class OccultismLang implements ICompatTranslations {
 
     public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 
-    public enum Value implements ITooltipKey {
-        WITH_THIRD_EYE("with_third_eye", "Requires Third Eye, Otherworld Goggles or True Sight Staff"),
-        WITHOUT_THIRD_EYE("without_third_eye", "Without Third Eye, Otherworld Goggles or True Sight Staff"),
+    public enum ConsumeEffects implements ITooltipKey {
+        DAMAGE_ITEM("damage_item", "Damage Item:"),
         ;
 
         private final Translation translation;
 
-        Value(String k, String e) {
-            translation = new Translation("alicompat.property.value." + k, e);
+        ConsumeEffects(String k, String e) {
+            translation = new Translation("alicompat.type.consume_effect." + k, e);
         }
 
         @NotNull
@@ -33,7 +32,7 @@ public class OccultismLang implements ICompatTranslations {
     }
 
     static {
-        CoreLang.register(TRANSLATION_MAP, Value.class);
+        CoreLang.register(TRANSLATION_MAP, ConsumeEffects.class);
     }
 
     @NotNull

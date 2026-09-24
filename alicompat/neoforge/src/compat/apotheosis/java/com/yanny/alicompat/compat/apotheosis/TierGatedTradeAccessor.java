@@ -6,18 +6,15 @@ import com.yanny.ali.language.Lang;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.IFunctionTooltip;
-import dev.shadowsoffire.apotheosis.loot.LootRarity;
-import dev.shadowsoffire.apotheosis.loot.functions.ReforgeItemFunction;
-import dev.shadowsoffire.placebo.dynreg.DynamicHolder;
+import dev.shadowsoffire.apotheosis.loot.functions.TierGatedTrade;
+import dev.shadowsoffire.apotheosis.tiers.WorldTier;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Set;
-
-public class ReforgeItemFunctionAccessor extends BaseAccessor<ReforgeItemFunction> implements IFunctionTooltip {
+public class TierGatedTradeAccessor extends BaseAccessor<TierGatedTrade> implements IFunctionTooltip {
     @FieldAccessor
-    private Set<DynamicHolder<LootRarity>> rarities;
+    private WorldTier minTier;
 
-    public ReforgeItemFunctionAccessor(ReforgeItemFunction parent) {
+    public TierGatedTradeAccessor(TierGatedTrade parent) {
         super(parent);
     }
 
@@ -25,8 +22,8 @@ public class ReforgeItemFunctionAccessor extends BaseAccessor<ReforgeItemFunctio
     @Override
     public TooltipBuilder getTooltip(IServerUtils utils) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, rarities).build(ApotheosisLang.Branch.RARITY));
+            b.add(utils.getValueTooltip(utils, minTier).build(ApotheosisLang.Value.MIN_WORLD_TIER));
             b.add(utils.getValueTooltip(utils, parent.predicates).build(Lang.Branch.PREDICATES));
-        }, ApotheosisLang.Functions.REFORGE_ITEM);
+        }, ApotheosisLang.Functions.TIER_GATED_TRADE);
     }
 }

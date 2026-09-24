@@ -7,7 +7,7 @@ import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.IValueTooltip;
 import dev.shadowsoffire.apotheosis.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.util.AffixItemIngredient;
-import dev.shadowsoffire.placebo.reload.DynamicHolder;
+import dev.shadowsoffire.placebo.dynreg.DynamicHolder;
 
 public class AffixItemIngredientAccessor extends BaseAccessor<AffixItemIngredient> implements IValueTooltip {
     @FieldAccessor

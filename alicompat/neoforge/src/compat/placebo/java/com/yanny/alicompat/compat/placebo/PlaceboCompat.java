@@ -1,24 +1,37 @@
 package com.yanny.alicompat.compat.placebo;
 
+import com.yanny.aci.language.CoreLang;
+import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerRegistry;
+import com.yanny.ali.api.IServerUtils;
 import com.yanny.alicompat.IModCompat;
-import com.yanny.alicompat.accessor.PluginUtils;
-import dev.shadowsoffire.placebo.loot.StackLootEntry;
-import dev.shadowsoffire.placebo.systems.wanderer.BasicWandererTrade;
+import dev.shadowsoffire.placebo.dynreg.DynamicHolder;
+import dev.shadowsoffire.placebo.dynreg.tag.DynamicHolderSet;
 import org.jetbrains.annotations.NotNull;
 
 public class PlaceboCompat implements IModCompat {
+    private static final String MOD_ID = "placebo";
+
     @NotNull
     @Override
     public String targetModId() {
-        return PlaceboLang.MOD_ID;
+        return MOD_ID;
     }
 
     @Override
     public void registerServer(IServerRegistry registry) {
-        PluginUtils.registerEntry(registry, StackLootEntry.class, StackLootEntryAccessor.class);
-        PluginUtils.registerEntryTooltip(registry, StackLootEntry.class, StackLootEntryAccessor.class);
+        registry.registerValueTooltip(DynamicHolder.class, PlaceboCompat::getDynamicHolderTooltip);
+        registry.registerValueTooltip(DynamicHolderSet.class, PlaceboCompat::getDynamicHolderSetTooltip);
+    }
 
-        PluginUtils.registerItemListing(registry, BasicWandererTrade.class, BasicWandererTradeAccessor.class);
+    @NotNull
+    private static TooltipBuilder getDynamicHolderTooltip(IServerUtils utils, DynamicHolder<?> holder) {
+        return utils.getValueTooltip(utils, holder.getId());
+    }
+
+    @NotNull
+    private static TooltipBuilder getDynamicHolderSetTooltip(IServerUtils utils, DynamicHolderSet<?> holderSet) {
+        return holderSet.unwrap().map((tag) -> TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, tag.id()).key(CoreLang.Utils.TAG))),
+                (holders) -> utils.getValueTooltip(utils, holders));
     }
 }

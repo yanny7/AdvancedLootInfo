@@ -1,20 +1,15 @@
 package com.yanny.alicompat.compat.apotheosis;
 
 import com.yanny.aci.tooltip.TooltipBuilder;
-import com.yanny.aci.tooltip.TooltipNode;
-import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
-import com.yanny.ali.plugin.common.trades.SubTradesNode;
 import com.yanny.ali.plugin.glm.*;
 import com.yanny.alicompat.IGlmModCompat;
 import com.yanny.alicompat.accessor.GlmAccessorUtils;
 import com.yanny.alicompat.accessor.PluginUtils;
 import dev.shadowsoffire.apotheosis.advancements.predicates.*;
-import dev.shadowsoffire.apotheosis.affix.trades.AffixTrade;
 import dev.shadowsoffire.apotheosis.affix.trades.AutomaticAffixTrade;
-import dev.shadowsoffire.apotheosis.affix.trades.TieredTrade;
 import dev.shadowsoffire.apotheosis.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.loot.RarityRegistry;
 import dev.shadowsoffire.apotheosis.loot.conditions.KilledByRealPlayerCondition;
@@ -23,6 +18,7 @@ import dev.shadowsoffire.apotheosis.loot.conditions.WorldTierCondition;
 import dev.shadowsoffire.apotheosis.loot.entry.AffixLootPoolEntry;
 import dev.shadowsoffire.apotheosis.loot.entry.GemLootPoolEntry;
 import dev.shadowsoffire.apotheosis.loot.functions.ReforgeItemFunction;
+import dev.shadowsoffire.apotheosis.loot.functions.TierGatedTrade;
 import dev.shadowsoffire.apotheosis.loot.modifiers.AffixConvertLootModifier;
 import dev.shadowsoffire.apotheosis.loot.modifiers.AffixHookLootModifier;
 import dev.shadowsoffire.apotheosis.loot.modifiers.AffixLootModifier;
@@ -33,16 +29,12 @@ import dev.shadowsoffire.apotheosis.util.AffixItemIngredient;
 import dev.shadowsoffire.apotheosis.util.GemIngredient;
 import dev.shadowsoffire.apotheosis.util.LootPatternMatcher;
 import dev.shadowsoffire.apotheosis.util.SpawnEggIngredient;
-import dev.shadowsoffire.placebo.reload.DynamicHolder;
-import dev.shadowsoffire.placebo.systems.wanderer.WandererTrade;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Monster;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class ApotheosisCompat implements IGlmModCompat {
@@ -60,12 +52,15 @@ public class ApotheosisCompat implements IGlmModCompat {
         PluginUtils.registerEntryTooltip(registry, GemLootPoolEntry.class, GemLootPoolEntryAccessor.class);
 
         PluginUtils.registerFunctionTooltip(registry, ReforgeItemFunction.class, ReforgeItemFunctionAccessor.class);
+        PluginUtils.registerFunctionTooltip(registry, AutomaticAffixTrade.class, AutomaticAffixTradeAccessor.class);
+        PluginUtils.registerFunctionTooltip(registry, TierGatedTrade.class, TierGatedTradeAccessor.class);
+
+        PluginUtils.registerItemStackModifier(registry, AutomaticAffixTrade.class, AutomaticAffixTradeAccessor.class);
 
         PluginUtils.registerValueTooltip(registry, AffixItemIngredient.class, AffixItemIngredientAccessor.class);
         registry.registerValueTooltip(GemIngredient.class, ApotheosisCompat::getGemIngredientTooltip);
         registry.registerValueTooltip(SpawnEggIngredient.class, ApotheosisCompat::getSpawnEggIngredientTooltip);
 
-        registry.registerValueTooltip(DynamicHolder.class, ApotheosisCompat::getDynamicHolderTooltip);
         registry.registerValueTooltip(LootRarity.class, ApotheosisCompat::getLootRarityTooltip);
         registry.registerValueTooltip(Purity.class, ApotheosisCompat::getPurityTooltip);
         registry.registerValueTooltip(WorldTier.class, ApotheosisCompat::getWorldTierTooltip);
@@ -78,14 +73,10 @@ public class ApotheosisCompat implements IGlmModCompat {
         registry.registerEntitySubPredicateTooltip(MonsterPredicate.CODEC, ApotheosisCompat::getMonsterPredicateTooltip);
         registry.registerEntitySubPredicateTooltip(InvaderPredicate.CODEC, ApotheosisCompat::getInvaderPredicateTooltip);
 
-        registry.registerItemSubPredicateTooltip(AffixItemPredicate.class, ApotheosisCompat::getAffixItemPredicateTooltip);
-        registry.registerItemSubPredicateTooltip(PurityItemPredicate.class, ApotheosisCompat::getPurityItemPredicateTooltip);
-        registry.registerItemSubPredicateTooltip(RarityItemPredicate.class, ApotheosisCompat::getRarityItemPredicateTooltip);
-        registry.registerItemSubPredicateTooltip(SocketItemPredicate.class, ApotheosisCompat::getSocketItemPredicateTooltip);
-
-        PluginUtils.registerItemListing(registry, AffixTrade.class, AffixTradeAccessor.class);
-        PluginUtils.registerItemListing(registry, AutomaticAffixTrade.class, AutomaticAffixTradeAccessor.class);
-        registry.registerItemListing(TieredTrade.class, ApotheosisCompat::getTieredTradeNode);
+        registry.registerDataComponentPredicateTooltip(AffixItemPredicate.class, ApotheosisCompat::getAffixItemPredicateTooltip);
+        registry.registerDataComponentPredicateTooltip(PurityItemPredicate.class, ApotheosisCompat::getPurityItemPredicateTooltip);
+        registry.registerDataComponentPredicateTooltip(RarityItemPredicate.class, ApotheosisCompat::getRarityItemPredicateTooltip);
+        registry.registerDataComponentPredicateTooltip(SocketItemPredicate.class, ApotheosisCompat::getSocketItemPredicateTooltip);
 
         PluginUtils.registerPageResolver(registry, AffixLootModifier.class, AffixLootModifierAccessor.class);
         PluginUtils.registerPageResolver(registry, AffixConvertLootModifier.class, AffixConvertLootModifierAccessor.class);
@@ -120,11 +111,6 @@ public class ApotheosisCompat implements IGlmModCompat {
     @NotNull
     private static TooltipBuilder getSpawnEggIngredientTooltip(IServerUtils ignoredUtils, SpawnEggIngredient ignoredIngredient) {
         return TooltipBuilder.array(TooltipBuilder::showEmpty, ApotheosisLang.Ingredient.SPAWN_EGG);
-    }
-
-    @NotNull
-    private static TooltipBuilder getDynamicHolderTooltip(IServerUtils utils, DynamicHolder<?> holder) {
-        return utils.getValueTooltip(utils, holder.getId());
     }
 
     @NotNull
@@ -219,23 +205,5 @@ public class ApotheosisCompat implements IGlmModCompat {
     @NotNull
     private static TooltipBuilder getSocketItemPredicateTooltip(IServerUtils ignoredUtils, SocketItemPredicate ignoredPredicate) {
         return TooltipBuilder.array(TooltipBuilder::showEmpty, ApotheosisLang.ItemSubPredicates.SOCKETED_ITEM);
-    }
-
-    @NotNull
-    private static IDataNode getTieredTradeNode(IServerUtils utils, TieredTrade listing, TooltipNode condition) {
-        return new SubTradesNode<>(utils, listing, condition) {
-            @Override
-            public List<IDataNode> getSubTrades(IServerUtils utils, TieredTrade listing) {
-                List<IDataNode> nodes = new ArrayList<>();
-
-                for (Map.Entry<WorldTier, WandererTrade> entry : listing.trades().entrySet()) {
-                    TooltipNode cond = utils.getValueTooltip(utils, entry.getKey()).build(ApotheosisLang.Value.WORLD_TIER);
-
-                    nodes.add(utils.getItemListing(utils, entry.getValue(), cond));
-                }
-
-                return nodes;
-            }
-        };
     }
 }
