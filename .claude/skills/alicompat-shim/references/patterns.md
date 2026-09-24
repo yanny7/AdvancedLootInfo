@@ -50,7 +50,7 @@ nothing at all, since conditions ALI can run decide themselves. See `alicompat/C
 | Shape | Example |
 |---|---|
 | Loot entry | `placebo` → `StackLootEntryAccessor`, registered through **both** `PluginUtils.registerEntry` and `registerEntryTooltip`; one accessor serves two target classes (`StackLootEntry`, `EnchantedLootEntry`) |
-| Ingredient needing no special rendering | `sophisticatedstorage` → `registry.registerIngredientTooltip(X.class, IngredientTooltipUtils::getIngredientTooltip)` — delegate to ALI's own util rather than writing one |
+| Custom ingredient | `sophisticatedstorage` → `registry.registerValueTooltip(BaseTierWoodenStorageIngredient.class, …)` — a value tooltip, never `registerIngredientTooltip`: NeoForge and Fabric hand ALI the unwrapped `ICustomIngredient`/`CustomIngredient`, not an `Ingredient` subclass |
 | Value tooltip | `ironsspellbooks` → `SpellFilterAccessor` implements `IValueTooltip`; its `array` carries **no key** — the caller names it |
 | Number provider | no shim registers one. Take the shape from `ali/common`'s `Plugin` (`registry.registerNumberProvider(...)`) |
 

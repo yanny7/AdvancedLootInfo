@@ -29,6 +29,10 @@ GRADLE_CACHE = GRADLE_FILES / "curse.maven"
 LOOM_CACHE = PROJECT_DIR / ".gradle" / "loom-cache" / "minecraftMaven" / "net" / "minecraft"
 MAPPINGS_CACHE = Path.home() / ".gradle" / "caches" / "fabric-loom"
 
+VALUE_HOOK = "value"
+# ALI renders an unwrapped custom ingredient through the value tier, so a value tooltip is what covers one.
+VALUE_COVERED_HOOKS = {"ingredient"}
+
 HOOK_OF_METHOD = {
     "registerFunctionTooltip": ["function"],
     "registerCountModifier": ["function"],
@@ -41,6 +45,7 @@ HOOK_OF_METHOD = {
     "registerEntryTooltip": ["entry"],
     "registerNumberProvider": ["number_provider"],
     "registerIngredientTooltip": ["ingredient"],
+    "registerValueTooltip": [VALUE_HOOK],
     "registerDataComponentPredicateTooltip": ["data_component_predicate"],
     "registerEntitySubPredicateTooltip": ["entity_sub_predicate"],
     "registerConsumeEffectTooltip": ["consume_effect"],
@@ -527,12 +532,19 @@ def scan(loader: str, key: str, owned: set, index: dict, bases: dict, cache: dic
                 if covered.get(hook, set()) & inherited:
                     continue
 
+                if hook in VALUE_COVERED_HOOKS and covered.get(VALUE_HOOK, set()) & inherited:
+                    continue
+
                 if hook == TRADER_ENTITY_HOOK and (dynamic_trades or entity_path(name) in traded):
                     continue
 
                 new.setdefault(hook, set()).add(name.replace("/", "."))
 
     for hook, groups in registered.items():
+        # A value tooltip may name any class, a loader's included, so neither "-" nor "!" says anything about it.
+        if hook == VALUE_HOOK:
+            continue
+
         wanted = {base for base, hooks in bases.items() if hook in hooks}
 
         for alternatives in groups:
