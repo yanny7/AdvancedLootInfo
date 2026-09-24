@@ -24,7 +24,6 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -71,7 +70,7 @@ public class JeiCompatibility implements IModPlugin {
             worldgenData.forEach((key, levelNode) -> {
                 RecipeType<RecipeHolder> type = new RecipeType<>(key, RecipeHolder.class);
                 Component title = GenericUtils.getFormattedCategoryTitle(key);
-                IRecipeCategory<RecipeHolder> category = new JeiBiomeLoot(guiHelper, type, title, guiHelper.createDrawableItemLike(Items.GLOBE_BANNER_PATTERN));
+                IRecipeCategory<RecipeHolder> category = new JeiBiomeLoot(guiHelper, type, title, guiHelper.createDrawableItemLike(GenericUtils.getCategoryIcon(clientRegistry, key)));
                 List<RecipeHolder> recipes = new ArrayList<>();
 
                 registration.addRecipeCategories(category);

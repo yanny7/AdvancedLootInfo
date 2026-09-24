@@ -4,7 +4,9 @@ import com.yanny.aci.configuration.ICoreConfig;
 import com.yanny.aci.configuration.TooltipColors;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AwiConfig implements ICoreConfig {
     public static final int CURRENT_VERSION = 1;
@@ -25,6 +27,7 @@ public class AwiConfig implements ICoreConfig {
     public boolean showConfigConditionalBlocks = false;
 
     public List<String> dimensions = new ArrayList<>();
+    public Map<String, String> dimensionIcons = new HashMap<>();
 
     @Override
     public int getConfigVersion() {
@@ -49,6 +52,10 @@ public class AwiConfig implements ICoreConfig {
 
         if (dimensions == null) {
             dimensions = new ArrayList<>();
+        }
+
+        if (dimensionIcons == null) {
+            dimensionIcons = new HashMap<>();
         }
     }
 }

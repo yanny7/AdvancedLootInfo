@@ -63,6 +63,18 @@
         "pattern": "^!?#?[a-z0-9_.-]+:[a-z0-9_./-]+$"
       },
       "default": []
+    },
+    "dimensionIcons": {
+      "type": "object",
+      "description": "Recipe-viewer category icon per dimension: dimension id -> item id, e.g. \"minecraft:the_nether\": \"minecraft:netherrack\". Dimensions not listed, and unknown items, use the default icon. Read on the client only.",
+      "propertyNames": {
+        "pattern": "^[a-z0-9_.-]+:[a-z0-9_./-]+$"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[a-z0-9_.-]+:[a-z0-9_./-]+$"
+      },
+      "default": {}
     }
   },
   "additionalProperties": false
