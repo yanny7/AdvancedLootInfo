@@ -11,7 +11,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.valueproviders.FloatProvider;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSize;
@@ -73,7 +72,7 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     <T extends PlacementModifier> void registerPlacementPropagator(Class<T> type, PlacementPropagator<T> getter);
 
-    void registerSurfaceRuleHandler(Identifier ruleType, Function<RandomState, @Nullable ISurfaceRuleHandler> factory);
+    void registerSurfaceRuleHandler(Identifier ruleType, Function<ISurfaceRuleHandler.Context, @Nullable ISurfaceRuleHandler> factory);
 
     /**
      * @deprecated use {@link #registerEnumTranslation(Class, String, String)}

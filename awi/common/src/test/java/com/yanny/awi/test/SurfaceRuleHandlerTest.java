@@ -45,7 +45,7 @@ public class SurfaceRuleHandlerTest {
             return List.of(new BlockInfo(Blocks.DIAMOND_BLOCK, BlockInfo.StorageType.ABSOLUTE,
                     List.of(new RangeValue(ghost.absoluteY().first(), ghost.absoluteY().last())), 0, ghost.water(), ghost.placement(), List.of()));
         };
-        Set<BlockInfo> infos = scan(Map.of(BandlandsLayout.TYPE, (randomState) -> handler));
+        Set<BlockInfo> infos = scan(Map.of(BandlandsLayout.TYPE, (context) -> handler));
         BlockInfo diamond = infos.stream().filter((info) -> info.block() == Blocks.DIAMOND_BLOCK).findFirst().orElseThrow();
 
         assertEquals("{\"type\":\"minecraft:bandlands\"}", definitions.get(0).toString());
@@ -56,19 +56,19 @@ public class SurfaceRuleHandlerTest {
 
     @Test
     public void testUnavailableHandlerLeavesTheRuleMeasured() {
-        assertMeasured(scan(Map.of(BandlandsLayout.TYPE, (randomState) -> null)));
+        assertMeasured(scan(Map.of(BandlandsLayout.TYPE, (context) -> null)));
     }
 
     @Test
     public void testFailingHandlerLeavesTheRuleMeasured() {
-        assertMeasured(scan(Map.of(BandlandsLayout.TYPE, (randomState) -> {
+        assertMeasured(scan(Map.of(BandlandsLayout.TYPE, (context) -> {
             throw new IllegalStateException("handler failed to start");
         })));
     }
 
     @Test
     public void testThrowingExpandKeepsTheRestOfTheBiome() {
-        Set<BlockInfo> infos = scan(Map.of(BandlandsLayout.TYPE, (randomState) -> (definition, ghost) -> {
+        Set<BlockInfo> infos = scan(Map.of(BandlandsLayout.TYPE, (context) -> (definition, ghost) -> {
             throw new IllegalStateException("expand failed");
         }));
 
@@ -81,7 +81,7 @@ public class SurfaceRuleHandlerTest {
         assertTrue(infos.stream().noneMatch((info) -> info.layerShift() > 0));
     }
 
-    private static Set<BlockInfo> scan(Map<Identifier, Function<RandomState, ISurfaceRuleHandler>> factories) {
+    private static Set<BlockInfo> scan(Map<Identifier, Function<ISurfaceRuleHandler.Context, ISurfaceRuleHandler>> factories) {
         NoiseBasedChunkGenerator generator = (NoiseBasedChunkGenerator) BaseLayoutTestUtils.levelStems().getValueOrThrow(LevelStem.OVERWORLD).generator();
         RandomState randomState = RandomState.create(generator.generatorSettings().value(),
                 BaseLayoutTestUtils.registryAccess().lookupOrThrow(Registries.NOISE), SEED);
