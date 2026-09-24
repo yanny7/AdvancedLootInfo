@@ -275,12 +275,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         return trades.entries();
     }
 
-    @Deprecated(forRemoval = true, since = "2.2.0")
-    @Override
-    public void registerEnumTranslation(Class<? extends Enum<?>> type, String owner) {
-        registerEnumTranslation(type, Utils.MOD_ID, owner);
-    }
-
     @Override
     public void registerEnumTranslation(Class<? extends Enum<?>> type, String modId, String owner) {
         enumValues.put(type, new EnumTranslation(modId, owner));
