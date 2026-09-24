@@ -69,6 +69,10 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     <T extends LootItemFunction> void registerItemStackModifier(Class<T> type, TriFunction<IServerUtils, T, ItemStack, ItemStack> consumer);
 
+    <T extends LootItemFunction> void registerFunctionUnwrapper(Class<T> type, BiFunction<IServerUtils, T, List<LootItemFunction>> unwrapper);
+
+    <T extends LootItemCondition> void registerConditionUnwrapper(Class<T> type, BiFunction<IServerUtils, T, List<LootItemCondition>> unwrapper);
+
     <T> void registerPageResolver(Class<T> type, IPageResolver<T> resolver);
 
     <T extends EntitySubPredicate> void registerEntitySubPredicateResolver(MapCodec<T> type, IEntitySubPredicateResolver<T> resolver);

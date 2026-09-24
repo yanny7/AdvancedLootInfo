@@ -551,6 +551,12 @@ public class Plugin implements IPlugin {
         registry.registerItemStackModifier(ToggleTooltips.class, TooltipUtils::applyItemStackModifier);
         registry.registerItemStackModifier(SetEnchantmentsFunction.class, TooltipUtils::applySetEnchantmentsItemStackModifier);
 
+        registry.registerConditionUnwrapper(AllOfCondition.class, TooltipUtils::unwrapAllOf);
+        registry.registerConditionUnwrapper(ConditionReference.class, TooltipUtils::unwrapConditionReference);
+
+        registry.registerFunctionUnwrapper(FunctionReference.class, TooltipUtils::unwrapFunctionReference);
+        registry.registerFunctionUnwrapper(SequenceFunction.class, TooltipUtils::unwrapFunctionSequence);
+
         registerVanillaTrades(registry);
     }
 

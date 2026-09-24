@@ -6,10 +6,12 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.awi.plugin.server.summary.CountSpan;
 import com.yanny.awi.plugin.server.summary.HeightSpanPropagator;
 import com.yanny.awi.plugin.server.summary.PlacementPropagator;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.valueproviders.FloatProvider;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSize;
@@ -22,9 +24,11 @@ import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
     <T extends FeatureConfiguration> void registerFeatureBlockCollector(Class<T> type, BiFunction<IServerUtils, T, List<Either<Block, TagKey<Block>>>> getter);
@@ -68,6 +72,8 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
     <T extends HeightProvider> void registerHeightSpanPropagator(Class<T> type, HeightSpanPropagator<T> getter);
 
     <T extends PlacementModifier> void registerPlacementPropagator(Class<T> type, PlacementPropagator<T> getter);
+
+    void registerSurfaceRuleHandler(Identifier ruleType, Function<RandomState, @Nullable ISurfaceRuleHandler> factory);
 
     /**
      * @deprecated use {@link #registerEnumTranslation(Class, String, String)}

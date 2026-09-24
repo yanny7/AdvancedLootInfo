@@ -32,8 +32,8 @@ public class BaseLayoutSweepTest {
     private static final Pattern RANGE = Pattern.compile("(-?\\d+)(?:-(-?\\d+))?");
     private static final List<Long> SEEDS = List.of(1234L, 987654321L, -42L);
     private static final Map<String, NodeUtils.ScanSettings> CANDIDATES = new LinkedHashMap<>() {{
-        put("specialization off", settings(8, 4, 8, 12, 8, 32, false));
-        put("half columns", settings(4, 4, 8, 12, 8, 32, true));
+        put("specialization off", settings(8, 4, 6, 12, 8, 32, false));
+        put("half columns", settings(4, 4, 6, 12, 8, 32, true));
     }};
 
     private static NodeUtils.ScanSettings settings(int columns, int step, int stable, int extentStable, int ceiling, int window, boolean specialize) {
@@ -100,8 +100,8 @@ public class BaseLayoutSweepTest {
     private static List<String> atoms(String line) {
         String[] parts = line.split(" ", 3);
         String body = parts[2];
-        String ranges = body.substring(body.indexOf('[') + 1, body.lastIndexOf(']'));
-        String[] flags = body.substring(body.lastIndexOf(']') + 2).split(" ");
+        String ranges = body.substring(body.indexOf('[') + 1, body.indexOf(']'));
+        String[] flags = body.substring(body.indexOf(']') + 2).split(" ");
         List<String> waters = "ANY".equals(flags[0]) ? List.of("DRY", "UNDERWATER") : List.of(flags[0]);
         List<String> placements = "ANY".equals(flags[1]) ? List.of("FLOOR", "CEILING") : List.of(flags[1]);
         List<String> result = new ArrayList<>();
