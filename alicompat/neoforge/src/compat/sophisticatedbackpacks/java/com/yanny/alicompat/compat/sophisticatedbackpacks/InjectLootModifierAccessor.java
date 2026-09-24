@@ -12,26 +12,26 @@ import com.yanny.alicompat.accessor.IGlobalLootModifierAccessor;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.p3pp3rf1y.sophisticatedbackpacks.data.SBLootModifierProvider;
+import net.p3pp3rf1y.sophisticatedbackpacks.data.BackpackLootModifierProvider;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
-public class InjectLootModifierAccessor extends BaseAccessor<SBLootModifierProvider.InjectLootModifier> implements IGlobalLootModifierAccessor {
+public class InjectLootModifierAccessor extends BaseAccessor<BackpackLootModifierProvider.InjectLootModifier> implements IGlobalLootModifierAccessor {
     @FieldAccessor
     private ResourceKey<LootTable> lootTable;
     @FieldAccessor
     protected LootItemCondition[] conditions;
 
-    public InjectLootModifierAccessor(SBLootModifierProvider.InjectLootModifier parent) {
+    public InjectLootModifierAccessor(BackpackLootModifierProvider.InjectLootModifier parent) {
         super(parent);
     }
 
     @Override
     public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions), (c) -> {
-            IDataNode node = GlmNodeUtils.referenceNode(utils, c, lootTable.location());
+            IDataNode node = GlmNodeUtils.referenceNode(utils, c, lootTable.identifier());
 
             return Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, node));
         }));

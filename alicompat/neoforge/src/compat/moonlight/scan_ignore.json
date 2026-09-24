@@ -1,4 +1,5 @@
 {
   "net.mehvahdjukaar.moonlight.api.trades.NoOpListing": "ItemListingManager.apply skips it, so it never enters a trade map; nested in a BiomeVariantItemListing it yields no offer and MoonlightCompat skips it",
-  "net.mehvahdjukaar.moonlight.api.trades.RemoveNonDataListingListing": "ItemListingManager.apply only uses it to remove other listings, never adds it to a trade map; nested in a BiomeVariantItemListing it yields no offer and MoonlightCompat skips it"
+  "net.mehvahdjukaar.moonlight.api.trades.RemoveNonDataListingListing": "ItemListingManager.apply only uses it to remove other listings, never adds it to a trade map; nested in a BiomeVariantItemListing it yields no offer and MoonlightCompat skips it",
+  "net.mehvahdjukaar.moonlight.api.resources.recipe.platform.BlockTypeSwapIngredientImpl": "handled: NeoForge ICustomIngredient is not an Ingredient subclass, registered through registerValueTooltip and reached via ALI's ingredient unwrapper"
 }

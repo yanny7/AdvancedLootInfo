@@ -6,14 +6,14 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.IConditionTooltip;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
 public class DetectRSLootTablesAccessor extends BaseAccessor<DetectRSLootTables> implements IConditionTooltip {
     @FieldAccessor
-    private Set<ResourceLocation> blacklistedLootTableIds;
+    private Set<Identifier> blacklistedLootTableIds;
 
     public DetectRSLootTablesAccessor(DetectRSLootTables parent) {
         super(parent);

@@ -1,0 +1,7 @@
+{
+  "com.gregtechceu.gtceu.api.recipe.ingredient.FluidContainerIngredient": "used only in GT crafting and machine recipes; no smelting/blasting/smoking recipe or mob food list is built with it, so it never reaches loot",
+  "com.gregtechceu.gtceu.api.recipe.ingredient.IntCircuitIngredient": "GT machine-recipe circuit input only; never part of loot",
+  "com.gregtechceu.gtceu.api.recipe.ingredient.IntProviderIngredient": "GT machine-recipe output ranges only; never part of loot",
+  "com.gregtechceu.gtceu.api.recipe.ingredient.NBTPredicateIngredient": "used only in GT crafting and machine recipes; never part of loot",
+  "com.gregtechceu.gtceu.api.recipe.ingredient.SizedIngredient": "GT machine-recipe input with a count; never part of loot"
+}

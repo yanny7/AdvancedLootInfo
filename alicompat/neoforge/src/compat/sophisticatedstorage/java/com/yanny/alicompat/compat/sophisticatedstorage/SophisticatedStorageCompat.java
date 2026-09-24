@@ -4,7 +4,8 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.alicompat.IModCompat;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Holder;
+import net.minecraft.world.item.Item;
 import net.p3pp3rf1y.sophisticatedstorage.crafting.BaseTierWoodenStorageIngredient;
 import net.p3pp3rf1y.sophisticatedstorage.data.CopyStorageDataFunction;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +33,7 @@ public class SophisticatedStorageCompat implements IModCompat {
 
     @NotNull
     private static TooltipBuilder baseTierWoodenStorageTooltip(IServerUtils utils, BaseTierWoodenStorageIngredient ingredient) {
-        List<ItemStack> items = ingredient.getItems().toList();
+        List<Item> items = ingredient.items().map(Holder::value).toList();
 
         return TooltipBuilder.array((b) -> items.forEach((i) -> b.add(TooltipBuilder.asElement(utils.getValueTooltip(utils, i), items.size()))));
     }

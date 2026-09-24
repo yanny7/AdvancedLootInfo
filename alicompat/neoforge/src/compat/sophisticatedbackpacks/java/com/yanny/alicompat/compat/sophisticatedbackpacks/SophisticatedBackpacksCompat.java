@@ -8,8 +8,8 @@ import com.yanny.alicompat.IGlmModCompat;
 import com.yanny.alicompat.accessor.GlmAccessorUtils;
 import com.yanny.alicompat.accessor.PluginUtils;
 import net.p3pp3rf1y.sophisticatedbackpacks.data.CopyBackpackDataFunction;
-import net.p3pp3rf1y.sophisticatedbackpacks.data.SBLootEnabledCondition;
-import net.p3pp3rf1y.sophisticatedbackpacks.data.SBLootModifierProvider;
+import net.p3pp3rf1y.sophisticatedbackpacks.data.BackpackLootEnabledCondition;
+import net.p3pp3rf1y.sophisticatedbackpacks.data.BackpackLootModifierProvider;
 import org.jetbrains.annotations.NotNull;
 
 public class SophisticatedBackpacksCompat implements IGlmModCompat {
@@ -23,12 +23,12 @@ public class SophisticatedBackpacksCompat implements IGlmModCompat {
     public void registerServer(IServerRegistry registry) {
         registry.registerFunctionTooltip(CopyBackpackDataFunction.class, SophisticatedBackpacksCompat::getCopyBackpackDataTooltip);
 
-        registry.registerConditionTooltip(SBLootEnabledCondition.class, SophisticatedBackpacksCompat::getLootEnabledTooltip);
+        registry.registerConditionTooltip(BackpackLootEnabledCondition.class, SophisticatedBackpacksCompat::getLootEnabledTooltip);
     }
 
     @Override
     public void registerGlobalLootModifier(IGlobalLootModifierPlugin.IRegistry registry) {
-        GlmAccessorUtils.registerGlobalLootModifier(registry, SBLootModifierProvider.InjectLootModifier.class, InjectLootModifierAccessor.class);
+        GlmAccessorUtils.registerGlobalLootModifier(registry, BackpackLootModifierProvider.InjectLootModifier.class, InjectLootModifierAccessor.class);
     }
 
     @NotNull
@@ -37,7 +37,7 @@ public class SophisticatedBackpacksCompat implements IGlmModCompat {
     }
 
     @NotNull
-    private static TooltipBuilder getLootEnabledTooltip(IServerUtils ignoredUtils, SBLootEnabledCondition ignoredCond) {
+    private static TooltipBuilder getLootEnabledTooltip(IServerUtils ignoredUtils, BackpackLootEnabledCondition ignoredCond) {
         return TooltipBuilder.array(TooltipBuilder::showEmpty, SophisticatedBackpacksLang.Conditions.LOOT_ENABLED);
     }
 }
