@@ -4,6 +4,7 @@ import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.Utils;
+import com.yanny.awi.api.BlockInfo;
 import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ListNode;
@@ -53,7 +54,7 @@ public class LevelStemNode extends ListNode {
 
         for (Holder<Biome> biomeHolder : generator.getBiomeSource().possibleBiomes()) {
             NodeUtils.LayerHolder layers = baseLayouts.get(biomeHolder);
-            Set<NodeUtils.BlockInfo> baseBlocks = layers != null ? layers.getBlockInfos() : Collections.emptySet();
+            Set<BlockInfo> baseBlocks = layers != null ? layers.getBlockInfos() : Collections.emptySet();
 
             try {
                 addChildren(new BiomeNode(utils, biomeHolder.value(), biomeTooltip, baseBlocks, defaultBlock, defaultFluid, columnContext, nodeCache));

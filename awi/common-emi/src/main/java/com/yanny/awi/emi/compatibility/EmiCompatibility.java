@@ -19,7 +19,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import org.slf4j.Logger;
 
@@ -47,7 +47,7 @@ public class EmiCompatibility implements EmiPlugin {
             GenericUtils.pruneHiddenBlocks(worldgenData, EmiCompatibility::isVisible);
 
             worldgenData.forEach((key, levelNode) -> {
-                EmiRecipeCategory category = new RecipeCategory(key);
+                EmiRecipeCategory category = new RecipeCategory(key, GenericUtils.getCategoryIcon(clientRegistry, key));
 
                 registry.addCategory(category);
 
@@ -80,8 +80,8 @@ public class EmiCompatibility implements EmiPlugin {
     private static class RecipeCategory extends EmiRecipeCategory {
         private final Component title;
 
-        public RecipeCategory(ResourceLocation id) {
-            super(id, EmiStack.of(Items.GLOBE_BANNER_PATTERN));
+        public RecipeCategory(ResourceLocation id, Item icon) {
+            super(id, EmiStack.of(icon));
             title = GenericUtils.getFormattedCategoryTitle(id);
         }
 

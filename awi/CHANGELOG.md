@@ -1,3 +1,8 @@
+## []
+
+- Added `dimensions` configuration to hide dimensions
+- Added `dimensionIcons` configuration to set recipe viewer icon of each dimension
+
 ## [1.1.1]
 
 - Fixed Plugins discovered multiple times on Fabric

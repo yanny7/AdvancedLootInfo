@@ -70,7 +70,7 @@ public class ReiCompatibility implements REIClientPlugin {
 
             worldgenData.forEach((key, levelNode) -> {
                 WorldCategory category = new WorldCategory(key);
-                Holder holder = createCategory(category, ReiBiomeDisplay::new, ReiBiomeCategory::new);
+                Holder holder = createCategory(category, ReiBiomeDisplay::new, (id, title) -> new ReiBiomeCategory(id, title, GenericUtils.getCategoryIcon(clientRegistry, key)));
                 List<RecipeHolder> recipes = new ArrayList<>();
 
                 for (IDataNode biomeNode : levelNode.nodes()) {

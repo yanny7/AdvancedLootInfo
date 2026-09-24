@@ -5,6 +5,11 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.yanny.aci.configuration.ICoreConfig;
 import com.yanny.aci.configuration.TooltipColors;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class AwiConfig implements ICoreConfig {
     public static final int CURRENT_VERSION = 1;
 
@@ -14,8 +19,10 @@ public class AwiConfig implements ICoreConfig {
                 Codec.BOOL.fieldOf("logMoreStatistics").orElse(false).forGetter((c) -> c.logMoreStatistics),
                 Codec.BOOL.fieldOf("showInGameNames").orElse(true).forGetter((c) -> c.showInGameNames),
                 Codec.BOOL.fieldOf("showConfigConditionalBlocks").orElse(false).forGetter((c) -> c.showConfigConditionalBlocks),
-                TooltipColors.CODEC.fieldOf("tooltipColors").orElseGet(TooltipColors::new).forGetter((c) -> c.tooltipColors)
-        ).apply(instance, (version, log, show, showConfigConditional, colors) -> {
+                TooltipColors.CODEC.fieldOf("tooltipColors").orElseGet(TooltipColors::new).forGetter((c) -> c.tooltipColors),
+                Codec.STRING.listOf().fieldOf("dimensions").orElseGet(ArrayList::new).forGetter((c) -> c.dimensions),
+                Codec.unboundedMap(Codec.STRING, Codec.STRING).fieldOf("dimensionIcons").orElseGet(HashMap::new).forGetter((c) -> c.dimensionIcons)
+        ).apply(instance, (version, log, show, showConfigConditional, colors, dimensions, dimensionIcons) -> {
             AwiConfig config = new AwiConfig();
 
             config.configVersion = version;
@@ -23,6 +30,8 @@ public class AwiConfig implements ICoreConfig {
             config.showInGameNames = show;
             config.showConfigConditionalBlocks = showConfigConditional;
             config.tooltipColors = colors;
+            config.dimensions = dimensions;
+            config.dimensionIcons = dimensionIcons;
             return config;
         })
     );
@@ -41,6 +50,9 @@ public class AwiConfig implements ICoreConfig {
      * bytecode scan found, at the cost of those blocks being wrong for some configurations.
      */
     public boolean showConfigConditionalBlocks = false;
+
+    public List<String> dimensions = new ArrayList<>();
+    public Map<String, String> dimensionIcons = new HashMap<>();
 
     @Override
     public int getConfigVersion() {

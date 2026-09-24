@@ -1,6 +1,10 @@
 package com.yanny.awi.test.utils;
 
 import com.mojang.serialization.Lifecycle;
+import com.yanny.aci.api.RangeValue;
+import com.yanny.awi.api.BlockInfo;
+import com.yanny.awi.api.ISurfaceRuleHandler;
+import com.yanny.awi.plugin.common.nodes.BandlandsLayout;
 import com.yanny.awi.plugin.common.nodes.BaseLayoutScanner;
 import com.yanny.awi.plugin.common.nodes.NodeUtils;
 import net.minecraft.DetectedVersion;
@@ -13,6 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.dimension.LevelStem;
+import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.presets.WorldPreset;
 import net.minecraft.world.level.levelgen.presets.WorldPresets;
 import org.jetbrains.annotations.NotNull;
@@ -21,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.function.Function;
 
 /**
  * Runs the base-layout scan against vanilla worldgen data without a running server: {@code VanillaRegistries} supplies
@@ -28,6 +34,9 @@ import java.util.TreeMap;
  * same dimensions/biome sources/noise settings it sees in game.
  */
 public class BaseLayoutTestUtils {
+    public static final Map<ResourceLocation, Function<RandomState, ISurfaceRuleHandler>> SURFACE_RULE_HANDLERS =
+            Map.of(BandlandsLayout.TYPE, BandlandsLayout::create);
+
     private static HolderLookup.Provider lookup;
     private static RegistryAccess registryAccess;
     private static Registry<LevelStem> levelStems;
@@ -59,9 +68,18 @@ public class BaseLayoutTestUtils {
      */
     @NotNull
     public static Map<String, Map<String, List<String>>> scan(long seed, NodeUtils.ScanSettings settings) {
+        return describe(scanner(seed, settings, true));
+    }
+
+    @NotNull
+    public static BaseLayoutScanner scanner(long seed, NodeUtils.ScanSettings settings, boolean logStatistics) {
         // The copied registries are a different HolderOwner than the one the surface rules' holders came from, so the
         // codec ops have to go through the original lookup or the specializer's encode fails its ownership check.
-        BaseLayoutScanner scanner = BaseLayoutScanner.scan(registryAccess, lookup, seed, levelStems, settings, true);
+        return BaseLayoutScanner.scan(registryAccess, lookup, seed, levelStems, (dimension) -> true, SURFACE_RULE_HANDLERS, settings, logStatistics);
+    }
+
+    @NotNull
+    public static Map<String, Map<String, List<String>>> describe(BaseLayoutScanner scanner) {
         Map<String, Map<String, List<String>>> result = new TreeMap<>();
 
         for (LevelStem levelStem : levelStems) {
@@ -80,16 +98,18 @@ public class BaseLayoutTestUtils {
     private static List<String> describe(NodeUtils.LayerHolder layers) {
         List<String> lines = new ArrayList<>();
 
-        for (NodeUtils.BlockInfo info : layers.getBlockInfos()) {
+        for (BlockInfo info : layers.getBlockInfos()) {
             StringBuilder ranges = new StringBuilder();
 
             for (int i = 0; i < info.ranges().size(); i++) {
                 ranges.append(i > 0 ? ", " : "").append(info.ranges().get(i).toIntString());
             }
 
-            lines.add("%s %s [%s] %s %s".formatted(
+            lines.add("%s %s [%s] %s %s%s%s".formatted(
                     net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(info.block()),
-                    info.storageType(), ranges, info.water(), info.placement()));
+                    info.storageType(), ranges, info.water(), info.placement(),
+                    info.layerShift() > 0 ? " shift=±" + info.layerShift() : "",
+                    info.heights().isEmpty() ? "" : " y=[" + String.join(", ", info.heights().stream().map(RangeValue::toIntString).toList()) + "]"));
         }
 
         lines.sort(String::compareTo);
@@ -98,7 +118,22 @@ public class BaseLayoutTestUtils {
     }
 
     @NotNull
-    private static String biomeName(Holder<Biome> biome) {
+    public static HolderLookup.Provider lookup() {
+        return lookup;
+    }
+
+    @NotNull
+    public static RegistryAccess registryAccess() {
+        return registryAccess;
+    }
+
+    @NotNull
+    public static Registry<LevelStem> levelStems() {
+        return levelStems;
+    }
+
+    @NotNull
+    public static String biomeName(Holder<Biome> biome) {
         return biome.unwrapKey().map((key) -> key.location().toString()).orElse("<unnamed biome>");
     }
 

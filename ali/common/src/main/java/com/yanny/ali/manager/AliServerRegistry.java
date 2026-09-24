@@ -83,6 +83,9 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemCondition, EnchantedRanges>> chanceModifiers = registerClassKeyed("chance modifiers", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemFunction, EnchantedRanges>> countModifiers = registerClassKeyed("count modifiers", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifiers = registerClassKeyed("item stack modifiers", false, HashMap::new, null);
+    // unwrappers
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemFunction, List<LootItemFunction>>> functionUnwrappers = registerClassKeyed("function unwrappers", false, HashMap::new, null);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemCondition, List<LootItemCondition>>> conditionUnwrappers = registerClassKeyed("condition unwrappers", false, HashMap::new, null);
     // global loot modifier pages
     private final ManagedRegistry<Class<?>, IPageResolver<Object>> pageResolvers = registerClassKeyed("global loot modifier page resolvers", false, HashMap::new, null);
     private final ManagedRegistry<MapCodec<?>, IEntitySubPredicateResolver<EntitySubPredicate>> entitySubPredicateResolvers = register("entity sub-predicate resolvers", false, HashMap::new, AliServerRegistry::mapCodecNameGetter, null);
@@ -201,6 +204,16 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @Override
     public <T extends LootItemFunction> void registerItemStackModifier(Class<T> type, TriFunction<IServerUtils, T, ItemStack, ItemStack> consumer) {
         itemStackModifiers.put(type, (u, f, i) -> consumer.apply(u, type.cast(f), i));
+    }
+
+    @Override
+    public <T extends LootItemFunction> void registerFunctionUnwrapper(Class<T> type, BiFunction<IServerUtils, T, List<LootItemFunction>> unwrapper) {
+        functionUnwrappers.put(type, (u, f) -> unwrapper.apply(u, type.cast(f)));
+    }
+
+    @Override
+    public <T extends LootItemCondition> void registerConditionUnwrapper(Class<T> type, BiFunction<IServerUtils, T, List<LootItemCondition>> unwrapper) {
+        conditionUnwrappers.put(type, (u, c) -> unwrapper.apply(u, type.cast(c)));
     }
 
     @Override
@@ -355,20 +368,49 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     @Override
     public <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, EnchantedRanges count) {
-        countModifiers.get(function.getClass()).ifPresent((m) -> m.accept(utils, function, count));
+        for (LootItemFunction f : unwrapFunction(utils, function)) {
+            countModifiers.get(f.getClass()).ifPresent((m) -> m.accept(utils, f, count));
+        }
     }
 
     @Override
     public <T extends LootItemCondition> void applyChanceModifier(IServerUtils utils, T condition, EnchantedRanges chance) {
-        chanceModifiers.get(condition.getClass()).ifPresent((m) -> m.accept(utils, condition, chance));
+        for (LootItemCondition c : unwrapCondition(utils, condition)) {
+            chanceModifiers.get(c.getClass()).ifPresent((m) -> m.accept(utils, c, chance));
+        }
     }
 
     @NotNull
     @Override
     public <T extends LootItemFunction> ItemStack applyItemStackModifier(IServerUtils utils, T function, final ItemStack itemStack) {
-        return itemStackModifiers.get(function.getClass())
-                .map((m) -> m.apply(utils, function, itemStack))
-                .orElse(itemStack);
+        ItemStack result = itemStack;
+
+        for (LootItemFunction f : unwrapFunction(utils, function)) {
+            ItemStack stack = result;
+            result = itemStackModifiers.get(f.getClass())
+                    .map((m) -> m.apply(utils, f, stack))
+                    .orElse(stack);
+        }
+
+        return result;
+    }
+
+    @NotNull
+    @Override
+    public List<LootItemFunction> unwrapFunction(IServerUtils utils, LootItemFunction function) {
+        List<LootItemFunction> result = new ArrayList<>();
+
+        unwrap(utils, function, functionUnwrappers, Collections.newSetFromMap(new IdentityHashMap<>()), result);
+        return result;
+    }
+
+    @NotNull
+    @Override
+    public List<LootItemCondition> unwrapCondition(IServerUtils utils, LootItemCondition condition) {
+        List<LootItemCondition> result = new ArrayList<>();
+
+        unwrap(utils, condition, conditionUnwrappers, Collections.newSetFromMap(new IdentityHashMap<>()), result);
+        return result;
     }
 
     @NotNull
@@ -545,4 +587,22 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     public record Trades(Supplier<Int2ObjectMap<VillagerTrades.ItemListing[]>> itemListings, IntFunction<TradeLevelInfo> levelInfo) {}
+
+    private static <T> void unwrap(IServerUtils utils, T value, ManagedRegistry<Class<?>, BiFunction<IServerUtils, T, List<T>>> unwrappers, Set<Object> visiting, List<T> result) {
+        // predicate and item modifier references can form cycles, vanilla only logs them
+        if (!visiting.add(value)) {
+            result.add(value);
+            return;
+        }
+
+        List<T> inner = unwrappers.get(value.getClass()).map((u) -> u.apply(utils, value)).orElse(null);
+
+        if (inner != null) {
+            inner.forEach((i) -> unwrap(utils, i, unwrappers, visiting, result));
+        } else {
+            result.add(value);
+        }
+
+        visiting.remove(value);
+    }
 }
