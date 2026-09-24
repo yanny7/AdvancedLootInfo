@@ -311,7 +311,9 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
             Object unwrapped = unwrapper.apply(ingredient);
 
             if (unwrapped != null) {
-                return getValueTooltip(utils, unwrapped);
+                return valueTooltips.get(unwrapped.getClass())
+                        .map((v) -> v.apply(utils, unwrapped))
+                        .orElseGet(() -> MissingTooltipUtils.getMissingIngredientTooltip(utils, ingredient));
             }
         }
 
