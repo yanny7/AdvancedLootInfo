@@ -12,6 +12,7 @@ import com.yanny.ali.forge.mixin.MixinBasicItemListing;
 import com.yanny.ali.forge.mixin.MixinCanToolPerformAction;
 import com.yanny.ali.forge.mixin.MixinForgeInternalHandler;
 import com.yanny.ali.forge.mixin.MixinLootModifier;
+import com.yanny.ali.forge.mixin.MixinLootModifierManager;
 import com.yanny.ali.forge.mixin.MixinLootTableIdCondition;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
@@ -20,6 +21,7 @@ import com.yanny.ali.plugin.glm.GlobalLootModifierWrapper;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierWrapper;
 import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.ali.plugin.glm.LootPage;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraftforge.common.BasicItemListing;
 import net.minecraftforge.common.crafting.CompoundIngredient;
@@ -28,11 +30,11 @@ import net.minecraftforge.common.crafting.IntersectionIngredient;
 import net.minecraftforge.common.crafting.PartialNBTIngredient;
 import net.minecraftforge.common.crafting.StrictNBTIngredient;
 import net.minecraftforge.common.loot.*;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @AliEntrypoint
 public class ForgePlugin implements IPlugin {
@@ -95,13 +97,17 @@ public class ForgePlugin implements IPlugin {
 
     @NotNull
     private static List<IPageLootModifier> registerLootModifiers(IServerUtils utils) {
-        return GlobalLootModifierCollector.collect(utils, MixinForgeInternalHandler.getLootModifierManager().getAllLootMods().stream().map(ForgePlugin::wrap).toList());
+        MixinLootModifierManager manager = (MixinLootModifierManager) MixinForgeInternalHandler.getLootModifierManager();
+
+        return GlobalLootModifierCollector.collect(utils, manager.getAliRegisteredLootModifiers().entrySet().stream().map(ForgePlugin::wrap).toList());
     }
 
     @NotNull
-    private static IGlobalLootModifierWrapper wrap(IGlobalLootModifier modifier) {
+    private static IGlobalLootModifierWrapper wrap(Map.Entry<ResourceLocation, IGlobalLootModifier> entry) {
+        IGlobalLootModifier modifier = entry.getValue();
+
         return new GlobalLootModifierWrapper(
-                ForgeRegistries.GLOBAL_LOOT_MODIFIER_SERIALIZERS.get().getKey(modifier.codec()),
+                entry.getKey(),
                 modifier,
                 LootModifier.class,
                 () -> Arrays.asList(((MixinLootModifier) modifier).getAliConditions()),

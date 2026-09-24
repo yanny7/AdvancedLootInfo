@@ -10,6 +10,7 @@
     "MixinForgeInternalHandler",
     "MixinIntersectionIngredient",
     "MixinLootModifier",
+    "MixinLootModifierManager",
     "MixinLootTableForge",
     "MixinLootTableIdCondition",
     "MixinMinecraftServer",
