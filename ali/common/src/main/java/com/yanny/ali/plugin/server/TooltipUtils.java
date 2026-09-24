@@ -29,7 +29,6 @@ import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.number.floats.ConstantValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Unmodifiable;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -134,32 +133,16 @@ public class TooltipUtils {
 
     @NotNull
     public static List<LootItemCondition> unwrapAllOf(IServerUtils ignoredUtils, AllOfCondition condition) {
-        return condition.terms;
+        return condition.terms.stream().filter(Holder::isBound).map(Holder::value).toList();
     }
 
-    @Unmodifiable
     @Nullable
-    public static List<LootItemCondition> unwrapConditionReference(IServerUtils utils, ConditionReference condition) {
-        return utils.getServerLevel().getServer().reloadableRegistries().lookup().get(condition.name())
-                .map((holder) -> Collections.singletonList(holder.value()))
-                .orElse(null);
-    }
-
-    @NotNull
     public static List<LootItemFunction> unwrapFunctionSequence(IServerUtils ignoredUtils, SequenceFunction function) {
-        return function.functions;
-    }
-
-    @Unmodifiable
-    @Nullable
-    public static List<LootItemFunction> unwrapFunctionReference(IServerUtils utils, FunctionReference function) {
         if (isConditional(function)) {
             return null;
         }
 
-        return utils.getServerLevel().getServer().reloadableRegistries().lookup().get(function.name)
-                .map((holder) -> Collections.singletonList(holder.value()))
-                .orElse(null);
+        return function.functions.stream().filter(Holder::isBound).map(Holder::value).toList();
     }
 
     @NotNull

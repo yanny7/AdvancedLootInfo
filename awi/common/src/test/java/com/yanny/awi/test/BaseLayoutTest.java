@@ -2,6 +2,7 @@ package com.yanny.awi.test;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -18,7 +19,8 @@ import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.RandomState;
-import net.minecraft.world.level.levelgen.SurfaceRules;
+import net.minecraft.world.level.levelgen.material.condition.MaterialCondition;
+import net.minecraft.world.level.levelgen.material.rule.MaterialRule;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -57,6 +59,7 @@ public class BaseLayoutTest {
     private static final String NOISE_THRESHOLD = "minecraft:noise_threshold";
     private static final String VERTICAL_GRADIENT = "minecraft:vertical_gradient";
     private static final String HOLE = "minecraft:hole";
+    private static final Set<String> REFERENCE_FIELDS = Set.of("sequence", "then_run", "if_true", "invert");
 
     @BeforeAll
     static void setUp() {
@@ -118,7 +121,7 @@ public class BaseLayoutTest {
                 continue;
             }
 
-            SurfaceRules.RuleSource rule = generator.generatorSettings().value().surfaceRule();
+            MaterialRule rule = generator.generatorSettings().value().materialRule().value();
             JsonElement original = encode(ops, rule);
 
             if (countNodes(original, BIOME_CONDITION) == 0) {
@@ -147,9 +150,9 @@ public class BaseLayoutTest {
     public void testBandlandsReplacedByGhosts() {
         DynamicOps<JsonElement> ops = BaseLayoutTestUtils.lookup().createSerializationContext(JsonOps.INSTANCE);
         NoiseBasedChunkGenerator generator = (NoiseBasedChunkGenerator) BaseLayoutTestUtils.levelStems().getValueOrThrow(LevelStem.OVERWORLD).generator();
-        SurfaceRules.RuleSource rule = generator.generatorSettings().value().surfaceRule();
-        RandomState randomState = RandomState.create(generator.generatorSettings().value(),
-                BaseLayoutTestUtils.registryAccess().lookupOrThrow(Registries.NOISE), SEEDS.get(0));
+        MaterialRule rule = generator.generatorSettings().value().materialRule().value();
+        RandomState randomState = RandomState.create(BaseLayoutTestUtils.registryAccess().lookupOrThrow(Registries.NOISE), SEEDS.get(0),
+                generator.generatorSettings().value());
         SurfaceRuleSpecializer specializer = new SurfaceRuleSpecializer(rule, BaseLayoutTestUtils.lookup(),
                 Map.of(BandlandsLayout.TYPE.toString(), BandlandsLayout.create(randomState)), false);
         List<Executable> checks = new ArrayList<>();
@@ -180,7 +183,7 @@ public class BaseLayoutTest {
             }
 
             String name = String.valueOf(BaseLayoutTestUtils.levelStems().getKey(levelStem));
-            SurfaceRules.RuleSource rule = generator.generatorSettings().value().surfaceRule();
+            MaterialRule rule = generator.generatorSettings().value().materialRule().value();
             JsonElement original = encode(ops, rule);
             JsonElement base = encode(ops, new SurfaceRuleSpecializer(rule, BaseLayoutTestUtils.lookup(), Map.of(), false).baseRule());
 
@@ -214,8 +217,39 @@ public class BaseLayoutTest {
         assertAll(checks);
     }
 
-    private static JsonElement encode(DynamicOps<JsonElement> ops, SurfaceRules.RuleSource rule) {
-        return SurfaceRules.RuleSource.CODEC.encodeStart(ops, rule).getOrThrow();
+    private static JsonElement encode(DynamicOps<JsonElement> ops, MaterialRule rule) {
+        return inline(ops, MaterialRule.CODEC.encodeStart(ops, rule).getOrThrow(), false);
+    }
+
+    private static JsonElement inline(DynamicOps<JsonElement> ops, JsonElement element, boolean reference) {
+        if (reference && element.isJsonPrimitive() && element.getAsJsonPrimitive().isString()) {
+            if (MaterialRule.CODEC.parse(ops, element).result().orElse(null) instanceof MaterialRule.HolderHolder rule) {
+                return inline(ops, MaterialRule.CODEC.encodeStart(ops, rule.holder().value()).getOrThrow(), false);
+            }
+
+            if (MaterialCondition.CODEC.parse(ops, element).result().orElse(null) instanceof MaterialCondition.HolderHolder condition) {
+                return inline(ops, MaterialCondition.CODEC.encodeStart(ops, condition.holder().value()).getOrThrow(), false);
+            }
+
+            return element;
+        }
+
+        if (element.isJsonArray()) {
+            JsonArray copy = new JsonArray();
+
+            element.getAsJsonArray().forEach((child) -> copy.add(inline(ops, child, reference)));
+            return copy;
+        }
+
+        if (!element.isJsonObject()) {
+            return element;
+        }
+
+        JsonObject copy = new JsonObject();
+
+        element.getAsJsonObject().entrySet().forEach((entry) ->
+                copy.add(entry.getKey(), inline(ops, entry.getValue(), REFERENCE_FIELDS.contains(entry.getKey()))));
+        return copy;
     }
 
     private static int countNodes(JsonElement element, @Nullable String type) {

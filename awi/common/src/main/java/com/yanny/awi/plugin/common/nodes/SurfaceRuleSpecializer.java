@@ -3,7 +3,6 @@ package com.yanny.awi.plugin.common.nodes;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import com.yanny.aci.CommonLogUtils;
@@ -45,6 +44,8 @@ import java.util.*;
  * <p>
  * Before any pruning, every node of a rule type AWI has a {@link ISurfaceRuleHandler} for is replaced by a ghost block, once
  * per dimension; the walk measures where the ghost lands and the handler expands that into what the rule really places.
+ * A rule that does not always place would shadow every rule after it as a ghost, so it becomes a marker that never fires
+ * instead; pruning alone tells whether it applies to a biome, and its handler is given the whole height of the dimension.
  * Every {@code minecraft:noise_threshold} and {@code minecraft:hole} gate is replaced by a coin that is true for about
  * half of all blocks.
  * <p>
@@ -76,13 +77,16 @@ public class SurfaceRuleSpecializer {
     private static final String HOLE = "minecraft:hole";
     private static final String VERTICAL_GRADIENT = "minecraft:vertical_gradient";
     private static final int COIN_ANCHOR = 2000;
+    private static final String Y_ABOVE = "minecraft:y_above";
 
     private final MaterialRule original;
     private final DynamicOps<JsonElement> ops;
     @Nullable
     private final JsonElement base;
-    private final SurfaceRules.RuleSource baseRule;
+    private final MaterialRule baseRule;
     private final List<Ghost> ghosts;
+    private final List<Ghost> markers;
+    private final Map<Holder<Biome>, List<Ghost>> markersByBiome = new HashMap<>();
     private final boolean logStatistics;
 
     private boolean pruningEffective = true;
@@ -102,7 +106,7 @@ public class SurfaceRuleSpecializer {
         // set built by RegistrySetBuilder does exactly that). Asking the provider keeps the two consistent.
         DynamicOps<JsonElement> dynamicOps = codecLookup.createSerializationContext(JsonOps.INSTANCE);
         List<Ghost> replaced = new ArrayList<>();
-        SurfaceRules.RuleSource rule = original;
+        MaterialRule rule = original;
 
         try {
             json = MaterialRule.CODEC.encodeStart(dynamicOps, original).getOrThrow();
@@ -118,11 +122,11 @@ public class SurfaceRuleSpecializer {
             }
 
             try {
-                Rewrite rewrite = new Rewrite(ghostsAllowed ? handlers : Map.of(), replaced);
-                JsonElement substituted = rewrite.apply(json);
+                Rewrite rewrite = new Rewrite(dynamicOps, ghostsAllowed ? handlers : Map.of(), replaced);
+                JsonElement substituted = rewrite.apply(json, Position.RULE);
 
                 if (!replaced.isEmpty() || rewrite.coins > 0) {
-                    rule = SurfaceRules.RuleSource.CODEC.parse(dynamicOps, substituted).getOrThrow();
+                    rule = MaterialRule.CODEC.parse(dynamicOps, substituted).getOrThrow();
                     json = substituted;
                 }
             } catch (Throwable t) {
@@ -136,17 +140,28 @@ public class SurfaceRuleSpecializer {
         this.base = json;
         this.baseRule = rule;
         this.ghosts = List.copyOf(replaced);
+        this.markers = replaced.stream().filter((ghost) -> !ghost.handler().alwaysPlaces()).toList();
         this.logStatistics = logStatistics;
     }
 
     @NotNull
-    public SurfaceRules.RuleSource baseRule() {
+    public MaterialRule baseRule() {
         return baseRule;
     }
 
     @NotNull
     public List<Ghost> ghosts() {
         return ghosts;
+    }
+
+    @NotNull
+    public List<Ghost> markers() {
+        return markers;
+    }
+
+    @NotNull
+    public List<Ghost> markers(Holder<Biome> biome) {
+        return markersByBiome.getOrDefault(biome, markers);
     }
 
     /** The base rule with every branch that cannot fire for {@code biome} removed, or the base rule if none can be. */
@@ -171,6 +186,7 @@ public class SurfaceRuleSpecializer {
 
             MaterialRule result = MaterialRule.CODEC.parse(ops, pruned).getOrThrow();
 
+            markersByBiome.put(biome, markers.stream().filter((marker) -> contains(pruned, encode(marker.state()))).toList());
             log("specialized", base, pruned);
 
             return result;
@@ -421,27 +437,36 @@ public class SurfaceRuleSpecializer {
         return null;
     }
 
+    private enum Position { RULE, CONDITION, OTHER }
+
     private static class Rewrite {
+        private final DynamicOps<JsonElement> ops;
         private final Map<String, ISurfaceRuleHandler> handlers;
         private final List<Ghost> ghosts;
         private final Map<List<Object>, BlockState> ghostStates = new HashMap<>();
+        private final Map<String, JsonElement> resolved = new HashMap<>();
         private int coins;
 
-        Rewrite(Map<String, ISurfaceRuleHandler> handlers, List<Ghost> ghosts) {
+        Rewrite(DynamicOps<JsonElement> ops, Map<String, ISurfaceRuleHandler> handlers, List<Ghost> ghosts) {
+            this.ops = ops;
             this.handlers = handlers;
             this.ghosts = ghosts;
         }
 
         @NotNull
-        JsonElement apply(JsonElement element) {
+        JsonElement apply(JsonElement element, Position position) {
             if (element.isJsonArray()) {
                 JsonArray copy = new JsonArray();
 
                 for (JsonElement child : element.getAsJsonArray()) {
-                    copy.add(apply(child));
+                    copy.add(apply(child, position));
                 }
 
                 return copy;
+            }
+
+            if (position != Position.OTHER && element.isJsonPrimitive() && element.getAsJsonPrimitive().isString()) {
+                return applyReferenced(element, position);
             }
 
             if (!element.isJsonObject()) {
@@ -456,7 +481,7 @@ public class SurfaceRuleSpecializer {
                 BlockState state = ghostState(handler, object);
 
                 if (state != null) {
-                    return ghost(state);
+                    return handler.alwaysPlaces() ? ghost(state) : marker(ghost(state));
                 }
             }
 
@@ -467,10 +492,68 @@ public class SurfaceRuleSpecializer {
             JsonObject copy = new JsonObject();
 
             for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
-                copy.add(entry.getKey(), apply(entry.getValue()));
+                copy.add(entry.getKey(), apply(entry.getValue(), childPosition(type, entry.getKey())));
             }
 
             return copy;
+        }
+
+        @NotNull
+        private static Position childPosition(@Nullable String type, String field) {
+            if (SEQUENCE.equals(type) && SEQUENCE_FIELD.equals(field)) {
+                return Position.RULE;
+            }
+
+            if (CONDITION.equals(type)) {
+                return switch (field) {
+                    case IF_TRUE_FIELD -> Position.CONDITION;
+                    case THEN_RUN_FIELD -> Position.RULE;
+                    default -> Position.OTHER;
+                };
+            }
+
+            if (NOT.equals(type) && INVERT_FIELD.equals(field)) {
+                return Position.CONDITION;
+            }
+
+            return Position.OTHER;
+        }
+
+        @NotNull
+        private JsonElement applyReferenced(JsonElement reference, Position position) {
+            String key = position + reference.getAsString();
+            JsonElement cached = resolved.get(key);
+
+            if (cached != null) {
+                return cached;
+            }
+
+            JsonElement inlined;
+
+            try {
+                if (position == Position.RULE) {
+                    if (!(MaterialRule.CODEC.parse(ops, reference).getOrThrow() instanceof MaterialRule.HolderHolder holder)) {
+                        return reference;
+                    }
+
+                    inlined = MaterialRule.CODEC.encodeStart(ops, holder.holder().value()).getOrThrow();
+                } else {
+                    if (!(MaterialCondition.CODEC.parse(ops, reference).getOrThrow() instanceof MaterialCondition.HolderHolder holder)) {
+                        return reference;
+                    }
+
+                    inlined = MaterialCondition.CODEC.encodeStart(ops, holder.holder().value()).getOrThrow();
+                }
+            } catch (Throwable t) {
+                return reference;
+            }
+
+            JsonElement rewritten = apply(inlined, position);
+            JsonElement result = rewritten.equals(inlined) ? reference : rewritten;
+
+            resolved.put(key, result);
+
+            return result;
         }
 
         @Nullable
@@ -492,9 +575,25 @@ public class SurfaceRuleSpecializer {
             JsonObject ghost = new JsonObject();
 
             ghost.addProperty(TYPE, BLOCK);
-            ghost.add(RESULT_STATE_FIELD, BlockState.CODEC.encodeStart(JsonOps.INSTANCE, state).getOrThrow());
+            ghost.add(RESULT_STATE_FIELD, encode(state));
 
             return ghost;
+        }
+
+        @NotNull
+        private static JsonObject marker(JsonObject ghost) {
+            JsonObject never = new JsonObject();
+            JsonObject marker = new JsonObject();
+
+            never.addProperty(TYPE, Y_ABOVE);
+            never.add("anchor", anchor(COIN_ANCHOR));
+            never.addProperty("surface_depth_multiplier", 0);
+            never.addProperty("add_stone_depth", false);
+            marker.addProperty(TYPE, CONDITION);
+            marker.add(IF_TRUE_FIELD, never);
+            marker.add(THEN_RUN_FIELD, ghost);
+
+            return marker;
         }
 
         // Never a constant true: an always-open gate shadows its sequence siblings and every not(gate) branch.
@@ -520,6 +619,33 @@ public class SurfaceRuleSpecializer {
         }
     }
 
+    @NotNull
+    private static JsonElement encode(BlockState state) {
+        return BlockState.CODEC.encodeStart(JsonOps.INSTANCE, state).getOrThrow();
+    }
+
+    private static boolean contains(JsonElement element, JsonElement needle) {
+        if (element.equals(needle)) {
+            return true;
+        }
+
+        if (element.isJsonArray()) {
+            for (JsonElement child : element.getAsJsonArray()) {
+                if (contains(child, needle)) {
+                    return true;
+                }
+            }
+        } else if (element.isJsonObject()) {
+            for (Map.Entry<String, JsonElement> entry : element.getAsJsonObject().entrySet()) {
+                if (contains(entry.getValue(), needle)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     private static boolean placesBlock(JsonElement element, String blockId) {
         if (element.isJsonArray()) {
             for (JsonElement child : element.getAsJsonArray()) {
@@ -529,6 +655,12 @@ public class SurfaceRuleSpecializer {
             }
 
             return false;
+        }
+
+        if (element.isJsonPrimitive()) {
+            String value = element.getAsString();
+
+            return value.equals(blockId) || value.startsWith(blockId + "[");
         }
 
         if (!element.isJsonObject()) {

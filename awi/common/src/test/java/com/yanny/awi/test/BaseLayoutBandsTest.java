@@ -12,7 +12,6 @@ import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.PalettedContainerFactory;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.RandomState;
@@ -98,9 +97,8 @@ public class BaseLayoutBandsTest {
     }
 
     private static Set<BlockInfo> scan(long seed, ResourceKey<Biome> biomeKey, NodeUtils.ScanSettings settings) {
-        NodeUtils.DimensionContext context = new NodeUtils.DimensionContext(BaseLayoutTestUtils.registryAccess(),
-                PalettedContainerFactory.create(BaseLayoutTestUtils.registryAccess()), BaseLayoutTestUtils.lookup(), generator(), randomState(seed), BaseLayoutTestUtils.SURFACE_RULE_HANDLERS);
-        Holder<Biome> biome = BaseLayoutTestUtils.registryAccess().lookupOrThrow(Registries.BIOME).getOrThrow(biomeKey);
+        NodeUtils.DimensionContext context = new NodeUtils.DimensionContext(BaseLayoutTestUtils.lookup(), generator(), randomState(seed), BaseLayoutTestUtils.SURFACE_RULE_HANDLERS);
+        Holder<Biome> biome = BaseLayoutTestUtils.lookup().lookupOrThrow(Registries.BIOME).getOrThrow(biomeKey);
 
         return NodeUtils.getBaseBlocksForBiome(context, biome, new NodeUtils.ScanOptions(settings, false)).getBlockInfos();
     }
@@ -140,7 +138,7 @@ public class BaseLayoutBandsTest {
     }
 
     private static RandomState randomState(long seed) {
-        return RandomState.create(generator().generatorSettings().value(),
-                BaseLayoutTestUtils.registryAccess().lookupOrThrow(Registries.NOISE), seed);
+        return RandomState.create(BaseLayoutTestUtils.registryAccess().lookupOrThrow(Registries.NOISE), seed,
+                generator().generatorSettings().value());
     }
 }

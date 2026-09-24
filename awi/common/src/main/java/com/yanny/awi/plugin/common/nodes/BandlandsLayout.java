@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Noises;
 import net.minecraft.world.level.levelgen.RandomState;
-import net.minecraft.world.level.levelgen.synth.NormalNoise;
+import net.minecraft.world.level.levelgen.synth.Noise;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -21,15 +21,15 @@ import java.util.Map;
 public class BandlandsLayout implements ISurfaceRuleHandler {
     public static final Identifier TYPE = Identifier.withDefaultNamespace("bandlands");
 
-    private static final double OFFSET_SCALE = 4.0;
+    private static final float OFFSET_SCALE = 4.0F;
     private static final int OFFSET_SAMPLE_RADIUS = 4096;
     private static final int OFFSET_SAMPLE_STEP = 32;
 
     private final BlockState[] palette;
-    private final NormalNoise offsetNoise;
+    private final Noise offsetNoise;
     private int shift = -1;
 
-    private BandlandsLayout(BlockState[] palette, NormalNoise offsetNoise) {
+    private BandlandsLayout(BlockState[] palette, Noise offsetNoise) {
         this.palette = palette;
         this.offsetNoise = offsetNoise;
     }
@@ -82,7 +82,7 @@ public class BandlandsLayout implements ISurfaceRuleHandler {
 
             for (int x = -OFFSET_SAMPLE_RADIUS; x <= OFFSET_SAMPLE_RADIUS; x += OFFSET_SAMPLE_STEP) {
                 for (int z = -OFFSET_SAMPLE_RADIUS; z <= OFFSET_SAMPLE_RADIUS; z += OFFSET_SAMPLE_STEP) {
-                    max = Math.max(max, Math.abs((int) Math.round(offsetNoise.getValue(x, 0.0, z) * OFFSET_SCALE)));
+                    max = Math.max(max, Math.abs(Math.round(offsetNoise.get(x, 0.0, z) * OFFSET_SCALE)));
                 }
             }
 

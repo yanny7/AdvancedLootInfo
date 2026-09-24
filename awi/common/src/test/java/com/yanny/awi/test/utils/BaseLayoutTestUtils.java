@@ -7,6 +7,7 @@ import com.yanny.awi.api.ISurfaceRuleHandler;
 import com.yanny.awi.plugin.common.nodes.BandlandsLayout;
 import com.yanny.awi.plugin.common.nodes.BaseLayoutScanner;
 import com.yanny.awi.plugin.common.nodes.NodeUtils;
+import com.yanny.awi.plugin.common.nodes.OreVeinLayout;
 import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.*;
@@ -17,7 +18,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.dimension.LevelStem;
-import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.presets.WorldPreset;
 import net.minecraft.world.level.levelgen.presets.WorldPresets;
 import org.jetbrains.annotations.NotNull;
@@ -34,8 +34,8 @@ import java.util.function.Function;
  * same dimensions/biome sources/noise settings it sees in game.
  */
 public class BaseLayoutTestUtils {
-    public static final Map<Identifier, Function<RandomState, ISurfaceRuleHandler>> SURFACE_RULE_HANDLERS =
-            Map.of(BandlandsLayout.TYPE, BandlandsLayout::create);
+    public static final Map<Identifier, Function<ISurfaceRuleHandler.Context, ISurfaceRuleHandler>> SURFACE_RULE_HANDLERS =
+            Map.of(BandlandsLayout.TYPE, (context) -> BandlandsLayout.create(context.randomState()), OreVeinLayout.TYPE, OreVeinLayout::create);
 
     private static HolderLookup.Provider lookup;
     private static RegistryAccess registryAccess;
@@ -121,11 +121,6 @@ public class BaseLayoutTestUtils {
         lines.sort(String::compareTo);
 
         return lines;
-    }
-
-    @NotNull
-    public static HolderLookup.Provider lookup() {
-        return lookup;
     }
 
     @NotNull
