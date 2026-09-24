@@ -1,0 +1,3 @@
+{
+  "com.github.ysbbbbbb.kaleidoscopecookery.crafting.ingredinet.AnyIngredient": "serializer is registered, but no recipe in the jar uses it and nothing in code builds one into a cooking recipe or mob food list, so it never reaches loot"
+}
