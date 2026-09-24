@@ -80,6 +80,7 @@
   "alicompat.type.function.random_arrows": "Random Arrows:",
   "alicompat.type.function.random_potion": "Random Potion",
   "alicompat.type.function.random_spell_scroll": "Random Spell Scroll:",
+  "alicompat.type.function.random_weight": "Random Weight:",
   "alicompat.type.function.randomize_ring_enhancement": "Randomize Ring Enhancement:",
   "alicompat.type.function.randomize_spell": "Randomize Spell:",
   "alicompat.type.function.replace_with_loot_table": "Replace With Loot Table:",

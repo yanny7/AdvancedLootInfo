@@ -102,6 +102,12 @@
     "curseforge": ["goblin-traders-363703"]
   },
   {
+    "key": "gtceu",
+    "name": "GregTech CEu Modern",
+    "mod_ids": ["gtceu"],
+    "curseforge": ["gregtechceu-modern-890405"]
+  },
+  {
     "key": "hybridaquatic",
     "name": "Hybrid Aquatic",
     "mod_ids": ["hybrid_aquatic"],
