@@ -349,7 +349,7 @@ public class SurfaceRuleSpecializer {
                 BlockState state = ghostState(handler, object);
 
                 if (state != null) {
-                    return ghost(state);
+                    return handler.alwaysPlaces() ? ghost(state) : gated(ghost(state));
                 }
             }
 
@@ -388,6 +388,17 @@ public class SurfaceRuleSpecializer {
             ghost.add(RESULT_STATE_FIELD, BlockState.CODEC.encodeStart(JsonOps.INSTANCE, state).getOrThrow(false, (error) -> {}));
 
             return ghost;
+        }
+
+        @NotNull
+        private JsonObject gated(JsonObject rule) {
+            JsonObject gated = new JsonObject();
+
+            gated.addProperty(TYPE, CONDITION);
+            gated.add(IF_TRUE_FIELD, coin());
+            gated.add(THEN_RUN_FIELD, rule);
+
+            return gated;
         }
 
         // Never a constant true: an always-open gate shadows its sequence siblings and every not(gate) branch.

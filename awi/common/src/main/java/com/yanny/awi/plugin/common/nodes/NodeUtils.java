@@ -116,13 +116,13 @@ public class NodeUtils {
 
         /** @param codecLookup see {@link SurfaceRuleSpecializer}; {@code registryAccess} in game, a test's own provider otherwise. */
         public DimensionContext(RegistryAccess registryAccess, HolderLookup.Provider codecLookup, NoiseBasedChunkGenerator noiseGenerator,
-                                RandomState randomState, Map<ResourceLocation, Function<RandomState, ISurfaceRuleHandler>> handlerFactories) {
+                                RandomState randomState, Map<ResourceLocation, Function<ISurfaceRuleHandler.Context, ISurfaceRuleHandler>> handlerFactories) {
             Registry<Biome> biomeRegistry = registryAccess.registryOrThrow(Registries.BIOME);
             NoiseGeneratorSettings settings = noiseGenerator.generatorSettings().value();
 
             this.codecLookup = codecLookup;
             this.masterSurfaceRule = settings.surfaceRule();
-            this.handlers = bind(handlerFactories, randomState);
+            this.handlers = bind(handlerFactories, new ISurfaceRuleHandler.Context(randomState, codecLookup));
 
             LevelHeightAccessor heightAccessor = new LevelHeightAccessor() {
                 @Override
@@ -183,13 +183,13 @@ public class NodeUtils {
         }
 
         @NotNull
-        private static Map<String, ISurfaceRuleHandler> bind(Map<ResourceLocation, Function<RandomState, ISurfaceRuleHandler>> factories,
-                                                            RandomState randomState) {
+        private static Map<String, ISurfaceRuleHandler> bind(Map<ResourceLocation, Function<ISurfaceRuleHandler.Context, ISurfaceRuleHandler>> factories,
+                                                            ISurfaceRuleHandler.Context context) {
             Map<String, ISurfaceRuleHandler> handlers = new HashMap<>();
 
             factories.forEach((type, factory) -> {
                 try {
-                    ISurfaceRuleHandler handler = factory.apply(randomState);
+                    ISurfaceRuleHandler handler = factory.apply(context);
 
                     if (handler != null) {
                         handlers.put(type.toString(), handler);
