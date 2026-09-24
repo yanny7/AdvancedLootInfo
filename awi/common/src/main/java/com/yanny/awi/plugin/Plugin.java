@@ -379,5 +379,7 @@ public class Plugin implements IPlugin {
         registry.registerStructureProcessorTooltip(NopProcessor.class, StructureProcessorTooltipUtils::getNopProcessorTooltip);
         registry.registerStructureProcessorTooltip(ProtectedBlockProcessor.class, StructureProcessorTooltipUtils::getProtectedBlockProcessorTooltip);
         registry.registerStructureProcessorTooltip(RuleProcessor.class, StructureProcessorTooltipUtils::getRuleProcessorTooltip);
+
+        registry.registerSurfaceRuleHandler(BandlandsLayout.TYPE, BandlandsLayout::create);
     }
 }

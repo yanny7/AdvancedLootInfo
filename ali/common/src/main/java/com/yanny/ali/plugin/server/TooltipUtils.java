@@ -25,12 +25,11 @@ import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.minecraft.world.level.storage.loot.functions.*;
-import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithEnchantedBonusCondition;
+import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -131,6 +130,36 @@ public class TooltipUtils {
      */
     public static boolean isConditional(LootItemConditionalFunction function) {
         return !function.predicates.isEmpty();
+    }
+
+    @NotNull
+    public static List<LootItemCondition> unwrapAllOf(IServerUtils ignoredUtils, AllOfCondition condition) {
+        return condition.terms;
+    }
+
+    @Unmodifiable
+    @Nullable
+    public static List<LootItemCondition> unwrapConditionReference(IServerUtils utils, ConditionReference condition) {
+        return utils.getServerLevel().getServer().reloadableRegistries().lookup().get(condition.name())
+                .map((holder) -> Collections.singletonList(holder.value()))
+                .orElse(null);
+    }
+
+    @NotNull
+    public static List<LootItemFunction> unwrapFunctionSequence(IServerUtils ignoredUtils, SequenceFunction function) {
+        return function.functions;
+    }
+
+    @Unmodifiable
+    @Nullable
+    public static List<LootItemFunction> unwrapFunctionReference(IServerUtils utils, FunctionReference function) {
+        if (isConditional(function)) {
+            return null;
+        }
+
+        return utils.getServerLevel().getServer().reloadableRegistries().lookup().get(function.name)
+                .map((holder) -> Collections.singletonList(holder.value()))
+                .orElse(null);
     }
 
     @NotNull
