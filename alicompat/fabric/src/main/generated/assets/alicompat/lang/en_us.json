@@ -10,6 +10,8 @@
   "alicompat.property.value.random_firework_star": "Random Firework Star",
   "alicompat.property.value.random_sea_message": "Random sea message",
   "alicompat.property.value.village_wood_type": "Wood type of the village",
+  "alicompat.type.condition.advance_block_match_tool": "Breaker Equipment:",
+  "alicompat.type.condition.advance_entity_match_tool": "Killer Equipment:",
   "alicompat.type.condition.artifact_rarity_adjusted_chance": "Artifact Rarity Adjusted Chance:",
   "alicompat.type.condition.block_named": "Block Is Named",
   "alicompat.type.condition.config_enabled": "Config Enabled:",

@@ -126,6 +126,12 @@
     "curseforge": ["irons-spells-n-spellbooks-855414"]
   },
   {
+    "key": "kaleidoscopecookery",
+    "name": "Kaleidoscope Cookery",
+    "mod_ids": ["kaleidoscope_cookery"],
+    "curseforge": ["kaleidoscope-cookery-1309203"]
+  },
+  {
     "key": "mantle",
     "name": "Mantle",
     "mod_ids": ["mantle"],
