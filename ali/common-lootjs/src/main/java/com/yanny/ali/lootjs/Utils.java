@@ -75,14 +75,14 @@ public class Utils {
 
         switch (vanillaEntry) {
             case LootItem lootItem -> {
-                List<LootItemCondition> allConditions = NodeUtils.getAllConditions(lootItem, conditions);
-                List<LootItemFunction> allFunctions = NodeUtils.getAllFunctions(lootItem, functions);
+                List<LootItemCondition> allConditions = NodeUtils.getAllConditions(utils, lootItem, conditions);
+                List<LootItemFunction> allFunctions = NodeUtils.getAllFunctions(utils, lootItem, functions);
 
                 return new ItemStackNode(utils, lootItem.item.value().getDefaultInstance(), chance, allFunctions, allConditions, preservedCount);
             }
             case TagEntry tagEntry -> {
-                List<LootItemCondition> allConditions = NodeUtils.getAllConditions(tagEntry, conditions);
-                List<LootItemFunction> allFunctions = NodeUtils.getAllFunctions(tagEntry, functions);
+                List<LootItemCondition> allConditions = NodeUtils.getAllConditions(utils, tagEntry, conditions);
+                List<LootItemFunction> allFunctions = NodeUtils.getAllFunctions(utils, tagEntry, functions);
 
                 return new ItemTagNode(utils, tagEntry.tag, chance, allFunctions, allConditions, preservedCount);
             }

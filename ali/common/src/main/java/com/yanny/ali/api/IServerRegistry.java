@@ -95,12 +95,6 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
     /** Registers a trader that builds its levels in code; the getter runs during the scan, so it may use {@link IServerUtils#lookupProvider()}. */
     void registerTradeLevels(Identifier traderId, Function<IServerUtils, Int2ObjectMap<TradeLevel>> levels);
 
-    /**
-     * @deprecated use {@link #registerEnumTranslation(Class, String, String)}
-     */
-    @Deprecated(forRemoval = true, since = "2.2.0")
-    void registerEnumTranslation(Class<? extends Enum<?>> type, String owner);
-
     void registerEnumTranslation(Class<? extends Enum<?>> type, String modId, String owner);
 
     @FunctionalInterface

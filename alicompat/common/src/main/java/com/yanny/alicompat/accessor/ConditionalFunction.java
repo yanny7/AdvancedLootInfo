@@ -1,6 +1,6 @@
 package com.yanny.alicompat.accessor;
 
-import com.yanny.ali.plugin.common.NodeUtils;
+import net.minecraft.core.Holder;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
@@ -11,6 +11,6 @@ public abstract class ConditionalFunction extends BaseAccessor<LootItemCondition
 
     public ConditionalFunction(LootItemConditionalFunction parent) {
         super(parent);
-        predicates = NodeUtils.unwrapConditions(parent.condition);
+        predicates = parent.condition.filter(Holder::isBound).map(Holder::value).stream().toList();
     }
 }

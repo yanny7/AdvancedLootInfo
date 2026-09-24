@@ -38,8 +38,8 @@ public class StackLootEntryAccessor extends BaseAccessor<StackLootEntry> impleme
 
     @Override
     public IDataNode create(IServerUtils utils, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        List<LootItemCondition> allConditions = NodeUtils.getAllConditions(parent, conditions);
-        List<LootItemFunction> allFunctions = NodeUtils.getAllFunctions(parent, functions);
+        List<LootItemCondition> allConditions = NodeUtils.getAllConditions(utils, parent, conditions);
+        List<LootItemFunction> allFunctions = NodeUtils.getAllFunctions(utils, parent, functions);
         float itemChance = NodeUtils.getChance(parent, chance, sumWeight);
         EnchantedRanges enchantedChance = NodeUtils.getEnchantedChance(utils, allConditions, itemChance);
         EnchantedRanges enchantedCount = getEnchantedCount(utils, allFunctions);

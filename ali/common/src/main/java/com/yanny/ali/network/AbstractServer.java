@@ -250,7 +250,7 @@ public abstract class AbstractServer {
     }
 
     private static boolean isDefaultBlockDrop(AliServerRegistry serverRegistry, AliConfig config, Block block, @Nullable LootTable lootTable) {
-        if (lootTable == null || !isIgnoredFunctions(config, NodeUtils.unwrapFunctions(lootTable.modifier))) {
+        if (lootTable == null || !isIgnoredFunctions(config, NodeUtils.unwrapFunctions(serverRegistry, lootTable.modifier))) {
             return false;
         }
 
@@ -263,16 +263,16 @@ public abstract class AbstractServer {
 
         LootPool pool = pools.getFirst();
 
-        if (pool.entries.size() != 1 || !isIgnoredFunctions(config, NodeUtils.unwrapFunctions(pool.modifier)) || !isIgnoredConditions(config, NodeUtils.unwrapConditions(pool.condition))
+        if (pool.entries.size() != 1 || !isIgnoredFunctions(config, NodeUtils.unwrapFunctions(serverRegistry, pool.modifier)) || !isIgnoredConditions(config, NodeUtils.unwrapConditions(serverRegistry, pool.condition))
                 || !isConstant(serverRegistry.convertInt(serverRegistry, pool.rolls), 1) || !isConstant(serverRegistry.convertFloat(serverRegistry, pool.bonusRolls), 0)) {
             return false;
         }
 
-        if (!(pool.entries.getFirst() instanceof LootItem lootItem) || lootItem.item.value() != block.asItem() || !isIgnoredFunctions(config, NodeUtils.unwrapFunctions(lootItem.modifier))) {
+        if (!(pool.entries.getFirst() instanceof LootItem lootItem) || lootItem.item.value() != block.asItem() || !isIgnoredFunctions(config, NodeUtils.unwrapFunctions(serverRegistry, lootItem.modifier))) {
             return false;
         }
 
-        return isIgnoredConditions(config, NodeUtils.unwrapConditions(lootItem.condition));
+        return isIgnoredConditions(config, NodeUtils.unwrapConditions(serverRegistry, lootItem.condition));
     }
 
     private static boolean isIgnoredFunctions(AliConfig config, List<LootItemFunction> functions) {

@@ -217,12 +217,6 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
         valueTooltips.put(type, (u, v) -> getter.apply(u, type.cast(v)));
     }
 
-    @Deprecated(forRemoval = true, since = "1.1.1")
-    @Override
-    public void registerEnumTranslation(Class<? extends Enum<?>> type, String owner) {
-        registerEnumTranslation(type, Utils.MOD_ID, owner);
-    }
-
     @Override
     public void registerEnumTranslation(Class<? extends Enum<?>> type, String modId, String owner) {
         enumValues.put(type, new EnumTranslation(modId, owner));

@@ -32,7 +32,7 @@ public class AddItemModifierAccessor extends BaseAccessor<AddItemModifier> imple
     }
 
     public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
-        List<LootItemCondition> conditionList = NodeUtils.unwrapConditions(condition);
+        List<LootItemCondition> conditionList = NodeUtils.unwrapConditions(utils, condition);
 
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
                 (c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true,

@@ -42,7 +42,7 @@ public class StructureModdedLootImporterApplierAccessor extends BaseAccessor<Str
 
     @Override
     public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
-        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, NodeUtils.unwrapConditions(condition), (c) -> getOperations(utils, c)));
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, NodeUtils.unwrapConditions(utils, condition), (c) -> getOperations(utils, c)));
     }
 
     @NotNull

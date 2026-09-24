@@ -72,8 +72,8 @@ public class ImmersiveEngineeringCompat implements IGlmModCompat {
     @NotNull
     private static IDataNode getDynamicNode(IServerUtils utils, LootPoolSingletonContainer entry, float rawChance, int sumWeight,
                                             List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        List<LootItemFunction> allFunctions = NodeUtils.getAllFunctions(entry, functions);
-        List<LootItemCondition> allConditions = NodeUtils.getAllConditions(entry, conditions);
+        List<LootItemFunction> allFunctions = NodeUtils.getAllFunctions(utils, entry, functions);
+        List<LootItemCondition> allConditions = NodeUtils.getAllConditions(utils, entry, conditions);
         float chance = NodeUtils.getChance(entry, rawChance, sumWeight);
 
         return new DynamicNode(chance, TooltipUtils.getDynamicTooltip(utils, entry.quality, chance, allFunctions, allConditions).build());

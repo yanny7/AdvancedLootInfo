@@ -75,11 +75,5 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     void registerSurfaceRuleHandler(Identifier ruleType, Function<ISurfaceRuleHandler.Context, @Nullable ISurfaceRuleHandler> factory);
 
-    /**
-     * @deprecated use {@link #registerEnumTranslation(Class, String, String)}
-     */
-    @Deprecated(forRemoval = true, since = "1.1.1")
-    void registerEnumTranslation(Class<? extends Enum<?>> type, String owner);
-
     void registerEnumTranslation(Class<? extends Enum<?>> type, String modId, String owner);
 }

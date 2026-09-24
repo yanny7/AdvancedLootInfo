@@ -22,8 +22,6 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.*;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-import net.minecraft.world.level.storage.loot.functions.SequenceFunction;
-import net.minecraft.world.level.storage.loot.predicates.AllOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -66,8 +64,8 @@ public class NodeUtils {
 
     @NotNull
     public static IDataNode getItemNode(IServerUtils utils, UniformContainerBase entry, Function<List<LootItemFunction>, Either<ItemStack, TagKey<? extends ItemLike>>> itemGetter, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
-        List<LootItemFunction> allFunctions = getAllFunctions(entry, functions);
+        List<LootItemCondition> allConditions = getAllConditions(utils, entry, conditions);
+        List<LootItemFunction> allFunctions = getAllFunctions(utils, entry, functions);
         float chance = getChance(entry, rawChance, sumWeight);
         EnchantedRanges enchantedChance = getEnchantedChance(utils, allConditions, chance);
         EnchantedRanges enchantedCount = getEnchantedCount(utils, allFunctions);
@@ -83,8 +81,8 @@ public class NodeUtils {
 
     @NotNull
     public static AlternativesNode getAlternativesNode(IServerUtils utils, AlternativesEntry entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        List<LootItemFunction> allFunctions = getAllFunctions(entry, functions);
-        List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
+        List<LootItemFunction> allFunctions = getAllFunctions(utils, entry, functions);
+        List<LootItemCondition> allConditions = getAllConditions(utils, entry, conditions);
         List<IDataNode> children = getChildren(utils, entry.children, rawChance, sumWeight, allFunctions, allConditions);
         TooltipNode tooltip = TooltipUtils.getAlternativesTooltip().build();
 
@@ -93,8 +91,8 @@ public class NodeUtils {
 
     @NotNull
     public static DynamicNode getDynamicNode(IServerUtils utils, DynamicLoot entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        List<LootItemFunction> allFunctions = getAllFunctions(entry, functions);
-        List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
+        List<LootItemFunction> allFunctions = getAllFunctions(utils, entry, functions);
+        List<LootItemCondition> allConditions = getAllConditions(utils, entry, conditions);
         float chance = getChance(entry, rawChance, sumWeight);
         TooltipNode tooltip = TooltipUtils.getDynamicTooltip(utils, entry.quality, chance, allFunctions, allConditions).build();
 
@@ -103,8 +101,8 @@ public class NodeUtils {
 
     @NotNull
     public static EmptyNode getEmptyNode(IServerUtils utils, EmptyLootItem entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        List<LootItemFunction> allFunctions = getAllFunctions(entry, functions);
-        List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
+        List<LootItemFunction> allFunctions = getAllFunctions(utils, entry, functions);
+        List<LootItemCondition> allConditions = getAllConditions(utils, entry, conditions);
         float chance = getChance(entry, rawChance, sumWeight);
         EnchantedRanges enchantedChance = getEnchantedChance(utils, allConditions, chance);
         TooltipNode tooltip = TooltipUtils.getEmptyTooltip(utils, entry.quality, enchantedChance, allFunctions, allConditions).build();
@@ -114,8 +112,8 @@ public class NodeUtils {
 
     @NotNull
     public static GroupNode getGroupNode(IServerUtils utils, EntryGroup entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        List<LootItemFunction> allFunctions = getAllFunctions(entry, functions);
-        List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
+        List<LootItemFunction> allFunctions = getAllFunctions(utils, entry, functions);
+        List<LootItemCondition> allConditions = getAllConditions(utils, entry, conditions);
         List<IDataNode> children = getChildren(utils, entry.children, rawChance, sumWeight, allFunctions, allConditions);
         TooltipNode tooltip = TooltipUtils.getGroupTooltip().build();
 
@@ -124,8 +122,8 @@ public class NodeUtils {
 
     @NotNull
     public static SequenceNode getSequenceNode(IServerUtils utils, SequentialEntry entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        List<LootItemFunction> allFunctions = getAllFunctions(entry, functions);
-        List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
+        List<LootItemFunction> allFunctions = getAllFunctions(utils, entry, functions);
+        List<LootItemCondition> allConditions = getAllConditions(utils, entry, conditions);
         List<IDataNode> children = getChildren(utils, entry.children, rawChance, sumWeight, allFunctions, allConditions);
         TooltipNode tooltip = TooltipUtils.getSequentialTooltip().build();
 
@@ -134,8 +132,8 @@ public class NodeUtils {
 
     @NotNull
     public static ReferenceNode getReferenceNode(IServerUtils utils, NestedLootTable entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        List<LootItemFunction> allFunctions = getAllFunctions(entry, functions);
-        List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
+        List<LootItemFunction> allFunctions = getAllFunctions(utils, entry, functions);
+        List<LootItemCondition> allConditions = getAllConditions(utils, entry, conditions);
         float chance = getChance(entry, rawChance, sumWeight);
         TooltipNode tooltip = TooltipUtils.getReferenceTooltip(entry, rawChance, sumWeight).build();
         List<IDataNode> children = entry.value.stream().map((holder) -> {
@@ -167,8 +165,8 @@ public class NodeUtils {
 
     @NotNull
     public static SlotNode getSlotNode(IServerUtils utils, SlotLoot entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        List<LootItemFunction> allFunctions = getAllFunctions(entry, functions);
-        List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
+        List<LootItemFunction> allFunctions = getAllFunctions(utils, entry, functions);
+        List<LootItemCondition> allConditions = getAllConditions(utils, entry, conditions);
         float chance = getChance(entry, rawChance, sumWeight);
         EnchantedRanges enchantedChance = getEnchantedChance(utils, allConditions, chance);
         TooltipNode tooltip = EntryTooltipUtils.getSlotTooltip(utils, entry.slotSource.value(), entry.quality, enchantedChance, allFunctions, allConditions).build();
@@ -178,8 +176,8 @@ public class NodeUtils {
 
     @NotNull
     public static LootPoolNode getLootPoolNode(IServerUtils utils, LootPool entry, float rawChance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), unwrapFunctions(entry.modifier).stream()).toList();
-        List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), unwrapConditions(entry.condition).stream()).toList();
+        List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), unwrapFunctions(utils, entry.modifier).stream()).toList();
+        List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), unwrapConditions(utils, entry.condition).stream()).toList();
         int sumWeight = getTotalWeight(entry.entries);
         TooltipNode tooltip = TooltipUtils.getLootPoolTooltip(utils.convertInt(utils, entry.rolls), utils.convertFloat(utils, entry.bonusRolls)).build();
         List<IDataNode> children = getChildren(utils, entry.entries, rawChance, sumWeight, allFunctions, allConditions);
@@ -199,7 +197,7 @@ public class NodeUtils {
 
     @NotNull
     public static LootTableNode getLootTableNode(List<IOperation> operations, IServerUtils utils, LootTable entry, float rawChance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), unwrapFunctions(entry.modifier).stream()).toList();
+        List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), unwrapFunctions(utils, entry.modifier).stream()).toList();
         TooltipNode tooltip = TooltipUtils.getLootTableTooltip().build();
         List<IDataNode> children = entry.pools.stream().map((lootPool) -> (IDataNode) getLootPoolNode(utils, lootPool, rawChance, allFunctions, conditions)).toList();
         LootTableNode node = new LootTableNode(children, tooltip);
@@ -214,52 +212,26 @@ public class NodeUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<LootItemCondition> getAllConditions(LootPoolEntryContainer entry, List<LootItemCondition> conditions) {
-        return Stream.concat(conditions.stream(), unwrapConditions(entry.condition).stream()).toList();
+    public static List<LootItemCondition> getAllConditions(IServerUtils utils, LootPoolEntryContainer entry, List<LootItemCondition> conditions) {
+        return Stream.concat(conditions.stream(), unwrapConditions(utils, entry.condition).stream()).toList();
     }
 
     @Unmodifiable
     @NotNull
-    public static List<LootItemFunction> getAllFunctions(LootPoolEntryContainer entry, List<LootItemFunction> functions) {
-        return Stream.concat(functions.stream(), unwrapFunctions(entry.modifier).stream()).toList();
+    public static List<LootItemFunction> getAllFunctions(IServerUtils utils, LootPoolEntryContainer entry, List<LootItemFunction> functions) {
+        return Stream.concat(functions.stream(), unwrapFunctions(utils, entry.modifier).stream()).toList();
     }
 
     @Unmodifiable
     @NotNull
-    public static List<LootItemCondition> unwrapConditions(Optional<Holder<LootItemCondition>> condition) {
-        List<LootItemCondition> result = new ArrayList<>();
-
-        condition.ifPresent((c) -> unwrapCondition(c, result));
-        return Collections.unmodifiableList(result);
+    public static List<LootItemCondition> unwrapConditions(IServerUtils utils, Optional<Holder<LootItemCondition>> condition) {
+        return condition.filter(Holder::isBound).map((c) -> List.copyOf(utils.unwrapCondition(utils, c.value()))).orElse(List.of());
     }
 
     @Unmodifiable
     @NotNull
-    public static List<LootItemFunction> unwrapFunctions(Optional<Holder<LootItemFunction>> modifier) {
-        List<LootItemFunction> result = new ArrayList<>();
-
-        modifier.ifPresent((f) -> unwrapFunction(f, result));
-        return Collections.unmodifiableList(result);
-    }
-
-    private static void unwrapCondition(Holder<LootItemCondition> holder, List<LootItemCondition> result) {
-        if (holder.isBound()) {
-            if (holder.value() instanceof AllOfCondition allOf) {
-                allOf.terms.forEach((term) -> unwrapCondition(term, result));
-            } else {
-                result.add(holder.value());
-            }
-        }
-    }
-
-    private static void unwrapFunction(Holder<LootItemFunction> holder, List<LootItemFunction> result) {
-        if (holder.isBound()) {
-            if (holder.value() instanceof SequenceFunction sequence && sequence.condition.isEmpty()) {
-                sequence.functions.forEach((function) -> unwrapFunction(function, result));
-            } else {
-                result.add(holder.value());
-            }
-        }
+    public static List<LootItemFunction> unwrapFunctions(IServerUtils utils, Optional<Holder<LootItemFunction>> modifier) {
+        return modifier.filter(Holder::isBound).map((f) -> List.copyOf(utils.unwrapFunction(utils, f.value()))).orElse(List.of());
     }
 
     @NotNull

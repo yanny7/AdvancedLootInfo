@@ -99,7 +99,7 @@ public class NeoForgePlugin implements IGlobalLootModifierPlugin {
 
     @NotNull
     private static Optional<IPageLootModifier> getAddTableLootModifier(IServerUtils utils, AddTableLootModifier modifier) {
-        List<LootItemCondition> conditionList = NodeUtils.unwrapConditions(((MixinLootModifier) modifier).getAliCondition());
+        List<LootItemCondition> conditionList = NodeUtils.unwrapConditions(utils, ((MixinLootModifier) modifier).getAliCondition());
 
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, modifier, conditionList, (c) -> {
             TooltipNode tooltip = TooltipBuilder.array((b) -> b
@@ -122,7 +122,7 @@ public class NeoForgePlugin implements IGlobalLootModifierPlugin {
                 NeoForgeRegistries.GLOBAL_LOOT_MODIFIER_SERIALIZERS.getKey(modifier.codec()),
                 modifier,
                 LootModifier.class,
-                () -> NodeUtils.unwrapConditions(((MixinLootModifier) modifier).getAliCondition()),
+                () -> NodeUtils.unwrapConditions(utils, ((MixinLootModifier) modifier).getAliCondition()),
                 () -> serialize(utils, modifier)
         );
     }

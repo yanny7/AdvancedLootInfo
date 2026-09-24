@@ -1,6 +1,6 @@
 package com.yanny.alicompat.accessor;
 
-import com.yanny.ali.plugin.common.NodeUtils;
+import net.minecraft.core.Holder;
 import net.minecraft.world.level.storage.loot.entries.UniformContainerBase;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -17,7 +17,7 @@ public abstract class SingletonContainer extends BaseAccessor<UniformContainerBa
         super(parent);
         weight = parent.weight;
         quality = parent.quality;
-        functions = NodeUtils.unwrapFunctions(parent.modifier);
-        conditions = NodeUtils.unwrapConditions(parent.condition);
+        functions = parent.modifier.filter(Holder::isBound).map(Holder::value).stream().toList();
+        conditions = parent.condition.filter(Holder::isBound).map(Holder::value).stream().toList();
     }
 }

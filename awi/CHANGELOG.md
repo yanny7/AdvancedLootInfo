@@ -2,7 +2,6 @@
 
 - Added `dimensions` configuration to hide dimensions
 - Added `dimensionIcons` configuration to set recipe viewer icon of each dimension
-- Ore veins show their ore, raw ore block and filler over the whole height range the vein generates in
 
 ## [1.1.1]
 
