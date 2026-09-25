@@ -95,7 +95,6 @@ public class JeiCompatibility implements IModPlugin {
 
     private void registerData(IRecipeRegistration registration, byte[] fullCompressedData) {
         AliClientRegistry clientRegistry = PluginManager.getInstance().clientRegistry;
-        AliConfig config = PluginManager.getInstance().commonRegistry.getConfiguration();
         ClientLevel level = Minecraft.getInstance().level;
         IIngredientVisibility ingredientVisibility = registration.getJeiHelpers().getIngredientVisibility();
 
@@ -117,10 +116,8 @@ public class JeiCompatibility implements IModPlugin {
                             addRecipeType(entityCategories, entityRecipeTypes, entity, () -> new EntityLootType(entity, location, node, outputs)),
                     (node, location, outputs) ->
                             addRecipeType(gameplayCategories, gameplayRecipeTypes, location, () -> new GameplayLootType(node, location, outputs)),
-                    (node, location, profession, inputs, outputs) ->
-                            addRecipeType(tradeCategories, tradeRecipeTypes, location, () -> new TradeLootType(profession, node, location, inputs, outputs)),
-                    (node, location, inputs, outputs) ->
-                            addRecipeType(tradeCategories, tradeRecipeTypes, location, () -> new TradeLootType(Set.of(), Set.of(), node, location, inputs, outputs))
+                    (trade) ->
+                            addRecipeType(tradeCategories, tradeRecipeTypes, trade.id(), () -> trade)
             );
 
             registerRecipes(registration, blockRecipeTypes);

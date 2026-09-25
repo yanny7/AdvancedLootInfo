@@ -75,7 +75,6 @@ public class ReiCompatibility implements REIClientPlugin {
 
     private void registerData(DisplayRegistry registry, byte[] fullCompressedData) {
         AliClientRegistry clientRegistry = PluginManager.getInstance().clientRegistry;
-        AliConfig config = PluginManager.getInstance().commonRegistry.getConfiguration();
         ClientLevel level = Minecraft.getInstance().level;
 
         LOGGER.info("Adding loot information to REI");
@@ -96,10 +95,8 @@ public class ReiCompatibility implements REIClientPlugin {
                             addLootType(entityCategories, entityRecipeTypes, entity, () -> new EntityLootType(entity, location, node, outputs)),
                     (node, location, outputs) ->
                             addLootType(gameplayCategories, gameplayRecipeTypes, location, () -> new GameplayLootType(node, location, outputs)),
-                    (tradeEntry, location, profession, inputs, outputs) ->
-                            addLootType(tradeCategories, tradeRecipeTypes, location, () -> new TradeLootType(profession, tradeEntry, location, inputs, outputs)),
-                    (tradeEntry, location, inputs, outputs) ->
-                            addLootType(tradeCategories, tradeRecipeTypes, location, () -> new TradeLootType(Set.of(), Set.of(), tradeEntry, location, inputs, outputs))
+                    (trade) ->
+                            addLootType(tradeCategories, tradeRecipeTypes, trade.id(), () -> trade)
             );
 
             registerFiller(registry, blockRecipeTypes, ReiCompatibility::blockPredicate);

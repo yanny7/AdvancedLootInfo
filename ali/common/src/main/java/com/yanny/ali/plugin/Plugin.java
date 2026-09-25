@@ -277,10 +277,10 @@ public class Plugin implements IPlugin {
     // Villager#updateTrades picks 2 listings per level, WanderingTrader#updateTrades 5 from its first pool and 1 from its second
     private static void registerVanillaTrades(IServerRegistry registry) {
         for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : BuiltInRegistries.VILLAGER_PROFESSION.entrySet()) {
-            registry.registerTrades(entry.getKey().location(), () -> VillagerTrades.TRADES.get(entry.getValue()), (level) -> new TradeLevelInfo(new RangeValue(2)));
+            registry.registerTrades(entry.getKey().location(), EntityType.VILLAGER, () -> VillagerTrades.TRADES.get(entry.getValue()), (level) -> new TradeLevelInfo(new RangeValue(2)));
         }
 
-        registry.registerTrades(new ResourceLocation("wandering_trader"), () -> VillagerTrades.WANDERING_TRADER_TRADES, (level) -> new TradeLevelInfo(new RangeValue(level == 2 ? 1 : 5)));
+        registry.registerTrades(new ResourceLocation("wandering_trader"), EntityType.WANDERING_TRADER, () -> VillagerTrades.WANDERING_TRADER_TRADES, (level) -> new TradeLevelInfo(new RangeValue(level == 2 ? 1 : 5)));
     }
 
     @NotNull

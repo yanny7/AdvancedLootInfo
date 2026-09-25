@@ -19,7 +19,9 @@ import com.yungnickyoung.minecraft.ribbits.module.RibbitProfessionModule;
 import com.yungnickyoung.minecraft.ribbits.module.RibbitTradeModule;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -54,12 +56,14 @@ public class RibbitsCompat implements IModCompat {
         PluginUtils.registerSelfItemListing(registry, EnchantedItemForAmethystAccessor.class);
         PluginUtils.registerSelfItemListing(registry, PotionForAmethystAccessor.class);
 
+        EntityType<?> ribbit = BuiltInRegistries.ENTITY_TYPE.get(new ResourceLocation(MOD_ID, "ribbit"));
+
         RibbitTradeModule.TRADES_BY_PROFESSION.forEach((profession, listings) -> {
             ResourceLocation professionId = profession.getId();
             ResourceLocation traderId = new ResourceLocation(professionId.getNamespace(), "ribbit_" + professionId.getPath());
             int tradeCount = RibbitProfessionModule.MERCHANT.equals(profession) ? MERCHANT_TRADE_COUNT : TRADE_COUNT;
 
-            registry.registerTrades(traderId, () -> getItemListings(profession), (level) -> new TradeLevelInfo(new RangeValue(tradeCount)));
+            registry.registerTrades(traderId, ribbit, () -> getItemListings(profession), (level) -> new TradeLevelInfo(new RangeValue(tradeCount)));
         });
     }
 

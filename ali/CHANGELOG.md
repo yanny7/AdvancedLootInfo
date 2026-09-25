@@ -3,6 +3,7 @@
 - Added support for custom ingredients that are not Ingredient subclasses
 - Improved count and chance detection
 - Fixed server crash on Forge when GLM cannot provide its codec
+- Reworked trades UI, displaying trader spawn egg
 
 ## [2.2.0]
 

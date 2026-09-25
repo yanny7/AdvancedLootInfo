@@ -231,8 +231,8 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
-    public void registerTrades(ResourceLocation traderId, Supplier<Int2ObjectMap<VillagerTrades.ItemListing[]>> itemListings, IntFunction<TradeLevelInfo> levelInfo) {
-        trades.put(traderId, new Trades(itemListings, levelInfo));
+    public void registerTrades(ResourceLocation traderId, @Nullable EntityType<?> entityType, Supplier<Int2ObjectMap<VillagerTrades.ItemListing[]>> itemListings, IntFunction<TradeLevelInfo> levelInfo) {
+        trades.put(traderId, new Trades(entityType, itemListings, levelInfo));
     }
 
     public Map<ResourceLocation, Trades> getTrades() {
@@ -465,7 +465,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     public IDataNode parseTrade(Trades trades) {
-        return new TradeNode(this, trades.itemListings().get(), trades.levelInfo());
+        return new TradeNode(this, trades.entityType(), trades.itemListings().get(), trades.levelInfo());
     }
 
     // hitCount != null means this table is referenced from another table's tree; the paramSet check
@@ -516,7 +516,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         }
     }
 
-    public record Trades(Supplier<Int2ObjectMap<VillagerTrades.ItemListing[]>> itemListings, IntFunction<TradeLevelInfo> levelInfo) {}
+    public record Trades(@Nullable EntityType<?> entityType, Supplier<Int2ObjectMap<VillagerTrades.ItemListing[]>> itemListings, IntFunction<TradeLevelInfo> levelInfo) {}
 
     private static <T> void unwrap(IServerUtils utils, T value, ManagedRegistry<Class<?>, BiFunction<IServerUtils, T, List<T>>> unwrappers, Set<Object> visiting, List<T> result) {
         // predicate and item modifier references can form cycles, vanilla only logs them
