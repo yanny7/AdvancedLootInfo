@@ -48,7 +48,7 @@ public class GoblinTradersCompat implements IModCompat {
     private static void registerTrader(IServerRegistry registry, String name, Config.Entities.Goblin.Trades trades) {
         ResourceLocation traderId = ResourceLocation.fromNamespaceAndPath(MOD_ID, name);
 
-        registry.registerTrades(traderId, () -> getItemListings(traderId, trades), (level) -> getLevelInfo(trades, level));
+        registry.registerTrades(traderId, BuiltInRegistries.ENTITY_TYPE.get(traderId), () -> getItemListings(traderId, trades), (level) -> getLevelInfo(trades, level));
     }
 
     @NotNull
