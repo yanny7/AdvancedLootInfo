@@ -46,6 +46,13 @@ New shim source sets arrive as new files. That is expected and they stay: a slug
 present but whose name is absent from `compat_mods` is **dormant**, compiled by nothing. See
 `alicompat/CLAUDE.md`.
 
+### Other recurring conflicts
+
+- **`alicompat/<loader>/src/main/generated/**`** is datagen output, so it is never merged by hand. Take either
+  side, build, then regenerate with `./gradlew runAlicompat<Loader>Datagen` for every enabled loader.
+- **`alicompat/CHANGELOG.md`**: keep this branch's `## []` entries, add the lower branch's entries that apply here
+  (cross-cutting changes), and drop "Added X support" for a slug that is dormant here, because this branch does not ship it.
+
 ### Source sets that went missing
 
 A source set is never deleted to express dormancy, so one that exists below and not here is either a
@@ -76,6 +83,10 @@ properties, do not assume which exist:
 
 A failure in `alicompat/common` is a merge problem and belongs here. A failure in a shim means its
 slug should not have been in `compat_mods` on this branch yet — take it out and leave it for phase 2.
+
+A merged change that rewrites a pattern across every shim, such as a key scheme or a renamed helper, does not
+reach code that exists only on this branch, and that code still compiles. After the merge, grep for the old
+pattern and bring the leftovers in line; the generated lang files show them as keys without the new shape.
 
 **Stop here.** Report what merged, what was restored, and how many slugs are dormant. The user
 commits. Phase 2 does not begin until that commit exists.
@@ -115,6 +126,9 @@ which loaders that target mod has a file on for this Minecraft version — the r
 are phase 2's worklist, the rest cannot be written here at all. The script leaves those entries
 strictly alone — it neither pins nor scaffolds them — so a `--update` run after the merge cannot
 switch on a shim nobody has ported.
+
+"0 portable" can be real: mods skip Minecraft versions. Before reporting that, confirm a few of them on
+CurseForge (`/v1/mods/<id>` → `latestFilesIndexes[].gameVersion`) and one active mod as a control.
 
 ### Take them in groups, not in bulk
 

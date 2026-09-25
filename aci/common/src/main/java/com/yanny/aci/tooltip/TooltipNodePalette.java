@@ -42,7 +42,7 @@ public class TooltipNodePalette {
 
     public void reportMergeable(String pluralKey, Object context) {
         if (reportedMergeableKeys.add(pluralKey)) {
-            logger.info("Tooltip {} could be merged if defined singular form in {}", pluralKey, context);
+            logger.debug("Tooltip {} could be merged if defined singular form in {}", pluralKey, context);
         }
     }
 
