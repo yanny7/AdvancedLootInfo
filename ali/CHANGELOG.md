@@ -4,6 +4,7 @@
 - Improved count and chance detection
 - Fixed server crash on Forge when GLM cannot provide its codec
 - Reworked trades UI, displaying trader spawn egg
+- Fixed missing tooltip in JEI and REI block loot
 
 ## [2.2.0]
 

@@ -56,7 +56,9 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
 
         if (isSpecial) {
             innerWidgets.add(Widgets.createResultSlotBackground(new Point(innerBounds.getCenterX() - ITEM_SIZE / 2, innerBounds.getY() + OUT_SLOT_OFFSET)));
-            innerWidgets.add(Widgets.wrapRenderer(new Rectangle(innerBounds.getCenterX() - ITEM_SIZE / 2, innerBounds.getY(), OUT_SLOT_SIZE, OUT_SLOT_SIZE), new BlockSlotRenderer(display.getBlock())));
+            Rectangle blockBounds = new Rectangle(innerBounds.getCenterX() - ITEM_SIZE / 2, innerBounds.getY(), OUT_SLOT_SIZE, OUT_SLOT_SIZE);
+
+            innerWidgets.add(Widgets.withTooltip(Widgets.wrapRenderer(blockBounds, new BlockSlotRenderer(display.getBlock())), display.getBlock().getName()));
         } else {
             innerWidgets.add(Widgets.createSlot(new Point(innerBounds.getCenterX() - ITEM_SIZE / 2, innerBounds.getY() + SLOT_OFFSET)).entry(EntryStacks.of(display.getBlock())).markInput());
         }
