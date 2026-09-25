@@ -14,23 +14,6 @@ public class OccultismLang implements ICompatTranslations {
 
     public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 
-    public enum ConsumeEffects implements ITooltipKey {
-        DAMAGE_ITEM("damage_item", "Damage Item:"),
-        ;
-
-        private final Translation translation;
-
-        ConsumeEffects(String k, String e) {
-            translation = new Translation("alicompat.type.consume_effect." + k, e);
-        }
-
-        @NotNull
-        @Override
-        public Translation getTranslation() {
-            return translation;
-        }
-    }
-
     public enum Value implements ITooltipKey {
         WITH_THIRD_EYE("with_third_eye", "Requires Third Eye, Otherworld Goggles or True Sight Staff"),
         WITHOUT_THIRD_EYE("without_third_eye", "Without Third Eye, Otherworld Goggles or True Sight Staff"),
@@ -49,9 +32,26 @@ public class OccultismLang implements ICompatTranslations {
         }
     }
 
+    public enum ConsumeEffects implements ITooltipKey {
+        DAMAGE_ITEM("damage_item", "Damage Item:"),
+        ;
+
+        private final Translation translation;
+
+        ConsumeEffects(String k, String e) {
+            translation = new Translation("alicompat.type.consume_effect." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
     static {
-        CoreLang.register(TRANSLATION_MAP, ConsumeEffects.class);
         CoreLang.register(TRANSLATION_MAP, Value.class);
+        CoreLang.register(TRANSLATION_MAP, ConsumeEffects.class);
     }
 
     @NotNull
