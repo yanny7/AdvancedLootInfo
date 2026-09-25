@@ -111,8 +111,12 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
     }
 
     protected PreparedWidgets prepareWidgets(T display, Rectangle bounds, int offset) {
+        return prepareWidgets(display, bounds, offset, 0);
+    }
+
+    protected PreparedWidgets prepareWidgets(T display, Rectangle bounds, int offset, int minContentHeight) {
         WidgetHolder holder = getBaseWidget(display, new Rectangle(0, 0, bounds.width, bounds.height), offset);
-        Rectangle innerBounds = new Rectangle(0, 0, bounds.width, holder.bounds().getHeight() + offset);
+        Rectangle innerBounds = new Rectangle(0, 0, bounds.width, Math.max(holder.bounds().getHeight() + offset, minContentHeight));
         int height = Math.min(innerBounds.height + 2 * PADDING, bounds.height - 2 * PADDING);
         Rectangle fullBounds = new Rectangle(0, 0, innerBounds.width + 3 * PADDING + AbstractScrollWidget.getScrollbarExtraWidth(), height);
 

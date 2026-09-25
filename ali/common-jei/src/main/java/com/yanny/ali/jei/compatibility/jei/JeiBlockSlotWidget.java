@@ -100,7 +100,7 @@ public class JeiBlockSlotWidget implements ISlottedRecipeWidget {
 
     public void getTooltip(ITooltipBuilder tooltip, double mouseX, double mouseY) {
         if (slotDrawable.isMouseOver(mouseX, mouseY)) {
-            if (isPlant) {
+            if (isPlant || block.asItem() == Items.AIR) {
                 tooltip.add(block.getName());
             } else {
                 slotDrawable.getTooltip(tooltip);

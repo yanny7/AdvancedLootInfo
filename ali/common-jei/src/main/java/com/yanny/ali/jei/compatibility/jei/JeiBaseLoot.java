@@ -141,7 +141,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
         }
 
         Rect renderRect = new Rect(0, 0, CATEGORY_WIDTH + JeiScrollWidget.getScrollbarExtraWidth(), MAX_SAFE_HEIGHT);
-        JeiScrollWidget scrollWidget = new JeiScrollWidget(renderRect, widgetWrapper.getRect().width(), widgetWrapper.getRect().height() + getYOffset(recipe.type()), scrollWidgets);
+        JeiScrollWidget scrollWidget = new JeiScrollWidget(renderRect, widgetWrapper.getRect().width(), Math.max(widgetWrapper.getRect().height() + getYOffset(recipe.type()), getMinContentHeight(recipe.type())), scrollWidgets);
 
         builder.addSlottedWidget(scrollWidget, slotDrawables);
         builder.addInputHandler(scrollWidget);
@@ -160,6 +160,10 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
     abstract Pair<List<IRecipeWidget>, List<IRecipeSlotDrawable>> getWidgets(IRecipeExtrasBuilder builder, T recipe);
 
     abstract int getYOffset(T recipe);
+
+    int getMinContentHeight(T recipe) {
+        return 0;
+    }
 
     abstract IWidget getRootWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth);
 

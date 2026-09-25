@@ -75,7 +75,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
     }
 
     private int getContentHeight() {
-        return getHeaderHeight() + getItemsHeight();
+        return Math.max(getHeaderHeight() + getItemsHeight(), getMinContentHeight());
     }
 
     /** Mirrors {@code RecipeScreen#init} + {@code RecipeTab#getVerticalRecipeSpace} - EMI exposes neither. */
@@ -107,6 +107,10 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
 
     protected int getItemsWidth() {
         return widget.getBounds().width();
+    }
+
+    protected int getMinContentHeight() {
+        return 0;
     }
 
     protected List<Widget> getAdditionalWidgets(WidgetHolder widgetHolder) {

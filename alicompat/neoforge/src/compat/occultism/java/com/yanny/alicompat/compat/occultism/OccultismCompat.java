@@ -12,6 +12,7 @@ import com.yanny.alicompat.accessor.GlmAccessorUtils;
 import com.yanny.alicompat.accessor.PluginUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +34,7 @@ public class OccultismCompat implements IGlmModCompat {
         PluginUtils.registerItemListing(registry, WonderingTrades.ItemTrade.class, ItemTradeAccessor.class);
         PluginUtils.registerSelfItemListing(registry, ConditionalListing.class);
 
-        registry.registerTrades(WONDERING_TRADER, OccultismCompat::getWonderingTraderTrades, OccultismCompat::getWonderingTraderLevel);
+        registry.registerTrades(WONDERING_TRADER, BuiltInRegistries.ENTITY_TYPE.get(WONDERING_TRADER), OccultismCompat::getWonderingTraderTrades, OccultismCompat::getWonderingTraderLevel);
     }
 
     @Override
