@@ -4,6 +4,7 @@ import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.language.ITooltipKey;
 import com.yanny.aci.language.Translation;
 import com.yanny.alicompat.ICompatTranslations;
+import com.yanny.alicompat.Utils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -22,7 +23,7 @@ public class KaleidoscopeCookeryLang implements ICompatTranslations {
         private final Translation translation;
 
         Conditions(String k, String e) {
-            translation = new Translation("alicompat.type.condition." + k, e);
+            translation = new Translation(Utils.langKey(MOD_ID, "type.condition", k), e);
         }
 
         @NotNull
@@ -39,7 +40,7 @@ public class KaleidoscopeCookeryLang implements ICompatTranslations {
         private final Translation translation;
 
         Functions(String k, String e) {
-            translation = new Translation("alicompat.type.function." + k, e);
+            translation = new Translation(Utils.langKey(MOD_ID, "type.function", k), e);
         }
 
         @NotNull
@@ -57,7 +58,7 @@ public class KaleidoscopeCookeryLang implements ICompatTranslations {
         private final Translation translation;
 
         Branch(String k, String e) {
-            translation = new Translation("alicompat.property.branch." + k, e);
+            translation = new Translation(Utils.langKey(MOD_ID, "property.branch", k), e);
         }
 
         @NotNull
@@ -75,7 +76,7 @@ public class KaleidoscopeCookeryLang implements ICompatTranslations {
         private final Translation translation;
 
         Value(String k, String e) {
-            translation = new Translation("alicompat.property.value." + k, e);
+            translation = new Translation(Utils.langKey(MOD_ID, "property.value", k), e);
         }
 
         @NotNull
