@@ -4,6 +4,7 @@ import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.language.ITooltipKey;
 import com.yanny.aci.language.Translation;
 import com.yanny.alicompat.ICompatTranslations;
+import com.yanny.alicompat.Utils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -22,7 +23,7 @@ public class EnderIoLang implements ICompatTranslations {
         private final Translation translation;
 
         Functions(String k, String e) {
-            translation = new Translation("alicompat.type.function." + k, e);
+            translation = new Translation(Utils.langKey(MOD_ID, "type.function", k), e);
         }
 
         @NotNull
@@ -42,7 +43,7 @@ public class EnderIoLang implements ICompatTranslations {
         private final Translation translation;
 
         Ingredient(String k, String e) {
-            translation = new Translation("alicompat.type.ingredient." + k, e);
+            translation = new Translation(Utils.langKey(MOD_ID, "type.ingredient", k), e);
         }
 
         @NotNull
@@ -59,7 +60,7 @@ public class EnderIoLang implements ICompatTranslations {
         private final Translation translation;
 
         Value(String k, String e) {
-            translation = new Translation("alicompat.property.value." + k, e);
+            translation = new Translation(Utils.langKey(MOD_ID, "property.value", k), e);
         }
 
         @NotNull

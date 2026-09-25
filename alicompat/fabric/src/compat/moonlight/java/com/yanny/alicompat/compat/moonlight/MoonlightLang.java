@@ -4,6 +4,7 @@ import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.language.ITooltipKey;
 import com.yanny.aci.language.Translation;
 import com.yanny.alicompat.ICompatTranslations;
+import com.yanny.alicompat.Utils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -23,7 +24,7 @@ public class MoonlightLang implements ICompatTranslations {
         private final Translation translation;
 
         Conditions(String k, String e) {
-            translation = new Translation("alicompat.type.condition." + k, e);
+            translation = new Translation(Utils.langKey(MOD_ID, "type.condition", k), e);
         }
 
         @NotNull
@@ -41,7 +42,7 @@ public class MoonlightLang implements ICompatTranslations {
         private final Translation translation;
 
         Entry(String k, String e) {
-            translation = new Translation("alicompat.type.entry." + k, e);
+            translation = new Translation(Utils.langKey(MOD_ID, "type.entry", k), e);
         }
 
         @NotNull

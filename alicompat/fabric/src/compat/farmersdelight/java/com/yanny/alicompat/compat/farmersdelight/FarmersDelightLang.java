@@ -25,7 +25,7 @@ public class FarmersDelightLang implements ICompatTranslations {
         private final Translation translation;
 
         Functions(String k, String e) {
-            translation = new Translation("alicompat.type.function." + k, e);
+            translation = new Translation(Utils.langKey(MOD_ID, "type.function", k), e);
         }
 
         @NotNull
