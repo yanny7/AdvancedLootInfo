@@ -37,6 +37,8 @@
   "alicompat.farmersdelight.type.function.smoker_cook": "Smoker Cook:",
   "alicompat.farmersdelight.type.ingredient.tool_action": "Tool Action:",
   "alicompat.gtceu.type.function.random_weight": "Random Weight:",
+  "alicompat.hybrid_aquatic.property.value.random_sea_message": "Random sea message",
+  "alicompat.hybrid_aquatic.type.entry.message_in_a_bottle": "Message In A Bottle:",
   "alicompat.immersiveengineering.property.branch.alternative": "Alternative:",
   "alicompat.immersiveengineering.property.value.alternative": "Alternative: %s",
   "alicompat.immersiveengineering.type.entry.drop_inventory": "Drop Inventory:",
