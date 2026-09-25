@@ -1,9 +1,11 @@
 package com.yanny.alicompat.compat.farlanders;
 
 import com.yanny.ali.api.IServerRegistry;
+import com.yanny.ali.api.TradeLevel;
 import com.yanny.alicompat.IModCompat;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -21,9 +23,15 @@ public class FarlandersCompat implements IModCompat {
 
     @Override
     public void registerServer(IServerRegistry registry) {
-        registry.registerTrades(id("farlander"), () -> tradeSets("farlander", 5));
-        registry.registerTrades(id("elder_farlander"), () -> tradeSets("elder", 5));
-        registry.registerTrades(id("wanderer"), () -> tradeSets("wanderer", 1));
+        registerTrader(registry, "farlander", "farlander", 5);
+        registerTrader(registry, "elder_farlander", "elder", 5);
+        registerTrader(registry, "wanderer", "wanderer", 1);
+    }
+
+    private static void registerTrader(IServerRegistry registry, String name, String tradeSetPrefix, int levels) {
+        Identifier traderId = id(name);
+
+        registry.registerTrades(traderId, BuiltInRegistries.ENTITY_TYPE.getValue(traderId), () -> TradeLevel.ofSets(tradeSets(tradeSetPrefix, levels)));
     }
 
     @NotNull

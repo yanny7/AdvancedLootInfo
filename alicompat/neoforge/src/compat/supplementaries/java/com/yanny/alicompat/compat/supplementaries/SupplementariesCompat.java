@@ -30,6 +30,7 @@ import net.mehvahdjukaar.supplementaries.platform.ReplaceRopeByConfigModifier;
 import net.mehvahdjukaar.supplementaries.reg.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -66,8 +67,11 @@ public class SupplementariesCompat implements IGlmModCompat {
         registry.registerItemListing(StructureMapListing.class, SupplementariesCompat::getStructureMapListingNode);
         registry.registerItemListing(RandomAdventurerMapListing.class, SupplementariesCompat::getAdventurerMapListingNode);
 
+        ResourceLocation redMerchant = ResourceLocation.fromNamespaceAndPath(SupplementariesLang.MOD_ID, "red_merchant");
+
         registry.registerTrades(
-                ResourceLocation.fromNamespaceAndPath(SupplementariesLang.MOD_ID, "red_merchant"),
+                redMerchant,
+                BuiltInRegistries.ENTITY_TYPE.get(redMerchant),
                 () -> getRedMerchantTrades(registry.getServerLevel().registryAccess()),
                 (level) -> new TradeLevelInfo(new RangeValue(RED_MERCHANT_TRADE_COUNT))
         );

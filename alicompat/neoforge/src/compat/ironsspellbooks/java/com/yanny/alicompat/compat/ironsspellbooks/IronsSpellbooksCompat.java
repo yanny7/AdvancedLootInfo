@@ -9,6 +9,7 @@ import com.yanny.alicompat.IGlmModCompat;
 import com.yanny.alicompat.accessor.GlmAccessorUtils;
 import com.yanny.alicompat.accessor.PluginUtils;
 import io.redspace.ironsspellbooks.loot.*;
+import net.minecraft.core.registries.BuiltInRegistries;
 import org.jetbrains.annotations.NotNull;
 
 public class IronsSpellbooksCompat implements IGlmModCompat {
@@ -27,10 +28,10 @@ public class IronsSpellbooksCompat implements IGlmModCompat {
         PluginUtils.registerSelfItemListing(registry, WizardTrade.class);
         WanderingTrades.register(registry);
 
-        registry.registerTrades(WizardTrades.APOTHECARIST, WizardTrades::apothecarist, WizardTrades::apothecaristLevel);
-        registry.registerTrades(WizardTrades.CRYOMANCER, WizardTrades::cryomancer, WizardTrades::cryomancerLevel);
-        registry.registerTrades(WizardTrades.PRIEST, WizardTrades::priest, WizardTrades::priestLevel);
-        registry.registerTrades(WizardTrades.PYROMANCER, WizardTrades::pyromancer, WizardTrades::pyromancerLevel);
+        registry.registerTrades(WizardTrades.APOTHECARIST, BuiltInRegistries.ENTITY_TYPE.get(WizardTrades.APOTHECARIST), WizardTrades::apothecarist, WizardTrades::apothecaristLevel);
+        registry.registerTrades(WizardTrades.CRYOMANCER, BuiltInRegistries.ENTITY_TYPE.get(WizardTrades.CRYOMANCER), WizardTrades::cryomancer, WizardTrades::cryomancerLevel);
+        registry.registerTrades(WizardTrades.PRIEST, BuiltInRegistries.ENTITY_TYPE.get(WizardTrades.PRIEST), WizardTrades::priest, WizardTrades::priestLevel);
+        registry.registerTrades(WizardTrades.PYROMANCER, BuiltInRegistries.ENTITY_TYPE.get(WizardTrades.PYROMANCER), WizardTrades::pyromancer, WizardTrades::pyromancerLevel);
 
         PluginUtils.registerValueTooltip(registry, SpellFilter.class, SpellFilterAccessor.class);
     }

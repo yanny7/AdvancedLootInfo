@@ -9,6 +9,7 @@ import com.yanny.ali.manager.AliClientRegistry;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.network.AbstractClient;
 import com.yanny.ali.network.RequestLootDataMessage;
+import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.common.nodes.EntityLootTableNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
 import io.netty.buffer.ByteBuf;
@@ -50,6 +51,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -59,6 +61,9 @@ public class GenericUtils {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
     private static final Identifier TEXTURE_LOC = com.yanny.ali.Utils.modLoc("textures/gui/gui.png");
     private static final int WIDGET_SIZE = 36;
+    private static final int SLOT_SIZE = 18;
+    private static final int TEXT_HEIGHT = 8;
+    private static final int HEADER_GAP = 2;
     private static final int DOTS_WIDTH = Minecraft.getInstance().font.width("...");
     private static final Set<EntityType<?>> BROKEN_ENTITY_RENDERERS = new HashSet<>(); // entity types whose renderer crashed, do not retry every frame
 
@@ -292,8 +297,7 @@ public class GenericUtils {
                                    QuadConsumer<IDataNode, Identifier, Block, List<ItemStack>> blockConsumer,
                                    QuadConsumer<IDataNode, Identifier, EntityType<?>, List<ItemStack>> entityConsumer,
                                    TriConsumer<IDataNode, Identifier, List<ItemStack>> gameplayConsumer,
-                                   QuintConsumer<IDataNode, Identifier, VillagerProfession, List<ItemStack>, List<ItemStack>> traderConsumer,
-                                   QuadConsumer<IDataNode, Identifier, List<ItemStack>, List<ItemStack>> wanderingTraderConsumer) {
+                                   Consumer<TradeLootType> tradeConsumer) {
         Pair<Map<Identifier, IDataNode>, Map<Identifier, IDataNode>> pair = GenericUtils.decompressLootData(clientRegistry, fullCompressedData, registryAccess);
         Map<Identifier, IDataNode> lootData = pair.getA();
         Map<Identifier, IDataNode> tradeData = pair.getB();
@@ -366,20 +370,24 @@ public class GenericUtils {
             IDataNode node = tradeData.get(location);
 
             if (node != null) {
-                Pair<List<ItemStack>, List<ItemStack>> items = collectTradeItems(node);
-
-                traderConsumer.accept(node, location, entry.getValue(), items.getA(), items.getB());
+                tradeConsumer.accept(createTradeLootType(node, location, entry.getValue()));
                 tradeData.remove(location);
             }
         }
 
         for (Map.Entry<Identifier, IDataNode> entry : tradeData.entrySet()) {
-            Pair<List<ItemStack>, List<ItemStack>> items = collectTradeItems(entry.getValue());
-
-            wanderingTraderConsumer.accept(entry.getValue(), entry.getKey(), items.getA(), items.getB());
+            tradeConsumer.accept(createTradeLootType(entry.getValue(), entry.getKey(), null));
         }
 
         tradeData.clear();
+    }
+
+    @NotNull
+    private static TradeLootType createTradeLootType(IDataNode node, Identifier location, @Nullable VillagerProfession profession) {
+        Pair<List<ItemStack>, List<ItemStack>> items = collectTradeItems(node);
+        EntityType<?> entityType = ((TradeNode) node).getEntityType();
+
+        return new TradeLootType(getJobSites(profession), getRequestedItems(profession), entityType, node, location, items.getA(), items.getB());
     }
 
     public static <T> void register(T emiRegistry, BiConsumer<T, byte[]> registerData) {
@@ -466,14 +474,64 @@ public class GenericUtils {
     }
 
     @NotNull
-    public static Triplet<Component, Component, Rect> prepareTraderTitle(Identifier location, int maxWidth) {
-        String path = location.getPath();
-        String key = getTraderTranslationKey(location);
-        Component text = GenericUtils.ellipsis(key, path, maxWidth);
-        Component fullText = Component.translatableWithFallback(key, path);
-        Rect rect = new Rect(0, 0, Minecraft.getInstance().font.width(text), 8);
+    public static TraderHeader prepareTraderHeader(TradeLootType type, int maxWidth) {
+        Font font = Minecraft.getInstance().font;
+        EntityType<?> entityType = type.entityType();
+        Item spawnEgg = null;
+        Component titleTooltip = null;
 
-        return new Triplet<>(text, fullText, rect);
+        if (entityType != null) {
+            spawnEgg = Services.getPlatform().getSpawnEggItem(entityType).map(Holder::value).orElse(null);
+            titleTooltip = Component.literal(BuiltInRegistries.ENTITY_TYPE.getKey(entityType).toString());
+        }
+
+        Rect spawnEggRect = new Rect(0, 0, SLOT_SIZE, SLOT_SIZE);
+        int titleX = 0;
+        int titleY = 0;
+        int y = TEXT_HEIGHT + HEADER_GAP;
+
+        if (spawnEgg != null) {
+            titleX = SLOT_SIZE + HEADER_GAP;
+            titleY = (SLOT_SIZE - TEXT_HEIGHT) / 2;
+            y = SLOT_SIZE + HEADER_GAP;
+        }
+
+        List<Rect> pois = new ArrayList<>(type.pois().size());
+
+        for (int i = 0; i < type.pois().size(); i++) {
+            pois.add(new Rect(maxWidth - SLOT_SIZE, i * SLOT_SIZE, SLOT_SIZE, SLOT_SIZE));
+        }
+
+        int leftWidth = pois.isEmpty() ? maxWidth : maxWidth - SLOT_SIZE - HEADER_GAP;
+        Component title = ellipsis(getTraderTranslationKey(type.id()), type.id().getPath(), leftWidth - titleX);
+        Rect titleRect = new Rect(titleX, titleY, font.width(title), TEXT_HEIGHT);
+        Component acceptsLabel = Component.translatable("ali.util.advanced_loot_info.accepts");
+        int acceptsLabelWidth = font.width(acceptsLabel);
+        Rect acceptsLabelRect = new Rect(0, y + (SLOT_SIZE - TEXT_HEIGHT) / 2, acceptsLabelWidth, TEXT_HEIGHT);
+        List<Rect> accepts = wrapSlots(type.accepts().size(), acceptsLabelWidth + HEADER_GAP, y, leftWidth);
+
+        y += getWrappedHeight(accepts, y);
+        return new TraderHeader(spawnEgg, spawnEggRect, title, titleTooltip, titleRect, pois, acceptsLabel, acceptsLabelRect, accepts, y, pois.size() * SLOT_SIZE);
+    }
+
+    @NotNull
+    private static List<Rect> wrapSlots(int count, int x, int y, int maxWidth) {
+        int perRow = Math.max(1, (maxWidth - x) / SLOT_SIZE);
+        List<Rect> rects = new ArrayList<>(count);
+
+        for (int i = 0; i < count; i++) {
+            rects.add(new Rect(x + (i % perRow) * SLOT_SIZE, y + (i / perRow) * SLOT_SIZE, SLOT_SIZE, SLOT_SIZE));
+        }
+
+        return rects;
+    }
+
+    private static int getWrappedHeight(List<Rect> rects, int y) {
+        if (rects.isEmpty()) {
+            return 0;
+        }
+
+        return rects.get(rects.size() - 1).y() + SLOT_SIZE - y + HEADER_GAP;
     }
 
     // every villager profession, modded ones included, is named by a key under the vanilla villager prefix

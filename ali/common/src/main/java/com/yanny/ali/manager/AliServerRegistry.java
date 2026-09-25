@@ -67,7 +67,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     // converters
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, NumberProvider, RangeValue>> numberConverters = registerClassKeyed("number converters", true, HashMap::new, BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE);
     // traders
-    private final ManagedRegistry<Identifier, Supplier<Int2ObjectMap<ResourceKey<TradeSet>>>> trades = register("trades", false, HashMap::new, Identifier::toString, null);
+    private final ManagedRegistry<Identifier, Trades> trades = register("trades", false, HashMap::new, Identifier::toString, null);
     // tooltips
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootPoolEntryContainer, TooltipBuilder>> entryTooltips = registerClassKeyed("entry tooltips", true, HashMap::new, BuiltInRegistries.LOOT_POOL_ENTRY_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemFunction, TooltipBuilder>> functionTooltips = registerClassKeyed("function tooltips", true, HashMap::new, BuiltInRegistries.LOOT_FUNCTION_TYPE);
@@ -255,11 +255,11 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
-    public void registerTrades(Identifier traderId, Supplier<Int2ObjectMap<ResourceKey<TradeSet>>> tradeSetsByLevel) {
-        trades.put(traderId, tradeSetsByLevel);
+    public void registerTrades(Identifier traderId, @Nullable EntityType<?> entityType, Supplier<Int2ObjectMap<TradeLevel>> levels) {
+        trades.put(traderId, new Trades(entityType, levels));
     }
 
-    public Map<Identifier, Supplier<Int2ObjectMap<ResourceKey<TradeSet>>>> getTrades() {
+    public Map<Identifier, Trades> getTrades() {
         return trades.entries();
     }
 
@@ -496,8 +496,8 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         return NodeUtils.getLootTableNode(operations);
     }
 
-    public IDataNode parseTrade(Supplier<Int2ObjectMap<ResourceKey<TradeSet>>> tradeSetsByLevel) {
-        return new TradeNode(this, tradeSetsByLevel.get());
+    public IDataNode parseTrade(Trades trades) {
+        return new TradeNode(this, trades.entityType(), trades.levels().get());
     }
 
     // hitCount != null means this table is referenced from another table's tree; the paramSet check
@@ -557,6 +557,8 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
             return dataComponentType.getClass().getTypeName();
         }
     }
+
+    public record Trades(@Nullable EntityType<?> entityType, Supplier<Int2ObjectMap<TradeLevel>> levels) {}
 
     private static <T> void unwrap(IServerUtils utils, T value, ManagedRegistry<Class<?>, BiFunction<IServerUtils, T, List<T>>> unwrappers, Set<Object> visiting, List<T> result) {
         // predicate and item modifier references can form cycles, vanilla only logs them
