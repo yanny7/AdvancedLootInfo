@@ -11,8 +11,8 @@ import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.IConditionTooltip;
 import com.yanny.alicompat.accessor.IPageResolverAccessor;
 import net.mehvahdjukaar.moonlight.core.loot.OptionalPropertyCondition;
-import net.minecraft.advancements.critereon.StatePropertiesPredicate;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.advancements.criterion.StatePropertiesPredicate;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,7 +26,7 @@ public class OptionalPropertyConditionAccessor extends BaseAccessor<OptionalProp
     private Optional<StatePropertiesPredicate> properties;
 
     @FieldAccessor
-    private ResourceLocation blockId;
+    private Identifier blockId;
 
     public OptionalPropertyConditionAccessor(OptionalPropertyCondition parent) {
         super(parent);

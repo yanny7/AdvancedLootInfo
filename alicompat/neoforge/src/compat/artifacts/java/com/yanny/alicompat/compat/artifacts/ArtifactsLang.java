@@ -34,6 +34,7 @@ public class ArtifactsLang implements ICompatTranslations {
     }
 
     public enum ConsumeEffects implements ITooltipKey {
+        DAMAGE_ITEM("damage_item", "Damage Item:"),
         HEAL("heal", "Heal:"),
         ;
 

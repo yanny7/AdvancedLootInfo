@@ -1,41 +1,23 @@
 package com.yanny.alicompat.compat.moonlight;
 
-import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
-import com.yanny.aci.tooltip.TooltipNode;
-import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.language.Lang;
-import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
-import com.yanny.ali.plugin.common.trades.SubTradesNode;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
-import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.alicompat.IGlmModCompat;
 import com.yanny.alicompat.accessor.GlmAccessorUtils;
 import com.yanny.alicompat.accessor.PluginUtils;
 import net.mehvahdjukaar.moonlight.api.resources.recipe.platform.BlockTypeSwapIngredientImpl;
-import net.mehvahdjukaar.moonlight.api.trades.BiomeVariantItemListing;
-import net.mehvahdjukaar.moonlight.api.trades.ModItemListing;
-import net.mehvahdjukaar.moonlight.api.trades.NoOpListing;
-import net.mehvahdjukaar.moonlight.api.trades.RemoveNonDataListingListing;
-import net.mehvahdjukaar.moonlight.api.trades.SimpleItemListing;
 import net.mehvahdjukaar.moonlight.core.loot.ConfigItemPoolEntry;
 import net.mehvahdjukaar.moonlight.core.loot.OptionalItemPoolEntry;
 import net.mehvahdjukaar.moonlight.core.loot.OptionalPropertyCondition;
 import net.mehvahdjukaar.moonlight.core.loot.PatternMatchLootItemCondition;
 import net.mehvahdjukaar.moonlight.core.loot.ResourceLootItemCondition;
 import net.mehvahdjukaar.moonlight.core.misc.platform.ModLootModifiers;
-import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.trading.ItemCost;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 public class MoonlightCompat implements IGlmModCompat {
@@ -60,10 +42,6 @@ public class MoonlightCompat implements IGlmModCompat {
         registry.registerValueTooltip(Pattern.class, MoonlightCompat::getPatternTooltip);
 
         PluginUtils.registerPageResolver(registry, OptionalPropertyCondition.class, OptionalPropertyConditionAccessor.class);
-
-        registry.registerItemListing(SimpleItemListing.class, MoonlightCompat::getSimpleItemListingNode);
-        registry.registerItemListing(BiomeVariantItemListing.class, MoonlightCompat::getBiomeVariantItemListingNode);
-        PluginUtils.registerItemListing(registry, SpecialListingAccessor.class);
     }
 
     @Override
@@ -87,7 +65,7 @@ public class MoonlightCompat implements IGlmModCompat {
 
     @NotNull
     private static TooltipBuilder getBlockTypeSwapIngredientTooltip(IServerUtils utils, BlockTypeSwapIngredientImpl<?> ingredient) {
-        List<ItemStack> items = ingredient.getItems().toList();
+        List<ItemStack> items = ingredient.getMatchingStacks();
 
         return TooltipBuilder.array((b) -> items.forEach((i) -> b.add(TooltipBuilder.asElement(utils.getValueTooltip(utils, i), items.size()))));
     }
@@ -95,63 +73,5 @@ public class MoonlightCompat implements IGlmModCompat {
     @NotNull
     private static TooltipBuilder getPatternTooltip(IServerUtils ignoredUtils, Pattern pattern) {
         return TooltipBuilder.value(pattern.pattern());
-    }
-
-    @NotNull
-    private static IDataNode getSimpleItemListingNode(IServerUtils utils, SimpleItemListing listing, TooltipNode condition) {
-        ItemStack price = listing.price().itemStack();
-        ItemStack price2 = listing.price2().map(ItemCost::itemStack).orElse(ItemStack.EMPTY);
-
-        return new ItemsToItemsNode(
-                utils,
-                Either.left(price),
-                new RangeValue(price.getCount()),
-                TooltipNode.empty(),
-                Either.left(price2),
-                new RangeValue(Math.max(1, price2.getCount())),
-                TooltipNode.empty(),
-                Either.left(TooltipUtils.getItemStack(utils, listing.offer().copy(), getFunctions(listing))),
-                new RangeValue(listing.offer().getCount()),
-                utils.getValueTooltip(utils, listing.func()).build(Lang.Branch.MODIFIERS),
-                listing.maxTrades(),
-                listing.xp(),
-                listing.priceMult(),
-                condition
-        );
-    }
-
-    @NotNull
-    private static IDataNode getBiomeVariantItemListingNode(IServerUtils utils, BiomeVariantItemListing listing, TooltipNode condition) {
-        return new SubTradesNode<>(utils, listing, condition) {
-            @Override
-            public List<IDataNode> getSubTrades(IServerUtils utils, BiomeVariantItemListing listing) {
-                List<IDataNode> nodes = new ArrayList<>();
-
-                for (Map.Entry<VillagerType, ModItemListing> entry : listing.listingMap().entrySet()) {
-                    if (isPlaceholder(entry.getValue())) {
-                        continue;
-                    }
-
-                    TooltipNode cond = utils.getValueTooltip(utils, entry.getKey().toString()).build(Lang.Value.VILLAGER_TYPE);
-
-                    nodes.add(utils.getItemListing(utils, entry.getValue(), cond));
-                }
-
-                if (!isPlaceholder(listing.defaultListing())) {
-                    nodes.add(utils.getItemListing(utils, listing.defaultListing(), TooltipBuilder.keyOnly(Lang.Branch.FALLBACK).build()));
-                }
-
-                return nodes;
-            }
-        };
-    }
-
-    private static boolean isPlaceholder(ModItemListing listing) {
-        return listing instanceof NoOpListing || listing instanceof RemoveNonDataListingListing;
-    }
-
-    @NotNull
-    private static List<LootItemFunction> getFunctions(SimpleItemListing listing) {
-        return listing.func() == null ? List.of() : List.of(listing.func());
     }
 }

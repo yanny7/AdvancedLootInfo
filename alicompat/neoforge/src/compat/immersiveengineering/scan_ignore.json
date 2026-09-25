@@ -1,0 +1,3 @@
+{
+  "blusunrize.immersiveengineering.common.crafting.fluidaware.IngredientFluidStack": "handled: NeoForge ICustomIngredient is not an Ingredient subclass, registered through registerValueTooltip and reached via ALI's ingredient unwrapper"
+}

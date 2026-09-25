@@ -1,0 +1,3 @@
+{
+  "net.p3pp3rf1y.sophisticatedstorage.crafting.BaseTierWoodenStorageIngredient": "handled: NeoForge ICustomIngredient is not an Ingredient subclass, registered through registerValueTooltip and reached via ALI's ingredient unwrapper"
+}

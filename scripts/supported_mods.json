@@ -102,6 +102,12 @@
     "curseforge": ["goblin-traders-363703"]
   },
   {
+    "key": "gtceu",
+    "name": "GregTech CEu Modern",
+    "mod_ids": ["gtceu"],
+    "curseforge": ["gregtechceu-modern-890405"]
+  },
+  {
     "key": "hybridaquatic",
     "name": "Hybrid Aquatic",
     "mod_ids": ["hybrid_aquatic"],
@@ -118,6 +124,12 @@
     "name": "Iron's Spells 'n Spellbooks",
     "mod_ids": ["irons_spellbooks"],
     "curseforge": ["irons-spells-n-spellbooks-855414"]
+  },
+  {
+    "key": "kaleidoscopecookery",
+    "name": "Kaleidoscope Cookery",
+    "mod_ids": ["kaleidoscope_cookery"],
+    "curseforge": ["kaleidoscope-cookery-1309203"]
   },
   {
     "key": "mantle",
