@@ -206,6 +206,9 @@ trade list. On Forge, `VillagerTradingManager.postWandererEvent` writes the `Wan
 result back into `VillagerTrades.WANDERING_TRADER_TRADES`, so a mod's wandering-trader additions do
 reach ALI and only a renderer is missing. Lookup is by **exact class**
 (`tradeItemListings.get(entry.getClass())`), so every subclass needs its own `registerItemListing`.
+The same check runs the other way for a mod's static `Int2ObjectMap<ItemListing[]>` fields: grep who reads each one
+(`grep -rla HOLSTAURUS_TRADES`) before calling `registerTrades` for it — Grimoire of Gaia declares six such maps and only
+four entities read them, and a map nothing reads is dead data, whose listing classes go into `scan_ignore.json`.
 
 An `item_listing` finding is registered by class like any other hook, and the shape depends on what
 the target's trade already is:

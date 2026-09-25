@@ -1,0 +1,10 @@
+{
+  "gaia.util.GaiaMerchantTrades$ItemsToItems": "fixed stacks, getOffer ignores trader and random, so ALI's getOffer(null, null) fallback renders it exactly",
+  "gaia.util.GaiaMerchantTrades$ItemForMerchantToken": "ItemsToItems subclass with fixed stacks; ALI's getOffer(null, null) fallback renders it exactly",
+  "gaia.util.GaiaMerchantTrades$MerchantTokenForItem": "ItemsToItems subclass with fixed stacks; ALI's getOffer(null, null) fallback renders it exactly",
+  "gaia.util.GaiaMerchantTrades$HolstaurusTokenForItem": "only in HOLSTAURUS_TRADES, which no entity reads",
+  "gaia.util.GaiaMerchantTrades$ItemForHolstaurusToken": "only in HOLSTAURUS_TRADES, which no entity reads",
+  "gaia.util.GaiaMerchantTrades$EnchantedItemForEmeralds": "only in HOLSTAURUS_TRADES, which no entity reads",
+  "gaia.util.GaiaMerchantTrades$ItemForWeresheepToken": "only in WERESHEEP_TRADES, which no entity reads",
+  "gaia.util.GaiaMerchantTrades$WeresheepTokenForItem": "only in WERESHEEP_TRADES, which no entity reads"
+}

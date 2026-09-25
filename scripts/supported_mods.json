@@ -102,6 +102,12 @@
     "curseforge": ["goblin-traders-363703"]
   },
   {
+    "key": "grimoireofgaia",
+    "name": "Grimoire of Gaia",
+    "mod_ids": ["grimoireofgaia"],
+    "curseforge": ["grimoire-of-gaia-228948"]
+  },
+  {
     "key": "gtceu",
     "name": "GregTech CEu Modern",
     "mod_ids": ["gtceu"],
