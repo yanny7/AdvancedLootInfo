@@ -5,7 +5,6 @@ import com.yanny.ali.platform.Services;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
-import net.minecraft.world.item.SpawnEggItem;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -39,11 +38,7 @@ public class ReiTradeDisplay extends ReiBaseDisplay {
         ingredients.addAll(entry.accepts().stream().map(EntryIngredients::of).toList());
 
         if (entry.entityType() != null) {
-            SpawnEggItem spawnEgg = Services.getPlatform().getSpawnEggItem(entry.entityType());
-
-            if (spawnEgg != null) {
-                ingredients.add(EntryIngredients.of(spawnEgg));
-            }
+            Services.getPlatform().getSpawnEggItem(entry.entityType()).ifPresent((spawnEgg) -> ingredients.add(EntryIngredients.of(spawnEgg.value())));
         }
 
         return ingredients;

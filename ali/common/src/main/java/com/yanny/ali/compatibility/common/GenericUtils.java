@@ -37,7 +37,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.jetbrains.annotations.NotNull;
@@ -477,11 +476,11 @@ public class GenericUtils {
     public static TraderHeader prepareTraderHeader(TradeLootType type, int maxWidth) {
         Font font = Minecraft.getInstance().font;
         EntityType<?> entityType = type.entityType();
-        SpawnEggItem spawnEgg = null;
+        Item spawnEgg = null;
         Component titleTooltip = null;
 
         if (entityType != null) {
-            spawnEgg = Services.getPlatform().getSpawnEggItem(entityType);
+            spawnEgg = Services.getPlatform().getSpawnEggItem(entityType).map(Holder::value).orElse(null);
             titleTooltip = Component.literal(BuiltInRegistries.ENTITY_TYPE.getKey(entityType).toString());
         }
 

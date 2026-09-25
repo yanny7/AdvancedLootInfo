@@ -509,7 +509,7 @@ public abstract class AbstractServer {
     private static Map<Identifier, IDataNode> processTrades(AliServerRegistry serverRegistry, AliConfig config) {
         Map<Identifier, IDataNode> nodes = new HashMap<>();
 
-        for (Map.Entry<Identifier, Supplier<Int2ObjectMap<ResourceKey<TradeSet>>>> entry : serverRegistry.getTrades().entrySet()) {
+        for (Map.Entry<Identifier, AliServerRegistry.Trades> entry : serverRegistry.getTrades().entrySet()) {
             Identifier location = entry.getKey();
 
             TooltipContext.set(location);
