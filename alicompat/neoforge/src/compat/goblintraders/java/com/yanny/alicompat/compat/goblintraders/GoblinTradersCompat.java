@@ -6,6 +6,7 @@ import com.yanny.alicompat.IModCompat;
 import com.yanny.alicompat.accessor.PluginUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -26,8 +27,14 @@ public class GoblinTradersCompat implements IModCompat {
     public void registerServer(IServerRegistry registry) {
         PluginUtils.registerFunctionTooltip(registry, IncreaseDurabilityFunction.class, IncreaseDurabilityFunctionAccessor.class);
 
-        registry.registerTrades(id("goblin_trader"), () -> tradeSets("goblin_trader"));
-        registry.registerTrades(id("vein_goblin_trader"), () -> tradeSets("vein_goblin_trader"));
+        registerTrader(registry, "goblin_trader");
+        registerTrader(registry, "vein_goblin_trader");
+    }
+
+    private static void registerTrader(IServerRegistry registry, String name) {
+        Identifier traderId = id(name);
+
+        registry.registerTrades(traderId, BuiltInRegistries.ENTITY_TYPE.getValue(traderId), () -> tradeSets(name));
     }
 
     // a goblin adds every rarity set instead of picking one - keyed as levels here

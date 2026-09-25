@@ -75,10 +75,8 @@ public class EmiCompatibility implements EmiPlugin {
                             addRecipe(registry, entityCategories, entity, (category) -> new EmiEntityLoot(category, location, entity, node, outputs)),
                     (node, location, outputs) ->
                             addRecipe(registry, gameplayCategories, location, (category) -> new EmiGameplayLoot(category, location, node, outputs)),
-                    (tradeEntry, location, profession, inputs, outputs) ->
-                            addRecipe(registry, tradeCategories, location, (category) -> new EmiTradeLoot(category, location, profession, tradeEntry, inputs, outputs)),
-                    (tradeEntry, location, inputs, outputs) ->
-                            addRecipe(registry, tradeCategories, location, (category) -> new EmiTradeLoot(category, location, null, tradeEntry, inputs, outputs))
+                    (trade) ->
+                            addRecipe(registry, tradeCategories, trade.id(), (category) -> new EmiTradeLoot(category, trade))
             );
         } else {
             LOGGER.warn("EMI integration was not loaded! Level is null!");

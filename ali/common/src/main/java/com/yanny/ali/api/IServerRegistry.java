@@ -15,6 +15,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -26,6 +27,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.apache.commons.lang3.function.TriFunction;
 import org.apache.logging.log4j.util.TriConsumer;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -88,7 +90,7 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
      * up in the {@code minecraft:trade_set} registry when the scan runs, so the supplier may name sets that a datapack
      * provides.
      */
-    void registerTrades(Identifier traderId, Supplier<Int2ObjectMap<ResourceKey<TradeSet>>> tradeSetsByLevel);
+    void registerTrades(Identifier traderId, @Nullable EntityType<?> entityType, Supplier<Int2ObjectMap<ResourceKey<TradeSet>>> tradeSetsByLevel);
 
     void registerEnumTranslation(Class<? extends Enum<?>> type, String modId, String owner);
 

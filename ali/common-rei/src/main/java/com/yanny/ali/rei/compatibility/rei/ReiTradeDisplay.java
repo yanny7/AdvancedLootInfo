@@ -1,29 +1,23 @@
 package com.yanny.ali.rei.compatibility.rei;
 
 import com.yanny.ali.compatibility.common.TradeLootType;
+import com.yanny.ali.platform.Services;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
-import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.SpawnEggItem;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class ReiTradeDisplay extends ReiBaseDisplay {
-    private final Identifier id;
+    private final TradeLootType type;
     private final CategoryIdentifier<ReiTradeDisplay> identifier;
-    private final Set<Block> pois;
-    private final Set<Item> accepts;
 
     public ReiTradeDisplay(TradeLootType entry, CategoryIdentifier<ReiTradeDisplay> identifier) {
         super(getInputIngredients(entry), entry);
-        id = entry.id();
-        pois = entry.pois();
-        accepts = entry.accepts();
+        type = entry;
         this.identifier = identifier;
     }
 
@@ -32,16 +26,8 @@ public class ReiTradeDisplay extends ReiBaseDisplay {
         return identifier;
     }
 
-    public Identifier getId() {
-        return id;
-    }
-
-    public Set<Block> getPois() {
-        return pois;
-    }
-
-    public Set<Item> getAccepts() {
-        return accepts;
+    public TradeLootType getType() {
+        return type;
     }
 
     @NotNull
@@ -51,6 +37,15 @@ public class ReiTradeDisplay extends ReiBaseDisplay {
         ingredients.addAll(entry.inputs().stream().map(EntryIngredients::of).toList());
         ingredients.addAll(entry.pois().stream().map(EntryIngredients::of).toList());
         ingredients.addAll(entry.accepts().stream().map(EntryIngredients::of).toList());
+
+        if (entry.entityType() != null) {
+            SpawnEggItem spawnEgg = Services.getPlatform().getSpawnEggItem(entry.entityType());
+
+            if (spawnEgg != null) {
+                ingredients.add(EntryIngredients.of(spawnEgg));
+            }
+        }
+
         return ingredients;
     }
 }

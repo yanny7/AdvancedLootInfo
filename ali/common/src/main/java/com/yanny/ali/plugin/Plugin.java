@@ -562,10 +562,10 @@ public class Plugin implements IPlugin {
 
     private static void registerVanillaTrades(IServerRegistry registry) {
         for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : BuiltInRegistries.VILLAGER_PROFESSION.entrySet()) {
-            registry.registerTrades(entry.getKey().identifier(), () -> entry.getValue().tradeSetsByLevel());
+            registry.registerTrades(entry.getKey().identifier(), EntityType.VILLAGER, () -> entry.getValue().tradeSetsByLevel());
         }
 
-        registry.registerTrades(Identifier.withDefaultNamespace("wandering_trader"), Plugin::wanderingTraderTradeSets);
+        registry.registerTrades(Identifier.withDefaultNamespace("wandering_trader"), EntityType.WANDERING_TRADER, Plugin::wanderingTraderTradeSets);
     }
 
     // the wandering trader has no trade levels, only the sets WanderingTrader#updateTrades adds - keyed as levels here
