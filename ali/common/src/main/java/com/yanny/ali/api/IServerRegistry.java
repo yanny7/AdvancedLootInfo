@@ -86,11 +86,11 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
     void registerGlobalLootModifiers(Function<IServerUtils, List<IPageLootModifier>> getter);
 
     /**
-     * Registers a trader, so that its trades are scanned and listed under their own entry. The trade sets are looked
-     * up in the {@code minecraft:trade_set} registry when the scan runs, so the supplier may name sets that a datapack
-     * provides.
+     * Registers a trader, so that its trades are scanned and listed under their own entry. A {@link TradeLevel.OfSet} is
+     * looked up in the {@code minecraft:trade_set} registry when the scan runs, so it may name a set that a datapack
+     * provides; a {@link TradeLevel.OfTrades} carries trades a mod defines in code.
      */
-    void registerTrades(Identifier traderId, @Nullable EntityType<?> entityType, Supplier<Int2ObjectMap<ResourceKey<TradeSet>>> tradeSetsByLevel);
+    void registerTrades(Identifier traderId, @Nullable EntityType<?> entityType, Supplier<Int2ObjectMap<TradeLevel>> levels);
 
     void registerEnumTranslation(Class<? extends Enum<?>> type, String modId, String owner);
 

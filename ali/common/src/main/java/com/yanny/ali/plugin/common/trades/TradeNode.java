@@ -3,10 +3,12 @@ package com.yanny.ali.plugin.common.trades;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;
+import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ListNode;
+import com.yanny.ali.api.TradeLevel;
+import com.yanny.ali.api.TradeLevelInfo;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -20,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
+import java.util.function.Function;
 
 public class TradeNode extends ListNode {
     public static final Identifier ID = Utils.modLoc("trade");
@@ -29,17 +31,22 @@ public class TradeNode extends ListNode {
     @Nullable
     private final EntityType<?> entityType;
 
-    public TradeNode(IServerUtils utils, @Nullable EntityType<?> entityType, Int2ObjectMap<ResourceKey<TradeSet>> tradeSetsByLevel) {
-        List<Int2ObjectMap.Entry<ResourceKey<TradeSet>>> entries = tradeSetsByLevel.int2ObjectEntrySet()
+    public TradeNode(IServerUtils utils, @Nullable EntityType<?> entityType, Int2ObjectMap<TradeLevel> levels) {
+        List<Int2ObjectMap.Entry<TradeLevel>> entries = levels.int2ObjectEntrySet()
                 .stream()
                 .sorted(Comparator.comparingInt(Int2ObjectMap.Entry::getIntKey))
                 .toList();
         HolderLookup.RegistryLookup<TradeSet> lookup = utils.lookupProvider().lookup(Registries.TRADE_SET).orElseThrow();
 
-        for (Int2ObjectMap.Entry<ResourceKey<TradeSet>> entry : entries) {
-            Optional<Holder.Reference<TradeSet>> tradeSetReference = lookup.get(entry.getValue());
+        for (Int2ObjectMap.Entry<TradeLevel> entry : entries) {
+            int level = entry.getIntKey();
 
-            tradeSetReference.ifPresent((tradeSet) -> addChildren(new TradeLevelNode(utils, entry.getIntKey(), tradeSet.value())));
+            switch (entry.getValue()) {
+                case TradeLevel.OfSet(ResourceKey<TradeSet> tradeSet) ->
+                        lookup.get(tradeSet).ifPresent((reference) -> addChildren(new TradeLevelNode(utils, level, reference.value())));
+                case TradeLevel.OfTrades(TradeLevelInfo levelInfo, Function<IServerUtils, List<IDataNode>> trades) ->
+                        addChildren(new TradeLevelNode(level, levelInfo, trades.apply(utils)));
+            }
         }
 
         tooltip = TooltipNode.empty();

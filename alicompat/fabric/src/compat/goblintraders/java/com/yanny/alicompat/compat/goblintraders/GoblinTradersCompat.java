@@ -2,6 +2,7 @@ package com.yanny.alicompat.compat.goblintraders;
 
 import com.mrcrayfish.goblintraders.loot_functions.IncreaseDurabilityFunction;
 import com.yanny.ali.api.IServerRegistry;
+import com.yanny.ali.api.TradeLevel;
 import com.yanny.alicompat.IModCompat;
 import com.yanny.alicompat.accessor.PluginUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -34,7 +35,7 @@ public class GoblinTradersCompat implements IModCompat {
     private static void registerTrader(IServerRegistry registry, String name) {
         Identifier traderId = id(name);
 
-        registry.registerTrades(traderId, BuiltInRegistries.ENTITY_TYPE.getValue(traderId), () -> tradeSets(name));
+        registry.registerTrades(traderId, BuiltInRegistries.ENTITY_TYPE.getValue(traderId), () -> TradeLevel.ofSets(tradeSets(name)));
     }
 
     // a goblin adds every rarity set instead of picking one - keyed as levels here

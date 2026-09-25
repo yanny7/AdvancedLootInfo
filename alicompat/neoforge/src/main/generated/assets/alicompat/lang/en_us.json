@@ -12,6 +12,8 @@
   "alicompat.property.value.min_world_tier": "Min World Tier: %s",
   "alicompat.property.value.purity": "Purity: %s",
   "alicompat.property.value.rarity": "Rarity: %s",
+  "alicompat.property.value.with_third_eye": "Requires Third Eye, Otherworld Goggles or True Sight Staff",
+  "alicompat.property.value.without_third_eye": "Without Third Eye, Otherworld Goggles or True Sight Staff",
   "alicompat.property.value.world_tier": "World Tier: %s",
   "alicompat.type.condition.artifact_rarity_adjusted_chance": "Artifact Rarity Adjusted Chance:",
   "alicompat.type.condition.config_value": "Config Value:",
