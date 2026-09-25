@@ -403,6 +403,12 @@ for every loader that has a file but no source set, which is what Step 1 onwards
 set carries `services/com.yanny.alicompat.IModCompat` plus, when there are keys,
 `services/com.yanny.alicompat.ICompatTranslations` — one fully-qualified class per line.
 
+Porting a dormant shim (merged from a lower branch, slug already in `scripts/supported_mods.json`) skips the registry
+entry: `--scaffold <slug>` pins it, enables it and creates only the loaders' missing source sets. Fill those from the
+lower branch's source set for another loader, copy its `scan_ignore.json`, and re-check every entry of it against this
+version's jar. A loader with no file keeps its merged source set untouched — no `_dep` line means nothing compiles it.
+A changelog line merged up for a loader this branch has no file on is removed from `## []` here.
+
 `alicompat/CHANGELOG.md`: while ALICompat is unreleased — the top section is `## []` reading
 `Initial release` — a new shim gets **no** entry; that section already covers every shim shipped in
 it, and neither the Ribbits nor the Twilight Forest commit touched the file. Once a numbered version
