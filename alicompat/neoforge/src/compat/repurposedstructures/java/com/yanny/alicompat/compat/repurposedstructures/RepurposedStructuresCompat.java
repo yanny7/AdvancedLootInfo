@@ -2,7 +2,6 @@ package com.yanny.alicompat.compat.repurposedstructures;
 
 import com.telepathicgrunt.repurposedstructures.misc.neoforge.lootmanager.DetectRSLootTables;
 import com.telepathicgrunt.repurposedstructures.misc.neoforge.lootmanager.StructureModdedLootImporterApplier;
-import com.telepathicgrunt.repurposedstructures.misc.maptrades.StructureSpecificMaps;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.alicompat.IGlmModCompat;
@@ -19,8 +18,6 @@ public class RepurposedStructuresCompat implements IGlmModCompat {
 
     @Override
     public void registerServer(IServerRegistry registry) {
-        PluginUtils.registerItemListing(registry, StructureSpecificMaps.TreasureMapForEmeralds.class, TreasureMapForEmeraldsAccessor.class);
-
         PluginUtils.registerConditionTooltip(registry, DetectRSLootTables.class, DetectRSLootTablesAccessor.class);
 
         PluginUtils.registerPageResolver(registry, StructureModdedLootImporterApplier.class, StructureModdedLootImporterApplierAccessor.class);
