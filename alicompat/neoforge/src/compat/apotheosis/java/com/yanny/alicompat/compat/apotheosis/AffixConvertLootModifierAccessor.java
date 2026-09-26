@@ -2,7 +2,6 @@ package com.yanny.alicompat.compat.apotheosis;
 
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
-import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.api.IOperation;
@@ -48,7 +47,7 @@ public class AffixConvertLootModifierAccessor extends BaseAccessor<AffixConvertL
 
     @Override
     public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
-        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions), (c) -> getOperations(utils, c)));
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions), (page, c) -> getOperations(utils, page, c)));
     }
 
     @NotNull
@@ -58,8 +57,8 @@ public class AffixConvertLootModifierAccessor extends BaseAccessor<AffixConvertL
     }
 
     @NotNull
-    private List<IOperation> getOperations(IServerUtils utils, List<LootItemCondition> conditions) {
-        AffixConvertLootModifier.AffixConversionEntry entry = matching(TooltipContext.get());
+    private List<IOperation> getOperations(IServerUtils utils, LootPage page, List<LootItemCondition> conditions) {
+        AffixConvertLootModifier.AffixConversionEntry entry = matching(page.tableId());
 
         if (entry == null || entry.chance() <= 0) {
             return Collections.emptyList();

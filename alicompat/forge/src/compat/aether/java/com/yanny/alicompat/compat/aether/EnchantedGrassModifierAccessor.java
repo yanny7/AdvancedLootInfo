@@ -32,7 +32,7 @@ public class EnchantedGrassModifierAccessor extends BaseAccessor<EnchantedGrassM
         List<LootItemCondition> conditionList = Arrays.asList(conditions);
 
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
-                (c) -> Collections.singletonList(new IOperation.ReplaceOperation(
+                (page, c) -> Collections.singletonList(new IOperation.ReplaceOperation(
                         (itemStack) -> itemStack.is(parent.item.getItem()),
                         (src) -> AetherNodeUtils.countedNode(utils, AetherNodeUtils.withChance(c, 0.5F), src,
                                 new RangeValue(((IItemNode) src).getCount()).add(1))))));

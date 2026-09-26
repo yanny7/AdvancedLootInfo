@@ -40,7 +40,7 @@ public class ReplaceRopeByConfigModifierAccessor extends BaseAccessor<ReplaceRop
 
     @Override
     public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
-        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(conditions), (c) -> getReplaceOperations(utils, c)));
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(conditions), (page, c) -> getReplaceOperations(utils, c)));
     }
 
     @NotNull

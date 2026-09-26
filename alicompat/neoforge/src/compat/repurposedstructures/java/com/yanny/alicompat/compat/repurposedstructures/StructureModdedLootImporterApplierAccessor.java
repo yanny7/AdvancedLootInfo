@@ -4,7 +4,6 @@ import com.telepathicgrunt.repurposedstructures.configs.neoforge.RSModdedLootCon
 import com.telepathicgrunt.repurposedstructures.misc.lootmanager.StructureModdedLootImporter;
 import com.telepathicgrunt.repurposedstructures.misc.neoforge.lootmanager.StructureModdedLootImporterApplier;
 import com.yanny.aci.tooltip.TooltipBuilder;
-import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IOperation;
@@ -42,7 +41,7 @@ public class StructureModdedLootImporterApplierAccessor extends BaseAccessor<Str
 
     @Override
     public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
-        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, NodeUtils.unwrapConditions(utils, condition), (c) -> getOperations(utils, c)));
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, NodeUtils.unwrapConditions(utils, condition), (page, c) -> getOperations(utils, page, c)));
     }
 
     @NotNull
@@ -52,9 +51,8 @@ public class StructureModdedLootImporterApplierAccessor extends BaseAccessor<Str
     }
 
     @NotNull
-    private static List<IOperation> getOperations(IServerUtils utils, List<LootItemCondition> conditions) {
-        Identifier location = TooltipContext.get();
-        ResourceKey<LootTable> imported = location == null ? null : StructureModdedLootImporter.TABLE_IMPORTS.get(tableKey(location));
+    private static List<IOperation> getOperations(IServerUtils utils, LootPage page, List<LootItemCondition> conditions) {
+        ResourceKey<LootTable> imported = StructureModdedLootImporter.TABLE_IMPORTS.get(tableKey(page.tableId()));
 
         if (imported == null) {
             return Collections.emptyList();

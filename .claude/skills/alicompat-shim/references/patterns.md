@@ -41,6 +41,7 @@ This file only says *where to look*.
 | Page resolver from an instance field | `moonlight` → `OptionalPropertyConditionAccessor` implements `IConditionTooltip` **and** `IPageResolverAccessor`, registered twice through `PluginUtils` |
 | Page resolver on the modifier class | `apotheosis` → `GemLootModifierAccessor` answers `testTable` from the mod's own config list, beside its `IGlobalLootModifierAccessor` half |
 | Table id read from a mod carrier | `portinglib` → `registerLootContextPreparer` writes `page.tableId()` into Porting Lib's `LootContextExtensions`; its `LootTableIdCondition` then decides itself and needs no resolver |
+| Replaced by a weighted loot-table roll | `hybridaquatic` (forge) → `HAGlobalLootModifierAccessor` — `ModifiedNode` over a one-roll `LootPoolNode` of `ReferenceNode`s, chance split by weight |
 
 A GLM the plugin produced nothing for usually wants a page resolver for the mod's own condition — or
 nothing at all, since conditions ALI can run decide themselves. See `alicompat/CLAUDE.md`.
@@ -61,6 +62,7 @@ nothing at all, since conditions ALI can run decide themselves. See `alicompat/C
 | Target is an `ItemListing`, accessor reads its fields | `morejs` → `PluginUtils.registerItemListing(registry, SimpleTrade.class, SimpleTradeAccessor.class)`, five of them |
 | Accessor *is* the listing | `ribbits` → `PluginUtils.registerSelfItemListing(registry, ItemsForAmethystsAccessor.class)` — the accessor implements `VillagerTrades.ItemListing` and `IItemListing` |
 | Trader with a static `ItemListing[]` | `farlanders` → `registerTrades(id, () -> FarlanderTrades.FARLANDER_TRADES, (level) -> new TradeLevelInfo(new RangeValue(2)))` |
+| Same, a different pick count per level | `grimoireofgaia` → `(level) -> new TradeLevelInfo(new RangeValue(level == 1 ? 10 : 5))`, the counts taken from each entity's `updateTrades` |
 | Trader configured by the mod | `goblintraders` → `getLevelInfo` reads `getMinValue()`/`getMaxValue()`/`includeChance()` into `TradeLevelInfo(RangeValue(min, max), chance)` |
 | Trader with no `ItemListing[]` at all | `ironsspellbooks` → `WizardTrades` mirrors the target's `getOffers()` by hand with shim-owned listings; each RNG gate becomes its own level (`new TradeLevelInfo(new RangeValue(1), 0.25f)`) |
 | Listing whose data is captured in a lambda | `ironsspellbooks` → `SimpleTradeAccessor` and the notes in `WanderingTrades`; uses `com.yanny.ali.plugin.common.ReflectionUtils.getCapturedInstances`, which matches **by type** |

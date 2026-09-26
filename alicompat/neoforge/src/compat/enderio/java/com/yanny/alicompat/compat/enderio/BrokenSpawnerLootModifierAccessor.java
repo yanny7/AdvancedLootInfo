@@ -36,7 +36,7 @@ public class BrokenSpawnerLootModifierAccessor extends BaseAccessor<BrokenSpawne
         float dropChance = BaseConfig.COMMON.BLOCKS.BROKEN_SPAWNER_DROP_CHANCE.get().floatValue();
 
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions),
-                (c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true,
+                (page, c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true,
                         GlmNodeUtils.addedNode(utils, c, brokenSpawner(), dropChance, new RangeValue(1))))));
     }
 

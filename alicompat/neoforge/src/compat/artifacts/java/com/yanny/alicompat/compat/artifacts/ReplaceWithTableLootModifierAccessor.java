@@ -25,7 +25,7 @@ public class ReplaceWithTableLootModifierAccessor extends BaseAccessor<ReplaceWi
 
     @Override
     public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
-        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions), (c) -> List.of(
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions), (page, c) -> List.of(
                 new IOperation.RemoveOperation((itemStack) -> true, (src) -> GlmNodeUtils.keptNode(utils, c, src)),
                 new IOperation.AddOperation((itemStack) -> true, GlmNodeUtils.referenceNode(utils, c, parent.table().identifier()))
         )));

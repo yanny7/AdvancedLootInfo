@@ -143,12 +143,13 @@ subprojects {
             // a slug enabled on another loader keeps its sources here, so without a dependency none of them can compile
             def compatMods = (project.findProperty("compat_mods") ?: "").split(",")*.trim().findAll { project.findProperty("${it}_${project.name}_dep") }
 
-            // ServiceLoader reads one file per name, so the per-mod fragments have to be merged
+            // ServiceLoader and the language loader read one file per name, so the per-mod fragments have to be merged
             def generateCompatServices = tasks.register("generateCompatServices") {
                 def serviceDirs = compatMods.collect { file("src/compat/$it/services") }.findAll { it.isDirectory() }
+                def langDirs = compatMods.collect { file("src/compat/$it/lang") }.findAll { it.isDirectory() }
                 def outDir = layout.buildDirectory.dir("generated/compat-resources").get().asFile
 
-                inputs.files(serviceDirs)
+                inputs.files(serviceDirs + langDirs)
                 outputs.dir(outDir)
 
                 doLast {
@@ -169,6 +170,21 @@ subprojects {
                             target.parentFile.mkdirs()
                             target.text = content
                         }
+                    }
+
+                    def translations = [:].withDefault { new TreeMap<String, String>() }
+
+                    langDirs.each { dir ->
+                        dir.listFiles({ f -> f.isFile() && f.name.endsWith(".json") } as FileFilter).each {
+                            translations[it.name].putAll(new groovy.json.JsonSlurper().parse(it, "UTF-8") as Map)
+                        }
+                    }
+
+                    translations.each { name, entries ->
+                        def target = new File(outDir, "assets/alicompat/lang/$name")
+
+                        target.parentFile.mkdirs()
+                        target.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(entries))
                     }
                 }
             }

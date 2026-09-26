@@ -32,9 +32,9 @@ public class GemLootModifierAccessor extends BaseAccessor<GemLootModifier> imple
     @Override
     public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions),
-                (c) -> Collections.singletonList(new IOperation.AddOperation(
+                (page, c) -> Collections.singletonList(new IOperation.AddOperation(
                         (itemStack) -> true,
-                        GlmNodeUtils.addedNode(utils, c, ApotheosisUtils.gemStack(), ApotheosisUtils.chance(AdventureConfig.GEM_LOOT_RULES), new RangeValue(1))))));
+                        GlmNodeUtils.addedNode(utils, c, ApotheosisUtils.gemStack(), ApotheosisUtils.chance(AdventureConfig.GEM_LOOT_RULES, page.tableId()), new RangeValue(1))))));
     }
 
     @NotNull

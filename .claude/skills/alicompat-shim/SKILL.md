@@ -211,6 +211,9 @@ trade list. On Forge, `VillagerTradingManager.postWandererEvent` writes the `Wan
 result back into `VillagerTrades.WANDERING_TRADER_TRADES`, so a mod's wandering-trader additions do
 reach ALI and only a renderer is missing. Lookup is by **exact class**
 (`tradeItemListings.get(entry.getClass())`), so every subclass needs its own `registerItemListing`.
+The same check runs the other way for a mod's static `Int2ObjectMap<ItemListing[]>` fields: grep who reads each one
+(`grep -rla HOLSTAURUS_TRADES`) before calling `registerTrades` for it — Grimoire of Gaia declares six such maps and only
+four entities read them, and a map nothing reads is dead data, whose listing classes go into `scan_ignore.json`.
 
 An `item_listing` finding is registered by class like any other hook, and the shape depends on what
 the target's trade already is:
@@ -221,6 +224,11 @@ the target's trade already is:
 - The target is the mod's **own** listing type (Ribbits) → the accessor implements
   `VillagerTrades.ItemListing` *and* `IItemListing`, and the shim hands the wrapped listing to
   `IServerUtils.getItemListing`. That is the only reason for the wrapper.
+
+Trades are data from 26.1 on. A mod whose `data/<ns>/villager_trade/*.json` are reached through a `trade_set` it
+passes to its own `VillagerProfession`, or through a vanilla `tags/villager_trade/<profession>/level_<n>.json`, needs
+no listing registration: ALI's `Plugin` walks every profession's `tradeSetsByLevel()` and the wandering trader's sets.
+Only a custom `given_item_modifiers` function or a trader outside the profession registry is left to cover.
 
 Measure the shim against what ALI already does, not against nothing: an unregistered listing falls
 back to `entry.getOffer(null, null)` rendered through `TradeUtils.getNode`, and to a missing-listing
@@ -360,10 +368,10 @@ concatenation of the modifier's conditions and the source node's, and take `chan
 
 ## Step 5 — tooltip keys
 
-Keys live in the shim's own `<Mod>Lang implements ICompatTranslations`, under `alicompat.`, split into
-the enums the shim needs (`Conditions` → `alicompat.type.condition.`, `Functions` →
-`alicompat.type.function.`, `Value` → `alicompat.property.value.`), each registered with
-`CoreLang.register` in a static block. That class must not name a single target-mod type — datagen
+Keys live in the shim's own `<Mod>Lang implements ICompatTranslations`, under `alicompat.<modid>.`, split
+into the enums the shim needs, each building its key with `Utils.langKey(MOD_ID, <group>, k)`
+(`Conditions` → `"type.condition"`, `Functions` → `"type.function"`, `Value` → `"property.value"`) and
+registered with `CoreLang.register` in a static block. That class must not name a single target-mod type — datagen
 constructs it with the target mod absent.
 
 `TooltipBuilder.key()` **overwrites**, it does not nest. A condition rendering one value takes a
@@ -382,16 +390,16 @@ each read by a single function. Calling a private helper instead works only for 
 about it, and the same object rendered from a GLM, a trade or another shim silently falls back to a
 bare `toString`. `forge`/`ironsspellbooks` registers `SpellFilter` this way.
 
-Check whether the key already exists before adding one: translations from every shim merge into one
-`HashMap`, so two shims may ship the same key with the same value (Ribbits and MoreJS both declare
-`alicompat.type.function.random_potion`) and the generated JSON does not change at all. Each shim
-still declares its own — that is what keeps a shim self-contained.
+Translations from every shim merge into one map, and the mod id in the key keeps them apart: a text two
+shims share (Ribbits and MoreJS both have `random_potion`) is declared by each under its own id. That is
+what keeps a shim self-contained. Hand-written locales go in `src/compat/<slug>/lang/<locale>.json`, not
+under `resources` — `generateCompatServices` merges every shim's file of one name into
+`assets/alicompat/lang/<locale>.json`.
 
-Do **not** launch the datagen run to regenerate
-`alicompat/<loader>/src/main/generated/assets/alicompat/lang/en_us.json` — it is a Minecraft run and
-can hang the session. Add the new keys to that JSON by hand (alphabetically sorted, two-space indent,
-**no trailing newline** — the generator writes none), and tell the user to re-run the loader's
-`Minecraft Data` configuration to confirm the file comes back byte-identical.
+Regenerate `alicompat/<loader>/src/main/generated/assets/alicompat/lang/en_us.json` with the loader's
+datagen (`runAlicompatFabricDatagen`, `runAlicompatForgeDatagen`). The Forge run never exits after it
+writes the files: run it in the background, and once `Caching:` appears in its output kill the game JVM
+whose `/proc/<pid>/cwd` is `alicompat/forge/run`; the task then reports failure, which is expected.
 
 ## Step 6 — wiring, and what the user must be told
 
@@ -404,6 +412,12 @@ write that block by hand, the next run overwrites it. The same command scaffolds
 for every loader that has a file but no source set, which is what Step 1 onwards is filled into. The source
 set carries `services/com.yanny.alicompat.IModCompat` plus, when there are keys,
 `services/com.yanny.alicompat.ICompatTranslations` — one fully-qualified class per line.
+
+Porting a dormant shim (merged from a lower branch, slug already in `scripts/supported_mods.json`) skips the registry
+entry: `--scaffold <slug>` pins it, enables it and creates only the loaders' missing source sets. Fill those from the
+lower branch's source set for another loader, copy its `scan_ignore.json`, and re-check every entry of it against this
+version's jar. A loader with no file keeps its merged source set untouched — no `_dep` line means nothing compiles it.
+A changelog line merged up for a loader this branch has no file on is removed from `## []` here.
 
 `alicompat/CHANGELOG.md`: while ALICompat is unreleased — the top section is `## []` reading
 `Initial release` — a new shim gets **no** entry; that section already covers every shim shipped in

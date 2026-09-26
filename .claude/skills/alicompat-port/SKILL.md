@@ -25,14 +25,21 @@ git branch -r                                               # what exists
 Merge one step (`git merge origin/<the branch directly below>`). Reaching the newest branch from the
 oldest is several runs of this skill, one per step, each with its own commit.
 
-Branches are usually separate checkouts, one per version. Work in the target branch's checkout.
+Every branch is its own checkout, a sibling directory one level above the repo root (`ls ..`); read
+`minecraft_version` in each to find the lower one, never guess from the directory name. Work in the target
+branch's checkout and read the lower branch from its sibling directory rather than from `git show`.
 
 ## Phase 1 — the merge
 
 ```bash
 git fetch origin
-git merge origin/<lower>
+git merge -X no-renames origin/<lower>
 ```
+
+Always without rename detection. Shims are near-identical files repeated across loaders and mods, so git pairs
+unrelated ones — a neoforge shim of one mod conflicting with a forge shim of another — and the result is
+conflicts that are not real and edits applied to the wrong file. A modify/delete conflict on a file this branch
+removed is resolved by keeping it removed (`git rm`).
 
 **The generated target-mod block in `gradle.properties` is resolved as `ours`, silently.** That is
 `compat_mods` and every `<mod>_<loader>_dep` line: each `_dep` pins a CurseForge file id or maven artifact
@@ -45,6 +52,24 @@ conflicts like any other code and is resolved on its merits.
 New shim source sets arrive as new files. That is expected and they stay: a slug whose files are
 present but whose name is absent from `compat_mods` is **dormant**, compiled by nothing. See
 `alicompat/CLAUDE.md`.
+
+### Dormant shims are not phase 1's business
+
+Phase 1 never reads, fixes or sweeps a dormant source set. Nothing compiles it, and phase 2 re-derives it
+against this version's jar and the current ALI/ALICompat API anyway, so any work on it now is spent twice.
+
+- A conflict inside a dormant source set takes the lower branch's side unread: `git checkout --theirs -- <path>`,
+  or `git rm` when the lower branch deleted it.
+- A grep, sed or script that brings shims in line with a changed API runs over active slugs only (the
+  `compat_mods` list), never over `alicompat/*/src/compat/*` as a whole.
+- Unresolved symbols, stale key schemes or old lambda shapes in a dormant shim are not reported as merge findings.
+
+### Other recurring conflicts
+
+- **`alicompat/<loader>/src/main/generated/**`** is datagen output, so it is never merged by hand. Take either
+  side, build, then regenerate with `./gradlew runAlicompat<Loader>Datagen` for every enabled loader.
+- **`alicompat/CHANGELOG.md`**: keep this branch's `## []` entries, add the lower branch's entries that apply here
+  (cross-cutting changes), and drop "Added X support" for a slug that is dormant here, because this branch does not ship it.
 
 ### Source sets that went missing
 
@@ -76,6 +101,16 @@ properties, do not assume which exist:
 
 A failure in `alicompat/common` is a merge problem and belongs here. A failure in a shim means its
 slug should not have been in `compat_mods` on this branch yet — take it out and leave it for phase 2.
+
+A merged change that rewrites a pattern across every shim, such as a key scheme or a renamed helper, does not
+reach code that exists only on this branch, and that code still compiles. After the merge, grep the active
+slugs' source sets for the old pattern and bring the leftovers in line; the generated lang files show them as
+keys without the new shape.
+
+The same holds for a change to one shim. A loader the lower branch lacks keeps its own copy of that shim here
+(forge below, neoforge here), and the merge never touches that copy. For every shim file the merge changed,
+open the same slug under each other loader here and, if that slug is active, port the change by hand,
+adapting it to that copy's code.
 
 **Stop here.** Report what merged, what was restored, and how many slugs are dormant. The user
 commits. Phase 2 does not begin until that commit exists.
@@ -116,6 +151,9 @@ are phase 2's worklist, the rest cannot be written here at all. The script leave
 strictly alone — it neither pins nor scaffolds them — so a `--update` run after the merge cannot
 switch on a shim nobody has ported.
 
+"0 portable" can be real: mods skip Minecraft versions. Before reporting that, confirm a few of them on
+CurseForge (`/v1/mods/<id>` → `latestFilesIndexes[].gameVersion`) and one active mod as a control.
+
 ### Take them in groups, not in bulk
 
 Group by the hooks a shim registers, so one pass needs one part of `alicompat-shim`'s knowledge
@@ -148,9 +186,16 @@ This is a full port, not a merge. It runs `alicompat-shim` from its Step 0:
 - fetch the jar for **this** Minecraft version and loader, and diff the classes the shim uses against
   what the jar contains — classes move, get renamed and disappear between versions
 - adjust the shim; only its shape ports, never its contents
+- bring it up to the current ALI/ALICompat API too: phase 1 left it untouched, so every API change merged
+  while it was dormant (key scheme, helper signatures, removed interfaces) lands here as a compile error
 - add the slug to `compat_mods`, then `python3 scripts/check_versions.py --update` to pin its `_dep` lines
   and rewrite the block (the slug's order in the list is the script's business, not yours)
 - if the mod has no file for this version or loader, write no shim, delete no source set, and say why
+- if the mod has a file but nothing left to register — its loot and trade classes are gone, or ALI already renders
+  what replaced them — reduce the source set to the `--scaffold` skeleton (an `IModCompat` returning only the mod id,
+  no `Lang`, no accessors) and enable it anyway. Never leave it dormant and never delete it: an enabled shim keeps
+  being repinned and scanned, so a later mod version that adds a class reaching an ALI hook shows up as `+` on the
+  next run. Anything it deliberately leaves unregistered goes into `scan_ignore.json` with the reason
 
 ## Done when
 

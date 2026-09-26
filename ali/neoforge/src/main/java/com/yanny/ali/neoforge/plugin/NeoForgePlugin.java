@@ -101,7 +101,7 @@ public class NeoForgePlugin implements IGlobalLootModifierPlugin {
     private static Optional<IPageLootModifier> getAddTableLootModifier(IServerUtils utils, AddTableLootModifier modifier) {
         List<LootItemCondition> conditionList = NodeUtils.unwrapConditions(utils, ((MixinLootModifier) modifier).getAliCondition());
 
-        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, modifier, conditionList, (c) -> {
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, modifier, conditionList, (page, c) -> {
             TooltipNode tooltip = TooltipBuilder.array((b) -> b
                             .add(TooltipBuilder.keyOnly(Lang.Group.ALL))
                             .add(utils.getValueTooltip(utils, c))

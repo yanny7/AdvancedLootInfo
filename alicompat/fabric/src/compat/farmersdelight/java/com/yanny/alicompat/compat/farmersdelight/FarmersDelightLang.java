@@ -26,7 +26,7 @@ public class FarmersDelightLang implements ICompatTranslations {
         private final Translation translation;
 
         ConsumeEffects(String k, String e) {
-            translation = new Translation("alicompat.type.consume_effect." + k, e);
+            translation = new Translation(Utils.langKey(MOD_ID, "type.consume_effect", k), e);
         }
 
         @NotNull
@@ -44,7 +44,7 @@ public class FarmersDelightLang implements ICompatTranslations {
         private final Translation translation;
 
         Functions(String k, String e) {
-            translation = new Translation("alicompat.type.function." + k, e);
+            translation = new Translation(Utils.langKey(MOD_ID, "type.function", k), e);
         }
 
         @NotNull
@@ -61,7 +61,7 @@ public class FarmersDelightLang implements ICompatTranslations {
         private final Translation translation;
 
         Value(String k, String e) {
-            translation = new Translation("alicompat.property.value." + k, e);
+            translation = new Translation(Utils.langKey(MOD_ID, "property.value", k), e);
         }
 
         @NotNull

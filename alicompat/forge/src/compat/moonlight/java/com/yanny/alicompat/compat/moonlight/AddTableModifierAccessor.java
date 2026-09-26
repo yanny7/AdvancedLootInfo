@@ -32,7 +32,7 @@ public class AddTableModifierAccessor extends BaseAccessor<ModLootModifiers.AddT
         List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
 
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
-                (c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true,
+                (page, c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true,
                         GlmNodeUtils.referenceNode(utils, c, injectTableId)))));
     }
 }

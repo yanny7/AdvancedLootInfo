@@ -46,7 +46,7 @@ public class ReplaceLootModifierAccessor extends BaseAccessor<ReplaceLootModifie
         ResourceLocation lootTable = ResourceLocation.parse(resourceLocationKey);
         float chance = (float) chanceToReplace;
 
-        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList, (c) -> {
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList, (page, c) -> {
             TooltipNode tooltip = TooltipBuilder.array((b) -> {
                 b.add(TooltipBuilder.keyOnly(Lang.Group.ALL));
                 b.add(TooltipUtils.getChanceTooltip(new EnchantedRanges(chance * 100)));

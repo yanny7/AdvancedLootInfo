@@ -34,7 +34,7 @@ public class DimensionFishingLootApplierAccessor extends BaseAccessor<DimensionF
     public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
         List<LootItemCondition> conditionList = Arrays.asList(conditions);
 
-        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList, (c) -> {
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList, (page, c) -> {
             List<LootItemCondition> inDimension = new ArrayList<>(c);
 
             inDimension.add(LocationCheck.checkLocation(LocationPredicate.Builder.location().setDimension(BzDimension.BZ_WORLD_KEY)).build());

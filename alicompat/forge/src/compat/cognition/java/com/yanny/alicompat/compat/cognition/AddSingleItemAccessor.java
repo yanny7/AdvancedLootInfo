@@ -36,7 +36,7 @@ public class AddSingleItemAccessor extends BaseAccessor<AddSingleItem> implement
         RangeValue count = new RangeValue(parent.min, parent.max);
 
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions),
-                (c) -> List.of(new IOperation.AddOperation((itemStack) -> true, GlmNodeUtils.addedNode(utils, c, item.getDefaultInstance(), appearChance, count)))));
+                (page, c) -> List.of(new IOperation.AddOperation((itemStack) -> true, GlmNodeUtils.addedNode(utils, c, item.getDefaultInstance(), appearChance, count)))));
     }
 
     @NotNull
