@@ -45,7 +45,7 @@ public class AffixLootModifierAccessor extends BaseAccessor<AffixLootModifier> i
     @Override
     public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions),
-                (c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, getNode(utils, c)))));
+                (page, c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, getNode(utils, page, c)))));
     }
 
     @NotNull
@@ -55,9 +55,9 @@ public class AffixLootModifierAccessor extends BaseAccessor<AffixLootModifier> i
     }
 
     @NotNull
-    private static IDataNode getNode(IServerUtils utils, List<LootItemCondition> conditions) {
+    private static IDataNode getNode(IServerUtils utils, LootPage page, List<LootItemCondition> conditions) {
         Collection<AffixLootEntry> entries = AffixLootRegistry.INSTANCE.getValues();
-        float chance = ApotheosisUtils.chance(AdventureConfig.AFFIX_ITEM_LOOT_RULES);
+        float chance = ApotheosisUtils.chance(AdventureConfig.AFFIX_ITEM_LOOT_RULES, page.tableId());
         int sumWeight = entries.stream().mapToInt(AffixLootEntry::getWeight).sum();
         List<IDataNode> children = entries.stream().map((entry) -> getEntryNode(utils, conditions, entry, chance, sumWeight)).toList();
         TooltipNode tooltip = TooltipBuilder.array((b) -> {

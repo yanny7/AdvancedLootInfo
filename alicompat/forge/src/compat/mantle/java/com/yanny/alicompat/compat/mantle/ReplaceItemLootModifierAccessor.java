@@ -50,7 +50,7 @@ public class ReplaceItemLootModifierAccessor extends BaseAccessor<ReplaceItemLoo
         List<LootItemCondition> conditionList = Arrays.asList(conditions);
         List<LootItemFunction> functionList = Arrays.asList(functions);
 
-        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList, (c) -> {
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList, (page, c) -> {
             Function<IDataNode, List<IDataNode>> factory = (src) -> {
                 IItemNode node = (IItemNode) src;
                 List<LootItemCondition> allConditions = Stream.concat(c.stream(), node.getConditions().stream()).toList();
