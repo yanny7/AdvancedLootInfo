@@ -4,6 +4,7 @@
 - Added `dimensionIcons` configuration to set recipe viewer icon of each dimension
 - Biome shows spawn eggs of mobs that spawn in it
 - Fixed missing biomes with more feature steps than vanilla defines
+- Faster worldgen scan of modded features
 
 ## [1.1.1]
 

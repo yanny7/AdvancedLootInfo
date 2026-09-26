@@ -43,6 +43,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
@@ -80,6 +81,7 @@ public final class FeatureBytecodeScanner {
     private static final Map<String, ClassNode> CLASS_NODE_CACHE = new ConcurrentHashMap<>();
     private static final Map<String, Class<?>> CLASS_CACHE = new ConcurrentHashMap<>();
     private static final Map<String, Set<String>> IMPLEMENTOR_CACHE = new ConcurrentHashMap<>();
+    private static final Map<MethodNode, Optional<Frame<SourceValue>[]>> FRAME_CACHE = new ConcurrentHashMap<>();
 
     // Runtime name+descriptor of Feature#place(FeaturePlaceContext), resolved reflectively (mapping-agnostic).
     private static final String PLACE_NAME;
@@ -176,6 +178,7 @@ public final class FeatureBytecodeScanner {
         CLASS_NODE_CACHE.clear();
         CLASS_CACHE.clear();
         IMPLEMENTOR_CACHE.clear();
+        FRAME_CACHE.clear();
     }
 
     /**
@@ -1292,6 +1295,10 @@ public final class FeatureBytecodeScanner {
 
 
     private static Frame<SourceValue>[] frames(ClassNode owner, MethodNode method) {
+        return FRAME_CACHE.computeIfAbsent(method, (m) -> Optional.ofNullable(analyze(owner, m))).orElse(null);
+    }
+
+    private static Frame<SourceValue>[] analyze(ClassNode owner, MethodNode method) {
         try {
             return new Analyzer<>(new SourceInterpreter()).analyze(owner.name, method);
         } catch (Throwable t) {
