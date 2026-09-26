@@ -25,14 +25,21 @@ git branch -r                                               # what exists
 Merge one step (`git merge origin/<the branch directly below>`). Reaching the newest branch from the
 oldest is several runs of this skill, one per step, each with its own commit.
 
-Branches are usually separate checkouts, one per version. Work in the target branch's checkout.
+Every branch is its own checkout, a sibling directory one level above the repo root (`ls ..`); read
+`minecraft_version` in each to find the lower one, never guess from the directory name. Work in the target
+branch's checkout and read the lower branch from its sibling directory rather than from `git show`.
 
 ## Phase 1 — the merge
 
 ```bash
 git fetch origin
-git merge origin/<lower>
+git merge -X no-renames origin/<lower>
 ```
+
+Always without rename detection. Shims are near-identical files repeated across loaders and mods, so git pairs
+unrelated ones — a neoforge shim of one mod conflicting with a forge shim of another — and the result is
+conflicts that are not real and edits applied to the wrong file. A modify/delete conflict on a file this branch
+removed is resolved by keeping it removed (`git rm`).
 
 **The generated target-mod block in `gradle.properties` is resolved as `ours`, silently.** That is
 `compat_mods` and every `<mod>_<loader>_dep` line: each `_dep` pins a CurseForge file id or maven artifact
@@ -87,6 +94,10 @@ slug should not have been in `compat_mods` on this branch yet — take it out an
 A merged change that rewrites a pattern across every shim, such as a key scheme or a renamed helper, does not
 reach code that exists only on this branch, and that code still compiles. After the merge, grep for the old
 pattern and bring the leftovers in line; the generated lang files show them as keys without the new shape.
+
+The same holds for a change to one shim. A loader the lower branch lacks keeps its own copy of that shim here
+(forge below, neoforge here), and the merge never touches that copy. For every shim file the merge changed,
+open the same slug under each other loader here and port the change by hand, adapting it to that copy's code.
 
 **Stop here.** Report what merged, what was restored, and how many slugs are dormant. The user
 commits. Phase 2 does not begin until that commit exists.
