@@ -36,7 +36,7 @@ public class AddDropModifierAccessor extends BaseAccessor<AddDropModifier> imple
         ItemStack stack = item.get();
 
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
-                (c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true,
+                (page, c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true,
                         GlmNodeUtils.addedNode(utils, c, stack.copy(), 1, new RangeValue(stack.getCount()))))));
     }
 }

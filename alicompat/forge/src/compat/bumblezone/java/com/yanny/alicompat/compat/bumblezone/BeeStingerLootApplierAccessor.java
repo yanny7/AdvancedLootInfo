@@ -36,7 +36,7 @@ public class BeeStingerLootApplierAccessor extends BaseAccessor<BeeStingerLootAp
         List<LootItemCondition> conditionList = Arrays.asList(conditions);
 
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
-                (c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true,
+                (page, c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true,
                         GlmNodeUtils.referenceNode(utils, c, NewLootInjectorApplier.STINGER_DROP_LOOT_TABLE_RL)))));
     }
 

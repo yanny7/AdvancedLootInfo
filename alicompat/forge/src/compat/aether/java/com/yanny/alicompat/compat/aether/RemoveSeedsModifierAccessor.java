@@ -32,7 +32,7 @@ public class RemoveSeedsModifierAccessor extends BaseAccessor<RemoveSeedsModifie
         List<LootItemCondition> conditionList = Arrays.asList(conditions);
 
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
-                (c) -> Collections.singletonList(new IOperation.RemoveOperation(
+                (page, c) -> Collections.singletonList(new IOperation.RemoveOperation(
                         (itemStack) -> itemStack.is(Items.WHEAT_SEEDS),
                         (src) -> GlmNodeUtils.keptNode(utils, c, src)))));
     }

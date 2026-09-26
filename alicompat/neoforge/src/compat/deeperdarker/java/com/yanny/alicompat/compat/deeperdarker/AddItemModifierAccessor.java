@@ -39,7 +39,7 @@ public class AddItemModifierAccessor extends BaseAccessor<AddItemModifier> imple
         List<LootItemCondition> conditionList = Arrays.asList(conditions);
 
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
-                (c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true,
+                (page, c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true,
                         GlmNodeUtils.addedNode(utils, c, item.getDefaultInstance(), 1, new RangeValue(min, max))))));
     }
 }

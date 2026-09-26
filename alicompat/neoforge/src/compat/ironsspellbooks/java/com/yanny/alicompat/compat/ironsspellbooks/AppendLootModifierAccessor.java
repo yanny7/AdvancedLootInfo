@@ -33,7 +33,7 @@ public class AppendLootModifierAccessor extends BaseAccessor<AppendLootModifier>
         List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
         ResourceLocation lootTable = ResourceLocation.parse(resourceLocationKey);
 
-        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList, (c) -> {
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList, (page, c) -> {
             IDataNode node = GlmNodeUtils.referenceNode(utils, c, lootTable);
 
             return Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, node));

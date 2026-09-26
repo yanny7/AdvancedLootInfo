@@ -165,6 +165,11 @@ This is a full port, not a merge. It runs `alicompat-shim` from its Step 0:
 - add the slug to `compat_mods`, then `python3 scripts/check_versions.py --update` to pin its `_dep` lines
   and rewrite the block (the slug's order in the list is the script's business, not yours)
 - if the mod has no file for this version or loader, write no shim, delete no source set, and say why
+- if the mod has a file but nothing left to register — its loot and trade classes are gone, or ALI already renders
+  what replaced them — reduce the source set to the `--scaffold` skeleton (an `IModCompat` returning only the mod id,
+  no `Lang`, no accessors) and enable it anyway. Never leave it dormant and never delete it: an enabled shim keeps
+  being repinned and scanned, so a later mod version that adds a class reaching an ALI hook shows up as `+` on the
+  next run. Anything it deliberately leaves unregistered goes into `scan_ignore.json` with the reason
 
 ## Done when
 
