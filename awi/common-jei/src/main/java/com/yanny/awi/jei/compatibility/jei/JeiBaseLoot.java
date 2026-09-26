@@ -79,12 +79,8 @@ public abstract class JeiBaseLoot implements IRecipeCategory<RecipeHolder> {
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder recipe, IFocusGroup iFocusGroup) {
-        List<Holder> slotParams = new LinkedList<>();
-        IWidgetUtils utils = getJeiUtils(slotParams);
-        RelativeRect rect = new RelativeRect(0, getYOffset(recipe), CATEGORY_WIDTH, 0);
+        List<Holder> slotParams = layout(recipe).slots();
 
-        recipe.setWidgetWrapper(new JeiWidgetWrapper(getRootWidget(utils, recipe.getEntry(), rect, CATEGORY_WIDTH)));
-        recipe.setHolders(slotParams);
 //        recipe.type().inputs().forEach((i) -> builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addItemStack(i));
         recipe.getBlocks().forEach((i) -> builder.addInvisibleIngredients(RecipeIngredientRole.OUTPUT).addItemLike(i));
 
@@ -112,13 +108,9 @@ public abstract class JeiBaseLoot implements IRecipeCategory<RecipeHolder> {
 
     @Override
     public void createRecipeExtras(IRecipeExtrasBuilder builder, RecipeHolder recipe, IFocusGroup focuses) {
-        JeiWidgetWrapper widgetWrapper = recipe.getWidgetWrapper();
-        List<Holder> slotParams = recipe.getHolders();
-
-        if (widgetWrapper == null || slotParams == null) {
-            return;
-        }
-
+        Layout layout = layout(recipe);
+        JeiWidgetWrapper widgetWrapper = layout.widget();
+        List<Holder> slotParams = layout.slots();
         Pair<List<IRecipeWidget>, List<IRecipeSlotDrawable>> additionalWidgets = getWidgets(builder, recipe);
         List<IRecipeWidget> scrollWidgets = new LinkedList<>(additionalWidgets.getA());
         List<IRecipeSlotDrawable> slotDrawables = new LinkedList<>(additionalWidgets.getB());
@@ -198,6 +190,15 @@ public abstract class JeiBaseLoot implements IRecipeCategory<RecipeHolder> {
     }
 
     @NotNull
+    private Layout layout(RecipeHolder recipe) {
+        List<Holder> slotParams = new LinkedList<>();
+        RelativeRect rect = new RelativeRect(0, getYOffset(recipe), CATEGORY_WIDTH, 0);
+        JeiWidgetWrapper widget = new JeiWidgetWrapper(getRootWidget(getJeiUtils(slotParams), recipe.getEntry(), rect, CATEGORY_WIDTH));
+
+        return new Layout(widget, slotParams);
+    }
+
+    @NotNull
     private IWidgetUtils getJeiUtils(List<Holder> slotParams) {
         return new ClientUtils() {
             @Nullable
@@ -232,4 +233,6 @@ public abstract class JeiBaseLoot implements IRecipeCategory<RecipeHolder> {
 
     public record Holder(Either<Block, TagKey<Block>> block, IDataNode entry, RelativeRect rect) {
     }
+
+    private record Layout(JeiWidgetWrapper widget, List<Holder> slots) {}
 }
