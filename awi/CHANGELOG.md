@@ -2,7 +2,7 @@
 
 - Added `dimensions` configuration to hide dimensions
 - Added `dimensionIcons` configuration to set recipe viewer icon of each dimension
-- Biome shows which mobs spawn in it
+- Biome shows spawn eggs of mobs that spawn in it
 - Fixed missing biomes with more feature steps than vanilla defines
 
 ## [1.1.1]

@@ -2,6 +2,7 @@ package com.yanny.awi.test;
 
 import com.mojang.serialization.Lifecycle;
 import com.yanny.aci.spawn.SpawnInfo;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.Utils;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
@@ -172,38 +173,62 @@ public class SpawnInfoTest {
     @Test
     public void testNoSpawn() {
         assertTrue(spawnInfo.getEntityTooltip(EntityType.PIG).isBlank(false));
-        assertTrue(spawnInfo.getBiomeTooltip(new ResourceLocation("test", "missing")).isBlank(false));
+        assertTrue(spawnInfo.getBiomeSpawns(new ResourceLocation("test", "missing")).isEmpty());
     }
 
     @Test
-    public void testBiomeTooltip() {
-        assertTooltip(spawnInfo.getBiomeTooltip(new ResourceLocation("test", "d")), List.of(
-                "Spawns:",
-                "  -> minecraft:skeleton",
-                "    -> Category: monster",
-                "    -> Weight: 100",
-                "    -> Group size: 1",
-                "  -> minecraft:zombie",
-                "    -> Category: monster",
-                "    -> Weight: 19",
-                "    -> Group size: 4"
+    public void testBiomeSpawns() {
+        Map<EntityType<?>, TooltipNode> spawns = spawnInfo.getBiomeSpawns(new ResourceLocation("test", "d"));
+
+        assertEquals(List.of(EntityType.SKELETON, EntityType.ZOMBIE), List.copyOf(spawns.keySet()));
+        assertTooltip(spawns.get(EntityType.SKELETON), List.of(
+                "Category: monster",
+                "Weight: 100",
+                "Group size: 1"
+        ));
+        assertTooltip(spawns.get(EntityType.ZOMBIE), List.of(
+                "Category: monster",
+                "Weight: 19",
+                "Group size: 4"
         ));
     }
 
     @Test
-    public void testBiomeTooltipWithStructure() {
-        assertTooltip(spawnInfo.getBiomeTooltip(new ResourceLocation("test", "e")), List.of(
-                "Spawns:",
-                "  -> minecraft:strider",
-                "    -> Category: creature",
-                "    -> Weight: 60",
-                "    -> Group size: 1-2",
-                "    -> Spawn cost: charge 0.7, budget 0.15",
-                "  -> Structure: test:fort",
-                "    -> minecraft:blaze",
-                "      -> Category: monster",
-                "      -> Weight: 10",
-                "      -> Group size: 2-3"
+    public void testBiomeSpawnsWithStructure() {
+        Map<EntityType<?>, TooltipNode> spawns = spawnInfo.getBiomeSpawns(new ResourceLocation("test", "e"));
+
+        assertEquals(List.of(EntityType.BLAZE, EntityType.STRIDER), List.copyOf(spawns.keySet()));
+        assertTooltip(spawns.get(EntityType.BLAZE), List.of(
+                "Structure: test:fort",
+                "  -> Category: monster",
+                "  -> Weight: 10",
+                "  -> Group size: 2-3"
+        ));
+        assertTooltip(spawns.get(EntityType.STRIDER), List.of(
+                "Category: creature",
+                "Weight: 60",
+                "Group size: 1-2",
+                "Spawn cost: charge 0.7, budget 0.15"
+        ));
+    }
+
+    @Test
+    public void testBiomeSpawnsMergeBiomeAndStructure() {
+        MappedRegistry<Structure> registry = structures(Map.of(
+                "camp", spawnSettings(HolderSet.direct(biomes.getHolderOrThrow(key(Registries.BIOME, "a"))), EntityType.ZOMBIE)
+        ));
+        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, registry)), OWN_SETTINGS);
+        Map<EntityType<?>, TooltipNode> spawns = info.getBiomeSpawns(new ResourceLocation("test", "a"));
+
+        assertEquals(List.of(EntityType.SKELETON, EntityType.SPIDER, EntityType.ZOMBIE, EntityType.COW), List.copyOf(spawns.keySet()));
+        assertTooltip(spawns.get(EntityType.ZOMBIE), List.of(
+                "Category: monster",
+                "Weight: 95",
+                "Group size: 4",
+                "Structure: test:camp",
+                "  -> Category: monster",
+                "  -> Weight: 1",
+                "  -> Group size: 1"
         ));
     }
 
@@ -273,19 +298,7 @@ public class SpawnInfoTest {
 
         assertTrue(info.getEntityTypes().contains(EntityType.WITCH));
         assertTrue(info.getEntityTooltip(EntityType.WITCH).isBlank(false));
-        assertTooltip(info.getBiomeTooltip(new ResourceLocation("test", "e")), List.of(
-                "Spawns:",
-                "  -> minecraft:strider",
-                "    -> Category: creature",
-                "    -> Weight: 60",
-                "    -> Group size: 1-2",
-                "    -> Spawn cost: charge 0.7, budget 0.15",
-                "  -> Structure: test:fort",
-                "    -> minecraft:blaze",
-                "      -> Category: monster",
-                "      -> Weight: 1",
-                "      -> Group size: 1"
-        ));
+        assertEquals(List.of(EntityType.BLAZE, EntityType.STRIDER), List.copyOf(info.getBiomeSpawns(new ResourceLocation("test", "e")).keySet()));
     }
 
     @Test

@@ -88,12 +88,12 @@ public class SpawnInfo {
     }
 
     @NotNull
-    public TooltipNode getBiomeTooltip(ResourceLocation biome) {
+    public Map<EntityType<?>, TooltipNode> getBiomeSpawns(ResourceLocation biome) {
         try {
-            return buildBiomeTooltip(biome);
+            return buildBiomeSpawns(biome);
         } catch (Throwable e) {
-            logger.warn("Failed to build spawn tooltip of biome {}", biome, e);
-            return TooltipNode.empty();
+            logger.warn("Failed to build spawn tooltips of biome {}", biome, e);
+            return Collections.emptyMap();
         }
     }
 
@@ -137,24 +137,42 @@ public class SpawnInfo {
     }
 
     @NotNull
-    private TooltipNode buildBiomeTooltip(ResourceLocation biome) {
-        return TooltipBuilder.branch((root) -> {
-            for (Entry entry : sorted(biomeEntries.getOrDefault(biome, Collections.emptyList()))) {
-                root.add(addEntry(entry));
-            }
+    private Map<EntityType<?>, TooltipNode> buildBiomeSpawns(ResourceLocation biome) {
+        Map<EntityType<?>, List<Spawn>> biomeSpawns = new HashMap<>();
+        Map<EntityType<?>, Map<ResourceLocation, List<Spawn>>> structureSpawns = new HashMap<>();
+        List<Entry> order = new ArrayList<>(biomeEntries.getOrDefault(biome, Collections.emptyList()));
+        Map<EntityType<?>, TooltipNode> result = new LinkedHashMap<>();
 
-            structureEntries.forEach((structure, entries) -> {
-                if (structureBiomes.get(structure).contains(biome)) {
-                    TooltipBuilder structureBuilder = TooltipBuilder.value(structure).key(CoreLang.Spawn.STRUCTURE);
+        for (Entry entry : order) {
+            biomeSpawns.computeIfAbsent(entry.type(), (k) -> new ArrayList<>()).add(entry.spawn());
+        }
 
-                    for (Entry entry : sorted(entries)) {
-                        structureBuilder.add(addEntry(entry));
-                    }
-
-                    root.add(structureBuilder);
+        structureEntries.forEach((structure, entries) -> {
+            if (structureBiomes.get(structure).contains(biome)) {
+                for (Entry entry : entries) {
+                    structureSpawns.computeIfAbsent(entry.type(), (k) -> new TreeMap<>()).computeIfAbsent(structure, (k) -> new ArrayList<>()).add(entry.spawn());
+                    order.add(entry);
                 }
-            });
-        }).build(CoreLang.Spawn.SPAWNS);
+            }
+        });
+
+        for (Entry entry : sorted(order)) {
+            result.computeIfAbsent(entry.type(), (type) -> TooltipBuilder.branch((b) -> {
+                List<Spawn> spawns = biomeSpawns.getOrDefault(type, Collections.emptyList());
+
+                for (Spawn spawn : spawns) {
+                    b.add(TooltipBuilder.asElement(addSpawn(TooltipBuilder.branch((x) -> {}), spawn), spawns.size()));
+                }
+
+                structureSpawns.getOrDefault(type, Collections.emptyMap()).forEach((structure, list) -> {
+                    for (Spawn spawn : list) {
+                        b.add(addSpawn(TooltipBuilder.value(structure).key(CoreLang.Spawn.STRUCTURE), spawn));
+                    }
+                });
+            }).build());
+        }
+
+        return result;
     }
 
     private void addBiome(ResourceLocation biome, MobSpawnSettings settings) {
@@ -207,11 +225,6 @@ public class SpawnInfo {
 
             dimension.add(i == listed.size() - 1 ? addSpawn(line, spawn) : line);
         }
-    }
-
-    @NotNull
-    private static TooltipBuilder addEntry(Entry entry) {
-        return addSpawn(TooltipBuilder.value(BuiltInRegistries.ENTITY_TYPE.getKey(entry.type())), entry.spawn());
     }
 
     @NotNull

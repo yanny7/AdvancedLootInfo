@@ -7,6 +7,8 @@ import com.yanny.awi.api.IPlugin;
 import com.yanny.awi.platform.services.IPlatformHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.SpawnEggItem;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -23,6 +25,11 @@ public class FabricPlatformHelper implements IPlatformHelper {
     @Override
     public List<IPlugin> getPlugins() {
         return pluginsSupplier.get();
+    }
+
+    @Override
+    public SpawnEggItem getSpawnEggItem(EntityType<?> entityType) {
+        return SpawnEggItem.byId(entityType);
     }
 
     @NotNull
