@@ -117,10 +117,14 @@ public abstract class AbstractServer {
 
         chunks.clear();
 
+        long collectionStart = System.currentTimeMillis();
+
         collectBlockPages(config, unprocessedLootTables, blockLootModifiers, lootTableLootModifiers, unboundedLootModifiers, pages);
         collectEntityPages(serverRegistry, config, serverRegistry.getServerLevel(), unprocessedLootTables, fakeLootTables, entityLootModifiers, lootTableLootModifiers,
                 unboundedLootModifiers, !pageLootModifiers.isEmpty(), referencedLootTables, pages);
         collectGameplayPages(config, unprocessedLootTables, lootTableLootModifiers, unboundedLootModifiers, pages);
+
+        LOGGER.info("Collecting {} pages took {}ms", pages.size(), System.currentTimeMillis() - collectionStart);
 
         long evaluationStart = System.currentTimeMillis();
 
@@ -128,8 +132,12 @@ public abstract class AbstractServer {
 
         LOGGER.info("Evaluating {} global loot modifiers against {} pages took {}ms", pageLootModifiers.size(), pages.size(), System.currentTimeMillis() - evaluationStart);
 
+        long buildStart = System.currentTimeMillis();
+
         // apply modifiers
         lootNodes = buildPages(serverRegistry, config, spawnInfo, pages, fakeLootTables, boundLootModifiers, attachedLootModifiers);
+
+        LOGGER.info("Building {} pages took {}ms", pages.size(), System.currentTimeMillis() - buildStart);
 
         int totalLootModifiers = lootModifiers.size() + pageLootModifiers.size();
 

@@ -64,7 +64,11 @@ public abstract class AbstractServer {
         Map<ResourceLocation, IDataNode> worldgenNodes = new HashMap<>();
         DimensionFilter dimensionFilter = new DimensionFilter(serverRegistry.getConfiguration().dimensions);
         Predicate<ResourceLocation> isDimensionVisible = (dimension) -> dimensionFilter.isVisible(levelStemRegistry, dimension);
+        long baseLayoutStart = System.currentTimeMillis();
         BaseLayoutScanner baseLayoutScanner = BaseLayoutScanner.scan(level, levelStemRegistry, isDimensionVisible, serverRegistry.getSurfaceRuleHandlers(), serverRegistry.getConfiguration().logMoreStatistics);
+
+        LOGGER.info("Scanning base layout took {}ms", System.currentTimeMillis() - baseLayoutStart);
+
         WorldgenNodeCache nodeCache = new WorldgenNodeCache();
         long spawnInfoStart = System.currentTimeMillis();
         SpawnInfo spawnInfo = new SpawnInfo(Utils.MOD_ID, registryAccess, Services.getPlatform()::getStructureSettings);
@@ -72,6 +76,8 @@ public abstract class AbstractServer {
         if (serverRegistry.getConfiguration().logMoreStatistics) {
             LOGGER.info("Collecting mob spawns took {}ms", System.currentTimeMillis() - spawnInfoStart);
         }
+
+        long buildStart = System.currentTimeMillis();
 
         for (LevelStem levelStem : levelStemRegistry) {
             ResourceLocation location = levelStemRegistry.getKey(levelStem);
@@ -89,6 +95,8 @@ public abstract class AbstractServer {
                 TooltipContext.clear();
             }
         }
+
+        LOGGER.info("Building {} level nodes took {}ms", worldgenNodes.size(), System.currentTimeMillis() - buildStart);
 
         worldgenNodes = removeEmptyNodes(worldgenNodes);
 
