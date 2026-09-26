@@ -53,6 +53,17 @@ New shim source sets arrive as new files. That is expected and they stay: a slug
 present but whose name is absent from `compat_mods` is **dormant**, compiled by nothing. See
 `alicompat/CLAUDE.md`.
 
+### Dormant shims are not phase 1's business
+
+Phase 1 never reads, fixes or sweeps a dormant source set. Nothing compiles it, and phase 2 re-derives it
+against this version's jar and the current ALI/ALICompat API anyway, so any work on it now is spent twice.
+
+- A conflict inside a dormant source set takes the lower branch's side unread: `git checkout --theirs -- <path>`,
+  or `git rm` when the lower branch deleted it.
+- A grep, sed or script that brings shims in line with a changed API runs over active slugs only (the
+  `compat_mods` list), never over `alicompat/*/src/compat/*` as a whole.
+- Unresolved symbols, stale key schemes or old lambda shapes in a dormant shim are not reported as merge findings.
+
 ### Other recurring conflicts
 
 - **`alicompat/<loader>/src/main/generated/**`** is datagen output, so it is never merged by hand. Take either
@@ -92,12 +103,14 @@ A failure in `alicompat/common` is a merge problem and belongs here. A failure i
 slug should not have been in `compat_mods` on this branch yet — take it out and leave it for phase 2.
 
 A merged change that rewrites a pattern across every shim, such as a key scheme or a renamed helper, does not
-reach code that exists only on this branch, and that code still compiles. After the merge, grep for the old
-pattern and bring the leftovers in line; the generated lang files show them as keys without the new shape.
+reach code that exists only on this branch, and that code still compiles. After the merge, grep the active
+slugs' source sets for the old pattern and bring the leftovers in line; the generated lang files show them as
+keys without the new shape.
 
 The same holds for a change to one shim. A loader the lower branch lacks keeps its own copy of that shim here
 (forge below, neoforge here), and the merge never touches that copy. For every shim file the merge changed,
-open the same slug under each other loader here and port the change by hand, adapting it to that copy's code.
+open the same slug under each other loader here and, if that slug is active, port the change by hand,
+adapting it to that copy's code.
 
 **Stop here.** Report what merged, what was restored, and how many slugs are dormant. The user
 commits. Phase 2 does not begin until that commit exists.
@@ -173,6 +186,8 @@ This is a full port, not a merge. It runs `alicompat-shim` from its Step 0:
 - fetch the jar for **this** Minecraft version and loader, and diff the classes the shim uses against
   what the jar contains — classes move, get renamed and disappear between versions
 - adjust the shim; only its shape ports, never its contents
+- bring it up to the current ALI/ALICompat API too: phase 1 left it untouched, so every API change merged
+  while it was dormant (key scheme, helper signatures, removed interfaces) lands here as a compile error
 - add the slug to `compat_mods`, then `python3 scripts/check_versions.py --update` to pin its `_dep` lines
   and rewrite the block (the slug's order in the list is the script's business, not yours)
 - if the mod has no file for this version or loader, write no shim, delete no source set, and say why
