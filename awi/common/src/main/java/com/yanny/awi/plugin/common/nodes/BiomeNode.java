@@ -14,7 +14,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
-import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.material.Fluid;
@@ -38,10 +37,7 @@ public class BiomeNode extends ListNode {
         addChildren(new BaseTerrainNode(utils, blocks, defaultBlock, defaultFluid));
 
         for (int i = 0; i < features.size(); i++) {
-            HolderSet<PlacedFeature> feature = features.get(i);
-            GenerationStep.Decoration step = GenerationStep.Decoration.values()[i];
-
-            addChildren(nodeCache.getOrCreate(utils, step, feature, columnContext));
+            addChildren(nodeCache.getOrCreate(utils, i, features.get(i), columnContext));
         }
 
         this.tooltip = tooltip;

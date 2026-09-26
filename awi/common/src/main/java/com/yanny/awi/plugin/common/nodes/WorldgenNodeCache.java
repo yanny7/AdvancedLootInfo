@@ -6,7 +6,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -43,7 +42,7 @@ public class WorldgenNodeCache {
     private int generationStepMisses = 0;
 
     @NotNull
-    public GenerationStepNode getOrCreate(IServerUtils utils, GenerationStep.Decoration step, HolderSet<PlacedFeature> features,
+    public GenerationStepNode getOrCreate(IServerUtils utils, int step, HolderSet<PlacedFeature> features,
                                           ColumnContext columnContext) {
         List<PlacedFeatureNode> children = new ArrayList<>();
 
@@ -101,5 +100,5 @@ public class WorldgenNodeCache {
         return generationStepMisses;
     }
 
-    private record StepKey(GenerationStep.Decoration step, List<PlacedFeatureNode> children) {}
+    private record StepKey(int step, List<PlacedFeatureNode> children) {}
 }
