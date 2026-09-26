@@ -298,7 +298,7 @@ public class Plugin implements IPlugin {
 
     @NotNull
     private static RangeValue convertBinomial(IServerUtils utils, BinomialDistributionGenerator numberProvider) {
-        return new RangeValue(0, numberProvider.n.getFloat(utils.getLootContext()));
+        return new RangeValue(0, utils.convertNumber(utils, numberProvider.n).max());
     }
 
     @NotNull

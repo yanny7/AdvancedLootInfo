@@ -4,6 +4,7 @@ import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.ICoreClientUtils;
 import com.yanny.aci.api.ICoreServerUtils;
 import net.minecraft.network.FriendlyByteBuf;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.*;
@@ -31,13 +32,19 @@ public class TooltipNodePalette {
             return cached;
         }
 
-        TooltipNode newNode = new TooltipNode(key);
+        CacheKey storedKey = new CacheKey(key.key() != null ? key.key().intern() : null, internValues(key.values()), key.componentValue(), key.flags(), List.copyOf(key.children()));
+        TooltipNode newNode = new TooltipNode(storedKey);
 
         misses++;
-        pool.put(key, newNode);
+        pool.put(storedKey, newNode);
         nodeToId.put(newNode, idToNode.size());
         idToNode.add(newNode);
         return newNode;
+    }
+
+    @Nullable
+    private static List<String> internValues(@Nullable List<String> values) {
+        return values != null ? values.stream().map(String::intern).toList() : null;
     }
 
     public void reportMergeable(String pluralKey, Object context) {

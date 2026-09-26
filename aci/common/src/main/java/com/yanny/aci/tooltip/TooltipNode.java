@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -351,20 +352,16 @@ public class TooltipNode {
     @NotNull
     public static TooltipNode getOrCreate(TooltipNodePalette cache, @Nullable String key, String @Nullable[] values, @Nullable Component component, short flags, List<TooltipNode> children) {
         if ((flags & FLAG_EMPTY) != 0) {
-            cache.getOrCreate(new CacheKey(null, null, null, FLAG_EMPTY, Collections.emptyList()));
+            return cache.getOrCreate(new CacheKey(null, null, null, FLAG_EMPTY, Collections.emptyList()));
         }
 
         List<String> valList = null;
 
         if ((flags & FLAG_HAS_VALUE) != 0) {
             assert values != null;
-            valList = new ArrayList<>(values.length);
-
-            for (String value : values) {
-                valList.add(value.intern());
-            }
+            valList = Arrays.asList(values);
         }
 
-        return cache.getOrCreate(new CacheKey(key != null ? key.intern() : null, valList, component, flags, List.copyOf(children)));
+        return cache.getOrCreate(new CacheKey(key, valList, component, flags, children));
     }
 }

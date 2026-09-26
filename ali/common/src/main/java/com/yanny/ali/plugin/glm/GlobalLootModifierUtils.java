@@ -43,7 +43,7 @@ import java.util.stream.Stream;
 
 public class GlobalLootModifierUtils {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
-    private static final Map<IGlobalLootModifierWrapper, Optional<GlobalLootModifierNode>> SERIALIZED_NODES = Collections.synchronizedMap(new IdentityHashMap<>());
+    private static final Map<IGlobalLootModifierWrapper, Optional<List<IOperation>>> SERIALIZED_OPERATIONS = Collections.synchronizedMap(new IdentityHashMap<>());
 
     @NotNull
     public static IPageLootModifier getLootModifier(IServerUtils utils, @Nullable Object modifier, List<LootItemCondition> conditions,
@@ -93,10 +93,10 @@ public class GlobalLootModifierUtils {
     public static Optional<IPageLootModifier> getMissingGlobalLootModifier(IServerUtils utils, IGlobalLootModifierWrapper modifier) {
         if (modifier.isLootModifier()) {
             return Optional.of(getLootModifier(utils, modifier.getLootModifier(), modifier.getConditions(), (page, conditions) -> {
-                Optional<GlobalLootModifierNode> serialized = SERIALIZED_NODES.computeIfAbsent(modifier, (m) -> getSerializedNode(utils, m));
+                Optional<List<IOperation>> serialized = SERIALIZED_OPERATIONS.computeIfAbsent(modifier, (m) -> getSerializedOperations(utils, m));
 
                 if (serialized.isPresent()) {
-                    return List.of(new IOperation.AddOperation((i) -> true, serialized.get()));
+                    return serialized.get();
                 }
 
                 TooltipBuilder tooltip = TooltipBuilder.array((b) -> {
@@ -114,7 +114,7 @@ public class GlobalLootModifierUtils {
     }
 
     public static void clearCaches() {
-        SERIALIZED_NODES.clear();
+        SERIALIZED_OPERATIONS.clear();
     }
 
     @NotNull
@@ -225,12 +225,12 @@ public class GlobalLootModifierUtils {
     }
 
     @NotNull
-    private static Optional<GlobalLootModifierNode> getSerializedNode(IServerUtils utils, IGlobalLootModifierWrapper modifier) {
+    private static Optional<List<IOperation>> getSerializedOperations(IServerUtils utils, IGlobalLootModifierWrapper modifier) {
         try {
             TooltipBuilder tooltip = utils.getValueTooltip(utils, modifier.getName());
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, modifier.serialize()));
-            return Optional.of(new GlobalLootModifierNode(tooltip.build(CoreLang.Utils.AUTO_DETECTED)));
+            return Optional.of(List.of(new IOperation.AddOperation((i) -> true, new GlobalLootModifierNode(tooltip.build(CoreLang.Utils.AUTO_DETECTED)))));
         } catch (Throwable e) {
             if (utils.getConfiguration().logMoreStatistics) {
                 LOGGER.warn("Failed to get GLM info from serialized data for {}", modifier.getName(), e);

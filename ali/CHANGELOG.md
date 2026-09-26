@@ -9,6 +9,7 @@
 - Added `showEntitiesWithoutLoot` configuration to show spawning entities that drop nothing
 - Lower client memory use with JEI and EMI
 - Faster loot scan with global loot modifiers
+- Fixed random maximum count shown for binomial count
 
 ## [2.2.0]
 

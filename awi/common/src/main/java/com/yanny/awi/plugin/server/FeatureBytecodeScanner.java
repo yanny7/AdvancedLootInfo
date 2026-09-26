@@ -78,8 +78,8 @@ public final class FeatureBytecodeScanner {
     private static final String CONSTRUCTOR = "<init>";
 
     private static final Map<Class<?>, ScanResult> RESULT_CACHE = new ConcurrentHashMap<>();
-    private static final Map<String, ClassNode> CLASS_NODE_CACHE = new ConcurrentHashMap<>();
-    private static final Map<String, Class<?>> CLASS_CACHE = new ConcurrentHashMap<>();
+    private static final Map<String, Optional<ClassNode>> CLASS_NODE_CACHE = new ConcurrentHashMap<>();
+    private static final Map<String, Optional<Class<?>>> CLASS_CACHE = new ConcurrentHashMap<>();
     private static final Map<String, Set<String>> IMPLEMENTOR_CACHE = new ConcurrentHashMap<>();
     private static final Map<MethodNode, Optional<Frame<SourceValue>[]>> FRAME_CACHE = new ConcurrentHashMap<>();
 
@@ -1351,16 +1351,16 @@ public final class FeatureBytecodeScanner {
         return CLASS_NODE_CACHE.computeIfAbsent(internalName, (name) -> {
             try (InputStream is = cl.getResourceAsStream(name + ".class")) {
                 if (is == null) {
-                    return null;
+                    return Optional.empty();
                 }
 
                 ClassNode node = new ClassNode();
                 new ClassReader(is).accept(node, ClassReader.SKIP_FRAMES | ClassReader.SKIP_DEBUG);
-                return node;
+                return Optional.of(node);
             } catch (Throwable t) {
-                return null;
+                return Optional.empty();
             }
-        });
+        }).orElse(null);
     }
 
     /** Resolves a method reference to the class that actually declares it, walking up the superclass chain. */
@@ -1399,11 +1399,11 @@ public final class FeatureBytecodeScanner {
     private static Class<?> loadClass(ClassLoader cl, String internalName) {
         return CLASS_CACHE.computeIfAbsent(internalName, (name) -> {
             try {
-                return Class.forName(Type.getObjectType(name).getClassName(), false, cl);
+                return Optional.of(Class.forName(Type.getObjectType(name).getClassName(), false, cl));
             } catch (Throwable t) {
-                return null;
+                return Optional.empty();
             }
-        });
+        }).orElse(null);
     }
 
     private static Object staticFieldValue(ClassLoader cl, String ownerInternal, String name) {

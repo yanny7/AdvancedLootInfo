@@ -19,6 +19,7 @@ import com.yanny.ali.manager.FakeLootDataManager;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.common.EntityLootTableResolver;
+import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.EntityLootTableNode;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.glm.IPageLootModifier;
@@ -546,7 +547,10 @@ public abstract class AbstractServer {
         IDataNode node;
 
         if (table.lootTable() != null) {
-            node = operations.isEmpty() ? table.getPlainNode() : serverRegistry.parseTable(operations, table.lootTable());
+            LootTableNode plainNode = table.getPlainNode();
+
+            NodeUtils.processOperations(operations, plainNode);
+            node = plainNode;
         } else if (!lootModifiers.isEmpty()) {
             node = serverRegistry.parseTable(operations);
         } else {
@@ -725,7 +729,7 @@ public abstract class AbstractServer {
         private final ResourceLocation location;
         private final Map<ResourceLocation, LootTable> fakeLootTables;
         @Nullable
-        private IDataNode plainNode;
+        private LootTableNode plainNode;
         @Nullable
         private List<IDataNode> fakePools;
         @Nullable
@@ -752,9 +756,9 @@ public abstract class AbstractServer {
         }
 
         @NotNull
-        private IDataNode getPlainNode() {
+        private LootTableNode getPlainNode() {
             if (plainNode == null) {
-                plainNode = serverRegistry.parseTable(Collections.emptyList(), Objects.requireNonNull(lootTable));
+                plainNode = (LootTableNode) serverRegistry.parseTable(Collections.emptyList(), Objects.requireNonNull(lootTable));
             }
 
             return plainNode;
