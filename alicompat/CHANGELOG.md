@@ -5,6 +5,7 @@
 - Translation keys now carry target mod id
 - Added Hybrid Aquatic support on Forge
 - Added Grimoire of Gaia support
+- Faster loot scan with auto-smelting loot modifiers in large modpacks
 
 ## [1.0.0]
 
