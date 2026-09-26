@@ -46,7 +46,7 @@ public class HAGlobalLootModifierAccessor extends BaseAccessor<HAGlobalLootModif
     @Override
     public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(conditions),
-                (c) -> Collections.singletonList(new IOperation.ReplaceOperation(
+                (page, c) -> Collections.singletonList(new IOperation.ReplaceOperation(
                         (itemStack) -> itemStack.is(parent.getItem_tag()),
                         (src) -> List.of(new ModifiedNode(utils, src, getTablesNode(utils, c, src)))))));
     }

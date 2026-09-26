@@ -33,7 +33,7 @@ public class SmeltOresWithPickaxeHeaterModifierAccessor extends BaseAccessor<Sme
     @Override
     public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions),
-                (c) -> Collections.singletonList(new IOperation.ReplaceOperation(
+                (page, c) -> Collections.singletonList(new IOperation.ReplaceOperation(
                         SmeltOresWithPickaxeHeaterModifierAccessor::isRawMaterial,
                         (src) -> SmeltingUtils.smeltedNode(utils, c, src)))));
     }

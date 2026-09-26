@@ -49,7 +49,7 @@ public class DungeonLootEnhancerModifierAccessor extends BaseAccessor<DungeonLoo
         }
 
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions),
-                (c) -> drops.stream()
+                (page, c) -> drops.stream()
                         .map((d) -> (IOperation) new IOperation.AddOperation((itemStack) -> true,
                                 GlmNodeUtils.addedNode(utils, c, d.stack(), d.chance(), d.count())))
                         .toList()));

@@ -33,7 +33,7 @@ public class ReplaceItemModifierAccessor extends BaseAccessor<ModLootModifiers.R
         List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
 
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
-                (c) -> Collections.singletonList(new IOperation.ReplaceOperation((itemStack) -> true,
+                (page, c) -> Collections.singletonList(new IOperation.ReplaceOperation((itemStack) -> true,
                         (src) -> GlmNodeUtils.replacedNode(utils, c, src, itemStack.copy(), new RangeValue(itemStack.getCount()))))));
     }
 }

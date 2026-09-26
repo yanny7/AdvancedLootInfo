@@ -31,7 +31,7 @@ public class WardenLootModifierAccessor extends BaseAccessor<WardenLootModifier>
     @Override
     public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions),
-                (c) -> Collections.singletonList(new IOperation.AddOperation(
+                (page, c) -> Collections.singletonList(new IOperation.AddOperation(
                         (itemStack) -> true,
                         GlmNodeUtils.addedNode(utils, c, ApotheosisUtils.wardenTendrilStack(), 1, new RangeValue(1, 2))))));
     }

@@ -38,7 +38,7 @@ public class AddEntryLootModifierAccessor extends BaseAccessor<AddEntryLootModif
         List<LootItemCondition> conditionList = Arrays.asList(conditions);
 
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
-                (c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, getEntryNode(utils, c)))));
+                (page, c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, getEntryNode(utils, c)))));
     }
 
     @NotNull
