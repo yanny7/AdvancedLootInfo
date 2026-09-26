@@ -1,6 +1,5 @@
 package com.yanny.alicompat.compat.apotheosis;
 
-import com.yanny.aci.tooltip.TooltipContext;
 import dev.shadowsoffire.apotheosis.adventure.AdventureConfig;
 import dev.shadowsoffire.apotheosis.adventure.loot.AffixLootEntry;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
@@ -30,13 +29,7 @@ public class ApotheosisUtils {
         return entries.stream().filter(DynamicHolder::isBound).findFirst().map((h) -> h.get().getStack().copy()).orElse(ItemStack.EMPTY);
     }
 
-    public static float chance(List<AdventureConfig.LootPatternMatcher> rules) {
-        ResourceLocation location = TooltipContext.get();
-
-        if (location == null) {
-            return 0;
-        }
-
+    public static float chance(List<AdventureConfig.LootPatternMatcher> rules, ResourceLocation location) {
         return rules.stream().filter((r) -> r.matches(location)).findFirst().map(AdventureConfig.LootPatternMatcher::chance).orElse(0.0F);
     }
 

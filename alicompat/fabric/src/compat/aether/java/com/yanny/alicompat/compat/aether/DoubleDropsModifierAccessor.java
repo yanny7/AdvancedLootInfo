@@ -33,7 +33,7 @@ public class DoubleDropsModifierAccessor extends BaseAccessor<DoubleDropsModifie
         List<LootItemCondition> conditionList = Arrays.asList(conditions);
 
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
-                (c) -> Collections.singletonList(new IOperation.ReplaceOperation(
+                (page, c) -> Collections.singletonList(new IOperation.ReplaceOperation(
                         (itemStack) -> !itemStack.is(AetherTags.Items.NO_SKYROOT_DOUBLE_DROPS),
                         (src) -> AetherNodeUtils.countedNode(utils, c, src, new RangeValue(((IItemNode) src).getCount()).multiply(2))))));
     }
