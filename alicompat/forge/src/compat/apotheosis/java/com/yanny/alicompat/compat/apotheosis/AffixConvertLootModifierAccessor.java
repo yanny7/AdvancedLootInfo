@@ -45,9 +45,9 @@ public class AffixConvertLootModifierAccessor extends BaseAccessor<AffixConvertL
     @Override
     public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions),
-                (c) -> Collections.singletonList(new IOperation.ReplaceOperation(
+                (page, c) -> Collections.singletonList(new IOperation.ReplaceOperation(
                         (itemStack) -> !LootCategory.forItem(itemStack).isNone(),
-                        (src) -> getNodes(utils, c, src)))));
+                        (src) -> getNodes(utils, page, c, src)))));
     }
 
     @NotNull
@@ -57,9 +57,9 @@ public class AffixConvertLootModifierAccessor extends BaseAccessor<AffixConvertL
     }
 
     @NotNull
-    private static List<IDataNode> getNodes(IServerUtils utils, List<LootItemCondition> conditions, IDataNode src) {
+    private static List<IDataNode> getNodes(IServerUtils utils, LootPage page, List<LootItemCondition> conditions, IDataNode src) {
         IItemNode node = (IItemNode) src;
-        LootItemCondition chance = LootItemRandomChanceCondition.randomChance(ApotheosisUtils.chance(AdventureConfig.AFFIX_CONVERT_LOOT_RULES)).build();
+        LootItemCondition chance = LootItemRandomChanceCondition.randomChance(ApotheosisUtils.chance(AdventureConfig.AFFIX_CONVERT_LOOT_RULES, page.tableId())).build();
         List<LootItemCondition> allConditions = Stream.concat(Stream.concat(conditions.stream(), node.getConditions().stream()), Stream.of(chance)).toList();
         EnchantedRanges enchantedChance = NodeUtils.getEnchantedChance(utils, allConditions, node.getChance());
         RangeValue count = new RangeValue(node.getCount());

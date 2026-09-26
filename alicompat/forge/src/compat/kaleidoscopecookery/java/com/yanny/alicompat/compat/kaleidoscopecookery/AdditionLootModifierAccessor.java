@@ -41,7 +41,7 @@ public class AdditionLootModifierAccessor extends BaseAccessor<AdditionLootModif
 
     @Override
     public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
-        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions), (c) -> {
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions), (page, c) -> {
             IDataNode node = GlmNodeUtils.referenceNode(utils, c, lootTableAdd);
             return Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, node));
         }));

@@ -31,7 +31,7 @@ public class LootModifierNoDropsAccessor extends BaseAccessor<LootModifierNoDrop
     @Override
     public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions),
-                (c) -> Collections.singletonList(new IOperation.RemoveOperation(
+                (page, c) -> Collections.singletonList(new IOperation.RemoveOperation(
                         (itemStack) -> true,
                         (src) -> GlmNodeUtils.keptNode(utils, c, src)))));
     }

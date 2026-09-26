@@ -31,7 +31,7 @@ public class RollLootTableModifierAccessor extends BaseAccessor<RollLootTableMod
 
     @Override
     public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
-        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions), (c) -> {
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions), (page, c) -> {
             List<IOperation> operations = new ArrayList<>();
 
             if (replace) {

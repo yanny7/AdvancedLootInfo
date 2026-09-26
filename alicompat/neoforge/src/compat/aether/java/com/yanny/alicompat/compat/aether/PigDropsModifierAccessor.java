@@ -33,7 +33,7 @@ public class PigDropsModifierAccessor extends BaseAccessor<PigDropsModifier> imp
         List<LootItemCondition> conditionList = Arrays.asList(conditions);
 
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
-                (c) -> Collections.singletonList(new IOperation.ReplaceOperation(
+                (page, c) -> Collections.singletonList(new IOperation.ReplaceOperation(
                         (itemStack) -> itemStack.is(AetherTags.Items.PIG_DROPS),
                         (src) -> AetherNodeUtils.countedNode(utils, AetherNodeUtils.withChance(c, 0.25F), src,
                                 new RangeValue(((IItemNode) src).getCount()).multiply(2))))));

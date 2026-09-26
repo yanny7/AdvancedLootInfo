@@ -32,7 +32,7 @@ public class GrassDropModifierAccessor extends BaseAccessor<GrassDropModifier> i
         List<LootItemCondition> conditionList = Arrays.asList(conditions);
 
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
-                (c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true,
+                (page, c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true,
                         GlmNodeUtils.addedNode(utils, c, new ItemStack(Misc.HEMP_SEEDS), 1, new RangeValue(1))))));
     }
 }

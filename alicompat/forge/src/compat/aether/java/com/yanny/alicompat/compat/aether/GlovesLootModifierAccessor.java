@@ -33,7 +33,7 @@ public class GlovesLootModifierAccessor extends BaseAccessor<GlovesLootModifier>
         List<LootItemCondition> conditionList = Arrays.asList(conditions);
 
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
-                (c) -> Collections.singletonList(new IOperation.ReplaceOperation(
+                (page, c) -> Collections.singletonList(new IOperation.ReplaceOperation(
                         (itemStack) -> itemStack.getItem() instanceof ArmorItem armorItem && armorItem.getMaterial().equals(parent.armorMaterial),
                         (src) -> GlmNodeUtils.replacedNode(utils, AetherNodeUtils.withChance(c, 0.25F), src, parent.glovesStack, new RangeValue(1))))));
     }

@@ -1,0 +1,6 @@
+{
+  "gaia.entity.trader.CreeperGirl": "GaiaMerchant.updateTrades is empty, the merchant has no offers",
+  "gaia.entity.trader.EnderGirl": "GaiaMerchant.updateTrades is empty, the merchant has no offers",
+  "gaia.entity.trader.SlimeGirl": "GaiaMerchant.updateTrades is empty, the merchant has no offers",
+  "gaia.entity.trader.Trader": "GaiaMerchant.updateTrades is empty, the merchant has no offers"
+}

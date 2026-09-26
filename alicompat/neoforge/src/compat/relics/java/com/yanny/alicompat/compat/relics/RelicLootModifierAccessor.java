@@ -3,14 +3,15 @@ package com.yanny.alicompat.compat.relics;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.ali.plugin.glm.LootPage;
-import com.yanny.ali.plugin.glm.Match;
-import com.yanny.ali.plugin.glm.PageMatch;
+import com.yanny.ali.plugin.glm.Verdict;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.GlmNodeUtils;
 import com.yanny.alicompat.accessor.IGlobalLootModifierAccessor;
+import com.yanny.alicompat.accessor.IPageResolverAccessor;
 import com.yanny.alicompat.accessor.ReflectionUtils;
 import it.hurts.sskirillss.relics.api.relics.IRelicItem;
 import it.hurts.sskirillss.relics.init.RelicsConfigs;
@@ -30,9 +31,11 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-public class RelicLootModifierAccessor extends BaseAccessor<RelicLootModifier> implements IGlobalLootModifierAccessor {
+public class RelicLootModifierAccessor extends BaseAccessor<RelicLootModifier> implements IGlobalLootModifierAccessor, IPageResolverAccessor {
     @FieldAccessor
     protected LootItemCondition[] conditions;
+
+    private final List<Drop> drops = collectDrops();
 
     public RelicLootModifierAccessor(RelicLootModifier parent) {
         super(parent);
@@ -40,38 +43,34 @@ public class RelicLootModifierAccessor extends BaseAccessor<RelicLootModifier> i
 
     @Override
     public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
-        List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
-        List<Drop> drops = collectDrops();
-
         if (drops.isEmpty()) {
             return Optional.empty();
         }
 
-        return Optional.of(new IPageLootModifier() {
-            @NotNull
-            @Override
-            public PageMatch test(LootPage page) {
-                return drops.stream().anyMatch((drop) -> drop.matches(page.tableId())) ? new PageMatch(Match.YES, conditionList) : PageMatch.NO;
-            }
+        return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions), (page, c) -> getOperations(utils, page, c)));
+    }
 
-            @NotNull
-            @Override
-            public List<IOperation> getOperations(LootPage page, PageMatch match) {
-                List<IOperation> operations = new ArrayList<>();
-                List<Drop> matching = drops.stream().filter((drop) -> drop.matches(page.tableId())).toList();
-                double totalWeight = matching.stream().mapToInt(Drop::weight).sum();
+    @NotNull
+    @Override
+    public Verdict test(IServerUtils ignoredUtils, LootPage page) {
+        return GlobalLootModifierUtils.testTable(page, (location) -> drops.stream().anyMatch((drop) -> drop.matches(location)), false);
+    }
 
-                if (totalWeight > 0) {
-                    double genChance = ReflectionUtils.copyClassData(LootConfigDataAccessor.class, RelicsConfigs.LOOT_CONFIG).relicGenChance;
+    @NotNull
+    private List<IOperation> getOperations(IServerUtils utils, LootPage page, List<LootItemCondition> conditions) {
+        List<IOperation> operations = new ArrayList<>();
+        List<Drop> matching = drops.stream().filter((drop) -> drop.matches(page.tableId())).toList();
+        double totalWeight = matching.stream().mapToInt(Drop::weight).sum();
 
-                    matching.forEach((drop) -> operations.add(new IOperation.AddOperation((itemStack) -> true,
-                            GlmNodeUtils.addedNode(utils, conditionList, drop.item().getDefaultInstance(),
-                                    (float) (genChance * drop.weight() / totalWeight), new RangeValue(1)))));
-                }
+        if (totalWeight > 0) {
+            double genChance = ReflectionUtils.copyClassData(LootConfigDataAccessor.class, RelicsConfigs.LOOT_CONFIG).relicGenChance;
 
-                return operations;
-            }
-        });
+            matching.forEach((drop) -> operations.add(new IOperation.AddOperation((itemStack) -> true,
+                    GlmNodeUtils.addedNode(utils, conditions, drop.item().getDefaultInstance(),
+                            (float) (genChance * drop.weight() / totalWeight), new RangeValue(1)))));
+        }
+
+        return operations;
     }
 
     @NotNull

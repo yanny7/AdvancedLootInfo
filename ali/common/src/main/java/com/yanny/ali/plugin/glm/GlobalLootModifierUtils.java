@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -45,7 +45,7 @@ public class GlobalLootModifierUtils {
 
     @NotNull
     public static IPageLootModifier getLootModifier(IServerUtils utils, @Nullable Object modifier, List<LootItemCondition> conditions,
-                                                    Function<List<LootItemCondition>, List<IOperation>> operationSupplier) {
+                                                    BiFunction<LootPage, List<LootItemCondition>, List<IOperation>> operationSupplier) {
         List<Object> terms = Stream.concat(Stream.ofNullable(modifier), conditions.stream()).toList();
         int conditionOffset = terms.size() - conditions.size();
         // evaluation order is mutated by every test, so a modifier must not be tested from several threads at once
@@ -83,14 +83,14 @@ public class GlobalLootModifierUtils {
             @NotNull
             @Override
             public List<IOperation> getOperations(LootPage page, PageMatch match) {
-                return operationSupplier.apply(match.unexplained());
+                return operationSupplier.apply(page, match.unexplained());
             }
         };
     }
 
     public static Optional<IPageLootModifier> getMissingGlobalLootModifier(IServerUtils utils, IGlobalLootModifierWrapper modifier) {
         if (modifier.isLootModifier()) {
-            return Optional.of(getLootModifier(utils, modifier.getLootModifier(), modifier.getConditions(), (conditions) -> {
+            return Optional.of(getLootModifier(utils, modifier.getLootModifier(), modifier.getConditions(), (page, conditions) -> {
 
                 try {
                     TooltipBuilder tooltip = utils.getValueTooltip(utils, modifier.getName());
