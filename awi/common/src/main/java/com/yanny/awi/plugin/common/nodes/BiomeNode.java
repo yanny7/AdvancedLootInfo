@@ -1,5 +1,6 @@
 package com.yanny.awi.plugin.common.nodes;
 
+import com.yanny.aci.spawn.SpawnInfo;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.Utils;
 import com.yanny.awi.api.BlockInfo;
@@ -27,9 +28,10 @@ public class BiomeNode extends ListNode {
 
     private final TooltipNode tooltip;
     private final ResourceLocation biomeId;
+    private final TooltipNode spawnTooltip;
 
     public BiomeNode(IServerUtils utils, Biome biome, TooltipNode tooltip, Set<BlockInfo> blocks, Block defaultBlock, Fluid defaultFluid,
-                     ColumnContext columnContext, WorldgenNodeCache nodeCache) {
+                     ColumnContext columnContext, WorldgenNodeCache nodeCache, SpawnInfo spawnInfo) {
         BiomeGenerationSettings settings = biome.getGenerationSettings();
         List<HolderSet<PlacedFeature>> features = settings.features();
 
@@ -44,18 +46,21 @@ public class BiomeNode extends ListNode {
 
         this.tooltip = tooltip;
         biomeId = utils.getServerLevel().registryAccess().registryOrThrow(Registries.BIOME).getKey(biome);
+        spawnTooltip = spawnInfo.getBiomeTooltip(biomeId);
     }
 
     public BiomeNode(IClientUtils utils, FriendlyByteBuf buf) {
         super(utils, buf);
         tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
         biomeId = buf.readResourceLocation();
+        spawnTooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
     }
 
     @Override
     public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
         buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
         buf.writeResourceLocation(biomeId);
+        buf.writeVarInt(utils.getTooltipCache().getNodeId(spawnTooltip));
     }
 
     @NotNull
@@ -72,5 +77,10 @@ public class BiomeNode extends ListNode {
 
     public ResourceLocation getBiomeId() {
         return biomeId;
+    }
+
+    @NotNull
+    public TooltipNode getSpawnTooltip() {
+        return spawnTooltip;
     }
 }

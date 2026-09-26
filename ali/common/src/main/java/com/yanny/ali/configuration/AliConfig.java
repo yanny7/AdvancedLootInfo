@@ -48,6 +48,7 @@ public class AliConfig implements ICoreConfig {
     public boolean showInGameNames = true;
     public boolean hideDefaultBlockLoot = true;
     public boolean showUnboundedGlobalLootModifiers = false;
+    public boolean showEntitiesWithoutLoot = false;
 
     public AliConfig() {
         blockCategories = new ArrayList<>();

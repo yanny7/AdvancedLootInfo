@@ -1,19 +1,26 @@
 package com.yanny.awi.jei.compatibility.jei;
 
 import com.yanny.aci.api.IWidget;
+import com.yanny.aci.api.Rect;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.api.IWidgetUtils;
+import com.yanny.awi.compatibility.GenericUtils;
 import com.yanny.awi.plugin.client.widget.BiomeWidget;
+import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotDrawable;
 import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.gui.widgets.IRecipeWidget;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.RecipeType;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class JeiBiomeLoot extends JeiBaseLoot {
@@ -23,7 +30,36 @@ public class JeiBiomeLoot extends JeiBaseLoot {
 
     @Override
     Pair<List<IRecipeWidget>, List<IRecipeSlotDrawable>> getWidgets(IRecipeExtrasBuilder builder, RecipeHolder recipe) {
-        return new Pair<>(List.of(createTextWidget(Component.translatable("biome." + recipe.getId().getNamespace() + "." + recipe.getId().getPath()), 0, 0, false)), List.of());
+        List<IRecipeWidget> widgets = new LinkedList<>();
+
+        widgets.add(createTextWidget(Component.translatable("biome." + recipe.getId().getNamespace() + "." + recipe.getId().getPath()), 0, 0, false));
+
+        if (GenericUtils.hasSpawnInfo(recipe.getEntry())) {
+            widgets.add(new IRecipeWidget() {
+                final Rect rect = GenericUtils.getSpawnInfoRect(CATEGORY_WIDTH);
+                final ScreenPosition position = new ScreenPosition(0, 0);
+
+                @Override
+                public void drawWidget(GuiGraphics guiGraphics, double mouseX, double mouseY) {
+                    GenericUtils.renderSpawnInfoIcon(recipe.getEntry(), rect, guiGraphics);
+                }
+
+                @Override
+                public void getTooltip(ITooltipBuilder tooltip, double mouseX, double mouseY) {
+                    if (rect.contains((int) mouseX, (int) mouseY)) {
+                        tooltip.addAll(GenericUtils.getSpawnTooltip(recipe.getEntry()));
+                    }
+                }
+
+                @NotNull
+                @Override
+                public ScreenPosition getPosition() {
+                    return position;
+                }
+            });
+        }
+
+        return new Pair<>(widgets, List.of());
     }
 
     @Override

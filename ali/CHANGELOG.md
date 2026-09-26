@@ -5,6 +5,8 @@
 - Fixed server crash on Forge when GLM cannot provide its codec
 - Reworked trades UI, displaying trader spawn egg
 - Fixed missing tooltip in JEI and REI block loot
+- Entity loot shows where entity spawns naturally (dimensions, biomes, structures, weight, group size)
+- Added `showEntitiesWithoutLoot` configuration to show spawning entities that drop nothing
 
 ## [2.2.0]
 

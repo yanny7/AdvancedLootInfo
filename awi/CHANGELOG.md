@@ -2,6 +2,7 @@
 
 - Added `dimensions` configuration to hide dimensions
 - Added `dimensionIcons` configuration to set recipe viewer icon of each dimension
+- Biome shows which mobs spawn in it
 
 ## [1.1.1]
 

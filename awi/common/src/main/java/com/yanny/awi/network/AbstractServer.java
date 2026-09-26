@@ -2,6 +2,7 @@ package com.yanny.awi.network;
 
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.network.NetworkUtils;
+import com.yanny.aci.spawn.SpawnInfo;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.awi.Utils;
 import com.yanny.awi.api.IDataNode;
@@ -9,6 +10,7 @@ import com.yanny.awi.configuration.DimensionFilter;
 import com.yanny.awi.api.ListNode;
 import com.yanny.awi.manager.AwiServerRegistry;
 import com.yanny.awi.manager.PluginManager;
+import com.yanny.awi.platform.Services;
 import com.yanny.awi.plugin.common.nodes.BaseLayoutScanner;
 import com.yanny.awi.plugin.common.nodes.LevelStemNode;
 import com.yanny.awi.plugin.common.nodes.WorldgenNodeCache;
@@ -64,6 +66,12 @@ public abstract class AbstractServer {
         Predicate<ResourceLocation> isDimensionVisible = (dimension) -> dimensionFilter.isVisible(levelStemRegistry, dimension);
         BaseLayoutScanner baseLayoutScanner = BaseLayoutScanner.scan(level, levelStemRegistry, isDimensionVisible, serverRegistry.getSurfaceRuleHandlers(), serverRegistry.getConfiguration().logMoreStatistics);
         WorldgenNodeCache nodeCache = new WorldgenNodeCache();
+        long spawnInfoStart = System.currentTimeMillis();
+        SpawnInfo spawnInfo = new SpawnInfo(Utils.MOD_ID, registryAccess, Services.getPlatform()::getStructureSettings);
+
+        if (serverRegistry.getConfiguration().logMoreStatistics) {
+            LOGGER.info("Collecting mob spawns took {}ms", System.currentTimeMillis() - spawnInfoStart);
+        }
 
         for (LevelStem levelStem : levelStemRegistry) {
             ResourceLocation location = levelStemRegistry.getKey(levelStem);
@@ -74,7 +82,7 @@ public abstract class AbstractServer {
 
             try {
                 TooltipContext.set(location);
-                worldgenNodes.put(location, new LevelStemNode(serverRegistry, levelStem, baseLayoutScanner.getBaseLayouts(location), nodeCache));
+                worldgenNodes.put(location, new LevelStemNode(serverRegistry, levelStem, baseLayoutScanner.getBaseLayouts(location), nodeCache, spawnInfo));
             } catch (Throwable e) {
                 LOGGER.error("Failed to build level stem {}", location, e);
             } finally {

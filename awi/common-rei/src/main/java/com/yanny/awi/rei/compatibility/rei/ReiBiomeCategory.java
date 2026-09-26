@@ -1,9 +1,11 @@
 package com.yanny.awi.rei.compatibility.rei;
 
 import com.yanny.aci.api.Rect;
+import com.yanny.awi.compatibility.GenericUtils;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.Renderer;
+import me.shedaniel.rei.api.client.gui.widgets.Tooltip;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.client.gui.widgets.Widgets;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
@@ -37,6 +39,16 @@ public class ReiBiomeCategory extends ReiBaseCategory<ReiBiomeDisplay> {
 
         fullBounds.move(bounds.getCenterX() - fullBounds.width / 2, bounds.y + PADDING);
         innerWidgets.add(Widgets.createLabel(new Point(0, 0), title).leftAligned().noShadow().color(0));
+
+        if (GenericUtils.hasSpawnInfo(display.getEntry().entry())) {
+            Rect rect = GenericUtils.getSpawnInfoRect(CATEGORY_WIDTH);
+            Rectangle iconBounds = new Rectangle(rect.x(), rect.y(), rect.width(), rect.height());
+            List<Component> spawnTooltip = GenericUtils.getSpawnTooltip(display.getEntry().entry());
+
+            innerWidgets.add(Widgets.createDrawableWidget((graphics, mouseX, mouseY, delta) -> GenericUtils.renderSpawnInfoIcon(display.getEntry().entry(), rect, graphics)));
+            innerWidgets.add(Widgets.createTooltip((point) -> iconBounds.contains(point) ? Tooltip.create(spawnTooltip) : null));
+        }
+
         widgets.add(Widgets.createCategoryBase(fullBounds));
         widgets.add(Widgets.withTranslate(
                 new ReiScrollWidget(new Rect(0, 0, fullBounds.width - 2 * PADDING, fullBounds.height - 2 * PADDING), prepared.contentWidth(), innerBounds.height, innerWidgets),

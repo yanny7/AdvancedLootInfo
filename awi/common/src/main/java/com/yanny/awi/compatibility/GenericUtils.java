@@ -1,6 +1,8 @@
 package com.yanny.awi.compatibility;
 
 import com.yanny.aci.CommonLogUtils;
+import com.yanny.aci.api.Rect;
+import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.awi.Utils;
 import com.yanny.awi.api.IBlockNode;
 import com.yanny.awi.api.IClientUtils;
@@ -10,9 +12,14 @@ import com.yanny.awi.configuration.DimensionFilter;
 import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.network.AbstractClient;
 import com.yanny.awi.network.RequestWorldgenDataMessage;
+import com.yanny.awi.plugin.client.TooltipUtils;
+import com.yanny.awi.plugin.client.WidgetUtils;
+import com.yanny.awi.plugin.common.nodes.BiomeNode;
 import com.yanny.awi.plugin.common.nodes.LevelStemNode;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -29,6 +36,7 @@ import org.slf4j.Logger;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.List;
@@ -40,6 +48,7 @@ import java.util.zip.GZIPInputStream;
 
 public class GenericUtils {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
+    private static final int SPAWN_INFO_SIZE = 9;
 
     @NotNull
     public static Map<ResourceLocation, LevelStemNode> decompressWorldgenData(IClientUtils utils, byte[] fullCompressedData) {
@@ -206,6 +215,30 @@ public class GenericUtils {
         }
 
         return item;
+    }
+
+    @NotNull
+    public static Rect getSpawnInfoRect(int headerWidth) {
+        return new Rect(headerWidth - SPAWN_INFO_SIZE, 0, SPAWN_INFO_SIZE, SPAWN_INFO_SIZE);
+    }
+
+    public static void renderSpawnInfoIcon(IDataNode node, Rect rect, GuiGraphics guiGraphics) {
+        if (hasSpawnInfo(node)) {
+            guiGraphics.blit(WidgetUtils.TEXTURE_LOC, rect.x(), rect.y(), 104, 0, rect.width(), rect.height());
+        }
+    }
+
+    @NotNull
+    public static List<Component> getSpawnTooltip(IDataNode node) {
+        if (node instanceof BiomeNode biomeNode) {
+            return CoreTooltipUtils.toComponents(biomeNode.getSpawnTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle());
+        }
+
+        return Collections.emptyList();
+    }
+
+    public static boolean hasSpawnInfo(IDataNode node) {
+        return node instanceof BiomeNode biomeNode && !biomeNode.getSpawnTooltip().isBlank(false);
     }
 
     public static Component getFormattedCategoryTitle(ResourceLocation location) {

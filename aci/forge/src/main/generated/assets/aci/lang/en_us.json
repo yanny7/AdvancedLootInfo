@@ -1,4 +1,13 @@
 {
+  "aci.spawn.biome_excluded": "- %s",
+  "aci.spawn.biome_included": "+ %s",
+  "aci.spawn.category": "Category: %s",
+  "aci.spawn.dimension": "Dimension: %s",
+  "aci.spawn.group_size": "Group size: %s",
+  "aci.spawn.spawn_cost": "Spawn cost: charge %s, budget %s",
+  "aci.spawn.spawns": "Spawns:",
+  "aci.spawn.structure": "Structure: %s",
+  "aci.spawn.weight": "Weight: %s",
   "aci.util.auto_detected": "Auto-detected: %s",
   "aci.util.entry": "Entry:",
   "aci.util.missing": "Not implemented: %s",

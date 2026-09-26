@@ -169,5 +169,6 @@
   "logMoreStatistics": false,
   "showInGameNames": true,
   "hideDefaultBlockLoot": true,
-  "showUnboundedGlobalLootModifiers": false
+  "showUnboundedGlobalLootModifiers": false,
+  "showEntitiesWithoutLoot": false
 }

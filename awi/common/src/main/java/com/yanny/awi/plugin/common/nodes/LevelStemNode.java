@@ -1,6 +1,7 @@
 package com.yanny.awi.plugin.common.nodes;
 
 import com.yanny.aci.CommonLogUtils;
+import com.yanny.aci.spawn.SpawnInfo;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.Utils;
@@ -37,7 +38,7 @@ public class LevelStemNode extends ListNode {
     private final TooltipNode tooltip;
 
     public LevelStemNode(IServerUtils utils, LevelStem levelStem, Map<Holder<Biome>, NodeUtils.LayerHolder> baseLayouts,
-                         WorldgenNodeCache nodeCache) {
+                         WorldgenNodeCache nodeCache, SpawnInfo spawnInfo) {
         ChunkGenerator generator = levelStem.generator();
         ColumnContext columnContext = new ColumnContext(generator.getMinY(), generator.getGenDepth());
         Block defaultBlock = Blocks.AIR;
@@ -57,7 +58,7 @@ public class LevelStemNode extends ListNode {
             Set<BlockInfo> baseBlocks = layers != null ? layers.getBlockInfos() : Collections.emptySet();
 
             try {
-                addChildren(new BiomeNode(utils, biomeHolder.value(), biomeTooltip, baseBlocks, defaultBlock, defaultFluid, columnContext, nodeCache));
+                addChildren(new BiomeNode(utils, biomeHolder.value(), biomeTooltip, baseBlocks, defaultBlock, defaultFluid, columnContext, nodeCache, spawnInfo));
             } catch (Exception e) {
                 LOGGER.error("Failed to analyze biome {}", biomeName(biomeHolder), e);
             }

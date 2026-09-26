@@ -12,6 +12,7 @@ import com.yanny.ali.platform.services.IPlatformHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraftforge.common.ForgeHooks;
@@ -46,6 +47,11 @@ public class ForgePlatformHelper implements IPlatformHelper {
     @Override
     public Path getConfiguration() {
         return FMLPaths.CONFIGDIR.get();
+    }
+
+    @Override
+    public Structure.StructureSettings getStructureSettings(Structure structure) {
+        return structure.getModifiedStructureSettings();
     }
 
     @Override

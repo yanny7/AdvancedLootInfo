@@ -28,8 +28,34 @@ public final class CoreLang {
         }
     }
 
+    public enum Spawn implements ITooltipKey {
+        SPAWNS("spawns", "Spawns:"),
+        DIMENSION("dimension", "Dimension: %s"),
+        STRUCTURE("structure", "Structure: %s"),
+        BIOME_INCLUDED("biome_included", "+ %s"),
+        BIOME_EXCLUDED("biome_excluded", "- %s"),
+        CATEGORY("category", "Category: %s"),
+        WEIGHT("weight", "Weight: %s"),
+        GROUP_SIZE("group_size", "Group size: %s"),
+        SPAWN_COST("spawn_cost", "Spawn cost: charge %s, budget %s"),
+        ;
+
+        private final Translation translation;
+
+        Spawn(String k, String e) {
+            translation = new Translation("aci.spawn." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
     static {
         register(TRANSLATION_MAP, Utils.class);
+        register(TRANSLATION_MAP, Spawn.class);
     }
 
     public static void register(Map<String, String> translationMap, Class<? extends ITooltipKey> enumClass) {
