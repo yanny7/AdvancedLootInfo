@@ -225,6 +225,11 @@ the target's trade already is:
   `VillagerTrades.ItemListing` *and* `IItemListing`, and the shim hands the wrapped listing to
   `IServerUtils.getItemListing`. That is the only reason for the wrapper.
 
+Trades are data from 26.1 on. A mod whose `data/<ns>/villager_trade/*.json` are reached through a `trade_set` it
+passes to its own `VillagerProfession`, or through a vanilla `tags/villager_trade/<profession>/level_<n>.json`, needs
+no listing registration: ALI's `Plugin` walks every profession's `tradeSetsByLevel()` and the wandering trader's sets.
+Only a custom `given_item_modifiers` function or a trader outside the profession registry is left to cover.
+
 Measure the shim against what ALI already does, not against nothing: an unregistered listing falls
 back to `entry.getOffer(null, null)` rendered through `TradeUtils.getNode`, and to a missing-listing
 tooltip when that throws. A shim earns its place by reading the listing's fields — which gives count

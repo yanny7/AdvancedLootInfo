@@ -1,4 +1,4 @@
-package com.yanny.alicompat.compat.sawmill;
+package com.yanny.alicompat.compat.grimoireofgaia;
 
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.language.ITooltipKey;
@@ -10,20 +10,19 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SawmillLang implements ICompatTranslations {
-    static final String MOD_ID = "sawmill";
+public class GrimoireOfGaiaLang implements ICompatTranslations {
+    static final String MOD_ID = "grimoireofgaia";
 
     public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 
-    public enum Value implements ITooltipKey {
-        ANY_WOOD_TYPE("any_wood_type", "Any wood type"),
-        VILLAGE_WOOD_TYPE("village_wood_type", "Wood type of the village"),
+    public enum ConsumeEffects implements ITooltipKey {
+        CLEAR_NEGATIVE_STATUS_EFFECTS("clear_negative_status_effects", "Clear Negative Effects"),
         ;
 
         private final Translation translation;
 
-        Value(String k, String e) {
-            translation = new Translation(Utils.langKey(MOD_ID, "property.value", k), e);
+        ConsumeEffects(String k, String e) {
+            translation = new Translation(Utils.langKey(MOD_ID, "type.consume_effect", k), e);
         }
 
         @NotNull
@@ -34,7 +33,7 @@ public class SawmillLang implements ICompatTranslations {
     }
 
     static {
-        CoreLang.register(TRANSLATION_MAP, Value.class);
+        CoreLang.register(TRANSLATION_MAP, ConsumeEffects.class);
     }
 
     @NotNull
