@@ -488,6 +488,7 @@ public abstract class AbstractServer {
                                                                Set<Object> attachedLootModifiers) {
         Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();
         int defaultDropLootTables = 0;
+        int itemlessPages = 0;
 
         for (PendingPage pending : pages) {
             LootPage page = pending.page();
@@ -498,6 +499,12 @@ public abstract class AbstractServer {
             try {
                 PageTable table = new PageTable(serverRegistry, pending.lootTable(), location, fakeLootTables);
                 List<Candidate> lootModifiers = filterByItems(getCandidates(pending, boundLootModifiers), table, attachedLootModifiers);
+
+                if (pending.lootTable() == null && !lootModifiers.isEmpty() && !fakeLootTables.containsKey(location)
+                        && lootModifiers.stream().noneMatch(AbstractServer::addsItems)) {
+                    itemlessPages++;
+                    continue;
+                }
 
                 if (pending.kind() == PageKind.BLOCK && config.hideDefaultBlockLoot && lootModifiers.isEmpty() && !fakeLootTables.containsKey(location)
                         && page.blocks().stream().anyMatch((b) -> isDefaultBlockDrop(serverRegistry, config, b, pending.lootTable()))) {
@@ -524,6 +531,10 @@ public abstract class AbstractServer {
 
         if (defaultDropLootTables > 0) {
             LOGGER.info("Skipped {} block loot tables dropping only the block itself", defaultDropLootTables);
+        }
+
+        if (itemlessPages > 0) {
+            LOGGER.info("Skipped {} pages without a loot table that no loot modifier adds items to", itemlessPages);
         }
 
         return lootNodes;
@@ -621,6 +632,10 @@ public abstract class AbstractServer {
 
         matched.forEach((c) -> attachedLootModifiers.add(c.source()));
         return matched;
+    }
+
+    private static boolean addsItems(Candidate candidate) {
+        return candidate.operations().stream().anyMatch((o) -> o instanceof IOperation.AddOperation add && !collectItems(add.node()).isEmpty());
     }
 
     private static boolean matchesItems(Candidate candidate, List<ItemStack> items) {

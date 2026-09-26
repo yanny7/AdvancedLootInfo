@@ -8,6 +8,7 @@
 - Entity loot shows where entity spawns naturally (dimensions, biomes, structures, weight, group size)
 - Added `showEntitiesWithoutLoot` configuration to show spawning entities that drop nothing
 - Lower client memory use with JEI and EMI
+- Faster loot scan with global loot modifiers
 
 ## [2.2.0]
 

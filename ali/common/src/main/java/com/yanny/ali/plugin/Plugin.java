@@ -108,6 +108,8 @@ public class Plugin implements IPlugin {
 
         EnumTypes.TRANSLATED_ENUMS.forEach((type, owner) -> registry.registerEnumTranslation(type, Utils.MOD_ID, owner));
 
+        registry.registerCacheCleaner(GlobalLootModifierUtils::clearCaches);
+
         registry.registerNumberProvider(ConstantValue.class, Plugin::convertConstant);
         registry.registerNumberProvider(UniformGenerator.class, Plugin::convertUniform);
         registry.registerNumberProvider(BinomialDistributionGenerator.class, Plugin::convertBinomial);
