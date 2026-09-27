@@ -1,6 +1,7 @@
 {
   "alicompat.goblintraders.property.value.durability_scale": "Durability Scale: %s",
   "alicompat.goblintraders.type.function.increase_durability": "Increase Durability:",
+  "alicompat.grimoireofgaia.type.consume_effect.clear_negative_status_effects": "Clear Negative Effects",
   "alicompat.occultism.property.value.with_third_eye": "Requires Third Eye, Otherworld Goggles or True Sight Staff",
   "alicompat.occultism.property.value.without_third_eye": "Without Third Eye, Otherworld Goggles or True Sight Staff",
   "alicompat.occultism.type.consume_effect.damage_item": "Damage Item:",

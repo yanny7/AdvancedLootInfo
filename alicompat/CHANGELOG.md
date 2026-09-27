@@ -1,5 +1,6 @@
 ## []
 
+- Added Grimoire of Gaia support
 - Added Occultism support
 - Added Repurposed Structures support
 - Added Sophisticated Backpacks support
