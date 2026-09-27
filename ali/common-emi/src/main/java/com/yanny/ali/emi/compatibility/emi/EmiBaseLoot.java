@@ -17,6 +17,7 @@ import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
+import dev.emi.emi.api.widget.Bounds;
 import dev.emi.emi.api.widget.Widget;
 import dev.emi.emi.api.widget.WidgetHolder;
 import dev.emi.emi.config.EmiConfig;
@@ -32,20 +33,23 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public abstract class EmiBaseLoot extends BasicEmiRecipe {
     static final int CATEGORY_WIDTH = 9 * 18 - AbstractScrollWidget.getScrollbarExtraWidth();
-    private final Widget widget;
-    private final List<Holder> slotWidgets = new LinkedList<>();
+    private final IDataNode lootTable;
+    private final int widgetX;
+    private final int widgetY;
+    private int itemsWidth = -1;
+    private int itemsHeight;
 
     public EmiBaseLoot(EmiRecipeCategory category, ResourceLocation id, IDataNode lootTable, int widgetX, int widgetY, List<ItemStack> inputs, List<ItemStack> outputs) {
         // '/' prefix marks the recipe as synthetic - EMI requires it for recipes that are not present in the recipe manager
         // the height passed to super is never read - getDisplayHeight() below overrides BasicEmiRecipe's accessor
         super(category, ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "/" + id.getPath()), CATEGORY_WIDTH + AbstractScrollWidget.getScrollbarExtraWidth(), 0);
-        RelativeRect rect = new RelativeRect(widgetX, widgetY, CATEGORY_WIDTH, 0);
-        widget = new EmiWidgetWrapper(getRootWidget(getEmiUtils(this), lootTable, rect, CATEGORY_WIDTH));
+        this.lootTable = lootTable;
+        this.widgetX = widgetX;
+        this.widgetY = widgetY;
         this.inputs.addAll(inputs.stream().map(EmiStack::of).toList());
         this.outputs.addAll(outputs.stream().map(EmiStack::of).toList());
     }
@@ -53,9 +57,10 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
     @Override
     public void addWidgets(WidgetHolder widgetHolder) {
         Rect rect = new Rect(0, 0, CATEGORY_WIDTH + AbstractScrollWidget.getScrollbarExtraWidth(), Math.min(getDisplayHeight(), widgetHolder.getHeight()));
+        Layout layout = layout();
         List<Widget> widgets = new ArrayList<>();
 
-        widgets.addAll(slotWidgets.stream().map((h) -> {
+        widgets.addAll(layout.slots().stream().map((h) -> {
             EmiIngredient ingredient = h.item.map(EmiStack::of, EmiIngredient::of);
             IItemNode node = (IItemNode) h.entry;
             EmiLootSlotWidget widget = new EmiLootSlotWidget(h.entry, ingredient, h.rect.getX(), h.rect.getY(), node.getCount(), node.hasPredicates());
@@ -64,7 +69,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
             return (Widget) widget;
         }).toList());
         widgets.addAll(getAdditionalWidgets(widgetHolder));
-        widgets.add(widget);
+        widgets.add(layout.widget());
         widgetHolder.add(new EmiScrollWidget(rect, getItemsWidth(), getContentHeight(), widgets));
     }
 
@@ -102,11 +107,13 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
     }
 
     protected int getItemsHeight() {
-        return widget.getBounds().height();
+        measure();
+        return itemsHeight;
     }
 
     protected int getItemsWidth() {
-        return widget.getBounds().width();
+        measure();
+        return itemsWidth;
     }
 
     protected int getMinContentHeight() {
@@ -122,8 +129,26 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
 
     abstract IWidget getRootWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth);
 
+    private void measure() {
+        if (itemsWidth < 0) {
+            Bounds bounds = layout().widget().getBounds();
+
+            itemsWidth = bounds.width();
+            itemsHeight = bounds.height();
+        }
+    }
+
     @NotNull
-    private IWidgetUtils getEmiUtils(EmiRecipe recipe) {
+    private Layout layout() {
+        List<Holder> slots = new ArrayList<>();
+        RelativeRect rect = new RelativeRect(widgetX, widgetY, CATEGORY_WIDTH, 0);
+        Widget widget = new EmiWidgetWrapper(getRootWidget(getEmiUtils(this, slots), lootTable, rect, CATEGORY_WIDTH));
+
+        return new Layout(widget, slots);
+    }
+
+    @NotNull
+    private IWidgetUtils getEmiUtils(EmiRecipe recipe, List<Holder> slotWidgets) {
         return new ClientUtils() {
             @Nullable
             @Override
@@ -143,6 +168,8 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
             }
         };
     }
+
+    private record Layout(Widget widget, List<Holder> slots) {}
 
     private record Holder(IWidgetUtils utils, Either<ItemStack, TagKey<? extends ItemLike>> item, IDataNode entry, RelativeRect rect, EmiRecipe recipe) {}
 }

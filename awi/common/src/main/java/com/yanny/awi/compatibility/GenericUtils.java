@@ -1,6 +1,8 @@
 package com.yanny.awi.compatibility;
 
 import com.yanny.aci.CommonLogUtils;
+import com.yanny.aci.tooltip.CoreTooltipUtils;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.Utils;
 import com.yanny.awi.api.IBlockNode;
 import com.yanny.awi.api.IClientUtils;
@@ -10,21 +12,31 @@ import com.yanny.awi.configuration.DimensionFilter;
 import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.network.AbstractClient;
 import com.yanny.awi.network.RequestWorldgenDataMessage;
+import com.yanny.awi.platform.Services;
+import com.yanny.awi.plugin.client.TooltipUtils;
+import com.yanny.awi.plugin.client.WidgetUtils;
+import com.yanny.awi.plugin.common.nodes.BiomeNode;
 import com.yanny.awi.plugin.common.nodes.LevelStemNode;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.io.ByteArrayInputStream;
@@ -41,6 +53,8 @@ import java.util.zip.GZIPInputStream;
 
 public class GenericUtils {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
+    private static final int SPAWN_SLOT_SIZE = 18;
+    private static final int SPAWN_SLOTS_GAP = 2;
 
     @NotNull
     public static Map<ResourceLocation, LevelStemNode> decompressWorldgenData(IClientUtils utils, byte[] fullCompressedData, RegistryAccess registryAccess) {
@@ -207,6 +221,61 @@ public class GenericUtils {
         }
 
         return item;
+    }
+
+    @NotNull
+    public static List<SpawnSlot> getSpawnSlots(IDataNode node, int width, int y) {
+        List<SpawnSlot> slots = new ArrayList<>();
+
+        if (node instanceof BiomeNode biomeNode) {
+            int perRow = Math.max(1, width / SPAWN_SLOT_SIZE);
+
+            for (Map.Entry<EntityType<?>, TooltipNode> entry : biomeNode.getSpawns().entrySet()) {
+                int index = slots.size();
+                SpawnEggItem egg = Services.getPlatform().getSpawnEggItem(entry.getKey());
+
+                slots.add(new SpawnSlot(entry.getKey(), egg, entry.getValue(), (index % perRow) * SPAWN_SLOT_SIZE, y + (index / perRow) * SPAWN_SLOT_SIZE));
+            }
+        }
+
+        return slots;
+    }
+
+    public static int getSpawnSlotsHeight(IDataNode node, int width) {
+        int count = node instanceof BiomeNode biomeNode ? biomeNode.getSpawns().size() : 0;
+
+        if (count == 0) {
+            return 0;
+        }
+
+        int perRow = Math.max(1, width / SPAWN_SLOT_SIZE);
+
+        return (count + perRow - 1) / perRow * SPAWN_SLOT_SIZE + SPAWN_SLOTS_GAP;
+    }
+
+    @NotNull
+    public static List<ItemStack> getSpawnEggs(IDataNode node) {
+        return getSpawnSlots(node, SPAWN_SLOT_SIZE, 0).stream().filter((s) -> s.egg() != null).map((s) -> new ItemStack(s.egg())).toList();
+    }
+
+    public static void renderUnknownSpawnEgg(GuiGraphics guiGraphics, int x, int y) {
+        guiGraphics.blit(WidgetUtils.TEXTURE_LOC, x, y, 30, 0, SPAWN_SLOT_SIZE, SPAWN_SLOT_SIZE);
+    }
+
+    public record SpawnSlot(EntityType<?> type, @Nullable SpawnEggItem egg, TooltipNode conditions, int x, int y) {
+        @NotNull
+        public List<Component> getConditions() {
+            return CoreTooltipUtils.toComponents(conditions, 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle());
+        }
+
+        @NotNull
+        public List<Component> getTooltip() {
+            List<Component> tooltip = new ArrayList<>();
+
+            tooltip.add(type.getDescription());
+            tooltip.addAll(getConditions());
+            return tooltip;
+        }
     }
 
     public static Component getFormattedCategoryTitle(ResourceLocation location) {

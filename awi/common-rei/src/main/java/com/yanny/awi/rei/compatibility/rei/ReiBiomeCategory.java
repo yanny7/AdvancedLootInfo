@@ -1,12 +1,14 @@
 package com.yanny.awi.rei.compatibility.rei;
 
 import com.yanny.aci.api.Rect;
+import com.yanny.awi.compatibility.GenericUtils;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.Renderer;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.client.gui.widgets.Widgets;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
+import me.shedaniel.rei.api.common.entry.EntryStack;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
@@ -16,6 +18,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ReiBiomeCategory extends ReiBaseCategory<ReiBiomeDisplay> {
+    private static final int TITLE_HEIGHT = 10;
+
     private final CategoryIdentifier<ReiBiomeDisplay> identifier;
     private final Component title;
     private final ItemStack icon;
@@ -29,7 +33,8 @@ public class ReiBiomeCategory extends ReiBaseCategory<ReiBiomeDisplay> {
     @Override
     public List<Widget> setupDisplay(ReiBiomeDisplay display, Rectangle bounds) {
         List<Widget> widgets = new LinkedList<>();
-        PreparedWidgets prepared = prepareWidgets(display, bounds, 10);
+        List<GenericUtils.SpawnSlot> spawnSlots = GenericUtils.getSpawnSlots(display.getEntry().entry(), CATEGORY_WIDTH, TITLE_HEIGHT);
+        PreparedWidgets prepared = prepareWidgets(display, bounds, TITLE_HEIGHT + GenericUtils.getSpawnSlotsHeight(display.getEntry().entry(), CATEGORY_WIDTH));
         Rectangle innerBounds = prepared.innerBounds();
         Rectangle fullBounds = prepared.fullBounds();
         List<Widget> innerWidgets = new LinkedList<>(prepared.widgets());
@@ -37,6 +42,22 @@ public class ReiBiomeCategory extends ReiBaseCategory<ReiBiomeDisplay> {
 
         fullBounds.move(bounds.getCenterX() - fullBounds.width / 2, bounds.y + PADDING);
         innerWidgets.add(Widgets.createLabel(new Point(0, 0), title).leftAligned().noShadow().color(0));
+
+        for (GenericUtils.SpawnSlot slot : spawnSlots) {
+            if (slot.egg() != null) {
+                EntryStack<ItemStack> stack = EntryStacks.of(slot.egg());
+
+                stack.tooltip((s) -> slot.getConditions());
+                innerWidgets.add(Widgets.createSlot(new Point(slot.x() + 1, slot.y() + 1)).entry(stack).markInput());
+            } else {
+                Rectangle slotBounds = new Rectangle(slot.x(), slot.y(), 18, 18);
+
+                innerWidgets.add(Widgets.createSlotBase(slotBounds));
+                innerWidgets.add(Widgets.wrapRenderer(slotBounds, (graphics, b, mouseX, mouseY, delta) -> GenericUtils.renderUnknownSpawnEgg(graphics, b.x, b.y)));
+                innerWidgets.add(Widgets.createTooltip(slotBounds, slot.getTooltip().toArray(new Component[0])));
+            }
+        }
+
         widgets.add(Widgets.createCategoryBase(fullBounds));
         widgets.add(Widgets.withTranslate(
                 new ReiScrollWidget(new Rect(0, 0, fullBounds.width - 2 * PADDING, fullBounds.height - 2 * PADDING), prepared.contentWidth(), innerBounds.height, innerWidgets),

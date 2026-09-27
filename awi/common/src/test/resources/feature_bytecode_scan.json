@@ -222,7 +222,7 @@
     "tags": []
   },
   "minecraft:freeze_top_layer": {
-    "visitedMethods": 63,
+    "visitedMethods": 58,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:ice",
@@ -305,7 +305,7 @@
     "tags": []
   },
   "minecraft:lake": {
-    "visitedMethods": 82,
+    "visitedMethods": 77,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:cave_air",
