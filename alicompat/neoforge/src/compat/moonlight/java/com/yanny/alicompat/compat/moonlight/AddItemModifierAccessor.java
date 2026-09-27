@@ -10,7 +10,7 @@ import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.GlmNodeUtils;
 import com.yanny.alicompat.accessor.IGlobalLootModifierAccessor;
 import net.mehvahdjukaar.moonlight.core.misc.platform.ModLootModifiers;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import java.util.Arrays;
@@ -20,7 +20,7 @@ import java.util.Optional;
 
 public class AddItemModifierAccessor extends BaseAccessor<ModLootModifiers.AddItemModifier> implements IGlobalLootModifierAccessor {
     @FieldAccessor
-    private ItemStack addedItemStack;
+    private ItemStackTemplate addedItem;
 
     @FieldAccessor
     protected LootItemCondition[] conditions;
@@ -34,6 +34,6 @@ public class AddItemModifierAccessor extends BaseAccessor<ModLootModifiers.AddIt
 
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
                 (page, c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true,
-                        GlmNodeUtils.addedNode(utils, c, addedItemStack.copy(), 1, new RangeValue(addedItemStack.getCount()))))));
+                        GlmNodeUtils.addedNode(utils, c, addedItem.create(), 1, new RangeValue(addedItem.count()))))));
     }
 }

@@ -2,8 +2,8 @@ package com.yanny.alicompat.compat.moonlight;
 
 import net.mehvahdjukaar.moonlight.core.loot.OptionalItemPoolEntry;
 import net.mehvahdjukaar.moonlight.core.loot.OptionalPropertyCondition;
-import net.minecraft.advancements.critereon.StatePropertiesPredicate;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.advancements.criterion.StatePropertiesPredicate;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +33,7 @@ public class MoonlightTooltipTest {
     public void testOptionalPropertyCondition() {
         Optional<StatePropertiesPredicate> properties = StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.LIT, true).build();
 
-        assertTooltip(UTILS.getConditionTooltip(UTILS, condition(ResourceLocation.parse("minecraft:furnace"), properties)).build(), List.of(
+        assertTooltip(UTILS.getConditionTooltip(UTILS, condition(Identifier.parse("minecraft:furnace"), properties)).build(), List.of(
                 "Optional Block State Property:",
                 "  -> Block: minecraft:furnace",
                 "  -> Properties:",
@@ -42,9 +42,9 @@ public class MoonlightTooltipTest {
     }
 
     @NotNull
-    private static OptionalPropertyCondition condition(ResourceLocation blockId, Optional<StatePropertiesPredicate> properties) {
+    private static OptionalPropertyCondition condition(Identifier blockId, Optional<StatePropertiesPredicate> properties) {
         try {
-            var constructor = OptionalPropertyCondition.class.getDeclaredConstructor(ResourceLocation.class, Optional.class);
+            var constructor = OptionalPropertyCondition.class.getDeclaredConstructor(Identifier.class, Optional.class);
 
             constructor.setAccessible(true);
             return constructor.newInstance(blockId, properties);
