@@ -14,6 +14,7 @@ import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotDrawable;
 import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
@@ -73,6 +74,14 @@ public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, EntityType<?>> {
                 if (level != null) {
                     Entity entity = EntityStorage.getEntity(PluginManager.getInstance().commonRegistry, recipe.entityType(), level, recipe.variant());
                     GenericUtils.renderEntity(entity, rect, CATEGORY_WIDTH, guiGraphics, (int) mouseX, (int) mouseY);
+                    GenericUtils.renderSpawnInfoIcon(recipe.entry(), rect, guiGraphics);
+                }
+            }
+
+            @Override
+            public void getTooltip(ITooltipBuilder tooltip, double mouseX, double mouseY) {
+                if (rect.contains((int) mouseX, (int) mouseY)) {
+                    tooltip.addAll(GenericUtils.getSpawnTooltip(recipe.entry()));
                 }
             }
 

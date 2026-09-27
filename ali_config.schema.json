@@ -243,6 +243,11 @@
       "description": "If true, global loot modifiers whose conditions name no block, entity or loot table are shown on every page whose items one of their operations matches, instead of being discarded.",
       "default": false
     },
+    "showEntitiesWithoutLoot": {
+      "type": "boolean",
+      "description": "If true, entities that spawn naturally but drop nothing are shown in the entity loot category too, so their spawn conditions can be looked up.",
+      "default": false
+    },
     "defaultBlockLootConditions": {
       "type": "array",
       "description": "Loot condition types that do not stop a block loot table from being treated as a default drop by hideDefaultBlockLoot. Defaults to minecraft:survives_explosion.",

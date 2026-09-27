@@ -46,12 +46,13 @@ public class AliConfig implements ICoreConfig {
                 Codec.BOOL.fieldOf("showInGameNames").orElse(true).forGetter((c) -> c.showInGameNames),
                 Codec.BOOL.fieldOf("hideDefaultBlockLoot").orElse(true).forGetter((c) -> c.hideDefaultBlockLoot),
                 Codec.BOOL.fieldOf("showUnboundedGlobalLootModifiers").orElse(false).forGetter((c) -> c.showUnboundedGlobalLootModifiers),
+                Codec.BOOL.fieldOf("showEntitiesWithoutLoot").orElse(false).forGetter((c) -> c.showEntitiesWithoutLoot),
                 Identifier.CODEC.listOf().fieldOf("defaultBlockLootConditions").orElse(DEFAULT_BLOCK_LOOT_CONDITIONS).forGetter((c) -> c.defaultBlockLootConditions),
                 Identifier.CODEC.listOf().fieldOf("defaultBlockLootFunctions").orElse(DEFAULT_BLOCK_LOOT_FUNCTIONS).forGetter((c) -> c.defaultBlockLootFunctions),
                 Identifier.CODEC.listOf().fieldOf("ignoredPredicateConditions").orElse(DEFAULT_IGNORED_PREDICATE_CONDITIONS).forGetter((c) -> c.ignoredPredicateConditions),
                 Codec.unboundedMap(Identifier.CODEC, Identifier.CODEC.listOf()).fieldOf("entityLootTables").orElse(Collections.emptyMap()).forGetter((c) -> c.entityLootTables),
                 TooltipColors.CODEC.fieldOf("tooltipColors").orElseGet(TooltipColors::new).forGetter((c) -> c.tooltipColors)
-        ).apply(instance, (version, blocks, entities, gameplay, trades, disabled, log, show, hideDefaultLoot, showUnboundedGlm, defaultConditions, defaultFunctions, ignoredPredicates, entityLoot, colors) -> {
+        ).apply(instance, (version, blocks, entities, gameplay, trades, disabled, log, show, hideDefaultLoot, showUnboundedGlm, showEntitiesWithoutLoot, defaultConditions, defaultFunctions, ignoredPredicates, entityLoot, colors) -> {
             AliConfig config = new AliConfig();
 
             config.configVersion = version;
@@ -64,6 +65,7 @@ public class AliConfig implements ICoreConfig {
             config.tradeCategories = new ArrayList<>(trades);
             config.hideDefaultBlockLoot = hideDefaultLoot;
             config.showUnboundedGlobalLootModifiers = showUnboundedGlm;
+            config.showEntitiesWithoutLoot = showEntitiesWithoutLoot;
             config.defaultBlockLootConditions = new ArrayList<>(defaultConditions);
             config.defaultBlockLootFunctions = new ArrayList<>(defaultFunctions);
             config.ignoredPredicateConditions = new ArrayList<>(ignoredPredicates);
@@ -98,6 +100,7 @@ public class AliConfig implements ICoreConfig {
     public boolean showInGameNames = true;
     public boolean hideDefaultBlockLoot = true;
     public boolean showUnboundedGlobalLootModifiers = false;
+    public boolean showEntitiesWithoutLoot = false;
 
     public AliConfig() {
         blockCategories = new ArrayList<>(defaultBlockCategories());
