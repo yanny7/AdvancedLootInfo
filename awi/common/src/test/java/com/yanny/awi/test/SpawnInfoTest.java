@@ -173,12 +173,12 @@ public class SpawnInfoTest {
     @Test
     public void testNoSpawn() {
         assertTrue(spawnInfo.getEntityTooltip(EntityType.PIG).isBlank(false));
-        assertTrue(spawnInfo.getBiomeSpawns(new ResourceLocation("test", "missing")).isEmpty());
+        assertTrue(spawnInfo.getBiomeSpawns(ResourceLocation.fromNamespaceAndPath("test", "missing")).isEmpty());
     }
 
     @Test
     public void testBiomeSpawns() {
-        Map<EntityType<?>, TooltipNode> spawns = spawnInfo.getBiomeSpawns(new ResourceLocation("test", "d"));
+        Map<EntityType<?>, TooltipNode> spawns = spawnInfo.getBiomeSpawns(ResourceLocation.fromNamespaceAndPath("test", "d"));
 
         assertEquals(List.of(EntityType.SKELETON, EntityType.ZOMBIE), List.copyOf(spawns.keySet()));
         assertTooltip(spawns.get(EntityType.SKELETON), List.of(
@@ -195,7 +195,7 @@ public class SpawnInfoTest {
 
     @Test
     public void testBiomeSpawnsWithStructure() {
-        Map<EntityType<?>, TooltipNode> spawns = spawnInfo.getBiomeSpawns(new ResourceLocation("test", "e"));
+        Map<EntityType<?>, TooltipNode> spawns = spawnInfo.getBiomeSpawns(ResourceLocation.fromNamespaceAndPath("test", "e"));
 
         assertEquals(List.of(EntityType.BLAZE, EntityType.STRIDER), List.copyOf(spawns.keySet()));
         assertTooltip(spawns.get(EntityType.BLAZE), List.of(
@@ -218,7 +218,7 @@ public class SpawnInfoTest {
                 "camp", spawnSettings(HolderSet.direct(biomes.getHolderOrThrow(key(Registries.BIOME, "a"))), EntityType.ZOMBIE)
         ));
         SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, registry)), OWN_SETTINGS);
-        Map<EntityType<?>, TooltipNode> spawns = info.getBiomeSpawns(new ResourceLocation("test", "a"));
+        Map<EntityType<?>, TooltipNode> spawns = info.getBiomeSpawns(ResourceLocation.fromNamespaceAndPath("test", "a"));
 
         assertEquals(List.of(EntityType.SKELETON, EntityType.SPIDER, EntityType.ZOMBIE, EntityType.COW), List.copyOf(spawns.keySet()));
         assertTooltip(spawns.get(EntityType.ZOMBIE), List.of(
@@ -289,7 +289,7 @@ public class SpawnInfoTest {
 
     @Test
     public void testUnboundBiomeTagSpawnsNowhere() {
-        HolderSet<Biome> unbound = HolderSet.emptyNamed(biomes.holderOwner(), TagKey.create(Registries.BIOME, new ResourceLocation("test", "unbound")));
+        HolderSet<Biome> unbound = biomes.getOrCreateTag(TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath("test", "unbound")));
         MappedRegistry<Structure> registry = structures(Map.of(
                 "fort", spawnSettings(HolderSet.direct(biomes.getHolderOrThrow(key(Registries.BIOME, "e"))), EntityType.BLAZE),
                 "tagged", spawnSettings(unbound, EntityType.WITCH)
@@ -298,7 +298,7 @@ public class SpawnInfoTest {
 
         assertTrue(info.getEntityTypes().contains(EntityType.WITCH));
         assertTrue(info.getEntityTooltip(EntityType.WITCH).isBlank(false));
-        assertEquals(List.of(EntityType.BLAZE, EntityType.STRIDER), List.copyOf(info.getBiomeSpawns(new ResourceLocation("test", "e")).keySet()));
+        assertEquals(List.of(EntityType.BLAZE, EntityType.STRIDER), List.copyOf(info.getBiomeSpawns(ResourceLocation.fromNamespaceAndPath("test", "e")).keySet()));
     }
 
     @Test
@@ -353,6 +353,6 @@ public class SpawnInfoTest {
 
     @NotNull
     private static <T> ResourceKey<T> key(ResourceKey<? extends Registry<T>> registry, String name) {
-        return ResourceKey.create(registry, new ResourceLocation("test", name));
+        return ResourceKey.create(registry, ResourceLocation.fromNamespaceAndPath("test", name));
     }
 }

@@ -232,7 +232,7 @@
     "tags": []
   },
   "minecraft:geode": {
-    "visitedMethods": 132,
+    "visitedMethods": 123,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:air"
