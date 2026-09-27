@@ -7,6 +7,7 @@ import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.platform.services.IPlatformHelper;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforgespi.language.ModFileScanData;
@@ -41,6 +42,11 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
     @Override
     public SpawnEggItem getSpawnEggItem(EntityType<?> entityType) {
         return SpawnEggItem.byId(entityType);
+    }
+
+    @Override
+    public Structure.StructureSettings getStructureSettings(Structure structure) {
+        return structure.getModifiedStructureSettings();
     }
 
     @NotNull

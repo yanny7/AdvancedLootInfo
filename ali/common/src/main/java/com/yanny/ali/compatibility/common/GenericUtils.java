@@ -3,6 +3,7 @@ package com.yanny.ali.compatibility.common;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.ICoreDataNode;
 import com.yanny.aci.api.Rect;
+import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.manager.AliClientRegistry;
@@ -10,6 +11,7 @@ import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.network.AbstractClient;
 import com.yanny.ali.network.RequestLootDataMessage;
 import com.yanny.ali.platform.Services;
+import com.yanny.ali.plugin.client.TooltipUtils;
 import com.yanny.ali.plugin.common.nodes.EntityLootTableNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
 import io.netty.buffer.ByteBuf;
@@ -61,6 +63,7 @@ public class GenericUtils {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
     private static final Identifier TEXTURE_LOC = com.yanny.ali.Utils.modLoc("textures/gui/gui.png");
     private static final int WIDGET_SIZE = 36;
+    private static final int SPAWN_INFO_SIZE = 9;
     private static final int SLOT_SIZE = 18;
     private static final int TEXT_HEIGHT = 8;
     private static final int HEADER_GAP = 2;
@@ -110,6 +113,25 @@ public class GenericUtils {
 
             guiGraphics.pose().popMatrix();
         }
+    }
+
+    public static void renderSpawnInfoIcon(IDataNode node, Rect bounds, GuiGraphics guiGraphics) {
+        if (hasSpawnInfo(node)) {
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE_LOC, bounds.right() - SPAWN_INFO_SIZE - 1, bounds.y() + 1, 120, 0, SPAWN_INFO_SIZE, SPAWN_INFO_SIZE, 256, 256);
+        }
+    }
+
+    @NotNull
+    public static List<Component> getSpawnTooltip(IDataNode node) {
+        if (node instanceof EntityLootTableNode entityNode) {
+            return CoreTooltipUtils.toComponents(entityNode.getSpawnTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle());
+        }
+
+        return Collections.emptyList();
+    }
+
+    private static boolean hasSpawnInfo(IDataNode node) {
+        return node instanceof EntityLootTableNode entityNode && !entityNode.getSpawnTooltip().isBlank(false);
     }
 
     @NotNull
@@ -212,7 +234,10 @@ public class GenericUtils {
      * @param isVisible viewer-specific visibility test
      */
     public static void pruneHiddenItems(Map<Identifier, IDataNode> lootData, Predicate<ItemStack> isVisible) {
-        lootData.values().removeIf((node) -> node instanceof ListNode listNode && listNode.prune(hiddenItemFilter(isVisible)));
+        boolean showEntitiesWithoutLoot = PluginManager.getInstance().commonRegistry.getConfiguration().showEntitiesWithoutLoot;
+
+        lootData.values().removeIf((node) -> node instanceof ListNode listNode && listNode.prune(hiddenItemFilter(isVisible))
+                && !(showEntitiesWithoutLoot && hasSpawnInfo(node)));
     }
 
     /**

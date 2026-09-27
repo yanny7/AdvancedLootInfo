@@ -161,6 +161,7 @@ public final class Lang {
         EXIT("exit", "Exit: %s"),
         EXTRA_BOTTOM_BLOCK_CHANCE("extra_bottom_block_chance", "Extra Bottom Block Chance: %s"),
         EXTRA_EDGE_COLUMN_CHANCE("extra_edge_column_chance", "Extra Edge Column Chance: %s"),
+        EXTRA_GENERATION_STEP("extra_generation_step", "Generation Step: Extra Step %s"),
         FEATURE("feature", "Feature: %s"),
         FILLING("filling", "Filling: %s"),
         FLOOR_RANGE_SEARCH("floor_range_search", "Floor Range Search: %s"),

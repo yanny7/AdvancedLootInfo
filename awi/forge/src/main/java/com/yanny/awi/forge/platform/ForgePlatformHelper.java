@@ -6,6 +6,10 @@ import com.yanny.awi.Utils;
 import com.yanny.awi.api.AwiEntrypoint;
 import com.yanny.awi.api.IPlugin;
 import com.yanny.awi.platform.services.IPlatformHelper;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.forgespi.language.ModFileScanData;
@@ -33,6 +37,16 @@ public class ForgePlatformHelper implements IPlatformHelper {
     @Override
     public Path getConfiguration() {
         return FMLPaths.CONFIGDIR.get();
+    }
+
+    @Override
+    public SpawnEggItem getSpawnEggItem(EntityType<?> entityType) {
+        return ForgeSpawnEggItem.fromEntityType(entityType);
+    }
+
+    @Override
+    public Structure.StructureSettings getStructureSettings(Structure structure) {
+        return structure.getModifiedStructureSettings();
     }
 
     @NotNull

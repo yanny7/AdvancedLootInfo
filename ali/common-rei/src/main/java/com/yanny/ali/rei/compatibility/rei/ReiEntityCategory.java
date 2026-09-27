@@ -8,6 +8,7 @@ import com.yanny.ali.manager.PluginManager;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.Renderer;
+import me.shedaniel.rei.api.client.gui.widgets.Tooltip;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.client.gui.widgets.Widgets;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
@@ -52,7 +53,10 @@ public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, EntityT
             innerWidgets.add(Widgets.createSlot(new Point(innerBounds.getX() + 1, innerBounds.getY() + TEXT_OFFSET + 1)).entry(EntryStacks.of(spawnEgg)).markInput());
         }
 
-        innerWidgets.add(Widgets.wrapRenderer(new Rectangle(innerBounds.getCenterX() - WIDGET_SIZE / 2, TEXT_OFFSET, WIDGET_SIZE, WIDGET_SIZE), (graphics, bounds1, mouseX, mouseY, delta) -> {
+        Rectangle entityBounds = new Rectangle(innerBounds.getCenterX() - WIDGET_SIZE / 2, TEXT_OFFSET, WIDGET_SIZE, WIDGET_SIZE);
+        List<Component> spawnTooltip = GenericUtils.getSpawnTooltip(display.getLootData());
+
+        innerWidgets.add(Widgets.wrapRenderer(entityBounds, (graphics, bounds1, mouseX, mouseY, delta) -> {
             Level level = Minecraft.getInstance().level;
 
             if (level != null) {
@@ -61,9 +65,11 @@ public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, EntityT
                 graphics.pose().pushMatrix();
                 graphics.pose().translate(bounds1.getX(), bounds1.getY());
                 GenericUtils.renderEntity(entity, rect, CATEGORY_WIDTH, graphics, mouseX + WIDGET_SIZE / 2 - innerBounds.width / 2, mouseY);
+                GenericUtils.renderSpawnInfoIcon(display.getLootData(), rect, graphics);
                 graphics.pose().popMatrix();
             }
         }));
+        innerWidgets.add(Widgets.createTooltip((point) -> entityBounds.contains(point) && !spawnTooltip.isEmpty() ? Tooltip.create(spawnTooltip) : null));
         innerWidgets.add(Widgets.createLabel(new Point(innerBounds.getCenterX(), 0), display.getEntityType().getDescription()).centered().noShadow().color(0xFF000000));
         fullBounds.move(bounds.getCenterX() - fullBounds.width / 2, bounds.y + PADDING);
         widgets.add(Widgets.createCategoryBase(fullBounds));

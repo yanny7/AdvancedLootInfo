@@ -15,6 +15,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.levelgen.GenerationStep;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 
@@ -41,7 +42,8 @@ public class WidgetUtils {
 
     @NotNull
     public static IWidget getGenerationStepWidget(RelativeRect rect, IDataNode node, int step) {
-        TextureWidget widget = new TextureWidget(TEXTURE_LOC, new RelativeRect(0, 0, WIDGET_WIDTH, WIDGET_HEIGHT, rect), WIDGET_WIDTH * step, 36);
+        int icon = Math.min(step, GenerationStep.Decoration.values().length);
+        TextureWidget widget = new TextureWidget(TEXTURE_LOC, new RelativeRect(0, 0, WIDGET_WIDTH, WIDGET_HEIGHT, rect), WIDGET_WIDTH * icon, 36);
 
         widget.tooltipText(node.getTooltip());
         return widget;
