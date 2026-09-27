@@ -6,10 +6,10 @@ import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.Utils;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.random.WeightedRandomList;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
@@ -53,22 +53,22 @@ public class SpawnInfoTest {
         structures = new MappedRegistry<>(Registries.STRUCTURE, Lifecycle.stable());
 
         Holder<Biome> a = biome("a", new MobSpawnSettings.Builder()
-                .addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, 95, 4, 4))
-                .addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.SKELETON, 100, 1, 1))
-                .addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.SPIDER, 100, 4, 4))
-                .addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.COW, 8, 4, 4)));
+                .addSpawn(MobCategory.MONSTER, 95, new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, 4, 4))
+                .addSpawn(MobCategory.MONSTER, 100, new MobSpawnSettings.SpawnerData(EntityType.SKELETON, 1, 1))
+                .addSpawn(MobCategory.MONSTER, 100, new MobSpawnSettings.SpawnerData(EntityType.SPIDER, 4, 4))
+                .addSpawn(MobCategory.CREATURE, 8, new MobSpawnSettings.SpawnerData(EntityType.COW, 4, 4)));
         Holder<Biome> b = biome("b", new MobSpawnSettings.Builder()
-                .addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, 95, 4, 4))
-                .addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.SKELETON, 100, 1, 1))
-                .addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.SPIDER, 100, 4, 4)));
+                .addSpawn(MobCategory.MONSTER, 95, new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, 4, 4))
+                .addSpawn(MobCategory.MONSTER, 100, new MobSpawnSettings.SpawnerData(EntityType.SKELETON, 1, 1))
+                .addSpawn(MobCategory.MONSTER, 100, new MobSpawnSettings.SpawnerData(EntityType.SPIDER, 4, 4)));
         Holder<Biome> c = biome("c", new MobSpawnSettings.Builder()
-                .addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, 95, 4, 4))
-                .addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.SKELETON, 100, 1, 1)));
+                .addSpawn(MobCategory.MONSTER, 95, new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, 4, 4))
+                .addSpawn(MobCategory.MONSTER, 100, new MobSpawnSettings.SpawnerData(EntityType.SKELETON, 1, 1)));
         Holder<Biome> d = biome("d", new MobSpawnSettings.Builder()
-                .addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, 19, 4, 4))
-                .addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.SKELETON, 100, 1, 1)));
+                .addSpawn(MobCategory.MONSTER, 19, new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, 4, 4))
+                .addSpawn(MobCategory.MONSTER, 100, new MobSpawnSettings.SpawnerData(EntityType.SKELETON, 1, 1)));
         Holder<Biome> e = biome("e", new MobSpawnSettings.Builder()
-                .addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.STRIDER, 60, 1, 2))
+                .addSpawn(MobCategory.CREATURE, 60, new MobSpawnSettings.SpawnerData(EntityType.STRIDER, 1, 2))
                 .addMobCharge(EntityType.STRIDER, 0.7, 0.15));
 
         levelStem("overworld", a, b, c, d);
@@ -77,7 +77,7 @@ public class SpawnInfoTest {
         Registry.register(structures, key(Registries.STRUCTURE, "fort"), new SwampHutStructure(new Structure.StructureSettings(
                 HolderSet.direct(e),
                 Map.of(MobCategory.MONSTER, new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.PIECE,
-                        WeightedRandomList.create(new MobSpawnSettings.SpawnerData(EntityType.BLAZE, 10, 2, 3)))),
+                        WeightedList.<MobSpawnSettings.SpawnerData>builder().add(new MobSpawnSettings.SpawnerData(EntityType.BLAZE, 2, 3), 10).build())),
                 GenerationStep.Decoration.SURFACE_STRUCTURES,
                 TerrainAdjustment.NONE
         )));
@@ -215,7 +215,7 @@ public class SpawnInfoTest {
     @Test
     public void testBiomeSpawnsMergeBiomeAndStructure() {
         MappedRegistry<Structure> registry = structures(Map.of(
-                "camp", spawnSettings(HolderSet.direct(biomes.getHolderOrThrow(key(Registries.BIOME, "a"))), EntityType.ZOMBIE)
+                "camp", spawnSettings(HolderSet.direct(biomes.getOrThrow(key(Registries.BIOME, "a"))), EntityType.ZOMBIE)
         ));
         SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, registry)), OWN_SETTINGS);
         Map<EntityType<?>, TooltipNode> spawns = info.getBiomeSpawns(Identifier.fromNamespaceAndPath("test", "a"));
@@ -235,9 +235,9 @@ public class SpawnInfoTest {
     @Test
     public void testStructureSettingsFromPlatform() {
         Structure.StructureSettings modified = new Structure.StructureSettings(
-                HolderSet.direct(biomes.getHolderOrThrow(key(Registries.BIOME, "a"))),
+                HolderSet.direct(biomes.getOrThrow(key(Registries.BIOME, "a"))),
                 Map.of(MobCategory.MONSTER, new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE,
-                        WeightedRandomList.create(new MobSpawnSettings.SpawnerData(EntityType.WITCH, 1, 1, 1)))),
+                        WeightedList.<MobSpawnSettings.SpawnerData>builder().add(new MobSpawnSettings.SpawnerData(EntityType.WITCH, 1, 1), 1).build())),
                 GenerationStep.Decoration.SURFACE_STRUCTURES,
                 TerrainAdjustment.NONE
         );
@@ -257,10 +257,10 @@ public class SpawnInfoTest {
     @Test
     public void testFailingStructureSettingsSkipOnlyThatStructure() {
         MappedRegistry<Structure> registry = structures(Map.of(
-                "fort", spawnSettings(HolderSet.direct(biomes.getHolderOrThrow(key(Registries.BIOME, "e"))), EntityType.BLAZE),
-                "hut", spawnSettings(HolderSet.direct(biomes.getHolderOrThrow(key(Registries.BIOME, "a"))), EntityType.WITCH)
+                "fort", spawnSettings(HolderSet.direct(biomes.getOrThrow(key(Registries.BIOME, "e"))), EntityType.BLAZE),
+                "hut", spawnSettings(HolderSet.direct(biomes.getOrThrow(key(Registries.BIOME, "a"))), EntityType.WITCH)
         ));
-        Structure fort = registry.getOrThrow(key(Registries.STRUCTURE, "fort"));
+        Structure fort = registry.getValueOrThrow(key(Registries.STRUCTURE, "fort"));
         SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, registry)), (s) -> {
             if (s == fort) {
                 throw new IllegalStateException("broken structure");
@@ -289,9 +289,9 @@ public class SpawnInfoTest {
 
     @Test
     public void testUnboundBiomeTagSpawnsNowhere() {
-        HolderSet<Biome> unbound = biomes.getOrCreateTag(TagKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath("test", "unbound")));
+        HolderSet<Biome> unbound = HolderSet.emptyNamed(biomes, TagKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath("test", "unbound")));
         MappedRegistry<Structure> registry = structures(Map.of(
-                "fort", spawnSettings(HolderSet.direct(biomes.getHolderOrThrow(key(Registries.BIOME, "e"))), EntityType.BLAZE),
+                "fort", spawnSettings(HolderSet.direct(biomes.getOrThrow(key(Registries.BIOME, "e"))), EntityType.BLAZE),
                 "tagged", spawnSettings(unbound, EntityType.WITCH)
         ));
         SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, registry)), OWN_SETTINGS);
@@ -323,7 +323,7 @@ public class SpawnInfoTest {
         return new Structure.StructureSettings(
                 biomeSet,
                 Map.of(MobCategory.MONSTER, new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.PIECE,
-                        WeightedRandomList.create(new MobSpawnSettings.SpawnerData(type, 1, 1, 1)))),
+                        WeightedList.<MobSpawnSettings.SpawnerData>builder().add(new MobSpawnSettings.SpawnerData(type, 1, 1), 1).build())),
                 GenerationStep.Decoration.SURFACE_STRUCTURES,
                 TerrainAdjustment.NONE
         );
@@ -335,7 +335,7 @@ public class SpawnInfoTest {
                 .hasPrecipitation(false)
                 .temperature(0.5F)
                 .downfall(0.5F)
-                .specialEffects(new BiomeSpecialEffects.Builder().fogColor(0).waterColor(0).waterFogColor(0).skyColor(0).build())
+                .specialEffects(new BiomeSpecialEffects.Builder().waterColor(0).build())
                 .mobSpawnSettings(spawns.build())
                 .generationSettings(BiomeGenerationSettings.EMPTY)
                 .build();

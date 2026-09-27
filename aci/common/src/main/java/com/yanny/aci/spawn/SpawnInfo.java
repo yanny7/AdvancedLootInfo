@@ -6,6 +6,7 @@ import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -208,7 +209,7 @@ public class SpawnInfo {
             return;
         }
 
-        structureBiomes.put(structure, toIds(settings.biomes().stream().toList()));
+        structureBiomes.put(structure, boundIds(settings.biomes()));
 
         for (Entry entry : entries) {
             structureEntries.computeIfAbsent(structure, (k) -> new ArrayList<>()).add(entry);
@@ -253,6 +254,15 @@ public class SpawnInfo {
     @NotNull
     private static List<Entry> sorted(List<Entry> entries) {
         return entries.stream().sorted(ENTRY_ORDER).toList();
+    }
+
+    @NotNull
+    private static Set<Identifier> boundIds(HolderSet<Biome> biomes) {
+        try {
+            return toIds(biomes.stream().toList());
+        } catch (IllegalStateException | UnsupportedOperationException e) {
+            return Collections.emptySet();
+        }
     }
 
     @NotNull
