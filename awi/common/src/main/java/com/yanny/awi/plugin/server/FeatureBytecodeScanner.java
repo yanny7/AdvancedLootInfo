@@ -39,6 +39,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -82,6 +83,7 @@ public final class FeatureBytecodeScanner {
     private static final Map<String, Optional<Class<?>>> CLASS_CACHE = new ConcurrentHashMap<>();
     private static final Map<String, Set<String>> IMPLEMENTOR_CACHE = new ConcurrentHashMap<>();
     private static final Map<MethodNode, Optional<Frame<SourceValue>[]>> FRAME_CACHE = new ConcurrentHashMap<>();
+    private static final Map<MethodNode, Set<AbstractInsnNode>> REACHABLE_CACHE = new ConcurrentHashMap<>();
 
     // Runtime name+descriptor of Feature#place(FeaturePlaceContext), resolved reflectively (mapping-agnostic).
     private static final String PLACE_NAME;
@@ -179,6 +181,7 @@ public final class FeatureBytecodeScanner {
         CLASS_CACHE.clear();
         IMPLEMENTOR_CACHE.clear();
         FRAME_CACHE.clear();
+        REACHABLE_CACHE.clear();
     }
 
     /**
@@ -267,7 +270,7 @@ public final class FeatureBytecodeScanner {
             return;
         }
 
-        currentReachable = reachableInstructions(cl, method);
+        currentReachable = reachable(cl, method);
         currentConfigGuarded = configGuardedInstructions(cl, method, frames);
 
         for (AbstractInsnNode insn : method.instructions.toArray()) {
@@ -833,7 +836,7 @@ public final class FeatureBytecodeScanner {
         Set<AbstractInsnNode> previousReachable = currentReachable;
 
         currentMethodKey = MethodRef.key(ownerName, method.name, method.desc);
-        currentReachable = reachableInstructions(cl, method);
+        currentReachable = reachable(cl, method);
 
         try {
             for (AbstractInsnNode insn : method.instructions.toArray()) {
@@ -1180,6 +1183,25 @@ public final class FeatureBytecodeScanner {
     }
 
 
+    private static Set<AbstractInsnNode> reachable(ClassLoader cl, MethodNode method) {
+        return REACHABLE_CACHE.computeIfAbsent(method, (m) -> reachableInstructions(cl, m));
+    }
+
+    private static boolean isPrimitiveOnly(ClassNode owner, MethodNode method) {
+        Type type = Type.getMethodType(method.desc);
+
+        return "java/lang/Object".equals(owner.superName)
+                && isPrimitive(type.getReturnType())
+                && Arrays.stream(type.getArgumentTypes()).allMatch(FeatureBytecodeScanner::isPrimitive)
+                && owner.fields.stream().allMatch((field) -> isPrimitive(Type.getType(field.desc)));
+    }
+
+    private static boolean isPrimitive(Type type) {
+        Type element = type.getSort() == Type.ARRAY ? type.getElementType() : type;
+
+        return element.getSort() < Type.ARRAY;
+    }
+
     /**
      * Forward control-flow sweep that folds tests on {@code static final boolean} flags, so a branch that can never
      * run places nothing.
@@ -1295,6 +1317,10 @@ public final class FeatureBytecodeScanner {
 
 
     private static Frame<SourceValue>[] frames(ClassNode owner, MethodNode method) {
+        if (isPrimitiveOnly(owner, method)) {
+            return null;
+        }
+
         return FRAME_CACHE.computeIfAbsent(method, (m) -> Optional.ofNullable(analyze(owner, m))).orElse(null);
     }
 
