@@ -15,6 +15,7 @@ import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
@@ -30,11 +31,13 @@ import java.util.List;
 public class EmiEntityLoot extends EmiBaseLoot {
     private final EntityType<?> entityType;
     private final Identifier variant;
+    private final IDataNode lootTable;
 
     public EmiEntityLoot(EmiRecipeCategory category, Identifier id, EntityType<?> entityType, IDataNode lootTable, List<ItemStack> outputs) {
         super(category, id, lootTable, 0, 48, Collections.emptyList(), outputs);
         this.entityType = entityType;
         this.variant = id;
+        this.lootTable = lootTable;
 
         SpawnEggItem spawnEgg = Services.getPlatform().getSpawnEggItem(entityType);
 
@@ -73,7 +76,13 @@ public class EmiEntityLoot extends EmiBaseLoot {
                     if (level != null) {
                         Entity entity = EntityStorage.getEntity(PluginManager.getInstance().commonRegistry, entityType, level, variant);
                         GenericUtils.renderEntity(entity, rect, widgetHolder.getWidth(), guiGraphics, mouseX, mouseY);
+                        GenericUtils.renderSpawnInfoIcon(lootTable, rect, guiGraphics);
                     }
+                }
+
+                @Override
+                public List<ClientTooltipComponent> getTooltip(int mouseX, int mouseY) {
+                    return GenericUtils.getSpawnTooltip(lootTable).stream().map((c) -> ClientTooltipComponent.create(c.getVisualOrderText())).toList();
                 }
             });
             widgets.add(new TextWidget(entityType.getDescription().getVisualOrderText(), (widgetHolder.getWidth() - length) / 2, 0, 0, false));

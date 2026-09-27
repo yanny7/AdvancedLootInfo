@@ -23,14 +23,20 @@ public class GenerationStepNode extends ListNode {
     private final TooltipNode tooltip;
     private final int generationStep;
 
-    GenerationStepNode(GenerationStep.Decoration step, List<PlacedFeatureNode> features) {
+    GenerationStepNode(int step, List<PlacedFeatureNode> features) {
+        GenerationStep.Decoration[] steps = GenerationStep.Decoration.values();
+
         for (PlacedFeatureNode feature : features) {
             addChildren(feature);
         }
 
-        tooltip = array((b) -> b.add(value(translate(EnumTypes.key(step))).build(Lang.Value.GENERATION_STEP))).build();
+        if (step < steps.length) {
+            tooltip = array((b) -> b.add(value(translate(EnumTypes.key(steps[step]))).build(Lang.Value.GENERATION_STEP))).build();
+        } else {
+            tooltip = array((b) -> b.add(value(step - steps.length + 1).build(Lang.Value.EXTRA_GENERATION_STEP))).build();
+        }
 
-        generationStep = step.ordinal();
+        generationStep = step;
     }
 
     public GenerationStepNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {

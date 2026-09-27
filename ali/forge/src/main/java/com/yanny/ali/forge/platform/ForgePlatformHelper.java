@@ -9,6 +9,7 @@ import com.yanny.ali.platform.services.IPlatformHelper;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLPaths;
@@ -49,6 +50,11 @@ public class ForgePlatformHelper implements IPlatformHelper {
     }
 
     @Nullable
+    @Override
+    public Structure.StructureSettings getStructureSettings(Structure structure) {
+        return structure.getModifiedStructureSettings();
+    }
+
     @Override
     public SpawnEggItem getSpawnEggItem(EntityType<?> entityType) {
         return ForgeSpawnEggItem.fromEntityType(entityType);

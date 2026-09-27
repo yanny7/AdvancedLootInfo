@@ -87,7 +87,8 @@ import java.util.concurrent.ExecutionException;
         BaseLayoutSweepTest.class,
         BaseLayoutBandsTest.class,
         SurfaceRuleHandlerTest.class,
-        FeatureBytecodeScanTest.class
+        FeatureBytecodeScanTest.class,
+        SpawnInfoTest.class
 })
 public class TooltipTestSuite {
     public static IServerUtils UTILS;

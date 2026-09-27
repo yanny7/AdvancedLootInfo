@@ -5,6 +5,11 @@ import com.mojang.logging.LogUtils;
 import com.yanny.awi.api.AwiEntrypoint;
 import com.yanny.awi.api.IPlugin;
 import com.yanny.awi.platform.services.IPlatformHelper;
+import net.minecraft.core.Holder;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforgespi.language.ModFileScanData;
@@ -15,6 +20,7 @@ import org.slf4j.Logger;
 import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public class NeoForgePlatformHelper implements IPlatformHelper {
@@ -32,6 +38,16 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
     @Override
     public Path getConfiguration() {
         return FMLPaths.CONFIGDIR.get();
+    }
+
+    @Override
+    public Optional<Holder<Item>> getSpawnEggItem(EntityType<?> entityType) {
+        return SpawnEggItem.byId(entityType);
+    }
+
+    @Override
+    public Structure.StructureSettings getStructureSettings(Structure structure) {
+        return structure.getModifiedStructureSettings();
     }
 
     @NotNull
