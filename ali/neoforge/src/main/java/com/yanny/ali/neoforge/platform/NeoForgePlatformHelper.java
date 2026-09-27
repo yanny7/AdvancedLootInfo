@@ -9,6 +9,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforgespi.language.ModFileScanData;
@@ -44,6 +45,11 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
     @Override
     public Optional<Holder<Item>> getSpawnEggItem(EntityType<?> entityType) {
         return SpawnEggItem.byId(entityType);
+    }
+
+    @Override
+    public Structure.StructureSettings getStructureSettings(Structure structure) {
+        return structure.getModifiedStructureSettings();
     }
 
     @NotNull

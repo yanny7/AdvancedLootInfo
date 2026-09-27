@@ -224,5 +224,10 @@
     "value": "aqua",
     "error": "red",
     "branch": "dark_gray"
-  }
+  },
+  "logMoreStatistics": false,
+  "showInGameNames": true,
+  "hideDefaultBlockLoot": true,
+  "showUnboundedGlobalLootModifiers": false,
+  "showEntitiesWithoutLoot": false
 }

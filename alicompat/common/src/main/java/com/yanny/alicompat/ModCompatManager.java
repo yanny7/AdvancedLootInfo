@@ -5,6 +5,7 @@ import com.yanny.ali.api.IClientRegistry;
 import com.yanny.ali.api.ICommonRegistry;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
+import com.yanny.alicompat.accessor.SmeltingUtils;
 import com.yanny.alicompat.platform.Services;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -56,6 +57,7 @@ public final class ModCompatManager {
     }
 
     public static void registerServer(IServerRegistry registry) {
+        registry.registerCacheCleaner(SmeltingUtils::clearCache);
         forEach("server", (compat) -> compat.registerServer(registry));
     }
 
