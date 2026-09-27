@@ -368,6 +368,7 @@
   "awi.property.value.exit": "Exit: %s",
   "awi.property.value.extra_bottom_block_chance": "Extra Bottom Block Chance: %s",
   "awi.property.value.extra_edge_column_chance": "Extra Edge Column Chance: %s",
+  "awi.property.value.extra_generation_step": "Generation Step: Extra Step %s",
   "awi.property.value.filling": "Filling: %s",
   "awi.property.value.floor_range_search": "Floor Range Search: %s",
   "awi.property.value.floor_to_ceiling_search_range": "Floor-Ceiling Search Range: %s",

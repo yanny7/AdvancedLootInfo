@@ -10,6 +10,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.random.WeightedList;
+import net.minecraft.util.valueproviders.ConstantInt;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.MobCategory;
@@ -54,23 +56,23 @@ public class SpawnInfoTest {
         structures = new MappedRegistry<>(Registries.STRUCTURE, Lifecycle.stable());
 
         Holder<Biome> a = biome("a", new MobSpawnSettings.Builder()
-                .addSpawn(MobCategory.MONSTER, 95, new MobSpawnSettings.SpawnerData(EntityTypes.ZOMBIE, 4, 4))
-                .addSpawn(MobCategory.MONSTER, 100, new MobSpawnSettings.SpawnerData(EntityTypes.SKELETON, 1, 1))
-                .addSpawn(MobCategory.MONSTER, 100, new MobSpawnSettings.SpawnerData(EntityTypes.SPIDER, 4, 4))
-                .addSpawn(MobCategory.CREATURE, 8, new MobSpawnSettings.SpawnerData(EntityTypes.COW, 4, 4)));
+                .addSpawn(EntityTypes.ZOMBIE, MobCategory.MONSTER, 95, ConstantInt.of(4))
+                .addSpawn(EntityTypes.SKELETON, MobCategory.MONSTER, 100, ConstantInt.of(1))
+                .addSpawn(EntityTypes.SPIDER, MobCategory.MONSTER, 100, ConstantInt.of(4))
+                .addSpawn(EntityTypes.COW, MobCategory.CREATURE, 8, ConstantInt.of(4)));
         Holder<Biome> b = biome("b", new MobSpawnSettings.Builder()
-                .addSpawn(MobCategory.MONSTER, 95, new MobSpawnSettings.SpawnerData(EntityTypes.ZOMBIE, 4, 4))
-                .addSpawn(MobCategory.MONSTER, 100, new MobSpawnSettings.SpawnerData(EntityTypes.SKELETON, 1, 1))
-                .addSpawn(MobCategory.MONSTER, 100, new MobSpawnSettings.SpawnerData(EntityTypes.SPIDER, 4, 4)));
+                .addSpawn(EntityTypes.ZOMBIE, MobCategory.MONSTER, 95, ConstantInt.of(4))
+                .addSpawn(EntityTypes.SKELETON, MobCategory.MONSTER, 100, ConstantInt.of(1))
+                .addSpawn(EntityTypes.SPIDER, MobCategory.MONSTER, 100, ConstantInt.of(4)));
         Holder<Biome> c = biome("c", new MobSpawnSettings.Builder()
-                .addSpawn(MobCategory.MONSTER, 95, new MobSpawnSettings.SpawnerData(EntityTypes.ZOMBIE, 4, 4))
-                .addSpawn(MobCategory.MONSTER, 100, new MobSpawnSettings.SpawnerData(EntityTypes.SKELETON, 1, 1)));
+                .addSpawn(EntityTypes.ZOMBIE, MobCategory.MONSTER, 95, ConstantInt.of(4))
+                .addSpawn(EntityTypes.SKELETON, MobCategory.MONSTER, 100, ConstantInt.of(1)));
         Holder<Biome> d = biome("d", new MobSpawnSettings.Builder()
-                .addSpawn(MobCategory.MONSTER, 19, new MobSpawnSettings.SpawnerData(EntityTypes.ZOMBIE, 4, 4))
-                .addSpawn(MobCategory.MONSTER, 100, new MobSpawnSettings.SpawnerData(EntityTypes.SKELETON, 1, 1)));
+                .addSpawn(EntityTypes.ZOMBIE, MobCategory.MONSTER, 19, ConstantInt.of(4))
+                .addSpawn(EntityTypes.SKELETON, MobCategory.MONSTER, 100, ConstantInt.of(1)));
         Holder<Biome> e = biome("e", new MobSpawnSettings.Builder()
-                .addSpawn(MobCategory.CREATURE, 60, new MobSpawnSettings.SpawnerData(EntityTypes.STRIDER, 1, 2))
-                .addMobCharge(EntityTypes.STRIDER, 0.7, 0.15));
+                .addSpawn(EntityTypes.STRIDER, MobCategory.CREATURE, 60, UniformInt.of(1, 2))
+                .addMobSpawnCost(EntityTypes.STRIDER, 0.7, 0.15));
 
         levelStem("overworld", a, b, c, d);
         levelStem("nether", e);
@@ -78,7 +80,7 @@ public class SpawnInfoTest {
         Registry.register(structures, key(Registries.STRUCTURE, "fort"), new SwampHutStructure(new Structure.StructureSettings(
                 HolderSet.direct(e),
                 Map.of(MobCategory.MONSTER, new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.PIECE,
-                        WeightedList.<MobSpawnSettings.SpawnerData>builder().add(new MobSpawnSettings.SpawnerData(EntityTypes.BLAZE, 2, 3), 10).build())),
+                        WeightedList.<MobSpawnSettings.SpawnerData>builder().add(new MobSpawnSettings.SpawnerData(EntityTypes.BLAZE, UniformInt.of(2, 3)), 10).build())),
                 GenerationStep.Decoration.SURFACE_STRUCTURES,
                 TerrainAdjustment.NONE
         )));
@@ -238,7 +240,7 @@ public class SpawnInfoTest {
         Structure.StructureSettings modified = new Structure.StructureSettings(
                 HolderSet.direct(biomes.getOrThrow(key(Registries.BIOME, "a"))),
                 Map.of(MobCategory.MONSTER, new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE,
-                        WeightedList.<MobSpawnSettings.SpawnerData>builder().add(new MobSpawnSettings.SpawnerData(EntityTypes.WITCH, 1, 1), 1).build())),
+                        WeightedList.<MobSpawnSettings.SpawnerData>builder().add(new MobSpawnSettings.SpawnerData(EntityTypes.WITCH, ConstantInt.of(1)), 1).build())),
                 GenerationStep.Decoration.SURFACE_STRUCTURES,
                 TerrainAdjustment.NONE
         );
@@ -324,7 +326,7 @@ public class SpawnInfoTest {
         return new Structure.StructureSettings(
                 biomeSet,
                 Map.of(MobCategory.MONSTER, new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.PIECE,
-                        WeightedList.<MobSpawnSettings.SpawnerData>builder().add(new MobSpawnSettings.SpawnerData(type, 1, 1), 1).build())),
+                        WeightedList.<MobSpawnSettings.SpawnerData>builder().add(new MobSpawnSettings.SpawnerData(type, ConstantInt.of(1)), 1).build())),
                 GenerationStep.Decoration.SURFACE_STRUCTURES,
                 TerrainAdjustment.NONE
         );
@@ -349,7 +351,7 @@ public class SpawnInfoTest {
         Holder<DimensionType> type = LOOKUP.lookupOrThrow(Registries.DIMENSION_TYPE).getOrThrow(BuiltinDimensionTypes.OVERWORLD);
         BiomeSource biomeSource = new CheckerboardColumnBiomeSource(HolderSet.direct(possibleBiomes), 2);
 
-        Registry.register(levelStems, key(Registries.LEVEL_STEM, name), new LevelStem(type, new NoiseBasedChunkGenerator(biomeSource, Holder.direct(NoiseGeneratorSettings.dummy()))));
+        Registry.register(levelStems, key(Registries.LEVEL_STEM, name), new LevelStem(type, new NoiseBasedChunkGenerator(biomeSource, LOOKUP.lookupOrThrow(Registries.NOISE_SETTINGS).getOrThrow(NoiseGeneratorSettings.OVERWORLD))));
     }
 
     @NotNull

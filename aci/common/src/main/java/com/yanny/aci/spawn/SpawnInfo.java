@@ -14,6 +14,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.random.Weighted;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.Biome;
@@ -56,7 +57,7 @@ public class SpawnInfo {
 
         for (Map.Entry<ResourceKey<Biome>, Biome> entry : entries(registryAccess, Registries.BIOME)) {
             try {
-                addBiome(entry.getKey().identifier(), entry.getValue().getMobSettings());
+                addBiome(entry.getKey().identifier(), entry.getValue().getAttributes().applyModifier(EnvironmentAttributes.NATURAL_MOB_SPAWNS, EnvironmentAttributes.NATURAL_MOB_SPAWNS.defaultValue()));
             } catch (Throwable e) {
                 logger.warn("Failed to collect mob spawns of biome {}", entry.getKey().identifier(), e);
             }
@@ -181,10 +182,10 @@ public class SpawnInfo {
         List<Entry> entries = new ArrayList<>();
 
         for (MobCategory category : MobCategory.values()) {
-            for (Weighted<MobSpawnSettings.SpawnerData> weighted : settings.getMobs(category).unwrap()) {
+            for (Weighted<MobSpawnSettings.SpawnerData> weighted : settings.getMobsToSpawn(category).unwrap()) {
                 MobSpawnSettings.SpawnerData data = weighted.value();
 
-                entries.add(new Entry(data.type(), new Spawn(category, weighted.weight(), data.minCount(), data.maxCount(), settings.getMobSpawnCost(data.type()))));
+                entries.add(new Entry(data.type(), new Spawn(category, weighted.weight(), data.count().minInclusive(), data.count().maxInclusive(), settings.getMobSpawnCost(data.type()))));
             }
         }
 
@@ -201,7 +202,7 @@ public class SpawnInfo {
             for (Weighted<MobSpawnSettings.SpawnerData> weighted : override.spawns().unwrap()) {
                 MobSpawnSettings.SpawnerData data = weighted.value();
 
-                entries.add(new Entry(data.type(), new Spawn(category, weighted.weight(), data.minCount(), data.maxCount(), null)));
+                entries.add(new Entry(data.type(), new Spawn(category, weighted.weight(), data.count().minInclusive(), data.count().maxInclusive(), null)));
             }
         });
 
