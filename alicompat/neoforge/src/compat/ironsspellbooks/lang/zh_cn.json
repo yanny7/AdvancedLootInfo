@@ -1,0 +1,15 @@
+{
+  "alicompat.irons_spellbooks.property.branch.alternative": "附加：",
+  "alicompat.irons_spellbooks.property.branch.applicable_spells": "可用法术：",
+  "alicompat.irons_spellbooks.property.branch.spell_filter": "法术筛选器：",
+  "alicompat.irons_spellbooks.property.branch.spells": "法术：",
+  "alicompat.irons_spellbooks.property.value.force": "强制：%s",
+  "alicompat.irons_spellbooks.property.value.school": "学派：%s",
+  "alicompat.irons_spellbooks.property.value.spell": "法术：%s",
+  "alicompat.irons_spellbooks.property.value.spell_level": "法术等级：%s",
+  "alicompat.irons_spellbooks.type.function.random_potion": "随机药水",
+  "alicompat.irons_spellbooks.type.function.random_spell_scroll": "随机法术卷轴：",
+  "alicompat.irons_spellbooks.type.function.randomize_ring_enhancement": "随机戒指魔咒：",
+  "alicompat.irons_spellbooks.type.function.randomize_spell": "随机法术：",
+  "alicompat.irons_spellbooks.type.function.set_furled_map": "设置卷起的地图："
+}

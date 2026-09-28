@@ -1,0 +1,13 @@
+{
+  "alicompat.the_bumblezone.property.value.is_failed": "搜索失败：%s",
+  "alicompat.the_bumblezone.property.value.is_loading": "正在搜索：%s",
+  "alicompat.the_bumblezone.property.value.located_special_structure": "定位的特殊结构：%s",
+  "alicompat.the_bumblezone.property.value.locked": "已锁定：%s",
+  "alicompat.the_bumblezone.property.value.search_id": "搜索ID：%s",
+  "alicompat.the_bumblezone.type.condition.essence_only_spawn": "玩家吸收过蜜蜂精华",
+  "alicompat.the_bumblezone.type.entity_sub_predicate.honey_slime": "蜜糖史莱姆：",
+  "alicompat.the_bumblezone.type.function.drop_container_items": "掉落容器战利品：",
+  "alicompat.the_bumblezone.type.function.honey_compass_locate_structure": "蜜糖指南针定位结构：",
+  "alicompat.the_bumblezone.type.function.tag_item_removals": "标签物品移除：",
+  "alicompat.the_bumblezone.type.function.uniquify_if_has_items": "若包含物品则设为不可堆叠："
+}

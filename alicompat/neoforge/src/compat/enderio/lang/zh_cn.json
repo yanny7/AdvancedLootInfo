@@ -1,0 +1,9 @@
+{
+  "alicompat.enderio.property.value.copy_primary": "复制主色：%s",
+  "alicompat.enderio.type.function.copy_paint": "复制喷涂：",
+  "alicompat.enderio.type.function.set_loot_capacitor": "设置战利品电容：",
+  "alicompat.enderio.type.ingredient.any_soul_storage": "灵魂容器（空或满）：",
+  "alicompat.enderio.type.ingredient.conduit": "导管：",
+  "alicompat.enderio.type.ingredient.empty_soul_storage": "空的灵魂容器：",
+  "alicompat.enderio.type.ingredient.filled_soul_storage": "已装填的灵魂容器："
+}
