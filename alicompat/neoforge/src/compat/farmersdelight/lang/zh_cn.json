@@ -1,4 +1,5 @@
 {
-  "alicompat.farmersdelight.type.function.copy_skillet": "复制煎锅",
-  "alicompat.farmersdelight.type.function.smoker_cook": "烟熏炉烹饪"
+  "alicompat.farmersdelight.type.function.copy_skillet": "复制煎锅：",
+  "alicompat.farmersdelight.type.function.smoker_cook": "烟熏炉烹饪：",
+  "alicompat.farmersdelight.type.ingredient.item_ability": "任意具备特定能力的物品："
 }

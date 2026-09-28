@@ -537,7 +537,7 @@
   "ali.type.condition.match_tool": "匹配工具：",
   "ali.type.condition.random_chance": "随机概率：",
   "ali.type.condition.random_chance_with_enchanted_bonus": "受魔咒加成的随机概率：",
-  "ali.type.condition.reference": "引用：%s",
+  "ali.type.condition.reference": "引用：",
   "ali.type.condition.survives_explosion": "爆炸后存留",
   "ali.type.condition.table_bonus": "魔咒概率表：",
   "ali.type.condition.time_check": "时间检查：",

@@ -1,0 +1,5 @@
+{
+  "alicompat.mekanism.type.function.copy_personal_storage_contents": "复制私人存储内容",
+  "alicompat.mekanism.type.item_sub_predicate.full_canteen": "满的餐壶",
+  "alicompat.mekanism.type.item_sub_predicate.maxed_module_container": "满装模块的模块容器：%s"
+}
