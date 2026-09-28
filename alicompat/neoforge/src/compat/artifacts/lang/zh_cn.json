@@ -1,0 +1,10 @@
+{
+  "alicompat.artifacts.property.value.config": "配置：%s",
+  "alicompat.artifacts.property.value.default_probability": "默认概率：%s",
+  "alicompat.artifacts.type.condition.artifact_rarity_adjusted_chance": "按饰品稀有度调整的概率：",
+  "alicompat.artifacts.type.condition.config_value": "配置值：",
+  "alicompat.artifacts.type.condition.config_value_chance": "配置值概率：",
+  "alicompat.artifacts.type.consume_effect.damage_item": "造成伤害：",
+  "alicompat.artifacts.type.consume_effect.heal": "治疗：",
+  "alicompat.artifacts.type.function.replace_with_loot_table": "替换为战利品表："
+}

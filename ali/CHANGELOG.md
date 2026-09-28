@@ -1,4 +1,4 @@
-## []
+## [2.3.0]
 
 - Added support for custom ingredients that are not Ingredient subclasses
 - Improved count and chance detection
@@ -11,6 +11,7 @@
 - Lower client memory use with JEI and EMI
 - Faster loot scan with global loot modifiers
 - Fixed random maximum count shown for binomial count
+- Updated Chinese translation (ZetaY)
 
 ## [2.2.0]
 

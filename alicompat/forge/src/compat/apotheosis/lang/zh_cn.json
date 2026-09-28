@@ -1,0 +1,14 @@
+{
+  "alicompat.apotheosis.property.branch.rarity": "稀有度：",
+  "alicompat.apotheosis.property.branch.stages": "阶段：",
+  "alicompat.apotheosis.property.value.max_rarity": "最大稀有度：%s",
+  "alicompat.apotheosis.property.value.min_rarity": "最小稀有度：%s",
+  "alicompat.apotheosis.property.value.rarity": "稀有度：%s",
+  "alicompat.apotheosis.type.condition.requires_player": "需要玩家",
+  "alicompat.apotheosis.type.entry.random_affix_item": "随机词缀物品：",
+  "alicompat.apotheosis.type.entry.random_gem": "随机宝石：",
+  "alicompat.apotheosis.type.global_loot_modifier.affix_conversion": "词缀转化：",
+  "alicompat.apotheosis.type.global_loot_modifier.random_affix_item": "随机词缀物品：",
+  "alicompat.apotheosis.type.ingredient.affix_item": "任意词缀物品：",
+  "alicompat.apotheosis.type.ingredient.gem": "任意宝石："
+}
