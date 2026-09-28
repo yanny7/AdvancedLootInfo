@@ -1,4 +1,6 @@
 {
-  "alicompat.farmersdelight.type.function.copy_meal": "复制菜肴",
-  "alicompat.farmersdelight.type.function.copy_skillet": "复制煎锅"
+  "alicompat.farmersdelight.type.function.copy_meal": "复制菜肴：",
+  "alicompat.farmersdelight.type.function.copy_skillet": "复制煎锅：",
+  "alicompat.farmersdelight.type.function.smoker_cook": "烟熏炉烹饪：",
+  "alicompat.farmersdelight.type.ingredient.tool_action": "工具行为："
 }

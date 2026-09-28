@@ -1,4 +1,4 @@
-## []
+## [1.1.0]
 
 - Added GregTech CEu Modern support
 - Added Kaleidoscope Cookery support
@@ -6,6 +6,7 @@
 - Added Hybrid Aquatic support on Forge
 - Added Grimoire of Gaia support
 - Faster loot scan with auto-smelting loot modifiers in large modpacks
+- Updated Chinese translation (ZetaY)
 
 ## [1.0.0]
 

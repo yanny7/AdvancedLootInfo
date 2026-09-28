@@ -1,0 +1,9 @@
+{
+  "alicompat.kaleidoscope_cookery.property.branch.inputs": "输入：",
+  "alicompat.kaleidoscope_cookery.property.branch.output": "输出：",
+  "alicompat.kaleidoscope_cookery.property.value.flex_recipe": "模糊配方：%s",
+  "alicompat.kaleidoscope_cookery.property.value.recipe_type": "配方类型：%s",
+  "alicompat.kaleidoscope_cookery.type.condition.advance_block_match_tool": "破坏者装备：",
+  "alicompat.kaleidoscope_cookery.type.condition.advance_entity_match_tool": "击杀者装备：",
+  "alicompat.kaleidoscope_cookery.type.function.recipe_randomly": "随机配方："
+}

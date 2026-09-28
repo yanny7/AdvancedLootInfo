@@ -1,8 +1,9 @@
-## []
+## [1.3.0]
 
 - Unbound Holder is rendered as its registry key instead of throwing
 - Added collecting natural mob spawns per dimension, biome and structure
 - Faster building of tooltip trees
+- Updated Chinese translation (ZetaY)
 
 ## [1.2.0]
 

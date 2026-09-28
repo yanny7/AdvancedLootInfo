@@ -1,0 +1,8 @@
+{
+  "alicompat.twilightforest.property.value.default_item": "默认物品：%s",
+  "alicompat.twilightforest.type.condition.giant_pick_used": "使用巨人镐：",
+  "alicompat.twilightforest.type.condition.is_minion": "是否为仆从：",
+  "alicompat.twilightforest.type.condition.mod_exists": "存在模组：",
+  "alicompat.twilightforest.type.condition.uncrafting_table_enabled": "启用拆解台",
+  "alicompat.twilightforest.type.function.mod_item_swap": "模组物品替换："
+}
