@@ -6,7 +6,7 @@
   "alicompat.artifacts.type.condition.config_value_chance": "配置值概率：",
   "alicompat.artifacts.type.consume_effect.heal": "治疗：",
   "alicompat.artifacts.type.function.replace_with_loot_table": "替换为战利品表：",
-  "alicompat.morered.type.entry.gears": "Gears:",
+  "alicompat.morered.type.entry.gears": "齿轮：",
   "alicompat.morered.type.function.set_wire_count": "设置线缆数量",
   "alicompat.repurposed_structures.property.branch.blacklisted_loot_tables": "黑名单战利品表：",
   "alicompat.repurposed_structures.property.value.modded_items_only": "仅其他模组添加的物品",
