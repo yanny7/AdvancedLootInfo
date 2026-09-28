@@ -32,6 +32,8 @@ public class SpawnInfo {
     private static final DecimalFormat COST_FORMAT = new DecimalFormat("0.###", DecimalFormatSymbols.getInstance(Locale.ROOT));
     private static final Comparator<Entry> ENTRY_ORDER = Comparator.<Entry, MobCategory>comparing((e) -> e.spawn().category())
             .thenComparing((e) -> BuiltInRegistries.ENTITY_TYPE.getKey(e.type()));
+    private static final Comparator<Map.Entry<Spawn, SortedSet<ResourceLocation>>> GROUP_ORDER =
+            Comparator.<Map.Entry<Spawn, SortedSet<ResourceLocation>>>comparingInt((e) -> -e.getValue().size()).thenComparing((e) -> e.getValue().first());
 
     private final Logger logger;
     private final Map<ResourceLocation, Set<ResourceLocation>> dimensionBiomes = new TreeMap<>();
@@ -113,21 +115,22 @@ public class SpawnInfo {
                 }
             }
 
-            for (Map.Entry<Spawn, SortedSet<ResourceLocation>> group : groups.entrySet().stream()
-                    .sorted(Comparator.<Map.Entry<Spawn, SortedSet<ResourceLocation>>>comparingInt((e) -> -e.getValue().size())
-                            .thenComparing((e) -> e.getValue().first()))
-                    .toList()) {
+            for (Map.Entry<Spawn, SortedSet<ResourceLocation>> group : groups.entrySet().stream().sorted(GROUP_ORDER).toList()) {
                 addBiomeGroup(dimensionBuilder, group.getKey(), group.getValue(), biomesInDimension);
                 spawnsHere = true;
             }
 
-            for (Map.Entry<ResourceLocation, List<Spawn>> structure : structures.entrySet()) {
-                if (!Collections.disjoint(structureBiomes.get(structure.getKey()), biomesInDimension)) {
-                    for (Spawn spawn : structure.getValue()) {
-                        dimensionBuilder.add(addSpawn(TooltipBuilder.value(structure.getKey()).key(CoreLang.Spawn.STRUCTURE), spawn));
-                        spawnsHere = true;
-                    }
+            Map<ResourceLocation, List<Spawn>> structuresInDimension = new HashMap<>();
+
+            structures.forEach((structure, spawns) -> {
+                if (!Collections.disjoint(structureBiomes.get(structure), biomesInDimension)) {
+                    structuresInDimension.put(structure, spawns);
                 }
+            });
+
+            if (!structuresInDimension.isEmpty()) {
+                addStructureGroups(dimensionBuilder, structuresInDimension);
+                spawnsHere = true;
             }
 
             if (spawnsHere) {
@@ -164,11 +167,7 @@ public class SpawnInfo {
                     b.add(TooltipBuilder.asElement(addSpawn(TooltipBuilder.branch((x) -> {}), spawn), spawns.size()));
                 }
 
-                structureSpawns.getOrDefault(type, Collections.emptyMap()).forEach((structure, list) -> {
-                    for (Spawn spawn : list) {
-                        b.add(addSpawn(TooltipBuilder.value(structure).key(CoreLang.Spawn.STRUCTURE), spawn));
-                    }
-                });
+                addStructureGroups(b, structureSpawns.getOrDefault(type, Collections.emptyMap()));
             }).build());
         }
 
@@ -224,6 +223,26 @@ public class SpawnInfo {
             TooltipBuilder line = TooltipBuilder.value(listed.get(i)).key(excluded ? CoreLang.Spawn.BIOME_EXCLUDED : CoreLang.Spawn.BIOME_INCLUDED);
 
             dimension.add(i == listed.size() - 1 ? addSpawn(line, spawn) : line);
+        }
+    }
+
+    private static void addStructureGroups(TooltipBuilder builder, Map<ResourceLocation, List<Spawn>> structures) {
+        Map<Spawn, SortedSet<ResourceLocation>> groups = new HashMap<>();
+
+        structures.forEach((structure, spawns) -> {
+            for (Spawn spawn : spawns) {
+                groups.computeIfAbsent(spawn, (k) -> new TreeSet<>()).add(structure);
+            }
+        });
+
+        for (Map.Entry<Spawn, SortedSet<ResourceLocation>> group : groups.entrySet().stream().sorted(GROUP_ORDER).toList()) {
+            List<ResourceLocation> listed = List.copyOf(group.getValue());
+
+            for (int i = 0; i < listed.size(); i++) {
+                TooltipBuilder line = TooltipBuilder.value(listed.get(i)).key(CoreLang.Spawn.STRUCTURE);
+
+                builder.add(i == listed.size() - 1 ? addSpawn(line, group.getKey()) : line);
+            }
         }
     }
 

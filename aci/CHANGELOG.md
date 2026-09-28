@@ -1,3 +1,7 @@
+## []
+
+- Grouping structure spawn info
+
 ## [1.3.0]
 
 - Unbound Holder is rendered as its registry key instead of throwing

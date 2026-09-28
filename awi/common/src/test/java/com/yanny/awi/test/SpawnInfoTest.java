@@ -233,6 +233,48 @@ public class SpawnInfoTest {
     }
 
     @Test
+    public void testStructuresWithSameSpawnAreGrouped() {
+        HolderSet<Biome> biomeSet = HolderSet.direct(biomes.getHolderOrThrow(key(Registries.BIOME, "a")));
+        MappedRegistry<Structure> registry = structures(Map.of(
+                "camp", spawnSettings(biomeSet, EntityType.WITCH),
+                "hut", spawnSettings(biomeSet, EntityType.WITCH),
+                "tower", new Structure.StructureSettings(
+                        biomeSet,
+                        Map.of(MobCategory.MONSTER, new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.PIECE,
+                                WeightedRandomList.create(new MobSpawnSettings.SpawnerData(EntityType.WITCH, 5, 1, 1)))),
+                        GenerationStep.Decoration.SURFACE_STRUCTURES,
+                        TerrainAdjustment.NONE
+                )
+        ));
+        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, registry)), OWN_SETTINGS);
+
+        assertTooltip(info.getEntityTooltip(EntityType.WITCH), List.of(
+                "Spawns:",
+                "  -> Dimension: test:overworld",
+                "    -> Structure: test:camp",
+                "    -> Structure: test:hut",
+                "      -> Category: monster",
+                "      -> Weight: 1",
+                "      -> Group size: 1",
+                "    -> Structure: test:tower",
+                "      -> Category: monster",
+                "      -> Weight: 5",
+                "      -> Group size: 1"
+        ));
+        assertTooltip(info.getBiomeSpawns(new ResourceLocation("test", "a")).get(EntityType.WITCH), List.of(
+                "Structure: test:camp",
+                "Structure: test:hut",
+                "  -> Category: monster",
+                "  -> Weight: 1",
+                "  -> Group size: 1",
+                "Structure: test:tower",
+                "  -> Category: monster",
+                "  -> Weight: 5",
+                "  -> Group size: 1"
+        ));
+    }
+
+    @Test
     public void testStructureSettingsFromPlatform() {
         Structure.StructureSettings modified = new Structure.StructureSettings(
                 HolderSet.direct(biomes.getHolderOrThrow(key(Registries.BIOME, "a"))),
