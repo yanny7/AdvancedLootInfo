@@ -279,7 +279,7 @@
   "awi.property.value.amount_per_charge": "每条信号的初始能量：%s",
   "awi.property.value.at_y": "Y坐标：%s",
   "awi.property.value.attempts_per_chunk": "每区块尝试次数：%s",
-  "awi.property.value.attempts_per_chunk_dist": "每区块尝试次数：%s (%s)",
+  "awi.property.value.attempts_per_chunk_dist": "每区块尝试次数：%s（%s）",
   "awi.property.value.base_crack_size": "基础裂缝大小：%s",
   "awi.property.value.base_height": "基础高度：%s",
   "awi.property.value.below_noise": "低于阈值时的返回值：%s",
