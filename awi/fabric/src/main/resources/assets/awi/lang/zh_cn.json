@@ -318,6 +318,7 @@
   "awi.property.value.exit": "传送坐标：%s",
   "awi.property.value.extra_bottom_block_chance": "底部额外生成方块的概率：%s",
   "awi.property.value.extra_edge_column_chance": "边缘额外生成柱子的概率：%s",
+  "awi.property.value.extra_generation_step": "生成阶段：额外步骤 %s",
   "awi.property.value.feature": "地物：%s",
   "awi.property.value.filling": "内部厚度：%s",
   "awi.property.value.floor_range_search": "地面搜索范围：%s",
