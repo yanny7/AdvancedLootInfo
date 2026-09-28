@@ -1,8 +1,0 @@
-{
-  "alicompat.occultism.property.value.with_third_eye": "需要第三只眼、异界眼镜或真视法杖",
-  "alicompat.occultism.property.value.without_third_eye": "无需第三只眼、异界眼镜或真视法杖",
-  "alicompat.occultism.type.consume_effect.damage_item": "造成伤害：",
-  "alicompat.repurposed_structures.property.branch.blacklisted_loot_tables": "黑名单战利品表：",
-  "alicompat.repurposed_structures.property.value.modded_items_only": "仅其他模组添加的物品",
-  "alicompat.repurposed_structures.type.condition.detect_rs_loot_tables": "检测到结构变体（Repurposed Structures）战利品表："
-}

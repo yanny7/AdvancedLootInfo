@@ -1,0 +1,15 @@
+{
+  "alicompat.mantle.property.branch.container": "容器：",
+  "alicompat.mantle.type.condition.block_tag": "方块标签：",
+  "alicompat.mantle.type.condition.has_loot_context_set": "已设置战利品上下文：",
+  "alicompat.mantle.type.condition.tag_empty": "标签为空：",
+  "alicompat.mantle.type.condition.tag_filled": "标签非空：",
+  "alicompat.mantle.type.entry.tag_preference": "标签偏好：",
+  "alicompat.mantle.type.function.retextured": "重设纹理：",
+  "alicompat.mantle.type.function.set_fluid": "设置流体：",
+  "alicompat.mantle.type.ingredient.fluid_container": "流体容器：",
+  "alicompat.mantle.type.ingredient.item_name": "物品名称：",
+  "alicompat.mantle.type.ingredient.nbt_name": "带NBT的物品：",
+  "alicompat.mantle.type.ingredient.potion": "药水原料：",
+  "alicompat.mantle.type.ingredient.potion_display": "任意药水："
+}
