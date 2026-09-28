@@ -16,5 +16,5 @@
   "alicompat.farmersdelight.type.consume_effect.remove_random_effects": "Remove Random Effects:",
   "alicompat.farmersdelight.type.function.copy_skillet": "Copy Skillet:",
   "alicompat.farmersdelight.type.function.smoker_cook": "Smoker Cook:",
-  "alicompat.property.value.modded_items_only": "Only items added by other mods"
+  "alicompat.repurposed_structures.property.value.modded_items_only": "Only items added by other mods"
 }
