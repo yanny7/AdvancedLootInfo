@@ -1,0 +1,12 @@
+{
+  "alicompat.immersiveengineering.property.branch.alternative": "备选：",
+  "alicompat.immersiveengineering.property.value.alternative": "备选：%s",
+  "alicompat.immersiveengineering.type.entry.drop_inventory": "掉落库存：",
+  "alicompat.immersiveengineering.type.entry.multiblock_drops": "多方块掉落：",
+  "alicompat.immersiveengineering.type.entry.tile_drop": "方块实体掉落：",
+  "alicompat.immersiveengineering.type.function.conveyor_cover": "传送带盖板：",
+  "alicompat.immersiveengineering.type.function.property_count": "属性计数：",
+  "alicompat.immersiveengineering.type.function.revolverperk": "左轮手枪属性：",
+  "alicompat.immersiveengineering.type.function.secret_bluprintz": "秘密蓝图：",
+  "alicompat.immersiveengineering.type.function.windmill": "风车帆："
+}

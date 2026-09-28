@@ -1,0 +1,9 @@
+{
+  "alicompat.twilightforest.property.value.extra_count_per_player": "每玩家额外数量：%s",
+  "alicompat.twilightforest.type.condition.giant_pick_used": "使用巨人镐：%s",
+  "alicompat.twilightforest.type.condition.is_minion": "是否为仆从：%s",
+  "alicompat.twilightforest.type.condition.mod_exists": "存在模组：%s",
+  "alicompat.twilightforest.type.condition.uncrafting_table_enabled": "启用拆解台",
+  "alicompat.twilightforest.type.function.multiplayer_addition": "多人加成：",
+  "alicompat.twilightforest.type.item_sub_predicate.item_color": "物品颜色：%s"
+}

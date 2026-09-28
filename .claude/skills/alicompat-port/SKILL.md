@@ -100,7 +100,19 @@ properties, do not assume which exist:
 ```
 
 A failure in `alicompat/common` is a merge problem and belongs here. A failure in a shim means its
-slug should not have been in `compat_mods` on this branch yet — take it out and leave it for phase 2.
+slug should not have been in `compat_mods` on this branch yet — take it out and leave it for phase 2. Check
+first whether the merge touched the failing file (`git diff --cached HEAD --stat -- <path>`): if it did not, the
+failure predates the merge — report it rather than disabling the slug.
+
+Code merged up from below is written against the lower Minecraft version's API, so the usual failures are
+vanilla renames and changed signatures (a moved package, a renamed class, a return type that became
+`Optional<Holder<…>>`). Fix them the way the code already on this branch does — find a sibling that calls the same
+API here and copy its shape, across ALI and AWI alike — rather than inventing a new adapter.
+
+A conflict in a golden test file (`src/test/resources/*.json` guarded by a `-D<mod>.<name>.regenerate` switch) is not
+merged by hand: take `ours`, run the owning `common` module's whole `test` task with the switch (a single `--tests`
+class skips the suite's bootstrap and fails), and check the resulting diff contains only what the merged change
+explains.
 
 A merged change that rewrites a pattern across every shim, such as a key scheme or a renamed helper, does not
 reach code that exists only on this branch, and that code still compiles. After the merge, grep the active

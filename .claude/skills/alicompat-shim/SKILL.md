@@ -421,10 +421,12 @@ has been published, the normal rule applies: append to `## []` if it exists, els
 newest version; `alicompat_version` moves only when opening a new section. Say in the summary which
 of the two applied.
 
-Verify with `./gradlew :alicompat:<loader>:build` and check the merged services files in the jar:
+Verify with `./gradlew :alicompat:<loader>:build` and check the merged services files in the jar built for the
+current `alicompat_version` — `build/libs` keeps jars of earlier versions, and a wildcard picks a stale one:
 
 ```bash
-unzip -p alicompat/forge/build/libs/ALICompat-forge-*-[0-9].[0-9].[0-9].jar \
+v=$(grep -m1 '^alicompat_version=' gradle.properties | cut -d= -f2)
+unzip -p alicompat/<loader>/build/libs/ALICompat-<loader>-*-$v.jar \
   META-INF/services/com.yanny.alicompat.IModCompat
 ```
 

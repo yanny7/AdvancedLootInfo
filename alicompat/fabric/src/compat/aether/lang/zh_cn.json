@@ -1,0 +1,8 @@
+{
+  "alicompat.aether.property.value.config": "配置：%s",
+  "alicompat.aether.type.condition.config_enabled": "启用配置：",
+  "alicompat.aether.type.function.double_drops": "双倍战利品：",
+  "alicompat.aether.type.function.spawn_tnt": "生成TNT：",
+  "alicompat.aether.type.function.spawn_xp": "生成经验球：",
+  "alicompat.aether.type.function.whirlwind_spawn_entity": "机遇旋风生成实体："
+}
