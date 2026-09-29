@@ -3,6 +3,7 @@ package com.yanny.ali.emi.compatibility.emi;
 import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.api.RelativeRect;
+import com.yanny.aci.compatibility.ScrollableTooltip;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.compatibility.common.EntityStorage;
@@ -17,6 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -82,7 +84,9 @@ public class EmiEntityLoot extends EmiBaseLoot {
 
                 @Override
                 public List<ClientTooltipComponent> getTooltip(int mouseX, int mouseY) {
-                    return GenericUtils.getSpawnTooltip(lootTable).stream().map((c) -> ClientTooltipComponent.create(c.getVisualOrderText())).toList();
+                    List<Component> spawnTooltip = GenericUtils.getSpawnTooltip(lootTable);
+
+                    return spawnTooltip.isEmpty() ? List.of() : List.of(new ScrollableTooltip(spawnTooltip));
                 }
             });
             widgets.add(new TextWidget(entityType.getDescription().getVisualOrderText(), (widgetHolder.getWidth() - length) / 2, 0, 0, false));

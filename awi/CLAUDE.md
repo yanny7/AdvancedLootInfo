@@ -156,7 +156,7 @@ GUI-side rendering: `ClientUtils`, `WidgetUtils` (dispatch to per-node-id widget
 Only `LanguageHolder` — registers `Lang.*` enum classes into `aci.CoreLang.TRANSLATION_MAP` (see `aci/CLAUDE.md`'s "Language wiring"). Unlike ALI, AWI's `datagen` generates no config: the whole user-config surface is the two-field `AwiConfig` described under Module layout above.
 
 ### `mixin`
-Single `MixinClientPlayNetworkHandler` — injects into `handleUpdateTags` (tail) to trigger `clientRegistry.reloadData()` on resource reload (same role as ALI's mixin of the same name).
+`MixinClientPlayNetworkHandler` — injects into `handleUpdateTags` (tail) to trigger `clientRegistry.reloadData()` on resource reload. `MixinGuiGraphics` — feeds `ScrollableTooltip` the tooltip being rendered. Both are the same as ALI's mixins of the same name.
 
 ### `platform` / `platform/services`
 `Services` (`ServiceLoader`-based platform accessor) + `IPlatformHelper extends ICorePlatformHelper<IPlugin>` — a smaller interface than ALI's (only `getPlugins`/`getConfiguration`, no loot-pool/spawn-egg/loot-table-parsing methods since AWI has no loot domain). Per-loader implementations live in `awi/fabric` and `awi/forge` (see `awi/fabric/CLAUDE.md`, `awi/forge/CLAUDE.md`).

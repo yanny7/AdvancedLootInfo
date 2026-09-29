@@ -4,6 +4,7 @@ import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.api.RelativeRect;
+import com.yanny.aci.compatibility.ScrollableTooltip;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.api.IWidgetUtils;
 import com.yanny.awi.compatibility.GenericUtils;
@@ -49,7 +50,7 @@ public class JeiBiomeLoot extends JeiBaseLoot {
                         .setStandardSlotBackground()
                         .setSlotName(SPAWN_SLOT_PREFIX + i)
                         .setPosition(slot.x(), slot.y())
-                        .addRichTooltipCallback((view, tooltipBuilder) -> tooltipBuilder.addAll(slot.getConditions()))
+                        .addRichTooltipCallback((view, tooltipBuilder) -> addConditions(tooltipBuilder, slot))
                         .addItemLike(slot.egg());
             }
         }
@@ -85,7 +86,7 @@ public class JeiBiomeLoot extends JeiBaseLoot {
                     @Override
                     public void getTooltip(ITooltipBuilder tooltip, double mouseX, double mouseY) {
                         if (rect.contains((int) mouseX, (int) mouseY)) {
-                            tooltip.addAll(slot.getTooltip());
+                            tooltip.add(new ScrollableTooltip(slot.getTooltip()));
                         }
                     }
 
@@ -109,5 +110,13 @@ public class JeiBiomeLoot extends JeiBaseLoot {
     @Override
     IWidget getRootWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
         return new BiomeWidget(utils, entry, rect, maxWidth);
+    }
+
+    private static void addConditions(ITooltipBuilder tooltip, GenericUtils.SpawnSlot slot) {
+        List<Component> conditions = slot.getConditions();
+
+        if (!conditions.isEmpty()) {
+            tooltip.add(new ScrollableTooltip(conditions));
+        }
     }
 }

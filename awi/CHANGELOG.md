@@ -1,3 +1,7 @@
+## []
+
+- Tooltips taller than the screen can be scrolled with the mouse wheel
+
 ## [1.2.0]
 
 - Added `dimensions` configuration to hide dimensions

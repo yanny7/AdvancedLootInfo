@@ -1,6 +1,7 @@
 ## []
 
 - Grouping structure spawn info
+- Scrollable tooltip by mouse wheel when taller than screen
 
 ## [1.3.0]
 

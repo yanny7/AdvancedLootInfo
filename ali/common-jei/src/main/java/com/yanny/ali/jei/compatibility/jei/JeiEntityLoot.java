@@ -4,6 +4,7 @@ import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.api.RelativeRect;
+import com.yanny.aci.compatibility.ScrollableTooltip;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.compatibility.common.EntityLootType;
@@ -82,7 +83,11 @@ public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, EntityType<?>> {
             @Override
             public void getTooltip(ITooltipBuilder tooltip, double mouseX, double mouseY) {
                 if (rect.contains((int) mouseX, (int) mouseY)) {
-                    tooltip.addAll(GenericUtils.getSpawnTooltip(recipe.entry()));
+                    List<Component> spawnTooltip = GenericUtils.getSpawnTooltip(recipe.entry());
+
+                    if (!spawnTooltip.isEmpty()) {
+                        tooltip.add(new ScrollableTooltip(spawnTooltip));
+                    }
                 }
             }
 

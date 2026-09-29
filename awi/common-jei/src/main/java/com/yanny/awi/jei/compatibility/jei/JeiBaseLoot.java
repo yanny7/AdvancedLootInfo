@@ -5,6 +5,7 @@ import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.api.RelativeRect;
+import com.yanny.aci.compatibility.ScrollableTooltip;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipNodePalette;
 import com.yanny.awi.api.IBlockNode;
@@ -90,8 +91,13 @@ public abstract class JeiBaseLoot implements IRecipeCategory<RecipeHolder> {
                     .setStandardSlotBackground()
                     .setSlotName(String.valueOf(i))
                     .setPosition(h.rect.getX(), h.rect.getY())
-                    .addRichTooltipCallback((iRecipeSlotView, tooltipBuilder)
-                            -> tooltipBuilder.addAll(CoreTooltipUtils.toComponents(h.entry().getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle())));
+                    .addRichTooltipCallback((iRecipeSlotView, tooltipBuilder) -> {
+                        List<Component> lines = CoreTooltipUtils.toComponents(h.entry().getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle());
+
+                        if (!lines.isEmpty()) {
+                            tooltipBuilder.add(new ScrollableTooltip(lines));
+                        }
+                    });
 
 
             // A tag adds every member to the same slot, which is what makes JEI cycle through them. Item-less blocks

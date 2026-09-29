@@ -3,6 +3,7 @@ package com.yanny.awi.jei.compatibility.jei;
 import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.api.RelativeRect;
+import com.yanny.aci.compatibility.ScrollableTooltip;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.widgets.IRecipeWidget;
 import net.minecraft.client.gui.GuiGraphics;
@@ -32,8 +33,8 @@ public class JeiWidgetWrapper implements IRecipeWidget {
     public void getTooltip(ITooltipBuilder tooltip, double mouseX, double mouseY) {
         List<Component> components = widget.getTooltipComponents((int) mouseX, (int) mouseY);
 
-        for (Component component : components) {
-            tooltip.add(component);
+        if (!components.isEmpty()) {
+            tooltip.add(new ScrollableTooltip(components));
         }
     }
 

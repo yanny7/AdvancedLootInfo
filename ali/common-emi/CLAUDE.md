@@ -26,7 +26,9 @@ Each viewer's plugin lifecycle differs, but the role is the same: translate ALI'
 
 ## Widget wrapper adapters
 
-`EmiWidgetWrapper`/`JeiWidgetWrapper`/`ReiWidgetWrapper` are thin (~30-65 line) adapters holding an `aci.api.IWidget` and forwarding `render`/tooltip calls into the viewer's native widget interface (`Widget`, `IRecipeWidget`, `WidgetWithBounds` respectively), translating `RelativeRect` ↔ the viewer's own `Bounds`/`Rect`/`Rectangle` type. No rendering logic is reimplemented per viewer — only the interop shim differs. `ScrollWidget`/`SlotWidget` classes repeat the same pattern: a viewer-native container widget delegating to the shared `IWidget` tree.
+`EmiWidgetWrapper`/`JeiWidgetWrapper`/`ReiWidgetWrapper` are thin (~30-65 line) adapters holding an `aci.api.IWidget` and forwarding `render`/tooltip calls into the viewer's native widget interface (`Widget`, `IRecipeWidget`, `WidgetWithBounds` respectively), translating `RelativeRect` ↔ the viewer's own `Bounds`/`Rect`/`Rectangle` type. No rendering logic is reimplemented per viewer — only the interop shim differs.
+
+Every tooltip ALI or AWI hands a viewer — slot tooltips, widget tooltips, spawn tooltips — goes in as a single `aci.compatibility.ScrollableTooltip` wrapping all its lines, never line by line, and nothing when there are no lines (an empty component still draws a tooltip box). The per-viewer entry points: EMI returns it in its `List<ClientTooltipComponent>` (or adds it in `addSlotTooltip`), JEI calls `ITooltipBuilder.add(TooltipComponent)`, REI uses `Tooltip.from(Tooltip.entry(...))` for widgets and `EntryStack.tooltipProcessor` for slots, since `EntryStack.tooltip` takes only text. See `aci/CLAUDE.md` for the mixin and Forge factory registration it depends on. `ScrollWidget`/`SlotWidget` classes repeat the same pattern: a viewer-native container widget delegating to the shared `IWidget` tree.
 
 ## ali vs awi
 

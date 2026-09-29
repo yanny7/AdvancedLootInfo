@@ -1,6 +1,7 @@
 package com.yanny.ali.rei.compatibility.rei;
 
 import com.yanny.aci.api.Rect;
+import com.yanny.aci.compatibility.ScrollableTooltip;
 import com.yanny.ali.compatibility.common.EntityStorage;
 import com.yanny.ali.compatibility.common.GenericUtils;
 import com.yanny.ali.configuration.LootCategory;
@@ -69,7 +70,7 @@ public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, EntityT
                 graphics.pose().popPose();
             }
         }));
-        innerWidgets.add(Widgets.createTooltip((point) -> entityBounds.contains(point) && !spawnTooltip.isEmpty() ? Tooltip.create(spawnTooltip) : null));
+        innerWidgets.add(Widgets.createTooltip((point) -> entityBounds.contains(point) && !spawnTooltip.isEmpty() ? Tooltip.from(Tooltip.entry(new ScrollableTooltip(spawnTooltip))) : null));
         innerWidgets.add(Widgets.createLabel(new Point(innerBounds.getCenterX(), 0), display.getEntityType().getDescription()).centered().noShadow().color(0));
         fullBounds.move(bounds.getCenterX() - fullBounds.width / 2, bounds.y + PADDING);
         widgets.add(Widgets.createCategoryBase(fullBounds));

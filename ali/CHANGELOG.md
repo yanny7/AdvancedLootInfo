@@ -1,3 +1,7 @@
+## []
+
+- Scrollable tooltip by mouse wheel when taller than screen
+
 ## [2.3.0]
 
 - Added support for custom ingredients that are not Ingredient subclasses

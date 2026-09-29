@@ -108,7 +108,7 @@ The payload carries the node tree and nothing else — the flat item lists a rec
 `AbstractServer`/`AbstractClient` are template-method base classes: they hold all the shared logic above and declare `protected abstract send*` methods that each loader's `Server`/`Client` subclass implements over its native networking API (Fabric's `ServerPlayNetworking`/`ClientPlayNetworking`, Forge's `SimpleChannel`).
 
 ## `mixin`
-`MixinBushBlock` (invoker accessor exposing protected `mayPlaceOn` for loot-modifier predicate checks). `MixinClientPlayNetworkHandler` (injects into `handleUpdateTags` tail to trigger `clientRegistry.reloadData()` on tag reload).
+`MixinBushBlock` (invoker accessor exposing protected `mayPlaceOn` for loot-modifier predicate checks). `MixinClientPlayNetworkHandler` (injects into `handleUpdateTags` tail to trigger `clientRegistry.reloadData()` on tag reload). `MixinGuiGraphics` (client; feeds `ScrollableTooltip` the components of the tooltip being rendered — see `aci/CLAUDE.md`).
 
 ## `platform` / `platform/services`
 `Services` (static holder loading `IPlatformHelper` via `ServiceLoader`), `IPlatformHelper` (loader-specific operations: get plugins, config dir, fake-loot-table parsing) — implemented per-loader, see `ali/fabric/CLAUDE.md`/`ali/forge/CLAUDE.md`.

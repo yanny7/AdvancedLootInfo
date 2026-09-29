@@ -2,6 +2,7 @@ package com.yanny.awi.emi.compatibility.emi;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.compatibility.ScrollableTooltip;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.plugin.client.TooltipUtils;
@@ -30,8 +31,12 @@ public class EmiLootSlotWidget extends SlotWidget {
 
     @Override
     protected void addSlotTooltip(List<ClientTooltipComponent> list) {
-        CoreTooltipUtils.toComponents(entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle())
-                .forEach((c) -> list.add(ClientTooltipComponent.create(c.getVisualOrderText())));
+        List<Component> lines = CoreTooltipUtils.toComponents(entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle());
+
+        if (!lines.isEmpty()) {
+            list.add(new ScrollableTooltip(lines));
+        }
+
         super.addSlotTooltip(list);
     }
 

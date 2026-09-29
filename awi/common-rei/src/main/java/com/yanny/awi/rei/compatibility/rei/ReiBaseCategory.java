@@ -8,6 +8,7 @@ import com.mojang.math.Axis;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.compatibility.AbstractScrollWidget;
+import com.yanny.aci.compatibility.ScrollableTooltip;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipNodePalette;
 import com.yanny.awi.api.IBlockNode;
@@ -23,6 +24,7 @@ import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.config.ConfigObject;
 import me.shedaniel.rei.api.client.gui.Renderer;
 import me.shedaniel.rei.api.client.gui.config.SearchFieldLocation;
+import me.shedaniel.rei.api.client.gui.widgets.Tooltip;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.client.gui.widgets.Widgets;
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory;
@@ -136,7 +138,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
                 widgets.add(Widgets.wrapRenderer(slotRect, new BlockSlotRenderer(block)));
                 widgets.add(Widgets.createTooltip(slotRect, Component.translatable(block.getDescriptionId())));
             } else {
-                stacks.forEach((stack) -> stack.tooltip((s) -> CoreTooltipUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle())));
+                stacks.forEach((stack) -> stack.tooltipProcessor((s, tooltip) -> addLootTooltip(tooltip, h.entry)));
                 widgets.add(Widgets.createSlot(new Point(slotX + 1, slotY + 1)).entries(stacks).markOutput());
             }
 
@@ -170,6 +172,12 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
     @NotNull
     private static EntryStack<?> toStack(Block block) {
         return GenericUtils.rendersAsFluid(block) ? EntryStacks.of(block.defaultBlockState().getFluidState().getType()) : EntryStacks.of(block);
+    }
+
+    private static Tooltip addLootTooltip(Tooltip tooltip, IDataNode entry) {
+        List<Component> lines = CoreTooltipUtils.toComponents(entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle());
+
+        return lines.isEmpty() ? tooltip : tooltip.add(new ScrollableTooltip(lines));
     }
 
     private record Holder(Either<Block, TagKey<Block>> block, IDataNode entry, RelativeRect rect) {}
