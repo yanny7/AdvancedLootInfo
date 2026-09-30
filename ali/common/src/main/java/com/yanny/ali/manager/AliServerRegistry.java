@@ -1,10 +1,12 @@
 package com.yanny.ali.manager;
 
 import com.yanny.aci.CommonLogUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
+import com.yanny.aci.api.NumberFunctions;
 import com.yanny.aci.manager.ClassKeyedMap;
 import com.yanny.aci.manager.CoreServerRegistry;
 import com.yanny.aci.manager.ManagedRegistry;
+import com.yanny.aci.manager.NumberConverters;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipContext;
@@ -18,8 +20,8 @@ import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.common.trades.TradeUtils;
 import com.yanny.ali.plugin.glm.*;
-import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.MissingTooltipUtils;
+import com.yanny.ali.plugin.server.TooltipUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -36,12 +38,12 @@ import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.*;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.apache.commons.lang3.function.TriFunction;
-import org.apache.logging.log4j.util.TriConsumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -59,7 +61,8 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     // factories
     private final ManagedRegistry<Class<?>, EntryFactory<?>> entryFactories = registerClassKeyed("entry factories", true, HashMap::new, BuiltInRegistries.LOOT_POOL_ENTRY_TYPE);
     // converters
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, NumberProvider, RangeValue>> numberConverters = registerClassKeyed("number converters", true, HashMap::new, BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, NumberProvider, NumberExpr>> numberConverters = registerClassKeyed("number converters", true, HashMap::new, BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, NumberProvider, NumberExpr>> intNumberConverters = registerClassKeyed("int number converters", false, HashMap::new, null);
     // listings
     private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, VillagerTrades.ItemListing, TooltipNode, IDataNode>> tradeItemListings = registerClassKeyed("trade item listings", true, HashMap::new, null);
     // traders
@@ -71,8 +74,8 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Ingredient, TooltipBuilder>> ingredientTooltips = registerClassKeyed("ingredient tooltips", true, HashMap::new, null);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Object, TooltipBuilder>> valueTooltips = registerClassKeyed("value tooltips", true, ClassKeyedMap::new, null);
     // modifiers
-    private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemCondition, EnchantedRanges>> chanceModifiers = registerClassKeyed("chance modifiers", false, HashMap::new, null);
-    private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemFunction, EnchantedRanges>> countModifiers = registerClassKeyed("count modifiers", false, HashMap::new, null);
+    private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, LootItemCondition, NumberExpr, NumberExpr>> chanceModifiers = registerClassKeyed("chance modifiers", false, HashMap::new, null);
+    private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, LootItemFunction, NumberExpr, NumberExpr>> countModifiers = registerClassKeyed("count modifiers", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifiers = registerClassKeyed("item stack modifiers", false, HashMap::new, null);
     // unwrappers
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemFunction, List<LootItemFunction>>> functionUnwrappers = registerClassKeyed("function unwrappers", false, HashMap::new, null);
@@ -166,18 +169,24 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
-    public <T extends NumberProvider> void registerNumberProvider(Class<T> type, BiFunction<IServerUtils, T, RangeValue> converter) {
+    public <T extends NumberProvider> void registerNumberProvider(Class<T> type, BiFunction<IServerUtils, T, NumberExpr> converter) {
         numberConverters.put(type, (u, n) -> converter.apply(u, type.cast(n)));
     }
 
     @Override
-    public <T extends LootItemFunction> void registerCountModifier(Class<T> type, TriConsumer<IServerUtils, T, EnchantedRanges> consumer) {
-        countModifiers.put(type, (u, f, v) -> consumer.accept(u, type.cast(f), v));
+    public <T extends NumberProvider> void registerNumberProvider(Class<T> type, BiFunction<IServerUtils, T, NumberExpr> converter, BiFunction<IServerUtils, T, NumberExpr> intConverter) {
+        registerNumberProvider(type, converter);
+        intNumberConverters.put(type, (u, n) -> intConverter.apply(u, type.cast(n)));
     }
 
     @Override
-    public <T extends LootItemCondition> void registerChanceModifier(Class<T> type, TriConsumer<IServerUtils, T, EnchantedRanges> consumer) {
-        chanceModifiers.put(type, (u, c, v) -> consumer.accept(u, type.cast(c), v));
+    public <T extends LootItemFunction> void registerCountModifier(Class<T> type, TriFunction<IServerUtils, T, NumberExpr, NumberExpr> modifier) {
+        countModifiers.put(type, (u, f, v) -> modifier.apply(u, type.cast(f), v));
+    }
+
+    @Override
+    public <T extends LootItemCondition> void registerChanceModifier(Class<T> type, TriFunction<IServerUtils, T, NumberExpr, NumberExpr> modifier) {
+        chanceModifiers.put(type, (u, c, v) -> modifier.apply(u, type.cast(c), v));
     }
 
     @Override
@@ -317,17 +326,55 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
-    public <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, EnchantedRanges count) {
+    @NotNull
+    public <T extends LootItemFunction> NumberExpr applyCountModifier(IServerUtils utils, T function, NumberExpr count, List<TooltipNode> conditions) {
+        NumberExpr result = count;
+
         for (LootItemFunction f : unwrapFunction(utils, function)) {
-            countModifiers.get(f.getClass()).ifPresent((m) -> m.accept(utils, f, count));
+            Optional<TriFunction<IServerUtils, LootItemFunction, NumberExpr, NumberExpr>> modifier = countModifiers.get(f.getClass());
+
+            if (modifier.isPresent()) {
+                try {
+                    NumberExpr modified = modifier.get().apply(utils, f, result);
+
+                    if (f instanceof LootItemConditionalFunction conditional && conditional.predicates.length > 0) {
+                        result = TooltipUtils.conditional(utils, result, modified, Arrays.asList(conditional.predicates), conditions);
+                    } else {
+                        result = modified;
+                    }
+                } catch (Throwable e) {
+                    String id = String.valueOf(BuiltInRegistries.LOOT_FUNCTION_TYPE.getKey(f.getType()));
+
+                    LOGGER.warn("Failed to apply count modifier {}: {}", id, e.getMessage(), e);
+                    result = NumberExpr.opaque(id);
+                }
+            }
         }
+
+        return result;
     }
 
     @Override
-    public <T extends LootItemCondition> void applyChanceModifier(IServerUtils utils, T condition, EnchantedRanges chance) {
+    @NotNull
+    public <T extends LootItemCondition> NumberExpr applyChanceModifier(IServerUtils utils, T condition, NumberExpr chance) {
+        NumberExpr result = chance;
+
         for (LootItemCondition c : unwrapCondition(utils, condition)) {
-            chanceModifiers.get(c.getClass()).ifPresent((m) -> m.accept(utils, c, chance));
+            Optional<TriFunction<IServerUtils, LootItemCondition, NumberExpr, NumberExpr>> modifier = chanceModifiers.get(c.getClass());
+
+            if (modifier.isPresent()) {
+                try {
+                    result = modifier.get().apply(utils, c, result);
+                } catch (Throwable e) {
+                    String id = String.valueOf(BuiltInRegistries.LOOT_CONDITION_TYPE.getKey(c.getType()));
+
+                    LOGGER.warn("Failed to apply chance modifier {}: {}", id, e.getMessage(), e);
+                    result = NumberExpr.opaque(id);
+                }
+            }
         }
+
+        return result;
     }
 
     @NotNull
@@ -405,14 +452,18 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     @NotNull
     @Override
-    public RangeValue convertNumber(IServerUtils utils, @Nullable NumberProvider numberProvider) {
-        if (numberProvider != null) {
-            return numberConverters.get(numberProvider.getClass())
-                    .map((c) -> c.apply(utils, numberProvider))
-                    .orElseGet(() -> new RangeValue(false, true));
+    public NumberExpr convertNumber(IServerUtils utils, NumberProvider numberProvider) {
+        return NumberConverters.convert(getModId(), numberConverters, utils, numberProvider, AliServerRegistry::numberProviderTypeId);
+    }
+
+    @NotNull
+    @Override
+    public NumberExpr convertIntNumber(IServerUtils utils, NumberProvider numberProvider) {
+        if (intNumberConverters.get(numberProvider.getClass()).isPresent()) {
+            return NumberConverters.convert(getModId(), intNumberConverters, utils, numberProvider, AliServerRegistry::numberProviderTypeId);
         }
 
-        return new RangeValue(false, true);
+        return NumberExpr.fn(NumberFunctions.ROUND, convertNumber(utils, numberProvider));
     }
 
     @Nullable
@@ -514,6 +565,11 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         } finally {
             TooltipContext.clearPalette();
         }
+    }
+
+    @NotNull
+    private static String numberProviderTypeId(NumberProvider numberProvider) {
+        return String.valueOf(BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE.getKey(numberProvider.getType()));
     }
 
     public record Trades(@Nullable EntityType<?> entityType, Supplier<Int2ObjectMap<VillagerTrades.ItemListing[]>> itemListings, IntFunction<TradeLevelInfo> levelInfo) {}

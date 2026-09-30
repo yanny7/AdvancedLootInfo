@@ -3,7 +3,7 @@ package com.yanny.alicompat.compat.morejs;
 import com.almostreliable.morejs.features.villager.TradeItem;
 import com.almostreliable.morejs.features.villager.trades.PotionTrade;
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
@@ -83,7 +83,7 @@ public class PotionTradeAccessor extends BaseAccessor<PotionTrade> implements II
                 second.getCount(),
                 TooltipNode.empty(),
                 Either.left(result),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 tooltip,
                 maxUses,
                 villagerExperience,

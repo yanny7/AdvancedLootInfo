@@ -54,14 +54,14 @@ public class LootJsGenericTooltipTest {
         )).build(), List.of(
                 "HAS_ENCHANTMENT",
                 "  -> Enchantment: minecraft:fortune",
-                "  -> Levels: 2 - 4"
+                "  -> Levels: 2 to 4"
         ));
         assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, ItemFilter.hasEnchantment(
                 new ResourceLocationFilter.ByLocation(new ResourceLocation("minecraft", "fortune")), 1, 5
         )).build(), List.of(
                 "HAS_ENCHANTMENT",
                 "  -> Enchantment: minecraft:fortune",
-                "  -> Levels: 1 - 5"
+                "  -> Levels: 1 to 5"
         ));
         assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, ItemFilter.hasEnchantment(
                 new ResourceLocationFilter.ByLocation(new ResourceLocation("minecraft", "fortune"))
@@ -78,7 +78,7 @@ public class LootJsGenericTooltipTest {
         )).build(), List.of(
                 "HAS_ENCHANTMENT",
                 "  -> Enchantment: minecraft:.*",
-                "  -> Levels: 2 - 5"
+                "  -> Levels: 2 to 5"
         ));
     }
 

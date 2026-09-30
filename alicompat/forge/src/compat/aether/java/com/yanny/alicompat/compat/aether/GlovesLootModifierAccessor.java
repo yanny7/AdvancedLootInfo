@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.aether;
 
 import com.aetherteam.aether.loot.modifiers.GlovesLootModifier;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
@@ -35,6 +35,6 @@ public class GlovesLootModifierAccessor extends BaseAccessor<GlovesLootModifier>
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
                 (page, c) -> Collections.singletonList(new IOperation.ReplaceOperation(
                         (itemStack) -> itemStack.getItem() instanceof ArmorItem armorItem && armorItem.getMaterial().equals(parent.armorMaterial),
-                        (src) -> GlmNodeUtils.replacedNode(utils, AetherNodeUtils.withChance(c, 0.25F), src, parent.glovesStack, new RangeValue(1))))));
+                        (src) -> GlmNodeUtils.replacedNode(utils, AetherNodeUtils.withChance(c, 0.25F), src, parent.glovesStack, NumberExpr.constant(1))))));
     }
 }

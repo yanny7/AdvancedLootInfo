@@ -1,10 +1,11 @@
 package com.yanny.awi.jei.compatibility.jei;
 
 import com.yanny.aci.api.IWidget;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.compatibility.ScrollableTooltip;
+import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.api.IWidgetUtils;
 import com.yanny.awi.compatibility.GenericUtils;
@@ -69,7 +70,7 @@ public class JeiBiomeLoot extends JeiBaseLoot {
 
             if (slot.egg() != null) {
                 builder.getRecipeSlots().findSlotByName(SPAWN_SLOT_PREFIX + i).ifPresent((slotDrawable) -> {
-                    widgets.add(new JeiLootSlotWidget(slotDrawable, slot.x(), slot.y(), new RangeValue(1)));
+                    widgets.add(new JeiLootSlotWidget(slotDrawable, slot.x(), slot.y(), NumberExpr.constant(1)));
                     slotDrawables.add(slotDrawable);
                 });
             } else {
@@ -113,7 +114,7 @@ public class JeiBiomeLoot extends JeiBaseLoot {
     }
 
     private static void addConditions(ITooltipBuilder tooltip, GenericUtils.SpawnSlot slot) {
-        List<Component> conditions = slot.getConditions();
+        List<TooltipLine> conditions = slot.getConditions();
 
         if (!conditions.isEmpty()) {
             tooltip.add(new ScrollableTooltip(conditions));

@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.charm;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
@@ -33,19 +33,19 @@ public class BarkForLogsAccessor extends BaseAccessor<LumberjackTradeOffers.Bark
     @NotNull
     @Override
     public IDataNode getNode(IServerUtils utils, TooltipNode conditions) {
-        RangeValue count = new RangeValue(baseCost, baseCost + extraCost);
+        NumberExpr count = NumberExpr.uniformInt(baseCost, baseCost + extraCost);
 
         return new ItemsToItemsNode(
                 utils,
                 Either.left(Items.EMERALD.getDefaultInstance()),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 TooltipNode.empty(),
                 Either.left(Blocks.OAK_LOG.asItem().getDefaultInstance()),
                 count,
                 utils.getValueTooltip(utils, List.of(Blocks.ACACIA_LOG, Blocks.BIRCH_LOG, Blocks.DARK_OAK_LOG, Blocks.JUNGLE_LOG,
                         Blocks.MANGROVE_LOG, Blocks.SPRUCE_LOG)).build(CharmLang.Branch.ALTERNATIVE),
                 Either.left(Blocks.OAK_WOOD.asItem().getDefaultInstance()),
-                new RangeValue(count),
+                count,
                 utils.getValueTooltip(utils, List.of(Blocks.ACACIA_WOOD, Blocks.BIRCH_WOOD, Blocks.DARK_OAK_WOOD, Blocks.JUNGLE_WOOD,
                         Blocks.MANGROVE_WOOD, Blocks.SPRUCE_WOOD)).build(CharmLang.Branch.ALTERNATIVE),
                 maxUses,

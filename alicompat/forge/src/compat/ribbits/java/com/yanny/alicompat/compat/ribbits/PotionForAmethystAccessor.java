@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.ribbits;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
@@ -68,13 +68,13 @@ public class PotionForAmethystAccessor extends BaseAccessor<PotionForAmethyst> i
         return new ItemsToItemsNode(
                 utils,
                 Either.left(Items.AMETHYST_SHARD.getDefaultInstance()),
-                new RangeValue(amethystCostMin, amethystCostMax),
+                NumberExpr.uniformInt(amethystCostMin, amethystCostMax),
                 TooltipNode.empty(),
                 Either.left(ItemStack.EMPTY),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 TooltipNode.empty(),
                 Either.left(result),
-                new RangeValue(count),
+                NumberExpr.constant(count),
                 resultTooltip,
                 maxUses,
                 0,

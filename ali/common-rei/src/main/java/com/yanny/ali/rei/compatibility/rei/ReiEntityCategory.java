@@ -2,6 +2,7 @@ package com.yanny.ali.rei.compatibility.rei;
 
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.compatibility.ScrollableTooltip;
+import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.ali.compatibility.common.EntityStorage;
 import com.yanny.ali.compatibility.common.GenericUtils;
 import com.yanny.ali.configuration.LootCategory;
@@ -55,7 +56,7 @@ public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, EntityT
         }
 
         Rectangle entityBounds = new Rectangle(innerBounds.getCenterX() - WIDGET_SIZE / 2, TEXT_OFFSET, WIDGET_SIZE, WIDGET_SIZE);
-        List<Component> spawnTooltip = GenericUtils.getSpawnTooltip(display.getLootData());
+        List<TooltipLine> spawnTooltip = GenericUtils.getSpawnTooltip(display.getLootData());
 
         innerWidgets.add(Widgets.wrapRenderer(entityBounds, (graphics, bounds1, mouseX, mouseY, delta) -> {
             Level level = Minecraft.getInstance().level;

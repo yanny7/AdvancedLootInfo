@@ -152,7 +152,7 @@ public class LootJsConditionTooltipTest {
         Mockito.when(((MixinIsLightLevel) condition).getMax()).thenReturn(7);
         assertTooltip(LootJsConditionTooltipUtils.isLightLevelTooltip(UTILS, condition).build(), List.of(
                 "Light Level:",
-                "  -> Value: 3 - 7"
+                "  -> Value: 3 to 7"
         ));
     }
 
@@ -211,8 +211,8 @@ public class LootJsConditionTooltipTest {
         assertTooltip(LootJsConditionTooltipUtils.matchKillerDistanceTooltip(UTILS, condition).build(), List.of(
                 "Distance To Killer:",
                 "  -> Predicate:",
-                "    -> X: =10.0",
-                "    -> Absolute: ≤5.0"
+                "    -> X: 10",
+                "    -> Absolute: ≤ 5"
         ));
     }
 

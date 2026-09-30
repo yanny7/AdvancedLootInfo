@@ -2,7 +2,6 @@ package com.yanny.ali.lootjs.node;
 
 import com.almostreliable.lootjs.core.LootEntry;
 import com.almostreliable.lootjs.loot.action.WeightedAddLootAction;
-import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IClientUtils;
@@ -67,7 +66,7 @@ public class WeightedAddLootNode extends ListNode {
     public static TooltipNode getTooltip(IServerUtils utils, MixinWeightedAddLootAction action) {
         return TooltipBuilder.array((b) -> {
             b.add(TooltipBuilder.keyOnly(Lang.Group.RANDOM));
-            b.add(TooltipUtils.getRolls(utils.convertNumber(utils, action.getNumberProvider()), new RangeValue(0)));
+            b.add(TooltipUtils.getRolls(utils.convertIntNumber(utils, action.getNumberProvider())));
             b.add(TooltipBuilder.value(action.getAllowDuplicateLoot()).build(Lang.Value.ALLOW_DUPLICATE_LOOT));
         }).build();
     }

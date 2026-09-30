@@ -2,11 +2,12 @@ package com.yanny.awi.jei.compatibility.jei;
 
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.IWidget;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.compatibility.ScrollableTooltip;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
+import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.aci.tooltip.TooltipNodePalette;
 import com.yanny.awi.api.IBlockNode;
 import com.yanny.awi.api.IDataNode;
@@ -92,7 +93,7 @@ public abstract class JeiBaseLoot implements IRecipeCategory<RecipeHolder> {
                     .setSlotName(String.valueOf(i))
                     .setPosition(h.rect.getX(), h.rect.getY())
                     .addRichTooltipCallback((iRecipeSlotView, tooltipBuilder) -> {
-                        List<Component> lines = CoreTooltipUtils.toComponents(h.entry().getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle());
+                        List<TooltipLine> lines = CoreTooltipUtils.toLines(h.entry().getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle(), TooltipUtils.getNumberOptions());
 
                         if (!lines.isEmpty()) {
                             tooltipBuilder.add(new ScrollableTooltip(lines));
@@ -132,7 +133,7 @@ public abstract class JeiBaseLoot implements IRecipeCategory<RecipeHolder> {
                 if (!models.isEmpty() && ingredientBlocks(h).isEmpty()) {
                     scrollWidgets.add(new JeiBlockSlotWidget(slotDrawable, models.get(0), h.rect.getX(), h.rect.getY()));
                 } else {
-                    scrollWidgets.add(new JeiLootSlotWidget(slotDrawable, h.rect.getX(), h.rect.getY(), new RangeValue(1)));
+                    scrollWidgets.add(new JeiLootSlotWidget(slotDrawable, h.rect.getX(), h.rect.getY(), NumberExpr.constant(1)));
                 }
 
                 slotDrawables.add(slotDrawable);

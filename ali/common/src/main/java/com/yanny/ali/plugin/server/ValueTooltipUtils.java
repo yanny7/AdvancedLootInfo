@@ -2,13 +2,14 @@ package com.yanny.ali.plugin.server;
 
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.stats.Stat;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -368,18 +369,18 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getNumberProviderTooltip(IServerUtils utils, NumberProvider value) {
-        return TooltipBuilder.value(utils.convertNumber(utils, value));
+        return TooltipBuilder.number(utils.convertNumber(utils, value));
     }
 
     @NotNull
     public static TooltipBuilder getIntRangeTooltip(IServerUtils utils, IntRange range) {
-        return TooltipBuilder.value(RangeValue.rangeToString(utils.convertNumber(utils, range.min), utils.convertNumber(utils, range.max)));
+        return TooltipBuilder.number(GenericTooltipUtils.getRange(utils, range));
     }
 
     @NotNull
     public static TooltipBuilder getMinMaxBoundsTooltip(IServerUtils ignoredUtils, MinMaxBounds.Ints ints) {
         if (ints != MinMaxBounds.Ints.ANY) {
-            return TooltipBuilder.value(GenericTooltipUtils.toString(ints));
+            return TooltipBuilder.number(GenericTooltipUtils.getRange(ints));
         }
 
         return TooltipBuilder.empty();
@@ -388,7 +389,7 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getMinMaxBoundsTooltip(IServerUtils ignoredUtils, MinMaxBounds.Doubles doubles) {
         if (doubles != MinMaxBounds.Doubles.ANY) {
-            return TooltipBuilder.value(GenericTooltipUtils.toString(doubles));
+            return TooltipBuilder.number(GenericTooltipUtils.getRange(doubles));
         }
 
         return TooltipBuilder.empty();
@@ -403,19 +404,18 @@ public class ValueTooltipUtils {
     public static TooltipBuilder getRangedPropertyMatcherTooltip(IServerUtils ignoredUtils, StatePropertiesPredicate.RangedPropertyMatcher matcher) {
         String min = matcher.minValue;
         String max = matcher.maxValue;
+        Component range;
 
-        if (min != null) {
-            if (max != null) {
-                return TooltipBuilder.value(matcher.name, min, max).key(Lang.Value.RANGED_BOTH);
-            } else {
-                return TooltipBuilder.value(matcher.name, min).key(Lang.Value.RANGED_GTE);
-            }
+        if (min != null && max != null) {
+            range = Component.translatable(CoreLang.Numbers.RANGE.singular(), min, max);
+        } else if (min != null) {
+            range = Component.translatable(CoreLang.Numbers.AT_LEAST.singular(), min);
+        } else if (max != null) {
+            range = Component.translatable(CoreLang.Numbers.AT_MOST.singular(), max);
         } else {
-            if (max != null) {
-                return TooltipBuilder.value(matcher.name, max).key(Lang.Value.RANGED_LTE);
-            } else {
-                return TooltipBuilder.value(matcher.name).key(Lang.Value.RANGED_ANY);
-            }
+            range = Component.translatable(CoreLang.Numbers.ANY.singular());
         }
+
+        return TooltipBuilder.component(range).rawKey(matcher.name);
     }
 }

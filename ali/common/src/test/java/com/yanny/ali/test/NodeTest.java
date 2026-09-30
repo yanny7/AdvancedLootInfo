@@ -35,16 +35,16 @@ public class NodeTest {
         );
 
         assertTooltip(node.getTooltip(), List.of(
-                "Count: 0-2",
-                "  -> 0-3 (Looting I)",
-                "  -> 0-4 (Looting II)",
-                "  -> 0-5 (Looting III)",
+                "Count: 0 to 2",
+                "  -> Looting I: 0 to 3  ~1 to 2 (33%)",
+                "  -> Looting II: 0 to 4  ~2 (33%)",
+                "  -> Looting III: 0 to 5  ~2 to 3 (28%)",
                 "----- Modifiers -----",
                 "Set Count:",
-                "  -> Count: 0-2",
+                "  -> Count: 0 to 2",
                 "  -> Add: false",
                 "Looting Enchant:",
-                "  -> Value: 0-1"
+                "  -> Value: 0 to 1"
         ));
     }
 
@@ -64,18 +64,18 @@ public class NodeTest {
         );
 
         assertTooltip(node.getTooltip(), List.of(
-                "Count: 0-1",
-                "  -> 0-2 (Looting I)",
-                "  -> 0-3 (Looting II)",
-                "  -> 0-4 (Looting III)",
+                "Count: 0 to 1  ~0 (67%)",
+                "  -> Looting I: 0 to 2  ~1 (50%)",
+                "  -> Looting II: 0 to 3  ~1 (42%)",
+                "  -> Looting III: 0 to 4  ~2 (33%)",
                 "----- Predicates -----",
                 "Killed by player",
                 "----- Modifiers -----",
                 "Set Count:",
-                "  -> Count: -1-1",
+                "  -> Count: −1 to 1",
                 "  -> Add: false",
                 "Looting Enchant:",
-                "  -> Value: 0-1"
+                "  -> Value: 0 to 1"
         ));
     }
 
@@ -95,9 +95,9 @@ public class NodeTest {
 
         assertTooltip(node.getTooltip(), List.of(
                 "Chance: 5%",
-                "  -> 6.25% (Fortune I)",
-                "  -> 8.33% (Fortune II)",
-                "  -> 10% (Fortune III)",
+                "  -> Fortune I: 6.25%",
+                "  -> Fortune II: 8.33%",
+                "  -> Fortune III: 10%",
                 "Count: 1",
                 "----- Predicates -----",
                 "Survives Explosion",

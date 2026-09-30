@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.villagertradingplus;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
@@ -20,6 +20,8 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 @ClassAccessor("com.lion.villagertradingplus.tradeoffers.trades.JsonSellEnchantedBookFromListTradeOffer$Factory")
 public class SellEnchantedBookFromListTradeOfferAccessor extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
@@ -74,10 +76,10 @@ public class SellEnchantedBookFromListTradeOfferAccessor extends BaseAccessor<Vi
                 getCostRange(),
                 TooltipNode.empty(),
                 Either.left(Items.BOOK.getDefaultInstance()),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 TooltipNode.empty(),
                 Either.left(Items.ENCHANTED_BOOK.getDefaultInstance()),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 tooltip,
                 maxUses,
                 experience,
@@ -87,18 +89,25 @@ public class SellEnchantedBookFromListTradeOfferAccessor extends BaseAccessor<Vi
     }
 
     @NotNull
-    private RangeValue getCostRange() {
-        int min = MAX_COST;
-        int max = MIN_COST;
+    private NumberExpr getCostRange() {
+        Map<Integer, Double> costs = new TreeMap<>();
 
         for (Object e : entries) {
             EnchantmentEntryAccessor entry = EnchantmentEntryAccessor.of(e);
+            int levels = entry.getMaxLevel() - entry.getMinLevel() + 1;
 
-            min = Math.min(min, getCost(entry.getEnchantment(), entry.getMinLevel()));
-            max = Math.max(max, getCost(entry.getEnchantment(), entry.getMaxLevel()));
+            for (int level = entry.getMinLevel(); level <= entry.getMaxLevel(); level++) {
+                costs.merge(getCost(entry.getEnchantment(), level), (double) entry.getWeight() / levels, Double::sum);
+            }
         }
 
-        return new RangeValue(Math.min(min, max), max);
+        if (costs.isEmpty()) {
+            return NumberExpr.constant(MIN_COST);
+        }
+
+        return NumberExpr.weighted(costs.entrySet().stream()
+                .map((c) -> new NumberExpr.WeightedEntry(c.getValue(), NumberExpr.constant(c.getKey())))
+                .toList());
     }
 
     private int getCost(Enchantment enchantment, int level) {

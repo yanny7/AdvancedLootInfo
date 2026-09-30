@@ -2,7 +2,6 @@ package com.yanny.aci.tooltip;
 
 import com.yanny.aci.api.ICoreServerUtils;
 import net.minecraft.core.Registry;
-import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -11,19 +10,19 @@ import java.util.Locale;
 
 public class CoreTooltipUtils {
     @NotNull
-    public static List<Component> toComponents(List<TooltipNode> tooltip, int pad, boolean showAdvancedTooltip, TooltipStyle style) {
-        List<Component> components = new ArrayList<>();
+    public static List<TooltipLine> toLines(List<TooltipNode> tooltip, int pad, boolean showAdvancedTooltip, TooltipStyle style, NumberOptions options) {
+        List<TooltipLine> lines = new ArrayList<>();
 
         for (TooltipNode node : tooltip) {
-            components.addAll(toComponents(node, pad, showAdvancedTooltip, style));
+            lines.addAll(toLines(node, pad, showAdvancedTooltip, style, options));
         }
 
-        return components;
+        return lines;
     }
 
     @NotNull
-    public static List<Component> toComponents(TooltipNode tooltip, int pad, boolean showAdvancedTooltip, TooltipStyle style) {
-        return tooltip.getComponents(pad, showAdvancedTooltip, style);
+    public static List<TooltipLine> toLines(TooltipNode tooltip, int pad, boolean showAdvancedTooltip, TooltipStyle style, NumberOptions options) {
+        return tooltip.getLines(pad, showAdvancedTooltip, style, options);
     }
 
     @NotNull

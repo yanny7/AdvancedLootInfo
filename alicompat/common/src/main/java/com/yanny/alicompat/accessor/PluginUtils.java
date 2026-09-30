@@ -140,7 +140,7 @@ public class PluginUtils {
     }
 
     public static <U extends NumberProvider, T extends BaseAccessor<?> & INumberProvider> void registerNumberProvider(IServerRegistry registry, Class<U> targetClass, Class<T> clazz) {
-        registry.registerNumberProvider(targetClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c, targetClass).convertNumber(u));
+        registry.registerNumberProvider(targetClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c, targetClass).convertNumber(u), (u, c) -> ReflectionUtils.copyClassData(clazz, c, targetClass).convertIntNumber(u));
     }
 
     public static <T extends BaseAccessor<?> & INumberProvider> void registerNumberProvider(IServerRegistry registry, Class<T> clazz) {
@@ -150,7 +150,7 @@ public class PluginUtils {
             try {
                 //noinspection unchecked
                 Class<NumberProvider> numberProviderClass = (Class<NumberProvider>) Class.forName(classAnnotation.value());
-                registry.registerNumberProvider(numberProviderClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c).convertNumber(u));
+                registry.registerNumberProvider(numberProviderClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c).convertNumber(u), (u, c) -> ReflectionUtils.copyClassData(clazz, c).convertIntNumber(u));
             } catch (Throwable e) {
                 LOGGER.warn("Failed to register number provider for {} with error {}", classAnnotation.value(), e.getMessage(), e);
             }
@@ -160,7 +160,7 @@ public class PluginUtils {
     }
 
     public static <U extends NumberProvider, T extends INumberProvider> void registerNumberProvider(IServerRegistry registry, Class<U> targetClass, Function<U, T> factory) {
-        registry.registerNumberProvider(targetClass, (u, c) -> factory.apply(c).convertNumber(u));
+        registry.registerNumberProvider(targetClass, (u, c) -> factory.apply(c).convertNumber(u), (u, c) -> factory.apply(c).convertIntNumber(u));
     }
 
     public static <U extends LootItemFunction, T extends BaseAccessor<?> & ICountModifier> void registerCountModifier(IServerRegistry registry, Class<U> targetClass, Class<T> clazz) {

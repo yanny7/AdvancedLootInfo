@@ -2,6 +2,7 @@ package com.yanny.awi.rei.compatibility.rei;
 
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.compatibility.ScrollableTooltip;
+import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.awi.compatibility.GenericUtils;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
@@ -86,7 +87,7 @@ public class ReiBiomeCategory extends ReiBaseCategory<ReiBiomeDisplay> {
     }
 
     private static Tooltip addConditions(Tooltip tooltip, GenericUtils.SpawnSlot slot) {
-        List<Component> conditions = slot.getConditions();
+        List<TooltipLine> conditions = slot.getConditions();
 
         return conditions.isEmpty() ? tooltip : tooltip.add(new ScrollableTooltip(conditions));
     }

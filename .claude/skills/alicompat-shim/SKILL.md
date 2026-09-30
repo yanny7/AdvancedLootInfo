@@ -129,14 +129,75 @@ python3 .claude/skills/alicompat-shim/scripts/srg_to_mojmap.py $(grep -m1 '^mine
 grep -m1 "^f_42616_ " srg2moj.txt   # -> net.minecraft.world.item.Items.EMERALD
 ```
 
-`m_216332_(a, b)` is `nextIntBetweenInclusive`, i.e. an inclusive `[a, b]` — read those as ranges when
-turning a rolled offer into a `RangeValue`, and mind integer division (`5 * rarity / 2`) when the
-target computes a price.
+That table covers **fields only**. Methods — the `RandomSource` calls that decide every count — have to be looked up
+for this checkout's version. Loom's `mappings.tiny` lists official, intermediary and mojmap names side by side, which
+is all a Fabric jar needs; for an SRG-named Forge jar, join loom's `joined.tsrg` (official → SRG) with it on the
+official name. Both files exist only after a build of this checkout, and neither is needed when the loader jar is
+already mojmap-named:
+
+```bash
+v=$(grep -m1 '^minecraft_version=' gradle.properties | cut -d= -f2)
+TINY=$(find ~/.gradle/caches/fabric-loom -name mappings.tiny -path "*${v//./_}*" | head -1)
+TSRG=$(find ~/.gradle/caches/fabric-loom/$v -name joined.tsrg | head -1)
+grep -P "\tmethod_43048\t" $TINY          # intermediary -> "(I)I a method_43048 nextInt"
+awk '/^[^\t]/{c=$1} / m_216339_ /{print c, $0}' $TSRG   # SRG -> "apf b (II)I m_216339_": official class, name, descriptor
+grep -P "^c\tapf\t" $TINY                  # official class -> "net/minecraft/util/RandomSource"; its `b (II)I` is nextInt
+```
+
+Look up the call **with its descriptor**: `nextInt(int)` and `nextInt(int, int)` share a name and differ in which values they
+return. The mojmap methods that come up in every offer:
+
+| Mojmap | Values |
+|---|---|
+| `RandomSource.nextInt(n)` | `0 … n − 1` |
+| `RandomSource.nextInt(a, b)` | `a … b − 1` |
+| `RandomSource.nextIntBetweenInclusive(a, b)` | `a … b` |
+| `Mth.randomBetweenInclusive(random, a, b)` | `a … b` |
+| `Mth.nextInt(random, a, b)` | `a … b` |
+| `RandomSource.nextFloat()` | a gate `< p` is a chance `p` |
+| `RandomSource.nextBoolean()` | 50 % |
+
+Step 2b turns them into a `NumberExpr`.
 
 Read the mod's own data files too: `data/<modid>/loot_modifiers/*.json` says which conditions each
 GLM is registered with, which is what decides Step 4. Also grep the jar for who populates a public
 static map a GLM reads (`grep -rla CONVERSIONS`) — that map is usually filled in mod setup and is
 readable from the shim at server-registry time.
+
+## Step 2b — numbers: transcribe the roll, not its bounds
+
+A count, price, level or chance is a `com.yanny.aci.api.NumberExpr`. Its shape decides what the tooltip can say:
+`NumberExpr.range(a, b)` means "somewhere in `[a; b]`, distribution unknown" and gets no `~` and no chart, while
+`uniformInt(a, b)` gets both. So write down what the target's code *does*, built through the factories (never the
+record constructors) — `aci/CLAUDE.md`'s "Number model" is the reference:
+
+| Target code | `NumberExpr` |
+|---|---|
+| a field, or a literal the code never rolls | `constant(x)` |
+| `a + nextInt(n)`, `nextIntBetweenInclusive(a, b)`, `Mth.randomBetweenInclusive` | `uniformInt(a, a + n − 1)`, `uniformInt(a, b)` |
+| `nextInt(a, b)` (exclusive bound) | `uniformInt(a, b − 1)` |
+| a sum or product of such rolls, `6 + 2 × nextIntBetweenInclusive(3, 6)` | `add(constant(6), mul(constant(2), uniformInt(3, 6)))` — not `range(12, 18)`, which also claims the odd values |
+| `Math.min(x, 64)`, `Mth.clamp` | `min(x, constant(64))`, `clamp(x, lo, hi)` |
+| one of several alternatives with known weights (a random enchantment, a `nextFloat() < 0.1` branch) | `weighted(List.of(new WeightedEntry(w, expr), …))`; weights need not sum to 1 |
+| `nextFloat() < p` adding one | `binomial(constant(1), constant(p))` |
+| a chance or count that grows with Looting/Fortune | `TooltipUtils.level(Enchantments.MOB_LOOTING)` (`ali/common`'s `plugin.server.TooltipUtils`) inside the expression — the tooltip then gets one row per level |
+| depends on world state the scan cannot see (block state, time of day, player luck) | `range(lo, hi)` for that part only, the rest exact (`add(mul(constant(5), range(1, 5)), uniformInt(0, 4))`) |
+
+- Do the target's integer arithmetic in Java before it becomes a constant: `5 * rarity / 2` truncates, and
+  `(float) (5 * rarity) / 2` is a different number.
+- A `Weighted` at the **top** of a tooltip number renders one row per entry. Group entries that share a value
+  (a `TreeMap<Integer, Double>` of value → summed weight), and when the alternatives are only one term of a larger
+  sum, keep them inside it (`add(weighted(…), uniformInt(4, 7))`, `min(weighted(…), constant(64))`) so the row list
+  stays out of the tooltip.
+- An integer level or count shown through `getValueTooltip` is `NumberExpr.uniformInt`, never
+  `UniformGenerator.between` — that one converts as a float `[a; b)`.
+- A distribution computed over a registry or a mod's list (every tradeable enchantment, every spell of a school)
+  is built at server-registry time, applying the same filters the target applies (`isTradeable`,
+  `isEnabled && allowLooting`).
+- When the target hides its rolls in lambdas and the shim can only sample (`supplier.get()` in a loop), sample
+  enough that an end value of the widest range is not missed — 256 samples for a 16-value range — and still read
+  the decompile to know which shape the sampled `min`/`max` stand for.
+- Every `range` that stays says why in the summary: which world state it depends on, or why it cannot be derived.
 
 ## Step 3 — accessor shape follows field visibility
 
@@ -183,13 +244,22 @@ loader module's single compile classpath, so a shim may name that library's type
 are Moonlight's `ModItemListing`) without reflection, and at runtime the target mod's own hard dependency guarantees
 it is there.
 
-**An entry that carries its own count reports `1` unless you seed the range yourself.**
-`NodeUtils.getEnchantedCount` starts from `RangeValue(1)` and lets the entry's functions modify it, which is right
-only for an entry whose count comes from a `SetItemCountFunction`. A `LootPoolSingletonContainer` holding its own
-`min`/`max` (Placebo's `StackLootEntry`) must build `new EnchantedRanges(new RangeValue(min, max))` and run
-`utils.applyCountModifier` over the functions itself, then hand that to both `ItemNode` and
-`TooltipUtils.getTooltip`. `weight`, `quality`, `conditions` and `functions` are read off `parent` — the access
-widener opens all four — and `IEntry` and `IEntryTooltip` sit on the one accessor.
+**An entry that carries its own count reports `1` unless you seed the count yourself.**
+`NodeUtils.getCount(utils, functions)` starts from `NumberExpr.constant(1)` and lets the entry's functions modify it,
+which is right only for an entry whose count comes from a `SetItemCountFunction`. A `LootPoolSingletonContainer`
+holding its own `min`/`max` (Placebo's `StackLootEntry`, which rolls `Mth.randomBetweenInclusive(min, max)`) calls
+`NodeUtils.getCount(utils, NumberExpr.uniformInt(min, max), allFunctions)` and hands the resulting `LootCount` to
+`TooltipUtils.getTooltip(utils, quality, NodeUtils.getChance(utils, allConditions, itemChance), count,
+NodeUtils.getCountLimit(itemStack), allFunctions, allConditions)` and its `value()` to `ItemNode`. `weight`,
+`quality`, `conditions` and `functions` are read off `parent` — the access widener opens all four — and `IEntry`
+and `IEntryTooltip` sit on the one accessor.
+
+**A function or condition that changes a number registers a modifier beside its tooltip.** `ICountModifier`
+(`applyCountModifier(utils, count)`) and `IChanceModifier` (`applyChanceModifier(utils, chance)`) take the
+`NumberExpr` built so far and return the transformed one — `min(count, constant(maxStack))`,
+`mul(chance, constant(p))` — through `PluginUtils.registerCountModifier` / `registerChanceModifier`. A conditional
+function needs nothing extra: ALI wraps the result in a `Cond` with its predicates. A mod `NumberProvider` is an
+`INumberProvider` (`convertNumber`, and `convertIntNumber` when the target's `getInt` is not `round(getFloat)`).
 
 One accessor may implement several hooks. A function that swaps the stack is worth registering twice:
 `registerFunctionTooltip` (what it says) and `registerItemStackModifier` (so the drop renders as
@@ -222,8 +292,8 @@ the target's trade already is:
 
 Measure the shim against what ALI already does, not against nothing: an unregistered listing falls
 back to `entry.getOffer(null, null)` rendered through `TradeUtils.getNode`, and to a missing-listing
-tooltip when that throws. A shim earns its place by reading the listing's fields — which gives count
-*ranges* and survives a listing that needs a trader — not by re-deriving one rolled offer.
+tooltip when that throws. A shim earns its place by reading the listing's fields — which gives the count
+*distribution* (Step 2b) and survives a listing that needs a trader — not by re-deriving one rolled offer.
 
 **A listing that keeps its data in a lambda** has no fields to read — a base class holding one
 `BiFunction<Entity, RandomSource, MerchantOffer>` (Iron's Spellbooks' `AdditionalWanderingTrades`)
@@ -261,13 +331,14 @@ entries only once a script or config has narrowed them.
 `registerTrades` wants an `Int2ObjectMap<ItemListing[]>`, but a custom trader often has none: it fills
 a `MerchantOffers` inline in `getOffers()`, behind `random.nextFloat() < 0.25` gates and private
 static filler lists. Mirror that list with **shim-owned** listings — one class implementing
-`VillagerTrades.ItemListing` *and* `IItemListing`, carrying `RangeValue` counts and an optional
+`VillagerTrades.ItemListing` *and* `IItemListing`, carrying `NumberExpr` counts and an optional
 result tooltip — rather than reusing the target's listing objects. You then know every constructor
 argument, because you are the one passing it, and the same builders serve the wandering-trader path.
 
 `TradeLevelInfo` carries one chance for a whole level, so **each RNG gate becomes its own level**:
-`new TradeLevelInfo(new RangeValue(1), 0.25f)` reads as "selects 1 of these, 25% chance", and a
-`RangeValue(3, 4)` over a filler pool reads as "selects 3-4 of these". Ten small levels on a trader
+`new TradeLevelInfo(NumberExpr.constant(1), 0.25f)` reads as "selects 1 of these, 25% chance", and a
+`NumberExpr.uniformInt(3, 4)` over a filler pool (`createRandomOffers(3, 4)`) reads as "selects 3-4 of these" —
+read the pick count off the target's code like any other roll (Step 2b). Ten small levels on a trader
 with no real levels is the honest encoding; one level loses every probability. A private static
 `List<MerchantOffer>` of fillers is worth reading by plain reflection (survives target updates); a
 private static `List<ItemListing>` of lambda-backed entries is not, since the entries are unreadable

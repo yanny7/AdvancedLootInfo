@@ -5,11 +5,14 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Either;
 import com.mojang.math.Axis;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
+import com.yanny.aci.api.NumberInterval;
+import com.yanny.aci.number.NumberFormatter;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.compatibility.AbstractScrollWidget;
 import com.yanny.aci.compatibility.ScrollableTooltip;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
+import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.aci.tooltip.TooltipNodePalette;
 import com.yanny.awi.api.IBlockNode;
 import com.yanny.awi.api.IDataNode;
@@ -142,7 +145,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
                 widgets.add(Widgets.createSlot(new Point(slotX + 1, slotY + 1)).entries(stacks).markOutput());
             }
 
-            widgets.add(Widgets.wrapRenderer(new Rectangle(slotX, slotY, 18, 18), new SlotCountRenderer(new RangeValue(1))));
+            widgets.add(Widgets.wrapRenderer(new Rectangle(slotX, slotY, 18, 18), new SlotCountRenderer(NumberExpr.constant(1))));
         });
         return new WidgetHolder(widgets, widget.getRect());
     }
@@ -175,7 +178,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
     }
 
     private static Tooltip addLootTooltip(Tooltip tooltip, IDataNode entry) {
-        List<Component> lines = CoreTooltipUtils.toComponents(entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle());
+        List<TooltipLine> lines = CoreTooltipUtils.toLines(entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle(), TooltipUtils.getNumberOptions());
 
         return lines.isEmpty() ? tooltip : tooltip.add(new ScrollableTooltip(lines));
     }
@@ -187,10 +190,12 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
         private Component count;
         private boolean isRange = false;
 
-        public SlotCountRenderer(RangeValue count) {
-            if (count.isRange() || count.min() > 1) {
-                this.count = Component.literal(count.toIntString());
-                isRange = count.isRange();
+        public SlotCountRenderer(NumberExpr count) {
+            NumberInterval bounds = NumberFormatter.slotBounds(count);
+
+            if (!bounds.isPoint() || bounds.lo() > 1) {
+                this.count = Component.literal(NumberFormatter.slot(bounds));
+                isRange = !bounds.isPoint();
             }
         }
 

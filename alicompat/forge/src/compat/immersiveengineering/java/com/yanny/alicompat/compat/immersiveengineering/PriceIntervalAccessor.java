@@ -1,6 +1,6 @@
 package com.yanny.alicompat.compat.immersiveengineering;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.ClassAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
@@ -19,7 +19,7 @@ public class PriceIntervalAccessor extends BaseAccessor<Object> {
     }
 
     @NotNull
-    public RangeValue getRange() {
-        return new RangeValue(min, max);
+    public NumberExpr getRange() {
+        return NumberExpr.uniformInt(min, Math.max(min, max));
     }
 }

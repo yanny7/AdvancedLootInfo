@@ -2,7 +2,7 @@ package com.yanny.awi.emi.compatibility.emi;
 
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.IWidget;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.compatibility.AbstractScrollWidget;
@@ -78,7 +78,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
             }
 
             EmiIngredient ingredient = stacks.size() == 1 ? stacks.get(0) : EmiIngredient.of(stacks);
-            EmiLootSlotWidget widget = new EmiLootSlotWidget(h.entry, ingredient, h.rect.getX(), h.rect.getY(), new RangeValue(1));
+            EmiLootSlotWidget widget = new EmiLootSlotWidget(h.entry, ingredient, h.rect.getX(), h.rect.getY(), NumberExpr.constant(1));
 
             widget.recipeContext(h.recipe);
             return (Widget) widget;

@@ -1,14 +1,13 @@
 package com.yanny.ali.api;
 
 import com.yanny.aci.api.ICoreServerRegistry;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.plugin.glm.IEntitySubPredicateResolver;
 import com.yanny.ali.plugin.glm.ILootContextPreparer;
 import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.ali.plugin.glm.IPageResolver;
-import com.yanny.ali.plugin.server.EnchantedRanges;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.resources.ResourceLocation;
@@ -21,7 +20,6 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.apache.commons.lang3.function.TriFunction;
-import org.apache.logging.log4j.util.TriConsumer;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -43,11 +41,13 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     void registerIngredientUnwrapper(Function<Ingredient, Object> unwrapper);
 
-    <T extends NumberProvider> void registerNumberProvider(Class<T> type, BiFunction<IServerUtils, T, RangeValue> converter);
+    <T extends NumberProvider> void registerNumberProvider(Class<T> type, BiFunction<IServerUtils, T, NumberExpr> converter);
 
-    <T extends LootItemFunction> void registerCountModifier(Class<T> type, TriConsumer<IServerUtils, T, EnchantedRanges> consumer);
+    <T extends NumberProvider> void registerNumberProvider(Class<T> type, BiFunction<IServerUtils, T, NumberExpr> converter, BiFunction<IServerUtils, T, NumberExpr> intConverter);
 
-    <T extends LootItemCondition> void registerChanceModifier(Class<T> type, TriConsumer<IServerUtils, T, EnchantedRanges> consumer);
+    <T extends LootItemFunction> void registerCountModifier(Class<T> type, TriFunction<IServerUtils, T, NumberExpr, NumberExpr> modifier);
+
+    <T extends LootItemCondition> void registerChanceModifier(Class<T> type, TriFunction<IServerUtils, T, NumberExpr, NumberExpr> modifier);
 
     <T extends LootItemFunction> void registerItemStackModifier(Class<T> type, TriFunction<IServerUtils, T, ItemStack, ItemStack> consumer);
 

@@ -32,7 +32,7 @@ public class ConditionTooltipTest {
                 "All Of:",
                 "  -> Time Check:",
                 "    -> Period: 10",
-                "    -> Value: 1 - 8",
+                "    -> Value: 1 to 8",
                 "  -> Weather Check:",
                 "    -> Is Raining: true"
         ));
@@ -53,7 +53,7 @@ public class ConditionTooltipTest {
                 "Any Of:",
                 "  -> Time Check:",
                 "    -> Period: 10",
-                "    -> Value: 1 - 8",
+                "    -> Value: 1 to 8",
                 "  -> Weather Check:",
                 "    -> Is Raining: true"
         ));
@@ -129,9 +129,9 @@ public class ConditionTooltipTest {
                 "  -> Target: Direct Killer",
                 "  -> Scores:",
                 "    -> double",
-                "      -> Limit: 1 - 7",
+                "      -> Limit: 1 to 7",
                 "    -> single",
-                "      -> Limit: 2 - 5"
+                "      -> Limit: 2 to 5"
         ));
     }
 
@@ -143,7 +143,7 @@ public class ConditionTooltipTest {
                 "Inverted:",
                 "  -> Time Check:",
                 "    -> Period: 10",
-                "    -> Value: 1 - 8"
+                "    -> Value: 1 to 8"
         ));
         assertTooltip(ConditionTooltipUtils.getInvertedTooltip(UTILS, (InvertedLootItemCondition) InvertedLootItemCondition.invert(
                 ExplosionCondition.survivesExplosion()
@@ -246,7 +246,7 @@ public class ConditionTooltipTest {
         assertTooltip(ConditionTooltipUtils.getTimeCheckTooltip(UTILS, TimeCheck.time(IntRange.range(5, 10)).setPeriod(24000).build()).build(), List.of(
                 "Time Check:",
                 "  -> Period: 24000",
-                "  -> Value: 5 - 10"
+                "  -> Value: 5 to 10"
         ));
     }
 
@@ -254,8 +254,8 @@ public class ConditionTooltipTest {
     public void testValueCheckTooltip() {
         assertTooltip(ConditionTooltipUtils.getValueCheckTooltip(UTILS, (ValueCheckCondition) ValueCheckCondition.hasValue(UniformGenerator.between(1, 20), IntRange.range(1, 10)).build()).build(), List.of(
                 "Value Check:",
-                "  -> Provider: 1-20",
-                "  -> Range: 1 - 10"
+                "  -> Provider: 1 to 20",
+                "  -> Range: 1 to 10"
         ));
     }
 

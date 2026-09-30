@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.yanny.aci.compatibility.ScrollableTooltip;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
+import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.plugin.client.TooltipUtils;
 import dev.emi.emi.api.stack.EmiStack;
@@ -35,7 +36,7 @@ public class EmiBlockSlotWidget extends SlotWidget {
 
     @Override
     protected void addSlotTooltip(List<ClientTooltipComponent> list) {
-        List<Component> lines = CoreTooltipUtils.toComponents(entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle());
+        List<TooltipLine> lines = CoreTooltipUtils.toLines(entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle(), TooltipUtils.getNumberOptions());
 
         if (!lines.isEmpty()) {
             list.add(new ScrollableTooltip(lines));

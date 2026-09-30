@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.villagertradingplus;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
@@ -57,13 +57,13 @@ public class SellStructureMapTradeOfferAccessor extends BaseAccessor<VillagerTra
         return new ItemsToItemsNode(
                 utils,
                 Either.left(currency),
-                new RangeValue(currency.getCount()),
+                NumberExpr.constant(currency.getCount()),
                 TooltipNode.empty(),
                 Either.left(buy),
-                new RangeValue(Math.max(1, buy.getCount())),
+                NumberExpr.constant(Math.max(1, buy.getCount())),
                 TooltipNode.empty(),
                 Either.left(getMapStack()),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 TooltipBuilder.array((b) -> {
                     b.add(utils.getValueTooltip(utils, structure).build(Lang.Value.DESTINATION));
                     b.add(utils.getValueTooltip(utils, MapDecoration.Type.RED_X).build(Lang.Value.MAP_DECORATION));

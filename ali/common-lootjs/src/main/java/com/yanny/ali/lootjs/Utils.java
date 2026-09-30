@@ -2,7 +2,7 @@ package com.yanny.ali.lootjs;
 
 import com.almostreliable.lootjs.core.LootEntry;
 import com.yanny.aci.CommonLogUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.lootjs.mixin.MixinLootEntry;
@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 public class Utils {
     private static final Logger LOGGER = CommonLogUtils.getLogger(com.yanny.ali.Utils.MOD_ID);
 
-    public static IDataNode getEntry(IServerUtils utils, LootEntry entry, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions, @Nullable RangeValue preservedCount) {
+    public static IDataNode getEntry(IServerUtils utils, LootEntry entry, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions, @Nullable NumberExpr preservedCount) {
         MixinLootEntry mixinLootEntry = (MixinLootEntry) entry;
         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), mixinLootEntry.getPostModifications().stream()).toList();
         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), mixinLootEntry.getConditions().stream()).toList();

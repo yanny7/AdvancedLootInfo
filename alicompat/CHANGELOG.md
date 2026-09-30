@@ -1,3 +1,7 @@
+## []
+
+- Counts and prices show their distribution, fixed several Iron's Spellbooks and Farmer's Delight values
+
 ## [1.1.0]
 
 - Added GregTech CEu Modern support

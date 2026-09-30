@@ -1,7 +1,7 @@
 package com.yanny.aci.spawn;
 
 import com.yanny.aci.CommonLogUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
@@ -250,7 +250,7 @@ public class SpawnInfo {
     private static TooltipBuilder addSpawn(TooltipBuilder builder, Spawn spawn) {
         builder.add(TooltipBuilder.value(spawn.category().getName()).build(CoreLang.Spawn.CATEGORY));
         builder.add(TooltipBuilder.value(spawn.weight()).build(CoreLang.Spawn.WEIGHT));
-        builder.add(TooltipBuilder.value(new RangeValue(spawn.minCount(), spawn.maxCount()).toIntString()).build(CoreLang.Spawn.GROUP_SIZE));
+        builder.add(TooltipBuilder.number(NumberExpr.uniformInt(spawn.minCount(), spawn.maxCount())).build(CoreLang.Spawn.GROUP_SIZE));
 
         if (spawn.cost() != null) {
             builder.add(TooltipBuilder.value(COST_FORMAT.format(spawn.cost().charge()), COST_FORMAT.format(spawn.cost().energyBudget())).build(CoreLang.Spawn.SPAWN_COST));

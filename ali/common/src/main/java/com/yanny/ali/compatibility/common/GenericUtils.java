@@ -8,6 +8,7 @@ import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.ICoreDataNode;
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
+import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.manager.AliClientRegistry;
@@ -146,9 +147,9 @@ public class GenericUtils {
     }
 
     @NotNull
-    public static List<Component> getSpawnTooltip(IDataNode node) {
+    public static List<TooltipLine> getSpawnTooltip(IDataNode node) {
         if (node instanceof EntityLootTableNode entityNode) {
-            return CoreTooltipUtils.toComponents(entityNode.getSpawnTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle());
+            return CoreTooltipUtils.toLines(entityNode.getSpawnTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle(), TooltipUtils.getNumberOptions());
         }
 
         return Collections.emptyList();

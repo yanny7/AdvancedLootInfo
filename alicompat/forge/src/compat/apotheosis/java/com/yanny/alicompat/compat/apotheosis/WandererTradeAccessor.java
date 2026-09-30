@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.apotheosis;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
@@ -40,11 +40,11 @@ public class WandererTradeAccessor extends BaseAccessor<WandererTrade> implement
         return new ItemsToItemsNode(
                 utils,
                 Either.left(price),
-                new RangeValue(price.getCount()),
+                NumberExpr.constant(price.getCount()),
                 Either.left(price2),
-                new RangeValue(price2.getCount()),
+                NumberExpr.constant(price2.getCount()),
                 Either.left(forSale),
-                new RangeValue(forSale.getCount()),
+                NumberExpr.constant(forSale.getCount()),
                 maxTrades,
                 xp,
                 priceMult,

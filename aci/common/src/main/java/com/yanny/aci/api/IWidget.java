@@ -1,7 +1,7 @@
 package com.yanny.aci.api;
 
+import com.yanny.aci.tooltip.TooltipLine;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public interface IWidget {
     default void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {}
 
     @NotNull
-    default List<Component> getTooltipComponents(int mouseX, int mouseY) {
+    default List<TooltipLine> getTooltipLines(int mouseX, int mouseY) {
         return List.of();
     }
 }

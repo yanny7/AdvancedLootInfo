@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.moonlight;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerRegistry;
@@ -44,13 +44,13 @@ public class MoonlightCompat implements IModCompat {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(listing.price()),
-                new RangeValue(listing.price().getCount()),
+                NumberExpr.constant(listing.price().getCount()),
                 TooltipNode.empty(),
                 Either.left(listing.price2()),
-                new RangeValue(Math.max(1, listing.price2().getCount())),
+                NumberExpr.constant(Math.max(1, listing.price2().getCount())),
                 TooltipNode.empty(),
                 Either.left(TooltipUtils.getItemStack(utils, listing.offer().copy(), getFunctions(listing))),
-                new RangeValue(listing.offer().getCount()),
+                NumberExpr.constant(listing.offer().getCount()),
                 utils.getValueTooltip(utils, listing.func()).build(Lang.Branch.MODIFIERS),
                 listing.maxTrades(),
                 listing.xp(),

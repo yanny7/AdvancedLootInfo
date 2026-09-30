@@ -34,6 +34,7 @@ public class LanguageHolder {
         CoreLang.register(TRANSLATION_MAP, Lang.Description.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Group.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Multi.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.Numbers.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Error.class);
 
         put(EquipmentSlot.MAINHAND, "Main Hand");

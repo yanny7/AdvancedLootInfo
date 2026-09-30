@@ -17,6 +17,7 @@ public class AwiConfig implements ICoreConfig {
 
     public boolean logMoreStatistics = false;
     public boolean showInGameNames = true;
+    public boolean showCharts = true;
 
     /**
      * Whether to display blocks that a feature's {@code place()} bytecode only reaches through a test on the

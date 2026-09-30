@@ -3,7 +3,7 @@ package com.yanny.alicompat.compat.morejs;
 import com.almostreliable.morejs.features.villager.TradeItem;
 import com.almostreliable.morejs.features.villager.trades.EnchantedItemTrade;
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
@@ -59,7 +59,7 @@ public class EnchantedItemTradeAccessor extends BaseAccessor<EnchantedItemTrade>
         TradeItemAccessor second = TradeItemAccessor.of(secondInput);
         ItemStack result = new ItemStack(itemToEnchant.equals(Items.BOOK) ? Items.ENCHANTED_BOOK : itemToEnchant);
         TooltipNode tooltip = TooltipBuilder.branch((b) -> {
-            b.add(utils.getValueTooltip(utils, new RangeValue(minEnchantmentAmount, maxEnchantmentAmount)).build(Lang.Value.AMOUNT));
+            b.add(utils.getValueTooltip(utils, NumberExpr.uniformInt(minEnchantmentAmount, maxEnchantmentAmount)).build(Lang.Value.AMOUNT));
 
             if (enchantments.size() < BuiltInRegistries.ENCHANTMENT.size()) {
                 enchantments.forEach((enchantment) -> b.add(utils.getValueTooltip(utils, enchantment).build(Lang.Value.ENCHANTMENT)));
@@ -75,7 +75,7 @@ public class EnchantedItemTradeAccessor extends BaseAccessor<EnchantedItemTrade>
                 second.getCount(),
                 TooltipNode.empty(),
                 Either.left(result),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 tooltip,
                 maxUses,
                 villagerExperience,

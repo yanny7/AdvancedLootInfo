@@ -1,6 +1,6 @@
 package com.yanny.alicompat.compat.hybridaquatic;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IItemNode;
@@ -67,7 +67,7 @@ public class HAGlobalLootModifierAccessor extends BaseAccessor<HAGlobalLootModif
                 .map((table) -> getTableNode(utils, allConditions, table.getData(), chance * table.getWeight().asInt() / sumWeight))
                 .toList();
 
-        return new LootPoolNode(children, TooltipUtils.getLootPoolTooltip(new RangeValue(1), new RangeValue(0)).build());
+        return new LootPoolNode(children, TooltipUtils.getLootPoolTooltip(NumberExpr.constant(1)).build());
     }
 
     @NotNull
@@ -75,7 +75,7 @@ public class HAGlobalLootModifierAccessor extends BaseAccessor<HAGlobalLootModif
         LootTable lootTable = utils.getLootTable(table);
         TooltipBuilder tooltip = TooltipBuilder.array((b) -> {
             b.add(TooltipBuilder.keyOnly(Lang.Group.ALL));
-            b.add(TooltipUtils.getChanceTooltip(NodeUtils.getEnchantedChance(utils, conditions, chance)));
+            b.add(TooltipUtils.getChanceTooltip(NodeUtils.getChance(utils, conditions, chance)));
             b.add(GenericTooltipUtils.getConditionsSectionTooltip(utils, conditions));
         });
         IDataNode child;

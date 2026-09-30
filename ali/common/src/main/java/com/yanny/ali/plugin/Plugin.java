@@ -1,7 +1,11 @@
 package com.yanny.ali.plugin;
 
 import com.mojang.datafixers.util.Pair;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
+import com.yanny.aci.api.NumberFunctions;
+import com.yanny.aci.api.NumberText;
+import com.yanny.aci.language.CoreLang;
+import com.yanny.aci.tooltip.CommonNumberProviders;
 import com.yanny.aci.tooltip.CommonValueTooltip;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
@@ -37,12 +41,15 @@ import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.loot.IntRange;
+import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootDataManager;
 import net.minecraft.world.level.storage.loot.entries.*;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.nbt.LootNbtProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.*;
+import net.minecraft.world.level.storage.loot.providers.score.ContextScoreboardNameProvider;
+import net.minecraft.world.level.storage.loot.providers.score.FixedScoreboardNameProvider;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -105,15 +112,16 @@ public class Plugin implements IPlugin {
     @Override
     public void registerServer(IServerRegistry registry) {
         new CommonValueTooltip<IServerUtils, IServerRegistry>().registerAll(registry);
+        new CommonNumberProviders<IServerUtils, IServerRegistry>().registerAll(registry);
 
         EnumTypes.TRANSLATED_ENUMS.forEach((type, owner) -> registry.registerEnumTranslation(type, Utils.MOD_ID, owner));
 
         registry.registerCacheCleaner(GlobalLootModifierUtils::clearCaches);
 
         registry.registerNumberProvider(ConstantValue.class, Plugin::convertConstant);
-        registry.registerNumberProvider(UniformGenerator.class, Plugin::convertUniform);
-        registry.registerNumberProvider(BinomialDistributionGenerator.class, Plugin::convertBinomial);
-        registry.registerNumberProvider(ScoreboardValue.class, Plugin::convertScore);
+        registry.registerNumberProvider(UniformGenerator.class, Plugin::convertUniform, Plugin::convertIntUniform);
+        registry.registerNumberProvider(BinomialDistributionGenerator.class, Plugin::convertBinomial, Plugin::convertBinomial);
+        registry.registerNumberProvider(ScoreboardValue.class, Plugin::convertScore, Plugin::convertIntScore);
 
         registry.registerEntry(LootItem.class, NodeUtils::getItemNode);
         registry.registerEntry(TagEntry.class, NodeUtils::getTagNode);
@@ -279,30 +287,68 @@ public class Plugin implements IPlugin {
     // Villager#updateTrades picks 2 listings per level, WanderingTrader#updateTrades 5 from its first pool and 1 from its second
     private static void registerVanillaTrades(IServerRegistry registry) {
         for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : BuiltInRegistries.VILLAGER_PROFESSION.entrySet()) {
-            registry.registerTrades(entry.getKey().location(), EntityType.VILLAGER, () -> VillagerTrades.TRADES.get(entry.getValue()), (level) -> new TradeLevelInfo(new RangeValue(2)));
+            registry.registerTrades(entry.getKey().location(), EntityType.VILLAGER, () -> VillagerTrades.TRADES.get(entry.getValue()), (level) -> new TradeLevelInfo(NumberExpr.constant(2)));
         }
 
-        registry.registerTrades(new ResourceLocation("wandering_trader"), EntityType.WANDERING_TRADER, () -> VillagerTrades.WANDERING_TRADER_TRADES, (level) -> new TradeLevelInfo(new RangeValue(level == 2 ? 1 : 5)));
+        registry.registerTrades(new ResourceLocation("wandering_trader"), EntityType.WANDERING_TRADER, () -> VillagerTrades.WANDERING_TRADER_TRADES, (level) -> new TradeLevelInfo(NumberExpr.constant(level == 2 ? 1 : 5)));
     }
 
     @NotNull
-    private static RangeValue convertConstant(IServerUtils utils, ConstantValue numberProvider) {
-        return new RangeValue(numberProvider.getFloat(utils.getLootContext()));
+    private static NumberExpr convertConstant(IServerUtils utils, ConstantValue numberProvider) {
+        return NumberExpr.constant(numberProvider.getFloat(utils.getLootContext()));
     }
 
     @NotNull
-    private static RangeValue convertUniform(IServerUtils utils, UniformGenerator numberProvider) {
-        return new RangeValue(utils.convertNumber(utils, numberProvider.min).min(),
-                utils.convertNumber(utils, numberProvider.max).max());
+    private static NumberExpr convertUniform(IServerUtils utils, UniformGenerator numberProvider) {
+        return NumberExpr.fn(NumberFunctions.UNIFORM_FLOAT, utils.convertNumber(utils, numberProvider.min), utils.convertNumber(utils, numberProvider.max));
     }
 
     @NotNull
-    private static RangeValue convertBinomial(IServerUtils utils, BinomialDistributionGenerator numberProvider) {
-        return new RangeValue(0, utils.convertNumber(utils, numberProvider.n).max());
+    private static NumberExpr convertIntUniform(IServerUtils utils, UniformGenerator numberProvider) {
+        return NumberExpr.uniformInt(utils.convertIntNumber(utils, numberProvider.min), utils.convertIntNumber(utils, numberProvider.max));
     }
 
     @NotNull
-    private static RangeValue convertScore(IServerUtils utils, ScoreboardValue numberProvider) {
-        return new RangeValue(true, false);
+    private static NumberExpr convertBinomial(IServerUtils utils, BinomialDistributionGenerator numberProvider) {
+        return NumberExpr.binomial(utils.convertIntNumber(utils, numberProvider.n), utils.convertNumber(utils, numberProvider.p));
+    }
+
+    @NotNull
+    private static NumberExpr convertScore(IServerUtils utils, ScoreboardValue numberProvider) {
+        return NumberExpr.mul(getScore(numberProvider), NumberExpr.constant(numberProvider.scale));
+    }
+
+    @NotNull
+    private static NumberExpr convertIntScore(IServerUtils utils, ScoreboardValue numberProvider) {
+        if (numberProvider.scale == 1) {
+            return getScore(numberProvider);
+        }
+
+        return NumberExpr.fn(NumberFunctions.ROUND, convertScore(utils, numberProvider));
+    }
+
+    @NotNull
+    private static NumberExpr getScore(ScoreboardValue numberProvider) {
+        NumberText target;
+
+        if (numberProvider.target instanceof ContextScoreboardNameProvider provider) {
+            target = NumberText.key(getTargetKey(provider.target).singular());
+        } else if (numberProvider.target instanceof FixedScoreboardNameProvider provider) {
+            target = NumberText.str(provider.getName());
+        } else {
+            target = NumberText.key(CoreLang.Numbers.UNKNOWN.singular());
+        }
+
+        return NumberExpr.score(target, numberProvider.score);
+    }
+
+    @NotNull
+    private static CoreLang.Numbers getTargetKey(LootContext.EntityTarget target) {
+        return switch (target) {
+            case THIS -> CoreLang.Numbers.TARGET_THIS;
+            case KILLER -> CoreLang.Numbers.TARGET_KILLER;
+            case DIRECT_KILLER -> CoreLang.Numbers.TARGET_DIRECT_KILLER;
+            case KILLER_PLAYER -> CoreLang.Numbers.TARGET_KILLER_PLAYER;
+        };
     }
 }

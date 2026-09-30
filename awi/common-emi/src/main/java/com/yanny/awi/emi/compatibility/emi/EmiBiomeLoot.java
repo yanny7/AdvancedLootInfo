@@ -3,6 +3,7 @@ package com.yanny.awi.emi.compatibility.emi;
 import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.compatibility.ScrollableTooltip;
+import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.api.IWidgetUtils;
 import com.yanny.awi.compatibility.GenericUtils;
@@ -53,7 +54,7 @@ public class EmiBiomeLoot extends EmiBaseLoot {
                 SlotWidget widget = new SlotWidget(EmiStack.of(slot.egg()), slot.x(), slot.y()) {
                     @Override
                     protected void addSlotTooltip(List<ClientTooltipComponent> list) {
-                        List<Component> conditions = slot.getConditions();
+                        List<TooltipLine> conditions = slot.getConditions();
 
                         if (!conditions.isEmpty()) {
                             list.add(new ScrollableTooltip(conditions));

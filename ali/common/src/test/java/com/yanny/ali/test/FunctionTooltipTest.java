@@ -117,7 +117,7 @@ public class FunctionTooltipTest {
     public void testEnchantWithLevelsTooltip() {
         assertTooltip(FunctionTooltipUtils.getEnchantWithLevelsTooltip(UTILS, (EnchantWithLevelsFunction) EnchantWithLevelsFunction.enchantWithLevels(UniformGenerator.between(1, 3)).allowTreasure().build()).build(), List.of(
                 "Enchant With Levels:",
-                "  -> Levels: 1-3",
+                "  -> Levels: 1 to 3",
                 "  -> Treasure: true"
         ));
     }
@@ -163,7 +163,7 @@ public class FunctionTooltipTest {
     public void testLimitCountTooltip() {
         assertTooltip(FunctionTooltipUtils.getLimitCountTooltip(UTILS, (LimitCount) LimitCount.limitCount(IntRange.range(0, 10)).build()).build(), List.of(
                 "Limit Count:",
-                "  -> Limit: 0 - 10"
+                "  -> Limit: 0 to 10"
         ));
     }
 
@@ -171,7 +171,7 @@ public class FunctionTooltipTest {
     public void testLootingEnchantTooltip() {
         assertTooltip(FunctionTooltipUtils.getLootingEnchantTooltip(UTILS, (LootingEnchantFunction) LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(0, 4)).setLimit(3).build()).build(), List.of(
                 "Looting Enchant:",
-                "  -> Value: 0-4",
+                "  -> Value: 0 to 4",
                 "  -> Limit: 3"
         ));
     }
@@ -201,7 +201,7 @@ public class FunctionTooltipTest {
                 "    -> Name: armor",
                 "    -> Attribute: minecraft:generic.armor",
                 "    -> Operation: Multiply Total",
-                "    -> Amount: 1-5",
+                "    -> Amount: 1 to 5",
                 "    -> Equipment Slots:",
                 "      -> Feet",
                 "      -> Legs",
@@ -252,7 +252,7 @@ public class FunctionTooltipTest {
     public void testSetCountTooltip() {
         assertTooltip(FunctionTooltipUtils.getSetCountTooltip(UTILS, (SetItemCountFunction) SetItemCountFunction.setCount(UniformGenerator.between(12, 24), true).build()).build(), List.of(
                 "Set Count:",
-                "  -> Count: 12-24",
+                "  -> Count: 12 to 24",
                 "  -> Add: true"
         ));
     }
@@ -261,7 +261,7 @@ public class FunctionTooltipTest {
     public void testSetDamageTooltip() {
         assertTooltip(FunctionTooltipUtils.getSetDamageTooltip(UTILS, (SetItemDamageFunction) SetItemDamageFunction.setDamage(UniformGenerator.between(0.12345F, 3.1412F), false).build()).build(), List.of(
                 "Set Damage:",
-                "  -> Damage: 0.12-3.14",
+                "  -> Damage: 12.35% to 314.12%",
                 "  -> Add: false"
         ));
     }
@@ -382,9 +382,9 @@ public class FunctionTooltipTest {
         ).build(), List.of(
                 "Set Stew Effect:",
                 "  -> minecraft:luck",
-                "    -> Duration: 1-5",
+                "    -> Duration: 1 to 5",
                 "  -> minecraft:unluck",
-                "    -> Duration: 3-4"
+                "    -> Duration: 3 to 4"
         ));
     }
 }

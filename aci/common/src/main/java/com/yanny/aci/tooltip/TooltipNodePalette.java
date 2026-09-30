@@ -32,7 +32,7 @@ public class TooltipNodePalette {
             return cached;
         }
 
-        CacheKey storedKey = new CacheKey(key.key() != null ? key.key().intern() : null, internValues(key.values()), key.componentValue(), key.flags(), List.copyOf(key.children()));
+        CacheKey storedKey = new CacheKey(key.key() != null ? key.key().intern() : null, internValues(key.values()), key.componentValue(), key.number(), key.flags(), List.copyOf(key.children()));
         TooltipNode newNode = new TooltipNode(storedKey);
 
         misses++;
@@ -103,7 +103,7 @@ public class TooltipNodePalette {
                 nodeChildren.add(idToNode.get(id));
             }
 
-            TooltipNode.getOrCreate(utils.getTooltipCache(), raw.key(), raw.values(), raw.componentValue(), raw.flags(), nodeChildren);
+            TooltipNode.getOrCreate(utils.getTooltipCache(), raw.key(), raw.values(), raw.componentValue(), raw.number(), raw.flags(), nodeChildren);
         }
     }
 

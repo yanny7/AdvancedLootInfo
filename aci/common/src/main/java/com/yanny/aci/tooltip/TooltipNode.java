@@ -1,6 +1,7 @@
 package com.yanny.aci.tooltip;
 
 import com.yanny.aci.CommonLogUtils;
+import com.yanny.aci.Utils;
 import com.yanny.aci.api.ICoreClientUtils;
 import com.yanny.aci.api.ICoreServerUtils;
 import com.yanny.aci.language.CoreLang;
@@ -25,10 +26,13 @@ public class TooltipNode {
     public static final short FLAG_HAS_VALUE = 1 << 6;
     public static final short FLAG_COMPONENT = 1 << 7;
     public static final short FLAG_INDEX_KEY = 1 << 8;
+    public static final short FLAG_NUMBER    = 1 << 9;
 
     private @Nullable final String key;
     private final String @Nullable[] values;
     private @Nullable final Component component;
+    private @Nullable final TooltipNumber number;
+    private final NumberView @Nullable[] numberViews;
     private final short flags;
     private final List<TooltipNode> children;
 
@@ -36,6 +40,8 @@ public class TooltipNode {
         this.key = cacheKey.key();
         this.values = cacheKey.values() != null ? cacheKey.values().toArray(new String[0]) : null;
         this.component = cacheKey.componentValue();
+        this.number = cacheKey.number();
+        this.numberViews = number != null ? new NumberView[4] : null;
         this.flags = cacheKey.flags();
         this.children = cacheKey.children();
     }
@@ -50,6 +56,11 @@ public class TooltipNode {
         return component;
     }
 
+    @Nullable
+    public TooltipNumber getNumber() {
+        return number;
+    }
+
     public boolean hasChildren() {
         return !children.isEmpty();
     }
@@ -61,14 +72,14 @@ public class TooltipNode {
     /**
      * Number of lines this node contributes to its parent's indent level. Nodes without a key/value/component are
      * transparent when rendered - they emit no line of their own and splice their children into the parent instead
-     * (see {@link #getComponents}), so a single node can span multiple lines.
+     * (see {@link #getLines}), so a single node can span multiple lines.
      */
     public int lineSpan() {
         if (is(FLAG_EMPTY)) {
             return 0;
         }
 
-        if (hasKey() || is(FLAG_HAS_VALUE) || is(FLAG_COMPONENT)) {
+        if (hasOwnLine()) {
             return 1;
         }
 
@@ -104,7 +115,7 @@ public class TooltipNode {
             }
         }
 
-        boolean hasOwnValue = is(FLAG_HAS_VALUE) || is(FLAG_COMPONENT) || is(FLAG_ERROR);
+        boolean hasOwnValue = is(FLAG_HAS_VALUE) || is(FLAG_COMPONENT) || is(FLAG_NUMBER) || is(FLAG_ERROR);
 
         if (hasOwnValue) {
             return false;
@@ -113,15 +124,16 @@ public class TooltipNode {
         return !is(FLAG_HAS_KEY) || !children.isEmpty();
     }
 
-    public List<Component> getComponents(int indentLevel, boolean isAdvanced, TooltipStyle style) {
+    public List<TooltipLine> getLines(int indentLevel, boolean isAdvanced, TooltipStyle style, NumberOptions options) {
         if (isBlank(isAdvanced)) {
             return List.of();
         }
 
-        List<Component> lines = new ArrayList<>();
+        List<TooltipLine> lines = new ArrayList<>();
         MutableComponent currentLine = indent(indentLevel);
-        boolean hasContent = is(FLAG_HAS_KEY) || is(FLAG_HAS_VALUE) || is(FLAG_COMPONENT);
-        boolean isBranching = is(FLAG_ARRAY) || !children.isEmpty() || (hasContent && indentLevel > 0);
+        boolean isBranching = is(FLAG_ARRAY) || !children.isEmpty() || (hasOwnLine() && indentLevel > 0);
+        NumberView view = numberView(options);
+        Component numberValue = view != null ? view.value(style, options.locale()) : null;
 
         if (indentLevel > 0 && isBranching) {
             currentLine.append(Component.literal("-> ").withStyle(style.branch()));
@@ -132,27 +144,68 @@ public class TooltipNode {
 
             if (is(FLAG_RAW_KEY)) {
                 appendRawKey(currentLine, style);
-                appendValuesAndComponentWithColon(currentLine, style);
+                appendValuesAndComponentWithColon(currentLine, style, numberValue);
             } else {
-                appendTranslatableKeyWithValuesAndComponent(currentLine, style);
+                appendTranslatableKeyWithValuesAndComponent(currentLine, style, numberValue);
             }
         } else {
-            appendValuesAncComponentDirectly(currentLine, style);
+            appendValuesAncComponentDirectly(currentLine, style, numberValue);
         }
 
         String rawText = currentLine.getString().replace("->", "").trim();
 
         if (!rawText.isEmpty() || is(FLAG_ERROR)) {
-            lines.add(currentLine);
+            lines.add(TooltipLine.text(currentLine));
         }
 
-        int childIndent = (is(FLAG_HAS_KEY) || is(FLAG_HAS_VALUE) || is(FLAG_COMPONENT)) ? indentLevel + 1 : indentLevel;
+        int childIndent = hasOwnLine() ? indentLevel + 1 : indentLevel;
 
-        for (TooltipNode child : children) {
-            lines.addAll(child.getComponents(childIndent, isAdvanced, style));
+        if (view != null) {
+            lines.addAll(numberLines(view, indentLevel, isAdvanced, style, options));
+        }
+
+        for (int i = 0; i < children.size(); i++) {
+            if (view == null || !view.isConditionChild(i)) {
+                lines.addAll(children.get(i).getLines(childIndent, isAdvanced, style, options));
+            }
         }
 
         return lines;
+    }
+
+    private boolean hasOwnLine() {
+        return hasKey() || is(FLAG_HAS_VALUE) || is(FLAG_COMPONENT) || is(FLAG_NUMBER);
+    }
+
+    @Nullable
+    private NumberView numberView(NumberOptions options) {
+        if (number == null || numberViews == null) {
+            return null;
+        }
+
+        int slot = (options.showFormulas() ? 1 : 0) | (options.showCharts() ? 2 : 0);
+
+        if (numberViews[slot] == null) {
+            numberViews[slot] = NumberView.compute(number, options.showFormulas(), options.showCharts());
+        }
+
+        return numberViews[slot];
+    }
+
+    @NotNull
+    private List<TooltipLine> numberLines(NumberView view, int indentLevel, boolean isAdvanced, TooltipStyle style, NumberOptions options) {
+        try {
+            return view.lines(indentLevel, style, options.locale(), (index, indent) -> {
+                if (index < 0 || index >= children.size()) {
+                    return List.of();
+                }
+
+                return children.get(index).getLines(indent, isAdvanced, style, options);
+            });
+        } catch (Throwable e) {
+            CommonLogUtils.getLogger(Utils.MOD_ID).warn("Failed to render number {}: {}", number, e.getMessage(), e);
+            return List.of();
+        }
     }
 
     private boolean is(short flag) {
@@ -173,7 +226,7 @@ public class TooltipNode {
         }
     }
 
-    private void appendTranslatableKeyWithValuesAndComponent(MutableComponent line, TooltipStyle style) {
+    private void appendTranslatableKeyWithValuesAndComponent(MutableComponent line, TooltipStyle style, @Nullable Component numberValue) {
         assert key != null;
 
         if (is(FLAG_HAS_VALUE)) {
@@ -188,12 +241,14 @@ public class TooltipNode {
         } else if (is(FLAG_COMPONENT)) {
             assert component != null;
             line.append(Component.translatable(key, component.copy().withStyle(style.value())).withStyle(style.text()));
+        } else if (numberValue != null) {
+            line.append(Component.translatable(key, numberValue).withStyle(style.text()));
         } else {
             line.append(Component.translatable(key).withStyle(style.text()));
         }
     }
 
-    private void appendValuesAndComponentWithColon(MutableComponent line, TooltipStyle style) {
+    private void appendValuesAndComponentWithColon(MutableComponent line, TooltipStyle style, @Nullable Component numberValue) {
         if (is(FLAG_HAS_VALUE)) {
             assert values != null;
             line.append(Component.literal(": ").withStyle(style.text()));
@@ -212,9 +267,14 @@ public class TooltipNode {
             line.append(Component.literal(": ").withStyle(style.text()));
             line.append(component.copy().withStyle(style.value()));
         }
+
+        if (numberValue != null) {
+            line.append(Component.literal(": ").withStyle(style.text()));
+            line.append(numberValue);
+        }
     }
 
-    private void appendValuesAncComponentDirectly(MutableComponent line, TooltipStyle style) {
+    private void appendValuesAncComponentDirectly(MutableComponent line, TooltipStyle style, @Nullable Component numberValue) {
         if (is(FLAG_HAS_VALUE)) {
             assert values != null;
             for (int i = 0; i < values.length; i++) {
@@ -227,6 +287,8 @@ public class TooltipNode {
         } else if (is(FLAG_COMPONENT)) {
             assert component != null;
             line.append(component.copy().withStyle(style.value()));
+        } else if (numberValue != null) {
+            line.append(numberValue);
         }
     }
 
@@ -280,6 +342,11 @@ public class TooltipNode {
             buf.writeComponent(component);
         }
 
+        if (is(FLAG_NUMBER)) {
+            assert number != null;
+            number.encode(buf);
+        }
+
         if (is(FLAG_HAS_VALUE)) {
             assert values != null;
             buf.writeVarInt(values.length);
@@ -302,9 +369,10 @@ public class TooltipNode {
         String key = null;
         String[] values = null;
         Component component = null;
+        TooltipNumber number = null;
 
         if ((flags & FLAG_EMPTY) != 0) {
-            return new RawTooltipNode(null, null, null, flags, List.of());
+            return new RawTooltipNode(null, null, null, null, flags, List.of());
         }
 
         if ((flags & FLAG_HAS_KEY) != 0) {
@@ -324,6 +392,10 @@ public class TooltipNode {
             component = buf.readComponent();
         }
 
+        if ((flags & FLAG_NUMBER) != 0) {
+            number = TooltipNumber.decode(buf);
+        }
+
         if ((flags & FLAG_HAS_VALUE) != 0) {
             int valCount = buf.readVarInt();
 
@@ -341,18 +413,18 @@ public class TooltipNode {
             children.add(buf.readVarInt());
         }
 
-        return new RawTooltipNode(key, values, component, flags, children);
+        return new RawTooltipNode(key, values, component, number, flags, children);
     }
 
     @NotNull
     public static TooltipNode empty() {
-        return getOrCreate(TooltipContext.getPalette(), null, null, null, FLAG_EMPTY, Collections.emptyList());
+        return getOrCreate(TooltipContext.getPalette(), null, null, null, null, FLAG_EMPTY, Collections.emptyList());
     }
 
     @NotNull
-    public static TooltipNode getOrCreate(TooltipNodePalette cache, @Nullable String key, String @Nullable[] values, @Nullable Component component, short flags, List<TooltipNode> children) {
+    public static TooltipNode getOrCreate(TooltipNodePalette cache, @Nullable String key, String @Nullable[] values, @Nullable Component component, @Nullable TooltipNumber number, short flags, List<TooltipNode> children) {
         if ((flags & FLAG_EMPTY) != 0) {
-            return cache.getOrCreate(new CacheKey(null, null, null, FLAG_EMPTY, Collections.emptyList()));
+            return cache.getOrCreate(new CacheKey(null, null, null, null, FLAG_EMPTY, Collections.emptyList()));
         }
 
         List<String> valList = null;
@@ -362,6 +434,6 @@ public class TooltipNode {
             valList = Arrays.asList(values);
         }
 
-        return cache.getOrCreate(new CacheKey(key, valList, component, flags, children));
+        return cache.getOrCreate(new CacheKey(key, valList, component, number, flags, children));
     }
 }

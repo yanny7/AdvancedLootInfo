@@ -1,6 +1,6 @@
 package com.yanny.alicompat.compat.ironsspellbooks;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import io.redspace.ironsspellbooks.loot.FurledMapLootFunction;
 import io.redspace.ironsspellbooks.loot.RandomizeRingEnhancementFunction;
@@ -37,7 +37,7 @@ public class IronsSpellbooksTooltipTest {
     public void testRandomizeSpellFunction() {
         assertTooltip(UTILS.getFunctionTooltip(UTILS, randomizeSpell()).build(), List.of(
                 "Randomize Spell:",
-                "  -> Quality: 1-4",
+                "  -> Quality: 1 to 4",
                 "  -> Applicable Spells:",
                 "    -> Force: false"
         ));
@@ -54,7 +54,7 @@ public class IronsSpellbooksTooltipTest {
 
     @Test
     public void testWizardTradeListing() {
-        WizardTrade trade = WizardTrade.of(new ItemStack(Items.EMERALD), new RangeValue(4), new ItemStack(Items.PAPER), new RangeValue(1), 8, 3, 0.05F);
+        WizardTrade trade = WizardTrade.of(new ItemStack(Items.EMERALD), NumberExpr.constant(4), new ItemStack(Items.PAPER), NumberExpr.constant(1), 8, 3, 0.05F);
 
         assertTooltip(UTILS.getItemListing(UTILS, trade, TooltipNode.empty()).getTooltip(), List.of(
                 "Uses: 8",

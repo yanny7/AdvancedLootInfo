@@ -5,5 +5,5 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public record RawTooltipNode(@Nullable String key, String @Nullable[] values, @Nullable Component componentValue, short flags, List<Integer> children) {
+public record RawTooltipNode(@Nullable String key, String @Nullable[] values, @Nullable Component componentValue, @Nullable TooltipNumber number, short flags, List<Integer> children) {
 }

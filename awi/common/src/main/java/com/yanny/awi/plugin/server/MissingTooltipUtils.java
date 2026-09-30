@@ -11,8 +11,6 @@ import com.yanny.awi.Utils;
 import com.yanny.awi.api.IServerUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.RegistryOps;
-import net.minecraft.util.valueproviders.FloatProvider;
-import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSize;
@@ -52,28 +50,6 @@ public class MissingTooltipUtils {
         } catch (Throwable e) {
             if (utils.getConfiguration().logMoreStatistics) {
                 LOGGER.warn("Failed to get placement modifier from serialized data for {} in {}", BuiltInRegistries.PLACEMENT_MODIFIER_TYPE.getKey(placement.type()), TooltipContext.get(), e);
-            }
-
-//            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
-        }
-
-        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
-    }
-
-    @NotNull
-    public static TooltipBuilder getMissingIntProviderTooltip(IServerUtils utils, IntProvider provider) {
-        TooltipBuilder tooltip = utils.getValueTooltip(utils, provider.getType());
-
-        try {
-            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
-            //noinspection unchecked
-            Codec<IntProvider> codec = ((Codec<IntProvider>) provider.getType().codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, provider).getOrThrow(true, (s) -> {});
-
-            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
-        } catch (Throwable e) {
-            if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get int provider from serialized data for {} in {}", BuiltInRegistries.INT_PROVIDER_TYPE.getKey(provider.getType()), TooltipContext.get(), e);
             }
 
 //            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
@@ -272,28 +248,6 @@ public class MissingTooltipUtils {
         } catch (Throwable e) {
             if (utils.getConfiguration().logMoreStatistics) {
                 LOGGER.warn("Failed to get trunk placer from serialized data for {} in {}", BuiltInRegistries.TRUNK_PLACER_TYPE.getKey(placer.type()), TooltipContext.get(), e);
-            }
-
-//            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
-        }
-
-        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
-    }
-
-    @NotNull
-    public static TooltipBuilder getMissingFloatProviderTooltip(IServerUtils utils, FloatProvider provider) {
-        TooltipBuilder tooltip = utils.getValueTooltip(utils, provider.getType());
-
-        try {
-            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
-            //noinspection unchecked
-            Codec<FloatProvider> codec = ((Codec<FloatProvider>) provider.getType().codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, provider).getOrThrow(true, (s) -> {});
-
-            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
-        } catch (Throwable e) {
-            if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get float provider from serialized data for {} in {}", BuiltInRegistries.FLOAT_PROVIDER_TYPE.getKey(provider.getType()), TooltipContext.get(), e);
             }
 
 //            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME

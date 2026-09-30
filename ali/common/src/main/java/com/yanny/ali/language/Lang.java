@@ -204,10 +204,6 @@ public final class Lang {
         PROPERTY("property", "Property: %s"),
         PROVIDER("provider", "Provider: %s"),
         RANGE("range", "Range: %s"),
-        RANGED_ANY("ranged_property_any", "%s: any"),
-        RANGED_BOTH("ranged_property_both", "%s: %s-%s"),
-        RANGED_GTE("ranged_property_gte", "%s: ≥%s"),
-        RANGED_LTE("ranged_property_lte", "%s: ≤%s"),
         REPLACE("replace", "Replace: %s"),
         RESOLUTION_CONTEXT("resolution_context", "Resolution Context: %s"),
         SEARCH_RADIUS("search_radius", "Search Radius: %s"),
@@ -323,11 +319,10 @@ public final class Lang {
         }
     }
 
-    public enum Description implements ITooltipKey {ROLLS("rolls", "Rolls: %s%s"),
-        CHANCE("chance", "Chance: %s%s"),
-        CHANCE_BONUS("chance_bonus", "%s (%s %s)"),
+    public enum Description implements ITooltipKey {
+        ROLLS("rolls", "Rolls: %s"),
+        CHANCE("chance", "Chance: %s"),
         COUNT("count", "Count: %s"),
-        COUNT_BONUS("count_bonus", "%s (%s %s)"),
         QUALITY("quality", "Quality: %s"),
         RANDOM_TRADE_SELECTION("random_trade_selection", "Randomly Selects %s Of These Trades"),
         ;
@@ -376,6 +371,24 @@ public final class Lang {
 
         Multi(String k, String e) {
             this.translation = new Translation("ali.property.multi." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
+    public enum Numbers implements ITooltipKey {
+        VAR_LUCK("var.luck", "luck"),
+        VAR_LUCK_DESC("var.luck.desc", "luck"),
+        ;
+
+        private final Translation translation;
+
+        Numbers(String k, String e) {
+            this.translation = new Translation("ali.number." + k, e);
         }
 
         @NotNull

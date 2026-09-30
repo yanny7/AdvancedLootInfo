@@ -2,6 +2,7 @@
 
 - Grouping structure spawn info
 - Scrollable tooltip by mouse wheel when taller than screen
+- Number model `NumberExpr` replaces `RangeValue`, showing most likely value, level rows and charts
 
 ## [1.3.0]
 

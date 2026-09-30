@@ -49,6 +49,7 @@ public class AliConfig implements ICoreConfig {
     public boolean hideDefaultBlockLoot = true;
     public boolean showUnboundedGlobalLootModifiers = false;
     public boolean showEntitiesWithoutLoot = false;
+    public boolean showCharts = true;
 
     public AliConfig() {
         blockCategories = new ArrayList<>();

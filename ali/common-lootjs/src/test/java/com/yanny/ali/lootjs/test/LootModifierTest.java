@@ -5,9 +5,11 @@ import com.almostreliable.lootjs.core.ILootAction;
 import com.almostreliable.lootjs.core.ILootHandler;
 import com.almostreliable.lootjs.core.LootEntry;
 import com.almostreliable.lootjs.loot.action.*;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
+import com.yanny.aci.number.NumberFormatter;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
@@ -17,6 +19,7 @@ import com.yanny.ali.lootjs.node.AddLootNode;
 import com.yanny.ali.lootjs.node.GroupLootNode;
 import com.yanny.ali.lootjs.node.ItemStackNode;
 import com.yanny.ali.lootjs.node.WeightedAddLootNode;
+import com.yanny.ali.plugin.client.TooltipUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.ModifiedNode;
 import net.minecraft.resources.ResourceLocation;
@@ -184,7 +187,7 @@ public class LootModifierTest {
         List<IDataNode> result = operation.factory().apply(itemNode(3));
 
         Assertions.assertEquals(1, result.size());
-        Assertions.assertEquals("7", ((ItemStackNode) result.get(0)).getCount().toIntString());
+        Assertions.assertEquals("7", slot((ItemStackNode) result.get(0)));
     }
 
     @Test
@@ -194,7 +197,7 @@ public class LootModifierTest {
         ).get(0);
         List<IDataNode> result = operation.factory().apply(itemNode(3));
 
-        Assertions.assertEquals("3", ((ItemStackNode) result.get(0)).getCount().toIntString());
+        Assertions.assertEquals("3", slot((ItemStackNode) result.get(0)));
     }
 
     @Test
@@ -222,7 +225,7 @@ public class LootModifierTest {
         ItemStackNode result = (ItemStackNode) operation.factory().apply(itemNode(3)).get(0);
 
         Assertions.assertTrue(result.isModified());
-        Assertions.assertEquals("3", result.getCount().toIntString());
+        Assertions.assertEquals("3", slot(result));
         assertTooltip(result.getTooltip(), List.of(
                 "Count: 3",
                 "----- Modifiers -----",
@@ -243,7 +246,7 @@ public class LootModifierTest {
     }
 
     private static ItemNode itemNode(int count, LootItemFunction... functions) {
-        return new ItemNode(1.0F, new RangeValue(count), new ItemStack(Items.DIAMOND), TooltipBuilder.empty().build(), List.of(functions), List.of());
+        return new ItemNode(1.0F, NumberExpr.constant(count), new ItemStack(Items.DIAMOND), TooltipBuilder.empty().build(), List.of(functions), List.of());
     }
 
     private static ItemStackNode itemStackNode() {
@@ -343,5 +346,9 @@ public class LootModifierTest {
         public ILootModifier.IType<ResourceLocation> getType() {
             return ILootModifier.IType.LOOT_TABLE;
         }
+    }
+
+    private static String slot(IItemNode node) {
+        return NumberFormatter.slot(TooltipUtils.getSlotCount(node));
     }
 }

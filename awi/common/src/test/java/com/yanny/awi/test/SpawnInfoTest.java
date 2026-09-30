@@ -153,7 +153,7 @@ public class SpawnInfoTest {
                 "  -> Dimension: test:nether",
                 "    -> Category: creature",
                 "    -> Weight: 60",
-                "    -> Group size: 1-2",
+                "    -> Group size: 1 to 2",
                 "    -> Spawn cost: charge 0.7, budget 0.15"
         ));
     }
@@ -166,7 +166,7 @@ public class SpawnInfoTest {
                 "    -> Structure: test:fort",
                 "      -> Category: monster",
                 "      -> Weight: 10",
-                "      -> Group size: 2-3"
+                "      -> Group size: 2 to 3"
         ));
     }
 
@@ -202,12 +202,12 @@ public class SpawnInfoTest {
                 "Structure: test:fort",
                 "  -> Category: monster",
                 "  -> Weight: 10",
-                "  -> Group size: 2-3"
+                "  -> Group size: 2 to 3"
         ));
         assertTooltip(spawns.get(EntityType.STRIDER), List.of(
                 "Category: creature",
                 "Weight: 60",
-                "Group size: 1-2",
+                "Group size: 1 to 2",
                 "Spawn cost: charge 0.7, budget 0.15"
         ));
     }

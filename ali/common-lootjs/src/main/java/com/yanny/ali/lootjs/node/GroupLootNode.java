@@ -4,7 +4,6 @@ import com.almostreliable.lootjs.core.ILootHandler;
 import com.almostreliable.lootjs.loot.action.AddLootAction;
 import com.almostreliable.lootjs.loot.action.GroupedLootAction;
 import com.almostreliable.lootjs.loot.action.WeightedAddLootAction;
-import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IServerUtils;
@@ -29,7 +28,7 @@ public class GroupLootNode extends ListNode {
     public GroupLootNode(IServerUtils utils, GroupedLootAction lootPool, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         MixinGroupedLootAction action = (MixinGroupedLootAction) lootPool;
 
-        tooltip = TooltipUtils.getLootPoolTooltip(utils.convertNumber(utils, action.getNumberProvider()), new RangeValue(0)).build();
+        tooltip = TooltipUtils.getLootPoolTooltip(utils.convertIntNumber(utils, action.getNumberProvider())).build();
 
         for (ILootHandler entry : ((MixinCompositeLootAction) lootPool).getHandlers()) {
             if (entry instanceof AddLootAction addLootAction) {

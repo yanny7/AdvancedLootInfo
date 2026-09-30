@@ -1,12 +1,13 @@
 package com.yanny.ali.plugin.common;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
+import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.*;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.nodes.*;
-import com.yanny.ali.plugin.server.EnchantedRanges;
+import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -21,6 +22,7 @@ import net.minecraft.world.level.storage.loot.entries.*;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.ArrayList;
@@ -47,15 +49,14 @@ public class NodeUtils {
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
         List<LootItemFunction> allFunctions = getAllFunctions(entry, functions);
         float chance = getChance(entry, rawChance, sumWeight);
-        EnchantedRanges enchantedChance = getEnchantedChance(utils, allConditions, chance);
-        EnchantedRanges enchantedCount = getEnchantedCount(utils, allFunctions);
-        TooltipNode tooltip = TooltipUtils.getTooltip(utils, entry.quality, enchantedChance, enchantedCount, allFunctions, allConditions).build();
         Either<ItemStack, TagKey<? extends ItemLike>> either = itemGetter.apply(allFunctions);
+        LootCount count = getCount(utils, allFunctions);
+        TooltipNode tooltip = TooltipUtils.getTooltip(utils, entry.quality, getChance(utils, allConditions, chance), count, getCountLimit(either), allFunctions, allConditions).build();
 
         if (either.left().isPresent() && either.left().get().isEmpty()) {
             return new EmptyNode(chance, tooltip);
         } else {
-            return new ItemNode(chance, enchantedCount.getUnenchantedValue(), either, tooltip, allFunctions, allConditions);
+            return new ItemNode(chance, count.value(), either, tooltip, allFunctions, allConditions);
         }
     }
 
@@ -83,8 +84,7 @@ public class NodeUtils {
         List<LootItemFunction> allFunctions = getAllFunctions(entry, functions);
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
         float chance = getChance(entry, rawChance, sumWeight);
-        EnchantedRanges enchantedChance = getEnchantedChance(utils, allConditions, chance);
-        TooltipNode tooltip = TooltipUtils.getEmptyTooltip(utils, entry.quality, enchantedChance, allFunctions, allConditions).build();
+        TooltipNode tooltip = TooltipUtils.getEmptyTooltip(utils, entry.quality, getChance(utils, allConditions, chance), allFunctions, allConditions).build();
 
         return new EmptyNode(chance, tooltip);
     }
@@ -144,7 +144,7 @@ public class NodeUtils {
         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), Arrays.stream(entry.functions)).toList();
         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), Arrays.stream(entry.conditions)).toList();
         int sumWeight = getTotalWeight(Arrays.asList(entry.entries));
-        TooltipNode tooltip = TooltipUtils.getLootPoolTooltip(utils.convertNumber(utils, entry.rolls), utils.convertNumber(utils, entry.bonusRolls)).build();
+        TooltipNode tooltip = TooltipUtils.getLootPoolTooltip(TooltipUtils.rolls(utils, entry.rolls, entry.bonusRolls)).build();
         List<IDataNode> children = getChildren(utils, entry.entries, rawChance, sumWeight, allFunctions, allConditions);
 
         return new LootPoolNode(children, tooltip);
@@ -202,27 +202,43 @@ public class NodeUtils {
     }
 
     @NotNull
-    public static EnchantedRanges getEnchantedChance(IServerUtils utils, List<LootItemCondition> conditions, float rawChance) {
-        EnchantedRanges chance = new EnchantedRanges(1);
+    public static NumberExpr getChance(IServerUtils utils, List<LootItemCondition> conditions, float rawChance) {
+        NumberExpr chance = NumberExpr.constant(1);
 
         for (LootItemCondition condition : conditions) {
-            utils.applyChanceModifier(utils, condition, chance);
+            chance = utils.applyChanceModifier(utils, condition, chance);
         }
 
-        chance.modifyAllEntries((value) -> value.multiply(rawChance * 100));
-        return chance;
+        return NumberExpr.mul(NumberExpr.constant(rawChance), chance);
     }
 
     @NotNull
-    public static EnchantedRanges getEnchantedCount(IServerUtils utils, List<LootItemFunction> functions) {
-        EnchantedRanges count = new EnchantedRanges(new RangeValue(1));
+    public static LootCount getCount(IServerUtils utils, List<LootItemFunction> functions) {
+        return getCount(utils, NumberExpr.constant(1), functions);
+    }
+
+    @NotNull
+    public static LootCount getCount(IServerUtils utils, NumberExpr baseCount, List<LootItemFunction> functions) {
+        List<TooltipNode> conditions = new ArrayList<>();
+        NumberExpr count = baseCount;
 
         for (LootItemFunction function : functions) {
-            utils.applyCountModifier(utils, function, count);
+            count = utils.applyCountModifier(utils, function, count, conditions);
         }
 
-        count.modifyAllEntries((value) -> value.clamp(0, 9999));
-        return count;
+        return new LootCount(count, conditions);
+    }
+
+    @Nullable
+    public static NumberInterval getCountLimit(ItemStack item) {
+        return item.isEmpty() ? null : NumberInterval.closed(0, item.getMaxStackSize());
+    }
+
+    @Nullable
+    public static NumberInterval getCountLimit(Either<ItemStack, TagKey<? extends ItemLike>> item) {
+        int maxStackSize = resolveItems(item).stream().mapToInt(ItemStack::getMaxStackSize).max().orElse(0);
+
+        return maxStackSize > 0 ? NumberInterval.closed(0, maxStackSize) : null;
     }
 
     public static int getTotalWeight(List<LootPoolEntryContainer> entries) {

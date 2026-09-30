@@ -1,7 +1,7 @@
 package com.yanny.ali.jei.compatibility.jei;
 
 import com.yanny.aci.api.IWidget;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IWidgetUtils;
@@ -55,7 +55,7 @@ public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
                 widgets.add(new JeiBlockSlotWidget(slotDrawable, recipe.block(), CATEGORY_WIDTH / 2 - 9, 5));
                 slotDrawables.add(slotDrawable);
             } else {
-                widgets.add(new JeiLootSlotWidget(slotDrawable, CATEGORY_WIDTH / 2 - 9, 0, new RangeValue(1)));
+                widgets.add(new JeiLootSlotWidget(slotDrawable, CATEGORY_WIDTH / 2 - 9, 0, NumberInterval.point(1)));
                 slotDrawables.add(slotDrawable);
             }
         }));
