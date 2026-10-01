@@ -1,14 +1,15 @@
 package com.yanny.awi.plugin;
 
+import com.yanny.aci.tooltip.CommonNumberProviders;
 import com.yanny.aci.tooltip.CommonValueTooltip;
 import com.yanny.awi.Utils;
 import com.yanny.awi.api.*;
 import com.yanny.awi.datagen.LanguageHolder;
 import com.yanny.awi.plugin.client.widget.*;
+import com.yanny.awi.plugin.common.HeightFunctions;
 import com.yanny.awi.plugin.common.nodes.*;
 import com.yanny.awi.plugin.server.*;
-import com.yanny.awi.plugin.server.summary.HeightSpanPropagatorUtils;
-import com.yanny.awi.plugin.server.summary.IntSpanPropagatorUtils;
+import com.yanny.awi.plugin.server.summary.HeightConverterUtils;
 import com.yanny.awi.plugin.server.summary.PlacementPropagatorUtils;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.random.SimpleWeightedRandomList;
@@ -52,6 +53,7 @@ public class Plugin implements IPlugin {
     @Override
     public void registerCommon(ICommonRegistry registry) {
         LanguageHolder.TRANSLATION_MAP.keySet().forEach(registry::registerTranslationKey);
+        HeightFunctions.register();
     }
 
     @Override
@@ -77,6 +79,7 @@ public class Plugin implements IPlugin {
         registry.registerCacheCleaner(SurfaceRuleSpecializer::clearLoggedRules);
 
         new CommonValueTooltip<IServerUtils, IServerRegistry>().registerAll(registry);
+        new CommonNumberProviders<IServerUtils, IServerRegistry>().registerAll(registry);
 
         EnumTypes.TRANSLATED_ENUMS.forEach((type, owner) -> registry.registerEnumTranslation(type, Utils.MOD_ID, owner));
 
@@ -177,18 +180,6 @@ public class Plugin implements IPlugin {
         registry.registerFeatureTooltip(FossilFeatureConfiguration.class, FeatureConfigurationTooltipUtils::getFossilFeatureConfigurationTooltip);
         registry.registerFeatureTooltip(HugeFungusConfiguration.class, FeatureConfigurationTooltipUtils::getHugeFungusConfigurationTooltip);
 
-        registry.registerIntProviderTooltip(ConstantInt.class, IntProviderTooltipUtils::getConstantIntTooltip);
-        registry.registerIntProviderTooltip(UniformInt.class, IntProviderTooltipUtils::getUniformIntTooltip);
-        registry.registerIntProviderTooltip(BiasedToBottomInt.class, IntProviderTooltipUtils::getBiasedToBottomIntTooltip);
-        registry.registerIntProviderTooltip(ClampedInt.class, IntProviderTooltipUtils::getClampedIntTooltip);
-        registry.registerIntProviderTooltip(WeightedListInt.class, IntProviderTooltipUtils::getWeightedListIntTooltip);
-        registry.registerIntProviderTooltip(ClampedNormalInt.class, IntProviderTooltipUtils::getClampedNormalIntTooltip);
-
-        registry.registerFloatProviderTooltip(ConstantFloat.class, FloatProviderTooltipUtils::getConstantFloatTooltip);
-        registry.registerFloatProviderTooltip(UniformFloat.class, FloatProviderTooltipUtils::getUniformFloatTooltip);
-        registry.registerFloatProviderTooltip(ClampedNormalFloat.class, FloatProviderTooltipUtils::getClampedNormalFloatTooltip);
-        registry.registerFloatProviderTooltip(TrapezoidFloat.class, FloatProviderTooltipUtils::getTrapezoidFloatTooltip);
-
         registry.registerHeightProviderTooltip(ConstantHeight.class, HeightProviderTooltipUtils::getConstantHeightTooltip);
         registry.registerHeightProviderTooltip(UniformHeight.class, HeightProviderTooltipUtils::getUniformHeightTooltip);
         registry.registerHeightProviderTooltip(BiasedToBottomHeight.class, HeightProviderTooltipUtils::getBiasedToBottomHeightTooltip);
@@ -234,19 +225,12 @@ public class Plugin implements IPlugin {
         registry.registerPlacementModifierTooltip(SurfaceWaterDepthFilter.class, PlacementModifierTooltipUtils::getSurfaceWaterDepthFilterTooltip);
         registry.registerPlacementModifierTooltip(FixedPlacement.class, PlacementModifierTooltipUtils::getFixedPlacementTooltip);
 
-        registry.registerIntSpanPropagator(ConstantInt.class, IntSpanPropagatorUtils::getConstantInt);
-        registry.registerIntSpanPropagator(UniformInt.class, IntSpanPropagatorUtils::getUniformInt);
-        registry.registerIntSpanPropagator(BiasedToBottomInt.class, IntSpanPropagatorUtils::getBiasedToBottomInt);
-        registry.registerIntSpanPropagator(ClampedInt.class, IntSpanPropagatorUtils::getClampedInt);
-        registry.registerIntSpanPropagator(ClampedNormalInt.class, IntSpanPropagatorUtils::getClampedNormalInt);
-        registry.registerIntSpanPropagator(WeightedListInt.class, IntSpanPropagatorUtils::getWeightedListInt);
-
-        registry.registerHeightSpanPropagator(ConstantHeight.class, HeightSpanPropagatorUtils::getConstantHeight);
-        registry.registerHeightSpanPropagator(UniformHeight.class, HeightSpanPropagatorUtils::getUniformHeight);
-        registry.registerHeightSpanPropagator(TrapezoidHeight.class, HeightSpanPropagatorUtils::getTrapezoidHeight);
-        registry.registerHeightSpanPropagator(BiasedToBottomHeight.class, HeightSpanPropagatorUtils::getBiasedToBottomHeight);
-        registry.registerHeightSpanPropagator(VeryBiasedToBottomHeight.class, HeightSpanPropagatorUtils::getVeryBiasedToBottomHeight);
-        registry.registerHeightSpanPropagator(WeightedListHeight.class, HeightSpanPropagatorUtils::getWeightedListHeight);
+        registry.registerHeightProvider(ConstantHeight.class, HeightConverterUtils::getConstantHeight);
+        registry.registerHeightProvider(UniformHeight.class, HeightConverterUtils::getUniformHeight);
+        registry.registerHeightProvider(TrapezoidHeight.class, HeightConverterUtils::getTrapezoidHeight);
+        registry.registerHeightProvider(BiasedToBottomHeight.class, HeightConverterUtils::getBiasedToBottomHeight);
+        registry.registerHeightProvider(VeryBiasedToBottomHeight.class, HeightConverterUtils::getVeryBiasedToBottomHeight);
+        registry.registerHeightProvider(WeightedListHeight.class, HeightConverterUtils::getWeightedListHeight);
 
         registry.registerPlacementPropagator(CountPlacement.class, PlacementPropagatorUtils::getCountPlacement);
         registry.registerPlacementPropagator(CountOnEveryLayerPlacement.class, PlacementPropagatorUtils::getCountOnEveryLayerPlacement);

@@ -1,8 +1,12 @@
 package com.yanny.awi.emi.compatibility.emi;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
+import com.yanny.aci.api.NumberInterval;
+import com.yanny.aci.number.NumberFormatter;
+import com.yanny.aci.compatibility.ScrollableTooltip;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
+import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.plugin.client.TooltipUtils;
 import dev.emi.emi.api.stack.EmiIngredient;
@@ -22,7 +26,7 @@ public class EmiLootSlotWidget extends SlotWidget {
     private Component count;
     private boolean isRange = false;
 
-    public EmiLootSlotWidget(IDataNode entry, EmiIngredient ingredient, int x, int y, RangeValue count) {
+    public EmiLootSlotWidget(IDataNode entry, EmiIngredient ingredient, int x, int y, NumberExpr count) {
         super(ingredient, x, y);
         this.entry = entry;
         setCount(count);
@@ -30,8 +34,12 @@ public class EmiLootSlotWidget extends SlotWidget {
 
     @Override
     protected void addSlotTooltip(List<ClientTooltipComponent> list) {
-        CoreTooltipUtils.toComponents(entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle())
-                .forEach((c) -> list.add(ClientTooltipComponent.create(c.getVisualOrderText())));
+        List<TooltipLine> lines = CoreTooltipUtils.toLines(entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle(), TooltipUtils.getNumberOptions());
+
+        if (!lines.isEmpty()) {
+            list.add(new ScrollableTooltip(lines));
+        }
+
         super.addSlotTooltip(list);
     }
 
@@ -61,10 +69,12 @@ public class EmiLootSlotWidget extends SlotWidget {
         super.drawOverlay(draw, mouseX, mouseY, delta);
     }
 
-    private void setCount(RangeValue count) {
-        if (count.isRange() || count.min() > 1) {
-            this.count = Component.literal(count.toIntString());
-            isRange = count.isRange();
+    private void setCount(NumberExpr count) {
+        NumberInterval bounds = NumberFormatter.slotBounds(count);
+
+        if (!bounds.isPoint() || bounds.lo() > 1) {
+            this.count = Component.literal(NumberFormatter.slot(bounds));
+            isRange = !bounds.isPoint();
         }
     }
 }

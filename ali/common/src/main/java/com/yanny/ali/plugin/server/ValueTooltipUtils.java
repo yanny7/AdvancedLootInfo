@@ -2,7 +2,6 @@ package com.yanny.ali.plugin.server;
 
 import com.mojang.authlib.properties.Property;
 import com.mojang.datafixers.util.Pair;
-import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
@@ -17,6 +16,7 @@ import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.food.FoodProperties;
@@ -289,7 +289,7 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getEffectEntryTooltip(IServerUtils utils, SetStewEffectFunction.EffectEntry entry) {
         return utils.getValueTooltip(utils, entry.effect())
-                .add(utils.getValueTooltip(utils,entry.duration()).build(Lang.Value.DURATION));
+                .add(TooltipBuilder.number(utils.convertIntNumber(utils, entry.duration())).build(Lang.Value.DURATION));
     }
 
     @NotNull
@@ -313,18 +313,18 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getNumberProviderTooltip(IServerUtils utils, NumberProvider value) {
-        return TooltipBuilder.value(utils.convertNumber(utils, value));
+        return TooltipBuilder.number(utils.convertNumber(utils, value));
     }
 
     @NotNull
     public static TooltipBuilder getIntRangeTooltip(IServerUtils utils, IntRange range) {
-        return TooltipBuilder.value(RangeValue.rangeToString(utils.convertNumber(utils, range.min), utils.convertNumber(utils, range.max)));
+        return TooltipBuilder.number(GenericTooltipUtils.getRange(utils, range));
     }
 
     @NotNull
     public static TooltipBuilder getMinMaxBoundsTooltip(IServerUtils ignoredUtils, MinMaxBounds.Ints ints) {
         if (ints != MinMaxBounds.Ints.ANY) {
-            return TooltipBuilder.value(GenericTooltipUtils.toString(ints));
+            return TooltipBuilder.number(GenericTooltipUtils.getRange(ints));
         }
 
         return TooltipBuilder.empty();
@@ -333,7 +333,7 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getMinMaxBoundsTooltip(IServerUtils ignoredUtils, MinMaxBounds.Doubles doubles) {
         if (doubles != MinMaxBounds.Doubles.ANY) {
-            return TooltipBuilder.value(GenericTooltipUtils.toString(doubles));
+            return TooltipBuilder.number(GenericTooltipUtils.getRange(doubles));
         }
 
         return TooltipBuilder.empty();
@@ -374,19 +374,19 @@ public class ValueTooltipUtils {
         return TooltipBuilder.array((b) -> {
             if (value.value() instanceof Item item) {
                 b.add(utils.getValueTooltip(utils, item)
-                        .add(TooltipBuilder.keyValue(key, GenericTooltipUtils.toString(stat.range())).build())
+                        .add(TooltipBuilder.number(GenericTooltipUtils.getRange(stat.range())).rawKey(key).build())
                         .build(Lang.Value.ITEM));
             } else if (value.value() instanceof Block block) {
                 b.add(utils.getValueTooltip(utils, block)
-                        .add(TooltipBuilder.keyValue(key, GenericTooltipUtils.toString(stat.range())).build())
+                        .add(TooltipBuilder.number(GenericTooltipUtils.getRange(stat.range())).rawKey(key).build())
                         .build(Lang.Value.BLOCK));
             } else if (value.value() instanceof EntityType<?> entityType) {
                 b.add(utils.getValueTooltip(utils, entityType)
-                        .add(TooltipBuilder.keyValue(key, GenericTooltipUtils.toString(stat.range())).build())
+                        .add(TooltipBuilder.number(GenericTooltipUtils.getRange(stat.range())).rawKey(key).build())
                         .build(Lang.Value.ENTITY_TYPE));
             } else if (value.value() instanceof ResourceLocation resourceLocation) {
                 b.add(utils.getValueTooltip(utils, resourceLocation)
-                        .add(TooltipBuilder.keyValue(TooltipBuilder.translate(getStatTranslationKey(resourceLocation)), GenericTooltipUtils.toString(stat.range())).build())
+                        .add(TooltipBuilder.number(GenericTooltipUtils.getRange(stat.range())).rawKey(TooltipBuilder.translate(getStatTranslationKey(resourceLocation))).build())
                         .build(Lang.Value.ID));
             }
         });
@@ -617,6 +617,11 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getGameTypePredicateTooltip(IServerUtils utils, GameTypePredicate gameType) {
         return utils.getValueTooltip(utils, gameType.types());
+    }
+
+    @NotNull
+    public static TooltipBuilder getIntProviderTooltip(IServerUtils utils, IntProvider provider) {
+        return TooltipBuilder.number(utils.convertIntProvider(utils, provider));
     }
 
     @NotNull

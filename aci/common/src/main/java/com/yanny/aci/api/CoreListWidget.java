@@ -2,8 +2,8 @@ package com.yanny.aci.api;
 
 import com.mojang.math.Divisor;
 import it.unimi.dsi.fastutil.ints.IntIterator;
+import com.yanny.aci.tooltip.TooltipLine;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
@@ -122,14 +122,14 @@ public abstract class CoreListWidget<
 
     @NotNull
     @Override
-    public List<Component> getTooltipComponents(int mouseX, int mouseY) {
-        List<Component> components = new LinkedList<>();
+    public List<TooltipLine> getTooltipLines(int mouseX, int mouseY) {
+        List<TooltipLine> components = new LinkedList<>();
 
         for (IWidget widget : widgets) {
             RelativeRect b = widget.getRect();
 
             if (b.contains(mouseX, mouseY)) {
-                components.addAll(widget.getTooltipComponents(mouseX, mouseY));
+                components.addAll(widget.getTooltipLines(mouseX, mouseY));
             }
         }
 

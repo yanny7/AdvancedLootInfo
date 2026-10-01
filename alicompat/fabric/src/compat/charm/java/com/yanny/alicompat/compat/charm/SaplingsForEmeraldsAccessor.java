@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.charm;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
@@ -41,13 +41,13 @@ public class SaplingsForEmeraldsAccessor extends BaseAccessor<Trades.SaplingsFor
         return new ItemsToItemsNode(
                 utils,
                 Either.left(Items.EMERALD.getDefaultInstance()),
-                new RangeValue(baseEmeralds, baseEmeralds + extraEmeralds),
+                NumberExpr.uniformInt(baseEmeralds, baseEmeralds + extraEmeralds),
                 TooltipNode.empty(),
                 Either.left(ItemStack.EMPTY),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 TooltipNode.empty(),
                 Either.left(sapling),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 utils.getValueTooltip(utils, saplings.stream().skip(1).toList()).build(CharmLang.Branch.ALTERNATIVE),
                 maxUses,
                 villagerXp,

@@ -2,7 +2,7 @@ package com.yanny.alicompat.compat.immersiveengineering;
 
 import blusunrize.immersiveengineering.common.register.IEItems.Ingredients;
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
@@ -27,13 +27,13 @@ public class RevolverPieceForEmeraldsAccessor extends BaseAccessor<VillagerTrade
         return new ItemsToItemsNode(
                 utils,
                 Either.left(Items.EMERALD.getDefaultInstance()),
-                new RangeValue(5, 29),
+                NumberExpr.add(NumberExpr.mul(NumberExpr.constant(5), NumberExpr.range(1, 5)), NumberExpr.uniformInt(0, 4)),
                 TooltipNode.empty(),
                 Either.left(ItemStack.EMPTY),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 TooltipNode.empty(),
                 Either.left(new ItemStack(Ingredients.GUNPART_BARREL)),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 utils.getValueTooltip(utils, List.of(Ingredients.GUNPART_DRUM.asItem(), Ingredients.GUNPART_HAMMER.asItem()))
                         .build(ImmersiveEngineeringLang.Branch.ALTERNATIVE),
                 1,

@@ -3,7 +3,7 @@ package com.yanny.alicompat.compat.goblintraders;
 import com.mojang.datafixers.util.Either;
 import com.mrcrayfish.goblintraders.trades.TradeCost;
 import com.mrcrayfish.goblintraders.trades.type.TreasureMapTrade;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
@@ -61,7 +61,7 @@ public class TreasureMapTradeAccessor extends BaseAccessor<TreasureMapTrade> imp
                 GoblinTradeUtils.getCount(secondaryPayment),
                 TooltipNode.empty(),
                 Either.left(map),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 TooltipBuilder.array((b) -> b
                                 .add(utils.getValueTooltip(utils, structure).build(Lang.Value.DESTINATION))
                                 .add(utils.getValueTooltip(utils, mapDecoration).build(Lang.Value.MAP_DECORATION))

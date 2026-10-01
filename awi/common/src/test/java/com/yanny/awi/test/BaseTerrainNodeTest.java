@@ -1,8 +1,9 @@
 package com.yanny.awi.test;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.test.utils.TestUtils;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
+import com.yanny.aci.tooltip.NumberOptions;
 import com.yanny.aci.tooltip.TooltipStyle;
 import com.yanny.awi.api.BlockInfo;
 import com.yanny.awi.api.IDataNode;
@@ -22,11 +23,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BaseTerrainNodeTest {
     private static final BlockInfo ORANGE_BANDS = new BlockInfo(Blocks.ORANGE_TERRACOTTA, BlockInfo.StorageType.LAYERED,
-            List.of(new RangeValue(57), new RangeValue(74)), 4, BlockInfo.WaterConstraint.ANY, BlockInfo.Placement.ANY, List.of());
+            List.of(NumberInterval.point(57), NumberInterval.point(74)), 4, BlockInfo.WaterConstraint.ANY, BlockInfo.Placement.ANY, List.of());
     private static final BlockInfo ORANGE_SURFACE = new BlockInfo(Blocks.ORANGE_TERRACOTTA, BlockInfo.StorageType.RELATIVE,
-            List.of(new RangeValue(0, 8)), 0, BlockInfo.WaterConstraint.ANY, BlockInfo.Placement.ANY, List.of());
+            List.of(NumberInterval.closed(0, 8)), 0, BlockInfo.WaterConstraint.ANY, BlockInfo.Placement.ANY, List.of());
     private static final BlockInfo RED_SAND = new BlockInfo(Blocks.RED_SAND, BlockInfo.StorageType.RELATIVE,
-            List.of(new RangeValue(0)), 0, BlockInfo.WaterConstraint.DRY, BlockInfo.Placement.FLOOR, List.of());
+            List.of(NumberInterval.point(0)), 0, BlockInfo.WaterConstraint.DRY, BlockInfo.Placement.FLOOR, List.of());
 
     @Test
     public void testNodeTooltip() {
@@ -55,15 +56,15 @@ public class BaseTerrainNodeTest {
                 "Layers At Y: 57, 74",
                 "Layer Shift: ±4",
                 "----------",
-                "Depth Below Surface: 0-8"
+                "Depth Below Surface: 0 to 8"
         ), lines(nodes.get(0)));
     }
 
     @Test
     public void testDetectedDefaultsAreNotAddedTwice() {
-        BlockInfo stone = new BlockInfo(Blocks.STONE, BlockInfo.StorageType.RELATIVE, List.of(new RangeValue(0)), 0,
+        BlockInfo stone = new BlockInfo(Blocks.STONE, BlockInfo.StorageType.RELATIVE, List.of(NumberInterval.point(0)), 0,
                 BlockInfo.WaterConstraint.ANY, BlockInfo.Placement.ANY, List.of());
-        BlockInfo water = new BlockInfo(Blocks.WATER, BlockInfo.StorageType.RELATIVE, List.of(new RangeValue(0)), 0,
+        BlockInfo water = new BlockInfo(Blocks.WATER, BlockInfo.StorageType.RELATIVE, List.of(NumberInterval.point(0)), 0,
                 BlockInfo.WaterConstraint.ANY, BlockInfo.Placement.ANY, List.of());
         List<BlockNode> nodes = blockNodes(new BaseTerrainNode(UTILS, Set.of(stone, water), Blocks.STONE, Fluids.WATER));
 
@@ -83,7 +84,7 @@ public class BaseTerrainNodeTest {
     }
 
     private static List<String> lines(BlockNode node) {
-        return CoreTooltipUtils.toComponents(node.getTooltip(), 0, true, TooltipStyle.DEFAULT).stream()
+        return TestUtils.toComponents(CoreTooltipUtils.toLines(node.getTooltip(), 0, true, TooltipStyle.DEFAULT, NumberOptions.DEFAULT)).stream()
                 .map(TestUtils::componentToPlainString).toList();
     }
 

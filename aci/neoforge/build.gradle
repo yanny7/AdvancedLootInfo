@@ -8,6 +8,12 @@ architectury {
 }
 
 loom {
+    accessWidenerPath = project(":aci:common").loom.accessWidenerPath
+
+    neoForge {
+        convertAccessWideners(tasks.named("remapJar"), "aci.accesswidener")
+    }
+
     runs {
         data {
             data()

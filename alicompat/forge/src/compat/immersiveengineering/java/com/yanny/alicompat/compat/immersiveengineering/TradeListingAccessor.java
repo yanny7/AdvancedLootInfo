@@ -3,7 +3,7 @@ package com.yanny.alicompat.compat.immersiveengineering;
 import blusunrize.immersiveengineering.common.world.Villages;
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.CommonLogUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
@@ -61,15 +61,15 @@ public class TradeListingAccessor extends BaseAccessor<VillagerTrades.ItemListin
         Either<ItemStack, TagKey<? extends ItemLike>> item = lazyItem.getItem();
 
         if (isOutline(EMERALD_FOR_ITEM)) {
-            return getNode(utils, item, priceInfo.getRange(), emerald(), new RangeValue(1), conditions);
+            return getNode(utils, item, priceInfo.getRange(), emerald(), NumberExpr.constant(1), conditions);
         }
 
         if (isOutline(ONE_ITEM_FOR_EMERALDS)) {
-            return getNode(utils, emerald(), priceInfo.getRange(), item, new RangeValue(1), conditions);
+            return getNode(utils, emerald(), priceInfo.getRange(), item, NumberExpr.constant(1), conditions);
         }
 
         if (isOutline(ITEMS_FOR_ONE_EMERALD)) {
-            return getNode(utils, emerald(), new RangeValue(1), item, priceInfo.getRange(), conditions);
+            return getNode(utils, emerald(), NumberExpr.constant(1), item, priceInfo.getRange(), conditions);
         }
 
         return new MissingNode(MissingTooltipUtils.getMissingItemListingTooltip(utils, parent).build());
@@ -78,9 +78,9 @@ public class TradeListingAccessor extends BaseAccessor<VillagerTrades.ItemListin
     @NotNull
     private IDataNode getNode(IServerUtils utils,
                               Either<ItemStack, TagKey<? extends ItemLike>> input,
-                              RangeValue inputCount,
+                              NumberExpr inputCount,
                               Either<ItemStack, TagKey<? extends ItemLike>> output,
-                              RangeValue outputCount,
+                              NumberExpr outputCount,
                               TooltipNode conditions) {
         return new ItemsToItemsNode(utils, input, inputCount, output, outputCount, maxUses, xp, priceMultiplier, conditions);
     }

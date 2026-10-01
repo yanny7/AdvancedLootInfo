@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.immersiveengineering;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
@@ -27,11 +27,11 @@ public class OreveinMapForEmeraldsAccessor extends BaseAccessor<VillagerTrades.I
         return new ItemsToItemsNode(
                 utils,
                 Either.left(Items.EMERALD.getDefaultInstance()),
-                new RangeValue(8, 15),
+                NumberExpr.uniformInt(8, 15),
                 Either.left(Items.COMPASS.getDefaultInstance()),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 Either.left(getOreveinMap()),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 1,
                 30,
                 0.5F,

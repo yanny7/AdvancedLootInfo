@@ -10,4 +10,4 @@ Enabled independently per branch via `gradle.properties` (`jei_enabled` + `<plat
 
 ## Domain substitution vs `ali/common-jei`
 
-Same three-phase lifecycle (`registerCategories` → `registerRecipeCatalysts` → `registerRecipes`), same `RecipeHolder` wrapping. The only real difference is the output type: `Block` (a biome's surface/feature blocks) instead of ALI's `ItemStack`/item outputs, using `RangeValue` for chance/count display.
+Same three-phase lifecycle (`registerCategories` → `registerRecipeCatalysts` → `registerRecipes`), same `RecipeHolder` wrapping. The only real difference is the output type: `Block` (a biome's surface/feature blocks) instead of ALI's `ItemStack`/item outputs, with the slot count taken from a `NumberExpr` through ACI's `NumberFormatter.slot`.

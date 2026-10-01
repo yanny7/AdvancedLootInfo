@@ -63,7 +63,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static TooltipBuilder getEnchantWithLevelsTooltip(IServerUtils utils, EnchantWithLevelsFunction fun) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, fun.levels).build(Lang.Value.LEVELS));
+            b.add(TooltipBuilder.number(utils.convertIntNumber(utils, fun.levels)).build(Lang.Value.LEVELS));
             b.add(utils.getValueTooltip(utils, fun.options).build(Lang.Branch.OPTIONS));
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.ENCHANT_WITH_LEVELS);
@@ -171,7 +171,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static TooltipBuilder getSetCountTooltip(IServerUtils utils, SetItemCountFunction fun) {
         return hideWhenFoldedIntoCount(TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, fun.value).build(Lang.Value.COUNT));
+            b.add(TooltipBuilder.number(utils.convertIntNumber(utils, fun.value)).build(Lang.Value.COUNT));
             b.add(utils.getValueTooltip(utils, fun.add).build(Lang.Value.ADD));
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.SET_COUNT), fun);
@@ -180,7 +180,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static TooltipBuilder getSetDamageTooltip(IServerUtils utils, SetItemDamageFunction fun) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, fun.damage).build(Lang.Value.DAMAGE));
+            b.add(TooltipBuilder.percent(utils.convertNumber(utils, fun.damage)).build(Lang.Value.DAMAGE));
             b.add(utils.getValueTooltip(utils, fun.add).build(Lang.Value.ADD));
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.SET_DAMAGE);
@@ -366,7 +366,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static TooltipBuilder getSetOminousBottleAmplifierTooltip(IServerUtils utils, SetOminousBottleAmplifierFunction fun) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, fun.amplifierGenerator).build(Lang.Value.AMPLIFIER));
+            b.add(TooltipBuilder.number(utils.convertIntNumber(utils, fun.amplifierGenerator)).build(Lang.Value.AMPLIFIER));
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.SET_OMINOUS_BOTTLE_AMPLIFIER);
     }
@@ -374,7 +374,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static TooltipBuilder getSetCustomModelDataTooltip(IServerUtils utils, SetCustomModelDataFunction fun) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, fun.valueProvider).build(Lang.Value.VALUE));
+            b.add(TooltipBuilder.number(utils.convertIntNumber(utils, fun.valueProvider)).build(Lang.Value.VALUE));
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.SET_CUSTOM_MODEL_DATA);
     }

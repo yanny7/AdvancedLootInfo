@@ -1,6 +1,6 @@
 package com.yanny.alicompat.compat.twilightforest;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
@@ -37,7 +37,7 @@ public class GiantToolGroupingModifierAccessor extends BaseAccessor<GiantToolGro
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions), (page, c) -> conversions.entrySet().stream()
                 .map((entry) -> (IOperation) new IOperation.ReplaceOperation(
                         (itemStack) -> itemStack.getItem().equals(entry.getKey().asItem()),
-                        (src) -> GlmNodeUtils.replacedNode(utils, c, src, entry.getValue().getDefaultInstance(), new RangeValue(1))))
+                        (src) -> GlmNodeUtils.replacedNode(utils, c, src, entry.getValue().getDefaultInstance(), NumberExpr.constant(1))))
                 .toList()));
     }
 }

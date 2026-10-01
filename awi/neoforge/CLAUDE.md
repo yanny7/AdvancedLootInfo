@@ -6,7 +6,7 @@ Guidance for `awi/neoforge` (`com.yanny.awi.neoforge`) — AWI's NeoForge loader
 
 Single `AwiMod` (`@Mod`, constructor takes the mod `IEventBus`). Unlike Forge it builds **no** `SimpleChannel`: `SERVER`/`CLIENT` are plain instances and payload registration happens in `RegisterPayloadHandlersEvent` (`registrar(MOD_ID).optional().versioned("1")`). Mod-bus listeners: `DataGeneration::generate`, common/client setup → `PluginManager`. There is no `AddReloadListenerEvent` listener — that one exists in `ali/neoforge` only, to publish `HolderLookup.Provider` for ALI's `getLookupProvider` and to register its fake-loot data manager; AWI needs neither.
 
-`NeoForgeCommonBusSubscriber` (`ServerStartingEvent` → `registerServerEvent` + `SERVER.readWorldgenInfo(overworld)`, `ServerStoppingEvent` → `deregisterServerEvent`) and `NeoForgeClientBusSubscriber` (`ClientPlayerNetworkEvent.LoggingIn`/`LoggingOut`) are the game-bus halves, both `@EventBusSubscriber(bus = Bus.GAME)`. There is no client level-unload handler — AWI has no per-level client cache to drop (`ali/neoforge` has one for `EntityStorage`).
+`NeoForgeCommonBusSubscriber` (`ServerStartingEvent` → `registerServerEvent` + `SERVER.readWorldgenInfo(overworld)`, `ServerStoppingEvent` → `deregisterServerEvent`) and `NeoForgeClientBusSubscriber` (`ClientPlayerNetworkEvent.LoggingIn`/`LoggingOut`) are the game-bus halves, both `@EventBusSubscriber(bus = Bus.GAME)`. There is no client level-unload handler — AWI has no per-level client cache to drop (`ali/neoforge` has one for `EntityStorage`). `NeoForgeClientModBusSubscriber` (mod bus, client only) registers the identity factory for `ScrollableTooltip` that JEI on NeoForge needs — see `aci/CLAUDE.md`.
 
 ## Platform + networking implementation
 

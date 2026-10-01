@@ -1,12 +1,14 @@
 package com.yanny.ali.test;
 
-import com.yanny.aci.api.RangeValue;
-import com.yanny.ali.plugin.server.EnchantedRanges;
+import com.yanny.aci.api.NumberExpr;
+import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -26,9 +28,13 @@ public class EntryTooltipTest {
 
     @Test
     public void testLootPoolTooltip() {
-        assertTooltip(TooltipUtils.getLootPoolTooltip(new RangeValue(2, 3), new RangeValue(1, 2)).build(), List.of(
+        assertTooltip(TooltipUtils.getLootPoolTooltip(TooltipUtils.rolls(UTILS, UniformGenerator.between(2, 3), ConstantValue.exactly(0))).build(), List.of(
                 "Selects random entry",
-                "Rolls: 3-5x"
+                "Rolls: 2 to 3"
+        ));
+        assertTooltip(TooltipUtils.getLootPoolTooltip(TooltipUtils.rolls(UTILS, UniformGenerator.between(2, 3), UniformGenerator.between(1, 2))).build(), List.of(
+                "Selects random entry",
+                "Rolls: 0 to 2050 (luck)"
         ));
     }
 
@@ -64,39 +70,31 @@ public class EntryTooltipTest {
 
     @Test
     public void testTooltip() {
-        EnchantedRanges chanceMap = new EnchantedRanges(1.25F);
-        EnchantedRanges countMap = new EnchantedRanges(1, 5);
-
-        chanceMap.computeLevels(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.LOOTING).orElseThrow(), (level, value) -> switch (level) {
-            case 1 ->  new RangeValue(0.1F);
-            case 2 -> new RangeValue(0.3F);
-            case 3 -> new RangeValue(0.5F);
-            default -> throw new IllegalStateException("Unexpected value: " + level);
-        });
-        countMap.computeLevels(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.FORTUNE).orElseThrow(), (level, value) -> switch (level) {
-            case 1 -> new RangeValue(1, 5);
-            case 2 -> new RangeValue(1, 10);
-            case 3 -> new RangeValue(1, 15);
-            default -> throw new IllegalStateException("Unexpected value: " + level);
-        });
+        NumberExpr chance = NumberExpr.lookup(TooltipUtils.level(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.LOOTING).orElseThrow()), List.of(
+                NumberExpr.constant(0.0125), NumberExpr.constant(0.001), NumberExpr.constant(0.003), NumberExpr.constant(0.005)
+        ), null);
+        LootCount count = LootCount.of(NumberExpr.lookup(TooltipUtils.level(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.FORTUNE).orElseThrow()), List.of(
+                NumberExpr.range(1, 5), NumberExpr.range(1, 5), NumberExpr.range(1, 10), NumberExpr.range(1, 15)
+        ), null));
 
         assertTooltip(TooltipUtils.getTooltip(
                 UTILS,
                 3,
-                chanceMap,
-                countMap,
+                chance,
+                count,
+                null,
                 List.of(ApplyExplosionDecay.explosionDecay().build()),
                 List.of(ExplosionCondition.survivesExplosion().build())
         ).build(), List.of(
                 "Quality: 3",
                 "Chance: 1.25%",
-                "  -> 0.10% (Looting I)",
-                "  -> 0.30% (Looting II)",
-                "  -> 0.50% (Looting III)",
-                "Count: 1-5",
-                "  -> 1-5 (Fortune I)",
-                "  -> 1-10 (Fortune II)",
-                "  -> 1-15 (Fortune III)",
+                "  -> Looting I: 0.1%",
+                "  -> Looting II: 0.3%",
+                "  -> Looting III: 0.5%",
+                "Count: 1 to 5",
+                "  -> Fortune I: 1 to 5",
+                "  -> Fortune II: 1 to 10",
+                "  -> Fortune III: 1 to 15",
                 "----- Predicates -----",
                 "Survives Explosion",
                 "----- Modifiers -----",
@@ -105,20 +103,21 @@ public class EntryTooltipTest {
         assertTooltip(TooltipUtils.getTooltip(
                 UTILS,
                 3,
-                chanceMap,
-                countMap,
+                chance,
+                count,
+                null,
                 List.of(ApplyExplosionDecay.explosionDecay().build()),
                 List.of(ExplosionCondition.survivesExplosion().build())
         ).build(), List.of(
                 "Quality: 3",
                 "Chance: 1.25%",
-                "  -> 0.10% (Looting I)",
-                "  -> 0.30% (Looting II)",
-                "  -> 0.50% (Looting III)",
-                "Count: 1-5",
-                "  -> 1-5 (Fortune I)",
-                "  -> 1-10 (Fortune II)",
-                "  -> 1-15 (Fortune III)",
+                "  -> Looting I: 0.1%",
+                "  -> Looting II: 0.3%",
+                "  -> Looting III: 0.5%",
+                "Count: 1 to 5",
+                "  -> Fortune I: 1 to 5",
+                "  -> Fortune II: 1 to 10",
+                "  -> Fortune III: 1 to 15",
                 "----- Predicates -----",
                 "Survives Explosion",
                 "----- Modifiers -----",

@@ -4,10 +4,20 @@
     "text": "gold",
     "value": "aqua",
     "error": "red",
-    "branch": "dark_gray"
+    "branch": "dark_gray",
+    "secondary": "gray",
+    "levels": [
+      "green",
+      "yellow",
+      "light_purple",
+      "blue",
+      "red",
+      "gold"
+    ]
   },
   "logMoreStatistics": false,
   "showInGameNames": true,
+  "showCharts": true,
   "showConfigConditionalBlocks": false,
   "dimensions": [],
   "dimensionIcons": {}

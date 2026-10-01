@@ -1,6 +1,6 @@
 package com.yanny.alicompat.compat.apotheosis;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
@@ -14,7 +14,7 @@ import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.ali.plugin.glm.LootPage;
 import com.yanny.ali.plugin.glm.Verdict;
-import com.yanny.ali.plugin.server.EnchantedRanges;
+import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
@@ -73,8 +73,8 @@ public class AffixLootModifierAccessor extends BaseAccessor<AffixLootModifier> i
     @NotNull
     private static IDataNode getEntryNode(IServerUtils utils, List<LootItemCondition> conditions, AffixLootEntry entry, float chance, int sumWeight) {
         float itemChance = sumWeight > 0 ? chance * entry.getWeight() / sumWeight : chance;
-        EnchantedRanges enchantedChance = NodeUtils.getEnchantedChance(utils, conditions, itemChance);
-        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, enchantedChance, new EnchantedRanges(new RangeValue(1)), Collections.emptyList(), conditions);
+        NumberExpr chanceExpr = NodeUtils.getChance(utils, conditions, itemChance);
+        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chanceExpr, LootCount.of(NumberExpr.constant(1)), NodeUtils.getCountLimit(entry.getStack()), Collections.emptyList(), conditions);
 
         tooltip.add(utils.getValueTooltip(utils, entry.getWeight()).build(Lang.Value.WEIGHT));
         tooltip.add(utils.getValueTooltip(utils, entry.getQuality()).build(Lang.Description.QUALITY));
@@ -83,6 +83,6 @@ public class AffixLootModifierAccessor extends BaseAccessor<AffixLootModifier> i
         tooltip.add(utils.getValueTooltip(utils, entry.getDimensions()).build(Lang.Branch.DIMENSIONS));
         tooltip.add(utils.getValueTooltip(utils, entry.getStages()).build(ApotheosisLang.Branch.STAGES));
 
-        return new ItemNode(itemChance, new RangeValue(1), entry.getStack(), tooltip.build(), Collections.emptyList(), conditions);
+        return new ItemNode(itemChance, NumberExpr.constant(1), entry.getStack(), tooltip.build(), Collections.emptyList(), conditions);
     }
 }

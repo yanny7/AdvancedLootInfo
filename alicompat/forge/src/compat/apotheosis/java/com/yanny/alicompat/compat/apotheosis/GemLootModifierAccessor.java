@@ -1,6 +1,6 @@
 package com.yanny.alicompat.compat.apotheosis;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
@@ -34,7 +34,7 @@ public class GemLootModifierAccessor extends BaseAccessor<GemLootModifier> imple
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions),
                 (page, c) -> Collections.singletonList(new IOperation.AddOperation(
                         (itemStack) -> true,
-                        GlmNodeUtils.addedNode(utils, c, ApotheosisUtils.gemStack(), ApotheosisUtils.chance(AdventureConfig.GEM_LOOT_RULES, page.tableId()), new RangeValue(1))))));
+                        GlmNodeUtils.addedNode(utils, c, ApotheosisUtils.gemStack(), ApotheosisUtils.chance(AdventureConfig.GEM_LOOT_RULES, page.tableId()), NumberExpr.constant(1))))));
     }
 
     @NotNull

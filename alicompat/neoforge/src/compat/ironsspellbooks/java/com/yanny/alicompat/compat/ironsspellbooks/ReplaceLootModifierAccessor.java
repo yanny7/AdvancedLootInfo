@@ -1,6 +1,7 @@
 package com.yanny.alicompat.compat.ironsspellbooks;
 
 import com.mojang.datafixers.util.Either;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
@@ -12,7 +13,6 @@ import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.nodes.ReferenceNode;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IPageLootModifier;
-import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
@@ -49,7 +49,7 @@ public class ReplaceLootModifierAccessor extends BaseAccessor<ReplaceLootModifie
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList, (page, c) -> {
             TooltipNode tooltip = TooltipBuilder.array((b) -> {
                 b.add(TooltipBuilder.keyOnly(Lang.Group.ALL));
-                b.add(TooltipUtils.getChanceTooltip(new EnchantedRanges(chance * 100)));
+                b.add(TooltipUtils.getChanceTooltip(NumberExpr.constant(chance)));
                 b.add(GenericTooltipUtils.getConditionsSectionTooltip(utils, c));
             }).build();
             LootTable table = utils.getLootTable(Either.left(lootTable));

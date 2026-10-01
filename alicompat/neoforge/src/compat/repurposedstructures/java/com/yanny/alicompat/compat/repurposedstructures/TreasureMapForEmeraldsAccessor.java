@@ -2,7 +2,7 @@ package com.yanny.alicompat.compat.repurposedstructures;
 
 import com.mojang.datafixers.util.Either;
 import com.telepathicgrunt.repurposedstructures.misc.maptrades.StructureSpecificMaps;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
@@ -61,13 +61,13 @@ public class TreasureMapForEmeraldsAccessor extends BaseAccessor<StructureSpecif
         return new ItemsToItemsNode(
                 utils,
                 Either.left(Items.EMERALD.getDefaultInstance()),
-                new RangeValue(emeraldCost),
+                NumberExpr.constant(emeraldCost),
                 TooltipNode.empty(),
                 Either.left(Items.COMPASS.getDefaultInstance()),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 TooltipNode.empty(),
                 Either.left(getMapStack()),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 TooltipBuilder.array((b) -> {
                     b.add(utils.getValueTooltip(utils, destination).build(Lang.Value.DESTINATION));
                     b.add(utils.getValueTooltip(utils, destinationTag).build(Lang.Value.DESTINATION));

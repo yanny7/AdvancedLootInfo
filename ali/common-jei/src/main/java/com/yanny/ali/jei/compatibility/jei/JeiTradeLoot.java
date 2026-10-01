@@ -1,7 +1,7 @@
 package com.yanny.ali.jei.compatibility.jei;
 
 import com.yanny.aci.api.IWidget;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.ali.api.IDataNode;
@@ -113,7 +113,7 @@ public class JeiTradeLoot extends JeiBaseLoot<TradeLootType, ResourceLocation> {
 
     private static void addSlotWidget(IRecipeExtrasBuilder builder, List<IRecipeWidget> widgets, List<IRecipeSlotDrawable> drawables, String slotName, Rect rect) {
         builder.getRecipeSlots().findSlotByName(slotName).ifPresent((slotDrawable) -> {
-            widgets.add(new JeiLootSlotWidget(slotDrawable, rect.x(), rect.y(), new RangeValue(1)));
+            widgets.add(new JeiLootSlotWidget(slotDrawable, rect.x(), rect.y(), NumberInterval.point(1)));
             drawables.add(slotDrawable);
         });
     }

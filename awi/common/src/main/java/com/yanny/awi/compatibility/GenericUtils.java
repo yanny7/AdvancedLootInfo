@@ -2,6 +2,7 @@ package com.yanny.awi.compatibility;
 
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
+import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.Utils;
 import com.yanny.awi.api.IBlockNode;
@@ -264,15 +265,15 @@ public class GenericUtils {
 
     public record SpawnSlot(EntityType<?> type, @Nullable SpawnEggItem egg, TooltipNode conditions, int x, int y) {
         @NotNull
-        public List<Component> getConditions() {
-            return CoreTooltipUtils.toComponents(conditions, 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle());
+        public List<TooltipLine> getConditions() {
+            return CoreTooltipUtils.toLines(conditions, 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle(), TooltipUtils.getNumberOptions());
         }
 
         @NotNull
-        public List<Component> getTooltip() {
-            List<Component> tooltip = new ArrayList<>();
+        public List<TooltipLine> getTooltip() {
+            List<TooltipLine> tooltip = new ArrayList<>();
 
-            tooltip.add(type.getDescription());
+            tooltip.add(TooltipLine.text(type.getDescription()));
             tooltip.addAll(getConditions());
             return tooltip;
         }

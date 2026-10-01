@@ -1,6 +1,6 @@
 package com.yanny.alicompat.compat.farmersdelight;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IItemNode;
@@ -14,7 +14,7 @@ import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.alicompat.accessor.IGlobalLootModifierAccessor;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
-import com.yanny.ali.plugin.server.EnchantedRanges;
+import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
@@ -51,14 +51,14 @@ public class ReplaceItemModifierAccessor extends BaseAccessor<ReplaceItemModifie
                 List<IDataNode> nodes = new ArrayList<>();
                 IItemNode node = (IItemNode) src;
                 List<LootItemCondition> allConditions = Stream.concat(c.stream(), node.getConditions().stream()).toList();
-                EnchantedRanges chance = NodeUtils.getEnchantedChance(utils, allConditions, 1);
-                EnchantedRanges count = NodeUtils.getEnchantedCount(utils, Collections.emptyList());
-                TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, count, Collections.emptyList(), allConditions);
+                NumberExpr chance = NodeUtils.getChance(utils, allConditions, 1);
+                LootCount count = LootCount.of(NumberExpr.constant(addedCount));
+                TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, count, NodeUtils.getCountLimit(addedItem.getDefaultInstance()), Collections.emptyList(), allConditions);
 
                 if (!c.isEmpty()) {
-                    nodes.add(new ModifiedNode(utils, src, new ItemNode(1, new RangeValue(addedCount), addedItem.getDefaultInstance(), tooltip.build(), Collections.emptyList(), allConditions)));
+                    nodes.add(new ModifiedNode(utils, src, new ItemNode(1, NumberExpr.constant(addedCount), addedItem.getDefaultInstance(), tooltip.build(), Collections.emptyList(), allConditions)));
                 } else {
-                    nodes.add(new ItemNode(1, new RangeValue(addedCount), addedItem.getDefaultInstance(), tooltip.build(), Collections.emptyList(), allConditions));
+                    nodes.add(new ItemNode(1, NumberExpr.constant(addedCount), addedItem.getDefaultInstance(), tooltip.build(), Collections.emptyList(), allConditions));
                 }
 
                 return nodes;

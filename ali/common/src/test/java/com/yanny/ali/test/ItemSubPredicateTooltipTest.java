@@ -33,15 +33,15 @@ public class ItemSubPredicateTooltipTest {
     public void testItemDamagePredicateTooltip() {
         assertTooltip(ItemSubPredicateTooltipUtils.getItemDamagePredicateTooltip(UTILS, ItemDamagePredicate.durability(MinMaxBounds.Ints.atMost(50))).build(), List.of(
                 "Damage:",
-                "  -> Durability: ≤50"
+                "  -> Durability: ≤ 50"
         ));
         assertTooltip(ItemSubPredicateTooltipUtils.getItemDamagePredicateTooltip(UTILS, new ItemDamagePredicate(
                 MinMaxBounds.Ints.atMost(50),
                 MinMaxBounds.Ints.atLeast(5)
         )).build(), List.of(
                 "Damage:",
-                "  -> Damage: ≥5",
-                "  -> Durability: ≤50"
+                "  -> Damage: ≥ 5",
+                "  -> Durability: ≤ 50"
         ));
     }
 
@@ -55,7 +55,7 @@ public class ItemSubPredicateTooltipTest {
                 "  -> Enchantment: minecraft:looting",
                 "  -> Entry:",
                 "    -> Enchantment: minecraft:mending",
-                "    -> Level: 1-5"
+                "    -> Level: 1 to 5"
         ));
     }
 
@@ -69,7 +69,7 @@ public class ItemSubPredicateTooltipTest {
                 "  -> Enchantment: minecraft:looting",
                 "  -> Entry:",
                 "    -> Enchantment: minecraft:mending",
-                "    -> Level: 1-5"
+                "    -> Level: 1 to 5"
         ));
     }
 
@@ -110,8 +110,8 @@ public class ItemSubPredicateTooltipTest {
                 "    -> Counts:",
                 "      -> Items:",
                 "        -> Tag: minecraft:arrows",
-                "      -> Count: 1-5",
-                "    -> Size: ≥4"
+                "      -> Count: 1 to 5",
+                "    -> Size: ≥ 4"
         ));
     }
 
@@ -128,8 +128,8 @@ public class ItemSubPredicateTooltipTest {
                 "  -> Counts:",
                 "    -> Items:",
                 "      -> Tag: minecraft:arrows",
-                "    -> Count: 1-5",
-                "  -> Size: ≥4"
+                "    -> Count: 1 to 5",
+                "  -> Size: ≥ 4"
         ));
     }
 
@@ -160,9 +160,9 @@ public class ItemSubPredicateTooltipTest {
                 "      -> Shape: Burst",
                 "    -> Counts:",
                 "      -> Shape: Creeper",
-                "      -> Count: 1-5",
-                "    -> Size: ≥4",
-                "  -> Flight Duration: 1-4"
+                "      -> Count: 1 to 5",
+                "    -> Size: ≥ 4",
+                "  -> Flight Duration: 1 to 4"
         ));
     }
 
@@ -178,8 +178,8 @@ public class ItemSubPredicateTooltipTest {
                 "    -> Page: Hello",
                 "  -> Counts:",
                 "    -> Page: World",
-                "      -> Count: 1-5",
-                "  -> Size: ≥4"
+                "      -> Count: 1 to 5",
+                "  -> Size: ≥ 4"
         ));
     }
 
@@ -196,11 +196,11 @@ public class ItemSubPredicateTooltipTest {
                 "      -> Page: Hello",
                 "    -> Counts:",
                 "      -> Page: World",
-                "        -> Count: 1-5",
-                "    -> Size: ≥4",
+                "        -> Count: 1 to 5",
+                "    -> Size: ≥ 4",
                 "  -> Author: Yanny",
                 "  -> Title: Testing",
-                "  -> Generation: 1-8",
+                "  -> Generation: 1 to 8",
                 "  -> Resolved: false"
         ));
     }
@@ -228,13 +228,13 @@ public class ItemSubPredicateTooltipTest {
                 "  -> Contains:",
                 "    -> Attribute: minecraft:generic.armor",
                 "    -> Id: minecraft:help",
-                "    -> Amount: 1.0-4.0",
+                "    -> Amount: 1 to 4",
                 "    -> Operation: Add Value",
                 "    -> Slot: Armor",
                 "  -> Counts:",
                 "    -> Attribute: minecraft:generic.gravity",
-                "    -> Count: 1-5",
-                "  -> Size: ≥4"
+                "    -> Count: 1 to 5",
+                "  -> Size: ≥ 4"
         ));
     }
 

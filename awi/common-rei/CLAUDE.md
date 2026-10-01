@@ -10,4 +10,4 @@ Enabled independently per branch via `gradle.properties` (`rei_enabled` + `<plat
 
 ## Domain substitution vs `ali/common-rei`
 
-Same two-phase lifecycle (`registerCategories` building a `Holder(identifier, category, filler)`, then `registerDisplays` calling `registerFiller`/`registry.add`). The only real difference is the output type: `Block` instead of ALI's `ItemStack`/tag outputs, using `RangeValue` for chance/count display.
+Same two-phase lifecycle (`registerCategories` building a `Holder(identifier, category, filler)`, then `registerDisplays` calling `registerFiller`/`registry.add`). The only real difference is the output type: `Block` instead of ALI's `ItemStack`/tag outputs, with the slot count taken from a `NumberExpr` through ACI's `NumberFormatter.slot`.
