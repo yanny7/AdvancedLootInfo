@@ -22,7 +22,7 @@
   "alicompat.artifacts.property.value.config": "設定：%s",
   "alicompat.artifacts.property.value.default_probability": "預設機率：%s",
   "alicompat.artifacts.type.condition.artifact_rarity_adjusted_chance": "遺物稀有度調整機率：",
-  "alicompat.artifacts.type.condition.config_value_chance": "設定值機率：",
+  "alicompat.artifacts.type.condition.config_value_chance": "設定機率值：",
   "alicompat.artifacts.type.condition.is_april_fools": "是否為愚人節",
   "alicompat.artifacts.type.function.replace_with_loot_table": "以戰利品表取代：",
   "alicompat.computercraft.type.condition.block_named": "方塊已命名",
