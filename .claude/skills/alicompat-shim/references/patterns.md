@@ -60,6 +60,7 @@ nothing at all, since conditions ALI can run decide themselves. See `alicompat/C
 | Shape | Example |
 |---|---|
 | Target is an `ItemListing`, accessor reads its fields | `morejs` → `PluginUtils.registerItemListing(registry, SimpleTrade.class, SimpleTradeAccessor.class)`, five of them |
+| Package-private subclasses of one listing | `grimoireofgaia` → `ItemsToItemsAccessor` over the base, the subclasses registered via `Class.forName` in `registerItemsToItems` and listed in `scan_ignore.json` |
 | Accessor *is* the listing | `ribbits` → `PluginUtils.registerSelfItemListing(registry, ItemsForAmethystsAccessor.class)` — the accessor implements `VillagerTrades.ItemListing` and `IItemListing` |
 | Trader with a static `ItemListing[]` | `farlanders` → `registerTrades(id, () -> FarlanderTrades.FARLANDER_TRADES, (level) -> new TradeLevelInfo(NumberExpr.constant(2)))` |
 | Same, a different pick count per level | `grimoireofgaia` → `(level) -> new TradeLevelInfo(NumberExpr.constant(level == 1 ? 10 : 5))`, the counts taken from each entity's `updateTrades` |

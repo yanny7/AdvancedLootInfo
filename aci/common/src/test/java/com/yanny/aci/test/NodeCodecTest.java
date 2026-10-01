@@ -242,10 +242,10 @@ public class NodeCodecTest {
     }
 
     private static TooltipNode leafTooltip(TooltipNodePalette palette, String key, String value) {
-        TooltipNode child = TooltipNode.getOrCreate(palette, key, new String[]{value}, null, null,
+        TooltipNode child = TooltipNode.getOrCreate(palette, key, new String[]{value}, null, null, null,
                 (short) (TooltipNode.FLAG_HAS_KEY | TooltipNode.FLAG_HAS_VALUE), List.of());
 
-        return TooltipNode.getOrCreate(palette, key, null, Component.literal(value), null, TooltipNode.FLAG_COMPONENT, List.of(child));
+        return TooltipNode.getOrCreate(palette, key, null, Component.literal(value), null, null, TooltipNode.FLAG_COMPONENT, List.of(child));
     }
 
     private static byte[] encodePayload(TestServerUtils utils, Map<ResourceLocation, ? extends TestDataNode> nodes) {

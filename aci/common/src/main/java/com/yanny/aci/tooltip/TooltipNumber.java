@@ -18,7 +18,7 @@ public record TooltipNumber(NumberExpr expr, boolean percent, @Nullable NumberIn
         return new TooltipNumber(NumberExpr.decode(buf), buf.readBoolean(), buf.readNullable(TooltipNumber::readInterval));
     }
 
-    private static void writeInterval(FriendlyByteBuf buf, NumberInterval interval) {
+    static void writeInterval(FriendlyByteBuf buf, NumberInterval interval) {
         buf.writeDouble(interval.lo());
         buf.writeDouble(interval.hi());
         buf.writeBoolean(interval.loClosed());
@@ -26,7 +26,7 @@ public record TooltipNumber(NumberExpr expr, boolean percent, @Nullable NumberIn
     }
 
     @NotNull
-    private static NumberInterval readInterval(FriendlyByteBuf buf) {
+    static NumberInterval readInterval(FriendlyByteBuf buf) {
         return new NumberInterval(buf.readDouble(), buf.readDouble(), buf.readBoolean(), buf.readBoolean());
     }
 }

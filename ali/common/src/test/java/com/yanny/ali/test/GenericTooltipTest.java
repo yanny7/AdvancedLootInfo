@@ -158,9 +158,9 @@ public class GenericTooltipTest {
         ))).build(Lang.Branch.PROPERTIES), List.of(
                 "Properties:",
                 "  -> facing: east",
-                "  -> level: 1 to 5",
-                "  -> level: ≤ 5",
-                "  -> level: ≥ 1",
+                "  -> level: 1-5",
+                "  -> level: ≤5",
+                "  -> level: ≥1",
                 "  -> level: any"
         ));
     }

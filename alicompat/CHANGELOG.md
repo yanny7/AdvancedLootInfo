@@ -1,6 +1,8 @@
 ## []
 
 - Counts and prices show their distribution, fixed several Iron's Spellbooks and Farmer's Delight values
+- Grimoire of Gaia trades are read from their fields instead of rolled offers
+- Improved crash recovery when versions doesn't match
 
 ## [1.1.0]
 

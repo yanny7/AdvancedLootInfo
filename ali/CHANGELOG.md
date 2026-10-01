@@ -3,6 +3,7 @@
 - Scrollable tooltip by mouse wheel when taller than screen
 - Counts and chances show most likely value, level rows, charts (`showCharts`) and formulas (F3+H)
 - Broken loot function or condition support from other mods no longer hides the whole loot table
+- Broken loot entry, tooltip or trade support from other mods shows that part as unsupported instead of hiding the whole loot table or trader
 
 ## [2.3.0]
 

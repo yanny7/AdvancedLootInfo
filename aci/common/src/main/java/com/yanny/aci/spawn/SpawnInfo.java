@@ -193,6 +193,11 @@ public class SpawnInfo {
         List<Entry> entries = new ArrayList<>();
 
         settings.spawnOverrides().forEach((category, override) -> {
+            // Mods (Hybrid Aquatic) add overrides under unknown categories, which arrive as a null key.
+            if (category == null) {
+                return;
+            }
+
             for (MobSpawnSettings.SpawnerData data : override.spawns().unwrap()) {
                 entries.add(new Entry(data.type, new Spawn(category, data.getWeight().asInt(), data.minCount, data.maxCount, null)));
             }

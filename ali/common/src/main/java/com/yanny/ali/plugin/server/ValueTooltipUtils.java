@@ -2,14 +2,12 @@ package com.yanny.ali.plugin.server;
 
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
-import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.stats.Stat;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -404,18 +402,19 @@ public class ValueTooltipUtils {
     public static TooltipBuilder getRangedPropertyMatcherTooltip(IServerUtils ignoredUtils, StatePropertiesPredicate.RangedPropertyMatcher matcher) {
         String min = matcher.minValue;
         String max = matcher.maxValue;
-        Component range;
 
-        if (min != null && max != null) {
-            range = Component.translatable(CoreLang.Numbers.RANGE.singular(), min, max);
-        } else if (min != null) {
-            range = Component.translatable(CoreLang.Numbers.AT_LEAST.singular(), min);
-        } else if (max != null) {
-            range = Component.translatable(CoreLang.Numbers.AT_MOST.singular(), max);
+        if (min != null) {
+            if (max != null) {
+                return TooltipBuilder.value(matcher.name, min, max).key(Lang.Value.RANGED_BOTH);
+            } else {
+                return TooltipBuilder.value(matcher.name, min).key(Lang.Value.RANGED_GTE);
+            }
         } else {
-            range = Component.translatable(CoreLang.Numbers.ANY.singular());
+            if (max != null) {
+                return TooltipBuilder.value(matcher.name, max).key(Lang.Value.RANGED_LTE);
+            } else {
+                return TooltipBuilder.value(matcher.name).key(Lang.Value.RANGED_ANY);
+            }
         }
-
-        return TooltipBuilder.component(range).rawKey(matcher.name);
     }
 }

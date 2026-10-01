@@ -5,13 +5,10 @@ import com.google.gson.JsonPrimitive;
 import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.api.NumberText;
 import com.yanny.aci.language.IMultiKey;
-import com.yanny.aci.number.NumberFormatter;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.awi.api.BlockInfo;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.language.Lang;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -60,10 +57,10 @@ public class TooltipUtils {
         return TooltipBuilder.array((b) -> {
             BlockInfo.StorageType storage = info.storageType();
 
-            addRanges(b, info.ranges(), storageLabel(storage), storageKey(storage), qualifier(info));
+            addRanges(b, info.ranges(), storageLabel(storage), storageKey(storage, false), storageKey(storage, true), qualifier(info));
 
             if (!info.heights().isEmpty()) {
-                addRanges(b, info.heights(), Lang.BaseTerrain.AT_Y, Lang.Value.AT_Y, null);
+                addRanges(b, info.heights(), Lang.BaseTerrain.AT_Y, Lang.Value.AT_Y, Lang.Value.AT_Y, null);
             }
 
             if (info.layerShift() > 0) {
@@ -72,7 +69,8 @@ public class TooltipUtils {
         });
     }
 
-    private static void addRanges(TooltipBuilder b, List<NumberInterval> ranges, IMultiKey label, IMultiKey single, @Nullable String qualifier) {
+    private static void addRanges(TooltipBuilder b, List<NumberInterval> ranges, IMultiKey label, IMultiKey single,
+                                  IMultiKey singleQualified, @Nullable String qualifier) {
         List<List<NumberInterval>> lines = wrapRanges(ranges);
         boolean wrapped = lines.size() > 1;
 
@@ -82,13 +80,22 @@ public class TooltipUtils {
 
         for (int i = 0; i < lines.size(); i++) {
             boolean last = i == lines.size() - 1;
-            MutableComponent value = joinRanges(lines.get(i), !last);
+            boolean qualified = qualifier != null && last;
+            IMultiKey key;
 
-            if (qualifier != null && last) {
-                value = Component.translatable(Lang.Value.QUALIFIED.singular(), value, Component.translatable(qualifier));
+            if (!wrapped) {
+                key = qualified ? singleQualified : single;
+            } else if (!last) {
+                key = Lang.Value.CONTINUATION_WRAPPED;
+            } else {
+                key = qualified ? Lang.Value.CONTINUATION_QUALIFIED : Lang.Value.CONTINUATION;
             }
 
-            b.add(TooltipBuilder.component(value).build(wrapped ? Lang.Value.CONTINUATION : single));
+            if (qualified) {
+                b.add(TooltipBuilder.intervals(lines.get(i), TooltipBuilder.translate(qualifier)).build(key));
+            } else {
+                b.add(TooltipBuilder.intervals(lines.get(i)).build(key));
+            }
         }
     }
 
@@ -128,30 +135,11 @@ public class TooltipUtils {
     }
 
     @NotNull
-    private static MutableComponent joinRanges(List<NumberInterval> ranges, boolean trailingComma) {
-        MutableComponent value = Component.empty();
-
-        for (int i = 0; i < ranges.size(); i++) {
-            if (i > 0) {
-                value.append(", ");
-            }
-
-            value.append(NumberFormatter.interval(ranges.get(i), false).toComponent(Locale.ROOT));
-        }
-
-        if (trailingComma) {
-            value.append(",");
-        }
-
-        return value;
-    }
-
-    @NotNull
-    private static IMultiKey storageKey(BlockInfo.StorageType storageType) {
+    private static IMultiKey storageKey(BlockInfo.StorageType storageType, boolean qualified) {
         return switch (storageType) {
-            case RELATIVE -> Lang.Value.DEPTH_BELOW_SURFACE;
-            case ABSOLUTE -> Lang.Value.ABSOLUTE_Y;
-            case LAYERED -> Lang.Value.LAYERS_AT_Y;
+            case RELATIVE -> qualified ? Lang.Value.DEPTH_BELOW_SURFACE_QUALIFIED : Lang.Value.DEPTH_BELOW_SURFACE;
+            case ABSOLUTE -> qualified ? Lang.Value.ABSOLUTE_Y_QUALIFIED : Lang.Value.ABSOLUTE_Y;
+            case LAYERED -> qualified ? Lang.Value.LAYERS_AT_Y_QUALIFIED : Lang.Value.LAYERS_AT_Y;
         };
     }
 

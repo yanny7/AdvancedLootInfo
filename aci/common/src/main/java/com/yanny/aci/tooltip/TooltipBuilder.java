@@ -21,6 +21,7 @@ public class TooltipBuilder {
     private String[] values;
     private Component componentValue;
     private TooltipNumber number;
+    private List<NumberInterval> intervals;
 
     private boolean isArray = false;
     private boolean isAdvancedOnly = false;
@@ -144,6 +145,14 @@ public class TooltipBuilder {
     }
 
     @NotNull
+    public static TooltipBuilder intervals(List<NumberInterval> intervals, Object... v) {
+        TooltipBuilder builder = value(v);
+
+        builder.intervals = List.copyOf(intervals);
+        return builder;
+    }
+
+    @NotNull
     public static TooltipBuilder component(Component component) {
         TooltipBuilder builder = new TooltipBuilder();
 
@@ -232,7 +241,7 @@ public class TooltipBuilder {
             return TooltipNode.empty();
         }
 
-        if (!forceVisible && values == null && componentValue == null && number == null && children.isEmpty()) {
+        if (!forceVisible && values == null && componentValue == null && number == null && intervals == null && children.isEmpty()) {
             return TooltipNode.empty();
         }
 
@@ -240,12 +249,13 @@ public class TooltipBuilder {
         String[] finalValues = values;
         Component finalComponent = componentValue;
         TooltipNumber finalNumber = number;
+        List<NumberInterval> finalIntervals = intervals;
         short finalFlags = getFlags();
         List<TooltipNode> finalChildren = new ArrayList<>(children);
 
         if (translatableKey != null && rawKey == null) {
             boolean isSingleSimpleChild = !finalChildren.isEmpty() && !finalChildren.get(0).hasChildren() && !finalChildren.get(0).hasKey();
-            boolean parentIsEligible = finalValues == null && finalComponent == null && finalNumber == null && !isError;
+            boolean parentIsEligible = finalValues == null && finalComponent == null && finalNumber == null && finalIntervals == null && !isError;
             boolean potentiallyMergeable = parentIsEligible && isSingleSimpleChild;
             boolean canBeMerged = potentiallyMergeable && !isArray && finalChildren.size() == 1;
             boolean hasMultiKey = !Objects.equals(translatableKey.plural(), translatableKey.singular());
@@ -256,6 +266,7 @@ public class TooltipBuilder {
                 finalValues = child.getValues();
                 finalComponent = child.getComponent();
                 finalNumber = child.getNumber();
+                finalIntervals = child.getIntervals();
 
                 if (finalValues != null) {
                     finalFlags |= TooltipNode.FLAG_HAS_VALUE;
@@ -266,6 +277,9 @@ public class TooltipBuilder {
                 if (finalNumber != null) {
                     finalFlags |= TooltipNode.FLAG_NUMBER;
                 }
+                if (finalIntervals != null) {
+                    finalFlags |= TooltipNode.FLAG_INTERVALS;
+                }
 
                 finalChildren.clear();
             } else {
@@ -273,7 +287,7 @@ public class TooltipBuilder {
                     TooltipContext.getPalette().reportMergeable(translatableKey.plural(), TooltipContext.get());
                 }
 
-                if (hasMultiKey && (finalChildren.isEmpty() || values != null || number != null)) {
+                if (hasMultiKey && (finalChildren.isEmpty() || values != null || number != null || intervals != null)) {
                     finalKeyStr = translatableKey.singular();
                 } else {
                     finalKeyStr = translatableKey.plural();
@@ -281,7 +295,7 @@ public class TooltipBuilder {
             }
         }
 
-        return TooltipNode.getOrCreate(TooltipContext.getPalette(), finalKeyStr, finalValues, finalComponent, finalNumber, finalFlags, finalChildren);
+        return TooltipNode.getOrCreate(TooltipContext.getPalette(), finalKeyStr, finalValues, finalComponent, finalNumber, finalIntervals, finalFlags, finalChildren);
     }
 
     private short getFlags() {
@@ -295,6 +309,7 @@ public class TooltipBuilder {
         if (values != null && values.length > 0) flags |= TooltipNode.FLAG_HAS_VALUE;
         if (componentValue != null) flags |= TooltipNode.FLAG_COMPONENT;
         if (number != null) flags |= TooltipNode.FLAG_NUMBER;
+        if (intervals != null) flags |= TooltipNode.FLAG_INTERVALS;
 
         return flags;
     }

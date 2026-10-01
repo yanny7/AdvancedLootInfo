@@ -87,6 +87,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final ManagedRegistry<Class<?>, EnumTranslation> enumValues = registerClassKeyed("enum values", true, HashMap::new, null);
 
     private final Set<String> fallbackItemListings = new HashSet<>();
+    private final Set<String> failedRenderers = new HashSet<>();
     private final Map<ResourceLocation, LootTable> lootTableMap = new HashMap<>();
     private final Map<ResourceLocation, Integer> hitMap = new HashMap<>();
     private final List<Function<IServerUtils, List<ILootModifier<?>>>> lootModifierGetters = new LinkedList<>();
@@ -111,6 +112,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     public void clearData() {
         super.clearData();
         fallbackItemListings.clear();
+        failedRenderers.clear();
         lootTableMap.clear();
         ingredientUnwrappers.clear();
         lootModifierGetters.clear();
@@ -257,15 +259,18 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @Override
     public <T extends LootPoolEntryContainer> EntryFactory<T> getEntryFactory(IServerUtils utils, T type) {
         //noinspection unchecked
-        return (EntryFactory<T>) entryFactories.get(type.getClass())
-                .orElseGet(() -> (u, e, c, s, f, o) -> new MissingNode(MissingTooltipUtils.getMissingEntryTooltip(u, e).build()));
+        EntryFactory<T> missing = (u, e, c, s, f, o) -> new MissingNode(MissingTooltipUtils.getMissingEntryTooltip(u, e).build());
+
+        return entryFactories.get(type.getClass())
+                .<EntryFactory<T>>map((factory) -> (u, e, c, s, f, o) -> guarded("entry", e, () -> ((EntryFactory<T>) factory).create(u, e, c, s, f, o), () -> missing.create(u, e, c, s, f, o)))
+                .orElse(missing);
     }
 
     @NotNull
     @Override
     public <T extends LootPoolEntryContainer> TooltipBuilder getEntryTooltip(IServerUtils utils, T entry) {
         return entryTooltips.get(entry.getClass())
-                .map((e) -> e.apply(utils, entry))
+                .map((e) -> guarded("entry tooltip", entry, () -> e.apply(utils, entry), () -> MissingTooltipUtils.getMissingEntryTooltip(utils, entry)))
                 .orElseGet(() -> MissingTooltipUtils.getMissingEntryTooltip(utils, entry));
     }
 
@@ -273,7 +278,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @Override
     public <T extends LootItemFunction> TooltipBuilder getFunctionTooltip(IServerUtils utils, T function) {
         return functionTooltips.get(function.getClass())
-                .map((f) -> f.apply(utils, function))
+                .map((f) -> guarded("function tooltip", function, () -> f.apply(utils, function), () -> MissingTooltipUtils.getMissingFunctionTooltip(utils, function)))
                 .orElseGet(() -> MissingTooltipUtils.getMissingFunctionTooltip(utils, function));
     }
 
@@ -281,7 +286,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @Override
     public <T extends LootItemCondition> TooltipBuilder getConditionTooltip(IServerUtils utils, T condition) {
         return conditionTooltips.get(condition.getClass())
-                .map((c) -> c.apply(utils, condition))
+                .map((c) -> guarded("condition tooltip", condition, () -> c.apply(utils, condition), () -> MissingTooltipUtils.getMissingConditionTooltip(utils, condition)))
                 .orElseGet(() -> MissingTooltipUtils.getMissingConditionTooltip(utils, condition));
     }
 
@@ -293,13 +298,13 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
             if (unwrapped != null) {
                 return valueTooltips.get(unwrapped.getClass())
-                        .map((v) -> v.apply(utils, unwrapped))
+                        .map((v) -> guarded("ingredient tooltip", unwrapped, () -> v.apply(utils, unwrapped), () -> MissingTooltipUtils.getMissingIngredientTooltip(utils, ingredient)))
                         .orElseGet(() -> MissingTooltipUtils.getMissingIngredientTooltip(utils, ingredient));
             }
         }
 
         return ingredientTooltips.get(ingredient.getClass())
-                .map((i) -> i.apply(utils, ingredient))
+                .map((i) -> guarded("ingredient tooltip", ingredient, () -> i.apply(utils, ingredient), () -> MissingTooltipUtils.getMissingIngredientTooltip(utils, ingredient)))
                 .orElseGet(() -> MissingTooltipUtils.getMissingIngredientTooltip(utils, ingredient));
     }
 
@@ -320,7 +325,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
             });
         } else {
             return valueTooltips.get(valueClass)
-                    .map((v) -> v.apply(utils, value))
+                    .map((v) -> guarded("value tooltip", value, () -> v.apply(utils, value), () -> MissingTooltipUtils.getMissingValueTooltip(utils, value)))
                     .orElseGet(() -> MissingTooltipUtils.getMissingValueTooltip(utils, value));
         }
     }
@@ -419,30 +424,47 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @Override
     public <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, TooltipNode condition) {
         return tradeItemListings.get(entry.getClass())
-                .map((e) -> e.apply(utils, entry, condition))
-                .orElseGet(() -> {
-                    try {
-                        // try to get result from MerchantOffer. only if params aren't used (otherwise values can be dynamic)
-                        //noinspection DataFlowIssue
-                        MerchantOffer offer = entry.getOffer(null, null);
+                .map((e) -> guarded("item listing", entry, () -> e.apply(utils, entry, condition), () -> getFallbackItemListing(utils, entry, condition)))
+                .orElseGet(() -> getFallbackItemListing(utils, entry, condition));
+    }
 
-                        if (offer != null) {
-                            String name = ManagedRegistry.classKeyName(entry.getClass());
+    @NotNull
+    private IDataNode getFallbackItemListing(IServerUtils utils, VillagerTrades.ItemListing entry, TooltipNode condition) {
+        try {
+            // try to get result from MerchantOffer. only if params aren't used (otherwise values can be dynamic)
+            //noinspection DataFlowIssue
+            MerchantOffer offer = entry.getOffer(null, null);
 
-                            if (fallbackItemListings.add(name)) {
-                                LOGGER.info("Using MerchantOffer fallback for trade item listing {}, reported values can be inaccurate", name);
-                            }
+            if (offer != null) {
+                String name = ManagedRegistry.classKeyName(entry.getClass());
 
-                            return TradeUtils.getNode(utils, offer, condition);
-                        }
-                    } catch (Throwable ignored) {}
+                if (fallbackItemListings.add(name)) {
+                    LOGGER.info("Using MerchantOffer fallback for trade item listing {}, reported values can be inaccurate", name);
+                }
 
-                    try {
-                        return new MissingNode(MissingTooltipUtils.getMissingItemListingTooltip(utils, entry).build());
-                    } catch (Throwable e) {
-                        return new MissingNode(TooltipNode.empty());
-                    }
-                });
+                return TradeUtils.getNode(utils, offer, condition);
+            }
+        } catch (Throwable ignored) {}
+
+        try {
+            return new MissingNode(MissingTooltipUtils.getMissingItemListingTooltip(utils, entry).build());
+        } catch (Throwable e) {
+            return new MissingNode(TooltipNode.empty());
+        }
+    }
+
+    private <R> R guarded(String kind, Object value, Supplier<R> renderer, Supplier<R> fallback) {
+        try {
+            return renderer.get();
+        } catch (Throwable e) {
+            String name = ManagedRegistry.classKeyName(value.getClass());
+
+            if (failedRenderers.add(kind + " " + name)) {
+                LOGGER.warn("Failed to build {} for {}, showing it as unsupported: {}", kind, name, e.getMessage(), e);
+            }
+
+            return fallback.get();
+        }
     }
 
     @NotNull

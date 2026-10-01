@@ -276,6 +276,11 @@ trade list. On Forge, `VillagerTradingManager.postWandererEvent` writes the `Wan
 result back into `VillagerTrades.WANDERING_TRADER_TRADES`, so a mod's wandering-trader additions do
 reach ALI and only a renderer is missing. Lookup is by **exact class**
 (`tradeItemListings.get(entry.getClass())`), so every subclass needs its own `registerItemListing`.
+A subclass that is package-private cannot be named as `X.class`: one `@ClassAccessor` over the base that declares the
+fields serves every subclass, since reflection reads fields up the hierarchy, and each subclass is registered with
+`PluginUtils.registerItemListing(registry, Class.forName(...), BaseAccessor.class)` inside a try/catch (Grimoire of Gaia's
+`registerItemsToItems`). The scan only sees `X.class` literals and `@ClassAccessor` strings, so it still reports those
+subclasses as `+` — record each in `scan_ignore.json` as registered by name, naming the method that does it.
 The same check runs the other way for a mod's static `Int2ObjectMap<ItemListing[]>` fields: grep who reads each one
 (`grep -rla HOLSTAURUS_TRADES`) before calling `registerTrades` for it — Grimoire of Gaia declares six such maps and only
 four entities read them, and a map nothing reads is dead data, whose listing classes go into `scan_ignore.json`.

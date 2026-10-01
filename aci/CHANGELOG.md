@@ -3,6 +3,8 @@
 - Grouping structure spawn info
 - Scrollable tooltip by mouse wheel when taller than screen
 - Number model `NumberExpr` replaces `RangeValue`, showing most likely value, level rows and charts
+- Added `TooltipBuilder.intervals`, a list of ranges formatted in the client's locale
+- Structure spawn overrides without mob category no longer break the entity's spawn tooltip
 
 ## [1.3.0]
 
