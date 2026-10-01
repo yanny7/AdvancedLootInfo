@@ -60,8 +60,20 @@ against this version's jar and the current ALI/ALICompat API anyway, so any work
 
 - A conflict inside a dormant source set takes the lower branch's side unread: `git checkout --theirs -- <path>`,
   or `git rm` when the lower branch deleted it.
-- A grep, sed or script that brings shims in line with a changed API runs over active slugs only (the
-  `compat_mods` list), never over `alicompat/*/src/compat/*` as a whole.
+- A grep, sed or script that brings shims in line with a changed API — ALI's, ALICompat's or vanilla's (a
+  constructor turned factory method) — runs over active source sets only, never over `alicompat` or
+  `alicompat/*/src/compat/*` as a whole. Activity is per slug *and* loader: a source set is active when its
+  `<slug>_<loader>_dep` line exists. Build the list first (`$S` is your scratchpad) and feed every sweep from it:
+
+  ```bash
+  for d in alicompat/*/src/compat/*/; do
+    l=$(echo $d | cut -d/ -f2); s=$(basename $d)
+    grep -q "^${s}_${l}_dep=" gradle.properties && echo $d
+  done > "$S/active_dirs.txt"
+  ```
+
+  A repo-wide sweep (`grep -rl … aci ali awi alicompat`) excludes `alicompat/*/src/compat/` and runs a second
+  time over that list.
 - Unresolved symbols, stale key schemes or old lambda shapes in a dormant shim are not reported as merge findings.
 
 ### Other recurring conflicts
@@ -114,6 +126,13 @@ merged by hand: take `ours`, run the owning `common` module's whole `test` task 
 class skips the suite's bootstrap and fails), and check the resulting diff contains only what the merged change
 explains.
 
+A merged change that alters rendered output (a number format, a tooltip shape) also breaks tests that exist only on
+this branch, because their expectations still hold the old output. Run the `common` modules' `test` tasks and take the
+failing lines from `build/test-results/test/*.xml`. Update an expectation only when the new value is exactly what the
+merged change produces in the lower branch's own tests. A regex over the failing files is fine for a pure format
+change, but restrict it to the lines that failed: a line in the old format that still passes marks code the merged
+change does not reach on the lower branch either. Leave it as it is and report it.
+
 A merged change that rewrites a pattern across every shim, such as a key scheme or a renamed helper, does not
 reach code that exists only on this branch, and that code still compiles. After the merge, grep the active
 slugs' source sets for the old pattern and bring the leftovers in line; the generated lang files show them as
@@ -121,8 +140,20 @@ keys without the new shape.
 
 The same holds for a change to one shim. A loader the lower branch lacks keeps its own copy of that shim here
 (forge below, neoforge here), and the merge never touches that copy. For every shim file the merge changed,
-open the same slug under each other loader here and, if that slug is active, port the change by hand,
-adapting it to that copy's code.
+open the same slug under each other loader here and, if that slug is active, port the change to that copy.
+
+Do it as a 3-way merge rather than by hand: the lower branch's diff of the sibling loader's file is the patch, and
+`git merge-file` applies it to this branch's copy, leaving conflict markers only where the copies genuinely differ:
+
+```bash
+b=$(git merge-base HEAD origin/<lower>)        # once the merge is committed: git merge-base HEAD^1 HEAD^2
+git show $b:alicompat/forge/<rel> > "$S/base.java"
+git show origin/<lower>:alicompat/forge/<rel> > "$S/theirs.java"
+git merge-file -L ours -L base -L theirs alicompat/neoforge/<rel> "$S/base.java" "$S/theirs.java"
+```
+
+Exit code 0 is a clean apply, a positive one is the number of conflicts left to resolve by hand. Use `fabric` as the
+base when the lower branch has no `forge` copy of that file.
 
 **Stop here.** Report what merged, what was restored, and how many slugs are dormant. The user
 commits. Phase 2 does not begin until that commit exists.
