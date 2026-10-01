@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.sawmill;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
@@ -42,13 +42,13 @@ public class SawmillCompat implements IModCompat {
         return new ItemsToItemsNode(
                 utils,
                 listing.buys() ? wood : emeralds,
-                new RangeValue(listing.buys() ? listing.woodPrice() : listing.emeralds().getCount()),
+                NumberExpr.constant(listing.buys() ? listing.woodPrice() : listing.emeralds().getCount()),
                 listing.buys() ? woodTooltip : TooltipNode.empty(),
                 Either.left(ItemStack.EMPTY),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 TooltipNode.empty(),
                 listing.buys() ? emeralds : wood,
-                new RangeValue(listing.buys() ? listing.emeralds().getCount() : listing.woodPrice()),
+                NumberExpr.constant(listing.buys() ? listing.emeralds().getCount() : listing.woodPrice()),
                 listing.buys() ? TooltipNode.empty() : woodTooltip,
                 listing.maxTrades(),
                 listing.xp(),
@@ -62,13 +62,13 @@ public class SawmillCompat implements IModCompat {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(getWoodStack(LOG_KEY, listing.amount())),
-                new RangeValue(listing.amount()),
+                NumberExpr.constant(listing.amount()),
                 getWoodTypeTooltip(true),
                 Either.left(listing.price()),
-                new RangeValue(Math.max(1, listing.price().getCount())),
+                NumberExpr.constant(Math.max(1, listing.price().getCount())),
                 TooltipNode.empty(),
                 Either.left(getWoodStack(STRIPPED_LOG_KEY, listing.amount())),
-                new RangeValue(listing.amount()),
+                NumberExpr.constant(listing.amount()),
                 getWoodTypeTooltip(true),
                 listing.maxTrades(),
                 listing.xp(),

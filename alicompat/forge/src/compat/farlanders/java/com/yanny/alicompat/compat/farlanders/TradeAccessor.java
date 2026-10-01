@@ -2,7 +2,7 @@ package com.yanny.alicompat.compat.farlanders;
 
 import com.legacy.farlanders.entity.util.FarlanderTrades;
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
@@ -49,11 +49,11 @@ public class TradeAccessor extends BaseAccessor<FarlanderTrades.Trade> implement
         return new ItemsToItemsNode(
                 utils,
                 Either.left(itemGiven1),
-                new RangeValue(itemGiven1Count),
+                NumberExpr.constant(itemGiven1Count),
                 Either.left(itemGiven2 != null ? itemGiven2 : ItemStack.EMPTY),
-                new RangeValue(itemGiven2Count),
+                NumberExpr.constant(itemGiven2Count),
                 Either.left(itemSold),
-                new RangeValue(soldItemCount),
+                NumberExpr.constant(soldItemCount),
                 maxUses,
                 givenXP,
                 priceMultiplier,

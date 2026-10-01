@@ -1,6 +1,6 @@
 package com.yanny.alicompat.accessor;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.api.IServerUtils;
@@ -58,7 +58,7 @@ public class SmeltingUtils {
 
         ItemStack smelted = result.get();
 
-        return GlmNodeUtils.replacedNode(utils, conditions, src, smelted, new RangeValue(node.getCount()).multiply(smelted.getCount()));
+        return GlmNodeUtils.replacedNode(utils, conditions, src, smelted, NumberExpr.mul(node.getCount(), NumberExpr.constant(smelted.getCount())));
     }
 
     @NotNull

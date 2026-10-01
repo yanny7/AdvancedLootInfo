@@ -4,6 +4,7 @@ import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.api.WidgetDirection;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
+import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.language.Lang;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MissingWidget implements IWidget {
-    private final List<Component> components;
+    private final List<TooltipLine> components;
     private final RelativeRect bounds;
     private final IWidget widget;
 
@@ -27,14 +28,14 @@ public class MissingWidget implements IWidget {
         components = new ArrayList<>();
         widget = WidgetUtils.getMissingWidget(rect);
 
-        components.add(Component.translatable(Lang.Group.MISSING.singular()));
-        components.addAll(CoreTooltipUtils.toComponents(entry.getTooltip(), 0, false, TooltipUtils.getStyle()));
+        components.add(TooltipLine.text(Component.translatable(Lang.Group.MISSING.singular())));
+        components.addAll(CoreTooltipUtils.toLines(entry.getTooltip(), 0, false, TooltipUtils.getStyle(), TooltipUtils.getNumberOptions()));
     }
 
     public MissingWidget(RelativeRect rect) {
         bounds = rect;
         bounds.setDimensions(18, 18);
-        components = List.of(Component.translatable(Lang.Group.MISSING.singular()));
+        components = List.of(TooltipLine.text(Component.translatable(Lang.Group.MISSING.singular())));
         widget = WidgetUtils.getMissingWidget(rect);
     }
 
@@ -52,7 +53,7 @@ public class MissingWidget implements IWidget {
 
     @NotNull
     @Override
-    public List<Component> getTooltipComponents(int mouseX, int mouseY) {
+    public List<TooltipLine> getTooltipLines(int mouseX, int mouseY) {
         return components;
     }
 

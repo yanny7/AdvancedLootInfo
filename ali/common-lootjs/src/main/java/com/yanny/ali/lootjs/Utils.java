@@ -3,7 +3,7 @@ package com.yanny.ali.lootjs;
 import com.almostreliable.lootjs.core.LootType;
 import com.almostreliable.lootjs.core.entry.ItemLootEntry;
 import com.mojang.logging.LogUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.lootjs.node.ItemStackNode;
@@ -67,7 +67,7 @@ public class Utils {
     }
 
     @NotNull
-    public static IDataNode getEntry(IServerUtils utils, ItemLootEntry entry, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions, @Nullable RangeValue preservedCount) {
+    public static IDataNode getEntry(IServerUtils utils, ItemLootEntry entry, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions, @Nullable NumberExpr preservedCount) {
         LootItem vanillaEntry = entry.getVanillaEntry();
         List<LootItemCondition> allConditions = NodeUtils.getAllConditions(vanillaEntry, conditions);
         List<LootItemFunction> allFunctions = NodeUtils.getAllFunctions(vanillaEntry, functions);

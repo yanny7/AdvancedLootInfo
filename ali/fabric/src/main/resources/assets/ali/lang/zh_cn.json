@@ -1,11 +1,9 @@
 {
-  "ali.description.chance": "概率：%s%s",
-  "ali.description.chance_bonus": "%s（%s %s）",
+  "ali.description.chance": "概率：%s",
   "ali.description.count": "数量：%s",
-  "ali.description.count_bonus": "%s（%s %s）",
   "ali.description.quality": "质量：%s",
   "ali.description.random_trade_selection": "从这些交易中随机选择%s项",
-  "ali.description.rolls": "抽取次数：%s%s",
+  "ali.description.rolls": "抽取次数：%s",
   "ali.enum.attribute_operation.add_multiplied_base": "乘以基础值",
   "ali.enum.attribute_operation.add_multiplied_total": "乘以总值",
   "ali.enum.attribute_operation.add_value": "添加值",

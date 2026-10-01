@@ -2,7 +2,7 @@ package com.yanny.ali.plugin.common.trades;
 
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.CommonLogUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
@@ -40,23 +40,23 @@ public class ItemsToItemsNode extends ListNode implements ITradeNode {
 
     public ItemsToItemsNode(IServerUtils utils,
                             Either<ItemStack, TagKey<? extends ItemLike>> input1,
-                            RangeValue input1Count,
+                            NumberExpr input1Count,
                             Either<ItemStack, TagKey<? extends ItemLike>> output,
-                            RangeValue outputCount,
+                            NumberExpr outputCount,
                             int maxUses,
                             int xp,
                             float priceMultiplier,
                             TooltipNode condition) {
-        this(utils, input1, input1Count, Either.left(ItemStack.EMPTY), new RangeValue(1), output, outputCount, maxUses, xp, priceMultiplier, condition);
+        this(utils, input1, input1Count, Either.left(ItemStack.EMPTY), NumberExpr.constant(1), output, outputCount, maxUses, xp, priceMultiplier, condition);
     }
 
     public ItemsToItemsNode(IServerUtils utils,
                             Either<ItemStack, TagKey<? extends ItemLike>> input1,
-                            RangeValue input1Count,
+                            NumberExpr input1Count,
                             Either<ItemStack, TagKey<? extends ItemLike>> input2,
-                            RangeValue input2Count,
+                            NumberExpr input2Count,
                             Either<ItemStack, TagKey<? extends ItemLike>> output,
-                            RangeValue outputCount,
+                            NumberExpr outputCount,
                             int maxUses,
                             int xp,
                             float priceMultiplier,
@@ -66,13 +66,13 @@ public class ItemsToItemsNode extends ListNode implements ITradeNode {
 
     public ItemsToItemsNode(IServerUtils utils,
                             Either<ItemStack, TagKey<? extends ItemLike>> input1,
-                            RangeValue input1Count,
+                            NumberExpr input1Count,
                             TooltipNode input1Condition,
                             Either<ItemStack, TagKey<? extends ItemLike>> input2,
-                            RangeValue input2Count,
+                            NumberExpr input2Count,
                             TooltipNode input2Condition,
                             Either<ItemStack, TagKey<? extends ItemLike>> output,
-                            RangeValue outputCount,
+                            NumberExpr outputCount,
                             TooltipNode outputCondition,
                             int maxUses,
                             int xp,
@@ -155,7 +155,7 @@ public class ItemsToItemsNode extends ListNode implements ITradeNode {
         return items;
     }
 
-    private static IDataNode getChildren(Either<ItemStack, TagKey<? extends ItemLike>> item, RangeValue count, TooltipNode condition) {
+    private static IDataNode getChildren(Either<ItemStack, TagKey<? extends ItemLike>> item, NumberExpr count, TooltipNode condition) {
         return item.map(
                 (i) -> new ItemNode(1, count, i, condition, Collections.emptyList(), Collections.emptyList()),
                 (t) -> new ItemNode(1, count, t, condition, Collections.emptyList(), Collections.emptyList())

@@ -2,7 +2,8 @@ package com.yanny.alicompat.compat.ironsspellbooks;
 
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.CommonLogUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
+import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerRegistry;
@@ -49,7 +50,7 @@ public class WanderingTrades {
         registry.registerItemListing(AdditionalWanderingTrades.SimpleTrade.class, WanderingTrades::rolledNode);
 
         registerNested(registry, "RandomCurioTrade", (utils, condition) ->
-                lootTableNode(utils, condition, BASIC_CURIOS, new RangeValue(64), null));
+                lootTableNode(utils, condition, BASIC_CURIOS, NumberExpr.constant(64), null));
         registerNested(registry, "ScrollPouchTrade", (utils, condition) ->
                 lootTableNode(utils, condition, SCROLL_POUCH, scrollPouchCost(utils), scrollPouch()));
     }
@@ -82,17 +83,17 @@ public class WanderingTrades {
     }
 
     @NotNull
-    private static IDataNode lootTableNode(IServerUtils utils, TooltipNode condition, ResourceLocation lootTable, RangeValue cost, @Nullable ItemStack forSale) {
+    private static IDataNode lootTableNode(IServerUtils utils, TooltipNode condition, ResourceLocation lootTable, NumberExpr cost, @Nullable ItemStack forSale) {
         ItemStack result = forSale != null ? forSale : firstItem(utils, lootTable);
 
-        return WizardTrade.of(new ItemStack(Items.EMERALD), cost, result, new RangeValue(1), 1, 5, 0.5f)
+        return WizardTrade.of(new ItemStack(Items.EMERALD), cost, result, NumberExpr.constant(1), 1, 5, 0.5f)
                 .withResultTooltip((u) -> u.getValueTooltip(u, lootTable).build(Lang.Value.LOOT_TABLE))
                 .getNode(utils, condition);
     }
 
     @NotNull
-    private static RangeValue scrollPouchCost(IServerUtils utils) {
-        int rolls = Math.max(1, (int) totalRolls(utils, SCROLL_POUCH).max());
+    private static NumberExpr scrollPouchCost(IServerUtils utils) {
+        NumberInterval rolls = totalRolls(utils, SCROLL_POUCH).bounds();
         int minValue = Integer.MAX_VALUE;
         int maxValue = Integer.MIN_VALUE;
 
@@ -101,17 +102,19 @@ public class WanderingTrades {
             maxValue = Math.max(maxValue, rarity.getValue());
         }
 
-        return new RangeValue(rolls * (minValue + 1) * 4 + 8, rolls * (maxValue + 1) * 4 + 16);
+        NumberExpr quality = NumberExpr.range(rolls.lo() * (minValue + 1), Math.max(1, rolls.hi()) * (maxValue + 1));
+
+        return NumberExpr.add(NumberExpr.mul(NumberExpr.constant(4), quality), NumberExpr.uniformInt(8, 16));
     }
 
     @NotNull
-    private static RangeValue totalRolls(IServerUtils utils, ResourceLocation lootTable) {
+    private static NumberExpr totalRolls(IServerUtils utils, ResourceLocation lootTable) {
         LootTable table = utils.getLootTable(Either.left(lootTable));
-        RangeValue rolls = new RangeValue(0);
+        NumberExpr rolls = NumberExpr.constant(0);
 
         if (table != null) {
             for (LootPool pool : table.pools) {
-                rolls.add(utils.convertNumber(utils, pool.rolls));
+                rolls = NumberExpr.add(rolls, utils.convertIntNumber(utils, pool.rolls));
             }
         }
 

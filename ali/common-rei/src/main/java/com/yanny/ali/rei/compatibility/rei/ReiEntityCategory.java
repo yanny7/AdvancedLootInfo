@@ -1,6 +1,8 @@
 package com.yanny.ali.rei.compatibility.rei;
 
 import com.yanny.aci.api.Rect;
+import com.yanny.aci.compatibility.ScrollableTooltip;
+import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.ali.compatibility.common.EntityStorage;
 import com.yanny.ali.compatibility.common.GenericUtils;
 import com.yanny.ali.configuration.LootCategory;
@@ -54,7 +56,7 @@ public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, EntityT
         }
 
         Rectangle entityBounds = new Rectangle(innerBounds.getCenterX() - WIDGET_SIZE / 2, TEXT_OFFSET, WIDGET_SIZE, WIDGET_SIZE);
-        List<Component> spawnTooltip = GenericUtils.getSpawnTooltip(display.getLootData());
+        List<TooltipLine> spawnTooltip = GenericUtils.getSpawnTooltip(display.getLootData());
 
         innerWidgets.add(Widgets.wrapRenderer(entityBounds, (graphics, bounds1, mouseX, mouseY, delta) -> {
             Level level = Minecraft.getInstance().level;
@@ -69,7 +71,7 @@ public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, EntityT
                 graphics.pose().popMatrix();
             }
         }));
-        innerWidgets.add(Widgets.createTooltip((point) -> entityBounds.contains(point) && !spawnTooltip.isEmpty() ? Tooltip.create(spawnTooltip) : null));
+        innerWidgets.add(Widgets.createTooltip((point) -> entityBounds.contains(point) && !spawnTooltip.isEmpty() ? Tooltip.from(Tooltip.entry(new ScrollableTooltip(spawnTooltip))) : null));
         innerWidgets.add(Widgets.createLabel(new Point(innerBounds.getCenterX(), 0), display.getEntityType().getDescription()).centered().noShadow().color(0xFF000000));
         fullBounds.move(bounds.getCenterX() - fullBounds.width / 2, bounds.y + PADDING);
         widgets.add(Widgets.createCategoryBase(fullBounds));

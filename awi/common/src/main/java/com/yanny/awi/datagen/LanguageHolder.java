@@ -5,7 +5,6 @@ import com.yanny.aci.language.CoreLang;
 import com.yanny.awi.Utils;
 import com.yanny.awi.language.Lang;
 import com.yanny.awi.plugin.EnumTypes;
-import com.yanny.awi.plugin.server.summary.Kind;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -36,12 +35,11 @@ public class LanguageHolder {
         CoreLang.register(TRANSLATION_MAP, Lang.TreeDecorator.class);
         CoreLang.register(TRANSLATION_MAP, Lang.RootPlacer.class);
         CoreLang.register(TRANSLATION_MAP, Lang.FoliagePlacer.class);
-        CoreLang.register(TRANSLATION_MAP, Lang.IntProvider.class);
-        CoreLang.register(TRANSLATION_MAP, Lang.FloatProvider.class);
         CoreLang.register(TRANSLATION_MAP, Lang.HeightProvider.class);
         CoreLang.register(TRANSLATION_MAP, Lang.BlockPredicate.class);
         CoreLang.register(TRANSLATION_MAP, Lang.GenerationStep.class);
         CoreLang.register(TRANSLATION_MAP, Lang.StructureProcessor.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.Numbers.class);
 
         put(Direction.DOWN, "Down");
         put(Direction.UP, "Up");
@@ -72,16 +70,6 @@ public class LanguageHolder {
         put(GenerationStep.Decoration.VEGETAL_DECORATION, "Vegetation Decoration");
         put(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, "Top Layer Modifications");
 
-        put(Kind.CONSTANT, "Constant");
-        put(Kind.UNIFORM, "Uniform");
-        put(Kind.BIASED_TO_BOTTOM, "Biased To Bottom");
-        put(Kind.VERY_BIASED_TO_BOTTOM, "Very Biased To Bottom");
-        put(Kind.TRAPEZOID, "Trapezoid");
-        put(Kind.CLAMPED, "Clamped");
-        put(Kind.CLAMPED_NORMAL, "Clamped Normal");
-        put(Kind.WEIGHTED, "Weighted");
-        put(Kind.RELATIVE_TO_HEIGHTMAP, "Relative To Heightmap");
-        put(Kind.UNKNOWN, "Unknown");
 
         verifyEnumTranslations();
     }

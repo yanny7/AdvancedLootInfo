@@ -6,7 +6,9 @@ import org.junit.platform.suite.api.Suite;
 @Suite
 @SelectClasses({
         CoreConfigUtilsTest.class,
-        NodeCodecTest.class
+        NodeCodecTest.class,
+        NumberExprTest.class,
+        NumberTooltipTest.class
 })
 public class CoreTestSuite {
 }

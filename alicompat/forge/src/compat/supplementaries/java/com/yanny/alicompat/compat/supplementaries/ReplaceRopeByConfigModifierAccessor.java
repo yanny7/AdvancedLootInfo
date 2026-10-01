@@ -1,5 +1,6 @@
 package com.yanny.alicompat.compat.supplementaries;
 
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IItemNode;
@@ -10,7 +11,7 @@ import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.ModifiedNode;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IPageLootModifier;
-import com.yanny.ali.plugin.server.EnchantedRanges;
+import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
@@ -66,10 +67,10 @@ public class ReplaceRopeByConfigModifierAccessor extends BaseAccessor<ReplaceRop
         }
 
         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), node.getConditions().stream()).toList();
-        EnchantedRanges chance = NodeUtils.getEnchantedChance(utils, allConditions, node.getChance());
-        EnchantedRanges count = new EnchantedRanges(node.getCount());
-        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, count, Collections.emptyList(), allConditions);
-        ItemNode replacement = new ItemNode(1, node.getCount(), ModRegistry.ROPE_ITEM.get().getDefaultInstance(), tooltip.build(), Collections.emptyList(), allConditions);
+        ItemStack rope = ModRegistry.ROPE_ITEM.get().getDefaultInstance();
+        NumberExpr chance = NodeUtils.getChance(utils, allConditions, node.getChance());
+        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, LootCount.of(node.getCount()), NodeUtils.getCountLimit(rope), Collections.emptyList(), allConditions);
+        ItemNode replacement = new ItemNode(1, node.getCount(), rope, tooltip.build(), Collections.emptyList(), allConditions);
 
         return new ModifiedNode(utils, src, replacement);
     }

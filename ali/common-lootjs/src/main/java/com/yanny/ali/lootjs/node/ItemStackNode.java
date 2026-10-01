@@ -1,7 +1,7 @@
 package com.yanny.ali.lootjs.node;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IDataNode;
@@ -9,7 +9,7 @@ import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.lootjs.LootJsPlugin;
 import com.yanny.ali.plugin.common.NodeUtils;
-import com.yanny.ali.plugin.server.EnchantedRanges;
+import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
@@ -34,17 +34,17 @@ public class ItemStackNode implements IDataNode, IItemNode {
     private final List<LootItemFunction> functions;
     private final ItemStack itemStack;
     private final List<ItemStack> items;
-    private final RangeValue count;
+    private final NumberExpr count;
     private final float chance;
     private final boolean modified;
     /** Only populated on the client - on the server it is derived from {@link #conditions} in {@link #encode}. */
     private final boolean hasPredicates;
 
-    public ItemStackNode(IServerUtils utils, ItemStack itemStack, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions, @Nullable RangeValue preservedCount) {
+    public ItemStackNode(IServerUtils utils, ItemStack itemStack, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions, @Nullable NumberExpr preservedCount) {
        this(utils, itemStack, chance, false, functions, conditions, preservedCount);
     }
 
-    public ItemStackNode(IServerUtils utils, ItemStack itemStack, float chance, boolean modified, List<LootItemFunction> functions, List<LootItemCondition> conditions, @Nullable RangeValue preservedCount) {
+    public ItemStackNode(IServerUtils utils, ItemStack itemStack, float chance, boolean modified, List<LootItemFunction> functions, List<LootItemCondition> conditions, @Nullable NumberExpr preservedCount) {
         this.conditions = conditions;
         this.functions = functions;
         this.itemStack = TooltipUtils.getItemStack(utils, itemStack.copyWithCount(1), this.functions);
@@ -53,19 +53,23 @@ public class ItemStackNode implements IDataNode, IItemNode {
         this.modified = modified;
         this.hasPredicates = false;
 
-        EnchantedRanges countRanges = preservedCount != null
-                ? new EnchantedRanges(clampToStackSize(preservedCount, this.itemStack.getMaxStackSize()))
-                : getCount(utils, new RangeValue(itemStack.getCount()), functions);
+        LootCount lootCount;
 
-        tooltip = getItemTooltip(utils, countRanges, chance, functions, conditions);
-        count = countRanges.getUnenchantedValue();
+        if (preservedCount != null) {
+            lootCount = LootCount.of(preservedCount);
+        } else {
+            lootCount = NodeUtils.getCount(utils, NumberExpr.constant(itemStack.getCount()), functions);
+        }
+
+        tooltip = getItemTooltip(utils, lootCount, getItem(), chance, functions, conditions);
+        count = lootCount.value();
     }
 
     public ItemStackNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         itemStack = ItemStack.STREAM_CODEC.decode(buf);
         items = NodeUtils.resolveItems(Either.left(itemStack));
         tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
-        count = new RangeValue(buf);
+        count = NumberExpr.decode(buf);
         modified = buf.readBoolean();
         chance = buf.readFloat();
         hasPredicates = buf.readBoolean();
@@ -109,7 +113,7 @@ public class ItemStackNode implements IDataNode, IItemNode {
 
     @NotNull
     @Override
-    public RangeValue getCount() {
+    public NumberExpr getCount() {
         return count;
     }
 
@@ -146,29 +150,9 @@ public class ItemStackNode implements IDataNode, IItemNode {
     }
 
     @NotNull
-    private static TooltipNode getItemTooltip(IServerUtils utils, EnchantedRanges countMap, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        EnchantedRanges chanceMap = NodeUtils.getEnchantedChance(utils, conditions, chance);
+    private static TooltipNode getItemTooltip(IServerUtils utils, LootCount count, Either<ItemStack, TagKey<? extends ItemLike>> item, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        NumberExpr chanceExpr = NodeUtils.getChance(utils, conditions, chance);
 
-        return TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chanceMap, countMap, functions, conditions).build();
-    }
-
-    @NotNull
-    private static RangeValue clampToStackSize(RangeValue count, int maxStackSize) {
-        if (count.isUnknown()) {
-            return new RangeValue(count);
-        }
-
-        return new RangeValue(Math.min(count.min(), maxStackSize), Math.min(count.max(), maxStackSize));
-    }
-
-    @NotNull
-    public static EnchantedRanges getCount(IServerUtils utils, RangeValue baseCount, List<LootItemFunction> functions) {
-        EnchantedRanges count = new EnchantedRanges(baseCount);
-
-        for (LootItemFunction function : functions) {
-            utils.applyCountModifier(utils, function, count);
-        }
-
-        return count;
+        return TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chanceExpr, count, NodeUtils.getCountLimit(item), functions, conditions).build();
     }
 }

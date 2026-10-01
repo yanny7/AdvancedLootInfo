@@ -2,9 +2,12 @@ package com.yanny.ali.lootjs.test;
 
 import com.almostreliable.lootjs.core.LootType;
 import com.almostreliable.lootjs.core.entry.ItemLootEntry;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
+import com.yanny.aci.number.NumberFormatter;
+import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.lootjs.Utils;
 import com.yanny.ali.lootjs.node.ItemStackNode;
+import com.yanny.ali.plugin.client.TooltipUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -12,6 +15,7 @@ import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -74,14 +78,14 @@ public class LootJsUtilsTest {
     public void testGetEntryUsesEntryCount() {
         ItemStackNode node = (ItemStackNode) Utils.getEntry(UTILS, itemEntry(Items.DIAMOND, 4), 1, List.of(), List.of(), null);
 
-        Assertions.assertEquals("4", node.getCount().toIntString());
+        Assertions.assertEquals("4", slot(node));
     }
 
     @Test
     public void testGetEntryPreservesCount() {
-        ItemStackNode node = (ItemStackNode) Utils.getEntry(UTILS, itemEntry(Items.DIAMOND, 4), 1, List.of(), List.of(), new RangeValue(6));
+        ItemStackNode node = (ItemStackNode) Utils.getEntry(UTILS, itemEntry(Items.DIAMOND, 4), 1, List.of(), List.of(), NumberExpr.constant(6));
 
-        Assertions.assertEquals("6", node.getCount().toIntString());
+        Assertions.assertEquals("6", slot(node));
     }
 
     @Test
@@ -96,7 +100,7 @@ public class LootJsUtilsTest {
                 null
         );
 
-        Assertions.assertEquals("5", node.getCount().toIntString());
+        Assertions.assertEquals("5", slot(node));
         assertTooltip(node.getTooltip(), List.of(
                 "Chance: 3.13%",
                 "Count: 5",
@@ -104,7 +108,7 @@ public class LootJsUtilsTest {
                 "Random Chance:",
                 "  -> Chance: 0.25",
                 "Random Chance:",
-                "  -> Chance: 0.50",
+                "  -> Chance: 0.5",
                 "----- Modifiers -----",
                 "Set Count:",
                 "  -> Count: 2",
@@ -123,5 +127,9 @@ public class LootJsUtilsTest {
 
     private static boolean matches(LootType type, String path) {
         return Utils.typePredicate(type).test(ResourceLocation.withDefaultNamespace(path));
+    }
+
+    private static String slot(IItemNode node) {
+        return NumberFormatter.slot(TooltipUtils.getSlotCount(node));
     }
 }

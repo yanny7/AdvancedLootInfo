@@ -3,7 +3,7 @@ package com.yanny.alicompat.compat.goblintraders;
 import com.mojang.datafixers.util.Either;
 import com.mrcrayfish.goblintraders.trades.TradeCost;
 import com.mrcrayfish.goblintraders.trades.type.BasicTrade;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
@@ -42,7 +42,7 @@ public class BasicTradeAccessor extends BaseAccessor<BasicTrade> implements IIte
                 Either.left(GoblinTradeUtils.getStack(secondaryPayment)),
                 GoblinTradeUtils.getCount(secondaryPayment),
                 Either.left(offerStack),
-                new RangeValue(offerStack.getCount()),
+                NumberExpr.constant(offerStack.getCount()),
                 maxTrades,
                 experience,
                 priceMultiplier,

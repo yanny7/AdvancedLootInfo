@@ -48,7 +48,7 @@ public class LootJsGenericTooltipTest {
                 "HAS_ENCHANTMENT",
                 "  -> Filter:",
                 "    -> minecraft:fortune",
-                "  -> Levels: 2-4",
+                "  -> Levels: 2 to 4",
                 "  -> Component: minecraft:enchantments"
         ));
     }

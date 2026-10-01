@@ -4,7 +4,7 @@ import com.mrcrayfish.goblintraders.trades.TradeCost;
 import com.mrcrayfish.goblintraders.trades.price.BasePrice;
 import com.mrcrayfish.goblintraders.trades.price.ConstantPrice;
 import com.mrcrayfish.goblintraders.trades.price.RangedPrice;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.ItemCost;
 import org.jetbrains.annotations.NotNull;
@@ -18,15 +18,15 @@ class GoblinTradeUtils {
     }
 
     @NotNull
-    static RangeValue getCount(TradeCost cost) {
+    static NumberExpr getCount(TradeCost cost) {
         BasePrice price = cost.count();
 
-        if (price instanceof ConstantPrice(int value)) {
-            return new RangeValue(value);
-        } else if (price instanceof RangedPrice(int min, int max)) {
-            return new RangeValue(min, max);
+        if (price instanceof ConstantPrice constantPrice) {
+            return NumberExpr.constant(constantPrice.value());
+        } else if (price instanceof RangedPrice rangedPrice) {
+            return NumberExpr.uniformInt(rangedPrice.min(), rangedPrice.max());
         } else {
-            return new RangeValue(false, true);
+            return NumberExpr.opaque(price.getClass().getName());
         }
     }
 
@@ -36,7 +36,7 @@ class GoblinTradeUtils {
     }
 
     @NotNull
-    static RangeValue getCount(Optional<TradeCost> cost) {
-        return cost.map(GoblinTradeUtils::getCount).orElse(new RangeValue(1));
+    static NumberExpr getCount(Optional<TradeCost> cost) {
+        return cost.map(GoblinTradeUtils::getCount).orElse(NumberExpr.constant(1));
     }
 }

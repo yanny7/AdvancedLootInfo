@@ -2,7 +2,7 @@ package com.yanny.ali.network;
 
 import com.google.common.base.Suppliers;
 import com.yanny.aci.CommonLogUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.network.NetworkUtils;
 import com.yanny.aci.spawn.SpawnInfo;
 import com.yanny.aci.tooltip.TooltipContext;
@@ -52,7 +52,6 @@ import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -285,7 +284,7 @@ public abstract class AbstractServer {
         LootPool pool = pools.getFirst();
 
         if (pool.entries.size() != 1 || !isIgnoredFunctions(config, pool.functions) || !isIgnoredConditions(config, pool.conditions)
-                || !isConstant(serverRegistry, pool.rolls, 1) || !isConstant(serverRegistry, pool.bonusRolls, 0)) {
+                || !isConstant(serverRegistry.convertIntNumber(serverRegistry, pool.rolls), 1) || !isConstant(serverRegistry.convertNumber(serverRegistry, pool.bonusRolls), 0)) {
             return false;
         }
 
@@ -304,10 +303,8 @@ public abstract class AbstractServer {
         return conditions.stream().allMatch((c) -> config.defaultBlockLootConditions.contains(BuiltInRegistries.LOOT_CONDITION_TYPE.getKey(c.getType())));
     }
 
-    private static boolean isConstant(AliServerRegistry serverRegistry, NumberProvider numberProvider, float value) {
-        RangeValue range = serverRegistry.convertNumber(serverRegistry, numberProvider);
-
-        return !range.isUnknown() && range.min() == value && range.max() == value;
+    private static boolean isConstant(NumberExpr expr, float value) {
+        return expr instanceof NumberExpr.Const constant && constant.value() == value;
     }
 
     private static void collectEntityPages(AliServerRegistry serverRegistry, AliConfig config, ServerLevel level, Map<Identifier, LootTable> lootTables,

@@ -2,7 +2,7 @@ package com.yanny.alicompat.compat.aether;
 
 import com.aetherteam.aether.AetherTags;
 import com.aetherteam.aether.loot.modifiers.DoubleDropsModifier;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
@@ -35,6 +35,6 @@ public class DoubleDropsModifierAccessor extends BaseAccessor<DoubleDropsModifie
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
                 (page, c) -> Collections.singletonList(new IOperation.ReplaceOperation(
                         (itemStack) -> !itemStack.is(AetherTags.Items.NO_SKYROOT_DOUBLE_DROPS),
-                        (src) -> AetherNodeUtils.countedNode(utils, c, src, new RangeValue(((IItemNode) src).getCount()).multiply(2))))));
+                        (src) -> AetherNodeUtils.countedNode(utils, c, src, NumberExpr.mul(((IItemNode) src).getCount(), NumberExpr.constant(2)))))));
     }
 }

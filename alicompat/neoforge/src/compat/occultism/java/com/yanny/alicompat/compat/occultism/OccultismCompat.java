@@ -2,7 +2,7 @@ package com.yanny.alicompat.compat.occultism;
 
 import com.klikli_dev.occultism.common.entity.spirit.wonderingtrader.WonderingTrades;
 import com.klikli_dev.occultism.loot.AddItemModifier;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.language.ITooltipKey;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.TradeLevelInfo;
@@ -60,12 +60,12 @@ public class OccultismCompat implements IGlmModCompat {
     @NotNull
     private static TradeLevelInfo getWonderingTraderLevel(int level) {
         return switch (level) {
-            case 2 -> new TradeLevelInfo(new RangeValue(5));
-            case 5, 8 -> new TradeLevelInfo(new RangeValue(1, 3));
-            case 6 -> new TradeLevelInfo(new RangeValue(1, 2));
-            case 10 -> new TradeLevelInfo(new RangeValue(1), 0.5f);
-            case 11 -> new TradeLevelInfo(new RangeValue(1), 0.25f);
-            default -> new TradeLevelInfo(new RangeValue(1));
+            case 2 -> new TradeLevelInfo(NumberExpr.constant(5));
+            case 5, 8 -> new TradeLevelInfo(NumberExpr.uniformInt(1, 3));
+            case 6 -> new TradeLevelInfo(NumberExpr.uniformInt(1, 2));
+            case 10 -> new TradeLevelInfo(NumberExpr.constant(1), 0.5f);
+            case 11 -> new TradeLevelInfo(NumberExpr.constant(1), 0.25f);
+            default -> new TradeLevelInfo(NumberExpr.constant(1));
         };
     }
 

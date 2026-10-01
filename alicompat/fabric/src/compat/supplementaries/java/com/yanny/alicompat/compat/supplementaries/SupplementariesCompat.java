@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.supplementaries;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
@@ -36,6 +36,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.ItemCost;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class SupplementariesCompat implements IModCompat {
@@ -45,6 +47,8 @@ public class SupplementariesCompat implements IModCompat {
     private static final int ADVENTURER_MAP_SEARCH_RADIUS = 150;
     private static final int ADVENTURER_MAP_ZOOM = 2;
     private static final String ADVENTURER_MAP_NAME = "filled_map.adventure";
+    private static final int MAX_FIREWORK_STARS = 7;
+    private static final double NEXT_STAR_CHANCE = 0.42;
 
     @NotNull
     @Override
@@ -70,7 +74,7 @@ public class SupplementariesCompat implements IModCompat {
                 redMerchant,
                 BuiltInRegistries.ENTITY_TYPE.get(redMerchant),
                 () -> getRedMerchantTrades(registry.getServerLevel().registryAccess()),
-                (level) -> new TradeLevelInfo(new RangeValue(RED_MERCHANT_TRADE_COUNT))
+                (level) -> new TradeLevelInfo(NumberExpr.constant(RED_MERCHANT_TRADE_COUNT))
         );
     }
 
@@ -92,13 +96,13 @@ public class SupplementariesCompat implements IModCompat {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(listing.emeralds().itemStack()),
-                new RangeValue(listing.emeralds().itemStack().getCount()),
+                NumberExpr.constant(listing.emeralds().itemStack().getCount()),
                 TooltipNode.empty(),
                 Either.left(getSecondaryPrice(listing.priceSecondary())),
-                new RangeValue(Math.max(1, getSecondaryPrice(listing.priceSecondary()).getCount())),
+                NumberExpr.constant(Math.max(1, getSecondaryPrice(listing.priceSecondary()).getCount())),
                 TooltipNode.empty(),
                 Either.left(Items.FIREWORK_STAR.getDefaultInstance()),
-                new RangeValue(listing.stars()),
+                NumberExpr.constant(listing.stars()),
                 TooltipBuilder.keyOnly(SupplementariesLang.Value.RANDOM_FIREWORK_STAR).build(),
                 listing.maxTrades(),
                 listing.xp(),
@@ -112,16 +116,16 @@ public class SupplementariesCompat implements IModCompat {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(listing.emeralds().itemStack()),
-                new RangeValue(listing.emeralds().itemStack().getCount()),
+                NumberExpr.constant(listing.emeralds().itemStack().getCount()),
                 TooltipNode.empty(),
                 Either.left(getSecondaryPrice(listing.priceSecondary())),
-                new RangeValue(Math.max(1, getSecondaryPrice(listing.priceSecondary()).getCount())),
+                NumberExpr.constant(Math.max(1, getSecondaryPrice(listing.priceSecondary()).getCount())),
                 TooltipNode.empty(),
                 Either.left(Items.FIREWORK_ROCKET.getDefaultInstance()),
-                new RangeValue(listing.rockets()),
+                NumberExpr.constant(listing.rockets()),
                 TooltipBuilder.array((b) -> {
-                    b.add(utils.getValueTooltip(utils, new RangeValue(1, 3)).build(SupplementariesLang.Value.FLIGHT_DURATION));
-                    b.add(utils.getValueTooltip(utils, new RangeValue(1, 7)).build(SupplementariesLang.Value.FIREWORK_STARS));
+                    b.add(utils.getValueTooltip(utils, NumberExpr.uniformInt(1, 3)).build(SupplementariesLang.Value.FLIGHT_DURATION));
+                    b.add(utils.getValueTooltip(utils, fireworkStars()).build(SupplementariesLang.Value.FIREWORK_STARS));
                 }, SupplementariesLang.Value.RANDOM_FIREWORK).build(),
                 listing.maxTrades(),
                 ModItemListing.defaultXp(true, listing.level()),
@@ -135,13 +139,13 @@ public class SupplementariesCompat implements IModCompat {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(listing.cost().getDefaultInstance()),
-                getPriceRange(listing.minPrice(), listing.maxPrice() - 1),
+                NumberExpr.max(NumberExpr.constant(1), NumberExpr.uniformInt(listing.minPrice(), listing.minPrice() + Math.max(1, listing.maxPrice() - listing.minPrice()) - 1)),
                 TooltipNode.empty(),
                 Either.left(getSecondaryPrice(listing.cost2())),
-                new RangeValue(Math.max(1, getSecondaryPrice(listing.cost2()).getCount())),
+                NumberExpr.constant(Math.max(1, getSecondaryPrice(listing.cost2()).getCount())),
                 TooltipNode.empty(),
                 Either.left(getMapStack(listing.mapName())),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 TooltipBuilder.array((b) -> {
                     b.add(utils.getValueTooltip(utils, listing.structure()).build(Lang.Value.DESTINATION));
                     b.add(utils.getValueTooltip(utils, listing.mapMarker()).build(Lang.Value.MAP_DECORATION));
@@ -161,13 +165,13 @@ public class SupplementariesCompat implements IModCompat {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(listing.emerald().getDefaultInstance()),
-                getPriceRange(listing.priceMax(), 2 * listing.priceMax() - listing.priceMin()),
+                NumberExpr.uniformInt(listing.priceMin(), listing.priceMax()),
                 TooltipNode.empty(),
                 Either.left(getSecondaryPrice(listing.priceSecondary())),
-                new RangeValue(Math.max(1, getSecondaryPrice(listing.priceSecondary()).getCount())),
+                NumberExpr.constant(Math.max(1, getSecondaryPrice(listing.priceSecondary()).getCount())),
                 TooltipNode.empty(),
                 Either.left(getMapStack(ADVENTURER_MAP_NAME)),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 TooltipBuilder.array((b) -> {
                     b.add(utils.getValueTooltip(utils, ModTags.ADVENTURE_MAP_DESTINATIONS).build(Lang.Value.DESTINATION));
                     b.add(utils.getValueTooltip(utils, ADVENTURER_MAP_SEARCH_RADIUS).build(Lang.Value.SEARCH_RADIUS));
@@ -187,8 +191,15 @@ public class SupplementariesCompat implements IModCompat {
     }
 
     @NotNull
-    private static RangeValue getPriceRange(int min, int max) {
-        return new RangeValue(Math.max(1, min), Math.max(Math.max(1, min), max));
+    private static NumberExpr fireworkStars() {
+        List<NumberExpr.WeightedEntry> entries = new ArrayList<>();
+
+        for (int stars = 1; stars < MAX_FIREWORK_STARS; stars++) {
+            entries.add(new NumberExpr.WeightedEntry(Math.pow(NEXT_STAR_CHANCE, stars - 1) * (1 - NEXT_STAR_CHANCE), NumberExpr.constant(stars)));
+        }
+
+        entries.add(new NumberExpr.WeightedEntry(Math.pow(NEXT_STAR_CHANCE, MAX_FIREWORK_STARS - 1), NumberExpr.constant(MAX_FIREWORK_STARS)));
+        return NumberExpr.weighted(entries);
     }
 
     @NotNull

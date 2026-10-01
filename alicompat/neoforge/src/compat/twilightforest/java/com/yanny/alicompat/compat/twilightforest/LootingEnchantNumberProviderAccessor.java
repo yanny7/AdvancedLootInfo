@@ -1,7 +1,8 @@
 package com.yanny.alicompat.compat.twilightforest;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.INumberProvider;
@@ -22,7 +23,7 @@ public class LootingEnchantNumberProviderAccessor extends BaseAccessor<LootingEn
     }
 
     @Override
-    public RangeValue convertNumber(IServerUtils utils) {
-        return utils.convertNumber(utils, baseValue).addMax(enchantment.value().getMaxLevel());
+    public NumberExpr convertNumber(IServerUtils utils) {
+        return NumberExpr.add(utils.convertNumber(utils, baseValue), TooltipUtils.level(enchantment));
     }
 }

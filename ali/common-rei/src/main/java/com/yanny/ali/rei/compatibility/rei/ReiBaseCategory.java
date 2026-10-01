@@ -1,10 +1,13 @@
 package com.yanny.ali.rei.compatibility.rei;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.compatibility.AbstractScrollWidget;
+import com.yanny.aci.compatibility.ScrollableTooltip;
+import com.yanny.aci.number.NumberFormatter;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
+import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.aci.tooltip.TooltipNodePalette;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IItemNode;
@@ -21,6 +24,7 @@ import me.shedaniel.rei.api.client.config.ConfigObject;
 import me.shedaniel.rei.api.client.gui.Renderer;
 import me.shedaniel.rei.api.client.gui.config.SearchFieldLocation;
 import me.shedaniel.rei.api.client.gui.widgets.Slot;
+import me.shedaniel.rei.api.client.gui.widgets.Tooltip;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.client.gui.widgets.Widgets;
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory;
@@ -145,13 +149,13 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
                 ItemStack itemStack = left.get();
                 EntryStack<ItemStack> stack = EntryStacks.of(itemStack);
 
-                stack.tooltip((s) -> CoreTooltipUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle()));
+                stack.tooltipProcessor((s, tooltip) -> addLootTooltip(tooltip, h.entry));
                 slot = Widgets.createSlot(point).entry(stack).markOutput();
             } else if (right.isPresent()) {
                 TagKey<? extends ItemLike> tagKey = right.get();
                 EntryIngredient ingredient = EntryIngredients.ofItemTag(tagKey);
 
-                ingredient.map((stack) -> stack.tooltip((s) -> CoreTooltipUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle())));
+                ingredient.map((stack) -> stack.tooltipProcessor((s, tooltip) -> addLootTooltip(tooltip, h.entry)));
                 slot = Widgets.createSlot(point).entries(ingredient).markOutput();
             }
 
@@ -166,7 +170,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
                 widgets.add(slot);
             }
 
-            widgets.add(Widgets.wrapRenderer(slotBounds, new SlotCountRenderer(node.getCount())));
+            widgets.add(Widgets.wrapRenderer(slotBounds, new SlotCountRenderer(TooltipUtils.getSlotCount(node))));
         });
         return new WidgetHolder(widgets, widget.getRect());
     }
@@ -193,6 +197,12 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
         };
     }
 
+    private static Tooltip addLootTooltip(Tooltip tooltip, IDataNode entry) {
+        List<TooltipLine> lines = CoreTooltipUtils.toLines(entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle(), TooltipUtils.getNumberOptions());
+
+        return lines.isEmpty() ? tooltip : tooltip.add(new ScrollableTooltip(lines));
+    }
+
     private record Holder(Either<ItemStack, TagKey<? extends ItemLike>> item, IDataNode entry, RelativeRect rect) {}
 
     private static class PredicatesRenderer implements Renderer {
@@ -207,10 +217,10 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
         private Component count;
         private boolean isRange = false;
 
-        public SlotCountRenderer(RangeValue count) {
-            if (count.isRange() || count.min() > 1) {
-                this.count = Component.literal(count.toIntString());
-                isRange = count.isRange();
+        public SlotCountRenderer(NumberInterval count) {
+            if (!count.isPoint() || count.lo() > 1) {
+                this.count = Component.literal(NumberFormatter.slot(count));
+                isRange = !count.isPoint();
             }
         }
 

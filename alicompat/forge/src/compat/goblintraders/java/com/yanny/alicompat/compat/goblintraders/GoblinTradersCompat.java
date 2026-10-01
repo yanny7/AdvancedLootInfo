@@ -9,7 +9,7 @@ import com.mrcrayfish.goblintraders.trades.TradeRarity;
 import com.mrcrayfish.goblintraders.trades.type.BaseTrade;
 import com.mrcrayfish.goblintraders.trades.type.BasicTrade;
 import com.mrcrayfish.goblintraders.trades.type.TreasureMapTrade;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerRegistry;
@@ -71,7 +71,10 @@ public class GoblinTradersCompat implements IModCompat {
     private static TradeLevelInfo getLevelInfo(Config.Entities.Goblin.Trades trades, int level) {
         IRaritySettings settings = trades.getSettings(getRarity(level));
 
-        return new TradeLevelInfo(new RangeValue(settings.getMinValue(), settings.getMaxValue()), (float) settings.includeChance());
+        int min = Math.min(settings.getMinValue(), settings.getMaxValue());
+        int max = Math.max(settings.getMinValue(), settings.getMaxValue());
+
+        return new TradeLevelInfo(NumberExpr.uniformInt(min, max), (float) settings.includeChance());
     }
 
     @Nullable

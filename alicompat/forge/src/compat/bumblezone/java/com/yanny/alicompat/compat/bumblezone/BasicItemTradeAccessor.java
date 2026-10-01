@@ -2,7 +2,7 @@ package com.yanny.alicompat.compat.bumblezone;
 
 import com.mojang.datafixers.util.Either;
 import com.telepathicgrunt.the_bumblezone.utils.GeneralUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
@@ -39,9 +39,9 @@ public class BasicItemTradeAccessor extends BaseAccessor<GeneralUtils.BasicItemT
         return new ItemsToItemsNode(
                 utils,
                 Either.left(itemToTrade.getDefaultInstance()),
-                new RangeValue(amountToGive),
+                NumberExpr.constant(amountToGive),
                 Either.left(itemToReceive.getDefaultInstance()),
-                new RangeValue(amountToReceive),
+                NumberExpr.constant(amountToReceive),
                 maxUses,
                 experience,
                 multiplier,

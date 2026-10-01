@@ -1,6 +1,6 @@
 package com.yanny.alicompat.compat.moonlight;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
@@ -34,6 +34,6 @@ public class AddItemModifierAccessor extends BaseAccessor<ModLootModifiers.AddIt
 
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
                 (page, c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true,
-                        GlmNodeUtils.addedNode(utils, c, addedItemStack.copy(), 1, new RangeValue(addedItemStack.getCount()))))));
+                        GlmNodeUtils.addedNode(utils, c, addedItemStack.copy(), 1, NumberExpr.constant(addedItemStack.getCount()))))));
     }
 }

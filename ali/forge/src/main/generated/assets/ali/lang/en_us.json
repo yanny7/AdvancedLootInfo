@@ -1,11 +1,9 @@
 {
-  "ali.description.chance": "Chance: %s%s",
-  "ali.description.chance_bonus": "%s (%s %s)",
+  "ali.description.chance": "Chance: %s",
   "ali.description.count": "Count: %s",
-  "ali.description.count_bonus": "%s (%s %s)",
   "ali.description.quality": "Quality: %s",
   "ali.description.random_trade_selection": "Randomly Selects %s Of These Trades",
-  "ali.description.rolls": "Rolls: %s%s",
+  "ali.description.rolls": "Rolls: %s",
   "ali.enum.attribute_operation.add_multiplied_base": "Multiply Base",
   "ali.enum.attribute_operation.add_multiplied_total": "Multiply Total",
   "ali.enum.attribute_operation.add_value": "Add Value",

@@ -8,6 +8,8 @@ architectury {
 }
 
 loom {
+    accessWidenerPath = project(":aci:common").loom.accessWidenerPath
+
     runs {
         datagen {
             inherit client
@@ -47,6 +49,7 @@ shadowJar {
 }
 
 remapJar {
+    injectAccessWidener = true
     input.set shadowJar.archiveFile
     dependsOn shadowJar
 }

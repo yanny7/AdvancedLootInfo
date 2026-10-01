@@ -16,8 +16,6 @@ import com.aetherteam.aetherfabric.common.loot.LootModifier;
 import com.aetherteam.aetherfabric.pond.LootContextExtension;
 import com.google.gson.JsonElement;
 import com.yanny.aci.CommonLogUtils;
-import com.yanny.aci.api.RangeValue;
-import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierCollector;
@@ -32,7 +30,6 @@ import com.yanny.alicompat.accessor.GlmAccessorUtils;
 import com.yanny.alicompat.accessor.PluginUtils;
 import com.yanny.alicompat.accessor.ReflectionUtils;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.storage.loot.LootContext;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -61,8 +58,6 @@ public class AetherCompat implements IGlmModCompat {
 
         registry.registerLootContextPreparer(AetherCompat::prepareLootContext);
 
-        registry.registerValueTooltip(IntProvider.class, AetherCompat::getIntProviderTooltip);
-
         registry.registerGlobalLootModifiers(AetherCompat::registerLootModifiers);
     }
 
@@ -73,11 +68,6 @@ public class AetherCompat implements IGlmModCompat {
         GlmAccessorUtils.registerGlobalLootModifier(registry, GlovesLootModifier.class, GlovesLootModifierAccessor.class);
         GlmAccessorUtils.registerGlobalLootModifier(registry, PigDropsModifier.class, PigDropsModifierAccessor.class);
         GlmAccessorUtils.registerGlobalLootModifier(registry, RemoveSeedsModifier.class, RemoveSeedsModifierAccessor.class);
-    }
-
-    @NotNull
-    private static TooltipBuilder getIntProviderTooltip(IServerUtils utils, IntProvider provider) {
-        return utils.getValueTooltip(utils, new RangeValue(provider.getMinValue(), provider.getMaxValue()));
     }
 
     private static void prepareLootContext(IServerUtils ignoredUtils, LootContext context, LootPage page) {

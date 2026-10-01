@@ -32,7 +32,7 @@ public class SupplementariesTooltipTest {
     public void testRandomArrowFunction() {
         assertTooltip(UTILS.getFunctionTooltip(UTILS, randomArrow()).build(), List.of(
                 "Random Arrows:",
-                "  -> Amount: 2-6"
+                "  -> Amount: 2 to 6"
         ));
     }
 

@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.apotheosis;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
@@ -50,13 +50,13 @@ public class AutomaticAffixTradeAccessor extends BaseAccessor<AutomaticAffixTrad
         return new ItemsToItemsNode(
                 utils,
                 Either.left(ApotheosisUtils.repairMaterial(affixStack)),
-                new RangeValue(REPAIR_MATERIAL_COUNT),
+                NumberExpr.constant(REPAIR_MATERIAL_COUNT),
                 TooltipNode.empty(),
                 Either.left(Items.EMERALD.getDefaultInstance()),
-                new RangeValue(1, (WorldTier.values().length - 1) * EMERALDS_PER_TIER + 1),
+                NumberExpr.add(NumberExpr.constant(1), NumberExpr.mul(NumberExpr.constant(EMERALDS_PER_TIER), NumberExpr.range(0, WorldTier.values().length - 1))),
                 TooltipNode.empty(),
                 Either.left(affixStack),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 result,
                 MAX_TRADES,
                 XP,

@@ -2,13 +2,12 @@ package com.yanny.ali.api;
 
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.ICoreServerUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.plugin.glm.LootPage;
 import com.yanny.ali.plugin.glm.ParamState;
 import com.yanny.ali.plugin.glm.Verdict;
-import com.yanny.ali.plugin.server.EnchantedRanges;
 import net.minecraft.advancements.criterion.EntitySubPredicate;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
@@ -19,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.slot.SlotSource;
+import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
@@ -59,9 +59,10 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
 
     <T extends SlotSource> TooltipBuilder getSlotSourceTooltip(IServerUtils utils, T slotSource);
 
-    <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, EnchantedRanges count);
+    <T extends LootItemFunction> NumberExpr applyCountModifier(IServerUtils utils, T function, NumberExpr count, List<TooltipNode> conditions);
 
-    <T extends LootItemCondition> void applyChanceModifier(IServerUtils utils, T condition, EnchantedRanges chance);
+    @NotNull
+    <T extends LootItemCondition> NumberExpr applyChanceModifier(IServerUtils utils, T condition, NumberExpr chance);
 
     @NotNull
     <T extends LootItemFunction> ItemStack applyItemStackModifier(IServerUtils utils, T function, ItemStack itemStack);
@@ -79,7 +80,13 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
     TooltipBuilder getEnumTranslation(IServerUtils utils, Enum<?> value);
 
     @NotNull
-    RangeValue convertNumber(IServerUtils utils, @Nullable NumberProvider numberProvider);
+    NumberExpr convertNumber(IServerUtils utils, NumberProvider numberProvider);
+
+    @NotNull
+    NumberExpr convertIntNumber(IServerUtils utils, NumberProvider numberProvider);
+
+    @NotNull
+    NumberExpr convertLevelBasedValue(IServerUtils utils, LevelBasedValue value, NumberExpr level);
 
     @Nullable
     LootContext getLootContext();

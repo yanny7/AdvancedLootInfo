@@ -1,7 +1,14 @@
 package com.yanny.awi.test;
 
+import com.yanny.aci.api.NumberFunctions;
+import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
+import com.yanny.awi.manager.PluginManager;
+import com.yanny.awi.plugin.common.HeightFunctions;
 import com.yanny.awi.plugin.server.summary.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedList;
 import net.minecraft.util.valueproviders.*;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -11,130 +18,126 @@ import net.minecraft.world.level.levelgen.placement.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.stream.Stream;
 
+import static com.yanny.aci.api.NumberExpr.*;
 import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
 import static com.yanny.awi.test.TooltipTestSuite.UTILS;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PlacementSummaryTest {
-    // overworld-like bounds: minY = -64, height (genDepth) = 384  ⇒  top = 319
     private static final ColumnContext CTX = new ColumnContext(-64, 384);
 
     @Test
-    public void testConstantIntSpan() {
-        CountSpan span = UTILS.getIntSpan(UTILS, ConstantInt.of(3));
-        assertEquals(Kind.CONSTANT, span.kind());
-        assertEquals("3", span.range().toIntString());
+    public void testIntProviderConverters() {
+        assertEquals(constant(3), UTILS.convertIntProvider(UTILS, ConstantInt.of(3)));
+        assertEquals(uniformInt(2, 6), UTILS.convertIntProvider(UTILS, UniformInt.of(2, 6)));
+        assertEquals(fn(NumberFunctions.BIASED_TO_BOTTOM, constant(0), constant(10)), UTILS.convertIntProvider(UTILS, BiasedToBottomInt.of(0, 10)));
+        assertEquals(clamp(uniformInt(1, 10), constant(3), constant(7)), UTILS.convertIntProvider(UTILS, ClampedInt.of(UniformInt.of(1, 10), 3, 7)));
+        assertEquals(
+                fn(NumberFunctions.TRUNC, clamp(fn(NumberFunctions.NORMAL, constant(5), constant(2)), constant(0), constant(10))),
+                UTILS.convertIntProvider(UTILS, ClampedNormalInt.of(5, 2, 0, 10))
+        );
     }
 
     @Test
-    public void testUniformIntSpan() {
-        CountSpan span = UTILS.getIntSpan(UTILS, UniformInt.of(2, 6));
-        assertEquals(Kind.UNIFORM, span.kind());
-        assertEquals("2-6", span.range().toIntString());
-    }
-
-    @Test
-    public void testClampedIntSpanRecurses() {
-        // source uniform [1,10] clamped to [3,7]
-        CountSpan span = UTILS.getIntSpan(UTILS, ClampedInt.of(UniformInt.of(1, 10), 3, 7));
-        assertEquals(Kind.CLAMPED, span.kind());
-        assertEquals("3-7", span.range().toIntString());
-    }
-
-    @Test
-    public void testWeightedListIntSpanRecurses() {
+    public void testWeightedListIntRecurses() {
         WeightedList<IntProvider> distribution = WeightedList.<IntProvider>builder()
-                .add(ConstantInt.of(2), 1)
+                .add(UniformInt.of(1, 2), 1)
                 .add(ConstantInt.of(8), 3)
                 .build();
-        CountSpan span = UTILS.getIntSpan(UTILS, new WeightedListInt(distribution));
-        assertEquals(Kind.WEIGHTED, span.kind());
-        assertEquals("2-8", span.range().toIntString()); // union of branch ranges
+
+        assertEquals(
+                weighted(List.of(new WeightedEntry(1, uniformInt(1, 2)), new WeightedEntry(3, constant(8)))),
+                UTILS.convertIntProvider(UTILS, new WeightedListInt(distribution))
+        );
     }
 
     @Test
-    public void testConstantHeightSpan() {
-        HeightSpan span = UTILS.getHeightSpan(UTILS, ConstantHeight.of(VerticalAnchor.absolute(5)), CTX);
-        assertEquals(Kind.CONSTANT, span.kind());
-        assertEquals("5", span.range().toIntString());
-        assertEquals("5", span.bestBand().toIntString());
+    public void testFloatProviderConverters() {
+        assertEquals(constant(2), UTILS.convertFloatProvider(UTILS, ConstantFloat.of(2)));
+        assertEquals(uniformFloat(1, 3), UTILS.convertFloatProvider(UTILS, UniformFloat.of(1, 3)));
+        assertEquals(
+                clamp(fn(NumberFunctions.NORMAL, constant(4.5), constant(1)), constant(2), constant(7)),
+                UTILS.convertFloatProvider(UTILS, ClampedNormalFloat.of(4.5f, 1, 2, 7))
+        );
+        assertEquals(
+                fn(NumberFunctions.TRAPEZOID_FLOAT, constant(1), constant(9), constant(2)),
+                UTILS.convertFloatProvider(UTILS, TrapezoidFloat.of(1, 9, 2))
+        );
     }
 
     @Test
-    public void testUniformHeightSpanIsFlatBand() {
-        HeightSpan span = UTILS.getHeightSpan(UTILS, UniformHeight.of(VerticalAnchor.absolute(-16), VerticalAnchor.absolute(112)), CTX);
-        assertEquals(Kind.UNIFORM, span.kind());
-        assertEquals("-16-112", span.range().toIntString());
-        assertEquals("-16-112", span.bestBand().toIntString()); // flat ⇒ whole range is the best band
+    public void testHeightConverters() {
+        assertEquals(constant(5), UTILS.convertHeightProvider(UTILS, ConstantHeight.of(VerticalAnchor.absolute(5)), CTX));
+        assertEquals(uniformInt(-64, 319), UTILS.convertHeightProvider(UTILS, UniformHeight.of(VerticalAnchor.aboveBottom(0), VerticalAnchor.belowTop(0)), CTX));
+        assertEquals(HeightFunctions.biasedToBottom(10, 60, 1), UTILS.convertHeightProvider(UTILS, BiasedToBottomHeight.of(VerticalAnchor.absolute(10), VerticalAnchor.absolute(60), 1), CTX));
+        assertEquals(HeightFunctions.veryBiasedToBottom(10, 60, 8), UTILS.convertHeightProvider(UTILS, VeryBiasedToBottomHeight.of(VerticalAnchor.absolute(10), VerticalAnchor.absolute(60), 8), CTX));
+        assertEquals(HeightFunctions.trapezoid(40, 120, 20), UTILS.convertHeightProvider(UTILS, TrapezoidHeight.of(VerticalAnchor.absolute(40), VerticalAnchor.absolute(120), 20), CTX));
     }
 
     @Test
-    public void testTrapezoidHeightSpanBandIsPlateau() {
-        HeightSpan span = UTILS.getHeightSpan(UTILS, TrapezoidHeight.of(VerticalAnchor.absolute(40), VerticalAnchor.absolute(120), 20), CTX);
-        assertEquals(Kind.TRAPEZOID, span.kind());
-        assertEquals("40-120", span.range().toIntString());
-        assertEquals("70-90", span.bestBand().toIntString()); // plateau band centered at 80, width 20
+    public void testHeightFunctionsMatchVanillaBounds() {
+        assertEquals(NumberInterval.closed(10, 59), HeightFunctions.biasedToBottom(10, 60, 1).bounds());
+        assertEquals(NumberInterval.closed(40, 120), HeightFunctions.trapezoid(40, 120, 20).bounds());
+        assertEquals(NumberInterval.closed(40, 120), HeightFunctions.trapezoid(40, 120, 100).bounds());
+        assertTrue(HeightFunctions.trapezoid(40, 120, 20).mode().isPresent());
     }
 
     @Test
-    public void testBiasedToBottomHeightSpanBandIsMode() {
-        HeightSpan span = UTILS.getHeightSpan(UTILS, BiasedToBottomHeight.of(VerticalAnchor.absolute(10), VerticalAnchor.absolute(60), 1), CTX);
-        assertEquals(Kind.BIASED_TO_BOTTOM, span.kind());
-        assertEquals("10-60", span.range().toIntString());
-        assertEquals("10", span.bestBand().toIntString()); // peaked ⇒ single mode at bottom
-    }
-
-    @Test
-    public void testHeightAnchorsResolveAgainstColumnContext() {
-        // aboveBottom(0) -> -64 ; belowTop(0) -> -64 + 384 - 1 = 319
-        HeightSpan span = UTILS.getHeightSpan(UTILS, UniformHeight.of(VerticalAnchor.aboveBottom(0), VerticalAnchor.belowTop(0)), CTX);
-        assertEquals("-64-319", span.range().toIntString());
-    }
-
-    @Test
-    public void testWeightedListHeightSpanRecurses() {
+    public void testWeightedListHeightRecurses() {
         WeightedList<HeightProvider> distribution = WeightedList.<HeightProvider>builder()
                 .add(ConstantHeight.of(VerticalAnchor.absolute(10)), 1)
                 .add(ConstantHeight.of(VerticalAnchor.absolute(100)), 5)
                 .build();
-        HeightSpan span = UTILS.getHeightSpan(UTILS, new WeightedListHeight(distribution), CTX);
-        assertEquals(Kind.WEIGHTED, span.kind());
-        assertEquals("10-100", span.range().toIntString());     // union of branches
-        assertEquals("100", span.bestBand().toIntString());     // best band = heaviest branch (weight 5 @ y=100)
+
+        assertEquals(
+                weighted(List.of(new WeightedEntry(1, constant(10)), new WeightedEntry(5, constant(100)))),
+                UTILS.convertHeightProvider(UTILS, new WeightedListHeight(distribution), CTX)
+        );
     }
 
     @Test
-    public void testCountOnEveryLayerIsUnknownTotal() {
+    public void testWorldDependentCountIsOpaqueWithDetails() {
         //noinspection deprecation
-        PlacementContribution contribution = UTILS.getPlacementContribution(UTILS, CountOnEveryLayerPlacement.of(5), CTX);
-        // per-layer count is known (5) but the number of layers isn't ⇒ flagged uncertain
-        assertEquals(Kind.UNKNOWN, contribution.count().kind());
-        assertTrue(contribution.count().range().isUnknown());
-        assertEquals("1[+???]", contribution.count().range().toIntString());
-    }
+        PlacementContribution everyLayer = UTILS.getPlacementContribution(UTILS, CountOnEveryLayerPlacement.of(5), CTX);
+        PlacementContribution noise = UTILS.getPlacementContribution(UTILS, NoiseBasedCountPlacement.of(5, 1.5, 0.2), CTX);
+        PlacementContribution threshold = UTILS.getPlacementContribution(UTILS, NoiseThresholdCountPlacement.of(0.5, 2, 8), CTX);
 
-    @Test
-    public void testNoiseBasedCountIsUnknown() {
-        PlacementContribution contribution = UTILS.getPlacementContribution(UTILS, NoiseBasedCountPlacement.of(5, 1.5, 0.2), CTX);
-        assertEquals(Kind.UNKNOWN, contribution.count().kind());
-        assertEquals("1[+???]", contribution.count().range().toIntString()); // up to noiseToCountRatio
-    }
-
-    @Test
-    public void testNoiseThresholdCountIsUnknown() {
-        PlacementContribution contribution = UTILS.getPlacementContribution(UTILS, NoiseThresholdCountPlacement.of(0.5, 2, 8), CTX);
-        assertEquals(Kind.UNKNOWN, contribution.count().kind());
-        assertEquals("1[+???]", contribution.count().range().toIntString()); // either belowNoise or aboveNoise
+        assertEquals(opaque("minecraft:count_on_every_layer"), everyLayer.count());
+        assertEquals(opaque("minecraft:noise_based_count"), noise.count());
+        assertEquals(opaque("minecraft:noise_threshold_count"), threshold.count());
+        assertNotNull(noise.countDetails());
     }
 
     @Test
     public void testHeightmapPlacementFallsBackToHeightmap() {
         PlacementContribution contribution = UTILS.getPlacementContribution(UTILS, HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR), CTX);
+
         assertNull(contribution.count());
-        assertNull(contribution.chancePercent());
-        assertEquals(Kind.RELATIVE_TO_HEIGHTMAP, contribution.height().kind());
+        assertNull(contribution.chance());
+        assertNull(contribution.height().height());
         assertEquals(Heightmap.Types.OCEAN_FLOOR, contribution.height().heightmap());
+    }
+
+    @Test
+    public void testChancesCompound() {
+        PlacementSummary summary = PlacementSummaryUtils.summarize(UTILS, List.of(RarityFilter.onAverageOnceEvery(4), RarityFilter.onAverageOnceEvery(5)), CTX);
+
+        assertEquals(constant(0.05), summary.chance());
+    }
+
+    @Test
+    public void testFirstCountAndHeightWin() {
+        PlacementSummary summary = PlacementSummaryUtils.summarize(UTILS, List.of(
+                CountPlacement.of(4),
+                CountPlacement.of(9),
+                HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(10)),
+                HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR)
+        ), CTX);
+
+        assertEquals(constant(4), summary.count());
+        assertEquals(uniformInt(0, 10), summary.height().height());
     }
 
     @Test
@@ -144,48 +147,41 @@ public class PlacementSummaryTest {
                 RarityFilter.onAverageOnceEvery(10),
                 HeightRangePlacement.of(TrapezoidHeight.of(VerticalAnchor.absolute(40), VerticalAnchor.absolute(120), 20))
         );
+
         assertTooltip(renderSummary(modifiers), List.of(
                 "Attempts Per Chunk: 4",
                 "Chance: 10%",
-                "Height: 40-120 (Trapezoid), most likely 70-90"
+                "Height: 40 to 120  ~70 to 90 (2%)"
         ));
     }
 
     @Test
-    public void testSummaryTooltipCountShowsDistributionKind() {
-        // non-constant, known count range ⇒ shown with its distribution kind, e.g. "2-6 (Uniform)"
-        List<PlacementModifier> modifiers = List.of(CountPlacement.of(UniformInt.of(2, 6)));
-        assertTooltip(renderSummary(modifiers), List.of(
-                "Attempts Per Chunk: 2-6 (Uniform)"
+    public void testSummaryTooltipUniformCount() {
+        assertTooltip(renderSummary(List.of(CountPlacement.of(UniformInt.of(2, 6)))), List.of(
+                "Attempts Per Chunk: 2 to 6"
         ));
     }
 
     @Test
-    public void testSummaryTooltipHidesMostLikelyWhenEqualToRange() {
-        // uniform ⇒ best band == full range ⇒ "Most Likely" would be redundant, so it's omitted
-        List<PlacementModifier> modifiers = List.of(
-                HeightRangePlacement.of(UniformHeight.of(VerticalAnchor.absolute(-16), VerticalAnchor.absolute(112)))
-        );
+    public void testSummaryTooltipBiasedHeight() {
+        List<PlacementModifier> modifiers = List.of(HeightRangePlacement.of(BiasedToBottomHeight.of(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(16), 1)));
+
         assertTooltip(renderSummary(modifiers), List.of(
-                "Height: -16-112 (Uniform)"
+                "Height: −64 to 15  ~−64 (6%)"
         ));
     }
 
     @Test
     public void testSummaryTooltipHeightmapFallback() {
-        List<PlacementModifier> modifiers = List.of(HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR));
-        assertTooltip(renderSummary(modifiers), List.of(
+        assertTooltip(renderSummary(List.of(HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR))), List.of(
                 "Height: Solid Ground, Ignores Water"
         ));
     }
 
     @Test
-    public void testSummaryTooltipUnknownCountRendersAsUnknown() {
-        // noise-based count has no clean numeric value ⇒ show "Unknown", not "0-5[+???]", but nest the
-        // modifier's own tooltip (header + parameters) so the reader can see which values it came from
-        List<PlacementModifier> modifiers = List.of(NoiseBasedCountPlacement.of(5, 1.5, 0.2));
-        assertTooltip(renderSummary(modifiers), List.of(
-                "Attempts Per Chunk: Unknown",
+    public void testSummaryTooltipUnknownCountKeepsDetails() {
+        assertTooltip(renderSummary(List.of(NoiseBasedCountPlacement.of(5, 1.5, 0.2))), List.of(
+                "Attempts Per Chunk: ? (minecraft:noise_based_count)",
                 "  -> Noise Based Count Placement:",
                 "    -> Noise To Count Ratio: 5",
                 "    -> Noise Factor: 1.5",
@@ -193,7 +189,28 @@ public class PlacementSummaryTest {
         ));
     }
 
-    private static com.yanny.aci.tooltip.TooltipNode renderSummary(List<PlacementModifier> modifiers) {
+    @Test
+    public void testFailingPropagatorDropsOnlyTheSummary() {
+        PluginManager.getInstance().serverRegistry.registerPlacementPropagator(BrokenPlacement.class, (u, m, c) -> {
+            throw new IllegalStateException("broken propagator");
+        });
+
+        assertTooltip(renderSummary(List.of(new BrokenPlacement(), CountPlacement.of(3))), List.of());
+    }
+
+    private static TooltipNode renderSummary(List<PlacementModifier> modifiers) {
         return TooltipBuilder.branch((b) -> PlacementSummaryUtils.appendSummary(b, UTILS, modifiers, CTX)).build();
+    }
+
+    private static class BrokenPlacement extends PlacementModifier {
+        @Override
+        public Stream<BlockPos> getPositions(PlacementContext context, RandomSource random, BlockPos pos) {
+            return Stream.of(pos);
+        }
+
+        @Override
+        public PlacementModifierType<?> type() {
+            return PlacementModifierType.COUNT;
+        }
     }
 }

@@ -6,7 +6,7 @@ import com.almostreliable.lootjs.loot.modifier.LootModifier;
 import com.almostreliable.lootjs.loot.modifier.handler.*;
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.*;
 import com.yanny.ali.lootjs.modifier.CustomPlayerFunction;
@@ -16,7 +16,7 @@ import com.yanny.ali.lootjs.node.ItemTagNode;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.ModifiedNode;
-import com.yanny.ali.plugin.server.EnchantedRanges;
+import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
@@ -36,8 +36,9 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static com.yanny.ali.plugin.common.NodeUtils.getEnchantedChance;
-import static com.yanny.ali.plugin.common.NodeUtils.getEnchantedCount;
+import static com.yanny.ali.plugin.common.NodeUtils.getChance;
+import static com.yanny.ali.plugin.common.NodeUtils.getCount;
+import static com.yanny.ali.plugin.common.NodeUtils.getCountLimit;
 
 public abstract class AbstractLootModifier<T> implements ILootModifier<T> {
     protected static final Logger LOGGER = LogUtils.getLogger();
@@ -76,14 +77,19 @@ public abstract class AbstractLootModifier<T> implements ILootModifier<T> {
                         }
 
                         if (c instanceof ItemNode i) {
-                            EnchantedRanges enchantedChance = getEnchantedChance(utils, i.getConditions(), i.getChance());
-                            EnchantedRanges enchantedCount = i.getFunctions().isEmpty()
-                                    ? new EnchantedRanges(i.getCount())
-                                    : getEnchantedCount(utils, i.getFunctions());
+                            NumberExpr chance = getChance(utils, i.getConditions(), i.getChance());
+                            LootCount count;
+
+                            if (i.getFunctions().isEmpty()) {
+                                count = LootCount.of(i.getCount());
+                            } else {
+                                count = getCount(utils, i.getFunctions());
+                            }
+
                             List<LootItemCondition> allConditions = new LinkedList<>(i.getConditions());
 
                             allConditions.add(new InvertedLootItemCondition(new AllOfCondition(conditions)));
-                            TooltipNode tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, enchantedChance, enchantedCount, i.getFunctions(), allConditions).build();
+                            TooltipNode tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, count, getCountLimit(i.getItem()), i.getFunctions(), allConditions).build();
                             return new ItemNode(i.getChance(), i.getCount(), i.getItem(), tooltip, i.getFunctions(), i.getConditions());
                         }
 
@@ -100,7 +106,7 @@ public abstract class AbstractLootModifier<T> implements ILootModifier<T> {
                         List<IDataNode> nodes = new ArrayList<>();
                         IItemNode node = (IItemNode) c;
                         ItemLootEntry entry = replaceLootAction.itemLootEntry();
-                        RangeValue preservedCount = replaceLootAction.preserveCount() ? node.getCount() : null;
+                        NumberExpr preservedCount = replaceLootAction.preserveCount() ? node.getCount() : null;
                         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), node.getConditions().stream()).toList();
                         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), node.getFunctions().stream()).toList();
 
@@ -155,7 +161,7 @@ public abstract class AbstractLootModifier<T> implements ILootModifier<T> {
         return operations;
     }
 
-    private static IDataNode constructEither(IServerUtils utils, Either<ItemStack, TagKey<? extends ItemLike>> either, float chance, RangeValue preservedCount, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    private static IDataNode constructEither(IServerUtils utils, Either<ItemStack, TagKey<? extends ItemLike>> either, float chance, NumberExpr preservedCount, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         return either.map(
                 (itemStack) -> new ItemStackNode(utils, itemStack, chance, true, functions, conditions, preservedCount),
                 (tagKey) -> new ItemTagNode(utils, tagKey, chance, true, functions, conditions, preservedCount)

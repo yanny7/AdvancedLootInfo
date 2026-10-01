@@ -2,7 +2,6 @@ package com.yanny.awi.plugin;
 
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.awi.Utils;
-import com.yanny.awi.plugin.server.summary.Kind;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -20,7 +19,6 @@ public class EnumTypes {
         TRANSLATED_ENUMS.put(Heightmap.Types.class, "heightmap_type");
         TRANSLATED_ENUMS.put(CaveSurface.class, "cave_surface");
         TRANSLATED_ENUMS.put(GenerationStep.Decoration.class, "decoration_step");
-        TRANSLATED_ENUMS.put(Kind.class, "kind");
     }
 
     @NotNull

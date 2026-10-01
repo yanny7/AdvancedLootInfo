@@ -27,7 +27,7 @@ Read `aci/common/src/main/java/com/yanny/aci/tooltip/TooltipBuilder.java` if uns
 
 ## Step 4 — do not hand-derive exact strings for anything non-trivial; probe it
 
-Number formatting (`Double.toString`, `RangeValue.toIntString()`/`toFloatString()`), enum rendering (`.name()`, all-caps), and structural value types (e.g. `Vec3i` renders as `[0,0,0]`, not `"0, 0, 0"`) are easy to get subtly wrong from reading source alone. For any assertion where the exact string isn't already confirmed by an existing sibling test:
+Number formatting (`Double.toString`, ACI number nodes: `0 to 5  ~2 to 3 (31%)`, `−` for negatives), enum rendering (`.name()`, all-caps), and structural value types (e.g. `Vec3i` renders as `[0,0,0]`, not `"0, 0, 0"`) are easy to get subtly wrong from reading source alone. For any assertion where the exact string isn't already confirmed by an existing sibling test:
 
 1. Write the assertion with an obviously-wrong or empty expected list (`List.of()` works well — every actual line then shows up as its own `"expected: <> but was: <...>"` failure).
 2. Add the new test class to the module's `TooltipTestSuite.java` `@SelectClasses({...})` array (tests must run through the Suite class — it bootstraps `Bootstrap.bootStrap()`/language loading/`PluginManager` registration in `@BeforeSuite`; running the test class directly without the suite will NPE).

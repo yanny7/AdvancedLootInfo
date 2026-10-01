@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.villagertradingplus;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
@@ -48,13 +48,13 @@ public class SellPotionTradeOfferAccessor extends BaseAccessor<VillagerTrades.It
         return new ItemsToItemsNode(
                 utils,
                 Either.left(getWaterPotion()),
-                new RangeValue(buy.getCount()),
+                NumberExpr.constant(buy.getCount()),
                 TooltipNode.empty(),
                 Either.left(currency),
-                new RangeValue(currency.getCount()),
+                NumberExpr.constant(currency.getCount()),
                 TooltipNode.empty(),
                 Either.left(new ItemStack(sell.getItem())),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 TooltipBuilder.keyOnly(VillagerTradingPlusLang.Functions.RANDOM_POTION).build(),
                 maxUses,
                 experience,

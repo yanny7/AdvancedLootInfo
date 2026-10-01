@@ -20,7 +20,7 @@ public class PlaceboTooltipTest {
                 "  -> Item:",
                 "    -> Item: minecraft:diamond",
                 "    -> Count: 1",
-                "  -> Count: 2-5",
+                "  -> Count: 2 to 5",
                 "  -> Weight: 3",
                 "  -> Quality: 1"
         ));

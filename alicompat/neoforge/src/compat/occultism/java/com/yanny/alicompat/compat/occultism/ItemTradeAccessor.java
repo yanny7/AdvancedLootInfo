@@ -2,7 +2,7 @@ package com.yanny.alicompat.compat.occultism;
 
 import com.klikli_dev.occultism.common.entity.spirit.wonderingtrader.WonderingTrades;
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
@@ -37,9 +37,9 @@ public class ItemTradeAccessor extends BaseAccessor<WonderingTrades.ItemTrade> i
         return new ItemsToItemsNode(
                 utils,
                 Either.left(input.copyWithCount(1)),
-                new RangeValue(input.getCount()),
+                NumberExpr.constant(input.getCount()),
                 Either.left(result.copyWithCount(1)),
-                new RangeValue(result.getCount()),
+                NumberExpr.constant(result.getCount()),
                 maxUses,
                 villagerXp,
                 priceMultiplier,

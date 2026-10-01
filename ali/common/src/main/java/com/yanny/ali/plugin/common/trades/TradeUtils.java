@@ -1,7 +1,7 @@
 package com.yanny.ali.plugin.common.trades;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
@@ -17,7 +17,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
@@ -31,11 +30,11 @@ public class TradeUtils {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(offer.getBaseCostA()),
-                new RangeValue(offer.getBaseCostA().getCount()),
+                NumberExpr.constant(offer.getBaseCostA().getCount()),
                 Either.left(offer.getCostB()),
-                new RangeValue(offer.getCostB().getCount()),
+                NumberExpr.constant(offer.getCostB().getCount()),
                 Either.left(offer.getResult()),
-                new RangeValue(offer.getResult().getCount()),
+                NumberExpr.constant(offer.getResult().getCount()),
                 offer.getMaxUses(),
                 offer.getXp(),
                 offer.getPriceMultiplier(),
@@ -48,13 +47,13 @@ public class TradeUtils {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(Items.EMERALD.getDefaultInstance()),
-                new RangeValue(listing.value),
+                NumberExpr.constant(listing.value),
                 TooltipNode.empty(),
                 Either.left(ItemStack.EMPTY),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 TooltipNode.empty(),
                 Either.left(listing.item.getDefaultInstance()),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 TooltipBuilder.keyOnly(Lang.Functions.DYED_RANDOMLY).build(),
                 listing.maxUses,
                 listing.villagerXp,
@@ -68,9 +67,9 @@ public class TradeUtils {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(listing.itemStack.itemStack()),
-                new RangeValue(listing.itemStack.count()),
+                NumberExpr.constant(listing.itemStack.count()),
                 Either.left(Items.EMERALD.getDefaultInstance()),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 listing.maxUses,
                 listing.villagerXp,
                 listing.priceMultiplier,
@@ -83,13 +82,13 @@ public class TradeUtils {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(Items.EMERALD.getDefaultInstance()),
-                new RangeValue(5, 64),
+                NumberExpr.range(5, 64),
                 TooltipNode.empty(),
                 Either.left(ItemStack.EMPTY),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 TooltipNode.empty(),
                 Either.left(Items.ENCHANTED_BOOK.getDefaultInstance()),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 TooltipBuilder.keyOnly(Lang.Functions.ENCHANT_RANDOMLY).build(),
                 12,
                 listing.villagerXp,
@@ -101,7 +100,7 @@ public class TradeUtils {
     @NotNull
     public static ItemsToItemsNode getNode(IServerUtils utils, VillagerTrades.EnchantedItemForEmeralds listing, TooltipNode condition) {
         TooltipNode tooltip = TooltipBuilder.branch((b) -> b
-                        .add(utils.getValueTooltip(utils, UniformGenerator.between(5, 19)).build(Lang.Value.LEVELS))
+                        .add(TooltipBuilder.number(NumberExpr.uniformInt(5, 19)).build(Lang.Value.LEVELS))
                         .add(utils.getValueTooltip(utils, false).build(Lang.Value.TREASURE))
                 )
                 .build(Lang.Functions.ENCHANT_WITH_LEVELS);
@@ -109,13 +108,13 @@ public class TradeUtils {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(Items.EMERALD.getDefaultInstance()),
-                new RangeValue(listing.baseEmeraldCost + 5, listing.baseEmeraldCost + 19),
+                NumberExpr.min(NumberExpr.add(NumberExpr.constant(listing.baseEmeraldCost), NumberExpr.uniformInt(5, 19)), NumberExpr.constant(64)),
                 TooltipNode.empty(),
                 Either.left(ItemStack.EMPTY),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 TooltipNode.empty(),
                 Either.left(listing.itemStack),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 tooltip,
                 listing.maxUses,
                 listing.villagerXp,
@@ -129,11 +128,11 @@ public class TradeUtils {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(listing.fromItem.itemStack()),
-                new RangeValue(listing.fromItem.count()),
+                NumberExpr.constant(listing.fromItem.count()),
                 Either.left(Items.EMERALD.getDefaultInstance()),
-                new RangeValue(listing.emeraldCost),
+                NumberExpr.constant(listing.emeraldCost),
                 Either.left(listing.toItem),
-                new RangeValue(listing.toItem.getCount()),
+                NumberExpr.constant(listing.toItem.getCount()),
                 listing.maxUses,
                 listing.villagerXp,
                 listing.priceMultiplier,
@@ -146,9 +145,9 @@ public class TradeUtils {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(Items.EMERALD.getDefaultInstance()),
-                new RangeValue(listing.emeraldCost),
+                NumberExpr.constant(listing.emeraldCost),
                 Either.left(listing.itemStack),
-                new RangeValue(listing.itemStack.getCount()),
+                NumberExpr.constant(listing.itemStack.getCount()),
                 listing.maxUses,
                 listing.villagerXp,
                 listing.priceMultiplier,
@@ -165,13 +164,13 @@ public class TradeUtils {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(Items.EMERALD.getDefaultInstance()),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 TooltipNode.empty(),
                 Either.left(ItemStack.EMPTY),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 TooltipNode.empty(),
                 Either.left(stew),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 DataComponentTooltipUtils.getSuspiciousStewEffectsTooltip(utils, listing.effects).build(),
                 12,
                 listing.xp,
@@ -185,11 +184,11 @@ public class TradeUtils {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(listing.fromItem.getDefaultInstance()),
-                new RangeValue(listing.fromCount),
+                NumberExpr.constant(listing.fromCount),
                 Either.left(Items.EMERALD.getDefaultInstance()),
-                new RangeValue(listing.emeraldCost),
+                NumberExpr.constant(listing.emeraldCost),
                 Either.left(listing.toItem),
-                new RangeValue(listing.toCount),
+                NumberExpr.constant(listing.toCount),
                 listing.maxUses,
                 listing.villagerXp,
                 listing.priceMultiplier,
@@ -206,13 +205,13 @@ public class TradeUtils {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(Items.EMERALD.getDefaultInstance()),
-                new RangeValue(listing.emeraldCost),
+                NumberExpr.constant(listing.emeraldCost),
                 TooltipNode.empty(),
                 Either.left(Items.COMPASS.getDefaultInstance()),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 TooltipNode.empty(),
                 Either.left(map),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 TooltipBuilder.array((b) -> b
                                 .add(utils.getValueTooltip(utils, listing.destination).build(Lang.Value.DESTINATION))
                                 .add(utils.getValueTooltip(utils, listing.destinationType).build(Lang.Value.MAP_DECORATION))

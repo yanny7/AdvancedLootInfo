@@ -77,6 +77,10 @@ public abstract class AbstractScrollWidget {
 
     public boolean onMouseScrolled(double mouseX, double mouseY, double scrollDeltaY) {
         if (rect.contains((int) mouseX, (int) mouseY)) {
+            if (ScrollableTooltip.onMouseScrolled(scrollDeltaY)) {
+                return true;
+            }
+
             if (Minecraft.getInstance().hasShiftDown() && horizontalScrollbar) {
                 scrollOffsetX = applyScroll(scrollOffsetX, getHiddenAmountX(), scrollDeltaY);
             } else {

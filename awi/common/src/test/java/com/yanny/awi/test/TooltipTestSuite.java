@@ -2,6 +2,7 @@ package com.yanny.awi.test;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.test.utils.TestUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipContext;
@@ -11,8 +12,6 @@ import com.yanny.awi.configuration.AwiConfig;
 import com.yanny.awi.datagen.LanguageHolder;
 import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.plugin.server.summary.ColumnContext;
-import com.yanny.awi.plugin.server.summary.CountSpan;
-import com.yanny.awi.plugin.server.summary.HeightSpan;
 import com.yanny.awi.plugin.server.summary.PlacementContribution;
 import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
@@ -70,7 +69,6 @@ import java.util.concurrent.ExecutionException;
         HeightProviderTooltipTest.class,
         BlockPredicateTooltipTest.class,
         IntProviderTooltipTest.class,
-        FloatProviderTooltipTest.class,
         TrunkPlacerTooltipTest.class,
         RuleTestTooltipTest.class,
         FeatureSizeTooltipTest.class,
@@ -87,7 +85,8 @@ import java.util.concurrent.ExecutionException;
         BaseLayoutBandsTest.class,
         SurfaceRuleHandlerTest.class,
         FeatureBytecodeScanTest.class,
-        SpawnInfoTest.class
+        SpawnInfoTest.class,
+        ValueCharacterizationTest.class
 })
 public class TooltipTestSuite {
     public static IServerUtils UTILS;
@@ -118,6 +117,18 @@ public class TooltipTestSuite {
             @Override
             public String getModId() {
                 return PluginManager.getInstance().serverRegistry.getModId();
+            }
+
+            @NotNull
+            @Override
+            public NumberExpr convertIntProvider(IServerUtils utils, IntProvider provider) {
+                return PluginManager.getInstance().serverRegistry.convertIntProvider(utils, provider);
+            }
+
+            @NotNull
+            @Override
+            public NumberExpr convertFloatProvider(IServerUtils utils, FloatProvider provider) {
+                return PluginManager.getInstance().serverRegistry.convertFloatProvider(utils, provider);
             }
 
             @Override
@@ -178,11 +189,6 @@ public class TooltipTestSuite {
             }
 
             @Override
-            public @NotNull <T extends IntProvider> TooltipBuilder getIntProviderTooltip(IServerUtils utils, T entry) {
-                return PluginManager.getInstance().serverRegistry.getIntProviderTooltip(utils, entry);
-            }
-
-            @Override
             public @NotNull <T extends RuleTest> TooltipBuilder getRuleTestTooltip(IServerUtils utils, T entry) {
                 return PluginManager.getInstance().serverRegistry.getRuleTestTooltip(utils, entry);
             }
@@ -228,11 +234,6 @@ public class TooltipTestSuite {
             }
 
             @Override
-            public @NotNull <T extends FloatProvider> TooltipBuilder getFloatProviderTooltip(IServerUtils utils, T entry) {
-                return PluginManager.getInstance().serverRegistry.getFloatProviderTooltip(utils, entry);
-            }
-
-            @Override
             public @NotNull <T extends StructureProcessor> TooltipBuilder getStructureProcessorTooltip(IServerUtils utils, T entry) {
                 return PluginManager.getInstance().serverRegistry.getStructureProcessorTooltip(utils, entry);
             }
@@ -242,14 +243,10 @@ public class TooltipTestSuite {
                 return PluginManager.getInstance().serverRegistry.getValueTooltip(utils, value);
             }
 
+            @NotNull
             @Override
-            public @NotNull <T extends IntProvider> CountSpan getIntSpan(IServerUtils utils, T provider) {
-                return PluginManager.getInstance().serverRegistry.getIntSpan(utils, provider);
-            }
-
-            @Override
-            public @NotNull <T extends HeightProvider> HeightSpan getHeightSpan(IServerUtils utils, T provider, ColumnContext ctx) {
-                return PluginManager.getInstance().serverRegistry.getHeightSpan(utils, provider, ctx);
+            public NumberExpr convertHeightProvider(IServerUtils utils, HeightProvider provider, ColumnContext ctx) {
+                return PluginManager.getInstance().serverRegistry.convertHeightProvider(utils, provider, ctx);
             }
 
             @Override

@@ -1,11 +1,15 @@
 # aci/fabric/CLAUDE.md
 
-Guidance for `aci/fabric` (`com.yanny.aci.fabric`) — ACI's Fabric loader wrapper; its Forge and NeoForge counterparts are `aci/forge` and `aci/neoforge` (see `aci/forge/CLAUDE.md`, `aci/neoforge/CLAUDE.md`). See `aci/CLAUDE.md` for the library this packages. Unlike `ali/fabric` and `awi/fabric` this module carries **no mod logic at all**: ACI has no `ModInitializer`, no client initializer, no mixins, no access widener and no platform-service implementation (`ICorePlatformHelper` is implemented by each *mod's* own `IPlatformHelper`, not here). Its whole job is to shadow `aci:common` into a jar the loader accepts.
+Guidance for `aci/fabric` (`com.yanny.aci.fabric`) — ACI's Fabric loader wrapper; its Forge and NeoForge counterparts are `aci/forge` and `aci/neoforge` (see `aci/forge/CLAUDE.md`, `aci/neoforge/CLAUDE.md`). See `aci/CLAUDE.md` for the library this packages. Unlike `ali/fabric` and `awi/fabric` this module carries **no mod logic at all**: ACI has no `ModInitializer`, no client initializer, no mixins and no platform-service implementation (`ICorePlatformHelper` is implemented by each *mod's* own `IPlatformHelper`, not here). Its whole job is to shadow `aci:common` into a jar the loader accepts.
 
 ## What is in it
 
-- `src/main/resources/fabric.mod.json` — `"id": "${aci_mod_id}"`, `"environment": "*"`, `depends` on `fabricloader`/`fabric`/`minecraft`/`java`, and a single `fabric-datagen` entrypoint. No `main`/`client` entrypoints; Fabric accepts a mod with none.
+- `src/main/resources/fabric.mod.json` — `"id": "${aci_mod_id}"`, `"environment": "*"`, `"accessWidener": "aci.accesswidener"`, `depends` on `fabricloader`/`fabric`/`minecraft`/`java`, and a single `fabric-datagen` entrypoint. No `main`/`client` entrypoints; Fabric accepts a mod with none.
 - `datagen.DataGeneration` (`DataGeneratorEntrypoint`) + package-private `datagen.LanguageProvider` — generate `assets/aci/lang/en_us.json` from `aci.datagen.LanguageHolder`. Structurally the same pair as `awi/fabric`'s.
+
+## Access widener
+
+`aci.accesswidener` lives in `aci/common` (`accessWidenerPath`). This module points `loom.accessWidenerPath` at it and sets `remapJar.injectAccessWidener = true`, so the jar carries it remapped to intermediary; the root `build.gradle` copies it in through `processResources`. Same wiring as `ali/fabric`.
 
 ## Fabric API dependency
 
