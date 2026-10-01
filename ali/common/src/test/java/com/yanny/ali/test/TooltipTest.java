@@ -157,8 +157,8 @@ public class TooltipTest {
         assertTooltip(getCountTooltip(getCount(UTILS, List.of(EnchantedCountIncreaseFunction.lootingMultiplier(LOOKUP, BinomialDistributionGenerator.binomial(3, 0.5f)).build())), null).build(), List.of(
                 "Count: 1",
                 "  -> Looting I: 1 to 4  ~2 to 3 (38%)",
-                "  -> Looting II: 1 to 7  ~3 to 5 (38%)",
-                "  -> Looting III: 1 to 10  ~4 to 7 (38%)"
+                "  -> Looting II: 1 to 7",
+                "  -> Looting III: 1 to 10"
         ));
         assertTooltip(getCountTooltip(getCount(UTILS, List.of(EnchantedCountIncreaseFunction.lootingMultiplier(LOOKUP, UniformGenerator.between(1, 4)).build())), null).build(), List.of(
                 "Count: 1",

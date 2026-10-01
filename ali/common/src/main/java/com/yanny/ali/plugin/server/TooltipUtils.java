@@ -64,10 +64,15 @@ public class TooltipUtils {
 
     @NotNull
     public static NumberExpr applyRandomChanceWithLooting(IServerUtils utils, LootItemRandomChanceWithEnchantedBonusCondition condition, NumberExpr chance) {
+        return NumberExpr.mul(chance, getEnchantedBonusChance(utils, condition));
+    }
+
+    @NotNull
+    public static NumberExpr getEnchantedBonusChance(IServerUtils utils, LootItemRandomChanceWithEnchantedBonusCondition condition) {
         NumberExpr level = level(condition.enchantment());
         NumberExpr enchanted = utils.convertLevelBasedValue(utils, condition.enchantedChance(), level);
 
-        return NumberExpr.mul(chance, NumberExpr.lookup(level, List.of(NumberExpr.constant(condition.unenchantedChance())), enchanted));
+        return NumberExpr.lookup(level, List.of(NumberExpr.constant(condition.unenchantedChance())), enchanted);
     }
 
     @NotNull
@@ -137,6 +142,16 @@ public class TooltipUtils {
     }
 
     @NotNull
+    public static NumberExpr anyEnchantmentLevel(IServerUtils utils) {
+        int maxLevel = utils.getServerLevel().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).listElements()
+                .mapToInt((holder) -> holder.value().getMaxLevel())
+                .max()
+                .orElse(1);
+
+        return new NumberExpr.Var(ENCHANTMENT_LEVEL, List.of(), 1, maxLevel);
+    }
+
+    @NotNull
     public static NumberExpr level(Holder<Enchantment> enchantment) {
         String id = enchantment.unwrapKey().map((key) -> key.identifier().toString()).orElse("?");
 
@@ -187,7 +202,7 @@ public class TooltipUtils {
             return base;
         }
 
-        NumberExpr luck = new NumberExpr.Var(LUCK, List.of(), -1024, 1024);
+        NumberExpr luck = new NumberExpr.Var(LUCK, List.of(), -1, 4);
 
         return NumberExpr.max(NumberExpr.constant(0), NumberExpr.add(base, NumberExpr.fn(NumberFunctions.FLOOR, NumberExpr.mul(bonus, luck))));
     }

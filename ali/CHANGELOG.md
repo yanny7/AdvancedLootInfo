@@ -6,6 +6,7 @@
 - Broken loot entry, tooltip or trade support from other mods shows that part as unsupported instead of hiding the whole loot table or trader
 - Storage and enchantment level number providers show their value instead of unknown
 - Exponent level based values show their value instead of unknown
+- Enchantment level based values show as one number with level rows instead of a structure tree
 
 ## [2.3.0]
 

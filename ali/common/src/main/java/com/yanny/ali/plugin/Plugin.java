@@ -692,9 +692,7 @@ public class Plugin implements IPlugin {
 
     @NotNull
     private static NumberExpr convertEnchantmentLevel(IServerUtils utils, EnchantmentLevelProvider numberProvider) {
-        NumberExpr level = new NumberExpr.Var(TooltipUtils.ENCHANTMENT_LEVEL, List.of(), 1, 255);
-
-        return utils.convertLevelBasedValue(utils, numberProvider.amount(), level);
+        return utils.convertLevelBasedValue(utils, numberProvider.amount(), TooltipUtils.anyEnchantmentLevel(utils));
     }
 
     @NotNull

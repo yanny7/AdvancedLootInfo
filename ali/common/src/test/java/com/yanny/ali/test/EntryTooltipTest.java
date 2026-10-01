@@ -34,7 +34,7 @@ public class EntryTooltipTest {
         ));
         assertTooltip(TooltipUtils.getLootPoolTooltip(TooltipUtils.rolls(UTILS, UniformGenerator.between(2, 3), UniformGenerator.between(1, 2))).build(), List.of(
                 "Selects random entry",
-                "Rolls: 0 to 2050 (luck)"
+                "Rolls: 0 to 10 (luck)"
         ));
     }
 
