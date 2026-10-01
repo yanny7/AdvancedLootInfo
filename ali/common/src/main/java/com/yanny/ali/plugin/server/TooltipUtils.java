@@ -65,10 +65,15 @@ public class TooltipUtils {
 
     @NotNull
     public static NumberExpr applyRandomChanceWithLooting(IServerUtils utils, LootItemRandomChanceWithEnchantedBonusCondition condition, NumberExpr chance) {
+        return NumberExpr.mul(chance, getEnchantedBonusChance(utils, condition));
+    }
+
+    @NotNull
+    public static NumberExpr getEnchantedBonusChance(IServerUtils utils, LootItemRandomChanceWithEnchantedBonusCondition condition) {
         NumberExpr level = level(condition.enchantment());
         NumberExpr enchanted = utils.convertLevelBasedValue(utils, condition.enchantedChance(), level);
 
-        return NumberExpr.mul(chance, NumberExpr.lookup(level, List.of(NumberExpr.constant(condition.unenchantedChance())), enchanted));
+        return NumberExpr.lookup(level, List.of(NumberExpr.constant(condition.unenchantedChance())), enchanted);
     }
 
     @NotNull
@@ -135,6 +140,11 @@ public class TooltipUtils {
         }
 
         return value;
+    }
+
+    @NotNull
+    public static NumberExpr anyEnchantmentLevel() {
+        return new NumberExpr.Var(ENCHANTMENT_LEVEL, List.of(), 1, 255);
     }
 
     @NotNull

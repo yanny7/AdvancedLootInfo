@@ -224,12 +224,10 @@ public class ConditionTooltipTest {
     public void testRandomChanceWithLootingTooltip() {
         assertTooltip(ConditionTooltipUtils.getRandomChanceWithEnchantedBonusTooltip(UTILS, (LootItemRandomChanceWithEnchantedBonusCondition) LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(LOOKUP, 0.25F, 5F).build()).build(), List.of(
                 "Random Chance With Enchanted Bonus:",
-                "  -> Unenchanted Chance: 0.25",
-                "  -> Enchanted Chance:",
-                "    -> Linear:",
-                "      -> Base: 5.25",
-                "      -> Per Level: 5.0",
-                "  -> Enchantment: minecraft:looting"
+                "  -> Chance: 0.25",
+                "    -> Looting I: 5.25",
+                "    -> Looting II: 10.25",
+                "    -> Looting III: 15.25"
         ));
     }
 
