@@ -177,7 +177,7 @@ public class TooltipUtils {
             return base;
         }
 
-        NumberExpr luck = new NumberExpr.Var(LUCK, List.of(), -1024, 1024);
+        NumberExpr luck = new NumberExpr.Var(LUCK, List.of(), -1, 4);
 
         return NumberExpr.max(NumberExpr.constant(0), NumberExpr.add(base, NumberExpr.fn(NumberFunctions.FLOOR, NumberExpr.mul(bonus, luck))));
     }
