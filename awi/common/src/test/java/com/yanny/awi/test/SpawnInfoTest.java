@@ -234,14 +234,14 @@ public class SpawnInfoTest {
 
     @Test
     public void testStructuresWithSameSpawnAreGrouped() {
-        HolderSet<Biome> biomeSet = HolderSet.direct(biomes.getHolderOrThrow(key(Registries.BIOME, "a")));
+        HolderSet<Biome> biomeSet = HolderSet.direct(biomes.getOrThrow(key(Registries.BIOME, "a")));
         MappedRegistry<Structure> registry = structures(Map.of(
                 "camp", spawnSettings(biomeSet, EntityType.WITCH),
                 "hut", spawnSettings(biomeSet, EntityType.WITCH),
                 "tower", new Structure.StructureSettings(
                         biomeSet,
                         Map.of(MobCategory.MONSTER, new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.PIECE,
-                                WeightedRandomList.create(new MobSpawnSettings.SpawnerData(EntityType.WITCH, 5, 1, 1)))),
+                                WeightedList.<MobSpawnSettings.SpawnerData>builder().add(new MobSpawnSettings.SpawnerData(EntityType.WITCH, 1, 1), 5).build())),
                         GenerationStep.Decoration.SURFACE_STRUCTURES,
                         TerrainAdjustment.NONE
                 )
@@ -261,7 +261,7 @@ public class SpawnInfoTest {
                 "      -> Weight: 5",
                 "      -> Group size: 1"
         ));
-        assertTooltip(info.getBiomeSpawns(ResourceLocation.fromNamespaceAndPath("test", "a")).get(EntityType.WITCH), List.of(
+        assertTooltip(info.getBiomeSpawns(Identifier.fromNamespaceAndPath("test", "a")).get(EntityType.WITCH), List.of(
                 "Structure: test:camp",
                 "Structure: test:hut",
                 "  -> Category: monster",

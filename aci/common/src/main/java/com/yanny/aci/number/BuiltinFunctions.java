@@ -6,7 +6,7 @@ import com.yanny.aci.api.NumberFunction;
 import com.yanny.aci.api.NumberFunctions;
 import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.api.NumberText;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -122,19 +122,19 @@ public final class BuiltinFunctions {
     }
 
     @NotNull
-    private static NumberFunction.Builder unary(ResourceLocation id, DoubleUnaryOperator f, UnaryOperator<NumberInterval> bounds) {
+    private static NumberFunction.Builder unary(Identifier id, DoubleUnaryOperator f, UnaryOperator<NumberInterval> bounds) {
         return NumberFunction.builder(id).arity(1)
                 .evaluate((v) -> f.applyAsDouble(v[0]))
                 .bounds((a) -> bounds.apply(a.get(0)));
     }
 
     @NotNull
-    private static NumberFunction.Builder rounding(ResourceLocation id, NumberDistribution.Rounding rounding, UnaryOperator<NumberInterval> bounds) {
+    private static NumberFunction.Builder rounding(Identifier id, NumberDistribution.Rounding rounding, UnaryOperator<NumberInterval> bounds) {
         return unary(id, rounding::apply, bounds).distribution((a) -> a.get(0).round(rounding));
     }
 
     @NotNull
-    private static NumberFunction.Builder binary(ResourceLocation id, DoubleBinaryOperator f, BinaryOperator<NumberInterval> bounds) {
+    private static NumberFunction.Builder binary(Identifier id, DoubleBinaryOperator f, BinaryOperator<NumberInterval> bounds) {
         return NumberFunction.builder(id).arity(2)
                 .evaluate((v) -> f.applyAsDouble(v[0], v[1]))
                 .bounds((a) -> bounds.apply(a.get(0), a.get(1)))
@@ -170,7 +170,7 @@ public final class BuiltinFunctions {
     }
 
     @NotNull
-    private static NumberText interval(ResourceLocation id, List<NumberText> formatted, boolean maxClosed) {
+    private static NumberText interval(Identifier id, List<NumberText> formatted, boolean maxClosed) {
         return NumberText.seq(
                 NumberText.key(NumberFunction.translationKey(id)),
                 NumberText.str("["),

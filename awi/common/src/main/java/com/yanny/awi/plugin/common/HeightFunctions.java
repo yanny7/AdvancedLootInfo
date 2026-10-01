@@ -5,7 +5,7 @@ import com.yanny.aci.api.NumberFunction;
 import com.yanny.aci.api.NumberFunctions;
 import com.yanny.aci.api.NumberText;
 import com.yanny.awi.Utils;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,9 +15,9 @@ import java.util.List;
 import static com.yanny.aci.api.NumberExpr.*;
 
 public final class HeightFunctions {
-    public static final ResourceLocation BIASED_TO_BOTTOM = Utils.modLoc("biased_to_bottom");
-    public static final ResourceLocation VERY_BIASED_TO_BOTTOM = Utils.modLoc("very_biased_to_bottom");
-    public static final ResourceLocation TRAPEZOID = Utils.modLoc("trapezoid");
+    public static final Identifier BIASED_TO_BOTTOM = Utils.modLoc("biased_to_bottom");
+    public static final Identifier VERY_BIASED_TO_BOTTOM = Utils.modLoc("very_biased_to_bottom");
+    public static final Identifier TRAPEZOID = Utils.modLoc("trapezoid");
 
     private static final NumberFunction BIASED = NumberFunction.builder(BIASED_TO_BOTTOM).arity(3)
             .expand((a) -> add(a.get(0), uniformInt(constant(0), add(uniformInt(constant(0), sub(sub(a.get(1), a.get(0)), a.get(2))), a.get(2), constant(-1)))))
@@ -63,7 +63,7 @@ public final class HeightFunctions {
     }
 
     @Nullable
-    private static NumberText hideUnitInner(ResourceLocation id, List<NumberExpr> args, List<NumberText> formatted) {
+    private static NumberText hideUnitInner(Identifier id, List<NumberExpr> args, List<NumberText> formatted) {
         if (!args.get(2).equals(constant(1))) {
             return null;
         }

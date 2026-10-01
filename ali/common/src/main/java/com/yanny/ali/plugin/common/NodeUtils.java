@@ -148,8 +148,7 @@ public class NodeUtils {
         List<LootItemFunction> allFunctions = getAllFunctions(entry, functions);
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
         float chance = getChance(entry, rawChance, sumWeight);
-        EnchantedRanges enchantedChance = getEnchantedChance(utils, allConditions, chance);
-        TooltipNode tooltip = EntryTooltipUtils.getSlotTooltip(utils, entry.slotSource, entry.quality, enchantedChance, allFunctions, allConditions).build();
+        TooltipNode tooltip = EntryTooltipUtils.getSlotTooltip(utils, entry.slotSource, entry.quality, getChance(utils, allConditions, chance), allFunctions, allConditions).build();
 
         return new SlotNode(chance, tooltip);
     }

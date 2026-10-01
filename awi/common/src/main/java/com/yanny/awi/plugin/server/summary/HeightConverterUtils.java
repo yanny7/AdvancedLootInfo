@@ -35,7 +35,7 @@ public class HeightConverterUtils {
     @NotNull
     public static NumberExpr getWeightedListHeight(IServerUtils utils, WeightedListHeight provider, ColumnContext ctx) {
         return NumberExpr.weighted(provider.distribution.unwrap().stream()
-                .map((e) -> new NumberExpr.WeightedEntry(e.getWeight().asInt(), utils.convertHeightProvider(utils, e.data(), ctx)))
+                .map((e) -> new NumberExpr.WeightedEntry(e.weight(), utils.convertHeightProvider(utils, e.value(), ctx)))
                 .toList());
     }
 }

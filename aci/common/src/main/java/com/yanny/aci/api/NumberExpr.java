@@ -2,7 +2,7 @@ package com.yanny.aci.api;
 
 import com.yanny.aci.number.NumberEvaluator;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,8 +15,8 @@ import java.util.Set;
 import java.util.function.UnaryOperator;
 
 public sealed interface NumberExpr {
-    ResourceLocation LEVEL = ResourceLocation.fromNamespaceAndPath("aci", "level");
-    ResourceLocation SCORE = ResourceLocation.fromNamespaceAndPath("aci", "score");
+    Identifier LEVEL = Identifier.fromNamespaceAndPath("aci", "level");
+    Identifier SCORE = Identifier.fromNamespaceAndPath("aci", "score");
 
     record Const(double value) implements NumberExpr {
     }
@@ -24,7 +24,7 @@ public sealed interface NumberExpr {
     record Range(@Nullable NumberExpr min, @Nullable NumberExpr max, boolean minClosed, boolean maxClosed) implements NumberExpr {
     }
 
-    record Var(ResourceLocation type, List<NumberText> args, double min, double max) implements NumberExpr {
+    record Var(Identifier type, List<NumberText> args, double min, double max) implements NumberExpr {
         public Var {
             args = List.copyOf(args);
         }
@@ -40,7 +40,7 @@ public sealed interface NumberExpr {
         }
     }
 
-    record Fn(ResourceLocation id, List<NumberExpr> args) implements NumberExpr {
+    record Fn(Identifier id, List<NumberExpr> args) implements NumberExpr {
         public Fn {
             args = List.copyOf(args);
         }
@@ -106,12 +106,12 @@ public sealed interface NumberExpr {
     }
 
     @NotNull
-    static NumberExpr fn(ResourceLocation id, NumberExpr... args) {
+    static NumberExpr fn(Identifier id, NumberExpr... args) {
         return fn(id, List.of(args));
     }
 
     @NotNull
-    static NumberExpr fn(ResourceLocation id, List<NumberExpr> args) {
+    static NumberExpr fn(Identifier id, List<NumberExpr> args) {
         NumberFunction function = NumberFunctions.get(id);
 
         if (function == null) {
@@ -342,7 +342,7 @@ public sealed interface NumberExpr {
             buf.writeBoolean(r.maxClosed);
         } else if (this instanceof Var v) {
             buf.writeByte(2);
-            buf.writeResourceLocation(v.type);
+            buf.writeIdentifier(v.type);
             NumberText.encodeList(buf, v.args);
             buf.writeDouble(v.min);
             buf.writeDouble(v.max);
@@ -353,7 +353,7 @@ public sealed interface NumberExpr {
             buf.writeNullable(l.fallback, NumberExpr::write);
         } else if (this instanceof Fn f) {
             buf.writeByte(4);
-            buf.writeResourceLocation(f.id);
+            buf.writeIdentifier(f.id);
             encodeList(buf, f.args);
         } else if (this instanceof Cond c) {
             buf.writeByte(5);
@@ -383,9 +383,9 @@ public sealed interface NumberExpr {
         return switch (tag) {
             case 0 -> new Const(buf.readDouble());
             case 1 -> new Range(buf.readNullable(NumberExpr::decode), buf.readNullable(NumberExpr::decode), buf.readBoolean(), buf.readBoolean());
-            case 2 -> new Var(buf.readResourceLocation(), NumberText.decodeList(buf), buf.readDouble(), buf.readDouble());
+            case 2 -> new Var(buf.readIdentifier(), NumberText.decodeList(buf), buf.readDouble(), buf.readDouble());
             case 3 -> new Lookup(decode(buf), decodeList(buf), buf.readNullable(NumberExpr::decode));
-            case 4 -> new Fn(buf.readResourceLocation(), decodeList(buf));
+            case 4 -> new Fn(buf.readIdentifier(), decodeList(buf));
             case 5 -> {
                 int size = buf.readVarInt();
                 List<Branch> branches = new ArrayList<>(size);

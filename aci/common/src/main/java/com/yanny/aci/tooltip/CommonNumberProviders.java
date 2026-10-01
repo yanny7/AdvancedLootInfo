@@ -61,7 +61,7 @@ public class CommonNumberProviders<
     @NotNull
     private NumberExpr getWeightedListInt(TServerUtils utils, WeightedListInt provider) {
         return NumberExpr.weighted(provider.distribution.unwrap().stream()
-                .map((e) -> new NumberExpr.WeightedEntry(e.getWeight().asInt(), utils.convertIntProvider(utils, e.data())))
+                .map((e) -> new NumberExpr.WeightedEntry(e.weight(), utils.convertIntProvider(utils, e.value())))
                 .toList());
     }
 

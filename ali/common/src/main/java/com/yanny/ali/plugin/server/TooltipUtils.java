@@ -45,9 +45,9 @@ import java.util.*;
 import java.util.function.Function;
 
 public class TooltipUtils {
-    public static final ResourceLocation LUCK = Utils.modLoc("luck");
-    public static final ResourceLocation STORAGE = Utils.modLoc("storage");
-    public static final ResourceLocation ENCHANTMENT_LEVEL = Utils.modLoc("enchantment_level");
+    public static final Identifier LUCK = Utils.modLoc("luck");
+    public static final Identifier STORAGE = Utils.modLoc("storage");
+    public static final Identifier ENCHANTMENT_LEVEL = Utils.modLoc("enchantment_level");
 
     public static ItemStack getItemStack(IServerUtils utils, ItemStack itemStack, List<LootItemFunction> functions) {
         for (LootItemFunction function : functions) {
@@ -138,7 +138,7 @@ public class TooltipUtils {
 
     @NotNull
     public static NumberExpr level(Holder<Enchantment> enchantment) {
-        String id = enchantment.unwrapKey().map((key) -> key.location().toString()).orElse("?");
+        String id = enchantment.unwrapKey().map((key) -> key.identifier().toString()).orElse("?");
 
         return NumberExpr.level(id, enchantment.value().getMaxLevel());
     }

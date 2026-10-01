@@ -4,7 +4,7 @@ import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.Utils;
 import com.yanny.aci.api.*;
 import com.yanny.aci.language.CoreLang;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -117,7 +117,7 @@ public final class NumberFormatter {
     }
 
     @NotNull
-    public static String varKey(ResourceLocation type) {
+    public static String varKey(Identifier type) {
         return type.getNamespace() + ".number.var." + type.getPath();
     }
 

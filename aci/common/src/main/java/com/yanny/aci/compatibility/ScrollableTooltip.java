@@ -1,7 +1,7 @@
 package com.yanny.aci.compatibility;
 
 import com.yanny.aci.tooltip.TooltipLine;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -108,18 +108,18 @@ public class ScrollableTooltip implements TooltipComponent, ClientTooltipCompone
     }
 
     @Override
-    public int getHeight() {
-        return getVisibleLines() * LINE_HEIGHT;
+    public int getHeight(Font font) {
+        return getVisibleLines(font) * LINE_HEIGHT;
     }
 
     @Override
     public int getWidth(Font font) {
-        return getVisibleLines() < totalLines ? contentWidth + SCROLLBAR_GAP + SCROLLBAR_WIDTH : contentWidth;
+        return getVisibleLines(font) < totalLines ? contentWidth + SCROLLBAR_GAP + SCROLLBAR_WIDTH : contentWidth;
     }
 
     @Override
-    public void renderImage(Font font, int x, int y, GuiGraphics guiGraphics) {
-        int visible = getVisibleLines();
+    public void renderImage(Font font, int x, int y, int ignoredWidth, int ignoredHeight, GuiGraphics guiGraphics) {
+        int visible = getVisibleLines(font);
         long now = Util.getMillis();
 
         if (now - lastRender > ACTIVE_MILLIS || !lines.equals(activeLines)) {
@@ -258,18 +258,18 @@ public class ScrollableTooltip implements TooltipComponent, ClientTooltipCompone
         return Math.max(columns * chart.columnWidth(), font.width(series.min()) + LABEL_GAP + font.width(series.max()));
     }
 
-    private int getVisibleLines() {
+    private int getVisibleLines(Font font) {
         int screenHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
 
-        return Math.min(totalLines, Math.max(1, (screenHeight - SCREEN_MARGIN - getOtherComponentsHeight()) / LINE_HEIGHT));
+        return Math.min(totalLines, Math.max(1, (screenHeight - SCREEN_MARGIN - getOtherComponentsHeight(font)) / LINE_HEIGHT));
     }
 
-    private int getOtherComponentsHeight() {
+    private int getOtherComponentsHeight(Font font) {
         int height = 0;
 
         for (ClientTooltipComponent component : renderedComponents) {
             if (component != this) {
-                height += component.getHeight();
+                height += component.getHeight(font);
             }
         }
 

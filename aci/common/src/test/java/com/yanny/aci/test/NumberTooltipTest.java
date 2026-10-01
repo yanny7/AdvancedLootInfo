@@ -20,7 +20,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.contents.TranslatableContents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.StringDecomposer;
 import org.jetbrains.annotations.NotNull;
@@ -45,7 +45,7 @@ public class NumberTooltipTest {
     private static final String CONDITION = "test.condition";
     private static final Var LOOTING = level("minecraft:looting", 3);
     private static final Var FORTUNE = level("minecraft:fortune", 3);
-    private static final ResourceLocation BOOM = ResourceLocation.fromNamespaceAndPath("aci_test", "boom");
+    private static final Identifier BOOM = Identifier.fromNamespaceAndPath("aci_test", "boom");
     private static final NumberOptions TEXT = NumberOptions.DEFAULT;
     private static final NumberOptions FORMULAS = new NumberOptions(true, false, Locale.ROOT);
     private static final NumberOptions CHARTS = new NumberOptions(false, true, Locale.ROOT);

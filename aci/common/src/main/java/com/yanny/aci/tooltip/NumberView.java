@@ -12,7 +12,7 @@ import com.yanny.aci.number.NumberFormatter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -275,7 +275,7 @@ final class NumberView {
     @NotNull
     private static NumberText enchantmentName(NumberExpr.Var var) {
         if (!var.args().isEmpty() && var.args().get(0) instanceof NumberText.Str s) {
-            ResourceLocation id = ResourceLocation.tryParse(s.text());
+            Identifier id = Identifier.tryParse(s.text());
 
             if (id != null) {
                 return NumberText.key("enchantment." + id.getNamespace() + "." + id.getPath());

@@ -65,7 +65,7 @@ public class SlotSourceTooltipTest {
         assertTooltip(SlotSourceTooltipUtils.getFilteredTooltip(UTILS, new FilteredSlotSource(new EmptySlotSource(), ItemPredicate.Builder.item().withCount(MinMaxBounds.Ints.atLeast(3)).build())).build(), List.of(
                 "Filtered:",
                 "  -> Filter:",
-                "    -> Count: ≥3",
+                "    -> Count: ≥ 3",
                 "  -> Slot Source:",
                 "    -> Empty Slot"
         ));

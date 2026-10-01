@@ -4,7 +4,7 @@ import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.api.NumberMode;
 import com.yanny.awi.plugin.server.summary.ColumnContext;
-import net.minecraft.util.random.SimpleWeightedRandomList;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.util.valueproviders.*;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.heightproviders.BiasedToBottomHeight;
@@ -34,7 +34,7 @@ public class ValueCharacterizationTest {
 
     @Test
     public void testWeightedListInt() {
-        SimpleWeightedRandomList<IntProvider> distribution = SimpleWeightedRandomList.<IntProvider>builder()
+        WeightedList<IntProvider> distribution = WeightedList.<IntProvider>builder()
                 .add(ConstantInt.of(1), 9)
                 .add(ConstantInt.of(2), 1)
                 .build();

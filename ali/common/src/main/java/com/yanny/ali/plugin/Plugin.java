@@ -174,6 +174,7 @@ public class Plugin implements IPlugin {
         registry.registerLevelBasedValue(LevelBasedValue.Fraction.class, Plugin::convertLevelFraction);
         registry.registerLevelBasedValue(LevelBasedValue.Clamped.class, Plugin::convertLevelClamped);
         registry.registerLevelBasedValue(LevelBasedValue.Lookup.class, Plugin::convertLevelLookup);
+        registry.registerLevelBasedValue(LevelBasedValue.Exponent.class, Plugin::convertLevelExponent);
 
         registry.registerEntry(LootItem.class, NodeUtils::getItemNode);
         registry.registerEntry(TagEntry.class, NodeUtils::getTagNode);
@@ -673,6 +674,8 @@ public class Plugin implements IPlugin {
             case ATTACKER -> CoreLang.Numbers.TARGET_KILLER;
             case DIRECT_ATTACKER -> CoreLang.Numbers.TARGET_DIRECT_KILLER;
             case ATTACKING_PLAYER -> CoreLang.Numbers.TARGET_KILLER_PLAYER;
+            case TARGET_ENTITY -> CoreLang.Numbers.TARGET_TARGET_ENTITY;
+            case INTERACTING_ENTITY -> CoreLang.Numbers.TARGET_INTERACTING_ENTITY;
         };
     }
 
@@ -717,6 +720,11 @@ public class Plugin implements IPlugin {
     @NotNull
     private static NumberExpr convertLevelClamped(IServerUtils utils, LevelBasedValue.Clamped value, NumberExpr level) {
         return NumberExpr.clamp(utils.convertLevelBasedValue(utils, value.value(), level), NumberExpr.constant(value.min()), NumberExpr.constant(value.max()));
+    }
+
+    @NotNull
+    private static NumberExpr convertLevelExponent(IServerUtils utils, LevelBasedValue.Exponent value, NumberExpr level) {
+        return NumberExpr.fn(NumberFunctions.POW, utils.convertLevelBasedValue(utils, value.base(), level), utils.convertLevelBasedValue(utils, value.power(), level));
     }
 
     @NotNull

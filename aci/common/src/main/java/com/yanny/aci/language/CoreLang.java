@@ -97,6 +97,8 @@ public final class CoreLang {
         TARGET_KILLER("target.killer", "killer"),
         TARGET_DIRECT_KILLER("target.direct_killer", "direct_killer"),
         TARGET_KILLER_PLAYER("target.killer_player", "killer_player"),
+        TARGET_TARGET_ENTITY("target.target_entity", "target_entity"),
+        TARGET_INTERACTING_ENTITY("target.interacting_entity", "interacting_entity"),
         ;
 
         public static final String PREFIX = "aci.number.";

@@ -1,6 +1,6 @@
 package com.yanny.aci.api;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,7 +33,7 @@ public interface NumberFunction {
     }
 
     @NotNull
-    ResourceLocation id();
+    Identifier id();
 
     default int minArity() {
         return 0;
@@ -88,17 +88,17 @@ public interface NumberFunction {
     }
 
     @NotNull
-    static String translationKey(ResourceLocation id) {
+    static String translationKey(Identifier id) {
         return id.getNamespace() + ".number.fn." + id.getPath();
     }
 
     @NotNull
-    static Builder builder(ResourceLocation id) {
+    static Builder builder(Identifier id) {
         return new Builder(id);
     }
 
     final class Builder {
-        private final ResourceLocation id;
+        private final Identifier id;
         private int minArity = 0;
         private int maxArity = Integer.MAX_VALUE;
         @Nullable
@@ -118,7 +118,7 @@ public interface NumberFunction {
         @Nullable
         private BiFunction<List<NumberExpr>, List<NumberText>, NumberText> format;
 
-        private Builder(ResourceLocation id) {
+        private Builder(Identifier id) {
             this.id = Objects.requireNonNull(id);
         }
 
@@ -208,7 +208,7 @@ public interface NumberFunction {
 
         @NotNull
         @Override
-        public ResourceLocation id() {
+        public Identifier id() {
             return b.id;
         }
 

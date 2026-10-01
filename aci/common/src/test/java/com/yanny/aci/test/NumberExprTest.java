@@ -5,7 +5,7 @@ import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.number.NumberFormatter;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -18,12 +18,12 @@ public class NumberExprTest {
     private static final Var LOOTING = level("minecraft:looting", 3);
     private static final Var FORTUNE = level("minecraft:fortune", 3);
 
-    private static final ResourceLocation BIASED_HEIGHT = test("biased_height");
-    private static final ResourceLocation VERY_BIASED_HEIGHT = test("very_biased_height");
-    private static final ResourceLocation VERY_BIASED_INT = test("very_biased_int");
-    private static final ResourceLocation TRAPEZOID_INT = test("trapezoid_int");
-    private static final ResourceLocation DICE = test("dice");
-    private static final ResourceLocation LOG = test("log");
+    private static final Identifier BIASED_HEIGHT = test("biased_height");
+    private static final Identifier VERY_BIASED_HEIGHT = test("very_biased_height");
+    private static final Identifier VERY_BIASED_INT = test("very_biased_int");
+    private static final Identifier TRAPEZOID_INT = test("trapezoid_int");
+    private static final Identifier DICE = test("dice");
+    private static final Identifier LOG = test("log");
     private static final Map<String, String> TEST_TRANSLATIONS = new HashMap<>();
 
     static {
@@ -438,7 +438,7 @@ public class NumberExprTest {
         return add(min, uniformInt(0, k - l), uniformInt(0, l));
     }
 
-    private static NumberText call(ResourceLocation id, List<NumberText> args) {
+    private static NumberText call(Identifier id, List<NumberText> args) {
         List<NumberText> parts = new ArrayList<>();
 
         parts.add(NumberText.key(NumberFunction.translationKey(id)));
@@ -456,8 +456,8 @@ public class NumberExprTest {
         return NumberText.seq(parts);
     }
 
-    private static ResourceLocation test(String path) {
-        return ResourceLocation.fromNamespaceAndPath("test", path);
+    private static Identifier test(String path) {
+        return Identifier.fromNamespaceAndPath("test", path);
     }
 
     private static NumberExpr roundTrip(NumberExpr expr) {
