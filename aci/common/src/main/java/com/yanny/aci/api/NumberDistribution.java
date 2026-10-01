@@ -489,6 +489,7 @@ public final class NumberDistribution {
             return Optional.empty();
         }
 
+        boolean integers = atoms.keySet().stream().allMatch((k) -> k == Math.rint(k));
         double first = 0;
         double last = 0;
         boolean started = false;
@@ -497,7 +498,7 @@ public final class NumberDistribution {
         for (Map.Entry<Double, Double> entry : atoms.entrySet()) {
             boolean best = max - entry.getValue() <= TIE * max;
 
-            if (best && ended) {
+            if (best && (ended || (started && integers && entry.getKey() - last > 1))) {
                 return Optional.empty();
             }
             if (best) {
