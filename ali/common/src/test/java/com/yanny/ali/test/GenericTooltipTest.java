@@ -3,6 +3,7 @@ package com.yanny.ali.test;
 import com.mojang.authlib.properties.Property;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.yanny.aci.api.NumberExpr;
+import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.TooltipUtils;
@@ -17,6 +18,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.*;
@@ -53,6 +55,7 @@ import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.LinkedHashMap;
@@ -63,6 +66,7 @@ import java.util.Optional;
 import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
+import static org.mockito.Mockito.*;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 
 public class GenericTooltipTest {
@@ -1001,12 +1005,26 @@ public class GenericTooltipTest {
 
     @Test
     public void testLevelBasedValueTooltip() {
-        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(UTILS, LevelBasedValue.constant(2.5F)).build(Lang.Value.CHANCE), List.of("Chance: 2.5"));
-        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(UTILS, new LevelBasedValue.Clamped(LevelBasedValue.constant(2.5F), 0.5F, 5F)).build(Lang.Value.CHANCE), List.of("Chance: 2.5"));
-        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(UTILS, new LevelBasedValue.Fraction(LevelBasedValue.constant(2), LevelBasedValue.constant(3))).build(Lang.Value.CHANCE), List.of("Chance: 0.67"));
-        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(UTILS, new LevelBasedValue.Linear(0.5F, 5F)).build(Lang.Value.CHANCE), List.of("Chance: 0.5 to 1270.5 (enchantment level)"));
-        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(UTILS, new LevelBasedValue.LevelsSquared(0.5F)).build(Lang.Value.CHANCE), List.of("Chance: 1.5 to 65025.5 (enchantment level)"));
-        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(UTILS, new LevelBasedValue.Lookup(List.of(0.5F, 1.5F, 2.5F), LevelBasedValue.constant(3.3F))).build(Lang.Value.CHANCE), List.of("Chance: 0.5 to 3.3 (enchantment level)"));
+        IServerUtils utils = enchantmentUtils();
+
+        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, LevelBasedValue.constant(2.5F)).build(Lang.Value.CHANCE), List.of("Chance: 2.5"));
+        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, new LevelBasedValue.Clamped(LevelBasedValue.constant(2.5F), 0.5F, 5F)).build(Lang.Value.CHANCE), List.of("Chance: 2.5"));
+        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, new LevelBasedValue.Fraction(LevelBasedValue.constant(2), LevelBasedValue.constant(3))).build(Lang.Value.CHANCE), List.of("Chance: 0.67"));
+        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, new LevelBasedValue.Linear(0.5F, 5F)).build(Lang.Value.CHANCE), List.of("Chance: 0.5 to 20.5 (enchantment level)"));
+        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, new LevelBasedValue.LevelsSquared(0.5F)).build(Lang.Value.CHANCE), List.of("Chance: 1.5 to 25.5 (enchantment level)"));
+        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, new LevelBasedValue.Lookup(List.of(0.5F, 1.5F, 2.5F), LevelBasedValue.constant(3.3F))).build(Lang.Value.CHANCE), List.of("Chance: 0.5 to 3.3 (enchantment level)"));
+    }
+
+    @NotNull
+    private static IServerUtils enchantmentUtils() {
+        RegistryAccess registryAccess = mock(RegistryAccess.class);
+        ServerLevel level = mock(ServerLevel.class);
+        IServerUtils utils = spy(UTILS);
+
+        doReturn(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT)).when(registryAccess).lookupOrThrow(Registries.ENCHANTMENT);
+        doReturn(registryAccess).when(level).registryAccess();
+        doReturn(level).when(utils).getServerLevel();
+        return utils;
     }
 
     @Test

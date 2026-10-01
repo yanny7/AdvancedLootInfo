@@ -626,7 +626,7 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getLevelBasedValueTooltip(IServerUtils utils, LevelBasedValue levelBasedValue) {
-        return TooltipBuilder.number(utils.convertLevelBasedValue(utils, levelBasedValue, TooltipUtils.anyEnchantmentLevel()));
+        return TooltipBuilder.number(utils.convertLevelBasedValue(utils, levelBasedValue, TooltipUtils.anyEnchantmentLevel(utils)));
     }
 
     @NotNull

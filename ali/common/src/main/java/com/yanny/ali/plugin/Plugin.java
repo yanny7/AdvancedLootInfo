@@ -613,7 +613,7 @@ public class Plugin implements IPlugin {
 
     @NotNull
     private static NumberExpr convertEnchantmentLevel(IServerUtils utils, EnchantmentLevelProvider numberProvider) {
-        return utils.convertLevelBasedValue(utils, numberProvider.amount(), TooltipUtils.anyEnchantmentLevel());
+        return utils.convertLevelBasedValue(utils, numberProvider.amount(), TooltipUtils.anyEnchantmentLevel(utils));
     }
 
     @NotNull

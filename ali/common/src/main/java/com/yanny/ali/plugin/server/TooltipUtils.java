@@ -143,8 +143,13 @@ public class TooltipUtils {
     }
 
     @NotNull
-    public static NumberExpr anyEnchantmentLevel() {
-        return new NumberExpr.Var(ENCHANTMENT_LEVEL, List.of(), 1, 255);
+    public static NumberExpr anyEnchantmentLevel(IServerUtils utils) {
+        int maxLevel = utils.getServerLevel().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).listElements()
+                .mapToInt((holder) -> holder.value().getMaxLevel())
+                .max()
+                .orElse(1);
+
+        return new NumberExpr.Var(ENCHANTMENT_LEVEL, List.of(), 1, maxLevel);
     }
 
     @NotNull
