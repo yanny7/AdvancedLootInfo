@@ -30,6 +30,7 @@ import java.util.List;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 public class ServerUtilsTest {
     @Test
@@ -128,6 +129,28 @@ public class ServerUtilsTest {
     }
 
     @Test
+    public void testFailingItemStackModifierKeepsStack() {
+        PluginManager.getInstance().serverRegistry.registerItemStackModifier(BrokenItemFunction.class, (u, f, i) -> {
+            throw new IllegalStateException("broken modifier");
+        });
+
+        ItemStack stack = new ItemStack(Items.STONE);
+
+        assertSame(stack, UTILS.applyItemStackModifier(UTILS, new BrokenItemFunction(), stack));
+    }
+
+    @Test
+    public void testFailingUnwrapperKeepsWrapper() {
+        BrokenWrapperCondition condition = new BrokenWrapperCondition();
+
+        PluginManager.getInstance().serverRegistry.registerConditionUnwrapper(BrokenWrapperCondition.class, (u, c) -> {
+            throw new IllegalStateException("broken unwrapper");
+        });
+
+        assertEquals(List.of(condition), UTILS.unwrapCondition(UTILS, condition));
+    }
+
+    @Test
     public void testFailingCountModifierGivesOpaque() {
         PluginManager.getInstance().serverRegistry.registerCountModifier(BrokenFunction.class, (u, f, c) -> {
             throw new IllegalStateException("broken modifier");
@@ -143,6 +166,32 @@ public class ServerUtilsTest {
         });
 
         assertEquals(NumberExpr.opaque("minecraft:unknown"), UTILS.applyChanceModifier(UTILS, new BrokenCondition(), NumberExpr.constant(1)));
+    }
+
+    private record BrokenItemFunction() implements LootItemFunction {
+        @NotNull
+        @Override
+        public LootItemFunctionType getType() {
+            return LootFunctionTypes.UNUSED;
+        }
+
+        @Override
+        public ItemStack apply(ItemStack itemStack, LootContext lootContext) {
+            return itemStack;
+        }
+    }
+
+    private record BrokenWrapperCondition() implements LootItemCondition {
+        @NotNull
+        @Override
+        public LootItemConditionType getType() {
+            return LootConditionTypes.UNUSED;
+        }
+
+        @Override
+        public boolean test(LootContext lootContext) {
+            return true;
+        }
     }
 
     private record BrokenFunction() implements LootItemFunction {

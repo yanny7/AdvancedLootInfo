@@ -321,7 +321,7 @@ subprojects {
                 }
             }
 
-            inputs.property "version", project.version
+            inputs.properties project.ext.expandProps
 
             filesMatching(["fabric.mod.json", "META-INF/mods.toml", "pack.mcmeta"]) {
                 expand project.ext.expandProps

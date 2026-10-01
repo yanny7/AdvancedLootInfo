@@ -384,9 +384,14 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
         for (LootItemFunction f : unwrapFunction(utils, function)) {
             ItemStack stack = result;
-            result = itemStackModifiers.get(f.getClass())
-                    .map((m) -> m.apply(utils, f, stack))
-                    .orElse(stack);
+
+            try {
+                result = itemStackModifiers.get(f.getClass())
+                        .map((m) -> m.apply(utils, f, stack))
+                        .orElse(stack);
+            } catch (Throwable e) {
+                LOGGER.warn("Failed to apply item stack modifier {}: {}", BuiltInRegistries.LOOT_FUNCTION_TYPE.getKey(f.getType()), e.getMessage(), e);
+            }
         }
 
         return result;
@@ -581,7 +586,14 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
             return;
         }
 
-        List<T> inner = unwrappers.get(value.getClass()).map((u) -> u.apply(utils, value)).orElse(null);
+        List<T> inner;
+
+        try {
+            inner = unwrappers.get(value.getClass()).map((u) -> u.apply(utils, value)).orElse(null);
+        } catch (Throwable e) {
+            LOGGER.warn("Failed to unwrap {}: {}", ManagedRegistry.classKeyName(value.getClass()), e.getMessage(), e);
+            inner = null;
+        }
 
         if (inner != null) {
             inner.forEach((i) -> unwrap(utils, i, unwrappers, visiting, result));

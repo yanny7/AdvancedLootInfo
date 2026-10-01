@@ -2,6 +2,7 @@
 
 - Scrollable tooltip by mouse wheel when taller than screen
 - Counts and chances show most likely value, level rows, charts (`showCharts`) and formulas (F3+H)
+- Broken loot function or condition support from other mods no longer hides the whole loot table
 
 ## [2.3.0]
 
