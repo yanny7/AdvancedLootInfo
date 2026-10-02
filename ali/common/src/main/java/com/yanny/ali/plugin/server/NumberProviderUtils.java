@@ -4,6 +4,8 @@ import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberFunctions;
 import com.yanny.aci.api.NumberText;
 import com.yanny.aci.language.CoreLang;
+import com.yanny.aci.language.ITooltipKey;
+import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -121,6 +123,11 @@ public class NumberProviderUtils {
     public static NumberExpr storage(StoredNumberAccess access) {
         return new NumberExpr.Var(TooltipUtils.STORAGE, List.of(NumberText.str(access.storage().toString()), NumberText.str(access.path().toString())),
                 Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+    }
+
+    @NotNull
+    public static NumberExpr withFallback(IServerUtils utils, NumberExpr value, ITooltipKey existsKey, NumberExpr fallback) {
+        return NumberExpr.cond(List.of(new NumberExpr.Branch(utils.addNumberCondition(TooltipBuilder.keyOnly(existsKey).build()), value)), fallback);
     }
 
     @NotNull

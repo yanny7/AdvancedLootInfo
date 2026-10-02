@@ -18,5 +18,3 @@ Guidance for `aci/fabric` (`com.yanny.aci.fabric`) — ACI's Fabric loader wrapp
 ## Gotchas
 
 Fabric datagen initialises the `fabric-datagen` entrypoint of **every** loaded mod, not only the one named by `-Dfabric-api.datagen.modid`. A broken or missing `DataGeneration` class here therefore breaks `:ali:fabric:runDatagen` and `:awi:fabric:runDatagen` too, not just ACI's own.
-
-Loom caches remapped mod dependencies under `.gradle/loom-cache/remapped_mods/<mappings>/com/yanny/aci/fabric/<version>/`, keyed on version. Because `aci_version` does not move during development, a dev run keeps loading the first copy ever remapped: edit `aci/common`, rebuild, and `:ali:fabric:runDatagen` still fails with a `ClassNotFoundException` or `NoSuchMethodError` for code that is demonstrably in the built jar. Clear it with `rm -rf .gradle/loom-cache/remapped_mods/*/com/yanny/aci` after any ACI change a dev run must see.

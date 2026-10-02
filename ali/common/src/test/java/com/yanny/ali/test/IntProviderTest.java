@@ -51,14 +51,14 @@ public class IntProviderTest {
 
     @Test
     public void testScore() {
-        assertValue(ContextIntProviders.fromScoreboard(LootContext.EntityTarget.THIS, "objective"), "Value: any (score \"objective\" (this))");
+        assertValue(ContextIntProviders.fromScoreboard(LootContext.EntityTarget.THIS, "objective"), "Value: ", "  -> any (score \"objective\" (this))", "    -> Score Exists", "  -> otherwise 0");
     }
 
     @Test
     public void testStorage() throws CommandSyntaxException {
         StoredNumberAccess access = new StoredNumberAccess(Identifier.withDefaultNamespace("test"), new NbtPathArgument().parse(new StringReader("value")));
 
-        assertValue(Holder.direct(new StorageValue(access, ContextIntProviders.exactly(1))), "Value: any (storage \"value\" (minecraft:test))");
+        assertValue(Holder.direct(new StorageValue(access, ContextIntProviders.exactly(1))), "Value: ", "  -> any (storage \"value\" (minecraft:test))", "    -> Storage Value Exists", "  -> otherwise 1");
     }
 
     @Test

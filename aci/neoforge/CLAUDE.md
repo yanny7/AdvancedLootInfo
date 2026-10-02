@@ -14,5 +14,3 @@ Guidance for `aci/neoforge` (`com.yanny.aci.neoforge`) — ACI's NeoForge loader
 `aci.accesswidener` reaches NeoForge the way `ali.accesswidener` does (see `ali/neoforge/CLAUDE.md`): `loom.accessWidenerPath` points at `aci/common`'s file and `neoForge { convertAccessWideners(tasks.named("shadowJar"), "aci.accesswidener") }` turns it into `META-INF/accesstransformer.cfg` during `shadowJar`, so nothing here is hand-maintained.
 
 `aci/neoforge/src/main/generated/assets/aci/lang/en_us.json` is byte-identical to `aci/forge`'s, and `runData` hangs after writing it (same as Forge) — copying the Forge file is the practical way to refresh it.
-
-The stale-loom-cache trap documented in `aci/fabric/CLAUDE.md` applies to the NeoForge dev runtime too: `modImplementation project(":aci:neoforge")` is cached under `.gradle/loom-cache/remapped_mods/*/com/yanny/aci/neoforge/<version>/` and `aci_version` does not move during development.

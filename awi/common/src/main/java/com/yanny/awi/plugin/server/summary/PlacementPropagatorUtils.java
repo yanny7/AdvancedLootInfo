@@ -21,17 +21,17 @@ public class PlacementPropagatorUtils {
 
     @NotNull
     public static PlacementContribution getCountOnEveryLayerPlacement(IServerUtils utils, CountOnEveryLayerPlacement placement, ColumnContext ignoredCtx) {
-        return worldDependentCount(utils, placement);
+        return opaqueCount(utils, placement);
     }
 
     @NotNull
     public static PlacementContribution getNoiseBasedCountPlacement(IServerUtils utils, NoiseBasedCountPlacement placement, ColumnContext ignoredCtx) {
-        return worldDependentCount(utils, placement);
+        return opaqueCount(utils, placement);
     }
 
     @NotNull
     public static PlacementContribution getNoiseThresholdCountPlacement(IServerUtils utils, NoiseThresholdCountPlacement placement, ColumnContext ignoredCtx) {
-        return worldDependentCount(utils, placement);
+        return opaqueCount(utils, placement);
     }
 
     @NotNull
@@ -53,7 +53,7 @@ public class PlacementPropagatorUtils {
         List<HeightSpan> heights = contributions.stream().map(PlacementContribution::height).filter(Objects::nonNull).toList();
         HeightSpan height = null;
 
-        if (heights.size() == 1) {
+        if (contributions.size() == 1 && heights.size() == 1) {
             height = heights.getFirst();
         } else if (heights.size() == contributions.size() && heights.stream().allMatch((h) -> h.height() != null)) {
             height = HeightSpan.of(NumberExpr.weighted(heights.stream().map((h) -> new NumberExpr.WeightedEntry(1, h.height())).toList()));
@@ -95,11 +95,6 @@ public class PlacementPropagatorUtils {
 
     @NotNull
     public static PlacementContribution getFixedPlacement(IServerUtils utils, FixedPlacement placement, ColumnContext ignoredCtx) {
-        return worldDependentCount(utils, placement);
-    }
-
-    @NotNull
-    private static <T extends PlacementModifier> PlacementContribution worldDependentCount(IServerUtils utils, T placement) {
         return opaqueCount(utils, placement);
     }
 

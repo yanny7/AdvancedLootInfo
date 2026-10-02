@@ -4,6 +4,7 @@ import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberFunctions;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.language.Lang;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.storage.loot.providers.number.ints.*;
 import org.jetbrains.annotations.NotNull;
@@ -57,12 +58,14 @@ public class IntProviderUtils {
 
     @NotNull
     public static NumberExpr convertScore(IServerUtils utils, ScoreboardValue provider) {
-        return NumberProviderUtils.score(provider.target(), provider.score());
+        return NumberProviderUtils.withFallback(utils, NumberProviderUtils.score(provider.target(), provider.score()), Lang.Numbers.SCORE_EXISTS, convert(utils, provider.fallback()));
     }
 
     @NotNull
     public static NumberExpr convertStorage(IServerUtils utils, StorageValue provider) {
-        return NumberExpr.fn(NumberFunctions.TRUNC, NumberProviderUtils.storage(provider.access()));
+        NumberExpr value = NumberExpr.fn(NumberFunctions.TRUNC, NumberProviderUtils.storage(provider.access()));
+
+        return NumberProviderUtils.withFallback(utils, value, Lang.Numbers.STORAGE_VALUE_EXISTS, convert(utils, provider.fallback()));
     }
 
     @NotNull

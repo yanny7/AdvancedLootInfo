@@ -145,7 +145,7 @@ The three lines at the top of a `PlacedFeatureNode`'s tooltip — attempts per c
 
 Dispatch goes through two exact-class registries on `AwiServerRegistry`, fed from `Plugin.registerServer` and open to plugins through `IServerRegistry`: `registerPlacementPropagator` (per `PlacementModifier` → `PlacementContribution`, the main extension point) and `registerHeightProvider` (per `HeightProvider` → `NumberExpr`, through `HeightConverter`). A count sub-provider goes through ACI's `convertIntProvider`. A `PlacementContribution` fills **at most one** of the three axes; a filter/scan/spread modifier returns `EMPTY`. `PlacementPropagator`/`HeightConverter` are named interfaces rather than `BiFunction` only because they take the `ColumnContext` as a third argument.
 
-`RandomlySelectedPlacement` runs one of its modifiers, picked uniformly, so each axis becomes an equally `Weighted` choice between what they contribute (a modifier without that axis counts as `1`); heights that cannot be weighted that way are `Opaque`.
+`RandomlySelectedPlacement` runs one of its modifiers, picked uniformly, so each axis becomes an equally `Weighted` choice between what they contribute (a modifier without that axis counts as `1`). A modifier without a height keeps the incoming Y, so the height is weighted only when every modifier sets an absolute one, and is `Opaque` otherwise.
 
 Merging mirrors vanilla's own semantics and is order-sensitive: the **first** count and the **first** height win (a later modifier of the same axis does not override), while chances **compound** (`p1 × p2`; the chance is a fraction, rendered as a percent). Changing that to "last wins" or "narrowest wins" would not match how the modifier list is actually applied during generation.
 

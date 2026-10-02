@@ -76,7 +76,7 @@ Each mod (`ali/`, `awi/`, `aci/`) follows the same subproject pattern:
 
 `alicompat` has `common` + the loader modules too, plus one extra source set per target mod (`<loader>/src/compat/<slug>/`) — see `alicompat/CLAUDE.md`.
 
-`aci` has only `common` + the loader modules — no viewer or compat subprojects, since it registers nothing with a recipe viewer. Its loader modules carry no mod logic at all (no mixins, no platform-service implementation); they exist to shadow `aci:common` into a loadable jar and to ship `aci.accesswidener` (see `aci/CLAUDE.md`). `ali:common`/`awi:common` compile against `aci:common` directly (`configuration: "namedElements"`), while the ALI/AWI loader modules take `modImplementation project(":aci:<loader>")` for the runtime — `aci:common` is deliberately **not** in their `commonProjects` list, so `com.yanny.aci.*` is not duplicated inside their jars.
+`aci` has only `common` + the loader modules — no viewer or compat subprojects, since it registers nothing with a recipe viewer. Its loader modules carry no mod logic at all (no mixins, no platform-service implementation); they exist to shadow `aci:common` into a loadable jar and to ship `aci.accesswidener` (see `aci/CLAUDE.md`). `ali:common`/`awi:common` compile against `aci:common` directly (`implementation project(":aci:common")`). The ALI/AWI/ALICompat loader modules take it through architectury's `common` configuration (compile and dev classpath, never `shadowCommon`) plus `runtimeOnly project(":aci:<loader>")` for the runtime — `aci:common` is deliberately **not** in their `commonProjects` list, so `com.yanny.aci.*` is not duplicated inside their jars.
 
 Which optional subprojects get included is controlled entirely by `settings.gradle` reading flags from `gradle.properties` (e.g. `emi_enabled`, `jei_enabled`, `rei_enabled`, `lootjs_enabled`, `fabric_enabled`, `forge_enabled`, `neoforge_enabled`). A loader is enabled only when it is listed in `enabled_platforms` **and** its `<loader>_enabled` is `true` — `enabled_platforms` may keep naming a loader a branch no longer builds, and the python scripts and generated run configurations below follow the same rule. The root `build.gradle` further gates per-project availability with `<platform>_<viewer>_enabled` properties and wires in the correct `commonProjects` dependency list for each loader module.
 
@@ -119,10 +119,6 @@ Build/work on a single mod or module:
 ./gradlew :aci:forge:build
 ./gradlew :aci:neoforge:build
 ```
-
-On a checkout with no `aci/<loader>/build/libs/` jar yet, **every** Gradle invocation fails while configuring `:ali:fabric` with `NoSuchFileException: aci/fabric/build/libs/AdvancedCoreInfo-fabric-<version>.jar` — `modImplementation project(":aci:<loader>")` resolves at configuration time. `--configure-on-demand` does not help (loom then fails with `Cannot get MappingsProvider before it has been setup`). Bootstrap it by commenting out the six `modImplementation project(":aci:<loader>")` lines in the ALI/AWI loader build scripts, building the three `:aci:<loader>:build` targets, then restoring them.
-
-After editing `aci`, a dev run may keep loading a stale copy: loom caches remapped mod dependencies keyed on version, and `aci_version` does not move during development. Clear it with `rm -rf .gradle/loom-cache/remapped_mods/*/com/yanny/aci`.
 
 Run the game (client) with a given loader/viewer combination — generated per-platform tasks follow the pattern `run<Ali|Awi><Fabric|Forge|NeoForge><Emi|Jei|Rei>Client`:
 ```

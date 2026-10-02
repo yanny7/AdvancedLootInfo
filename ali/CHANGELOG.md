@@ -9,6 +9,8 @@
 - Sum and environment attribute number providers show their value instead of unknown
 - Number provider operations show their value instead of unknown, conditional and dispatched values show each branch with its condition
 - Enchantment level based values show as one number with level rows instead of a structure tree
+- Scoreboard and storage number providers show their fallback value
+- Trade prices, uses, experience and offer counts show the conditions of their conditional values
 
 ## [2.3.0]
 

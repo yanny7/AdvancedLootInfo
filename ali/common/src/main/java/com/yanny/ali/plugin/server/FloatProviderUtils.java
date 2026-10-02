@@ -4,6 +4,7 @@ import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberFunctions;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.language.Lang;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.loot.providers.number.UnaryProvider;
@@ -61,7 +62,7 @@ public class FloatProviderUtils {
 
     @NotNull
     public static NumberExpr convertStorage(IServerUtils utils, StorageValue provider) {
-        return NumberProviderUtils.storage(provider.access());
+        return NumberProviderUtils.withFallback(utils, NumberProviderUtils.storage(provider.access()), Lang.Numbers.STORAGE_VALUE_EXISTS, convert(utils, provider.fallback()));
     }
 
     @NotNull

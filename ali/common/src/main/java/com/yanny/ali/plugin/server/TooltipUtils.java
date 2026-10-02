@@ -472,6 +472,14 @@ public class TooltipUtils {
     }
 
     @NotNull
+    public static TooltipBuilder getNumberTooltip(LootCount number) {
+        TooltipBuilder builder = TooltipBuilder.number(number.value());
+
+        number.conditions().forEach(builder::add);
+        return builder;
+    }
+
+    @NotNull
     public static TooltipBuilder getNumberTooltip(IServerUtils utils, Supplier<NumberExpr> conversion) {
         return getNumberTooltip(utils, conversion, false);
     }

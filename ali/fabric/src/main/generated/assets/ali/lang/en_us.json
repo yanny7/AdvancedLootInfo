@@ -135,6 +135,8 @@
   "ali.enum.tropical_fish_pattern.sunstreak": "Sunstreak",
   "ali.error.detail_not_available": "Detail Not Available",
   "ali.error.modified_item": "Modified dynamically!",
+  "ali.number.score_exists": "Score Exists",
+  "ali.number.storage_value_exists": "Storage Value Exists",
   "ali.number.var.enchantment_level": "LVL",
   "ali.number.var.enchantment_level.desc": "enchantment level",
   "ali.number.var.environment_attribute": "env(%s)",

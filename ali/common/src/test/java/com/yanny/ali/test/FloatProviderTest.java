@@ -21,14 +21,7 @@ import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.DispatcherProvider;
 import net.minecraft.world.level.storage.loot.providers.number.StoredNumberAccess;
-import net.minecraft.world.level.storage.loot.providers.number.floats.ConditionalValue;
-import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProvider;
-import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProviders;
-import net.minecraft.world.level.storage.loot.providers.number.floats.Floor;
-import net.minecraft.world.level.storage.loot.providers.number.floats.FromInt;
-import net.minecraft.world.level.storage.loot.providers.number.floats.NumberDispatcher;
-import net.minecraft.world.level.storage.loot.providers.number.floats.StorageValue;
-import net.minecraft.world.level.storage.loot.providers.number.floats.WeightedListValue;
+import net.minecraft.world.level.storage.loot.providers.number.floats.*;
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import org.junit.jupiter.api.Test;
 
@@ -56,7 +49,7 @@ public class FloatProviderTest {
     public void testStorage() throws CommandSyntaxException {
         StoredNumberAccess access = new StoredNumberAccess(Identifier.withDefaultNamespace("test"), new NbtPathArgument().parse(new StringReader("value")));
 
-        assertValue(Holder.direct(new StorageValue(access, ContextFloatProviders.exactly(1f))), "Value: any (storage \"value\" (minecraft:test))");
+        assertValue(Holder.direct(new StorageValue(access, ContextFloatProviders.exactly(1f))), "Value: ", "  -> any (storage \"value\" (minecraft:test))", "    -> Storage Value Exists", "  -> otherwise 1");
     }
 
     @Test

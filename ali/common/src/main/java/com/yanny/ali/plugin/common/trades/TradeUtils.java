@@ -5,6 +5,8 @@ import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
+import com.yanny.ali.plugin.server.LootCount;
+import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.VillagerTrade;
@@ -20,16 +22,16 @@ public class TradeUtils {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(trade.wants.item().value().getDefaultInstance()),
-                utils.convertContextInt(utils, trade.wants.count()),
+                TooltipUtils.collectConditions(utils, () -> utils.convertContextInt(utils, trade.wants.count())),
                 utils.getValueTooltip(utils, trade.wants.components()).build(Lang.Branch.EXPECTED_COMPONENTS),
                 Either.left(trade.additionalWants.map((t) -> t.item().value().getDefaultInstance()).orElse(ItemStack.EMPTY)),
-                trade.additionalWants.map((t) -> utils.convertContextInt(utils, t.count())).orElse(NumberExpr.constant(1)),
+                trade.additionalWants.map((t) -> TooltipUtils.collectConditions(utils, () -> utils.convertContextInt(utils, t.count()))).orElse(LootCount.of(NumberExpr.constant(1))),
                 trade.additionalWants.map((t) -> utils.getValueTooltip(utils, t.components())).orElse(TooltipBuilder.empty()).build(Lang.Branch.EXPECTED_COMPONENTS),
                 Either.left(trade.gives.create()),
                 NumberExpr.constant(trade.gives.count()),
                 utils.getValueTooltip(utils, trade.givenItemModifier).build(),
-                utils.convertContextInt(utils, trade.maxUses),
-                utils.convertContextInt(utils, trade.xp),
+                TooltipUtils.collectConditions(utils, () -> utils.convertContextInt(utils, trade.maxUses)),
+                TooltipUtils.collectConditions(utils, () -> utils.convertContextInt(utils, trade.xp)),
                 utils.getValueTooltip(utils, trade.doubleTradePriceEnchantments).build(Lang.Branch.DOUBLE_TRADE_PRICE_ENCHANTMENTS)
         );
     }

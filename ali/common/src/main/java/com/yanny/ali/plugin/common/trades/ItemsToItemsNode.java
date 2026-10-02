@@ -13,7 +13,10 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITradeNode;
 import com.yanny.ali.api.ListNode;
 import com.yanny.ali.language.Lang;
+import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
+import com.yanny.ali.plugin.server.LootCount;
+import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
@@ -51,13 +54,30 @@ public class ItemsToItemsNode extends ListNode implements ITradeNode {
                             NumberExpr maxUses,
                             NumberExpr xp,
                             TooltipNode tooltip) {
+        this(utils, input1, LootCount.of(input1Count), input1Condition, input2, LootCount.of(input2Count), input2Condition,
+                output, outputCount, outputModifier, LootCount.of(maxUses), LootCount.of(xp), tooltip);
+    }
+
+    public ItemsToItemsNode(IServerUtils ignoredUtils,
+                            Either<ItemStack, TagKey<? extends ItemLike>> input1,
+                            LootCount input1Count,
+                            TooltipNode input1Condition,
+                            Either<ItemStack, TagKey<? extends ItemLike>> input2,
+                            LootCount input2Count,
+                            TooltipNode input2Condition,
+                            Either<ItemStack, TagKey<? extends ItemLike>> output,
+                            NumberExpr outputCount,
+                            TooltipNode outputModifier,
+                            LootCount maxUses,
+                            LootCount xp,
+                            TooltipNode tooltip) {
         addChildren(getChildren(input1, input1Count, input1Condition));
         addChildren(getChildren(input2, input2Count, input2Condition));
-        addChildren(getChildren(output, outputCount, outputModifier));
+        addChildren(getChildren(output, LootCount.of(outputCount), outputModifier));
         inputCount = 2;
         this.tooltip = TooltipBuilder.array((b) -> b
-                .add(TooltipBuilder.number(maxUses).build(Lang.Value.USES))
-                .add(TooltipBuilder.number(xp).build(Lang.Value.VILLAGER_XP))
+                .add(TooltipUtils.getNumberTooltip(maxUses).build(Lang.Value.USES))
+                .add(TooltipUtils.getNumberTooltip(xp).build(Lang.Value.VILLAGER_XP))
                 .add(tooltip)
         ).build();
     }
@@ -127,10 +147,16 @@ public class ItemsToItemsNode extends ListNode implements ITradeNode {
         return items;
     }
 
-    private static IDataNode getChildren(Either<ItemStack, TagKey<? extends ItemLike>> item, NumberExpr count, TooltipNode condition) {
-        return item.map(
-                (i) -> new ItemNode(1, count, i, condition, Collections.emptyList(), Collections.emptyList()),
-                (t) -> new ItemNode(1, count, t, condition, Collections.emptyList(), Collections.emptyList())
-        );
+    private static IDataNode getChildren(Either<ItemStack, TagKey<? extends ItemLike>> item, LootCount count, TooltipNode condition) {
+        TooltipNode tooltip = condition;
+
+        if (!count.conditions().isEmpty()) {
+            tooltip = TooltipBuilder.array((b) -> b
+                    .add(TooltipUtils.getCountTooltip(count, NodeUtils.getCountLimit(item)).build())
+                    .add(condition)
+            ).build();
+        }
+
+        return new ItemNode(1, count.value(), item, tooltip, Collections.emptyList(), Collections.emptyList());
     }
 }
