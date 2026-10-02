@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberInterval;
 import com.yanny.awi.api.BlockInfo;
 import com.yanny.awi.api.ISurfaceRuleHandler;
 import net.minecraft.resources.Identifier;
@@ -71,7 +71,7 @@ public class OreVeinLayout implements ISurfaceRuleHandler {
             return List.of();
         }
 
-        List<RangeValue> ranges = heights.buildRanges();
+        List<NumberInterval> ranges = heights.buildRanges();
         Set<Block> blocks = new LinkedHashSet<>();
 
         blocks.add(rule.oreBlock().getBlock());

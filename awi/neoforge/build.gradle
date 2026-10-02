@@ -57,7 +57,6 @@ shadowJar {
     from(zipTree(jar.archiveFile))     // Unpack jar output (preserves Loom modifications)
 
     exclude "fabric.mod.json"
-    exclude "awi.accessWidener"
     configurations = [project.configurations.shadowCommon]
     archiveClassifier = null           // shadowJar becomes the main artifact
     from rootProject.file("LICENSE")

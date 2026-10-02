@@ -1,6 +1,6 @@
 package com.yanny.awi.plugin.server;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.language.Lang;
@@ -114,13 +114,10 @@ public class PlacementModifierTooltipUtils {
         return array((b) -> {
             b.add(utils.getValueTooltip(utils, placement.heightmap).build(Lang.Value.HEIGHTMAP));
 
-            if (placement.minInclusive == Integer.MIN_VALUE) {
-                b.add(utils.getValueTooltip(utils, "≤" + placement.maxInclusive).build(Lang.Value.RANGE));
-            } else if (placement.maxInclusive == Integer.MAX_VALUE) {
-                b.add(utils.getValueTooltip(utils, "≥" + placement.minInclusive).build(Lang.Value.RANGE));
-            } else {
-                b.add(utils.getValueTooltip(utils, new RangeValue(placement.minInclusive, placement.maxInclusive)).build(Lang.Value.RANGE));
-            }
+            NumberExpr min = placement.minInclusive == Integer.MIN_VALUE ? null : NumberExpr.constant(placement.minInclusive);
+            NumberExpr max = placement.maxInclusive == Integer.MAX_VALUE ? null : NumberExpr.constant(placement.maxInclusive);
+
+            b.add(TooltipBuilder.number(NumberExpr.range(min, max, true, true)).build(Lang.Value.RANGE));
 
         }, Lang.PlacementModifier.SURFACE_RELATIVE_THRESHOLD_FILTER);
     }

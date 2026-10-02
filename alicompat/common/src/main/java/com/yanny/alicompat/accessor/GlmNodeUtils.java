@@ -1,6 +1,6 @@
 package com.yanny.alicompat.accessor;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
@@ -10,8 +10,8 @@ import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.ModifiedNode;
-import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
+import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -31,11 +31,11 @@ import java.util.stream.Stream;
 
 public class GlmNodeUtils {
     @NotNull
-    public static IDataNode addedNode(IServerUtils utils, List<LootItemCondition> conditions, ItemStack item, float rawChance, RangeValue count) {
-        EnchantedRanges chance = NodeUtils.getEnchantedChance(utils, conditions, rawChance);
-        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, UniformContainerBase.DEFAULT_QUALITY, chance, new EnchantedRanges(new RangeValue(count)), Collections.emptyList(), conditions);
+    public static IDataNode addedNode(IServerUtils utils, List<LootItemCondition> conditions, ItemStack item, float rawChance, NumberExpr count) {
+        LootCount chance = NodeUtils.getChance(utils, conditions, rawChance);
+        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, UniformContainerBase.DEFAULT_QUALITY, chance, LootCount.of(count), NodeUtils.getCountLimit(item), Collections.emptyList(), conditions);
 
-        return new ItemNode(rawChance, new RangeValue(count), item, tooltip.build(), Collections.emptyList(), conditions);
+        return new ItemNode(rawChance, count, item, tooltip.build(), Collections.emptyList(), conditions);
     }
 
     @NotNull
@@ -49,11 +49,11 @@ public class GlmNodeUtils {
     }
 
     @NotNull
-    public static List<IDataNode> replacedNode(IServerUtils utils, List<LootItemCondition> conditions, IDataNode src, ItemStack item, RangeValue count) {
+    public static List<IDataNode> replacedNode(IServerUtils utils, List<LootItemCondition> conditions, IDataNode src, ItemStack item, NumberExpr count) {
         IItemNode node = (IItemNode) src;
         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), node.getConditions().stream()).toList();
-        EnchantedRanges chance = NodeUtils.getEnchantedChance(utils, allConditions, node.getChance());
-        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, UniformContainerBase.DEFAULT_QUALITY, chance, new EnchantedRanges(new RangeValue(count)), node.getFunctions(), allConditions);
+        LootCount chance = NodeUtils.getChance(utils, allConditions, node.getChance());
+        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, UniformContainerBase.DEFAULT_QUALITY, chance, LootCount.of(count), NodeUtils.getCountLimit(item), node.getFunctions(), allConditions);
         ItemNode replacement = new ItemNode(node.getChance(), count, item, tooltip.build(), node.getFunctions(), allConditions);
 
         return List.of(new ModifiedNode(utils, src, replacement));
@@ -73,9 +73,17 @@ public class GlmNodeUtils {
 
         allConditions.add(new InvertedLootItemCondition(Holder.direct(AllOfCondition.allOf(HolderSet.direct(conditions.stream().<Holder<LootItemCondition>>map(Holder::direct).toList())))));
 
-        EnchantedRanges chance = NodeUtils.getEnchantedChance(utils, allConditions, node.getChance());
-        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, UniformContainerBase.DEFAULT_QUALITY, chance, new EnchantedRanges(new RangeValue(node.getCount())), node.getFunctions(), allConditions);
+        LootCount chance = NodeUtils.getChance(utils, allConditions, node.getChance());
+        LootCount count;
 
-        return new ItemNode(node.getChance(), new RangeValue(node.getCount()), node.getItem(), tooltip.build(), node.getFunctions(), allConditions);
+        if (node.getFunctions().isEmpty()) {
+            count = LootCount.of(node.getCount());
+        } else {
+            count = NodeUtils.getCount(utils, node.getFunctions());
+        }
+
+        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, UniformContainerBase.DEFAULT_QUALITY, chance, count, NodeUtils.getCountLimit(node.getItem()), node.getFunctions(), allConditions);
+
+        return new ItemNode(node.getChance(), node.getCount(), node.getItem(), tooltip.build(), node.getFunctions(), allConditions);
     }
 }

@@ -850,7 +850,7 @@ public class DataComponentTooltipTest {
                                 .expect(DataComponents.MAX_STACK_SIZE, 16).build()).build()
         ))).build(), List.of(
                 "Predicate:",
-                "  -> Count: ≥5",
+                "  -> Count: ≥ 5",
                 "  -> Components:",
                 "    -> Expected Components:",
                 "      -> minecraft:damage",

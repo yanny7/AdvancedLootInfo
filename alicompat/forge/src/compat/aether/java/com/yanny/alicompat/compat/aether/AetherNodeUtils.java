@@ -1,6 +1,6 @@
 package com.yanny.alicompat.compat.aether;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IItemNode;
@@ -8,7 +8,7 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.ModifiedNode;
-import com.yanny.ali.plugin.server.EnchantedRanges;
+import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -29,11 +29,11 @@ public class AetherNodeUtils {
     }
 
     @NotNull
-    public static List<IDataNode> countedNode(IServerUtils utils, List<LootItemCondition> conditions, IDataNode src, RangeValue count) {
+    public static List<IDataNode> countedNode(IServerUtils utils, List<LootItemCondition> conditions, IDataNode src, NumberExpr count) {
         IItemNode node = (IItemNode) src;
         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), node.getConditions().stream()).toList();
-        EnchantedRanges chance = NodeUtils.getEnchantedChance(utils, allConditions, node.getChance());
-        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, new EnchantedRanges(count), node.getFunctions(), allConditions);
+        NumberExpr chance = NodeUtils.getChance(utils, allConditions, node.getChance());
+        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, LootCount.of(count), NodeUtils.getCountLimit(node.getItem()), node.getFunctions(), allConditions);
         ItemNode replacement = new ItemNode(node.getChance(), count, node.getItem(), tooltip.build(), node.getFunctions(), allConditions);
 
         return List.of(new ModifiedNode(utils, src, replacement));

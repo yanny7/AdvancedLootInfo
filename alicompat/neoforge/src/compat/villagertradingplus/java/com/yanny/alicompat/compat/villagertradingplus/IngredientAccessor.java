@@ -2,7 +2,7 @@ package com.yanny.alicompat.compat.villagertradingplus;
 
 import com.lion.villagertradingplus.tradeoffers.util.Ingredient;
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.ReflectionUtils;
@@ -44,11 +44,11 @@ public class IngredientAccessor extends BaseAccessor<Ingredient> {
     }
 
     @NotNull
-    public RangeValue getCount() {
+    public NumberExpr getCount() {
         if (tag != null) {
-            return new RangeValue(count);
+            return NumberExpr.constant(count);
         }
 
-        return new RangeValue(fixed != null ? fixed.getCount() : 1);
+        return NumberExpr.constant(fixed != null ? fixed.getCount() : 1);
     }
 }

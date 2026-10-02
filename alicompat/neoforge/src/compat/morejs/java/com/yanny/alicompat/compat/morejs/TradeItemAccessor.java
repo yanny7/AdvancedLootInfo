@@ -2,7 +2,7 @@ package com.yanny.alicompat.compat.morejs;
 
 import com.almostreliable.morejs.features.villager.IntRange;
 import com.almostreliable.morejs.features.villager.TradeItem;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.ReflectionUtils;
@@ -33,11 +33,11 @@ public class TradeItemAccessor extends BaseAccessor<TradeItem> {
     }
 
     @NotNull
-    public RangeValue getCount() {
+    public NumberExpr getCount() {
         if (countRange == null) {
-            return new RangeValue(itemStack.getCount());
+            return NumberExpr.constant(itemStack.getCount());
         }
 
-        return new RangeValue(countRange.getMin(), countRange.getMax());
+        return NumberExpr.uniformInt(countRange.getMin(), countRange.getMax());
     }
 }

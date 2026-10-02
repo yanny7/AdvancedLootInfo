@@ -39,15 +39,13 @@ public class PlacementModifierTooltipTest {
         assertTooltip(PlacementModifierTooltipUtils.getCountOnEveryLayerPlacementTooltip(UTILS, CountOnEveryLayerPlacement.of(5)).build(), List.of(
                 "Count On Every Layer:",
                 "  -> Count:",
-                "    -> Constant:",
-                "      -> Value: 5"
+                "    -> 5"
         ));
         //noinspection deprecation
         assertTooltip(PlacementModifierTooltipUtils.getCountOnEveryLayerPlacementTooltip(UTILS, CountOnEveryLayerPlacement.of(UniformInt.of(1, 3))).build(), List.of(
                 "Count On Every Layer:",
                 "  -> Count:",
-                "    -> Uniform:",
-                "      -> Range: 1-3"
+                "    -> 1 to 3"
         ));
     }
 
@@ -56,14 +54,12 @@ public class PlacementModifierTooltipTest {
         assertTooltip(PlacementModifierTooltipUtils.getCountPlacementTooltip(UTILS, CountPlacement.of(3)).build(), List.of(
                 "Count Placement:",
                 "  -> Count:",
-                "    -> Constant:",
-                "      -> Value: 3"
+                "    -> 3"
         ));
         assertTooltip(PlacementModifierTooltipUtils.getCountPlacementTooltip(UTILS, CountPlacement.of(UniformInt.of(2, 6))).build(), List.of(
                 "Count Placement:",
                 "  -> Count:",
-                "    -> Uniform:",
-                "      -> Range: 2-6"
+                "    -> 2 to 6"
         ));
     }
 
@@ -148,14 +144,11 @@ public class PlacementModifierTooltipTest {
         assertTooltip(PlacementModifierTooltipUtils.getOffsetPlacementTooltip(UTILS, OffsetPlacement.of(1, 2, 3)).build(), List.of(
                 "Offset:",
                 "  -> X:",
-                "    -> Constant:",
-                "      -> Value: 1",
+                "    -> 1",
                 "  -> Y:",
-                "    -> Constant:",
-                "      -> Value: 2",
+                "    -> 2",
                 "  -> Z:",
-                "    -> Constant:",
-                "      -> Value: 3"
+                "    -> 3"
         ));
     }
 
@@ -164,17 +157,17 @@ public class PlacementModifierTooltipTest {
         assertTooltip(PlacementModifierTooltipUtils.getSurfaceRelativeThresholdFilterTooltip(UTILS, SurfaceRelativeThresholdFilter.of(Heightmap.Types.WORLD_SURFACE_WG, Integer.MIN_VALUE, 5)).build(), List.of(
                 "Surface Relative Threshold Filter:",
                 "  -> Heightmap: Highest Block, Plants Included",
-                "  -> Range: ≤5"
+                "  -> Range: ≤ 5"
         ));
         assertTooltip(PlacementModifierTooltipUtils.getSurfaceRelativeThresholdFilterTooltip(UTILS, SurfaceRelativeThresholdFilter.of(Heightmap.Types.WORLD_SURFACE_WG, 3, Integer.MAX_VALUE)).build(), List.of(
                 "Surface Relative Threshold Filter:",
                 "  -> Heightmap: Highest Block, Plants Included",
-                "  -> Range: ≥3"
+                "  -> Range: ≥ 3"
         ));
         assertTooltip(PlacementModifierTooltipUtils.getSurfaceRelativeThresholdFilterTooltip(UTILS, SurfaceRelativeThresholdFilter.of(Heightmap.Types.WORLD_SURFACE_WG, 2, 8)).build(), List.of(
                 "Surface Relative Threshold Filter:",
                 "  -> Heightmap: Highest Block, Plants Included",
-                "  -> Range: 2-8"
+                "  -> Range: 2 to 8"
         ));
     }
 
@@ -208,11 +201,9 @@ public class PlacementModifierTooltipTest {
         assertTooltip(PlacementModifierTooltipUtils.getCuboidPlacementTooltip(UTILS, new CuboidPlacement(UniformInt.of(3, 5), ConstantInt.of(2), false, true)).build(), List.of(
                 "Cuboid:",
                 "  -> XZ Size:",
-                "    -> Uniform:",
-                "      -> Range: 3-5",
+                "    -> 3 to 5",
                 "  -> Y Size:",
-                "    -> Constant:",
-                "      -> Value: 2",
+                "    -> 2",
                 "  -> Include Edges: false",
                 "  -> Include Interior: true"
         ));
@@ -236,18 +227,14 @@ public class PlacementModifierTooltipTest {
                 "  -> Placements:",
                 "    -> Offset:",
                 "      -> X:",
-                "        -> Constant:",
-                "          -> Value: 0",
+                "        -> 0",
                 "      -> Y:",
-                "        -> Constant:",
-                "          -> Value: -1",
+                "        -> −1",
                 "      -> Z:",
-                "        -> Constant:",
-                "          -> Value: 0",
+                "        -> 0",
                 "    -> Count Placement:",
                 "      -> Count:",
-                "        -> Constant:",
-                "          -> Value: 3"
+                "        -> 3"
         ));
     }
 }

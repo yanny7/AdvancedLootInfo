@@ -4,9 +4,10 @@ import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFlo
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import com.mojang.authlib.properties.Property;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
+import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
-import com.yanny.ali.plugin.server.EnchantedRanges;
+import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.ali.plugin.server.ValueTooltipUtils;
 import it.unimi.dsi.fastutil.ints.IntList;
@@ -17,10 +18,12 @@ import net.minecraft.core.*;
 import net.minecraft.core.component.*;
 import net.minecraft.core.component.predicates.*;
 import net.minecraft.core.component.predicates.DamagePredicate;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.*;
@@ -39,6 +42,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.JukeboxSongs;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.component.*;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.item.equipment.trim.TrimMaterials;
@@ -56,6 +60,7 @@ import net.minecraft.world.level.storage.loot.ContainerComponentManipulators;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.LinkedHashMap;
@@ -66,68 +71,49 @@ import java.util.Optional;
 import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
+import static org.mockito.Mockito.*;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 
 public class GenericTooltipTest {
     @Test
-    public void testRangeValue() {
-        assertTooltip(Component.translatable(String.valueOf(new RangeValue(123))), "123");
-        assertTooltip(Component.translatable(String.valueOf(new RangeValue(1, 5))), "1-5");
-        assertTooltip(Component.translatable(String.valueOf(new RangeValue(-1, 3))), "-1-3");
-        assertTooltip(Component.translatable(String.valueOf(new RangeValue(456, 789))), "456-789");
-        assertTooltip(Component.translatable(String.valueOf(new RangeValue(2.5F))), "2.50");
-        assertTooltip(Component.translatable(String.valueOf(new RangeValue(2.5F, 3.6F))), "2.50-3.60");
-        assertTooltip(Component.translatable(String.valueOf(new RangeValue(true, false))), "1[+Score]");
-        assertTooltip(Component.translatable(String.valueOf(new RangeValue(false, true))), "1[+???]");
-        assertTooltip(Component.translatable(String.valueOf(new RangeValue(true, true))), "1[+Score][+???]");
-    }
-
-    @Test
     public void testTooltip() {
-        EnchantedRanges chanceMap = new EnchantedRanges(2.5F);
-        EnchantedRanges countMap = new EnchantedRanges(2, 10);
-
-        chanceMap.computeLevels(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.LOOTING).orElseThrow(), (level, value) -> switch (level) {
-            case 1 ->  new RangeValue(1.5f);
-            case 2 -> new RangeValue(3F);
-            case 3 -> new RangeValue(4.5F);
-            default -> throw new IllegalStateException("Unexpected value: " + level);
-        });
-        countMap.computeLevels(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.FORTUNE).orElseThrow(), (level, value) -> switch (level) {
-            case 1 -> new RangeValue(1, 2);
-            case 2 -> new RangeValue(2, 4);
-            case 3 -> new RangeValue(4, 8);
-            default -> throw new IllegalStateException("Unexpected value: " + level);
-        });
+        LootCount chance = LootCount.of(NumberExpr.lookup(TooltipUtils.level(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.LOOTING).orElseThrow()), List.of(
+                NumberExpr.constant(0.025), NumberExpr.constant(0.015), NumberExpr.constant(0.03), NumberExpr.constant(0.045)
+        ), null));
+        LootCount count = LootCount.of(NumberExpr.lookup(TooltipUtils.level(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.FORTUNE).orElseThrow()), List.of(
+                NumberExpr.range(2, 10), NumberExpr.range(1, 2), NumberExpr.range(2, 4), NumberExpr.range(4, 8)
+        ), null));
 
         assertTooltip(TooltipUtils.getTooltip(
                 UTILS,
                 0,
-                new EnchantedRanges(2.5F),
-                new EnchantedRanges(2, 10),
+                LootCount.of(NumberExpr.constant(0.025)),
+                LootCount.of(NumberExpr.range(2, 10)),
+                null,
                 List.of(),
                 List.of()
         ).build(), List.of(
-                "Chance: 2.50%",
-                "Count: 2-10"
+                "Chance: 2.5%",
+                "Count: 2 to 10"
         ));
         assertTooltip(TooltipUtils.getTooltip(
                 UTILS,
                 5,
-                chanceMap,
-                countMap,
+                chance,
+                count,
+                null,
                 List.of(ApplyExplosionDecay.explosionDecay().when(ExplosionCondition.survivesExplosion()).build(), SmeltItemFunction.smelted().build()),
                 List.of(LootItemKilledByPlayerCondition.killedByPlayer().build())
         ).build(), List.of(
                 "Quality: 5",
-                "Chance: 2.50%",
-                "  -> 1.50% (Looting I)",
-                "  -> 3% (Looting II)",
-                "  -> 4.50% (Looting III)",
-                "Count: 2-10",
-                "  -> 1-2 (Fortune I)",
-                "  -> 2-4 (Fortune II)",
-                "  -> 4-8 (Fortune III)",
+                "Chance: 2.5%",
+                "  -> Looting I: 1.5%",
+                "  -> Looting II: 3%",
+                "  -> Looting III: 4.5%",
+                "Count: 2 to 10",
+                "  -> Fortune I: 1 to 2",
+                "  -> Fortune II: 2 to 4",
+                "  -> Fortune III: 4 to 8",
                 "----- Predicates -----",
                 "Killed by player",
                 "----- Modifiers -----",
@@ -170,7 +156,7 @@ public class GenericTooltipTest {
                 "Modifier:",
                 "  -> Attribute: minecraft:armor",
                 "  -> Operation: Multiply Total",
-                "  -> Amount: 1-5",
+                "  -> Amount: 1 to 5",
                 "  -> Id: minecraft:armor",
                 "  -> Equipment Slots:",
                 "    -> Feet",
@@ -266,13 +252,13 @@ public class GenericTooltipTest {
                 "Predicate:",
                 "  -> Entity Type: minecraft:cat",
                 "  -> Distance To Player:",
-                "    -> X: =10.0",
+                "    -> X: 10",
                 "  -> Location:",
                 "    -> Position:",
-                "      -> X: ≥20.0",
+                "      -> X: ≥ 20",
                 "  -> Stepping On:",
                 "    -> Position:",
-                "      -> X: ≤30.0",
+                "      -> X: ≤ 30",
                 "  -> Effects:",
                 "    -> minecraft:absorption",
                 "      -> Is Ambient: true",
@@ -287,7 +273,7 @@ public class GenericTooltipTest {
                 "        -> minecraft:andesite",
                 "        -> minecraft:diorite",
                 "  -> Lightning Bolt:",
-                "    -> Blocks On Fire: ≤10",
+                "    -> Blocks On Fire: ≤ 10",
                 "  -> Vehicle:",
                 "    -> Team: blue",
                 "  -> Passenger:",
@@ -296,7 +282,7 @@ public class GenericTooltipTest {
                 "    -> Team: red",
                 "  -> Periodic Tick: 1000",
                 "  -> Movement:",
-                "    -> X: 1.0-5.0",
+                "    -> X: 1 to 5",
                 "  -> Team: orange",
                 "  -> Slots:",
                 "    -> test: [1, 2]",
@@ -307,7 +293,7 @@ public class GenericTooltipTest {
                 "      -> Value: 3",
                 "  -> Predicate:",
                 "    -> minecraft:damage",
-                "      -> Durability: 1-8"
+                "      -> Durability: 1 to 8"
         ));
     }
 
@@ -332,11 +318,11 @@ public class GenericTooltipTest {
                 MinMaxBounds.Doubles.between(2, 5.5)
         )).build(Lang.EntitySubPredicates.DISTANCE_TO_PLAYER), List.of(
                 "Distance To Player:",
-                "  -> X: =10.0",
-                "  -> Y: ≥20.0",
-                "  -> Z: ≤30.0",
-                "  -> Horizontal: ≥15.0",
-                "  -> Absolute: 2.0-5.5"
+                "  -> X: 10",
+                "  -> Y: ≥ 20",
+                "  -> Z: ≤ 30",
+                "  -> Horizontal: ≥ 15",
+                "  -> Absolute: 2 to 5.5"
         ));
     }
 
@@ -358,14 +344,14 @@ public class GenericTooltipTest {
         ).build(Lang.Branch.LOCATED), List.of(
                 "Located:",
                 "  -> Position:",
-                "    -> X: =10.0",
-                "    -> Y: ≥20.0",
-                "    -> Z: ≤30.0",
+                "    -> X: 10",
+                "    -> Y: ≥ 20",
+                "    -> Z: ≤ 30",
                 "  -> Biome: minecraft:plains",
                 "  -> Structure: minecraft:mineshaft",
                 "  -> Dimension: minecraft:overworld",
                 "  -> Smokey: true",
-                "  -> Light: 10-15",
+                "  -> Light: 10 to 15",
                 "  -> Block Predicate:",
                 "    -> Blocks:",
                 "      -> minecraft:stone",
@@ -384,15 +370,15 @@ public class GenericTooltipTest {
                 MinMaxBounds.Doubles.atMost(4)
         )).build(Lang.Branch.POSITION), List.of(
                 "Position:",
-                "  -> X: ≥3.0",
-                "  -> Y: 1.0-2.0",
-                "  -> Z: ≤4.0"
+                "  -> X: ≥ 3",
+                "  -> Y: 1 to 2",
+                "  -> Z: ≤ 4"
         ));
     }
 
     @Test
     public void testLightPredicateTooltip() {
-        assertTooltip(ValueTooltipUtils.getLightPredicateTooltip(UTILS, LightPredicate.Builder.light().setComposite(MinMaxBounds.Ints.between(10, 15)).build()).build(Lang.Value.LIGHT), List.of("Light: 10-15"));
+        assertTooltip(ValueTooltipUtils.getLightPredicateTooltip(UTILS, LightPredicate.Builder.light().setComposite(MinMaxBounds.Ints.between(10, 15)).build()).build(Lang.Value.LIGHT), List.of("Light: 10 to 15"));
     }
 
     @Test
@@ -430,7 +416,7 @@ public class GenericTooltipTest {
                 "        -> Value: 3",
                 "    -> Partial Matchers:",
                 "      -> minecraft:damage",
-                "        -> Durability: 1-8"
+                "        -> Durability: 1 to 8"
         ));
     }
 
@@ -470,13 +456,13 @@ public class GenericTooltipTest {
         ).build(Lang.Branch.MOB_EFFECTS), List.of(
                 "Mob Effects:",
                 "  -> minecraft:absorption",
-                "    -> Amplifier: 10-15",
-                "    -> Duration: ≤5",
+                "    -> Amplifier: 10 to 15",
+                "    -> Duration: ≤ 5",
                 "    -> Is Ambient: true",
                 "    -> Is Visible: false",
                 "  -> minecraft:blindness",
-                "    -> Amplifier: ≥5",
-                "    -> Duration: 1-2"
+                "    -> Amplifier: ≥ 5",
+                "    -> Duration: 1 to 2"
         ));
     }
 
@@ -517,19 +503,19 @@ public class GenericTooltipTest {
         ).build(Lang.Branch.ENTITY_EQUIPMENT), List.of(
             "Entity Equipment:",
             "  -> Head:",
-            "    -> Count: 10-15",
+            "    -> Count: 10 to 15",
             "  -> Chest:",
-            "    -> Count: ≤5",
+            "    -> Count: ≤ 5",
             "  -> Legs:",
-            "    -> Count: ≥5",
+            "    -> Count: ≥ 5",
             "  -> Feet:",
-            "    -> Count: 1-2",
+            "    -> Count: 1 to 2",
             "  -> Body:",
-            "    -> Count: 1-3",
+            "    -> Count: 1 to 3",
             "  -> Main Hand:",
-            "    -> Count: 0-64",
+            "    -> Count: 0 to 64",
             "  -> Offhand:",
-            "    -> Count: ≥32"
+            "    -> Count: ≥ 32"
         ));
     }
 
@@ -566,13 +552,13 @@ public class GenericTooltipTest {
                 "  -> Items:",
                 "    -> minecraft:cake",
                 "    -> minecraft:netherite_axe",
-                "  -> Count: 10-15",
+                "  -> Count: 10 to 15",
                 "  -> Components:",
                 "    -> Partial Matchers:",
                 "      -> minecraft:custom_data",
                 "        -> Nbt: {healing:1b}",
                 "      -> minecraft:damage",
-                "        -> Durability: ≤5"
+                "        -> Durability: ≤ 5"
         ));
         assertTooltip(ValueTooltipUtils.getItemPredicateTooltip(UTILS, ItemPredicate.Builder.item()
                 .of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.DIAMOND)
@@ -706,34 +692,34 @@ public class GenericTooltipTest {
                 "        -> Contains:",
                 "          -> Attribute: minecraft:armor",
                 "          -> Id: minecraft:test",
-                "          -> Amount: =3.2",
+                "          -> Amount: 3.2",
                 "          -> Operation: Add Value",
                 "          -> Slot: Chest",
                 "        -> Counts:",
-                "          -> Amount: 1.0-3.5",
+                "          -> Amount: 1 to 3.5",
                 "          -> Slot: Body",
-                "          -> Count: ≤8",
-                "        -> Size: =2",
+                "          -> Count: ≤ 8",
+                "        -> Size: 2",
                 "      -> minecraft:bundle_contents",
                 "        -> Contains:",
-                "          -> Count: 1-3",
+                "          -> Count: 1 to 3",
                 "        -> Counts:",
-                "          -> Count: =2",
-                "        -> Size: ≥1",
+                "          -> Count: 2",
+                "        -> Size: ≥ 1",
                 "      -> minecraft:container",
                 "        -> Contains:",
-                "          -> Count: 2-3",
+                "          -> Count: 2 to 3",
                 "        -> Counts:",
-                "          -> Count: =5",
-                "        -> Size: ≥4",
+                "          -> Count: 5",
+                "        -> Size: ≥ 4",
                 "      -> minecraft:custom_data",
                 "        -> Nbt: {healing:1b}",
                 "      -> minecraft:damage",
-                "        -> Damage: =6",
-                "        -> Durability: ≤5",
+                "        -> Damage: 6",
+                "        -> Durability: ≤ 5",
                 "      -> minecraft:enchantments",
                 "        -> Enchantment: minecraft:flame",
-                "        -> Level: 1-2",
+                "        -> Level: 1 to 2",
                 "      -> minecraft:firework_explosion",
                 "        -> Shape: Creeper",
                 "        -> Trail: false",
@@ -744,16 +730,16 @@ public class GenericTooltipTest {
                 "            -> Shape: Star",
                 "          -> Counts:",
                 "            -> Shape: Large Ball",
-                "            -> Count: ≤6",
-                "          -> Size: ≥1",
-                "        -> Flight Duration: =3",
+                "            -> Count: ≤ 6",
+                "          -> Size: ≥ 1",
+                "        -> Flight Duration: 3",
                 "      -> minecraft:jukebox_playable",
                 "        -> minecraft:pigstep",
                 "      -> minecraft:potion_contents",
                 "        -> Potion: minecraft:healing",
                 "      -> minecraft:stored_enchantments",
                 "        -> Enchantment: minecraft:breach",
-                "        -> Level: 1-2",
+                "        -> Level: 1 to 2",
                 "      -> minecraft:trim",
                 "        -> Material: minecraft:gold",
                 "        -> Pattern: minecraft:dune",
@@ -763,21 +749,21 @@ public class GenericTooltipTest {
                 "          -> Page: World",
                 "        -> Counts:",
                 "          -> Page: Star",
-                "            -> Count: 1-5",
+                "            -> Count: 1 to 5",
                 "          -> Page: Wars",
-                "            -> Count: ≥3",
-                "        -> Size: ≥4",
+                "            -> Count: ≥ 3",
+                "        -> Size: ≥ 4",
                 "      -> minecraft:written_book_content",
                 "        -> Pages:",
                 "          -> Contains:",
                 "            -> Page: Hello",
                 "          -> Counts:",
                 "            -> Page: World",
-                "              -> Count: ≤3",
-                "          -> Size: =2",
+                "              -> Count: ≤ 3",
+                "          -> Size: 2",
                 "        -> Author: asdf",
                 "        -> Title: jklo",
-                "        -> Generation: =3",
+                "        -> Generation: 3",
                 "        -> Resolved: false"
         ));
 
@@ -787,7 +773,7 @@ public class GenericTooltipTest {
     public void testEnchantmentPredicateTooltip() {
         assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(Optional.empty(), MinMaxBounds.Ints.atLeast(1))).build(Lang.Branch.PREDICATE), List.of(
                 "Predicate:",
-                "  -> Level: ≥1"
+                "  -> Level: ≥ 1"
         ));
         assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(
                 LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FEATHER_FALLING),
@@ -795,7 +781,7 @@ public class GenericTooltipTest {
         ).build(Lang.Branch.PREDICATE), List.of(
                 "Predicate:",
                 "  -> Enchantment: minecraft:feather_falling",
-                "  -> Level: ≤2"
+                "  -> Level: ≤ 2"
         ));
         assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(
                 LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).get(EnchantmentTags.BOOTS_EXCLUSIVE).orElseThrow(),
@@ -804,7 +790,7 @@ public class GenericTooltipTest {
                 "Predicate:",
                 "  -> Enchantments:",
                 "    -> Tag: minecraft:exclusive_set/boots",
-                "  -> Level: ≤2"
+                "  -> Level: ≤ 2"
         ));
         assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FEATHER_FALLING), MinMaxBounds.Ints.ANY)).build(Lang.Branch.PREDICATE), List.of(
                 "Predicate:",
@@ -835,7 +821,7 @@ public class GenericTooltipTest {
 
         assertTooltip(ValueTooltipUtils.getStatMatcherTooltip(UTILS, statMatcher).build(), List.of(
                 "Block: minecraft:cobblestone",
-                "  -> Times Mined: ≥4"
+                "  -> Times Mined: ≥ 4"
         ));
     }
 
@@ -898,10 +884,10 @@ public class GenericTooltipTest {
                 "    -> Page: World",
                 "  -> Counts:",
                 "    -> Page: Star",
-                "      -> Count: 1-5",
+                "      -> Count: 1 to 5",
                 "    -> Page: Wars",
-                "      -> Count: ≥3",
-                "  -> Size: ≥4"
+                "      -> Count: ≥ 3",
+                "  -> Size: ≥ 4"
         ));
     }
 
@@ -939,7 +925,7 @@ public class GenericTooltipTest {
                 "    -> minecraft:armor",
                 "    -> minecraft:gravity",
                 "  -> Id: minecraft:test",
-                "  -> Amount: 1.5-3.1",
+                "  -> Amount: 1.5 to 3.14",
                 "  -> Operation: Add Value",
                 "  -> Slot: Armor"
         ));
@@ -1179,44 +1165,29 @@ public class GenericTooltipTest {
 
     @Test
     public void testLevelBasedValueTooltip() {
-        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(UTILS, LevelBasedValue.constant(2.5F)).build(Lang.Branch.ENCHANTED_CHANCE), List.of(
-                "Enchanted Chance:",
-                "  -> Constant: 2.5"
-        ));
-        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(UTILS, new LevelBasedValue.Clamped(LevelBasedValue.constant(2.5F), 0.5F, 5F)).build(Lang.Branch.ENCHANTED_CHANCE), List.of(
-                "Enchanted Chance:",
-                "  -> Clamped:",
-                "    -> Value:",
-                "      -> Constant: 2.5",
-                "    -> Min: 0.5",
-                "    -> Max: 5.0"
-        ));
-        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(UTILS, new LevelBasedValue.Fraction(LevelBasedValue.constant(2), LevelBasedValue.constant(3))).build(Lang.Branch.ENCHANTED_CHANCE), List.of(
-                "Enchanted Chance:",
-                "  -> Fraction:",
-                "    -> Numerator:",
-                "      -> Constant: 2.0",
-                "    -> Denominator:",
-                "      -> Constant: 3.0"
-        ));
-        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(UTILS, new LevelBasedValue.Linear(0.5F, 5F)).build(Lang.Branch.ENCHANTED_CHANCE), List.of(
-                "Enchanted Chance:",
-                "  -> Linear:",
-                "    -> Base: 0.5",
-                "    -> Per Level: 5.0"
-        ));
-        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(UTILS, new LevelBasedValue.LevelsSquared(0.5F)).build(Lang.Branch.ENCHANTED_CHANCE), List.of(
-                "Enchanted Chance:",
-                "  -> Squared Level:",
-                "    -> Added: 0.5"
-        ));
-        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(UTILS, new LevelBasedValue.Lookup(List.of(0.5F, 1.5F, 2.5F), LevelBasedValue.constant(3.3F))).build(Lang.Branch.ENCHANTED_CHANCE), List.of(
-                "Enchanted Chance:",
-                "  -> Lookup:",
-                "    -> Values: [0.5, 1.5, 2.5]",
-                "    -> Fallback:",
-                "      -> Constant: 3.3"
-        ));
+        IServerUtils utils = enchantmentUtils();
+
+        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, LevelBasedValue.constant(2.5F)).build(Lang.Value.CHANCE), List.of("Chance: 2.5"));
+        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, new LevelBasedValue.Clamped(LevelBasedValue.constant(2.5F), 0.5F, 5F)).build(Lang.Value.CHANCE), List.of("Chance: 2.5"));
+        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, new LevelBasedValue.Fraction(LevelBasedValue.constant(2), LevelBasedValue.constant(3))).build(Lang.Value.CHANCE), List.of("Chance: 0.67"));
+        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, new LevelBasedValue.Linear(0.5F, 5F)).build(Lang.Value.CHANCE), List.of("Chance: 0.5 to 20.5 (enchantment level)"));
+        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, new LevelBasedValue.LevelsSquared(0.5F)).build(Lang.Value.CHANCE), List.of("Chance: 1.5 to 25.5 (enchantment level)"));
+        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, new LevelBasedValue.Lookup(List.of(0.5F, 1.5F, 2.5F), LevelBasedValue.constant(3.3F))).build(Lang.Value.CHANCE), List.of("Chance: 0.5 to 3.3 (enchantment level)"));
+    }
+
+    @NotNull
+    private static IServerUtils enchantmentUtils() {
+        RegistryAccess registryAccess = mock(RegistryAccess.class);
+        ServerLevel level = mock(ServerLevel.class);
+        IServerUtils utils = spy(UTILS);
+
+        Registry<Enchantment> enchantments = mock();
+
+        doAnswer((i) -> LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).listElements()).when(enchantments).listElements();
+        doReturn(enchantments).when(registryAccess).lookupOrThrow(Registries.ENCHANTMENT);
+        doReturn(registryAccess).when(level).registryAccess();
+        doReturn(level).when(utils).getServerLevel();
+        return utils;
     }
 
     @Test
@@ -1231,13 +1202,13 @@ public class GenericTooltipTest {
                 MinMaxBounds.Doubles.atLeast(10)
         )).build(Lang.EntitySubPredicates.MOVEMENT), List.of(
                 "Movement:",
-                "  -> X: ≤3.0",
-                "  -> Y: 1.0-2.0",
-                "  -> Z: ≥3.0",
-                "  -> Speed: ≥2.0",
-                "  -> Horizontal Speed: ≥1.5",
-                "  -> Vertical Speed: ≥0.5",
-                "  -> Fall Distance: ≥10.0"
+                "  -> X: ≤ 3",
+                "  -> Y: 1 to 2",
+                "  -> Z: ≥ 3",
+                "  -> Speed: ≥ 2",
+                "  -> Horizontal Speed: ≥ 1.5",
+                "  -> Vertical Speed: ≥ 0.5",
+                "  -> Fall Distance: ≥ 10"
         ));
     }
 

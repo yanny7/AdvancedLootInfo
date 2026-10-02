@@ -1,7 +1,7 @@
 package com.yanny.awi.plugin.common.nodes;
 
 import com.yanny.aci.CommonLogUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberInterval;
 import com.yanny.awi.Utils;
 import com.yanny.awi.api.BlockInfo;
 import com.yanny.awi.api.ISurfaceRuleHandler;
@@ -278,24 +278,24 @@ public class NodeUtils {
             return size == 0 ? 0 : max - min;
         }
 
-        public List<RangeValue> buildRanges() {
+        public List<NumberInterval> buildRanges() {
             if (size == 0) {
                 return Collections.emptyList();
             }
 
-            List<RangeValue> ranges = new ArrayList<>();
+            List<NumberInterval> ranges = new ArrayList<>();
             int[] run = {min, min};
 
             forEachAscending((current) -> {
                 if (current > run[1] + 1) {
-                    ranges.add(new RangeValue(run[0], run[1]));
+                    ranges.add(NumberInterval.closed(run[0], run[1]));
                     run[0] = current;
                 }
 
                 run[1] = current;
             });
 
-            ranges.add(new RangeValue(run[0], run[1]));
+            ranges.add(NumberInterval.closed(run[0], run[1]));
             return ranges;
         }
     }
@@ -433,23 +433,23 @@ public class NodeUtils {
             this.seaLevel = seaLevel;
         }
 
-        private List<RangeValue> heights(BlockObservation obs) {
+        private List<NumberInterval> heights(BlockObservation obs) {
             int gap = (maxY - minY) / HEIGHT_GAP_DIVISOR;
-            List<RangeValue> merged = new ArrayList<>();
+            List<NumberInterval> merged = new ArrayList<>();
 
-            for (RangeValue range : obs.absolute.buildRanges()) {
-                RangeValue last = merged.isEmpty() ? null : merged.get(merged.size() - 1);
+            for (NumberInterval range : obs.absolute.buildRanges()) {
+                NumberInterval last = merged.isEmpty() ? null : merged.get(merged.size() - 1);
 
-                if (last != null && range.min() - last.max() - 1 <= gap) {
-                    merged.set(merged.size() - 1, new RangeValue(last.min(), range.max()));
+                if (last != null && range.lo() - last.hi() - 1 <= gap) {
+                    merged.set(merged.size() - 1, NumberInterval.closed(last.lo(), range.hi()));
                 } else {
                     merged.add(range);
                 }
             }
 
             int top = obs.waterConstraint() == BlockInfo.WaterConstraint.UNDERWATER ? seaLevel - 1 : maxY - 1;
-            boolean everywhere = merged.size() == 1 && merged.get(0).min() <= minY + 1 + gap
-                    && merged.get(0).max() >= top - obs.depths.max() - gap;
+            boolean everywhere = merged.size() == 1 && merged.get(0).lo() <= minY + 1 + gap
+                    && merged.get(0).hi() >= top - obs.depths.max() - gap;
 
             return everywhere ? List.of() : merged;
         }
@@ -560,7 +560,7 @@ public class NodeUtils {
 
                 switch (obs.classify(settings)) {
                     case SURFACE -> {
-                        List<RangeValue> heights = heights(obs);
+                        List<NumberInterval> heights = heights(obs);
                         boolean hasFloor = obs.floorDepths.size() > 0;
                         boolean hasCeiling = obs.ceilingDepths.size() > 0;
 

@@ -4,7 +4,7 @@ import com.klikli_dev.occultism.common.entity.spirit.wonderingtrader.WonderingTr
 import com.klikli_dev.occultism.loot.AddItemModifier;
 import com.klikli_dev.occultism.registry.OccultismFoods;
 import com.yanny.aci.CommonLogUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.language.ITooltipKey;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
@@ -56,19 +56,19 @@ public class OccultismCompat implements IGlmModCompat {
     private static Int2ObjectMap<TradeLevel> getWonderingTraderLevels() {
         Int2ObjectMap<TradeLevel> levels = new Int2ObjectOpenHashMap<>();
 
-        levels.put(1, getLevel(WonderingTrades.HINT, new TradeLevelInfo(new RangeValue(1)), OccultismLang.Value.WITHOUT_THIRD_EYE));
+        levels.put(1, getLevel(WonderingTrades.HINT, new TradeLevelInfo(NumberExpr.constant(1)), OccultismLang.Value.WITHOUT_THIRD_EYE));
         levels.put(2, new TradeLevel.OfSet(TradeSets.WANDERING_TRADER_BUYING));
         levels.put(3, new TradeLevel.OfSet(TradeSets.WANDERING_TRADER_UNCOMMON));
         levels.put(4, new TradeLevel.OfSet(TradeSets.WANDERING_TRADER_COMMON));
-        levels.put(5, getLevel(WonderingTrades.BOOK, new TradeLevelInfo(new RangeValue(1)), OccultismLang.Value.WITH_THIRD_EYE));
-        levels.put(6, getLevel(WonderingTrades.PARAPHERNALIA, new TradeLevelInfo(new RangeValue(1, 3)), OccultismLang.Value.WITH_THIRD_EYE));
-        levels.put(7, getLevel(WonderingTrades.MATERIAL, new TradeLevelInfo(new RangeValue(1, 2)), OccultismLang.Value.WITH_THIRD_EYE));
-        levels.put(8, getLevel(WonderingTrades.INVENTORY, new TradeLevelInfo(new RangeValue(1)), OccultismLang.Value.WITH_THIRD_EYE));
-        levels.put(9, getLevel(WonderingTrades.STORAGE, new TradeLevelInfo(new RangeValue(1, 3)), OccultismLang.Value.WITH_THIRD_EYE));
-        levels.put(10, getLevel(WonderingTrades.UTILITY, new TradeLevelInfo(new RangeValue(1)), OccultismLang.Value.WITH_THIRD_EYE));
-        levels.put(11, getLevel(WonderingTrades.INFUSED, new TradeLevelInfo(new RangeValue(1, 2), 0.8f), OccultismLang.Value.WITH_THIRD_EYE));
-        levels.put(12, getLevel(WonderingTrades.FAMILIAR, new TradeLevelInfo(new RangeValue(1), 0.5f), OccultismLang.Value.WITH_THIRD_EYE));
-        levels.put(13, getLevel(WonderingTrades.DYE, new TradeLevelInfo(new RangeValue(1), 0.25f), OccultismLang.Value.WITH_THIRD_EYE));
+        levels.put(5, getLevel(WonderingTrades.BOOK, new TradeLevelInfo(NumberExpr.constant(1)), OccultismLang.Value.WITH_THIRD_EYE));
+        levels.put(6, getLevel(WonderingTrades.PARAPHERNALIA, new TradeLevelInfo(NumberExpr.uniformInt(1, 3)), OccultismLang.Value.WITH_THIRD_EYE));
+        levels.put(7, getLevel(WonderingTrades.MATERIAL, new TradeLevelInfo(NumberExpr.uniformInt(1, 2)), OccultismLang.Value.WITH_THIRD_EYE));
+        levels.put(8, getLevel(WonderingTrades.INVENTORY, new TradeLevelInfo(NumberExpr.constant(1)), OccultismLang.Value.WITH_THIRD_EYE));
+        levels.put(9, getLevel(WonderingTrades.STORAGE, new TradeLevelInfo(NumberExpr.uniformInt(1, 3)), OccultismLang.Value.WITH_THIRD_EYE));
+        levels.put(10, getLevel(WonderingTrades.UTILITY, new TradeLevelInfo(NumberExpr.constant(1)), OccultismLang.Value.WITH_THIRD_EYE));
+        levels.put(11, getLevel(WonderingTrades.INFUSED, new TradeLevelInfo(NumberExpr.uniformInt(1, 2), 0.8f), OccultismLang.Value.WITH_THIRD_EYE));
+        levels.put(12, getLevel(WonderingTrades.FAMILIAR, new TradeLevelInfo(NumberExpr.constant(1), 0.5f), OccultismLang.Value.WITH_THIRD_EYE));
+        levels.put(13, getLevel(WonderingTrades.DYE, new TradeLevelInfo(NumberExpr.constant(1), 0.25f), OccultismLang.Value.WITH_THIRD_EYE));
         return levels;
     }
 

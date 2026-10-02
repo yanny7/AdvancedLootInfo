@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.ribbits;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
@@ -55,9 +55,9 @@ public class ItemsForAmethystsAccessor extends BaseAccessor<ItemsForAmethysts> i
         return new ItemsToItemsNode(
                 utils,
                 Either.left(Items.AMETHYST_SHARD.getDefaultInstance()),
-                new RangeValue(costCountMin, costCountMax),
+                NumberExpr.uniformInt(costCountMin, costCountMax),
                 Either.left(itemStack.getItem().getDefaultInstance()),
-                new RangeValue(resultCountMin, resultCountMax),
+                NumberExpr.uniformInt(resultCountMin, resultCountMax),
                 maxUses,
                 0,
                 priceMultiplier,

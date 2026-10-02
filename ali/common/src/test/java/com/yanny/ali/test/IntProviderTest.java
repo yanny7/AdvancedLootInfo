@@ -2,6 +2,8 @@ package com.yanny.ali.test;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.yanny.ali.language.Lang;
+import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.commands.arguments.NbtPathArgument;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
@@ -26,100 +28,100 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class IntProviderTest {
     private static final Holder<LootItemCondition> CONDITION = Holder.direct(ExplosionCondition.survivesExplosion().build());
 
     @Test
     public void testConstant() {
-        assertEquals("5", convert(ContextIntProviders.exactly(5)));
+        assertValue(ContextIntProviders.exactly(5), "Value: 5");
     }
 
     @Test
     public void testUniform() {
-        assertEquals("2-6", convert(ContextIntProviders.between(2, 6)));
+        assertValue(ContextIntProviders.between(2, 6), "Value: 2 to 6");
     }
 
     @Test
     public void testBinomial() {
-        assertEquals("0-5", convert(ContextIntProviders.binomial(5, 0.5f)));
+        assertValue(ContextIntProviders.binomial(5, 0.5f), "Value: 0 to 5  ~2 to 3 (31%)");
     }
 
     @Test
     public void testScore() {
-        assertEquals("1[+Score]", convert(ContextIntProviders.fromScoreboard(LootContext.EntityTarget.THIS, "objective")));
+        assertValue(ContextIntProviders.fromScoreboard(LootContext.EntityTarget.THIS, "objective"), "Value: any (score \"objective\" (this))");
     }
 
     @Test
     public void testStorage() throws CommandSyntaxException {
         StoredNumberAccess access = new StoredNumberAccess(Identifier.withDefaultNamespace("test"), new NbtPathArgument().parse(new StringReader("value")));
 
-        assertEquals("1[+???]", convert(Holder.direct(new StorageValue(access, ContextIntProviders.exactly(1)))));
+        assertValue(Holder.direct(new StorageValue(access, ContextIntProviders.exactly(1))), "Value: any (storage \"value\" (minecraft:test))");
     }
 
     @Test
     public void testEnvironmentAttribute() {
-        assertEquals("1[+???]", convert(Holder.direct(new EnvironmentAttributeValue(EnvironmentAttributes.CLOUD_HEIGHT))));
+        assertValue(Holder.direct(new EnvironmentAttributeValue(EnvironmentAttributes.CLOUD_HEIGHT)), "Value: any (environment attribute \"minecraft:visual/cloud_height\")");
     }
 
     @Test
     public void testSum() {
-        assertEquals("5", convert(ContextIntProviders.add(ContextIntProviders.exactly(2), ContextIntProviders.exactly(3))));
+        assertValue(ContextIntProviders.add(ContextIntProviders.exactly(2), ContextIntProviders.exactly(3)), "Value: 5");
     }
 
     @Test
     public void testProduct() {
-        assertEquals("6", convert(ContextIntProviders.mul(ContextIntProviders.exactly(2), ContextIntProviders.exactly(3))));
+        assertValue(ContextIntProviders.mul(ContextIntProviders.exactly(2), ContextIntProviders.exactly(3)), "Value: 6");
     }
 
     @Test
     public void testAverage() {
-        assertEquals("3", convert(ContextIntProviders.avg(ContextIntProviders.exactly(2), ContextIntProviders.exactly(4))));
+        assertValue(ContextIntProviders.avg(ContextIntProviders.exactly(2), ContextIntProviders.exactly(4)), "Value: 3");
     }
 
     @Test
     public void testMinimum() {
-        assertEquals("1-3", convert(ContextIntProviders.min(ContextIntProviders.between(1, 5), ContextIntProviders.exactly(3))));
+        assertValue(ContextIntProviders.min(ContextIntProviders.between(1, 5), ContextIntProviders.exactly(3)), "Value: 1 to 3  ~3 (60%)");
     }
 
     @Test
     public void testMaximum() {
-        assertEquals("3-5", convert(ContextIntProviders.max(ContextIntProviders.between(1, 5), ContextIntProviders.exactly(3))));
+        assertValue(ContextIntProviders.max(ContextIntProviders.between(1, 5), ContextIntProviders.exactly(3)), "Value: 3 to 5  ~3 (60%)");
     }
 
     @Test
     public void testDifference() {
-        assertEquals("3", convert(ContextIntProviders.sub(ContextIntProviders.exactly(5), ContextIntProviders.exactly(2))));
+        assertValue(ContextIntProviders.sub(ContextIntProviders.exactly(5), ContextIntProviders.exactly(2)), "Value: 3");
     }
 
     @Test
     public void testNegate() {
-        assertEquals("-4", convert(ContextIntProviders.negate(ContextIntProviders.exactly(4))));
+        assertValue(ContextIntProviders.negate(ContextIntProviders.exactly(4)), "Value: −4");
     }
 
     @Test
     public void testAbsolute() {
-        assertEquals("4", convert(Holder.direct(new Absolute(ContextIntProviders.negate(ContextIntProviders.exactly(4))))));
-        assertEquals("0-5", convert(Holder.direct(new Absolute(ContextIntProviders.between(-5, 3)))));
+        assertValue(Holder.direct(new Absolute(ContextIntProviders.negate(ContextIntProviders.exactly(4)))), "Value: 4");
+        assertValue(Holder.direct(new Absolute(ContextIntProviders.between(-5, 3))), "Value: 0 to 5  ~1 to 3 (22%)");
     }
 
     @Test
     public void testFromFloat() {
-        assertEquals("2", convert(ContextIntProviders.fromFloat(ContextFloatProviders.exactly(2.7f))));
+        assertValue(ContextIntProviders.fromFloat(ContextFloatProviders.exactly(2.7f)), "Value: 2");
     }
 
     @Test
     public void testConditional() {
-        assertEquals("1-9", convert(Holder.direct(new ConditionalValue(CONDITION, ContextIntProviders.exactly(1), ContextIntProviders.exactly(9)))));
+        assertValue(Holder.direct(new ConditionalValue(CONDITION, ContextIntProviders.exactly(1), ContextIntProviders.exactly(9))), "Value: ", "  -> 1", "    -> Survives Explosion", "  -> otherwise 9");
     }
 
     @Test
     public void testDispatcher() {
         List<DispatcherProvider.Case<ContextIntProvider>> cases = List.of(new DispatcherProvider.Case<>(CONDITION, ContextIntProviders.exactly(7)));
 
-        assertEquals("1-7", convert(Holder.direct(new NumberDispatcher(cases, ContextIntProviders.exactly(1)))));
+        assertValue(Holder.direct(new NumberDispatcher(cases, ContextIntProviders.exactly(1))), "Value: ", "  -> 7", "    -> Survives Explosion", "  -> otherwise 1");
     }
 
     @Test
@@ -129,35 +131,35 @@ public class IntProviderTest {
                 new Weighted<>(ContextIntProviders.exactly(8), 3)
         ));
 
-        assertEquals("2-8", convert(ContextIntProviders.weighted(list)));
+        assertValue(ContextIntProviders.weighted(list), "Value: 2 to 8  ~8 (75%)", "  -> 2 (25%)", "  -> 8 (75%)");
     }
 
     @Test
     public void testModulus() {
-        assertEquals("1[+???]", convert(ContextIntProviders.mod(ContextIntProviders.exactly(7), ContextIntProviders.exactly(3))));
+        assertValue(ContextIntProviders.mod(ContextIntProviders.exactly(7), ContextIntProviders.exactly(3)), "Value: 1");
     }
 
     @Test
     public void testFloorModulus() {
-        assertEquals("1[+???]", convert(ContextIntProviders.floorMod(ContextIntProviders.exactly(7), ContextIntProviders.exactly(3))));
+        assertValue(ContextIntProviders.floorMod(ContextIntProviders.exactly(7), ContextIntProviders.exactly(3)), "Value: 1");
     }
 
     @Test
     public void testQuotient() {
-        assertEquals("1[+???]", convert(ContextIntProviders.div(ContextIntProviders.exactly(7), ContextIntProviders.exactly(3))));
+        assertValue(ContextIntProviders.div(ContextIntProviders.exactly(7), ContextIntProviders.exactly(3)), "Value: 2");
     }
 
     @Test
     public void testFloorQuotient() {
-        assertEquals("1[+???]", convert(ContextIntProviders.floorDiv(ContextIntProviders.exactly(7), ContextIntProviders.exactly(3))));
+        assertValue(ContextIntProviders.floorDiv(ContextIntProviders.exactly(7), ContextIntProviders.exactly(3)), "Value: 2");
     }
 
     @Test
     public void testPower() {
-        assertEquals("1[+???]", convert(Holder.direct(new Power(ContextIntProviders.exactly(2), ContextIntProviders.exactly(3)))));
+        assertValue(Holder.direct(new Power(ContextIntProviders.exactly(2), ContextIntProviders.exactly(3))), "Value: 8");
     }
 
-    private static String convert(Holder<ContextIntProvider> provider) {
-        return UTILS.convertInt(UTILS, provider).toString();
+    private static void assertValue(Holder<ContextIntProvider> provider, String... expected) {
+        assertTooltip(TooltipUtils.getNumberTooltip(UTILS, () -> UTILS.convertContextInt(UTILS, provider)).build(Lang.Value.VALUE), true, List.of(expected));
     }
 }

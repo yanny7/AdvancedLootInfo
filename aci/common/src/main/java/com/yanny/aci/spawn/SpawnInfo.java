@@ -1,7 +1,7 @@
 package com.yanny.aci.spawn;
 
 import com.yanny.aci.CommonLogUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
@@ -35,6 +35,8 @@ public class SpawnInfo {
     private static final DecimalFormat COST_FORMAT = new DecimalFormat("0.###", DecimalFormatSymbols.getInstance(Locale.ROOT));
     private static final Comparator<Entry> ENTRY_ORDER = Comparator.<Entry, MobCategory>comparing((e) -> e.spawn().category())
             .thenComparing((e) -> BuiltInRegistries.ENTITY_TYPE.getKey(e.type()));
+    private static final Comparator<Map.Entry<Spawn, SortedSet<Identifier>>> GROUP_ORDER =
+            Comparator.<Map.Entry<Spawn, SortedSet<Identifier>>>comparingInt((e) -> -e.getValue().size()).thenComparing((e) -> e.getValue().first());
 
     private final Logger logger;
     private final Map<Identifier, Set<Identifier>> dimensionBiomes = new TreeMap<>();
@@ -116,21 +118,22 @@ public class SpawnInfo {
                 }
             }
 
-            for (Map.Entry<Spawn, SortedSet<Identifier>> group : groups.entrySet().stream()
-                    .sorted(Comparator.<Map.Entry<Spawn, SortedSet<Identifier>>>comparingInt((e) -> -e.getValue().size())
-                            .thenComparing((e) -> e.getValue().first()))
-                    .toList()) {
+            for (Map.Entry<Spawn, SortedSet<Identifier>> group : groups.entrySet().stream().sorted(GROUP_ORDER).toList()) {
                 addBiomeGroup(dimensionBuilder, group.getKey(), group.getValue(), biomesInDimension);
                 spawnsHere = true;
             }
 
-            for (Map.Entry<Identifier, List<Spawn>> structure : structures.entrySet()) {
-                if (!Collections.disjoint(structureBiomes.get(structure.getKey()), biomesInDimension)) {
-                    for (Spawn spawn : structure.getValue()) {
-                        dimensionBuilder.add(addSpawn(TooltipBuilder.value(structure.getKey()).key(CoreLang.Spawn.STRUCTURE), spawn));
-                        spawnsHere = true;
-                    }
+            Map<Identifier, List<Spawn>> structuresInDimension = new HashMap<>();
+
+            structures.forEach((structure, spawns) -> {
+                if (!Collections.disjoint(structureBiomes.get(structure), biomesInDimension)) {
+                    structuresInDimension.put(structure, spawns);
                 }
+            });
+
+            if (!structuresInDimension.isEmpty()) {
+                addStructureGroups(dimensionBuilder, structuresInDimension);
+                spawnsHere = true;
             }
 
             if (spawnsHere) {
@@ -167,11 +170,7 @@ public class SpawnInfo {
                     b.add(TooltipBuilder.asElement(addSpawn(TooltipBuilder.branch((x) -> {}), spawn), spawns.size()));
                 }
 
-                structureSpawns.getOrDefault(type, Collections.emptyMap()).forEach((structure, list) -> {
-                    for (Spawn spawn : list) {
-                        b.add(addSpawn(TooltipBuilder.value(structure).key(CoreLang.Spawn.STRUCTURE), spawn));
-                    }
-                });
+                addStructureGroups(b, structureSpawns.getOrDefault(type, Collections.emptyMap()));
             }).build());
         }
 
@@ -199,6 +198,11 @@ public class SpawnInfo {
         List<Entry> entries = new ArrayList<>();
 
         settings.spawnOverrides().forEach((category, override) -> {
+            // Mods (Hybrid Aquatic) add overrides under unknown categories, which arrive as a null key.
+            if (category == null) {
+                return;
+            }
+
             for (Weighted<MobSpawnSettings.SpawnerData> weighted : override.spawns().unwrap()) {
                 MobSpawnSettings.SpawnerData data = weighted.value();
 
@@ -234,11 +238,31 @@ public class SpawnInfo {
         }
     }
 
+    private static void addStructureGroups(TooltipBuilder builder, Map<Identifier, List<Spawn>> structures) {
+        Map<Spawn, SortedSet<Identifier>> groups = new HashMap<>();
+
+        structures.forEach((structure, spawns) -> {
+            for (Spawn spawn : spawns) {
+                groups.computeIfAbsent(spawn, (k) -> new TreeSet<>()).add(structure);
+            }
+        });
+
+        for (Map.Entry<Spawn, SortedSet<Identifier>> group : groups.entrySet().stream().sorted(GROUP_ORDER).toList()) {
+            List<Identifier> listed = List.copyOf(group.getValue());
+
+            for (int i = 0; i < listed.size(); i++) {
+                TooltipBuilder line = TooltipBuilder.value(listed.get(i)).key(CoreLang.Spawn.STRUCTURE);
+
+                builder.add(i == listed.size() - 1 ? addSpawn(line, group.getKey()) : line);
+            }
+        }
+    }
+
     @NotNull
     private static TooltipBuilder addSpawn(TooltipBuilder builder, Spawn spawn) {
         builder.add(TooltipBuilder.value(spawn.category().getName()).build(CoreLang.Spawn.CATEGORY));
         builder.add(TooltipBuilder.value(spawn.weight()).build(CoreLang.Spawn.WEIGHT));
-        builder.add(TooltipBuilder.value(new RangeValue(spawn.minCount(), spawn.maxCount()).toIntString()).build(CoreLang.Spawn.GROUP_SIZE));
+        builder.add(TooltipBuilder.number(NumberExpr.uniformInt(spawn.minCount(), spawn.maxCount())).build(CoreLang.Spawn.GROUP_SIZE));
 
         if (spawn.cost() != null) {
             builder.add(TooltipBuilder.value(COST_FORMAT.format(spawn.cost().charge()), COST_FORMAT.format(spawn.cost().energyBudget())).build(CoreLang.Spawn.SPAWN_COST));

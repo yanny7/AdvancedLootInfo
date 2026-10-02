@@ -1,6 +1,6 @@
 package com.yanny.alicompat.compat.apotheosis;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IOperation;
@@ -12,7 +12,7 @@ import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.ali.plugin.glm.LootPage;
 import com.yanny.ali.plugin.glm.Verdict;
-import com.yanny.ali.plugin.server.EnchantedRanges;
+import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
@@ -65,14 +65,14 @@ public class GemLootModifierAccessor extends BaseAccessor<GemLootModifier> imple
 
     @NotNull
     private static IDataNode getNode(IServerUtils utils, List<LootItemCondition> conditions, GemLootModifier.GemTableEntry entry) {
-        EnchantedRanges chance = NodeUtils.getEnchantedChance(utils, conditions, entry.chance());
-        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, new EnchantedRanges(new RangeValue(1)), Collections.emptyList(), conditions);
+        NumberExpr chance = NodeUtils.getChance(utils, conditions, entry.chance());
+        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, LootCount.of(NumberExpr.constant(1)), NodeUtils.getCountLimit(ApotheosisUtils.gemStack()), Collections.emptyList(), conditions);
 
         tooltip.add(TooltipBuilder.keyOnly(ApotheosisLang.Conditions.REQUIRES_PLAYER));
         tooltip.add(utils.getValueTooltip(utils, entry.purities()).build(ApotheosisLang.Branch.PURITY));
         tooltip.add(utils.getValueTooltip(utils, entry.gems()).build(Lang.Branch.ENTRIES));
 
-        return new ItemNode(entry.chance(), new RangeValue(1), ApotheosisUtils.gemStack(), tooltip.build(), Collections.emptyList(), conditions);
+        return new ItemNode(entry.chance(), NumberExpr.constant(1), ApotheosisUtils.gemStack(), tooltip.build(), Collections.emptyList(), conditions);
     }
 
     @Nullable

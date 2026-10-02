@@ -1,185 +1,156 @@
 package com.yanny.ali.plugin.server;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
+import com.yanny.aci.api.NumberFunctions;
+import com.yanny.aci.api.NumberText;
+import com.yanny.aci.language.CoreLang;
 import com.yanny.ali.api.IServerUtils;
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.random.Weighted;
 import net.minecraft.util.random.WeightedList;
+import net.minecraft.world.attribute.EnvironmentAttribute;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.*;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.score.ContextScoreboardNameProvider;
+import net.minecraft.world.level.storage.loot.providers.score.FixedScoreboardNameProvider;
+import net.minecraft.world.level.storage.loot.providers.score.ScoreboardNameProvider;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.UnaryOperator;
+import java.util.function.Function;
 
 public class NumberProviderUtils {
     @NotNull
-    public static RangeValue unknown() {
-        return new RangeValue(false, true);
-    }
-
-    public static float truncate(float value) {
-        return (int) value;
+    public static <T> NumberExpr range(IServerUtils utils, RangeProvider<?> provider, BiFunction<IServerUtils, Holder<T>, NumberExpr> converter,
+                                       BiFunction<NumberExpr, NumberExpr, NumberExpr> distribution) {
+        return distribution.apply(convert(utils, provider.min(), converter), convert(utils, provider.max(), converter));
     }
 
     @NotNull
-    public static <T> RangeValue range(IServerUtils utils, RangeProvider<?> provider, BiFunction<IServerUtils, Holder<T>, RangeValue> converter) {
-        //noinspection unchecked
-        RangeValue min = converter.apply(utils, (Holder<T>) provider.min());
-        //noinspection unchecked
-        RangeValue max = converter.apply(utils, (Holder<T>) provider.max());
+    public static <T> NumberExpr aggregate(IServerUtils utils, AggregateProvider<?> provider, BiFunction<IServerUtils, Holder<T>, NumberExpr> converter,
+                                           Function<NumberExpr[], NumberExpr> operation) {
+        List<NumberExpr> values = new ArrayList<>();
 
-        return withFlags(min.min(), max.max(), min, max);
-    }
-
-    @NotNull
-    public static <T> RangeValue sum(IServerUtils utils, AggregateProvider<?> provider, BiFunction<IServerUtils, Holder<T>, RangeValue> converter) {
-        List<RangeValue> values = convertAll(utils, provider, converter);
-        RangeValue result = new RangeValue(0);
-
-        for (RangeValue value : values) {
-            result = result.add(value);
+        for (Holder<?> input : provider.inputs()) {
+            values.add(convert(utils, input, converter));
         }
 
-        return result;
+        return operation.apply(values.toArray(NumberExpr[]::new));
     }
 
     @NotNull
-    public static <T> RangeValue product(IServerUtils utils, AggregateProvider<?> provider, BiFunction<IServerUtils, Holder<T>, RangeValue> converter) {
-        List<RangeValue> values = convertAll(utils, provider, converter);
-        RangeValue result = new RangeValue(1);
+    public static <T> NumberExpr binary(IServerUtils utils, BinaryProvider<?> provider, BiFunction<IServerUtils, Holder<T>, NumberExpr> converter,
+                                        BiFunction<NumberExpr, NumberExpr, NumberExpr> operation) {
+        return operation.apply(convert(utils, provider.left(), converter), convert(utils, provider.right(), converter));
+    }
 
-        for (RangeValue value : values) {
-            result = result.multiply(value);
+    @NotNull
+    public static <T> NumberExpr power(IServerUtils utils, PowerProvider<?> provider, BiFunction<IServerUtils, Holder<T>, NumberExpr> converter) {
+        return NumberExpr.fn(NumberFunctions.POW, convert(utils, provider.base(), converter), convert(utils, provider.exponent(), converter));
+    }
+
+    @NotNull
+    public static <T> NumberExpr unary(IServerUtils utils, UnaryProvider<?> provider, BiFunction<IServerUtils, Holder<T>, NumberExpr> converter,
+                                       Function<NumberExpr, NumberExpr> operation) {
+        return operation.apply(convert(utils, provider.input(), converter));
+    }
+
+    @NotNull
+    public static <T> NumberExpr conditional(IServerUtils utils, ConditionalProvider<?> provider, BiFunction<IServerUtils, Holder<T>, NumberExpr> converter) {
+        NumberExpr onTrue = convert(utils, provider.onTrue(), converter);
+        NumberExpr onFalse = convert(utils, provider.onFalse(), converter);
+
+        if (provider.condition().isBound() && provider.condition().value() instanceof LootItemRandomChanceCondition(Holder<?> chance)
+                && chance.isBound() && chance.value() instanceof ConstantValue(float probability)) {
+            if (probability >= 1) {
+                return onTrue;
+            } else if (probability <= 0) {
+                return onFalse;
+            }
+
+            return NumberExpr.weighted(List.of(new NumberExpr.WeightedEntry(probability, onTrue), new NumberExpr.WeightedEntry(1 - probability, onFalse)));
         }
 
-        return result;
+        return NumberExpr.cond(List.of(branch(utils, provider.condition(), onTrue)), onFalse);
     }
 
     @NotNull
-    public static <T> RangeValue average(IServerUtils utils, AggregateProvider<?> provider, BiFunction<IServerUtils, Holder<T>, RangeValue> converter) {
-        int size = provider.inputs().size();
-
-        return size > 0 ? sum(utils, provider, converter).multiply(1f / size) : unknown();
-    }
-
-    @NotNull
-    public static <T> RangeValue minimum(IServerUtils utils, AggregateProvider<?> provider, BiFunction<IServerUtils, Holder<T>, RangeValue> converter) {
-        List<RangeValue> values = convertAll(utils, provider, converter);
-
-        if (values.isEmpty()) {
-            return unknown();
-        }
-
-        float min = values.stream().map(RangeValue::min).reduce(Float.MAX_VALUE, Math::min);
-        float max = values.stream().map(RangeValue::max).reduce(Float.MAX_VALUE, Math::min);
-        return withFlags(min, max, values.toArray(RangeValue[]::new));
-    }
-
-    @NotNull
-    public static <T> RangeValue maximum(IServerUtils utils, AggregateProvider<?> provider, BiFunction<IServerUtils, Holder<T>, RangeValue> converter) {
-        List<RangeValue> values = convertAll(utils, provider, converter);
-
-        if (values.isEmpty()) {
-            return unknown();
-        }
-
-        float min = values.stream().map(RangeValue::min).reduce(-Float.MAX_VALUE, Math::max);
-        float max = values.stream().map(RangeValue::max).reduce(-Float.MAX_VALUE, Math::max);
-        return withFlags(min, max, values.toArray(RangeValue[]::new));
-    }
-
-    @NotNull
-    public static <T> RangeValue difference(IServerUtils utils, BinaryProvider<?> provider, BiFunction<IServerUtils, Holder<T>, RangeValue> converter) {
-        //noinspection unchecked
-        RangeValue left = converter.apply(utils, (Holder<T>) provider.left());
-        //noinspection unchecked
-        RangeValue right = converter.apply(utils, (Holder<T>) provider.right());
-
-        return left.add(right.multiply(-1));
-    }
-
-    @NotNull
-    public static <T> RangeValue negate(IServerUtils utils, UnaryProvider<?> provider, BiFunction<IServerUtils, Holder<T>, RangeValue> converter) {
-        //noinspection unchecked
-        return converter.apply(utils, (Holder<T>) provider.input()).multiply(-1);
-    }
-
-    @NotNull
-    public static <T> RangeValue absolute(IServerUtils utils, UnaryProvider<?> provider, BiFunction<IServerUtils, Holder<T>, RangeValue> converter) {
-        //noinspection unchecked
-        RangeValue value = converter.apply(utils, (Holder<T>) provider.input());
-
-        if (value.min() >= 0) {
-            return value;
-        } else if (value.max() <= 0) {
-            return value.multiply(-1);
-        } else {
-            return withFlags(0, Math.max(-value.min(), value.max()), value);
-        }
-    }
-
-    @NotNull
-    public static <T> RangeValue monotonic(IServerUtils utils, UnaryProvider<?> provider, BiFunction<IServerUtils, Holder<T>, RangeValue> converter, UnaryOperator<Float> operator) {
-        //noinspection unchecked
-        RangeValue value = converter.apply(utils, (Holder<T>) provider.input());
-
-        return withFlags(operator.apply(value.min()), operator.apply(value.max()), value);
-    }
-
-    @NotNull
-    public static <T> RangeValue conditional(IServerUtils utils, ConditionalProvider<?> provider, BiFunction<IServerUtils, Holder<T>, RangeValue> converter) {
-        //noinspection unchecked
-        RangeValue onTrue = converter.apply(utils, (Holder<T>) provider.onTrue());
-        //noinspection unchecked
-        return onTrue.union(converter.apply(utils, (Holder<T>) provider.onFalse()));
-    }
-
-    @NotNull
-    public static <T> RangeValue dispatcher(IServerUtils utils, DispatcherProvider<?> provider, BiFunction<IServerUtils, Holder<T>, RangeValue> converter) {
-        //noinspection unchecked
-        RangeValue result = converter.apply(utils, (Holder<T>) provider.defaultValue());
+    public static <T> NumberExpr dispatcher(IServerUtils utils, DispatcherProvider<?> provider, BiFunction<IServerUtils, Holder<T>, NumberExpr> converter) {
+        List<NumberExpr.Branch> branches = new ArrayList<>();
 
         for (DispatcherProvider.Case<?> aCase : provider.cases()) {
-            //noinspection unchecked
-            result = result.union(converter.apply(utils, (Holder<T>) aCase.value()));
+            branches.add(branch(utils, aCase.condition(), convert(utils, aCase.value(), converter)));
         }
 
-        return result;
+        return NumberExpr.cond(branches, convert(utils, provider.defaultValue(), converter));
     }
 
     @NotNull
-    public static <T> RangeValue distribution(IServerUtils utils, DistributionProvider<?> provider, BiFunction<IServerUtils, Holder<T>, RangeValue> converter) {
+    public static <T> NumberExpr distribution(IServerUtils utils, DistributionProvider<?> provider, BiFunction<IServerUtils, Holder<T>, NumberExpr> converter) {
+        List<NumberExpr.WeightedEntry> entries = new ArrayList<>();
+
+        for (Weighted<? extends Holder<?>> entry : ((WeightedList<? extends Holder<?>>) provider.distribution()).unwrap()) {
+            entries.add(new NumberExpr.WeightedEntry(entry.weight(), convert(utils, entry.value(), converter)));
+        }
+
+        return NumberExpr.weighted(entries);
+    }
+
+    @NotNull
+    public static NumberExpr score(ScoreboardNameProvider targetProvider, String score) {
+        NumberText target;
+
+        if (targetProvider instanceof ContextScoreboardNameProvider provider) {
+            target = NumberText.key(getTargetKey(provider.target()).singular());
+        } else if (targetProvider instanceof FixedScoreboardNameProvider provider) {
+            target = NumberText.str(provider.name());
+        } else {
+            target = NumberText.key(CoreLang.Numbers.UNKNOWN.singular());
+        }
+
+        return NumberExpr.score(target, score);
+    }
+
+    @NotNull
+    public static NumberExpr storage(StoredNumberAccess access) {
+        return new NumberExpr.Var(TooltipUtils.STORAGE, List.of(NumberText.str(access.storage().toString()), NumberText.str(access.path().toString())),
+                Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+    }
+
+    @NotNull
+    public static NumberExpr environmentAttribute(EnvironmentAttribute<?> attribute) {
+        return new NumberExpr.Var(TooltipUtils.ENVIRONMENT_ATTRIBUTE, List.of(NumberText.str(String.valueOf(BuiltInRegistries.ENVIRONMENT_ATTRIBUTE.getKey(attribute)))),
+                Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+    }
+
+    @NotNull
+    private static NumberExpr.Branch branch(IServerUtils utils, Holder<LootItemCondition> condition, NumberExpr value) {
+        int index = condition.isBound() ? utils.addNumberCondition(utils.getConditionTooltip(utils, condition.value()).build()) : -1;
+
+        return new NumberExpr.Branch(index, value);
+    }
+
+    @NotNull
+    private static <T> NumberExpr convert(IServerUtils utils, Holder<?> holder, BiFunction<IServerUtils, Holder<T>, NumberExpr> converter) {
         //noinspection unchecked
-        List<Weighted<Holder<T>>> entries = ((WeightedList<Holder<T>>) (WeightedList<?>) provider.distribution()).unwrap();
-
-        if (entries.isEmpty()) {
-            return unknown();
-        }
-
-        RangeValue result = converter.apply(utils, entries.getFirst().value());
-
-        for (Weighted<Holder<T>> entry : entries) {
-            result = result.union(converter.apply(utils, entry.value()));
-        }
-
-        return result;
+        return converter.apply(utils, (Holder<T>) holder);
     }
 
     @NotNull
-    private static <T> List<RangeValue> convertAll(IServerUtils utils, AggregateProvider<?> provider, BiFunction<IServerUtils, Holder<T>, RangeValue> converter) {
-        //noinspection unchecked
-        return provider.inputs().stream().map((h) -> converter.apply(utils, (Holder<T>) h)).toList();
-    }
-
-    @NotNull
-    private static RangeValue withFlags(float min, float max, RangeValue... sources) {
-        RangeValue result = new RangeValue(min, max);
-
-        for (RangeValue source : sources) {
-            result = result.add(source.multiply(0));
-        }
-
-        return result;
+    private static CoreLang.Numbers getTargetKey(LootContext.EntityTarget target) {
+        return switch (target) {
+            case THIS -> CoreLang.Numbers.TARGET_THIS;
+            case ATTACKER -> CoreLang.Numbers.TARGET_KILLER;
+            case DIRECT_ATTACKER -> CoreLang.Numbers.TARGET_DIRECT_KILLER;
+            case ATTACKING_PLAYER -> CoreLang.Numbers.TARGET_KILLER_PLAYER;
+            case TARGET_ENTITY -> CoreLang.Numbers.TARGET_TARGET_ENTITY;
+            case INTERACTING_ENTITY -> CoreLang.Numbers.TARGET_INTERACTING_ENTITY;
+        };
     }
 }

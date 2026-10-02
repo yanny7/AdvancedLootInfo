@@ -91,11 +91,8 @@ public class ConditionTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getRandomChanceWithEnchantedBonusTooltip(IServerUtils utils, LootItemRandomChanceWithEnchantedBonusCondition cond) {
-        return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, cond.unenchantedChance()).build(Lang.Value.UNENCHANTED_CHANCE));
-            b.add(utils.getValueTooltip(utils, cond.enchantedChance()).build(Lang.Branch.ENCHANTED_CHANCE));
-            b.add(utils.getValueTooltip(utils, cond.enchantment()).build(Lang.Value.ENCHANTMENT));
-        }, Lang.Conditions.RANDOM_CHANCE_WITH_ENCHANTED_BONUS).isAdvancedTooltip();
+        return TooltipBuilder.array((b) -> b.add(TooltipBuilder.number(TooltipUtils.getEnchantedBonusChance(utils, cond)).build(Lang.Value.CHANCE)),
+                Lang.Conditions.RANDOM_CHANCE_WITH_ENCHANTED_BONUS).isAdvancedTooltip();
     }
 
     @NotNull
@@ -125,7 +122,7 @@ public class ConditionTooltipUtils {
     @NotNull
     public static TooltipBuilder getIntValueCheckTooltip(IServerUtils utils, IntValueCheck cond) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, cond.value()).build(Lang.Value.VALUE));
+            b.add(TooltipUtils.getNumberTooltip(utils, () -> utils.convertContextInt(utils, cond.value())).build(Lang.Value.VALUE));
             b.add(utils.getValueTooltip(utils, cond.range()).build(Lang.Value.RANGE));
         }, Lang.Conditions.INT_VALUE_CHECK);
     }

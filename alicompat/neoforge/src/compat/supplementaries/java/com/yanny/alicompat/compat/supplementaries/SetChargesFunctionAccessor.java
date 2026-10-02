@@ -1,6 +1,5 @@
 package com.yanny.alicompat.compat.supplementaries;
 
-import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
@@ -23,7 +22,7 @@ public class SetChargesFunctionAccessor extends BaseAccessor<SetChargesFunction>
     @Override
     public TooltipBuilder getTooltip(IServerUtils utils) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, new RangeValue(amount.getMinValue(), amount.getMaxValue())).build(Lang.Value.AMOUNT));
+            b.add(utils.getValueTooltip(utils, amount).build(Lang.Value.AMOUNT));
             b.add(utils.getValueTooltip(utils, parent.predicates).build(Lang.Branch.PREDICATES));
         }, SupplementariesLang.Functions.SET_CHARGES);
     }

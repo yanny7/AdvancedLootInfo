@@ -5,7 +5,6 @@ import net.minecraft.world.level.storage.loot.providers.number.ints.ResolvableIn
 import com.mojang.authlib.properties.Property;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
-import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
@@ -23,6 +22,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.inventory.SlotRange;
@@ -288,7 +288,7 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getEffectEntryTooltip(IServerUtils utils, SetStewEffectFunction.EffectEntry entry) {
         return utils.getValueTooltip(utils, entry.effect())
-                .add(utils.getValueTooltip(utils,entry.duration()).build(Lang.Value.DURATION));
+                .add(TooltipUtils.getNumberTooltip(utils, () -> utils.convertContextInt(utils, entry.duration())).build(Lang.Value.DURATION));
     }
 
     @NotNull
@@ -311,13 +311,13 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getIntProviderTooltip(IServerUtils utils, ContextIntProvider value) {
-        return TooltipBuilder.value(utils.convertInt(utils, Holder.direct(value)));
+    public static TooltipBuilder getContextIntProviderTooltip(IServerUtils utils, ContextIntProvider value) {
+        return TooltipUtils.getNumberTooltip(utils, () -> utils.convertContextInt(utils, Holder.direct(value)));
     }
 
     @NotNull
-    public static TooltipBuilder getFloatProviderTooltip(IServerUtils utils, ContextFloatProvider value) {
-        return TooltipBuilder.value(utils.convertFloat(utils, Holder.direct(value)));
+    public static TooltipBuilder getContextFloatProviderTooltip(IServerUtils utils, ContextFloatProvider value) {
+        return TooltipUtils.getNumberTooltip(utils, () -> utils.convertContextFloat(utils, Holder.direct(value)));
     }
 
     @NotNull
@@ -338,29 +338,29 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getIntLimitTooltip(IServerUtils utils, IntLimit limit) {
-        return TooltipBuilder.value(RangeValue.rangeToString(utils.convertInt(utils, limit.min.orElse(null)), utils.convertInt(utils, limit.max.orElse(null))));
+        return TooltipUtils.getNumberTooltip(utils, () -> GenericTooltipUtils.getRange(utils, limit.min, limit.max, IntProviderUtils::convert));
     }
 
     @NotNull
     public static TooltipBuilder getIntRangePredicateTooltip(IServerUtils utils, IntRangePredicate range) {
         return switch (range) {
-            case IntRangePredicate.Point point -> TooltipBuilder.value(utils.convertInt(utils, point.value()));
-            case IntRangePredicate.Line line -> TooltipBuilder.value(RangeValue.rangeToString(utils.convertInt(utils, line.min.orElse(null)), utils.convertInt(utils, line.max.orElse(null))));
+            case IntRangePredicate.Point point -> TooltipUtils.getNumberTooltip(utils, () -> utils.convertContextInt(utils, point.value()));
+            case IntRangePredicate.Line line -> TooltipUtils.getNumberTooltip(utils, () -> GenericTooltipUtils.getRange(utils, line.min, line.max, IntProviderUtils::convert));
         };
     }
 
     @NotNull
     public static TooltipBuilder getFloatRangePredicateTooltip(IServerUtils utils, FloatRangePredicate range) {
         return switch (range) {
-            case FloatRangePredicate.Point point -> TooltipBuilder.value(utils.convertFloat(utils, point.value()));
-            case FloatRangePredicate.Line line -> TooltipBuilder.value(RangeValue.rangeToString(utils.convertFloat(utils, line.min.orElse(null)), utils.convertFloat(utils, line.max.orElse(null))));
+            case FloatRangePredicate.Point point -> TooltipUtils.getNumberTooltip(utils, () -> utils.convertContextFloat(utils, point.value()));
+            case FloatRangePredicate.Line line -> TooltipUtils.getNumberTooltip(utils, () -> GenericTooltipUtils.getRange(utils, line.min, line.max, FloatProviderUtils::convert));
         };
     }
 
     @NotNull
     public static TooltipBuilder getMinMaxBoundsTooltip(IServerUtils ignoredUtils, MinMaxBounds.Ints ints) {
         if (ints != MinMaxBounds.Ints.ANY) {
-            return TooltipBuilder.value(GenericTooltipUtils.toString(ints));
+            return TooltipBuilder.number(GenericTooltipUtils.getRange(ints));
         }
 
         return TooltipBuilder.empty();
@@ -369,7 +369,7 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getMinMaxBoundsTooltip(IServerUtils ignoredUtils, MinMaxBounds.Doubles doubles) {
         if (doubles != MinMaxBounds.Doubles.ANY) {
-            return TooltipBuilder.value(GenericTooltipUtils.toString(doubles));
+            return TooltipBuilder.number(GenericTooltipUtils.getRange(doubles));
         }
 
         return TooltipBuilder.empty();
@@ -410,19 +410,19 @@ public class ValueTooltipUtils {
         return TooltipBuilder.array((b) -> {
             if (value.value() instanceof Item item) {
                 b.add(utils.getValueTooltip(utils, item)
-                        .add(TooltipBuilder.keyValue(key, GenericTooltipUtils.toString(stat.range())).build())
+                        .add(TooltipBuilder.number(GenericTooltipUtils.getRange(stat.range())).rawKey(key).build())
                         .build(Lang.Value.ITEM));
             } else if (value.value() instanceof Block block) {
                 b.add(utils.getValueTooltip(utils, block)
-                        .add(TooltipBuilder.keyValue(key, GenericTooltipUtils.toString(stat.range())).build())
+                        .add(TooltipBuilder.number(GenericTooltipUtils.getRange(stat.range())).rawKey(key).build())
                         .build(Lang.Value.BLOCK));
             } else if (value.value() instanceof EntityType<?> entityType) {
                 b.add(utils.getValueTooltip(utils, entityType)
-                        .add(TooltipBuilder.keyValue(key, GenericTooltipUtils.toString(stat.range())).build())
+                        .add(TooltipBuilder.number(GenericTooltipUtils.getRange(stat.range())).rawKey(key).build())
                         .build(Lang.Value.ENTITY_TYPE));
             } else if (value.value() instanceof Identifier identifier) {
                 b.add(utils.getValueTooltip(utils, identifier)
-                        .add(TooltipBuilder.keyValue(TooltipBuilder.translate(getTranslationKey(identifier)), GenericTooltipUtils.toString(stat.range())).build())
+                        .add(TooltipBuilder.number(GenericTooltipUtils.getRange(stat.range())).rawKey(TooltipBuilder.translate(getTranslationKey(identifier))).build())
                         .build(Lang.Value.ID));
             }
         });
@@ -644,44 +644,13 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
+    public static TooltipBuilder getIntProviderTooltip(IServerUtils utils, IntProvider provider) {
+        return TooltipBuilder.number(utils.convertIntProvider(utils, provider));
+    }
+
+    @NotNull
     public static TooltipBuilder getLevelBasedValueTooltip(IServerUtils utils, LevelBasedValue levelBasedValue) {
-        return TooltipBuilder.array((b) -> {
-            switch (levelBasedValue) {
-                case LevelBasedValue.Constant(float value) ->
-                        b.add(utils.getValueTooltip(utils, value).build(Lang.Value.CONSTANT));
-                case LevelBasedValue.Clamped(LevelBasedValue value, float min, float max) ->
-                        b.add(TooltipBuilder.array((c) -> c
-                                .add(utils.getValueTooltip(utils, value).build(Lang.Branch.VALUE))
-                                .add(utils.getValueTooltip(utils, min).build(Lang.Value.MIN))
-                                .add(utils.getValueTooltip(utils, max).build(Lang.Value.MAX))
-                                .build(Lang.Branch.CLAMPED)
-                        ));
-                case LevelBasedValue.Fraction(LevelBasedValue numerator, LevelBasedValue denominator) ->
-                        b.add(TooltipBuilder.array((c) -> c
-                                .add(utils.getValueTooltip(utils, numerator).build(Lang.Branch.NUMERATOR))
-                                .add(utils.getValueTooltip(utils, denominator).build(Lang.Branch.DENOMINATOR))
-                                .build(Lang.Branch.FRACTION)
-                        ));
-                case LevelBasedValue.Linear(float base, float perLevelAboveFirst) ->
-                        b.add(TooltipBuilder.array((c) -> c
-                                .add(utils.getValueTooltip(utils, base).build(Lang.Value.BASE))
-                                .add(utils.getValueTooltip(utils, perLevelAboveFirst).build(Lang.Value.PER_LEVEL))
-                                .build(Lang.Branch.LINEAR)
-                ));
-                case LevelBasedValue.LevelsSquared(float added) ->
-                        b.add(TooltipBuilder.array((c) -> c
-                                .add(utils.getValueTooltip(utils, added).build(Lang.Value.ADDED))
-                                .build(Lang.Branch.LEVEL_SQUARED)
-                ));
-                case LevelBasedValue.Lookup(List<Float> values, LevelBasedValue fallback) ->
-                        b.add(TooltipBuilder.array((c) -> c
-                                .add(utils.getValueTooltip(utils, values.toString()).build(Lang.Value.VALUES))
-                                .add(utils.getValueTooltip(utils, fallback).build(Lang.Branch.FALLBACK))
-                                .build(Lang.Branch.LOOKUP)
-                        ));
-                default -> {}
-            }
-        });
+        return TooltipBuilder.number(utils.convertLevelBasedValue(utils, levelBasedValue, TooltipUtils.anyEnchantmentLevel(utils)));
     }
 
     @NotNull

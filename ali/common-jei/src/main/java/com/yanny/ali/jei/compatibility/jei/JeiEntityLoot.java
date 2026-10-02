@@ -1,9 +1,11 @@
 package com.yanny.ali.jei.compatibility.jei;
 
 import com.yanny.aci.api.IWidget;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.api.RelativeRect;
+import com.yanny.aci.compatibility.ScrollableTooltip;
+import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.compatibility.common.EntityLootType;
@@ -58,7 +60,7 @@ public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, EntityType<?>> {
         List<IRecipeSlotDrawable> slotDrawables = new LinkedList<>();
 
         builder.getRecipeSlots().findSlotByName("spawn_egg").ifPresent((slotDrawable -> {
-            widgets.add(new JeiLootSlotWidget(slotDrawable, CATEGORY_WIDTH / 2 - 9, 0, new RangeValue(1)));
+            widgets.add(new JeiLootSlotWidget(slotDrawable, CATEGORY_WIDTH / 2 - 9, 0, NumberInterval.point(1)));
             slotDrawables.add(slotDrawable);
         }));
         widgets.add(createTextWidget(recipe.entityType().getDescription(), CATEGORY_WIDTH / 2, 0, true));
@@ -81,7 +83,11 @@ public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, EntityType<?>> {
             @Override
             public void getTooltip(ITooltipBuilder tooltip, double mouseX, double mouseY) {
                 if (rect.contains((int) mouseX, (int) mouseY)) {
-                    tooltip.addAll(GenericUtils.getSpawnTooltip(recipe.entry()));
+                    List<TooltipLine> spawnTooltip = GenericUtils.getSpawnTooltip(recipe.entry());
+
+                    if (!spawnTooltip.isEmpty()) {
+                        tooltip.add(new ScrollableTooltip(spawnTooltip));
+                    }
                 }
             }
 

@@ -1,7 +1,7 @@
 package com.yanny.ali.plugin.common.trades;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
@@ -20,16 +20,16 @@ public class TradeUtils {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(trade.wants.item().value().getDefaultInstance()),
-                utils.convertInt(utils, trade.wants.count()),
+                utils.convertContextInt(utils, trade.wants.count()),
                 utils.getValueTooltip(utils, trade.wants.components()).build(Lang.Branch.EXPECTED_COMPONENTS),
                 Either.left(trade.additionalWants.map((t) -> t.item().value().getDefaultInstance()).orElse(ItemStack.EMPTY)),
-                trade.additionalWants.map((t) -> utils.convertInt(utils, t.count())).orElse(new RangeValue(1)),
+                trade.additionalWants.map((t) -> utils.convertContextInt(utils, t.count())).orElse(NumberExpr.constant(1)),
                 trade.additionalWants.map((t) -> utils.getValueTooltip(utils, t.components())).orElse(TooltipBuilder.empty()).build(Lang.Branch.EXPECTED_COMPONENTS),
                 Either.left(trade.gives.create()),
-                new RangeValue(trade.gives.count()),
+                NumberExpr.constant(trade.gives.count()),
                 utils.getValueTooltip(utils, trade.givenItemModifier).build(),
-                utils.convertInt(utils, trade.maxUses),
-                utils.convertInt(utils, trade.xp),
+                utils.convertContextInt(utils, trade.maxUses),
+                utils.convertContextInt(utils, trade.xp),
                 utils.getValueTooltip(utils, trade.doubleTradePriceEnchantments).build(Lang.Branch.DOUBLE_TRADE_PRICE_ENCHANTMENTS)
         );
     }

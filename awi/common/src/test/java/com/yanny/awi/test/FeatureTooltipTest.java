@@ -66,9 +66,7 @@ public class FeatureTooltipTest {
         assertTooltip(FEATURES.get("block_column"), List.of(
                 "Block Column:",
                 "  -> Layers:",
-                "    -> Height:",
-                "      -> Constant:",
-                "        -> Value: 2",
+                "    -> Height: 2",
                 "    -> State:",
                 "      -> Simple:",
                 "        -> State:",
@@ -154,12 +152,9 @@ public class FeatureTooltipTest {
                 "      -> level: 0",
                 "  -> Rim:",
                 "    -> Block: Magma Block",
-                "  -> Size:",
-                "    -> Constant:",
-                "      -> Value: 4",
+                "  -> Size: 4",
                 "  -> Rim Size:",
-                "    -> Uniform:",
-                "      -> Range: 1-2"
+                "    -> 1 to 2"
         ));
     }
 
@@ -173,9 +168,7 @@ public class FeatureTooltipTest {
                 "        -> Block: Sand",
                 "  -> Target:",
                 "    -> Solid:",
-                "  -> Radius:",
-                "    -> Constant:",
-                "      -> Value: 3",
+                "  -> Radius: 3",
                 "  -> Half Height: 2"
         ));
     }
@@ -237,8 +230,7 @@ public class FeatureTooltipTest {
                 "        -> Properties:",
                 "          -> axis: y",
                 "  -> Log Length:",
-                "    -> Constant:",
-                "      -> Value: 5",
+                "    -> 5",
                 "  -> Stump Decorators:",
                 "    -> Trunk Vine",
                 "  -> Log Decorators:",
@@ -327,14 +319,11 @@ public class FeatureTooltipTest {
                 "  -> Alternate Layer Chance: 0.0",
                 "  -> Require Alternate Layer: true",
                 "  -> Outer Wall Distance:",
-                "    -> Constant:",
-                "      -> Value: 5",
+                "    -> 5",
                 "  -> Distribution Points:",
-                "    -> Constant:",
-                "      -> Value: 4",
+                "    -> 4",
                 "  -> Point Offset:",
-                "    -> Constant:",
-                "      -> Value: 2",
+                "    -> 2",
                 "  -> Min Gen Offset: -16",
                 "  -> Max Gen Offset: 16",
                 "  -> Noise Multiplier: 0.05",
@@ -466,21 +455,16 @@ public class FeatureTooltipTest {
                 "    -> Tag: minecraft:wool",
                 "  -> Search Range: 30",
                 "  -> Column Radius:",
-                "    -> Constant:",
-                "      -> Value: 2",
+                "    -> 2",
                 "  -> Height Scale:",
-                "    -> Constant:",
-                "      -> Value: 0.4",
+                "    -> 0.4",
                 "  -> Radius To Height Ratio: 0.2",
                 "  -> Stalactite Bluntness:",
-                "    -> Constant:",
-                "      -> Value: 0.1",
+                "    -> 0.1",
                 "  -> Stalagmite Bluntness:",
-                "    -> Constant:",
-                "      -> Value: 0.2",
+                "    -> 0.2",
                 "  -> Wind Speed:",
-                "    -> Constant:",
-                "      -> Value: 0.3",
+                "    -> 0.3",
                 "  -> Min Radius For Wind: 3",
                 "  -> Min Bluntness For Wind: 0.4"
         ));
@@ -516,9 +500,7 @@ public class FeatureTooltipTest {
                 "    -> Block: Netherrack",
                 "  -> Replace State:",
                 "    -> Block: Blackstone",
-                "  -> Radius:",
-                "    -> Uniform:",
-                "      -> Range: 3-5"
+                "  -> Radius: 3 to 5"
         ));
     }
 
@@ -569,9 +551,7 @@ public class FeatureTooltipTest {
                 "        -> Block: Moss Carpet",
                 "  -> Project Through:",
                 "    -> Solid:",
-                "  -> Size:",
-                "    -> Constant:",
-                "      -> Value: 3",
+                "  -> Size: 3",
                 "  -> Max Projection Height: 5"
         ));
     }
@@ -608,14 +588,11 @@ public class FeatureTooltipTest {
                 "  -> Can Replace:",
                 "    -> Solid:",
                 "  -> Attempts:",
-                "    -> Constant:",
-                "      -> Value: 1500",
+                "    -> 1500",
                 "  -> XZ Offset:",
-                "    -> Uniform:",
-                "      -> Range: 0-12",
+                "    -> 0 to 12",
                 "  -> Y Offset:",
-                "    -> Uniform:",
-                "      -> Range: 0-12"
+                "    -> 0 to 12"
         ));
     }
 
@@ -814,23 +791,16 @@ public class FeatureTooltipTest {
                 "  -> Replaceable Blocks:",
                 "    -> Tag: minecraft:wool",
                 "  -> Floor-Ceiling Search Range: 12",
-                "  -> Height:",
-                "    -> Uniform:",
-                "      -> Range: 3-6",
-                "  -> Radius:",
-                "    -> Uniform:",
-                "      -> Range: 2-8",
+                "  -> Height: 3 to 6",
+                "  -> Radius: 2 to 8",
                 "  -> Max Stalagmite/Stalactite Diff: 1",
                 "  -> Height Deviation: 3",
                 "  -> Speleothem Layer Thickness:",
-                "    -> Constant:",
-                "      -> Value: 1",
+                "    -> 1",
                 "  -> Density:",
-                "    -> Constant:",
-                "      -> Value: 0.4",
+                "    -> 0.4",
                 "  -> Wetness:",
-                "    -> Constant:",
-                "      -> Value: 0.3",
+                "    -> 0.3",
                 "  -> Chance At Max Center Distance: 0.1",
                 "  -> Max Edge Distance For Chance: 4",
                 "  -> Max Center Distance For Height Bias: 5"
@@ -883,17 +853,12 @@ public class FeatureTooltipTest {
                 "  -> Cannot Place On:",
                 "    -> Tag: minecraft:wool",
                 "  -> Cluster Reach:",
-                "    -> Constant:",
-                "      -> Value: 4",
+                "    -> 4",
                 "  -> Column Count:",
-                "    -> Uniform:",
-                "      -> Range: 1-3",
+                "    -> 1 to 3",
                 "  -> Column Reach:",
-                "    -> Constant:",
-                "      -> Value: 2",
-                "  -> Height:",
-                "    -> Uniform:",
-                "      -> Range: 1-5"
+                "    -> 2",
+                "  -> Height: 1 to 5"
         ));
     }
 
@@ -941,18 +906,14 @@ public class FeatureTooltipTest {
                 "          -> waterlogged: false",
                 "  -> Foliage Placer:",
                 "    -> Blob:",
-                "      -> Radius:",
-                "        -> Constant:",
-                "          -> Value: 2",
+                "      -> Radius: 2",
                 "      -> Offset:",
-                "        -> Constant:",
-                "          -> Value: 0",
+                "        -> 0",
                 "      -> Height: 3",
                 "  -> Root Placer:",
                 "    -> Mangrove Root:",
                 "      -> Trunk Offset Y:",
-                "        -> Constant:",
-                "          -> Value: 1",
+                "        -> 1",
                 "      -> Root Provider:",
                 "        -> Simple:",
                 "          -> State:",
@@ -1016,14 +977,12 @@ public class FeatureTooltipTest {
                 "        -> Solid:",
                 "  -> Surface: Floor",
                 "  -> Depth:",
-                "    -> Constant:",
-                "      -> Value: 1",
+                "    -> 1",
                 "  -> Extra Bottom Block Chance: 0.0",
                 "  -> Vertical Range: 5",
                 "  -> Vegetation Chance: 0.8",
                 "  -> XZ Radius:",
-                "    -> Uniform:",
-                "      -> Range: 1-2",
+                "    -> 1 to 2",
                 "  -> Extra Edge Column Chance: 0.7"
         ));
     }
@@ -1060,14 +1019,12 @@ public class FeatureTooltipTest {
                 "        -> Solid:",
                 "  -> Surface: Floor",
                 "  -> Depth:",
-                "    -> Constant:",
-                "      -> Value: 1",
+                "    -> 1",
                 "  -> Extra Bottom Block Chance: 0.0",
                 "  -> Vertical Range: 5",
                 "  -> Vegetation Chance: 0.8",
                 "  -> XZ Radius:",
-                "    -> Uniform:",
-                "      -> Range: 1-2",
+                "    -> 1 to 2",
                 "  -> Extra Edge Column Chance: 0.7"
         ));
     }

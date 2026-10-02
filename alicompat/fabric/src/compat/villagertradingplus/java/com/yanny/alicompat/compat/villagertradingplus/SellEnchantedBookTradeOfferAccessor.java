@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.villagertradingplus;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
@@ -12,14 +12,21 @@ import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.ClassAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.IItemListing;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 @ClassAccessor("com.lion.villagertradingplus.tradeoffers.trades.JsonSellEnchantedBookTradeOffer$Factory")
 public class SellEnchantedBookTradeOfferAccessor extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
-    private static final int MIN_COST = 5;
     private static final int MAX_COST = 64;
 
     @FieldAccessor
@@ -44,18 +51,48 @@ public class SellEnchantedBookTradeOfferAccessor extends BaseAccessor<VillagerTr
         return new ItemsToItemsNode(
                 utils,
                 Either.left(new ItemStack(currency.getItem())),
-                new RangeValue(MIN_COST, MAX_COST),
+                getCost(utils),
                 TooltipNode.empty(),
                 Either.left(Items.BOOK.getDefaultInstance()),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 TooltipNode.empty(),
                 Either.left(Items.ENCHANTED_BOOK.getDefaultInstance()),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 TooltipBuilder.keyOnly(Lang.Functions.ENCHANT_RANDOMLY).build(),
                 maxUses,
                 experience,
                 multiplier,
                 conditions
         );
+    }
+
+    @NotNull
+    private static NumberExpr getCost(IServerUtils utils) {
+        List<Holder.Reference<Enchantment>> enchantments = utils.lookupProvider().lookupOrThrow(Registries.ENCHANTMENT).listElements()
+                .filter((e) -> e.is(EnchantmentTags.TRADEABLE))
+                .toList();
+        Map<List<Integer>, Double> weights = new LinkedHashMap<>();
+
+        for (Holder.Reference<Enchantment> holder : enchantments) {
+            Enchantment enchantment = holder.value();
+            int levels = enchantment.getMaxLevel() - enchantment.getMinLevel() + 1;
+
+            for (int level = enchantment.getMinLevel(); level <= enchantment.getMaxLevel(); level++) {
+                weights.merge(List.of(holder.is(EnchantmentTags.DOUBLE_TRADE_PRICE) ? 2 : 1, level), 1.0 / enchantments.size() / levels, Double::sum);
+            }
+        }
+
+        if (weights.isEmpty()) {
+            return NumberExpr.constant(MAX_COST);
+        }
+
+        NumberExpr price = NumberExpr.weighted(weights.entrySet().stream()
+                .map((e) -> new NumberExpr.WeightedEntry(e.getValue(), NumberExpr.mul(
+                        NumberExpr.constant(e.getKey().get(0)),
+                        NumberExpr.add(NumberExpr.constant(2 + 3 * e.getKey().get(1)), NumberExpr.uniformInt(0, 4 + 10 * e.getKey().get(1)))
+                )))
+                .toList());
+
+        return NumberExpr.min(price, NumberExpr.constant(MAX_COST));
     }
 }

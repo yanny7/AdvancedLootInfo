@@ -1,11 +1,10 @@
 package com.yanny.alicompat.compat.gtceu;
 
 import com.gregtechceu.gtceu.data.loot.ChestGenHooks;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
-import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.ICountModifier;
@@ -34,14 +33,14 @@ public class RandomWeightLootFunctionAccessor extends BaseAccessor<ChestGenHooks
     public TooltipBuilder getTooltip(IServerUtils utils) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, stack).build(Lang.Branch.ITEM));
-            b.add(utils.getValueTooltip(utils, new RangeValue(minAmount, maxAmount)).build(Lang.Value.COUNT));
+            b.add(utils.getValueTooltip(utils, NumberExpr.uniformInt(minAmount, maxAmount)).build(Lang.Value.COUNT));
             b.add(utils.getValueTooltip(utils, parent.predicates).build(Lang.Branch.PREDICATES));
         }, GregTechCEuModernLang.Functions.RANDOM_WEIGHT);
     }
 
     @Override
-    public void applyCountModifier(IServerUtils utils, EnchantedRanges count) {
-        count.modifyAllEntries((value) -> getCount());
+    public NumberExpr applyCountModifier(IServerUtils utils, NumberExpr count) {
+        return getCount();
     }
 
     @Override
@@ -61,11 +60,11 @@ public class RandomWeightLootFunctionAccessor extends BaseAccessor<ChestGenHooks
     }
 
     @NotNull
-    private RangeValue getCount() {
+    private NumberExpr getCount() {
         if (minAmount == maxAmount) {
-            return new RangeValue(minAmount);
+            return NumberExpr.constant(minAmount);
         }
 
-        return new RangeValue(Math.min(minAmount, stack.getMaxStackSize()), Math.min(maxAmount, stack.getMaxStackSize()));
+        return NumberExpr.min(NumberExpr.uniformInt(minAmount, maxAmount), NumberExpr.constant(stack.getMaxStackSize()));
     }
 }

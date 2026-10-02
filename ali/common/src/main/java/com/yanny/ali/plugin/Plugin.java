@@ -1,6 +1,9 @@
 package com.yanny.ali.plugin;
 
 import com.mojang.datafixers.util.Pair;
+import com.yanny.aci.api.NumberExpr;
+import com.yanny.aci.api.NumberFunctions;
+import com.yanny.aci.tooltip.CommonNumberProviders;
 import com.yanny.aci.tooltip.CommonValueTooltip;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
@@ -38,6 +41,7 @@ import net.minecraft.world.clock.WorldClock;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -87,6 +91,7 @@ import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntPr
 import net.minecraft.world.level.storage.loot.providers.number.ints.ResolvableInt;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Map;
 
 @AliEntrypoint
@@ -147,6 +152,7 @@ public class Plugin implements IPlugin {
     @Override
     public void registerServer(IServerRegistry registry) {
         new CommonValueTooltip<IServerUtils, IServerRegistry>().registerAll(registry);
+        new CommonNumberProviders<IServerUtils, IServerRegistry>().registerAll(registry);
 
         EnumTypes.TRANSLATED_ENUMS.forEach((type, owner) -> registry.registerEnumTranslation(type, Utils.MOD_ID, owner));
 
@@ -154,6 +160,14 @@ public class Plugin implements IPlugin {
 
         IntProviderUtils.register(registry);
         FloatProviderUtils.register(registry);
+
+        registry.registerLevelBasedValue(LevelBasedValue.Constant.class, Plugin::convertLevelConstant);
+        registry.registerLevelBasedValue(LevelBasedValue.Linear.class, Plugin::convertLevelLinear);
+        registry.registerLevelBasedValue(LevelBasedValue.LevelsSquared.class, Plugin::convertLevelsSquared);
+        registry.registerLevelBasedValue(LevelBasedValue.Fraction.class, Plugin::convertLevelFraction);
+        registry.registerLevelBasedValue(LevelBasedValue.Clamped.class, Plugin::convertLevelClamped);
+        registry.registerLevelBasedValue(LevelBasedValue.Lookup.class, Plugin::convertLevelLookup);
+        registry.registerLevelBasedValue(LevelBasedValue.Exponent.class, Plugin::convertLevelExponent);
 
         registry.registerEntry(LootItem.class, NodeUtils::getItemNode);
         registry.registerEntry(TagEntry.class, NodeUtils::getTagNode);
@@ -495,8 +509,8 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(MinMaxBounds.Doubles.class, ValueTooltipUtils::getMinMaxBoundsTooltip);
         registry.registerValueTooltip(ApplyBonusCount.Formula.class, ValueTooltipUtils::getFormulaTooltip);
         registry.registerValueTooltip(SetAttributesFunction.Modifier.class, ValueTooltipUtils::getModifierTooltip);
-        registry.registerValueTooltip(ContextIntProvider.class, ValueTooltipUtils::getIntProviderTooltip);
-        registry.registerValueTooltip(ContextFloatProvider.class, ValueTooltipUtils::getFloatProviderTooltip);
+        registry.registerValueTooltip(ContextIntProvider.class, ValueTooltipUtils::getContextIntProviderTooltip);
+        registry.registerValueTooltip(ContextFloatProvider.class, ValueTooltipUtils::getContextFloatProviderTooltip);
         registry.registerValueTooltip(IntLimit.class, ValueTooltipUtils::getIntLimitTooltip);
         registry.registerValueTooltip(IntRangePredicate.class, ValueTooltipUtils::getIntRangePredicateTooltip);
         registry.registerValueTooltip(FloatRangePredicate.class, ValueTooltipUtils::getFloatRangePredicateTooltip);
@@ -530,6 +544,7 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(BannerPatternLayers.Layer.class, ValueTooltipUtils::getBannerPatternLayerTooltip);
         registry.registerValueTooltip(GameTypePredicate.class, ValueTooltipUtils::getGameTypePredicateTooltip);
         registry.registerValueTooltip(LevelBasedValue.class, ValueTooltipUtils::getLevelBasedValueTooltip);
+        registry.registerValueTooltip(IntProvider.class, ValueTooltipUtils::getIntProviderTooltip);
         registry.registerValueTooltip(MovementPredicate.class, ValueTooltipUtils::getMovementPredicateTooltip);
         registry.registerValueTooltip(SlotsPredicate.class, ValueTooltipUtils::getSlotPredicateTooltip);
 //        registry.registerValueTooltip(HolderSet.class, ValueTooltipUtils::getHolderSetTooltip);
@@ -606,5 +621,48 @@ public class Plugin implements IPlugin {
         tradeSets.put(3, TradeSets.WANDERING_TRADER_COMMON);
 
         return tradeSets;
+    }
+
+    @NotNull
+    private static NumberExpr convertLevelConstant(IServerUtils utils, LevelBasedValue.Constant value, NumberExpr level) {
+        return NumberExpr.constant(value.value());
+    }
+
+    @NotNull
+    private static NumberExpr convertLevelLinear(IServerUtils utils, LevelBasedValue.Linear value, NumberExpr level) {
+        return NumberExpr.add(NumberExpr.constant(value.base()), NumberExpr.mul(NumberExpr.constant(value.perLevelAboveFirst()), NumberExpr.sub(level, NumberExpr.constant(1))));
+    }
+
+    @NotNull
+    private static NumberExpr convertLevelsSquared(IServerUtils utils, LevelBasedValue.LevelsSquared value, NumberExpr level) {
+        return NumberExpr.add(NumberExpr.fn(NumberFunctions.POW, level, NumberExpr.constant(2)), NumberExpr.constant(value.added()));
+    }
+
+    @NotNull
+    private static NumberExpr convertLevelFraction(IServerUtils utils, LevelBasedValue.Fraction value, NumberExpr level) {
+        return NumberExpr.div(utils.convertLevelBasedValue(utils, value.numerator(), level), utils.convertLevelBasedValue(utils, value.denominator(), level));
+    }
+
+    @NotNull
+    private static NumberExpr convertLevelClamped(IServerUtils utils, LevelBasedValue.Clamped value, NumberExpr level) {
+        return NumberExpr.clamp(utils.convertLevelBasedValue(utils, value.value(), level), NumberExpr.constant(value.min()), NumberExpr.constant(value.max()));
+    }
+
+    @NotNull
+    private static NumberExpr convertLevelExponent(IServerUtils utils, LevelBasedValue.Exponent value, NumberExpr level) {
+        return NumberExpr.fn(NumberFunctions.POW, utils.convertLevelBasedValue(utils, value.base(), level), utils.convertLevelBasedValue(utils, value.power(), level));
+    }
+
+    @NotNull
+    private static NumberExpr convertLevelLookup(IServerUtils utils, LevelBasedValue.Lookup value, NumberExpr level) {
+        NumberExpr fallback = utils.convertLevelBasedValue(utils, value.fallback(), level);
+
+        if (value.values().isEmpty()) {
+            return fallback;
+        }
+
+        List<NumberExpr> values = value.values().stream().map(NumberExpr::constant).toList();
+
+        return NumberExpr.lookup(NumberExpr.sub(level, NumberExpr.constant(1)), values, fallback);
     }
 }

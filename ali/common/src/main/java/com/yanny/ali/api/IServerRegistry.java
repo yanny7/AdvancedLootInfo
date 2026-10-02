@@ -1,13 +1,12 @@
 package com.yanny.ali.api;
 
 import com.yanny.aci.api.ICoreServerRegistry;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.plugin.glm.IEntitySubPredicateResolver;
 import com.yanny.ali.plugin.glm.ILootContextPreparer;
 import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.ali.plugin.glm.IPageResolver;
-import com.yanny.ali.plugin.server.EnchantedRanges;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.advancements.predicates.entity.EntitySubPredicate;
 import net.minecraft.core.component.DataComponentType;
@@ -20,13 +19,14 @@ import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.slot.SlotSource;
 import net.minecraft.world.item.trading.TradeSet;
+import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 import org.apache.commons.lang3.function.TriFunction;
-import org.apache.logging.log4j.util.TriConsumer;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -63,13 +63,15 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     <T extends SlotSource> void registerSlotSourceTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter);
 
-    <T extends ContextIntProvider> void registerIntProvider(Class<T> type, BiFunction<IServerUtils, T, RangeValue> converter);
+    <T extends ContextIntProvider> void registerContextIntProvider(Class<T> type, BiFunction<IServerUtils, T, NumberExpr> converter);
 
-    <T extends ContextFloatProvider> void registerFloatProvider(Class<T> type, BiFunction<IServerUtils, T, RangeValue> converter);
+    <T extends ContextFloatProvider> void registerContextFloatProvider(Class<T> type, BiFunction<IServerUtils, T, NumberExpr> converter);
 
-    <T extends LootItemFunction> void registerCountModifier(Class<T> type, TriConsumer<IServerUtils, T, EnchantedRanges> consumer);
+    <T extends LevelBasedValue> void registerLevelBasedValue(Class<T> type, TriFunction<IServerUtils, T, NumberExpr, NumberExpr> converter);
 
-    <T extends LootItemCondition> void registerChanceModifier(Class<T> type, TriConsumer<IServerUtils, T, EnchantedRanges> consumer);
+    <T extends LootItemFunction> void registerCountModifier(Class<T> type, TriFunction<IServerUtils, T, NumberExpr, NumberExpr> modifier);
+
+    <T extends LootItemCondition> void registerChanceModifier(Class<T> type, TriFunction<IServerUtils, T, NumberExpr, NumberExpr> modifier);
 
     <T extends LootItemFunction> void registerItemStackModifier(Class<T> type, TriFunction<IServerUtils, T, ItemStack, ItemStack> consumer);
 

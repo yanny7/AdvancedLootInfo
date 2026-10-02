@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.immersiveengineering;
 
 import blusunrize.immersiveengineering.common.util.loot.AddDropModifier;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
@@ -37,6 +37,6 @@ public class AddDropModifierAccessor extends BaseAccessor<AddDropModifier> imple
 
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
                 (page, c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true,
-                        GlmNodeUtils.addedNode(utils, c, stack.copy(), 1, new RangeValue(stack.getCount()))))));
+                        GlmNodeUtils.addedNode(utils, c, stack.copy(), 1, NumberExpr.constant(stack.getCount()))))));
     }
 }

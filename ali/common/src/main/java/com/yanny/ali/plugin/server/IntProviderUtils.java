@@ -1,6 +1,7 @@
 package com.yanny.ali.plugin.server;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
+import com.yanny.aci.api.NumberFunctions;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
 import net.minecraft.core.Holder;
@@ -9,148 +10,148 @@ import org.jetbrains.annotations.NotNull;
 
 public class IntProviderUtils {
     public static void register(IServerRegistry registry) {
-        registry.registerIntProvider(ConstantValue.class, IntProviderUtils::convertConstant);
-        registry.registerIntProvider(UniformGenerator.class, IntProviderUtils::convertUniform);
-        registry.registerIntProvider(BinomialDistributionGenerator.class, IntProviderUtils::convertBinomial);
-        registry.registerIntProvider(ScoreboardValue.class, IntProviderUtils::convertScore);
-        registry.registerIntProvider(StorageValue.class, IntProviderUtils::convertStorage);
-        registry.registerIntProvider(EnvironmentAttributeValue.class, IntProviderUtils::convertEnvironmentAttribute);
-        registry.registerIntProvider(Sum.class, IntProviderUtils::convertSum);
-        registry.registerIntProvider(Product.class, IntProviderUtils::convertProduct);
-        registry.registerIntProvider(Average.class, IntProviderUtils::convertAverage);
-        registry.registerIntProvider(Minimum.class, IntProviderUtils::convertMinimum);
-        registry.registerIntProvider(Maximum.class, IntProviderUtils::convertMaximum);
-        registry.registerIntProvider(Difference.class, IntProviderUtils::convertDifference);
-        registry.registerIntProvider(Negate.class, IntProviderUtils::convertNegate);
-        registry.registerIntProvider(Absolute.class, IntProviderUtils::convertAbsolute);
-        registry.registerIntProvider(FromFloat.class, IntProviderUtils::convertFromFloat);
-        registry.registerIntProvider(ConditionalValue.class, IntProviderUtils::convertConditional);
-        registry.registerIntProvider(NumberDispatcher.class, IntProviderUtils::convertDispatcher);
-        registry.registerIntProvider(WeightedListValue.class, IntProviderUtils::convertWeightedList);
-        registry.registerIntProvider(Modulus.class, IntProviderUtils::convertModulus);
-        registry.registerIntProvider(FloorModulus.class, IntProviderUtils::convertFloorModulus);
-        registry.registerIntProvider(Quotient.class, IntProviderUtils::convertQuotient);
-        registry.registerIntProvider(FloorQuotient.class, IntProviderUtils::convertFloorQuotient);
-        registry.registerIntProvider(Power.class, IntProviderUtils::convertPower);
+        registry.registerContextIntProvider(ConstantValue.class, IntProviderUtils::convertConstant);
+        registry.registerContextIntProvider(UniformGenerator.class, IntProviderUtils::convertUniform);
+        registry.registerContextIntProvider(BinomialDistributionGenerator.class, IntProviderUtils::convertBinomial);
+        registry.registerContextIntProvider(ScoreboardValue.class, IntProviderUtils::convertScore);
+        registry.registerContextIntProvider(StorageValue.class, IntProviderUtils::convertStorage);
+        registry.registerContextIntProvider(EnvironmentAttributeValue.class, IntProviderUtils::convertEnvironmentAttribute);
+        registry.registerContextIntProvider(Sum.class, IntProviderUtils::convertSum);
+        registry.registerContextIntProvider(Product.class, IntProviderUtils::convertProduct);
+        registry.registerContextIntProvider(Average.class, IntProviderUtils::convertAverage);
+        registry.registerContextIntProvider(Minimum.class, IntProviderUtils::convertMinimum);
+        registry.registerContextIntProvider(Maximum.class, IntProviderUtils::convertMaximum);
+        registry.registerContextIntProvider(Difference.class, IntProviderUtils::convertDifference);
+        registry.registerContextIntProvider(Negate.class, IntProviderUtils::convertNegate);
+        registry.registerContextIntProvider(Absolute.class, IntProviderUtils::convertAbsolute);
+        registry.registerContextIntProvider(FromFloat.class, IntProviderUtils::convertFromFloat);
+        registry.registerContextIntProvider(ConditionalValue.class, IntProviderUtils::convertConditional);
+        registry.registerContextIntProvider(NumberDispatcher.class, IntProviderUtils::convertDispatcher);
+        registry.registerContextIntProvider(WeightedListValue.class, IntProviderUtils::convertWeightedList);
+        registry.registerContextIntProvider(Modulus.class, IntProviderUtils::convertModulus);
+        registry.registerContextIntProvider(FloorModulus.class, IntProviderUtils::convertFloorModulus);
+        registry.registerContextIntProvider(Quotient.class, IntProviderUtils::convertQuotient);
+        registry.registerContextIntProvider(FloorQuotient.class, IntProviderUtils::convertFloorQuotient);
+        registry.registerContextIntProvider(Power.class, IntProviderUtils::convertPower);
     }
 
     @NotNull
-    public static RangeValue convert(IServerUtils utils, Holder<ContextIntProvider> provider) {
-        return utils.convertInt(utils, provider);
+    public static NumberExpr convert(IServerUtils utils, Holder<ContextIntProvider> provider) {
+        return utils.convertContextInt(utils, provider);
     }
 
     @NotNull
-    public static RangeValue convertConstant(IServerUtils utils, ConstantValue provider) {
-        return new RangeValue(provider.value());
+    public static NumberExpr convertConstant(IServerUtils utils, ConstantValue provider) {
+        return NumberExpr.constant(provider.value());
     }
 
     @NotNull
-    public static RangeValue convertUniform(IServerUtils utils, UniformGenerator provider) {
-        return NumberProviderUtils.range(utils, provider, IntProviderUtils::convert);
+    public static NumberExpr convertUniform(IServerUtils utils, UniformGenerator provider) {
+        return NumberProviderUtils.range(utils, provider, IntProviderUtils::convert, NumberExpr::uniformInt);
     }
 
     @NotNull
-    public static RangeValue convertBinomial(IServerUtils utils, BinomialDistributionGenerator provider) {
-        return new RangeValue(0, utils.convertInt(utils, provider.n()).max());
+    public static NumberExpr convertBinomial(IServerUtils utils, BinomialDistributionGenerator provider) {
+        return NumberExpr.binomial(convert(utils, provider.n()), FloatProviderUtils.convert(utils, provider.p()));
     }
 
     @NotNull
-    public static RangeValue convertScore(IServerUtils utils, ScoreboardValue provider) {
-        return new RangeValue(true, false);
+    public static NumberExpr convertScore(IServerUtils utils, ScoreboardValue provider) {
+        return NumberProviderUtils.score(provider.target(), provider.score());
     }
 
     @NotNull
-    public static RangeValue convertStorage(IServerUtils utils, StorageValue provider) {
-        return NumberProviderUtils.unknown();
+    public static NumberExpr convertStorage(IServerUtils utils, StorageValue provider) {
+        return NumberExpr.fn(NumberFunctions.TRUNC, NumberProviderUtils.storage(provider.access()));
     }
 
     @NotNull
-    public static RangeValue convertEnvironmentAttribute(IServerUtils utils, EnvironmentAttributeValue provider) {
-        return NumberProviderUtils.unknown();
+    public static NumberExpr convertEnvironmentAttribute(IServerUtils utils, EnvironmentAttributeValue provider) {
+        return NumberProviderUtils.environmentAttribute(provider.attribute());
     }
 
     @NotNull
-    public static RangeValue convertSum(IServerUtils utils, Sum provider) {
-        return NumberProviderUtils.sum(utils, provider, IntProviderUtils::convert);
+    public static NumberExpr convertSum(IServerUtils utils, Sum provider) {
+        return NumberProviderUtils.aggregate(utils, provider, IntProviderUtils::convert, NumberExpr::add);
     }
 
     @NotNull
-    public static RangeValue convertProduct(IServerUtils utils, Product provider) {
-        return NumberProviderUtils.product(utils, provider, IntProviderUtils::convert);
+    public static NumberExpr convertProduct(IServerUtils utils, Product provider) {
+        return NumberProviderUtils.aggregate(utils, provider, IntProviderUtils::convert, NumberExpr::mul);
     }
 
     @NotNull
-    public static RangeValue convertAverage(IServerUtils utils, Average provider) {
-        return NumberProviderUtils.average(utils, provider, IntProviderUtils::convert);
+    public static NumberExpr convertAverage(IServerUtils utils, Average provider) {
+        return NumberExpr.fn(NumberFunctions.TRUNC, NumberProviderUtils.aggregate(utils, provider, IntProviderUtils::convert, (args) -> NumberExpr.fn(NumberFunctions.AVG, args)));
     }
 
     @NotNull
-    public static RangeValue convertMinimum(IServerUtils utils, Minimum provider) {
-        return NumberProviderUtils.minimum(utils, provider, IntProviderUtils::convert);
+    public static NumberExpr convertMinimum(IServerUtils utils, Minimum provider) {
+        return NumberProviderUtils.aggregate(utils, provider, IntProviderUtils::convert, NumberExpr::min);
     }
 
     @NotNull
-    public static RangeValue convertMaximum(IServerUtils utils, Maximum provider) {
-        return NumberProviderUtils.maximum(utils, provider, IntProviderUtils::convert);
+    public static NumberExpr convertMaximum(IServerUtils utils, Maximum provider) {
+        return NumberProviderUtils.aggregate(utils, provider, IntProviderUtils::convert, NumberExpr::max);
     }
 
     @NotNull
-    public static RangeValue convertDifference(IServerUtils utils, Difference provider) {
-        return NumberProviderUtils.difference(utils, provider, IntProviderUtils::convert);
+    public static NumberExpr convertDifference(IServerUtils utils, Difference provider) {
+        return NumberProviderUtils.binary(utils, provider, IntProviderUtils::convert, NumberExpr::sub);
     }
 
     @NotNull
-    public static RangeValue convertNegate(IServerUtils utils, Negate provider) {
-        return NumberProviderUtils.negate(utils, provider, IntProviderUtils::convert);
+    public static NumberExpr convertNegate(IServerUtils utils, Negate provider) {
+        return NumberProviderUtils.unary(utils, provider, IntProviderUtils::convert, (value) -> NumberExpr.fn(NumberFunctions.NEG, value));
     }
 
     @NotNull
-    public static RangeValue convertAbsolute(IServerUtils utils, Absolute provider) {
-        return NumberProviderUtils.absolute(utils, provider, IntProviderUtils::convert);
+    public static NumberExpr convertAbsolute(IServerUtils utils, Absolute provider) {
+        return NumberProviderUtils.unary(utils, provider, IntProviderUtils::convert, (value) -> NumberExpr.fn(NumberFunctions.ABS, value));
     }
 
     @NotNull
-    public static RangeValue convertFromFloat(IServerUtils utils, FromFloat provider) {
-        return NumberProviderUtils.monotonic(utils, provider, FloatProviderUtils::convert, NumberProviderUtils::truncate);
+    public static NumberExpr convertFromFloat(IServerUtils utils, FromFloat provider) {
+        return NumberProviderUtils.unary(utils, provider, FloatProviderUtils::convert, (value) -> NumberExpr.fn(NumberFunctions.TRUNC, value));
     }
 
     @NotNull
-    public static RangeValue convertConditional(IServerUtils utils, ConditionalValue provider) {
+    public static NumberExpr convertConditional(IServerUtils utils, ConditionalValue provider) {
         return NumberProviderUtils.conditional(utils, provider, IntProviderUtils::convert);
     }
 
     @NotNull
-    public static RangeValue convertDispatcher(IServerUtils utils, NumberDispatcher provider) {
+    public static NumberExpr convertDispatcher(IServerUtils utils, NumberDispatcher provider) {
         return NumberProviderUtils.dispatcher(utils, provider, IntProviderUtils::convert);
     }
 
     @NotNull
-    public static RangeValue convertWeightedList(IServerUtils utils, WeightedListValue provider) {
+    public static NumberExpr convertWeightedList(IServerUtils utils, WeightedListValue provider) {
         return NumberProviderUtils.distribution(utils, provider, IntProviderUtils::convert);
     }
 
     @NotNull
-    public static RangeValue convertModulus(IServerUtils utils, Modulus provider) {
-        return NumberProviderUtils.unknown();
+    public static NumberExpr convertModulus(IServerUtils utils, Modulus provider) {
+        return NumberProviderUtils.binary(utils, provider, IntProviderUtils::convert, (a, b) -> NumberExpr.fn(NumberFunctions.MOD, a, b));
     }
 
     @NotNull
-    public static RangeValue convertFloorModulus(IServerUtils utils, FloorModulus provider) {
-        return NumberProviderUtils.unknown();
+    public static NumberExpr convertFloorModulus(IServerUtils utils, FloorModulus provider) {
+        return NumberProviderUtils.binary(utils, provider, IntProviderUtils::convert, (a, b) -> NumberExpr.fn(NumberFunctions.FLOOR_MOD, a, b));
     }
 
     @NotNull
-    public static RangeValue convertQuotient(IServerUtils utils, Quotient provider) {
-        return NumberProviderUtils.unknown();
+    public static NumberExpr convertQuotient(IServerUtils utils, Quotient provider) {
+        return NumberProviderUtils.binary(utils, provider, IntProviderUtils::convert, (a, b) -> NumberExpr.fn(NumberFunctions.TRUNC, NumberExpr.div(a, b)));
     }
 
     @NotNull
-    public static RangeValue convertFloorQuotient(IServerUtils utils, FloorQuotient provider) {
-        return NumberProviderUtils.unknown();
+    public static NumberExpr convertFloorQuotient(IServerUtils utils, FloorQuotient provider) {
+        return NumberProviderUtils.binary(utils, provider, IntProviderUtils::convert, (a, b) -> NumberExpr.fn(NumberFunctions.FLOOR_DIV, a, b));
     }
 
     @NotNull
-    public static RangeValue convertPower(IServerUtils utils, Power provider) {
-        return NumberProviderUtils.unknown();
+    public static NumberExpr convertPower(IServerUtils utils, Power provider) {
+        return NumberProviderUtils.power(utils, provider, IntProviderUtils::convert);
     }
 }

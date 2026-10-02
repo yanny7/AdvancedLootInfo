@@ -135,9 +135,7 @@ public class StructureProcessorTooltipTest {
                 "Capped:",
                 "  -> Delegate:",
                 "    -> Nop",
-                "  -> Limit:",
-                "    -> Constant:",
-                "      -> Value: 5"
+                "  -> Limit: 5"
         ));
     }
 }

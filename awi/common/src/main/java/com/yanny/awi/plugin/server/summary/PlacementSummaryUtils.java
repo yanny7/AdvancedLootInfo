@@ -1,25 +1,26 @@
 package com.yanny.awi.plugin.server.summary;
 
-import com.yanny.awi.plugin.EnumTypes;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.CommonLogUtils;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
+import com.yanny.awi.Utils;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.language.Lang;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 
 import java.util.List;
 
-/**
- * Orchestrator: walks a placed feature's {@code PlacementModifier} list through the placement propagator
- * registry and merges the per-modifier {@link PlacementContribution}s into one {@link PlacementSummary},
- * then appends it as top-level (un-headed) text lines to a tooltip.
- */
 public class PlacementSummaryUtils {
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
+
     @NotNull
     public static PlacementSummary summarize(IServerUtils utils, List<PlacementModifier> modifiers, ColumnContext ctx) {
-        CountSpan count = null;
-        RangeValue chancePercent = null;
+        NumberExpr count = null;
+        TooltipNode countDetails = null;
+        NumberExpr chance = null;
         HeightSpan height = null;
 
         for (PlacementModifier modifier : modifiers) {
@@ -27,101 +28,49 @@ public class PlacementSummaryUtils {
 
             if (contribution.count() != null && count == null) {
                 count = contribution.count();
+                countDetails = contribution.countDetails();
             }
-            if (contribution.chancePercent() != null) {
-                // multiple rarity filters compound: p = p1 * p2 (percent ⇒ divide by 100)
-                chancePercent = (chancePercent == null)
-                        ? contribution.chancePercent()
-                        : chancePercent.multiply(contribution.chancePercent()).multiply(0.01f);
+            if (contribution.chance() != null) {
+                chance = chance == null ? contribution.chance() : NumberExpr.mul(chance, contribution.chance());
             }
             if (contribution.height() != null && height == null) {
                 height = contribution.height();
             }
         }
 
-        return new PlacementSummary(count, chancePercent, height);
+        return new PlacementSummary(count, countDetails, chance, height);
     }
 
-    /**
-     * Appends the summary as top-level (un-headed) lines directly onto {@code b} (e.g. the
-     * {@code PlacedFeatureNode} branch), so Count/Chance/Height show right at the top of the tooltip.
-     */
     public static void appendSummary(TooltipBuilder b, IServerUtils utils, List<PlacementModifier> modifiers, ColumnContext ctx) {
-        PlacementSummary summary = summarize(utils, modifiers, ctx);
+        PlacementSummary summary;
+
+        try {
+            summary = summarize(utils, modifiers, ctx);
+        } catch (Throwable e) {
+            LOGGER.warn("Failed to summarize placement: {}", e.getMessage(), e);
+            return;
+        }
 
         if (summary.count() != null) {
-            addCount(b, summary.count());
+            TooltipBuilder count = TooltipBuilder.number(summary.count());
+
+            if (summary.countDetails() != null) {
+                count.add(summary.countDetails());
+            }
+
+            b.add(count.build(Lang.Value.ATTEMPTS_PER_CHUNK));
         }
-        if (summary.chancePercent() != null) {
-            b.add(utils.getValueTooltip(utils, summary.chancePercent().toFloatString() + "%").build(Lang.Value.CHANCE));
+        if (summary.chance() != null) {
+            b.add(TooltipBuilder.percent(summary.chance()).build(Lang.Value.CHANCE));
         }
         if (summary.height() != null) {
-            addHeight(b, utils, summary.height());
-        }
-    }
+            HeightSpan height = summary.height();
 
-    /** Attempts per chunk (feature tries, NOT block count), with the count distribution kind when meaningful. */
-    private static void addCount(TooltipBuilder b, CountSpan count) {
-        if (count.range().isUnknown()) {
-            TooltipBuilder value = TooltipBuilder.value(TooltipBuilder.translate(EnumTypes.key(Kind.UNKNOWN)));
-
-            if (count.details() != null) {
-                value.add(count.details());
+            if (height.heightmap() != null) {
+                b.add(utils.getValueTooltip(utils, height.heightmap()).build(Lang.Value.HEIGHT));
+            } else if (height.height() != null) {
+                b.add(TooltipBuilder.number(height.height()).build(Lang.Value.HEIGHT));
             }
-
-            b.add(value.build(Lang.Value.ATTEMPTS_PER_CHUNK));
-            return;
         }
-
-        String range = count.range().toIntString();
-
-        if (showsKind(count.kind())) {
-            b.add(TooltipBuilder.value(range, TooltipBuilder.translate(kindKey(count.kind()))).build(Lang.Value.ATTEMPTS_PER_CHUNK_DIST));
-        } else {
-            b.add(TooltipBuilder.value(range).build(Lang.Value.ATTEMPTS_PER_CHUNK));
-        }
-    }
-
-    /** One line: full range, distribution kind, and the "most likely" band (only when it narrows the range). */
-    private static void addHeight(TooltipBuilder b, IServerUtils utils, HeightSpan height) {
-        if (height.heightmap() != null) {
-            b.add(utils.getValueTooltip(utils, height.heightmap()).build(Lang.Value.HEIGHT));
-            return;
-        }
-        if (height.range().isUnknown()) {
-            b.add(TooltipBuilder.value(TooltipBuilder.translate(EnumTypes.key(Kind.UNKNOWN))).build(Lang.Value.HEIGHT));
-            return;
-        }
-
-        String range = height.range().toIntString();
-
-        if (showsKind(height.kind())) {
-            String kind = TooltipBuilder.translate(kindKey(height.kind()));
-
-            if (height.bestBand() != null && !isSameRange(height.bestBand(), height.range())) {
-                b.add(TooltipBuilder.value(range, kind, height.bestBand().toIntString()).build(Lang.Value.HEIGHT_DIST_BAND));
-            } else {
-                b.add(TooltipBuilder.value(range, kind).build(Lang.Value.HEIGHT_DIST));
-            }
-        } else {
-            b.add(TooltipBuilder.value(range).build(Lang.Value.HEIGHT));
-        }
-    }
-
-    @NotNull
-    private static String kindKey(Kind kind) {
-        return EnumTypes.key(kind);
-    }
-
-    private static boolean showsKind(Kind kind) {
-        // CONSTANT is obvious from a single value; UNKNOWN / heightmap-relative carry no useful shape
-        return switch (kind) {
-            case UNIFORM, BIASED_TO_BOTTOM, VERY_BIASED_TO_BOTTOM, TRAPEZOID, CLAMPED, CLAMPED_NORMAL, WEIGHTED -> true;
-            default -> false;
-        };
-    }
-
-    private static boolean isSameRange(RangeValue a, RangeValue b) {
-        return a.min() == b.min() && a.max() == b.max();
     }
 }

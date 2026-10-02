@@ -2,7 +2,7 @@ package com.yanny.ali.network;
 
 import com.google.common.base.Suppliers;
 import com.yanny.aci.CommonLogUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.network.NetworkUtils;
 import com.yanny.aci.spawn.SpawnInfo;
 import com.yanny.aci.tooltip.TooltipContext;
@@ -286,7 +286,7 @@ public abstract class AbstractServer {
         LootPool pool = pools.getFirst();
 
         if (pool.entries.size() != 1 || !isIgnoredFunctions(config, NodeUtils.unwrapFunctions(serverRegistry, pool.modifier)) || !isIgnoredConditions(config, NodeUtils.unwrapConditions(serverRegistry, pool.condition))
-                || !isConstant(serverRegistry.convertInt(serverRegistry, pool.rolls), 1) || !isConstant(serverRegistry.convertFloat(serverRegistry, pool.bonusRolls), 0)) {
+                || !isConstant(serverRegistry.convertContextInt(serverRegistry, pool.rolls), 1) || !isConstant(serverRegistry.convertContextFloat(serverRegistry, pool.bonusRolls), 0)) {
             return false;
         }
 
@@ -305,8 +305,8 @@ public abstract class AbstractServer {
         return conditions.stream().allMatch((c) -> config.defaultBlockLootConditions.contains(BuiltInRegistries.LOOT_CONDITION_TYPE.getKey(c.codec())));
     }
 
-    private static boolean isConstant(RangeValue range, float value) {
-        return !range.isUnknown() && range.min() == value && range.max() == value;
+    private static boolean isConstant(NumberExpr expr, float value) {
+        return expr instanceof NumberExpr.Const constant && constant.value() == value;
     }
 
     private static void collectEntityPages(AliServerRegistry serverRegistry, AliConfig config, ServerLevel level, Map<Identifier, LootTable> lootTables,

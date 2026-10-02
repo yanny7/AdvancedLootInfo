@@ -2,6 +2,8 @@ package com.yanny.ali.rei.compatibility.rei;
 
 import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RelativeRect;
+import com.yanny.aci.compatibility.ScrollableTooltip;
+import com.yanny.aci.tooltip.TooltipLine;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.compat.GuiGraphics;
@@ -38,8 +40,9 @@ public class ReiWidgetWrapper extends WidgetWithBounds {
     @Nullable
     public Tooltip getTooltip(Point point) {
         if (point.x >= bounds.getMinX() && point.x <= bounds.getMaxX() && point.y >= bounds.getMinY()) {
-            List<Component> components = widget.getTooltipComponents(point.getX() - bounds.getX(), point.getY() - bounds.getY());
-            return !components.isEmpty() ? Tooltip.create(components) : null;
+            List<TooltipLine> lines = widget.getTooltipLines(point.getX() - bounds.getX(), point.getY() - bounds.getY());
+
+            return lines.isEmpty() ? null : Tooltip.from(Tooltip.entry(new ScrollableTooltip(lines)));
         } else {
             return null;
         }

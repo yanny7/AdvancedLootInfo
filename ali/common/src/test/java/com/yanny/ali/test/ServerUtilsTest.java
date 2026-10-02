@@ -5,7 +5,9 @@ import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntPr
 import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProviders;
 import com.mojang.serialization.MapCodec;
 import com.yanny.aci.language.CoreLang;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.ali.language.Lang;
+import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.server.LootConditionTypes;
 import com.yanny.ali.plugin.server.LootFunctionTypes;
 import net.minecraft.world.effect.MobEffects;
@@ -25,17 +27,20 @@ import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntPr
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 public class ServerUtilsTest {
     @Test
     public void testGetFunctionTooltip() {
         assertTooltip(UTILS.getFunctionTooltip(UTILS, SetItemCountFunction.setCount(ContextIntProviders.binomial(5, 0.5f)).build()).build(), List.of(
                 "Set Count:",
-                "  -> Count: 0-5",
+                "  -> Count: 0 to 5  ~2 to 3 (31%)",
                 "  -> Add: false"
         ));
         assertTooltip(UTILS.getFunctionTooltip(UTILS, new UnknownFunction(Items.ANDESITE, ContextIntProviders.binomial(5, 0.3f))).build(), List.of(
@@ -47,7 +52,7 @@ public class ServerUtilsTest {
     public void testGetConditionTooltip() {
         assertTooltip(UTILS.getConditionTooltip(UTILS, LootItemRandomChanceCondition.randomChance(0.5f).build()).build(), List.of(
                 "Random Chance:",
-                "  -> Chance: 0.50"
+                "  -> Chance: 0.5"
         ));
         assertTooltip(UTILS.getConditionTooltip(UTILS, new UnknownCondition(true)).build(), List.of(
                 "Auto-detected: minecraft:unknown"
@@ -91,6 +96,98 @@ public class ServerUtilsTest {
         )).build(), List.of(
             "Auto-detected: minecraft:unknown"
         ));
+    }
+
+    @Test
+    public void testFailingItemStackModifierKeepsStack() {
+        PluginManager.getInstance().serverRegistry.registerItemStackModifier(BrokenItemFunction.class, (u, f, i) -> {
+            throw new IllegalStateException("broken modifier");
+        });
+
+        ItemStack stack = new ItemStack(Items.STONE);
+
+        assertSame(stack, UTILS.applyItemStackModifier(UTILS, new BrokenItemFunction(), stack));
+    }
+
+    @Test
+    public void testFailingUnwrapperKeepsWrapper() {
+        BrokenWrapperCondition condition = new BrokenWrapperCondition();
+
+        PluginManager.getInstance().serverRegistry.registerConditionUnwrapper(BrokenWrapperCondition.class, (u, c) -> {
+            throw new IllegalStateException("broken unwrapper");
+        });
+
+        assertEquals(List.of(condition), UTILS.unwrapCondition(UTILS, condition));
+    }
+
+    @Test
+    public void testFailingCountModifierGivesOpaque() {
+        PluginManager.getInstance().serverRegistry.registerCountModifier(BrokenFunction.class, (u, f, c) -> {
+            throw new IllegalStateException("broken modifier");
+        });
+
+        assertEquals(NumberExpr.opaque("minecraft:unknown"), UTILS.applyCountModifier(UTILS, new BrokenFunction(), NumberExpr.constant(1), new ArrayList<>()));
+    }
+
+    @Test
+    public void testFailingChanceModifierGivesOpaque() {
+        PluginManager.getInstance().serverRegistry.registerChanceModifier(BrokenCondition.class, (u, c, v) -> {
+            throw new IllegalStateException("broken modifier");
+        });
+
+        assertEquals(NumberExpr.opaque("minecraft:unknown"), UTILS.applyChanceModifier(UTILS, new BrokenCondition(), NumberExpr.constant(1)));
+    }
+
+    private record BrokenItemFunction() implements LootItemFunction {
+        @Override
+        public ItemStack apply(ItemStack itemStack, LootContext lootContext) {
+            return itemStack;
+        }
+
+        @NotNull
+        @Override
+        public MapCodec<? extends LootItemFunction> codec() {
+            return LootFunctionTypes.UNUSED;
+        }
+    }
+
+    private record BrokenWrapperCondition() implements LootItemCondition {
+        @Override
+        public boolean test(LootContext lootContext) {
+            return true;
+        }
+
+        @NotNull
+        @Override
+        public MapCodec<? extends LootItemCondition> codec() {
+            return LootConditionTypes.UNUSED;
+        }
+    }
+
+    private record BrokenFunction() implements LootItemFunction {
+        @Override
+        public ItemStack apply(ItemStack itemStack, LootContext lootContext) {
+            return itemStack;
+        }
+
+        @NotNull
+        @Override
+        public MapCodec<? extends LootItemFunction> codec() {
+            return LootFunctionTypes.UNUSED;
+        }
+    }
+
+    private record BrokenCondition() implements LootItemCondition {
+        @Override
+        public boolean test(LootContext lootContext) {
+            return true;
+        }
+
+        @NotNull
+        @Override
+        public MapCodec<? extends LootItemCondition> codec() {
+            return LootConditionTypes.UNUSED;
+        }
     }
 
     private record UnknownFunction(Item item, Holder<ContextIntProvider> value) implements LootItemFunction {

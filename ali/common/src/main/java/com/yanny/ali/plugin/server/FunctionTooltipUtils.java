@@ -64,7 +64,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static TooltipBuilder getEnchantWithLevelsTooltip(IServerUtils utils, EnchantWithLevelsFunction fun) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, fun.levels).build(Lang.Value.LEVELS));
+            b.add(TooltipUtils.getNumberTooltip(utils, () -> utils.convertContextInt(utils, fun.levels)).build(Lang.Value.LEVELS));
             b.add(utils.getValueTooltip(utils, fun.options).build(Lang.Branch.OPTIONS));
             b.add(utils.getValueTooltip(utils, fun.includeAdditionalCostComponent).build(Lang.Value.INCLUDE_ADDITIONAL_COST_COMPONENT));
             b.add(utils.getValueTooltip(utils, fun.condition).build(Lang.Branch.PREDICATES));
@@ -166,7 +166,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static TooltipBuilder getSetCountTooltip(IServerUtils utils, SetItemCountFunction fun) {
         return hideWhenFoldedIntoCount(TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, fun.count).build(Lang.Value.COUNT));
+            b.add(TooltipUtils.getNumberTooltip(utils, () -> utils.convertContextInt(utils, fun.count)).build(Lang.Value.COUNT));
             b.add(utils.getValueTooltip(utils, fun.add).build(Lang.Value.ADD));
             b.add(utils.getValueTooltip(utils, fun.condition).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.SET_COUNT), fun);
@@ -175,7 +175,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static TooltipBuilder getSetDamageTooltip(IServerUtils utils, SetItemDamageFunction fun) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, fun.damage).build(Lang.Value.DAMAGE));
+            b.add(TooltipUtils.getPercentTooltip(utils, () -> utils.convertContextFloat(utils, fun.damage)).build(Lang.Value.DAMAGE));
             b.add(utils.getValueTooltip(utils, fun.add).build(Lang.Value.ADD));
             b.add(utils.getValueTooltip(utils, fun.condition).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.SET_DAMAGE);

@@ -3,7 +3,7 @@ package com.yanny.aci.tooltip;
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.ICoreServerRegistry;
 import com.yanny.aci.api.ICoreServerUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.language.CoreLang;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.Holder;
@@ -44,7 +44,7 @@ public class CommonValueTooltip<
         registry.registerValueTooltip(CompoundTag.class, this::getCompoundTagTooltip);
         registry.registerValueTooltip(IntList.class, this::getIntListTooltip);
         registry.registerValueTooltip(Property.class, this::getPropertyTooltip);
-        registry.registerValueTooltip(RangeValue.class, this::getRangeValueTooltip);
+        registry.registerValueTooltip(NumberExpr.class, this::getNumberExprTooltip);
         registry.registerValueTooltip(HolderSet.class, this::getHolderSetTooltip);
         registry.registerValueTooltip(Either.class, this::getEitherTooltip);
         registry.registerValueTooltip(Vec3i.class, this::getVec3iTooltip);
@@ -168,8 +168,8 @@ public class CommonValueTooltip<
     }
 
     @NotNull
-    private TooltipBuilder getRangeValueTooltip(TServerUtils utils, RangeValue value) {
-        return utils.getValueTooltip(utils, value.toIntString());
+    private TooltipBuilder getNumberExprTooltip(TServerUtils utils, NumberExpr value) {
+        return TooltipBuilder.number(value);
     }
 
     @NotNull

@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.ribbits;
 
 import com.yanny.aci.CommonLogUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.TradeLevelInfo;
 import com.yanny.alicompat.IModCompat;
@@ -61,7 +61,7 @@ public class RibbitsCompat implements IModCompat {
             ResourceLocation traderId = ResourceLocation.fromNamespaceAndPath(professionId.getNamespace(), "ribbit_" + professionId.getPath());
             int tradeCount = RibbitProfessionModule.MERCHANT.equals(profession) ? MERCHANT_TRADE_COUNT : TRADE_COUNT;
 
-            registry.registerTrades(traderId, ribbit, () -> getItemListings(profession), (level) -> new TradeLevelInfo(new RangeValue(tradeCount)));
+            registry.registerTrades(traderId, ribbit, () -> getItemListings(profession), (level) -> new TradeLevelInfo(NumberExpr.constant(tradeCount)));
         });
     }
 

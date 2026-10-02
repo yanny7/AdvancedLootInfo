@@ -3,12 +3,15 @@ package com.yanny.ali.manager;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.yanny.aci.CommonLogUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
+import com.yanny.aci.api.NumberFunctions;
 import com.yanny.aci.manager.ClassKeyedMap;
 import com.yanny.aci.manager.CoreServerRegistry;
 import com.yanny.aci.manager.ManagedRegistry;
+import com.yanny.aci.manager.NumberConverters;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
@@ -17,9 +20,9 @@ import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.glm.*;
-import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.MissingTooltipUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.advancements.predicates.entity.EntitySubPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
@@ -37,17 +40,18 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.slot.SlotSource;
+import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 import org.apache.commons.lang3.function.TriFunction;
-import org.apache.logging.log4j.util.TriConsumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -64,8 +68,9 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     // factories
     private final ManagedRegistry<Class<?>, EntryFactory<?>> entryFactories = registerClassKeyed("entry factories", true, HashMap::new, BuiltInRegistries.LOOT_POOL_ENTRY_TYPE);
     // converters
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, ContextIntProvider, RangeValue>> intConverters = registerClassKeyed("int converters", true, HashMap::new, BuiltInRegistries.CONTEXT_INT_PROVIDER_TYPE);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, ContextFloatProvider, RangeValue>> floatConverters = registerClassKeyed("float converters", true, HashMap::new, BuiltInRegistries.CONTEXT_FLOAT_PROVIDER_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, ContextIntProvider, NumberExpr>> contextIntConverters = registerClassKeyed("context int converters", true, HashMap::new, BuiltInRegistries.CONTEXT_INT_PROVIDER_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, ContextFloatProvider, NumberExpr>> contextFloatConverters = registerClassKeyed("context float converters", true, HashMap::new, BuiltInRegistries.CONTEXT_FLOAT_PROVIDER_TYPE);
+    private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, LevelBasedValue, NumberExpr, NumberExpr>> levelBasedValueConverters = registerClassKeyed("level based value converters", true, HashMap::new, BuiltInRegistries.ENCHANTMENT_LEVEL_BASED_VALUE_TYPE);
     // traders
     private final ManagedRegistry<Identifier, Trades> trades = register("trades", false, HashMap::new, Identifier::toString, null);
     // tooltips
@@ -80,8 +85,8 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, ConsumeEffect, TooltipBuilder>> consumeEffectTooltips = registerClassKeyed("consume effect tooltips", true, HashMap::new, BuiltInRegistries.CONSUME_EFFECT_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, SlotSource, TooltipBuilder>> slotSourceTooltips = registerClassKeyed("slot source tooltips", true, HashMap::new, BuiltInRegistries.SLOT_SOURCE_TYPE);
     // modifiers
-    private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemCondition, EnchantedRanges>> chanceModifiers = registerClassKeyed("chance modifiers", false, HashMap::new, null);
-    private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemFunction, EnchantedRanges>> countModifiers = registerClassKeyed("count modifiers", false, HashMap::new, null);
+    private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, LootItemCondition, NumberExpr, NumberExpr>> chanceModifiers = registerClassKeyed("chance modifiers", false, HashMap::new, null);
+    private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, LootItemFunction, NumberExpr, NumberExpr>> countModifiers = registerClassKeyed("count modifiers", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifiers = registerClassKeyed("item stack modifiers", false, HashMap::new, null);
     // unwrappers
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemFunction, List<LootItemFunction>>> functionUnwrappers = registerClassKeyed("function unwrappers", false, HashMap::new, null);
@@ -92,6 +97,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     // translations
     private final ManagedRegistry<Class<?>, EnumTranslation> enumValues = registerClassKeyed("enum values", true, HashMap::new, null);
 
+    private final Set<String> failedRenderers = new HashSet<>();
     private final Map<Identifier, LootTable> lootTableMap = new HashMap<>();
     private final Map<Identifier, Integer> hitMap = new HashMap<>();
     private final List<Function<IServerUtils, List<ILootModifier<?>>>> lootModifierGetters = new LinkedList<>();
@@ -102,6 +108,8 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final List<ILootContextPreparer> lootContextPreparers = new ArrayList<>();
 
     private final LootContext lootContext;
+    @Nullable
+    private List<TooltipNode> numberConditions;
 
     public AliServerRegistry(AliCommonRegistry utils, ServerLevel level) {
         super(utils, level);
@@ -110,6 +118,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     public void clearData() {
         super.clearData();
+        failedRenderers.clear();
         lootTableMap.clear();
         ingredientUnwrappers.clear();
         lootModifierGetters.clear();
@@ -195,23 +204,28 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
-    public <T extends ContextIntProvider> void registerIntProvider(Class<T> type, BiFunction<IServerUtils, T, RangeValue> converter) {
-        intConverters.put(type, (u, n) -> converter.apply(u, type.cast(n)));
+    public <T extends ContextIntProvider> void registerContextIntProvider(Class<T> type, BiFunction<IServerUtils, T, NumberExpr> converter) {
+        contextIntConverters.put(type, (u, n) -> converter.apply(u, type.cast(n)));
     }
 
     @Override
-    public <T extends ContextFloatProvider> void registerFloatProvider(Class<T> type, BiFunction<IServerUtils, T, RangeValue> converter) {
-        floatConverters.put(type, (u, n) -> converter.apply(u, type.cast(n)));
+    public <T extends ContextFloatProvider> void registerContextFloatProvider(Class<T> type, BiFunction<IServerUtils, T, NumberExpr> converter) {
+        contextFloatConverters.put(type, (u, n) -> converter.apply(u, type.cast(n)));
     }
 
     @Override
-    public <T extends LootItemFunction> void registerCountModifier(Class<T> type, TriConsumer<IServerUtils, T, EnchantedRanges> consumer) {
-        countModifiers.put(type, (u, f, v) -> consumer.accept(u, type.cast(f), v));
+    public <T extends LevelBasedValue> void registerLevelBasedValue(Class<T> type, TriFunction<IServerUtils, T, NumberExpr, NumberExpr> converter) {
+        levelBasedValueConverters.put(type, (u, v, l) -> converter.apply(u, type.cast(v), l));
     }
 
     @Override
-    public <T extends LootItemCondition> void registerChanceModifier(Class<T> type, TriConsumer<IServerUtils, T, EnchantedRanges> consumer) {
-        chanceModifiers.put(type, (u, c, v) -> consumer.accept(u, type.cast(c), v));
+    public <T extends LootItemFunction> void registerCountModifier(Class<T> type, TriFunction<IServerUtils, T, NumberExpr, NumberExpr> modifier) {
+        countModifiers.put(type, (u, f, v) -> modifier.apply(u, type.cast(f), v));
+    }
+
+    @Override
+    public <T extends LootItemCondition> void registerChanceModifier(Class<T> type, TriFunction<IServerUtils, T, NumberExpr, NumberExpr> modifier) {
+        chanceModifiers.put(type, (u, c, v) -> modifier.apply(u, type.cast(c), v));
     }
 
     @Override
@@ -277,15 +291,18 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @Override
     public <T extends LootPoolEntryContainer> EntryFactory<T> getEntryFactory(IServerUtils utils, T type) {
         //noinspection unchecked
-        return (EntryFactory<T>) entryFactories.get(type.getClass())
-                .orElseGet(() -> (u, e, c, s, f, o) -> new MissingNode(MissingTooltipUtils.getMissingEntryTooltip(u, e).build()));
+        EntryFactory<T> missing = (u, e, c, s, f, o) -> new MissingNode(MissingTooltipUtils.getMissingEntryTooltip(u, e).build());
+
+        return entryFactories.get(type.getClass())
+                .<EntryFactory<T>>map((factory) -> (u, e, c, s, f, o) -> guarded("entry", e, () -> ((EntryFactory<T>) factory).create(u, e, c, s, f, o), () -> missing.create(u, e, c, s, f, o)))
+                .orElse(missing);
     }
 
     @NotNull
     @Override
     public <T extends LootPoolEntryContainer> TooltipBuilder getEntryTooltip(IServerUtils utils, T entry) {
         return entryTooltips.get(entry.getClass())
-                .map((e) -> e.apply(utils, entry))
+                .map((e) -> guarded("entry tooltip", entry, () -> e.apply(utils, entry), () -> MissingTooltipUtils.getMissingEntryTooltip(utils, entry)))
                 .orElseGet(() -> MissingTooltipUtils.getMissingEntryTooltip(utils, entry));
     }
 
@@ -293,7 +310,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @Override
     public <T extends LootItemFunction> TooltipBuilder getFunctionTooltip(IServerUtils utils, T function) {
         return functionTooltips.get(function.getClass())
-                .map((f) -> f.apply(utils, function))
+                .map((f) -> guarded("function tooltip", function, () -> f.apply(utils, function), () -> MissingTooltipUtils.getMissingFunctionTooltip(utils, function)))
                 .orElseGet(() -> MissingTooltipUtils.getMissingFunctionTooltip(utils, function));
     }
 
@@ -301,7 +318,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @Override
     public <T extends LootItemCondition> TooltipBuilder getConditionTooltip(IServerUtils utils, T condition) {
         return conditionTooltips.get(condition.getClass())
-                .map((c) -> c.apply(utils, condition))
+                .map((c) -> guarded("condition tooltip", condition, () -> c.apply(utils, condition), () -> MissingTooltipUtils.getMissingConditionTooltip(utils, condition)))
                 .orElseGet(() -> MissingTooltipUtils.getMissingConditionTooltip(utils, condition));
     }
 
@@ -313,13 +330,13 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
             if (unwrapped != null) {
                 return valueTooltips.get(unwrapped.getClass())
-                        .map((v) -> v.apply(utils, unwrapped))
+                        .map((v) -> guarded("ingredient tooltip", unwrapped, () -> v.apply(utils, unwrapped), () -> MissingTooltipUtils.getMissingIngredientTooltip(utils, ingredient)))
                         .orElseGet(() -> MissingTooltipUtils.getMissingIngredientTooltip(utils, ingredient));
             }
         }
 
         return ingredientTooltips.get(ingredient.getClass())
-                .map((i) -> i.apply(utils, ingredient))
+                .map((i) -> guarded("ingredient tooltip", ingredient, () -> i.apply(utils, ingredient), () -> MissingTooltipUtils.getMissingIngredientTooltip(utils, ingredient)))
                 .orElseGet(() -> MissingTooltipUtils.getMissingIngredientTooltip(utils, ingredient));
     }
 
@@ -340,7 +357,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
             });
         } else {
             return valueTooltips.get(valueClass)
-                    .map((v) -> v.apply(utils, value))
+                    .map((v) -> guarded("value tooltip", value, () -> v.apply(utils, value), () -> MissingTooltipUtils.getMissingValueTooltip(utils, value)))
                     .orElseGet(() -> MissingTooltipUtils.getMissingValueTooltip(utils, value));
         }
     }
@@ -373,29 +390,68 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @Override
     public <T extends ConsumeEffect> TooltipBuilder getConsumeEffectTooltip(IServerUtils utils, T effect) {
         return consumeEffectTooltips.get(effect.getClass())
-                .map((i) -> i.apply(utils, effect))
+                .map((i) -> guarded("consume effect tooltip", effect, () -> i.apply(utils, effect), () -> MissingTooltipUtils.getMissingConsumableEffectTooltip(utils, effect)))
                 .orElseGet(() -> MissingTooltipUtils.getMissingConsumableEffectTooltip(utils, effect));
     }
 
     @Override
     public <T extends SlotSource> TooltipBuilder getSlotSourceTooltip(IServerUtils utils, T slotSource) {
         return slotSourceTooltips.get(slotSource.getClass())
-                .map((i) -> i.apply(utils, slotSource))
+                .map((i) -> guarded("slot source tooltip", slotSource, () -> i.apply(utils, slotSource), () -> MissingTooltipUtils.getMissingSlotSourceTooltip(utils, slotSource)))
                 .orElseGet(() -> MissingTooltipUtils.getMissingSlotSourceTooltip(utils, slotSource));
     }
 
     @Override
-    public <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, EnchantedRanges count) {
+    @NotNull
+    public <T extends LootItemFunction> NumberExpr applyCountModifier(IServerUtils utils, T function, NumberExpr count, List<TooltipNode> conditions) {
+        NumberExpr result = count;
+
         for (LootItemFunction f : unwrapFunction(utils, function)) {
-            countModifiers.get(f.getClass()).ifPresent((m) -> m.accept(utils, f, count));
+            Optional<TriFunction<IServerUtils, LootItemFunction, NumberExpr, NumberExpr>> modifier = countModifiers.get(f.getClass());
+
+            if (modifier.isPresent()) {
+                try {
+                    NumberExpr original = result;
+                    NumberExpr modified = collectNumberConditions(conditions, () -> modifier.get().apply(utils, f, original));
+
+                    if (f instanceof LootItemConditionalFunction conditional && conditional.condition.isPresent()) {
+                        result = TooltipUtils.conditional(utils, result, modified, conditional.condition.get(), conditions);
+                    } else {
+                        result = modified;
+                    }
+                } catch (Throwable e) {
+                    String id = String.valueOf(BuiltInRegistries.LOOT_FUNCTION_TYPE.getKey(f.codec()));
+
+                    LOGGER.warn("Failed to apply count modifier {}: {}", id, e.getMessage(), e);
+                    result = NumberExpr.opaque(id);
+                }
+            }
         }
+
+        return result;
     }
 
     @Override
-    public <T extends LootItemCondition> void applyChanceModifier(IServerUtils utils, T condition, EnchantedRanges chance) {
+    @NotNull
+    public <T extends LootItemCondition> NumberExpr applyChanceModifier(IServerUtils utils, T condition, NumberExpr chance) {
+        NumberExpr result = chance;
+
         for (LootItemCondition c : unwrapCondition(utils, condition)) {
-            chanceModifiers.get(c.getClass()).ifPresent((m) -> m.accept(utils, c, chance));
+            Optional<TriFunction<IServerUtils, LootItemCondition, NumberExpr, NumberExpr>> modifier = chanceModifiers.get(c.getClass());
+
+            if (modifier.isPresent()) {
+                try {
+                    result = modifier.get().apply(utils, c, result);
+                } catch (Throwable e) {
+                    String id = String.valueOf(BuiltInRegistries.LOOT_CONDITION_TYPE.getKey(c.codec()));
+
+                    LOGGER.warn("Failed to apply chance modifier {}: {}", id, e.getMessage(), e);
+                    result = NumberExpr.opaque(id);
+                }
+            }
         }
+
+        return result;
     }
 
     @NotNull
@@ -405,9 +461,14 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
         for (LootItemFunction f : unwrapFunction(utils, function)) {
             ItemStack stack = result;
-            result = itemStackModifiers.get(f.getClass())
-                    .map((m) -> m.apply(utils, f, stack))
-                    .orElse(stack);
+
+            try {
+                result = itemStackModifiers.get(f.getClass())
+                        .map((m) -> m.apply(utils, f, stack))
+                        .orElse(stack);
+            } catch (Throwable e) {
+                LOGGER.warn("Failed to apply item stack modifier {}: {}", BuiltInRegistries.LOOT_FUNCTION_TYPE.getKey(f.codec()), e.getMessage(), e);
+            }
         }
 
         return result;
@@ -431,6 +492,20 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         return result;
     }
 
+    private <R> R guarded(String kind, Object value, Supplier<R> renderer, Supplier<R> fallback) {
+        try {
+            return renderer.get();
+        } catch (Throwable e) {
+            String name = ManagedRegistry.classKeyName(value.getClass());
+
+            if (failedRenderers.add(kind + " " + name)) {
+                LOGGER.warn("Failed to build {} for {}, showing it as unsupported: {}", kind, name, e.getMessage(), e);
+            }
+
+            return fallback.get();
+        }
+    }
+
     @NotNull
     @Override
     public TooltipBuilder getEnumTranslation(IServerUtils utils, Enum<?> value) {
@@ -443,14 +518,57 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     @NotNull
     @Override
-    public RangeValue convertInt(IServerUtils utils, @Nullable Holder<ContextIntProvider> provider) {
-        return convert(utils, provider, intConverters);
+    public NumberExpr convertContextInt(IServerUtils utils, Holder<ContextIntProvider> provider) {
+        return convertHolder(utils, provider, contextIntConverters, (p) -> String.valueOf(BuiltInRegistries.CONTEXT_INT_PROVIDER_TYPE.getKey(p.codec())));
     }
 
     @NotNull
     @Override
-    public RangeValue convertFloat(IServerUtils utils, @Nullable Holder<ContextFloatProvider> provider) {
-        return convert(utils, provider, floatConverters);
+    public NumberExpr convertContextFloat(IServerUtils utils, Holder<ContextFloatProvider> provider) {
+        return convertHolder(utils, provider, contextFloatConverters, (p) -> String.valueOf(BuiltInRegistries.CONTEXT_FLOAT_PROVIDER_TYPE.getKey(p.codec())));
+    }
+
+    @NotNull
+    @Override
+    public NumberExpr collectNumberConditions(List<TooltipNode> conditions, Supplier<NumberExpr> conversion) {
+        List<TooltipNode> previous = numberConditions;
+
+        numberConditions = conditions;
+
+        try {
+            return conversion.get();
+        } finally {
+            numberConditions = previous;
+        }
+    }
+
+    @Override
+    public int addNumberCondition(TooltipNode condition) {
+        if (numberConditions == null || condition == TooltipNode.empty()) {
+            return -1;
+        }
+
+        numberConditions.add(condition);
+        return numberConditions.size() - 1;
+    }
+
+    @NotNull
+    @Override
+    public NumberExpr convertLevelBasedValue(IServerUtils utils, LevelBasedValue value, NumberExpr level) {
+        Optional<TriFunction<IServerUtils, LevelBasedValue, NumberExpr, NumberExpr>> converter = levelBasedValueConverters.get(value.getClass());
+
+        if (converter.isEmpty()) {
+            return NumberExpr.opaque(levelBasedValueTypeId(value));
+        }
+
+        try {
+            return converter.get().apply(utils, value, level);
+        } catch (Throwable e) {
+            String id = levelBasedValueTypeId(value);
+
+            LOGGER.warn("Failed to convert level based value {}: {}", id, e.getMessage(), e);
+            return NumberExpr.opaque(id);
+        }
     }
 
     @Nullable
@@ -564,16 +682,17 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @NotNull
-    private static <T> RangeValue convert(IServerUtils utils, @Nullable Holder<T> provider, ManagedRegistry<Class<?>, BiFunction<IServerUtils, T, RangeValue>> converters) {
-        if (provider != null && provider.isBound()) {
-            T value = provider.value();
-
-            return converters.get(value.getClass())
-                    .map((c) -> c.apply(utils, value))
-                    .orElseGet(() -> new RangeValue(false, true));
+    private <T> NumberExpr convertHolder(IServerUtils utils, Holder<T> provider, ManagedRegistry<Class<?>, BiFunction<IServerUtils, T, NumberExpr>> converters, Function<T, String> typeId) {
+        if (!provider.isBound()) {
+            return NumberExpr.opaque(provider.unwrapKey().map((key) -> key.identifier().toString()).orElse("?"));
         }
 
-        return new RangeValue(false, true);
+        return NumberConverters.convert(getModId(), converters, utils, provider.value(), typeId);
+    }
+
+    @NotNull
+    private static String levelBasedValueTypeId(LevelBasedValue value) {
+        return String.valueOf(BuiltInRegistries.ENCHANTMENT_LEVEL_BASED_VALUE_TYPE.getKey(value.codec()));
     }
 
     public record Trades(@Nullable EntityType<?> entityType, Supplier<Int2ObjectMap<TradeLevel>> levels) {}
@@ -585,7 +704,14 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
             return;
         }
 
-        List<T> inner = unwrappers.get(value.getClass()).map((u) -> u.apply(utils, value)).orElse(null);
+        List<T> inner;
+
+        try {
+            inner = unwrappers.get(value.getClass()).map((u) -> u.apply(utils, value)).orElse(null);
+        } catch (Throwable e) {
+            LOGGER.warn("Failed to unwrap {}: {}", ManagedRegistry.classKeyName(value.getClass()), e.getMessage(), e);
+            inner = null;
+        }
 
         if (inner != null) {
             inner.forEach((i) -> unwrap(utils, i, unwrappers, visiting, result));

@@ -2,14 +2,11 @@ package com.yanny.awi.api;
 
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.ICoreServerUtils;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.awi.plugin.server.summary.ColumnContext;
-import com.yanny.awi.plugin.server.summary.CountSpan;
-import com.yanny.awi.plugin.server.summary.HeightSpan;
 import com.yanny.awi.plugin.server.summary.PlacementContribution;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.valueproviders.FloatProvider;
-import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -47,9 +44,6 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
     <T extends PlacementModifier> TooltipBuilder getPlacementModifierTooltip(IServerUtils utils, T entry);
 
     @NotNull
-    <T extends IntProvider> TooltipBuilder getIntProviderTooltip(IServerUtils utils, T entry);
-
-    @NotNull
     <T extends RuleTest> TooltipBuilder getRuleTestTooltip(IServerUtils utils, T entry);
 
     @NotNull
@@ -77,16 +71,10 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
     <T extends TrunkPlacer> TooltipBuilder getTrunkPlacerTooltip(IServerUtils utils, T entry);
 
     @NotNull
-    <T extends FloatProvider> TooltipBuilder getFloatProviderTooltip(IServerUtils utils, T entry);
-
-    @NotNull
     <T extends StructureProcessor> TooltipBuilder getStructureProcessorTooltip(IServerUtils utils, T entry);
 
     @NotNull
-    <T extends IntProvider> CountSpan getIntSpan(IServerUtils utils, T provider);
-
-    @NotNull
-    <T extends HeightProvider> HeightSpan getHeightSpan(IServerUtils utils, T provider, ColumnContext ctx);
+    NumberExpr convertHeightProvider(IServerUtils utils, HeightProvider provider, ColumnContext ctx);
 
     @NotNull
     <T extends PlacementModifier> PlacementContribution getPlacementContribution(IServerUtils utils, T modifier, ColumnContext ctx);

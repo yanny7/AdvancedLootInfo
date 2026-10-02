@@ -2,6 +2,8 @@ package com.yanny.ali.emi.compatibility.emi;
 
 import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RelativeRect;
+import com.yanny.aci.compatibility.ScrollableTooltip;
+import com.yanny.aci.tooltip.TooltipLine;
 import dev.emi.emi.api.widget.Bounds;
 import dev.emi.emi.api.widget.Widget;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -32,6 +34,8 @@ public class EmiWidgetWrapper extends Widget {
 
     @Override
     public List<ClientTooltipComponent> getTooltip(int mouseX, int mouseY) {
-        return widget.getTooltipComponents(mouseX, mouseY).stream().map((t) -> ClientTooltipComponent.create(t.getVisualOrderText())).toList();
+        List<TooltipLine> lines = widget.getTooltipLines(mouseX, mouseY);
+
+        return lines.isEmpty() ? List.of() : List.of(new ScrollableTooltip(lines));
     }
 }

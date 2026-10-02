@@ -6,7 +6,7 @@ import com.lion.villagertradingplus.tradeoffers.ConditionalTradeFactory;
 import com.lion.villagertradingplus.tradeoffers.PricingTradeFactory;
 import com.lion.villagertradingplus.tradeoffers.conditions.ParsedConditions;
 import com.lion.villagertradingplus.tradeoffers.conditions.TradeCondition;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
@@ -71,14 +71,14 @@ public class VillagerTradingPlusCompat implements IModCompat {
     }
 
     @NotNull
-    private static RangeValue getCostScale() {
+    private static NumberExpr getCostScale() {
         VTPConfig config = VillagerTradingPlus.CONFIG;
 
         if (config.enable_time_of_day_pricing) {
-            return new RangeValue(config.trade_cost_scale * (1.0f - config.time_of_day_price_variance), config.trade_cost_scale * (1.0f + config.time_of_day_price_variance));
+            return NumberExpr.range(config.trade_cost_scale * (1.0f - config.time_of_day_price_variance), config.trade_cost_scale * (1.0f + config.time_of_day_price_variance));
         }
 
-        return new RangeValue(config.trade_cost_scale);
+        return NumberExpr.constant(config.trade_cost_scale);
     }
 
     private static boolean isAnyOf(TradeCondition condition) {

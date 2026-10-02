@@ -2,12 +2,20 @@ package com.yanny.ali.test;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.language.Lang;
+import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.commands.arguments.NbtPathArgument;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.random.Weighted;
 import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.attribute.EnvironmentAttributes;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -26,129 +34,141 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
+import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 public class FloatProviderTest {
     private static final Holder<LootItemCondition> CONDITION = Holder.direct(ExplosionCondition.survivesExplosion().build());
 
     @Test
     public void testConstant() {
-        assertEquals("1.50", convert(ContextFloatProviders.exactly(1.5f)));
+        assertValue(ContextFloatProviders.exactly(1.5f), "Value: 1.5");
     }
 
     @Test
     public void testUniform() {
-        assertEquals("1-3", convert(ContextFloatProviders.between(1f, 3f)));
+        assertValue(ContextFloatProviders.between(1f, 3f), "Value: 1 to 3");
     }
 
     @Test
     public void testStorage() throws CommandSyntaxException {
         StoredNumberAccess access = new StoredNumberAccess(Identifier.withDefaultNamespace("test"), new NbtPathArgument().parse(new StringReader("value")));
 
-        assertEquals("1[+???]", convert(Holder.direct(new StorageValue(access, ContextFloatProviders.exactly(1f)))));
+        assertValue(Holder.direct(new StorageValue(access, ContextFloatProviders.exactly(1f))), "Value: any (storage \"value\" (minecraft:test))");
     }
 
     @Test
     public void testEnvironmentAttribute() {
-        assertEquals("1[+???]", convert(ContextFloatProviders.forEnvironmentAttribute(EnvironmentAttributes.CLOUD_HEIGHT)));
+        assertValue(ContextFloatProviders.forEnvironmentAttribute(EnvironmentAttributes.CLOUD_HEIGHT), "Value: any (environment attribute \"minecraft:visual/cloud_height\")");
     }
 
     @Test
     public void testEnchantmentLevel() {
-        assertEquals("1[+???]", convert(ContextFloatProviders.forEnchantmentLevel(LevelBasedValue.constant(2f))));
+        RegistryAccess registryAccess = mock(RegistryAccess.class);
+        ServerLevel level = mock(ServerLevel.class);
+        IServerUtils utils = spy(UTILS);
+        Registry<Enchantment> enchantments = mock();
+        Holder<ContextFloatProvider> provider = ContextFloatProviders.forEnchantmentLevel(LevelBasedValue.constant(2f));
+
+        doAnswer((i) -> LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).listElements()).when(enchantments).listElements();
+        doReturn(enchantments).when(registryAccess).lookupOrThrow(Registries.ENCHANTMENT);
+        doReturn(registryAccess).when(level).registryAccess();
+        doReturn(level).when(utils).getServerLevel();
+        assertTooltip(TooltipUtils.getNumberTooltip(utils, () -> utils.convertContextFloat(utils, provider)).build(Lang.Value.VALUE), true, List.of("Value: 2"));
     }
 
     @Test
     public void testSum() {
-        assertEquals("4", convert(ContextFloatProviders.add(ContextFloatProviders.exactly(1.5f), ContextFloatProviders.exactly(2.5f))));
+        assertValue(ContextFloatProviders.add(ContextFloatProviders.exactly(1.5f), ContextFloatProviders.exactly(2.5f)), "Value: 4");
     }
 
     @Test
     public void testProduct() {
-        assertEquals("5", convert(ContextFloatProviders.mul(ContextFloatProviders.exactly(2f), ContextFloatProviders.exactly(2.5f))));
+        assertValue(ContextFloatProviders.mul(ContextFloatProviders.exactly(2f), ContextFloatProviders.exactly(2.5f)), "Value: 5");
     }
 
     @Test
     public void testAverage() {
-        assertEquals("2", convert(ContextFloatProviders.avg(ContextFloatProviders.exactly(1f), ContextFloatProviders.exactly(3f))));
+        assertValue(ContextFloatProviders.avg(ContextFloatProviders.exactly(1f), ContextFloatProviders.exactly(3f)), "Value: 2");
     }
 
     @Test
     public void testMinimum() {
-        assertEquals("1-3", convert(ContextFloatProviders.min(ContextFloatProviders.between(1f, 5f), ContextFloatProviders.exactly(3f))));
+        assertValue(ContextFloatProviders.min(ContextFloatProviders.between(1f, 5f), ContextFloatProviders.exactly(3f)), "Value: 1 to 3  ~3 (50%)");
     }
 
     @Test
     public void testMaximum() {
-        assertEquals("3-5", convert(ContextFloatProviders.max(ContextFloatProviders.between(1f, 5f), ContextFloatProviders.exactly(3f))));
+        assertValue(ContextFloatProviders.max(ContextFloatProviders.between(1f, 5f), ContextFloatProviders.exactly(3f)), "Value: 3 to 5  ~3 (50%)");
     }
 
     @Test
     public void testDifference() {
-        assertEquals("3.50", convert(ContextFloatProviders.sub(ContextFloatProviders.exactly(5f), ContextFloatProviders.exactly(1.5f))));
+        assertValue(ContextFloatProviders.sub(ContextFloatProviders.exactly(5f), ContextFloatProviders.exactly(1.5f)), "Value: 3.5");
     }
 
     @Test
     public void testNegate() {
-        assertEquals("-2.50", convert(ContextFloatProviders.negate(ContextFloatProviders.exactly(2.5f))));
+        assertValue(ContextFloatProviders.negate(ContextFloatProviders.exactly(2.5f)), "Value: −2.5");
     }
 
     @Test
     public void testAbsolute() {
-        assertEquals("2.50", convert(ContextFloatProviders.abs(ContextFloatProviders.negate(ContextFloatProviders.exactly(2.5f)))));
+        assertValue(ContextFloatProviders.abs(ContextFloatProviders.negate(ContextFloatProviders.exactly(2.5f))), "Value: 2.5");
     }
 
     @Test
     public void testFromInt() {
-        assertEquals("1-4", convert(Holder.direct(new FromInt(ContextIntProviders.between(1, 4)))));
+        assertValue(Holder.direct(new FromInt(ContextIntProviders.between(1, 4))), "Value: 1 to 4");
     }
 
     @Test
     public void testFloor() {
-        assertEquals("1-3", convert(Holder.direct(new Floor(ContextFloatProviders.between(1.5f, 3.5f)))));
+        assertValue(Holder.direct(new Floor(ContextFloatProviders.between(1.5f, 3.5f))), "Value: 1 to 3  ~2 (50%)");
     }
 
     @Test
     public void testCeiling() {
-        assertEquals("2-4", convert(ContextFloatProviders.ceiling(ContextFloatProviders.between(1.5f, 3.5f))));
+        assertValue(ContextFloatProviders.ceiling(ContextFloatProviders.between(1.5f, 3.5f)), "Value: 2 to 4  ~3 (50%)");
     }
 
     @Test
     public void testRound() {
-        assertEquals("1-4", convert(ContextFloatProviders.round(ContextFloatProviders.between(1.4f, 3.6f))));
+        assertValue(ContextFloatProviders.round(ContextFloatProviders.between(1.4f, 3.6f)), "Value: 1 to 4  ~2 to 3 (45%)");
     }
 
     @Test
     public void testTruncate() {
-        assertEquals("1-3", convert(ContextFloatProviders.trunc(ContextFloatProviders.between(1.9f, 3.9f))));
+        assertValue(ContextFloatProviders.trunc(ContextFloatProviders.between(1.9f, 3.9f)), "Value: 1 to 3  ~2 (50%)");
     }
 
     @Test
     public void testSquareRoot() {
-        assertEquals("2-3", convert(ContextFloatProviders.sqrt(ContextFloatProviders.between(4f, 9f))));
+        assertValue(ContextFloatProviders.sqrt(ContextFloatProviders.between(4f, 9f)), "Value: 2 to 3");
     }
 
     @Test
     public void testSine() {
-        assertEquals("-1-1", convert(ContextFloatProviders.sin(ContextFloatProviders.exactly(1f))));
+        assertValue(ContextFloatProviders.sin(ContextFloatProviders.exactly(1f)), "Value: 0.84");
     }
 
     @Test
     public void testCosine() {
-        assertEquals("-1-1", convert(ContextFloatProviders.cos(ContextFloatProviders.exactly(1f))));
+        assertValue(ContextFloatProviders.cos(ContextFloatProviders.exactly(1f)), "Value: 0.54");
     }
 
     @Test
     public void testConditional() {
-        assertEquals("1-9", convert(Holder.direct(new ConditionalValue(CONDITION, ContextFloatProviders.exactly(1f), ContextFloatProviders.exactly(9f)))));
+        assertValue(Holder.direct(new ConditionalValue(CONDITION, ContextFloatProviders.exactly(1f), ContextFloatProviders.exactly(9f))), "Value: ", "  -> 1", "    -> Survives Explosion", "  -> otherwise 9");
     }
 
     @Test
     public void testDispatcher() {
         List<DispatcherProvider.Case<ContextFloatProvider>> cases = List.of(new DispatcherProvider.Case<>(CONDITION, ContextFloatProviders.exactly(7f)));
 
-        assertEquals("1-7", convert(Holder.direct(new NumberDispatcher(cases, ContextFloatProviders.exactly(1f)))));
+        assertValue(Holder.direct(new NumberDispatcher(cases, ContextFloatProviders.exactly(1f))), "Value: ", "  -> 7", "    -> Survives Explosion", "  -> otherwise 1");
     }
 
     @Test
@@ -158,30 +178,30 @@ public class FloatProviderTest {
                 new Weighted<>(ContextFloatProviders.exactly(8f), 3)
         ));
 
-        assertEquals("2-8", convert(Holder.direct(new WeightedListValue(list))));
+        assertValue(Holder.direct(new WeightedListValue(list)), "Value: 2 to 8  ~8 (75%)", "  -> 2 (25%)", "  -> 8 (75%)");
     }
 
     @Test
     public void testLength() {
-        assertEquals("1[+???]", convert(ContextFloatProviders.length(ContextFloatProviders.exactly(3f), ContextFloatProviders.exactly(4f))));
+        assertValue(ContextFloatProviders.length(ContextFloatProviders.exactly(3f), ContextFloatProviders.exactly(4f)), "Value: 5");
     }
 
     @Test
     public void testModulus() {
-        assertEquals("1[+???]", convert(ContextFloatProviders.mod(ContextFloatProviders.exactly(7f), ContextFloatProviders.exactly(3f))));
+        assertValue(ContextFloatProviders.mod(ContextFloatProviders.exactly(7f), ContextFloatProviders.exactly(3f)), "Value: 1");
     }
 
     @Test
     public void testQuotient() {
-        assertEquals("1[+???]", convert(ContextFloatProviders.div(ContextFloatProviders.exactly(7f), ContextFloatProviders.exactly(3f))));
+        assertValue(ContextFloatProviders.div(ContextFloatProviders.exactly(7f), ContextFloatProviders.exactly(3f)), "Value: 2.33");
     }
 
     @Test
     public void testPower() {
-        assertEquals("1[+???]", convert(ContextFloatProviders.pow(ContextFloatProviders.exactly(2f), ContextFloatProviders.exactly(3f))));
+        assertValue(ContextFloatProviders.pow(ContextFloatProviders.exactly(2f), ContextFloatProviders.exactly(3f)), "Value: 8");
     }
 
-    private static String convert(Holder<ContextFloatProvider> provider) {
-        return UTILS.convertFloat(UTILS, provider).toString();
+    private static void assertValue(Holder<ContextFloatProvider> provider, String... expected) {
+        assertTooltip(TooltipUtils.getNumberTooltip(UTILS, () -> UTILS.convertContextFloat(UTILS, provider)).build(Lang.Value.VALUE), true, List.of(expected));
     }
 }

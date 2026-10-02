@@ -1,7 +1,7 @@
 package com.yanny.awi.plugin.common.nodes;
 
 import com.google.gson.JsonObject;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberInterval;
 import com.yanny.awi.api.BlockInfo;
 import com.yanny.awi.api.ISurfaceRuleHandler;
 import net.minecraft.resources.Identifier;
@@ -58,7 +58,7 @@ public class BandlandsLayout implements ISurfaceRuleHandler {
         List<BlockInfo> infos = new ArrayList<>();
         int layerShift = shift();
 
-        infos.add(new BlockInfo(filler, BlockInfo.StorageType.ABSOLUTE, List.of(new RangeValue(bottom, top)), 0, ghost.water(),
+        infos.add(new BlockInfo(filler, BlockInfo.StorageType.ABSOLUTE, List.of(NumberInterval.closed(bottom, top)), 0, ghost.water(),
                 ghost.placement(), List.of()));
         levels.forEach((block, holder) -> infos.add(new BlockInfo(block, BlockInfo.StorageType.LAYERED, holder.buildRanges(),
                 layerShift, ghost.water(), ghost.placement(), List.of())));

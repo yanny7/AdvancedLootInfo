@@ -1,6 +1,6 @@
 # aci/neoforge/CLAUDE.md
 
-Guidance for `aci/neoforge` (`com.yanny.aci.neoforge`) — ACI's NeoForge loader wrapper. See `aci/CLAUDE.md` for the library this packages, and `aci/fabric/CLAUDE.md` / `aci/forge/CLAUDE.md` for the other two halves. Like them it carries **no mod logic**: no networking, no mixins, no access transformer, no platform-service implementation. Its whole job is to shadow `aci:common` into a jar NeoForge accepts.
+Guidance for `aci/neoforge` (`com.yanny.aci.neoforge`) — ACI's NeoForge loader wrapper. See `aci/CLAUDE.md` for the library this packages, and `aci/fabric/CLAUDE.md` / `aci/forge/CLAUDE.md` for the other two halves. Like them it carries **no mod logic**: no networking, no mixins, no platform-service implementation. Its whole job is to shadow `aci:common` into a jar NeoForge accepts, with `aci.accesswidener` converted to `META-INF/accesstransformer.cfg`.
 
 ## What is in it
 
@@ -11,7 +11,7 @@ Guidance for `aci/neoforge` (`com.yanny.aci.neoforge`) — ACI's NeoForge loader
 
 ## Gotchas
 
-There is no access transformer here, unlike `ali/neoforge` and `awi/neoforge`: `aci:common` has no access widener to translate, so nothing needs mirroring when a widener entry is added to ALI's or AWI's.
+`aci.accesswidener` reaches NeoForge the way `ali.accesswidener` does (see `ali/neoforge/CLAUDE.md`): `loom.accessWidenerPath` points at `aci/common`'s file and `neoForge { convertAccessWideners(tasks.named("shadowJar"), "aci.accesswidener") }` turns it into `META-INF/accesstransformer.cfg` during `shadowJar`, so nothing here is hand-maintained.
 
 `aci/neoforge/src/main/generated/assets/aci/lang/en_us.json` is byte-identical to `aci/forge`'s, and `runData` hangs after writing it (same as Forge) — copying the Forge file is the practical way to refresh it.
 

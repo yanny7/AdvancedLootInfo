@@ -5,14 +5,17 @@ import com.almostreliable.lootjs.core.filters.ItemFilter;
 import com.almostreliable.lootjs.loot.modifier.LootAction;
 import com.almostreliable.lootjs.loot.modifier.LootModifier;
 import com.almostreliable.lootjs.loot.modifier.handler.*;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
+import com.yanny.aci.number.NumberFormatter;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.lootjs.AbstractLootModifier;
 import com.yanny.ali.lootjs.node.ItemStackNode;
+import com.yanny.ali.plugin.client.TooltipUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.LootPoolNode;
 import com.yanny.ali.plugin.common.nodes.ModifiedNode;
@@ -190,7 +193,7 @@ public class LootModifierTest {
         IOperation.ReplaceOperation operation = replaceOperation(List.of(), itemEntry(Items.EMERALD, 7), true);
         ItemStackNode result = (ItemStackNode) operation.factory().apply(itemNode(3)).getFirst();
 
-        Assertions.assertEquals("3", result.getCount().toIntString());
+        Assertions.assertEquals("3", slot(result));
         assertTooltip(result.getTooltip(), List.of(
                 "Count: 3",
                 "----- Modifiers -----",
@@ -206,7 +209,7 @@ public class LootModifierTest {
         List<IDataNode> result = operation.factory().apply(itemNode(3));
 
         Assertions.assertEquals(1, result.size());
-        Assertions.assertEquals("7", ((ItemStackNode) result.getFirst()).getCount().toIntString());
+        Assertions.assertEquals("7", slot(((ItemStackNode) result.getFirst())));
     }
 
     @Test
@@ -214,7 +217,7 @@ public class LootModifierTest {
         IOperation.ReplaceOperation operation = replaceOperation(List.of(), itemEntry(Items.EMERALD, 7), true);
         List<IDataNode> result = operation.factory().apply(itemNode(3));
 
-        Assertions.assertEquals("3", ((ItemStackNode) result.getFirst()).getCount().toIntString());
+        Assertions.assertEquals("3", slot(((ItemStackNode) result.getFirst())));
     }
 
     @Test
@@ -249,7 +252,7 @@ public class LootModifierTest {
         ItemStackNode result = (ItemStackNode) operation.factory().apply(itemNode(3)).getFirst();
 
         Assertions.assertTrue(result.isModified());
-        Assertions.assertEquals("3", result.getCount().toIntString());
+        Assertions.assertEquals("3", slot(result));
         assertTooltip(result.getTooltip(), List.of(
                 "Count: 3",
                 "----- Modifiers -----",
@@ -302,7 +305,7 @@ public class LootModifierTest {
     }
 
     private static ItemNode itemNode(int count, LootItemFunction... functions) {
-        return new ItemNode(1.0F, new RangeValue(count), new ItemStack(Items.DIAMOND), TooltipBuilder.empty().build(), List.of(functions), List.of());
+        return new ItemNode(1.0F, NumberExpr.constant(count), new ItemStack(Items.DIAMOND), TooltipBuilder.empty().build(), List.of(functions), List.of());
     }
 
     private static ItemStackNode itemStackNode() {
@@ -324,5 +327,9 @@ public class LootModifierTest {
         public ILootModifier.IType<Identifier> getType() {
             return ILootModifier.IType.LOOT_TABLE;
         }
+    }
+
+    private static String slot(IItemNode node) {
+        return NumberFormatter.slot(TooltipUtils.getSlotCount(node));
     }
 }
