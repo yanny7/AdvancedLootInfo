@@ -1,3 +1,8 @@
+## []
+
+- Tooltips taller than the screen can be scrolled with the mouse wheel
+- Values show most likely value, charts (`showCharts`) and formulas (F3+H)
+
 ## [1.2.0]
 
 - Added `dimensions` configuration to hide dimensions

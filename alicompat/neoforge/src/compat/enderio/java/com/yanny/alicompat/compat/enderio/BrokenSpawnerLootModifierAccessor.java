@@ -2,7 +2,7 @@ package com.yanny.alicompat.compat.enderio;
 
 import com.enderio.enderio.config.base.BaseConfig;
 import com.enderio.enderio.content.broken_spawner.BrokenSpawnerLootModifier;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
@@ -37,7 +37,7 @@ public class BrokenSpawnerLootModifierAccessor extends BaseAccessor<BrokenSpawne
 
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions),
                 (page, c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true,
-                        GlmNodeUtils.addedNode(utils, c, brokenSpawner(), dropChance, new RangeValue(1))))));
+                        GlmNodeUtils.addedNode(utils, c, brokenSpawner(), dropChance, NumberExpr.constant(1))))));
     }
 
     @NotNull

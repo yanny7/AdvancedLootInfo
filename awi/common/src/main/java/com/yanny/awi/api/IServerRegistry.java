@@ -3,13 +3,10 @@ package com.yanny.awi.api;
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.ICoreServerRegistry;
 import com.yanny.aci.tooltip.TooltipBuilder;
-import com.yanny.awi.plugin.server.summary.CountSpan;
-import com.yanny.awi.plugin.server.summary.HeightSpanPropagator;
+import com.yanny.awi.plugin.server.summary.HeightConverter;
 import com.yanny.awi.plugin.server.summary.PlacementPropagator;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.valueproviders.FloatProvider;
-import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
@@ -42,8 +39,6 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     <T extends PlacementModifier> void registerPlacementModifierTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter);
 
-    <T extends IntProvider> void registerIntProviderTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter);
-
     <T extends RuleTest> void registerRuleTestTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter);
 
     <T extends HeightProvider> void registerHeightProviderTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter);
@@ -62,13 +57,9 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     <T extends TrunkPlacer> void registerTrunkPlacerTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter);
 
-    <T extends FloatProvider> void registerFloatProviderTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter);
-
     <T extends StructureProcessor> void registerStructureProcessorTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter);
 
-    <T extends IntProvider> void registerIntSpanPropagator(Class<T> type, BiFunction<IServerUtils, T, CountSpan> getter);
-
-    <T extends HeightProvider> void registerHeightSpanPropagator(Class<T> type, HeightSpanPropagator<T> getter);
+    <T extends HeightProvider> void registerHeightProvider(Class<T> type, HeightConverter<T> converter);
 
     <T extends PlacementModifier> void registerPlacementPropagator(Class<T> type, PlacementPropagator<T> getter);
 

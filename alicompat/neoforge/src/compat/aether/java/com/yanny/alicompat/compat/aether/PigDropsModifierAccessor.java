@@ -2,7 +2,7 @@ package com.yanny.alicompat.compat.aether;
 
 import com.aetherteam.aether.AetherTags;
 import com.aetherteam.aether.loot.modifiers.PigDropsModifier;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
@@ -36,6 +36,6 @@ public class PigDropsModifierAccessor extends BaseAccessor<PigDropsModifier> imp
                 (page, c) -> Collections.singletonList(new IOperation.ReplaceOperation(
                         (itemStack) -> itemStack.is(AetherTags.Items.PIG_DROPS),
                         (src) -> AetherNodeUtils.countedNode(utils, AetherNodeUtils.withChance(c, 0.25F), src,
-                                new RangeValue(((IItemNode) src).getCount()).multiply(2))))));
+                                NumberExpr.mul(((IItemNode) src).getCount(), NumberExpr.constant(2)))))));
     }
 }

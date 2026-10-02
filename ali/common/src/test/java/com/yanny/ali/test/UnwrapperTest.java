@@ -25,8 +25,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
-import static com.yanny.ali.plugin.common.NodeUtils.getEnchantedChance;
-import static com.yanny.ali.plugin.common.NodeUtils.getEnchantedCount;
+import static com.yanny.ali.plugin.common.NodeUtils.getChance;
+import static com.yanny.ali.plugin.common.NodeUtils.getCount;
 import static com.yanny.ali.plugin.server.TooltipUtils.getChanceTooltip;
 import static com.yanny.ali.plugin.server.TooltipUtils.getCountTooltip;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
@@ -43,10 +43,10 @@ public class UnwrapperTest {
 
     @Test
     public void testAllOfChance() {
-        assertTooltip(getChanceTooltip(getEnchantedChance(UTILS, List.of(
+        assertTooltip(getChanceTooltip(getChance(UTILS, List.of(
                 AllOfCondition.allOf(LootItemRandomChanceCondition.randomChance(0.25f)).build()
         ), 1)).build(), List.of("Chance: 25%"));
-        assertTooltip(getChanceTooltip(getEnchantedChance(UTILS, List.of(
+        assertTooltip(getChanceTooltip(getChance(UTILS, List.of(
                 AllOfCondition.allOf(
                         AllOfCondition.allOf(LootItemRandomChanceCondition.randomChance(0.5f)),
                         LootItemRandomChanceCondition.randomChance(0.5f)
@@ -58,15 +58,15 @@ public class UnwrapperTest {
     public void testInlinePredicateListChance() {
         LootItemCondition composite = AllOfCondition.allOf(List.of(LootItemRandomChanceCondition.randomChance(0.25f).build()));
 
-        assertTooltip(getChanceTooltip(getEnchantedChance(UTILS, List.of(composite), 1)).build(), List.of("Chance: 25%"));
+        assertTooltip(getChanceTooltip(getChance(UTILS, List.of(composite), 1)).build(), List.of("Chance: 25%"));
     }
 
     @Test
     public void testInexactConditionsKept() {
-        assertTooltip(getChanceTooltip(getEnchantedChance(UTILS, List.of(
+        assertTooltip(getChanceTooltip(getChance(UTILS, List.of(
                 AnyOfCondition.anyOf(LootItemRandomChanceCondition.randomChance(0.25f)).build()
         ), 1)).build(), List.of());
-        assertTooltip(getChanceTooltip(getEnchantedChance(UTILS, List.of(
+        assertTooltip(getChanceTooltip(getChance(UTILS, List.of(
                 LootItemRandomChanceCondition.randomChance(0.25f).invert().build()
         ), 1)).build(), List.of());
     }
@@ -75,27 +75,27 @@ public class UnwrapperTest {
     public void testConditionReferenceChance() {
         IServerUtils utils = resolvingUtils();
 
-        assertTooltip(getChanceTooltip(getEnchantedChance(utils, List.of(ConditionReference.conditionReference(PREDICATE).build()), 1)).build(), List.of("Chance: 25%"));
-        assertTooltip(getChanceTooltip(getEnchantedChance(utils, List.of(ConditionReference.conditionReference(MISSING_PREDICATE).build()), 1)).build(), List.of());
-        assertTooltip(getChanceTooltip(getEnchantedChance(utils, List.of(ConditionReference.conditionReference(CYCLIC_PREDICATE).build()), 1)).build(), List.of());
+        assertTooltip(getChanceTooltip(getChance(utils, List.of(ConditionReference.conditionReference(PREDICATE).build()), 1)).build(), List.of("Chance: 25%"));
+        assertTooltip(getChanceTooltip(getChance(utils, List.of(ConditionReference.conditionReference(MISSING_PREDICATE).build()), 1)).build(), List.of());
+        assertTooltip(getChanceTooltip(getChance(utils, List.of(ConditionReference.conditionReference(CYCLIC_PREDICATE).build()), 1)).build(), List.of());
     }
 
     @Test
     public void testFunctionSequenceCount() {
         LootItemFunction sequence = SequenceFunction.of(List.of(SetItemCountFunction.setCount(ConstantValue.exactly(10)).build()));
 
-        assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(sequence))).build(), List.of("Count: 10"));
+        assertTooltip(getCountTooltip(getCount(UTILS, List.of(sequence)), null).build(), List.of("Count: 10"));
     }
 
     @Test
     public void testFunctionReferenceCount() {
         IServerUtils utils = resolvingUtils();
 
-        assertTooltip(getCountTooltip(getEnchantedCount(utils, List.of(FunctionReference.functionReference(MODIFIER).build()))).build(), List.of("Count: 10"));
-        assertTooltip(getCountTooltip(getEnchantedCount(utils, List.of(
+        assertTooltip(getCountTooltip(getCount(utils, List.of(FunctionReference.functionReference(MODIFIER).build())), null).build(), List.of("Count: 10"));
+        assertTooltip(getCountTooltip(getCount(utils, List.of(
                 FunctionReference.functionReference(MODIFIER).when(LootItemRandomChanceCondition.randomChance(0.5f)).build()
-        ))).build(), List.of("Count: 1"));
-        assertTooltip(getCountTooltip(getEnchantedCount(utils, List.of(FunctionReference.functionReference(MISSING_MODIFIER).build()))).build(), List.of("Count: 1"));
+        )), null).build(), List.of("Count: 1"));
+        assertTooltip(getCountTooltip(getCount(utils, List.of(FunctionReference.functionReference(MISSING_MODIFIER).build())), null).build(), List.of("Count: 1"));
     }
 
     @Test

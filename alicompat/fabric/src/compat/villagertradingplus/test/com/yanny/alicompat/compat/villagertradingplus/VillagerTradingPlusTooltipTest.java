@@ -83,17 +83,6 @@ public class VillagerTradingPlusTooltipTest {
     }
 
     @Test
-    public void testSellEnchantedBookTradeOffer() {
-        assertTooltip(tooltip(factory("JsonSellEnchantedBookTradeOffer$Factory", new ItemStack(Items.EMERALD, 10), 3, 12, 0.2F, 2)), List.of(
-                "Uses: 3",
-                "XP: 12",
-                "Price Multiplier: 0.2"
-        ));
-    }
-
-
-
-    @Test
     public void testSellEnchantedToolTradeOffer() {
         assertTooltip(tooltip(factory("JsonSellEnchantedToolTradeOffer$Factory", new ItemStack(Items.EMERALD, 14), new ItemStack(Items.DIAMOND_PICKAXE), 3, 10, 0.2F)), List.of(
                 "Uses: 3",

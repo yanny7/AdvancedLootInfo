@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.kaleidoscopecookery;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
@@ -15,7 +15,6 @@ import com.yanny.alicompat.accessor.IItemListing;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.jetbrains.annotations.NotNull;
 
 @ClassAccessor("com.github.ysbbbbbb.kaleidoscopecookery.event.ModTradesEvent$EnchantedItemForEmeralds")
@@ -47,20 +46,20 @@ public class EnchantedItemForEmeraldsAccessor extends BaseAccessor<VillagerTrade
     @Override
     public IDataNode getNode(IServerUtils utils, TooltipNode conditions) {
         TooltipNode tooltip = TooltipBuilder.branch((b) -> {
-            b.add(utils.getValueTooltip(utils, UniformGenerator.between(MIN_LEVELS, MAX_LEVELS)).build(Lang.Value.LEVELS));
+            b.add(utils.getValueTooltip(utils, NumberExpr.uniformInt(MIN_LEVELS, MAX_LEVELS)).build(Lang.Value.LEVELS));
             b.add(utils.getValueTooltip(utils, false).build(Lang.Value.TREASURE));
         }).build(Lang.Functions.ENCHANT_WITH_LEVELS);
 
         return new ItemsToItemsNode(
                 utils,
                 Either.left(Items.EMERALD.getDefaultInstance()),
-                new RangeValue(Math.min(baseEmeraldCost + MIN_LEVELS, MAX_COST), Math.min(baseEmeraldCost + MAX_LEVELS, MAX_COST)),
+                NumberExpr.min(NumberExpr.add(NumberExpr.constant(baseEmeraldCost), NumberExpr.uniformInt(MIN_LEVELS, MAX_LEVELS)), NumberExpr.constant(MAX_COST)),
                 TooltipNode.empty(),
                 Either.left(ItemStack.EMPTY),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 TooltipNode.empty(),
                 Either.left(new ItemStack(itemStack.getItem())),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 tooltip,
                 maxUses,
                 villagerXp,

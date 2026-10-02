@@ -1,5 +1,6 @@
 package com.yanny.ali.plugin.server;
 
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
@@ -141,7 +142,7 @@ public class GenericTooltipUtils {
     @NotNull
     public static TooltipBuilder getEnchantmentLevelsEntryTooltip(IServerUtils utils, Map.Entry<Holder<Enchantment>, NumberProvider> entry) {
         return utils.getValueTooltip(utils, entry.getKey())
-                .add(utils.getValueTooltip(utils, entry.getValue()).build(Lang.Value.LEVELS));
+                .add(TooltipBuilder.number(utils.convertIntNumber(utils, entry.getValue())).build(Lang.Value.LEVELS));
     }
 
     @NotNull
@@ -224,43 +225,27 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static String toString(MinMaxBounds.Doubles doubles) {
-        Optional<Double> min = doubles.min();
-        Optional<Double> max = doubles.max();
+    public static NumberExpr getRange(MinMaxBounds.Doubles doubles) {
+        NumberExpr min = doubles.min().map(NumberExpr::constant).orElse(null);
+        NumberExpr max = doubles.max().map(NumberExpr::constant).orElse(null);
 
-        if (min.isPresent()) {
-            if (max.isPresent()) {
-                if (!Objects.equals(min.get(), max.get())) {
-                    return String.format("%.1f-%.1f", min.get(), max.get());
-                } else {
-                    return String.format("=%.1f", min.get());
-                }
-            } else {
-                return String.format("≥%.1f", min.get());
-            }
-        } else {
-            return max.map(aDouble -> String.format("≤%.1f", aDouble)).orElse("???");
-        }
+        return NumberExpr.range(min, max, min != null, max != null);
     }
 
     @NotNull
-    public static String toString(MinMaxBounds.Ints ints) {
-        Optional<Integer> min = ints.min();
-        Optional<Integer> max = ints.max();
+    public static NumberExpr getRange(MinMaxBounds.Ints ints) {
+        NumberExpr min = ints.min().map(NumberExpr::constant).orElse(null);
+        NumberExpr max = ints.max().map(NumberExpr::constant).orElse(null);
 
-        if (min.isPresent()) {
-            if (max.isPresent()) {
-                if (!Objects.equals(min.get(), max.get())) {
-                    return String.format("%d-%d", min.get(), max.get());
-                } else {
-                    return String.format("=%d", min.get());
-                }
-            } else {
-                return String.format("≥%d", min.get());
-            }
-        } else {
-            return max.map(integer -> String.format("≤%d", integer)).orElse("???");
-        }
+        return NumberExpr.range(min, max, min != null, max != null);
+    }
+
+    @NotNull
+    public static NumberExpr getRange(IServerUtils utils, IntRange range) {
+        NumberExpr min = range.min != null ? utils.convertIntNumber(utils, range.min) : null;
+        NumberExpr max = range.max != null ? utils.convertIntNumber(utils, range.max) : null;
+
+        return NumberExpr.range(min, max, min != null, max != null);
     }
 
     @NotNull

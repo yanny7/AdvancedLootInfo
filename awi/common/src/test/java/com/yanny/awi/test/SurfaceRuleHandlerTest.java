@@ -1,7 +1,7 @@
 package com.yanny.awi.test;
 
 import com.google.gson.JsonObject;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberInterval;
 import com.yanny.awi.api.BlockInfo;
 import com.yanny.awi.api.ISurfaceRuleHandler;
 import com.yanny.awi.plugin.common.nodes.BandlandsLayout;
@@ -43,13 +43,13 @@ public class SurfaceRuleHandlerTest {
         ISurfaceRuleHandler handler = (definition, ghost) -> {
             definitions.add(definition);
             return List.of(new BlockInfo(Blocks.DIAMOND_BLOCK, BlockInfo.StorageType.ABSOLUTE,
-                    List.of(new RangeValue(ghost.absoluteY().first(), ghost.absoluteY().last())), 0, ghost.water(), ghost.placement(), List.of()));
+                    List.of(NumberInterval.closed(ghost.absoluteY().first(), ghost.absoluteY().last())), 0, ghost.water(), ghost.placement(), List.of()));
         };
         Set<BlockInfo> infos = scan(Map.of(BandlandsLayout.TYPE, (context) -> handler));
         BlockInfo diamond = infos.stream().filter((info) -> info.block() == Blocks.DIAMOND_BLOCK).findFirst().orElseThrow();
 
         assertEquals("{\"type\":\"minecraft:bandlands\"}", definitions.get(0).toString());
-        assertEquals("54-318", diamond.ranges().get(0).toIntString());
+        assertEquals(NumberInterval.closed(54, 318), diamond.ranges().get(0));
         assertTrue(infos.stream().noneMatch((info) -> info.block() == Blocks.LIGHT), "a ghost leaked into the result");
         assertTrue(infos.stream().noneMatch((info) -> info.block() == Blocks.DYED_TERRACOTTA.yellow()), "bands still measured");
     }

@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.charm;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
@@ -39,9 +39,9 @@ public class PopulatedBeehiveForEmeraldsAccessor extends BaseAccessor<Trades.Pop
         return new ItemsToItemsNode(
                 utils,
                 Either.left(Items.EMERALD.getDefaultInstance()),
-                new RangeValue(baseEmeralds, baseEmeralds + extraEmeralds),
+                NumberExpr.uniformInt(baseEmeralds, baseEmeralds + extraEmeralds),
                 Either.left(beehive),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 maxUses,
                 villagerXp,
                 0.2F,

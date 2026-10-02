@@ -41,7 +41,7 @@ public class ConditionTooltipTest {
                 "  -> Time Check:",
                 "    -> Clock: minecraft:overworld",
                 "    -> Period: 10",
-                "    -> Value: 1 - 8",
+                "    -> Value: 1 to 8",
                 "  -> Weather Check:",
                 "    -> Is Raining: true"
         ));
@@ -63,7 +63,7 @@ public class ConditionTooltipTest {
                 "  -> Time Check:",
                 "    -> Clock: minecraft:overworld",
                 "    -> Period: 10",
-                "    -> Value: 1 - 8",
+                "    -> Value: 1 to 8",
                 "  -> Weather Check:",
                 "    -> Is Raining: true"
         ));
@@ -153,9 +153,9 @@ public class ConditionTooltipTest {
                 "  -> Target: Direct Attacker",
                 "  -> Scores:",
                 "    -> double",
-                "      -> Limit: 1 - 7",
+                "      -> Limit: 1 to 7",
                 "    -> single",
-                "      -> Limit: 2 - 5"
+                "      -> Limit: 2 to 5"
         ));
     }
 
@@ -168,7 +168,7 @@ public class ConditionTooltipTest {
                 "  -> Time Check:",
                 "    -> Clock: minecraft:overworld",
                 "    -> Period: 10",
-                "    -> Value: 1 - 8"
+                "    -> Value: 1 to 8"
         ));
         assertTooltip(ConditionTooltipUtils.getInvertedTooltip(UTILS, (InvertedLootItemCondition) InvertedLootItemCondition.invert(
                 ExplosionCondition.survivesExplosion()
@@ -232,12 +232,10 @@ public class ConditionTooltipTest {
     public void testRandomChanceWithLootingTooltip() {
         assertTooltip(ConditionTooltipUtils.getRandomChanceWithEnchantedBonusTooltip(UTILS, (LootItemRandomChanceWithEnchantedBonusCondition) LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(LOOKUP, 0.25F, 5F).build()).build(), List.of(
                 "Random Chance With Enchanted Bonus:",
-                "  -> Unenchanted Chance: 0.25",
-                "  -> Enchanted Chance:",
-                "    -> Linear:",
-                "      -> Base: 5.25",
-                "      -> Per Level: 5.0",
-                "  -> Enchantment: minecraft:looting"
+                "  -> Chance: 0.25",
+                "    -> Looting I: 5.25",
+                "    -> Looting II: 10.25",
+                "    -> Looting III: 15.25"
         ));
     }
 
@@ -269,7 +267,7 @@ public class ConditionTooltipTest {
                 "Time Check:",
                 "  -> Clock: minecraft:overworld",
                 "  -> Period: 24000",
-                "  -> Value: 5 - 10"
+                "  -> Value: 5 to 10"
         ));
     }
 
@@ -277,8 +275,8 @@ public class ConditionTooltipTest {
     public void testValueCheckTooltip() {
         assertTooltip(ConditionTooltipUtils.getValueCheckTooltip(UTILS, (ValueCheckCondition) ValueCheckCondition.hasValue(UniformGenerator.between(1, 20), IntRange.range(1, 10)).build()).build(), List.of(
                 "Value Check:",
-                "  -> Value: 1-20",
-                "  -> Range: 1 - 10"
+                "  -> Value: 1 to 20",
+                "  -> Range: 1 to 10"
         ));
     }
 

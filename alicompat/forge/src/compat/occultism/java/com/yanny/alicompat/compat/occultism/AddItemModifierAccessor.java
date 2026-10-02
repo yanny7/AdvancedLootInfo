@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.occultism;
 
 import com.klikli_dev.occultism.loot.AddItemModifier;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
@@ -35,6 +35,6 @@ public class AddItemModifierAccessor extends BaseAccessor<AddItemModifier> imple
 
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
                 (page, c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true,
-                        GlmNodeUtils.addedNode(utils, c, addedItem.getDefaultInstance(), 1, new RangeValue(count))))));
+                        GlmNodeUtils.addedNode(utils, c, addedItem.getDefaultInstance(), 1, NumberExpr.constant(count))))));
     }
 }

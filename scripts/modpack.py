@@ -9,6 +9,7 @@ import os
 import re
 import sys
 import zipfile
+from datetime import datetime
 from pathlib import Path
 
 import requests
@@ -16,6 +17,8 @@ import requests
 import shimscan
 
 API_URL = "https://api.curseforge.com/v1"
+PRISM_META_URL = "https://meta.prismlauncher.org/v1"
+LOADER_META_UIDS = {"forge": "net.minecraftforge", "fabric": "net.fabricmc.fabric-loader", "neoforge": "net.neoforged"}
 MOD_LOADER_TYPE = {"forge": 1, "fabric": 4, "neoforge": 6, "quilt": 5}
 RELEASE_TYPES = {1: "release", 2: "beta"}
 REQUIRED_RELATION_TYPE = 3
@@ -361,13 +364,21 @@ def build_modlist(mods):
     return f"<ul>\n{rows}\n</ul>\n"
 
 
-def build_manifest(properties: dict, loader: str, files):
-    loader_version = {
-        "forge": properties.get("forge_version"),
-        "fabric": properties.get("fabric_loader_version"),
-        "neoforge": properties.get("neoforge_version"),
-    }[loader]
+def newest_loader_version(minecraft_version: str, loader: str):
+    response = requests.get(f"{PRISM_META_URL}/{LOADER_META_UIDS[loader]}/index.json", timeout=60)
+    response.raise_for_status()
+    candidates = [
+        version for version in response.json()["versions"]
+        if all(require.get("equals") == minecraft_version for require in version.get("requires", []) if require["uid"] == "net.minecraft")
+    ]
 
+    if not candidates:
+        return None
+
+    return max(candidates, key=lambda version: datetime.fromisoformat(version["releaseTime"]))["version"]
+
+
+def build_manifest(properties: dict, loader: str, loader_version: str, files):
     return {
         "minecraft": {
             "version": properties["minecraft_version"],
@@ -426,6 +437,12 @@ def main():
 
         return 1
 
+    loader_version = newest_loader_version(properties["minecraft_version"], loader)
+
+    if loader_version is None:
+        print(f"Error: Prism meta lists no {loader} version for {properties['minecraft_version']}.")
+        return 1
+
     client = CurseForge(api_key, properties["minecraft_version"], loader)
     pinned = read_compat_mods(properties, loader)
     maven_pinned = [key for key, dep in read_pinned_deps(properties, loader).items() if "coordinates" in dep]
@@ -461,7 +478,7 @@ def main():
     jars += maven_jars
 
     output = Path(args.output) if args.output else PROJECT_DIR / "build" / "modpack" / f"{properties['alicompat_mod_name']}-{loader}-{properties['minecraft_version']}.zip"
-    write_zip(output, build_manifest(properties, loader, resolved.values()), build_modlist(mods), jars)
+    write_zip(output, build_manifest(properties, loader, loader_version, resolved.values()), build_modlist(mods), jars)
 
     for mod in mods:
         file = resolved[mod["id"]]
@@ -485,7 +502,7 @@ def main():
         for mod in blocked:
             print(f"  {mod['name']}: {mod.get('links', {}).get('websiteUrl')}")
 
-    print(f"\nWrote {output} ({len(resolved)} mods, {len(jars)} bundled jars)")
+    print(f"\nWrote {output} ({loader} {loader_version}, {len(resolved)} mods, {len(jars)} bundled jars)")
     return 0
 
 

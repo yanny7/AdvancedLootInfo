@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.villagertradingplus;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
@@ -41,9 +41,9 @@ public class BuyItemTradeOfferAccessor extends BaseAccessor<VillagerTrades.ItemL
         return new ItemsToItemsNode(
                 utils,
                 Either.left(buy),
-                new RangeValue(buy.getCount()),
+                NumberExpr.constant(buy.getCount()),
                 Either.left(currency),
-                new RangeValue(currency.getCount()),
+                NumberExpr.constant(currency.getCount()),
                 maxUses,
                 experience,
                 multiplier,

@@ -1,6 +1,6 @@
 package com.yanny.alicompat.compat.supplementaries;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
@@ -24,7 +24,7 @@ public class RandomArrowFunctionAccessor extends BaseAccessor<RandomArrowFunctio
     @Override
     public TooltipBuilder getTooltip(IServerUtils utils) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, new RangeValue(min, max)).build(Lang.Value.AMOUNT));
+            b.add(utils.getValueTooltip(utils, NumberExpr.uniformInt(min, max)).build(Lang.Value.AMOUNT));
             b.add(utils.getValueTooltip(utils, parent.predicates).build(Lang.Branch.PREDICATES));
         }, SupplementariesLang.Functions.RANDOM_ARROWS);
     }

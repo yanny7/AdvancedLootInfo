@@ -18,16 +18,18 @@ public class AwiConfig implements ICoreConfig {
                 Codec.INT.fieldOf("configVersion").orElse(0).forGetter((c) -> c.configVersion),
                 Codec.BOOL.fieldOf("logMoreStatistics").orElse(false).forGetter((c) -> c.logMoreStatistics),
                 Codec.BOOL.fieldOf("showInGameNames").orElse(true).forGetter((c) -> c.showInGameNames),
+                Codec.BOOL.fieldOf("showCharts").orElse(true).forGetter((c) -> c.showCharts),
                 Codec.BOOL.fieldOf("showConfigConditionalBlocks").orElse(false).forGetter((c) -> c.showConfigConditionalBlocks),
                 TooltipColors.CODEC.fieldOf("tooltipColors").orElseGet(TooltipColors::new).forGetter((c) -> c.tooltipColors),
                 Codec.STRING.listOf().fieldOf("dimensions").orElseGet(ArrayList::new).forGetter((c) -> c.dimensions),
                 Codec.unboundedMap(Codec.STRING, Codec.STRING).fieldOf("dimensionIcons").orElseGet(HashMap::new).forGetter((c) -> c.dimensionIcons)
-        ).apply(instance, (version, log, show, showConfigConditional, colors, dimensions, dimensionIcons) -> {
+        ).apply(instance, (version, log, show, showCharts, showConfigConditional, colors, dimensions, dimensionIcons) -> {
             AwiConfig config = new AwiConfig();
 
             config.configVersion = version;
             config.logMoreStatistics = log;
             config.showInGameNames = show;
+            config.showCharts = showCharts;
             config.showConfigConditionalBlocks = showConfigConditional;
             config.tooltipColors = colors;
             config.dimensions = dimensions;
@@ -42,6 +44,7 @@ public class AwiConfig implements ICoreConfig {
 
     public boolean logMoreStatistics = false;
     public boolean showInGameNames = true;
+    public boolean showCharts = true;
 
     /**
      * Whether to display blocks that a feature's {@code place()} bytecode only reaches through a test on the

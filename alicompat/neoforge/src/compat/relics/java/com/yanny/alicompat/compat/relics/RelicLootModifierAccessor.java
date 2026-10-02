@@ -1,6 +1,6 @@
 package com.yanny.alicompat.compat.relics;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
@@ -67,7 +67,7 @@ public class RelicLootModifierAccessor extends BaseAccessor<RelicLootModifier> i
 
             matching.forEach((drop) -> operations.add(new IOperation.AddOperation((itemStack) -> true,
                     GlmNodeUtils.addedNode(utils, conditions, drop.item().getDefaultInstance(),
-                            (float) (genChance * drop.weight() / totalWeight), new RangeValue(1)))));
+                            (float) (genChance * drop.weight() / totalWeight), NumberExpr.constant(1)))));
         }
 
         return operations;

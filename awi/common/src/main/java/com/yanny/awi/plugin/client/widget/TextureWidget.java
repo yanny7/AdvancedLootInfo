@@ -4,6 +4,7 @@ import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.api.WidgetDirection;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
+import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.plugin.client.TooltipUtils;
 import net.minecraft.client.Minecraft;
@@ -27,7 +28,7 @@ public class TextureWidget implements IWidget {
     protected final int regionHeight;
     protected final int textureWidth;
     protected final int textureHeight;
-    private final List<Supplier<List<Component>>> components = new LinkedList<>();
+    private final List<Supplier<List<TooltipLine>>> components = new LinkedList<>();
 
     public TextureWidget(Identifier texture, RelativeRect rect, int u, int v, int regionWidth, int regionHeight, int textureWidth, int textureHeight) {
         this.texture = texture;
@@ -58,18 +59,18 @@ public class TextureWidget implements IWidget {
     }
 
     public void tooltipText(TooltipNode tooltip) {
-        this.components.add(() -> CoreTooltipUtils.toComponents(tooltip, 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle()));
+        this.components.add(() -> CoreTooltipUtils.toLines(tooltip, 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle(), TooltipUtils.getNumberOptions()));
     }
 
     /** Adds a raw component line to the tooltip (e.g. a white title). Lines appear in the order they were added. */
     public void tooltipComponent(Component component) {
-        this.components.add(() -> List.of(component));
+        this.components.add(() -> List.of(TooltipLine.text(component)));
     }
 
     @NotNull
     @Override
-    public List<Component> getTooltipComponents(int mouseX, int mouseY) {
-        List<Component> list = new ArrayList<>();
+    public List<TooltipLine> getTooltipLines(int mouseX, int mouseY) {
+        List<TooltipLine> list = new ArrayList<>();
 
         components.forEach((supplier) -> list.addAll(supplier.get()));
         return list;

@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.twilightforest;
 
 import com.yanny.aci.CommonLogUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.ICommonRegistry;
 import com.yanny.ali.api.IServerRegistry;
@@ -39,7 +39,6 @@ import java.util.Optional;
 
 public class TwilightForestCompat implements IGlmModCompat {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
-    private static final RangeValue UNKNOWN_PLAYER_COUNT = new RangeValue(false, true);
     private static final String BIGHORN_SHEEP = "twilightforest:bighorn_sheep";
 
     @NotNull
@@ -105,11 +104,11 @@ public class TwilightForestCompat implements IGlmModCompat {
     }
 
     @NotNull
-    private static RangeValue convertMultiplayerRolls(IServerUtils utils, MultiplayerBasedNumberProvider provider) {
-        RangeValue defaultRolls = utils.convertNumber(utils, provider.defaultRolls());
-        RangeValue perPlayer = utils.convertNumber(utils, provider.rollsPerPlayer());
+    private static NumberExpr convertMultiplayerRolls(IServerUtils utils, MultiplayerBasedNumberProvider provider) {
+        NumberExpr defaultRolls = utils.convertNumber(utils, provider.defaultRolls());
+        NumberExpr perPlayer = NumberExpr.max(NumberExpr.constant(0), utils.convertNumber(utils, provider.rollsPerPlayer()));
 
-        return defaultRolls.union(defaultRolls.add(perPlayer)).multiply(UNKNOWN_PLAYER_COUNT);
+        return NumberExpr.add(defaultRolls, NumberExpr.mul(NumberExpr.atLeast(0), perPlayer));
     }
 
     @NotNull

@@ -3,13 +3,13 @@ package com.yanny.ali.plugin.client.widget.trades;
 import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.api.WidgetDirection;
+import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.api.ListNode;
 import com.yanny.ali.plugin.client.WidgetUtils;
 import com.yanny.ali.plugin.client.widget.ItemWidget;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -55,14 +55,14 @@ public class ItemListingWidget implements IWidget {
 
     @NotNull
     @Override
-    public List<Component> getTooltipComponents(int mouseX, int mouseY) {
-        List<Component> components = new LinkedList<>();
+    public List<TooltipLine> getTooltipLines(int mouseX, int mouseY) {
+        List<TooltipLine> components = new LinkedList<>();
 
         for (IWidget widget : widgets) {
             RelativeRect b = widget.getRect();
 
             if (b.contains(mouseX, mouseY)) {
-                components.addAll(widget.getTooltipComponents(mouseX, mouseY));
+                components.addAll(widget.getTooltipLines(mouseX, mouseY));
             }
         }
 

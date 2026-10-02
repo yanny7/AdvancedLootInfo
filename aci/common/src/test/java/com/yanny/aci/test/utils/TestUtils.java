@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableMap;
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
+import com.yanny.aci.tooltip.NumberOptions;
+import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.aci.tooltip.TooltipStyle;
 import net.minecraft.core.Registry;
@@ -45,7 +47,7 @@ public class TestUtils {
     }
 
     public static void assertTooltip(TooltipNode tooltip, boolean isAdvanced, List<String> expected) {
-        List<Component> components = CoreTooltipUtils.toComponents(tooltip, 0, isAdvanced, TooltipStyle.DEFAULT);
+        List<Component> components = toComponents(CoreTooltipUtils.toLines(tooltip, 0, isAdvanced, TooltipStyle.DEFAULT, NumberOptions.DEFAULT));
         List<Executable> executables = new LinkedList<>();
 
         executables.add(() -> Assertions.assertEquals(expected.size(), components.size()));
@@ -66,7 +68,7 @@ public class TestUtils {
     }
 
     public static void assertTooltip(List<TooltipNode> tooltip, List<String> expected) {
-        List<Component> components = CoreTooltipUtils.toComponents(tooltip, 0, true, TooltipStyle.DEFAULT);
+        List<Component> components = toComponents(CoreTooltipUtils.toLines(tooltip, 0, true, TooltipStyle.DEFAULT, NumberOptions.DEFAULT));
         List<Executable> executables = new LinkedList<>();
 
         executables.add(() -> Assertions.assertEquals(expected.size(), components.size()));
@@ -83,7 +85,7 @@ public class TestUtils {
     }
 
     public static void assertUnorderedTooltip(TooltipNode tooltip, List<Object> expected) {
-        List<Component> components = CoreTooltipUtils.toComponents(tooltip, 0, true, TooltipStyle.DEFAULT);
+        List<Component> components = toComponents(CoreTooltipUtils.toLines(tooltip, 0, true, TooltipStyle.DEFAULT, NumberOptions.DEFAULT));
         int cmpIndex = 0;
         int expIndex = 0;
 
@@ -132,6 +134,11 @@ public class TestUtils {
         String translated = componentToPlainString(component);
 
         Assertions.assertEquals(expected, translated);
+    }
+
+    @NotNull
+    public static List<Component> toComponents(List<TooltipLine> lines) {
+        return lines.stream().map((l) -> l instanceof TooltipLine.Text t ? t.component() : Component.literal("[chart]")).toList();
     }
 
     @NotNull

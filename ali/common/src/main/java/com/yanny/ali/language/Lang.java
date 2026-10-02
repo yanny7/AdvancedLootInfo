@@ -242,7 +242,6 @@ public final class Lang {
         ABSOLUTE("absolute", "Absolute: %s"),
         ACTIVE("active", "Active: %s"),
         ADD("add", "Add: %s"),
-        ADDED("added", "Added: %s"),
         ALLOWED_ENTITY("allowed_entity", "Allowed Entity: %s"),
         AMBIENT("ambient", "Ambient: %s"),
         AMOUNT("amount", "Amount: %s"),
@@ -274,7 +273,6 @@ public final class Lang {
         COLOR("color", "Color: %s"),
         COLORS("colors", "Colors: %s"),
         COMPONENT("component", "Component: %s"),
-        CONSTANT("constant", "Constant: %s"),
         CONSUME_SECONDS("consume_seconds", "Consume Seconds: %s"),
         CONTACT_COOLDOWN_TICKS("contact_cooldown_ticks", "Contact Cooldown Ticks: %s"),
         CONTAINER("container", "Container: %s"),
@@ -377,12 +375,10 @@ public final class Lang {
         LORE("lore", "Lore: %s"),
         MAP_DECORATION("map_decoration", "Map Decoration: %s"),
         MATERIAL("material", "Material: %s"),
-        MAX("max", "Max: %s"),
         MAX_CREATIVE_REACH("max_creative_reach", "Max Creative Reach: %s"),
         MAX_DURATION_TICKS("max_duration_ticks", "Max Duration Ticks: %s"),
         MAX_REACH("max_reach", "Max Reach: %s"),
         MERGE_STRATEGY("merge_strategy", "Merge Strategy: %s"),
-        MIN("min", "Min: %s"),
         MIN_CREATIVE_REACH("min_creative_reach", "Min Creative Reach: %s"),
         MIN_REACH("min_reach", "Min Reach: %s"),
         MIN_RELATIVE_SPEED("min_relative_speed", "Min Relative Speed: %s"),
@@ -402,7 +398,6 @@ public final class Lang {
         PATTERN("pattern", "Pattern: %s"),
         PERIOD("period", "Period: %s"),
         PARTIAL_MATCHER("partial_matcher", "Partial Matchers: %s"),
-        PER_LEVEL("per_level", "Per Level: %s"),
         POTION("potion", "Potion: %s"),
         PREDICATE("predicate", "Predicate: %s"),
         PROBABILITY("probability", "Probability: %s"),
@@ -457,7 +452,6 @@ public final class Lang {
         TRAIL("trail", "Trail: %s"),
         TWINKLE("twinkle", "Twinkle: %s"),
         TYPE("type", "Type: %s"),
-        UNENCHANTED_CHANCE("unenchanted_chance", "Unenchanted Chance: %s"),
         USES("uses", "Uses: %s"),
         USE_INPUT_COUNT("use_input_count", "Use Input Count: %s"),
         VALUE("value", "Value: %s"),
@@ -504,7 +498,6 @@ public final class Lang {
         BODY("body", "Body:"),
         BYPASSED_BY("bypassed_by", "Bypassed By:"),
         CHEST("chest", "Chest:"),
-        CLAMPED("clamped", "Clamped:"),
         COLORS("colors", "Colors:"),
         COMPONENTS(Value.COMPONENT, "components", "Components:"),
         CONTAINS("contains", "Contains:"),
@@ -519,14 +512,12 @@ public final class Lang {
         DAMAGE_TYPES(Value.DAMAGE_TYPE, "damage_types", "Damage Types:"),
         DEATH_EFFECTS("death_effects", "Death Effects:"),
         DECORATIONS("decorations", "Decorations:"),
-        DENOMINATOR("denominator", "Denominator:"),
         DIMENSIONS("dimensions", "Dimensions:"),
         DIRECT_ENTITY("direct_entity", "Direct Entity:"),
         DISMOUNT_CONDITION("dismount_condition", "Dismount Condition:"),
         DOUBLE_TRADE_PRICE_ENCHANTMENTS("double_trade_price_enchantments", "Double Trade Price:"),
         EFFECT("effect", "Effect:"),
         EFFECTS("effects", "Effects:"),
-        ENCHANTED_CHANCE("enchanted_chance", "Enchanted Chance:"),
         ENCHANTMENT(Value.ENCHANTMENT, "enchantment", "Enchantment:"),
         ENCHANTMENTS(Value.ENCHANTMENT, "enchantments", "Enchantments:"),
         ENCHANTMENT_PREDICATE("enchantment_predicate", "Enchantment Predicate:"),
@@ -551,7 +542,6 @@ public final class Lang {
         FLUIDS(Value.FLUID, "fluids", "Fluids:"),
         FLUID_PREDICATE("fluid_predicate", "Fluid Predicate:"),
         FOOD("food", "Food:"),
-        FRACTION("fraction", "Fraction:"),
         GAME_TYPES(Value.GAME_TYPE, "game_types", "Game Types:"),
         GLOBAL_POS("global_pos", "Global Position:"),
         HEAD("head", "Head:"),
@@ -564,13 +554,10 @@ public final class Lang {
         ITEM_DAMAGE("item_damage", "Item Damage:"),
         KNOCKBACK_CONDITION("knockback_condition", "Knockback Condition:"),
         LEGS("legs", "Legs:"),
-        LEVEL_SQUARED("level_squared", "Squared Level:"),
-        LINEAR("linear", "Linear:"),
         LINES(Value.LINE, "lines", "Lines:"),
         LOCATED("located", "Located:"),
         LOCATION("location", "Location:"),
         LOOKING_AT("looking_at", "Looking At:"),
-        LOOKUP("lookup", "Lookup:"),
         LORE(Value.LORE, "lore", "Lore:"),
         MAINHAND("mainhand", "Main Hand:"),
         MATERIALS(Value.MATERIAL, "materials", "Materials:"),
@@ -578,7 +565,6 @@ public final class Lang {
         MODIFIER("modifier", "Modifier:"),
         MODIFIERS("modifiers", "Modifiers:"),
         NONE_OF("none_of", "None Of:"),
-        NUMERATOR("numerator", "Numerator:"),
         OCCUPANT("occupant", "Occupant:"),
         OFFHAND("offhand", "Offhand:"),
         ON_CONSUME_EFFECTS("on_consume_effects", "On Consume Effects:"),
@@ -616,7 +602,6 @@ public final class Lang {
         TAGS("tags", "Tags:"),
         TITLE("title", "Title:"),
         TYPES("types", "Types:"),
-        VALUE("value", "Value:"),
         VALUES(Value.VALUE, "values", "Values:"),
         ;
 
@@ -637,11 +622,10 @@ public final class Lang {
         }
     }
 
-    public enum Description implements ITooltipKey {ROLLS("rolls", "Rolls: %s%s"),
-        CHANCE("chance", "Chance: %s%s"),
-        CHANCE_BONUS("chance_bonus", "%s (%s %s)"),
+    public enum Description implements ITooltipKey {
+        ROLLS("rolls", "Rolls: %s"),
+        CHANCE("chance", "Chance: %s"),
         COUNT("count", "Count: %s"),
-        COUNT_BONUS("count_bonus", "%s (%s %s)"),
         QUALITY("quality", "Quality: %s"),
         RANDOM_TRADE_SELECTION("random_trade_selection", "Randomly Selects %s Of These Trades"),
         ;
@@ -709,6 +693,30 @@ public final class Lang {
 
         Error(String k, String e) {
             this.translation = new Translation("ali.error." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
+    public enum Numbers implements ITooltipKey {
+        VAR_LUCK("var.luck", "luck"),
+        VAR_LUCK_DESC("var.luck.desc", "luck"),
+        VAR_STORAGE("var.storage", "storage(%s; %s)"),
+        VAR_STORAGE_DESC("var.storage.desc", "storage \"%2$s\" (%1$s)"),
+        VAR_ENVIRONMENT_ATTRIBUTE("var.environment_attribute", "env(%s)"),
+        VAR_ENVIRONMENT_ATTRIBUTE_DESC("var.environment_attribute.desc", "environment attribute \"%s\""),
+        VAR_ENCHANTMENT_LEVEL("var.enchantment_level", "LVL"),
+        VAR_ENCHANTMENT_LEVEL_DESC("var.enchantment_level.desc", "enchantment level"),
+        ;
+
+        private final Translation translation;
+
+        Numbers(String k, String e) {
+            this.translation = new Translation("ali.number." + k, e);
         }
 
         @NotNull

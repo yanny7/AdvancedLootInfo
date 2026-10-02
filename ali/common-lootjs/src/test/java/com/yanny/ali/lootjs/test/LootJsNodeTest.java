@@ -1,8 +1,11 @@
 package com.yanny.ali.lootjs.test;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
+import com.yanny.aci.number.NumberFormatter;
+import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.lootjs.node.ItemStackNode;
 import com.yanny.ali.lootjs.node.ItemTagNode;
+import com.yanny.ali.plugin.client.TooltipUtils;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -11,6 +14,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -32,16 +36,16 @@ public class LootJsNodeTest {
 
     @Test
     public void testItemStackNodePreservedCount() {
-        ItemStackNode node = new ItemStackNode(UTILS, new ItemStack(Items.DIAMOND, 3), 1.0F, List.of(), List.of(), new RangeValue(2, 5));
+        ItemStackNode node = new ItemStackNode(UTILS, new ItemStack(Items.DIAMOND, 3), 1.0F, List.of(), List.of(), NumberExpr.range(2, 5));
 
-        Assertions.assertEquals("2-5", node.getCount().toIntString());
+        Assertions.assertEquals("2-5", slot(node));
     }
 
     @Test
-    public void testItemStackNodePreservedCountClampedToMaxStackSize() {
-        ItemStackNode node = new ItemStackNode(UTILS, new ItemStack(Items.DIAMOND_SWORD), 1.0F, List.of(), List.of(), new RangeValue(3, 8));
+    public void testItemStackNodePreservedCountNotClampedToMaxStackSize() {
+        ItemStackNode node = new ItemStackNode(UTILS, new ItemStack(Items.DIAMOND_SWORD), 1.0F, List.of(), List.of(), NumberExpr.range(3, 8));
 
-        Assertions.assertEquals("1", node.getCount().toIntString());
+        Assertions.assertEquals("3-8", slot(node));
     }
 
     @Test
@@ -54,13 +58,13 @@ public class LootJsNodeTest {
 
         assertTooltip(node.getTooltip(), List.of(
                 "Chance: 25%",
-                "Count: 2-4",
+                "Count: 2 to 4",
                 "----- Predicates -----",
                 "Random Chance:",
                 "  -> Chance: 0.25",
                 "----- Modifiers -----",
                 "Set Count:",
-                "  -> Count: 2-4",
+                "  -> Count: 2 to 4",
                 "  -> Add: false"
         ));
     }
@@ -97,7 +101,7 @@ public class LootJsNodeTest {
         ItemTagNode node = new ItemTagNode(UTILS, ItemTags.PLANKS, 1.0F,
                 List.of(SetItemCountFunction.setCount(ConstantValue.exactly(5)).build()), List.of(chance(0.25F)), null);
 
-        Assertions.assertEquals("5", node.getCount().toIntString());
+        Assertions.assertEquals("5", slot(node));
         assertTooltip(node.getTooltip(), List.of(
                 "Chance: 25%",
                 "Count: 5",
@@ -113,17 +117,17 @@ public class LootJsNodeTest {
 
     @Test
     public void testItemTagNodePreservedCount() {
-        ItemTagNode node = new ItemTagNode(UTILS, ItemTags.PLANKS, 1.0F, List.of(), List.of(), new RangeValue(2, 5));
+        ItemTagNode node = new ItemTagNode(UTILS, ItemTags.PLANKS, 1.0F, List.of(), List.of(), NumberExpr.range(2, 5));
 
-        Assertions.assertEquals("2-5", node.getCount().toIntString());
+        Assertions.assertEquals("2-5", slot(node));
     }
 
     @Test
     public void testItemTagNodePreservedCountWinsOverCountFunction() {
         ItemTagNode node = new ItemTagNode(UTILS, ItemTags.PLANKS, 1.0F,
-                List.of(SetItemCountFunction.setCount(ConstantValue.exactly(5)).build()), List.of(), new RangeValue(3));
+                List.of(SetItemCountFunction.setCount(ConstantValue.exactly(5)).build()), List.of(), NumberExpr.constant(3));
 
-        Assertions.assertEquals("3", node.getCount().toIntString());
+        Assertions.assertEquals("3", slot(node));
         assertTooltip(node.getTooltip(), List.of(
                 "Count: 3",
                 "----- Modifiers -----",
@@ -135,5 +139,10 @@ public class LootJsNodeTest {
 
     private static LootItemCondition chance(float value) {
         return LootItemRandomChanceCondition.randomChance(value).build();
+    }
+
+    @NotNull
+    private static String slot(IItemNode node) {
+        return NumberFormatter.slot(TooltipUtils.getSlotCount(node));
     }
 }
