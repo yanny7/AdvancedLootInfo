@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.aether;
 
 import com.aetherteam.aether.loot.modifiers.EnchantedGrassModifier;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
@@ -35,6 +35,6 @@ public class EnchantedGrassModifierAccessor extends BaseAccessor<EnchantedGrassM
                 (page, c) -> Collections.singletonList(new IOperation.ReplaceOperation(
                         (itemStack) -> itemStack.is(parent.item.getItem()),
                         (src) -> AetherNodeUtils.countedNode(utils, AetherNodeUtils.withChance(c, 0.5F), src,
-                                new RangeValue(((IItemNode) src).getCount()).add(1))))));
+                                NumberExpr.add(((IItemNode) src).getCount(), NumberExpr.constant(1)))))));
     }
 }

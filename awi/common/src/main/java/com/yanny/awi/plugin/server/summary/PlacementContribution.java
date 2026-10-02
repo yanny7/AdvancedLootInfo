@@ -1,24 +1,30 @@
 package com.yanny.awi.plugin.server.summary;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
+import com.yanny.aci.tooltip.TooltipNode;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * The partial contribution a single {@code PlacementModifier} makes to the overall summary. Each
- * modifier fills at most one axis (count / chance / height); the rest stay {@code null}.
- */
-public record PlacementContribution(@Nullable CountSpan count, @Nullable RangeValue chancePercent, @Nullable HeightSpan height) {
-    public static final PlacementContribution EMPTY = new PlacementContribution(null, null, null);
+public record PlacementContribution(@Nullable NumberExpr count, @Nullable TooltipNode countDetails, @Nullable NumberExpr chance, @Nullable HeightSpan height) {
+    public static final PlacementContribution EMPTY = new PlacementContribution(null, null, null, null);
 
-    public static PlacementContribution ofCount(CountSpan count) {
-        return new PlacementContribution(count, null, null);
+    @NotNull
+    public static PlacementContribution ofCount(NumberExpr count) {
+        return new PlacementContribution(count, null, null, null);
     }
 
-    public static PlacementContribution ofChance(RangeValue chancePercent) {
-        return new PlacementContribution(null, chancePercent, null);
+    @NotNull
+    public static PlacementContribution ofCount(NumberExpr count, TooltipNode details) {
+        return new PlacementContribution(count, details, null, null);
     }
 
+    @NotNull
+    public static PlacementContribution ofChance(NumberExpr chance) {
+        return new PlacementContribution(null, null, chance, null);
+    }
+
+    @NotNull
     public static PlacementContribution ofHeight(HeightSpan height) {
-        return new PlacementContribution(null, null, height);
+        return new PlacementContribution(null, null, null, height);
     }
 }

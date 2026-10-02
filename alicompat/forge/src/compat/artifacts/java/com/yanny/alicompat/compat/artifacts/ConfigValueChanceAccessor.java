@@ -1,9 +1,9 @@
 package com.yanny.alicompat.compat.artifacts;
 
 import artifacts.loot.ConfigValueChance;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.IChanceModifier;
@@ -26,7 +26,7 @@ public class ConfigValueChanceAccessor extends BaseAccessor<ConfigValueChance> i
     }
 
     @Override
-    public void applyChanceModifier(IServerUtils ignoredUtils, EnchantedRanges chance) {
-        chance.modifyAllEntries((range) -> range.multiply(chanceConfig.getChance()));
+    public NumberExpr applyChanceModifier(IServerUtils ignoredUtils, NumberExpr chance) {
+        return NumberExpr.mul(chance, NumberExpr.constant(chanceConfig.getChance()));
     }
 }

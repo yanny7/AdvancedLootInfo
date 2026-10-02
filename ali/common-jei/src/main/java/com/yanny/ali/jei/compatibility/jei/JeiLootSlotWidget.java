@@ -1,7 +1,8 @@
 package com.yanny.ali.jei.compatibility.jei;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.api.Rect;
+import com.yanny.aci.number.NumberFormatter;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotDrawable;
 import mezz.jei.api.gui.inputs.RecipeSlotUnderMouse;
@@ -24,7 +25,7 @@ public class JeiLootSlotWidget implements ISlottedRecipeWidget {
     private Component count;
     private boolean isRange = false;
 
-    public JeiLootSlotWidget(IRecipeSlotDrawable slotDrawable, int x, int y, RangeValue count) {
+    public JeiLootSlotWidget(IRecipeSlotDrawable slotDrawable, int x, int y, NumberInterval count) {
         this.slotDrawable = slotDrawable;
         rect = new Rect(x, y, 18, 18);
         setCount(count);
@@ -81,10 +82,10 @@ public class JeiLootSlotWidget implements ISlottedRecipeWidget {
         }
     }
 
-    private void setCount(RangeValue count) {
-        if (count.isRange() || count.min() > 1) {
-            this.count = Component.literal(count.toIntString());
-            isRange = count.isRange();
+    private void setCount(NumberInterval count) {
+        if (!count.isPoint() || count.lo() > 1) {
+            this.count = Component.literal(NumberFormatter.slot(count));
+            isRange = !count.isPoint();
         }
     }
 }

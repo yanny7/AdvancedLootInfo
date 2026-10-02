@@ -3,7 +3,7 @@ package com.yanny.alicompat.compat.arsnouveau;
 import com.hollingsworth.arsnouveau.api.loot.DungeonLootEnhancerModifier;
 import com.hollingsworth.arsnouveau.api.loot.DungeonLootTables;
 import com.hollingsworth.arsnouveau.setup.config.Config;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 public class DungeonLootEnhancerModifierAccessor extends BaseAccessor<DungeonLootEnhancerModifier> implements IGlobalLootModifierAccessor {
-    private static final int SAMPLES = 64;
+    private static final int SAMPLES = 256;
 
     @FieldAccessor
     protected LootItemCondition[] conditions;
@@ -64,7 +64,7 @@ public class DungeonLootEnhancerModifierAccessor extends BaseAccessor<DungeonLoo
             for (Sample sample : sample(supplier)) {
                 double perRoll = chance * sample.hits / (SAMPLES * (double) pool.size());
 
-                drops.add(new Drop(sample.stack, new RangeValue(sample.min, sample.max), (float) (1 - Math.pow(1 - perRoll, rolls))));
+                drops.add(new Drop(sample.stack, NumberExpr.uniformInt(sample.min, sample.max), (float) (1 - Math.pow(1 - perRoll, rolls))));
             }
         }
     }
@@ -91,7 +91,7 @@ public class DungeonLootEnhancerModifierAccessor extends BaseAccessor<DungeonLoo
         return samples;
     }
 
-    private record Drop(ItemStack stack, RangeValue count, float chance) {}
+    private record Drop(ItemStack stack, NumberExpr count, float chance) {}
 
     private static class Sample {
         private final ItemStack stack;

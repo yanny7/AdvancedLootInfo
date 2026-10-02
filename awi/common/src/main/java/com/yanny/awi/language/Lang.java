@@ -119,7 +119,6 @@ public final class Lang {
         AMOUNT_PER_CHARGE("amount_per_charge", "Amount Per Charge: %s"),
         AT_Y("at_y", "At Y: %s"),
         ATTEMPTS_PER_CHUNK("attempts_per_chunk", "Attempts Per Chunk: %s"),
-        ATTEMPTS_PER_CHUNK_DIST("attempts_per_chunk_dist", "Attempts Per Chunk: %s (%s)"),
         BASE_CRACK_SIZE("base_crack_size", "Base Crack Size: %s"),
         BASE_HEIGHT("base_height", "Base Height: %s"),
         BELOW_NOISE("below_noise", "Below Noise: %s"),
@@ -146,12 +145,12 @@ public final class Lang {
         CHARGE_COUNT("charge_count", "Charge Count: %s"),
         CONTINUATION("continuation", "  %s"),
         CONTINUATION_QUALIFIED("continuation_qualified", "  %s (%s)"),
+        CONTINUATION_WRAPPED("continuation_wrapped", "  %s,"),
         CORNER_HOLE_CHANCE("corner_hole_chance", "Corner Hole Chance: %s"),
         CRACK_POINT_OFFSET("crack_point_offset", "Crack Point Offset: %s"),
         CRYSTAL_BEAM_TARGET("crystal_beam_target", "Crystal Beam Target: %s"),
         DEPTH_BELOW_SURFACE("depth_below_surface", "Depth Below Surface: %s"),
         DEPTH_BELOW_SURFACE_QUALIFIED("depth_below_surface_qualified", "Depth Below Surface: %s (%s)"),
-        DEVIATION("deviation", "Deviation: %s"),
         DIRECTION("direction", "Direction: %s"),
         DIRECTION_OF_SEARCH("direction_of_search", "Direction Of Search: %s"),
         DISCARD_CHANCE_ON_AIR_EXPOSURE("discard_chance_on_air_exposure", "Discard Chance On Air Exposure: %s"),
@@ -180,8 +179,6 @@ public final class Lang {
         HANGING_ROOT_RADIUS("hanging_root_radius", "Hanging Root Radius: %s"),
         HANGING_ROOT_VERTICAL_SPAN("hanging_root_vertical_span", "Hanging Root Vertical Span: %s"),
         HEIGHT("height", "Height: %s"),
-        HEIGHT_DIST("height_dist", "Height: %s (%s)"),
-        HEIGHT_DIST_BAND("height_dist_band", "Height: %s (%s), most likely %s"),
         HEIGHTMAP("heightmap", "Heightmap: %s"),
         HEIGHT_BIAS_RADIUS("height_bias_radius", "Height Bias Radius: %s"),
         HEIGHT_DEVIATION("height_deviation", "Height Deviation: %s"),
@@ -212,7 +209,6 @@ public final class Lang {
         MAX_ROOT_WIDTH("max_root_width", "Max Root Width: %s"),
         MAX_STEPS("max_steps", "Max Steps: %s"),
         MAX_WATER_DEPTH("max_water_depth", "Max Water Depth: %s"),
-        MEAN("mean", "Mean: %s"),
         MIDDLE_LAYER("middle_layer", "Middle Layer: %s"),
         MIDDLE_SIZE("middle_size", "Middle Size: %s"),
         MIN_BLUNTNESS_FOR_WIND("min_bluntness_for_wind", "Min Bluntness For Wind: %s"),
@@ -275,7 +271,6 @@ public final class Lang {
         UPPER_LIMIT("upper_limit", "Upper Limit: %s"),
         UPPER_SIZE("upper_size", "Upper Size: %s"),
         VALID_BLOCK("valid_block", "Valid Block: %s"),
-        VALUE("value", "Value: %s"),
         VEGETATION_CHANCE("vegetation_chance", "Vegetation Chance: %s"),
         VERTICAL_RANGE("vertical_range", "Vertical Range: %s"),
         WIDE_BOTTOM_LAYER_HOLE_CHANCE("wide_bottom_layer_hole_chance", "Wide Bottom Layer Hole Chance: %s"),
@@ -330,7 +325,6 @@ public final class Lang {
         DENSITY("density", "Density:"),
         DEPTH("depth", "Depth:"),
         DIRECTIONS(Value.DIRECTION, "directions", "Directions:"),
-        DISTRIBUTION("distribution", "Distribution:"),
         DISTRIBUTION_POINTS("distribution_points", "Distribution Points:"),
         EXTRA_BRANCH_LENGTH("extra_branch_length", "Extra Branch Length:"),
         EXTRA_BRANCH_STEPS("extra_branch_steps", "Extra Branch Steps:"),
@@ -664,49 +658,6 @@ public final class Lang {
         }
     }
 
-    public enum IntProvider implements ITooltipKey {
-        BIASED_TO_BOTTOM("biased_to_bottom", "Biased To Bottom:"),
-        CLAMPED("clamped", "Clamped:"),
-        CLAMPED_NORMAL("clamped_normal", "Clamped Normal:"),
-        CONSTANT("constant", "Constant:"),
-        TRAPEZOID("trapezoid", "Trapezoid:"),
-        UNIFORM("uniform", "Uniform:"),
-        WEIGHTED_LIST("weighted_list", "Weighted List:"),
-        ;
-
-        private final Translation translation;
-
-        IntProvider(String k, String e) {
-            this.translation = new Translation("awi.property.int_provider." + k, e);
-        }
-
-        @NotNull
-        @Override
-        public Translation getTranslation() {
-            return translation;
-        }
-    }
-
-    public enum FloatProvider implements ITooltipKey {
-        CLAMPED_NORMAL("clamped_normal", "Clamped Normal:"),
-        CONSTANT("constant", "Constant:"),
-        TRAPEZOID("trapezoid", "Trapezoid:"),
-        UNIFORM("uniform", "Uniform:"),
-        ;
-
-        private final Translation translation;
-
-        FloatProvider(String k, String e) {
-            this.translation = new Translation("awi.property.float_provider." + k, e);
-        }
-
-        @NotNull
-        @Override
-        public Translation getTranslation() {
-            return translation;
-        }
-    }
-
     public enum HeightProvider implements ITooltipKey {
         BIASED_TO_BOTTOM("biased_to_bottom", "Biased To Bottom:"),
         CONSTANT("constant", "Constant:"),
@@ -766,6 +717,25 @@ public final class Lang {
 
         GenerationStep(String k, String e) {
             this.translation = new Translation("awi.enum.decoration_step." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
+    public enum Numbers implements ITooltipKey {
+        FN_BIASED_TO_BOTTOM("fn.biased_to_bottom", "biased"),
+        FN_VERY_BIASED_TO_BOTTOM("fn.very_biased_to_bottom", "very_biased"),
+        FN_TRAPEZOID("fn.trapezoid", "trapezoid"),
+        ;
+
+        private final Translation translation;
+
+        Numbers(String k, String e) {
+            this.translation = new Translation("awi.number." + k, e);
         }
 
         @NotNull

@@ -40,8 +40,7 @@ public class RootPlacerTooltipTest {
         )).build(), List.of(
                 "Mangrove Root:",
                 "  -> Trunk Offset Y:",
-                "    -> Constant:",
-                "      -> Value: 2",
+                "    -> 2",
                 "  -> Root Provider:",
                 "    -> Simple:",
                 "      -> State:",

@@ -97,7 +97,7 @@ public class LootJsConditionTooltipTest {
     public void testIsLightLevelTooltip() {
         assertTooltip(LootJsConditionTooltipUtils.isLightLevelTooltip(UTILS, new IsLightLevel(3, 7)).build(), List.of(
                 "Is Light Level:",
-                "  -> Value: 3 - 7"
+                "  -> Value: 3 to 7"
         ));
     }
 
@@ -147,8 +147,8 @@ public class LootJsConditionTooltipTest {
         assertTooltip(LootJsConditionTooltipUtils.matchKillerDistanceTooltip(UTILS, condition).build(), List.of(
                 "Match Distance:",
                 "  -> Predicate:",
-                "    -> X: =10.0",
-                "    -> Absolute: ≤5.0"
+                "    -> X: 10",
+                "    -> Absolute: ≤ 5"
         ));
     }
 

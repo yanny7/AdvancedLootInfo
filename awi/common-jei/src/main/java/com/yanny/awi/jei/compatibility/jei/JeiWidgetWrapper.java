@@ -3,11 +3,12 @@ package com.yanny.awi.jei.compatibility.jei;
 import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.api.RelativeRect;
+import com.yanny.aci.compatibility.ScrollableTooltip;
+import com.yanny.aci.tooltip.TooltipLine;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.widgets.IRecipeWidget;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenPosition;
-import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -30,10 +31,10 @@ public class JeiWidgetWrapper implements IRecipeWidget {
 
     @Override
     public void getTooltip(ITooltipBuilder tooltip, double mouseX, double mouseY) {
-        List<Component> components = widget.getTooltipComponents((int) mouseX, (int) mouseY);
+        List<TooltipLine> components = widget.getTooltipLines((int) mouseX, (int) mouseY);
 
-        for (Component component : components) {
-            tooltip.add(component);
+        if (!components.isEmpty()) {
+            tooltip.add(new ScrollableTooltip(components));
         }
     }
 

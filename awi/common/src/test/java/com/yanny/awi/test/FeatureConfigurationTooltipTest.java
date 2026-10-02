@@ -53,14 +53,12 @@ public class FeatureConfigurationTooltipTest {
         assertTooltip(FeatureConfigurationTooltipUtils.getCountConfigurationTooltip(UTILS, new CountConfiguration(5)).build(), List.of(
                 "Count:",
                 "  -> Count:",
-                "    -> Constant:",
-                "      -> Value: 5"
+                "    -> 5"
         ));
         assertTooltip(FeatureConfigurationTooltipUtils.getCountConfigurationTooltip(UTILS, new CountConfiguration(UniformInt.of(1, 2))).build(), List.of(
                 "Count:",
                 "  -> Count:",
-                "    -> Uniform:",
-                "      -> Range: 1-2"
+                "    -> 1 to 2"
         ));
     }
 
@@ -96,9 +94,7 @@ public class FeatureConfigurationTooltipTest {
         )).build(), List.of(
                 "Block Column:",
                 "  -> Layers:",
-                "    -> Height:",
-                "      -> Constant:",
-                "        -> Value: 3",
+                "    -> Height: 3",
                 "    -> State:",
                 "      -> Simple:",
                 "        -> State:",
@@ -136,11 +132,8 @@ public class FeatureConfigurationTooltipTest {
         assertTooltip(FeatureConfigurationTooltipUtils.getColumnFeatureConfigurationTooltip(UTILS, new ColumnFeatureConfiguration(ConstantInt.of(1), ConstantInt.of(4))).build(), List.of(
                 "Column Feature:",
                 "  -> Reach:",
-                "    -> Constant:",
-                "      -> Value: 1",
-                "  -> Height:",
-                "    -> Constant:",
-                "      -> Value: 4"
+                "    -> 1",
+                "  -> Height: 4"
         ));
     }
 
@@ -157,12 +150,9 @@ public class FeatureConfigurationTooltipTest {
                 "    -> Block: Magma Block",
                 "  -> Rim:",
                 "    -> Block: Obsidian",
-                "  -> Size:",
-                "    -> Constant:",
-                "      -> Value: 3",
+                "  -> Size: 3",
                 "  -> Rim Size:",
-                "    -> Constant:",
-                "      -> Value: 1"
+                "    -> 1"
         ));
     }
 
@@ -181,9 +171,7 @@ public class FeatureConfigurationTooltipTest {
                 "        -> Block: Sand",
                 "  -> Target:",
                 "    -> Solid:",
-                "  -> Radius:",
-                "    -> Constant:",
-                "      -> Value: 3",
+                "  -> Radius: 3",
                 "  -> Half Height: 2"
         ));
     }
@@ -205,23 +193,16 @@ public class FeatureConfigurationTooltipTest {
         )).build(), List.of(
                 "Dripstone Cluster:",
                 "  -> Search Range: 10",
-                "  -> Height:",
-                "    -> Constant:",
-                "      -> Value: 6",
-                "  -> Radius:",
-                "    -> Constant:",
-                "      -> Value: 3",
+                "  -> Height: 6",
+                "  -> Radius: 3",
                 "  -> Max Height Diff: 1",
                 "  -> Height Deviation: 2",
                 "  -> Layer Thickness:",
-                "    -> Constant:",
-                "      -> Value: 4",
+                "    -> 4",
                 "  -> Density:",
-                "    -> Constant:",
-                "      -> Value: 0.7",
+                "    -> 0.7",
                 "  -> Wetness:",
-                "    -> Constant:",
-                "      -> Value: 0.5",
+                "    -> 0.5",
                 "  -> Edge Chance: 0.2",
                 "  -> Chance Radius: 3",
                 "  -> Height Bias Radius: 4"
@@ -309,14 +290,11 @@ public class FeatureConfigurationTooltipTest {
                 "  -> Alternate Layer Chance: 0.0",
                 "  -> Require Alternate Layer: true",
                 "  -> Outer Wall Distance:",
-                "    -> Constant:",
-                "      -> Value: 5",
+                "    -> 5",
                 "  -> Distribution Points:",
-                "    -> Constant:",
-                "      -> Value: 4",
+                "    -> 4",
                 "  -> Point Offset:",
-                "    -> Constant:",
-                "      -> Value: 2",
+                "    -> 2",
                 "  -> Min Gen Offset: -16",
                 "  -> Max Gen Offset: 16",
                 "  -> Noise Multiplier: 0.05",
@@ -377,21 +355,16 @@ public class FeatureConfigurationTooltipTest {
                 "Large Dripstone:",
                 "  -> Search Range: 30",
                 "  -> Column Radius:",
-                "    -> Constant:",
-                "      -> Value: 6",
+                "    -> 6",
                 "  -> Height Scale:",
-                "    -> Constant:",
-                "      -> Value: 4.0",
+                "    -> 4",
                 "  -> Radius To Height Ratio: 0.4",
                 "  -> Stalactite Bluntness:",
-                "    -> Constant:",
-                "      -> Value: 1.0",
+                "    -> 1",
                 "  -> Stalagmite Bluntness:",
-                "    -> Constant:",
-                "      -> Value: 1.0",
+                "    -> 1",
                 "  -> Wind Speed:",
-                "    -> Constant:",
-                "      -> Value: 0.6",
+                "    -> 0.6",
                 "  -> Min Radius For Wind: 8",
                 "  -> Min Bluntness For Wind: 1.0"
         ));
@@ -569,9 +542,7 @@ public class FeatureConfigurationTooltipTest {
                 "    -> Block: Stone",
                 "  -> Replace State:",
                 "    -> Block: Dirt",
-                "  -> Radius:",
-                "    -> Constant:",
-                "      -> Value: 3"
+                "  -> Radius: 3"
         ));
     }
 
@@ -635,8 +606,7 @@ public class FeatureConfigurationTooltipTest {
                 "  -> Growth Rounds: 1",
                 "  -> Spread Rounds: 1",
                 "  -> Extra Rare Growths:",
-                "    -> Constant:",
-                "      -> Value: 2",
+                "    -> 2",
                 "  -> Catalyst Chance: 0.5"
         ));
     }
@@ -756,12 +726,9 @@ public class FeatureConfigurationTooltipTest {
                 "          -> waterlogged: false",
                 "  -> Foliage Placer:",
                 "    -> Blob:",
-                "      -> Radius:",
-                "        -> Constant:",
-                "          -> Value: 2",
+                "      -> Radius: 2",
                 "      -> Offset:",
-                "        -> Constant:",
-                "          -> Value: 0",
+                "        -> 0",
                 "      -> Height: 3",
                 "  -> Minimum Size:",
                 "    -> Two Layers:",
@@ -825,18 +792,14 @@ public class FeatureConfigurationTooltipTest {
                 "          -> waterlogged: false",
                 "  -> Foliage Placer:",
                 "    -> Blob:",
-                "      -> Radius:",
-                "        -> Constant:",
-                "          -> Value: 2",
+                "      -> Radius: 2",
                 "      -> Offset:",
-                "        -> Constant:",
-                "          -> Value: 0",
+                "        -> 0",
                 "      -> Height: 3",
                 "  -> Root Placer:",
                 "    -> Mangrove Root:",
                 "      -> Trunk Offset Y:",
-                "        -> Constant:",
-                "          -> Value: 2",
+                "        -> 2",
                 "      -> Root Provider:",
                 "        -> Simple:",
                 "          -> State:",
@@ -924,14 +887,12 @@ public class FeatureConfigurationTooltipTest {
                 "        -> Solid:",
                 "  -> Surface: Floor",
                 "  -> Depth:",
-                "    -> Constant:",
-                "      -> Value: 3",
+                "    -> 3",
                 "  -> Extra Bottom Block Chance: 0.5",
                 "  -> Vertical Range: 5",
                 "  -> Vegetation Chance: 0.3",
                 "  -> XZ Radius:",
-                "    -> Constant:",
-                "      -> Value: 2",
+                "    -> 2",
                 "  -> Extra Edge Column Chance: 0.1"
         ));
     }
@@ -1031,8 +992,7 @@ public class FeatureConfigurationTooltipTest {
                 "        -> Properties:",
                 "          -> axis: y",
                 "  -> Log Length:",
-                "    -> Constant:",
-                "      -> Value: 5",
+                "    -> 5",
                 "  -> Stump Decorators:",
                 "    -> Cocoa:",
                 "      -> Probability: 0.2",

@@ -2,7 +2,7 @@ package com.yanny.ali.plugin.common.trades;
 
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.CommonLogUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
@@ -40,24 +40,24 @@ public class ItemsToItemsNode extends ListNode implements ITradeNode {
 
     public ItemsToItemsNode(IServerUtils utils,
                             Either<ItemStack, TagKey<? extends ItemLike>> input1,
-                            RangeValue input1Count,
+                            NumberExpr input1Count,
                             TooltipNode input1Condition,
                             Either<ItemStack, TagKey<? extends ItemLike>> input2,
-                            RangeValue input2Count,
+                            NumberExpr input2Count,
                             TooltipNode input2Condition,
                             Either<ItemStack, TagKey<? extends ItemLike>> output,
-                            RangeValue outputCount,
+                            NumberExpr outputCount,
                             TooltipNode outputModifier,
-                            RangeValue maxUses,
-                            RangeValue xp,
+                            NumberExpr maxUses,
+                            NumberExpr xp,
                             TooltipNode tooltip) {
         addChildren(getChildren(input1, input1Count, input1Condition));
         addChildren(getChildren(input2, input2Count, input2Condition));
         addChildren(getChildren(output, outputCount, outputModifier));
         inputCount = 2;
         this.tooltip = TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, maxUses.toString()).build(Lang.Value.USES))
-                .add(utils.getValueTooltip(utils, xp.toString()).build(Lang.Value.VILLAGER_XP))
+                .add(TooltipBuilder.number(maxUses).build(Lang.Value.USES))
+                .add(TooltipBuilder.number(xp).build(Lang.Value.VILLAGER_XP))
                 .add(tooltip)
         ).build();
     }
@@ -127,7 +127,7 @@ public class ItemsToItemsNode extends ListNode implements ITradeNode {
         return items;
     }
 
-    private static IDataNode getChildren(Either<ItemStack, TagKey<? extends ItemLike>> item, RangeValue count, TooltipNode condition) {
+    private static IDataNode getChildren(Either<ItemStack, TagKey<? extends ItemLike>> item, NumberExpr count, TooltipNode condition) {
         return item.map(
                 (i) -> new ItemNode(1, count, i, condition, Collections.emptyList(), Collections.emptyList()),
                 (t) -> new ItemNode(1, count, t, condition, Collections.emptyList(), Collections.emptyList())

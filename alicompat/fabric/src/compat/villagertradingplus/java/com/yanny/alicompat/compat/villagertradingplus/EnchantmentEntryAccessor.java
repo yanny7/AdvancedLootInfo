@@ -1,6 +1,6 @@
 package com.yanny.alicompat.compat.villagertradingplus;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.ClassAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
@@ -20,6 +20,9 @@ public class EnchantmentEntryAccessor extends BaseAccessor<Object> {
     @FieldAccessor
     private int maxLevel;
 
+    @FieldAccessor
+    private int weight;
+
     public EnchantmentEntryAccessor(Object parent) {
         super(parent);
     }
@@ -35,8 +38,8 @@ public class EnchantmentEntryAccessor extends BaseAccessor<Object> {
     }
 
     @NotNull
-    public RangeValue getLevels() {
-        return new RangeValue(minLevel, maxLevel);
+    public NumberExpr getLevels() {
+        return NumberExpr.uniformInt(minLevel, maxLevel);
     }
 
     public int getMinLevel() {
@@ -45,5 +48,9 @@ public class EnchantmentEntryAccessor extends BaseAccessor<Object> {
 
     public int getMaxLevel() {
         return maxLevel;
+    }
+
+    public int getWeight() {
+        return weight;
     }
 }

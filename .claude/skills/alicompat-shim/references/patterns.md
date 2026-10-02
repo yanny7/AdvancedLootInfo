@@ -19,7 +19,7 @@ This file only says *where to look*.
 | Non-public fields | `ironsspellbooks` → `RandomizeSpellFunctionAccessor` — `BaseAccessor<Target>` with `@FieldAccessor`, registered `PluginUtils.registerFunctionTooltip(registry, Target.class, Accessor.class)` |
 | No own fields, only `predicates` | `farmersdelight` → `CopyMealFunctionAccessor` — extends `ConditionalFunction`, registered by **constructor reference** (`…, CopyStorageDataFunctionAccessor::new`), never by class: it needs no reflection |
 | Replaces the stack | `twilightforest` → `ModItemSwapAccessor`, registered twice on the same accessor — `registerFunctionTooltip` and `registerItemStackModifier` |
-| Modifies the count | `morered` → `MoreRedCompat` — `registerFunctionTooltip` + `registerCountModifier` on `WireCountLootFunction`, both as method references, no accessor |
+| Modifies the count | `morered` → `MoreRedCompat` — `registerFunctionTooltip` + `registerCountModifier` on `WireCountLootFunction`, both as method references, no accessor; `gtceu` → `RandomWeightLootFunctionAccessor` implements `ICountModifier` (`min(uniformInt(min, max), constant(maxStack))`) |
 
 ## Conditions
 
@@ -53,19 +53,33 @@ nothing at all, since conditions ALI can run decide themselves. See `alicompat/C
 | Loot entry | `placebo` → `StackLootEntryAccessor`, registered through **both** `PluginUtils.registerEntry` and `registerEntryTooltip`; one accessor serves two target classes (`StackLootEntry`, `EnchantedLootEntry`) |
 | Custom ingredient | `sophisticatedstorage` → `registry.registerValueTooltip(BaseTierWoodenStorageIngredient.class, …)` — a value tooltip, never `registerIngredientTooltip`: NeoForge and Fabric hand ALI the unwrapped `ICustomIngredient`/`CustomIngredient`, not an `Ingredient` subclass |
 | Value tooltip | `ironsspellbooks` → `SpellFilterAccessor` implements `IValueTooltip`; its `array` carries **no key** — the caller names it |
-| Number provider | no shim registers one. Take the shape from `ali/common`'s `Plugin` (`registry.registerNumberProvider(...)`) |
+| Number provider | no shim registers one. Implement `INumberProvider` and register through `PluginUtils.registerNumberProvider`; the converter shapes are in `ali/common`'s `Plugin` and ACI's `CommonNumberProviders` |
 
 ## Villager trades
 
 | Shape | Example |
 |---|---|
 | Target is an `ItemListing`, accessor reads its fields | `morejs` → `PluginUtils.registerItemListing(registry, SimpleTrade.class, SimpleTradeAccessor.class)`, five of them |
+| Package-private subclasses of one listing | `grimoireofgaia` → `ItemsToItemsAccessor` over the base, the subclasses registered via `Class.forName` in `registerItemsToItems` and listed in `scan_ignore.json` |
 | Accessor *is* the listing | `ribbits` → `PluginUtils.registerSelfItemListing(registry, ItemsForAmethystsAccessor.class)` — the accessor implements `VillagerTrades.ItemListing` and `IItemListing` |
-| Trader with a static `ItemListing[]` | `farlanders` → `registerTrades(id, () -> FarlanderTrades.FARLANDER_TRADES, (level) -> new TradeLevelInfo(new RangeValue(2)))` |
-| Same, a different pick count per level | `grimoireofgaia` → `(level) -> new TradeLevelInfo(new RangeValue(level == 1 ? 10 : 5))`, the counts taken from each entity's `updateTrades` |
-| Trader configured by the mod | `goblintraders` → `getLevelInfo` reads `getMinValue()`/`getMaxValue()`/`includeChance()` into `TradeLevelInfo(RangeValue(min, max), chance)` |
-| Trader with no `ItemListing[]` at all | `ironsspellbooks` → `WizardTrades` mirrors the target's `getOffers()` by hand with shim-owned listings; each RNG gate becomes its own level (`new TradeLevelInfo(new RangeValue(1), 0.25f)`) |
+| Trader with a static `ItemListing[]` | `farlanders` → `registerTrades(id, () -> FarlanderTrades.FARLANDER_TRADES, (level) -> new TradeLevelInfo(NumberExpr.constant(2)))` |
+| Same, a different pick count per level | `grimoireofgaia` → `(level) -> new TradeLevelInfo(NumberExpr.constant(level == 1 ? 10 : 5))`, the counts taken from each entity's `updateTrades` |
+| Trader configured by the mod | `goblintraders` → `getLevelInfo` reads `getMinValue()`/`getMaxValue()`/`includeChance()` into `TradeLevelInfo(NumberExpr.uniformInt(min, max), chance)` — the entity rolls `min + nextInt(max - min + 1)` |
+| Trader with no `ItemListing[]` at all | `ironsspellbooks` → `WizardTrades` mirrors the target's `getOffers()` by hand with shim-owned listings; each RNG gate becomes its own level (`new TradeLevelInfo(NumberExpr.constant(1), 0.25f)`) |
 | Listing whose data is captured in a lambda | `ironsspellbooks` → `SimpleTradeAccessor` and the notes in `WanderingTrades`; uses `com.yanny.ali.plugin.common.ReflectionUtils.getCapturedInstances`, which matches **by type** |
+
+## Numbers (Step 2b)
+
+| Shape | Example |
+|---|---|
+| Uniform roll | `charm` → every `GenericTradeOffers` accessor: `base + nextInt(extra + 1)` is `uniformInt(base, base + extra)` |
+| Sum and product of rolls | `ironsspellbooks` → `WizardTrades.elixirBuy`: `add(constant(6), mul(constant(m), uniformInt(3, 6)))` |
+| Alternatives with weights | `charm` → `EnchantedShearsForEmeraldsAccessor` (level 1/2/3 at 45/45/10 %, price `add(weighted(…), uniformInt(0, extra))`); `supplementaries` → `fireworkStars` (a do-while with a `0.42` continue chance) |
+| Grouped over a registry or list | `ironsspellbooks` → `SpellScrollTrade` (`TreeMap` value → weight over every spell and level); `villagertradingplus` → `SellEnchantedBookTradeOfferAccessor` (`min(weighted(…), constant(64))` over every tradeable enchantment) |
+| Clamp to a limit | `villagertradingplus` → `SellEnchantedToolTradeOfferAccessor`: `min(add(constant(count), uniformInt(5, 19)), constant(64))` |
+| Depends on an enchantment level | `apotheosis` → `WardenLootModifierAccessor`: `add(constant(1), binomial(constant(1), 0.1 + 0.1 × TooltipUtils.level(MOB_LOOTING)))` |
+| Mod's own weighting function | `cognition` → `AddSingleItemAccessor.getCount` mirrors `weightedRandInt`, falling back to `uniformInt` exactly where the target does |
+| Part of it cannot be known | `immersiveengineering` → `RevolverPieceForEmeraldsAccessor`: `add(mul(constant(5), range(1, 5)), uniformInt(0, 4))`, the tier coming from luck-dependent perks |
 
 ## Whole shims worth reading end to end
 

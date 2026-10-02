@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.advancedperipherals;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
@@ -52,8 +52,8 @@ public class VillagerTradeAccessor extends BaseAccessor<VillagerTrade> implement
         ItemStack tradedStack = getTradedStack();
         Either<ItemStack, TagKey<? extends ItemLike>> traded = Either.left(tradedStack);
         Either<ItemStack, TagKey<? extends ItemLike>> emeralds = Either.left(new ItemStack(Items.EMERALD, emeraldAmount));
-        RangeValue tradedCount = new RangeValue(tradedStack.getCount());
-        RangeValue emeraldCount = new RangeValue(emeraldAmount);
+        NumberExpr tradedCount = NumberExpr.constant(tradedStack.getCount());
+        NumberExpr emeraldCount = NumberExpr.constant(emeraldAmount);
 
         if (type == VillagerTrade.Type.EMERALD_FOR_ITEM) {
             return new ItemsToItemsNode(utils, traded, tradedCount, emeralds, emeraldCount, maxUses, xp, PRICE_MULTIPLIER, conditions);

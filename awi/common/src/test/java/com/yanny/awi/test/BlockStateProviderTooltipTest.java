@@ -123,8 +123,7 @@ public class BlockStateProviderTooltipTest {
                 "        -> Block: Stone",
                 "  -> Property Name: age",
                 "  -> Values:",
-                "    -> Constant:",
-                "      -> Value: 1"
+                "    -> 1"
         ));
     }
 

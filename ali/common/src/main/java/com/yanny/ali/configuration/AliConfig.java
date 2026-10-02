@@ -1,7 +1,9 @@
 package com.yanny.ali.configuration;
 
 import com.mojang.datafixers.util.Either;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.yanny.aci.configuration.ICoreConfig;
 import com.yanny.aci.configuration.TooltipColors;
@@ -34,7 +36,7 @@ public class AliConfig implements ICoreConfig {
             Identifier.withDefaultNamespace("survives_explosion")
     );
 
-    public static final Codec<AliConfig> CODEC = RecordCodecBuilder.create((instance) ->
+    private static final MapCodec<AliConfig> BASE_CODEC = RecordCodecBuilder.mapCodec((instance) ->
         instance.group(
                 Codec.INT.fieldOf("configVersion").orElse(0).forGetter((c) -> c.configVersion),
                 BlockLootCategory.CODEC.codec().listOf().fieldOf("blockCategories").orElseGet(AliConfig::defaultBlockCategories).forGetter(c -> c.blockCategories),
@@ -75,6 +77,13 @@ public class AliConfig implements ICoreConfig {
         })
     );
 
+    public static final Codec<AliConfig> CODEC = Codec.mapPair(BASE_CODEC, Codec.BOOL.fieldOf("showCharts").orElse(true)).xmap((pair) -> {
+        AliConfig config = pair.getFirst();
+
+        config.showCharts = pair.getSecond();
+        return config;
+    }, (config) -> Pair.of(config, config.showCharts)).codec();
+
     public int configVersion = 0;
 
     public List<BlockLootCategory> blockCategories;
@@ -101,6 +110,7 @@ public class AliConfig implements ICoreConfig {
     public boolean hideDefaultBlockLoot = true;
     public boolean showUnboundedGlobalLootModifiers = false;
     public boolean showEntitiesWithoutLoot = false;
+    public boolean showCharts = true;
 
     public AliConfig() {
         blockCategories = new ArrayList<>(defaultBlockCategories());

@@ -14,6 +14,7 @@
     "license": "${license}",
     "icon": "logo.png",
     "environment": "*",
+    "accessWidener": "aci.accesswidener",
     "entrypoints": {
         "fabric-datagen": [
             "com.yanny.aci.fabric.datagen.DataGeneration"

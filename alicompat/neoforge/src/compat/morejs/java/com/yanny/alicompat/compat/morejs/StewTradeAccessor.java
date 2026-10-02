@@ -3,7 +3,7 @@ package com.yanny.alicompat.compat.morejs;
 import com.almostreliable.morejs.features.villager.TradeItem;
 import com.almostreliable.morejs.features.villager.trades.StewTrade;
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
@@ -60,7 +60,7 @@ public class StewTradeAccessor extends BaseAccessor<StewTrade> implements IItemL
                 second.getCount(),
                 TooltipNode.empty(),
                 Either.left(stew),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 DataComponentTooltipUtils.getSuspiciousStewEffectsTooltip(utils, stewEffects).build(),
                 maxUses,
                 villagerExperience,

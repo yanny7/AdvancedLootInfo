@@ -3,7 +3,7 @@ package com.yanny.ali.lootjs;
 import com.almostreliable.lootjs.core.LootType;
 import com.almostreliable.lootjs.core.entry.LootEntry;
 import com.mojang.logging.LogUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.lootjs.node.ItemStackNode;
@@ -70,7 +70,7 @@ public class Utils {
     }
 
     @NotNull
-    public static IDataNode getEntry(IServerUtils utils, LootEntry entry, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions, @Nullable RangeValue preservedCount) {
+    public static IDataNode getEntry(IServerUtils utils, LootEntry entry, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions, @Nullable NumberExpr preservedCount) {
         LootPoolEntryContainer vanillaEntry = entry.getVanillaEntry();
 
         switch (vanillaEntry) {

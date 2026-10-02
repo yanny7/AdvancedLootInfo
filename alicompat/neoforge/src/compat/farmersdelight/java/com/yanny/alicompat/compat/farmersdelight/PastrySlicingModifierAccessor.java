@@ -1,6 +1,6 @@
 package com.yanny.alicompat.compat.farmersdelight;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
@@ -33,6 +33,6 @@ public class PastrySlicingModifierAccessor extends BaseAccessor<PastrySlicingMod
 
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList,
                 (page, c) -> Collections.singletonList(new IOperation.AddOperation((itemStack) -> true,
-                        GlmNodeUtils.addedNode(utils, c, pastrySlice.getDefaultInstance(), 1, new RangeValue(1, 7))))));
+                        GlmNodeUtils.addedNode(utils, c, pastrySlice.getDefaultInstance(), 1, NumberExpr.range(1, 7))))));
     }
 }

@@ -2,7 +2,7 @@ package com.yanny.ali.plugin.common.nodes;
 
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.CommonLogUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;
@@ -77,22 +77,22 @@ public class ItemNode implements IDataNode, IItemNode {
     private final List<LootItemFunction> functions;
     private final Either<ItemStack, TagKey<? extends ItemLike>> item;
     private final List<ItemStack> items;
-    private final RangeValue count;
+    private final NumberExpr count;
     private final float chance;
     /** Only populated on the client - on the server it is derived from {@link #conditions} in {@link #encode}. */
     private final boolean hasPredicates;
 
-    public ItemNode(float chance, RangeValue count, ItemStack item, TooltipNode tooltip, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public ItemNode(float chance, NumberExpr count, ItemStack item, TooltipNode tooltip, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         this(chance, count, Either.left(item), tooltip, functions, conditions);
     }
 
-    public ItemNode(float chance, RangeValue count, TagKey<? extends ItemLike> tag, TooltipNode tooltip, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public ItemNode(float chance, NumberExpr count, TagKey<? extends ItemLike> tag, TooltipNode tooltip, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         this(chance, count, Either.right(tag), tooltip, functions, conditions);
     }
 
-    public ItemNode(float chance, RangeValue count, Either<ItemStack, TagKey<? extends ItemLike>> item, TooltipNode tooltip, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public ItemNode(float chance, NumberExpr count, Either<ItemStack, TagKey<? extends ItemLike>> item, TooltipNode tooltip, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         this.chance = chance;
-        this.count = count.clamp(0, 9999);
+        this.count = count;
         this.item = item;
         this.items = NodeUtils.resolveItems(item);
         this.tooltip = tooltip;
@@ -105,7 +105,7 @@ public class ItemNode implements IDataNode, IItemNode {
         item = EITHER_CODEC.decode(buf).mapLeft((o) -> o.map(ItemStackTemplate::create).orElse(ItemStack.EMPTY));
         items = NodeUtils.resolveItems(item);
         tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
-        count = new RangeValue(buf);
+        count = NumberExpr.decode(buf);
         chance = buf.readFloat();
         hasPredicates = buf.readBoolean();
 
@@ -144,7 +144,7 @@ public class ItemNode implements IDataNode, IItemNode {
 
     @NotNull
     @Override
-    public RangeValue getCount() {
+    public NumberExpr getCount() {
         return count;
     }
 

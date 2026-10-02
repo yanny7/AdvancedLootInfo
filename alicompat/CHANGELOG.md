@@ -1,3 +1,8 @@
+## []
+
+- Counts and prices show their distribution
+- Improved crash recovery when versions doesn't match
+
 ## [1.1.0]
 
 - Added Apotheosis support

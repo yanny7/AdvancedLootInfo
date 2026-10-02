@@ -3,7 +3,7 @@ package com.yanny.alicompat.compat.immersiveengineering;
 import blusunrize.immersiveengineering.common.world.Villages;
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.CommonLogUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
@@ -62,19 +62,19 @@ public class TradeListingAccessor extends BaseAccessor<VillagerTrades.ItemListin
         Either<ItemStack, TagKey<? extends ItemLike>> item = lazyItem.getItem();
 
         if (isOutline(SELL_FOR_ONE_EMERALD)) {
-            return getNode(utils, item, new RangeValue(price), emerald(), new RangeValue(1), conditions);
+            return getNode(utils, item, NumberExpr.constant(price), emerald(), NumberExpr.constant(1), conditions);
         }
 
         if (isOutline(SELL_FOR_MANY_EMERALDS)) {
-            return getNode(utils, item, new RangeValue(1), emerald(), new RangeValue(price), conditions);
+            return getNode(utils, item, NumberExpr.constant(1), emerald(), NumberExpr.constant(price), conditions);
         }
 
         if (isOutline(BUY_FOR_ONE_EMERALD)) {
-            return getNode(utils, emerald(), new RangeValue(1), item, new RangeValue(price), conditions);
+            return getNode(utils, emerald(), NumberExpr.constant(1), item, NumberExpr.constant(price), conditions);
         }
 
         if (isOutline(BUY_FOR_MANY_EMERALDS)) {
-            return getNode(utils, emerald(), new RangeValue(price), item, item.map((s) -> new RangeValue(Math.max(1, s.getCount())), (t) -> new RangeValue(1)), conditions);
+            return getNode(utils, emerald(), NumberExpr.constant(price), item, item.map((s) -> NumberExpr.constant(Math.max(1, s.getCount())), (t) -> NumberExpr.constant(1)), conditions);
         }
 
         return new MissingNode(MissingTooltipUtils.getMissingItemListingTooltip(utils, parent).build());
@@ -83,9 +83,9 @@ public class TradeListingAccessor extends BaseAccessor<VillagerTrades.ItemListin
     @NotNull
     private IDataNode getNode(IServerUtils utils,
                               Either<ItemStack, TagKey<? extends ItemLike>> input,
-                              RangeValue inputCount,
+                              NumberExpr inputCount,
                               Either<ItemStack, TagKey<? extends ItemLike>> output,
-                              RangeValue outputCount,
+                              NumberExpr outputCount,
                               TooltipNode conditions) {
         return new ItemsToItemsNode(utils, input, inputCount, output, outputCount, maxUses, xp, priceMultiplier, conditions);
     }

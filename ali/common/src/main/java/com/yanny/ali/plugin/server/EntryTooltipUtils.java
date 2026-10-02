@@ -1,5 +1,6 @@
 package com.yanny.ali.plugin.server;
 
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
@@ -46,7 +47,7 @@ public class EntryTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getSlotTooltip(IServerUtils utils, SlotSource slotSource, int quality, EnchantedRanges chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public static TooltipBuilder getSlotTooltip(IServerUtils utils, SlotSource slotSource, int quality, NumberExpr chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         return TooltipBuilder.array((b) -> {
             b.add(TooltipBuilder.keyOnly("ali.enum.group_type.slot"));
             b.add(utils.getSlotSourceTooltip(utils, slotSource));

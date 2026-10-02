@@ -7,6 +7,7 @@ import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.api.WidgetDirection;
 import com.yanny.aci.compatibility.RenderingUtils;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
+import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.plugin.client.widget.TextureWidget;
@@ -124,8 +125,8 @@ public class WidgetUtils {
 
             @NotNull
             @Override
-            public List<Component> getTooltipComponents(int mouseX, int mouseY) {
-                return CoreTooltipUtils.toComponents(node.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle());
+            public List<TooltipLine> getTooltipLines(int mouseX, int mouseY) {
+                return CoreTooltipUtils.toLines(node.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle(), TooltipUtils.getNumberOptions());
             }
 
             @Override

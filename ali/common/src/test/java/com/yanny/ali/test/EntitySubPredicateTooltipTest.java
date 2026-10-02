@@ -25,12 +25,12 @@ public class EntitySubPredicateTooltipTest {
     public void testLightningBoltPredicateTooltip() {
         assertTooltip(EntitySubPredicateTooltipUtils.getLightningBoltPredicateTooltip(UTILS, LightningBoltPredicate.blockSetOnFire(MinMaxBounds.Ints.atMost(5))).build(), List.of(
                 "Lightning Bolt:",
-                "  -> Blocks On Fire: ≤5"
+                "  -> Blocks On Fire: ≤ 5"
         ));
         assertTooltip(EntitySubPredicateTooltipUtils.getLightningBoltPredicateTooltip(UTILS,
                 new LightningBoltPredicate(MinMaxBounds.Ints.between(1, 5), Optional.of(EntityPredicate.Builder.entity().team("blue").build()))).build(), List.of(
                 "Lightning Bolt:",
-                "  -> Blocks On Fire: 1-5",
+                "  -> Blocks On Fire: 1 to 5",
                 "  -> Stuck Entity:",
                 "    -> Team: blue"
         ));
@@ -63,14 +63,14 @@ public class EntitySubPredicateTooltipTest {
                 .build()).build(), List.of(
                 "Player:",
                 "  -> Food:",
-                "    -> Level: ≥3",
-                "    -> Saturation: ≥2.0",
+                "    -> Level: ≥ 3",
+                "    -> Saturation: ≥ 2",
                 "  -> Game Type: Survival",
                 "  -> Stats:",
                 "    -> Block: minecraft:cobblestone",
-                "      -> Times Mined: ≥100",
+                "      -> Times Mined: ≥ 100",
                 "    -> Item: minecraft:chicken",
-                "      -> Times Used: ≤10",
+                "      -> Times Used: ≤ 10",
                 "  -> Recipes:",
                 "    -> minecraft:test: false",
                 "  -> Advancements:",
@@ -91,7 +91,7 @@ public class EntitySubPredicateTooltipTest {
     public void testSlimePredicateTooltip() {
         assertTooltip(EntitySubPredicateTooltipUtils.getSlimePredicateTooltip(UTILS, SlimePredicate.sized(MinMaxBounds.Ints.between(0, 2))).build(), List.of(
                 "Slime:",
-                "  -> Size: 0-2"
+                "  -> Size: 0 to 2"
         ));
     }
 

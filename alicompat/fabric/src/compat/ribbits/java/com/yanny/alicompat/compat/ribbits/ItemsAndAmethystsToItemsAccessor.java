@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.ribbits;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
@@ -55,11 +55,11 @@ public class ItemsAndAmethystsToItemsAccessor extends BaseAccessor<ItemsAndAmeth
         return new ItemsToItemsNode(
                 utils,
                 Either.left(itemCost.getItem().getDefaultInstance()),
-                new RangeValue(itemCostCount),
+                NumberExpr.constant(itemCostCount),
                 Either.left(Items.AMETHYST_SHARD.getDefaultInstance()),
-                new RangeValue(amethystCostCount),
+                NumberExpr.constant(amethystCostCount),
                 Either.left(result.getItem().getDefaultInstance()),
-                new RangeValue(resultCount),
+                NumberExpr.constant(resultCount),
                 maxUses,
                 0,
                 priceMultiplier,

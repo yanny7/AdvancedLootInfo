@@ -1,6 +1,6 @@
 package com.yanny.alicompat.compat.hybridaquatic;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IOperation;
@@ -11,7 +11,7 @@ import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.ali.plugin.glm.LootPage;
 import com.yanny.ali.plugin.glm.Verdict;
-import com.yanny.ali.plugin.server.EnchantedRanges;
+import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
@@ -78,10 +78,10 @@ public class HAGlobalLootModifierAccessor extends BaseAccessor<HAGlobalLootModif
         }
 
         List<LootItemCondition> allConditions = Stream.concat(node.getConditions().stream(), withChance(conditions, parent.getChance()).stream()).toList();
-        EnchantedRanges chance = NodeUtils.getEnchantedChance(utils, allConditions, node.getChance());
-        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, new EnchantedRanges(new RangeValue(node.getCount())), node.getFunctions(), allConditions);
+        NumberExpr chance = NodeUtils.getChance(utils, allConditions, node.getChance());
+        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, LootCount.of(node.getCount()), NodeUtils.getCountLimit(node.getItem()), node.getFunctions(), allConditions);
 
-        return new ItemNode(node.getChance(), new RangeValue(node.getCount()), node.getItem(), tooltip.build(), node.getFunctions(), allConditions);
+        return new ItemNode(node.getChance(), node.getCount(), node.getItem(), tooltip.build(), node.getFunctions(), allConditions);
     }
 
     @NotNull

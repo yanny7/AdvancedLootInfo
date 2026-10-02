@@ -1,7 +1,7 @@
 package com.yanny.ali.api;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -42,7 +42,7 @@ public interface IItemNode {
     List<LootItemFunction> getFunctions();
 
     @NotNull
-    RangeValue getCount();
+    NumberExpr getCount();
 
     float getChance();
 

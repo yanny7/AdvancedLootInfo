@@ -153,7 +153,7 @@ public class SpawnInfoTest {
                 "  -> Dimension: test:nether",
                 "    -> Category: creature",
                 "    -> Weight: 60",
-                "    -> Group size: 1-2",
+                "    -> Group size: 1 to 2",
                 "    -> Spawn cost: charge 0.7, budget 0.15"
         ));
     }
@@ -166,7 +166,7 @@ public class SpawnInfoTest {
                 "    -> Structure: test:fort",
                 "      -> Category: monster",
                 "      -> Weight: 10",
-                "      -> Group size: 2-3"
+                "      -> Group size: 2 to 3"
         ));
     }
 
@@ -202,12 +202,12 @@ public class SpawnInfoTest {
                 "Structure: test:fort",
                 "  -> Category: monster",
                 "  -> Weight: 10",
-                "  -> Group size: 2-3"
+                "  -> Group size: 2 to 3"
         ));
         assertTooltip(spawns.get(EntityType.STRIDER), List.of(
                 "Category: creature",
                 "Weight: 60",
-                "Group size: 1-2",
+                "Group size: 1 to 2",
                 "Spawn cost: charge 0.7, budget 0.15"
         ));
     }
@@ -228,6 +228,48 @@ public class SpawnInfoTest {
                 "Structure: test:camp",
                 "  -> Category: monster",
                 "  -> Weight: 1",
+                "  -> Group size: 1"
+        ));
+    }
+
+    @Test
+    public void testStructuresWithSameSpawnAreGrouped() {
+        HolderSet<Biome> biomeSet = HolderSet.direct(biomes.getOrThrow(key(Registries.BIOME, "a")));
+        MappedRegistry<Structure> registry = structures(Map.of(
+                "camp", spawnSettings(biomeSet, EntityType.WITCH),
+                "hut", spawnSettings(biomeSet, EntityType.WITCH),
+                "tower", new Structure.StructureSettings(
+                        biomeSet,
+                        Map.of(MobCategory.MONSTER, new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.PIECE,
+                                WeightedList.<MobSpawnSettings.SpawnerData>builder().add(new MobSpawnSettings.SpawnerData(EntityType.WITCH, 1, 1), 5).build())),
+                        GenerationStep.Decoration.SURFACE_STRUCTURES,
+                        TerrainAdjustment.NONE
+                )
+        ));
+        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, registry)), OWN_SETTINGS);
+
+        assertTooltip(info.getEntityTooltip(EntityType.WITCH), List.of(
+                "Spawns:",
+                "  -> Dimension: test:overworld",
+                "    -> Structure: test:camp",
+                "    -> Structure: test:hut",
+                "      -> Category: monster",
+                "      -> Weight: 1",
+                "      -> Group size: 1",
+                "    -> Structure: test:tower",
+                "      -> Category: monster",
+                "      -> Weight: 5",
+                "      -> Group size: 1"
+        ));
+        assertTooltip(info.getBiomeSpawns(Identifier.fromNamespaceAndPath("test", "a")).get(EntityType.WITCH), List.of(
+                "Structure: test:camp",
+                "Structure: test:hut",
+                "  -> Category: monster",
+                "  -> Weight: 1",
+                "  -> Group size: 1",
+                "Structure: test:tower",
+                "  -> Category: monster",
+                "  -> Weight: 5",
                 "  -> Group size: 1"
         ));
     }

@@ -1,10 +1,11 @@
 package com.yanny.awi.manager;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.manager.ClassKeyedMap;
 import com.yanny.aci.manager.CoreServerRegistry;
 import com.yanny.aci.manager.ManagedRegistry;
+import com.yanny.aci.manager.NumberConverters;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.awi.Utils;
@@ -20,8 +21,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.valueproviders.FloatProvider;
-import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
@@ -54,7 +53,6 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
     // tooltips
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FeatureConfiguration, TooltipBuilder>> featureTooltips = registerClassKeyed("feature tooltips", true, HashMap::new, null);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, PlacementModifier, TooltipBuilder>> placementModifierTooltips = registerClassKeyed("placement modifier tooltips", true, HashMap::new, BuiltInRegistries.PLACEMENT_MODIFIER_TYPE);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, IntProvider, TooltipBuilder>> intProviderTooltips = registerClassKeyed("int provider tooltips", true, HashMap::new, BuiltInRegistries.INT_PROVIDER_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, RuleTest, TooltipBuilder>> ruleTestTooltips = registerClassKeyed("rule test tooltips", true, HashMap::new, BuiltInRegistries.RULE_TEST);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Object, TooltipBuilder>> valueTooltips = registerClassKeyed("value tooltips", true, ClassKeyedMap::new, null);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, HeightProvider, TooltipBuilder>> heightProviderTooltips = registerClassKeyed("height provider tooltips", true, HashMap::new, BuiltInRegistries.HEIGHT_PROVIDER_TYPE);
@@ -65,11 +63,9 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, RootPlacer, TooltipBuilder>> rootPlacerTooltips = registerClassKeyed("root placer tooltips", true, HashMap::new, BuiltInRegistries.ROOT_PLACER_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FoliagePlacer, TooltipBuilder>> foliagePlacerTooltips = registerClassKeyed("foliage placer tooltips", true, HashMap::new, BuiltInRegistries.FOLIAGE_PLACER_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, TrunkPlacer, TooltipBuilder>> trunkPlacerTooltips = registerClassKeyed("trunk placer tooltips", true, HashMap::new, BuiltInRegistries.TRUNK_PLACER_TYPE);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FloatProvider, TooltipBuilder>> floatProviderTooltips = registerClassKeyed("float provider tooltips", true, HashMap::new, BuiltInRegistries.FLOAT_PROVIDER_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, StructureProcessor, TooltipBuilder>> structureProcessorTooltips = registerClassKeyed("structure processor tooltips", true, HashMap::new, BuiltInRegistries.STRUCTURE_PROCESSOR);
     // propagators
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, IntProvider, CountSpan>> intSpanPropagators = registerClassKeyed("int span propagators", true, HashMap::new, BuiltInRegistries.INT_PROVIDER_TYPE);
-    private final ManagedRegistry<Class<?>, HeightSpanPropagator<HeightProvider>> heightSpanPropagators = registerClassKeyed("height span propagators", true, HashMap::new, BuiltInRegistries.HEIGHT_PROVIDER_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<HeightArgs, HeightProvider, NumberExpr>> heightProviders = registerClassKeyed("height providers", true, HashMap::new, BuiltInRegistries.HEIGHT_PROVIDER_TYPE);
     private final ManagedRegistry<Class<?>, PlacementPropagator<PlacementModifier>> placementPropagators = registerClassKeyed("placement propagators", false, HashMap::new, BuiltInRegistries.PLACEMENT_MODIFIER_TYPE);
     // surface rules
     private final ManagedRegistry<Identifier, Function<ISurfaceRuleHandler.Context, ISurfaceRuleHandler>> surfaceRuleHandlers = register("surface rule handlers", false, HashMap::new, Identifier::toString, BuiltInRegistries.MATERIAL_RULE);
@@ -119,12 +115,6 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
     public <T extends PlacementModifier> void registerPlacementModifierTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
         //noinspection unchecked
         placementModifierTooltips.put(type, (u, t) -> getter.apply(u, (T) t));
-    }
-
-    @Override
-    public <T extends IntProvider> void registerIntProviderTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
-        //noinspection unchecked
-        intProviderTooltips.put(type, (u, t) -> getter.apply(u, (T) t));
     }
 
     @Override
@@ -182,27 +172,15 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
     }
 
     @Override
-    public <T extends FloatProvider> void registerFloatProviderTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
-        //noinspection unchecked
-        floatProviderTooltips.put(type, (u, t) -> getter.apply(u, (T) t));
-    }
-
-    @Override
     public <T extends StructureProcessor> void registerStructureProcessorTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
         //noinspection unchecked
         structureProcessorTooltips.put(type, (u, t) -> getter.apply(u, (T) t));
     }
 
     @Override
-    public <T extends IntProvider> void registerIntSpanPropagator(Class<T> type, BiFunction<IServerUtils, T, CountSpan> getter) {
+    public <T extends HeightProvider> void registerHeightProvider(Class<T> type, HeightConverter<T> converter) {
         //noinspection unchecked
-        intSpanPropagators.put(type, (u, p) -> getter.apply(u, (T) p));
-    }
-
-    @Override
-    public <T extends HeightProvider> void registerHeightSpanPropagator(Class<T> type, HeightSpanPropagator<T> getter) {
-        //noinspection unchecked
-        heightSpanPropagators.put(type, (u, p, c) -> getter.apply(u, (T) p, c));
+        heightProviders.put(type, (a, p) -> converter.apply(a.utils(), (T) p, a.ctx()));
     }
 
     @Override
@@ -263,14 +241,6 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
         return placementModifierTooltips.get(entry.getClass())
                 .map((e) -> e.apply(utils, entry))
                 .orElseGet(() -> MissingTooltipUtils.getMissingPlacementModifierTooltip(utils, entry));
-    }
-
-    @NotNull
-    @Override
-    public <T extends IntProvider> TooltipBuilder getIntProviderTooltip(IServerUtils utils, T entry) {
-        return intProviderTooltips.get(entry.getClass())
-                .map((e) -> e.apply(utils, entry))
-                .orElseGet(() -> MissingTooltipUtils.getMissingIntProviderTooltip(utils, entry));
     }
 
     @NotNull
@@ -349,14 +319,6 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
 
     @NotNull
     @Override
-    public <T extends FloatProvider> TooltipBuilder getFloatProviderTooltip(IServerUtils utils, T entry) {
-        return floatProviderTooltips.get(entry.getClass())
-                .map((e) -> e.apply(utils, entry))
-                .orElseGet(() -> MissingTooltipUtils.getMissingFloatProviderTooltip(utils, entry));
-    }
-
-    @NotNull
-    @Override
     public <T extends StructureProcessor> TooltipBuilder getStructureProcessorTooltip(IServerUtils utils, T entry) {
         return structureProcessorTooltips.get(entry.getClass())
                 .map((e) -> e.apply(utils, entry))
@@ -365,19 +327,8 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
 
     @NotNull
     @Override
-    public <T extends IntProvider> CountSpan getIntSpan(IServerUtils utils, T provider) {
-        return intSpanPropagators.get(provider.getClass())
-                .map((e) -> e.apply(utils, provider))
-                // fallback: even an unregistered provider exposes a generic min/max range
-                .orElseGet(() -> CountSpan.unknown(new RangeValue(provider.minInclusive(), provider.maxInclusive())));
-    }
-
-    @NotNull
-    @Override
-    public <T extends HeightProvider> HeightSpan getHeightSpan(IServerUtils utils, T provider, ColumnContext ctx) {
-        return heightSpanPropagators.get(provider.getClass())
-                .map((e) -> e.apply(utils, provider, ctx))
-                .orElseGet(HeightSpan::unknown);
+    public NumberExpr convertHeightProvider(IServerUtils utils, HeightProvider provider, ColumnContext ctx) {
+        return NumberConverters.convert(getModId(), heightProviders, new HeightArgs(utils, ctx), provider, (p) -> String.valueOf(BuiltInRegistries.HEIGHT_PROVIDER_TYPE.getKey(p.getType())));
     }
 
     @NotNull
@@ -427,5 +378,8 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
         if (this.getConfiguration().logMoreStatistics) {
             getTooltipCache().logStatistics();
         }
+    }
+
+    private record HeightArgs(IServerUtils utils, ColumnContext ctx) {
     }
 }

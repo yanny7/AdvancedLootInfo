@@ -5,7 +5,8 @@
     "MixinVegetationBlock"
   ],
   "client": [
-    "MixinClientPlayNetworkHandler"
+    "MixinClientPlayNetworkHandler",
+    "MixinGuiGraphics"
   ],
   "injectors": {
     "defaultRequire": 1

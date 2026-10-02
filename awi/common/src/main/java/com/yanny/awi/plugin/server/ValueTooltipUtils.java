@@ -44,7 +44,7 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getIntProviderTooltip(IServerUtils utils, IntProvider value) {
-        return utils.getIntProviderTooltip(utils, value);
+        return TooltipBuilder.branch((b) -> b.add(TooltipBuilder.number(utils.convertIntProvider(utils, value))));
     }
 
     @NotNull
@@ -94,7 +94,7 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getFloatProviderTooltip(IServerUtils utils, FloatProvider value) {
-        return utils.getFloatProviderTooltip(utils, value);
+        return TooltipBuilder.branch((b) -> b.add(TooltipBuilder.number(utils.convertFloatProvider(utils, value))));
     }
 
     @NotNull

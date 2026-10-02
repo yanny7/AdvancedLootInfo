@@ -1,6 +1,6 @@
 package com.yanny.ali.plugin.common.trades;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
@@ -23,13 +23,13 @@ public class TradeLevelNode extends ListNode {
     public static final Identifier ID = Utils.modLoc("trade_level");
 
     public final int level;
-    public final RangeValue selectionCount;
+    public final NumberExpr selectionCount;
     private final TooltipNode tooltip;
 
     // a trader adds every trade of the set instead of picking randomly once the set is no bigger than the number it picks
     public TradeLevelNode(IServerUtils utils, int level, TradeSet tradeSet) {
         this.level = level;
-        this.selectionCount = utils.convertNumber(utils, tradeSet.amount).clamp(0, tradeSet.getTrades().size());
+        this.selectionCount = NumberExpr.min(utils.convertNumber(utils, tradeSet.amount), NumberExpr.constant(tradeSet.getTrades().size()));
 
         for (Holder<VillagerTrade> trade : tradeSet.getTrades()) {
             addChildren(TradeUtils.getNode(utils, trade.value()));
@@ -40,7 +40,7 @@ public class TradeLevelNode extends ListNode {
 
     public TradeLevelNode(int level, TradeLevelInfo levelInfo, List<IDataNode> trades) {
         this.level = level;
-        this.selectionCount = levelInfo.offers().clamp(0, trades.size());
+        this.selectionCount = NumberExpr.min(levelInfo.offers(), NumberExpr.constant(trades.size()));
         trades.forEach(this::addChildren);
         tooltip = getTooltip(level, selectionCount, levelInfo.chance());
     }
@@ -48,7 +48,7 @@ public class TradeLevelNode extends ListNode {
     public TradeLevelNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
         level = buf.readInt();
-        selectionCount = new RangeValue(buf);
+        selectionCount = NumberExpr.decode(buf);
         tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
     }
 
@@ -72,13 +72,13 @@ public class TradeLevelNode extends ListNode {
     }
 
     @NotNull
-    private static TooltipNode getTooltip(int level, RangeValue selectionCount, float chance) {
+    private static TooltipNode getTooltip(int level, NumberExpr selectionCount, float chance) {
         return TooltipBuilder.branch((b) -> {
             b.add(TooltipBuilder.value(level).build(Lang.Value.LEVEL));
-            b.add(TooltipBuilder.value(selectionCount.toIntString()).build(Lang.Description.RANDOM_TRADE_SELECTION));
+            b.add(TooltipBuilder.number(selectionCount).build(Lang.Description.RANDOM_TRADE_SELECTION));
 
             if (chance < 1.0f) {
-                b.add(TooltipBuilder.value(new RangeValue(chance * 100), "%").build(Lang.Description.CHANCE));
+                b.add(TooltipBuilder.percent(NumberExpr.constant(chance)).build(Lang.Description.CHANCE));
             }
         }).build();
     }
