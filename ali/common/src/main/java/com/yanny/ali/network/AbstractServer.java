@@ -43,7 +43,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.*;
-import net.minecraft.world.level.storage.loot.entries.CompositeEntryBase;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootTableReference;
@@ -280,7 +279,8 @@ public abstract class AbstractServer {
         LootPool pool = pools.get(0);
 
         if (pool.entries.length != 1 || !isIgnoredFunctions(config, pool.functions) || !isIgnoredConditions(config, pool.conditions)
-                || !isConstant(serverRegistry.convertIntNumber(serverRegistry, pool.rolls), 1) || !isConstant(serverRegistry.convertNumber(serverRegistry, pool.bonusRolls), 0)) {
+                || !isConstant(serverRegistry.convertIntNumber(serverRegistry, pool.rolls, new ArrayList<>()), 1)
+                || !isConstant(serverRegistry.convertNumber(serverRegistry, pool.bonusRolls, new ArrayList<>()), 0)) {
             return false;
         }
 
@@ -673,18 +673,18 @@ public abstract class AbstractServer {
         Set<ResourceLocation> referenced = new HashSet<>();
 
         Stream.concat(lootTables.values().stream(), fakeLootTables.values().stream())
-                .forEach((lootTable) -> serverRegistry.getLootPools(lootTable).forEach((pool) -> collectReferences(pool.entries, referenced)));
+                .forEach((lootTable) -> serverRegistry.getLootPools(lootTable).forEach((pool) -> collectReferences(serverRegistry, Arrays.asList(pool.entries), referenced)));
 
         return referenced;
     }
 
-    private static void collectReferences(LootPoolEntryContainer[] entries, Set<ResourceLocation> referenced) {
+    private static void collectReferences(AliServerRegistry serverRegistry, List<LootPoolEntryContainer> entries, Set<ResourceLocation> referenced) {
         for (LootPoolEntryContainer entry : entries) {
             if (entry instanceof LootTableReference reference) {
                 referenced.add(reference.name);
-            } else if (entry instanceof CompositeEntryBase composite) {
-                collectReferences(composite.children, referenced);
             }
+
+            collectReferences(serverRegistry, serverRegistry.getEntryChildren(serverRegistry, entry), referenced);
         }
     }
 

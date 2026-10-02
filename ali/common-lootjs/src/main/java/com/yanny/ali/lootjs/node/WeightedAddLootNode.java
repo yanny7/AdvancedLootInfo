@@ -2,6 +2,7 @@ package com.yanny.ali.lootjs.node;
 
 import com.almostreliable.lootjs.core.LootEntry;
 import com.almostreliable.lootjs.loot.action.WeightedAddLootAction;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IClientUtils;
@@ -12,6 +13,7 @@ import com.yanny.ali.lootjs.LootJsPlugin;
 import com.yanny.ali.lootjs.Utils;
 import com.yanny.ali.lootjs.mixin.MixinWeightedAddLootAction;
 import com.yanny.ali.lootjs.mixin.MixinWeightedRandomList;
+import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -20,6 +22,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class WeightedAddLootNode extends ListNode {
@@ -64,9 +67,12 @@ public class WeightedAddLootNode extends ListNode {
 
     @NotNull
     public static TooltipNode getTooltip(IServerUtils utils, MixinWeightedAddLootAction action) {
+        List<TooltipNode> rollConditions = new ArrayList<>();
+        NumberExpr rolls = utils.convertIntNumber(utils, action.getNumberProvider(), rollConditions);
+
         return TooltipBuilder.array((b) -> {
             b.add(TooltipBuilder.keyOnly(Lang.Group.RANDOM));
-            b.add(TooltipUtils.getRolls(utils.convertIntNumber(utils, action.getNumberProvider())));
+            b.add(TooltipUtils.getRolls(new LootCount(rolls, rollConditions)));
             b.add(TooltipBuilder.value(action.getAllowDuplicateLoot()).build(Lang.Value.ALLOW_DUPLICATE_LOOT));
         }).build();
     }

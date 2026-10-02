@@ -30,13 +30,13 @@ public class PlacementSummaryTest {
 
     @Test
     public void testIntProviderConverters() {
-        assertEquals(constant(3), UTILS.convertIntProvider(UTILS, ConstantInt.of(3)));
-        assertEquals(uniformInt(2, 6), UTILS.convertIntProvider(UTILS, UniformInt.of(2, 6)));
-        assertEquals(fn(NumberFunctions.BIASED_TO_BOTTOM, constant(0), constant(10)), UTILS.convertIntProvider(UTILS, BiasedToBottomInt.of(0, 10)));
-        assertEquals(clamp(uniformInt(1, 10), constant(3), constant(7)), UTILS.convertIntProvider(UTILS, ClampedInt.of(UniformInt.of(1, 10), 3, 7)));
+        assertEquals(constant(3), UTILS.convertIntProvider(UTILS, ConstantInt.of(3), List.of()));
+        assertEquals(uniformInt(2, 6), UTILS.convertIntProvider(UTILS, UniformInt.of(2, 6), List.of()));
+        assertEquals(fn(NumberFunctions.BIASED_TO_BOTTOM, constant(0), constant(10)), UTILS.convertIntProvider(UTILS, BiasedToBottomInt.of(0, 10), List.of()));
+        assertEquals(clamp(uniformInt(1, 10), constant(3), constant(7)), UTILS.convertIntProvider(UTILS, ClampedInt.of(UniformInt.of(1, 10), 3, 7), List.of()));
         assertEquals(
                 fn(NumberFunctions.TRUNC, clamp(fn(NumberFunctions.NORMAL, constant(5), constant(2)), constant(0), constant(10))),
-                UTILS.convertIntProvider(UTILS, ClampedNormalInt.of(5, 2, 0, 10))
+                UTILS.convertIntProvider(UTILS, ClampedNormalInt.of(5, 2, 0, 10), List.of())
         );
     }
 
@@ -49,31 +49,31 @@ public class PlacementSummaryTest {
 
         assertEquals(
                 weighted(List.of(new WeightedEntry(1, uniformInt(1, 2)), new WeightedEntry(3, constant(8)))),
-                UTILS.convertIntProvider(UTILS, new WeightedListInt(distribution))
+                UTILS.convertIntProvider(UTILS, new WeightedListInt(distribution), List.of())
         );
     }
 
     @Test
     public void testFloatProviderConverters() {
-        assertEquals(constant(2), UTILS.convertFloatProvider(UTILS, ConstantFloat.of(2)));
-        assertEquals(uniformFloat(1, 3), UTILS.convertFloatProvider(UTILS, UniformFloat.of(1, 3)));
+        assertEquals(constant(2), UTILS.convertFloatProvider(UTILS, ConstantFloat.of(2), List.of()));
+        assertEquals(uniformFloat(1, 3), UTILS.convertFloatProvider(UTILS, UniformFloat.of(1, 3), List.of()));
         assertEquals(
                 clamp(fn(NumberFunctions.NORMAL, constant(4.5), constant(1)), constant(2), constant(7)),
-                UTILS.convertFloatProvider(UTILS, ClampedNormalFloat.of(4.5f, 1, 2, 7))
+                UTILS.convertFloatProvider(UTILS, ClampedNormalFloat.of(4.5f, 1, 2, 7), List.of())
         );
         assertEquals(
                 fn(NumberFunctions.TRAPEZOID_FLOAT, constant(1), constant(9), constant(2)),
-                UTILS.convertFloatProvider(UTILS, TrapezoidFloat.of(1, 9, 2))
+                UTILS.convertFloatProvider(UTILS, TrapezoidFloat.of(1, 9, 2), List.of())
         );
     }
 
     @Test
     public void testHeightConverters() {
-        assertEquals(constant(5), UTILS.convertHeightProvider(UTILS, ConstantHeight.of(VerticalAnchor.absolute(5)), CTX));
-        assertEquals(uniformInt(-64, 319), UTILS.convertHeightProvider(UTILS, UniformHeight.of(VerticalAnchor.aboveBottom(0), VerticalAnchor.belowTop(0)), CTX));
-        assertEquals(HeightFunctions.biasedToBottom(10, 60, 1), UTILS.convertHeightProvider(UTILS, BiasedToBottomHeight.of(VerticalAnchor.absolute(10), VerticalAnchor.absolute(60), 1), CTX));
-        assertEquals(HeightFunctions.veryBiasedToBottom(10, 60, 8), UTILS.convertHeightProvider(UTILS, VeryBiasedToBottomHeight.of(VerticalAnchor.absolute(10), VerticalAnchor.absolute(60), 8), CTX));
-        assertEquals(HeightFunctions.trapezoid(40, 120, 20), UTILS.convertHeightProvider(UTILS, TrapezoidHeight.of(VerticalAnchor.absolute(40), VerticalAnchor.absolute(120), 20), CTX));
+        assertEquals(constant(5), UTILS.convertHeightProvider(UTILS, ConstantHeight.of(VerticalAnchor.absolute(5)), CTX, List.of()));
+        assertEquals(uniformInt(-64, 319), UTILS.convertHeightProvider(UTILS, UniformHeight.of(VerticalAnchor.aboveBottom(0), VerticalAnchor.belowTop(0)), CTX, List.of()));
+        assertEquals(HeightFunctions.biasedToBottom(10, 60, 1), UTILS.convertHeightProvider(UTILS, BiasedToBottomHeight.of(VerticalAnchor.absolute(10), VerticalAnchor.absolute(60), 1), CTX, List.of()));
+        assertEquals(HeightFunctions.veryBiasedToBottom(10, 60, 8), UTILS.convertHeightProvider(UTILS, VeryBiasedToBottomHeight.of(VerticalAnchor.absolute(10), VerticalAnchor.absolute(60), 8), CTX, List.of()));
+        assertEquals(HeightFunctions.trapezoid(40, 120, 20), UTILS.convertHeightProvider(UTILS, TrapezoidHeight.of(VerticalAnchor.absolute(40), VerticalAnchor.absolute(120), 20), CTX, List.of()));
     }
 
     @Test
@@ -93,7 +93,7 @@ public class PlacementSummaryTest {
 
         assertEquals(
                 weighted(List.of(new WeightedEntry(1, constant(10)), new WeightedEntry(5, constant(100)))),
-                UTILS.convertHeightProvider(UTILS, new WeightedListHeight(distribution), CTX)
+                UTILS.convertHeightProvider(UTILS, new WeightedListHeight(distribution), CTX, List.of())
         );
     }
 

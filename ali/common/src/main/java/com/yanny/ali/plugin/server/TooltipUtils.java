@@ -51,19 +51,19 @@ public class TooltipUtils {
     }
 
     @NotNull
-    public static NumberExpr applyRandomChance(IServerUtils ignoredUtils, LootItemRandomChanceCondition condition, NumberExpr chance) {
+    public static NumberExpr applyRandomChance(IServerUtils ignoredUtils, LootItemRandomChanceCondition condition, NumberExpr chance, List<TooltipNode> ignoredConditions) {
         return NumberExpr.mul(chance, NumberExpr.constant(condition.probability));
     }
 
     @NotNull
-    public static NumberExpr applyRandomChanceWithLooting(IServerUtils ignoredUtils, LootItemRandomChanceWithLootingCondition condition, NumberExpr chance) {
+    public static NumberExpr applyRandomChanceWithLooting(IServerUtils ignoredUtils, LootItemRandomChanceWithLootingCondition condition, NumberExpr chance, List<TooltipNode> ignoredConditions) {
         NumberExpr level = level(Enchantments.MOB_LOOTING);
 
         return NumberExpr.mul(chance, NumberExpr.add(NumberExpr.constant(condition.percent), NumberExpr.mul(level, NumberExpr.constant(condition.lootingMultiplier))));
     }
 
     @NotNull
-    public static NumberExpr applyTableBonus(IServerUtils ignoredUtils, BonusLevelTableCondition condition, NumberExpr chance) {
+    public static NumberExpr applyTableBonus(IServerUtils ignoredUtils, BonusLevelTableCondition condition, NumberExpr chance, List<TooltipNode> ignoredConditions) {
         if (condition.values.length == 0) {
             return chance;
         }
@@ -78,14 +78,14 @@ public class TooltipUtils {
     }
 
     @NotNull
-    public static NumberExpr applySetCount(IServerUtils utils, SetItemCountFunction function, NumberExpr count) {
-        NumberExpr value = utils.convertIntNumber(utils, function.value);
+    public static NumberExpr applySetCount(IServerUtils utils, SetItemCountFunction function, NumberExpr count, List<TooltipNode> conditions) {
+        NumberExpr value = utils.convertIntNumber(utils, function.value, conditions);
 
         return NumberExpr.max(NumberExpr.constant(0), function.add ? NumberExpr.add(count, value) : value);
     }
 
     @NotNull
-    public static NumberExpr applyBonus(IServerUtils ignoredUtils, ApplyBonusCount function, NumberExpr count) {
+    public static NumberExpr applyBonus(IServerUtils ignoredUtils, ApplyBonusCount function, NumberExpr count, List<TooltipNode> ignoredConditions) {
         NumberExpr level = level(function.enchantment);
 
         if (function.formula instanceof ApplyBonusCount.OreDrops) {
@@ -100,22 +100,22 @@ public class TooltipUtils {
     }
 
     @NotNull
-    public static NumberExpr applyLimitCount(IServerUtils utils, LimitCount function, NumberExpr count) {
-        return limit(utils, count, function.limiter);
+    public static NumberExpr applyLimitCount(IServerUtils utils, LimitCount function, NumberExpr count, List<TooltipNode> conditions) {
+        return limit(utils, count, function.limiter, conditions);
     }
 
     @NotNull
-    public static NumberExpr applyLootingEnchant(IServerUtils utils, LootingEnchantFunction function, NumberExpr count) {
-        NumberExpr bonus = NumberExpr.fn(NumberFunctions.ROUND, NumberExpr.mul(level(Enchantments.MOB_LOOTING), utils.convertNumber(utils, function.value)));
+    public static NumberExpr applyLootingEnchant(IServerUtils utils, LootingEnchantFunction function, NumberExpr count, List<TooltipNode> conditions) {
+        NumberExpr bonus = NumberExpr.fn(NumberFunctions.ROUND, NumberExpr.mul(level(Enchantments.MOB_LOOTING), utils.convertNumber(utils, function.value, conditions)));
         NumberExpr result = NumberExpr.add(count, bonus);
 
         return function.limit > 0 ? NumberExpr.min(result, NumberExpr.constant(function.limit)) : result;
     }
 
     @NotNull
-    public static NumberExpr limit(IServerUtils utils, NumberExpr value, IntRange range) {
-        NumberExpr min = range.min != null ? utils.convertIntNumber(utils, range.min) : null;
-        NumberExpr max = range.max != null ? utils.convertIntNumber(utils, range.max) : null;
+    public static NumberExpr limit(IServerUtils utils, NumberExpr value, IntRange range, List<TooltipNode> conditions) {
+        NumberExpr min = range.min != null ? utils.convertIntNumber(utils, range.min, conditions) : null;
+        NumberExpr max = range.max != null ? utils.convertIntNumber(utils, range.max, conditions) : null;
 
         if (min != null && max != null) {
             return NumberExpr.clamp(value, min, max);
@@ -169,17 +169,36 @@ public class TooltipUtils {
     }
 
     @NotNull
-    public static NumberExpr rolls(IServerUtils utils, NumberProvider rolls, NumberProvider bonusRolls) {
-        NumberExpr base = utils.convertIntNumber(utils, rolls);
-        NumberExpr bonus = utils.convertNumber(utils, bonusRolls);
+    public static NumberExpr rolls(IServerUtils utils, NumberProvider rolls, NumberProvider bonusRolls, List<TooltipNode> conditions) {
+        return luckBased(utils.convertIntNumber(utils, rolls, conditions), utils.convertNumber(utils, bonusRolls, conditions));
+    }
 
+    @NotNull
+    public static TooltipBuilder getNumberTooltip(IServerUtils utils, NumberProvider provider) {
+        List<TooltipNode> conditions = new ArrayList<>();
+
+        return TooltipBuilder.number(utils.convertNumber(utils, provider, conditions), conditions);
+    }
+
+    @NotNull
+    public static TooltipBuilder getIntNumberTooltip(IServerUtils utils, NumberProvider provider) {
+        List<TooltipNode> conditions = new ArrayList<>();
+
+        return TooltipBuilder.number(utils.convertIntNumber(utils, provider, conditions), conditions);
+    }
+
+    @NotNull
+    public static NumberExpr luckBased(NumberExpr base, NumberExpr bonus) {
         if (bonus instanceof NumberExpr.Const c && c.value() == 0) {
             return base;
         }
 
-        NumberExpr luck = new NumberExpr.Var(LUCK, List.of(), -1, 4);
+        return NumberExpr.max(NumberExpr.constant(0), NumberExpr.add(base, NumberExpr.fn(NumberFunctions.FLOOR, NumberExpr.mul(bonus, luck()))));
+    }
 
-        return NumberExpr.max(NumberExpr.constant(0), NumberExpr.add(base, NumberExpr.fn(NumberFunctions.FLOOR, NumberExpr.mul(bonus, luck))));
+    @NotNull
+    public static NumberExpr.Var luck() {
+        return new NumberExpr.Var(LUCK, List.of(), -1, 4);
     }
 
     @NotNull
@@ -330,16 +349,16 @@ public class TooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getReferenceTooltip(LootTableReference entry, float chance, int sumWeight) {
+    public static TooltipBuilder getReferenceTooltip(LootTableReference entry, LootCount chance) {
         return TooltipBuilder.array((b) -> {
             b.add(TooltipBuilder.keyOnly(Lang.Group.ALL));
             b.add(getQualityTooltip(entry.quality));
-            b.add(getChanceTooltip(NumberExpr.constant(chance * entry.weight / sumWeight)));
+            b.add(getChanceTooltip(chance));
         });
     }
 
     @NotNull
-    public static TooltipBuilder getLootPoolTooltip(NumberExpr rolls) {
+    public static TooltipBuilder getLootPoolTooltip(LootCount rolls) {
         return TooltipBuilder.array((b) -> {
             b.add(TooltipBuilder.keyOnly(Lang.Group.RANDOM));
             b.add(getRolls(rolls));
@@ -352,11 +371,11 @@ public class TooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getDynamicTooltip(IServerUtils utils, int quality, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public static TooltipBuilder getDynamicTooltip(IServerUtils utils, int quality, LootCount chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         return TooltipBuilder.array((b) -> {
             b.add(TooltipBuilder.keyOnly(Lang.Group.DYNAMIC));
             b.add(getQualityTooltip(quality));
-            b.add(getChanceTooltip(NumberExpr.constant(chance)));
+            b.add(getChanceTooltip(chance));
             b.add(GenericTooltipUtils.getConditionsSectionTooltip(utils, conditions));
             b.add(GenericTooltipUtils.getFunctionsSectionTooltip(utils, functions));
         });
@@ -373,7 +392,7 @@ public class TooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getEmptyTooltip(IServerUtils utils, int quality, NumberExpr chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public static TooltipBuilder getEmptyTooltip(IServerUtils utils, int quality, LootCount chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         return TooltipBuilder.array((b) -> {
             b.add(TooltipBuilder.keyOnly(Lang.Group.EMPTY));
             b.add(getQualityTooltip(quality));
@@ -384,7 +403,7 @@ public class TooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getTooltip(IServerUtils utils, int quality, NumberExpr chance, LootCount count, @Nullable NumberInterval countLimit,
+    public static TooltipBuilder getTooltip(IServerUtils utils, int quality, LootCount chance, LootCount count, @Nullable NumberInterval countLimit,
                                             List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         return TooltipBuilder.array((b) -> {
             b.add(getQualityTooltip(quality));
@@ -414,12 +433,15 @@ public class TooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getChanceTooltip(NumberExpr chance) {
-        if (chance instanceof NumberExpr.Const c && c.value() > 0.9999999) {
+    public static TooltipBuilder getChanceTooltip(LootCount chance) {
+        if (chance.value() instanceof NumberExpr.Const c && c.value() > 0.9999999) {
             return TooltipBuilder.empty();
         }
 
-        return TooltipBuilder.percent(chance).key(Lang.Description.CHANCE);
+        TooltipBuilder builder = TooltipBuilder.percent(chance.value());
+
+        chance.conditions().forEach(builder::add);
+        return builder.key(Lang.Description.CHANCE);
     }
 
     @NotNull
@@ -431,8 +453,8 @@ public class TooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getRolls(NumberExpr rolls) {
-        return TooltipBuilder.number(rolls).key(Lang.Description.ROLLS);
+    public static TooltipBuilder getRolls(LootCount rolls) {
+        return TooltipBuilder.number(rolls.value(), rolls.conditions()).key(Lang.Description.ROLLS);
     }
 
     private static TooltipBuilder getElementTooltip(IServerUtils utils, JsonElement element) {

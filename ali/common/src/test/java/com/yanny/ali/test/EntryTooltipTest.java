@@ -10,6 +10,7 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
@@ -25,11 +26,11 @@ public class EntryTooltipTest {
 
     @Test
     public void testLootPoolTooltip() {
-        assertTooltip(TooltipUtils.getLootPoolTooltip(TooltipUtils.rolls(UTILS, UniformGenerator.between(2, 3), ConstantValue.exactly(0))).build(), List.of(
+        assertTooltip(TooltipUtils.getLootPoolTooltip(LootCount.of(TooltipUtils.rolls(UTILS, UniformGenerator.between(2, 3), ConstantValue.exactly(0), new ArrayList<>()))).build(), List.of(
                 "Selects random entry",
                 "Rolls: 2 to 3"
         ));
-        assertTooltip(TooltipUtils.getLootPoolTooltip(TooltipUtils.rolls(UTILS, UniformGenerator.between(2, 3), UniformGenerator.between(1, 2))).build(), List.of(
+        assertTooltip(TooltipUtils.getLootPoolTooltip(LootCount.of(TooltipUtils.rolls(UTILS, UniformGenerator.between(2, 3), UniformGenerator.between(1, 2), new ArrayList<>()))).build(), List.of(
                 "Selects random entry",
                 "Rolls: 0 to 10 (luck)"
         ));
@@ -44,7 +45,7 @@ public class EntryTooltipTest {
 
     @Test
     public void testDynamicTooltip() {
-        assertTooltip(TooltipUtils.getDynamicTooltip(UTILS, 10, 0.3f, List.of(), List.of()).build(), List.of(
+        assertTooltip(TooltipUtils.getDynamicTooltip(UTILS, 10, LootCount.of(NumberExpr.constant(0.3f)), List.of(), List.of()).build(), List.of(
                 "Dynamic block-specific drops",
                 "Quality: 10",
                 "Chance: 30%"
@@ -77,7 +78,7 @@ public class EntryTooltipTest {
         assertTooltip(TooltipUtils.getTooltip(
                 UTILS,
                 3,
-                chance,
+                LootCount.of(chance),
                 count,
                 null,
                 List.of(ApplyExplosionDecay.explosionDecay().build()),
@@ -100,7 +101,7 @@ public class EntryTooltipTest {
         assertTooltip(TooltipUtils.getTooltip(
                 UTILS,
                 3,
-                chance,
+                LootCount.of(chance),
                 count,
                 null,
                 List.of(ApplyExplosionDecay.explosionDecay().build()),

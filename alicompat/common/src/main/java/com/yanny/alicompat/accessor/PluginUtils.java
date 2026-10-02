@@ -21,7 +21,7 @@ public class PluginUtils {
 
     public static <U extends LootPoolEntryContainer, T extends BaseAccessor<?> & IEntry> void registerEntry(IServerRegistry registry, Class<U> targetClass, Class<T> clazz) {
         if (isValid(clazz, targetClass)) {
-            registry.registerEntry(targetClass, (u, e, r, w, f, c) -> ReflectionUtils.copyClassData(clazz, e, targetClass).create(u, r, w, f, c));
+            registry.registerEntry(targetClass, (u, e, r, w, l, f, c) -> ReflectionUtils.copyClassData(clazz, e, targetClass).create(u, r, w, l, f, c));
         }
     }
 
@@ -33,7 +33,7 @@ public class PluginUtils {
                 //noinspection unchecked
                 Class<LootPoolEntryContainer> entryClass = (Class<LootPoolEntryContainer>) Class.forName(classAnnotation.value());
                 ReflectionUtils.validate(clazz, entryClass);
-                registry.registerEntry(entryClass, (u, e, r, w, f, c) -> ReflectionUtils.copyClassData(clazz, e).create(u, r, w, f, c));
+                registry.registerEntry(entryClass, (u, e, r, w, l, f, c) -> ReflectionUtils.copyClassData(clazz, e).create(u, r, w, l, f, c));
             } catch (Throwable e) {
                 LOGGER.warn("Failed to register entry for {} with error {}", classAnnotation.value(), e.getMessage(), e);
             }
@@ -43,7 +43,7 @@ public class PluginUtils {
     }
 
     public static <U extends LootPoolEntryContainer, T extends IEntry> void registerEntry(IServerRegistry registry, Class<U> targetClass, Function<U, T> factory) {
-        registry.registerEntry(targetClass, (u, e, r, w, f, c) -> factory.apply(e).create(u, r, w, f, c));
+        registry.registerEntry(targetClass, (u, e, r, w, l, f, c) -> factory.apply(e).create(u, r, w, l, f, c));
     }
 
     public static <U extends LootPoolEntryContainer, T extends BaseAccessor<?> & IEntryTooltip> void registerEntryTooltip(IServerRegistry registry, Class<U> targetClass, Class<T> clazz) {
@@ -156,7 +156,7 @@ public class PluginUtils {
 
     public static <U extends NumberProvider, T extends BaseAccessor<?> & INumberProvider> void registerNumberProvider(IServerRegistry registry, Class<U> targetClass, Class<T> clazz) {
         if (isValid(clazz, targetClass)) {
-            registry.registerNumberProvider(targetClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c, targetClass).convertNumber(u), (u, c) -> ReflectionUtils.copyClassData(clazz, c, targetClass).convertIntNumber(u));
+            registry.registerNumberProvider(targetClass, (u, c, l) -> ReflectionUtils.copyClassData(clazz, c, targetClass).convertNumber(u, l), (u, c, l) -> ReflectionUtils.copyClassData(clazz, c, targetClass).convertIntNumber(u, l));
         }
     }
 
@@ -168,7 +168,7 @@ public class PluginUtils {
                 //noinspection unchecked
                 Class<NumberProvider> numberProviderClass = (Class<NumberProvider>) Class.forName(classAnnotation.value());
                 ReflectionUtils.validate(clazz, numberProviderClass);
-                registry.registerNumberProvider(numberProviderClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c).convertNumber(u), (u, c) -> ReflectionUtils.copyClassData(clazz, c).convertIntNumber(u));
+                registry.registerNumberProvider(numberProviderClass, (u, c, l) -> ReflectionUtils.copyClassData(clazz, c).convertNumber(u, l), (u, c, l) -> ReflectionUtils.copyClassData(clazz, c).convertIntNumber(u, l));
             } catch (Throwable e) {
                 LOGGER.warn("Failed to register number provider for {} with error {}", classAnnotation.value(), e.getMessage(), e);
             }
@@ -178,12 +178,12 @@ public class PluginUtils {
     }
 
     public static <U extends NumberProvider, T extends INumberProvider> void registerNumberProvider(IServerRegistry registry, Class<U> targetClass, Function<U, T> factory) {
-        registry.registerNumberProvider(targetClass, (u, c) -> factory.apply(c).convertNumber(u), (u, c) -> factory.apply(c).convertIntNumber(u));
+        registry.registerNumberProvider(targetClass, (u, c, l) -> factory.apply(c).convertNumber(u, l), (u, c, l) -> factory.apply(c).convertIntNumber(u, l));
     }
 
     public static <U extends LootItemFunction, T extends BaseAccessor<?> & ICountModifier> void registerCountModifier(IServerRegistry registry, Class<U> targetClass, Class<T> clazz) {
         if (isValid(clazz, targetClass)) {
-            registry.registerCountModifier(targetClass, (u, c, m) -> ReflectionUtils.copyClassData(clazz, c, targetClass).applyCountModifier(u, m));
+            registry.registerCountModifier(targetClass, (u, c, m, l) -> ReflectionUtils.copyClassData(clazz, c, targetClass).applyCountModifier(u, m, l));
         }
     }
 
@@ -195,7 +195,7 @@ public class PluginUtils {
                 //noinspection unchecked
                 Class<LootItemFunction> functionClass = (Class<LootItemFunction>) Class.forName(classAnnotation.value());
                 ReflectionUtils.validate(clazz, functionClass);
-                registry.registerCountModifier(functionClass, (u, c, m) -> ReflectionUtils.copyClassData(clazz, c).applyCountModifier(u, m));
+                registry.registerCountModifier(functionClass, (u, c, m, l) -> ReflectionUtils.copyClassData(clazz, c).applyCountModifier(u, m, l));
             } catch (Throwable e) {
                 LOGGER.warn("Failed to register count modifier for {} with error {}", classAnnotation.value(), e.getMessage(), e);
             }
@@ -205,12 +205,12 @@ public class PluginUtils {
     }
 
     public static <U extends LootItemFunction, T extends ICountModifier> void registerCountModifier(IServerRegistry registry, Class<U> targetClass, Function<U, T> factory) {
-        registry.registerCountModifier(targetClass, (u, c, m) -> factory.apply(c).applyCountModifier(u, m));
+        registry.registerCountModifier(targetClass, (u, c, m, l) -> factory.apply(c).applyCountModifier(u, m, l));
     }
 
     public static <U extends LootItemCondition, T extends BaseAccessor<?> & IChanceModifier> void registerChanceModifier(IServerRegistry registry, Class<U> targetClass, Class<T> clazz) {
         if (isValid(clazz, targetClass)) {
-            registry.registerChanceModifier(targetClass, (u, c, m) -> ReflectionUtils.copyClassData(clazz, c, targetClass).applyChanceModifier(u, m));
+            registry.registerChanceModifier(targetClass, (u, c, m, l) -> ReflectionUtils.copyClassData(clazz, c, targetClass).applyChanceModifier(u, m, l));
         }
     }
 
@@ -222,7 +222,7 @@ public class PluginUtils {
                 //noinspection unchecked
                 Class<LootItemCondition> conditionClass = (Class<LootItemCondition>) Class.forName(classAnnotation.value());
                 ReflectionUtils.validate(clazz, conditionClass);
-                registry.registerChanceModifier(conditionClass, (u, c, m) -> ReflectionUtils.copyClassData(clazz, c).applyChanceModifier(u, m));
+                registry.registerChanceModifier(conditionClass, (u, c, m, l) -> ReflectionUtils.copyClassData(clazz, c).applyChanceModifier(u, m, l));
             } catch (Throwable e) {
                 LOGGER.warn("Failed to register chance modifier for {} with error {}", classAnnotation.value(), e.getMessage(), e);
             }
@@ -232,7 +232,7 @@ public class PluginUtils {
     }
 
     public static <U extends LootItemCondition, T extends IChanceModifier> void registerChanceModifier(IServerRegistry registry, Class<U> targetClass, Function<U, T> factory) {
-        registry.registerChanceModifier(targetClass, (u, c, m) -> factory.apply(c).applyChanceModifier(u, m));
+        registry.registerChanceModifier(targetClass, (u, c, m, l) -> factory.apply(c).applyChanceModifier(u, m, l));
     }
 
     public static <U extends LootItemFunction, T extends BaseAccessor<?> & IItemStackModifier> void registerItemStackModifier(IServerRegistry registry, Class<U> targetClass, Class<T> clazz) {

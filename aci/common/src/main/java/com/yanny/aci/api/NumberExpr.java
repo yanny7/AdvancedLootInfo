@@ -303,6 +303,21 @@ public sealed interface NumberExpr {
     }
 
     @NotNull
+    default NumberExpr shiftConditions(int offset) {
+        if (offset == 0) {
+            return this;
+        }
+
+        return transform((e) -> {
+            if (e instanceof Cond c) {
+                return cond(c.branches.stream().map((b) -> new Branch(b.condition < 0 ? b.condition : b.condition + offset, b.value)).toList(), c.otherwise);
+            }
+
+            return e;
+        });
+    }
+
+    @NotNull
     default NumberExpr transform(UnaryOperator<NumberExpr> mapper) {
         NumberExpr rebuilt;
 

@@ -60,7 +60,7 @@ public class GenericTooltipTest {
         assertTooltip(TooltipUtils.getTooltip(
                 UTILS,
                 0,
-                NumberExpr.constant(0.025),
+                LootCount.of(NumberExpr.constant(0.025)),
                 LootCount.of(NumberExpr.range(2, 10)),
                 null,
                 List.of(),
@@ -72,7 +72,7 @@ public class GenericTooltipTest {
         assertTooltip(TooltipUtils.getTooltip(
                 UTILS,
                 5,
-                chance,
+                LootCount.of(chance),
                 count,
                 null,
                 List.of(ApplyExplosionDecay.explosionDecay().when(ExplosionCondition.survivesExplosion()).build(), SmeltItemFunction.smelted().build()),

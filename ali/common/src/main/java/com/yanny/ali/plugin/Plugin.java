@@ -7,6 +7,7 @@ import com.yanny.aci.api.NumberText;
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.tooltip.CommonNumberProviders;
 import com.yanny.aci.tooltip.CommonValueTooltip;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.datagen.LanguageHolder;
@@ -52,6 +53,7 @@ import net.minecraft.world.level.storage.loot.providers.score.ContextScoreboardN
 import net.minecraft.world.level.storage.loot.providers.score.FixedScoreboardNameProvider;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Map;
 
 @AliEntrypoint
@@ -122,6 +124,12 @@ public class Plugin implements IPlugin {
         registry.registerNumberProvider(UniformGenerator.class, Plugin::convertUniform, Plugin::convertIntUniform);
         registry.registerNumberProvider(BinomialDistributionGenerator.class, Plugin::convertBinomial, Plugin::convertBinomial);
         registry.registerNumberProvider(ScoreboardValue.class, Plugin::convertScore, Plugin::convertIntScore);
+
+        registry.registerEntryWeight(LootPoolSingletonContainer.class, NodeUtils::getSingletonWeight);
+        registry.registerEntryWeight(CompositeEntryBase.class, NodeUtils::getCompositeWeight);
+        registry.registerEntryWeight(AlternativesEntry.class, NodeUtils::getAlternativesWeight);
+
+        registry.registerEntryChildren(CompositeEntryBase.class, NodeUtils::getCompositeChildren);
 
         registry.registerEntry(LootItem.class, NodeUtils::getItemNode);
         registry.registerEntry(TagEntry.class, NodeUtils::getTagNode);
@@ -294,37 +302,37 @@ public class Plugin implements IPlugin {
     }
 
     @NotNull
-    private static NumberExpr convertConstant(IServerUtils utils, ConstantValue numberProvider) {
+    private static NumberExpr convertConstant(IServerUtils utils, ConstantValue numberProvider, List<TooltipNode> conditions) {
         return NumberExpr.constant(numberProvider.getFloat(utils.getLootContext()));
     }
 
     @NotNull
-    private static NumberExpr convertUniform(IServerUtils utils, UniformGenerator numberProvider) {
-        return NumberExpr.fn(NumberFunctions.UNIFORM_FLOAT, utils.convertNumber(utils, numberProvider.min), utils.convertNumber(utils, numberProvider.max));
+    private static NumberExpr convertUniform(IServerUtils utils, UniformGenerator numberProvider, List<TooltipNode> conditions) {
+        return NumberExpr.fn(NumberFunctions.UNIFORM_FLOAT, utils.convertNumber(utils, numberProvider.min, conditions), utils.convertNumber(utils, numberProvider.max, conditions));
     }
 
     @NotNull
-    private static NumberExpr convertIntUniform(IServerUtils utils, UniformGenerator numberProvider) {
-        return NumberExpr.uniformInt(utils.convertIntNumber(utils, numberProvider.min), utils.convertIntNumber(utils, numberProvider.max));
+    private static NumberExpr convertIntUniform(IServerUtils utils, UniformGenerator numberProvider, List<TooltipNode> conditions) {
+        return NumberExpr.uniformInt(utils.convertIntNumber(utils, numberProvider.min, conditions), utils.convertIntNumber(utils, numberProvider.max, conditions));
     }
 
     @NotNull
-    private static NumberExpr convertBinomial(IServerUtils utils, BinomialDistributionGenerator numberProvider) {
-        return NumberExpr.binomial(utils.convertIntNumber(utils, numberProvider.n), utils.convertNumber(utils, numberProvider.p));
+    private static NumberExpr convertBinomial(IServerUtils utils, BinomialDistributionGenerator numberProvider, List<TooltipNode> conditions) {
+        return NumberExpr.binomial(utils.convertIntNumber(utils, numberProvider.n, conditions), utils.convertNumber(utils, numberProvider.p, conditions));
     }
 
     @NotNull
-    private static NumberExpr convertScore(IServerUtils utils, ScoreboardValue numberProvider) {
+    private static NumberExpr convertScore(IServerUtils utils, ScoreboardValue numberProvider, List<TooltipNode> conditions) {
         return NumberExpr.mul(getScore(numberProvider), NumberExpr.constant(numberProvider.scale));
     }
 
     @NotNull
-    private static NumberExpr convertIntScore(IServerUtils utils, ScoreboardValue numberProvider) {
+    private static NumberExpr convertIntScore(IServerUtils utils, ScoreboardValue numberProvider, List<TooltipNode> conditions) {
         if (numberProvider.scale == 1) {
             return getScore(numberProvider);
         }
 
-        return NumberExpr.fn(NumberFunctions.ROUND, convertScore(utils, numberProvider));
+        return NumberExpr.fn(NumberFunctions.ROUND, convertScore(utils, numberProvider, conditions));
     }
 
     @NotNull

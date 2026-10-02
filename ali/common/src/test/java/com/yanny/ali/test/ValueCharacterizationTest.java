@@ -148,7 +148,7 @@ public class ValueCharacterizationTest {
     }
 
     private static List<String> chance(LootItemCondition... conditions) {
-        return describe(NodeUtils.getChance(UTILS, List.of(conditions), 1), 100);
+        return describe(NodeUtils.getChance(UTILS, List.of(conditions), 1).value(), 100);
     }
 
     private static NumberExpr price(int baseEmeraldCost) {

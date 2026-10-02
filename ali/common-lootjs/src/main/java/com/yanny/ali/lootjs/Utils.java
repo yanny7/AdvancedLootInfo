@@ -41,15 +41,15 @@ public class Utils {
 
             if (preservedCount != null) {
                 if (entryContainer instanceof LootItem lootItem) {
-                    return new ItemStackNode(utils, lootItem.item.getDefaultInstance(), NodeUtils.getChance(lootItem, 1, sumWeight),
+                    return new ItemStackNode(utils, lootItem.item.getDefaultInstance(), (float) lootItem.weight / sumWeight,
                             NodeUtils.getAllFunctions(lootItem, allFunctions), NodeUtils.getAllConditions(lootItem, allConditions), preservedCount);
                 } else if (entryContainer instanceof TagEntry tagEntry) {
-                    return new ItemTagNode(utils, tagEntry.tag, NodeUtils.getChance(tagEntry, 1, sumWeight),
+                    return new ItemTagNode(utils, tagEntry.tag, (float) tagEntry.weight / sumWeight,
                             NodeUtils.getAllFunctions(tagEntry, allFunctions), NodeUtils.getAllConditions(tagEntry, allConditions), preservedCount);
                 }
             }
 
-            return utils.getEntryFactory(utils, entryContainer).create(utils, entryContainer, 1, sumWeight, allFunctions, allConditions);
+            return utils.getEntryFactory(utils, entryContainer).create(utils, entryContainer, NumberExpr.constant(1), NumberExpr.constant(sumWeight), List.of(), allFunctions, allConditions);
         } else if (generator instanceof LootEntry.RandomIngredientGenerator ingredientGenerator) {
             Ingredient ingredient = ingredientGenerator.ingredient();
 

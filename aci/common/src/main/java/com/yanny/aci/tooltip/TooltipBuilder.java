@@ -139,6 +139,14 @@ public class TooltipBuilder {
     }
 
     @NotNull
+    public static TooltipBuilder number(NumberExpr expr, List<TooltipNode> conditions) {
+        TooltipBuilder builder = number(expr);
+
+        conditions.forEach(builder::add);
+        return builder;
+    }
+
+    @NotNull
     public static TooltipBuilder percent(NumberExpr expr) {
         return number(expr, true, null);
     }

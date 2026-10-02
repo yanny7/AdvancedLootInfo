@@ -3,6 +3,7 @@ package com.yanny.ali.plugin.server;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import net.minecraft.advancements.critereon.*;
@@ -21,7 +22,9 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -367,12 +370,14 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getNumberProviderTooltip(IServerUtils utils, NumberProvider value) {
-        return TooltipBuilder.number(utils.convertNumber(utils, value));
+        return TooltipUtils.getNumberTooltip(utils, value);
     }
 
     @NotNull
     public static TooltipBuilder getIntRangeTooltip(IServerUtils utils, IntRange range) {
-        return TooltipBuilder.number(GenericTooltipUtils.getRange(utils, range));
+        List<TooltipNode> conditions = new ArrayList<>();
+
+        return TooltipBuilder.number(GenericTooltipUtils.getRange(utils, range, conditions), conditions);
     }
 
     @NotNull

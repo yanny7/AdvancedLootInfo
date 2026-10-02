@@ -1,5 +1,6 @@
 ## []
 
+- Number converters receive the list of condition tooltips of their conditional values
 - Grouping structure spawn info
 - Scrollable tooltip by mouse wheel when taller than screen
 - Number model `NumberExpr` replaces `RangeValue`, showing most likely value, level rows and charts

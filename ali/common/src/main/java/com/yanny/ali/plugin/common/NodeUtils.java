@@ -3,6 +3,7 @@ package com.yanny.ali.plugin.common;
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberInterval;
+import com.yanny.aci.number.NumberEvaluator;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.*;
 import com.yanny.ali.language.Lang;
@@ -35,94 +36,95 @@ import java.util.stream.Stream;
 
 public class NodeUtils {
     @NotNull
-    public static IDataNode getItemNode(IServerUtils utils, LootItem entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        return getItemNode(utils, entry, (f) -> Either.left(TooltipUtils.getItemStack(utils, entry.item.getDefaultInstance(), f)), rawChance, sumWeight, functions, conditions);
+    public static IDataNode getItemNode(IServerUtils utils, LootItem entry, NumberExpr rawChance, NumberExpr sumWeight, List<TooltipNode> chanceConditions, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        return getItemNode(utils, entry, (f) -> Either.left(TooltipUtils.getItemStack(utils, entry.item.getDefaultInstance(), f)), rawChance, sumWeight, chanceConditions, functions, conditions);
     }
 
     @NotNull
-    public static IDataNode getTagNode(IServerUtils utils, TagEntry entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        return getItemNode(utils, entry, (f) -> Either.right(entry.tag), rawChance, sumWeight, functions, conditions);
+    public static IDataNode getTagNode(IServerUtils utils, TagEntry entry, NumberExpr rawChance, NumberExpr sumWeight, List<TooltipNode> chanceConditions, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        return getItemNode(utils, entry, (f) -> Either.right(entry.tag), rawChance, sumWeight, chanceConditions, functions, conditions);
     }
 
     @NotNull
-    public static IDataNode getItemNode(IServerUtils utils, LootPoolSingletonContainer entry, Function<List<LootItemFunction>, Either<ItemStack, TagKey<? extends ItemLike>>> itemGetter, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public static IDataNode getItemNode(IServerUtils utils, LootPoolSingletonContainer entry, Function<List<LootItemFunction>, Either<ItemStack, TagKey<? extends ItemLike>>> itemGetter,
+                                        NumberExpr rawChance, NumberExpr sumWeight, List<TooltipNode> chanceConditions, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
         List<LootItemFunction> allFunctions = getAllFunctions(entry, functions);
-        float chance = getChance(entry, rawChance, sumWeight);
+        LootCount chance = getChance(utils, entry, rawChance, sumWeight, chanceConditions);
         Either<ItemStack, TagKey<? extends ItemLike>> either = itemGetter.apply(allFunctions);
         LootCount count = getCount(utils, allFunctions);
         TooltipNode tooltip = TooltipUtils.getTooltip(utils, entry.quality, getChance(utils, allConditions, chance), count, getCountLimit(either), allFunctions, allConditions).build();
 
         if (either.left().isPresent() && either.left().get().isEmpty()) {
-            return new EmptyNode(chance, tooltip);
+            return new EmptyNode(toFloat(chance.value()), tooltip);
         } else {
-            return new ItemNode(chance, count.value(), either, tooltip, allFunctions, allConditions);
+            return new ItemNode(toFloat(chance.value()), count.value(), either, tooltip, allFunctions, allConditions);
         }
     }
 
     @NotNull
-    public static AlternativesNode getAlternativesNode(IServerUtils utils, AlternativesEntry entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public static AlternativesNode getAlternativesNode(IServerUtils utils, AlternativesEntry entry, NumberExpr rawChance, NumberExpr sumWeight, List<TooltipNode> chanceConditions, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
-        List<IDataNode> children = getChildren(utils, entry.children, rawChance, sumWeight, functions, allConditions);
+        List<IDataNode> children = getChildren(utils, entry.children, rawChance, sumWeight, chanceConditions, functions, allConditions);
         TooltipNode tooltip = TooltipUtils.getAlternativesTooltip().build();
 
         return new AlternativesNode(children, tooltip);
     }
 
     @NotNull
-    public static DynamicNode getDynamicNode(IServerUtils utils, DynamicLoot entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public static DynamicNode getDynamicNode(IServerUtils utils, DynamicLoot entry, NumberExpr rawChance, NumberExpr sumWeight, List<TooltipNode> chanceConditions, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemFunction> allFunctions = getAllFunctions(entry, functions);
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
-        float chance = getChance(entry, rawChance, sumWeight);
+        LootCount chance = getChance(utils, entry, rawChance, sumWeight, chanceConditions);
         TooltipNode tooltip = TooltipUtils.getDynamicTooltip(utils, entry.quality, chance, allFunctions, allConditions).build();
 
-        return new DynamicNode(chance, tooltip);
+        return new DynamicNode(toFloat(chance.value()), tooltip);
     }
 
     @NotNull
-    public static EmptyNode getEmptyNode(IServerUtils utils, EmptyLootItem entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public static EmptyNode getEmptyNode(IServerUtils utils, EmptyLootItem entry, NumberExpr rawChance, NumberExpr sumWeight, List<TooltipNode> chanceConditions, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemFunction> allFunctions = getAllFunctions(entry, functions);
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
-        float chance = getChance(entry, rawChance, sumWeight);
+        LootCount chance = getChance(utils, entry, rawChance, sumWeight, chanceConditions);
         TooltipNode tooltip = TooltipUtils.getEmptyTooltip(utils, entry.quality, getChance(utils, allConditions, chance), allFunctions, allConditions).build();
 
-        return new EmptyNode(chance, tooltip);
+        return new EmptyNode(toFloat(chance.value()), tooltip);
     }
 
     @NotNull
-    public static GroupNode getGroupNode(IServerUtils utils, EntryGroup entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public static GroupNode getGroupNode(IServerUtils utils, EntryGroup entry, NumberExpr rawChance, NumberExpr sumWeight, List<TooltipNode> chanceConditions, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
-        List<IDataNode> children = getChildren(utils, entry.children, rawChance, sumWeight, functions, allConditions);
+        List<IDataNode> children = getChildren(utils, entry.children, rawChance, sumWeight, chanceConditions, functions, allConditions);
         TooltipNode tooltip = TooltipUtils.getGroupTooltip().build();
 
         return new GroupNode(children, tooltip);
     }
 
     @NotNull
-    public static SequenceNode getSequenceNode(IServerUtils utils, SequentialEntry entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public static SequenceNode getSequenceNode(IServerUtils utils, SequentialEntry entry, NumberExpr rawChance, NumberExpr sumWeight, List<TooltipNode> chanceConditions, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
-        List<IDataNode> children = getChildren(utils, entry.children, rawChance, sumWeight, functions, allConditions);
+        List<IDataNode> children = getChildren(utils, entry.children, rawChance, sumWeight, chanceConditions, functions, allConditions);
         TooltipNode tooltip = TooltipUtils.getSequentialTooltip().build();
 
         return new SequenceNode(children, tooltip);
     }
 
     @NotNull
-    public static ReferenceNode getReferenceNode(IServerUtils utils, LootTableReference entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public static ReferenceNode getReferenceNode(IServerUtils utils, LootTableReference entry, NumberExpr rawChance, NumberExpr sumWeight, List<TooltipNode> chanceConditions, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemFunction> allFunctions = getAllFunctions(entry, functions);
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
-        float chance = getChance(entry, rawChance, sumWeight);
+        LootCount chance = getChance(utils, entry, rawChance, sumWeight, chanceConditions);
         LootTable lootTable = utils.getLootTable(entry.name);
-        TooltipNode tooltip = TooltipUtils.getReferenceTooltip(entry, rawChance, sumWeight).build();
+        TooltipNode tooltip = TooltipUtils.getReferenceTooltip(entry, chance).build();
         List<IDataNode> children;
 
         if (lootTable != null) {
-            children = Collections.singletonList(getLootTableNode(Collections.emptyList(), utils, lootTable, chance, allFunctions, allConditions));
+            children = Collections.singletonList(getLootTableNode(Collections.emptyList(), utils, lootTable, chance.value(), chance.conditions(), allFunctions, allConditions));
         } else {
             children = Collections.singletonList(new MissingNode(utils.getValueTooltip(utils, entry.name).build(Lang.Value.LOOT_TABLE)));
         }
 
-        return new ReferenceNode(children, chance, tooltip);
+        return new ReferenceNode(children, toFloat(chance.value()), tooltip);
     }
 
     @NotNull
@@ -140,12 +142,15 @@ public class NodeUtils {
     }
 
     @NotNull
-    public static LootPoolNode getLootPoolNode(IServerUtils utils, LootPool entry, float rawChance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public static LootPoolNode getLootPoolNode(IServerUtils utils, LootPool entry, NumberExpr rawChance, List<TooltipNode> chanceConditions, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), Arrays.stream(entry.functions)).toList();
         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), Arrays.stream(entry.conditions)).toList();
-        int sumWeight = getTotalWeight(Arrays.asList(entry.entries));
-        TooltipNode tooltip = TooltipUtils.getLootPoolTooltip(TooltipUtils.rolls(utils, entry.rolls, entry.bonusRolls)).build();
-        List<IDataNode> children = getChildren(utils, entry.entries, rawChance, sumWeight, allFunctions, allConditions);
+        List<TooltipNode> poolConditions = new ArrayList<>(chanceConditions);
+        NumberExpr sumWeight = getTotalWeight(utils, Arrays.asList(entry.entries), poolConditions);
+        List<TooltipNode> rollConditions = new ArrayList<>();
+        NumberExpr rolls = TooltipUtils.rolls(utils, entry.rolls, entry.bonusRolls, rollConditions);
+        TooltipNode tooltip = TooltipUtils.getLootPoolTooltip(new LootCount(rolls, rollConditions)).build();
+        List<IDataNode> children = getChildren(utils, entry.entries, rawChance, sumWeight, poolConditions, allFunctions, allConditions);
 
         return new LootPoolNode(children, tooltip);
     }
@@ -162,17 +167,63 @@ public class NodeUtils {
 
     @NotNull
     public static LootTableNode getLootTableNode(List<IOperation> operations, IServerUtils utils, LootTable entry, float rawChance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        return getLootTableNode(operations, utils, entry, NumberExpr.constant(rawChance), List.of(), functions, conditions);
+    }
+
+    @NotNull
+    public static LootTableNode getLootTableNode(List<IOperation> operations, IServerUtils utils, LootTable entry, NumberExpr rawChance, List<TooltipNode> chanceConditions,
+                                                 List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), Arrays.stream(entry.functions)).toList();
         TooltipNode tooltip = TooltipUtils.getLootTableTooltip().build();
-        List<IDataNode> children = utils.getLootPools(entry).stream().map((lootPool) -> (IDataNode) getLootPoolNode(utils, lootPool, rawChance, allFunctions, conditions)).toList();
+        List<IDataNode> children = utils.getLootPools(entry).stream().map((lootPool) -> (IDataNode) getLootPoolNode(utils, lootPool, rawChance, chanceConditions, allFunctions, conditions)).toList();
         LootTableNode node = new LootTableNode(children, tooltip);
 
         processOperations(operations, node);
         return node;
     }
 
-    public static float getChance(LootPoolSingletonContainer entry, float rawChance, int sumWeight) {
-        return rawChance * entry.weight / sumWeight;
+    @NotNull
+    public static LootCount getChance(IServerUtils utils, LootPoolEntryContainer entry, NumberExpr rawChance, NumberExpr sumWeight, List<TooltipNode> chanceConditions) {
+        List<TooltipNode> conditions = new ArrayList<>(chanceConditions);
+        NumberExpr weight = utils.getEntryWeight(utils, entry, conditions);
+
+        if (sumWeight instanceof NumberExpr.Const c && c.value() == 0) {
+            return new LootCount(NumberExpr.constant(0), conditions);
+        }
+
+        return new LootCount(NumberExpr.mul(rawChance, NumberExpr.div(weight, sumWeight)), conditions);
+    }
+
+    public static float toFloat(NumberExpr chance) {
+        NumberExpr value = chance.bind(TooltipUtils.luck(), 0);
+
+        if (value instanceof NumberExpr.Const c) {
+            return (float) c.value();
+        }
+
+        NumberInterval bounds = NumberEvaluator.bounds(value);
+
+        return bounds.isBounded() ? (float) ((bounds.lo() + bounds.hi()) / 2) : 0;
+    }
+
+    @NotNull
+    public static NumberExpr getSingletonWeight(IServerUtils ignoredUtils, LootPoolSingletonContainer entry, List<TooltipNode> ignoredConditions) {
+        return TooltipUtils.luckBased(NumberExpr.constant(entry.weight), NumberExpr.constant(entry.quality));
+    }
+
+    @NotNull
+    public static NumberExpr getCompositeWeight(IServerUtils utils, CompositeEntryBase entry, List<TooltipNode> conditions) {
+        return getTotalWeight(utils, Arrays.asList(entry.children), conditions);
+    }
+
+    @NotNull
+    public static NumberExpr getAlternativesWeight(IServerUtils ignoredUtils, AlternativesEntry ignoredEntry, List<TooltipNode> ignoredConditions) {
+        return NumberExpr.constant(LootPoolSingletonContainer.DEFAULT_WEIGHT);
+    }
+
+    @NotNull
+    public static List<LootPoolEntryContainer> getCompositeChildren(IServerUtils ignoredUtils, CompositeEntryBase entry) {
+        return List.of(entry.children);
     }
 
     @Unmodifiable
@@ -188,8 +239,11 @@ public class NodeUtils {
     }
 
     @NotNull
-    public static List<IDataNode> getChildren(IServerUtils utils, LootPoolEntryContainer[] children, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        return Arrays.stream(children).map((c) -> utils.getEntryFactory(utils, c).create(utils, c, chance, sumWeight, functions, conditions)).toList();
+    public static List<IDataNode> getChildren(IServerUtils utils, LootPoolEntryContainer[] children, NumberExpr chance, NumberExpr sumWeight, List<TooltipNode> chanceConditions,
+                                              List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        List<TooltipNode> shared = List.copyOf(chanceConditions);
+
+        return Arrays.stream(children).map((c) -> utils.getEntryFactory(utils, c).create(utils, c, chance, sumWeight, shared, functions, conditions)).toList();
     }
 
     /** Condition types listed in {@code ignoredPredicateConditions} don't count as predicates. */
@@ -202,14 +256,20 @@ public class NodeUtils {
     }
 
     @NotNull
-    public static NumberExpr getChance(IServerUtils utils, List<LootItemCondition> conditions, float rawChance) {
+    public static LootCount getChance(IServerUtils utils, List<LootItemCondition> conditions, float rawChance) {
+        return getChance(utils, conditions, LootCount.of(NumberExpr.constant(rawChance)));
+    }
+
+    @NotNull
+    public static LootCount getChance(IServerUtils utils, List<LootItemCondition> conditions, LootCount rawChance) {
+        List<TooltipNode> chanceConditions = new ArrayList<>(rawChance.conditions());
         NumberExpr chance = NumberExpr.constant(1);
 
         for (LootItemCondition condition : conditions) {
-            chance = utils.applyChanceModifier(utils, condition, chance);
+            chance = utils.applyChanceModifier(utils, condition, chance, chanceConditions);
         }
 
-        return NumberExpr.mul(NumberExpr.constant(rawChance), chance);
+        return new LootCount(NumberExpr.mul(rawChance.value(), chance), chanceConditions);
     }
 
     @NotNull
@@ -241,19 +301,12 @@ public class NodeUtils {
         return maxStackSize > 0 ? NumberInterval.closed(0, maxStackSize) : null;
     }
 
-    public static int getTotalWeight(List<LootPoolEntryContainer> entries) {
-        int sum = 0;
+    @NotNull
+    public static NumberExpr getTotalWeight(IServerUtils utils, List<LootPoolEntryContainer> entries, List<TooltipNode> conditions) {
+        NumberExpr sum = NumberExpr.constant(0);
 
         for (LootPoolEntryContainer entry : entries) {
-            if (entry instanceof LootPoolSingletonContainer singletonContainer) {
-                sum += singletonContainer.weight;
-            } else if (entry instanceof CompositeEntryBase compositeEntryBase) {
-                if (entry instanceof AlternativesEntry) {
-                    sum += LootPoolSingletonContainer.DEFAULT_WEIGHT;
-                } else {
-                    sum += getTotalWeight(Arrays.asList(compositeEntryBase.children));
-                }
-            }
+            sum = NumberExpr.add(sum, utils.getEntryWeight(utils, entry, conditions));
         }
 
         return sum;

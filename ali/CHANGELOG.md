@@ -1,5 +1,7 @@
 ## []
 
+- Entry chance accounts for quality and luck
+- Number converters, count and chance modifiers and entry factories receive the condition tooltips of their conditional values
 - Scrollable tooltip by mouse wheel when taller than screen
 - Counts and chances show most likely value, level rows, charts (`showCharts`) and formulas (F3+H)
 - Broken loot function or condition support from other mods no longer hides the whole loot table

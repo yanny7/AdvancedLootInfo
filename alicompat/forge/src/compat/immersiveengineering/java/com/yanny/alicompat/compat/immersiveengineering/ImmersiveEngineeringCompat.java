@@ -12,8 +12,10 @@ import blusunrize.immersiveengineering.common.util.loot.MultiblockDropsLootConta
 import blusunrize.immersiveengineering.common.util.loot.PropertyCountLootFunction;
 import blusunrize.immersiveengineering.common.util.loot.RevolverperkLootFunction;
 import blusunrize.immersiveengineering.common.util.loot.WindmillLootFunction;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.language.ITooltipKey;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
@@ -21,6 +23,7 @@ import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.DynamicNode;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
+import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.alicompat.IGlmModCompat;
 import com.yanny.alicompat.accessor.GlmAccessorUtils;
@@ -70,13 +73,13 @@ public class ImmersiveEngineeringCompat implements IGlmModCompat {
     }
 
     @NotNull
-    private static IDataNode getDynamicNode(IServerUtils utils, LootPoolSingletonContainer entry, float rawChance, int sumWeight,
+    private static IDataNode getDynamicNode(IServerUtils utils, LootPoolSingletonContainer entry, NumberExpr rawChance, NumberExpr sumWeight, List<TooltipNode> chanceConditions,
                                             List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemFunction> allFunctions = NodeUtils.getAllFunctions(entry, functions);
         List<LootItemCondition> allConditions = NodeUtils.getAllConditions(entry, conditions);
-        float chance = NodeUtils.getChance(entry, rawChance, sumWeight);
+        LootCount chance = NodeUtils.getChance(utils, entry, rawChance, sumWeight, chanceConditions);
 
-        return new DynamicNode(chance, TooltipUtils.getDynamicTooltip(utils, entry.quality, chance, allFunctions, allConditions).build());
+        return new DynamicNode(NodeUtils.toFloat(chance.value()), TooltipUtils.getDynamicTooltip(utils, entry.quality, chance, allFunctions, allConditions).build());
     }
 
     @NotNull

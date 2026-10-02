@@ -88,7 +88,7 @@ public abstract class LootModifier<T> implements ILootModifier<T> {
                 }
 
                 if (c instanceof ItemNode i) {
-                    NumberExpr chance = getChance(utils, i.getConditions(), i.getChance());
+                    LootCount chance = getChance(utils, i.getConditions(), i.getChance());
                     LootCount count;
 
                     if (i.getFunctions().isEmpty()) {

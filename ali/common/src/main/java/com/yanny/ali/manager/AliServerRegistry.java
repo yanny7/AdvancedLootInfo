@@ -1,6 +1,7 @@
 package com.yanny.ali.manager;
 
 import com.yanny.aci.CommonLogUtils;
+import com.yanny.aci.api.NumberConverter;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberFunctions;
 import com.yanny.aci.manager.ClassKeyedMap;
@@ -61,8 +62,10 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     // factories
     private final ManagedRegistry<Class<?>, EntryFactory<?>> entryFactories = registerClassKeyed("entry factories", true, HashMap::new, BuiltInRegistries.LOOT_POOL_ENTRY_TYPE);
     // converters
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, NumberProvider, NumberExpr>> numberConverters = registerClassKeyed("number converters", true, HashMap::new, BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, NumberProvider, NumberExpr>> intNumberConverters = registerClassKeyed("int number converters", false, HashMap::new, null);
+    private final ManagedRegistry<Class<?>, NumberConverter<IServerUtils, LootPoolEntryContainer>> entryWeights = registerClassKeyed("entry weights", true, ClassKeyedMap::new, null);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootPoolEntryContainer, List<LootPoolEntryContainer>>> entryChildren = registerClassKeyed("entry children", true, ClassKeyedMap::new, null);
+    private final ManagedRegistry<Class<?>, NumberConverter<IServerUtils, NumberProvider>> numberConverters = registerClassKeyed("number converters", true, HashMap::new, BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE);
+    private final ManagedRegistry<Class<?>, NumberConverter<IServerUtils, NumberProvider>> intNumberConverters = registerClassKeyed("int number converters", false, HashMap::new, null);
     // listings
     private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, VillagerTrades.ItemListing, TooltipNode, IDataNode>> tradeItemListings = registerClassKeyed("trade item listings", true, HashMap::new, null);
     // traders
@@ -74,8 +77,8 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Ingredient, TooltipBuilder>> ingredientTooltips = registerClassKeyed("ingredient tooltips", true, HashMap::new, null);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Object, TooltipBuilder>> valueTooltips = registerClassKeyed("value tooltips", true, ClassKeyedMap::new, null);
     // modifiers
-    private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, LootItemCondition, NumberExpr, NumberExpr>> chanceModifiers = registerClassKeyed("chance modifiers", false, HashMap::new, null);
-    private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, LootItemFunction, NumberExpr, NumberExpr>> countModifiers = registerClassKeyed("count modifiers", false, HashMap::new, null);
+    private final ManagedRegistry<Class<?>, NumberModifier<LootItemCondition>> chanceModifiers = registerClassKeyed("chance modifiers", false, HashMap::new, null);
+    private final ManagedRegistry<Class<?>, NumberModifier<LootItemFunction>> countModifiers = registerClassKeyed("count modifiers", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifiers = registerClassKeyed("item stack modifiers", false, HashMap::new, null);
     // unwrappers
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemFunction, List<LootItemFunction>>> functionUnwrappers = registerClassKeyed("function unwrappers", false, HashMap::new, null);
@@ -146,6 +149,16 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
+    public <T extends LootPoolEntryContainer> void registerEntryWeight(Class<T> type, NumberConverter<IServerUtils, T> weight) {
+        entryWeights.put(type, (u, e, c) -> weight.convert(u, type.cast(e), c));
+    }
+
+    @Override
+    public <T extends LootPoolEntryContainer> void registerEntryChildren(Class<T> type, BiFunction<IServerUtils, T, List<LootPoolEntryContainer>> children) {
+        entryChildren.put(type, (u, e) -> children.apply(u, type.cast(e)));
+    }
+
+    @Override
     public <T extends LootPoolEntryContainer> void registerEntryTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
         entryTooltips.put(type, (u, e) -> getter.apply(u, type.cast(e)));
     }
@@ -171,24 +184,24 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
-    public <T extends NumberProvider> void registerNumberProvider(Class<T> type, BiFunction<IServerUtils, T, NumberExpr> converter) {
-        numberConverters.put(type, (u, n) -> converter.apply(u, type.cast(n)));
+    public <T extends NumberProvider> void registerNumberProvider(Class<T> type, NumberConverter<IServerUtils, T> converter) {
+        numberConverters.put(type, (u, n, c) -> converter.convert(u, type.cast(n), c));
     }
 
     @Override
-    public <T extends NumberProvider> void registerNumberProvider(Class<T> type, BiFunction<IServerUtils, T, NumberExpr> converter, BiFunction<IServerUtils, T, NumberExpr> intConverter) {
+    public <T extends NumberProvider> void registerNumberProvider(Class<T> type, NumberConverter<IServerUtils, T> converter, NumberConverter<IServerUtils, T> intConverter) {
         registerNumberProvider(type, converter);
-        intNumberConverters.put(type, (u, n) -> intConverter.apply(u, type.cast(n)));
+        intNumberConverters.put(type, (u, n, c) -> intConverter.convert(u, type.cast(n), c));
     }
 
     @Override
-    public <T extends LootItemFunction> void registerCountModifier(Class<T> type, TriFunction<IServerUtils, T, NumberExpr, NumberExpr> modifier) {
-        countModifiers.put(type, (u, f, v) -> modifier.apply(u, type.cast(f), v));
+    public <T extends LootItemFunction> void registerCountModifier(Class<T> type, NumberModifier<T> modifier) {
+        countModifiers.put(type, (u, f, v, c) -> modifier.apply(u, type.cast(f), v, c));
     }
 
     @Override
-    public <T extends LootItemCondition> void registerChanceModifier(Class<T> type, TriFunction<IServerUtils, T, NumberExpr, NumberExpr> modifier) {
-        chanceModifiers.put(type, (u, c, v) -> modifier.apply(u, type.cast(c), v));
+    public <T extends LootItemCondition> void registerChanceModifier(Class<T> type, NumberModifier<T> modifier) {
+        chanceModifiers.put(type, (u, c, v, l) -> modifier.apply(u, type.cast(c), v, l));
     }
 
     @Override
@@ -258,12 +271,30 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @NotNull
     @Override
     public <T extends LootPoolEntryContainer> EntryFactory<T> getEntryFactory(IServerUtils utils, T type) {
-        //noinspection unchecked
-        EntryFactory<T> missing = (u, e, c, s, f, o) -> new MissingNode(MissingTooltipUtils.getMissingEntryTooltip(u, e).build());
+        EntryFactory<T> missing = (u, e, c, s, l, f, o) -> new MissingNode(MissingTooltipUtils.getMissingEntryTooltip(u, e).build());
 
+        //noinspection unchecked
         return entryFactories.get(type.getClass())
-                .<EntryFactory<T>>map((factory) -> (u, e, c, s, f, o) -> guarded("entry", e, () -> ((EntryFactory<T>) factory).create(u, e, c, s, f, o), () -> missing.create(u, e, c, s, f, o)))
+                .<EntryFactory<T>>map((factory) -> (u, e, c, s, l, f, o) -> guarded("entry", e, () -> ((EntryFactory<T>) factory).create(u, e, c, s, l, f, o), () -> missing.create(u, e, c, s, l, f, o)))
                 .orElse(missing);
+    }
+
+    @NotNull
+    @Override
+    public <T extends LootPoolEntryContainer> NumberExpr getEntryWeight(IServerUtils utils, T entry, List<TooltipNode> conditions) {
+        if (entryWeights.get(entry.getClass()).isEmpty()) {
+            return NumberExpr.constant(0);
+        }
+
+        return NumberConverters.convert(getModId(), entryWeights, utils, entry, conditions, (e) -> String.valueOf(BuiltInRegistries.LOOT_POOL_ENTRY_TYPE.getKey(e.getType())));
+    }
+
+    @NotNull
+    @Override
+    public <T extends LootPoolEntryContainer> List<LootPoolEntryContainer> getEntryChildren(IServerUtils utils, T entry) {
+        return entryChildren.get(entry.getClass())
+                .map((c) -> guarded("entry children", entry, () -> c.apply(utils, entry), List::<LootPoolEntryContainer>of))
+                .orElseGet(List::of);
     }
 
     @NotNull
@@ -336,11 +367,11 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         NumberExpr result = count;
 
         for (LootItemFunction f : unwrapFunction(utils, function)) {
-            Optional<TriFunction<IServerUtils, LootItemFunction, NumberExpr, NumberExpr>> modifier = countModifiers.get(f.getClass());
+            Optional<NumberModifier<LootItemFunction>> modifier = countModifiers.get(f.getClass());
 
             if (modifier.isPresent()) {
                 try {
-                    NumberExpr modified = modifier.get().apply(utils, f, result);
+                    NumberExpr modified = modifier.get().apply(utils, f, result, conditions);
 
                     if (f instanceof LootItemConditionalFunction conditional && conditional.predicates.length > 0) {
                         result = TooltipUtils.conditional(utils, result, modified, Arrays.asList(conditional.predicates), conditions);
@@ -361,15 +392,15 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     @Override
     @NotNull
-    public <T extends LootItemCondition> NumberExpr applyChanceModifier(IServerUtils utils, T condition, NumberExpr chance) {
+    public <T extends LootItemCondition> NumberExpr applyChanceModifier(IServerUtils utils, T condition, NumberExpr chance, List<TooltipNode> conditions) {
         NumberExpr result = chance;
 
         for (LootItemCondition c : unwrapCondition(utils, condition)) {
-            Optional<TriFunction<IServerUtils, LootItemCondition, NumberExpr, NumberExpr>> modifier = chanceModifiers.get(c.getClass());
+            Optional<NumberModifier<LootItemCondition>> modifier = chanceModifiers.get(c.getClass());
 
             if (modifier.isPresent()) {
                 try {
-                    result = modifier.get().apply(utils, c, result);
+                    result = modifier.get().apply(utils, c, result, conditions);
                 } catch (Throwable e) {
                     String id = String.valueOf(BuiltInRegistries.LOOT_CONDITION_TYPE.getKey(c.getType()));
 
@@ -479,18 +510,18 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     @NotNull
     @Override
-    public NumberExpr convertNumber(IServerUtils utils, NumberProvider numberProvider) {
-        return NumberConverters.convert(getModId(), numberConverters, utils, numberProvider, AliServerRegistry::numberProviderTypeId);
+    public NumberExpr convertNumber(IServerUtils utils, NumberProvider numberProvider, List<TooltipNode> conditions) {
+        return NumberConverters.convert(getModId(), numberConverters, utils, numberProvider, conditions, AliServerRegistry::numberProviderTypeId);
     }
 
     @NotNull
     @Override
-    public NumberExpr convertIntNumber(IServerUtils utils, NumberProvider numberProvider) {
+    public NumberExpr convertIntNumber(IServerUtils utils, NumberProvider numberProvider, List<TooltipNode> conditions) {
         if (intNumberConverters.get(numberProvider.getClass()).isPresent()) {
-            return NumberConverters.convert(getModId(), intNumberConverters, utils, numberProvider, AliServerRegistry::numberProviderTypeId);
+            return NumberConverters.convert(getModId(), intNumberConverters, utils, numberProvider, conditions, AliServerRegistry::numberProviderTypeId);
         }
 
-        return NumberExpr.fn(NumberFunctions.ROUND, convertNumber(utils, numberProvider));
+        return NumberExpr.fn(NumberFunctions.ROUND, convertNumber(utils, numberProvider, conditions));
     }
 
     @Nullable

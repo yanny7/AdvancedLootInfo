@@ -1,5 +1,7 @@
 package com.yanny.alicompat.compat.mantle;
 
+import com.yanny.aci.api.NumberExpr;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
@@ -15,6 +17,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 import slimeknights.mantle.loot.AddEntryLootModifier;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -43,8 +46,9 @@ public class AddEntryLootModifierAccessor extends BaseAccessor<AddEntryLootModif
 
     @NotNull
     private IDataNode getEntryNode(IServerUtils utils, List<LootItemCondition> conditions) {
-        int sumWeight = entry instanceof LootPoolSingletonContainer singleton ? singleton.weight : 1;
+        List<TooltipNode> chanceConditions = new ArrayList<>();
+        NumberExpr sumWeight = utils.getEntryWeight(utils, entry, chanceConditions);
 
-        return utils.getEntryFactory(utils, entry).create(utils, entry, 1, sumWeight, Arrays.asList(functions), conditions);
+        return utils.getEntryFactory(utils, entry).create(utils, entry, NumberExpr.constant(1), sumWeight, chanceConditions, Arrays.asList(functions), conditions);
     }
 }

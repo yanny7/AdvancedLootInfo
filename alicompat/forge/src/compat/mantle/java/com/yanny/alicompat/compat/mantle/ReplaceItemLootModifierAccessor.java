@@ -55,7 +55,7 @@ public class ReplaceItemLootModifierAccessor extends BaseAccessor<ReplaceItemLoo
             Function<IDataNode, List<IDataNode>> factory = (src) -> {
                 IItemNode node = (IItemNode) src;
                 List<LootItemCondition> allConditions = Stream.concat(c.stream(), node.getConditions().stream()).toList();
-                NumberExpr chance = NodeUtils.getChance(utils, allConditions, node.getChance());
+                LootCount chance = NodeUtils.getChance(utils, allConditions, node.getChance());
                 LootCount functionCount = NodeUtils.getCount(utils, functionList);
                 LootCount count = new LootCount(NumberExpr.mul(functionCount.value(), NumberExpr.constant(replacement.getCount()), node.getCount()), functionCount.conditions());
                 TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, count, NodeUtils.getCountLimit(replacement.copy()), functionList, allConditions);
