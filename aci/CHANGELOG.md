@@ -1,5 +1,6 @@
 ## []
 
+- Variables with a finite domain containing 0 (luck) get a row per value, like enchantment levels
 - Number converters receive the list of condition tooltips of their conditional values
 - Grouping structure spawn info
 - Scrollable tooltip by mouse wheel when taller than screen

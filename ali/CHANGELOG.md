@@ -1,5 +1,6 @@
 ## []
 
+- Chances and rolls depending on luck show one row per luck value
 - Entry chance accounts for quality and luck
 - Number converters, count and chance modifiers and entry factories receive the condition tooltips of their conditional values
 - Scrollable tooltip by mouse wheel when taller than screen

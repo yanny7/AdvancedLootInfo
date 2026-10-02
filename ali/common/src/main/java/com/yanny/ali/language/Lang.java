@@ -387,6 +387,8 @@ public final class Lang {
     public enum Numbers implements ITooltipKey {
         VAR_LUCK("var.luck", "luck"),
         VAR_LUCK_DESC("var.luck.desc", "luck"),
+        VAR_LUCK_ROW("var.luck.row", "Luck %s"),
+        VAR_LUCK_ROW_NEGATIVE("var.luck.row.negative", "Bad Luck"),
         ;
 
         private final Translation translation;

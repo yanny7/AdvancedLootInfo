@@ -64,6 +64,7 @@ public final class CoreLang {
         MODE_PEAK("mode_peak", "~%s"),
         DEPENDS("depends", "(%s)"),
         LEVEL_ROW("level_row", "%s %s: %s"),
+        VAR_ROW("var_row", "%s: %s"),
         WEIGHTED_ENTRY("weighted_entry", "%s (%s)"),
         OTHERWISE("otherwise", "otherwise %s"),
         FN_MOD("fn.mod", "mod"),

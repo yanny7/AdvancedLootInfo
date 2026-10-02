@@ -82,6 +82,8 @@
   "ali.error.modified_item": "Modified dynamically!",
   "ali.number.var.luck": "luck",
   "ali.number.var.luck.desc": "luck",
+  "ali.number.var.luck.row": "Luck %s",
+  "ali.number.var.luck.row.negative": "Bad Luck",
   "ali.property.branch.advancements": "Advancements:",
   "ali.property.branch.all": "All:",
   "ali.property.branch.any": "Any:",

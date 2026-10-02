@@ -1,12 +1,17 @@
 package com.yanny.awi.test;
 
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberFunctions;
 import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
+import com.yanny.awi.language.Lang;
 import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.plugin.common.HeightFunctions;
-import com.yanny.awi.plugin.server.summary.*;
+import com.yanny.awi.plugin.server.summary.ColumnContext;
+import com.yanny.awi.plugin.server.summary.PlacementContribution;
+import com.yanny.awi.plugin.server.summary.PlacementSummary;
+import com.yanny.awi.plugin.server.summary.PlacementSummaryUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.SimpleWeightedRandomList;
@@ -15,6 +20,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.heightproviders.*;
 import net.minecraft.world.level.levelgen.placement.*;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -198,19 +204,60 @@ public class PlacementSummaryTest {
         assertTooltip(renderSummary(List.of(new BrokenPlacement(), CountPlacement.of(3))), List.of());
     }
 
+    @Test
+    public void testConditionalChancesKeepTheirConditions() {
+        TooltipNode first = TooltipBuilder.keyOnly(Lang.Value.CHANCE).build();
+        TooltipNode second = TooltipBuilder.keyOnly(Lang.Value.HEIGHT).build();
+
+        PluginManager.getInstance().serverRegistry.registerPlacementPropagator(ConditionalPlacement.class, (u, m, c) -> {
+            NumberExpr chance = cond(List.of(new Branch(0, constant(m.chance))), constant(1));
+
+            return PlacementContribution.ofChance(chance, List.of(m.condition));
+        });
+
+        PlacementSummary summary = PlacementSummaryUtils.summarize(UTILS, List.of(new ConditionalPlacement(0.5, first), new ConditionalPlacement(0.25, second)), CTX);
+
+        assertEquals(mul(cond(List.of(new Branch(0, constant(0.5))), constant(1)), cond(List.of(new Branch(1, constant(0.25))), constant(1))), summary.chance());
+        assertEquals(List.of(first, second), summary.chanceConditions());
+    }
+
     private static TooltipNode renderSummary(List<PlacementModifier> modifiers) {
         return TooltipBuilder.branch((b) -> PlacementSummaryUtils.appendSummary(b, UTILS, modifiers, CTX)).build();
     }
 
     private static class BrokenPlacement extends PlacementModifier {
+        @NotNull
         @Override
         public Stream<BlockPos> getPositions(PlacementContext context, RandomSource random, BlockPos pos) {
             return Stream.of(pos);
         }
 
+        @NotNull
         @Override
         public PlacementModifierType<?> type() {
             return PlacementModifierType.COUNT;
+        }
+    }
+
+    private static class ConditionalPlacement extends PlacementModifier {
+        private final double chance;
+        private final TooltipNode condition;
+
+        private ConditionalPlacement(double chance, TooltipNode condition) {
+            this.chance = chance;
+            this.condition = condition;
+        }
+
+        @NotNull
+        @Override
+        public Stream<BlockPos> getPositions(PlacementContext context, RandomSource random, BlockPos pos) {
+            return Stream.of(pos);
+        }
+
+        @NotNull
+        @Override
+        public PlacementModifierType<?> type() {
+            return PlacementModifierType.RARITY_FILTER;
         }
     }
 }

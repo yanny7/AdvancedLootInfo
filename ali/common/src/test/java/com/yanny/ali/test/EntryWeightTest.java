@@ -3,7 +3,9 @@ package com.yanny.ali.test;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.number.NumberEvaluator;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.GroupNode;
 import com.yanny.ali.plugin.common.nodes.LootPoolNode;
@@ -13,6 +15,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.entries.*;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
@@ -23,6 +26,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static com.yanny.aci.api.NumberExpr.constant;
+import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
@@ -30,47 +34,64 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 public class EntryWeightTest {
     @Test
     public void testSingletons() {
-        assertEquals(constant(4), NodeUtils.getTotalWeight(UTILS, List.of(item(1), item(3)), new ArrayList<>()));
+        assertEquals(constant(4), weight(List.of(item(1), item(3))));
     }
 
     @Test
     public void testGroup() {
-        assertEquals(constant(8), NodeUtils.getTotalWeight(UTILS, List.of(EntryGroup.list(itemBuilder(2), itemBuilder(2)).build(), item(4)), new ArrayList<>()));
+        assertEquals(constant(8), weight(List.of(EntryGroup.list(itemBuilder(2), itemBuilder(2)).build(), item(4))));
     }
 
     @Test
     public void testSequence() {
-        assertEquals(constant(8), NodeUtils.getTotalWeight(UTILS, List.of(SequentialEntry.sequential(itemBuilder(2), itemBuilder(2)).build(), item(4)), new ArrayList<>()));
+        assertEquals(constant(8), weight(List.of(SequentialEntry.sequential(itemBuilder(2), itemBuilder(2)).build(), item(4))));
     }
 
     @Test
     public void testNestedGroup() {
         LootPoolEntryContainer entry = EntryGroup.list(EntryGroup.list(itemBuilder(2), itemBuilder(3)), itemBuilder(5)).build();
 
-        assertEquals(constant(10), NodeUtils.getTotalWeight(UTILS, List.of(entry), new ArrayList<>()));
+        assertEquals(constant(10), weight(List.of(entry)));
     }
 
     @Test
     public void testAlternatives() {
-        assertEquals(constant(1), NodeUtils.getTotalWeight(UTILS, List.of(AlternativesEntry.alternatives(itemBuilder(1), itemBuilder(1)).build()), new ArrayList<>()));
+        assertEquals(constant(1), weight(List.of(AlternativesEntry.alternatives(itemBuilder(1), itemBuilder(1)).build())));
     }
 
     @Test
     public void testModdedSingleton() {
-        assertEquals(constant(7), NodeUtils.getTotalWeight(UTILS, List.of(new TestSingleton(7)), new ArrayList<>()));
+        assertEquals(constant(7), weight(List.of(new TestSingleton(7))));
     }
 
     @Test
     public void testUnknownEntry() {
-        assertEquals(constant(0), NodeUtils.getTotalWeight(UTILS, List.of(new TestEntry()), new ArrayList<>()));
+        assertEquals(constant(0), weight(List.of(new TestEntry())));
     }
 
     @Test
     public void testQuality() {
         LootPoolEntryContainer entry = LootItem.lootTableItem(Items.STONE).setWeight(2).setQuality(1).build();
-        NumberExpr weight = NodeUtils.getTotalWeight(UTILS, List.of(entry), new ArrayList<>());
+        assertEquals(NumberInterval.closed(1, 6), NumberEvaluator.bounds(weight(List.of(entry))));
+    }
 
-        assertEquals(NumberInterval.closed(1, 6), NumberEvaluator.bounds(weight));
+    @Test
+    public void testQualityChanceRows() {
+        LootPool pool = LootPool.lootPool()
+                .add(LootItem.lootTableItem(Items.STONE).setWeight(10).setQuality(-2))
+                .add(LootItem.lootTableItem(Items.DIRT).setWeight(5).setQuality(2))
+                .build();
+        LootPoolNode node = NodeUtils.getLootPoolNode(UTILS, pool, constant(1), List.of(), Collections.emptyList(), Collections.emptyList());
+        assertTooltip(node.nodes().get(0).getTooltip(), List.of(
+                "Quality: -2",
+                "Chance: 66.67%",
+                "  -> Bad Luck: 80%",
+                "  -> Luck 1: 53.33%",
+                "  -> Luck 2: 40%",
+                "  -> Luck 3: 26.67%",
+                "  -> Luck 4: 13.33%",
+                "Count: 1"
+        ));
     }
 
     @Test
@@ -99,6 +120,36 @@ public class EntryWeightTest {
         assertEquals(0.5f, nodes.get(1).getChance(), 1e-6);
     }
 
+    @Test
+    public void testConditionalWeightReachesChance() {
+        PluginManager.getInstance().serverRegistry.registerEntryWeight(ConditionalSingleton.class, (u, e, c) -> {
+            int index = c.size();
+
+            c.add(u.getConditionTooltip(u, ExplosionCondition.survivesExplosion().build()).build());
+            return NumberExpr.cond(List.of(new NumberExpr.Branch(index, constant(3))), constant(1));
+        });
+
+        LootPoolEntryContainer[] entries = {new ConditionalSingleton(), item(1)};
+        List<TooltipNode> conditions = new ArrayList<>();
+        NumberExpr sumWeight = NodeUtils.getTotalWeight(UTILS, List.of(entries), conditions);
+        List<IDataNode> nodes = NodeUtils.getChildren(UTILS, entries, constant(1), sumWeight, conditions, List.of(), List.of());
+
+        assertTooltip(nodes.get(1).getTooltip(), List.of(
+                "Chance: 25% to 50%",
+                "  -> Survives Explosion",
+                "Count: 1"
+        ));
+    }
+
+    @NotNull
+    private static NumberExpr weight(List<LootPoolEntryContainer> entries) {
+        List<TooltipNode> conditions = new ArrayList<>();
+        NumberExpr weight = NodeUtils.getTotalWeight(UTILS, entries, conditions);
+
+        assertEquals(List.of(), conditions);
+        return weight;
+    }
+
     @NotNull
     private static LootPoolSingletonContainer.Builder<?> itemBuilder(int weight) {
         return LootItem.lootTableItem(Items.STONE).setWeight(weight);
@@ -122,6 +173,12 @@ public class EntryWeightTest {
         @Override
         public LootPoolEntryType getType() {
             return LootPoolEntries.ITEM;
+        }
+    }
+
+    private static class ConditionalSingleton extends TestSingleton {
+        ConditionalSingleton() {
+            super(1);
         }
     }
 
