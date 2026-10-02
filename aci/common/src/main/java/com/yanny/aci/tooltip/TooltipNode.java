@@ -338,6 +338,8 @@ public class TooltipNode {
 
         if (!value.isEmpty() && value.charAt(0) == TooltipBuilder.TRANSLATE_MARKER) {
             comp = Component.translatable(value.substring(1));
+        } else if (!value.isEmpty() && value.charAt(0) == TooltipBuilder.REGISTRY_MARKER) {
+            comp = RegistryNames.resolve(value);
         } else {
             comp = Component.literal(value);
         }

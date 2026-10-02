@@ -4,6 +4,7 @@ import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.language.IMultiKey;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,6 +16,7 @@ import java.util.function.Consumer;
 
 public class TooltipBuilder {
     static final char TRANSLATE_MARKER = '\uE000';
+    static final char REGISTRY_MARKER = '\uE001';
 
     private IMultiKey translatableKey;
     private String rawKey;
@@ -34,6 +36,11 @@ public class TooltipBuilder {
     @NotNull
     public static String translate(String key) {
         return TRANSLATE_MARKER + key;
+    }
+
+    @NotNull
+    public static <T> String registryEntry(Registry<T> registry, T value) {
+        return REGISTRY_MARKER + registry.key().location().toString() + " " + registry.getKey(value);
     }
 
     @NotNull
