@@ -36,7 +36,7 @@ unzip -l mod.jar | grep -E 'data/[a-z0-9_]+/loot_modifiers/'
 ```
 
 What matters is what inherits from `LootItemCondition`, `LootItemFunction`, `LootPoolEntryContainer`,
-`NumberProvider`, `Ingredient`, `VillagerTrades.ItemListing` or `IGlobalLootModifier`, plus any
+`ContextIntProvider`/`ContextFloatProvider`, `Ingredient`, `VillagerTrades.ItemListing` or `IGlobalLootModifier`, plus any
 `EntityType` the mod registers as a merchant. Confirm the hierarchy with `javap -p`, never from the
 class name. A scan that finds nothing is a valid answer: say so and write no shim.
 
@@ -189,8 +189,8 @@ record constructors) — `aci/CLAUDE.md`'s "Number model" is the reference:
   (a `TreeMap<Integer, Double>` of value → summed weight), and when the alternatives are only one term of a larger
   sum, keep them inside it (`add(weighted(…), uniformInt(4, 7))`, `min(weighted(…), constant(64))`) so the row list
   stays out of the tooltip.
-- An integer level or count shown through `getValueTooltip` is `NumberExpr.uniformInt`, never
-  `UniformGenerator.between` — that one converts as a float `[a; b)`.
+- An integer level or count shown through `getValueTooltip` is `NumberExpr.uniformInt`, never a float-family
+  `floats.UniformGenerator` — that one converts as a float `[a; b)`.
 - A distribution computed over a registry or a mod's list (every tradeable enchantment, every spell of a school)
   is built at server-registry time, applying the same filters the target applies (`isTradeable`,
   `isEnabled && allowLooting`).
@@ -206,14 +206,25 @@ record constructors) — `aci/CLAUDE.md`'s "Number model" is the reference:
 - Non-public field → `BaseAccessor<Target>` with `@FieldAccessor` fields, built by
   `ReflectionUtils.copyClassData(Accessor.class, instance, Target.class)`.
 - A `LootItemConditionalFunction` whose own fields you do **not** need → `ConditionalFunction`, which
-  hands you `predicates` through ALI's access widener.
+  hands you its condition unwrapped as `predicates`.
 
 **The `@FieldAccessor` processor validates names against the accessor's type parameter.** Extending
 `ConditionalFunction` types the accessor on `LootItemConditionalFunction`, and `SingletonContainer` on
-`LootPoolSingletonContainer`, so a `@FieldAccessor` naming a field of the *target* fails the build with
+`UniformContainerBase`, so a `@FieldAccessor` naming a field of the *target* fails the build with
 `No field named x in LootItemConditionalFunction`.
-When you need both the target's fields and its predicates, extend `BaseAccessor<Target>` and read
-`parent.predicates` — the access widener opens it either way.
+When you need both the target's fields and its condition, extend `BaseAccessor<Target>` and read `parent.condition`.
+
+**Vanilla loot types hold `Holder`s, not lists.** Every function, entry and NeoForge `LootModifier` carries one
+`Optional<Holder<LootItemCondition>> condition` (an entry also an `Optional<Holder<LootItemFunction>> modifier`), never a
+`predicates`/`conditions` list or array: a GLM accessor declares `@FieldAccessor Optional<Holder<LootItemCondition>> condition`
+and hands `NodeUtils.unwrapConditions(utils, condition)` on, an entry builds its node from
+`NodeUtils.getAllConditions(utils, parent, conditions)` and `getAllFunctions(utils, parent, functions)` — a composite
+entry carries a modifier too — and a tooltip shows `parent.condition` under `Lang.Branch.PREDICATES` and
+`parent.modifier` under `Lang.Branch.MODIFIERS`. A number field is a `Holder<ContextIntProvider>` or
+`Holder<ContextFloatProvider>`, shown with `TooltipUtils.getIntNumberTooltip`/`getNumberTooltip(utils, holder)` and
+converted with `utils.convertContextInt`/`convertContextFloat(utils, holder, conditions)`; the family is the field's
+type, never a rounding the shim picks. A singleton entry is a `UniformContainerBase` (`SingleEntryContainerBase` when it
+emits one stack).
 
 **`copyClassData` does not inherit fields, though everything around it does.** Reflection *reads*
 through the target's superclasses (`getFieldsUpTo`) and the processor *validates* against them too,
@@ -246,20 +257,21 @@ it is there.
 
 **An entry that carries its own count reports `1` unless you seed the count yourself.**
 `NodeUtils.getCount(utils, functions)` starts from `NumberExpr.constant(1)` and lets the entry's functions modify it,
-which is right only for an entry whose count comes from a `SetItemCountFunction`. A `LootPoolSingletonContainer`
+which is right only for an entry whose count comes from a `SetItemCountFunction`. A `UniformContainerBase`
 holding its own `min`/`max` (Placebo's `StackLootEntry`, which rolls `Mth.randomBetweenInclusive(min, max)`) calls
 `NodeUtils.getCount(utils, NumberExpr.uniformInt(min, max), allFunctions)` and hands the resulting `LootCount` to
 `TooltipUtils.getTooltip(utils, quality, NodeUtils.getChance(utils, allConditions, itemChance), count,
 NodeUtils.getCountLimit(itemStack), allFunctions, allConditions)` and its `value()` to `ItemNode`. `weight`,
-`quality`, `conditions` and `functions` are read off `parent` — the access widener opens all four — and `IEntry`
-and `IEntryTooltip` sit on the one accessor.
+`quality`, `conditions` and `functions` come from `SingletonContainer`, which unwraps the entry's `condition` and
+`modifier`, and `IEntry` and `IEntryTooltip` sit on the one accessor.
 
 **A function or condition that changes a number registers a modifier beside its tooltip.** `ICountModifier`
 (`applyCountModifier(utils, count, conditions)`) and `IChanceModifier` (`applyChanceModifier(utils, chance, conditions)`) take the
 `NumberExpr` built so far and return the transformed one — `min(count, constant(maxStack))`,
 `mul(chance, constant(p))` — through `PluginUtils.registerCountModifier` / `registerChanceModifier`. A conditional
-function needs nothing extra: ALI wraps the result in a `Cond` with its predicates. A mod `NumberProvider` is an
-`INumberProvider` (`convertNumber(utils, conditions)`, and `convertIntNumber` when the target's `getInt` is not `round(getFloat)`).
+function needs nothing extra: ALI wraps the result in a `Cond` with its predicates. A mod number provider is an
+`INumberProvider` (`convertNumber(utils, conditions)`, in the target's own family), registered through
+`PluginUtils.registerContextIntProvider`/`registerContextFloatProvider`, or `registerNumberProvider` with a `@ClassAccessor`.
 
 One accessor may implement several hooks. A function that swaps the stack is worth registering twice:
 `registerFunctionTooltip` (what it says) and `registerItemStackModifier` (so the drop renders as
@@ -330,7 +342,7 @@ puts every constructor argument in the lambda's capture. Work down this list:
 - Captures nothing but rolls a loot table → render *from that table* instead of rolling it: ALI's
   access widener opens `LootPool.entries` and `LootItem.item`, so a representative stack and the
   table id (`Lang.Value.LOOT_TABLE`) cost ten lines and stay correct when the table changes.
-  `utils.getLootTable` / `getLootPools` / `convertNumber` give the rolls for a cost bound.
+  `utils.getLootTable` / `getLootPools` / `convertContextInt` give the rolls for a cost bound.
 - Captures nothing and two instances are indistinguishable → one roll, but pass a real
   `RandomSource.create()`. ALI's own fallback fails on these only because it passes `null` for both
   arguments; most such lambdas never touch the trader, so supplying the random alone revives them.
