@@ -1,6 +1,7 @@
 package com.yanny.awi.manager;
 
 import com.mojang.datafixers.util.Either;
+import com.yanny.aci.api.NumberConverter;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.manager.ClassKeyedMap;
 import com.yanny.aci.manager.CoreServerRegistry;
@@ -8,6 +9,7 @@ import com.yanny.aci.manager.ManagedRegistry;
 import com.yanny.aci.manager.NumberConverters;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.Utils;
 import com.yanny.awi.api.ICommonUtils;
 import com.yanny.awi.api.IServerRegistry;
@@ -65,7 +67,7 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, TrunkPlacer, TooltipBuilder>> trunkPlacerTooltips = registerClassKeyed("trunk placer tooltips", true, HashMap::new, BuiltInRegistries.TRUNK_PLACER_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, StructureProcessor, TooltipBuilder>> structureProcessorTooltips = registerClassKeyed("structure processor tooltips", true, HashMap::new, BuiltInRegistries.STRUCTURE_PROCESSOR);
     // propagators
-    private final ManagedRegistry<Class<?>, BiFunction<HeightArgs, HeightProvider, NumberExpr>> heightProviders = registerClassKeyed("height providers", true, HashMap::new, BuiltInRegistries.HEIGHT_PROVIDER_TYPE);
+    private final ManagedRegistry<Class<?>, NumberConverter<HeightArgs, HeightProvider>> heightProviders = registerClassKeyed("height providers", true, HashMap::new, BuiltInRegistries.HEIGHT_PROVIDER_TYPE);
     private final ManagedRegistry<Class<?>, PlacementPropagator<PlacementModifier>> placementPropagators = registerClassKeyed("placement propagators", false, HashMap::new, BuiltInRegistries.PLACEMENT_MODIFIER_TYPE);
     // surface rules
     private final ManagedRegistry<Identifier, Function<ISurfaceRuleHandler.Context, ISurfaceRuleHandler>> surfaceRuleHandlers = register("surface rule handlers", false, HashMap::new, Identifier::toString, BuiltInRegistries.MATERIAL_RULE);
@@ -180,7 +182,7 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
     @Override
     public <T extends HeightProvider> void registerHeightProvider(Class<T> type, HeightConverter<T> converter) {
         //noinspection unchecked
-        heightProviders.put(type, (a, p) -> converter.apply(a.utils(), (T) p, a.ctx()));
+        heightProviders.put(type, (a, p, c) -> converter.apply(a.utils(), (T) p, a.ctx(), c));
     }
 
     @Override
@@ -327,8 +329,8 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
 
     @NotNull
     @Override
-    public NumberExpr convertHeightProvider(IServerUtils utils, HeightProvider provider, ColumnContext ctx) {
-        return NumberConverters.convert(getModId(), heightProviders, new HeightArgs(utils, ctx), provider, (p) -> String.valueOf(BuiltInRegistries.HEIGHT_PROVIDER_TYPE.getKey(p.getType())));
+    public NumberExpr convertHeightProvider(IServerUtils utils, HeightProvider provider, ColumnContext ctx, List<TooltipNode> conditions) {
+        return NumberConverters.convert(getModId(), heightProviders, new HeightArgs(utils, ctx), provider, conditions, (p) -> String.valueOf(BuiltInRegistries.HEIGHT_PROVIDER_TYPE.getKey(p.getType())));
     }
 
     @NotNull

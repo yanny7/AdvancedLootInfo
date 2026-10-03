@@ -8,8 +8,8 @@ import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.NodeUtils;
-import com.yanny.ali.plugin.common.nodes.LootPoolNode;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
+import com.yanny.ali.plugin.common.nodes.LootPoolNode;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.ali.plugin.glm.LootPage;
@@ -73,7 +73,7 @@ public class AffixLootModifierAccessor extends BaseAccessor<AffixLootModifier> i
     @NotNull
     private static IDataNode getEntryNode(IServerUtils utils, List<LootItemCondition> conditions, AffixLootEntry entry, float chance, int sumWeight) {
         float itemChance = sumWeight > 0 ? chance * entry.getWeight() / sumWeight : chance;
-        NumberExpr chanceExpr = NodeUtils.getChance(utils, conditions, itemChance);
+        LootCount chanceExpr = NodeUtils.getChance(utils, conditions, itemChance);
         TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chanceExpr, LootCount.of(NumberExpr.constant(1)), NodeUtils.getCountLimit(entry.getStack()), Collections.emptyList(), conditions);
 
         tooltip.add(utils.getValueTooltip(utils, entry.getWeight()).build(Lang.Value.WEIGHT));

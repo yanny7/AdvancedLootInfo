@@ -36,6 +36,12 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
     <T extends LootPoolEntryContainer> IServerRegistry.EntryFactory<T> getEntryFactory(IServerUtils utils, T type);
 
     @NotNull
+    <T extends LootPoolEntryContainer> NumberExpr getEntryWeight(IServerUtils utils, T entry, List<TooltipNode> conditions);
+
+    @NotNull
+    <T extends LootPoolEntryContainer> List<LootPoolEntryContainer> getEntryChildren(IServerUtils utils, T entry);
+
+    @NotNull
     <T extends LootPoolEntryContainer> TooltipBuilder getEntryTooltip(IServerUtils utils, T entry);
 
     @NotNull
@@ -63,7 +69,7 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
     <T extends LootItemFunction> NumberExpr applyCountModifier(IServerUtils utils, T function, NumberExpr count, List<TooltipNode> conditions);
 
     @NotNull
-    <T extends LootItemCondition> NumberExpr applyChanceModifier(IServerUtils utils, T condition, NumberExpr chance);
+    <T extends LootItemCondition> NumberExpr applyChanceModifier(IServerUtils utils, T condition, NumberExpr chance, List<TooltipNode> conditions);
 
     @NotNull
     <T extends LootItemFunction> ItemStack applyItemStackModifier(IServerUtils utils, T function, ItemStack itemStack);
@@ -78,10 +84,10 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
     TooltipBuilder getEnumTranslation(IServerUtils utils, Enum<?> value);
 
     @NotNull
-    NumberExpr convertNumber(IServerUtils utils, NumberProvider numberProvider);
+    NumberExpr convertNumber(IServerUtils utils, NumberProvider numberProvider, List<TooltipNode> conditions);
 
     @NotNull
-    NumberExpr convertIntNumber(IServerUtils utils, NumberProvider numberProvider);
+    NumberExpr convertIntNumber(IServerUtils utils, NumberProvider numberProvider, List<TooltipNode> conditions);
 
     @NotNull
     NumberExpr convertLevelBasedValue(IServerUtils utils, LevelBasedValue value, NumberExpr level);

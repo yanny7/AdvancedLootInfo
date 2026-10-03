@@ -65,7 +65,7 @@ public class GemLootModifierAccessor extends BaseAccessor<GemLootModifier> imple
 
     @NotNull
     private static IDataNode getNode(IServerUtils utils, List<LootItemCondition> conditions, GemLootModifier.GemTableEntry entry) {
-        NumberExpr chance = NodeUtils.getChance(utils, conditions, entry.chance());
+        LootCount chance = NodeUtils.getChance(utils, conditions, entry.chance());
         TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, LootCount.of(NumberExpr.constant(1)), NodeUtils.getCountLimit(ApotheosisUtils.gemStack()), Collections.emptyList(), conditions);
 
         tooltip.add(TooltipBuilder.keyOnly(ApotheosisLang.Conditions.REQUIRES_PLAYER));

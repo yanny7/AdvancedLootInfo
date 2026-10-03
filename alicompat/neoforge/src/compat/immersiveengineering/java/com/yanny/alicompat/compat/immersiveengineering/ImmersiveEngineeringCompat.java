@@ -6,6 +6,7 @@ import blusunrize.immersiveengineering.common.register.IEItemSubPredicates;
 import blusunrize.immersiveengineering.common.register.IEItems;
 import blusunrize.immersiveengineering.common.util.loot.*;
 import blusunrize.immersiveengineering.common.world.Villages;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.language.ITooltipKey;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
@@ -20,6 +21,7 @@ import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.ali.plugin.glm.LootPage;
 import com.yanny.ali.plugin.glm.Verdict;
+import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.MissingTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.alicompat.IGlmModCompat;
@@ -95,13 +97,13 @@ public class ImmersiveEngineeringCompat implements IGlmModCompat {
     }
 
     @NotNull
-    private static IDataNode getDynamicNode(IServerUtils utils, LootPoolSingletonContainer entry, float rawChance, int sumWeight,
+    private static IDataNode getDynamicNode(IServerUtils utils, LootPoolSingletonContainer entry, NumberExpr rawChance, NumberExpr sumWeight, List<TooltipNode> chanceConditions,
                                             List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemFunction> allFunctions = NodeUtils.getAllFunctions(entry, functions);
         List<LootItemCondition> allConditions = NodeUtils.getAllConditions(entry, conditions);
-        float chance = NodeUtils.getChance(entry, rawChance, sumWeight);
+        LootCount chance = NodeUtils.getChance(utils, entry, rawChance, sumWeight, chanceConditions);
 
-        return new DynamicNode(chance, TooltipUtils.getDynamicTooltip(utils, entry.quality, chance, allFunctions, allConditions).build());
+        return new DynamicNode(NodeUtils.toFloat(chance.value()), TooltipUtils.getDynamicTooltip(utils, entry.quality, chance, allFunctions, allConditions).build());
     }
 
     @NotNull

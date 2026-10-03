@@ -3,6 +3,7 @@ package com.yanny.alicompat.compat.twilightforest;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
+import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.IFunctionTooltip;
@@ -22,7 +23,7 @@ public class MultiplayerBasedAdditionAccessor extends BaseAccessor<MultiplayerBa
     @Override
     public TooltipBuilder getTooltip(IServerUtils utils) {
         return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, utils.convertNumber(utils, value)).build(TwilightForestLang.Value.EXTRA_COUNT_PER_PLAYER))
+                .add(TooltipUtils.getNumberTooltip(utils, value).build(TwilightForestLang.Value.EXTRA_COUNT_PER_PLAYER))
                 .add(utils.getValueTooltip(utils, parent.predicates).build(Lang.Branch.PREDICATES)),
                 TwilightForestLang.Functions.MULTIPLAYER_ADDITION);
     }

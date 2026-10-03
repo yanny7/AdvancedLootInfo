@@ -73,6 +73,16 @@ public class NumberExprTest {
     }
 
     @Test
+    public void testShiftConditions() {
+        NumberExpr inner = cond(List.of(new Branch(0, constant(2))), constant(1));
+        NumberExpr expr = add(cond(List.of(new Branch(1, inner), new Branch(-1, constant(5))), constant(0)), constant(3));
+        NumberExpr shiftedInner = cond(List.of(new Branch(2, constant(2))), constant(1));
+
+        assertEquals(add(cond(List.of(new Branch(3, shiftedInner), new Branch(-1, constant(5))), constant(0)), constant(3)), expr.shiftConditions(2));
+        assertSame(expr, expr.shiftConditions(0));
+    }
+
+    @Test
     public void testConstant() {
         assertLevels(constant(1), false, List.of("1"));
     }

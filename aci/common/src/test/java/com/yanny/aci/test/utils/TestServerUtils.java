@@ -3,6 +3,7 @@ package com.yanny.aci.test.utils;
 import com.yanny.aci.api.ICoreServerUtils;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.aci.tooltip.TooltipNodePalette;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.server.level.ServerLevel;
@@ -61,13 +62,13 @@ public class TestServerUtils implements ICoreServerUtils<TestServerUtils> {
 
     @NotNull
     @Override
-    public NumberExpr convertIntProvider(TestServerUtils utils, IntProvider provider) {
+    public NumberExpr convertIntProvider(TestServerUtils utils, IntProvider provider, List<TooltipNode> conditions) {
         throw new UnsupportedOperationException();
     }
 
     @NotNull
     @Override
-    public NumberExpr convertFloatProvider(TestServerUtils utils, FloatProvider provider) {
+    public NumberExpr convertFloatProvider(TestServerUtils utils, FloatProvider provider, List<TooltipNode> conditions) {
         throw new UnsupportedOperationException();
     }
 }

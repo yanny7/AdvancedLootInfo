@@ -1,5 +1,6 @@
 package com.yanny.ali.test;
 
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.plugin.common.NodeUtils;
 import net.minecraft.core.registries.Registries;
@@ -30,8 +31,9 @@ public class NodeTest {
                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 2)))
                         .apply(EnchantedCountIncreaseFunction.lootingMultiplier(LOOKUP, UniformGenerator.between(0, 1)))
                         .build(),
-                1,
-                1,
+                NumberExpr.constant(1),
+                NumberExpr.constant(1),
+                List.of(),
                 Collections.emptyList(),
                 Collections.emptyList()
         );
@@ -60,8 +62,9 @@ public class NodeTest {
                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(-1, 1)))
                         .apply(EnchantedCountIncreaseFunction.lootingMultiplier(LOOKUP, UniformGenerator.between(0, 1)))
                         .build(),
-                1,
-                1,
+                NumberExpr.constant(1),
+                NumberExpr.constant(1),
+                List.of(),
                 Collections.emptyList(),
                 Collections.emptyList()
         );
@@ -91,8 +94,9 @@ public class NodeTest {
                         .when(ExplosionCondition.survivesExplosion())
                         .when(BonusLevelTableCondition.bonusLevelFlatChance(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.FORTUNE).orElseThrow(), 0.05f, 0.0625f, 0.083333336f, 0.1f))
                         .build(),
-                1,
-                1,
+                NumberExpr.constant(1),
+                NumberExpr.constant(1),
+                List.of(),
                 Collections.emptyList(),
                 Collections.emptyList()
         );

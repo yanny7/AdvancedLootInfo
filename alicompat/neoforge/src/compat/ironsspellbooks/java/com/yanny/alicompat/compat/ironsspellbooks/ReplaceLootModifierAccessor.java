@@ -14,6 +14,7 @@ import com.yanny.ali.plugin.common.nodes.ReferenceNode;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
+import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
@@ -49,7 +50,7 @@ public class ReplaceLootModifierAccessor extends BaseAccessor<ReplaceLootModifie
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, conditionList, (page, c) -> {
             TooltipNode tooltip = TooltipBuilder.array((b) -> {
                 b.add(TooltipBuilder.keyOnly(Lang.Group.ALL));
-                b.add(TooltipUtils.getChanceTooltip(NumberExpr.constant(chance)));
+                b.add(TooltipUtils.getChanceTooltip(LootCount.of(NumberExpr.constant(chance))));
                 b.add(GenericTooltipUtils.getConditionsSectionTooltip(utils, c));
             }).build();
             LootTable table = utils.getLootTable(Either.left(lootTable));
