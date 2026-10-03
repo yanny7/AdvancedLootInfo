@@ -40,6 +40,8 @@
   "alicompat.artifacts.type.consume_effect.damage_item": "Damage Item:",
   "alicompat.artifacts.type.consume_effect.heal": "Heal:",
   "alicompat.artifacts.type.function.replace_with_loot_table": "Replace With Loot Table:",
+  "alicompat.enum.spell_engine.weight_operation.add": "Add",
+  "alicompat.enum.spell_engine.weight_operation.multiply": "Multiply",
   "alicompat.extrastorage.type.function.copy_storage_id": "Copy Storage Id:",
   "alicompat.goblintraders.property.value.durability_scale": "Durability Scale: %s",
   "alicompat.goblintraders.type.function.increase_durability": "Increase Durability:",
@@ -63,5 +65,11 @@
   "alicompat.snowrealmagic.type.entry.normalize": "Covered Block Drops:",
   "alicompat.sophisticatedbackpacks.type.condition.loot_enabled": "Chest Loot Enabled",
   "alicompat.sophisticatedbackpacks.type.function.copy_backpack_data": "Copy Backpack Data:",
-  "alicompat.sophisticatedstorage.type.function.copy_storage_data": "Copy Storage Data:"
+  "alicompat.sophisticatedstorage.type.function.copy_storage_data": "Copy Storage Data:",
+  "alicompat.spell_engine.property.value.extra_weight": "Class Affiliation Extra Weight: %s",
+  "alicompat.spell_engine.property.value.include_team": "Include Team: %s",
+  "alicompat.spell_engine.property.value.spell_pool": "Spell Pool: %s",
+  "alicompat.spell_engine.property.value.tier": "Tier: %s",
+  "alicompat.spell_engine.type.entry.affiliation_group": "Affiliation Group:",
+  "alicompat.spell_engine.type.function.spell_bind_randomly": "Spell Bind Randomly:"
 }
