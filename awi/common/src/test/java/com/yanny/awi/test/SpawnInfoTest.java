@@ -27,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -71,8 +72,25 @@ public class SpawnInfoTest {
                 .addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.STRIDER, 60, 1, 2))
                 .addMobCharge(EntityType.STRIDER, 0.7, 0.15));
 
+        List<Holder<Biome>> wide = new ArrayList<>();
+
+        for (int i = 0; i < 12; i++) {
+            MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
+
+            if (i < 11) {
+                spawns.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.CREEPER, 100, 4, 4));
+            }
+
+            if (i < 10) {
+                spawns.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ENDERMAN, 10, 1, 4));
+            }
+
+            wide.add(biome("w%02d".formatted(i), spawns));
+        }
+
         levelStem("overworld", a, b, c, d);
         levelStem("nether", e);
+        levelStem("wide", wide.toArray(Holder[]::new));
 
         Registry.register(structures, key(Registries.STRUCTURE, "fort"), new SwampHutStructure(new Structure.StructureSettings(
                 HolderSet.direct(e),
@@ -90,8 +108,8 @@ public class SpawnInfoTest {
 
     @Test
     public void testEntityTypes() {
-        assertEquals(Set.of(EntityType.ZOMBIE, EntityType.SKELETON, EntityType.SPIDER, EntityType.COW, EntityType.STRIDER, EntityType.BLAZE),
-                spawnInfo.getEntityTypes());
+        assertEquals(Set.of(EntityType.ZOMBIE, EntityType.SKELETON, EntityType.SPIDER, EntityType.COW, EntityType.STRIDER, EntityType.BLAZE,
+                EntityType.CREEPER, EntityType.ENDERMAN), spawnInfo.getEntityTypes());
     }
 
     @Test
@@ -106,11 +124,13 @@ public class SpawnInfoTest {
     }
 
     @Test
-    public void testMajorityListsExceptions() {
+    public void testFewBiomesListedEvenWhenMajority() {
         assertTooltip(spawnInfo.getEntityTooltip(EntityType.ZOMBIE), List.of(
                 "Spawns:",
                 "  -> Dimension: test:overworld",
-                "    -> - test:d",
+                "    -> + test:a",
+                "    -> + test:b",
+                "    -> + test:c",
                 "      -> Category: monster",
                 "      -> Weight: 95",
                 "      -> Group size: 4",
@@ -118,6 +138,39 @@ public class SpawnInfoTest {
                 "      -> Category: monster",
                 "      -> Weight: 19",
                 "      -> Group size: 4"
+        ));
+    }
+
+    @Test
+    public void testManyBiomesListExceptions() {
+        assertTooltip(spawnInfo.getEntityTooltip(EntityType.CREEPER), List.of(
+                "Spawns:",
+                "  -> Dimension: test:wide",
+                "    -> - test:w11",
+                "      -> Category: monster",
+                "      -> Weight: 100",
+                "      -> Group size: 4"
+        ));
+    }
+
+    @Test
+    public void testTenBiomesListedEvenWhenMajority() {
+        assertTooltip(spawnInfo.getEntityTooltip(EntityType.ENDERMAN), List.of(
+                "Spawns:",
+                "  -> Dimension: test:wide",
+                "    -> + test:w00",
+                "    -> + test:w01",
+                "    -> + test:w02",
+                "    -> + test:w03",
+                "    -> + test:w04",
+                "    -> + test:w05",
+                "    -> + test:w06",
+                "    -> + test:w07",
+                "    -> + test:w08",
+                "    -> + test:w09",
+                "      -> Category: monster",
+                "      -> Weight: 10",
+                "      -> Group size: 1 to 4"
         ));
     }
 
@@ -348,7 +401,8 @@ public class SpawnInfoTest {
         SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes)), OWN_SETTINGS);
 
         assertTrue(info.getEntityTooltip(EntityType.ZOMBIE).isBlank(false));
-        assertEquals(Set.of(EntityType.ZOMBIE, EntityType.SKELETON, EntityType.SPIDER, EntityType.COW, EntityType.STRIDER), info.getEntityTypes());
+        assertEquals(Set.of(EntityType.ZOMBIE, EntityType.SKELETON, EntityType.SPIDER, EntityType.COW, EntityType.STRIDER, EntityType.CREEPER,
+                EntityType.ENDERMAN), info.getEntityTypes());
     }
 
     @NotNull

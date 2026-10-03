@@ -29,6 +29,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class SpawnInfo {
+    private static final int MAX_INCLUDED_BIOMES = 10;
     private static final DecimalFormat COST_FORMAT = new DecimalFormat("0.###", DecimalFormatSymbols.getInstance(Locale.ROOT));
     private static final Comparator<Entry> ENTRY_ORDER = Comparator.<Entry, MobCategory>comparing((e) -> e.spawn().category())
             .thenComparing((e) -> BuiltInRegistries.ENTITY_TYPE.getKey(e.type()));
@@ -221,7 +222,7 @@ public class SpawnInfo {
             return;
         }
 
-        boolean excluded = biomes.size() * 2 > biomesInDimension.size();
+        boolean excluded = biomes.size() > MAX_INCLUDED_BIOMES && biomes.size() * 2 > biomesInDimension.size();
         List<ResourceLocation> listed = excluded ? biomesInDimension.stream().filter((b) -> !biomes.contains(b)).toList() : List.copyOf(biomes);
 
         for (int i = 0; i < listed.size(); i++) {

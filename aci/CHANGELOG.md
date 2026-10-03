@@ -7,6 +7,7 @@
 - Number model `NumberExpr` replaces `RangeValue`, showing most likely value, level rows and charts
 - Added `TooltipBuilder.intervals`, a list of ranges formatted in the client's locale
 - Structure spawn overrides without mob category no longer break the entity's spawn tooltip
+- Spawn biomes are listed as exclusions (`-`) only when more than 10 biomes would be listed otherwise
 
 ## [1.3.0]
 
