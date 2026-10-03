@@ -511,9 +511,9 @@ unzip -p alicompat/<loader>/build/libs/ALICompat-<loader>-*-$v.jar \
 Compiling is not playing. Close the task by telling the user, explicitly: that the shim was never
 run in game and which part is least certain (GLM rendering, usually); that datagen still needs
 re-running; that `alicompat/CLAUDE.md`'s "Current targets" list wants a line for the new mod, which
-only they may edit; that the wiki's supported-mods page drifts; and what the row still leaves open —
-an `entityLootTables` config entry is an `ali_config` change, not Java, and belongs to the user's
-decision, not this shim.
+only they may edit; and what the row still leaves open — an `entityLootTables` config entry is an
+`ali_config` change, not Java, and belongs to the user's decision, not this shim. The wiki's
+`Users/ALI Compat` page gets the new mod for this Minecraft version and loader in the same task.
 
 ## Step 7 — what does not fit in code
 
