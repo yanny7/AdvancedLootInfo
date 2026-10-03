@@ -78,7 +78,7 @@ public class HAGlobalLootModifierAccessor extends BaseAccessor<HAGlobalLootModif
         }
 
         List<LootItemCondition> allConditions = Stream.concat(node.getConditions().stream(), withChance(conditions, parent.getChance()).stream()).toList();
-        NumberExpr chance = NodeUtils.getChance(utils, allConditions, node.getChance());
+        LootCount chance = NodeUtils.getChance(utils, allConditions, node.getChance());
         TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, LootCount.of(node.getCount()), NodeUtils.getCountLimit(node.getItem()), node.getFunctions(), allConditions);
 
         return new ItemNode(node.getChance(), node.getCount(), node.getItem(), tooltip.build(), node.getFunctions(), allConditions);

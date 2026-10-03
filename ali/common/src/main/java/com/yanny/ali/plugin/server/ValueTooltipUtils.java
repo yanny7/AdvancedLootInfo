@@ -4,6 +4,7 @@ import com.mojang.authlib.properties.Property;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import net.minecraft.advancements.predicates.*;
@@ -281,7 +282,7 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getEffectEntryTooltip(IServerUtils utils, SetStewEffectFunction.EffectEntry entry) {
         return utils.getValueTooltip(utils, entry.effect())
-                .add(TooltipBuilder.number(utils.convertIntNumber(utils, entry.duration())).build(Lang.Value.DURATION));
+                .add(TooltipUtils.getIntNumberTooltip(utils, entry.duration()).build(Lang.Value.DURATION));
     }
 
     @NotNull
@@ -305,12 +306,14 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getNumberProviderTooltip(IServerUtils utils, NumberProvider value) {
-        return TooltipBuilder.number(utils.convertNumber(utils, value));
+        return TooltipUtils.getNumberTooltip(utils, value);
     }
 
     @NotNull
     public static TooltipBuilder getIntRangeTooltip(IServerUtils utils, IntRange range) {
-        return TooltipBuilder.number(GenericTooltipUtils.getRange(utils, range));
+        List<TooltipNode> conditions = new ArrayList<>();
+
+        return TooltipBuilder.number(GenericTooltipUtils.getRange(utils, range, conditions), conditions);
     }
 
     @NotNull
@@ -596,7 +599,9 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getIntProviderTooltip(IServerUtils utils, IntProvider provider) {
-        return TooltipBuilder.number(utils.convertIntProvider(utils, provider));
+        List<TooltipNode> conditions = new ArrayList<>();
+
+        return TooltipBuilder.number(utils.convertIntProvider(utils, provider, conditions), conditions);
     }
 
     @NotNull

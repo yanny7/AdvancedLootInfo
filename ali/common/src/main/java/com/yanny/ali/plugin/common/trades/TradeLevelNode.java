@@ -17,6 +17,7 @@ import net.minecraft.world.item.trading.TradeSet;
 import net.minecraft.world.item.trading.VillagerTrade;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TradeLevelNode extends ListNode {
@@ -29,7 +30,7 @@ public class TradeLevelNode extends ListNode {
     // a trader adds every trade of the set instead of picking randomly once the set is no bigger than the number it picks
     public TradeLevelNode(IServerUtils utils, int level, TradeSet tradeSet) {
         this.level = level;
-        this.selectionCount = NumberExpr.min(utils.convertNumber(utils, tradeSet.amount), NumberExpr.constant(tradeSet.getTrades().size()));
+        this.selectionCount = NumberExpr.min(utils.convertNumber(utils, tradeSet.amount, new ArrayList<>()), NumberExpr.constant(tradeSet.getTrades().size()));
 
         for (Holder<VillagerTrade> trade : tradeSet.getTrades()) {
             addChildren(TradeUtils.getNode(utils, trade.value()));

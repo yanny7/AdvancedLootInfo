@@ -142,7 +142,7 @@ public class GenericTooltipUtils {
     @NotNull
     public static TooltipBuilder getEnchantmentLevelsEntryTooltip(IServerUtils utils, Map.Entry<Holder<Enchantment>, NumberProvider> entry) {
         return utils.getValueTooltip(utils, entry.getKey())
-                .add(TooltipBuilder.number(utils.convertIntNumber(utils, entry.getValue())).build(Lang.Value.LEVELS));
+                .add(TooltipUtils.getIntNumberTooltip(utils, entry.getValue()).build(Lang.Value.LEVELS));
     }
 
     @NotNull
@@ -241,9 +241,9 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static NumberExpr getRange(IServerUtils utils, IntRange range) {
-        NumberExpr min = range.min != null ? utils.convertIntNumber(utils, range.min) : null;
-        NumberExpr max = range.max != null ? utils.convertIntNumber(utils, range.max) : null;
+    public static NumberExpr getRange(IServerUtils utils, IntRange range, List<TooltipNode> conditions) {
+        NumberExpr min = range.min != null ? utils.convertIntNumber(utils, range.min, conditions) : null;
+        NumberExpr max = range.max != null ? utils.convertIntNumber(utils, range.max, conditions) : null;
 
         return NumberExpr.range(min, max, min != null, max != null);
     }

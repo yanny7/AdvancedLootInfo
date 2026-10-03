@@ -59,7 +59,9 @@ Phase 1 never reads, fixes or sweeps a dormant source set. Nothing compiles it, 
 against this version's jar and the current ALI/ALICompat API anyway, so any work on it now is spent twice.
 
 - A conflict inside a dormant source set takes the lower branch's side unread: `git checkout --theirs -- <path>`,
-  or `git rm` when the lower branch deleted it.
+  or `git rm` when the lower branch deleted it. Check every such path against `$S/active_dirs.txt` (built below,
+  before resolving any conflict), never against a list in memory: `--theirs` on an active source set silently throws
+  away this branch's port, and the build will not catch it.
 - A grep, sed or script that brings shims in line with a changed API — ALI's, ALICompat's or vanilla's (a
   constructor turned factory method) — runs over active source sets only, never over `alicompat` or
   `alicompat/*/src/compat/*` as a whole. Activity is per slug *and* loader: a source set is active when its
@@ -82,6 +84,13 @@ against this version's jar and the current ALI/ALICompat API anyway, so any work
   side, build, then regenerate with `./gradlew runAlicompat<Loader>Datagen` for every enabled loader.
 - **`alicompat/CHANGELOG.md`**: keep this branch's `## []` entries, add the lower branch's entries that apply here
   (cross-cutting changes), and drop "Added X support" for a slug that is dormant here, because this branch does not ship it.
+- **`Lang` enums and the lang JSONs** (generated `en_us` and the hand-kept translations): a key deleted below sits next
+  to keys that exist only here, and a key this branch already deleted as unused still exists below. Never resolve by
+  taking the union of both sides, because that silently brings back the keys this branch deleted. Start from `ours`
+  and drop the keys the lower branch deleted, unless code here still uses them (`grep -rn "Lang\.<Enum>\.<KEY>\b"` over
+  the built modules). Then diff the `Lang` constants against `HEAD`: the result should be `HEAD` minus those keys, plus
+  whatever the lower branch added and this branch uses. Regenerate `en_us` and check that it gained nothing.
+  Datagen repairs only `en_us`, so remove the same keys from every translation by hand.
 
 ### Source sets that went missing
 
@@ -132,6 +141,21 @@ failing lines from `build/test-results/test/*.xml`. Update an expectation only w
 merged change produces in the lower branch's own tests. A regex over the failing files is fine for a pure format
 change, but restrict it to the lines that failed: a line in the old format that still passes marks code the merged
 change does not reach on the lower branch either. Leave it as it is and report it.
+
+A test whose subject exists only on this branch (a Minecraft type the lower branch lacks) has no lower-branch test to
+copy the new value from. Derive it, do not guess it: let the assertion record instead of fail (a temporary flag-file
+check in `aci/common`'s `TestUtils.assertTooltip` that appends caller, expected and actual to a scratchpad file), run
+the suite, read every expected→actual diff, and apply only the diffs the merged change explains, matching the expected
+lines by content (an assertion may sit in a shared helper, so its line number points nowhere useful). Revert the hook
+before the final run. A test that compared a removed type's `toString()` is rewritten to assert the rendered tooltip,
+and each new value is checked by hand against vanilla's algorithm, not copied from the output.
+
+Code that exists only on this branch and is written against an API the merge removed is ported in this phase, since
+nothing compiles until it is: converters for this version's own vanilla types, tests of them, docs. Vanilla's behaviour
+is checked against the decompiled jar (the loom `*-sources.jar` files can be empty; decompile the merged
+`minecraft-merged-*.jar` from `.gradle/loom-cache` with vineflower into the scratchpad). A name, a signature or a
+behaviour the lower branch does not settle for this version (two families where the lower branch has one, an erasure
+clash with an inherited method) is the user's decision: ask before writing the code that depends on it.
 
 A merged change that rewrites a pattern across every shim, such as a key scheme or a renamed helper, does not
 reach code that exists only on this branch, and that code still compiles. After the merge, grep the active

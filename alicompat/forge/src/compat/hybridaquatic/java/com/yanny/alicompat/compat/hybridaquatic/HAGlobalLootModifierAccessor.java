@@ -17,6 +17,7 @@ import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.ali.plugin.glm.LootPage;
 import com.yanny.ali.plugin.glm.Verdict;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
+import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
@@ -67,7 +68,7 @@ public class HAGlobalLootModifierAccessor extends BaseAccessor<HAGlobalLootModif
                 .map((table) -> getTableNode(utils, allConditions, table.getData(), chance * table.getWeight().asInt() / sumWeight))
                 .toList();
 
-        return new LootPoolNode(children, TooltipUtils.getLootPoolTooltip(NumberExpr.constant(1)).build());
+        return new LootPoolNode(children, TooltipUtils.getLootPoolTooltip(LootCount.of(NumberExpr.constant(1))).build());
     }
 
     @NotNull

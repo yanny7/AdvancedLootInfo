@@ -1,6 +1,7 @@
 package com.yanny.ali.plugin.server;
 
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -9,7 +10,9 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.storage.loot.functions.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getMapTooltip;
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getStandaloneTooltip;
@@ -64,7 +67,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static TooltipBuilder getEnchantWithLevelsTooltip(IServerUtils utils, EnchantWithLevelsFunction fun) {
         return TooltipBuilder.array((b) -> {
-            b.add(TooltipBuilder.number(utils.convertIntNumber(utils, fun.levels)).build(Lang.Value.LEVELS));
+            b.add(TooltipUtils.getIntNumberTooltip(utils, fun.levels).build(Lang.Value.LEVELS));
             b.add(utils.getValueTooltip(utils, fun.options).build(Lang.Branch.OPTIONS));
             b.add(utils.getValueTooltip(utils, fun.includeAdditionalCostComponent).build(Lang.Value.INCLUDE_ADDITIONAL_COST_COMPONENT));
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
@@ -174,7 +177,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static TooltipBuilder getSetCountTooltip(IServerUtils utils, SetItemCountFunction fun) {
         return hideWhenFoldedIntoCount(TooltipBuilder.array((b) -> {
-            b.add(TooltipBuilder.number(utils.convertIntNumber(utils, fun.count)).build(Lang.Value.COUNT));
+            b.add(TooltipUtils.getIntNumberTooltip(utils, fun.count).build(Lang.Value.COUNT));
             b.add(utils.getValueTooltip(utils, fun.add).build(Lang.Value.ADD));
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.SET_COUNT), fun);
@@ -183,7 +186,11 @@ public class FunctionTooltipUtils {
     @NotNull
     public static TooltipBuilder getSetDamageTooltip(IServerUtils utils, SetItemDamageFunction fun) {
         return TooltipBuilder.array((b) -> {
-            b.add(TooltipBuilder.percent(utils.convertNumber(utils, fun.damage)).build(Lang.Value.DAMAGE));
+            List<TooltipNode> conditions = new ArrayList<>();
+            TooltipBuilder damage = TooltipBuilder.percent(utils.convertNumber(utils, fun.damage, conditions));
+
+            conditions.forEach(damage::add);
+            b.add(damage.build(Lang.Value.DAMAGE));
             b.add(utils.getValueTooltip(utils, fun.add).build(Lang.Value.ADD));
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.SET_DAMAGE);
@@ -370,7 +377,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static TooltipBuilder getSetOminousBottleAmplifierTooltip(IServerUtils utils, SetOminousBottleAmplifierFunction fun) {
         return TooltipBuilder.array((b) -> {
-            b.add(TooltipBuilder.number(utils.convertIntNumber(utils, fun.amplifier)).build(Lang.Value.AMPLIFIER));
+            b.add(TooltipUtils.getIntNumberTooltip(utils, fun.amplifier).build(Lang.Value.AMPLIFIER));
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.SET_OMINOUS_BOTTLE_AMPLIFIER);
     }

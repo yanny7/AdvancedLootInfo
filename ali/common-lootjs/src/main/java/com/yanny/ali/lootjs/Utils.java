@@ -88,7 +88,7 @@ public class Utils {
             }
             default -> {
                 LOGGER.warn("Unsupported replacement loot entry {}", vanillaEntry.getClass().getCanonicalName());
-                return utils.getEntryFactory(utils, vanillaEntry).create(utils, vanillaEntry, chance, 1, functions, conditions);
+                return utils.getEntryFactory(utils, vanillaEntry).create(utils, vanillaEntry, NumberExpr.constant(chance), NumberExpr.constant(1), List.of(), functions, conditions);
             }
         }
     }

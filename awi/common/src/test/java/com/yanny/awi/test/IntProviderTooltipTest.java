@@ -87,7 +87,7 @@ public class IntProviderTooltipTest {
     @Test
     public void testBiasedToBottomHeightFormula() {
         TooltipNode node = TooltipBuilder.number(UTILS.convertHeightProvider(UTILS,
-                BiasedToBottomHeight.of(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(16), 1), new ColumnContext(-64, 384))).build(Lang.Value.HEIGHT);
+                BiasedToBottomHeight.of(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(16), 1), new ColumnContext(-64, 384), List.of())).build(Lang.Value.HEIGHT);
 
         assertTooltip(node, List.of("Height: −64 to 15  ~−64 (6%)"));
         assertEquals(List.of("Height: biased(−64; 16)  ~−64 (6%)"), lines(node, FORMULAS));

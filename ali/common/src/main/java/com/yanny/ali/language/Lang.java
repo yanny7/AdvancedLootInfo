@@ -711,6 +711,9 @@ public final class Lang {
         VAR_ENVIRONMENT_ATTRIBUTE_DESC("var.environment_attribute.desc", "environment attribute \"%s\""),
         VAR_ENCHANTMENT_LEVEL("var.enchantment_level", "LVL"),
         VAR_ENCHANTMENT_LEVEL_DESC("var.enchantment_level.desc", "enchantment level"),
+        VAR_ENCHANTMENT_LEVEL_ROW("var.enchantment_level.row", "Level %s"),
+        VAR_LUCK_ROW("var.luck.row", "Luck %s"),
+        VAR_LUCK_ROW_NEGATIVE("var.luck.row.negative", "Bad Luck"),
         ;
 
         private final Translation translation;
