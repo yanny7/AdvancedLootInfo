@@ -319,7 +319,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
             return NumberExpr.constant(0);
         }
 
-        return NumberConverters.convert(getModId(), entryWeights, utils, entry, conditions, (e) -> String.valueOf(BuiltInRegistries.LOOT_POOL_ENTRY_TYPE.getKey(e.getType())));
+        return NumberConverters.convert(getModId(), entryWeights, utils, entry, conditions, (e) -> String.valueOf(BuiltInRegistries.LOOT_POOL_ENTRY_TYPE.getKey(e.codec())));
     }
 
     @NotNull

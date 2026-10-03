@@ -20,16 +20,16 @@ public class TradeUtils {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(trade.wants.item().value().getDefaultInstance()),
-                utils.convertNumber(utils, trade.wants.count()),
+                utils.convertNumber(utils, trade.wants.count(), new ArrayList<>()),
                 utils.getValueTooltip(utils, trade.wants.components()).build(Lang.Branch.EXPECTED_COMPONENTS),
                 Either.left(trade.additionalWants.map((t) -> t.item().value().getDefaultInstance()).orElse(ItemStack.EMPTY)),
-                trade.additionalWants.map((t) -> utils.convertNumber(utils, t.count())).orElse(NumberExpr.constant(1)),
+                trade.additionalWants.map((t) -> utils.convertNumber(utils, t.count(), new ArrayList<>())).orElse(NumberExpr.constant(1)),
                 trade.additionalWants.map((t) -> utils.getValueTooltip(utils, t.components())).orElse(TooltipBuilder.empty()).build(Lang.Branch.EXPECTED_COMPONENTS),
                 Either.left(trade.gives.create()),
                 NumberExpr.constant(trade.gives.count()),
                 utils.getValueTooltip(utils, trade.givenItemModifiers).build(),
-                utils.convertNumber(utils, trade.maxUses),
-                utils.convertNumber(utils, trade.xp),
+                utils.convertNumber(utils, trade.maxUses, new ArrayList<>()),
+                utils.convertNumber(utils, trade.xp, new ArrayList<>()),
                 utils.getValueTooltip(utils, trade.doubleTradePriceEnchantments).build(Lang.Branch.DOUBLE_TRADE_PRICE_ENCHANTMENTS)
         );
     }

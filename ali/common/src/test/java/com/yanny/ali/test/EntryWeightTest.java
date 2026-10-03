@@ -1,5 +1,6 @@
 package com.yanny.ali.test;
 
+import com.mojang.serialization.MapCodec;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.number.NumberEvaluator;
@@ -354,8 +355,8 @@ public class EntryWeightTest {
 
         @NotNull
         @Override
-        public LootPoolEntryType getType() {
-            return LootPoolEntries.ITEM;
+        public MapCodec<? extends LootPoolSingletonContainer> codec() {
+            return LootItem.MAP_CODEC;
         }
     }
 
@@ -377,8 +378,8 @@ public class EntryWeightTest {
 
         @NotNull
         @Override
-        public LootPoolEntryType getType() {
-            return LootPoolEntries.ITEM;
+        public MapCodec<? extends LootPoolEntryContainer> codec() {
+            return LootItem.MAP_CODEC;
         }
     }
 }

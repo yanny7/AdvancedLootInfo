@@ -728,18 +728,18 @@ public class Plugin implements IPlugin {
     }
 
     @NotNull
-    private static NumberExpr convertEnvironmentAttribute(IServerUtils utils, EnvironmentAttributeValue numberProvider) {
+    private static NumberExpr convertEnvironmentAttribute(IServerUtils utils, EnvironmentAttributeValue numberProvider, List<TooltipNode> conditions) {
         return new NumberExpr.Var(TooltipUtils.ENVIRONMENT_ATTRIBUTE, List.of(NumberText.str(String.valueOf(BuiltInRegistries.ENVIRONMENT_ATTRIBUTE.getKey(numberProvider.attribute())))),
                 Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
     }
 
     @NotNull
-    private static NumberExpr convertSum(IServerUtils utils, Sum numberProvider) {
-        return NumberExpr.add(numberProvider.summands().stream().map((summand) -> utils.convertNumber(utils, summand)).toArray(NumberExpr[]::new));
+    private static NumberExpr convertSum(IServerUtils utils, Sum numberProvider, List<TooltipNode> conditions) {
+        return NumberExpr.add(numberProvider.summands().stream().map((summand) -> utils.convertNumber(utils, summand, conditions)).toArray(NumberExpr[]::new));
     }
 
     @NotNull
-    private static NumberExpr convertIntSum(IServerUtils utils, Sum numberProvider) {
-        return NumberExpr.fn(NumberFunctions.FLOOR, convertSum(utils, numberProvider));
+    private static NumberExpr convertIntSum(IServerUtils utils, Sum numberProvider, List<TooltipNode> conditions) {
+        return NumberExpr.fn(NumberFunctions.FLOOR, convertSum(utils, numberProvider, conditions));
     }
 }
