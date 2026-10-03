@@ -68,7 +68,7 @@ public class ReplaceRopeByConfigModifierAccessor extends BaseAccessor<ReplaceRop
 
         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), node.getConditions().stream()).toList();
         ItemStack rope = ModRegistry.ROPE_ITEM.get().getDefaultInstance();
-        NumberExpr chance = NodeUtils.getChance(utils, allConditions, node.getChance());
+        LootCount chance = NodeUtils.getChance(utils, allConditions, node.getChance());
         TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, LootCount.of(node.getCount()), NodeUtils.getCountLimit(rope), Collections.emptyList(), allConditions);
         ItemNode replacement = new ItemNode(1, node.getCount(), rope, tooltip.build(), Collections.emptyList(), allConditions);
 

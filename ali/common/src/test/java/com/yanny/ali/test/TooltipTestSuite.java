@@ -100,7 +100,8 @@ import java.util.concurrent.ExecutionException;
         SlotSourceTooltipTest.class,
         GlobalLootModifierTest.class,
         ConfigTest.class,
-        ValueCharacterizationTest.class
+        ValueCharacterizationTest.class,
+        EntryWeightTest.class
 })
 public class TooltipTestSuite {
     public static IServerUtils UTILS;
@@ -138,14 +139,14 @@ public class TooltipTestSuite {
 
             @NotNull
             @Override
-            public NumberExpr convertIntProvider(IServerUtils utils, IntProvider provider) {
-                return PluginManager.getInstance().serverRegistry.convertIntProvider(utils, provider);
+            public NumberExpr convertIntProvider(IServerUtils utils, IntProvider provider, List<TooltipNode> conditions) {
+                return PluginManager.getInstance().serverRegistry.convertIntProvider(utils, provider, conditions);
             }
 
             @NotNull
             @Override
-            public NumberExpr convertFloatProvider(IServerUtils utils, FloatProvider provider) {
-                return PluginManager.getInstance().serverRegistry.convertFloatProvider(utils, provider);
+            public NumberExpr convertFloatProvider(IServerUtils utils, FloatProvider provider, List<TooltipNode> conditions) {
+                return PluginManager.getInstance().serverRegistry.convertFloatProvider(utils, provider, conditions);
             }
 
             @NotNull
@@ -176,6 +177,18 @@ public class TooltipTestSuite {
             @Override
             public <T extends LootPoolEntryContainer> IServerRegistry.EntryFactory<T> getEntryFactory(IServerUtils utils, T type) {
                 return PluginManager.getInstance().serverRegistry.getEntryFactory(utils, type);
+            }
+
+            @NotNull
+            @Override
+            public <T extends LootPoolEntryContainer> NumberExpr getEntryWeight(IServerUtils utils, T entry, List<TooltipNode> conditions) {
+                return PluginManager.getInstance().serverRegistry.getEntryWeight(utils, entry, conditions);
+            }
+
+            @NotNull
+            @Override
+            public <T extends LootPoolEntryContainer> List<LootPoolEntryContainer> getEntryChildren(IServerUtils utils, T entry) {
+                return PluginManager.getInstance().serverRegistry.getEntryChildren(utils, entry);
             }
 
             @NotNull
@@ -243,8 +256,8 @@ public class TooltipTestSuite {
 
             @NotNull
             @Override
-            public <T extends LootItemCondition> NumberExpr applyChanceModifier(IServerUtils utils, T condition, NumberExpr chance) {
-                return PluginManager.getInstance().serverRegistry.applyChanceModifier(utils, condition, chance);
+            public <T extends LootItemCondition> NumberExpr applyChanceModifier(IServerUtils utils, T condition, NumberExpr chance, List<TooltipNode> conditions) {
+                return PluginManager.getInstance().serverRegistry.applyChanceModifier(utils, condition, chance, conditions);
             }
 
             @NotNull
@@ -279,14 +292,14 @@ public class TooltipTestSuite {
 
             @NotNull
             @Override
-            public NumberExpr convertNumber(IServerUtils utils, NumberProvider numberProvider) {
-                return PluginManager.getInstance().serverRegistry.convertNumber(utils, numberProvider);
+            public NumberExpr convertNumber(IServerUtils utils, NumberProvider numberProvider, List<TooltipNode> conditions) {
+                return PluginManager.getInstance().serverRegistry.convertNumber(utils, numberProvider, conditions);
             }
 
             @NotNull
             @Override
-            public NumberExpr convertIntNumber(IServerUtils utils, NumberProvider numberProvider) {
-                return PluginManager.getInstance().serverRegistry.convertIntNumber(utils, numberProvider);
+            public NumberExpr convertIntNumber(IServerUtils utils, NumberProvider numberProvider, List<TooltipNode> conditions) {
+                return PluginManager.getInstance().serverRegistry.convertIntNumber(utils, numberProvider, conditions);
             }
 
             @NotNull

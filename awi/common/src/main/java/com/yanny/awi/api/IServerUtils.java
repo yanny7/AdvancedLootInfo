@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.ICoreServerUtils;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.plugin.server.summary.ColumnContext;
 import com.yanny.awi.plugin.server.summary.PlacementContribution;
 import net.minecraft.tags.TagKey;
@@ -74,7 +75,7 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
     <T extends StructureProcessor> TooltipBuilder getStructureProcessorTooltip(IServerUtils utils, T entry);
 
     @NotNull
-    NumberExpr convertHeightProvider(IServerUtils utils, HeightProvider provider, ColumnContext ctx);
+    NumberExpr convertHeightProvider(IServerUtils utils, HeightProvider provider, ColumnContext ctx, List<TooltipNode> conditions);
 
     @NotNull
     <T extends PlacementModifier> PlacementContribution getPlacementContribution(IServerUtils utils, T modifier, ColumnContext ctx);

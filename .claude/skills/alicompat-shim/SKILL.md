@@ -255,11 +255,11 @@ NodeUtils.getCountLimit(itemStack), allFunctions, allConditions)` and its `value
 and `IEntryTooltip` sit on the one accessor.
 
 **A function or condition that changes a number registers a modifier beside its tooltip.** `ICountModifier`
-(`applyCountModifier(utils, count)`) and `IChanceModifier` (`applyChanceModifier(utils, chance)`) take the
+(`applyCountModifier(utils, count, conditions)`) and `IChanceModifier` (`applyChanceModifier(utils, chance, conditions)`) take the
 `NumberExpr` built so far and return the transformed one — `min(count, constant(maxStack))`,
 `mul(chance, constant(p))` — through `PluginUtils.registerCountModifier` / `registerChanceModifier`. A conditional
 function needs nothing extra: ALI wraps the result in a `Cond` with its predicates. A mod `NumberProvider` is an
-`INumberProvider` (`convertNumber`, and `convertIntNumber` when the target's `getInt` is not `round(getFloat)`).
+`INumberProvider` (`convertNumber(utils, conditions)`, and `convertIntNumber` when the target's `getInt` is not `round(getFloat)`).
 
 One accessor may implement several hooks. A function that swaps the stack is worth registering twice:
 `registerFunctionTooltip` (what it says) and `registerItemStackModifier` (so the drop renders as

@@ -42,6 +42,7 @@
   "aci.number.var.level": "LVL",
   "aci.number.var.score": "score(%s; %s)",
   "aci.number.var.score.desc": "score \"%2$s\" (%1$s)",
+  "aci.number.var_row": "%s: %s",
   "aci.number.weighted_entry": "%s (%s)",
   "aci.spawn.biome_excluded": "- %s",
   "aci.spawn.biome_included": "+ %s",

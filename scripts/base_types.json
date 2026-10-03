@@ -13,7 +13,7 @@
     },
     "entry": {
       "title": "Loot pool entries",
-      "registry": "registerEntry / registerEntryTooltip",
+      "registry": "registerEntry / registerEntryTooltip / registerEntryWeight / registerEntryChildren",
       "bases": ["net/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer"]
     },
     "number_provider": {

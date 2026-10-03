@@ -36,15 +36,15 @@ public class StackLootEntryAccessor extends BaseAccessor<StackLootEntry> impleme
     }
 
     @Override
-    public IDataNode create(IServerUtils utils, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public IDataNode create(IServerUtils utils, NumberExpr chance, NumberExpr sumWeight, List<TooltipNode> chanceConditions, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemCondition> allConditions = NodeUtils.getAllConditions(parent, conditions);
         List<LootItemFunction> allFunctions = NodeUtils.getAllFunctions(parent, functions);
-        float itemChance = NodeUtils.getChance(parent, chance, sumWeight);
+        LootCount itemChance = NodeUtils.getChance(utils, parent, chance, sumWeight, chanceConditions);
         ItemStack itemStack = TooltipUtils.getItemStack(utils, stack.copy(), allFunctions);
         LootCount count = NodeUtils.getCount(utils, NumberExpr.uniformInt(min, max), allFunctions);
         TooltipNode tooltip = TooltipUtils.getTooltip(utils, parent.quality, NodeUtils.getChance(utils, allConditions, itemChance), count, NodeUtils.getCountLimit(itemStack), allFunctions, allConditions).build();
 
-        return new ItemNode(itemChance, count.value(), itemStack, tooltip, allFunctions, allConditions);
+        return new ItemNode(NodeUtils.toFloat(itemChance.value()), count.value(), itemStack, tooltip, allFunctions, allConditions);
     }
 
     @Override

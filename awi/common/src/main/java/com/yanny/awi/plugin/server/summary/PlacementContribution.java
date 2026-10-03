@@ -5,26 +5,34 @@ import com.yanny.aci.tooltip.TooltipNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public record PlacementContribution(@Nullable NumberExpr count, @Nullable TooltipNode countDetails, @Nullable NumberExpr chance, @Nullable HeightSpan height) {
-    public static final PlacementContribution EMPTY = new PlacementContribution(null, null, null, null);
+import java.util.List;
+
+public record PlacementContribution(@Nullable NumberExpr count, List<TooltipNode> countConditions, @Nullable TooltipNode countDetails,
+                                    @Nullable NumberExpr chance, List<TooltipNode> chanceConditions, @Nullable HeightSpan height) {
+    public static final PlacementContribution EMPTY = new PlacementContribution(null, List.of(), null, null, List.of(), null);
+
+    public PlacementContribution {
+        countConditions = List.copyOf(countConditions);
+        chanceConditions = List.copyOf(chanceConditions);
+    }
 
     @NotNull
-    public static PlacementContribution ofCount(NumberExpr count) {
-        return new PlacementContribution(count, null, null, null);
+    public static PlacementContribution ofCount(NumberExpr count, List<TooltipNode> conditions) {
+        return new PlacementContribution(count, conditions, null, null, List.of(), null);
     }
 
     @NotNull
     public static PlacementContribution ofCount(NumberExpr count, TooltipNode details) {
-        return new PlacementContribution(count, details, null, null);
+        return new PlacementContribution(count, List.of(), details, null, List.of(), null);
     }
 
     @NotNull
-    public static PlacementContribution ofChance(NumberExpr chance) {
-        return new PlacementContribution(null, null, chance, null);
+    public static PlacementContribution ofChance(NumberExpr chance, List<TooltipNode> conditions) {
+        return new PlacementContribution(null, List.of(), null, chance, conditions, null);
     }
 
     @NotNull
     public static PlacementContribution ofHeight(HeightSpan height) {
-        return new PlacementContribution(null, null, null, height);
+        return new PlacementContribution(null, List.of(), null, null, List.of(), height);
     }
 }

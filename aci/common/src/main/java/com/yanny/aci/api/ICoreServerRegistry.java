@@ -11,7 +11,7 @@ public interface ICoreServerRegistry<TServerUtils extends ICoreServerUtils<?>> {
 
     void registerCacheCleaner(Runnable cleaner);
 
-    <T extends IntProvider> void registerIntProvider(Class<T> type, BiFunction<TServerUtils, T, NumberExpr> converter);
+    <T extends IntProvider> void registerIntProvider(Class<T> type, NumberConverter<TServerUtils, T> converter);
 
-    <T extends FloatProvider> void registerFloatProvider(Class<T> type, BiFunction<TServerUtils, T, NumberExpr> converter);
+    <T extends FloatProvider> void registerFloatProvider(Class<T> type, NumberConverter<TServerUtils, T> converter);
 }

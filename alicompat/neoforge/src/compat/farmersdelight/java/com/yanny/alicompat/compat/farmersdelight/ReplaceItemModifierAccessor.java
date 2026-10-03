@@ -11,11 +11,11 @@ import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.ModifiedNode;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IPageLootModifier;
-import com.yanny.alicompat.accessor.IGlobalLootModifierAccessor;
-import com.yanny.alicompat.accessor.BaseAccessor;
-import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.TooltipUtils;
+import com.yanny.alicompat.accessor.BaseAccessor;
+import com.yanny.alicompat.accessor.FieldAccessor;
+import com.yanny.alicompat.accessor.IGlobalLootModifierAccessor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -51,7 +51,7 @@ public class ReplaceItemModifierAccessor extends BaseAccessor<ReplaceItemModifie
                 List<IDataNode> nodes = new ArrayList<>();
                 IItemNode node = (IItemNode) src;
                 List<LootItemCondition> allConditions = Stream.concat(c.stream(), node.getConditions().stream()).toList();
-                NumberExpr chance = NodeUtils.getChance(utils, allConditions, 1);
+                LootCount chance = NodeUtils.getChance(utils, allConditions, 1);
                 LootCount count = LootCount.of(NumberExpr.constant(addedCount));
                 TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, count, NodeUtils.getCountLimit(addedItem.getDefaultInstance()), Collections.emptyList(), allConditions);
 

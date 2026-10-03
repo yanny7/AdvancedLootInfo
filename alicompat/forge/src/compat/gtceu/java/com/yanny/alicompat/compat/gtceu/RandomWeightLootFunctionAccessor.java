@@ -3,6 +3,7 @@ package com.yanny.alicompat.compat.gtceu;
 import com.gregtechceu.gtceu.data.loot.ChestGenHooks;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import com.yanny.alicompat.accessor.BaseAccessor;
@@ -13,6 +14,8 @@ import com.yanny.alicompat.accessor.IItemStackModifier;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class RandomWeightLootFunctionAccessor extends BaseAccessor<ChestGenHooks.RandomWeightLootFunction> implements IFunctionTooltip, ICountModifier, IItemStackModifier {
     @FieldAccessor
@@ -39,7 +42,7 @@ public class RandomWeightLootFunctionAccessor extends BaseAccessor<ChestGenHooks
     }
 
     @Override
-    public NumberExpr applyCountModifier(IServerUtils utils, NumberExpr count) {
+    public NumberExpr applyCountModifier(IServerUtils utils, NumberExpr count, List<TooltipNode> ignoredConditions) {
         return getCount();
     }
 

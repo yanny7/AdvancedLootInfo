@@ -11,6 +11,7 @@ import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlacementSummaryUtils {
@@ -19,8 +20,10 @@ public class PlacementSummaryUtils {
     @NotNull
     public static PlacementSummary summarize(IServerUtils utils, List<PlacementModifier> modifiers, ColumnContext ctx) {
         NumberExpr count = null;
+        List<TooltipNode> countConditions = List.of();
         TooltipNode countDetails = null;
         NumberExpr chance = null;
+        List<TooltipNode> chanceConditions = new ArrayList<>();
         HeightSpan height = null;
 
         for (PlacementModifier modifier : modifiers) {
@@ -28,17 +31,21 @@ public class PlacementSummaryUtils {
 
             if (contribution.count() != null && count == null) {
                 count = contribution.count();
+                countConditions = contribution.countConditions();
                 countDetails = contribution.countDetails();
             }
             if (contribution.chance() != null) {
-                chance = chance == null ? contribution.chance() : NumberExpr.mul(chance, contribution.chance());
+                NumberExpr shifted = contribution.chance().shiftConditions(chanceConditions.size());
+
+                chance = chance == null ? shifted : NumberExpr.mul(chance, shifted);
+                chanceConditions.addAll(contribution.chanceConditions());
             }
             if (contribution.height() != null && height == null) {
                 height = contribution.height();
             }
         }
 
-        return new PlacementSummary(count, countDetails, chance, height);
+        return new PlacementSummary(count, countConditions, countDetails, chance, chanceConditions, height);
     }
 
     public static void appendSummary(TooltipBuilder b, IServerUtils utils, List<PlacementModifier> modifiers, ColumnContext ctx) {
@@ -52,7 +59,7 @@ public class PlacementSummaryUtils {
         }
 
         if (summary.count() != null) {
-            TooltipBuilder count = TooltipBuilder.number(summary.count());
+            TooltipBuilder count = TooltipBuilder.number(summary.count(), summary.countConditions());
 
             if (summary.countDetails() != null) {
                 count.add(summary.countDetails());
@@ -61,7 +68,10 @@ public class PlacementSummaryUtils {
             b.add(count.build(Lang.Value.ATTEMPTS_PER_CHUNK));
         }
         if (summary.chance() != null) {
-            b.add(TooltipBuilder.percent(summary.chance()).build(Lang.Value.CHANCE));
+            TooltipBuilder chance = TooltipBuilder.percent(summary.chance());
+
+            summary.chanceConditions().forEach(chance::add);
+            b.add(chance.build(Lang.Value.CHANCE));
         }
         if (summary.height() != null) {
             HeightSpan height = summary.height();
@@ -69,7 +79,7 @@ public class PlacementSummaryUtils {
             if (height.heightmap() != null) {
                 b.add(utils.getValueTooltip(utils, height.heightmap()).build(Lang.Value.HEIGHT));
             } else if (height.height() != null) {
-                b.add(TooltipBuilder.number(height.height()).build(Lang.Value.HEIGHT));
+                b.add(TooltipBuilder.number(height.height(), height.conditions()).build(Lang.Value.HEIGHT));
             }
         }
     }

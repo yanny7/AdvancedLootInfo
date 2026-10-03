@@ -7,6 +7,8 @@ import com.yanny.aci.api.NumberFunctions;
 import net.minecraft.util.valueproviders.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 public class CommonNumberProviders<
         TServerUtils    extends ICoreServerUtils<TServerUtils>,
         TServerRegistry extends ICoreServerRegistry<TServerUtils>
@@ -26,31 +28,31 @@ public class CommonNumberProviders<
     }
 
     @NotNull
-    private NumberExpr getConstantInt(TServerUtils utils, ConstantInt provider) {
+    private NumberExpr getConstantInt(TServerUtils utils, ConstantInt provider, List<TooltipNode> conditions) {
         return NumberExpr.constant(provider.getValue());
     }
 
     @NotNull
-    private NumberExpr getUniformInt(TServerUtils utils, UniformInt provider) {
+    private NumberExpr getUniformInt(TServerUtils utils, UniformInt provider, List<TooltipNode> conditions) {
         return NumberExpr.uniformInt(provider.getMinValue(), provider.getMaxValue());
     }
 
     @NotNull
-    private NumberExpr getBiasedToBottomInt(TServerUtils utils, BiasedToBottomInt provider) {
+    private NumberExpr getBiasedToBottomInt(TServerUtils utils, BiasedToBottomInt provider, List<TooltipNode> conditions) {
         return NumberExpr.fn(NumberFunctions.BIASED_TO_BOTTOM, NumberExpr.constant(provider.getMinValue()), NumberExpr.constant(provider.getMaxValue()));
     }
 
     @NotNull
-    private NumberExpr getClampedInt(TServerUtils utils, ClampedInt provider) {
+    private NumberExpr getClampedInt(TServerUtils utils, ClampedInt provider, List<TooltipNode> conditions) {
         return NumberExpr.clamp(
-                utils.convertIntProvider(utils, provider.source),
+                utils.convertIntProvider(utils, provider.source, conditions),
                 NumberExpr.constant(provider.getMinValue()),
                 NumberExpr.constant(provider.getMaxValue())
         );
     }
 
     @NotNull
-    private NumberExpr getClampedNormalInt(TServerUtils utils, ClampedNormalInt provider) {
+    private NumberExpr getClampedNormalInt(TServerUtils utils, ClampedNormalInt provider, List<TooltipNode> conditions) {
         return NumberExpr.fn(NumberFunctions.TRUNC, NumberExpr.clamp(
                 NumberExpr.fn(NumberFunctions.NORMAL, NumberExpr.constant(provider.mean), NumberExpr.constant(provider.deviation)),
                 NumberExpr.constant(provider.getMinValue()),
@@ -59,24 +61,24 @@ public class CommonNumberProviders<
     }
 
     @NotNull
-    private NumberExpr getWeightedListInt(TServerUtils utils, WeightedListInt provider) {
+    private NumberExpr getWeightedListInt(TServerUtils utils, WeightedListInt provider, List<TooltipNode> conditions) {
         return NumberExpr.weighted(provider.distribution.unwrap().stream()
-                .map((e) -> new NumberExpr.WeightedEntry(e.weight(), utils.convertIntProvider(utils, e.value())))
+                .map((e) -> new NumberExpr.WeightedEntry(e.weight(), utils.convertIntProvider(utils, e.value(), conditions)))
                 .toList());
     }
 
     @NotNull
-    private NumberExpr getConstantFloat(TServerUtils utils, ConstantFloat provider) {
+    private NumberExpr getConstantFloat(TServerUtils utils, ConstantFloat provider, List<TooltipNode> conditions) {
         return NumberExpr.constant(provider.getValue());
     }
 
     @NotNull
-    private NumberExpr getUniformFloat(TServerUtils utils, UniformFloat provider) {
+    private NumberExpr getUniformFloat(TServerUtils utils, UniformFloat provider, List<TooltipNode> conditions) {
         return NumberExpr.uniformFloat(provider.getMinValue(), provider.getMaxValue());
     }
 
     @NotNull
-    private NumberExpr getClampedNormalFloat(TServerUtils utils, ClampedNormalFloat provider) {
+    private NumberExpr getClampedNormalFloat(TServerUtils utils, ClampedNormalFloat provider, List<TooltipNode> conditions) {
         return NumberExpr.clamp(
                 NumberExpr.fn(NumberFunctions.NORMAL, NumberExpr.constant(provider.mean), NumberExpr.constant(provider.deviation)),
                 NumberExpr.constant(provider.getMinValue()),
@@ -85,7 +87,7 @@ public class CommonNumberProviders<
     }
 
     @NotNull
-    private NumberExpr getTrapezoidFloat(TServerUtils utils, TrapezoidFloat provider) {
+    private NumberExpr getTrapezoidFloat(TServerUtils utils, TrapezoidFloat provider, List<TooltipNode> conditions) {
         return NumberExpr.fn(
                 NumberFunctions.TRAPEZOID_FLOAT,
                 NumberExpr.constant(provider.getMinValue()),
