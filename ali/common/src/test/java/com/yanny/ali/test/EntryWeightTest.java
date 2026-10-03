@@ -7,6 +7,7 @@ import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.common.NodeUtils;
+import com.yanny.ali.plugin.common.nodes.AlternativesNode;
 import com.yanny.ali.plugin.common.nodes.GroupNode;
 import com.yanny.ali.plugin.common.nodes.LootPoolNode;
 import net.minecraft.world.item.ItemStack;
@@ -17,6 +18,8 @@ import net.minecraft.world.level.storage.loot.entries.*;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
@@ -135,10 +138,192 @@ public class EntryWeightTest {
         List<IDataNode> nodes = NodeUtils.getChildren(UTILS, entries, constant(1), sumWeight, conditions, List.of(), List.of());
 
         assertTooltip(nodes.get(1).getTooltip(), List.of(
-                "Chance: 25% to 50%",
-                "  -> Survives Explosion",
+                "Chance: ",
+                "  -> 25%",
+                "    -> Survives Explosion",
+                "  -> otherwise 50%",
                 "Count: 1"
         ));
+    }
+
+    @Test
+    public void testAlternativesConditionedChild() {
+        List<IDataNode> nodes = poolNodes(
+                AlternativesEntry.alternatives(LootItem.lootTableItem(Items.DIAMOND).when(LootItemKilledByPlayerCondition.killedByPlayer()), itemBuilder(5)),
+                itemBuilder(4)
+        );
+        List<IDataNode> alternatives = alternatives(nodes.get(0));
+
+        assertTooltip(alternatives.get(0).getTooltip(), List.of(
+                "Chance: 20%",
+                "Count: 1",
+                "----- Predicates -----",
+                "Killed by player"
+        ));
+        assertTooltip(alternatives.get(1).getTooltip(), List.of(
+                "Chance: 55.56%",
+                "Count: 1"
+        ));
+        assertTooltip(nodes.get(1).getTooltip(), List.of(
+                "Chance: ",
+                "  -> 80%",
+                "    -> Killed by player",
+                "  -> otherwise 44.44%",
+                "Count: 1"
+        ));
+    }
+
+    @Test
+    public void testAlternativesRandomChanceChild() {
+        List<IDataNode> nodes = poolNodes(
+                AlternativesEntry.alternatives(LootItem.lootTableItem(Items.DIAMOND).when(LootItemRandomChanceCondition.randomChance(0.3f)), itemBuilder(5)),
+                itemBuilder(4)
+        );
+        List<IDataNode> alternatives = alternatives(nodes.get(0));
+
+        assertTooltip(alternatives.get(0).getTooltip(), List.of(
+                "Chance: 6%",
+                "Count: 1",
+                "----- Predicates -----",
+                "Random Chance:",
+                "  -> Probability: 0.3"
+        ));
+        assertTooltip(alternatives.get(1).getTooltip(), List.of(
+                "Chance: 55.56%",
+                "Count: 1"
+        ));
+        assertTooltip(nodes.get(1).getTooltip(), List.of(
+                "Chance: 44.44% to 80%  ~44.44% (70%)",
+                "Count: 1"
+        ));
+    }
+
+    @Test
+    public void testAlternativesMultipleConditionedChildren() {
+        List<IDataNode> nodes = poolNodes(
+                AlternativesEntry.alternatives(
+                        LootItem.lootTableItem(Items.DIAMOND).setWeight(3).when(LootItemKilledByPlayerCondition.killedByPlayer()),
+                        LootItem.lootTableItem(Items.EMERALD).setWeight(2).when(ExplosionCondition.survivesExplosion()),
+                        itemBuilder(5)
+                ),
+                itemBuilder(4)
+        );
+        List<IDataNode> alternatives = alternatives(nodes.get(0));
+
+        assertTooltip(alternatives.get(0).getTooltip(), List.of(
+                "Chance: 42.86%",
+                "Count: 1",
+                "----- Predicates -----",
+                "Killed by player"
+        ));
+        assertTooltip(alternatives.get(1).getTooltip(), List.of(
+                "Chance: 33.33%",
+                "Count: 1",
+                "----- Predicates -----",
+                "Survives Explosion"
+        ));
+        assertTooltip(alternatives.get(2).getTooltip(), List.of(
+                "Chance: 55.56%",
+                "Count: 1"
+        ));
+        assertTooltip(nodes.get(1).getTooltip(), List.of(
+                "Chance: ",
+                "  -> 57.14%",
+                "    -> Killed by player",
+                "  -> otherwise 66.67%",
+                "    -> Survives Explosion",
+                "  -> otherwise 44.44%",
+                "Count: 1"
+        ));
+    }
+
+    @Test
+    public void testAlternativesWithoutUnconditionedChild() {
+        List<IDataNode> nodes = poolNodes(
+                AlternativesEntry.alternatives(LootItem.lootTableItem(Items.DIAMOND).when(LootItemKilledByPlayerCondition.killedByPlayer())),
+                itemBuilder(4)
+        );
+
+        assertTooltip(alternatives(nodes.get(0)).get(0).getTooltip(), List.of(
+                "Chance: 20%",
+                "Count: 1",
+                "----- Predicates -----",
+                "Killed by player"
+        ));
+        assertTooltip(nodes.get(1).getTooltip(), List.of(
+                "Chance: ",
+                "  -> 80%",
+                "    -> Killed by player",
+                "  -> otherwise 100%",
+                "Count: 1"
+        ));
+    }
+
+    @Test
+    public void testTwoAlternatives() {
+        List<IDataNode> nodes = poolNodes(
+                AlternativesEntry.alternatives(LootItem.lootTableItem(Items.DIAMOND).when(LootItemKilledByPlayerCondition.killedByPlayer()), itemBuilder(5)),
+                AlternativesEntry.alternatives(LootItem.lootTableItem(Items.EMERALD).setWeight(2).when(ExplosionCondition.survivesExplosion()), itemBuilder(6)),
+                itemBuilder(4)
+        );
+        List<IDataNode> first = alternatives(nodes.get(0));
+        List<IDataNode> second = alternatives(nodes.get(1));
+
+        assertTooltip(first.get(0).getTooltip(), List.of(
+                "Chance: ",
+                "  -> 14.29%",
+                "    -> Survives Explosion",
+                "  -> otherwise 9.09%",
+                "Count: 1",
+                "----- Predicates -----",
+                "Killed by player"
+        ));
+        assertTooltip(first.get(1).getTooltip(), List.of(
+                "Chance: ",
+                "  -> 45.45%",
+                "    -> Survives Explosion",
+                "  -> otherwise 33.33%",
+                "Count: 1"
+        ));
+        assertTooltip(second.get(0).getTooltip(), List.of(
+                "Chance: ",
+                "  -> 28.57%",
+                "    -> Killed by player",
+                "  -> otherwise 18.18%",
+                "Count: 1",
+                "----- Predicates -----",
+                "Survives Explosion"
+        ));
+        assertTooltip(second.get(1).getTooltip(), List.of(
+                "Chance: ",
+                "  -> 54.55%",
+                "    -> Killed by player",
+                "  -> otherwise 40%",
+                "Count: 1"
+        ));
+        assertTooltip(nodes.get(2).getTooltip(), List.of(
+                "Chance: ",
+                "  -> 36.36% to 57.14%",
+                "    -> Killed by player",
+                "  -> otherwise 26.67% to 36.36%",
+                "Count: 1"
+        ));
+    }
+
+    @NotNull
+    private static List<IDataNode> poolNodes(LootPoolEntryContainer.Builder<?>... entries) {
+        LootPool.Builder pool = LootPool.lootPool();
+
+        for (LootPoolEntryContainer.Builder<?> entry : entries) {
+            pool.add(entry);
+        }
+
+        return NodeUtils.getLootPoolNode(UTILS, pool.build(), constant(1), List.of(), Collections.emptyList(), Collections.emptyList()).nodes();
+    }
+
+    @NotNull
+    private static List<IDataNode> alternatives(IDataNode node) {
+        return assertInstanceOf(AlternativesNode.class, node).nodes();
     }
 
     @NotNull

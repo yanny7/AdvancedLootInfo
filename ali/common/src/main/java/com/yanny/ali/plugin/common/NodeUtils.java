@@ -65,7 +65,13 @@ public class NodeUtils {
     @NotNull
     public static AlternativesNode getAlternativesNode(IServerUtils utils, AlternativesEntry entry, NumberExpr rawChance, NumberExpr sumWeight, List<TooltipNode> chanceConditions, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
-        List<IDataNode> children = getChildren(utils, entry.children, rawChance, sumWeight, chanceConditions, functions, allConditions);
+        NumberExpr weight = utils.getEntryWeight(utils, entry, new ArrayList<>());
+        List<IDataNode> children = Arrays.stream(entry.children).map((c) -> {
+            List<TooltipNode> childConditions = new ArrayList<>(chanceConditions);
+            NumberExpr childSum = replaceWeight(sumWeight, weight, utils.getEntryWeight(utils, c, childConditions));
+
+            return utils.getEntryFactory(utils, c).create(utils, c, rawChance, childSum, List.copyOf(childConditions), functions, allConditions);
+        }).toList();
         TooltipNode tooltip = TooltipUtils.getAlternativesTooltip().build();
 
         return new AlternativesNode(children, tooltip);
@@ -185,13 +191,137 @@ public class NodeUtils {
     @NotNull
     public static LootCount getChance(IServerUtils utils, LootPoolEntryContainer entry, NumberExpr rawChance, NumberExpr sumWeight, List<TooltipNode> chanceConditions) {
         List<TooltipNode> conditions = new ArrayList<>(chanceConditions);
-        NumberExpr weight = utils.getEntryWeight(utils, entry, conditions);
+        List<TooltipNode> weightConditions = new ArrayList<>();
+        NumberExpr weight = utils.getEntryWeight(utils, entry, weightConditions);
+        NumberExpr found = findWeight(sumWeight, weight);
 
-        if (sumWeight instanceof NumberExpr.Const c && c.value() == 0) {
-            return new LootCount(NumberExpr.constant(0), conditions);
+        if (found != null) {
+            weight = found;
+        } else {
+            weight = weight.shiftConditions(conditions.size());
+            conditions.addAll(weightConditions);
         }
 
-        return new LootCount(NumberExpr.mul(rawChance, NumberExpr.div(weight, sumWeight)), conditions);
+        if (sumWeight instanceof NumberExpr.Const c && c.value() == 0) {
+            return new LootCount(NumberExpr.constant(0), List.of());
+        }
+
+        return withUsedConditions(liftCondition(NumberExpr.mul(rawChance, NumberExpr.div(weight, sumWeight))), conditions);
+    }
+
+    @NotNull
+    private static NumberExpr liftCondition(NumberExpr expr) {
+        if (expr instanceof NumberExpr.Cond) {
+            return expr;
+        }
+
+        NumberExpr.Cond[] found = {null};
+
+        expr.transform((e) -> {
+            if (found[0] == null && e instanceof NumberExpr.Cond c) {
+                found[0] = c;
+            }
+            return e;
+        });
+
+        if (found[0] == null) {
+            return expr;
+        }
+
+        NumberExpr.Cond cond = found[0];
+        List<NumberExpr.Branch> branches = cond.branches().stream().map((b) -> new NumberExpr.Branch(b.condition(), substitute(expr, cond, b.value()))).toList();
+
+        return NumberExpr.cond(branches, substitute(expr, cond, cond.otherwise()));
+    }
+
+    @NotNull
+    private static NumberExpr substitute(NumberExpr expr, NumberExpr target, NumberExpr replacement) {
+        return expr.transform((e) -> e.equals(target) ? replacement : e);
+    }
+
+    @NotNull
+    private static LootCount withUsedConditions(NumberExpr value, List<TooltipNode> conditions) {
+        if (!(value instanceof NumberExpr.Cond cond)) {
+            return new LootCount(value.transform(NodeUtils::dropConditions), List.of());
+        }
+
+        List<TooltipNode> used = new ArrayList<>();
+        List<NumberExpr.Branch> branches = new ArrayList<>();
+
+        for (NumberExpr.Branch branch : cond.branches()) {
+            int index = -1;
+
+            if (branch.condition() >= 0) {
+                index = used.size();
+                used.add(conditions.get(branch.condition()));
+            }
+
+            branches.add(new NumberExpr.Branch(index, branch.value().transform(NodeUtils::dropConditions)));
+        }
+
+        return new LootCount(NumberExpr.cond(branches, cond.otherwise().transform(NodeUtils::dropConditions)), used);
+    }
+
+    @NotNull
+    private static NumberExpr dropConditions(NumberExpr expr) {
+        if (expr instanceof NumberExpr.Cond c) {
+            return NumberExpr.cond(c.branches().stream().map((b) -> new NumberExpr.Branch(-1, b.value())).toList(), c.otherwise());
+        }
+
+        return expr;
+    }
+
+    @NotNull
+    private static NumberExpr replaceWeight(NumberExpr sumWeight, NumberExpr weight, NumberExpr replacement) {
+        if (weight.equals(replacement)) {
+            return sumWeight;
+        }
+
+        NumberExpr found = findWeight(sumWeight, weight);
+
+        if (found == null) {
+            return NumberExpr.add(NumberExpr.sub(sumWeight, weight), replacement);
+        }
+
+        boolean[] replaced = {false};
+
+        return sumWeight.transform((e) -> {
+            if (!replaced[0] && e.equals(found)) {
+                replaced[0] = true;
+                return replacement;
+            }
+            return e;
+        });
+    }
+
+    @Nullable
+    private static NumberExpr findWeight(NumberExpr sumWeight, NumberExpr weight) {
+        if (weight instanceof NumberExpr.Const) {
+            return null;
+        }
+
+        int base = firstCondition(weight);
+        NumberExpr[] found = {null};
+
+        sumWeight.transform((e) -> {
+            if (found[0] == null && e.getClass() == weight.getClass() && weight.shiftConditions(firstCondition(e) - base).equals(e)) {
+                found[0] = e;
+            }
+            return e;
+        });
+        return found[0];
+    }
+
+    private static int firstCondition(NumberExpr expr) {
+        int[] first = {-1};
+
+        expr.transform((e) -> {
+            if (first[0] < 0 && e instanceof NumberExpr.Cond c) {
+                c.branches().stream().mapToInt(NumberExpr.Branch::condition).filter((i) -> i >= 0).findFirst().ifPresent((i) -> first[0] = i);
+            }
+            return e;
+        });
+        return first[0];
     }
 
     public static float toFloat(NumberExpr chance) {
@@ -217,8 +347,29 @@ public class NodeUtils {
     }
 
     @NotNull
-    public static NumberExpr getAlternativesWeight(IServerUtils ignoredUtils, AlternativesEntry ignoredEntry, List<TooltipNode> ignoredConditions) {
-        return NumberExpr.constant(LootPoolSingletonContainer.DEFAULT_WEIGHT);
+    public static NumberExpr getAlternativesWeight(IServerUtils utils, AlternativesEntry entry, List<TooltipNode> conditions) {
+        int reachable = 0;
+
+        while (reachable < entry.children.length && entry.children[reachable].conditions.length > 0) {
+            reachable++;
+        }
+
+        NumberExpr weight = NumberExpr.constant(0);
+
+        if (reachable < entry.children.length) {
+            weight = utils.getEntryWeight(utils, entry.children[reachable], conditions);
+        }
+
+        for (int i = reachable - 1; i >= 0; i--) {
+            LootPoolEntryContainer child = entry.children[i];
+            NumberExpr childWeight = utils.getEntryWeight(utils, child, conditions);
+
+            if (!childWeight.equals(weight)) {
+                weight = TooltipUtils.conditional(utils, weight, childWeight, List.of(child.conditions), conditions);
+            }
+        }
+
+        return weight;
     }
 
     @NotNull

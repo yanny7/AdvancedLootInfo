@@ -73,6 +73,60 @@ public class PluginUtils {
         registry.registerEntryTooltip(targetClass, (u, c) -> factory.apply(c).getTooltip(u));
     }
 
+    public static <U extends LootPoolEntryContainer, T extends BaseAccessor<?> & IEntryWeight> void registerEntryWeight(IServerRegistry registry, Class<U> targetClass, Class<T> clazz) {
+        if (isValid(clazz, targetClass)) {
+            registry.registerEntryWeight(targetClass, (u, e, l) -> ReflectionUtils.copyClassData(clazz, e, targetClass).getEntryWeight(u, l));
+        }
+    }
+
+    public static <T extends BaseAccessor<?> & IEntryWeight> void registerEntryWeight(IServerRegistry registry, Class<T> clazz) {
+        ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
+
+        if (classAnnotation != null) {
+            try {
+                //noinspection unchecked
+                Class<LootPoolEntryContainer> entryClass = (Class<LootPoolEntryContainer>) Class.forName(classAnnotation.value());
+                ReflectionUtils.validate(clazz, entryClass);
+                registry.registerEntryWeight(entryClass, (u, e, l) -> ReflectionUtils.copyClassData(clazz, e).getEntryWeight(u, l));
+            } catch (Throwable e) {
+                LOGGER.warn("Failed to register entry weight for {} with error {}", classAnnotation.value(), e.getMessage(), e);
+            }
+        } else {
+            throw new IllegalStateException("Missing ClassAccessor annotation for entry weight " + clazz.getName());
+        }
+    }
+
+    public static <U extends LootPoolEntryContainer, T extends IEntryWeight> void registerEntryWeight(IServerRegistry registry, Class<U> targetClass, Function<U, T> factory) {
+        registry.registerEntryWeight(targetClass, (u, e, l) -> factory.apply(e).getEntryWeight(u, l));
+    }
+
+    public static <U extends LootPoolEntryContainer, T extends BaseAccessor<?> & IEntryChildren> void registerEntryChildren(IServerRegistry registry, Class<U> targetClass, Class<T> clazz) {
+        if (isValid(clazz, targetClass)) {
+            registry.registerEntryChildren(targetClass, (u, e) -> ReflectionUtils.copyClassData(clazz, e, targetClass).getEntryChildren(u));
+        }
+    }
+
+    public static <T extends BaseAccessor<?> & IEntryChildren> void registerEntryChildren(IServerRegistry registry, Class<T> clazz) {
+        ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
+
+        if (classAnnotation != null) {
+            try {
+                //noinspection unchecked
+                Class<LootPoolEntryContainer> entryClass = (Class<LootPoolEntryContainer>) Class.forName(classAnnotation.value());
+                ReflectionUtils.validate(clazz, entryClass);
+                registry.registerEntryChildren(entryClass, (u, e) -> ReflectionUtils.copyClassData(clazz, e).getEntryChildren(u));
+            } catch (Throwable e) {
+                LOGGER.warn("Failed to register entry children for {} with error {}", classAnnotation.value(), e.getMessage(), e);
+            }
+        } else {
+            throw new IllegalStateException("Missing ClassAccessor annotation for entry children " + clazz.getName());
+        }
+    }
+
+    public static <U extends LootPoolEntryContainer, T extends IEntryChildren> void registerEntryChildren(IServerRegistry registry, Class<U> targetClass, Function<U, T> factory) {
+        registry.registerEntryChildren(targetClass, (u, e) -> factory.apply(e).getEntryChildren(u));
+    }
+
     public static <U extends LootItemFunction, T extends BaseAccessor<?> & IFunctionTooltip> void registerFunctionTooltip(IServerRegistry registry, Class<U> targetClass, Class<T> clazz) {
         if (isValid(clazz, targetClass)) {
             registry.registerFunctionTooltip(targetClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c, targetClass).getTooltip(u));

@@ -246,6 +246,12 @@
     "curseforge": ["sophisticated-storage-619320"]
   },
   {
+    "key": "spellengine",
+    "name": "Spell Engine",
+    "mod_ids": ["spell_engine"],
+    "curseforge": ["spell-engine-807653"]
+  },
+  {
     "key": "supplementaries",
     "name": "Supplementaries",
     "mod_ids": ["supplementaries"],

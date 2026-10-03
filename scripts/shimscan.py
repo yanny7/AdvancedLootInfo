@@ -39,6 +39,8 @@ HOOK_OF_METHOD = {
     "registerConditionUnwrapper": ["condition"],
     "registerEntry": ["entry"],
     "registerEntryTooltip": ["entry"],
+    "registerEntryWeight": ["entry"],
+    "registerEntryChildren": ["entry"],
     "registerNumberProvider": ["number_provider"],
     "registerIngredientTooltip": ["ingredient"],
     "registerItemListing": ["item_listing"],
