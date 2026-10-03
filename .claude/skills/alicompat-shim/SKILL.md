@@ -485,6 +485,13 @@ lower branch's source set for another loader, copy its `scan_ignore.json`, and r
 version's jar. A loader with no file keeps its merged source set untouched — no `_dep` line means nothing compiles it.
 A changelog line merged up for a loader this branch has no file on is removed from `## []` here.
 
+The merged source set is the lower version's class list, so diff it against this version's jar before copying it
+anywhere (Step 1). A target class the jar no longer has takes its accessor file, its `register…` lines in the
+`IModCompat` and its now unused `Lang` constants with it — leaving them fails the build, and leaving only the key leaves
+an unused lang key. Fill a scaffolded loader only after that cleanup, so both loaders get the same class list; the copy
+replaces the `--scaffold` skeleton (`IModCompat`, `package-info.java`, services) wholesale. Dropping the
+"Added X support" changelog line was the merge's job while the slug was dormant; it goes back under `## []` with the port.
+
 `alicompat/CHANGELOG.md`: while ALICompat is unreleased — the top section is `## []` reading
 `Initial release` — a new shim gets **no** entry; that section already covers every shim shipped in
 it, and neither the Ribbits nor the Twilight Forest commit touched the file. Once a numbered version
