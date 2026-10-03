@@ -1,6 +1,8 @@
 ## []
 
 - Added Spell Engine support (RPG Series loot)
+- Added Sophisticated Backpacks support
+- Added Sophisticated Storage support
 - Entry chances account for quality and luck
 - Counts and prices show their distribution
 - Improved crash recovery when versions doesn't match

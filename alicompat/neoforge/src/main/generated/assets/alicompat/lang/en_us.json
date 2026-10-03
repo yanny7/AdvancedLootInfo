@@ -1,8 +1,19 @@
 {
+  "alicompat.enum.spell_engine.weight_operation.add": "Add",
+  "alicompat.enum.spell_engine.weight_operation.multiply": "Multiply",
   "alicompat.occultism.property.value.with_third_eye": "Requires Third Eye, Otherworld Goggles or True Sight Staff",
   "alicompat.occultism.property.value.without_third_eye": "Without Third Eye, Otherworld Goggles or True Sight Staff",
   "alicompat.occultism.type.consume_effect.damage_item": "Damage Item:",
   "alicompat.repurposed_structures.property.branch.blacklisted_loot_tables": "Blacklisted Loot Tables:",
   "alicompat.repurposed_structures.property.value.modded_items_only": "Only items added by other mods",
-  "alicompat.repurposed_structures.type.condition.detect_rs_loot_tables": "Detect Repurposed Structures Loot Tables:"
+  "alicompat.repurposed_structures.type.condition.detect_rs_loot_tables": "Detect Repurposed Structures Loot Tables:",
+  "alicompat.sophisticatedbackpacks.type.condition.loot_enabled": "Chest Loot Enabled",
+  "alicompat.sophisticatedbackpacks.type.function.copy_backpack_data": "Copy Backpack Data:",
+  "alicompat.sophisticatedstorage.type.function.copy_storage_data": "Copy Storage Data:",
+  "alicompat.spell_engine.property.value.extra_weight": "Class Affiliation Extra Weight: %s",
+  "alicompat.spell_engine.property.value.include_team": "Include Team: %s",
+  "alicompat.spell_engine.property.value.spell_pool": "Spell Pool: %s",
+  "alicompat.spell_engine.property.value.tier": "Tier: %s",
+  "alicompat.spell_engine.type.entry.affiliation_group": "Affiliation Group:",
+  "alicompat.spell_engine.type.function.spell_bind_randomly": "Spell Bind Randomly:"
 }

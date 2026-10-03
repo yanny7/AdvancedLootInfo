@@ -39,13 +39,14 @@ public class AffiliationGroupEntryAccessor extends BaseAccessor<AffiliationGroup
 
     @Override
     public IDataNode create(IServerUtils utils, NumberExpr chance, NumberExpr sumWeight, List<TooltipNode> chanceConditions, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        List<LootItemCondition> allConditions = NodeUtils.getAllConditions(parent, conditions);
+        List<LootItemFunction> allFunctions = NodeUtils.getAllFunctions(utils, parent, functions);
+        List<LootItemCondition> allConditions = NodeUtils.getAllConditions(utils, parent, conditions);
         TooltipNode tooltip = TooltipBuilder.array((b) -> {
             b.add(TooltipUtils.getGroupTooltip());
             addAffiliation(b, utils);
         }).build();
 
-        return new GroupNode(NodeUtils.getChildren(utils, parent.children(), chance, sumWeight, chanceConditions, functions, allConditions), tooltip);
+        return new GroupNode(NodeUtils.getChildren(utils, parent.children(), chance, sumWeight, chanceConditions, allFunctions, allConditions), tooltip);
     }
 
     @Override
@@ -53,7 +54,8 @@ public class AffiliationGroupEntryAccessor extends BaseAccessor<AffiliationGroup
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, parent.children()).build(Lang.Branch.ENTRIES));
             addAffiliation(b, utils);
-            b.add(utils.getValueTooltip(utils, parent.conditions).build(Lang.Branch.PREDICATES));
+            b.add(utils.getValueTooltip(utils, parent.condition).build(Lang.Branch.PREDICATES));
+            b.add(utils.getValueTooltip(utils, parent.modifier).build(Lang.Branch.MODIFIERS));
         }, SpellEngineLang.Entry.AFFILIATION_GROUP);
     }
 
