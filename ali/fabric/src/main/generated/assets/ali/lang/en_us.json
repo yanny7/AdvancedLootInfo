@@ -79,6 +79,8 @@
   "ali.number.var.enchantment_level.desc": "enchantment level",
   "ali.number.var.luck": "luck",
   "ali.number.var.luck.desc": "luck",
+  "ali.number.var.luck.row": "Luck %s",
+  "ali.number.var.luck.row.negative": "Bad Luck",
   "ali.number.var.storage": "storage(%s; %s)",
   "ali.number.var.storage.desc": "storage \"%2$s\" (%1$s)",
   "ali.property.branch.abilities": "Abilities:",

@@ -61,11 +61,11 @@ public abstract class AbstractLootModifier<T> implements ILootModifier<T> {
                 case CustomPlayerAction ignoredAction -> {}
                 case AddLootAction addLootAction -> {
                     for (LootPoolEntryContainer entry : addLootAction.entries()) {
-                        operations.add(new IOperation.AddOperation((s) -> true, utils.getEntryFactory(utils, entry).create(utils, entry, 1, 1, functions, conditions)));
+                        operations.add(new IOperation.AddOperation((s) -> true, utils.getEntryFactory(utils, entry).create(utils, entry, NumberExpr.constant(1), NumberExpr.constant(1), List.of(), functions, conditions)));
                     }
                 }
                 case LootPoolAction lootPoolAction ->
-                        operations.add(new IOperation.AddOperation((s) -> true, NodeUtils.getLootPoolNode(utils, lootPoolAction.pool(), 1, functions, conditions)));
+                        operations.add(new IOperation.AddOperation((s) -> true, NodeUtils.getLootPoolNode(utils, lootPoolAction.pool(), NumberExpr.constant(1), List.of(), functions, conditions)));
                 case RemoveLootAction removeLootAction -> {
                     Function<IDataNode, IDataNode> factory = (c) -> {
                         if (isOwnNode(c)) {
@@ -77,7 +77,7 @@ public abstract class AbstractLootModifier<T> implements ILootModifier<T> {
                         }
 
                         if (c instanceof ItemNode i) {
-                            NumberExpr chance = getChance(utils, i.getConditions(), i.getChance());
+                            LootCount chance = getChance(utils, i.getConditions(), i.getChance());
                             LootCount count;
 
                             if (i.getFunctions().isEmpty()) {

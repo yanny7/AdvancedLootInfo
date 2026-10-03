@@ -153,7 +153,7 @@ public class ServerUtilsTest {
 
     @Test
     public void testFailingCountModifierGivesOpaque() {
-        PluginManager.getInstance().serverRegistry.registerCountModifier(BrokenFunction.class, (u, f, c) -> {
+        PluginManager.getInstance().serverRegistry.registerCountModifier(BrokenFunction.class, (u, f, c, l) -> {
             throw new IllegalStateException("broken modifier");
         });
 
@@ -162,11 +162,11 @@ public class ServerUtilsTest {
 
     @Test
     public void testFailingChanceModifierGivesOpaque() {
-        PluginManager.getInstance().serverRegistry.registerChanceModifier(BrokenCondition.class, (u, c, v) -> {
+        PluginManager.getInstance().serverRegistry.registerChanceModifier(BrokenCondition.class, (u, c, v, l) -> {
             throw new IllegalStateException("broken modifier");
         });
 
-        assertEquals(NumberExpr.opaque("minecraft:unknown"), UTILS.applyChanceModifier(UTILS, new BrokenCondition(), NumberExpr.constant(1)));
+        assertEquals(NumberExpr.opaque("minecraft:unknown"), UTILS.applyChanceModifier(UTILS, new BrokenCondition(), NumberExpr.constant(1), new ArrayList<>()));
     }
 
     private record BrokenItemFunction() implements LootItemFunction {

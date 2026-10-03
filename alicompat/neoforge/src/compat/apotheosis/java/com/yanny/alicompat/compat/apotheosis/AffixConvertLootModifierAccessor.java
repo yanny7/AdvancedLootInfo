@@ -74,7 +74,7 @@ public class AffixConvertLootModifierAccessor extends BaseAccessor<AffixConvertL
         IItemNode node = (IItemNode) src;
         LootItemCondition chance = LootItemRandomChanceCondition.randomChance(entry.chance()).build();
         List<LootItemCondition> allConditions = Stream.concat(Stream.concat(conditions.stream(), node.getConditions().stream()), Stream.of(chance)).toList();
-        NumberExpr itemChance = NodeUtils.getChance(utils, allConditions, node.getChance());
+        LootCount itemChance = NodeUtils.getChance(utils, allConditions, node.getChance());
         NumberExpr count = node.getCount();
         TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, itemChance, LootCount.of(count), NodeUtils.getCountLimit(node.getItem()), node.getFunctions(), allConditions);
 

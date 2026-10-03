@@ -47,7 +47,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.entries.CompositeEntryBase;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
@@ -117,7 +116,7 @@ public abstract class AbstractServer {
 
         lootTables.forEach(serverRegistry::addLootTable); // used for table references
 
-        Set<ResourceLocation> referencedLootTables = collectReferencedLootTables(lootTables, fakeLootTables);
+        Set<ResourceLocation> referencedLootTables = collectReferencedLootTables(serverRegistry, lootTables, fakeLootTables);
 
         chunks.clear();
 
@@ -287,7 +286,8 @@ public abstract class AbstractServer {
         LootPool pool = pools.getFirst();
 
         if (pool.entries.size() != 1 || !isIgnoredFunctions(config, pool.functions) || !isIgnoredConditions(config, pool.conditions)
-                || !isConstant(serverRegistry.convertIntNumber(serverRegistry, pool.rolls), 1) || !isConstant(serverRegistry.convertNumber(serverRegistry, pool.bonusRolls), 0)) {
+                || !isConstant(serverRegistry.convertIntNumber(serverRegistry, pool.rolls, new ArrayList<>()), 1)
+                || !isConstant(serverRegistry.convertNumber(serverRegistry, pool.bonusRolls, new ArrayList<>()), 0)) {
             return false;
         }
 
@@ -676,28 +676,29 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static Set<ResourceLocation> collectReferencedLootTables(Map<ResourceLocation, LootTable> lootTables, Map<ResourceLocation, LootTable> fakeLootTables) {
+    private static Set<ResourceLocation> collectReferencedLootTables(AliServerRegistry serverRegistry, Map<ResourceLocation, LootTable> lootTables,
+                                                                    Map<ResourceLocation, LootTable> fakeLootTables) {
         Set<ResourceLocation> referenced = new HashSet<>();
 
         Stream.concat(lootTables.values().stream(), fakeLootTables.values().stream())
-                .forEach((lootTable) -> collectReferences(lootTable, referenced));
+                .forEach((lootTable) -> collectReferences(serverRegistry, lootTable, referenced));
 
         return referenced;
     }
 
-    private static void collectReferences(LootTable lootTable, Set<ResourceLocation> referenced) {
-        lootTable.pools.forEach((pool) -> collectReferences(pool.entries, referenced));
+    private static void collectReferences(AliServerRegistry serverRegistry, LootTable lootTable, Set<ResourceLocation> referenced) {
+        lootTable.pools.forEach((pool) -> collectReferences(serverRegistry, pool.entries, referenced));
     }
 
-    private static void collectReferences(List<LootPoolEntryContainer> entries, Set<ResourceLocation> referenced) {
+    private static void collectReferences(AliServerRegistry serverRegistry, List<LootPoolEntryContainer> entries, Set<ResourceLocation> referenced) {
         for (LootPoolEntryContainer entry : entries) {
             if (entry instanceof NestedLootTable nested) {
                 nested.contents
                         .ifLeft((key) -> referenced.add(key.location()))
-                        .ifRight((lootTable) -> collectReferences(lootTable, referenced));
-            } else if (entry instanceof CompositeEntryBase composite) {
-                collectReferences(composite.children, referenced);
+                        .ifRight((lootTable) -> collectReferences(serverRegistry, lootTable, referenced));
             }
+
+            collectReferences(serverRegistry, serverRegistry.getEntryChildren(serverRegistry, entry), referenced);
         }
     }
 

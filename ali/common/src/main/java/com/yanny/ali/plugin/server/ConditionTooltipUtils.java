@@ -129,7 +129,7 @@ public class ConditionTooltipUtils {
     @NotNull
     public static TooltipBuilder getValueCheckTooltip(IServerUtils utils, ValueCheckCondition cond) {
         return TooltipBuilder.array((b) -> {
-            b.add(TooltipBuilder.number(utils.convertIntNumber(utils, cond.provider())).build(Lang.Value.PROVIDER));
+            b.add(TooltipUtils.getIntNumberTooltip(utils, cond.provider()).build(Lang.Value.PROVIDER));
             b.add(utils.getValueTooltip(utils, cond.range()).build(Lang.Value.RANGE));
         }, Lang.Conditions.VALUE_CHECK);
     }

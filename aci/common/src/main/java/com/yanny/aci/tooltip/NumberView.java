@@ -45,7 +45,7 @@ final class NumberView {
         this.error = error;
     }
 
-    private record Row(int depth, @Nullable NumberText enchantment, int level, @Nullable NumberText value, @Nullable NumberText mode,
+    private record Row(int depth, @Nullable NumberText name, @Nullable NumberText label, @Nullable NumberText value, @Nullable NumberText mode,
                        int condition, int color) {
     }
 
@@ -100,12 +100,17 @@ final class NumberView {
 
             line.append(Component.literal("-> ").withStyle(style.branch()));
 
-            if (row.enchantment != null) {
+            if (row.name != null) {
                 Style labelStyle = row.color != NO_COLOR ? Style.EMPTY.withColor(style.level(row.color)) : style.text();
-                Component name = row.enchantment.toComponent(locale).withStyle(labelStyle);
-                Component level = levelLabel(row.level).withStyle(labelStyle);
+                Component name = row.name.toComponent(locale).withStyle(labelStyle);
 
-                line.append(Component.translatable(CoreLang.Numbers.LEVEL_ROW.singular(), name, level, value(row, style, locale)).withStyle(style.text()));
+                if (row.label != null) {
+                    Component level = row.label.toComponent(locale).withStyle(labelStyle);
+
+                    line.append(Component.translatable(CoreLang.Numbers.LEVEL_ROW.singular(), name, level, value(row, style, locale)).withStyle(style.text()));
+                } else {
+                    line.append(Component.translatable(CoreLang.Numbers.VAR_ROW.singular(), name, value(row, style, locale)).withStyle(style.text()));
+                }
             } else {
                 line.append(value(row, style, locale));
             }
@@ -154,13 +159,13 @@ final class NumberView {
         return value;
     }
 
-    @NotNull
-    private static MutableComponent levelLabel(int level) {
-        if (level == 0) {
-            return Component.translatable(CoreLang.Numbers.VAR_LEVEL.singular());
+    @Nullable
+    private static NumberText rowLabel(NumberExpr.Var var, int value) {
+        if (var.type().equals(NumberExpr.LEVEL)) {
+            return NumberText.key(value == 0 ? CoreLang.Numbers.VAR_LEVEL.singular() : "enchantment.level." + value);
         }
 
-        return Component.translatable("enchantment.level." + level);
+        return null;
     }
 
     @NotNull
@@ -184,7 +189,7 @@ final class NumberView {
 
             w.entries().forEach((e) -> block(rows, e.value(), number, showFormulas, 1, -1, NumberFormatter.number(e.weight() / total, true), false));
 
-            Row main = new Row(0, null, 0, formatted.value(), formatted.mode(), -1, NO_COLOR);
+            Row main = new Row(0, null, null, formatted.value(), formatted.mode(), -1, NO_COLOR);
 
             return new NumberView(main, rows, showCharts ? chart(List.of(unbound(expr)), number) : null, false);
         }
@@ -194,7 +199,7 @@ final class NumberView {
 
         levelRows(rows, expr, number, showFormulas, 1, showCharts, levels);
 
-        Row main = new Row(0, null, 0, formatted.value(), formatted.mode(), -1, NO_COLOR);
+        Row main = new Row(0, null, null, formatted.value(), formatted.mode(), -1, NO_COLOR);
         List<NumberExpr> series = new ArrayList<>();
 
         series.add(unbound(expr));
@@ -203,7 +208,7 @@ final class NumberView {
         ChartData chart = showCharts ? chart(series, number) : null;
 
         if (chart == null) {
-            rows.replaceAll((r) -> new Row(r.depth, r.enchantment, r.level, r.value, r.mode, r.condition, NO_COLOR));
+            rows.replaceAll((r) -> new Row(r.depth, r.name, r.label, r.value, r.mode, r.condition, NO_COLOR));
         }
 
         return new NumberView(main, rows, chart, false);
@@ -221,17 +226,16 @@ final class NumberView {
             text = NumberText.key(CoreLang.Numbers.OTHERWISE.singular(), text);
         }
 
-        rows.add(new Row(depth, null, 0, text, formatted.mode(), condition, NO_COLOR));
+        rows.add(new Row(depth, null, null, text, formatted.mode(), condition, NO_COLOR));
         levelRows(rows, value, number, showFormulas, depth + 1, false, new ArrayList<>());
     }
 
     private static void levelRows(List<Row> rows, NumberExpr expr, TooltipNumber number, boolean showFormulas, int depth, boolean colored,
                                   List<NumberExpr> levels) {
-        List<NumberExpr.Var> vars = levelVars(expr);
+        List<NumberExpr.Var> vars = steppedVars(expr);
 
         for (NumberExpr.Var var : vars) {
             NumberExpr single = expr;
-            NumberText enchantment = enchantmentName(var);
 
             for (NumberExpr.Var other : vars) {
                 if (!other.equals(var)) {
@@ -240,32 +244,37 @@ final class NumberView {
             }
 
             if (showFormulas) {
-                rows.add(new Row(depth, enchantment, 0, NumberFormatter.format(single, true, number.percent()).value(), null, -1, NO_COLOR));
+                rows.add(new Row(depth, rowName(var, 0), rowLabel(var, 0), NumberFormatter.format(single, true, number.percent()).value(), null, -1, NO_COLOR));
             }
 
-            int max = (int) Math.min(var.max(), MAX_LEVEL_ROWS);
+            int min = (int) Math.max(Math.ceil(var.min()), -MAX_LEVEL_ROWS);
+            int max = (int) Math.min(Math.floor(var.max()), MAX_LEVEL_ROWS);
 
-            for (int level = 1; level <= max; level++) {
-                NumberExpr bound = single.bind(var, level);
+            for (int value = min; value <= max; value++) {
+                if (value == 0) {
+                    continue;
+                }
+
+                NumberExpr bound = single.bind(var, value);
                 NumberFormatter.Formatted formatted = format(bound, false, number);
                 int color = colored ? levels.size() : NO_COLOR;
 
                 levels.add(bound);
-                rows.add(new Row(depth, enchantment, level, formatted.value(), formatted.mode(), -1, color));
+                rows.add(new Row(depth, rowName(var, value), rowLabel(var, value), formatted.value(), formatted.mode(), -1, color));
             }
         }
     }
 
     @NotNull
-    private static List<NumberExpr.Var> levelVars(NumberExpr expr) {
-        return expr.vars().stream().filter((v) -> v.type().equals(NumberExpr.LEVEL)).toList();
+    private static List<NumberExpr.Var> steppedVars(NumberExpr expr) {
+        return expr.vars().stream().filter((v) -> Double.isFinite(v.min()) && Double.isFinite(v.max()) && v.min() <= 0 && v.max() >= 0).toList();
     }
 
     @NotNull
     private static NumberExpr unbound(NumberExpr expr) {
         NumberExpr result = expr;
 
-        for (NumberExpr.Var var : levelVars(expr)) {
+        for (NumberExpr.Var var : steppedVars(expr)) {
             result = result.bind(var, 0);
         }
 
@@ -273,7 +282,19 @@ final class NumberView {
     }
 
     @NotNull
-    private static NumberText enchantmentName(NumberExpr.Var var) {
+    private static NumberText rowName(NumberExpr.Var var, int value) {
+        if (!var.type().equals(NumberExpr.LEVEL)) {
+            String key = NumberFormatter.varKey(var.type());
+            List<NumberText> args = new ArrayList<>();
+
+            if (value == 0) {
+                return new NumberText.Key(key, var.args());
+            }
+
+            args.add(NumberText.num(Math.abs(value)));
+            args.addAll(var.args());
+            return new NumberText.Key(key + (value < 0 ? ".row.negative" : ".row"), args);
+        }
         if (!var.args().isEmpty() && var.args().get(0) instanceof NumberText.Str s) {
             ResourceLocation id = ResourceLocation.tryParse(s.text());
 

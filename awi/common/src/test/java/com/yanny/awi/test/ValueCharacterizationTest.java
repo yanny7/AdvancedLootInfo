@@ -9,6 +9,7 @@ import net.minecraft.util.valueproviders.*;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.heightproviders.BiasedToBottomHeight;
 import org.junit.jupiter.api.Test;
+import java.util.List;
 
 import static com.yanny.awi.test.TooltipTestSuite.UTILS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,7 +19,7 @@ public class ValueCharacterizationTest {
 
     @Test
     public void testClampedUniformInt() {
-        NumberExpr expr = UTILS.convertIntProvider(UTILS, ClampedInt.of(UniformInt.of(-10, 4), 0, 4));
+        NumberExpr expr = UTILS.convertIntProvider(UTILS, ClampedInt.of(UniformInt.of(-10, 4), 0, 4), List.of());
 
         assertEquals(NumberInterval.closed(0, 4), expr.bounds());
         assertMode(expr, 0, 0, 11.0 / 15);
@@ -26,7 +27,7 @@ public class ValueCharacterizationTest {
 
     @Test
     public void testClampedNormalInt() {
-        NumberExpr expr = UTILS.convertIntProvider(UTILS, ClampedNormalInt.of(3, 1, 1, 5));
+        NumberExpr expr = UTILS.convertIntProvider(UTILS, ClampedNormalInt.of(3, 1, 1, 5), List.of());
 
         assertEquals(NumberInterval.closed(1, 5), expr.bounds());
         assertMode(expr, 2, 3, 0.3413);
@@ -38,7 +39,7 @@ public class ValueCharacterizationTest {
                 .add(ConstantInt.of(1), 9)
                 .add(ConstantInt.of(2), 1)
                 .build();
-        NumberExpr expr = UTILS.convertIntProvider(UTILS, new WeightedListInt(distribution));
+        NumberExpr expr = UTILS.convertIntProvider(UTILS, new WeightedListInt(distribution), List.of());
 
         assertEquals(NumberInterval.closed(1, 2), expr.bounds());
         assertMode(expr, 1, 1, 0.9);
@@ -46,7 +47,7 @@ public class ValueCharacterizationTest {
 
     @Test
     public void testBiasedToBottomHeight() {
-        NumberExpr expr = UTILS.convertHeightProvider(UTILS, BiasedToBottomHeight.of(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(16), 1), CTX);
+        NumberExpr expr = UTILS.convertHeightProvider(UTILS, BiasedToBottomHeight.of(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(16), 1), CTX, List.of());
         double probability = 0;
 
         for (int k = 1; k <= 80; k++) {
