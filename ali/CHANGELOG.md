@@ -1,5 +1,9 @@
 ## []
 
+- Chances and rolls depending on luck show one row per luck value
+- Entry chance accounts for quality and luck
+- Chances in pools with alternatives account for the weight of the alternative that is picked
+- Number converters, count and chance modifiers and entry factories receive the condition tooltips of their conditional values
 - Scrollable tooltip by mouse wheel when taller than screen
 - Counts and chances show most likely value, level rows, charts (`showCharts`) and formulas (F3+H)
 - Broken loot function or condition support from other mods no longer hides the whole loot table
@@ -11,6 +15,7 @@
 - Enchantment level based values show as one number with level rows instead of a structure tree
 - Scoreboard and storage number providers show their fallback value
 - Trade prices, uses, experience and offer counts show the conditions of their conditional values
+- Fixed names built from arguments (e.g. GregTech `%s Dust`)
 
 ## [2.3.0]
 

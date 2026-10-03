@@ -1,6 +1,8 @@
 package com.yanny.awi.plugin.server;
 
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.language.Lang;
 import net.minecraft.util.random.Weighted;
@@ -35,6 +37,9 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.rule.blockent
 import net.minecraft.world.level.material.FluidState;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getEnumTooltip(IServerUtils utils, Enum<?> value) {
@@ -43,7 +48,10 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getIntProviderTooltip(IServerUtils utils, IntProvider value) {
-        return TooltipBuilder.branch((b) -> b.add(TooltipBuilder.number(utils.convertIntProvider(utils, value))));
+        List<TooltipNode> conditions = new ArrayList<>();
+        NumberExpr number = utils.convertIntProvider(utils, value, conditions);
+
+        return TooltipBuilder.branch((b) -> b.add(TooltipBuilder.number(number, conditions)));
     }
 
     @NotNull
@@ -93,7 +101,10 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getFloatProviderTooltip(IServerUtils utils, FloatProvider value) {
-        return TooltipBuilder.branch((b) -> b.add(TooltipBuilder.number(utils.convertFloatProvider(utils, value))));
+        List<TooltipNode> conditions = new ArrayList<>();
+        NumberExpr number = utils.convertFloatProvider(utils, value, conditions);
+
+        return TooltipBuilder.branch((b) -> b.add(TooltipBuilder.number(number, conditions)));
     }
 
     @NotNull

@@ -6,7 +6,7 @@ Guidance for `ali/common-lootjs` (`com.yanny.ali.lootjs`) — ALI's optional Loo
 
 Only included when `lootjs_enabled == "true"` in `gradle.properties` (`settings.gradle`: `if (settings.lootjs_enabled == "true") include("ali:common-lootjs")`). Built via Architectury's `common(enabled_platforms)` so it's mixin/refmap-compiled against whichever loaders are enabled.
 
-⚠️ On this `1.21.5` branch `lootjs_enabled=false`, so this module is **not in the build at all** — and neither loader references it: `ali/fabric`'s `fabric.mod.json` lists no `LootJsPlugin` entrypoint and no `ali.lootjs.mixins.json` (`lootjs` appears only under `suggests`), and `ali/neoforge`'s `neoforge.mods.toml` has no `ali.lootjs.mixins.json` `[[mixins]]` block either. Reviving it means flipping `lootjs_enabled` plus the per-loader `<platform>_lootjs_enabled` flag *and* re-adding those resource references; the code below has not been compiled against 1.21.5.
+On this branch the module is built for NeoForge only (`neoforge_lootjs_enabled=true`; `fabric_lootjs_enabled`/`forge_lootjs_enabled=false`): `ali/neoforge` declares `ali.lootjs.mixins.json` in `neoforge.mods.toml` and compiles against LootJS (`compileOnly` in `ali/neoforge/build.gradle`), while `ali/fabric`'s `fabric.mod.json` only lists `lootjs` under `suggests` and has no `LootJsPlugin` entrypoint.
 
 ## What it does
 

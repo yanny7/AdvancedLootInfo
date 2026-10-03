@@ -160,6 +160,6 @@ public class IntProviderTest {
     }
 
     private static void assertValue(Holder<ContextIntProvider> provider, String... expected) {
-        assertTooltip(TooltipUtils.getNumberTooltip(UTILS, () -> UTILS.convertContextInt(UTILS, provider)).build(Lang.Value.VALUE), true, List.of(expected));
+        assertTooltip(TooltipUtils.getNumberTooltip((c) -> UTILS.convertContextInt(UTILS, provider, c)).build(Lang.Value.VALUE), true, List.of(expected));
     }
 }

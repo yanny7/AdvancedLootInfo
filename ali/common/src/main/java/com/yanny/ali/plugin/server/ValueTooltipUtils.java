@@ -6,6 +6,7 @@ import com.mojang.authlib.properties.Property;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import net.minecraft.advancements.predicates.*;
@@ -288,7 +289,7 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getEffectEntryTooltip(IServerUtils utils, SetStewEffectFunction.EffectEntry entry) {
         return utils.getValueTooltip(utils, entry.effect())
-                .add(TooltipUtils.getNumberTooltip(utils, () -> utils.convertContextInt(utils, entry.duration())).build(Lang.Value.DURATION));
+                .add(TooltipUtils.getIntNumberTooltip(utils, entry.duration()).build(Lang.Value.DURATION));
     }
 
     @NotNull
@@ -312,12 +313,12 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getContextIntProviderTooltip(IServerUtils utils, ContextIntProvider value) {
-        return TooltipUtils.getNumberTooltip(utils, () -> utils.convertContextInt(utils, Holder.direct(value)));
+        return TooltipUtils.getIntNumberTooltip(utils, Holder.direct(value));
     }
 
     @NotNull
     public static TooltipBuilder getContextFloatProviderTooltip(IServerUtils utils, ContextFloatProvider value) {
-        return TooltipUtils.getNumberTooltip(utils, () -> utils.convertContextFloat(utils, Holder.direct(value)));
+        return TooltipUtils.getNumberTooltip(utils, Holder.direct(value));
     }
 
     @NotNull
@@ -338,22 +339,22 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getIntLimitTooltip(IServerUtils utils, IntLimit limit) {
-        return TooltipUtils.getNumberTooltip(utils, () -> GenericTooltipUtils.getRange(utils, limit.min, limit.max, IntProviderUtils::convert));
+        return TooltipUtils.getNumberTooltip((c) -> GenericTooltipUtils.getRange(utils, limit.min, limit.max, IntProviderUtils::convert, c));
     }
 
     @NotNull
     public static TooltipBuilder getIntRangePredicateTooltip(IServerUtils utils, IntRangePredicate range) {
         return switch (range) {
-            case IntRangePredicate.Point point -> TooltipUtils.getNumberTooltip(utils, () -> utils.convertContextInt(utils, point.value()));
-            case IntRangePredicate.Line line -> TooltipUtils.getNumberTooltip(utils, () -> GenericTooltipUtils.getRange(utils, line.min, line.max, IntProviderUtils::convert));
+            case IntRangePredicate.Point point -> TooltipUtils.getIntNumberTooltip(utils, point.value());
+            case IntRangePredicate.Line line -> TooltipUtils.getNumberTooltip((c) -> GenericTooltipUtils.getRange(utils, line.min, line.max, IntProviderUtils::convert, c));
         };
     }
 
     @NotNull
     public static TooltipBuilder getFloatRangePredicateTooltip(IServerUtils utils, FloatRangePredicate range) {
         return switch (range) {
-            case FloatRangePredicate.Point point -> TooltipUtils.getNumberTooltip(utils, () -> utils.convertContextFloat(utils, point.value()));
-            case FloatRangePredicate.Line line -> TooltipUtils.getNumberTooltip(utils, () -> GenericTooltipUtils.getRange(utils, line.min, line.max, FloatProviderUtils::convert));
+            case FloatRangePredicate.Point point -> TooltipUtils.getNumberTooltip(utils, point.value());
+            case FloatRangePredicate.Line line -> TooltipUtils.getNumberTooltip((c) -> GenericTooltipUtils.getRange(utils, line.min, line.max, FloatProviderUtils::convert, c));
         };
     }
 
@@ -645,7 +646,9 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getIntProviderTooltip(IServerUtils utils, IntProvider provider) {
-        return TooltipBuilder.number(utils.convertIntProvider(utils, provider));
+        List<TooltipNode> conditions = new ArrayList<>();
+
+        return TooltipBuilder.number(utils.convertIntProvider(utils, provider, conditions), conditions);
     }
 
     @NotNull

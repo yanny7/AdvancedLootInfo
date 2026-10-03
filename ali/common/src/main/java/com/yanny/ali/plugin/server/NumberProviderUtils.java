@@ -1,11 +1,13 @@
 package com.yanny.ali.plugin.server;
 
+import com.yanny.aci.api.NumberConverter;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberFunctions;
 import com.yanny.aci.api.NumberText;
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.language.ITooltipKey;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -29,44 +31,44 @@ import java.util.function.Function;
 
 public class NumberProviderUtils {
     @NotNull
-    public static <T> NumberExpr range(IServerUtils utils, RangeProvider<?> provider, BiFunction<IServerUtils, Holder<T>, NumberExpr> converter,
+    public static <T> NumberExpr range(IServerUtils utils, RangeProvider<?> provider, List<TooltipNode> conditions, NumberConverter<IServerUtils, Holder<T>> converter,
                                        BiFunction<NumberExpr, NumberExpr, NumberExpr> distribution) {
-        return distribution.apply(convert(utils, provider.min(), converter), convert(utils, provider.max(), converter));
+        return distribution.apply(convert(utils, provider.min(), converter, conditions), convert(utils, provider.max(), converter, conditions));
     }
 
     @NotNull
-    public static <T> NumberExpr aggregate(IServerUtils utils, AggregateProvider<?> provider, BiFunction<IServerUtils, Holder<T>, NumberExpr> converter,
+    public static <T> NumberExpr aggregate(IServerUtils utils, AggregateProvider<?> provider, List<TooltipNode> conditions, NumberConverter<IServerUtils, Holder<T>> converter,
                                            Function<NumberExpr[], NumberExpr> operation) {
         List<NumberExpr> values = new ArrayList<>();
 
         for (Holder<?> input : provider.inputs()) {
-            values.add(convert(utils, input, converter));
+            values.add(convert(utils, input, converter, conditions));
         }
 
         return operation.apply(values.toArray(NumberExpr[]::new));
     }
 
     @NotNull
-    public static <T> NumberExpr binary(IServerUtils utils, BinaryProvider<?> provider, BiFunction<IServerUtils, Holder<T>, NumberExpr> converter,
+    public static <T> NumberExpr binary(IServerUtils utils, BinaryProvider<?> provider, List<TooltipNode> conditions, NumberConverter<IServerUtils, Holder<T>> converter,
                                         BiFunction<NumberExpr, NumberExpr, NumberExpr> operation) {
-        return operation.apply(convert(utils, provider.left(), converter), convert(utils, provider.right(), converter));
+        return operation.apply(convert(utils, provider.left(), converter, conditions), convert(utils, provider.right(), converter, conditions));
     }
 
     @NotNull
-    public static <T> NumberExpr power(IServerUtils utils, PowerProvider<?> provider, BiFunction<IServerUtils, Holder<T>, NumberExpr> converter) {
-        return NumberExpr.fn(NumberFunctions.POW, convert(utils, provider.base(), converter), convert(utils, provider.exponent(), converter));
+    public static <T> NumberExpr power(IServerUtils utils, PowerProvider<?> provider, List<TooltipNode> conditions, NumberConverter<IServerUtils, Holder<T>> converter) {
+        return NumberExpr.fn(NumberFunctions.POW, convert(utils, provider.base(), converter, conditions), convert(utils, provider.exponent(), converter, conditions));
     }
 
     @NotNull
-    public static <T> NumberExpr unary(IServerUtils utils, UnaryProvider<?> provider, BiFunction<IServerUtils, Holder<T>, NumberExpr> converter,
+    public static <T> NumberExpr unary(IServerUtils utils, UnaryProvider<?> provider, List<TooltipNode> conditions, NumberConverter<IServerUtils, Holder<T>> converter,
                                        Function<NumberExpr, NumberExpr> operation) {
-        return operation.apply(convert(utils, provider.input(), converter));
+        return operation.apply(convert(utils, provider.input(), converter, conditions));
     }
 
     @NotNull
-    public static <T> NumberExpr conditional(IServerUtils utils, ConditionalProvider<?> provider, BiFunction<IServerUtils, Holder<T>, NumberExpr> converter) {
-        NumberExpr onTrue = convert(utils, provider.onTrue(), converter);
-        NumberExpr onFalse = convert(utils, provider.onFalse(), converter);
+    public static <T> NumberExpr conditional(IServerUtils utils, ConditionalProvider<?> provider, List<TooltipNode> conditions, NumberConverter<IServerUtils, Holder<T>> converter) {
+        NumberExpr onTrue = convert(utils, provider.onTrue(), converter, conditions);
+        NumberExpr onFalse = convert(utils, provider.onFalse(), converter, conditions);
 
         if (provider.condition().isBound() && provider.condition().value() instanceof LootItemRandomChanceCondition(Holder<?> chance)
                 && chance.isBound() && chance.value() instanceof ConstantValue(float probability)) {
@@ -79,26 +81,26 @@ public class NumberProviderUtils {
             return NumberExpr.weighted(List.of(new NumberExpr.WeightedEntry(probability, onTrue), new NumberExpr.WeightedEntry(1 - probability, onFalse)));
         }
 
-        return NumberExpr.cond(List.of(branch(utils, provider.condition(), onTrue)), onFalse);
+        return NumberExpr.cond(List.of(branch(utils, provider.condition(), onTrue, conditions)), onFalse);
     }
 
     @NotNull
-    public static <T> NumberExpr dispatcher(IServerUtils utils, DispatcherProvider<?> provider, BiFunction<IServerUtils, Holder<T>, NumberExpr> converter) {
+    public static <T> NumberExpr dispatcher(IServerUtils utils, DispatcherProvider<?> provider, List<TooltipNode> conditions, NumberConverter<IServerUtils, Holder<T>> converter) {
         List<NumberExpr.Branch> branches = new ArrayList<>();
 
         for (DispatcherProvider.Case<?> aCase : provider.cases()) {
-            branches.add(branch(utils, aCase.condition(), convert(utils, aCase.value(), converter)));
+            branches.add(branch(utils, aCase.condition(), convert(utils, aCase.value(), converter, conditions), conditions));
         }
 
-        return NumberExpr.cond(branches, convert(utils, provider.defaultValue(), converter));
+        return NumberExpr.cond(branches, convert(utils, provider.defaultValue(), converter, conditions));
     }
 
     @NotNull
-    public static <T> NumberExpr distribution(IServerUtils utils, DistributionProvider<?> provider, BiFunction<IServerUtils, Holder<T>, NumberExpr> converter) {
+    public static <T> NumberExpr distribution(IServerUtils utils, DistributionProvider<?> provider, List<TooltipNode> conditions, NumberConverter<IServerUtils, Holder<T>> converter) {
         List<NumberExpr.WeightedEntry> entries = new ArrayList<>();
 
         for (Weighted<? extends Holder<?>> entry : ((WeightedList<? extends Holder<?>>) provider.distribution()).unwrap()) {
-            entries.add(new NumberExpr.WeightedEntry(entry.weight(), convert(utils, entry.value(), converter)));
+            entries.add(new NumberExpr.WeightedEntry(entry.weight(), convert(utils, entry.value(), converter, conditions)));
         }
 
         return NumberExpr.weighted(entries);
@@ -126,8 +128,9 @@ public class NumberProviderUtils {
     }
 
     @NotNull
-    public static NumberExpr withFallback(IServerUtils utils, NumberExpr value, ITooltipKey existsKey, NumberExpr fallback) {
-        return NumberExpr.cond(List.of(new NumberExpr.Branch(utils.addNumberCondition(TooltipBuilder.keyOnly(existsKey).build()), value)), fallback);
+    public static NumberExpr withFallback(NumberExpr value, ITooltipKey existsKey, NumberExpr fallback, List<TooltipNode> conditions) {
+        conditions.add(TooltipBuilder.keyOnly(existsKey).build());
+        return NumberExpr.cond(List.of(new NumberExpr.Branch(conditions.size() - 1, value)), fallback);
     }
 
     @NotNull
@@ -137,16 +140,21 @@ public class NumberProviderUtils {
     }
 
     @NotNull
-    private static NumberExpr.Branch branch(IServerUtils utils, Holder<LootItemCondition> condition, NumberExpr value) {
-        int index = condition.isBound() ? utils.addNumberCondition(utils.getConditionTooltip(utils, condition.value()).build()) : -1;
+    private static NumberExpr.Branch branch(IServerUtils utils, Holder<LootItemCondition> condition, NumberExpr value, List<TooltipNode> conditions) {
+        TooltipNode tooltip = condition.isBound() ? utils.getConditionTooltip(utils, condition.value()).build() : TooltipNode.empty();
 
-        return new NumberExpr.Branch(index, value);
+        if (tooltip == TooltipNode.empty()) {
+            return new NumberExpr.Branch(-1, value);
+        }
+
+        conditions.add(tooltip);
+        return new NumberExpr.Branch(conditions.size() - 1, value);
     }
 
     @NotNull
-    private static <T> NumberExpr convert(IServerUtils utils, Holder<?> holder, BiFunction<IServerUtils, Holder<T>, NumberExpr> converter) {
+    private static <T> NumberExpr convert(IServerUtils utils, Holder<?> holder, NumberConverter<IServerUtils, Holder<T>> converter, List<TooltipNode> conditions) {
         //noinspection unchecked
-        return converter.apply(utils, (Holder<T>) holder);
+        return converter.convert(utils, (Holder<T>) holder, conditions);
     }
 
     @NotNull

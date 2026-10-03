@@ -1,5 +1,6 @@
 package com.yanny.alicompat.compat.apotheosis;
 
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
@@ -35,15 +36,15 @@ public class AffixLootPoolEntryAccessor extends BaseAccessor<AffixLootPoolEntry>
     }
 
     @Override
-    public IDataNode create(IServerUtils utils, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        List<LootItemCondition> allConditions = NodeUtils.getAllConditions(utils, parent, conditions);
-        List<LootItemFunction> allFunctions = NodeUtils.getAllFunctions(utils, parent, functions);
-        float itemChance = NodeUtils.getChance(parent, chance, sumWeight);
+    public IDataNode create(IServerUtils utils, NumberExpr chance, NumberExpr sumWeight, List<TooltipNode> chanceConditions, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        List<LootItemCondition> allConditions = NodeUtils.getAllConditions(parent, conditions);
+        List<LootItemFunction> allFunctions = NodeUtils.getAllFunctions(parent, functions);
+        LootCount itemChance = NodeUtils.getChance(utils, parent, chance, sumWeight, chanceConditions);
         ItemStack itemStack = TooltipUtils.getItemStack(utils, ApotheosisUtils.firstEntryStack(entries), allFunctions);
         LootCount count = NodeUtils.getCount(utils, allFunctions);
         TooltipNode tooltip = TooltipUtils.getTooltip(utils, parent.quality, NodeUtils.getChance(utils, allConditions, itemChance), count, NodeUtils.getCountLimit(itemStack), allFunctions, allConditions).build();
 
-        return new ItemNode(itemChance, count.value(), itemStack, tooltip, allFunctions, allConditions);
+        return new ItemNode(NodeUtils.toFloat(itemChance.value()), count.value(), itemStack, tooltip, allFunctions, allConditions);
     }
 
     @Override

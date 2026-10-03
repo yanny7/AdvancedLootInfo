@@ -1,5 +1,6 @@
 package com.yanny.ali.plugin.server;
 
+import com.yanny.aci.api.NumberConverter;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.tooltip.TooltipBuilder;
@@ -142,7 +143,7 @@ public class GenericTooltipUtils {
     @NotNull
     public static TooltipBuilder getEnchantmentLevelsEntryTooltip(IServerUtils utils, Map.Entry<Holder<Enchantment>, Holder<ContextIntProvider>> entry) {
         return utils.getValueTooltip(utils, entry.getKey())
-                .add(TooltipUtils.getNumberTooltip(utils, () -> utils.convertContextInt(utils, entry.getValue())).build(Lang.Value.LEVELS));
+                .add(TooltipUtils.getIntNumberTooltip(utils, entry.getValue()).build(Lang.Value.LEVELS));
     }
 
     @NotNull
@@ -241,9 +242,10 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static <T> NumberExpr getRange(IServerUtils utils, Optional<Holder<T>> minProvider, Optional<Holder<T>> maxProvider, BiFunction<IServerUtils, Holder<T>, NumberExpr> converter) {
-        NumberExpr min = minProvider.map((m) -> converter.apply(utils, m)).orElse(null);
-        NumberExpr max = maxProvider.map((m) -> converter.apply(utils, m)).orElse(null);
+    public static <T> NumberExpr getRange(IServerUtils utils, Optional<Holder<T>> minProvider, Optional<Holder<T>> maxProvider, NumberConverter<IServerUtils, Holder<T>> converter,
+                                          List<TooltipNode> conditions) {
+        NumberExpr min = minProvider.map((m) -> converter.convert(utils, m, conditions)).orElse(null);
+        NumberExpr max = maxProvider.map((m) -> converter.convert(utils, m, conditions)).orElse(null);
 
         return NumberExpr.range(min, max, min != null, max != null);
     }

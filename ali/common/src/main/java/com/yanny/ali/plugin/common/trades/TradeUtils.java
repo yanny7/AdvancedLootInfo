@@ -22,16 +22,16 @@ public class TradeUtils {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(trade.wants.item().value().getDefaultInstance()),
-                TooltipUtils.collectConditions(utils, () -> utils.convertContextInt(utils, trade.wants.count())),
+                TooltipUtils.collectConditions((c) -> utils.convertContextInt(utils, trade.wants.count(), c)),
                 utils.getValueTooltip(utils, trade.wants.components()).build(Lang.Branch.EXPECTED_COMPONENTS),
                 Either.left(trade.additionalWants.map((t) -> t.item().value().getDefaultInstance()).orElse(ItemStack.EMPTY)),
-                trade.additionalWants.map((t) -> TooltipUtils.collectConditions(utils, () -> utils.convertContextInt(utils, t.count()))).orElse(LootCount.of(NumberExpr.constant(1))),
+                trade.additionalWants.map((t) -> TooltipUtils.collectConditions((c) -> utils.convertContextInt(utils, t.count(), c))).orElse(LootCount.of(NumberExpr.constant(1))),
                 trade.additionalWants.map((t) -> utils.getValueTooltip(utils, t.components())).orElse(TooltipBuilder.empty()).build(Lang.Branch.EXPECTED_COMPONENTS),
                 Either.left(trade.gives.create()),
                 NumberExpr.constant(trade.gives.count()),
                 utils.getValueTooltip(utils, trade.givenItemModifier).build(),
-                TooltipUtils.collectConditions(utils, () -> utils.convertContextInt(utils, trade.maxUses)),
-                TooltipUtils.collectConditions(utils, () -> utils.convertContextInt(utils, trade.xp)),
+                TooltipUtils.collectConditions((c) -> utils.convertContextInt(utils, trade.maxUses, c)),
+                TooltipUtils.collectConditions((c) -> utils.convertContextInt(utils, trade.xp, c)),
                 utils.getValueTooltip(utils, trade.doubleTradePriceEnchantments).build(Lang.Branch.DOUBLE_TRADE_PRICE_ENCHANTMENTS)
         );
     }

@@ -1,8 +1,10 @@
 package com.yanny.ali.api;
 
 import com.yanny.aci.api.ICoreServerRegistry;
+import com.yanny.aci.api.NumberConverter;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.plugin.glm.IEntitySubPredicateResolver;
 import com.yanny.ali.plugin.glm.ILootContextPreparer;
 import com.yanny.ali.plugin.glm.IPageLootModifier;
@@ -37,6 +39,10 @@ import java.util.function.Supplier;
 public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
     <T extends LootPoolEntryContainer> void registerEntry(Class<T> type, EntryFactory<T> entryFactory);
 
+    <T extends LootPoolEntryContainer> void registerEntryWeight(Class<T> type, NumberConverter<IServerUtils, T> weight);
+
+    <T extends LootPoolEntryContainer> void registerEntryChildren(Class<T> type, BiFunction<IServerUtils, T, List<LootPoolEntryContainer>> children);
+
     <T extends LootPoolEntryContainer> void registerEntryTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter);
 
     <T extends LootItemFunction> void registerFunctionTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter);
@@ -63,15 +69,15 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     <T extends SlotSource> void registerSlotSourceTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter);
 
-    <T extends ContextIntProvider> void registerContextIntProvider(Class<T> type, BiFunction<IServerUtils, T, NumberExpr> converter);
+    <T extends ContextIntProvider> void registerContextIntProvider(Class<T> type, NumberConverter<IServerUtils, T> converter);
 
-    <T extends ContextFloatProvider> void registerContextFloatProvider(Class<T> type, BiFunction<IServerUtils, T, NumberExpr> converter);
+    <T extends ContextFloatProvider> void registerContextFloatProvider(Class<T> type, NumberConverter<IServerUtils, T> converter);
 
     <T extends LevelBasedValue> void registerLevelBasedValue(Class<T> type, TriFunction<IServerUtils, T, NumberExpr, NumberExpr> converter);
 
-    <T extends LootItemFunction> void registerCountModifier(Class<T> type, TriFunction<IServerUtils, T, NumberExpr, NumberExpr> modifier);
+    <T extends LootItemFunction> void registerCountModifier(Class<T> type, NumberModifier<T> modifier);
 
-    <T extends LootItemCondition> void registerChanceModifier(Class<T> type, TriFunction<IServerUtils, T, NumberExpr, NumberExpr> modifier);
+    <T extends LootItemCondition> void registerChanceModifier(Class<T> type, NumberModifier<T> modifier);
 
     <T extends LootItemFunction> void registerItemStackModifier(Class<T> type, TriFunction<IServerUtils, T, ItemStack, ItemStack> consumer);
 
@@ -100,6 +106,6 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     @FunctionalInterface
     interface EntryFactory<T extends LootPoolEntryContainer> {
-        IDataNode create(IServerUtils utils, T entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions);
+        IDataNode create(IServerUtils utils, T entry, NumberExpr chance, NumberExpr sumWeight, List<TooltipNode> chanceConditions, List<LootItemFunction> functions, List<LootItemCondition> conditions);
     }
 }

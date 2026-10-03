@@ -722,6 +722,9 @@ public final class Lang {
         VAR_ENCHANTMENT_LEVEL_DESC("var.enchantment_level.desc", "enchantment level"),
         SCORE_EXISTS("score_exists", "Score Exists"),
         STORAGE_VALUE_EXISTS("storage_value_exists", "Storage Value Exists"),
+        VAR_ENCHANTMENT_LEVEL_ROW("var.enchantment_level.row", "Level %s"),
+        VAR_LUCK_ROW("var.luck.row", "Luck %s"),
+        VAR_LUCK_ROW_NEGATIVE("var.luck.row.negative", "Bad Luck"),
         ;
 
         private final Translation translation;

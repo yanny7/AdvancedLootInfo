@@ -2,6 +2,7 @@ package com.yanny.ali.plugin.server;
 
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberFunctions;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
@@ -11,6 +12,7 @@ import net.minecraft.world.level.storage.loot.providers.number.UnaryProvider;
 import net.minecraft.world.level.storage.loot.providers.number.floats.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.function.Function;
 
 public class FloatProviderUtils {
@@ -46,152 +48,152 @@ public class FloatProviderUtils {
     }
 
     @NotNull
-    public static NumberExpr convert(IServerUtils utils, Holder<ContextFloatProvider> provider) {
-        return utils.convertContextFloat(utils, provider);
+    public static NumberExpr convert(IServerUtils utils, Holder<ContextFloatProvider> provider, List<TooltipNode> conditions) {
+        return utils.convertContextFloat(utils, provider, conditions);
     }
 
     @NotNull
-    public static NumberExpr convertConstant(IServerUtils utils, ConstantValue provider) {
+    public static NumberExpr convertConstant(IServerUtils utils, ConstantValue provider, List<TooltipNode> conditions) {
         return NumberExpr.constant(provider.value());
     }
 
     @NotNull
-    public static NumberExpr convertUniform(IServerUtils utils, UniformGenerator provider) {
-        return NumberProviderUtils.range(utils, provider, FloatProviderUtils::convert, (min, max) -> NumberExpr.fn(NumberFunctions.UNIFORM_FLOAT, min, max));
+    public static NumberExpr convertUniform(IServerUtils utils, UniformGenerator provider, List<TooltipNode> conditions) {
+        return NumberProviderUtils.range(utils, provider, conditions, FloatProviderUtils::convert, (min, max) -> NumberExpr.fn(NumberFunctions.UNIFORM_FLOAT, min, max));
     }
 
     @NotNull
-    public static NumberExpr convertStorage(IServerUtils utils, StorageValue provider) {
-        return NumberProviderUtils.withFallback(utils, NumberProviderUtils.storage(provider.access()), Lang.Numbers.STORAGE_VALUE_EXISTS, convert(utils, provider.fallback()));
+    public static NumberExpr convertStorage(IServerUtils utils, StorageValue provider, List<TooltipNode> conditions) {
+        return NumberProviderUtils.withFallback(NumberProviderUtils.storage(provider.access()), Lang.Numbers.STORAGE_VALUE_EXISTS, convert(utils, provider.fallback(), conditions), conditions);
     }
 
     @NotNull
-    public static NumberExpr convertEnvironmentAttribute(IServerUtils utils, EnvironmentAttributeValue provider) {
+    public static NumberExpr convertEnvironmentAttribute(IServerUtils utils, EnvironmentAttributeValue provider, List<TooltipNode> conditions) {
         return NumberProviderUtils.environmentAttribute(provider.attribute());
     }
 
     @NotNull
-    public static NumberExpr convertEnchantmentLevel(IServerUtils utils, EnchantmentLevelProvider provider) {
+    public static NumberExpr convertEnchantmentLevel(IServerUtils utils, EnchantmentLevelProvider provider, List<TooltipNode> conditions) {
         return utils.convertLevelBasedValue(utils, provider.amount(), TooltipUtils.anyEnchantmentLevel(utils));
     }
 
     @NotNull
-    public static NumberExpr convertSum(IServerUtils utils, Sum provider) {
-        return NumberProviderUtils.aggregate(utils, provider, FloatProviderUtils::convert, NumberExpr::add);
+    public static NumberExpr convertSum(IServerUtils utils, Sum provider, List<TooltipNode> conditions) {
+        return NumberProviderUtils.aggregate(utils, provider, conditions, FloatProviderUtils::convert, NumberExpr::add);
     }
 
     @NotNull
-    public static NumberExpr convertProduct(IServerUtils utils, Product provider) {
-        return NumberProviderUtils.aggregate(utils, provider, FloatProviderUtils::convert, NumberExpr::mul);
+    public static NumberExpr convertProduct(IServerUtils utils, Product provider, List<TooltipNode> conditions) {
+        return NumberProviderUtils.aggregate(utils, provider, conditions, FloatProviderUtils::convert, NumberExpr::mul);
     }
 
     @NotNull
-    public static NumberExpr convertAverage(IServerUtils utils, Average provider) {
-        return NumberProviderUtils.aggregate(utils, provider, FloatProviderUtils::convert, (args) -> NumberExpr.fn(NumberFunctions.AVG, args));
+    public static NumberExpr convertAverage(IServerUtils utils, Average provider, List<TooltipNode> conditions) {
+        return NumberProviderUtils.aggregate(utils, provider, conditions, FloatProviderUtils::convert, (args) -> NumberExpr.fn(NumberFunctions.AVG, args));
     }
 
     @NotNull
-    public static NumberExpr convertMinimum(IServerUtils utils, Minimum provider) {
-        return NumberProviderUtils.aggregate(utils, provider, FloatProviderUtils::convert, NumberExpr::min);
+    public static NumberExpr convertMinimum(IServerUtils utils, Minimum provider, List<TooltipNode> conditions) {
+        return NumberProviderUtils.aggregate(utils, provider, conditions, FloatProviderUtils::convert, NumberExpr::min);
     }
 
     @NotNull
-    public static NumberExpr convertMaximum(IServerUtils utils, Maximum provider) {
-        return NumberProviderUtils.aggregate(utils, provider, FloatProviderUtils::convert, NumberExpr::max);
+    public static NumberExpr convertMaximum(IServerUtils utils, Maximum provider, List<TooltipNode> conditions) {
+        return NumberProviderUtils.aggregate(utils, provider, conditions, FloatProviderUtils::convert, NumberExpr::max);
     }
 
     @NotNull
-    public static NumberExpr convertDifference(IServerUtils utils, Difference provider) {
-        return NumberProviderUtils.binary(utils, provider, FloatProviderUtils::convert, NumberExpr::sub);
+    public static NumberExpr convertDifference(IServerUtils utils, Difference provider, List<TooltipNode> conditions) {
+        return NumberProviderUtils.binary(utils, provider, conditions, FloatProviderUtils::convert, NumberExpr::sub);
     }
 
     @NotNull
-    public static NumberExpr convertNegate(IServerUtils utils, Negate provider) {
-        return unary(utils, provider, NumberFunctions.NEG);
+    public static NumberExpr convertNegate(IServerUtils utils, Negate provider, List<TooltipNode> conditions) {
+        return unary(utils, provider, conditions, NumberFunctions.NEG);
     }
 
     @NotNull
-    public static NumberExpr convertAbsolute(IServerUtils utils, Absolute provider) {
-        return unary(utils, provider, NumberFunctions.ABS);
+    public static NumberExpr convertAbsolute(IServerUtils utils, Absolute provider, List<TooltipNode> conditions) {
+        return unary(utils, provider, conditions, NumberFunctions.ABS);
     }
 
     @NotNull
-    public static NumberExpr convertFromInt(IServerUtils utils, FromInt provider) {
-        return NumberProviderUtils.unary(utils, provider, IntProviderUtils::convert, Function.identity());
+    public static NumberExpr convertFromInt(IServerUtils utils, FromInt provider, List<TooltipNode> conditions) {
+        return NumberProviderUtils.unary(utils, provider, conditions, IntProviderUtils::convert, Function.identity());
     }
 
     @NotNull
-    public static NumberExpr convertFloor(IServerUtils utils, Floor provider) {
-        return unary(utils, provider, NumberFunctions.FLOOR);
+    public static NumberExpr convertFloor(IServerUtils utils, Floor provider, List<TooltipNode> conditions) {
+        return unary(utils, provider, conditions, NumberFunctions.FLOOR);
     }
 
     @NotNull
-    public static NumberExpr convertCeiling(IServerUtils utils, Ceiling provider) {
-        return unary(utils, provider, NumberFunctions.CEIL);
+    public static NumberExpr convertCeiling(IServerUtils utils, Ceiling provider, List<TooltipNode> conditions) {
+        return unary(utils, provider, conditions, NumberFunctions.CEIL);
     }
 
     @NotNull
-    public static NumberExpr convertRound(IServerUtils utils, Round provider) {
-        return unary(utils, provider, NumberFunctions.ROUND);
+    public static NumberExpr convertRound(IServerUtils utils, Round provider, List<TooltipNode> conditions) {
+        return unary(utils, provider, conditions, NumberFunctions.ROUND);
     }
 
     @NotNull
-    public static NumberExpr convertTruncate(IServerUtils utils, Truncate provider) {
-        return unary(utils, provider, NumberFunctions.TRUNC);
+    public static NumberExpr convertTruncate(IServerUtils utils, Truncate provider, List<TooltipNode> conditions) {
+        return unary(utils, provider, conditions, NumberFunctions.TRUNC);
     }
 
     @NotNull
-    public static NumberExpr convertSquareRoot(IServerUtils utils, SquareRoot provider) {
-        return unary(utils, provider, NumberFunctions.SQRT);
+    public static NumberExpr convertSquareRoot(IServerUtils utils, SquareRoot provider, List<TooltipNode> conditions) {
+        return unary(utils, provider, conditions, NumberFunctions.SQRT);
     }
 
     @NotNull
-    public static NumberExpr convertSine(IServerUtils utils, Sine provider) {
-        return unary(utils, provider, NumberFunctions.SIN);
+    public static NumberExpr convertSine(IServerUtils utils, Sine provider, List<TooltipNode> conditions) {
+        return unary(utils, provider, conditions, NumberFunctions.SIN);
     }
 
     @NotNull
-    public static NumberExpr convertCosine(IServerUtils utils, Cosine provider) {
-        return unary(utils, provider, NumberFunctions.COS);
+    public static NumberExpr convertCosine(IServerUtils utils, Cosine provider, List<TooltipNode> conditions) {
+        return unary(utils, provider, conditions, NumberFunctions.COS);
     }
 
     @NotNull
-    public static NumberExpr convertConditional(IServerUtils utils, ConditionalValue provider) {
-        return NumberProviderUtils.conditional(utils, provider, FloatProviderUtils::convert);
+    public static NumberExpr convertConditional(IServerUtils utils, ConditionalValue provider, List<TooltipNode> conditions) {
+        return NumberProviderUtils.conditional(utils, provider, conditions, FloatProviderUtils::convert);
     }
 
     @NotNull
-    public static NumberExpr convertDispatcher(IServerUtils utils, NumberDispatcher provider) {
-        return NumberProviderUtils.dispatcher(utils, provider, FloatProviderUtils::convert);
+    public static NumberExpr convertDispatcher(IServerUtils utils, NumberDispatcher provider, List<TooltipNode> conditions) {
+        return NumberProviderUtils.dispatcher(utils, provider, conditions, FloatProviderUtils::convert);
     }
 
     @NotNull
-    public static NumberExpr convertWeightedList(IServerUtils utils, WeightedListValue provider) {
-        return NumberProviderUtils.distribution(utils, provider, FloatProviderUtils::convert);
+    public static NumberExpr convertWeightedList(IServerUtils utils, WeightedListValue provider, List<TooltipNode> conditions) {
+        return NumberProviderUtils.distribution(utils, provider, conditions, FloatProviderUtils::convert);
     }
 
     @NotNull
-    public static NumberExpr convertLength(IServerUtils utils, Length provider) {
-        return NumberProviderUtils.aggregate(utils, provider, FloatProviderUtils::convert, (args) -> NumberExpr.fn(NumberFunctions.LENGTH, args));
+    public static NumberExpr convertLength(IServerUtils utils, Length provider, List<TooltipNode> conditions) {
+        return NumberProviderUtils.aggregate(utils, provider, conditions, FloatProviderUtils::convert, (args) -> NumberExpr.fn(NumberFunctions.LENGTH, args));
     }
 
     @NotNull
-    public static NumberExpr convertModulus(IServerUtils utils, Modulus provider) {
-        return NumberProviderUtils.binary(utils, provider, FloatProviderUtils::convert, (a, b) -> NumberExpr.fn(NumberFunctions.MOD, a, b));
+    public static NumberExpr convertModulus(IServerUtils utils, Modulus provider, List<TooltipNode> conditions) {
+        return NumberProviderUtils.binary(utils, provider, conditions, FloatProviderUtils::convert, (a, b) -> NumberExpr.fn(NumberFunctions.MOD, a, b));
     }
 
     @NotNull
-    public static NumberExpr convertQuotient(IServerUtils utils, Quotient provider) {
-        return NumberProviderUtils.binary(utils, provider, FloatProviderUtils::convert, NumberExpr::div);
+    public static NumberExpr convertQuotient(IServerUtils utils, Quotient provider, List<TooltipNode> conditions) {
+        return NumberProviderUtils.binary(utils, provider, conditions, FloatProviderUtils::convert, NumberExpr::div);
     }
 
     @NotNull
-    public static NumberExpr convertPower(IServerUtils utils, Power provider) {
-        return NumberProviderUtils.power(utils, provider, FloatProviderUtils::convert);
+    public static NumberExpr convertPower(IServerUtils utils, Power provider, List<TooltipNode> conditions) {
+        return NumberProviderUtils.power(utils, provider, conditions, FloatProviderUtils::convert);
     }
 
     @NotNull
-    private static NumberExpr unary(IServerUtils utils, UnaryProvider<ContextFloatProvider> provider, Identifier function) {
-        return NumberProviderUtils.unary(utils, provider, FloatProviderUtils::convert, (value) -> NumberExpr.fn(function, value));
+    private static NumberExpr unary(IServerUtils utils, UnaryProvider<ContextFloatProvider> provider, List<TooltipNode> conditions, Identifier function) {
+        return NumberProviderUtils.unary(utils, provider, conditions, FloatProviderUtils::convert, (value) -> NumberExpr.fn(function, value));
     }
 }

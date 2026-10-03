@@ -81,7 +81,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.function.Supplier;
 
 @Suite
 @SelectClasses({
@@ -104,7 +103,8 @@ import java.util.function.Supplier;
         SlotSourceTooltipTest.class,
         GlobalLootModifierTest.class,
         ConfigTest.class,
-        ValueCharacterizationTest.class
+        ValueCharacterizationTest.class,
+        EntryWeightTest.class
 })
 public class TooltipTestSuite {
     public static IServerUtils UTILS;
@@ -144,14 +144,14 @@ public class TooltipTestSuite {
 
             @NotNull
             @Override
-            public NumberExpr convertIntProvider(IServerUtils utils, IntProvider provider) {
-                return PluginManager.getInstance().serverRegistry.convertIntProvider(utils, provider);
+            public NumberExpr convertIntProvider(IServerUtils utils, IntProvider provider, List<TooltipNode> conditions) {
+                return PluginManager.getInstance().serverRegistry.convertIntProvider(utils, provider, conditions);
             }
 
             @NotNull
             @Override
-            public NumberExpr convertFloatProvider(IServerUtils utils, FloatProvider provider) {
-                return PluginManager.getInstance().serverRegistry.convertFloatProvider(utils, provider);
+            public NumberExpr convertFloatProvider(IServerUtils utils, FloatProvider provider, List<TooltipNode> conditions) {
+                return PluginManager.getInstance().serverRegistry.convertFloatProvider(utils, provider, conditions);
             }
 
             @NotNull
@@ -182,6 +182,18 @@ public class TooltipTestSuite {
             @Override
             public <T extends LootPoolEntryContainer> IServerRegistry.EntryFactory<T> getEntryFactory(IServerUtils utils, T type) {
                 return PluginManager.getInstance().serverRegistry.getEntryFactory(utils, type);
+            }
+
+            @NotNull
+            @Override
+            public <T extends LootPoolEntryContainer> NumberExpr getEntryWeight(IServerUtils utils, T entry, List<TooltipNode> conditions) {
+                return PluginManager.getInstance().serverRegistry.getEntryWeight(utils, entry, conditions);
+            }
+
+            @NotNull
+            @Override
+            public <T extends LootPoolEntryContainer> List<LootPoolEntryContainer> getEntryChildren(IServerUtils utils, T entry) {
+                return PluginManager.getInstance().serverRegistry.getEntryChildren(utils, entry);
             }
 
             @NotNull
@@ -249,8 +261,8 @@ public class TooltipTestSuite {
 
             @NotNull
             @Override
-            public <T extends LootItemCondition> NumberExpr applyChanceModifier(IServerUtils utils, T condition, NumberExpr chance) {
-                return PluginManager.getInstance().serverRegistry.applyChanceModifier(utils, condition, chance);
+            public <T extends LootItemCondition> NumberExpr applyChanceModifier(IServerUtils utils, T condition, NumberExpr chance, List<TooltipNode> conditions) {
+                return PluginManager.getInstance().serverRegistry.applyChanceModifier(utils, condition, chance, conditions);
             }
 
             @NotNull
@@ -279,25 +291,14 @@ public class TooltipTestSuite {
 
             @NotNull
             @Override
-            public NumberExpr convertContextInt(IServerUtils utils, Holder<ContextIntProvider> provider) {
-                return PluginManager.getInstance().serverRegistry.convertContextInt(utils, provider);
+            public NumberExpr convertContextInt(IServerUtils utils, Holder<ContextIntProvider> provider, List<TooltipNode> conditions) {
+                return PluginManager.getInstance().serverRegistry.convertContextInt(utils, provider, conditions);
             }
 
             @NotNull
             @Override
-            public NumberExpr convertContextFloat(IServerUtils utils, Holder<ContextFloatProvider> provider) {
-                return PluginManager.getInstance().serverRegistry.convertContextFloat(utils, provider);
-            }
-
-            @NotNull
-            @Override
-            public NumberExpr collectNumberConditions(List<TooltipNode> conditions, Supplier<NumberExpr> conversion) {
-                return PluginManager.getInstance().serverRegistry.collectNumberConditions(conditions, conversion);
-            }
-
-            @Override
-            public int addNumberCondition(TooltipNode condition) {
-                return PluginManager.getInstance().serverRegistry.addNumberCondition(condition);
+            public NumberExpr convertContextFloat(IServerUtils utils, Holder<ContextFloatProvider> provider, List<TooltipNode> conditions) {
+                return PluginManager.getInstance().serverRegistry.convertContextFloat(utils, provider, conditions);
             }
 
             @NotNull

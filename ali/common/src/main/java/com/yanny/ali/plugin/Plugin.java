@@ -169,6 +169,12 @@ public class Plugin implements IPlugin {
         registry.registerLevelBasedValue(LevelBasedValue.Lookup.class, Plugin::convertLevelLookup);
         registry.registerLevelBasedValue(LevelBasedValue.Exponent.class, Plugin::convertLevelExponent);
 
+        registry.registerEntryWeight(UniformContainerBase.class, NodeUtils::getSingletonWeight);
+        registry.registerEntryWeight(CompositeEntryBase.class, NodeUtils::getCompositeWeight);
+        registry.registerEntryWeight(AlternativesEntry.class, NodeUtils::getAlternativesWeight);
+
+        registry.registerEntryChildren(CompositeEntryBase.class, NodeUtils::getCompositeChildren);
+
         registry.registerEntry(LootItem.class, NodeUtils::getItemNode);
         registry.registerEntry(TagEntry.class, NodeUtils::getTagNode);
         registry.registerEntry(AlternativesEntry.class, NodeUtils::getAlternativesNode);

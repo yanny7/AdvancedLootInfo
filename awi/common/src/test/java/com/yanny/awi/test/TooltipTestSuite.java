@@ -5,6 +5,7 @@ import com.mojang.logging.LogUtils;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.test.utils.TestUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.aci.tooltip.TooltipNodePalette;
 import com.yanny.awi.api.IServerUtils;
@@ -122,14 +123,14 @@ public class TooltipTestSuite {
 
             @NotNull
             @Override
-            public NumberExpr convertIntProvider(IServerUtils utils, IntProvider provider) {
-                return PluginManager.getInstance().serverRegistry.convertIntProvider(utils, provider);
+            public NumberExpr convertIntProvider(IServerUtils utils, IntProvider provider, List<TooltipNode> conditions) {
+                return PluginManager.getInstance().serverRegistry.convertIntProvider(utils, provider, conditions);
             }
 
             @NotNull
             @Override
-            public NumberExpr convertFloatProvider(IServerUtils utils, FloatProvider provider) {
-                return PluginManager.getInstance().serverRegistry.convertFloatProvider(utils, provider);
+            public NumberExpr convertFloatProvider(IServerUtils utils, FloatProvider provider, List<TooltipNode> conditions) {
+                return PluginManager.getInstance().serverRegistry.convertFloatProvider(utils, provider, conditions);
             }
 
             @Override
@@ -246,8 +247,8 @@ public class TooltipTestSuite {
 
             @NotNull
             @Override
-            public NumberExpr convertHeightProvider(IServerUtils utils, HeightProvider provider, ColumnContext ctx) {
-                return PluginManager.getInstance().serverRegistry.convertHeightProvider(utils, provider, ctx);
+            public NumberExpr convertHeightProvider(IServerUtils utils, HeightProvider provider, ColumnContext ctx, List<TooltipNode> conditions) {
+                return PluginManager.getInstance().serverRegistry.convertHeightProvider(utils, provider, ctx, conditions);
             }
 
             @Override

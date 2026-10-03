@@ -69,7 +69,7 @@ public class FloatProviderTest {
         doReturn(enchantments).when(registryAccess).lookupOrThrow(Registries.ENCHANTMENT);
         doReturn(registryAccess).when(level).registryAccess();
         doReturn(level).when(utils).getServerLevel();
-        assertTooltip(TooltipUtils.getNumberTooltip(utils, () -> utils.convertContextFloat(utils, provider)).build(Lang.Value.VALUE), true, List.of("Value: 2"));
+        assertTooltip(TooltipUtils.getNumberTooltip((c) -> utils.convertContextFloat(utils, provider, c)).build(Lang.Value.VALUE), true, List.of("Value: 2"));
     }
 
     @Test
@@ -195,6 +195,6 @@ public class FloatProviderTest {
     }
 
     private static void assertValue(Holder<ContextFloatProvider> provider, String... expected) {
-        assertTooltip(TooltipUtils.getNumberTooltip(UTILS, () -> UTILS.convertContextFloat(UTILS, provider)).build(Lang.Value.VALUE), true, List.of(expected));
+        assertTooltip(TooltipUtils.getNumberTooltip((c) -> UTILS.convertContextFloat(UTILS, provider, c)).build(Lang.Value.VALUE), true, List.of(expected));
     }
 }

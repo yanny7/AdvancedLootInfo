@@ -31,11 +31,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUtils {
     @NotNull
     <T extends LootPoolEntryContainer> IServerRegistry.EntryFactory<T> getEntryFactory(IServerUtils utils, T type);
+
+    @NotNull
+    <T extends LootPoolEntryContainer> NumberExpr getEntryWeight(IServerUtils utils, T entry, List<TooltipNode> conditions);
+
+    @NotNull
+    <T extends LootPoolEntryContainer> List<LootPoolEntryContainer> getEntryChildren(IServerUtils utils, T entry);
 
     @NotNull
     <T extends LootPoolEntryContainer> TooltipBuilder getEntryTooltip(IServerUtils utils, T entry);
@@ -65,7 +70,7 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
     <T extends LootItemFunction> NumberExpr applyCountModifier(IServerUtils utils, T function, NumberExpr count, List<TooltipNode> conditions);
 
     @NotNull
-    <T extends LootItemCondition> NumberExpr applyChanceModifier(IServerUtils utils, T condition, NumberExpr chance);
+    <T extends LootItemCondition> NumberExpr applyChanceModifier(IServerUtils utils, T condition, NumberExpr chance, List<TooltipNode> conditions);
 
     @NotNull
     <T extends LootItemFunction> ItemStack applyItemStackModifier(IServerUtils utils, T function, ItemStack itemStack);
@@ -80,15 +85,10 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
     TooltipBuilder getEnumTranslation(IServerUtils utils, Enum<?> value);
 
     @NotNull
-    NumberExpr convertContextInt(IServerUtils utils, Holder<ContextIntProvider> provider);
+    NumberExpr convertContextInt(IServerUtils utils, Holder<ContextIntProvider> provider, List<TooltipNode> conditions);
 
     @NotNull
-    NumberExpr convertContextFloat(IServerUtils utils, Holder<ContextFloatProvider> provider);
-
-    @NotNull
-    NumberExpr collectNumberConditions(List<TooltipNode> conditions, Supplier<NumberExpr> conversion);
-
-    int addNumberCondition(TooltipNode condition);
+    NumberExpr convertContextFloat(IServerUtils utils, Holder<ContextFloatProvider> provider, List<TooltipNode> conditions);
 
     @NotNull
     NumberExpr convertLevelBasedValue(IServerUtils utils, LevelBasedValue value, NumberExpr level);

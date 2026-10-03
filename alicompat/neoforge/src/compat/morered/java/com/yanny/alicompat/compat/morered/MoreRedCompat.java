@@ -49,20 +49,21 @@ public class MoreRedCompat implements IModCompat {
         return TooltipBuilder.array(TooltipBuilder::showEmpty, MoreRedLang.Functions.SET_WIRE_COUNT);
     }
 
-    private static NumberExpr applyWireCount(IServerUtils ignoredUtils, WireCountLootFunction ignoredFunction, NumberExpr count) {
+    private static NumberExpr applyWireCount(IServerUtils ignoredUtils, WireCountLootFunction ignoredFunction, NumberExpr count, List<TooltipNode> ignoredConditions) {
         return WIRE_COUNT;
     }
 
     @NotNull
-    private static IDataNode gearsNode(IServerUtils utils, GearsLootEntry entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    private static IDataNode gearsNode(IServerUtils utils, GearsLootEntry entry, NumberExpr rawChance, NumberExpr sumWeight, List<TooltipNode> chanceConditions,
+                                       List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemCondition> allConditions = NodeUtils.getAllConditions(entry, conditions);
         List<LootItemFunction> allFunctions = NodeUtils.getAllFunctions(entry, functions);
-        float chance = NodeUtils.getChance(entry, rawChance, sumWeight);
+        LootCount chance = NodeUtils.getChance(utils, entry, rawChance, sumWeight, chanceConditions);
         Either<ItemStack, TagKey<? extends ItemLike>> item = Either.right(MoreRed.Tags.Items.GEARS);
         LootCount count = NodeUtils.getCount(utils, GEAR_COUNT, allFunctions);
         TooltipNode tooltip = TooltipUtils.getTooltip(utils, entry.quality, NodeUtils.getChance(utils, allConditions, chance), count, NodeUtils.getCountLimit(item), allFunctions, allConditions).build();
 
-        return new ItemNode(chance, count.value(), item, tooltip, allFunctions, allConditions);
+        return new ItemNode(NodeUtils.toFloat(chance.value()), count.value(), item, tooltip, allFunctions, allConditions);
     }
 
     @NotNull

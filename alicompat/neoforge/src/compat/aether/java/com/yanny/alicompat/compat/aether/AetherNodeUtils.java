@@ -32,7 +32,7 @@ public class AetherNodeUtils {
     public static List<IDataNode> countedNode(IServerUtils utils, List<LootItemCondition> conditions, IDataNode src, NumberExpr count) {
         IItemNode node = (IItemNode) src;
         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), node.getConditions().stream()).toList();
-        NumberExpr chance = NodeUtils.getChance(utils, allConditions, node.getChance());
+        LootCount chance = NodeUtils.getChance(utils, allConditions, node.getChance());
         TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, LootCount.of(count), NodeUtils.getCountLimit(node.getItem()), node.getFunctions(), allConditions);
         ItemNode replacement = new ItemNode(node.getChance(), count, node.getItem(), tooltip.build(), node.getFunctions(), allConditions);
 

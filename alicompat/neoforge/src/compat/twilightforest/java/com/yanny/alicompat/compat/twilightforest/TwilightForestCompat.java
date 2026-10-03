@@ -3,6 +3,7 @@ package com.yanny.alicompat.compat.twilightforest;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.ICommonRegistry;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
@@ -104,9 +105,9 @@ public class TwilightForestCompat implements IGlmModCompat {
     }
 
     @NotNull
-    private static NumberExpr convertMultiplayerRolls(IServerUtils utils, MultiplayerBasedNumberProvider provider) {
-        NumberExpr defaultRolls = utils.convertNumber(utils, provider.defaultRolls());
-        NumberExpr perPlayer = NumberExpr.max(NumberExpr.constant(0), utils.convertNumber(utils, provider.rollsPerPlayer()));
+    private static NumberExpr convertMultiplayerRolls(IServerUtils utils, MultiplayerBasedNumberProvider provider, List<TooltipNode> conditions) {
+        NumberExpr defaultRolls = utils.convertNumber(utils, provider.defaultRolls(), conditions);
+        NumberExpr perPlayer = NumberExpr.max(NumberExpr.constant(0), utils.convertNumber(utils, provider.rollsPerPlayer(), conditions));
 
         return NumberExpr.add(defaultRolls, NumberExpr.mul(NumberExpr.atLeast(0), perPlayer));
     }

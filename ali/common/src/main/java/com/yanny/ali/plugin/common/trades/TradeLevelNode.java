@@ -31,7 +31,7 @@ public class TradeLevelNode extends ListNode {
     // a trader adds every trade of the set instead of picking randomly once the set is no bigger than the number it picks
     public TradeLevelNode(IServerUtils utils, int level, TradeSet tradeSet) {
         this.level = level;
-        LootCount selection = TooltipUtils.collectConditions(utils, () -> NumberExpr.min(utils.convertContextInt(utils, tradeSet.amount()), NumberExpr.constant(tradeSet.trades().size())));
+        LootCount selection = TooltipUtils.collectConditions((c) -> NumberExpr.min(utils.convertContextInt(utils, tradeSet.amount(), c), NumberExpr.constant(tradeSet.trades().size())));
 
         this.selectionCount = selection.value();
 
