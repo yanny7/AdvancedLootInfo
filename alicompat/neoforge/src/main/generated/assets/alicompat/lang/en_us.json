@@ -1,4 +1,6 @@
 {
+  "alicompat.enum.spell_engine.weight_operation.add": "Add",
+  "alicompat.enum.spell_engine.weight_operation.multiply": "Multiply",
   "alicompat.goblintraders.property.value.durability_scale": "Durability Scale: %s",
   "alicompat.goblintraders.type.function.increase_durability": "Increase Durability:",
   "alicompat.grimoireofgaia.type.consume_effect.clear_negative_status_effects": "Clear Negative Effects",
@@ -10,5 +12,11 @@
   "alicompat.repurposed_structures.type.condition.detect_rs_loot_tables": "Detect Repurposed Structures Loot Tables:",
   "alicompat.sophisticatedbackpacks.type.condition.loot_enabled": "Chest Loot Enabled",
   "alicompat.sophisticatedbackpacks.type.function.copy_backpack_data": "Copy Backpack Data:",
-  "alicompat.sophisticatedstorage.type.function.copy_storage_data": "Copy Storage Data:"
+  "alicompat.sophisticatedstorage.type.function.copy_storage_data": "Copy Storage Data:",
+  "alicompat.spell_engine.property.value.extra_weight": "Class Affiliation Extra Weight: %s",
+  "alicompat.spell_engine.property.value.include_team": "Include Team: %s",
+  "alicompat.spell_engine.property.value.spell_pool": "Spell Pool: %s",
+  "alicompat.spell_engine.property.value.tier": "Tier: %s",
+  "alicompat.spell_engine.type.entry.affiliation_group": "Affiliation Group:",
+  "alicompat.spell_engine.type.function.spell_bind_randomly": "Spell Bind Randomly:"
 }
