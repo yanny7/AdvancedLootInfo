@@ -77,6 +77,7 @@
   "ali.error.modified_item": "Modified dynamically!",
   "ali.number.var.enchantment_level": "LVL",
   "ali.number.var.enchantment_level.desc": "enchantment level",
+  "ali.number.var.enchantment_level.row": "Level %s",
   "ali.number.var.luck": "luck",
   "ali.number.var.luck.desc": "luck",
   "ali.number.var.luck.row": "Luck %s",

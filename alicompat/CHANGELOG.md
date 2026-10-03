@@ -6,6 +6,7 @@
 - Improved crash recovery when versions doesn't match
 - Fixed Villager Trading Plus enchanted book price of enchantments with double trade price
 - Fixed Supplementaries adventurer map price
+- Fixed Twilight Forest condition names showing `%s` on NeoForge
 
 ## [1.1.0]
 

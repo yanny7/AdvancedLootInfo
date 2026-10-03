@@ -191,7 +191,7 @@ final class NumberView {
 
             Row main = new Row(0, null, null, formatted.value(), formatted.mode(), -1, NO_COLOR);
 
-            return new NumberView(main, rows, showCharts ? chart(List.of(unbound(expr)), number) : null, false);
+            return new NumberView(main, rows, showCharts ? chart(List.of(unbound(expr)), true, number) : null, false);
         }
 
         List<NumberExpr> levels = new ArrayList<>();
@@ -201,11 +201,15 @@ final class NumberView {
 
         Row main = new Row(0, null, null, formatted.value(), formatted.mode(), -1, NO_COLOR);
         List<NumberExpr> series = new ArrayList<>();
+        boolean hasBase = steppedVars(expr).stream().allMatch(NumberView::containsZero);
 
-        series.add(unbound(expr));
+        if (hasBase) {
+            series.add(unbound(expr));
+        }
+
         series.addAll(levels);
 
-        ChartData chart = showCharts ? chart(series, number) : null;
+        ChartData chart = showCharts ? chart(series, hasBase, number) : null;
 
         if (chart == null) {
             rows.replaceAll((r) -> new Row(r.depth, r.name, r.label, r.value, r.mode, r.condition, NO_COLOR));
@@ -238,7 +242,7 @@ final class NumberView {
             NumberExpr single = expr;
 
             for (NumberExpr.Var other : vars) {
-                if (!other.equals(var)) {
+                if (!other.equals(var) && containsZero(other)) {
                     single = single.bind(other, 0);
                 }
             }
@@ -251,7 +255,7 @@ final class NumberView {
             int max = (int) Math.min(Math.floor(var.max()), MAX_LEVEL_ROWS);
 
             for (int value = min; value <= max; value++) {
-                if (value == 0) {
+                if (value == 0 && containsZero(var)) {
                     continue;
                 }
 
@@ -267,7 +271,11 @@ final class NumberView {
 
     @NotNull
     private static List<NumberExpr.Var> steppedVars(NumberExpr expr) {
-        return expr.vars().stream().filter((v) -> Double.isFinite(v.min()) && Double.isFinite(v.max()) && v.min() <= 0 && v.max() >= 0).toList();
+        return expr.vars().stream().filter((v) -> Double.isFinite(v.min()) && Double.isFinite(v.max())).toList();
+    }
+
+    private static boolean containsZero(NumberExpr.Var var) {
+        return var.min() <= 0 && var.max() >= 0;
     }
 
     @NotNull
@@ -275,7 +283,9 @@ final class NumberView {
         NumberExpr result = expr;
 
         for (NumberExpr.Var var : steppedVars(expr)) {
-            result = result.bind(var, 0);
+            if (containsZero(var)) {
+                result = result.bind(var, 0);
+            }
         }
 
         return result;
@@ -312,7 +322,7 @@ final class NumberView {
     }
 
     @Nullable
-    private static ChartData chart(List<NumberExpr> exprs, TooltipNumber number) {
+    private static ChartData chart(List<NumberExpr> exprs, boolean hasBase, TooltipNumber number) {
         List<NumberDistribution> distributions = new ArrayList<>();
         List<Integer> levels = new ArrayList<>();
         boolean hasMode = false;
@@ -330,7 +340,11 @@ final class NumberView {
 
             hasMode |= distribution.mode().isPresent();
             distributions.add(distribution);
-            levels.add(s == 0 ? NO_COLOR : s - 1);
+            if (hasBase) {
+                levels.add(s == 0 ? NO_COLOR : s - 1);
+            } else {
+                levels.add(s);
+            }
         }
 
         if (!hasMode) {

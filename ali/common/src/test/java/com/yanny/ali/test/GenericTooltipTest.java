@@ -1010,9 +1010,30 @@ public class GenericTooltipTest {
         assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, LevelBasedValue.constant(2.5F)).build(Lang.Value.CHANCE), List.of("Chance: 2.5"));
         assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, new LevelBasedValue.Clamped(LevelBasedValue.constant(2.5F), 0.5F, 5F)).build(Lang.Value.CHANCE), List.of("Chance: 2.5"));
         assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, new LevelBasedValue.Fraction(LevelBasedValue.constant(2), LevelBasedValue.constant(3))).build(Lang.Value.CHANCE), List.of("Chance: 0.67"));
-        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, new LevelBasedValue.Linear(0.5F, 5F)).build(Lang.Value.CHANCE), List.of("Chance: 0.5 to 20.5 (enchantment level)"));
-        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, new LevelBasedValue.LevelsSquared(0.5F)).build(Lang.Value.CHANCE), List.of("Chance: 1.5 to 25.5 (enchantment level)"));
-        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, new LevelBasedValue.Lookup(List.of(0.5F, 1.5F, 2.5F), LevelBasedValue.constant(3.3F))).build(Lang.Value.CHANCE), List.of("Chance: 0.5 to 3.3 (enchantment level)"));
+        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, new LevelBasedValue.Linear(0.5F, 5F)).build(Lang.Value.CHANCE), List.of(
+                "Chance: 0.5 to 20.5 (enchantment level)",
+                "  -> Level 1: 0.5",
+                "  -> Level 2: 5.5",
+                "  -> Level 3: 10.5",
+                "  -> Level 4: 15.5",
+                "  -> Level 5: 20.5"
+        ));
+        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, new LevelBasedValue.LevelsSquared(0.5F)).build(Lang.Value.CHANCE), List.of(
+                "Chance: 1.5 to 25.5 (enchantment level)",
+                "  -> Level 1: 1.5",
+                "  -> Level 2: 4.5",
+                "  -> Level 3: 9.5",
+                "  -> Level 4: 16.5",
+                "  -> Level 5: 25.5"
+        ));
+        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, new LevelBasedValue.Lookup(List.of(0.5F, 1.5F, 2.5F), LevelBasedValue.constant(3.3F))).build(Lang.Value.CHANCE), List.of(
+                "Chance: 0.5 to 3.3 (enchantment level)",
+                "  -> Level 1: 0.5",
+                "  -> Level 2: 1.5",
+                "  -> Level 3: 2.5",
+                "  -> Level 4: 3.3",
+                "  -> Level 5: 3.3"
+        ));
     }
 
     @NotNull
