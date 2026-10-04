@@ -103,11 +103,16 @@ public abstract class AbstractServer {
         List<PendingPage> pages = new ArrayList<>();
         Map<ResourceLocation, IDataNode> tradeNodes;
 
-        long spawnInfoStart = System.currentTimeMillis();
-        SpawnInfo spawnInfo = new SpawnInfo(Utils.MOD_ID, serverRegistry.getServerLevel().registryAccess(), Services.getPlatform()::getStructureSettings, config.showInGameNames);
+        SpawnInfo spawnInfo = null;
 
-        if (config.logMoreStatistics) {
-            LOGGER.info("Collecting mob spawns took {}ms", System.currentTimeMillis() - spawnInfoStart);
+        if (!config.spawnInfo.isDisabled()) {
+            long spawnInfoStart = System.currentTimeMillis();
+
+            spawnInfo = new SpawnInfo(Utils.MOD_ID, serverRegistry.getServerLevel().registryAccess(), Services.getPlatform()::getStructureSettings, config.spawnInfo, config.showInGameNames);
+
+            if (config.logMoreStatistics) {
+                LOGGER.info("Collecting mob spawns took {}ms", System.currentTimeMillis() - spawnInfoStart);
+            }
         }
 
         lootTables.forEach(serverRegistry::addLootTable); // used for table references
@@ -146,7 +151,7 @@ public abstract class AbstractServer {
 
         lootNodes = removeEmptyLootTable(serverRegistry, lootNodes);
 
-        if (config.showEntitiesWithoutLoot) {
+        if (config.showEntitiesWithoutLoot && spawnInfo != null) {
             addEntitiesWithoutLoot(config, spawnInfo, lootNodes);
         }
 
@@ -394,9 +399,11 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static IDataNode asEntityNode(IDataNode node, List<EntityType<?>> entityTypes, SpawnInfo spawnInfo) {
+    private static IDataNode asEntityNode(IDataNode node, List<EntityType<?>> entityTypes, @Nullable SpawnInfo spawnInfo) {
         if (node instanceof LootTableNode lootTableNode) {
-            return new EntityLootTableNode(lootTableNode, entityTypes.get(0), spawnInfo.getEntityTooltip(entityTypes.get(0)));
+            TooltipNode spawnTooltip = spawnInfo != null ? spawnInfo.getEntityTooltip(entityTypes.get(0)) : TooltipNode.empty();
+
+            return new EntityLootTableNode(lootTableNode, entityTypes.get(0), spawnTooltip);
         }
 
         return node;
@@ -481,7 +488,7 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static Map<ResourceLocation, IDataNode> buildPages(AliServerRegistry serverRegistry, AliConfig config, SpawnInfo spawnInfo, List<PendingPage> pages,
+    private static Map<ResourceLocation, IDataNode> buildPages(AliServerRegistry serverRegistry, AliConfig config, @Nullable SpawnInfo spawnInfo, List<PendingPage> pages,
                                                                Map<ResourceLocation, LootTable> fakeLootTables, Set<IPageLootModifier> boundLootModifiers,
                                                                Set<Object> attachedLootModifiers) {
         Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();

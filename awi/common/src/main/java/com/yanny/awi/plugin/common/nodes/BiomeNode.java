@@ -20,7 +20,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.material.Fluid;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +37,7 @@ public class BiomeNode extends ListNode {
     private final Map<EntityType<?>, TooltipNode> spawns;
 
     public BiomeNode(IServerUtils utils, Biome biome, TooltipNode tooltip, Set<BlockInfo> blocks, Block defaultBlock, Fluid defaultFluid,
-                     ColumnContext columnContext, WorldgenNodeCache nodeCache, SpawnInfo spawnInfo) {
+                     ColumnContext columnContext, WorldgenNodeCache nodeCache, @Nullable SpawnInfo spawnInfo) {
         BiomeGenerationSettings settings = biome.getGenerationSettings();
         List<HolderSet<PlacedFeature>> features = settings.features();
 
@@ -47,7 +49,7 @@ public class BiomeNode extends ListNode {
 
         this.tooltip = tooltip;
         biomeId = utils.getServerLevel().registryAccess().registryOrThrow(Registries.BIOME).getKey(biome);
-        spawns = spawnInfo.getBiomeSpawns(biomeId);
+        spawns = spawnInfo != null ? spawnInfo.getBiomeSpawns(biomeId) : Collections.emptyMap();
     }
 
     public BiomeNode(IClientUtils utils, FriendlyByteBuf buf) {

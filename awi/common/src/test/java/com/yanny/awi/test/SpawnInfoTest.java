@@ -103,7 +103,7 @@ public class SpawnInfoTest {
         biomes.freeze();
         levelStems.freeze();
         structures.freeze();
-        spawnInfo = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, structures)), OWN_SETTINGS, false);
+        spawnInfo = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, structures)), OWN_SETTINGS, (t) -> true, false);
     }
 
     @Test
@@ -270,7 +270,7 @@ public class SpawnInfoTest {
         MappedRegistry<Structure> registry = structures(Map.of(
                 "camp", spawnSettings(HolderSet.direct(biomes.getHolderOrThrow(key(Registries.BIOME, "a"))), EntityType.ZOMBIE)
         ));
-        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, registry)), OWN_SETTINGS, false);
+        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, registry)), OWN_SETTINGS, (t) -> true, false);
         Map<EntityType<?>, TooltipNode> spawns = info.getBiomeSpawns(new ResourceLocation("test", "a"));
 
         assertEquals(List.of(EntityType.SKELETON, EntityType.SPIDER, EntityType.ZOMBIE, EntityType.COW), List.copyOf(spawns.keySet()));
@@ -299,7 +299,7 @@ public class SpawnInfoTest {
                         TerrainAdjustment.NONE
                 )
         ));
-        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, registry)), OWN_SETTINGS, false);
+        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, registry)), OWN_SETTINGS, (t) -> true, false);
 
         assertTooltip(info.getEntityTooltip(EntityType.WITCH), List.of(
                 "Spawns:",
@@ -336,7 +336,7 @@ public class SpawnInfoTest {
                 GenerationStep.Decoration.SURFACE_STRUCTURES,
                 TerrainAdjustment.NONE
         );
-        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, structures)), (s) -> modified, false);
+        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, structures)), (s) -> modified, (t) -> true, false);
 
         assertTrue(info.getEntityTooltip(EntityType.BLAZE).isBlank(false));
         assertTooltip(info.getEntityTooltip(EntityType.WITCH), List.of(
@@ -362,7 +362,7 @@ public class SpawnInfoTest {
             }
 
             return OWN_SETTINGS.apply(s);
-        }, false);
+        }, (t) -> true, false);
 
         assertTrue(info.getEntityTooltip(EntityType.BLAZE).isBlank(false));
         assertTooltip(info.getEntityTooltip(EntityType.WITCH), List.of(
@@ -389,7 +389,7 @@ public class SpawnInfoTest {
                 "fort", spawnSettings(HolderSet.direct(biomes.getHolderOrThrow(key(Registries.BIOME, "e"))), EntityType.BLAZE),
                 "tagged", spawnSettings(unbound, EntityType.WITCH)
         ));
-        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, registry)), OWN_SETTINGS, false);
+        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, registry)), OWN_SETTINGS, (t) -> true, false);
 
         assertTrue(info.getEntityTypes().contains(EntityType.WITCH));
         assertTrue(info.getEntityTooltip(EntityType.WITCH).isBlank(false));
@@ -398,7 +398,7 @@ public class SpawnInfoTest {
 
     @Test
     public void testMissingRegistriesYieldNoSpawns() {
-        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes)), OWN_SETTINGS, false);
+        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes)), OWN_SETTINGS, (t) -> true, false);
 
         assertTrue(info.getEntityTooltip(EntityType.ZOMBIE).isBlank(false));
         assertEquals(Set.of(EntityType.ZOMBIE, EntityType.SKELETON, EntityType.SPIDER, EntityType.COW, EntityType.STRIDER, EntityType.CREEPER,

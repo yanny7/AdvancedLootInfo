@@ -4,6 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Either;
+import com.yanny.aci.CommonLogUtils;
+import com.yanny.ali.Utils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -12,10 +14,14 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
+import org.slf4j.Logger;
 
 import java.util.List;
+import java.util.Objects;
 
 public class BlockLootCategory extends LootCategory<Block> {
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
+
     private final List<Either<TagKey<Block>, Block>> blocks;
 
     public BlockLootCategory(ResourceLocation key, Item icon, boolean hide, List<Ingredient> catalysts, List<Either<TagKey<Block>, Block>> blocks) {
@@ -44,8 +50,10 @@ public class BlockLootCategory extends LootCategory<Block> {
                         }
                     }
 
+                    LOGGER.warn("Ignoring invalid entry '{}' in 'blocks' of category {}", s, getKey());
                     return null;
                 })
+                .filter(Objects::nonNull)
                 .toList();
     }
 
