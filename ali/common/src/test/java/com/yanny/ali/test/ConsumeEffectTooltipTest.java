@@ -28,16 +28,16 @@ public class ConsumeEffectTooltipTest {
                 "      -> Effect: minecraft:bad_omen",
                 "      -> Duration: 0",
                 "      -> Amplifier: 0",
-                "      -> Ambient: false",
-                "      -> Is Visible: true",
-                "      -> Show Icon: true",
+                "      -> Ambient: False",
+                "      -> Is Visible: True",
+                "      -> Show Icon: True",
                 "    -> Entry:",
                 "      -> Effect: minecraft:nausea",
                 "      -> Duration: 0",
                 "      -> Amplifier: 0",
-                "      -> Ambient: false",
-                "      -> Is Visible: true",
-                "      -> Show Icon: true",
+                "      -> Ambient: False",
+                "      -> Is Visible: True",
+                "      -> Show Icon: True",
                 "  -> Probability: 1.0"
         ));
     }

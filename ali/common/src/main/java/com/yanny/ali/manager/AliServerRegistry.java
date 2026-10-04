@@ -72,7 +72,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final ManagedRegistry<Class<?>, EntryFactory<?>> entryFactories = registerClassKeyed("entry factories", true, HashMap::new, BuiltInRegistries.LOOT_POOL_ENTRY_TYPE);
     // converters
     private final ManagedRegistry<Class<?>, NumberConverter<IServerUtils, LootPoolEntryContainer>> entryWeights = registerClassKeyed("entry weights", true, ClassKeyedMap::new, null);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootPoolEntryContainer, List<LootPoolEntryContainer>>> entryChildren = registerClassKeyed("entry children", true, ClassKeyedMap::new, null);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootPoolEntryContainer, List<LootPoolEntryContainer>>> entryChildren = registerClassKeyed("entry children", false, ClassKeyedMap::new, null);
     private final ManagedRegistry<Class<?>, NumberConverter<IServerUtils, NumberProvider>> numberConverters = registerClassKeyed("number converters", true, HashMap::new, BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE);
     private final ManagedRegistry<Class<?>, NumberConverter<IServerUtils, NumberProvider>> intNumberConverters = registerClassKeyed("int number converters", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, LevelBasedValue, NumberExpr, NumberExpr>> levelBasedValueConverters = registerClassKeyed("level based value converters", true, HashMap::new, BuiltInRegistries.ENCHANTMENT_LEVEL_BASED_VALUE_TYPE);

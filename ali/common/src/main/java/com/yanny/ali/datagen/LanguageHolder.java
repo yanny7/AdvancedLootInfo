@@ -50,6 +50,7 @@ public class LanguageHolder {
         CoreLang.register(TRANSLATION_MAP, Lang.Branch.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Description.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Group.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.ItemFilter.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Multi.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Numbers.class);
 

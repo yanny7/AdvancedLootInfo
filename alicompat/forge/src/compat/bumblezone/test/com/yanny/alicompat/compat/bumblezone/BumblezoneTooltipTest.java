@@ -84,7 +84,7 @@ public class BumblezoneTooltipTest {
                 "Honey Compass Locate Structure:",
                 "  -> Destination: minecraft:village",
                 "  -> Search Radius: 50",
-                "  -> Skip Known Structures: true"
+                "  -> Skip Known Structures: True"
         ));
     }
 

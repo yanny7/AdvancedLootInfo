@@ -392,6 +392,8 @@ public final class Lang {
         STRUCTURE("structure", "Structure: %s"),
         SWAPPABLE("swappable", "Swappable: %s"),
         TAG("tag", "Tag: %s"),
+        TAG_IS("tag_is", "Is: %s"),
+        TAG_IS_NOT("tag_is_not", "Is Not: %s"),
         TARGET("target", "Target: %s"),
         TARGET_PATH("target_path", "Target Path: %s"),
         TEAM("team", "Team: %s"),
@@ -606,6 +608,44 @@ public final class Lang {
 
         Group(String k, String e) {
             this.translation = new Translation("ali.enum.group_type." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
+    public enum ItemFilter implements ITooltipKey {
+        NONE("none", "None"),
+        ANY("any", "Any"),
+        EMPTY("empty", "Empty"),
+        ARMOR("armor", "Armor"),
+        EDIBLE("edible", "Edible"),
+        DAMAGEABLE("damageable", "Damageable"),
+        DAMAGED("damaged", "Damaged"),
+        ENCHANTED("enchanted", "Enchanted"),
+        BLOCK_ITEM("block_item", "Block Item"),
+        HAS_ENCHANTMENT("has_enchantment", "Has Enchantment"),
+        EQUIPMENT_SLOT("equipment_slot", "Equipment Slot"),
+        EQUIPMENT_SLOT_GROUP("equipment_slot_group", "Equipment Slot Group"),
+        ITEM("item", "Item"),
+        INGREDIENT("ingredient", "Ingredient"),
+        TAG("tag", "Tag"),
+        ANY_OF_TOOL_ACTION("any_of_tool_action", "Any of Tool Actions"),
+        ALL_OF_TOOL_ACTION("all_of_tool_action", "All of Tool Actions"),
+        NOT("not", "Not"),
+        ALL_OF("all_of", "All Of"),
+        ANY_OF("any_of", "Any Of"),
+        CUSTOM("custom", "Custom"),
+        UNKNOWN("unknown", "Unknown"),
+        ;
+
+        private final Translation translation;
+
+        ItemFilter(String k, String e) {
+            this.translation = new Translation("ali.enum.item_filter." + k, e);
         }
 
         @NotNull

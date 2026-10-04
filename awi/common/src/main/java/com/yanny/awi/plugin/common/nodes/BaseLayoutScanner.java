@@ -39,6 +39,7 @@ import java.util.function.Predicate;
  */
 public class BaseLayoutScanner {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
+    private static final long HEAP_PER_WORKER = 512L * 1024 * 1024;
 
     private final Map<Identifier, Map<Holder<Biome>, NodeUtils.LayerHolder>> resultsByDimension;
     private final Stats stats;
@@ -110,8 +111,7 @@ public class BaseLayoutScanner {
         Map<CacheKey, NodeUtils.LayerHolder> cache = new ConcurrentHashMap<>();
         ThreadLocal<ContextCache> threadLocalCtx = ThreadLocal.withInitial(ContextCache::new);
         NodeUtils.ScanOptions scanOptions = new NodeUtils.ScanOptions(scanSettings, logStatistics);
-        int threadCount = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
-        ExecutorService executor = Executors.newFixedThreadPool(threadCount);
+        ExecutorService executor = Executors.newFixedThreadPool(workerCount());
         Map<Identifier, Map<Holder<Biome>, NodeUtils.LayerHolder>> results = new HashMap<>();
         List<Long> scanDurations = new ArrayList<>();
         Map<Identifier, DimensionCost> costs = new HashMap<>();
@@ -159,6 +159,14 @@ public class BaseLayoutScanner {
 
         return new BaseLayoutScanner(results, buildStats(System.nanoTime() - startTime, scanDurations, cachedCount,
                 scannedDimensions.size(), distinctRules.size(), distinctRuleInstances.size(), costliest));
+    }
+
+    private static int workerCount() {
+        Runtime runtime = Runtime.getRuntime();
+        long headroom = runtime.maxMemory() - (runtime.totalMemory() - runtime.freeMemory());
+        long byMemory = headroom / HEAP_PER_WORKER;
+
+        return (int) Math.max(1, Math.min(runtime.availableProcessors() - 1, byMemory));
     }
 
     @NotNull

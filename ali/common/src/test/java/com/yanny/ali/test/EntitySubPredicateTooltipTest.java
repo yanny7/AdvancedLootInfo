@@ -43,7 +43,7 @@ public class EntitySubPredicateTooltipTest {
         ));
         assertTooltip(EntitySubPredicateTooltipUtils.getFishingHookPredicateTooltip(UTILS, FishingHookPredicate.inOpenWater(true)).build(), List.of(
                 "Fishing Hook:",
-                "  -> Is In Open Water: true"
+                "  -> Is In Open Water: True"
         ));
     }
 
@@ -75,11 +75,11 @@ public class EntitySubPredicateTooltipTest {
                 "        -> test: true",
                 "        -> test2: false",
                 "    -> minecraft:test",
-                "      -> Done: true",
+                "      -> Done: True",
                 "  -> Looking At:",
                 "    -> Entity Type: minecraft:warden",
                 "  -> Input:",
-                "    -> Forward: true"
+                "    -> Forward: True"
         ));
     }
 
@@ -95,8 +95,8 @@ public class EntitySubPredicateTooltipTest {
     public void testRaiderPredicateTooltip() {
         assertTooltip(EntitySubPredicateTooltipUtils.getRaiderPredicateTooltip(UTILS, RaiderPredicate.CAPTAIN_WITHOUT_RAID).build(), List.of(
                 "Raider:",
-                "  -> Has Raid: false",
-                "  -> Is Captain: true"
+                "  -> Has Raid: False",
+                "  -> Is Captain: True"
         ));
     }
 
@@ -104,7 +104,7 @@ public class EntitySubPredicateTooltipTest {
     public void testSheepPredicateTooltip() {
         assertTooltip(EntitySubPredicateTooltipUtils.getSheepPredicateTooltip(UTILS, new SheepPredicate(Optional.of(false))).build(), List.of(
                 "Sheep:",
-                "  -> Sheared: false"
+                "  -> Sheared: False"
         ));
     }
 }

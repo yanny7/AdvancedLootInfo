@@ -5,6 +5,8 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.lootjs.mixin.MixinCustomParamPredicate;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +21,7 @@ public class LootJsConditionTooltipUtils {
 
     @NotNull
     public static TooltipBuilder matchDimensionTooltip(IServerUtils utils, MatchDimension condition) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, Arrays.asList(condition.dimensions())).build(Lang.Branch.DIMENSIONS)),
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, Arrays.stream(condition.dimensions()).map((dimension) -> ResourceKey.create(Registries.DIMENSION, dimension)).toList()).build(Lang.Branch.DIMENSIONS)),
                 Lang.Conditions.MATCH_DIMENSION);
     }
 
