@@ -71,7 +71,7 @@ public abstract class AbstractServer {
 
         WorldgenNodeCache nodeCache = new WorldgenNodeCache();
         long spawnInfoStart = System.currentTimeMillis();
-        SpawnInfo spawnInfo = new SpawnInfo(Utils.MOD_ID, registryAccess, Services.getPlatform()::getStructureSettings);
+        SpawnInfo spawnInfo = new SpawnInfo(Utils.MOD_ID, registryAccess, Services.getPlatform()::getStructureSettings, serverRegistry.getConfiguration().showInGameNames);
 
         if (serverRegistry.getConfiguration().logMoreStatistics) {
             LOGGER.info("Collecting mob spawns took {}ms", System.currentTimeMillis() - spawnInfoStart);

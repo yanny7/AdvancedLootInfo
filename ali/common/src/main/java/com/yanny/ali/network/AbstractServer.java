@@ -104,7 +104,7 @@ public abstract class AbstractServer {
         Map<ResourceLocation, IDataNode> tradeNodes;
 
         long spawnInfoStart = System.currentTimeMillis();
-        SpawnInfo spawnInfo = new SpawnInfo(Utils.MOD_ID, serverRegistry.getServerLevel().registryAccess(), Services.getPlatform()::getStructureSettings);
+        SpawnInfo spawnInfo = new SpawnInfo(Utils.MOD_ID, serverRegistry.getServerLevel().registryAccess(), Services.getPlatform()::getStructureSettings, config.showInGameNames);
 
         if (config.logMoreStatistics) {
             LOGGER.info("Collecting mob spawns took {}ms", System.currentTimeMillis() - spawnInfoStart);

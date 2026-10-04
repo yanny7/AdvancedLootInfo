@@ -24,17 +24,17 @@ import static com.yanny.aci.tooltip.CoreTooltipUtils.getBuiltInRegistryTooltip;
 public class RegistriesTooltipUtils {
     @NotNull
     public static TooltipBuilder getEntryTypeTooltip(IServerUtils utils, LootPoolEntryType type) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.LOOT_POOL_ENTRY_TYPE, type);
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.LOOT_POOL_ENTRY_TYPE, type, utils.getConfiguration().showInGameNames);
     }
 
     @NotNull
     public static TooltipBuilder getFunctionTypeTooltip(IServerUtils utils, LootItemFunctionType type) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.LOOT_FUNCTION_TYPE, type);
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.LOOT_FUNCTION_TYPE, type, utils.getConfiguration().showInGameNames);
     }
 
     @NotNull
     public static TooltipBuilder getConditionTypeTooltip(IServerUtils utils, LootItemConditionType type) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.LOOT_CONDITION_TYPE, type);
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.LOOT_CONDITION_TYPE, type, utils.getConfiguration().showInGameNames);
     }
 
     @NotNull
@@ -54,17 +54,17 @@ public class RegistriesTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getBannerPatternTooltip(IServerUtils utils, BannerPattern bannerPattern) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.BANNER_PATTERN, bannerPattern);
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.BANNER_PATTERN, bannerPattern, utils.getConfiguration().showInGameNames);
     }
 
     @NotNull
     public static TooltipBuilder getBlockEntityTypeTooltip(IServerUtils utils, BlockEntityType<?> blockEntityType) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.BLOCK_ENTITY_TYPE, blockEntityType);
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.BLOCK_ENTITY_TYPE, blockEntityType, utils.getConfiguration().showInGameNames);
     }
 
     @NotNull
     public static TooltipBuilder getPotionTooltip(IServerUtils utils, Potion potion) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.POTION, potion);
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.POTION, potion, utils.getConfiguration().showInGameNames);
     }
 
     @NotNull
@@ -74,12 +74,12 @@ public class RegistriesTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getLootNbtProviderTypeTooltip(IServerUtils utils, LootNbtProviderType providerType) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.LOOT_NBT_PROVIDER_TYPE, providerType);
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.LOOT_NBT_PROVIDER_TYPE, providerType, utils.getConfiguration().showInGameNames);
     }
 
     @NotNull
     public static TooltipBuilder getFluidTooltip(IServerUtils utils, Fluid fluid) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.FLUID, fluid);
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.FLUID, fluid, utils.getConfiguration().showInGameNames);
     }
 
     @NotNull

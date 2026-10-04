@@ -4,6 +4,8 @@
 - Tooltips taller than the screen can be scrolled with the mouse wheel
 - Values show most likely value, charts (`showCharts`) and formulas (F3+H)
 - Fixed running out of memory during the worldgen scan with mods that cache compiled surface rules
+- With `showInGameNames`, IDs (biomes, dimensions, structures, …) and tags are shown translated when a translation exists, in spawn info too
+- Spawn category is shown translated (`Monster` instead of `monster`)
 
 ## [1.2.0]
 

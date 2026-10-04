@@ -2,6 +2,7 @@ package com.yanny.awi.compatibility;
 
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
+import com.yanny.aci.tooltip.RegistryNames;
 import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.Utils;
@@ -23,6 +24,7 @@ import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -279,8 +281,12 @@ public class GenericUtils {
     }
 
     public static Component getFormattedCategoryTitle(ResourceLocation location) {
-        String translationKey = "dimension." + location.getNamespace() + "." + location.getPath();
-        return Component.translatableWithFallback(translationKey, categoryTitle(location));
+        return RegistryNames.name(Registries.LEVEL_STEM, location, categoryTitle(location));
+    }
+
+    @NotNull
+    public static Component getBiomeTitle(ResourceLocation location) {
+        return RegistryNames.name(Registries.BIOME, location, location.toString());
     }
 
     private static String categoryTitle(ResourceLocation location) {

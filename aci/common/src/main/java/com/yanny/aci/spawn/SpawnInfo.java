@@ -37,6 +37,7 @@ public class SpawnInfo {
             Comparator.<Map.Entry<Spawn, SortedSet<ResourceLocation>>>comparingInt((e) -> -e.getValue().size()).thenComparing((e) -> e.getValue().first());
 
     private final Logger logger;
+    private final boolean showInGameNames;
     private final Map<ResourceLocation, Set<ResourceLocation>> dimensionBiomes = new TreeMap<>();
     private final Map<ResourceLocation, List<Entry>> biomeEntries = new HashMap<>();
     private final Map<ResourceLocation, List<Entry>> structureEntries = new TreeMap<>();
@@ -44,8 +45,9 @@ public class SpawnInfo {
     private final Map<EntityType<?>, Map<ResourceLocation, List<Spawn>>> entityBiomes = new HashMap<>();
     private final Map<EntityType<?>, Map<ResourceLocation, List<Spawn>>> entityStructures = new HashMap<>();
 
-    public SpawnInfo(String modId, RegistryAccess registryAccess, Function<Structure, Structure.StructureSettings> structureSettings) {
+    public SpawnInfo(String modId, RegistryAccess registryAccess, Function<Structure, Structure.StructureSettings> structureSettings, boolean showInGameNames) {
         logger = CommonLogUtils.getLogger(modId);
+        this.showInGameNames = showInGameNames;
 
         for (Map.Entry<ResourceKey<LevelStem>, LevelStem> entry : entries(registryAccess, Registries.LEVEL_STEM)) {
             try {
@@ -107,7 +109,7 @@ public class SpawnInfo {
 
         return TooltipBuilder.branch((root) -> dimensionBiomes.forEach((dimension, biomesInDimension) -> {
             Map<Spawn, SortedSet<ResourceLocation>> groups = new HashMap<>();
-            TooltipBuilder dimensionBuilder = TooltipBuilder.value(dimension).key(CoreLang.Spawn.DIMENSION);
+            TooltipBuilder dimensionBuilder = TooltipBuilder.value(name(Registries.LEVEL_STEM, dimension)).key(CoreLang.Spawn.DIMENSION);
             boolean spawnsHere = false;
 
             for (ResourceLocation biome : biomesInDimension) {
@@ -216,7 +218,7 @@ public class SpawnInfo {
         }
     }
 
-    private static void addBiomeGroup(TooltipBuilder dimension, Spawn spawn, SortedSet<ResourceLocation> biomes, Set<ResourceLocation> biomesInDimension) {
+    private void addBiomeGroup(TooltipBuilder dimension, Spawn spawn, SortedSet<ResourceLocation> biomes, Set<ResourceLocation> biomesInDimension) {
         if (biomes.size() == biomesInDimension.size()) {
             addSpawn(dimension, spawn);
             return;
@@ -226,13 +228,13 @@ public class SpawnInfo {
         List<ResourceLocation> listed = excluded ? biomesInDimension.stream().filter((b) -> !biomes.contains(b)).toList() : List.copyOf(biomes);
 
         for (int i = 0; i < listed.size(); i++) {
-            TooltipBuilder line = TooltipBuilder.value(listed.get(i)).key(excluded ? CoreLang.Spawn.BIOME_EXCLUDED : CoreLang.Spawn.BIOME_INCLUDED);
+            TooltipBuilder line = TooltipBuilder.value(name(Registries.BIOME, listed.get(i))).key(excluded ? CoreLang.Spawn.BIOME_EXCLUDED : CoreLang.Spawn.BIOME_INCLUDED);
 
             dimension.add(i == listed.size() - 1 ? addSpawn(line, spawn) : line);
         }
     }
 
-    private static void addStructureGroups(TooltipBuilder builder, Map<ResourceLocation, List<Spawn>> structures) {
+    private void addStructureGroups(TooltipBuilder builder, Map<ResourceLocation, List<Spawn>> structures) {
         Map<Spawn, SortedSet<ResourceLocation>> groups = new HashMap<>();
 
         structures.forEach((structure, spawns) -> {
@@ -245,7 +247,7 @@ public class SpawnInfo {
             List<ResourceLocation> listed = List.copyOf(group.getValue());
 
             for (int i = 0; i < listed.size(); i++) {
-                TooltipBuilder line = TooltipBuilder.value(listed.get(i)).key(CoreLang.Spawn.STRUCTURE);
+                TooltipBuilder line = TooltipBuilder.value(name(Registries.STRUCTURE, listed.get(i))).key(CoreLang.Spawn.STRUCTURE);
 
                 builder.add(i == listed.size() - 1 ? addSpawn(line, group.getKey()) : line);
             }
@@ -253,8 +255,20 @@ public class SpawnInfo {
     }
 
     @NotNull
+    private static String categoryName(MobCategory category) {
+        String key = CoreLang.mobCategoryKey(category);
+
+        return CoreLang.TRANSLATION_MAP.containsKey(key) ? TooltipBuilder.translate(key) : category.getName();
+    }
+
+    @NotNull
+    private <T> Object name(ResourceKey<? extends Registry<T>> registry, ResourceLocation id) {
+        return showInGameNames ? TooltipBuilder.registryKey(ResourceKey.create(registry, id)) : id;
+    }
+
+    @NotNull
     private static TooltipBuilder addSpawn(TooltipBuilder builder, Spawn spawn) {
-        builder.add(TooltipBuilder.value(spawn.category().getName()).build(CoreLang.Spawn.CATEGORY));
+        builder.add(TooltipBuilder.value(categoryName(spawn.category())).build(CoreLang.Spawn.CATEGORY));
         builder.add(TooltipBuilder.value(spawn.weight()).build(CoreLang.Spawn.WEIGHT));
         builder.add(TooltipBuilder.number(NumberExpr.uniformInt(spawn.minCount(), spawn.maxCount())).build(CoreLang.Spawn.GROUP_SIZE));
 

@@ -8,6 +8,7 @@
 - Added `TooltipBuilder.intervals`, a list of ranges formatted in the client's locale
 - Structure spawn overrides without mob category no longer break the entity's spawn tooltip
 - Spawn biomes are listed as exclusions (`-`) only when more than 10 biomes would be listed otherwise
+- IDs of any registry and tags are shown translated under `showInGameNames`, using the key forms of vanilla, Fabric API, NeoForge and EMI
 
 ## [1.3.0]
 
