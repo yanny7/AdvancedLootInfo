@@ -17,7 +17,7 @@ dependencies {
 
     modCompileOnly "curse.maven:kubejs-238086:5853321"
     modCompileOnly "curse.maven:rhino-416294:6186969"
-    modCompileOnly "curse.maven:lootjs-570630:6508898"
+    modCompileOnly "curse.maven:lootjs-570630:7551185"
 
     testImplementation 'org.junit.platform:junit-platform-suite:1.12.0'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
