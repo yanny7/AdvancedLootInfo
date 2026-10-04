@@ -29,68 +29,73 @@ public class LootJsGenericTooltipUtils {
         if (predicate instanceof ItemFilterWrapper(ItemFilter filter)) {
             return getItemFilterTooltip(utils, filter);
         } else if (predicate == ItemFilter.NONE) {
-            return TooltipBuilder.value("NONE");
+            return filterTooltip(Lang.ItemFilter.NONE);
         } else if (predicate == ItemFilter.ANY) {
-            return TooltipBuilder.value("ANY");
+            return filterTooltip(Lang.ItemFilter.ANY);
         } else if (predicate == ItemFilter.EMPTY) {
-            return TooltipBuilder.value("EMPTY");
+            return filterTooltip(Lang.ItemFilter.EMPTY);
         } else if (predicate == ItemFilter.ARMOR) {
-            return TooltipBuilder.value("ARMOR");
+            return filterTooltip(Lang.ItemFilter.ARMOR);
         } else if (predicate == ItemFilter.EDIBLE) {
-            return TooltipBuilder.value("EDIBLE");
+            return filterTooltip(Lang.ItemFilter.EDIBLE);
         } else if (predicate == ItemFilter.DAMAGEABLE) {
-            return TooltipBuilder.value("DAMAGEABLE");
+            return filterTooltip(Lang.ItemFilter.DAMAGEABLE);
         } else if (predicate == ItemFilter.DAMAGED) {
-            return TooltipBuilder.value("DAMAGED");
+            return filterTooltip(Lang.ItemFilter.DAMAGED);
         } else if (predicate == ItemFilter.ENCHANTED) {
-            return TooltipBuilder.value("ENCHANTED");
+            return filterTooltip(Lang.ItemFilter.ENCHANTED);
         } else if (predicate == ItemFilter.BLOCK_ITEM) {
-            return TooltipBuilder.value("BLOCK_ITEM");
+            return filterTooltip(Lang.ItemFilter.BLOCK_ITEM);
         } else if (predicate instanceof ItemFilterImpl.HasEnchantment(IdFilter filter, MinMaxBounds.Ints levelBounds, DataComponentType<ItemEnchantments> type)) {
-            return TooltipBuilder.value("HAS_ENCHANTMENT")
+            return filterTooltip(Lang.ItemFilter.HAS_ENCHANTMENT)
                     .add(utils.getValueTooltip(utils, filter).build(Lang.Branch.FILTER))
                     .add(utils.getValueTooltip(utils, levelBounds).build(Lang.Value.LEVELS))
                     .add(utils.getValueTooltip(utils, type).build(Lang.Value.COMPONENT));
         } else if (predicate instanceof ItemFilterImpl.HasComponent hasComponent) {
-            return TooltipBuilder.value("HAS_COMPONENT")
+            return filterTooltip(Lang.ItemFilter.HAS_COMPONENT)
                     .add(utils.getValueTooltip(utils, List.of(hasComponent.types())).build(Lang.Branch.COMPONENTS));
         } else if (predicate instanceof ItemFilterImpl.IsEquipmentSlot(EquipmentSlot equipmentSlot)) {
-            return TooltipBuilder.value("EQUIPMENT_SLOT")
+            return filterTooltip(Lang.ItemFilter.EQUIPMENT_SLOT)
                     .add(utils.getValueTooltip(utils, equipmentSlot).build(Lang.Value.SLOT));
         } else if (predicate instanceof ItemFilterImpl.IsEquipmentSlotGroup(EquipmentSlotGroup equipmentSlotGroup)) {
-            return TooltipBuilder.value("EQUIPMENT_SLOT_GROUP")
+            return filterTooltip(Lang.ItemFilter.EQUIPMENT_SLOT_GROUP)
                     .add(utils.getValueTooltip(utils, equipmentSlotGroup).build(Lang.Value.SLOT_GROUP));
         } else if (predicate instanceof ItemFilterImpl.ByItem(ItemStack itemStack, boolean checkComponents)) {
-            return TooltipBuilder.value("ITEM")
+            return filterTooltip(Lang.ItemFilter.ITEM)
                     .add(utils.getValueTooltip(utils, itemStack).build(Lang.Branch.ITEM))
                     .add(utils.getValueTooltip(utils, checkComponents).build(Lang.Value.CHECK_COMPONENTS));
         } else if (predicate instanceof ItemFilterImpl.ByIngredient(Ingredient ingredient)) {
-            return TooltipBuilder.value("INGREDIENT")
+            return filterTooltip(Lang.ItemFilter.INGREDIENT)
                     .add(utils.getValueTooltip(utils, ingredient));
         } else if (predicate instanceof ItemFilterImpl.ByTag(TagKey<Item> tag)) {
-            return TooltipBuilder.value("TAG")
+            return filterTooltip(Lang.ItemFilter.TAG)
                     .add(utils.getValueTooltip(utils, tag).build());
         } else if (predicate instanceof ItemFilterImpl.AnyOfToolAction toolAction) {
-            return TooltipBuilder.value("ANY_OF_TOOL_ACTION")
+            return filterTooltip(Lang.ItemFilter.ANY_OF_TOOL_ACTION)
                     .add(utils.getValueTooltip(utils, toolAction.toolActions()).build(Lang.Branch.ABILITIES));
         } else if (predicate instanceof ItemFilterImpl.AllOfToolAction toolAction) {
-            return TooltipBuilder.value("ALL_OF_TOOL_ACTION")
+            return filterTooltip(Lang.ItemFilter.ALL_OF_TOOL_ACTION)
                     .add(utils.getValueTooltip(utils, toolAction.toolActions()).build(Lang.Branch.ABILITIES));
         } else if (predicate instanceof ItemFilterImpl.Not(ItemFilter itemFilter)) {
-            return TooltipBuilder.value("NOT")
+            return filterTooltip(Lang.ItemFilter.NOT)
                     .add(utils.getValueTooltip(utils, itemFilter).build(Lang.Value.ITEM_FILTER));
         } else if (predicate instanceof ItemFilterImpl.AllOf allOf) {
-            return TooltipBuilder.value("ALL_OF")
+            return filterTooltip(Lang.ItemFilter.ALL_OF)
                     .add(utils.getValueTooltip(utils, List.of(allOf.itemFilters())).build(Lang.Branch.FILTERS));
         } else if (predicate instanceof ItemFilterImpl.AnyOf allOf) {
-            return TooltipBuilder.value("ANY_OF")
+            return filterTooltip(Lang.ItemFilter.ANY_OF)
                     .add(utils.getValueTooltip(utils, List.of(allOf.itemFilters())).build(Lang.Branch.FILTERS));
         } else if (predicate instanceof ItemFilterImpl.Custom custom) {
-            return TooltipBuilder.value("CUSTOM")
+            return filterTooltip(Lang.ItemFilter.CUSTOM)
                     .add(utils.getValueTooltip(utils, Optional.ofNullable(custom.description())).build(Lang.Value.DESCRIPTION));
         }
 
-        return TooltipBuilder.value("UNKNOWN");
+        return filterTooltip(Lang.ItemFilter.UNKNOWN);
+    }
+
+    @NotNull
+    private static TooltipBuilder filterTooltip(Lang.ItemFilter filter) {
+        return TooltipBuilder.value(TooltipBuilder.translate(filter.singular()));
     }
 
     @NotNull

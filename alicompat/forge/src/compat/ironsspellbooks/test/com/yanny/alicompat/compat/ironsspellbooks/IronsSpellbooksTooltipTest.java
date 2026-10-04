@@ -39,7 +39,7 @@ public class IronsSpellbooksTooltipTest {
                 "Randomize Spell:",
                 "  -> Quality: 1 to 4",
                 "  -> Applicable Spells:",
-                "    -> Force: false"
+                "    -> Force: False"
         ));
     }
 
@@ -48,7 +48,7 @@ public class IronsSpellbooksTooltipTest {
         assertTooltip(UTILS.getFunctionTooltip(UTILS, randomizeRingEnhancement()).build(), List.of(
                 "Randomize Ring Enhancement:",
                 "  -> Spell Filter:",
-                "    -> Force: false"
+                "    -> Force: False"
         ));
     }
 

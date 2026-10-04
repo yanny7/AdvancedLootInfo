@@ -78,7 +78,7 @@ public class FarmersDelightTooltipTest {
         assertTooltip(UTILS.getConsumeEffectTooltip(UTILS, effect).build(), List.of(
                 "Remove Random Effects:",
                 "  -> Exclude: farmersdelight:test",
-                "  -> Harmful Only: true"
+                "  -> Harmful Only: True"
         ));
     }
 

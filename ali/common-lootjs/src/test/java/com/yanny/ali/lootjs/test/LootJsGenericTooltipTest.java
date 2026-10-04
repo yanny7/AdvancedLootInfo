@@ -26,15 +26,15 @@ import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 public class LootJsGenericTooltipTest {
     @Test
     public void testItemFilterConstantTooltip() {
-        assertFilter(ItemFilter.NONE, "NONE");
-        assertFilter(ItemFilter.ANY, "ANY");
-        assertFilter(ItemFilter.EMPTY, "EMPTY");
-        assertFilter(ItemFilter.ARMOR, "ARMOR");
-        assertFilter(ItemFilter.EDIBLE, "EDIBLE");
-        assertFilter(ItemFilter.DAMAGEABLE, "DAMAGEABLE");
-        assertFilter(ItemFilter.DAMAGED, "DAMAGED");
-        assertFilter(ItemFilter.ENCHANTED, "ENCHANTED");
-        assertFilter(ItemFilter.BLOCK_ITEM, "BLOCK_ITEM");
+        assertFilter(ItemFilter.NONE, "None");
+        assertFilter(ItemFilter.ANY, "Any");
+        assertFilter(ItemFilter.EMPTY, "Empty");
+        assertFilter(ItemFilter.ARMOR, "Armor");
+        assertFilter(ItemFilter.EDIBLE, "Edible");
+        assertFilter(ItemFilter.DAMAGEABLE, "Damageable");
+        assertFilter(ItemFilter.DAMAGED, "Damaged");
+        assertFilter(ItemFilter.ENCHANTED, "Enchanted");
+        assertFilter(ItemFilter.BLOCK_ITEM, "Block Item");
     }
 
     @Test
@@ -46,7 +46,7 @@ public class LootJsGenericTooltipTest {
         );
 
         assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, filter).build(), List.of(
-                "HAS_ENCHANTMENT",
+                "Has Enchantment",
                 "  -> Filter:",
                 "    -> minecraft:fortune",
                 "  -> Levels: 2 to 4",
@@ -62,7 +62,7 @@ public class LootJsGenericTooltipTest {
         });
 
         assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, filter).build(), List.of(
-                "HAS_COMPONENT",
+                "Has Component",
                 "  -> Components:",
                 "    -> minecraft:enchantments",
                 "    -> minecraft:damage"
@@ -72,11 +72,11 @@ public class LootJsGenericTooltipTest {
     @Test
     public void testItemFilterEquipmentSlotTooltip() {
         assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, new ItemFilterImpl.IsEquipmentSlot(EquipmentSlot.HEAD)).build(), List.of(
-                "EQUIPMENT_SLOT",
+                "Equipment Slot",
                 "  -> Slot: Head"
         ));
         assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, new ItemFilterImpl.IsEquipmentSlotGroup(EquipmentSlotGroup.ARMOR)).build(), List.of(
-                "EQUIPMENT_SLOT_GROUP",
+                "Equipment Slot Group",
                 "  -> Slot Group: Armor"
         ));
     }
@@ -84,7 +84,7 @@ public class LootJsGenericTooltipTest {
     @Test
     public void testItemFilterByItemTooltip() {
         assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, new ItemFilterImpl.ByItem(new ItemStack(Items.DIAMOND), true)).build(), List.of(
-                "ITEM",
+                "Item",
                 "  -> Item:",
                 "    -> Item: minecraft:diamond",
                 "    -> Count: 1",
@@ -95,14 +95,14 @@ public class LootJsGenericTooltipTest {
                 "        -> Item Name: Diamond",
                 "      -> minecraft:provides_trim_material",
                 "        -> Value: minecraft:diamond",
-                "  -> Check Components: true"
+                "  -> Check Components: True"
         ));
     }
 
     @Test
     public void testItemFilterByIngredientTooltip() {
         assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, new ItemFilterImpl.ByIngredient(Ingredient.of(Items.DIAMOND, Items.EMERALD))).build(), List.of(
-                "INGREDIENT",
+                "Ingredient",
                 "  -> Item: minecraft:diamond",
                 "  -> Item: minecraft:emerald"
         ));
@@ -111,7 +111,7 @@ public class LootJsGenericTooltipTest {
     @Test
     public void testItemFilterByTagTooltip() {
         assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, new ItemFilterImpl.ByTag(ItemTags.PLANKS)).build(), List.of(
-                "TAG",
+                "Tag",
                 "  -> minecraft:planks"
         ));
     }
@@ -119,12 +119,12 @@ public class LootJsGenericTooltipTest {
     @Test
     public void testItemFilterToolActionTooltip() {
         assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, new ItemFilterImpl.AnyOfToolAction(List.of(ItemAbilities.AXE_STRIP), (stack) -> true)).build(), List.of(
-                "ANY_OF_TOOL_ACTION",
+                "Any of Tool Actions",
                 "  -> Abilities:",
                 "    -> axe_strip"
         ));
         assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, new ItemFilterImpl.AllOfToolAction(List.of(ItemAbilities.SHOVEL_FLATTEN), (stack) -> true)).build(), List.of(
-                "ALL_OF_TOOL_ACTION",
+                "All of Tool Actions",
                 "  -> Abilities:",
                 "    -> shovel_flatten"
         ));
@@ -133,34 +133,34 @@ public class LootJsGenericTooltipTest {
     @Test
     public void testItemFilterCompositeTooltip() {
         assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, new ItemFilterImpl.Not(ItemFilter.ARMOR)).build(), List.of(
-                "NOT",
-                "  -> Item Filter: ARMOR"
+                "Not",
+                "  -> Item Filter: Armor"
         ));
         assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, new ItemFilterImpl.AllOf(new ItemFilter[]{ItemFilter.ARMOR, ItemFilter.DAMAGED}, ItemFilter.ANY)).build(), List.of(
-                "ALL_OF",
+                "All Of",
                 "  -> Filters:",
-                "    -> ARMOR",
-                "    -> DAMAGED"
+                "    -> Armor",
+                "    -> Damaged"
         ));
         assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, new ItemFilterImpl.AnyOf(new ItemFilter[]{ItemFilter.ARMOR, ItemFilter.DAMAGED}, ItemFilter.NONE)).build(), List.of(
-                "ANY_OF",
+                "Any Of",
                 "  -> Filters:",
-                "    -> ARMOR",
-                "    -> DAMAGED"
+                "    -> Armor",
+                "    -> Damaged"
         ));
     }
 
     @Test
     public void testItemFilterCustomTooltip() {
         assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, new ItemFilterImpl.Custom((stack) -> true, "my filter")).build(), List.of(
-                "CUSTOM",
+                "Custom",
                 "  -> Description: my filter"
         ));
     }
 
     @Test
     public void testItemFilterUnknownTooltip() {
-        assertFilter((stack) -> true, "UNKNOWN");
+        assertFilter((stack) -> true, "Unknown");
     }
 
     @Test

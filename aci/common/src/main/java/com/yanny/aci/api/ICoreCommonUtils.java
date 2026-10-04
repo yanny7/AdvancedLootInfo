@@ -8,4 +8,6 @@ public interface ICoreCommonUtils<TConfig> {
 
     @NotNull
     TConfig getConfiguration();
+
+    boolean showInGameNames();
 }
