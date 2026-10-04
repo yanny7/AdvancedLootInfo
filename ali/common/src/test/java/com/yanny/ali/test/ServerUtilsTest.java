@@ -41,7 +41,7 @@ public class ServerUtilsTest {
         assertTooltip(UTILS.getFunctionTooltip(UTILS, SetItemCountFunction.setCount(BinomialDistributionGenerator.binomial(5, 0.5f)).build()).build(), List.of(
                 "Set Count:",
                 "  -> Count: 0 to 5  ~2 to 3 (31%)",
-                "  -> Add: false"
+                "  -> Add: False"
         ));
         assertTooltip(UTILS.getFunctionTooltip(UTILS, new UnknownFunction(Items.ANDESITE, BinomialDistributionGenerator.binomial(5, 0.3f))).build(), List.of(
                 "Auto-detected: minecraft:unknown"

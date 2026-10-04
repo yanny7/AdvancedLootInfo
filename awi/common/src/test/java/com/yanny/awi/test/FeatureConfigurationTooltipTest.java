@@ -103,7 +103,7 @@ public class FeatureConfigurationTooltipTest {
                 "  -> Allowed Placement:",
                 "    -> Matching Block Tag:",
                 "      -> Tag: minecraft:air",
-                "  -> Prioritize Tip: true"
+                "  -> Prioritize Tip: True"
         ));
     }
 
@@ -214,11 +214,11 @@ public class FeatureConfigurationTooltipTest {
         assertTooltip(FeatureConfigurationTooltipUtils.getEndGatewayConfigurationTooltip(UTILS, EndGatewayConfiguration.knownExit(new BlockPos(1, 2, 3), true)).build(), List.of(
                 "End Gateway:",
                 "  -> Exit: [1,2,3]",
-                "  -> Exact: true"
+                "  -> Exact: True"
         ));
         assertTooltip(FeatureConfigurationTooltipUtils.getEndGatewayConfigurationTooltip(UTILS, EndGatewayConfiguration.delayedExitSearch()).build(), List.of(
                 "End Gateway:",
-                "  -> Exact: false"
+                "  -> Exact: False"
         ));
     }
 
@@ -288,7 +288,7 @@ public class FeatureConfigurationTooltipTest {
                 "    -> Crack Point Offset: 2",
                 "  -> Potential Placement Chance: 0.35",
                 "  -> Alternate Layer Chance: 0.0",
-                "  -> Require Alternate Layer: true",
+                "  -> Require Alternate Layer: True",
                 "  -> Outer Wall Distance:",
                 "    -> 5",
                 "  -> Distribution Points:",
@@ -394,9 +394,9 @@ public class FeatureConfigurationTooltipTest {
                 "Multiface Growth:",
                 "  -> Place Block: Glow Lichen",
                 "  -> Search Range: 8",
-                "  -> Can Place On Floor: true",
-                "  -> Can Place On Ceiling: false",
-                "  -> Can Place On Wall: true",
+                "  -> Can Place On Floor: True",
+                "  -> Can Place On Ceiling: False",
+                "  -> Can Place On Wall: True",
                 "  -> Chance Of Spreading: 0.3",
                 "  -> Can be Placed On: Stone"
         ));
@@ -412,9 +412,9 @@ public class FeatureConfigurationTooltipTest {
                 "Multiface Growth:",
                 "  -> Place Block: Glow Lichen",
                 "  -> Search Range: 8",
-                "  -> Can Place On Floor: true",
-                "  -> Can Place On Ceiling: false",
-                "  -> Can Place On Wall: true",
+                "  -> Can Place On Floor: True",
+                "  -> Can Place On Ceiling: False",
+                "  -> Can Place On Wall: True",
                 "  -> Chance Of Spreading: 0.3",
                 "  -> Can Be Placed On:",
                 "    -> Stone",
@@ -615,7 +615,7 @@ public class FeatureConfigurationTooltipTest {
     public void testSimpleBlockConfigurationTooltip() {
         assertTooltip(FeatureConfigurationTooltipUtils.getSimpleBlockConfigurationTooltip(UTILS, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.STONE))).build(), List.of(
                 "Simple Block:",
-                "  -> Schedule Tick: false",
+                "  -> Schedule Tick: False",
                 "  -> To Place:",
                 "    -> Simple:",
                 "      -> State:",
@@ -669,7 +669,7 @@ public class FeatureConfigurationTooltipTest {
                 "    -> Fluid: minecraft:water",
                 "    -> Properties:",
                 "      -> falling: true",
-                "  -> Requires Block Below: true",
+                "  -> Requires Block Below: True",
                 "  -> Rock Count: 4",
                 "  -> Hole Count: 1",
                 "  -> Valid Block: Stone"
@@ -686,7 +686,7 @@ public class FeatureConfigurationTooltipTest {
                 "    -> Fluid: minecraft:water",
                 "    -> Properties:",
                 "      -> falling: true",
-                "  -> Requires Block Below: true",
+                "  -> Requires Block Below: True",
                 "  -> Rock Count: 4",
                 "  -> Hole Count: 1",
                 "  -> Valid Blocks:",
@@ -735,7 +735,7 @@ public class FeatureConfigurationTooltipTest {
                 "      -> Limit: 1",
                 "      -> Lower Size: 0",
                 "      -> Upper Size: 1",
-                "  -> Ignore Vines: false",
+                "  -> Ignore Vines: False",
                 "  -> Below Trunk Provider:",
                 "    -> Rule Based:",
                 "      -> Rules:",
@@ -825,7 +825,7 @@ public class FeatureConfigurationTooltipTest {
                 "      -> Upper Size: 1",
                 "  -> Decorators:",
                 "    -> Trunk Vine",
-                "  -> Ignore Vines: false",
+                "  -> Ignore Vines: False",
                 "  -> Below Trunk Provider:",
                 "    -> Simple:",
                 "      -> State:",
@@ -974,7 +974,7 @@ public class FeatureConfigurationTooltipTest {
                 "    -> Block: Warped Wart Block",
                 "  -> Replaceable Blocks:",
                 "    -> Solid:",
-                "  -> Planted: true"
+                "  -> Planted: True"
         ));
     }
 
@@ -1024,13 +1024,13 @@ public class FeatureConfigurationTooltipTest {
                 new BlockPos(1, 2, 3)
         )).build(), List.of(
                 "End Spike:",
-                "  -> Is Crystal Invulnerable: true",
+                "  -> Is Crystal Invulnerable: True",
                 "  -> Spikes:",
                 "    -> Center X: 1",
                 "    -> Center Z: 2",
                 "    -> Radius: 5",
                 "    -> Height: 30",
-                "    -> Is Guarded: true",
+                "    -> Is Guarded: True",
                 "  -> Crystal Beam Target: [1,2,3]"
         ));
     }

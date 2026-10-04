@@ -1,6 +1,7 @@
 package com.yanny.aci.tooltip;
 
 import com.mojang.datafixers.util.Either;
+import com.yanny.aci.api.ICoreCommonUtils;
 import com.yanny.aci.api.ICoreServerRegistry;
 import com.yanny.aci.api.ICoreServerUtils;
 import com.yanny.aci.api.NumberExpr;
@@ -19,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 public class CommonValueTooltip<
-        TServerUtils    extends ICoreServerUtils<TServerUtils>,
+        TServerUtils    extends ICoreServerUtils<TServerUtils> & ICoreCommonUtils<?>,
         TServerRegistry extends ICoreServerRegistry<TServerUtils>
         > {
     public void registerAll(TServerRegistry registry) {
@@ -87,7 +88,7 @@ public class CommonValueTooltip<
 
     @NotNull
     private TooltipBuilder getBooleanTooltip(TServerUtils utils, Boolean value) {
-        return TooltipBuilder.value(value);
+        return TooltipBuilder.value(TooltipBuilder.translate((value ? CoreLang.Utils.TRUE : CoreLang.Utils.FALSE).singular()));
     }
 
     @NotNull
@@ -132,11 +133,19 @@ public class CommonValueTooltip<
 
     @NotNull
     private TooltipBuilder getResourceKeyTooltip(TServerUtils utils, ResourceKey<?> value) {
+        if (utils.showInGameNames()) {
+            return TooltipBuilder.value(TooltipBuilder.registryKey(value));
+        }
+
         return utils.getValueTooltip(utils, value.identifier());
     }
 
     @NotNull
     private TooltipBuilder getTagKeyTooltip(TServerUtils utils, TagKey<?> value) {
+        if (utils.showInGameNames()) {
+            return TooltipBuilder.value(TooltipBuilder.tagKey(value));
+        }
+
         return utils.getValueTooltip(utils, value.location());
     }
 
