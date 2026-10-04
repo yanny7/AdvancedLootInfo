@@ -120,7 +120,7 @@ public class FunctionTooltipTest {
                 "Enchant Randomly:",
                 "  -> Enchantments:",
                 "    -> Tag: minecraft:on_random_loot",
-                "  -> Only Compatible: true"
+                "  -> Only Compatible: True"
         ));
         assertTooltip(FunctionTooltipUtils.getEnchantRandomlyTooltip(UTILS, (EnchantRandomlyFunction) EnchantRandomlyFunction.randomEnchantment()
                 .withEnchantment(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.CHANNELING).orElseThrow())
@@ -128,7 +128,7 @@ public class FunctionTooltipTest {
         ).build(), List.of(
                 "Enchant Randomly:",
                 "  -> Enchantment: minecraft:channeling",
-                "  -> Only Compatible: true"
+                "  -> Only Compatible: True"
         ));
     }
 
@@ -158,7 +158,7 @@ public class FunctionTooltipTest {
                 "  -> Map Decoration: minecraft:monument",
                 "  -> Zoom: 2",
                 "  -> Search Radius: 50",
-                "  -> Skip Known Structures: true"
+                "  -> Skip Known Structures: True"
         ));
     }
 
@@ -228,7 +228,7 @@ public class FunctionTooltipTest {
     public void testSetAttributesTooltip() {
         assertTooltip(FunctionTooltipUtils.getSetAttributesTooltip(UTILS, (SetAttributesFunction) SetAttributesFunction.setAttributes().build()).build(), List.of(
                 "Set Attributes:",
-                "  -> Replace: false"
+                "  -> Replace: False"
         ));
         assertTooltip(FunctionTooltipUtils.getSetAttributesTooltip(UTILS, (SetAttributesFunction) SetAttributesFunction.setAttributes()
                 .withModifier(new SetAttributesFunction.ModifierBuilder(ResourceLocation.withDefaultNamespace("armor"), Attributes.ARMOR, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL, UniformGenerator.between(1, 5))
@@ -257,7 +257,7 @@ public class FunctionTooltipTest {
                 "      -> Amount: 3",
                 "      -> Id: minecraft:chest",
                 "      -> Equipment Slot: Main Hand",
-                "  -> Replace: false"
+                "  -> Replace: False"
         ));
     }
 
@@ -268,7 +268,7 @@ public class FunctionTooltipTest {
                 .addPattern(TooltipTestSuite.LOOKUP.lookup(Registries.BANNER_PATTERN).orElseThrow().get(BannerPatterns.CREEPER).orElseThrow(), DyeColor.GREEN)
                 .build()).build(), List.of(
                 "Set Banner Pattern:",
-                "  -> Append: true",
+                "  -> Append: True",
                 "  -> Banner Patterns:",
                 "    -> minecraft:base",
                 "      -> Color: White",
@@ -298,7 +298,7 @@ public class FunctionTooltipTest {
         assertTooltip(FunctionTooltipUtils.getSetCountTooltip(UTILS, (SetItemCountFunction) SetItemCountFunction.setCount(UniformGenerator.between(12, 24), true).build()).build(), List.of(
                 "Set Count:",
                 "  -> Count: 12 to 24",
-                "  -> Add: true"
+                "  -> Add: True"
         ));
     }
 
@@ -307,7 +307,7 @@ public class FunctionTooltipTest {
         assertTooltip(FunctionTooltipUtils.getSetDamageTooltip(UTILS, (SetItemDamageFunction) SetItemDamageFunction.setDamage(UniformGenerator.between(0.12345F, 3.1412F), false).build()).build(), List.of(
                 "Set Damage:",
                 "  -> Damage: 12.35% to 314.12%",
-                "  -> Add: false"
+                "  -> Add: False"
         ));
     }
 
@@ -315,7 +315,7 @@ public class FunctionTooltipTest {
     public void testSetEnchantmentsTooltip() {
         assertTooltip(FunctionTooltipUtils.getSetEnchantmentsTooltip(UTILS, (SetEnchantmentsFunction) new SetEnchantmentsFunction.Builder(true).build()).build(), List.of(
                 "Set Enchantments:",
-                "  -> Add: true"
+                "  -> Add: True"
         ));
         assertTooltip(FunctionTooltipUtils.getSetEnchantmentsTooltip(UTILS, (SetEnchantmentsFunction) new SetEnchantmentsFunction.Builder(false)
                 .withEnchantment(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.CHANNELING).orElseThrow(), ConstantValue.exactly(1))
@@ -327,7 +327,7 @@ public class FunctionTooltipTest {
                 "      -> Levels: 1",
                 "    -> minecraft:mending",
                 "      -> Levels: 2",
-                "  -> Add: false"
+                "  -> Add: False"
         ));
     }
 
@@ -538,14 +538,14 @@ public class FunctionTooltipTest {
                 "        -> Shape: Small Ball",
                 "        -> Colors: []",
                 "        -> Fade Colors: []",
-                "        -> Has Trail: false",
-                "        -> Has Twinkle: false",
+                "        -> Has Trail: False",
+                "        -> Has Twinkle: False",
                 "      -> Entry:",
                 "        -> Shape: Star",
                 "        -> Colors: [1]",
                 "        -> Fade Colors: [2]",
-                "        -> Has Trail: true",
-                "        -> Has Twinkle: false",
+                "        -> Has Trail: True",
+                "        -> Has Twinkle: False",
                 "    -> List Operation: Insert",
                 "      -> Offset: 0",
                 "  -> Flight Duration: 10"
@@ -566,8 +566,8 @@ public class FunctionTooltipTest {
                 "  -> Shape: Creeper",
                 "  -> Colors: [1, 2]",
                 "  -> Fade Colors: [3, 4]",
-                "  -> Trail: false",
-                "  -> Twinkle: true"
+                "  -> Trail: False",
+                "  -> Twinkle: True"
         ));
     }
 
@@ -646,9 +646,9 @@ public class FunctionTooltipTest {
                 "Toggle Tooltips:",
                 "  -> Components:",
                 "    -> minecraft:base_color",
-                "      -> Value: true",
+                "      -> Value: True",
                 "    -> minecraft:damage",
-                "      -> Value: false"
+                "      -> Value: False"
         ));
     }
 

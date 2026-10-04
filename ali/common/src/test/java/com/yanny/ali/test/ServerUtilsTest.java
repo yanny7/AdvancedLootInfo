@@ -38,7 +38,7 @@ public class ServerUtilsTest {
         assertTooltip(UTILS.getFunctionTooltip(UTILS, SetItemCountFunction.setCount(BinomialDistributionGenerator.binomial(5, 0.5f)).build()).build(), List.of(
                 "Set Count:",
                 "  -> Count: 0 to 5  ~2 to 3 (31%)",
-                "  -> Add: false"
+                "  -> Add: False"
         ));
         assertTooltip(UTILS.getFunctionTooltip(UTILS, new UnknownFunction(Items.ANDESITE, BinomialDistributionGenerator.binomial(5, 0.3f))).build(), List.of(
                 "Auto-detected: minecraft:unknown",
@@ -59,13 +59,13 @@ public class ServerUtilsTest {
                 EnchantRandomlyFunction.randomEnchantment().build())
         ).build(), List.of(
                 "Auto-detected: minecraft:unknown",
-                "  -> valid: true",
+                "  -> valid: True",
                 "  -> condition:",
                 "    -> Weather Check:",
-                "      -> Is Raining: true",
+                "      -> Is Raining: True",
                 "  -> function:",
                 "    -> Enchant Randomly:",
-                "      -> Only Compatible: true"
+                "      -> Only Compatible: True"
         ));
     }
 
@@ -101,24 +101,24 @@ public class ServerUtilsTest {
                 "  -> builder:",
                 "    -> Not implemented: [java.lang.StringBuilder]",
                 "  -> primitiveArray:",
-                "    -> true",
-                "    -> false",
+                "    -> True",
+                "    -> False",
                 "  -> array:",
-                "    -> false",
-                "    -> true",
+                "    -> False",
+                "    -> True",
                 "  -> functions:",
                 "    -> Auto-detected: minecraft:unknown",
                 "      -> item: minecraft:item_frame",
                 "      -> value: 1 to 4",
                 "    -> Set Damage:",
                 "      -> Damage: 50%",
-                "      -> Add: false",
+                "      -> Add: False",
                 "  -> builders:",
                 "    -> Not implemented: [java.lang.StringBuilder]",
                 "    -> Not implemented: [java.lang.StringBuilder]",
                 "  -> enumValue: attached",
-                "  -> primitive: true",
-                "  -> state: false",
+                "  -> primitive: True",
+                "  -> state: False",
                 "  -> function:",
                 "    -> Set Stew Effect:",
                 "      -> minecraft:absorption",

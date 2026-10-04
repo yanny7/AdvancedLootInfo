@@ -27,6 +27,9 @@ import net.mehvahdjukaar.moonlight.core.loot.OptionalPropertyCondition;
 import net.mehvahdjukaar.moonlight.core.loot.PatternMatchLootItemCondition;
 import net.mehvahdjukaar.moonlight.core.loot.ResourceLootItemCondition;
 import net.mehvahdjukaar.moonlight.core.misc.platform.ModLootModifiers;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.ItemCost;
@@ -132,7 +135,7 @@ public class MoonlightCompat implements IGlmModCompat {
                         continue;
                     }
 
-                    TooltipNode cond = utils.getValueTooltip(utils, entry.getKey().toString()).build(Lang.Value.VILLAGER_TYPE);
+                    TooltipNode cond = utils.getValueTooltip(utils, ResourceKey.create(Registries.VILLAGER_TYPE, BuiltInRegistries.VILLAGER_TYPE.getKey(entry.getKey()))).build(Lang.Value.VILLAGER_TYPE);
 
                     nodes.add(utils.getItemListing(utils, entry.getValue(), cond));
                 }

@@ -198,20 +198,20 @@ public class GenericTooltipTest {
                 .build()).build(Lang.Branch.PREDICATE), List.of(
                 "Predicate:",
                 "  -> Tags:",
-                "    -> minecraft:bypasses_armor: true",
-                "    -> minecraft:is_explosion: false",
+                "    -> Is: minecraft:bypasses_armor",
+                "    -> Is Not: minecraft:is_explosion",
                 "  -> Direct Entity:",
                 "    -> Entity Type: minecraft:arrow",
                 "  -> Source Entity:",
                 "    -> Entity Type: minecraft:bat",
-                "  -> Is Direct: false"
+                "  -> Is Direct: False"
         ));
     }
 
     @Test
     public void testTagPredicateTooltip() {
-        assertTooltip(ValueTooltipUtils.getTagPredicateTooltip(UTILS, TagPredicate.is(DamageTypeTags.BYPASSES_ARMOR)).build(), List.of("minecraft:bypasses_armor: true"));
-        assertTooltip(ValueTooltipUtils.getTagPredicateTooltip(UTILS, TagPredicate.isNot(DamageTypeTags.BYPASSES_ARMOR)).build(), List.of("minecraft:bypasses_armor: false"));
+        assertTooltip(ValueTooltipUtils.getTagPredicateTooltip(UTILS, TagPredicate.is(DamageTypeTags.BYPASSES_ARMOR)).build(), List.of("Is: minecraft:bypasses_armor"));
+        assertTooltip(ValueTooltipUtils.getTagPredicateTooltip(UTILS, TagPredicate.isNot(DamageTypeTags.BYPASSES_ARMOR)).build(), List.of("Is Not: minecraft:bypasses_armor"));
     }
 
     @Test
@@ -256,12 +256,12 @@ public class GenericTooltipTest {
                 "  -> Periodic Tick: 1000",
                 "  -> Mob Effects:",
                 "    -> minecraft:absorption",
-                "      -> Is Ambient: true",
+                "      -> Is Ambient: True",
                 "    -> minecraft:blindness",
-                "      -> Is Visible: false",
+                "      -> Is Visible: False",
                 "  -> Nbt: {range:5}",
                 "  -> Entity Flags:",
-                "    -> Is Baby: true",
+                "    -> Is Baby: True",
                 "  -> Entity Equipment:",
                 "    -> Head:",
                 "      -> Items:",
@@ -337,7 +337,7 @@ public class GenericTooltipTest {
                 "  -> Biome: minecraft:plains",
                 "  -> Structure: minecraft:mineshaft",
                 "  -> Dimension: minecraft:overworld",
-                "  -> Smokey: true",
+                "  -> Smokey: True",
                 "  -> Light: 10 to 15",
                 "  -> Block Predicate:",
                 "    -> Blocks:",
@@ -345,7 +345,7 @@ public class GenericTooltipTest {
                 "      -> minecraft:cobblestone",
                 "  -> Fluid Predicate:",
                 "    -> Fluid: minecraft:lava",
-                "  -> Can See Sky: true"
+                "  -> Can See Sky: True"
         ));
     }
 
@@ -435,8 +435,8 @@ public class GenericTooltipTest {
                 "  -> minecraft:absorption",
                 "    -> Amplifier: 10 to 15",
                 "    -> Duration: ≤ 5",
-                "    -> Is Ambient: true",
-                "    -> Is Visible: false",
+                "    -> Is Ambient: True",
+                "    -> Is Visible: False",
                 "  -> minecraft:blindness",
                 "    -> Amplifier: ≥ 5",
                 "    -> Duration: 1 to 2"
@@ -456,13 +456,13 @@ public class GenericTooltipTest {
                 .build()
         ).build(Lang.Branch.ENTITY_FLAGS), List.of(
                 "Entity Flags:",
-                "  -> Is On Ground: false",
-                "  -> Is On Fire: false",
-                "  -> Is Baby: true",
-                "  -> Is Crouching: true",
-                "  -> Is Sprinting: true",
-                "  -> Is Swimming: false",
-                "  -> Is Flying: true"
+                "  -> Is On Ground: False",
+                "  -> Is On Fire: False",
+                "  -> Is Baby: True",
+                "  -> Is Crouching: True",
+                "  -> Is Sprinting: True",
+                "  -> Is Swimming: False",
+                "  -> Is Flying: True"
         ));
     }
 
@@ -715,8 +715,8 @@ public class GenericTooltipTest {
         )).build(Lang.Branch.PREDICATE), List.of(
                 "Predicate:",
                 "  -> Shape: Creeper",
-                "  -> Trail: false",
-                "  -> Twinkle: true"
+                "  -> Trail: False",
+                "  -> Twinkle: True"
         ));
     }
 
@@ -781,8 +781,8 @@ public class GenericTooltipTest {
                 "  -> Shape: Star",
                 "  -> Colors: [1, 2, 3]",
                 "  -> Fade Colors: [3, 4, 5]",
-                "  -> Has Trail: true",
-                "  -> Has Twinkle: false"
+                "  -> Has Trail: True",
+                "  -> Has Twinkle: False"
         ));
     }
 
@@ -841,9 +841,9 @@ public class GenericTooltipTest {
                 "    -> Effect: minecraft:luck",
                 "    -> Duration: 1",
                 "    -> Amplifier: 0",
-                "    -> Ambient: false",
-                "    -> Is Visible: true",
-                "    -> Show Icon: true",
+                "    -> Ambient: False",
+                "    -> Is Visible: True",
+                "    -> Show Icon: True",
                 "  -> Probability: 0.5"
         ));
     }
@@ -863,16 +863,16 @@ public class GenericTooltipTest {
                 "  -> Effect: minecraft:bad_omen",
                 "  -> Duration: 1",
                 "  -> Amplifier: 2",
-                "  -> Ambient: true",
-                "  -> Is Visible: false",
-                "  -> Show Icon: true",
+                "  -> Ambient: True",
+                "  -> Is Visible: False",
+                "  -> Show Icon: True",
                 "  -> Hidden Effect:",
                 "    -> Effect: minecraft:unluck",
                 "    -> Duration: 5",
                 "    -> Amplifier: 0",
-                "    -> Ambient: false",
-                "    -> Is Visible: true",
-                "    -> Show Icon: true"
+                "    -> Ambient: False",
+                "    -> Is Visible: True",
+                "    -> Show Icon: True"
         ));
     }
 
@@ -887,7 +887,7 @@ public class GenericTooltipTest {
                 "  -> Blocks:",
                 "    -> minecraft:dirt",
                 "    -> minecraft:cobblestone",
-                "  -> Correct For Drops: true",
+                "  -> Correct For Drops: True",
                 "  -> Speed: 0.25"
         ));
     }

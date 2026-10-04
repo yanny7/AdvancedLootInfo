@@ -63,7 +63,7 @@ public class JeiBiomeLoot extends JeiBaseLoot {
         List<IRecipeSlotDrawable> slotDrawables = new LinkedList<>();
         List<GenericUtils.SpawnSlot> slots = GenericUtils.getSpawnSlots(recipe.getEntry(), CATEGORY_WIDTH, TITLE_HEIGHT);
 
-        widgets.add(createTextWidget(Component.translatable("biome." + recipe.getId().getNamespace() + "." + recipe.getId().getPath()), 0, 0, false));
+        widgets.add(createTextWidget(GenericUtils.getBiomeTitle(recipe.getId()), 0, 0, false));
 
         for (int i = 0; i < slots.size(); i++) {
             GenericUtils.SpawnSlot slot = slots.get(i);

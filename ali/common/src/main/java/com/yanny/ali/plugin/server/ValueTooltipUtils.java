@@ -133,8 +133,8 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
-    public static <T> TooltipBuilder getTagPredicateTooltip(IServerUtils ignoredUtils, TagPredicate<T> tagPredicate) {
-        return TooltipBuilder.keyValue(tagPredicate.tag().location().toString(), Boolean.toString(tagPredicate.expected()));
+    public static <T> TooltipBuilder getTagPredicateTooltip(IServerUtils utils, TagPredicate<T> tagPredicate) {
+        return utils.getValueTooltip(utils, tagPredicate.tag()).key(tagPredicate.expected() ? Lang.Value.TAG_IS : Lang.Value.TAG_IS_NOT);
     }
 
     @NotNull

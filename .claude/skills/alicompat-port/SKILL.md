@@ -92,6 +92,10 @@ against this version's jar and the current ALI/ALICompat API anyway, so any work
   whatever the lower branch added and this branch uses. Regenerate `en_us` and check that it gained nothing.
   Datagen repairs only `en_us`, so remove the same keys from every translation by hand.
 
+Stage resolved files by exact path, never `git add -A` or a directory: that marks every file under it resolved,
+conflict markers included, and they vanish from `git diff --name-only --diff-filter=U`. Before the build, check
+nothing slipped through: `grep -rln '^<<<<<<< \|^>>>>>>> ' --exclude-dir=build --exclude-dir=.gradle .`
+
 ### Source sets that went missing
 
 A source set is never deleted to express dormancy, so one that exists below and not here is either a
@@ -165,6 +169,11 @@ keys without the new shape.
 The same holds for a change to one shim. A loader the lower branch lacks keeps its own copy of that shim here
 (forge below, neoforge here), and the merge never touches that copy. For every shim file the merge changed,
 open the same slug under each other loader here and, if that slug is active, port the change to that copy.
+List them from the lower branch's diff (a `'alicompat/*/src/compat/'` pathspec matches nothing, filter with `grep`):
+
+```bash
+git diff --name-only --diff-filter=M $(git merge-base HEAD origin/<lower>) origin/<lower> -- alicompat | grep /src/compat/
+```
 
 Do it as a 3-way merge rather than by hand: the lower branch's diff of the sibling loader's file is the patch, and
 `git merge-file` applies it to this branch's copy, leaving conflict markers only where the copies genuinely differ:
@@ -178,6 +187,26 @@ git merge-file -L ours -L base -L theirs alicompat/neoforge/<rel> "$S/base.java"
 
 Exit code 0 is a clean apply, a positive one is the number of conflicts left to resolve by hand. Use `fabric` as the
 base when the lower branch has no `forge` copy of that file.
+
+`git merge-file` only reaches files the lower branch has. A shim file that exists only here (a slug or class the lower
+branch never had, or a loader copy written for this version) gets an API change only through the compiler, and a change
+that compiles either way never reaches it — most often a `Lang` text: a key turned into an array header (`"X: %s"` →
+`"X:"`) below stays `"X: %s"` here and renders the placeholder literally. After the build, compare each active slug's
+`Lang` keys across its loader copies and port every value that differs only because one copy missed a lower-branch
+change:
+
+```bash
+for n in alicompat/<this loader>/src/compat/*/java/com/yanny/alicompat/compat/*/*Lang.java; do
+  for o in <every other loader>; do
+    f=${n/<this loader>/$o}; [ -f "$f" ] || continue
+    diff <(grep -oE '^\s+[A-Z_0-9]+\("[^"]+", "[^"]*"\)' "$f" | sort) \
+         <(grep -oE '^\s+[A-Z_0-9]+\("[^"]+", "[^"]*"\)' "$n" | sort) | grep '^[<>]'
+  done
+done
+```
+
+Only a key present on both sides with a different value is a finding; keys on one side only are version differences.
+A value that differs on purpose (an empty `showEmpty` array has no colon) stays as it is.
 
 **Stop here.** Report what merged, what was restored, and how many slugs are dormant. The user
 commits. Phase 2 does not begin until that commit exists.

@@ -46,7 +46,7 @@ public class NodeTest {
                 "----- Modifiers -----",
                 "Set Count:",
                 "  -> Count: 0 to 2",
-                "  -> Add: false",
+                "  -> Add: False",
                 "Enchanted Count Increase:",
                 "  -> Enchantment: minecraft:looting",
                 "  -> Value: 0 to 1"
@@ -79,7 +79,7 @@ public class NodeTest {
                 "----- Modifiers -----",
                 "Set Count:",
                 "  -> Count: −1 to 1",
-                "  -> Add: false",
+                "  -> Add: False",
                 "Enchanted Count Increase:",
                 "  -> Enchantment: minecraft:looting",
                 "  -> Value: 0 to 1"
@@ -111,7 +111,10 @@ public class NodeTest {
                 "Survives Explosion",
                 "Table Bonus:",
                 "  -> Enchantment: minecraft:fortune",
-                "  -> Values: [0.05, 0.0625, 0.0833, 0.1]"
+                "  -> Values: 5%",
+                "    -> Fortune I: 6.25%",
+                "    -> Fortune II: 8.33%",
+                "    -> Fortune III: 10%"
         ));
     }
 }
