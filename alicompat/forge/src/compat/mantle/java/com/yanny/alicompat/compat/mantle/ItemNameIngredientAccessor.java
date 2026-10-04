@@ -6,6 +6,8 @@ import com.yanny.ali.language.Lang;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.IIngredientTooltip;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import slimeknights.mantle.recipe.data.ItemNameIngredient;
@@ -23,6 +25,6 @@ public class ItemNameIngredientAccessor extends BaseAccessor<ItemNameIngredient>
     @NotNull
     @Override
     public TooltipBuilder getTooltip(IServerUtils utils) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, names).build(Lang.Branch.ITEMS)), MantleLang.Ingredient.ITEM_NAME);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, names.stream().map((name) -> ResourceKey.create(Registries.ITEM, name)).toList()).build(Lang.Branch.ITEMS)), MantleLang.Ingredient.ITEM_NAME);
     }
 }

@@ -34,6 +34,7 @@ public final class RegistryNames {
         register(Registries.MOB_EFFECT, MobEffect::getDisplayName);
         register(Registries.ENCHANTMENT, (enchantment) -> Component.translatable(enchantment.getDescriptionId()));
         register(Registries.ATTRIBUTE, (attribute) -> Component.translatable(attribute.getDescriptionId()));
+        register(Registries.POTION, (potion) -> Component.translatable(potion.getName("item.minecraft.potion.effect.")));
     }
 
     private RegistryNames() {}

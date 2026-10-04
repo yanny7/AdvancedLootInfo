@@ -118,7 +118,7 @@ public class FunctionTooltipTest {
         assertTooltip(FunctionTooltipUtils.getEnchantWithLevelsTooltip(UTILS, (EnchantWithLevelsFunction) EnchantWithLevelsFunction.enchantWithLevels(UniformGenerator.between(1, 3)).allowTreasure().build()).build(), List.of(
                 "Enchant With Levels:",
                 "  -> Levels: 1 to 3",
-                "  -> Treasure: true"
+                "  -> Treasure: True"
         ));
     }
 
@@ -137,7 +137,7 @@ public class FunctionTooltipTest {
                 "  -> Map Decoration: Ocean Monument",
                 "  -> Zoom: 2",
                 "  -> Search Radius: 50",
-                "  -> Skip Known Structures: true"
+                "  -> Skip Known Structures: True"
         ));
     }
 
@@ -223,7 +223,7 @@ public class FunctionTooltipTest {
                 .addPattern(Holder.direct(Objects.requireNonNull(BuiltInRegistries.BANNER_PATTERN.get(BannerPatterns.CREEPER))), DyeColor.GREEN)
                 .build()).build(), List.of(
                 "Set Banner Pattern:",
-                "  -> Append: true",
+                "  -> Append: True",
                 "  -> Banner Patterns:",
                 "    -> minecraft:base",
                 "      -> Color: White",
@@ -253,7 +253,7 @@ public class FunctionTooltipTest {
         assertTooltip(FunctionTooltipUtils.getSetCountTooltip(UTILS, (SetItemCountFunction) SetItemCountFunction.setCount(UniformGenerator.between(12, 24), true).build()).build(), List.of(
                 "Set Count:",
                 "  -> Count: 12 to 24",
-                "  -> Add: true"
+                "  -> Add: True"
         ));
     }
 
@@ -262,7 +262,7 @@ public class FunctionTooltipTest {
         assertTooltip(FunctionTooltipUtils.getSetDamageTooltip(UTILS, (SetItemDamageFunction) SetItemDamageFunction.setDamage(UniformGenerator.between(0.12345F, 3.1412F), false).build()).build(), List.of(
                 "Set Damage:",
                 "  -> Damage: 12.35% to 314.12%",
-                "  -> Add: false"
+                "  -> Add: False"
         ));
     }
 
@@ -270,7 +270,7 @@ public class FunctionTooltipTest {
     public void testSetEnchantmentsTooltip() {
         assertTooltip(FunctionTooltipUtils.getSetEnchantmentsTooltip(UTILS, (SetEnchantmentsFunction) new SetEnchantmentsFunction.Builder(true).build()).build(), List.of(
                 "Set Enchantments:",
-                "  -> Add: true"
+                "  -> Add: True"
         ));
         assertTooltip(FunctionTooltipUtils.getSetEnchantmentsTooltip(UTILS, (SetEnchantmentsFunction) new SetEnchantmentsFunction.Builder(false)
                 .withEnchantment(Enchantments.CHANNELING, ConstantValue.exactly(1))
@@ -282,7 +282,7 @@ public class FunctionTooltipTest {
                 "      -> Levels: 1",
                 "    -> minecraft:mending",
                 "      -> Levels: 2",
-                "  -> Add: false"
+                "  -> Add: False"
         ));
     }
 
@@ -317,7 +317,7 @@ public class FunctionTooltipTest {
                 .build()
         ).build(), List.of(
                 "Set Lore:",
-                "  -> Replace: true",
+                "  -> Replace: True",
                 "  -> Lore:",
                 "    -> Hello",
                 "    -> World"
@@ -329,7 +329,7 @@ public class FunctionTooltipTest {
                 .build()
         ).build(), List.of(
                 "Set Lore:",
-                "  -> Replace: true",
+                "  -> Replace: True",
                 "  -> Lore: Block Drops",
                 "  -> Resolution Context: Killer"
         ));

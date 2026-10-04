@@ -39,11 +39,11 @@ public class TwilightForestTooltipTest {
     public void testIsMinionCondition() {
         assertTooltip(UTILS.getConditionTooltip(UTILS, new IsMinionCondition(false)).build(), List.of(
                 "Is Minion:",
-                "  -> true"
+                "  -> True"
         ));
         assertTooltip(UTILS.getConditionTooltip(UTILS, new IsMinionCondition(true)).build(), List.of(
                 "Is Minion:",
-                "  -> false"
+                "  -> False"
         ));
     }
 

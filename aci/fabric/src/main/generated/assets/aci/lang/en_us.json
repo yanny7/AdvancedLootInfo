@@ -61,6 +61,8 @@
   "aci.spawn.weight": "Weight: %s",
   "aci.util.auto_detected": "Auto-detected: %s",
   "aci.util.entry": "Entry:",
+  "aci.util.false": "False",
   "aci.util.missing": "Not implemented: %s",
-  "aci.util.tag": "Tag: %s"
+  "aci.util.tag": "Tag: %s",
+  "aci.util.true": "True"
 }

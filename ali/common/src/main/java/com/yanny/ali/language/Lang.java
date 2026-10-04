@@ -219,6 +219,8 @@ public final class Lang {
         SOURCE("source", "Source: %s"),
         STRUCTURE("structure", "Structure: %s"),
         TAG("tag", "Tag: %s"),
+        TAG_IS("tag_is", "Is: %s"),
+        TAG_IS_NOT("tag_is_not", "Is Not: %s"),
         TARGET("target", "Target: %s"),
         TEAM("team", "Team: %s"),
         TREASURE("treasure", "Treasure: %s"),
@@ -358,6 +360,48 @@ public final class Lang {
 
         Group(String k, String e) {
             this.translation = new Translation("ali.enum.group_type." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
+    public enum ItemFilter implements ITooltipKey {
+        ALWAYS_FALSE("always_false", "Always False"),
+        ALWAYS_TRUE("always_true", "Always True"),
+        SWORD("sword", "Sword"),
+        PICKAXE("pickaxe", "Pickaxe"),
+        AXE("axe", "Axe"),
+        SHOVEL("shovel", "Shovel"),
+        HOE("hoe", "Hoe"),
+        TOOL("tool", "Tool"),
+        POTION("potion", "Potion"),
+        HAS_TIER("has_tier", "Has Tier"),
+        PROJECTILE_WEAPON("projectile_weapon", "Projectile Weapon"),
+        ARMOR("armor", "Armor"),
+        WEAPON("weapon", "Weapon"),
+        HEAD_ARMOR("head_armor", "Head Armor"),
+        CHEST_ARMOR("chest_armor", "Chest Armor"),
+        LEGS_ARMOR("legs_armor", "Legs Armor"),
+        FEET_ARMOR("feet_armor", "Feet Armor"),
+        FOOD("food", "Food"),
+        DAMAGEABLE("damageable", "Damageable"),
+        DAMAGED("damaged", "Damaged"),
+        ENCHANTABLE("enchantable", "Enchantable"),
+        ENCHANTED("enchanted", "Enchanted"),
+        BLOCK("block", "Block"),
+        HAS_ENCHANTMENT("has_enchantment", "Has Enchantment"),
+        INGREDIENT("ingredient", "Ingredient"),
+        UNKNOWN("unknown", "Unknown"),
+        ;
+
+        private final Translation translation;
+
+        ItemFilter(String k, String e) {
+            this.translation = new Translation("ali.enum.item_filter." + k, e);
         }
 
         @NotNull

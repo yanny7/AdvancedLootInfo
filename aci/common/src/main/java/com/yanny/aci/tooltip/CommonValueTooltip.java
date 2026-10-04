@@ -85,7 +85,7 @@ public class CommonValueTooltip<
 
     @NotNull
     private TooltipBuilder getBooleanTooltip(TServerUtils utils, Boolean value) {
-        return TooltipBuilder.value(value);
+        return TooltipBuilder.value(TooltipBuilder.translate((value ? CoreLang.Utils.TRUE : CoreLang.Utils.FALSE).singular()));
     }
 
     @NotNull

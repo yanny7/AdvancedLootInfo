@@ -176,8 +176,8 @@ public class GenericTooltipTest {
                 .build()).build(Lang.Branch.PREDICATE), List.of(
                 "Predicate:",
                 "  -> Tags:",
-                "    -> minecraft:bypasses_armor: true",
-                "    -> minecraft:is_explosion: false",
+                "    -> Is: minecraft:bypasses_armor",
+                "    -> Is Not: minecraft:is_explosion",
                 "  -> Direct Entity:",
                 "    -> Entity Type: minecraft:arrow",
                 "  -> Source Entity:",
@@ -187,8 +187,8 @@ public class GenericTooltipTest {
 
     @Test
     public void testTagPredicateTooltip() {
-        assertTooltip(ValueTooltipUtils.getTagPredicateTooltip(UTILS, TagPredicate.is(DamageTypeTags.BYPASSES_ARMOR)).build(), List.of("minecraft:bypasses_armor: true"));
-        assertTooltip(ValueTooltipUtils.getTagPredicateTooltip(UTILS, TagPredicate.isNot(DamageTypeTags.BYPASSES_ARMOR)).build(), List.of("minecraft:bypasses_armor: false"));
+        assertTooltip(ValueTooltipUtils.getTagPredicateTooltip(UTILS, TagPredicate.is(DamageTypeTags.BYPASSES_ARMOR)).build(), List.of("Is: minecraft:bypasses_armor"));
+        assertTooltip(ValueTooltipUtils.getTagPredicateTooltip(UTILS, TagPredicate.isNot(DamageTypeTags.BYPASSES_ARMOR)).build(), List.of("Is Not: minecraft:bypasses_armor"));
     }
 
     @Test
@@ -225,12 +225,12 @@ public class GenericTooltipTest {
                 "    -> X: ≤ 30",
                 "  -> Mob Effects:",
                 "    -> minecraft:absorption",
-                "      -> Is Ambient: true",
+                "      -> Is Ambient: True",
                 "    -> minecraft:blindness",
-                "      -> Is Visible: false",
+                "      -> Is Visible: False",
                 "  -> Nbt: {range:5}",
                 "  -> Entity Flags:",
-                "    -> Is Baby: true",
+                "    -> Is Baby: True",
                 "  -> Entity Equipment:",
                 "    -> Head:",
                 "      -> Items:",
@@ -297,7 +297,7 @@ public class GenericTooltipTest {
                 "  -> Biome: minecraft:plains",
                 "  -> Structure: minecraft:mineshaft",
                 "  -> Dimension: minecraft:overworld",
-                "  -> Smokey: true",
+                "  -> Smokey: True",
                 "  -> Light: 10 to 15",
                 "  -> Block Predicate:",
                 "    -> Blocks:",
@@ -375,8 +375,8 @@ public class GenericTooltipTest {
                 "  -> minecraft:absorption",
                 "    -> Amplifier: 10 to 15",
                 "    -> Duration: ≤ 5",
-                "    -> Is Ambient: true",
-                "    -> Is Visible: false",
+                "    -> Is Ambient: True",
+                "    -> Is Visible: False",
                 "  -> minecraft:blindness",
                 "    -> Amplifier: ≥ 5",
                 "    -> Duration: 1 to 2"
@@ -399,11 +399,11 @@ public class GenericTooltipTest {
                 .build()
         ).build(Lang.Branch.ENTITY_FLAGS), List.of(
                 "Entity Flags:",
-                "  -> Is On Fire: false",
-                "  -> Is Baby: true",
-                "  -> Is Crouching: true",
-                "  -> Is Sprinting: true",
-                "  -> Is Swimming: false"
+                "  -> Is On Fire: False",
+                "  -> Is Baby: True",
+                "  -> Is Crouching: True",
+                "  -> Is Sprinting: True",
+                "  -> Is Swimming: False"
         ));
     }
 
@@ -516,7 +516,7 @@ public class GenericTooltipTest {
         ));
         assertTooltip(ValueTooltipUtils.getEntitySubPredicateTooltip(UTILS, FishingHookPredicate.inOpenWater(true)).build(Lang.Branch.ENTITY_SUB_PREDICATE), List.of(
                 "Entity Sub Predicate:",
-                "  -> Is In Open Water: true"
+                "  -> Is In Open Water: True"
         ));
         assertTooltip(ValueTooltipUtils.getEntitySubPredicateTooltip(UTILS, PlayerPredicate.Builder.player()
                 .setLevel(MinMaxBounds.Ints.atLeast(3))
@@ -547,7 +547,7 @@ public class GenericTooltipTest {
                 "    -> minecraft:recipe2: false",
                 "  -> Advancements:",
                 "    -> minecraft:first",
-                "      -> Done: true",
+                "      -> Done: True",
                 "    -> minecraft:second",
                 "      -> Criterions:",
                 "        -> test: false"

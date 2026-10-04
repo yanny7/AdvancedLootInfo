@@ -22,29 +22,29 @@ import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 public class LootJsGenericTooltipTest {
     @Test
     public void testItemFilterConstantTooltip() {
-        assertFilter(ItemFilter.ALWAYS_FALSE, "ALWAYS_FALSE");
-        assertFilter(ItemFilter.ALWAYS_TRUE, "ALWAYS_TRUE");
-        assertFilter(ItemFilter.SWORD, "SWORD");
-        assertFilter(ItemFilter.PICKAXE, "PICKAXE");
-        assertFilter(ItemFilter.AXE, "AXE");
-        assertFilter(ItemFilter.SHOVEL, "SHOVEL");
-        assertFilter(ItemFilter.HOE, "HOE");
-        assertFilter(ItemFilter.TOOL, "TOOL");
-        assertFilter(ItemFilter.POTION, "POTION");
-        assertFilter(ItemFilter.HAS_TIER, "HAS_TIER");
-        assertFilter(ItemFilter.PROJECTILE_WEAPON, "PROJECTILE_WEAPON");
-        assertFilter(ItemFilter.ARMOR, "ARMOR");
-        assertFilter(ItemFilter.WEAPON, "WEAPON");
-        assertFilter(ItemFilter.HEAD_ARMOR, "HEAD_ARMOR");
-        assertFilter(ItemFilter.CHEST_ARMOR, "CHEST_ARMOR");
-        assertFilter(ItemFilter.LEGS_ARMOR, "LEGS_ARMOR");
-        assertFilter(ItemFilter.FEET_ARMOR, "FEET_ARMOR");
-        assertFilter(ItemFilter.FOOD, "FOOD");
-        assertFilter(ItemFilter.DAMAGEABLE, "DAMAGEABLE");
-        assertFilter(ItemFilter.DAMAGED, "DAMAGED");
-        assertFilter(ItemFilter.ENCHANTABLE, "ENCHANTABLE");
-        assertFilter(ItemFilter.ENCHANTED, "ENCHANTED");
-        assertFilter(ItemFilter.BLOCK, "BLOCK");
+        assertFilter(ItemFilter.ALWAYS_FALSE, "Always False");
+        assertFilter(ItemFilter.ALWAYS_TRUE, "Always True");
+        assertFilter(ItemFilter.SWORD, "Sword");
+        assertFilter(ItemFilter.PICKAXE, "Pickaxe");
+        assertFilter(ItemFilter.AXE, "Axe");
+        assertFilter(ItemFilter.SHOVEL, "Shovel");
+        assertFilter(ItemFilter.HOE, "Hoe");
+        assertFilter(ItemFilter.TOOL, "Tool");
+        assertFilter(ItemFilter.POTION, "Potion");
+        assertFilter(ItemFilter.HAS_TIER, "Has Tier");
+        assertFilter(ItemFilter.PROJECTILE_WEAPON, "Projectile Weapon");
+        assertFilter(ItemFilter.ARMOR, "Armor");
+        assertFilter(ItemFilter.WEAPON, "Weapon");
+        assertFilter(ItemFilter.HEAD_ARMOR, "Head Armor");
+        assertFilter(ItemFilter.CHEST_ARMOR, "Chest Armor");
+        assertFilter(ItemFilter.LEGS_ARMOR, "Legs Armor");
+        assertFilter(ItemFilter.FEET_ARMOR, "Feet Armor");
+        assertFilter(ItemFilter.FOOD, "Food");
+        assertFilter(ItemFilter.DAMAGEABLE, "Damageable");
+        assertFilter(ItemFilter.DAMAGED, "Damaged");
+        assertFilter(ItemFilter.ENCHANTABLE, "Enchantable");
+        assertFilter(ItemFilter.ENCHANTED, "Enchanted");
+        assertFilter(ItemFilter.BLOCK, "Block");
     }
 
     @Test
@@ -52,21 +52,21 @@ public class LootJsGenericTooltipTest {
         assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, ItemFilter.hasEnchantment(
                 new ResourceLocationFilter.ByLocation(new ResourceLocation("minecraft", "fortune")), 2, 4
         )).build(), List.of(
-                "HAS_ENCHANTMENT",
+                "Has Enchantment",
                 "  -> Enchantment: minecraft:fortune",
                 "  -> Levels: 2 to 4"
         ));
         assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, ItemFilter.hasEnchantment(
                 new ResourceLocationFilter.ByLocation(new ResourceLocation("minecraft", "fortune")), 1, 5
         )).build(), List.of(
-                "HAS_ENCHANTMENT",
+                "Has Enchantment",
                 "  -> Enchantment: minecraft:fortune",
                 "  -> Levels: 1 to 5"
         ));
         assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, ItemFilter.hasEnchantment(
                 new ResourceLocationFilter.ByLocation(new ResourceLocation("minecraft", "fortune"))
         )).build(), List.of(
-                "HAS_ENCHANTMENT",
+                "Has Enchantment",
                 "  -> Enchantment: minecraft:fortune"
         ));
     }
@@ -76,7 +76,7 @@ public class LootJsGenericTooltipTest {
         assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, ItemFilter.hasEnchantment(
                 new ResourceLocationFilter.ByPattern(Pattern.compile("minecraft:.*")), 2, 5
         )).build(), List.of(
-                "HAS_ENCHANTMENT",
+                "Has Enchantment",
                 "  -> Enchantment: minecraft:.*",
                 "  -> Levels: 2 to 5"
         ));
@@ -88,7 +88,7 @@ public class LootJsGenericTooltipTest {
         ItemFilter filter = ingredient::test;
 
         assertTooltip(LootJsGenericTooltipUtils.getItemFilterTooltip(UTILS, filter).build(), List.of(
-                "INGREDIENT",
+                "Ingredient",
                 "  -> Entry:",
                 "    -> Item: minecraft:diamond",
                 "    -> Count: 1",
@@ -102,9 +102,9 @@ public class LootJsGenericTooltipTest {
     public void testItemFilterUnknownTooltip() {
         Predicate<ItemStack> notAnItemFilter = (stack) -> true;
 
-        assertFilter(notAnItemFilter, "UNKNOWN");
-        assertFilter(ItemFilter.and(ItemFilter.SWORD, ItemFilter.DAMAGED), "UNKNOWN");
-        assertFilter(Ingredient.EMPTY, "UNKNOWN");
+        assertFilter(notAnItemFilter, "Unknown");
+        assertFilter(ItemFilter.and(ItemFilter.SWORD, ItemFilter.DAMAGED), "Unknown");
+        assertFilter(Ingredient.EMPTY, "Unknown");
     }
 
     @Test

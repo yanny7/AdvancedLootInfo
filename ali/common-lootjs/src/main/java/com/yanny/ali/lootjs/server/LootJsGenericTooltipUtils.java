@@ -7,6 +7,8 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.ReflectionUtils;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.IntRange;
@@ -20,51 +22,51 @@ public class LootJsGenericTooltipUtils {
     public static TooltipBuilder getItemFilterTooltip(IServerUtils utils, Predicate<ItemStack> predicate) {
         if (predicate instanceof ItemFilter) {
             if (predicate == ItemFilter.ALWAYS_FALSE) {
-                return TooltipBuilder.value("ALWAYS_FALSE");
+                return filterTooltip(Lang.ItemFilter.ALWAYS_FALSE);
             } else if (predicate == ItemFilter.ALWAYS_TRUE) {
-                return TooltipBuilder.value("ALWAYS_TRUE");
+                return filterTooltip(Lang.ItemFilter.ALWAYS_TRUE);
             } else if (predicate == ItemFilter.SWORD) {
-                return TooltipBuilder.value("SWORD");
+                return filterTooltip(Lang.ItemFilter.SWORD);
             } else if (predicate == ItemFilter.PICKAXE) {
-                return TooltipBuilder.value("PICKAXE");
+                return filterTooltip(Lang.ItemFilter.PICKAXE);
             } else if (predicate == ItemFilter.AXE) {
-                return TooltipBuilder.value("AXE");
+                return filterTooltip(Lang.ItemFilter.AXE);
             } else if (predicate == ItemFilter.SHOVEL) {
-                return TooltipBuilder.value("SHOVEL");
+                return filterTooltip(Lang.ItemFilter.SHOVEL);
             } else if (predicate == ItemFilter.HOE) {
-                return TooltipBuilder.value("HOE");
+                return filterTooltip(Lang.ItemFilter.HOE);
             } else if (predicate == ItemFilter.TOOL) {
-                return TooltipBuilder.value("TOOL");
+                return filterTooltip(Lang.ItemFilter.TOOL);
             } else if (predicate == ItemFilter.POTION) {
-                return TooltipBuilder.value("POTION");
+                return filterTooltip(Lang.ItemFilter.POTION);
             } else if (predicate == ItemFilter.HAS_TIER) {
-                return TooltipBuilder.value("HAS_TIER");
+                return filterTooltip(Lang.ItemFilter.HAS_TIER);
             } else if (predicate == ItemFilter.PROJECTILE_WEAPON) {
-                return TooltipBuilder.value("PROJECTILE_WEAPON");
+                return filterTooltip(Lang.ItemFilter.PROJECTILE_WEAPON);
             } else if (predicate == ItemFilter.ARMOR) {
-                return TooltipBuilder.value("ARMOR");
+                return filterTooltip(Lang.ItemFilter.ARMOR);
             } else if (predicate == ItemFilter.WEAPON) {
-                return TooltipBuilder.value("WEAPON");
+                return filterTooltip(Lang.ItemFilter.WEAPON);
             } else if (predicate == ItemFilter.HEAD_ARMOR) {
-                return TooltipBuilder.value("HEAD_ARMOR");
+                return filterTooltip(Lang.ItemFilter.HEAD_ARMOR);
             } else if (predicate == ItemFilter.CHEST_ARMOR) {
-                return TooltipBuilder.value("CHEST_ARMOR");
+                return filterTooltip(Lang.ItemFilter.CHEST_ARMOR);
             } else if (predicate == ItemFilter.LEGS_ARMOR) {
-                return TooltipBuilder.value("LEGS_ARMOR");
+                return filterTooltip(Lang.ItemFilter.LEGS_ARMOR);
             } else if (predicate == ItemFilter.FEET_ARMOR) {
-                return TooltipBuilder.value("FEET_ARMOR");
+                return filterTooltip(Lang.ItemFilter.FEET_ARMOR);
             } else if (predicate == ItemFilter.FOOD) {
-                return TooltipBuilder.value("FOOD");
+                return filterTooltip(Lang.ItemFilter.FOOD);
             } else if (predicate == ItemFilter.DAMAGEABLE) {
-                return TooltipBuilder.value("DAMAGEABLE");
+                return filterTooltip(Lang.ItemFilter.DAMAGEABLE);
             } else if (predicate == ItemFilter.DAMAGED) {
-                return TooltipBuilder.value("DAMAGED");
+                return filterTooltip(Lang.ItemFilter.DAMAGED);
             } else if (predicate == ItemFilter.ENCHANTABLE) {
-                return TooltipBuilder.value("ENCHANTABLE");
+                return filterTooltip(Lang.ItemFilter.ENCHANTABLE);
             } else if (predicate == ItemFilter.ENCHANTED) {
-                return TooltipBuilder.value("ENCHANTED");
+                return filterTooltip(Lang.ItemFilter.ENCHANTED);
             } else if (predicate == ItemFilter.BLOCK) {
-                return TooltipBuilder.value("BLOCK");
+                return filterTooltip(Lang.ItemFilter.BLOCK);
             }
 
             List<ResourceLocationFilter.ByLocation> byLocation = ReflectionUtils.getCapturedInstances(predicate, ResourceLocationFilter.ByLocation.class);
@@ -73,11 +75,11 @@ public class LootJsGenericTooltipUtils {
                 List<Integer> minMax = ReflectionUtils.getCapturedInstances(predicate, Integer.class);
 
                 if (minMax.size() == 2) {
-                    TooltipBuilder tooltip = TooltipBuilder.value("HAS_ENCHANTMENT");
+                    TooltipBuilder tooltip = filterTooltip(Lang.ItemFilter.HAS_ENCHANTMENT);
                     int min = Math.min(minMax.get(0), minMax.get(1));
                     int max = Math.max(minMax.get(0), minMax.get(1));
 
-                    tooltip.add(utils.getValueTooltip(utils, byLocation.get(0).location()).build(Lang.Value.ENCHANTMENT));
+                    tooltip.add(utils.getValueTooltip(utils, ResourceKey.create(Registries.ENCHANTMENT, byLocation.get(0).location())).build(Lang.Value.ENCHANTMENT));
 
                     if (min != 1 || max != 255) {
                         tooltip.add(utils.getValueTooltip(utils, IntRange.range(min, max)).build(Lang.Value.LEVELS));
@@ -93,7 +95,7 @@ public class LootJsGenericTooltipUtils {
                 List<Integer> minMax = ReflectionUtils.getCapturedInstances(predicate, Integer.class);
 
                 if (minMax.size() == 2) {
-                    TooltipBuilder tooltip = TooltipBuilder.value("HAS_ENCHANTMENT");
+                    TooltipBuilder tooltip = filterTooltip(Lang.ItemFilter.HAS_ENCHANTMENT);
                     int min = Math.min(minMax.get(0), minMax.get(1));
                     int max = Math.max(minMax.get(0), minMax.get(1));
 
@@ -113,12 +115,17 @@ public class LootJsGenericTooltipUtils {
                 Ingredient i = ingredient.get(0);
 
                 if (!i.isEmpty()) {
-                    return TooltipBuilder.value("INGREDIENT").add(utils.getValueTooltip(utils, i));
+                    return filterTooltip(Lang.ItemFilter.INGREDIENT).add(utils.getValueTooltip(utils, i));
                 }
             }
         }
 
-        return TooltipBuilder.value("UNKNOWN");
+        return filterTooltip(Lang.ItemFilter.UNKNOWN);
+    }
+
+    @NotNull
+    private static TooltipBuilder filterTooltip(Lang.ItemFilter filter) {
+        return TooltipBuilder.value(TooltipBuilder.translate(filter.singular()));
     }
 
     @NotNull

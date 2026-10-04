@@ -15,6 +15,8 @@ public final class CoreLang {
         ENTRY("entry", "Entry:"),
         TAG("tag", "Tag: %s"),
         NOT_IMPLEMENTED("missing", "Not implemented: %s"),
+        TRUE("true", "True"),
+        FALSE("false", "False"),
         ;
 
         private final Translation translation;

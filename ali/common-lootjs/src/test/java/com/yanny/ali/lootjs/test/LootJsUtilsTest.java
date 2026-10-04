@@ -141,10 +141,10 @@ public class LootJsUtilsTest {
                 "----- Modifiers -----",
                 "Set Count:",
                 "  -> Count: 2",
-                "  -> Add: false",
+                "  -> Add: False",
                 "Set Count:",
                 "  -> Count: 5",
-                "  -> Add: true"
+                "  -> Add: True"
         ));
     }
 
