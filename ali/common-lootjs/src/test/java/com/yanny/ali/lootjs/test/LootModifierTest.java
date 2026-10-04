@@ -19,6 +19,7 @@ import com.yanny.ali.plugin.client.TooltipUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.LootPoolNode;
 import com.yanny.ali.plugin.common.nodes.ModifiedNode;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -248,7 +249,7 @@ public class LootModifierTest {
 
     private static IOperation.ReplaceOperation replaceOperation(List<LootItemCondition> conditions, ItemLootEntry entry, boolean preserveCount) {
         return (IOperation.ReplaceOperation) operations(conditions, List.of(),
-                new ReplaceLootAction(ItemFilter.ANY, entry, preserveCount)).getFirst();
+                new ReplaceLootAction(ItemFilter.ANY, entry, preserveCount, new DataComponentType<?>[0])).getFirst();
     }
 
     private static ItemLootEntry itemEntry(Item item) {

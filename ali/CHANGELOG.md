@@ -12,6 +12,7 @@
 - Storage and enchantment level number providers show their value instead of unknown
 - Enchantment level based values show as one number with level rows instead of a structure tree
 - Fixed names built from arguments (e.g. GregTech `%s Dust`)
+- Fixed LootJS `replaceLoot` hiding the whole loot table by updating to LootJS 3.7.0
 
 ## [2.3.0]
 
