@@ -21,6 +21,7 @@ import net.minecraft.world.level.levelgen.densityfunction.DensitySamplerSet;
 import net.minecraft.world.level.levelgen.densityfunction.DensityVolume;
 import net.minecraft.world.level.levelgen.densityfunction.SamplerContext;
 import net.minecraft.world.level.levelgen.material.MaterialRuleContext;
+import net.minecraft.world.level.levelgen.material.MaterialSystem;
 import net.minecraft.world.level.levelgen.material.rule.MaterialRule;
 import net.minecraft.world.level.levelgen.material.rule.RuleEvaluator;
 import org.jetbrains.annotations.NotNull;
@@ -30,6 +31,7 @@ import org.slf4j.Logger;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.IntConsumer;
+import java.util.function.Supplier;
 
 /**
  * Determines, per biome, which blocks the dimension's surface rules place and at what vertical position.
@@ -98,7 +100,8 @@ public class NodeUtils {
     public static class DimensionContext {
         private final HolderLookup.Provider codecLookup;
         private final MaterialRule masterMaterialRule;
-        private final MaterialRuleContext context;
+        private final Supplier<MaterialRuleContext> freshContext;
+        private MaterialRuleContext context;
         private RuleEvaluator compiledRule;
         /** Built on first use and reused for every biome of this dimension — the encode behind it is not free. */
         @Nullable
@@ -151,6 +154,10 @@ public class NodeUtils {
                     randomState.surfaceSystem(), randomState, volume, samplers,
                     biomeWrapper, genContext, null
             );
+            this.freshContext = () -> new MaterialRuleContext(
+                    new MaterialSystem(randomState, settings.defaultBlock(), settings.seaLevel(), settings.noiseRouter().chunkSurfaceLevel(), randomState.random),
+                    randomState, volume, samplers, biomeWrapper, genContext, null
+            );
             this.compiledRule = this.masterMaterialRule.compile(this.context);
         }
 
@@ -165,6 +172,8 @@ public class NodeUtils {
             }
 
             if (options.settings().specializeRulePerBiome()) {
+                // Mods caching compiled rules per MaterialSystem (zmatcomp) would otherwise keep every biome's rule alive.
+                context = freshContext.get();
                 compiledRule = specializer.specialize(biome).compile(context);
                 markers = specializer.markers(biome);
             } else {

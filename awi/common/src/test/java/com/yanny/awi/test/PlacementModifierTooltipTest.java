@@ -204,8 +204,8 @@ public class PlacementModifierTooltipTest {
                 "    -> 3 to 5",
                 "  -> Y Size:",
                 "    -> 2",
-                "  -> Include Edges: false",
-                "  -> Include Interior: true"
+                "  -> Include Edges: False",
+                "  -> Include Interior: True"
         ));
     }
 

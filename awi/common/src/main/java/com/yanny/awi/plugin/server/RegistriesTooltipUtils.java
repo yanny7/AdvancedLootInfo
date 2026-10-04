@@ -27,56 +27,56 @@ public class RegistriesTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getFluidTooltip(IServerUtils utils, Fluid fluid) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.FLUID, fluid);
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.FLUID, fluid, utils.getConfiguration().showInGameNames);
     }
 
     @NotNull
     public static TooltipBuilder getRuleTestTypeTooltip(IServerUtils utils, RuleTestType<?> type) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.RULE_TEST, type);
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.RULE_TEST, type, utils.getConfiguration().showInGameNames);
     }
 
     @NotNull
     public static TooltipBuilder getHeightProviderTooltip(IServerUtils utils, HeightProviderType<?> type) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.HEIGHT_PROVIDER_TYPE, type);
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.HEIGHT_PROVIDER_TYPE, type, utils.getConfiguration().showInGameNames);
     }
 
     @NotNull
     public static TooltipBuilder getBlockPredicateTooltip(IServerUtils utils, BlockPredicateType<?> type) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.BLOCK_PREDICATE_TYPE, type);
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.BLOCK_PREDICATE_TYPE, type, utils.getConfiguration().showInGameNames);
     }
 
     @NotNull
     public static TooltipBuilder getTreeDecoratorTooltip(IServerUtils utils, TreeDecoratorType<?> type) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.TREE_DECORATOR_TYPE, type);
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.TREE_DECORATOR_TYPE, type, utils.getConfiguration().showInGameNames);
     }
 
     @NotNull
     public static TooltipBuilder getFeatureSizeTooltip(IServerUtils utils, FeatureSizeType<?> type) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.FEATURE_SIZE_TYPE, type);
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.FEATURE_SIZE_TYPE, type, utils.getConfiguration().showInGameNames);
     }
 
     @NotNull
     public static TooltipBuilder getRootPlacerTooltip(IServerUtils utils, RootPlacerType<?> type) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.ROOT_PLACER_TYPE, type);
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.ROOT_PLACER_TYPE, type, utils.getConfiguration().showInGameNames);
     }
 
     @NotNull
     public static TooltipBuilder getFoliagePlacerTooltip(IServerUtils utils, FoliagePlacerType<?> type) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.FOLIAGE_PLACER_TYPE, type);
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.FOLIAGE_PLACER_TYPE, type, utils.getConfiguration().showInGameNames);
     }
 
     @NotNull
     public static TooltipBuilder getTrunkPlacerTooltip(IServerUtils utils, TrunkPlacerType<?> type) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.TRUNK_PLACER_TYPE, type);
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.TRUNK_PLACER_TYPE, type, utils.getConfiguration().showInGameNames);
     }
 
     @NotNull
     public static TooltipBuilder getPosRuleTestTypeTooltip(IServerUtils utils, PosRuleTestType<?> type) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.POS_RULE_TEST, type);
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.POS_RULE_TEST, type, utils.getConfiguration().showInGameNames);
     }
 
     @NotNull
     public static TooltipBuilder getRuleBlockEntityModifierTooltip(IServerUtils utils, RuleBlockEntityModifierType<?> type) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.RULE_BLOCK_ENTITY_MODIFIER, type);
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.RULE_BLOCK_ENTITY_MODIFIER, type, utils.getConfiguration().showInGameNames);
     }
 }

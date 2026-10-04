@@ -146,8 +146,8 @@ public class DataComponentPredicateTooltipTest {
         ))).build(Lang.Branch.PREDICATE), List.of(
                 "Predicate:",
                 "  -> Shape: Large Ball",
-                "  -> Trail: false",
-                "  -> Twinkle: true"
+                "  -> Trail: False",
+                "  -> Twinkle: True"
         ));
     }
 
@@ -205,7 +205,7 @@ public class DataComponentPredicateTooltipTest {
                 "  -> Author: Yanny",
                 "  -> Title: Testing",
                 "  -> Generation: 1 to 8",
-                "  -> Resolved: false"
+                "  -> Resolved: False"
         ));
     }
 

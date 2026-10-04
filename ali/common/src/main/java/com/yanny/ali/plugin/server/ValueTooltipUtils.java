@@ -140,10 +140,11 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
-    public static <T> TooltipBuilder getTagPredicateTooltip(IServerUtils ignoredUtils, TagPredicate<T> tagPredicate) {
+    public static <T> TooltipBuilder getTagPredicateTooltip(IServerUtils utils, TagPredicate<T> tagPredicate) {
         return tagPredicate.tag().unwrapKey()
-                .map((tag) -> TooltipBuilder.keyValue(tag.location().toString(), Boolean.toString(tagPredicate.expected())))
-                .orElseGet(() -> TooltipBuilder.keyValue(tagPredicate.tag().toString(), Boolean.toString(tagPredicate.expected())));
+                .map((tag) -> utils.getValueTooltip(utils, tag))
+                .orElseGet(() -> utils.getValueTooltip(utils, tagPredicate.tag()))
+                .key(tagPredicate.expected() ? Lang.Value.TAG_IS : Lang.Value.TAG_IS_NOT);
     }
 
     @NotNull

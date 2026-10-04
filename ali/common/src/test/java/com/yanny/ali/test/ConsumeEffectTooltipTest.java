@@ -28,16 +28,16 @@ public class ConsumeEffectTooltipTest {
                 "      -> Effect: minecraft:bad_omen",
                 "      -> Duration: 0",
                 "      -> Amplifier: 0",
-                "      -> Ambient: false",
-                "      -> Is Visible: true",
-                "      -> Show Icon: true",
+                "      -> Ambient: False",
+                "      -> Is Visible: True",
+                "      -> Show Icon: True",
                 "    -> Entry:",
                 "      -> Effect: minecraft:nausea",
                 "      -> Duration: 0",
                 "      -> Amplifier: 0",
-                "      -> Ambient: false",
-                "      -> Is Visible: true",
-                "      -> Show Icon: true",
+                "      -> Ambient: False",
+                "      -> Is Visible: True",
+                "      -> Show Icon: True",
                 "  -> Probability: 1.0"
         ));
     }
@@ -63,7 +63,7 @@ public class ConsumeEffectTooltipTest {
         assertTooltip(ConsumeEffectTooltipUtils.getTeleportRandomlyTooltip(UTILS, new TeleportRandomlyConsumeEffect(30, false)).build(), List.of(
                 "Teleport Randomly:",
                 "  -> Diameter: 30.0",
-                "  -> Directional Particles: false"
+                "  -> Directional Particles: False"
         ));
     }
 

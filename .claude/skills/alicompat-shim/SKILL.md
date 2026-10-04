@@ -507,6 +507,13 @@ lower branch's source set for another loader, copy its `scan_ignore.json`, and r
 version's jar. A loader with no file keeps its merged source set untouched — no `_dep` line means nothing compiles it.
 A changelog line merged up for a loader this branch has no file on is removed from `## []` here.
 
+The merged source set is the lower version's class list, so diff it against this version's jar before copying it
+anywhere (Step 1). A target class the jar no longer has takes its accessor file, its `register…` lines in the
+`IModCompat` and its now unused `Lang` constants with it — leaving them fails the build, and leaving only the key leaves
+an unused lang key. Fill a scaffolded loader only after that cleanup, so both loaders get the same class list; the copy
+replaces the `--scaffold` skeleton (`IModCompat`, `package-info.java`, services) wholesale. Dropping the
+"Added X support" changelog line was the merge's job while the slug was dormant; it goes back under `## []` with the port.
+
 `alicompat/CHANGELOG.md`: while ALICompat is unreleased — the top section is `## []` reading
 `Initial release` — a new shim gets **no** entry; that section already covers every shim shipped in
 it, and neither the Ribbits nor the Twilight Forest commit touched the file. Once a numbered version
@@ -526,9 +533,9 @@ unzip -p alicompat/<loader>/build/libs/ALICompat-<loader>-*-$v.jar \
 Compiling is not playing. Close the task by telling the user, explicitly: that the shim was never
 run in game and which part is least certain (GLM rendering, usually); that datagen still needs
 re-running; that `alicompat/CLAUDE.md`'s "Current targets" list wants a line for the new mod, which
-only they may edit; that the wiki's supported-mods page drifts; and what the row still leaves open —
-an `entityLootTables` config entry is an `ali_config` change, not Java, and belongs to the user's
-decision, not this shim.
+only they may edit; and what the row still leaves open — an `entityLootTables` config entry is an
+`ali_config` change, not Java, and belongs to the user's decision, not this shim. The wiki's
+`Users/ALI Compat` page gets the new mod for this Minecraft version and loader in the same task.
 
 ## Step 7 — what does not fit in code
 

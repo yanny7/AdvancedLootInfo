@@ -225,7 +225,7 @@ public class DataComponentTooltipTest {
                         DataComponents.MAX_STACK_SIZE
                 ))
         )).build(), List.of(
-                "Hide Tooltip: true",
+                "Hide Tooltip: True",
                 "Hidden Components:",
                 "  -> minecraft:damage",
                 "  -> minecraft:max_stack_size"
@@ -239,7 +239,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testBoolTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getBoolTooltip(UTILS, true).build(), List.of("Value: true"));
+        assertTooltip(DataComponentTooltipUtils.getBoolTooltip(UTILS, true).build(), List.of("Value: True"));
     }
 
     @Test
@@ -251,7 +251,7 @@ public class DataComponentTooltipTest {
         )).build(), List.of(
                 "Nutrition: 5",
                 "Saturation: 2.5",
-                "Can Always Eat: false"
+                "Can Always Eat: False"
         ));
     }
 
@@ -270,11 +270,11 @@ public class DataComponentTooltipTest {
                 "Consume Seconds: 5.0",
                 "Animation: Drink",
                 "Sound: minecraft:entity.allay.hurt",
-                "Has Custom Particles: true",
+                "Has Custom Particles: True",
                 "On Consume Effects:",
                 "  -> Teleport Randomly:",
                 "    -> Diameter: 20.0",
-                "    -> Directional Particles: true",
+                "    -> Directional Particles: True",
                 "  -> Clear All Effects"
         ));
     }
@@ -340,12 +340,12 @@ public class DataComponentTooltipTest {
                 "    -> Blocks:",
                 "      -> minecraft:dirt",
                 "      -> minecraft:stone",
-                "    -> Correct For Drops: true",
+                "    -> Correct For Drops: True",
                 "    -> Speed: 2.5",
                 "  -> Block: minecraft:furnace",
                 "Default Mining Speed: 0.5",
                 "Damage Per Block: 10",
-                "Can Destroy Blocks In Creative: true"
+                "Can Destroy Blocks In Creative: True"
         ));
     }
 
@@ -387,10 +387,10 @@ public class DataComponentTooltipTest {
                 "Allowed Entities:",
                 "  -> minecraft:allay",
                 "  -> minecraft:armadillo",
-                "Dispensable: true",
-                "Swappable: true",
-                "Damage On Hurt: false",
-                "Equip On Interact: true"
+                "Dispensable: True",
+                "Swappable: True",
+                "Damage On Hurt: False",
+                "Equip On Interact: True"
         ));
     }
 
@@ -414,7 +414,7 @@ public class DataComponentTooltipTest {
                 "Death Effects:",
                 "  -> Teleport Randomly:",
                 "    -> Diameter: 30.0",
-                "    -> Directional Particles: true",
+                "    -> Directional Particles: True",
                 "  -> Clear All Effects"
         ));
     }
@@ -543,16 +543,16 @@ public class DataComponentTooltipTest {
                 "    -> Effect: minecraft:blindness",
                 "    -> Duration: 5",
                 "    -> Amplifier: 2",
-                "    -> Ambient: false",
-                "    -> Is Visible: true",
-                "    -> Show Icon: true",
+                "    -> Ambient: False",
+                "    -> Is Visible: True",
+                "    -> Show Icon: True",
                 "  -> Entry:",
                 "    -> Effect: minecraft:absorption",
                 "    -> Duration: 0",
                 "    -> Amplifier: 0",
-                "    -> Ambient: false",
-                "    -> Is Visible: true",
-                "    -> Show Icon: true",
+                "    -> Ambient: False",
+                "    -> Is Visible: True",
+                "    -> Show Icon: True",
                 "Custom Name: Hello"
         ));
     }
@@ -616,7 +616,7 @@ public class DataComponentTooltipTest {
                 "  -> Entry:",
                 "    -> Raw: Sum",
                 "    -> Filtered: Rum",
-                "Resolved: true"
+                "Resolved: True"
         ));
     }
 
@@ -697,7 +697,7 @@ public class DataComponentTooltipTest {
                 "Global Position:",
                 "  -> Dimension: minecraft:the_end",
                 "  -> Position: [X: 1, Y: 2, Z: 3]",
-                "Tracked: true"
+                "Tracked: True"
         ));
     }
 
@@ -713,8 +713,8 @@ public class DataComponentTooltipTest {
                 "Shape: Large Ball",
                 "Colors: [1, 2, 3]",
                 "Fade Colors: []",
-                "Has Trail: true",
-                "Has Twinkle: false"
+                "Has Trail: True",
+                "Has Twinkle: False"
         ));
     }
 
@@ -733,14 +733,14 @@ public class DataComponentTooltipTest {
                 "    -> Shape: Star",
                 "    -> Colors: []",
                 "    -> Fade Colors: []",
-                "    -> Has Trail: true",
-                "    -> Has Twinkle: true",
+                "    -> Has Trail: True",
+                "    -> Has Twinkle: True",
                 "  -> Entry:",
                 "    -> Shape: Creeper",
                 "    -> Colors: []",
                 "    -> Fade Colors: []",
-                "    -> Has Trail: true",
-                "    -> Has Twinkle: true"
+                "    -> Has Trail: True",
+                "    -> Has Twinkle: True"
         ));
     }
 
@@ -901,8 +901,8 @@ public class DataComponentTooltipTest {
     public void testUseEffectsTooltip() {
         assertTooltip(DataComponentTooltipUtils.getUseEffectsTooltip(UTILS, UseEffects.DEFAULT).build(),
                 List.of(
-                        "Can Sprint: false",
-                        "Interact Vibrations: true",
+                        "Can Sprint: False",
+                        "Interact Vibrations: True",
                         "Speed Multiplier: 0.2"
                 ));
     }
@@ -928,8 +928,8 @@ public class DataComponentTooltipTest {
                 Optional.of(SoundEvents.AMBIENT_CAVE),
                 Optional.of(Holder.direct(SoundEvents.ALLAY_HURT)))
         ).build(), List.of(
-                "Deals Knockback: true",
-                "Dismounts: false",
+                "Deals Knockback: True",
+                "Dismounts: False",
                 "Sound: minecraft:ambient.cave",
                 "Hit Sound: minecraft:entity.allay.hurt"
         ));
@@ -1029,7 +1029,7 @@ public class DataComponentTooltipTest {
                 "  -> Hello",
                 "  -> ****",
                 "Color: Red",
-                "Has Glowing Text: true"
+                "Has Glowing Text: True"
         ));
     }
 

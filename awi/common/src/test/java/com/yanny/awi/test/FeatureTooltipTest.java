@@ -78,7 +78,7 @@ public class FeatureTooltipTest {
                 "  -> Allowed Placement:",
                 "    -> Matching Block Tag:",
                 "      -> Tag: minecraft:air",
-                "  -> Prioritize Tip: true"
+                "  -> Prioritize Tip: True"
         ));
     }
 
@@ -178,7 +178,7 @@ public class FeatureTooltipTest {
         assertTooltip(FEATURES.get("end_gateway"), List.of(
                 "End Gateway:",
                 "  -> Exit: [1,2,3]",
-                "  -> Exact: true"
+                "  -> Exact: True"
         ));
     }
 
@@ -200,7 +200,7 @@ public class FeatureTooltipTest {
     public void testEndPodiumTooltip() {
         assertTooltip(FEATURES.get("end_podium"), List.of(
                 "End Podium:",
-                "  -> Active: true"
+                "  -> Active: True"
         ));
     }
 
@@ -213,8 +213,8 @@ public class FeatureTooltipTest {
                 "    -> Center Z: 2",
                 "    -> Radius: 5",
                 "    -> Height: 30",
-                "    -> Is Guarded: true",
-                "  -> Is Crystal Invulnerable: true",
+                "    -> Is Guarded: True",
+                "  -> Is Crystal Invulnerable: True",
                 "  -> Crystal Beam Target: [1,2,3]"
         ));
     }
@@ -317,7 +317,7 @@ public class FeatureTooltipTest {
                 "    -> Crack Point Offset: 2",
                 "  -> Potential Placement Chance: 0.35",
                 "  -> Alternate Layer Chance: 0.0",
-                "  -> Require Alternate Layer: true",
+                "  -> Require Alternate Layer: True",
                 "  -> Outer Wall Distance:",
                 "    -> 5",
                 "  -> Distribution Points:",
@@ -379,7 +379,7 @@ public class FeatureTooltipTest {
                 "    -> Block: Shroomlight",
                 "  -> Replaceable Blocks:",
                 "    -> Solid:",
-                "  -> Planted: true"
+                "  -> Planted: True"
         ));
     }
 
@@ -483,9 +483,9 @@ public class FeatureTooltipTest {
                 "Multiface Growth:",
                 "  -> Place Block: Glow Lichen",
                 "  -> Search Range: 20",
-                "  -> Can Place On Floor: true",
-                "  -> Can Place On Ceiling: true",
-                "  -> Can Place On Wall: true",
+                "  -> Can Place On Floor: True",
+                "  -> Can Place On Ceiling: True",
+                "  -> Can Place On Wall: True",
                 "  -> Chance Of Spreading: 0.5",
                 "  -> Can Be Placed On:",
                 "    -> Tag: minecraft:wool"
@@ -715,7 +715,7 @@ public class FeatureTooltipTest {
                 "    -> Simple:",
                 "      -> State:",
                 "        -> Block: Seagrass",
-                "  -> Schedule Tick: true"
+                "  -> Schedule Tick: True"
         ));
     }
 
@@ -828,7 +828,7 @@ public class FeatureTooltipTest {
                 "    -> Fluid: minecraft:water",
                 "    -> Properties:",
                 "      -> falling: true",
-                "  -> Requires Block Below: true",
+                "  -> Requires Block Below: True",
                 "  -> Rock Count: 4",
                 "  -> Hole Count: 1",
                 "  -> Valid Blocks:",
@@ -941,7 +941,7 @@ public class FeatureTooltipTest {
                 "      -> Upper Size: 1",
                 "  -> Decorators:",
                 "    -> Trunk Vine",
-                "  -> Ignore Vines: true",
+                "  -> Ignore Vines: True",
                 "  -> Below Trunk Provider:",
                 "    -> Simple:",
                 "      -> State:",

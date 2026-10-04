@@ -26,6 +26,7 @@ accessible field net/minecraft/world/level/levelgen/material/MaterialRuleContext
 accessible field net/minecraft/world/level/levelgen/material/MaterialRuleContext lastUpdateXZ J
 accessible field net/minecraft/world/level/levelgen/material/MaterialRuleContext minSurfaceLevel I
 accessible field net/minecraft/world/level/levelgen/material/MaterialSystem clayBands [Lnet/minecraft/world/level/block/state/BlockState;
+accessible field net/minecraft/world/level/levelgen/RandomState random Lnet/minecraft/world/level/levelgen/PositionalRandomFactory;
 
 accessible field net/minecraft/world/level/levelgen/placement/HeightmapPlacement heightmap Lnet/minecraft/world/level/levelgen/Heightmap$Types;
 accessible field net/minecraft/world/level/levelgen/placement/CountPlacement count Lnet/minecraft/util/valueproviders/IntProvider;

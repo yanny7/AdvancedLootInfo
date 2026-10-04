@@ -65,7 +65,7 @@ public class LootJsNodeTest {
                 "----- Modifiers -----",
                 "Set Count:",
                 "  -> Count: 2 to 4",
-                "  -> Add: false"
+                "  -> Add: False"
         ));
     }
 
@@ -111,7 +111,7 @@ public class LootJsNodeTest {
                 "----- Modifiers -----",
                 "Set Count:",
                 "  -> Count: 5",
-                "  -> Add: false"
+                "  -> Add: False"
         ));
     }
 
@@ -133,7 +133,7 @@ public class LootJsNodeTest {
                 "----- Modifiers -----",
                 "Set Count:",
                 "  -> Count: 5",
-                "  -> Add: false"
+                "  -> Add: False"
         ));
     }
 

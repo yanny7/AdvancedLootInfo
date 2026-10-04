@@ -187,7 +187,7 @@ public class TooltipTest {
                 "----- Modifiers -----",
                 "Set Count:",
                 "  -> Count: 10",
-                "  -> Add: false"
+                "  -> Add: False"
         ));
     }
 
@@ -221,7 +221,7 @@ public class TooltipTest {
                 "----- Modifiers -----",
                 "Set Count:",
                 "  -> Count: 10",
-                "  -> Add: false",
+                "  -> Add: False",
                 "  -> Predicates:",
                 "    -> Survives Explosion"
         ));

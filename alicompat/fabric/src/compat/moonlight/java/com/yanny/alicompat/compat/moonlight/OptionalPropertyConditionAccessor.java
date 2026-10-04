@@ -12,7 +12,9 @@ import com.yanny.alicompat.accessor.IConditionTooltip;
 import com.yanny.alicompat.accessor.IPageResolverAccessor;
 import net.mehvahdjukaar.moonlight.core.loot.OptionalPropertyCondition;
 import net.minecraft.advancements.criterion.StatePropertiesPredicate;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,7 +37,7 @@ public class OptionalPropertyConditionAccessor extends BaseAccessor<OptionalProp
     @Override
     public TooltipBuilder getTooltip(IServerUtils utils) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, blockId).build(Lang.Value.BLOCK));
+            b.add(utils.getValueTooltip(utils, ResourceKey.create(Registries.BLOCK, blockId)).build(Lang.Value.BLOCK));
             b.add(utils.getValueTooltip(utils, properties).build(Lang.Branch.PROPERTIES));
         }, MoonlightLang.Conditions.OPTIONAL_BLOCK_STATE_PROPERTY);
     }
