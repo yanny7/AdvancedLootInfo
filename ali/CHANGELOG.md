@@ -15,6 +15,7 @@
 - Fixed names built from arguments (e.g. GregTech `%s Dust`)
 - Fixed LootJS `replaceLoot` hiding the whole loot table by updating to LootJS 3.7.0
 - Broken loot modifications from LootJS, global loot modifiers or other mods are skipped instead of hiding the whole loot table
+- Invalid configuration values are skipped with a warning instead of silently resetting the whole option to defaults
 
 ## [2.3.0]
 

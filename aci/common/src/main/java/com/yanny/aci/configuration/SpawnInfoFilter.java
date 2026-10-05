@@ -11,18 +11,20 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class SpawnInfoFilter implements Predicate<EntityType<?>> {
-    public static final Codec<SpawnInfoFilter> CODEC = RecordCodecBuilder.create((instance) ->
-        instance.group(
-                ResourceLocation.CODEC.listOf().fieldOf("entities").orElseGet(ArrayList::new).forGetter((c) -> c.entities),
-                Codec.BOOL.fieldOf("whitelist").orElse(false).forGetter((c) -> c.whitelist)
-        ).apply(instance, (entities, whitelist) -> {
-            SpawnInfoFilter filter = new SpawnInfoFilter();
+    public static Codec<SpawnInfoFilter> codec(String modId) {
+        return RecordCodecBuilder.create((instance) ->
+            instance.group(
+                    ConfigCodecs.field(modId, ConfigCodecs.lenientList(modId, ResourceLocation.CODEC, "entities"), "entities", ArrayList::new).forGetter((c) -> c.entities),
+                    ConfigCodecs.field(modId, Codec.BOOL, "whitelist", () -> false).forGetter((c) -> c.whitelist)
+            ).apply(instance, (entities, whitelist) -> {
+                SpawnInfoFilter filter = new SpawnInfoFilter();
 
-            filter.entities = new ArrayList<>(entities);
-            filter.whitelist = whitelist;
-            return filter;
-        })
-    );
+                filter.entities = new ArrayList<>(entities);
+                filter.whitelist = whitelist;
+                return filter;
+            })
+        );
+    }
 
     public List<ResourceLocation> entities = new ArrayList<>();
     public boolean whitelist = false;

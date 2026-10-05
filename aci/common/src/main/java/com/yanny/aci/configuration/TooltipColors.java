@@ -14,26 +14,29 @@ import java.util.List;
 
 public class TooltipColors {
     private static final List<String> DEFAULT_LEVELS = List.of("green", "yellow", "light_purple", "blue", "red", "gold");
-    public static final Codec<TooltipColors> CODEC = RecordCodecBuilder.create((instance) ->
-        instance.group(
-                Codec.STRING.fieldOf("text").orElse("gold").forGetter((c) -> c.text),
-                Codec.STRING.fieldOf("value").orElse("aqua").forGetter((c) -> c.value),
-                Codec.STRING.fieldOf("error").orElse("red").forGetter((c) -> c.error),
-                Codec.STRING.fieldOf("branch").orElse("dark_gray").forGetter((c) -> c.branch),
-                Codec.STRING.fieldOf("secondary").orElse("gray").forGetter((c) -> c.secondary),
-                Codec.STRING.listOf().fieldOf("levels").orElse(DEFAULT_LEVELS).forGetter((c) -> c.levels)
-        ).apply(instance, (text, value, error, branch, secondary, levels) -> {
-            TooltipColors colors = new TooltipColors();
 
-            colors.text = text;
-            colors.value = value;
-            colors.error = error;
-            colors.branch = branch;
-            colors.secondary = secondary;
-            colors.levels = levels;
-            return colors;
-        })
-    );
+    public static Codec<TooltipColors> codec(String modId) {
+        return RecordCodecBuilder.create((instance) ->
+            instance.group(
+                    ConfigCodecs.field(modId, Codec.STRING, "text", () -> "gold").forGetter((c) -> c.text),
+                    ConfigCodecs.field(modId, Codec.STRING, "value", () -> "aqua").forGetter((c) -> c.value),
+                    ConfigCodecs.field(modId, Codec.STRING, "error", () -> "red").forGetter((c) -> c.error),
+                    ConfigCodecs.field(modId, Codec.STRING, "branch", () -> "dark_gray").forGetter((c) -> c.branch),
+                    ConfigCodecs.field(modId, Codec.STRING, "secondary", () -> "gray").forGetter((c) -> c.secondary),
+                    ConfigCodecs.field(modId, ConfigCodecs.lenientList(modId, Codec.STRING, "levels"), "levels", () -> DEFAULT_LEVELS).forGetter((c) -> c.levels)
+            ).apply(instance, (text, value, error, branch, secondary, levels) -> {
+                TooltipColors colors = new TooltipColors();
+
+                colors.text = text;
+                colors.value = value;
+                colors.error = error;
+                colors.branch = branch;
+                colors.secondary = secondary;
+                colors.levels = levels;
+                return colors;
+            })
+        );
+    }
 
     public String text = "gold";
     public String value = "aqua";

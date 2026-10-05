@@ -5,6 +5,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.yanny.aci.configuration.ConfigCodecs;
 import com.yanny.aci.configuration.ICoreConfig;
 import com.yanny.aci.configuration.SpawnInfoFilter;
 import com.yanny.aci.configuration.TooltipColors;
@@ -17,12 +18,8 @@ import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 public class AliConfig implements ICoreConfig {
@@ -39,22 +36,22 @@ public class AliConfig implements ICoreConfig {
 
     private static final MapCodec<AliConfig> BASE_CODEC = RecordCodecBuilder.mapCodec((instance) ->
         instance.group(
-                Codec.INT.fieldOf("configVersion").orElse(0).forGetter((c) -> c.configVersion),
-                BlockLootCategory.CODEC.codec().listOf().fieldOf("blockCategories").orElseGet(AliConfig::defaultBlockCategories).forGetter(c -> c.blockCategories),
-                EntityLootCategory.CODEC.codec().listOf().fieldOf("entityCategories").orElseGet(AliConfig::defaultEntityCategories).forGetter(c -> c.entityCategories),
-                GameplayLootCategory.CODEC.codec().listOf().fieldOf("gameplayCategories").orElseGet(AliConfig::defaultGameplayCategories).forGetter(c -> c.gameplayCategories),
-                TradeLootCategory.CODEC.codec().listOf().fieldOf("tradeCategories").orElseGet(AliConfig::defaultTradeCategories).forGetter(c -> c.tradeCategories),
-                ResourceLocation.CODEC.listOf().fieldOf("disabledEntities").orElse(Collections.emptyList()).forGetter((c) -> c.disabledEntities),
-                Codec.BOOL.fieldOf("logMoreStatistics").orElse(false).forGetter((c) -> c.logMoreStatistics),
-                Codec.BOOL.fieldOf("showInGameNames").orElse(true).forGetter((c) -> c.showInGameNames),
-                Codec.BOOL.fieldOf("hideDefaultBlockLoot").orElse(true).forGetter((c) -> c.hideDefaultBlockLoot),
-                Codec.BOOL.fieldOf("showUnboundedGlobalLootModifiers").orElse(false).forGetter((c) -> c.showUnboundedGlobalLootModifiers),
-                Codec.BOOL.fieldOf("showEntitiesWithoutLoot").orElse(false).forGetter((c) -> c.showEntitiesWithoutLoot),
-                ResourceLocation.CODEC.listOf().fieldOf("defaultBlockLootConditions").orElse(DEFAULT_BLOCK_LOOT_CONDITIONS).forGetter((c) -> c.defaultBlockLootConditions),
-                ResourceLocation.CODEC.listOf().fieldOf("defaultBlockLootFunctions").orElse(DEFAULT_BLOCK_LOOT_FUNCTIONS).forGetter((c) -> c.defaultBlockLootFunctions),
-                ResourceLocation.CODEC.listOf().fieldOf("ignoredPredicateConditions").orElse(DEFAULT_IGNORED_PREDICATE_CONDITIONS).forGetter((c) -> c.ignoredPredicateConditions),
-                Codec.unboundedMap(ResourceLocation.CODEC, ResourceLocation.CODEC.listOf()).fieldOf("entityLootTables").orElse(Collections.emptyMap()).forGetter((c) -> c.entityLootTables),
-                TooltipColors.CODEC.fieldOf("tooltipColors").orElseGet(TooltipColors::new).forGetter((c) -> c.tooltipColors)
+                field(Codec.INT, "configVersion", () -> 0).forGetter((c) -> c.configVersion),
+                field(categories(BlockLootCategory.CODEC, "blockCategories"), "blockCategories", AliConfig::defaultBlockCategories).forGetter(c -> c.blockCategories),
+                field(categories(EntityLootCategory.CODEC, "entityCategories"), "entityCategories", AliConfig::defaultEntityCategories).forGetter(c -> c.entityCategories),
+                field(categories(GameplayLootCategory.CODEC, "gameplayCategories"), "gameplayCategories", AliConfig::defaultGameplayCategories).forGetter(c -> c.gameplayCategories),
+                field(categories(TradeLootCategory.CODEC, "tradeCategories"), "tradeCategories", AliConfig::defaultTradeCategories).forGetter(c -> c.tradeCategories),
+                field(ids("disabledEntities"), "disabledEntities", Collections::emptyList).forGetter((c) -> c.disabledEntities),
+                field(Codec.BOOL, "logMoreStatistics", () -> false).forGetter((c) -> c.logMoreStatistics),
+                field(Codec.BOOL, "showInGameNames", () -> true).forGetter((c) -> c.showInGameNames),
+                field(Codec.BOOL, "hideDefaultBlockLoot", () -> true).forGetter((c) -> c.hideDefaultBlockLoot),
+                field(Codec.BOOL, "showUnboundedGlobalLootModifiers", () -> false).forGetter((c) -> c.showUnboundedGlobalLootModifiers),
+                field(Codec.BOOL, "showEntitiesWithoutLoot", () -> false).forGetter((c) -> c.showEntitiesWithoutLoot),
+                field(ids("defaultBlockLootConditions"), "defaultBlockLootConditions", () -> DEFAULT_BLOCK_LOOT_CONDITIONS).forGetter((c) -> c.defaultBlockLootConditions),
+                field(ids("defaultBlockLootFunctions"), "defaultBlockLootFunctions", () -> DEFAULT_BLOCK_LOOT_FUNCTIONS).forGetter((c) -> c.defaultBlockLootFunctions),
+                field(ids("ignoredPredicateConditions"), "ignoredPredicateConditions", () -> DEFAULT_IGNORED_PREDICATE_CONDITIONS).forGetter((c) -> c.ignoredPredicateConditions),
+                field(Codec.unboundedMap(ResourceLocation.CODEC, ResourceLocation.CODEC.listOf()), "entityLootTables", Collections::emptyMap).forGetter((c) -> c.entityLootTables),
+                field(TooltipColors.codec(Utils.MOD_ID), "tooltipColors", TooltipColors::new).forGetter((c) -> c.tooltipColors)
         ).apply(instance, (version, blocks, entities, gameplay, trades, disabled, log, show, hideDefaultLoot, showUnboundedGlm, showEntitiesWithoutLoot, defaultConditions, defaultFunctions, ignoredPredicates, entityLoot, colors) -> {
             AliConfig config = new AliConfig();
 
@@ -80,8 +77,8 @@ public class AliConfig implements ICoreConfig {
 
     private static final MapCodec<Pair<SpawnInfoFilter, Boolean>> EXTRA_CODEC = RecordCodecBuilder.mapCodec((instance) ->
         instance.group(
-                SpawnInfoFilter.CODEC.fieldOf("spawnInfo").orElseGet(SpawnInfoFilter::new).forGetter(Pair::getFirst),
-                Codec.BOOL.fieldOf("showCharts").orElse(true).forGetter(Pair::getSecond)
+                field(SpawnInfoFilter.codec(Utils.MOD_ID), "spawnInfo", SpawnInfoFilter::new).forGetter(Pair::getFirst),
+                field(Codec.BOOL, "showCharts", () -> true).forGetter(Pair::getSecond)
         ).apply(instance, Pair::of)
     );
 
@@ -150,6 +147,21 @@ public class AliConfig implements ICoreConfig {
     @Override
     public int getCurrentVersion() {
         return CURRENT_VERSION;
+    }
+
+    @NotNull
+    private static <A> MapCodec<A> field(Codec<A> codec, String name, Supplier<? extends A> fallback) {
+        return ConfigCodecs.field(Utils.MOD_ID, codec, name, fallback);
+    }
+
+    @NotNull
+    private static <T extends LootCategory<?>> Codec<List<T>> categories(MapCodec<T> codec, String name) {
+        return ConfigCodecs.lenientList(Utils.MOD_ID, codec.codec(), name);
+    }
+
+    @NotNull
+    private static Codec<List<ResourceLocation>> ids(String name) {
+        return ConfigCodecs.lenientList(Utils.MOD_ID, ResourceLocation.CODEC, name);
     }
 
     @NotNull

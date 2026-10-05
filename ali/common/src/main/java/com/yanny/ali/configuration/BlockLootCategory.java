@@ -24,8 +24,8 @@ public class BlockLootCategory extends LootCategory<Block> {
                 ResourceLocation.CODEC.fieldOf("key").forGetter(LootCategory::getKey),
                 BuiltInRegistries.ITEM.byNameCodec().fieldOf("icon").forGetter(LootCategory::getIcon),
                 Codec.BOOL.optionalFieldOf("hide", false).forGetter(LootCategory::isHidden),
-                Ingredient.CODEC.listOf().optionalFieldOf("catalysts", Collections.emptyList()).forGetter(LootCategory::getCatalysts),
-                TAG_OR_BLOCK_CODEC.listOf().fieldOf("blocks").forGetter(src -> src.blocks)
+                catalysts().optionalFieldOf("catalysts", Collections.emptyList()).forGetter(LootCategory::getCatalysts),
+                lenientList(TAG_OR_BLOCK_CODEC, "blocks").fieldOf("blocks").forGetter(src -> src.blocks)
         ).apply(instance, BlockLootCategory::new)
     );
 

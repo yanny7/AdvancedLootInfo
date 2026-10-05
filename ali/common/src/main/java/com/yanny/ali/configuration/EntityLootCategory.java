@@ -24,8 +24,8 @@ public class EntityLootCategory extends LootCategory<EntityType<?>> {
                     ResourceLocation.CODEC.fieldOf("key").forGetter(LootCategory::getKey),
                     BuiltInRegistries.ITEM.byNameCodec().fieldOf("icon").forGetter(LootCategory::getIcon),
                     Codec.BOOL.optionalFieldOf("hide", false).forGetter(LootCategory::isHidden),
-                    Ingredient.CODEC.listOf().optionalFieldOf("catalysts", Collections.emptyList()).forGetter(LootCategory::getCatalysts),
-                    TAG_OR_ENTITY_TYPE_CODEC.listOf().fieldOf("entityTypes").forGetter(src -> src.entityTypes)
+                    catalysts().optionalFieldOf("catalysts", Collections.emptyList()).forGetter(LootCategory::getCatalysts),
+                    lenientList(TAG_OR_ENTITY_TYPE_CODEC, "entityTypes").fieldOf("entityTypes").forGetter(src -> src.entityTypes)
             ).apply(instance, EntityLootCategory::new)
     );
 
