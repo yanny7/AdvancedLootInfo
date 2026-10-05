@@ -3,6 +3,7 @@ package com.yanny.awi.configuration;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.yanny.aci.configuration.ICoreConfig;
+import com.yanny.aci.configuration.SpawnInfoFilter;
 import com.yanny.aci.configuration.TooltipColors;
 
 import java.util.ArrayList;
@@ -21,9 +22,10 @@ public class AwiConfig implements ICoreConfig {
                 Codec.BOOL.fieldOf("showCharts").orElse(true).forGetter((c) -> c.showCharts),
                 Codec.BOOL.fieldOf("showConfigConditionalBlocks").orElse(false).forGetter((c) -> c.showConfigConditionalBlocks),
                 TooltipColors.CODEC.fieldOf("tooltipColors").orElseGet(TooltipColors::new).forGetter((c) -> c.tooltipColors),
+                SpawnInfoFilter.CODEC.fieldOf("spawnInfo").orElseGet(SpawnInfoFilter::new).forGetter((c) -> c.spawnInfo),
                 Codec.STRING.listOf().fieldOf("dimensions").orElseGet(ArrayList::new).forGetter((c) -> c.dimensions),
                 Codec.unboundedMap(Codec.STRING, Codec.STRING).fieldOf("dimensionIcons").orElseGet(HashMap::new).forGetter((c) -> c.dimensionIcons)
-        ).apply(instance, (version, log, show, showCharts, showConfigConditional, colors, dimensions, dimensionIcons) -> {
+        ).apply(instance, (version, log, show, showCharts, showConfigConditional, colors, spawnInfo, dimensions, dimensionIcons) -> {
             AwiConfig config = new AwiConfig();
 
             config.configVersion = version;
@@ -32,6 +34,7 @@ public class AwiConfig implements ICoreConfig {
             config.showCharts = showCharts;
             config.showConfigConditionalBlocks = showConfigConditional;
             config.tooltipColors = colors;
+            config.spawnInfo = spawnInfo;
             config.dimensions = dimensions;
             config.dimensionIcons = dimensionIcons;
             return config;
@@ -41,6 +44,7 @@ public class AwiConfig implements ICoreConfig {
     public int configVersion = 0;
 
     public TooltipColors tooltipColors = new TooltipColors();
+    public SpawnInfoFilter spawnInfo = new SpawnInfoFilter();
 
     public boolean logMoreStatistics = false;
     public boolean showInGameNames = true;

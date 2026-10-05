@@ -6,6 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.yanny.aci.configuration.ICoreConfig;
+import com.yanny.aci.configuration.SpawnInfoFilter;
 import com.yanny.aci.configuration.TooltipColors;
 import com.yanny.ali.Utils;
 import net.minecraft.resources.ResourceLocation;
@@ -77,12 +78,20 @@ public class AliConfig implements ICoreConfig {
         })
     );
 
-    public static final Codec<AliConfig> CODEC = Codec.mapPair(BASE_CODEC, Codec.BOOL.fieldOf("showCharts").orElse(true)).xmap((pair) -> {
+    private static final MapCodec<Pair<SpawnInfoFilter, Boolean>> EXTRA_CODEC = RecordCodecBuilder.mapCodec((instance) ->
+        instance.group(
+                SpawnInfoFilter.CODEC.fieldOf("spawnInfo").orElseGet(SpawnInfoFilter::new).forGetter(Pair::getFirst),
+                Codec.BOOL.fieldOf("showCharts").orElse(true).forGetter(Pair::getSecond)
+        ).apply(instance, Pair::of)
+    );
+
+    public static final Codec<AliConfig> CODEC = Codec.mapPair(BASE_CODEC, EXTRA_CODEC).xmap((pair) -> {
         AliConfig config = pair.getFirst();
 
-        config.showCharts = pair.getSecond();
+        config.spawnInfo = pair.getSecond().getFirst();
+        config.showCharts = pair.getSecond().getSecond();
         return config;
-    }, (config) -> Pair.of(config, config.showCharts)).codec();
+    }, (config) -> Pair.of(config, Pair.of(config.spawnInfo, config.showCharts))).codec();
 
     public int configVersion = 0;
 
@@ -104,6 +113,7 @@ public class AliConfig implements ICoreConfig {
     public Map<ResourceLocation, List<ResourceLocation>> entityLootTables;
 
     public TooltipColors tooltipColors = new TooltipColors();
+    public SpawnInfoFilter spawnInfo = new SpawnInfoFilter();
 
     public boolean logMoreStatistics = false;
     public boolean showInGameNames = true;

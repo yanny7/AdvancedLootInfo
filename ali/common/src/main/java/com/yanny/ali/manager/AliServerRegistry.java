@@ -122,6 +122,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         super.clearData();
         fallbackItemListings.clear();
         failedRenderers.clear();
+        NodeUtils.clearFailedOperations();
         lootTableMap.clear();
         ingredientUnwrappers.clear();
         lootModifierGetters.clear();

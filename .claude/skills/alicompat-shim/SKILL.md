@@ -140,7 +140,7 @@ v=$(grep -m1 '^minecraft_version=' gradle.properties | cut -d= -f2)
 TINY=$(find ~/.gradle/caches/fabric-loom -name mappings.tiny -path "*${v//./_}*" | head -1)
 TSRG=$(find ~/.gradle/caches/fabric-loom/$v -name joined.tsrg | head -1)
 grep -P "\tmethod_43048\t" $TINY          # intermediary -> "(I)I a method_43048 nextInt"
-awk '/^[^\t]/{c=$1} / m_216339_ /{print c, $0}' $TSRG   # SRG -> "apf b (II)I m_216339_": official class, name, descriptor
+awk '/^[^\t]/{c=$(1)} / m_216339_ /{print c, $(0)}' $TSRG   # SRG -> "apf b (II)I m_216339_": official class, name, descriptor
 grep -P "^c\tapf\t" $TINY                  # official class -> "net/minecraft/util/RandomSource"; its `b (II)I` is nextInt
 ```
 
@@ -514,11 +514,12 @@ unzip -p alicompat/<loader>/build/libs/ALICompat-<loader>-*-$v.jar \
 ```
 
 Compiling is not playing. Close the task by telling the user, explicitly: that the shim was never
-run in game and which part is least certain (GLM rendering, usually); that datagen still needs
-re-running; that `alicompat/CLAUDE.md`'s "Current targets" list wants a line for the new mod, which
-only they may edit; and what the row still leaves open — an `entityLootTables` config entry is an
+run in game and which part is least certain (GLM rendering, usually); whether datagen was re-run
+(Step 5); and what the row still leaves open — an `entityLootTables` config entry is an
 `ali_config` change, not Java, and belongs to the user's decision, not this shim. The wiki's
-`Users/ALI Compat` page gets the new mod for this Minecraft version and loader in the same task.
+`Users/ALI Compat` page (`../ali_wiki/Users-Loot-Info-ALI-Compat.md`) gets the new mod for this
+Minecraft version and loader in the same task: a row in that version's alphabetical table and the
+mod count in its `<summary>` line.
 
 ## Step 7 — what does not fit in code
 
