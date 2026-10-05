@@ -27,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -71,8 +72,25 @@ public class SpawnInfoTest {
                 .addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.STRIDER, 60, 1, 2))
                 .addMobCharge(EntityType.STRIDER, 0.7, 0.15));
 
+        List<Holder<Biome>> wide = new ArrayList<>();
+
+        for (int i = 0; i < 12; i++) {
+            MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
+
+            if (i < 11) {
+                spawns.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.CREEPER, 100, 4, 4));
+            }
+
+            if (i < 10) {
+                spawns.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ENDERMAN, 10, 1, 4));
+            }
+
+            wide.add(biome("w%02d".formatted(i), spawns));
+        }
+
         levelStem("overworld", a, b, c, d);
         levelStem("nether", e);
+        levelStem("wide", wide.toArray(Holder[]::new));
 
         Registry.register(structures, key(Registries.STRUCTURE, "fort"), new SwampHutStructure(new Structure.StructureSettings(
                 HolderSet.direct(e),
@@ -85,13 +103,13 @@ public class SpawnInfoTest {
         biomes.freeze();
         levelStems.freeze();
         structures.freeze();
-        spawnInfo = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, structures)), OWN_SETTINGS);
+        spawnInfo = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, structures)), OWN_SETTINGS, (t) -> true, false);
     }
 
     @Test
     public void testEntityTypes() {
-        assertEquals(Set.of(EntityType.ZOMBIE, EntityType.SKELETON, EntityType.SPIDER, EntityType.COW, EntityType.STRIDER, EntityType.BLAZE),
-                spawnInfo.getEntityTypes());
+        assertEquals(Set.of(EntityType.ZOMBIE, EntityType.SKELETON, EntityType.SPIDER, EntityType.COW, EntityType.STRIDER, EntityType.BLAZE,
+                EntityType.CREEPER, EntityType.ENDERMAN), spawnInfo.getEntityTypes());
     }
 
     @Test
@@ -99,25 +117,60 @@ public class SpawnInfoTest {
         assertTooltip(spawnInfo.getEntityTooltip(EntityType.SKELETON), List.of(
                 "Spawns:",
                 "  -> Dimension: test:overworld",
-                "    -> Category: monster",
+                "    -> Category: Monster",
                 "    -> Weight: 100",
                 "    -> Group size: 1"
         ));
     }
 
     @Test
-    public void testMajorityListsExceptions() {
+    public void testFewBiomesListedEvenWhenMajority() {
         assertTooltip(spawnInfo.getEntityTooltip(EntityType.ZOMBIE), List.of(
                 "Spawns:",
                 "  -> Dimension: test:overworld",
-                "    -> - test:d",
-                "      -> Category: monster",
+                "    -> + test:a",
+                "    -> + test:b",
+                "    -> + test:c",
+                "      -> Category: Monster",
                 "      -> Weight: 95",
                 "      -> Group size: 4",
                 "    -> + test:d",
-                "      -> Category: monster",
+                "      -> Category: Monster",
                 "      -> Weight: 19",
                 "      -> Group size: 4"
+        ));
+    }
+
+    @Test
+    public void testManyBiomesListExceptions() {
+        assertTooltip(spawnInfo.getEntityTooltip(EntityType.CREEPER), List.of(
+                "Spawns:",
+                "  -> Dimension: test:wide",
+                "    -> - test:w11",
+                "      -> Category: Monster",
+                "      -> Weight: 100",
+                "      -> Group size: 4"
+        ));
+    }
+
+    @Test
+    public void testTenBiomesListedEvenWhenMajority() {
+        assertTooltip(spawnInfo.getEntityTooltip(EntityType.ENDERMAN), List.of(
+                "Spawns:",
+                "  -> Dimension: test:wide",
+                "    -> + test:w00",
+                "    -> + test:w01",
+                "    -> + test:w02",
+                "    -> + test:w03",
+                "    -> + test:w04",
+                "    -> + test:w05",
+                "    -> + test:w06",
+                "    -> + test:w07",
+                "    -> + test:w08",
+                "    -> + test:w09",
+                "      -> Category: Monster",
+                "      -> Weight: 10",
+                "      -> Group size: 1 to 4"
         ));
     }
 
@@ -127,7 +180,7 @@ public class SpawnInfoTest {
                 "Spawns:",
                 "  -> Dimension: test:overworld",
                 "    -> + test:a",
-                "      -> Category: creature",
+                "      -> Category: Creature",
                 "      -> Weight: 8",
                 "      -> Group size: 4"
         ));
@@ -140,7 +193,7 @@ public class SpawnInfoTest {
                 "  -> Dimension: test:overworld",
                 "    -> + test:a",
                 "    -> + test:b",
-                "      -> Category: monster",
+                "      -> Category: Monster",
                 "      -> Weight: 100",
                 "      -> Group size: 4"
         ));
@@ -151,9 +204,9 @@ public class SpawnInfoTest {
         assertTooltip(spawnInfo.getEntityTooltip(EntityType.STRIDER), List.of(
                 "Spawns:",
                 "  -> Dimension: test:nether",
-                "    -> Category: creature",
+                "    -> Category: Creature",
                 "    -> Weight: 60",
-                "    -> Group size: 1-2",
+                "    -> Group size: 1 to 2",
                 "    -> Spawn cost: charge 0.7, budget 0.15"
         ));
     }
@@ -164,9 +217,9 @@ public class SpawnInfoTest {
                 "Spawns:",
                 "  -> Dimension: test:nether",
                 "    -> Structure: test:fort",
-                "      -> Category: monster",
+                "      -> Category: Monster",
                 "      -> Weight: 10",
-                "      -> Group size: 2-3"
+                "      -> Group size: 2 to 3"
         ));
     }
 
@@ -182,12 +235,12 @@ public class SpawnInfoTest {
 
         assertEquals(List.of(EntityType.SKELETON, EntityType.ZOMBIE), List.copyOf(spawns.keySet()));
         assertTooltip(spawns.get(EntityType.SKELETON), List.of(
-                "Category: monster",
+                "Category: Monster",
                 "Weight: 100",
                 "Group size: 1"
         ));
         assertTooltip(spawns.get(EntityType.ZOMBIE), List.of(
-                "Category: monster",
+                "Category: Monster",
                 "Weight: 19",
                 "Group size: 4"
         ));
@@ -200,14 +253,14 @@ public class SpawnInfoTest {
         assertEquals(List.of(EntityType.BLAZE, EntityType.STRIDER), List.copyOf(spawns.keySet()));
         assertTooltip(spawns.get(EntityType.BLAZE), List.of(
                 "Structure: test:fort",
-                "  -> Category: monster",
+                "  -> Category: Monster",
                 "  -> Weight: 10",
-                "  -> Group size: 2-3"
+                "  -> Group size: 2 to 3"
         ));
         assertTooltip(spawns.get(EntityType.STRIDER), List.of(
-                "Category: creature",
+                "Category: Creature",
                 "Weight: 60",
-                "Group size: 1-2",
+                "Group size: 1 to 2",
                 "Spawn cost: charge 0.7, budget 0.15"
         ));
     }
@@ -217,17 +270,59 @@ public class SpawnInfoTest {
         MappedRegistry<Structure> registry = structures(Map.of(
                 "camp", spawnSettings(HolderSet.direct(biomes.getHolderOrThrow(key(Registries.BIOME, "a"))), EntityType.ZOMBIE)
         ));
-        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, registry)), OWN_SETTINGS);
+        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, registry)), OWN_SETTINGS, (t) -> true, false);
         Map<EntityType<?>, TooltipNode> spawns = info.getBiomeSpawns(new ResourceLocation("test", "a"));
 
         assertEquals(List.of(EntityType.SKELETON, EntityType.SPIDER, EntityType.ZOMBIE, EntityType.COW), List.copyOf(spawns.keySet()));
         assertTooltip(spawns.get(EntityType.ZOMBIE), List.of(
-                "Category: monster",
+                "Category: Monster",
                 "Weight: 95",
                 "Group size: 4",
                 "Structure: test:camp",
-                "  -> Category: monster",
+                "  -> Category: Monster",
                 "  -> Weight: 1",
+                "  -> Group size: 1"
+        ));
+    }
+
+    @Test
+    public void testStructuresWithSameSpawnAreGrouped() {
+        HolderSet<Biome> biomeSet = HolderSet.direct(biomes.getHolderOrThrow(key(Registries.BIOME, "a")));
+        MappedRegistry<Structure> registry = structures(Map.of(
+                "camp", spawnSettings(biomeSet, EntityType.WITCH),
+                "hut", spawnSettings(biomeSet, EntityType.WITCH),
+                "tower", new Structure.StructureSettings(
+                        biomeSet,
+                        Map.of(MobCategory.MONSTER, new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.PIECE,
+                                WeightedRandomList.create(new MobSpawnSettings.SpawnerData(EntityType.WITCH, 5, 1, 1)))),
+                        GenerationStep.Decoration.SURFACE_STRUCTURES,
+                        TerrainAdjustment.NONE
+                )
+        ));
+        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, registry)), OWN_SETTINGS, (t) -> true, false);
+
+        assertTooltip(info.getEntityTooltip(EntityType.WITCH), List.of(
+                "Spawns:",
+                "  -> Dimension: test:overworld",
+                "    -> Structure: test:camp",
+                "    -> Structure: test:hut",
+                "      -> Category: Monster",
+                "      -> Weight: 1",
+                "      -> Group size: 1",
+                "    -> Structure: test:tower",
+                "      -> Category: Monster",
+                "      -> Weight: 5",
+                "      -> Group size: 1"
+        ));
+        assertTooltip(info.getBiomeSpawns(new ResourceLocation("test", "a")).get(EntityType.WITCH), List.of(
+                "Structure: test:camp",
+                "Structure: test:hut",
+                "  -> Category: Monster",
+                "  -> Weight: 1",
+                "  -> Group size: 1",
+                "Structure: test:tower",
+                "  -> Category: Monster",
+                "  -> Weight: 5",
                 "  -> Group size: 1"
         ));
     }
@@ -241,14 +336,14 @@ public class SpawnInfoTest {
                 GenerationStep.Decoration.SURFACE_STRUCTURES,
                 TerrainAdjustment.NONE
         );
-        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, structures)), (s) -> modified);
+        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, structures)), (s) -> modified, (t) -> true, false);
 
         assertTrue(info.getEntityTooltip(EntityType.BLAZE).isBlank(false));
         assertTooltip(info.getEntityTooltip(EntityType.WITCH), List.of(
                 "Spawns:",
                 "  -> Dimension: test:overworld",
                 "    -> Structure: test:fort",
-                "      -> Category: monster",
+                "      -> Category: Monster",
                 "      -> Weight: 1",
                 "      -> Group size: 1"
         ));
@@ -267,21 +362,21 @@ public class SpawnInfoTest {
             }
 
             return OWN_SETTINGS.apply(s);
-        });
+        }, (t) -> true, false);
 
         assertTrue(info.getEntityTooltip(EntityType.BLAZE).isBlank(false));
         assertTooltip(info.getEntityTooltip(EntityType.WITCH), List.of(
                 "Spawns:",
                 "  -> Dimension: test:overworld",
                 "    -> Structure: test:hut",
-                "      -> Category: monster",
+                "      -> Category: Monster",
                 "      -> Weight: 1",
                 "      -> Group size: 1"
         ));
         assertTooltip(info.getEntityTooltip(EntityType.SKELETON), List.of(
                 "Spawns:",
                 "  -> Dimension: test:overworld",
-                "    -> Category: monster",
+                "    -> Category: Monster",
                 "    -> Weight: 100",
                 "    -> Group size: 1"
         ));
@@ -294,7 +389,7 @@ public class SpawnInfoTest {
                 "fort", spawnSettings(HolderSet.direct(biomes.getHolderOrThrow(key(Registries.BIOME, "e"))), EntityType.BLAZE),
                 "tagged", spawnSettings(unbound, EntityType.WITCH)
         ));
-        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, registry)), OWN_SETTINGS);
+        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, registry)), OWN_SETTINGS, (t) -> true, false);
 
         assertTrue(info.getEntityTypes().contains(EntityType.WITCH));
         assertTrue(info.getEntityTooltip(EntityType.WITCH).isBlank(false));
@@ -303,10 +398,11 @@ public class SpawnInfoTest {
 
     @Test
     public void testMissingRegistriesYieldNoSpawns() {
-        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes)), OWN_SETTINGS);
+        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes)), OWN_SETTINGS, (t) -> true, false);
 
         assertTrue(info.getEntityTooltip(EntityType.ZOMBIE).isBlank(false));
-        assertEquals(Set.of(EntityType.ZOMBIE, EntityType.SKELETON, EntityType.SPIDER, EntityType.COW, EntityType.STRIDER), info.getEntityTypes());
+        assertEquals(Set.of(EntityType.ZOMBIE, EntityType.SKELETON, EntityType.SPIDER, EntityType.COW, EntityType.STRIDER, EntityType.CREEPER,
+                EntityType.ENDERMAN), info.getEntityTypes());
     }
 
     @NotNull

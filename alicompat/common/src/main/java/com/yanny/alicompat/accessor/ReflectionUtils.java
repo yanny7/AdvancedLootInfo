@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -12,6 +13,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class ReflectionUtils {
+    private static final List<Class<?>> WIDENING = List.of(byte.class, short.class, int.class, long.class, float.class, double.class);
+
     public static <T extends BaseAccessor<?>> T copyClassData(Class<T> myClass, Object targetObject) {
         ClassAccessor classAnnotation = myClass.getAnnotation(ClassAccessor.class);
 
@@ -63,6 +66,55 @@ public class ReflectionUtils {
         } catch (Throwable e) {
             throw new IllegalStateException(e);
         }
+    }
+
+    public static void validate(Class<?> myClass, Class<?> targetClass) throws ReflectiveOperationException {
+        List<Field> targetFields = getFieldsUpTo(targetClass, Object.class);
+
+        for (Field myField : myClass.getDeclaredFields()) {
+            FieldAccessor fieldAnnotation = myField.getAnnotation(FieldAccessor.class);
+
+            if (fieldAnnotation == null) {
+                continue;
+            }
+
+            Field targetField = targetFields.stream()
+                    .filter((f) -> f.getName().equals(myField.getName()))
+                    .findFirst()
+                    .orElseThrow(() -> new NoSuchFieldException(targetClass.getName() + "." + myField.getName()));
+
+            if (fieldAnnotation.clazz() == Object.class) {
+                if (!isAssignable(targetField.getType(), myField.getType())) {
+                    throw new IllegalStateException(targetClass.getName() + "." + myField.getName() + " is " + targetField.getType().getName() + ", accessor expects " + myField.getType().getName());
+                }
+            } else {
+                ClassAccessor nestedAnnotation = fieldAnnotation.clazz().getAnnotation(ClassAccessor.class);
+
+                if (nestedAnnotation == null) {
+                    throw new IllegalStateException("Class " + fieldAnnotation.clazz().getName() + " is not annotated with @ClassAccessor");
+                }
+
+                Class<?> nestedTarget = Class.forName(nestedAnnotation.value());
+
+                if (!nestedTarget.isAssignableFrom(targetField.getType())) {
+                    throw new IllegalStateException(targetClass.getName() + "." + myField.getName() + " is " + targetField.getType().getName() + ", accessor reads " + nestedTarget.getName());
+                }
+
+                validate(fieldAnnotation.clazz(), nestedTarget);
+            }
+        }
+    }
+
+    private static boolean isAssignable(Class<?> from, Class<?> to) {
+        if (from.isPrimitive() && to.isPrimitive()) {
+            return from == to || (WIDENING.contains(from) && WIDENING.indexOf(from) < WIDENING.indexOf(to));
+        }
+
+        return wrap(to).isAssignableFrom(wrap(from));
+    }
+
+    private static Class<?> wrap(Class<?> type) {
+        return type.isPrimitive() ? MethodType.methodType(type).wrap().returnType() : type;
     }
 
     private static <T> T createObject(Class<T> myClass, Object object) {

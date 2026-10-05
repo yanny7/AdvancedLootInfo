@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.*;
@@ -69,11 +69,11 @@ public class ForgePlugin implements IPlugin {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(accessor.getPrice()),
-                new RangeValue(accessor.getPrice().getCount()),
+                NumberExpr.constant(accessor.getPrice().getCount()),
                 Either.left(accessor.getPrice2()),
-                new RangeValue(accessor.getPrice2().getCount()),
+                NumberExpr.constant(accessor.getPrice2().getCount()),
                 Either.left(accessor.getForSale()),
-                new RangeValue(accessor.getForSale().getCount()),
+                NumberExpr.constant(accessor.getForSale().getCount()),
                 accessor.getMaxTrades(),
                 accessor.getXp(),
                 accessor.getPriceMult(),

@@ -2,7 +2,7 @@ package com.yanny.alicompat.compat.villagertradingplus;
 
 import com.lion.villagertradingplus.tradeoffers.util.Ingredient;
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
@@ -44,7 +44,7 @@ public class SellTaggedItemTradeOfferAccessor extends BaseAccessor<VillagerTrade
         return new ItemsToItemsNode(
                 utils,
                 Either.left(currency),
-                new RangeValue(currency.getCount()),
+                NumberExpr.constant(currency.getCount()),
                 ingredient.getItem(),
                 ingredient.getCount(),
                 maxUses,

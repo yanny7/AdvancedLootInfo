@@ -2,6 +2,8 @@ package com.yanny.awi.emi.compatibility.emi;
 
 import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RelativeRect;
+import com.yanny.aci.compatibility.ScrollableTooltip;
+import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.api.IWidgetUtils;
 import com.yanny.awi.compatibility.GenericUtils;
@@ -15,7 +17,6 @@ import dev.emi.emi.api.widget.Widget;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 
@@ -45,14 +46,19 @@ public class EmiBiomeLoot extends EmiBaseLoot {
     protected List<Widget> getAdditionalWidgets(WidgetHolder widgetHolder) {
         List<Widget> widgets = new LinkedList<>();
 
-        widgets.add(new TextWidget(Component.translatable("biome." + biome.getNamespace() + "." + biome.getPath()).getVisualOrderText(), 0, 0, 0, false));
+        widgets.add(new TextWidget(GenericUtils.getBiomeTitle(biome).getVisualOrderText(), 0, 0, 0, false));
 
         for (GenericUtils.SpawnSlot slot : GenericUtils.getSpawnSlots(biomeNode, CATEGORY_WIDTH, TITLE_HEIGHT)) {
             if (slot.egg() != null) {
                 SlotWidget widget = new SlotWidget(EmiStack.of(slot.egg()), slot.x(), slot.y()) {
                     @Override
                     protected void addSlotTooltip(List<ClientTooltipComponent> list) {
-                        slot.getConditions().forEach((c) -> list.add(ClientTooltipComponent.create(c.getVisualOrderText())));
+                        List<TooltipLine> conditions = slot.getConditions();
+
+                        if (!conditions.isEmpty()) {
+                            list.add(new ScrollableTooltip(conditions));
+                        }
+
                         super.addSlotTooltip(list);
                     }
                 };
@@ -69,7 +75,7 @@ public class EmiBiomeLoot extends EmiBaseLoot {
 
                     @Override
                     public List<ClientTooltipComponent> getTooltip(int mouseX, int mouseY) {
-                        return slot.getTooltip().stream().map((c) -> ClientTooltipComponent.create(c.getVisualOrderText())).toList();
+                        return List.of(new ScrollableTooltip(slot.getTooltip()));
                     }
                 });
             }

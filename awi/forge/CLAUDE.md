@@ -6,7 +6,7 @@ Guidance for `awi/forge` (`com.yanny.awi.forge`) — AWI's Forge loader entry po
 
 Single `AwiMod` (`@Mod`). Its constructor statically builds the `SimpleChannel` (`NetworkRegistry.ChannelBuilder`, protocol version `"1"`), constructs `SERVER`, registers message handlers via `network.NetworkUtils`, and wires `FMLJavaModLoadingContext` mod-bus listeners (`DataGeneration::generate`, common/client setup → `PluginManager`).
 
-`ForgeCommonBusSubscriber` (`ServerStartingEvent` → `registerServerEvent` + `SERVER.readWorldgenInfo(overworld)`, `ServerStoppingEvent` → `deregisterServerEvent`) and `ForgeClientBusSubscriber` (`ClientPlayerNetworkEvent.LoggingIn`/`LoggingOut` → `clientRegistry.loggingIn`/`loggingOut`) are the Forge-bus halves. Unlike Fabric's `ServerWorldEvents.LOAD`, `ServerStartingEvent` fires exactly once, so no "already loaded" guard is needed here. There is no client level-unload handler — AWI has no per-level client cache to drop.
+`ForgeCommonBusSubscriber` (`ServerStartingEvent` → `registerServerEvent` + `SERVER.readWorldgenInfo(overworld)`, `ServerStoppingEvent` → `deregisterServerEvent`) and `ForgeClientBusSubscriber` (`ClientPlayerNetworkEvent.LoggingIn`/`LoggingOut` → `clientRegistry.loggingIn`/`loggingOut`) are the Forge-bus halves. Unlike Fabric's `ServerWorldEvents.LOAD`, `ServerStartingEvent` fires exactly once, so no "already loaded" guard is needed here. There is no client level-unload handler — AWI has no per-level client cache to drop. `ForgeClientModBusSubscriber` (mod bus, client only) registers the identity factory for `ScrollableTooltip` that JEI on Forge needs — see `aci/CLAUDE.md`.
 
 ## Platform + networking implementation
 

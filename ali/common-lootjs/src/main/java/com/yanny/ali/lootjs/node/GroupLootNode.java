@@ -4,7 +4,7 @@ import com.almostreliable.lootjs.core.ILootHandler;
 import com.almostreliable.lootjs.loot.action.AddLootAction;
 import com.almostreliable.lootjs.loot.action.GroupedLootAction;
 import com.almostreliable.lootjs.loot.action.WeightedAddLootAction;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IServerUtils;
@@ -12,6 +12,7 @@ import com.yanny.ali.api.ListNode;
 import com.yanny.ali.lootjs.LootJsPlugin;
 import com.yanny.ali.lootjs.mixin.MixinCompositeLootAction;
 import com.yanny.ali.lootjs.mixin.MixinGroupedLootAction;
+import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -19,6 +20,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GroupLootNode extends ListNode {
@@ -29,7 +31,10 @@ public class GroupLootNode extends ListNode {
     public GroupLootNode(IServerUtils utils, GroupedLootAction lootPool, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         MixinGroupedLootAction action = (MixinGroupedLootAction) lootPool;
 
-        tooltip = TooltipUtils.getLootPoolTooltip(utils.convertNumber(utils, action.getNumberProvider()), new RangeValue(0)).build();
+        List<TooltipNode> rollConditions = new ArrayList<>();
+        NumberExpr rolls = utils.convertIntNumber(utils, action.getNumberProvider(), rollConditions);
+
+        tooltip = TooltipUtils.getLootPoolTooltip(new LootCount(rolls, rollConditions)).build();
 
         for (ILootHandler entry : ((MixinCompositeLootAction) lootPool).getHandlers()) {
             if (entry instanceof AddLootAction addLootAction) {

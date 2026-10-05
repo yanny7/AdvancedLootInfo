@@ -313,6 +313,7 @@ subprojects {
             } else if (project.parent.name == "aci") {
                 from(project(":aci:common").sourceSets.main.resources.srcDirs) {
                     include "pack.mcmeta"
+                    include "aci.accesswidener"
                 }
             } else if (project.parent.name == "alicompat") {
                 from(project(":alicompat:common").sourceSets.main.resources.srcDirs) {
@@ -320,7 +321,7 @@ subprojects {
                 }
             }
 
-            inputs.property "version", project.version
+            inputs.properties project.ext.expandProps
 
             filesMatching(["fabric.mod.json", "META-INF/mods.toml", "pack.mcmeta"]) {
                 expand project.ext.expandProps

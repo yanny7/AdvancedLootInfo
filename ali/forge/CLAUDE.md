@@ -6,6 +6,8 @@ Guidance for `ali/forge` (`com.yanny.ali.forge`) — ALI's Forge loader entry po
 
 Single `AliMod` (`@Mod`). Its constructor statically builds the `SimpleChannel` (`NetworkRegistry.ChannelBuilder`, protocol version `"2"`), constructs `SERVER`, registers message handlers via `network.NetworkUtils`, wires `FMLJavaModLoadingContext` mod-bus listeners (`DataGeneration::generate`, common/client setup → `PluginManager`), and adds a Forge-bus `@SubscribeEvent onAddReloadListener` that registers `SERVER.getFakeLootDataManager()` as a reload listener (see `ali/CLAUDE.md`'s `configuration`/`datagen` section for `FakeLootDataManager`).
 
+`ForgeCommonBusSubscriber` and `ForgeClientBusSubscriber` are the Forge-bus halves (server start/stop; client level unload and login/logout). `ForgeClientModBusSubscriber` (mod bus, client only) registers the identity factory for `ScrollableTooltip` that JEI on Forge needs (see `aci/CLAUDE.md`); it is a separate `Dist.CLIENT` class because the event references client-only types.
+
 ## Platform + networking implementation
 
 - `platform.ForgePlatformHelper implements IPlatformHelper` — discovers plugins via annotation scanning (`ModFileScanData`/`AliEntrypoint` ASM type match, memoized with `Suppliers.memoize`), gets loot pools via `MixinLootTableForge`, uses `ForgeHooks.loadLootTable`, `ForgeSpawnEggItem`.

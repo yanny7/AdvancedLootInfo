@@ -1,3 +1,13 @@
+## []
+
+- Added `spawnInfo` configuration to hide biome mob spawns
+- Height converters and placement contributions carry the condition tooltips of their conditional numbers
+- Tooltips taller than the screen can be scrolled with the mouse wheel
+- Values show most likely value, charts (`showCharts`) and formulas (F3+H)
+- Fixed running out of memory during the worldgen scan with mods that cache compiled surface rules
+- With `showInGameNames`, IDs (biomes, dimensions, structures, …) and tags are shown translated when a translation exists, in spawn info too
+- Spawn category is shown translated (`Monster` instead of `monster`)
+
 ## [1.2.0]
 
 - Added `dimensions` configuration to hide dimensions

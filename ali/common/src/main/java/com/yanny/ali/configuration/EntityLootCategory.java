@@ -4,6 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Either;
+import com.yanny.aci.CommonLogUtils;
+import com.yanny.ali.Utils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -12,10 +14,14 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
+import org.slf4j.Logger;
 
 import java.util.List;
+import java.util.Objects;
 
 public class EntityLootCategory extends LootCategory<EntityType<?>> {
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
+
     private final List<Either<TagKey<EntityType<?>>, EntityType<?>>> entityTypes;
 
     public EntityLootCategory(ResourceLocation key, Item icon, boolean hide, List<Ingredient> catalysts, List<Either<TagKey<EntityType<?>>, EntityType<?>>> entityTypes) {
@@ -39,13 +45,15 @@ public class EntityLootCategory extends LootCategory<EntityType<?>> {
                     } else {
                         ResourceLocation location = ResourceLocation.tryParse(s);
 
-                        if (location != null && BuiltInRegistries.BLOCK.containsKey(location)) {
+                        if (location != null && BuiltInRegistries.ENTITY_TYPE.containsKey(location)) {
                             return Either.<TagKey<EntityType<?>>, EntityType<?>>right(BuiltInRegistries.ENTITY_TYPE.get(location));
                         }
                     }
 
+                    LOGGER.warn("Ignoring invalid entry '{}' in 'entityTypes' of category {}", s, getKey());
                     return null;
                 })
+                .filter(Objects::nonNull)
                 .toList();
     }
 

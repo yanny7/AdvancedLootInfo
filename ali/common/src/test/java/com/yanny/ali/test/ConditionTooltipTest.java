@@ -19,8 +19,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
+import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 
 public class ConditionTooltipTest {
     @Test
@@ -32,9 +32,9 @@ public class ConditionTooltipTest {
                 "All Of:",
                 "  -> Time Check:",
                 "    -> Period: 10",
-                "    -> Value: 1 - 8",
+                "    -> Value: 1 to 8",
                 "  -> Weather Check:",
-                "    -> Is Raining: true"
+                "    -> Is Raining: True"
         ));
         assertTooltip(ConditionTooltipUtils.getAllOfTooltip(UTILS, (AllOfCondition) AllOfCondition.allOf(
                 ExplosionCondition.survivesExplosion()
@@ -53,9 +53,9 @@ public class ConditionTooltipTest {
                 "Any Of:",
                 "  -> Time Check:",
                 "    -> Period: 10",
-                "    -> Value: 1 - 8",
+                "    -> Value: 1 to 8",
                 "  -> Weather Check:",
-                "    -> Is Raining: true"
+                "    -> Is Raining: True"
         ));
     }
 
@@ -85,8 +85,8 @@ public class ConditionTooltipTest {
         ).build()).build(), List.of(
                 "Damage Source Properties:",
                 "  -> Tags:",
-                "    -> minecraft:bypasses_armor: true",
-                "    -> minecraft:is_explosion: false",
+                "    -> Is: minecraft:bypasses_armor",
+                "    -> Is Not: minecraft:is_explosion",
                 "  -> Direct Entity:",
                 "    -> Entity Type: minecraft:warden",
                 "  -> Source Entity:",
@@ -129,9 +129,9 @@ public class ConditionTooltipTest {
                 "  -> Target: Direct Killer",
                 "  -> Scores:",
                 "    -> double",
-                "      -> Limit: 1 - 7",
+                "      -> Limit: 1 to 7",
                 "    -> single",
-                "      -> Limit: 2 - 5"
+                "      -> Limit: 2 to 5"
         ));
     }
 
@@ -143,7 +143,7 @@ public class ConditionTooltipTest {
                 "Inverted:",
                 "  -> Time Check:",
                 "    -> Period: 10",
-                "    -> Value: 1 - 8"
+                "    -> Value: 1 to 8"
         ));
         assertTooltip(ConditionTooltipUtils.getInvertedTooltip(UTILS, (InvertedLootItemCondition) InvertedLootItemCondition.invert(
                 ExplosionCondition.survivesExplosion()
@@ -166,7 +166,7 @@ public class ConditionTooltipTest {
         ).build()).build(), List.of(
                 "Location Check:",
                 "  -> Location:",
-                "    -> Smokey: true",
+                "    -> Smokey: True",
                 "  -> Offset: [X: 2, Y: 4, Z: 6]"
         ));
         assertTooltip(ConditionTooltipUtils.getLocationCheckTooltip(UTILS, (LocationCheck) LocationCheck.checkLocation(
@@ -174,7 +174,7 @@ public class ConditionTooltipTest {
         ).build()).build(), List.of(
                 "Location Check:",
                 "  -> Location:",
-                "    -> Smokey: true"
+                "    -> Smokey: True"
         ));
     }
 
@@ -234,10 +234,13 @@ public class ConditionTooltipTest {
 
     @Test
     public void testTableBonusTooltip() {
-        assertTooltip(ConditionTooltipUtils.getTableBonusTooltip(UTILS, (BonusLevelTableCondition) BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.MOB_LOOTING, 0.25F, 0.5555F, 0.99F).build()).build(), List.of(
+        assertTooltip(ConditionTooltipUtils.getTableBonusTooltip(UTILS, (BonusLevelTableCondition) BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.MOB_LOOTING, 0.25F, 0.5555F, 0.6666F, 0.99F).build()).build(), List.of(
                 "Table Bonus:",
                 "  -> Enchantment: minecraft:looting",
-                "  -> Values: [0.25, 0.5555, 0.99]"
+                "  -> Values: 25%",
+                "    -> Looting I: 55.55%",
+                "    -> Looting II: 66.66%",
+                "    -> Looting III: 99%"
         ));
     }
 
@@ -246,7 +249,7 @@ public class ConditionTooltipTest {
         assertTooltip(ConditionTooltipUtils.getTimeCheckTooltip(UTILS, TimeCheck.time(IntRange.range(5, 10)).setPeriod(24000).build()).build(), List.of(
                 "Time Check:",
                 "  -> Period: 24000",
-                "  -> Value: 5 - 10"
+                "  -> Value: 5 to 10"
         ));
     }
 
@@ -254,8 +257,8 @@ public class ConditionTooltipTest {
     public void testValueCheckTooltip() {
         assertTooltip(ConditionTooltipUtils.getValueCheckTooltip(UTILS, (ValueCheckCondition) ValueCheckCondition.hasValue(UniformGenerator.between(1, 20), IntRange.range(1, 10)).build()).build(), List.of(
                 "Value Check:",
-                "  -> Provider: 1-20",
-                "  -> Range: 1 - 10"
+                "  -> Provider: 1 to 20",
+                "  -> Range: 1 to 10"
         ));
     }
 
@@ -263,16 +266,16 @@ public class ConditionTooltipTest {
     public void testWeatherCheckTooltip() {
         assertTooltip(ConditionTooltipUtils.getWeatherCheckTooltip(UTILS, WeatherCheck.weather().setRaining(true).setThundering(false).build()).build(), List.of(
                 "Weather Check:",
-                "  -> Is Raining: true",
-                "  -> Is Thundering: false"
+                "  -> Is Raining: True",
+                "  -> Is Thundering: False"
         ));
         assertTooltip(ConditionTooltipUtils.getWeatherCheckTooltip(UTILS, WeatherCheck.weather().setRaining(true).build()).build(), List.of(
                 "Weather Check:",
-                "  -> Is Raining: true"
+                "  -> Is Raining: True"
         ));
         assertTooltip(ConditionTooltipUtils.getWeatherCheckTooltip(UTILS, WeatherCheck.weather().setThundering(false).build()).build(), List.of(
                 "Weather Check:",
-                "  -> Is Thundering: false"
+                "  -> Is Thundering: False"
         ));
         assertTooltip(ConditionTooltipUtils.getWeatherCheckTooltip(UTILS, WeatherCheck.weather().build()).build(), List.of());
     }

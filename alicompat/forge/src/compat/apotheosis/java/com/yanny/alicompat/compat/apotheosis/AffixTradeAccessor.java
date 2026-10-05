@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.apotheosis;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
@@ -50,13 +50,13 @@ public class AffixTradeAccessor extends BaseAccessor<AffixTrade> implements IIte
         return new ItemsToItemsNode(
                 utils,
                 Either.left(price),
-                new RangeValue(price.getCount()),
+                NumberExpr.constant(price.getCount()),
                 TooltipNode.empty(),
                 Either.left(price2),
-                new RangeValue(Math.max(1, price2.getCount())),
+                NumberExpr.constant(Math.max(1, price2.getCount())),
                 TooltipNode.empty(),
                 Either.left(ApotheosisUtils.firstEntryStack(entries)),
-                new RangeValue(1),
+                NumberExpr.constant(1),
                 result,
                 MAX_TRADES,
                 XP,

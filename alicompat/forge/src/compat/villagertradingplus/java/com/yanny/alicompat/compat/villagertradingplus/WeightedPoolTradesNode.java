@@ -1,6 +1,6 @@
 package com.yanny.alicompat.compat.villagertradingplus;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
@@ -24,7 +24,7 @@ public class WeightedPoolTradesNode extends SubTradesNode<WeightedPoolTradeOffer
 
         for (Object e : listing.getEntries()) {
             WeightedPoolEntryAccessor entry = WeightedPoolEntryAccessor.of(e);
-            TooltipNode chance = TooltipBuilder.value(new RangeValue(listing.getChance(entry.getWeight()) * 100), "%").build(Lang.Description.CHANCE);
+            TooltipNode chance = TooltipBuilder.percent(NumberExpr.constant(listing.getChance(entry.getWeight()))).build(Lang.Description.CHANCE);
 
             nodes.add(utils.getItemListing(utils, entry.getFactory(), chance));
         }

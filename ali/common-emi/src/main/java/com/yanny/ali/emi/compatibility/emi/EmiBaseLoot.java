@@ -11,6 +11,7 @@ import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.client.ClientUtils;
+import com.yanny.ali.plugin.client.TooltipUtils;
 import dev.emi.emi.api.EmiApi;
 import dev.emi.emi.api.recipe.BasicEmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipe;
@@ -63,7 +64,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         widgets.addAll(layout.slots().stream().map((h) -> {
             EmiIngredient ingredient = h.item.map(EmiStack::of, EmiIngredient::of);
             IItemNode node = (IItemNode) h.entry;
-            EmiLootSlotWidget widget = new EmiLootSlotWidget(h.entry, ingredient, h.rect.getX(), h.rect.getY(), node.getCount(), node.hasPredicates());
+            EmiLootSlotWidget widget = new EmiLootSlotWidget(h.entry, ingredient, h.rect.getX(), h.rect.getY(), TooltipUtils.getSlotCount(node), node.hasPredicates());
 
             widget.recipeContext(h.recipe);
             return (Widget) widget;

@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.charm;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
@@ -40,9 +40,9 @@ public class EmeraldsForItemsAccessor extends BaseAccessor<GenericTradeOffers.Em
         return new ItemsToItemsNode(
                 utils,
                 Either.left(itemLike.asItem().getDefaultInstance()),
-                new RangeValue(baseCost, baseCost + extraCost),
+                NumberExpr.uniformInt(baseCost, baseCost + extraCost),
                 Either.left(Items.EMERALD.getDefaultInstance()),
-                new RangeValue(baseEmeralds, baseEmeralds + extraEmeralds),
+                NumberExpr.uniformInt(baseEmeralds, baseEmeralds + extraEmeralds),
                 maxUses,
                 villagerXp,
                 0.05F,

@@ -4,11 +4,11 @@ import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.api.WidgetDirection;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
+import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.plugin.client.TooltipUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
@@ -60,8 +60,8 @@ public class TextureWidget implements IWidget {
 
     @NotNull
     @Override
-    public List<Component> getTooltipComponents(int mouseX, int mouseY) {
-        return CoreTooltipUtils.toComponents(tooltips, 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle());
+    public List<TooltipLine> getTooltipLines(int mouseX, int mouseY) {
+        return CoreTooltipUtils.toLines(tooltips, 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle(), TooltipUtils.getNumberOptions());
     }
 
     @Override

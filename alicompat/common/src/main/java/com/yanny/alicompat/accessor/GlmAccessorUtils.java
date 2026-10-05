@@ -10,6 +10,7 @@ public class GlmAccessorUtils {
 
     public static <M, T extends BaseAccessor<?> & IGlobalLootModifierAccessor> void registerGlobalLootModifier(IGlobalLootModifierPlugin.IRegistry registry, Class<M> targetClass, Class<T> clazz) {
         try {
+            ReflectionUtils.validate(clazz, targetClass);
             registry.registerGlobalLootModifier(targetClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c, targetClass).getLootModifier(u));
         } catch (Throwable e) {
             LOGGER.warn("Failed to register GLM for {} with error {}", targetClass.getName(), e.getMessage(), e);
@@ -22,6 +23,7 @@ public class GlmAccessorUtils {
         if (classAnnotation != null) {
             try {
                 Class<?> functionClass = Class.forName(classAnnotation.value());
+                ReflectionUtils.validate(clazz, functionClass);
                 registry.registerGlobalLootModifier(functionClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c).getLootModifier(u));
             } catch (Throwable e) {
                 LOGGER.warn("Failed to register GLM for {} with error {}", classAnnotation.value(), e.getMessage(), e);

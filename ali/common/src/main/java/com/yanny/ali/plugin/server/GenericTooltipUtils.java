@@ -1,5 +1,6 @@
 package com.yanny.ali.plugin.server;
 
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerUtils;
@@ -23,7 +24,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.BiFunction;
 
 public class GenericTooltipUtils {
@@ -90,22 +90,22 @@ public class GenericTooltipUtils {
         if (value instanceof Item item) {
             TooltipBuilder itemTooltip = utils.getValueTooltip(utils, item);
 
-            itemTooltip.add(TooltipBuilder.keyValue(TooltipBuilder.translate(stat.getType().getTranslationKey()), toString(ints)).build());
+            itemTooltip.add(TooltipBuilder.number(getRange(ints)).rawKey(TooltipBuilder.translate(stat.getType().getTranslationKey())).build());
             return itemTooltip.key(Lang.Value.ITEM);
         } else if (value instanceof Block block) {
             TooltipBuilder blockTooltip = utils.getValueTooltip(utils, block);
 
-            blockTooltip.add(TooltipBuilder.keyValue(TooltipBuilder.translate(stat.getType().getTranslationKey()), toString(ints)).build());
+            blockTooltip.add(TooltipBuilder.number(getRange(ints)).rawKey(TooltipBuilder.translate(stat.getType().getTranslationKey())).build());
             return blockTooltip.key(Lang.Value.BLOCK);
         } else if (value instanceof EntityType<?> entityType) {
             TooltipBuilder entityTooltip = utils.getValueTooltip(utils, entityType);
 
-            entityTooltip.add(TooltipBuilder.keyValue(TooltipBuilder.translate(stat.getType().getTranslationKey()), toString(ints)).build());
+            entityTooltip.add(TooltipBuilder.number(getRange(ints)).rawKey(TooltipBuilder.translate(stat.getType().getTranslationKey())).build());
             return entityTooltip.key(Lang.Value.ENTITY_TYPE);
         } else if (value instanceof ResourceLocation resourceLocation) {
             TooltipBuilder locationTooltip = utils.getValueTooltip(utils, resourceLocation);
 
-            locationTooltip.add(TooltipBuilder.keyValue(TooltipBuilder.translate(getTranslationKey(resourceLocation)), toString(ints)).build());
+            locationTooltip.add(TooltipBuilder.number(getRange(ints)).rawKey(TooltipBuilder.translate(getTranslationKey(resourceLocation))).build());
             return locationTooltip.key(Lang.Value.ID);
         }
 
@@ -140,13 +140,13 @@ public class GenericTooltipUtils {
     @NotNull
     public static TooltipBuilder getEnchantmentLevelsEntryTooltip(IServerUtils utils, Map.Entry<Enchantment, NumberProvider> entry) {
         return utils.getValueTooltip(utils, entry.getKey())
-                .add(utils.getValueTooltip(utils, entry.getValue()).build(Lang.Value.LEVELS));
+                .add(TooltipUtils.getIntNumberTooltip(utils, entry.getValue()).build(Lang.Value.LEVELS));
     }
 
     @NotNull
     public static TooltipBuilder getMobEffectDurationEntryTooltip(IServerUtils utils, Map.Entry<MobEffect, NumberProvider> entry) {
         return utils.getValueTooltip(utils, entry.getKey())
-                .add(utils.getValueTooltip(utils, entry.getValue()).build(Lang.Value.DURATION));
+                .add(TooltipUtils.getIntNumberTooltip(utils, entry.getValue()).build(Lang.Value.DURATION));
     }
 
     @NotNull
@@ -156,51 +156,27 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static String toString(MinMaxBounds.Doubles doubles) {
+    public static NumberExpr getRange(MinMaxBounds.Doubles doubles) {
         Double min = doubles.getMin();
         Double max = doubles.getMax();
 
-        if (min != null) {
-            if (max != null) {
-                if (!Objects.equals(min, max)) {
-                    return String.format("%.1f-%.1f", min, max);
-                } else {
-                    return String.format("=%.1f", min);
-                }
-            } else {
-                return String.format("≥%.1f", min);
-            }
-        } else {
-            if (max != null) {
-                return String.format("≤%.1f", max);
-            }
-
-            return "???";
-        }
+        return NumberExpr.range(min != null ? NumberExpr.constant(min) : null, max != null ? NumberExpr.constant(max) : null, min != null, max != null);
     }
 
     @NotNull
-    public static String toString(MinMaxBounds.Ints ints) {
+    public static NumberExpr getRange(MinMaxBounds.Ints ints) {
         Integer min = ints.getMin();
         Integer max = ints.getMax();
 
-        if (min != null) {
-            if (max != null) {
-                if (!Objects.equals(min, max)) {
-                    return String.format("%d-%d", min, max);
-                } else {
-                    return String.format("=%d", min);
-                }
-            } else {
-                return String.format("≥%d", min);
-            }
-        } else {
-            if (max != null) {
-                return String.format("≤%d", max);
-            }
+        return NumberExpr.range(min != null ? NumberExpr.constant(min) : null, max != null ? NumberExpr.constant(max) : null, min != null, max != null);
+    }
 
-            return "???";
-        }
+    @NotNull
+    public static NumberExpr getRange(IServerUtils utils, IntRange range, List<TooltipNode> conditions) {
+        NumberExpr min = range.min != null ? utils.convertIntNumber(utils, range.min, conditions) : null;
+        NumberExpr max = range.max != null ? utils.convertIntNumber(utils, range.max, conditions) : null;
+
+        return NumberExpr.range(min, max, min != null, max != null);
     }
 
     @NotNull

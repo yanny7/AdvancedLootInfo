@@ -2,7 +2,7 @@ package com.yanny.ali.lootjs;
 
 import com.almostreliable.lootjs.core.LootEntry;
 import com.yanny.aci.CommonLogUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.lootjs.mixin.MixinLootEntry;
@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 public class Utils {
     private static final Logger LOGGER = CommonLogUtils.getLogger(com.yanny.ali.Utils.MOD_ID);
 
-    public static IDataNode getEntry(IServerUtils utils, LootEntry entry, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions, @Nullable RangeValue preservedCount) {
+    public static IDataNode getEntry(IServerUtils utils, LootEntry entry, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions, @Nullable NumberExpr preservedCount) {
         MixinLootEntry mixinLootEntry = (MixinLootEntry) entry;
         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), mixinLootEntry.getPostModifications().stream()).toList();
         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), mixinLootEntry.getConditions().stream()).toList();
@@ -41,15 +41,15 @@ public class Utils {
 
             if (preservedCount != null) {
                 if (entryContainer instanceof LootItem lootItem) {
-                    return new ItemStackNode(utils, lootItem.item.getDefaultInstance(), NodeUtils.getChance(lootItem, 1, sumWeight),
+                    return new ItemStackNode(utils, lootItem.item.getDefaultInstance(), (float) lootItem.weight / sumWeight,
                             NodeUtils.getAllFunctions(lootItem, allFunctions), NodeUtils.getAllConditions(lootItem, allConditions), preservedCount);
                 } else if (entryContainer instanceof TagEntry tagEntry) {
-                    return new ItemTagNode(utils, tagEntry.tag, NodeUtils.getChance(tagEntry, 1, sumWeight),
+                    return new ItemTagNode(utils, tagEntry.tag, (float) tagEntry.weight / sumWeight,
                             NodeUtils.getAllFunctions(tagEntry, allFunctions), NodeUtils.getAllConditions(tagEntry, allConditions), preservedCount);
                 }
             }
 
-            return utils.getEntryFactory(utils, entryContainer).create(utils, entryContainer, 1, sumWeight, allFunctions, allConditions);
+            return utils.getEntryFactory(utils, entryContainer).create(utils, entryContainer, NumberExpr.constant(1), NumberExpr.constant(sumWeight), List.of(), allFunctions, allConditions);
         } else if (generator instanceof LootEntry.RandomIngredientGenerator ingredientGenerator) {
             Ingredient ingredient = ingredientGenerator.ingredient();
 

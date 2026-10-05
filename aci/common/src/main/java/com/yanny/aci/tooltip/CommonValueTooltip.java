@@ -1,9 +1,10 @@
 package com.yanny.aci.tooltip;
 
 import com.mojang.datafixers.util.Either;
+import com.yanny.aci.api.ICoreCommonUtils;
 import com.yanny.aci.api.ICoreServerRegistry;
 import com.yanny.aci.api.ICoreServerUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.language.CoreLang;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -18,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 public class CommonValueTooltip<
-        TServerUtils    extends ICoreServerUtils<TServerUtils>,
+        TServerUtils    extends ICoreServerUtils<TServerUtils> & ICoreCommonUtils<?>,
         TServerRegistry extends ICoreServerRegistry<TServerUtils>
         > {
     public void registerAll(TServerRegistry registry) {
@@ -41,7 +42,7 @@ public class CommonValueTooltip<
         registry.registerValueTooltip(UUID.class, this::getUUIDTooltip);
         registry.registerValueTooltip(CompoundTag.class, this::getCompoundTagTooltip);
         registry.registerValueTooltip(Property.class, this::getPropertyTooltip);
-        registry.registerValueTooltip(RangeValue.class, this::getRangeValueTooltip);
+        registry.registerValueTooltip(NumberExpr.class, this::getNumberExprTooltip);
         registry.registerValueTooltip(HolderSet.class, this::getHolderSetTooltip);
     }
 
@@ -84,7 +85,7 @@ public class CommonValueTooltip<
 
     @NotNull
     private TooltipBuilder getBooleanTooltip(TServerUtils utils, Boolean value) {
-        return TooltipBuilder.value(value);
+        return TooltipBuilder.value(TooltipBuilder.translate((value ? CoreLang.Utils.TRUE : CoreLang.Utils.FALSE).singular()));
     }
 
     @NotNull
@@ -129,11 +130,19 @@ public class CommonValueTooltip<
 
     @NotNull
     private TooltipBuilder getResourceKeyTooltip(TServerUtils utils, ResourceKey<?> value) {
+        if (utils.showInGameNames()) {
+            return TooltipBuilder.value(TooltipBuilder.registryKey(value));
+        }
+
         return utils.getValueTooltip(utils, value.location());
     }
 
     @NotNull
     private TooltipBuilder getTagKeyTooltip(TServerUtils utils, TagKey<?> value) {
+        if (utils.showInGameNames()) {
+            return TooltipBuilder.value(TooltipBuilder.tagKey(value));
+        }
+
         return utils.getValueTooltip(utils, value.location());
     }
 
@@ -158,8 +167,8 @@ public class CommonValueTooltip<
     }
 
     @NotNull
-    private TooltipBuilder getRangeValueTooltip(TServerUtils utils, RangeValue value) {
-        return utils.getValueTooltip(utils, value.toIntString());
+    private TooltipBuilder getNumberExprTooltip(TServerUtils utils, NumberExpr value) {
+        return TooltipBuilder.number(value);
     }
 
     @NotNull

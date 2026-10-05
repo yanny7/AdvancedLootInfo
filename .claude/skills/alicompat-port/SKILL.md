@@ -59,9 +59,23 @@ Phase 1 never reads, fixes or sweeps a dormant source set. Nothing compiles it, 
 against this version's jar and the current ALI/ALICompat API anyway, so any work on it now is spent twice.
 
 - A conflict inside a dormant source set takes the lower branch's side unread: `git checkout --theirs -- <path>`,
-  or `git rm` when the lower branch deleted it.
-- A grep, sed or script that brings shims in line with a changed API runs over active slugs only (the
-  `compat_mods` list), never over `alicompat/*/src/compat/*` as a whole.
+  or `git rm` when the lower branch deleted it. Check every such path against `$S/active_dirs.txt` (built below,
+  before resolving any conflict), never against a list in memory: `--theirs` on an active source set silently throws
+  away this branch's port, and the build will not catch it.
+- A grep, sed or script that brings shims in line with a changed API — ALI's, ALICompat's or vanilla's (a
+  constructor turned factory method) — runs over active source sets only, never over `alicompat` or
+  `alicompat/*/src/compat/*` as a whole. Activity is per slug *and* loader: a source set is active when its
+  `<slug>_<loader>_dep` line exists. Build the list first (`$S` is your scratchpad) and feed every sweep from it:
+
+  ```bash
+  for d in alicompat/*/src/compat/*/; do
+    l=$(echo $d | cut -d/ -f2); s=$(basename $d)
+    grep -q "^${s}_${l}_dep=" gradle.properties && echo $d
+  done > "$S/active_dirs.txt"
+  ```
+
+  A repo-wide sweep (`grep -rl … aci ali awi alicompat`) excludes `alicompat/*/src/compat/` and runs a second
+  time over that list.
 - Unresolved symbols, stale key schemes or old lambda shapes in a dormant shim are not reported as merge findings.
 
 ### Other recurring conflicts
@@ -70,6 +84,17 @@ against this version's jar and the current ALI/ALICompat API anyway, so any work
   side, build, then regenerate with `./gradlew runAlicompat<Loader>Datagen` for every enabled loader.
 - **`alicompat/CHANGELOG.md`**: keep this branch's `## []` entries, add the lower branch's entries that apply here
   (cross-cutting changes), and drop "Added X support" for a slug that is dormant here, because this branch does not ship it.
+- **`Lang` enums and the lang JSONs** (generated `en_us` and the hand-kept translations): a key deleted below sits next
+  to keys that exist only here, and a key this branch already deleted as unused still exists below. Never resolve by
+  taking the union of both sides, because that silently brings back the keys this branch deleted. Start from `ours`
+  and drop the keys the lower branch deleted, unless code here still uses them (`grep -rn "Lang\.<Enum>\.<KEY>\b"` over
+  the built modules). Then diff the `Lang` constants against `HEAD`: the result should be `HEAD` minus those keys, plus
+  whatever the lower branch added and this branch uses. Regenerate `en_us` and check that it gained nothing.
+  Datagen repairs only `en_us`, so remove the same keys from every translation by hand.
+
+Stage resolved files by exact path, never `git add -A` or a directory: that marks every file under it resolved,
+conflict markers included, and they vanish from `git diff --name-only --diff-filter=U`. Before the build, check
+nothing slipped through: `grep -rln '^<<<<<<< \|^>>>>>>> ' --exclude-dir=build --exclude-dir=.gradle .`
 
 ### Source sets that went missing
 
@@ -114,6 +139,28 @@ merged by hand: take `ours`, run the owning `common` module's whole `test` task 
 class skips the suite's bootstrap and fails), and check the resulting diff contains only what the merged change
 explains.
 
+A merged change that alters rendered output (a number format, a tooltip shape) also breaks tests that exist only on
+this branch, because their expectations still hold the old output. Run the `common` modules' `test` tasks and take the
+failing lines from `build/test-results/test/*.xml`. Update an expectation only when the new value is exactly what the
+merged change produces in the lower branch's own tests. A regex over the failing files is fine for a pure format
+change, but restrict it to the lines that failed: a line in the old format that still passes marks code the merged
+change does not reach on the lower branch either. Leave it as it is and report it.
+
+A test whose subject exists only on this branch (a Minecraft type the lower branch lacks) has no lower-branch test to
+copy the new value from. Derive it, do not guess it: let the assertion record instead of fail (a temporary flag-file
+check in `aci/common`'s `TestUtils.assertTooltip` that appends caller, expected and actual to a scratchpad file), run
+the suite, read every expected→actual diff, and apply only the diffs the merged change explains, matching the expected
+lines by content (an assertion may sit in a shared helper, so its line number points nowhere useful). Revert the hook
+before the final run. A test that compared a removed type's `toString()` is rewritten to assert the rendered tooltip,
+and each new value is checked by hand against vanilla's algorithm, not copied from the output.
+
+Code that exists only on this branch and is written against an API the merge removed is ported in this phase, since
+nothing compiles until it is: converters for this version's own vanilla types, tests of them, docs. Vanilla's behaviour
+is checked against the decompiled jar (the loom `*-sources.jar` files can be empty; decompile the merged
+`minecraft-merged-*.jar` from `.gradle/loom-cache` with vineflower into the scratchpad). A name, a signature or a
+behaviour the lower branch does not settle for this version (two families where the lower branch has one, an erasure
+clash with an inherited method) is the user's decision: ask before writing the code that depends on it.
+
 A merged change that rewrites a pattern across every shim, such as a key scheme or a renamed helper, does not
 reach code that exists only on this branch, and that code still compiles. After the merge, grep the active
 slugs' source sets for the old pattern and bring the leftovers in line; the generated lang files show them as
@@ -121,8 +168,56 @@ keys without the new shape.
 
 The same holds for a change to one shim. A loader the lower branch lacks keeps its own copy of that shim here
 (forge below, neoforge here), and the merge never touches that copy. For every shim file the merge changed,
-open the same slug under each other loader here and, if that slug is active, port the change by hand,
-adapting it to that copy's code.
+open the same slug under each other loader here and, if that slug is active, port the change to that copy.
+List them from the lower branch's diff (a `'alicompat/*/src/compat/'` pathspec matches nothing, filter with `grep`):
+
+```bash
+git diff --name-only --diff-filter=M $(git merge-base HEAD origin/<lower>) origin/<lower> -- alicompat | grep /src/compat/
+```
+
+Do it as a 3-way merge rather than by hand: the lower branch's diff of the sibling loader's file is the patch, and
+`git merge-file` applies it to this branch's copy, leaving conflict markers only where the copies genuinely differ:
+
+```bash
+b=$(git merge-base HEAD origin/<lower>)        # once the merge is committed: git merge-base HEAD^1 HEAD^2
+git show $b:alicompat/forge/<rel> > "$S/base.java"
+git show origin/<lower>:alicompat/forge/<rel> > "$S/theirs.java"
+git merge-file -L ours -L base -L theirs alicompat/neoforge/<rel> "$S/base.java" "$S/theirs.java"
+```
+
+Exit code 0 is a clean apply, a positive one is the number of conflicts left to resolve by hand. Use `fabric` as the
+base when the lower branch has no `forge` copy of that file.
+
+`git merge-file` only reaches files the lower branch has. A shim file that exists only here (a slug or class the lower
+branch never had, or a loader copy written for this version) gets an API change only through the compiler, and a change
+that compiles either way never reaches it — most often a `Lang` text: a key turned into an array header (`"X: %s"` →
+`"X:"`) below stays `"X: %s"` here and renders the placeholder literally. After the build, compare each active slug's
+`Lang` keys across its loader copies and port every value that differs only because one copy missed a lower-branch
+change:
+
+```bash
+for n in alicompat/<this loader>/src/compat/*/java/com/yanny/alicompat/compat/*/*Lang.java; do
+  for o in <every other loader>; do
+    f=${n/<this loader>/$o}; [ -f "$f" ] || continue
+    diff <(grep -oE '^\s+[A-Z_0-9]+\("[^"]+", "[^"]*"\)' "$f" | sort) \
+         <(grep -oE '^\s+[A-Z_0-9]+\("[^"]+", "[^"]*"\)' "$n" | sort) | grep '^[<>]'
+  done
+done
+```
+
+Only a key present on both sides with a different value is a finding; keys on one side only are version differences.
+A value that differs on purpose (an empty `showEmpty` array has no colon) stays as it is.
+
+Neither the merge nor `git merge-file` reaches code that implements the same thing differently here: a module
+written against another major version of its target (LootJS 1 below, LootJS 3 here), a vanilla type that exists only
+here (`TypeSpecificTrade`), or a shim class the lower branch never had. Such a file usually conflicts as a whole or not
+at all, so take `ours` and port the merged change by its intent. Read each lower-branch commit's diff
+(`git show <commit>`), name the pattern it replaced (a hardcoded string turned `Lang` key, a `ResourceLocation` id
+turned `ResourceKey`, a `toString()` value, a call that gained an argument), and grep for the old pattern over
+`aci`, `ali`, `awi`, `alicompat/common` and the active source sets (`$S/active_dirs.txt`), leaving out tests. Every hit
+the merged change would have rewritten had the code existed below gets the same rewrite. A hit the lower branch left
+alone in its own equivalent code stays as it is. A `Lang` enum the merge brings in for code that differs here is
+reshaped to this branch's constants, not copied from below.
 
 **Stop here.** Report what merged, what was restored, and how many slugs are dormant. The user
 commits. Phase 2 does not begin until that commit exists.
@@ -165,6 +260,10 @@ switch on a shim nobody has ported.
 
 "0 portable" can be real: mods skip Minecraft versions. Before reporting that, confirm a few of them on
 CurseForge (`/v1/mods/<id>` → `latestFilesIndexes[].gameVersion`) and one active mod as a control.
+The scripts take only release and beta files, so a version listed there may still be "no file": check
+`releaseType` (`/v1/mods/<id>/files?gameVersion=<mc>`, 3 is alpha). A mod that ships only alphas on CurseForge
+often publishes releases on its own maven. Find that maven and report it, since adding a `maven` source to
+`scripts/supported_mods.json` is the user's decision.
 
 ### Take them in groups, not in bulk
 

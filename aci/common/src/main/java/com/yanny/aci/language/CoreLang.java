@@ -1,5 +1,7 @@
 package com.yanny.aci.language;
 
+import com.yanny.aci.tooltip.CoreTooltipUtils;
+import net.minecraft.world.entity.MobCategory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -13,6 +15,8 @@ public final class CoreLang {
         ENTRY("entry", "Entry:"),
         TAG("tag", "Tag: %s"),
         NOT_IMPLEMENTED("missing", "Not implemented: %s"),
+        TRUE("true", "True"),
+        FALSE("false", "False"),
         ;
 
         private final Translation translation;
@@ -53,9 +57,89 @@ public final class CoreLang {
         }
     }
 
+    public enum Numbers implements ITooltipKey {
+        RANGE("range", "%s to %s"),
+        AT_LEAST("at_least", "≥ %s"),
+        AT_MOST("at_most", "≤ %s"),
+        ANY("any", "any"),
+        UNKNOWN("unknown", "?"),
+        PERCENT("percent", "%s%%"),
+        MODE("mode", "~%s (%s)"),
+        MODE_PEAK("mode_peak", "~%s"),
+        DEPENDS("depends", "(%s)"),
+        LEVEL_ROW("level_row", "%s %s: %s"),
+        VAR_ROW("var_row", "%s: %s"),
+        WEIGHTED_ENTRY("weighted_entry", "%s (%s)"),
+        OTHERWISE("otherwise", "otherwise %s"),
+        FN_MOD("fn.mod", "mod"),
+        FN_FLOOR_MOD("fn.floor_mod", "floorMod"),
+        FN_FLOOR_DIV("fn.floor_div", "floorDiv"),
+        FN_POW("fn.pow", "pow"),
+        FN_MIN("fn.min", "min"),
+        FN_MAX("fn.max", "max"),
+        FN_ABS("fn.abs", "abs"),
+        FN_FLOOR("fn.floor", "floor"),
+        FN_CEIL("fn.ceil", "ceil"),
+        FN_ROUND("fn.round", "round"),
+        FN_TRUNC("fn.trunc", "trunc"),
+        FN_SQRT("fn.sqrt", "sqrt"),
+        FN_SIN("fn.sin", "sin"),
+        FN_COS("fn.cos", "cos"),
+        FN_LENGTH("fn.length", "length"),
+        FN_CLAMP("fn.clamp", "clamp"),
+        FN_AVG("fn.avg", "avg"),
+        FN_UNIFORM_INT("fn.uniform_int", "U"),
+        FN_UNIFORM_FLOAT("fn.uniform_float", "U"),
+        FN_BINOMIAL("fn.binomial", "binom"),
+        FN_NORMAL("fn.normal", "normal"),
+        FN_BIASED_TO_BOTTOM("fn.biased_to_bottom", "biased"),
+        FN_TRAPEZOID_FLOAT("fn.trapezoid_float", "trapezoid"),
+        VAR_LEVEL("var.level", "LVL"),
+        VAR_SCORE("var.score", "score(%s; %s)"),
+        VAR_SCORE_DESC("var.score.desc", "score \"%2$s\" (%1$s)"),
+        TARGET_THIS("target.this", "this"),
+        TARGET_KILLER("target.killer", "killer"),
+        TARGET_DIRECT_KILLER("target.direct_killer", "direct_killer"),
+        TARGET_KILLER_PLAYER("target.killer_player", "killer_player"),
+        ;
+
+        public static final String PREFIX = "aci.number.";
+
+        private final Translation translation;
+
+        Numbers(String k, String e) {
+            translation = new Translation(PREFIX + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
     static {
         register(TRANSLATION_MAP, Utils.class);
         register(TRANSLATION_MAP, Spawn.class);
+        register(TRANSLATION_MAP, Numbers.class);
+
+        putMobCategory(MobCategory.MONSTER, "Monster");
+        putMobCategory(MobCategory.CREATURE, "Creature");
+        putMobCategory(MobCategory.AMBIENT, "Ambient");
+        putMobCategory(MobCategory.AXOLOTLS, "Axolotls");
+        putMobCategory(MobCategory.UNDERGROUND_WATER_CREATURE, "Underground Water Creature");
+        putMobCategory(MobCategory.WATER_CREATURE, "Water Creature");
+        putMobCategory(MobCategory.WATER_AMBIENT, "Water Ambient");
+        putMobCategory(MobCategory.MISC, "Misc");
+    }
+
+    @NotNull
+    public static String mobCategoryKey(MobCategory category) {
+        return CoreTooltipUtils.enumKey(com.yanny.aci.Utils.MOD_ID, "mob_category", category.name());
+    }
+
+    private static void putMobCategory(MobCategory category, String english) {
+        TRANSLATION_MAP.put(mobCategoryKey(category), english);
     }
 
     public static void register(Map<String, String> translationMap, Class<? extends ITooltipKey> enumClass) {

@@ -1,10 +1,13 @@
 package com.yanny.awi.rei.compatibility.rei;
 
 import com.yanny.aci.api.Rect;
+import com.yanny.aci.compatibility.ScrollableTooltip;
+import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.awi.compatibility.GenericUtils;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.Renderer;
+import me.shedaniel.rei.api.client.gui.widgets.Tooltip;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.client.gui.widgets.Widgets;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
@@ -38,7 +41,7 @@ public class ReiBiomeCategory extends ReiBaseCategory<ReiBiomeDisplay> {
         Rectangle innerBounds = prepared.innerBounds();
         Rectangle fullBounds = prepared.fullBounds();
         List<Widget> innerWidgets = new LinkedList<>(prepared.widgets());
-        Component title = Component.translatable("biome." + display.getEntry().id().getNamespace() + "." + display.getEntry().id().getPath());
+        Component title = GenericUtils.getBiomeTitle(display.getEntry().id());
 
         fullBounds.move(bounds.getCenterX() - fullBounds.width / 2, bounds.y + PADDING);
         innerWidgets.add(Widgets.createLabel(new Point(0, 0), title).leftAligned().noShadow().color(0));
@@ -47,14 +50,14 @@ public class ReiBiomeCategory extends ReiBaseCategory<ReiBiomeDisplay> {
             if (slot.egg() != null) {
                 EntryStack<ItemStack> stack = EntryStacks.of(slot.egg());
 
-                stack.tooltip((s) -> slot.getConditions());
+                stack.tooltipProcessor((s, tooltip) -> addConditions(tooltip, slot));
                 innerWidgets.add(Widgets.createSlot(new Point(slot.x() + 1, slot.y() + 1)).entry(stack).markInput());
             } else {
                 Rectangle slotBounds = new Rectangle(slot.x(), slot.y(), 18, 18);
 
                 innerWidgets.add(Widgets.createSlotBase(slotBounds));
                 innerWidgets.add(Widgets.wrapRenderer(slotBounds, (graphics, b, mouseX, mouseY, delta) -> GenericUtils.renderUnknownSpawnEgg(graphics, b.x, b.y)));
-                innerWidgets.add(Widgets.createTooltip(slotBounds, slot.getTooltip().toArray(new Component[0])));
+                innerWidgets.add(Widgets.createTooltip((point) -> slotBounds.contains(point) ? Tooltip.from(Tooltip.entry(new ScrollableTooltip(slot.getTooltip()))) : null));
             }
         }
 
@@ -81,5 +84,11 @@ public class ReiBiomeCategory extends ReiBaseCategory<ReiBiomeDisplay> {
     @Override
     public Renderer getIcon() {
         return EntryStacks.of(icon);
+    }
+
+    private static Tooltip addConditions(Tooltip tooltip, GenericUtils.SpawnSlot slot) {
+        List<TooltipLine> conditions = slot.getConditions();
+
+        return conditions.isEmpty() ? tooltip : tooltip.add(new ScrollableTooltip(conditions));
     }
 }

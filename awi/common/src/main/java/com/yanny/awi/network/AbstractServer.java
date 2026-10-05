@@ -70,11 +70,17 @@ public abstract class AbstractServer {
         LOGGER.info("Scanning base layout took {}ms", System.currentTimeMillis() - baseLayoutStart);
 
         WorldgenNodeCache nodeCache = new WorldgenNodeCache();
-        long spawnInfoStart = System.currentTimeMillis();
-        SpawnInfo spawnInfo = new SpawnInfo(Utils.MOD_ID, registryAccess, Services.getPlatform()::getStructureSettings);
+        SpawnInfo spawnInfo = null;
 
-        if (serverRegistry.getConfiguration().logMoreStatistics) {
-            LOGGER.info("Collecting mob spawns took {}ms", System.currentTimeMillis() - spawnInfoStart);
+        if (!serverRegistry.getConfiguration().spawnInfo.isDisabled()) {
+            long spawnInfoStart = System.currentTimeMillis();
+
+            spawnInfo = new SpawnInfo(Utils.MOD_ID, registryAccess, Services.getPlatform()::getStructureSettings, serverRegistry.getConfiguration().spawnInfo,
+                    serverRegistry.getConfiguration().showInGameNames);
+
+            if (serverRegistry.getConfiguration().logMoreStatistics) {
+                LOGGER.info("Collecting mob spawns took {}ms", System.currentTimeMillis() - spawnInfoStart);
+            }
         }
 
         long buildStart = System.currentTimeMillis();

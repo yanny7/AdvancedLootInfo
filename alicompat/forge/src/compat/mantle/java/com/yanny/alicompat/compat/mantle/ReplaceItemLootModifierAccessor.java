@@ -1,5 +1,6 @@
 package com.yanny.alicompat.compat.mantle;
 
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IItemNode;
@@ -10,7 +11,7 @@ import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.ModifiedNode;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IPageLootModifier;
-import com.yanny.ali.plugin.server.EnchantedRanges;
+import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
@@ -54,13 +55,11 @@ public class ReplaceItemLootModifierAccessor extends BaseAccessor<ReplaceItemLoo
             Function<IDataNode, List<IDataNode>> factory = (src) -> {
                 IItemNode node = (IItemNode) src;
                 List<LootItemCondition> allConditions = Stream.concat(c.stream(), node.getConditions().stream()).toList();
-                EnchantedRanges chance = NodeUtils.getEnchantedChance(utils, allConditions, node.getChance());
-                EnchantedRanges count = NodeUtils.getEnchantedCount(utils, functionList);
-
-                count.modifyAllEntries((value) -> value.multiply(replacement.getCount()).multiply(node.getCount()));
-
-                TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, count, functionList, allConditions);
-                ItemNode replaced = new ItemNode(node.getChance(), count.getUnenchantedValue(), replacement.copy(), tooltip.build(), functionList, allConditions);
+                LootCount chance = NodeUtils.getChance(utils, allConditions, node.getChance());
+                LootCount functionCount = NodeUtils.getCount(utils, functionList);
+                LootCount count = new LootCount(NumberExpr.mul(functionCount.value(), NumberExpr.constant(replacement.getCount()), node.getCount()), functionCount.conditions());
+                TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, count, NodeUtils.getCountLimit(replacement.copy()), functionList, allConditions);
+                ItemNode replaced = new ItemNode(node.getChance(), count.value(), replacement.copy(), tooltip.build(), functionList, allConditions);
 
                 return List.of(new ModifiedNode(utils, src, replaced));
             };

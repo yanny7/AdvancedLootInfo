@@ -9,6 +9,27 @@
       "type": "integer",
       "description": "Version of the configuration format. Do not edit by hand - an outdated value makes the mod rename the file to awi_common.json.bak and write a fresh default file."
     },
+    "spawnInfo": {
+      "type": "object",
+      "description": "Which mobs biomes list as spawning in them. An empty whitelist turns biome mob spawns off completely, and then they are not even collected.",
+      "additionalProperties": false,
+      "properties": {
+        "entities": {
+          "type": "array",
+          "description": "Entities left out of the biome spawn lists, or with whitelist the only entities listed.",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9_.-]+:[a-z0-9_./-]+$"
+          },
+          "default": []
+        },
+        "whitelist": {
+          "type": "boolean",
+          "description": "If true, entities is a whitelist instead of a blacklist.",
+          "default": false
+        }
+      }
+    },
     "tooltipColors": {
       "type": "object",
       "description": "Colors used when rendering tooltips. Changes take effect on restart.",
@@ -37,6 +58,21 @@
           "description": "Color of the tree branch arrows. A vanilla color name or a hex color code such as #FFAA00. An invalid value falls back to the default.",
           "pattern": "^(#[0-9a-fA-F]{6}|[a-z_]+)$",
           "default": "dark_gray"
+        },
+        "secondary": {
+          "type": "string",
+          "description": "Color of secondary information after a value, such as the most likely value of a count. A vanilla color name or a hex color code such as #FFAA00. An invalid value falls back to the default.",
+          "pattern": "^(#[0-9a-fA-F]{6}|[a-z_]+)$",
+          "default": "gray"
+        },
+        "levels": {
+          "type": "array",
+          "description": "Colors of enchantment level rows and their charts, used in order and repeated when there are more levels. Each is a vanilla color name or a hex color code such as #FFAA00. An invalid entry is skipped; an empty list falls back to the default.",
+          "items": {
+            "type": "string",
+            "pattern": "^(#[0-9a-fA-F]{6}|[a-z_]+)$"
+          },
+          "default": ["green", "yellow", "light_purple", "blue", "red", "gold"]
         }
       }
     },
@@ -48,6 +84,11 @@
     "showInGameNames": {
       "type": "boolean",
       "description": "If true, displays translated names instead of ids.",
+      "default": true
+    },
+    "showCharts": {
+      "type": "boolean",
+      "description": "Client-side. If true, a small chart of the distribution is drawn under numbers that have a most likely value.",
       "default": true
     },
     "showConfigConditionalBlocks": {

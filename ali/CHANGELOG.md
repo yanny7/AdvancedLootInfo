@@ -1,3 +1,18 @@
+## []
+
+- Added `spawnInfo` configuration to hide entity spawn info
+- Chances and rolls depending on luck show one row per luck value
+- Entry chance accounts for quality and luck
+- Chances in pools with alternatives account for the weight of the alternative that is picked
+- Number converters, count and chance modifiers and entry factories receive the condition tooltips of their conditional values
+- Scrollable tooltip by mouse wheel when taller than screen
+- Counts and chances show most likely value, level rows, charts (`showCharts`) and formulas (F3+H)
+- With `showInGameNames`, IDs (biomes, dimensions, structures, …) and tags are shown translated when a translation exists, in spawn info too
+- Broken loot function or condition support from other mods no longer hides the whole loot table
+- Broken loot entry, tooltip or trade support from other mods shows that part as unsupported instead of hiding the whole loot table or trader
+- Fixed names built from arguments (e.g. GregTech `%s Dust`)
+- Broken loot modifications from LootJS, global loot modifiers or other mods are skipped instead of hiding the whole loot table
+
 ## [2.3.0]
 
 - Added support for custom ingredients that are not Ingredient subclasses

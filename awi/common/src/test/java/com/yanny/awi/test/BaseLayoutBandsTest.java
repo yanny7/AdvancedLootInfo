@@ -1,6 +1,6 @@
 package com.yanny.awi.test;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberInterval;
 import com.yanny.awi.api.BlockInfo;
 import com.yanny.awi.plugin.common.nodes.NodeUtils;
 import com.yanny.awi.test.utils.BaseLayoutTestUtils;
@@ -111,8 +111,8 @@ public class BaseLayoutBandsTest {
             if (info.layerShift() > 0) {
                 NavigableSet<Integer> levels = bands.computeIfAbsent(info.block(), (k) -> new TreeSet<>());
 
-                for (RangeValue range : info.ranges()) {
-                    IntStream.rangeClosed((int) range.min(), (int) range.max()).forEach(levels::add);
+                for (NumberInterval range : info.ranges()) {
+                    IntStream.rangeClosed((int) range.lo(), (int) range.hi()).forEach(levels::add);
                 }
             }
         }
@@ -129,7 +129,7 @@ public class BaseLayoutBandsTest {
         assertEquals(1, filler.size(), "exactly one filler entry");
         assertEquals(1, filler.get(0).ranges().size(), "the filler is one range");
         assertEquals(0, filler.get(0).layerShift(), "the filler has no shift");
-        IntStream.rangeClosed((int) filler.get(0).ranges().get(0).min(), (int) filler.get(0).ranges().get(0).max()).forEach(window::add);
+        IntStream.rangeClosed((int) filler.get(0).ranges().get(0).lo(), (int) filler.get(0).ranges().get(0).hi()).forEach(window::add);
 
         return window;
     }

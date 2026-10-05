@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.farlanders;
 
 import com.legacy.farlanders.entity.util.FarlanderTrades;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.TradeLevelInfo;
 import com.yanny.alicompat.IModCompat;
@@ -28,9 +28,9 @@ public class FarlandersCompat implements IModCompat {
     public void registerServer(IServerRegistry registry) {
         PluginUtils.registerItemListing(registry, FarlanderTrades.Trade.class, TradeAccessor.class);
 
-        registerTrades(registry, "farlander", () -> FarlanderTrades.FARLANDER_TRADES, (level) -> new TradeLevelInfo(new RangeValue(2)));
-        registerTrades(registry, "elder_farlander", () -> FarlanderTrades.ELDER_TRADES, (level) -> new TradeLevelInfo(new RangeValue(2)));
-        registerTrades(registry, "wanderer", () -> FarlanderTrades.WANDERER_TRADES, (level) -> new TradeLevelInfo(new RangeValue(5)));
+        registerTrades(registry, "farlander", () -> FarlanderTrades.FARLANDER_TRADES, (level) -> new TradeLevelInfo(NumberExpr.constant(2)));
+        registerTrades(registry, "elder_farlander", () -> FarlanderTrades.ELDER_TRADES, (level) -> new TradeLevelInfo(NumberExpr.constant(2)));
+        registerTrades(registry, "wanderer", () -> FarlanderTrades.WANDERER_TRADES, (level) -> new TradeLevelInfo(NumberExpr.constant(5)));
     }
 
     private static void registerTrades(IServerRegistry registry, String name, Supplier<Int2ObjectMap<VillagerTrades.ItemListing[]>> itemListings, IntFunction<TradeLevelInfo> levelInfo) {

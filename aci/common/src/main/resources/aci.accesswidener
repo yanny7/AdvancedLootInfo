@@ -1,0 +1,9 @@
+accessWidener v2 named
+
+accessible field net/minecraft/util/valueproviders/ClampedInt source Lnet/minecraft/util/valueproviders/IntProvider;
+accessible field net/minecraft/util/valueproviders/ClampedNormalInt mean F
+accessible field net/minecraft/util/valueproviders/ClampedNormalInt deviation F
+accessible field net/minecraft/util/valueproviders/WeightedListInt distribution Lnet/minecraft/util/random/SimpleWeightedRandomList;
+accessible field net/minecraft/util/valueproviders/ClampedNormalFloat mean F
+accessible field net/minecraft/util/valueproviders/ClampedNormalFloat deviation F
+accessible field net/minecraft/util/valueproviders/TrapezoidFloat plateau F

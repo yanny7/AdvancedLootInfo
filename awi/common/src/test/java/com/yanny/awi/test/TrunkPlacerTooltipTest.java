@@ -84,8 +84,7 @@ public class TrunkPlacerTooltipTest {
                 "  -> Height Rand B: 1",
                 "  -> Min Height For Leaves: 3",
                 "  -> Bend Length:",
-                "    -> Constant:",
-                "      -> Value: 2"
+                "    -> 2"
         ));
     }
 
@@ -103,12 +102,10 @@ public class TrunkPlacerTooltipTest {
                 "  -> Height Rand A: 2",
                 "  -> Height Rand B: 1",
                 "  -> Extra Branch Steps:",
-                "    -> Constant:",
-                "      -> Value: 2",
+                "    -> 2",
                 "  -> Branch Per-Log Chance: 0.25",
                 "  -> Extra Branch Length:",
-                "    -> Constant:",
-                "      -> Value: 3",
+                "    -> 3",
                 "  -> Can Grow Through:",
                 "    -> Oak Log",
                 "    -> Spruce Log"
@@ -129,20 +126,15 @@ public class TrunkPlacerTooltipTest {
                 "  -> Height Rand A: 2",
                 "  -> Height Rand B: 1",
                 "  -> Branch Count:",
-                "    -> Constant:",
-                "      -> Value: 4",
+                "    -> 4",
                 "  -> Branch Horizontal Length:",
-                "    -> Constant:",
-                "      -> Value: 2",
+                "    -> 2",
                 "  -> Branch Start Offset From Top:",
-                "    -> Uniform:",
-                "      -> Range: 2-4",
+                "    -> 2 to 4",
                 "  -> Second Branch Start Offset From Top:",
-                "    -> Uniform:",
-                "      -> Range: 2-3",
+                "    -> 2 to 3",
                 "  -> Branch End Offset From Top:",
-                "    -> Constant:",
-                "      -> Value: 1"
+                "    -> 1"
         ));
     }
 }

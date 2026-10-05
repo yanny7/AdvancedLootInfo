@@ -1,7 +1,7 @@
 package com.yanny.alicompat.compat.ironsspellbooks;
 
 import com.yanny.aci.CommonLogUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.TradeLevelInfo;
 import com.yanny.ali.language.Lang;
@@ -35,7 +35,9 @@ import org.slf4j.Logger;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class WizardTrades {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
@@ -45,9 +47,9 @@ public class WizardTrades {
     public static final ResourceLocation PRIEST = new ResourceLocation(IronsSpellbooksLang.MOD_ID, "priest");
     public static final ResourceLocation PYROMANCER = new ResourceLocation(IronsSpellbooksLang.MOD_ID, "pyromancer");
 
-    private static final TradeLevelInfo ALL = new TradeLevelInfo(new RangeValue(Integer.MAX_VALUE));
-    private static final TradeLevelInfo ONE = new TradeLevelInfo(new RangeValue(1));
-    private static final TradeLevelInfo INK = new TradeLevelInfo(new RangeValue(1), 0.25f);
+    private static final TradeLevelInfo ALL = new TradeLevelInfo(NumberExpr.constant(Integer.MAX_VALUE));
+    private static final TradeLevelInfo ONE = new TradeLevelInfo(NumberExpr.constant(1));
+    private static final TradeLevelInfo INK = new TradeLevelInfo(NumberExpr.constant(1), 0.25f);
 
     @NotNull
     public static Int2ObjectMap<VillagerTrades.ItemListing[]> apothecarist() {
@@ -62,9 +64,9 @@ public class WizardTrades {
         listings.put(6, potionOrElixirSell());
         listings.put(7, listings(randomScroll(nature, 0.0f, 0.4f)));
         listings.put(8, listings(randomScroll(nature, 0.5f, 0.9f)));
-        listings.put(9, listings(WizardTrade.of(emeralds(), new RangeValue(16), stack(ItemRegistry.NETHERWARD_TINCTURE), new RangeValue(1), 8, 5, 0.01f)));
+        listings.put(9, listings(WizardTrade.of(emeralds(), NumberExpr.constant(16), stack(ItemRegistry.NETHERWARD_TINCTURE), NumberExpr.constant(1), 8, 5, 0.01f)));
         listings.put(10, greaterElixirs().stream()
-                .map((elixir) -> WizardTrade.of(new ItemStack(elixir, 4), new RangeValue(4), stack(ItemRegistry.NATURE_RUNE), new RangeValue(1), 1, 5, 0.1f))
+                .map((elixir) -> WizardTrade.of(new ItemStack(elixir, 4), NumberExpr.constant(4), stack(ItemRegistry.NATURE_RUNE), NumberExpr.constant(1), 1, 5, 0.1f))
                 .toArray(VillagerTrades.ItemListing[]::new));
 
         return listings;
@@ -73,11 +75,11 @@ public class WizardTrades {
     @NotNull
     public static TradeLevelInfo apothecaristLevel(int level) {
         return switch (level) {
-            case 1 -> new TradeLevelInfo(new RangeValue(3, 4));
+            case 1 -> new TradeLevelInfo(NumberExpr.uniformInt(3, 4));
             case 2, 3, 4 -> INK;
-            case 5 -> new TradeLevelInfo(new RangeValue(1), 0.5f);
-            case 6 -> new TradeLevelInfo(new RangeValue(1, 2));
-            case 8 -> new TradeLevelInfo(new RangeValue(1), 0.65f);
+            case 5 -> new TradeLevelInfo(NumberExpr.constant(1), 0.5f);
+            case 6 -> new TradeLevelInfo(NumberExpr.uniformInt(1, 3));
+            case 8 -> new TradeLevelInfo(NumberExpr.constant(1), 0.65f);
             case 10 -> ONE;
             default -> ALL;
         };
@@ -99,8 +101,8 @@ public class WizardTrades {
                 furledMap(32, "ice_spider_den", "item.irons_spellbooks.ice_spider_den_map")
         ));
         listings.put(8, listings(
-                WizardTrade.of(new ItemStack(ItemRegistry.FIRE_ALE.get(), 4), new RangeValue(4), stack(ItemRegistry.MUSIC_DISC_WHISPERS_OF_ICE), new RangeValue(1), 1, 5, 0.1f),
-                WizardTrade.of(new ItemStack(ItemRegistry.ICY_FANG.get(), 2), new RangeValue(2), stack(ItemRegistry.ICE_RUNE), new RangeValue(1), 1, 5, 0.1f)
+                WizardTrade.of(new ItemStack(ItemRegistry.FIRE_ALE.get(), 4), NumberExpr.constant(4), stack(ItemRegistry.MUSIC_DISC_WHISPERS_OF_ICE), NumberExpr.constant(1), 1, 5, 0.1f),
+                WizardTrade.of(new ItemStack(ItemRegistry.ICY_FANG.get(), 2), NumberExpr.constant(2), stack(ItemRegistry.ICE_RUNE), NumberExpr.constant(1), 1, 5, 0.1f)
         ));
 
         return listings;
@@ -110,7 +112,7 @@ public class WizardTrades {
     public static TradeLevelInfo cryomancerLevel(int level) {
         return switch (level) {
             case 1, 2, 3 -> INK;
-            case 5, 6 -> new TradeLevelInfo(new RangeValue(1), 0.8f);
+            case 5, 6 -> new TradeLevelInfo(NumberExpr.constant(1), 0.8f);
             case 7 -> ONE;
             default -> ALL;
         };
@@ -139,7 +141,7 @@ public class WizardTrades {
         listings.put(8, listings(
                 simpleSell(3, stack(ItemRegistry.FIRE_ALE), 12, 16),
                 furledMap(24, "mangrove_hut", "item.irons_spellbooks.alchemical_trade_route"),
-                WizardTrade.of(new ItemStack(ItemRegistry.CHAINED_BOOK.get(), 4), new RangeValue(4), stack(ItemRegistry.FIRE_RUNE), new RangeValue(1), 1, 5, 0.1f)
+                WizardTrade.of(new ItemStack(ItemRegistry.CHAINED_BOOK.get(), 4), NumberExpr.constant(4), stack(ItemRegistry.FIRE_RUNE), NumberExpr.constant(1), 1, 5, 0.1f)
         ));
 
         return listings;
@@ -148,9 +150,9 @@ public class WizardTrades {
     @NotNull
     public static TradeLevelInfo pyromancerLevel(int level) {
         return switch (level) {
-            case 1 -> new TradeLevelInfo(new RangeValue(2, 3));
+            case 1 -> new TradeLevelInfo(NumberExpr.uniformInt(2, 3));
             case 2, 3, 4 -> INK;
-            case 6, 7 -> new TradeLevelInfo(new RangeValue(1), 0.8f);
+            case 6, 7 -> new TradeLevelInfo(NumberExpr.constant(1), 0.8f);
             default -> ALL;
         };
     }
@@ -161,9 +163,9 @@ public class WizardTrades {
 
         listings.put(1, listings(
                 furledMap(24, "evoker_fort", "item.irons_spellbooks.evoker_fort_battle_plans"),
-                WizardTrade.of(stack(ItemRegistry.GREATER_HEALING_POTION), new RangeValue(1), emeralds(), new RangeValue(18), 3, 0, 0.2f),
-                WizardTrade.of(emeralds(), new RangeValue(6), PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.HEALING), new RangeValue(1), 2, 0, 0.2f),
-                WizardTrade.of(stack(ItemRegistry.TRANSLATED_ARCHEVOKER_LOGBOOK), new RangeValue(1), stack(ItemRegistry.VILLAGER_SPELL_BOOK), new RangeValue(1), 1, 5, 0.5f)
+                WizardTrade.of(stack(ItemRegistry.GREATER_HEALING_POTION), NumberExpr.constant(1), emeralds(), NumberExpr.constant(18), 3, 0, 0.2f),
+                WizardTrade.of(emeralds(), NumberExpr.constant(6), PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.HEALING), NumberExpr.constant(1), 2, 0, 0.2f),
+                WizardTrade.of(stack(ItemRegistry.TRANSLATED_ARCHEVOKER_LOGBOOK), NumberExpr.constant(1), stack(ItemRegistry.VILLAGER_SPELL_BOOK), NumberExpr.constant(1), 1, 5, 0.5f)
         ));
 
         return listings;
@@ -177,12 +179,12 @@ public class WizardTrades {
     @NotNull
     public static WizardTrade inkBuy(InkItem ink) {
         int rarity = ink.getRarity().getValue();
-        RangeValue essence = new RangeValue((float) (5 * rarity) / 2 + 2, (float) (5 * rarity) / 2 + 3);
+        NumberExpr essence = NumberExpr.uniformInt(5 * rarity / 2 + 2, 5 * rarity / 2 + 3);
 
-        return WizardTrade.of(new ItemStack(ink), new RangeValue(1), emeralds(), new RangeValue(5 * rarity + 2, 5 * rarity + 3), 8, 1, 0.05f)
+        return WizardTrade.of(new ItemStack(ink), NumberExpr.constant(1), emeralds(), NumberExpr.uniformInt(5 * rarity + 2, 5 * rarity + 3), 8, 1, 0.05f)
                 .withResultTooltip((utils) -> TooltipBuilder.array((b) -> {
                     b.add(utils.getValueTooltip(utils, ItemRegistry.ARCANE_ESSENCE.get()).build(Lang.Value.ITEM));
-                    b.add(TooltipBuilder.value(essence.toIntString()).build(Lang.Value.COUNT));
+                    b.add(TooltipBuilder.number(essence).build(Lang.Value.COUNT));
                 }, IronsSpellbooksLang.Branch.ALTERNATIVE).build());
     }
 
@@ -190,7 +192,7 @@ public class WizardTrades {
     public static WizardTrade inkSell(InkItem ink) {
         int rarity = ink.getRarity().getValue();
 
-        return WizardTrade.of(emeralds(), new RangeValue(8 * rarity + 2, 8 * rarity + 3), new ItemStack(ink), new RangeValue(1), 4, 1, 0.05f);
+        return WizardTrade.of(emeralds(), NumberExpr.uniformInt(8 * rarity + 2, 8 * rarity + 3), new ItemStack(ink), NumberExpr.constant(1), 4, 1, 0.05f);
     }
 
     @NotNull
@@ -198,8 +200,8 @@ public class WizardTrades {
         int multiplier = greater ? 2 : 1;
 
         return elixirs(greater).stream()
-                .map((elixir) -> WizardTrade.of(new ItemStack(elixir), new RangeValue(1), emeralds(),
-                        new RangeValue(6 + 3 * multiplier, 6 + 6 * multiplier), 6, 1, 0.05f))
+                .map((elixir) -> WizardTrade.of(new ItemStack(elixir), NumberExpr.constant(1), emeralds(),
+                        NumberExpr.add(NumberExpr.constant(6), NumberExpr.mul(NumberExpr.constant(multiplier), NumberExpr.uniformInt(3, 6))), 6, 1, 0.05f))
                 .toArray(VillagerTrades.ItemListing[]::new);
     }
 
@@ -217,28 +219,37 @@ public class WizardTrades {
         int multiplier = greater ? 2 : 1;
 
         return elixirs(greater).stream()
-                .map((elixir) -> WizardTrade.of(emeralds(), new RangeValue(10 + 4 * multiplier, 10 + 8 * multiplier),
-                        new ItemStack(elixir), new RangeValue(1), 3, 1, 0.05f))
+                .map((elixir) -> WizardTrade.of(emeralds(),
+                        NumberExpr.add(NumberExpr.constant(10), NumberExpr.mul(NumberExpr.constant(multiplier), NumberExpr.uniformInt(4, 8))),
+                        new ItemStack(elixir), NumberExpr.constant(1), 3, 1, 0.05f))
                 .toList();
     }
 
     @NotNull
     private static WizardTrade potionSell() {
-        int min = 12;
-        int max = 16;
+        Map<NumberExpr, Integer> surcharges = new LinkedHashMap<>();
 
         for (Potion potion : BuiltInRegistries.POTION) {
             if (!potion.getEffects().isEmpty()) {
                 MobEffectInstance effect = potion.getEffects().get(0);
-                int amplifier = effect.getAmplifier();
-                int duration = effect.getDuration() / 1200;
+                NumberExpr surcharge = NumberExpr.add(
+                        NumberExpr.mul(NumberExpr.constant(effect.getAmplifier()), NumberExpr.uniformInt(4, 6)),
+                        NumberExpr.constant(effect.getDuration() / 1200)
+                );
 
-                min = Math.min(min, 12 + 4 * amplifier + duration);
-                max = Math.max(max, 16 + 6 * amplifier + duration);
+                surcharges.merge(surcharge, 1, Integer::sum);
             }
         }
 
-        return WizardTrade.of(emeralds(), new RangeValue(min, max), new ItemStack(Items.POTION), new RangeValue(1), 3, 1, 0.05f)
+        NumberExpr cost = NumberExpr.uniformInt(12, 16);
+
+        if (!surcharges.isEmpty()) {
+            cost = NumberExpr.add(cost, NumberExpr.weighted(surcharges.entrySet().stream()
+                    .map((e) -> new NumberExpr.WeightedEntry(e.getValue(), e.getKey()))
+                    .toList()));
+        }
+
+        return WizardTrade.of(emeralds(), cost, new ItemStack(Items.POTION), NumberExpr.constant(1), 3, 1, 0.05f)
                 .withResultTooltip((ignoredUtils) -> TooltipBuilder.keyOnly(IronsSpellbooksLang.Functions.RANDOM_POTION).build());
     }
 
@@ -251,17 +262,17 @@ public class WizardTrades {
     private static WizardTrade furledMap(int cost, String destination, String translation) {
         ItemStack map = FurledMapItem.of(new ResourceLocation(IronsSpellbooksLang.MOD_ID, destination), FurledMapItem.OVERWORLD, Component.translatable(translation));
 
-        return WizardTrade.of(emeralds(), new RangeValue(cost), map, new RangeValue(1), 1, 5, 10.0f);
+        return WizardTrade.of(emeralds(), NumberExpr.constant(cost), map, NumberExpr.constant(1), 1, 5, 10.0f);
     }
 
     @NotNull
     private static WizardTrade simpleBuy(int maxUses, ItemStack buy, int minEmeralds, int maxEmeralds) {
-        return WizardTrade.of(buy, new RangeValue(buy.getCount()), emeralds(), new RangeValue(minEmeralds, maxEmeralds), maxUses, 0, 0.05f);
+        return WizardTrade.of(buy, NumberExpr.constant(buy.getCount()), emeralds(), NumberExpr.uniformInt(minEmeralds, maxEmeralds), maxUses, 0, 0.05f);
     }
 
     @NotNull
     private static WizardTrade simpleSell(int maxUses, ItemStack sell, int minEmeralds, int maxEmeralds) {
-        return WizardTrade.of(emeralds(), new RangeValue(minEmeralds, maxEmeralds), sell, new RangeValue(sell.getCount()), maxUses, 0, 0.05f);
+        return WizardTrade.of(emeralds(), NumberExpr.uniformInt(minEmeralds, maxEmeralds), sell, NumberExpr.constant(sell.getCount()), maxUses, 0, 0.05f);
     }
 
     @NotNull

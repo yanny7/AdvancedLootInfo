@@ -1,5 +1,6 @@
 package com.yanny.ali.test;
 
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.plugin.common.NodeUtils;
 import net.minecraft.world.item.Items;
@@ -28,23 +29,24 @@ public class NodeTest {
                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 2)))
                         .apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(0, 1)))
                         .build(),
-                1,
-                1,
+                NumberExpr.constant(1),
+                NumberExpr.constant(1),
+                List.of(),
                 Collections.emptyList(),
                 Collections.emptyList()
         );
 
         assertTooltip(node.getTooltip(), List.of(
-                "Count: 0-2",
-                "  -> 0-3 (Looting I)",
-                "  -> 0-4 (Looting II)",
-                "  -> 0-5 (Looting III)",
+                "Count: 0 to 2",
+                "  -> Looting I: 0 to 3  ~1 to 2 (33%)",
+                "  -> Looting II: 0 to 4  ~2 (33%)",
+                "  -> Looting III: 0 to 5  ~2 to 3 (28%)",
                 "----- Modifiers -----",
                 "Set Count:",
-                "  -> Count: 0-2",
-                "  -> Add: false",
+                "  -> Count: 0 to 2",
+                "  -> Add: False",
                 "Looting Enchant:",
-                "  -> Value: 0-1"
+                "  -> Value: 0 to 1"
         ));
     }
 
@@ -57,25 +59,26 @@ public class NodeTest {
                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(-1, 1)))
                         .apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(0, 1)))
                         .build(),
-                1,
-                1,
+                NumberExpr.constant(1),
+                NumberExpr.constant(1),
+                List.of(),
                 Collections.emptyList(),
                 Collections.emptyList()
         );
 
         assertTooltip(node.getTooltip(), List.of(
-                "Count: 0-1",
-                "  -> 0-2 (Looting I)",
-                "  -> 0-3 (Looting II)",
-                "  -> 0-4 (Looting III)",
+                "Count: 0 to 1  ~0 (67%)",
+                "  -> Looting I: 0 to 2  ~1 (50%)",
+                "  -> Looting II: 0 to 3  ~1 (42%)",
+                "  -> Looting III: 0 to 4  ~2 (33%)",
                 "----- Predicates -----",
                 "Killed by player",
                 "----- Modifiers -----",
                 "Set Count:",
-                "  -> Count: -1-1",
-                "  -> Add: false",
+                "  -> Count: −1 to 1",
+                "  -> Add: False",
                 "Looting Enchant:",
-                "  -> Value: 0-1"
+                "  -> Value: 0 to 1"
         ));
     }
 
@@ -87,23 +90,27 @@ public class NodeTest {
                         .when(ExplosionCondition.survivesExplosion())
                         .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.05f, 0.0625f, 0.083333336f, 0.1f))
                         .build(),
-                1,
-                1,
+                NumberExpr.constant(1),
+                NumberExpr.constant(1),
+                List.of(),
                 Collections.emptyList(),
                 Collections.emptyList()
         );
 
         assertTooltip(node.getTooltip(), List.of(
                 "Chance: 5%",
-                "  -> 6.25% (Fortune I)",
-                "  -> 8.33% (Fortune II)",
-                "  -> 10% (Fortune III)",
+                "  -> Fortune I: 6.25%",
+                "  -> Fortune II: 8.33%",
+                "  -> Fortune III: 10%",
                 "Count: 1",
                 "----- Predicates -----",
                 "Survives Explosion",
                 "Table Bonus:",
                 "  -> Enchantment: minecraft:fortune",
-                "  -> Values: [0.05, 0.0625, 0.0833, 0.1]"
+                "  -> Values: 5%",
+                "    -> Fortune I: 6.25%",
+                "    -> Fortune II: 8.33%",
+                "    -> Fortune III: 10%"
         ));
     }
 }

@@ -1,5 +1,6 @@
 package com.yanny.ali.plugin.server;
 
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
@@ -7,15 +8,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.storage.loot.predicates.*;
 import org.jetbrains.annotations.NotNull;
 
-import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.IntStream;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getMapTooltip;
 
 public class ConditionTooltipUtils {
-    private static final DecimalFormat FLOAT_FORMAT = new DecimalFormat("0.####");
 
     @NotNull
     public static TooltipBuilder getAllOfTooltip(IServerUtils utils, AllOfCondition cond) {
@@ -108,11 +107,18 @@ public class ConditionTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getTableBonusTooltip(IServerUtils utils, BonusLevelTableCondition cond) {
-        List<String> list = IntStream.range(0, cond.values.length).mapToDouble(i -> cond.values[i]).mapToObj(FLOAT_FORMAT::format).toList();
+        List<NumberExpr> values = new ArrayList<>();
+
+        for (float value : cond.values) {
+            values.add(NumberExpr.constant(value));
+        }
 
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, cond.enchantment).build(Lang.Value.ENCHANTMENT));
-            b.add(utils.getValueTooltip(utils, list.toString()).build(Lang.Value.VALUES));
+
+            if (!values.isEmpty()) {
+                b.add(TooltipBuilder.percent(NumberExpr.lookup(TooltipUtils.level(cond.enchantment), values, null)).build(Lang.Value.VALUES));
+            }
         }, Lang.Conditions.TABLE_BONUS).isAdvancedTooltip();
     }
 
@@ -127,7 +133,7 @@ public class ConditionTooltipUtils {
     @NotNull
     public static TooltipBuilder getValueCheckTooltip(IServerUtils utils, ValueCheckCondition cond) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, cond.provider).build(Lang.Value.PROVIDER));
+            b.add(TooltipUtils.getIntNumberTooltip(utils, cond.provider).build(Lang.Value.PROVIDER));
             b.add(utils.getValueTooltip(utils, cond.range).build(Lang.Value.RANGE));
         }, Lang.Conditions.VALUE_CHECK);
     }

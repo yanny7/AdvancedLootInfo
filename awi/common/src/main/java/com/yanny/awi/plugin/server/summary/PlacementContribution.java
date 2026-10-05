@@ -1,24 +1,38 @@
 package com.yanny.awi.plugin.server.summary;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
+import com.yanny.aci.tooltip.TooltipNode;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * The partial contribution a single {@code PlacementModifier} makes to the overall summary. Each
- * modifier fills at most one axis (count / chance / height); the rest stay {@code null}.
- */
-public record PlacementContribution(@Nullable CountSpan count, @Nullable RangeValue chancePercent, @Nullable HeightSpan height) {
-    public static final PlacementContribution EMPTY = new PlacementContribution(null, null, null);
+import java.util.List;
 
-    public static PlacementContribution ofCount(CountSpan count) {
-        return new PlacementContribution(count, null, null);
+public record PlacementContribution(@Nullable NumberExpr count, List<TooltipNode> countConditions, @Nullable TooltipNode countDetails,
+                                    @Nullable NumberExpr chance, List<TooltipNode> chanceConditions, @Nullable HeightSpan height) {
+    public static final PlacementContribution EMPTY = new PlacementContribution(null, List.of(), null, null, List.of(), null);
+
+    public PlacementContribution {
+        countConditions = List.copyOf(countConditions);
+        chanceConditions = List.copyOf(chanceConditions);
     }
 
-    public static PlacementContribution ofChance(RangeValue chancePercent) {
-        return new PlacementContribution(null, chancePercent, null);
+    @NotNull
+    public static PlacementContribution ofCount(NumberExpr count, List<TooltipNode> conditions) {
+        return new PlacementContribution(count, conditions, null, null, List.of(), null);
     }
 
+    @NotNull
+    public static PlacementContribution ofCount(NumberExpr count, TooltipNode details) {
+        return new PlacementContribution(count, List.of(), details, null, List.of(), null);
+    }
+
+    @NotNull
+    public static PlacementContribution ofChance(NumberExpr chance, List<TooltipNode> conditions) {
+        return new PlacementContribution(null, List.of(), null, chance, conditions, null);
+    }
+
+    @NotNull
     public static PlacementContribution ofHeight(HeightSpan height) {
-        return new PlacementContribution(null, null, height);
+        return new PlacementContribution(null, List.of(), null, null, List.of(), height);
     }
 }

@@ -2,12 +2,17 @@ package com.yanny.ali.plugin.server;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
+import com.yanny.aci.api.NumberFunctions;
+import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
+import com.yanny.ali.Utils;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import net.minecraft.Util;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -15,6 +20,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.LootDataId;
 import net.minecraft.world.level.storage.loot.LootDataManager;
 import net.minecraft.world.level.storage.loot.LootDataType;
@@ -23,6 +29,7 @@ import net.minecraft.world.level.storage.loot.entries.LootTableReference;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,6 +40,8 @@ import java.lang.reflect.Modifier;
 import java.util.*;
 
 public class TooltipUtils {
+    public static final ResourceLocation LUCK = Utils.modLoc("luck");
+
     public static ItemStack getItemStack(IServerUtils utils, ItemStack itemStack, List<LootItemFunction> functions) {
         for (LootItemFunction function : functions) {
             itemStack = utils.applyItemStackModifier(utils, function, itemStack);
@@ -41,87 +50,155 @@ public class TooltipUtils {
         return itemStack;
     }
 
-    public static void applyRandomChance(IServerUtils ignoredUtils, LootItemRandomChanceCondition condition, EnchantedRanges chance) {
-        chance.modifyAllEntries((range) -> range.multiply(condition.probability));
+    @NotNull
+    public static NumberExpr applyRandomChance(IServerUtils ignoredUtils, LootItemRandomChanceCondition condition, NumberExpr chance, List<TooltipNode> ignoredConditions) {
+        return NumberExpr.mul(chance, NumberExpr.constant(condition.probability));
     }
 
-    public static void applyRandomChanceWithLooting(IServerUtils ignoredUtils, LootItemRandomChanceWithLootingCondition condition, EnchantedRanges chance) {
-        chance.computeAllLevels(Enchantments.MOB_LOOTING, (level, value) -> {
-            float multiplier = condition.percent + (level * condition.lootingMultiplier);
-            return value.multiply(multiplier);
-        });
+    @NotNull
+    public static NumberExpr applyRandomChanceWithLooting(IServerUtils ignoredUtils, LootItemRandomChanceWithLootingCondition condition, NumberExpr chance, List<TooltipNode> ignoredConditions) {
+        NumberExpr level = level(Enchantments.MOB_LOOTING);
+
+        return NumberExpr.mul(chance, NumberExpr.add(NumberExpr.constant(condition.percent), NumberExpr.mul(level, NumberExpr.constant(condition.lootingMultiplier))));
     }
 
-    public static void applyTableBonus(IServerUtils ignoredUtils, BonusLevelTableCondition condition, EnchantedRanges chance) {
+    @NotNull
+    public static NumberExpr applyTableBonus(IServerUtils ignoredUtils, BonusLevelTableCondition condition, NumberExpr chance, List<TooltipNode> ignoredConditions) {
         if (condition.values.length == 0) {
-            return;
+            return chance;
         }
 
-        chance.computeAllLevels(condition.enchantment, (level, value) -> {
-            if (level < condition.values.length) {
-                return value.multiply(condition.values[level]);
+        List<NumberExpr> values = new ArrayList<>();
+
+        for (float value : condition.values) {
+            values.add(NumberExpr.constant(value));
+        }
+
+        return NumberExpr.mul(chance, NumberExpr.lookup(level(condition.enchantment), values, null));
+    }
+
+    @NotNull
+    public static NumberExpr applySetCount(IServerUtils utils, SetItemCountFunction function, NumberExpr count, List<TooltipNode> conditions) {
+        NumberExpr value = utils.convertIntNumber(utils, function.value, conditions);
+
+        return NumberExpr.max(NumberExpr.constant(0), function.add ? NumberExpr.add(count, value) : value);
+    }
+
+    @NotNull
+    public static NumberExpr applyBonus(IServerUtils ignoredUtils, ApplyBonusCount function, NumberExpr count, List<TooltipNode> ignoredConditions) {
+        NumberExpr level = level(function.enchantment);
+
+        if (function.formula instanceof ApplyBonusCount.OreDrops) {
+            return NumberExpr.mul(count, NumberExpr.max(NumberExpr.constant(1), NumberExpr.uniformInt(NumberExpr.constant(0), NumberExpr.add(level, NumberExpr.constant(1)))));
+        } else if (function.formula instanceof ApplyBonusCount.BinomialWithBonusCount formula) {
+            return NumberExpr.add(count, NumberExpr.binomial(NumberExpr.add(level, NumberExpr.constant(formula.extraRounds)), NumberExpr.constant(formula.probability)));
+        } else if (function.formula instanceof ApplyBonusCount.UniformBonusCount formula) {
+            return NumberExpr.add(count, NumberExpr.uniformInt(NumberExpr.constant(0), NumberExpr.mul(NumberExpr.constant(formula.bonusMultiplier), level)));
+        }
+
+        return count;
+    }
+
+    @NotNull
+    public static NumberExpr applyLimitCount(IServerUtils utils, LimitCount function, NumberExpr count, List<TooltipNode> conditions) {
+        return limit(utils, count, function.limiter, conditions);
+    }
+
+    @NotNull
+    public static NumberExpr applyLootingEnchant(IServerUtils utils, LootingEnchantFunction function, NumberExpr count, List<TooltipNode> conditions) {
+        NumberExpr bonus = NumberExpr.fn(NumberFunctions.ROUND, NumberExpr.mul(level(Enchantments.MOB_LOOTING), utils.convertNumber(utils, function.value, conditions)));
+        NumberExpr result = NumberExpr.add(count, bonus);
+
+        return function.limit > 0 ? NumberExpr.min(result, NumberExpr.constant(function.limit)) : result;
+    }
+
+    @NotNull
+    public static NumberExpr limit(IServerUtils utils, NumberExpr value, IntRange range, List<TooltipNode> conditions) {
+        NumberExpr min = range.min != null ? utils.convertIntNumber(utils, range.min, conditions) : null;
+        NumberExpr max = range.max != null ? utils.convertIntNumber(utils, range.max, conditions) : null;
+
+        if (min != null && max != null) {
+            return NumberExpr.clamp(value, min, max);
+        } else if (min != null) {
+            return NumberExpr.max(value, min);
+        } else if (max != null) {
+            return NumberExpr.min(value, max);
+        }
+
+        return value;
+    }
+
+    @NotNull
+    public static NumberExpr level(Enchantment enchantment) {
+        return NumberExpr.level(String.valueOf(BuiltInRegistries.ENCHANTMENT.getKey(enchantment)), enchantment.getMaxLevel());
+    }
+
+    @NotNull
+    public static NumberExpr conditional(IServerUtils utils, NumberExpr original, NumberExpr modified, List<LootItemCondition> predicates, List<TooltipNode> conditions) {
+        List<LootItemCondition> leaves = predicates.stream().flatMap((c) -> utils.unwrapCondition(utils, c).stream()).toList();
+
+        if (leaves.stream().allMatch(LootItemRandomChanceCondition.class::isInstance)) {
+            double probability = 1;
+
+            for (LootItemCondition leaf : leaves) {
+                probability *= ((LootItemRandomChanceCondition) leaf).probability;
             }
 
-            return value;
-        });
-    }
-
-    public static void applySetCount(IServerUtils utils, SetItemCountFunction function, EnchantedRanges count) {
-        RangeValue modifierValue = utils.convertNumber(utils, function.value);
-        boolean isConditional = isConditional(function);
-
-        count.modifyAllEntries((value) -> {
-            RangeValue modifiedValue = function.add ? value.add(modifierValue) : modifierValue;
-
-            return isConditional ? value.union(modifiedValue) : modifiedValue;
-        });
-    }
-
-    public static void applyBonus(IServerUtils ignoredUtils, ApplyBonusCount function, EnchantedRanges count) {
-        boolean isConditional = isConditional(function);
-
-        count.computeAllLevels(function.enchantment, (level, value) -> {
-            RangeValue modifiedValue = calculateCount(function, value, level);
-
-            return isConditional ? value.union(modifiedValue) : modifiedValue;
-        });
-    }
-
-    public static void applyLimitCount(IServerUtils utils, LimitCount function, EnchantedRanges bonusCount) {
-        RangeValue limitMin = utils.convertNumber(utils, function.limiter.min);
-        RangeValue limitMax = utils.convertNumber(utils, function.limiter.max);
-        boolean isConditional = isConditional(function);
-
-        bonusCount.modifyAllEntries((value) -> {
-            RangeValue modifiedValue = value.clamp(limitMin, limitMax);
-
-            return isConditional ? value.union(modifiedValue) : modifiedValue;
-        });
-    }
-
-    public static void applyLootingEnchant(IServerUtils utils, LootingEnchantFunction function, EnchantedRanges count) {
-        RangeValue modifierBonus = utils.convertNumber(utils, function.value);
-        RangeValue floorLimit = new RangeValue(false, true);
-        RangeValue ceilLimit = function.limit > 0 ? new RangeValue(function.limit) : null;
-        boolean isConditional = isConditional(function);
-
-        count.computeLevels(Enchantments.MOB_LOOTING, (level, value) -> {
-            RangeValue updatedValue = value.add(modifierBonus.multiply(level));
-
-            if (ceilLimit != null) {
-                updatedValue = updatedValue.clamp(floorLimit, ceilLimit);
+            if (probability >= 1) {
+                return modified;
+            } else if (probability <= 0) {
+                return original;
             }
 
-            return isConditional ? value.union(updatedValue) : updatedValue;
-        });
+            return NumberExpr.weighted(List.of(new NumberExpr.WeightedEntry(probability, modified), new NumberExpr.WeightedEntry(1 - probability, original)));
+        }
+
+        TooltipNode condition = TooltipBuilder.array((b) -> predicates.forEach((p) -> b.add(utils.getConditionTooltip(utils, p)))).build();
+        int index = -1;
+
+        if (condition != TooltipNode.empty()) {
+            index = conditions.size();
+            conditions.add(condition);
+        }
+
+        return NumberExpr.cond(List.of(new NumberExpr.Branch(index, modified)), original);
     }
 
-    /**
-     * A function guarded by predicates may or may not run, so the value it produces is only one of two possible
-     * outcomes - the unmodified value being the other one. Such a modifier widens the range instead of replacing it.
-     */
     public static boolean isConditional(LootItemConditionalFunction function) {
         return function.predicates.length != 0;
+    }
+
+    @NotNull
+    public static NumberExpr rolls(IServerUtils utils, NumberProvider rolls, NumberProvider bonusRolls, List<TooltipNode> conditions) {
+        return luckBased(utils.convertIntNumber(utils, rolls, conditions), utils.convertNumber(utils, bonusRolls, conditions));
+    }
+
+    @NotNull
+    public static TooltipBuilder getNumberTooltip(IServerUtils utils, NumberProvider provider) {
+        List<TooltipNode> conditions = new ArrayList<>();
+
+        return TooltipBuilder.number(utils.convertNumber(utils, provider, conditions), conditions);
+    }
+
+    @NotNull
+    public static TooltipBuilder getIntNumberTooltip(IServerUtils utils, NumberProvider provider) {
+        List<TooltipNode> conditions = new ArrayList<>();
+
+        return TooltipBuilder.number(utils.convertIntNumber(utils, provider, conditions), conditions);
+    }
+
+    @NotNull
+    public static NumberExpr luckBased(NumberExpr base, NumberExpr bonus) {
+        if (bonus instanceof NumberExpr.Const c && c.value() == 0) {
+            return base;
+        }
+
+        return NumberExpr.max(NumberExpr.constant(0), NumberExpr.add(base, NumberExpr.fn(NumberFunctions.FLOOR, NumberExpr.mul(bonus, luck()))));
+    }
+
+    @NotNull
+    public static NumberExpr.Var luck() {
+        return new NumberExpr.Var(LUCK, List.of(), -1, 4);
     }
 
     @NotNull
@@ -272,19 +349,19 @@ public class TooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getReferenceTooltip(LootTableReference entry, float chance, int sumWeight) {
+    public static TooltipBuilder getReferenceTooltip(LootTableReference entry, LootCount chance) {
         return TooltipBuilder.array((b) -> {
             b.add(TooltipBuilder.keyOnly(Lang.Group.ALL));
             b.add(getQualityTooltip(entry.quality));
-            b.add(getChanceTooltip(new EnchantedRanges((chance * entry.weight / sumWeight) * 100)));
+            b.add(getChanceTooltip(chance));
         });
     }
 
     @NotNull
-    public static TooltipBuilder getLootPoolTooltip(RangeValue rolls, RangeValue bonusRolls) {
+    public static TooltipBuilder getLootPoolTooltip(LootCount rolls) {
         return TooltipBuilder.array((b) -> {
             b.add(TooltipBuilder.keyOnly(Lang.Group.RANDOM));
-            b.add(getRolls(rolls, bonusRolls));
+            b.add(getRolls(rolls));
         });
     }
 
@@ -294,11 +371,11 @@ public class TooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getDynamicTooltip(IServerUtils utils, int quality, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public static TooltipBuilder getDynamicTooltip(IServerUtils utils, int quality, LootCount chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         return TooltipBuilder.array((b) -> {
             b.add(TooltipBuilder.keyOnly(Lang.Group.DYNAMIC));
             b.add(getQualityTooltip(quality));
-            b.add(getChanceTooltip(new EnchantedRanges(chance * 100)));
+            b.add(getChanceTooltip(chance));
             b.add(GenericTooltipUtils.getConditionsSectionTooltip(utils, conditions));
             b.add(GenericTooltipUtils.getFunctionsSectionTooltip(utils, functions));
         });
@@ -315,7 +392,7 @@ public class TooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getEmptyTooltip(IServerUtils utils, int quality, EnchantedRanges chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public static TooltipBuilder getEmptyTooltip(IServerUtils utils, int quality, LootCount chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         return TooltipBuilder.array((b) -> {
             b.add(TooltipBuilder.keyOnly(Lang.Group.EMPTY));
             b.add(getQualityTooltip(quality));
@@ -326,12 +403,12 @@ public class TooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getTooltip(IServerUtils utils, int quality, EnchantedRanges chance, EnchantedRanges count,
-                                               List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public static TooltipBuilder getTooltip(IServerUtils utils, int quality, LootCount chance, LootCount count, @Nullable NumberInterval countLimit,
+                                            List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         return TooltipBuilder.array((b) -> {
             b.add(getQualityTooltip(quality));
             b.add(getChanceTooltip(chance));
-            b.add(getCountTooltip(count));
+            b.add(getCountTooltip(count, countLimit));
             b.add(GenericTooltipUtils.getConditionsSectionTooltip(utils, conditions));
             b.add(GenericTooltipUtils.getFunctionsSectionTooltip(utils, functions));
         });
@@ -356,48 +433,28 @@ public class TooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getChanceTooltip(EnchantedRanges chance) {
-        RangeValue defaultChance = chance.getUnenchantedValue();
-
-        if (!defaultChance.isRange() && defaultChance.max() > 99.99999) {
+    public static TooltipBuilder getChanceTooltip(LootCount chance) {
+        if (chance.value() instanceof NumberExpr.Const c && c.value() > 0.9999999) {
             return TooltipBuilder.empty();
         }
 
-        TooltipBuilder builder = TooltipBuilder.value(defaultChance, "%");
+        TooltipBuilder builder = TooltipBuilder.percent(chance.value());
 
-        chance.forEachEnchantment((enchantment, level, value) -> builder.add(TooltipBuilder.value(
-                value + "%",
-                TooltipBuilder.translate(enchantment.getDescriptionId()),
-                TooltipBuilder.translate("enchantment.level." + level)
-        ).build(Lang.Description.CHANCE_BONUS)));
-
+        chance.conditions().forEach(builder::add);
         return builder.key(Lang.Description.CHANCE);
     }
 
     @NotNull
-    public static TooltipBuilder getCountTooltip(EnchantedRanges count) {
-        TooltipBuilder builder = TooltipBuilder.value(count.getUnenchantedValue());
+    public static TooltipBuilder getCountTooltip(LootCount count, @Nullable NumberInterval limit) {
+        TooltipBuilder builder = TooltipBuilder.number(count.value(), false, limit);
 
-        count.forEachEnchantment((enchantment, level, value) -> builder.add(TooltipBuilder.value(
-                value,
-                TooltipBuilder.translate(enchantment.getDescriptionId()),
-                TooltipBuilder.translate("enchantment.level." + level)
-        ).build(Lang.Description.COUNT_BONUS)));
-
+        count.conditions().forEach(builder::add);
         return builder.key(Lang.Description.COUNT);
     }
 
     @NotNull
-    public static TooltipBuilder getRolls(RangeValue rolls, RangeValue bonusRolls) {
-        return TooltipBuilder.value(getTotalRolls(rolls, bonusRolls).toIntString(), "x").key(Lang.Description.ROLLS);
-    }
-
-    private static RangeValue getTotalRolls(RangeValue rolls, RangeValue bonusRolls) {
-        if (bonusRolls.min() > 0 || bonusRolls.max() > 0) {
-            return bonusRolls.add(rolls);
-        } else {
-            return rolls;
-        }
+    public static TooltipBuilder getRolls(LootCount rolls) {
+        return TooltipBuilder.number(rolls.value(), rolls.conditions()).key(Lang.Description.ROLLS);
     }
 
     private static TooltipBuilder getElementTooltip(IServerUtils utils, JsonElement element) {
@@ -418,22 +475,6 @@ public class TooltipUtils {
         }
 
         return TooltipBuilder.empty();
-    }
-
-    private static RangeValue calculateCount(ApplyBonusCount function, RangeValue value, int level) {
-        if (function.formula instanceof ApplyBonusCount.OreDrops) {
-            if (level > 0) {
-                return value.multiplyMax(level + 1);
-            }
-        } else if (function.formula instanceof ApplyBonusCount.BinomialWithBonusCount binomialWithBonusCount) {
-            return value.addMax(binomialWithBonusCount.extraRounds + level);
-        } else if (function.formula instanceof ApplyBonusCount.UniformBonusCount uniformBonusCount) {
-            if (level > 0) {
-                return value.addMax(uniformBonusCount.bonusMultiplier * level);
-            }
-        }
-
-        return value;
     }
 
     @NotNull

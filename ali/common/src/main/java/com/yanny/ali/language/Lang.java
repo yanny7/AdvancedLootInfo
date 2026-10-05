@@ -219,6 +219,8 @@ public final class Lang {
         SOURCE("source", "Source: %s"),
         STRUCTURE("structure", "Structure: %s"),
         TAG("tag", "Tag: %s"),
+        TAG_IS("tag_is", "Is: %s"),
+        TAG_IS_NOT("tag_is_not", "Is Not: %s"),
         TARGET("target", "Target: %s"),
         TEAM("team", "Team: %s"),
         TREASURE("treasure", "Treasure: %s"),
@@ -323,11 +325,10 @@ public final class Lang {
         }
     }
 
-    public enum Description implements ITooltipKey {ROLLS("rolls", "Rolls: %s%s"),
-        CHANCE("chance", "Chance: %s%s"),
-        CHANCE_BONUS("chance_bonus", "%s (%s %s)"),
+    public enum Description implements ITooltipKey {
+        ROLLS("rolls", "Rolls: %s"),
+        CHANCE("chance", "Chance: %s"),
         COUNT("count", "Count: %s"),
-        COUNT_BONUS("count_bonus", "%s (%s %s)"),
         QUALITY("quality", "Quality: %s"),
         RANDOM_TRADE_SELECTION("random_trade_selection", "Randomly Selects %s Of These Trades"),
         ;
@@ -368,6 +369,48 @@ public final class Lang {
         }
     }
 
+    public enum ItemFilter implements ITooltipKey {
+        ALWAYS_FALSE("always_false", "Always False"),
+        ALWAYS_TRUE("always_true", "Always True"),
+        SWORD("sword", "Sword"),
+        PICKAXE("pickaxe", "Pickaxe"),
+        AXE("axe", "Axe"),
+        SHOVEL("shovel", "Shovel"),
+        HOE("hoe", "Hoe"),
+        TOOL("tool", "Tool"),
+        POTION("potion", "Potion"),
+        HAS_TIER("has_tier", "Has Tier"),
+        PROJECTILE_WEAPON("projectile_weapon", "Projectile Weapon"),
+        ARMOR("armor", "Armor"),
+        WEAPON("weapon", "Weapon"),
+        HEAD_ARMOR("head_armor", "Head Armor"),
+        CHEST_ARMOR("chest_armor", "Chest Armor"),
+        LEGS_ARMOR("legs_armor", "Legs Armor"),
+        FEET_ARMOR("feet_armor", "Feet Armor"),
+        FOOD("food", "Food"),
+        DAMAGEABLE("damageable", "Damageable"),
+        DAMAGED("damaged", "Damaged"),
+        ENCHANTABLE("enchantable", "Enchantable"),
+        ENCHANTED("enchanted", "Enchanted"),
+        BLOCK("block", "Block"),
+        HAS_ENCHANTMENT("has_enchantment", "Has Enchantment"),
+        INGREDIENT("ingredient", "Ingredient"),
+        UNKNOWN("unknown", "Unknown"),
+        ;
+
+        private final Translation translation;
+
+        ItemFilter(String k, String e) {
+            this.translation = new Translation("ali.enum.item_filter." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
     public enum Multi implements ITooltipKey {
         OFFSET("offset", "Offset: [X: %s, Y: %s, Z: %s]"),
         ;
@@ -376,6 +419,26 @@ public final class Lang {
 
         Multi(String k, String e) {
             this.translation = new Translation("ali.property.multi." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
+    public enum Numbers implements ITooltipKey {
+        VAR_LUCK("var.luck", "luck"),
+        VAR_LUCK_DESC("var.luck.desc", "luck"),
+        VAR_LUCK_ROW("var.luck.row", "Luck %s"),
+        VAR_LUCK_ROW_NEGATIVE("var.luck.row.negative", "Bad Luck"),
+        ;
+
+        private final Translation translation;
+
+        Numbers(String k, String e) {
+            this.translation = new Translation("ali.number." + k, e);
         }
 
         @NotNull

@@ -1,6 +1,6 @@
 package com.yanny.alicompat.compat.apotheosis;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IItemNode;
@@ -13,7 +13,7 @@ import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.ali.plugin.glm.LootPage;
 import com.yanny.ali.plugin.glm.Verdict;
-import com.yanny.ali.plugin.server.EnchantedRanges;
+import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
@@ -61,9 +61,9 @@ public class AffixConvertLootModifierAccessor extends BaseAccessor<AffixConvertL
         IItemNode node = (IItemNode) src;
         LootItemCondition chance = LootItemRandomChanceCondition.randomChance(ApotheosisUtils.chance(AdventureConfig.AFFIX_CONVERT_LOOT_RULES, page.tableId())).build();
         List<LootItemCondition> allConditions = Stream.concat(Stream.concat(conditions.stream(), node.getConditions().stream()), Stream.of(chance)).toList();
-        EnchantedRanges enchantedChance = NodeUtils.getEnchantedChance(utils, allConditions, node.getChance());
-        RangeValue count = new RangeValue(node.getCount());
-        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, enchantedChance, new EnchantedRanges(count), node.getFunctions(), allConditions);
+        LootCount itemChance = NodeUtils.getChance(utils, allConditions, node.getChance());
+        NumberExpr count = node.getCount();
+        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, itemChance, LootCount.of(count), NodeUtils.getCountLimit(node.getItem()), node.getFunctions(), allConditions);
         RarityClamp rarities = AdventureConfig.AFFIX_CONVERT_RARITIES.get(utils.getServerLevel().dimension().location());
 
         if (rarities != null) {

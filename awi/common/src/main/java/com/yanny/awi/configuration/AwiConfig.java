@@ -1,6 +1,7 @@
 package com.yanny.awi.configuration;
 
 import com.yanny.aci.configuration.ICoreConfig;
+import com.yanny.aci.configuration.SpawnInfoFilter;
 import com.yanny.aci.configuration.TooltipColors;
 
 import java.util.ArrayList;
@@ -14,9 +15,11 @@ public class AwiConfig implements ICoreConfig {
     public int configVersion = 0;
 
     public TooltipColors tooltipColors = new TooltipColors();
+    public SpawnInfoFilter spawnInfo = new SpawnInfoFilter();
 
     public boolean logMoreStatistics = false;
     public boolean showInGameNames = true;
+    public boolean showCharts = true;
 
     /**
      * Whether to display blocks that a feature's {@code place()} bytecode only reaches through a test on the
@@ -48,6 +51,10 @@ public class AwiConfig implements ICoreConfig {
     public void normalize() {
         if (tooltipColors == null) {
             tooltipColors = new TooltipColors();
+        }
+
+        if (spawnInfo == null) {
+            spawnInfo = new SpawnInfoFilter();
         }
 
         if (dimensions == null) {

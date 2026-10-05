@@ -1,9 +1,15 @@
 package com.yanny.aci.tooltip;
 
+import com.yanny.aci.api.NumberExpr;
+import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.language.IMultiKey;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.TagKey;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +18,15 @@ import java.util.function.Consumer;
 
 public class TooltipBuilder {
     static final char TRANSLATE_MARKER = '\uE000';
+    static final char REGISTRY_MARKER = '\uE001';
+    static final char TAG_MARKER = '\uE002';
 
     private IMultiKey translatableKey;
     private String rawKey;
     private String[] values;
     private Component componentValue;
+    private TooltipNumber number;
+    private List<NumberInterval> intervals;
 
     private boolean isArray = false;
     private boolean isAdvancedOnly = false;
@@ -29,6 +39,21 @@ public class TooltipBuilder {
     @NotNull
     public static String translate(String key) {
         return TRANSLATE_MARKER + key;
+    }
+
+    @NotNull
+    public static <T> String registryEntry(Registry<T> registry, T value) {
+        return REGISTRY_MARKER + registry.key().location().toString() + " " + registry.getKey(value);
+    }
+
+    @NotNull
+    public static String registryKey(ResourceKey<?> key) {
+        return REGISTRY_MARKER + key.registry().toString() + " " + key.location();
+    }
+
+    @NotNull
+    public static String tagKey(TagKey<?> key) {
+        return TAG_MARKER + key.registry().location().toString() + " " + key.location();
     }
 
     @NotNull
@@ -122,6 +147,40 @@ public class TooltipBuilder {
     }
 
     @NotNull
+    public static TooltipBuilder number(NumberExpr expr) {
+        return number(expr, false, null);
+    }
+
+    @NotNull
+    public static TooltipBuilder number(NumberExpr expr, List<TooltipNode> conditions) {
+        TooltipBuilder builder = number(expr);
+
+        conditions.forEach(builder::add);
+        return builder;
+    }
+
+    @NotNull
+    public static TooltipBuilder percent(NumberExpr expr) {
+        return number(expr, true, null);
+    }
+
+    @NotNull
+    public static TooltipBuilder number(NumberExpr expr, boolean percent, @Nullable NumberInterval limit) {
+        TooltipBuilder builder = new TooltipBuilder();
+
+        builder.number = new TooltipNumber(expr, percent, limit);
+        return builder;
+    }
+
+    @NotNull
+    public static TooltipBuilder intervals(List<NumberInterval> intervals, Object... v) {
+        TooltipBuilder builder = value(v);
+
+        builder.intervals = List.copyOf(intervals);
+        return builder;
+    }
+
+    @NotNull
     public static TooltipBuilder component(Component component) {
         TooltipBuilder builder = new TooltipBuilder();
 
@@ -210,19 +269,21 @@ public class TooltipBuilder {
             return TooltipNode.empty();
         }
 
-        if (!forceVisible && values == null && componentValue == null && children.isEmpty()) {
+        if (!forceVisible && values == null && componentValue == null && number == null && intervals == null && children.isEmpty()) {
             return TooltipNode.empty();
         }
 
         String finalKeyStr = rawKey;
         String[] finalValues = values;
         Component finalComponent = componentValue;
+        TooltipNumber finalNumber = number;
+        List<NumberInterval> finalIntervals = intervals;
         short finalFlags = getFlags();
         List<TooltipNode> finalChildren = new ArrayList<>(children);
 
         if (translatableKey != null && rawKey == null) {
             boolean isSingleSimpleChild = !finalChildren.isEmpty() && !finalChildren.get(0).hasChildren() && !finalChildren.get(0).hasKey();
-            boolean parentIsEligible = finalValues == null && finalComponent == null && !isError;
+            boolean parentIsEligible = finalValues == null && finalComponent == null && finalNumber == null && finalIntervals == null && !isError;
             boolean potentiallyMergeable = parentIsEligible && isSingleSimpleChild;
             boolean canBeMerged = potentiallyMergeable && !isArray && finalChildren.size() == 1;
             boolean hasMultiKey = !Objects.equals(translatableKey.plural(), translatableKey.singular());
@@ -232,12 +293,20 @@ public class TooltipBuilder {
                 finalKeyStr = translatableKey.singular();
                 finalValues = child.getValues();
                 finalComponent = child.getComponent();
+                finalNumber = child.getNumber();
+                finalIntervals = child.getIntervals();
 
                 if (finalValues != null) {
                     finalFlags |= TooltipNode.FLAG_HAS_VALUE;
                 }
                 if (finalComponent != null) {
                     finalFlags |= TooltipNode.FLAG_COMPONENT;
+                }
+                if (finalNumber != null) {
+                    finalFlags |= TooltipNode.FLAG_NUMBER;
+                }
+                if (finalIntervals != null) {
+                    finalFlags |= TooltipNode.FLAG_INTERVALS;
                 }
 
                 finalChildren.clear();
@@ -246,7 +315,7 @@ public class TooltipBuilder {
                     TooltipContext.getPalette().reportMergeable(translatableKey.plural(), TooltipContext.get());
                 }
 
-                if (hasMultiKey && (finalChildren.isEmpty() || values != null)) {
+                if (hasMultiKey && (finalChildren.isEmpty() || values != null || number != null || intervals != null)) {
                     finalKeyStr = translatableKey.singular();
                 } else {
                     finalKeyStr = translatableKey.plural();
@@ -254,7 +323,7 @@ public class TooltipBuilder {
             }
         }
 
-        return TooltipNode.getOrCreate(TooltipContext.getPalette(), finalKeyStr, finalValues, finalComponent, finalFlags, finalChildren);
+        return TooltipNode.getOrCreate(TooltipContext.getPalette(), finalKeyStr, finalValues, finalComponent, finalNumber, finalIntervals, finalFlags, finalChildren);
     }
 
     private short getFlags() {
@@ -267,6 +336,8 @@ public class TooltipBuilder {
         if (translatableKey != null || rawKey != null) flags |= TooltipNode.FLAG_HAS_KEY;
         if (values != null && values.length > 0) flags |= TooltipNode.FLAG_HAS_VALUE;
         if (componentValue != null) flags |= TooltipNode.FLAG_COMPONENT;
+        if (number != null) flags |= TooltipNode.FLAG_NUMBER;
+        if (intervals != null) flags |= TooltipNode.FLAG_INTERVALS;
 
         return flags;
     }

@@ -2,6 +2,7 @@ package com.yanny.ali.configuration;
 
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.configuration.ICoreConfig;
+import com.yanny.aci.configuration.SpawnInfoFilter;
 import com.yanny.aci.configuration.TooltipColors;
 import com.yanny.ali.Utils;
 import net.minecraft.resources.ResourceLocation;
@@ -43,12 +44,14 @@ public class AliConfig implements ICoreConfig {
     public Map<ResourceLocation, List<ResourceLocation>> entityLootTables;
 
     public TooltipColors tooltipColors = new TooltipColors();
+    public SpawnInfoFilter spawnInfo = new SpawnInfoFilter();
 
     public boolean logMoreStatistics = false;
     public boolean showInGameNames = true;
     public boolean hideDefaultBlockLoot = true;
     public boolean showUnboundedGlobalLootModifiers = false;
     public boolean showEntitiesWithoutLoot = false;
+    public boolean showCharts = true;
 
     public AliConfig() {
         blockCategories = new ArrayList<>();
@@ -133,6 +136,9 @@ public class AliConfig implements ICoreConfig {
         }
         if (tooltipColors == null) {
             tooltipColors = defaults.tooltipColors;
+        }
+        if (spawnInfo == null) {
+            spawnInfo = defaults.spawnInfo;
         }
     }
 

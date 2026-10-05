@@ -2,7 +2,8 @@ package com.yanny.awi.plugin.server;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberInterval;
+import com.yanny.aci.api.NumberText;
 import com.yanny.aci.language.IMultiKey;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.awi.api.BlockInfo;
@@ -14,9 +15,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 public class TooltipUtils {
     private static final int RANGE_LINE_CHARS = 40;
+    private static final int RANGE_SEPARATOR_CHARS = 4;
     private static final Comparator<BlockInfo> BLOCK_INFO_ORDER = Comparator
             .comparing((BlockInfo info) -> switch (info.storageType()) {
                 case LAYERED -> 0;
@@ -24,7 +27,7 @@ public class TooltipUtils {
                 case RELATIVE -> 2;
             })
             .thenComparing((info) -> info.placement() == BlockInfo.Placement.CEILING)
-            .thenComparing((info) -> info.ranges().isEmpty() ? 0 : info.ranges().get(0).min());
+            .thenComparing((info) -> info.ranges().isEmpty() ? 0 : info.ranges().get(0).lo());
 
     public static TooltipBuilder getJsonTooltip(IServerUtils utils, JsonElement element) {
         if (element.isJsonObject()) {
@@ -66,9 +69,9 @@ public class TooltipUtils {
         });
     }
 
-    private static void addRanges(TooltipBuilder b, List<RangeValue> ranges, IMultiKey label, IMultiKey single,
+    private static void addRanges(TooltipBuilder b, List<NumberInterval> ranges, IMultiKey label, IMultiKey single,
                                   IMultiKey singleQualified, @Nullable String qualifier) {
-        List<String> lines = wrapRanges(ranges);
+        List<List<NumberInterval>> lines = wrapRanges(ranges);
         boolean wrapped = lines.size() > 1;
 
         if (wrapped) {
@@ -76,43 +79,59 @@ public class TooltipUtils {
         }
 
         for (int i = 0; i < lines.size(); i++) {
-            boolean qualified = qualifier != null && i == lines.size() - 1;
+            boolean last = i == lines.size() - 1;
+            boolean qualified = qualifier != null && last;
             IMultiKey key;
 
             if (!wrapped) {
                 key = qualified ? singleQualified : single;
+            } else if (!last) {
+                key = Lang.Value.CONTINUATION_WRAPPED;
             } else {
                 key = qualified ? Lang.Value.CONTINUATION_QUALIFIED : Lang.Value.CONTINUATION;
             }
 
             if (qualified) {
-                b.add(TooltipBuilder.value(lines.get(i), TooltipBuilder.translate(qualifier)).build(key));
+                b.add(TooltipBuilder.intervals(lines.get(i), TooltipBuilder.translate(qualifier)).build(key));
             } else {
-                b.add(TooltipBuilder.value(lines.get(i)).build(key));
+                b.add(TooltipBuilder.intervals(lines.get(i)).build(key));
             }
         }
     }
 
     @NotNull
-    private static List<String> wrapRanges(List<RangeValue> ranges) {
-        List<String> lines = new ArrayList<>();
-        StringBuilder line = new StringBuilder();
+    private static List<List<NumberInterval>> wrapRanges(List<NumberInterval> ranges) {
+        List<List<NumberInterval>> lines = new ArrayList<>();
+        List<NumberInterval> line = new ArrayList<>();
+        int length = 0;
 
-        for (RangeValue range : ranges) {
-            String value = range.toIntString();
+        for (NumberInterval range : ranges) {
+            int rangeLength = estimateLength(range);
 
-            if (!line.isEmpty() && line.length() + 2 + value.length() > RANGE_LINE_CHARS) {
-                lines.add(line.append(',').toString());
-                line = new StringBuilder();
+            if (!line.isEmpty() && length + 2 + rangeLength > RANGE_LINE_CHARS) {
+                lines.add(line);
+                line = new ArrayList<>();
+                length = 0;
             } else if (!line.isEmpty()) {
-                line.append(", ");
+                length += 2;
             }
 
-            line.append(value);
+            line.add(range);
+            length += rangeLength;
         }
 
-        lines.add(line.toString());
+        lines.add(line);
         return lines;
+    }
+
+    private static int estimateLength(NumberInterval range) {
+        int lo = NumberText.formatNumber(range.lo(), Locale.ROOT).length();
+
+        if (range.isPoint()) {
+            return lo;
+        }
+
+        return lo + RANGE_SEPARATOR_CHARS + NumberText.formatNumber(range.hi(), Locale.ROOT).length();
     }
 
     @NotNull

@@ -1,6 +1,6 @@
 package com.yanny.alicompat.compat.apotheosis;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
@@ -8,7 +8,7 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
-import com.yanny.ali.plugin.server.EnchantedRanges;
+import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
@@ -36,16 +36,15 @@ public class AffixLootPoolEntryAccessor extends BaseAccessor<AffixLootPoolEntry>
     }
 
     @Override
-    public IDataNode create(IServerUtils utils, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public IDataNode create(IServerUtils utils, NumberExpr chance, NumberExpr sumWeight, List<TooltipNode> chanceConditions, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemCondition> allConditions = NodeUtils.getAllConditions(parent, conditions);
         List<LootItemFunction> allFunctions = NodeUtils.getAllFunctions(parent, functions);
-        float itemChance = NodeUtils.getChance(parent, chance, sumWeight);
-        EnchantedRanges enchantedChance = NodeUtils.getEnchantedChance(utils, allConditions, itemChance);
-        EnchantedRanges enchantedCount = NodeUtils.getEnchantedCount(utils, allFunctions);
-        TooltipNode tooltip = TooltipUtils.getTooltip(utils, parent.quality, enchantedChance, enchantedCount, allFunctions, allConditions).build();
+        LootCount itemChance = NodeUtils.getChance(utils, parent, chance, sumWeight, chanceConditions);
         ItemStack itemStack = TooltipUtils.getItemStack(utils, ApotheosisUtils.firstEntryStack(entries), allFunctions);
+        LootCount count = NodeUtils.getCount(utils, allFunctions);
+        TooltipNode tooltip = TooltipUtils.getTooltip(utils, parent.quality, NodeUtils.getChance(utils, allConditions, itemChance), count, NodeUtils.getCountLimit(itemStack), allFunctions, allConditions).build();
 
-        return new ItemNode(itemChance, enchantedCount.getUnenchantedValue(), itemStack, tooltip, allFunctions, allConditions);
+        return new ItemNode(NodeUtils.toFloat(itemChance.value()), count.value(), itemStack, tooltip, allFunctions, allConditions);
     }
 
     @Override

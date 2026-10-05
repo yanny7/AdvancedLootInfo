@@ -61,7 +61,7 @@ dependencies {
     // LootJS
     modCompileOnly "curse.maven:kubejs-238086:5853326"
     modCompileOnly "curse.maven:rhino-416294:6186971"
-    modCompileOnly "curse.maven:lootjs-570630:5404565"
+    modCompileOnly "curse.maven:lootjs-570630:7551186"
 }
 
 shadowJar {

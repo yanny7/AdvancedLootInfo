@@ -8,7 +8,7 @@ import com.mrcrayfish.goblintraders.trades.GoblinTrade;
 import com.mrcrayfish.goblintraders.trades.IRaritySettings;
 import com.mrcrayfish.goblintraders.trades.TradeManager;
 import com.mrcrayfish.goblintraders.trades.TradeRarity;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerRegistry;
@@ -68,7 +68,10 @@ public class GoblinTradersCompat implements IModCompat {
     private static TradeLevelInfo getLevelInfo(Config.Entities.Goblin.Trades trades, int level) {
         IRaritySettings settings = trades.getSettings(getRarity(level));
 
-        return new TradeLevelInfo(new RangeValue(settings.getMinValue(), settings.getMaxValue()), (float) settings.includeChance());
+        int min = Math.min(settings.getMinValue(), settings.getMaxValue());
+        int max = Math.max(settings.getMinValue(), settings.getMaxValue());
+
+        return new TradeLevelInfo(NumberExpr.uniformInt(min, max), (float) settings.includeChance());
     }
 
     @Nullable
@@ -93,11 +96,11 @@ public class GoblinTradersCompat implements IModCompat {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(trade.paymentStack()),
-                new RangeValue(trade.paymentStack().getCount()),
+                NumberExpr.constant(trade.paymentStack().getCount()),
                 Either.left(trade.secondaryPaymentStack()),
-                new RangeValue(trade.secondaryPaymentStack().getCount()),
+                NumberExpr.constant(trade.secondaryPaymentStack().getCount()),
                 Either.left(trade.offerStack()),
-                new RangeValue(trade.offerStack().getCount()),
+                NumberExpr.constant(trade.offerStack().getCount()),
                 trade.maxUses(),
                 trade.experience(),
                 trade.priceMultiplier(),

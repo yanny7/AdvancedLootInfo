@@ -1,13 +1,12 @@
 package com.yanny.ali.api;
 
 import com.yanny.aci.api.ICoreServerUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.plugin.glm.LootPage;
 import com.yanny.ali.plugin.glm.ParamState;
 import com.yanny.ali.plugin.glm.Verdict;
-import com.yanny.ali.plugin.server.EnchantedRanges;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -31,6 +30,12 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
     <T extends LootPoolEntryContainer> IServerRegistry.EntryFactory<T> getEntryFactory(IServerUtils utils, T type);
 
     @NotNull
+    <T extends LootPoolEntryContainer> NumberExpr getEntryWeight(IServerUtils utils, T entry, List<TooltipNode> conditions);
+
+    @NotNull
+    <T extends LootPoolEntryContainer> List<LootPoolEntryContainer> getEntryChildren(IServerUtils utils, T entry);
+
+    @NotNull
     <T extends LootPoolEntryContainer> TooltipBuilder getEntryTooltip(IServerUtils utils, T entry);
 
     @NotNull
@@ -42,9 +47,11 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
     @NotNull
     <T extends Ingredient> TooltipBuilder getIngredientTooltip(IServerUtils utils, T ingredient);
 
-    <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, EnchantedRanges count);
+    @NotNull
+    <T extends LootItemFunction> NumberExpr applyCountModifier(IServerUtils utils, T function, NumberExpr count, List<TooltipNode> conditions);
 
-    <T extends LootItemCondition> void applyChanceModifier(IServerUtils utils, T condition, EnchantedRanges chance);
+    @NotNull
+    <T extends LootItemCondition> NumberExpr applyChanceModifier(IServerUtils utils, T condition, NumberExpr chance, List<TooltipNode> conditions);
 
     @NotNull
     <T extends LootItemFunction> ItemStack applyItemStackModifier(IServerUtils utils, T function, ItemStack itemStack);
@@ -62,7 +69,10 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
     TooltipBuilder getEnumTranslation(IServerUtils utils, Enum<?> value);
 
     @NotNull
-    RangeValue convertNumber(IServerUtils utils, @Nullable NumberProvider numberProvider);
+    NumberExpr convertNumber(IServerUtils utils, NumberProvider numberProvider, List<TooltipNode> conditions);
+
+    @NotNull
+    NumberExpr convertIntNumber(IServerUtils utils, NumberProvider numberProvider, List<TooltipNode> conditions);
 
     @Nullable
     LootContext getLootContext();

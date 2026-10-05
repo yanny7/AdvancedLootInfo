@@ -1,13 +1,16 @@
 package com.yanny.ali.test;
 
-import com.yanny.aci.api.RangeValue;
-import com.yanny.ali.plugin.server.EnchantedRanges;
+import com.yanny.aci.api.NumberExpr;
+import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
@@ -23,9 +26,18 @@ public class EntryTooltipTest {
 
     @Test
     public void testLootPoolTooltip() {
-        assertTooltip(TooltipUtils.getLootPoolTooltip(new RangeValue(2, 3), new RangeValue(1, 2)).build(), List.of(
+        assertTooltip(TooltipUtils.getLootPoolTooltip(LootCount.of(TooltipUtils.rolls(UTILS, UniformGenerator.between(2, 3), ConstantValue.exactly(0), new ArrayList<>()))).build(), List.of(
                 "Selects random entry",
-                "Rolls: 3-5x"
+                "Rolls: 2 to 3"
+        ));
+        assertTooltip(TooltipUtils.getLootPoolTooltip(LootCount.of(TooltipUtils.rolls(UTILS, UniformGenerator.between(2, 3), UniformGenerator.between(1, 2), new ArrayList<>()))).build(), List.of(
+                "Selects random entry",
+                "Rolls: 2 to 3",
+                "  -> Bad Luck: 0 to 2",
+                "  -> Luck 1: 3 to 4",
+                "  -> Luck 2: 4 to 6  ~5 (50%)",
+                "  -> Luck 3: 5 to 8  ~6 to 7 (33%)",
+                "  -> Luck 4: 6 to 10  ~7 to 9 (25%)"
         ));
     }
 
@@ -38,7 +50,7 @@ public class EntryTooltipTest {
 
     @Test
     public void testDynamicTooltip() {
-        assertTooltip(TooltipUtils.getDynamicTooltip(UTILS, 10, 0.3f, List.of(), List.of()).build(), List.of(
+        assertTooltip(TooltipUtils.getDynamicTooltip(UTILS, 10, LootCount.of(NumberExpr.constant(0.3f)), List.of(), List.of()).build(), List.of(
                 "Dynamic block-specific drops",
                 "Quality: 10",
                 "Chance: 30%"
@@ -61,39 +73,31 @@ public class EntryTooltipTest {
 
     @Test
     public void testTooltip() {
-        EnchantedRanges chanceMap = new EnchantedRanges(1.25F);
-        EnchantedRanges countMap = new EnchantedRanges(1, 5);
-
-        chanceMap.computeLevels(Enchantments.MOB_LOOTING, (level, value) -> switch (level) {
-            case 1 ->  new RangeValue(0.1F);
-            case 2 -> new RangeValue(0.3F);
-            case 3 -> new RangeValue(0.5F);
-            default -> throw new IllegalStateException("Unexpected value: " + level);
-        });
-        countMap.computeLevels(Enchantments.BLOCK_FORTUNE, (level, value) -> switch (level) {
-            case 1 -> new RangeValue(1, 5);
-            case 2 -> new RangeValue(1, 10);
-            case 3 -> new RangeValue(1, 15);
-            default -> throw new IllegalStateException("Unexpected value: " + level);
-        });
+        NumberExpr chance = NumberExpr.lookup(TooltipUtils.level(Enchantments.MOB_LOOTING), List.of(
+                NumberExpr.constant(0.0125), NumberExpr.constant(0.001), NumberExpr.constant(0.003), NumberExpr.constant(0.005)
+        ), null);
+        LootCount count = LootCount.of(NumberExpr.lookup(TooltipUtils.level(Enchantments.BLOCK_FORTUNE), List.of(
+                NumberExpr.range(1, 5), NumberExpr.range(1, 5), NumberExpr.range(1, 10), NumberExpr.range(1, 15)
+        ), null));
 
         assertTooltip(TooltipUtils.getTooltip(
                 UTILS,
                 3,
-                chanceMap,
-                countMap,
+                LootCount.of(chance),
+                count,
+                null,
                 List.of(ApplyExplosionDecay.explosionDecay().build()),
                 List.of(ExplosionCondition.survivesExplosion().build())
         ).build(), List.of(
                 "Quality: 3",
                 "Chance: 1.25%",
-                "  -> 0.10% (Looting I)",
-                "  -> 0.30% (Looting II)",
-                "  -> 0.50% (Looting III)",
-                "Count: 1-5",
-                "  -> 1-5 (Fortune I)",
-                "  -> 1-10 (Fortune II)",
-                "  -> 1-15 (Fortune III)",
+                "  -> Looting I: 0.1%",
+                "  -> Looting II: 0.3%",
+                "  -> Looting III: 0.5%",
+                "Count: 1 to 5",
+                "  -> Fortune I: 1 to 5",
+                "  -> Fortune II: 1 to 10",
+                "  -> Fortune III: 1 to 15",
                 "----- Predicates -----",
                 "Survives Explosion",
                 "----- Modifiers -----",
@@ -102,20 +106,21 @@ public class EntryTooltipTest {
         assertTooltip(TooltipUtils.getTooltip(
                 UTILS,
                 3,
-                chanceMap,
-                countMap,
+                LootCount.of(chance),
+                count,
+                null,
                 List.of(ApplyExplosionDecay.explosionDecay().build()),
                 List.of(ExplosionCondition.survivesExplosion().build())
         ).build(), List.of(
                 "Quality: 3",
                 "Chance: 1.25%",
-                "  -> 0.10% (Looting I)",
-                "  -> 0.30% (Looting II)",
-                "  -> 0.50% (Looting III)",
-                "Count: 1-5",
-                "  -> 1-5 (Fortune I)",
-                "  -> 1-10 (Fortune II)",
-                "  -> 1-15 (Fortune III)",
+                "  -> Looting I: 0.1%",
+                "  -> Looting II: 0.3%",
+                "  -> Looting III: 0.5%",
+                "Count: 1 to 5",
+                "  -> Fortune I: 1 to 5",
+                "  -> Fortune II: 1 to 10",
+                "  -> Fortune III: 1 to 15",
                 "----- Predicates -----",
                 "Survives Explosion",
                 "----- Modifiers -----",

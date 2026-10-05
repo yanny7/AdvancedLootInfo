@@ -1,14 +1,17 @@
 package com.yanny.alicompat.compat.artifacts;
 
 import artifacts.loot.ConfigValueChance;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.IChanceModifier;
 import com.yanny.alicompat.accessor.IConditionTooltip;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class ConfigValueChanceAccessor extends BaseAccessor<ConfigValueChance> implements IConditionTooltip, IChanceModifier {
     @FieldAccessor(clazz = ChanceConfigAccessor.class)
@@ -26,7 +29,7 @@ public class ConfigValueChanceAccessor extends BaseAccessor<ConfigValueChance> i
     }
 
     @Override
-    public void applyChanceModifier(IServerUtils ignoredUtils, EnchantedRanges chance) {
-        chance.modifyAllEntries((range) -> range.multiply(chanceConfig.getChance()));
+    public NumberExpr applyChanceModifier(IServerUtils ignoredUtils, NumberExpr chance, List<TooltipNode> ignoredConditions) {
+        return NumberExpr.mul(chance, NumberExpr.constant(chanceConfig.getChance()));
     }
 }

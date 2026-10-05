@@ -46,7 +46,7 @@ dependencies {
     modCompileOnly "curse.maven:kubejs-238086:5853321"
     modCompileOnly "curse.maven:rhino-416294:6186969"
     modCompileOnly "curse.maven:architectury-api-419699:5137936"
-    modCompileOnly "curse.maven:lootjs-570630:5404564"
+    modCompileOnly "curse.maven:lootjs-570630:7551185"
 }
 
 shadowJar {

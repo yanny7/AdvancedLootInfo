@@ -192,6 +192,24 @@
       "description": "List of entities that will not be used for gathering loot tables.",
       "items": { "$ref": "#/definitions/ResourceLocation" }
     },
+    "spawnInfo": {
+      "type": "object",
+      "description": "Which entities show where they spawn naturally. An empty whitelist turns spawn info off completely, and then it is not even collected. An entity without loot whose spawn info is hidden is not listed by showEntitiesWithoutLoot.",
+      "additionalProperties": false,
+      "properties": {
+        "entities": {
+          "type": "array",
+          "description": "Entities whose spawn info is hidden, or with whitelist the only entities whose spawn info is shown.",
+          "items": { "$ref": "#/definitions/ResourceLocation" },
+          "default": []
+        },
+        "whitelist": {
+          "type": "boolean",
+          "description": "If true, entities is a whitelist instead of a blacklist.",
+          "default": false
+        }
+      }
+    },
     "tooltipColors": {
       "type": "object",
       "description": "Colors used when rendering tooltips. Changes take effect on restart.",
@@ -220,6 +238,21 @@
           "description": "Color of the tree branch arrows. A vanilla color name or a hex color code such as #FFAA00. An invalid value falls back to the default.",
           "pattern": "^(#[0-9a-fA-F]{6}|[a-z_]+)$",
           "default": "dark_gray"
+        },
+        "secondary": {
+          "type": "string",
+          "description": "Color of secondary information after a value, such as the most likely value of a count. A vanilla color name or a hex color code such as #FFAA00. An invalid value falls back to the default.",
+          "pattern": "^(#[0-9a-fA-F]{6}|[a-z_]+)$",
+          "default": "gray"
+        },
+        "levels": {
+          "type": "array",
+          "description": "Colors of enchantment level rows and their charts, used in order and repeated when there are more levels. Each is a vanilla color name or a hex color code such as #FFAA00. An invalid entry is skipped; an empty list falls back to the default.",
+          "items": {
+            "type": "string",
+            "pattern": "^(#[0-9a-fA-F]{6}|[a-z_]+)$"
+          },
+          "default": ["green", "yellow", "light_purple", "blue", "red", "gold"]
         }
       }
     },
@@ -247,6 +280,11 @@
       "type": "boolean",
       "description": "If true, entities that spawn naturally but drop nothing are shown in the entity loot category too, so their spawn conditions can be looked up.",
       "default": false
+    },
+    "showCharts": {
+      "type": "boolean",
+      "description": "Client-side. If true, a small chart of the distribution is drawn under numbers that have a most likely value.",
+      "default": true
     },
     "defaultBlockLootConditions": {
       "type": "array",

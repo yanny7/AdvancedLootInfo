@@ -1,3 +1,16 @@
+## []
+
+- Added `SpawnInfoFilter` configuration block
+- Variables with a finite domain containing 0 (luck) get a row per value, like enchantment levels
+- Number converters receive the list of condition tooltips of their conditional values
+- Grouping structure spawn info
+- Scrollable tooltip by mouse wheel when taller than screen
+- Number model `NumberExpr` replaces `RangeValue`, showing most likely value, level rows and charts
+- Added `TooltipBuilder.intervals`, a list of ranges formatted in the client's locale
+- Structure spawn overrides without mob category no longer break the entity's spawn tooltip
+- Spawn biomes are listed as exclusions (`-`) only when more than 10 biomes would be listed otherwise
+- IDs of any registry and tags are shown translated under `showInGameNames`, using the key forms of vanilla, Fabric API, NeoForge and EMI
+
 ## [1.3.0]
 
 - Unbound Holder is rendered as its registry key instead of throwing

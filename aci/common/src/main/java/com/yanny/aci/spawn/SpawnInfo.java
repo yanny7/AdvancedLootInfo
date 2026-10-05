@@ -1,7 +1,7 @@
 package com.yanny.aci.spawn;
 
 import com.yanny.aci.CommonLogUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
@@ -26,14 +26,20 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class SpawnInfo {
+    private static final int MAX_INCLUDED_BIOMES = 10;
     private static final DecimalFormat COST_FORMAT = new DecimalFormat("0.###", DecimalFormatSymbols.getInstance(Locale.ROOT));
     private static final Comparator<Entry> ENTRY_ORDER = Comparator.<Entry, MobCategory>comparing((e) -> e.spawn().category())
             .thenComparing((e) -> BuiltInRegistries.ENTITY_TYPE.getKey(e.type()));
+    private static final Comparator<Map.Entry<Spawn, SortedSet<ResourceLocation>>> GROUP_ORDER =
+            Comparator.<Map.Entry<Spawn, SortedSet<ResourceLocation>>>comparingInt((e) -> -e.getValue().size()).thenComparing((e) -> e.getValue().first());
 
     private final Logger logger;
+    private final boolean showInGameNames;
+    private final Predicate<EntityType<?>> entityFilter;
     private final Map<ResourceLocation, Set<ResourceLocation>> dimensionBiomes = new TreeMap<>();
     private final Map<ResourceLocation, List<Entry>> biomeEntries = new HashMap<>();
     private final Map<ResourceLocation, List<Entry>> structureEntries = new TreeMap<>();
@@ -41,8 +47,11 @@ public class SpawnInfo {
     private final Map<EntityType<?>, Map<ResourceLocation, List<Spawn>>> entityBiomes = new HashMap<>();
     private final Map<EntityType<?>, Map<ResourceLocation, List<Spawn>>> entityStructures = new HashMap<>();
 
-    public SpawnInfo(String modId, RegistryAccess registryAccess, Function<Structure, Structure.StructureSettings> structureSettings) {
+    public SpawnInfo(String modId, RegistryAccess registryAccess, Function<Structure, Structure.StructureSettings> structureSettings,
+                     Predicate<EntityType<?>> entityFilter, boolean showInGameNames) {
         logger = CommonLogUtils.getLogger(modId);
+        this.showInGameNames = showInGameNames;
+        this.entityFilter = entityFilter;
 
         for (Map.Entry<ResourceKey<LevelStem>, LevelStem> entry : entries(registryAccess, Registries.LEVEL_STEM)) {
             try {
@@ -104,7 +113,7 @@ public class SpawnInfo {
 
         return TooltipBuilder.branch((root) -> dimensionBiomes.forEach((dimension, biomesInDimension) -> {
             Map<Spawn, SortedSet<ResourceLocation>> groups = new HashMap<>();
-            TooltipBuilder dimensionBuilder = TooltipBuilder.value(dimension).key(CoreLang.Spawn.DIMENSION);
+            TooltipBuilder dimensionBuilder = TooltipBuilder.value(name(Registries.LEVEL_STEM, dimension)).key(CoreLang.Spawn.DIMENSION);
             boolean spawnsHere = false;
 
             for (ResourceLocation biome : biomesInDimension) {
@@ -113,21 +122,22 @@ public class SpawnInfo {
                 }
             }
 
-            for (Map.Entry<Spawn, SortedSet<ResourceLocation>> group : groups.entrySet().stream()
-                    .sorted(Comparator.<Map.Entry<Spawn, SortedSet<ResourceLocation>>>comparingInt((e) -> -e.getValue().size())
-                            .thenComparing((e) -> e.getValue().first()))
-                    .toList()) {
+            for (Map.Entry<Spawn, SortedSet<ResourceLocation>> group : groups.entrySet().stream().sorted(GROUP_ORDER).toList()) {
                 addBiomeGroup(dimensionBuilder, group.getKey(), group.getValue(), biomesInDimension);
                 spawnsHere = true;
             }
 
-            for (Map.Entry<ResourceLocation, List<Spawn>> structure : structures.entrySet()) {
-                if (!Collections.disjoint(structureBiomes.get(structure.getKey()), biomesInDimension)) {
-                    for (Spawn spawn : structure.getValue()) {
-                        dimensionBuilder.add(addSpawn(TooltipBuilder.value(structure.getKey()).key(CoreLang.Spawn.STRUCTURE), spawn));
-                        spawnsHere = true;
-                    }
+            Map<ResourceLocation, List<Spawn>> structuresInDimension = new HashMap<>();
+
+            structures.forEach((structure, spawns) -> {
+                if (!Collections.disjoint(structureBiomes.get(structure), biomesInDimension)) {
+                    structuresInDimension.put(structure, spawns);
                 }
+            });
+
+            if (!structuresInDimension.isEmpty()) {
+                addStructureGroups(dimensionBuilder, structuresInDimension);
+                spawnsHere = true;
             }
 
             if (spawnsHere) {
@@ -164,11 +174,7 @@ public class SpawnInfo {
                     b.add(TooltipBuilder.asElement(addSpawn(TooltipBuilder.branch((x) -> {}), spawn), spawns.size()));
                 }
 
-                structureSpawns.getOrDefault(type, Collections.emptyMap()).forEach((structure, list) -> {
-                    for (Spawn spawn : list) {
-                        b.add(addSpawn(TooltipBuilder.value(structure).key(CoreLang.Spawn.STRUCTURE), spawn));
-                    }
-                });
+                addStructureGroups(b, structureSpawns.getOrDefault(type, Collections.emptyMap()));
             }).build());
         }
 
@@ -180,6 +186,10 @@ public class SpawnInfo {
 
         for (MobCategory category : MobCategory.values()) {
             for (MobSpawnSettings.SpawnerData data : settings.getMobs(category).unwrap()) {
+                if (!entityFilter.test(data.type)) {
+                    continue;
+                }
+
                 entries.add(new Entry(data.type, new Spawn(category, data.getWeight().asInt(), data.minCount, data.maxCount, settings.getMobSpawnCost(data.type))));
             }
         }
@@ -194,7 +204,16 @@ public class SpawnInfo {
         List<Entry> entries = new ArrayList<>();
 
         settings.spawnOverrides().forEach((category, override) -> {
+            // Mods (Hybrid Aquatic) add overrides under unknown categories, which arrive as a null key.
+            if (category == null) {
+                return;
+            }
+
             for (MobSpawnSettings.SpawnerData data : override.spawns().unwrap()) {
+                if (!entityFilter.test(data.type)) {
+                    continue;
+                }
+
                 entries.add(new Entry(data.type, new Spawn(category, data.getWeight().asInt(), data.minCount, data.maxCount, null)));
             }
         });
@@ -211,27 +230,59 @@ public class SpawnInfo {
         }
     }
 
-    private static void addBiomeGroup(TooltipBuilder dimension, Spawn spawn, SortedSet<ResourceLocation> biomes, Set<ResourceLocation> biomesInDimension) {
+    private void addBiomeGroup(TooltipBuilder dimension, Spawn spawn, SortedSet<ResourceLocation> biomes, Set<ResourceLocation> biomesInDimension) {
         if (biomes.size() == biomesInDimension.size()) {
             addSpawn(dimension, spawn);
             return;
         }
 
-        boolean excluded = biomes.size() * 2 > biomesInDimension.size();
+        boolean excluded = biomes.size() > MAX_INCLUDED_BIOMES && biomes.size() * 2 > biomesInDimension.size();
         List<ResourceLocation> listed = excluded ? biomesInDimension.stream().filter((b) -> !biomes.contains(b)).toList() : List.copyOf(biomes);
 
         for (int i = 0; i < listed.size(); i++) {
-            TooltipBuilder line = TooltipBuilder.value(listed.get(i)).key(excluded ? CoreLang.Spawn.BIOME_EXCLUDED : CoreLang.Spawn.BIOME_INCLUDED);
+            TooltipBuilder line = TooltipBuilder.value(name(Registries.BIOME, listed.get(i))).key(excluded ? CoreLang.Spawn.BIOME_EXCLUDED : CoreLang.Spawn.BIOME_INCLUDED);
 
             dimension.add(i == listed.size() - 1 ? addSpawn(line, spawn) : line);
         }
     }
 
+    private void addStructureGroups(TooltipBuilder builder, Map<ResourceLocation, List<Spawn>> structures) {
+        Map<Spawn, SortedSet<ResourceLocation>> groups = new HashMap<>();
+
+        structures.forEach((structure, spawns) -> {
+            for (Spawn spawn : spawns) {
+                groups.computeIfAbsent(spawn, (k) -> new TreeSet<>()).add(structure);
+            }
+        });
+
+        for (Map.Entry<Spawn, SortedSet<ResourceLocation>> group : groups.entrySet().stream().sorted(GROUP_ORDER).toList()) {
+            List<ResourceLocation> listed = List.copyOf(group.getValue());
+
+            for (int i = 0; i < listed.size(); i++) {
+                TooltipBuilder line = TooltipBuilder.value(name(Registries.STRUCTURE, listed.get(i))).key(CoreLang.Spawn.STRUCTURE);
+
+                builder.add(i == listed.size() - 1 ? addSpawn(line, group.getKey()) : line);
+            }
+        }
+    }
+
+    @NotNull
+    private static String categoryName(MobCategory category) {
+        String key = CoreLang.mobCategoryKey(category);
+
+        return CoreLang.TRANSLATION_MAP.containsKey(key) ? TooltipBuilder.translate(key) : category.getName();
+    }
+
+    @NotNull
+    private <T> Object name(ResourceKey<? extends Registry<T>> registry, ResourceLocation id) {
+        return showInGameNames ? TooltipBuilder.registryKey(ResourceKey.create(registry, id)) : id;
+    }
+
     @NotNull
     private static TooltipBuilder addSpawn(TooltipBuilder builder, Spawn spawn) {
-        builder.add(TooltipBuilder.value(spawn.category().getName()).build(CoreLang.Spawn.CATEGORY));
+        builder.add(TooltipBuilder.value(categoryName(spawn.category())).build(CoreLang.Spawn.CATEGORY));
         builder.add(TooltipBuilder.value(spawn.weight()).build(CoreLang.Spawn.WEIGHT));
-        builder.add(TooltipBuilder.value(new RangeValue(spawn.minCount(), spawn.maxCount()).toIntString()).build(CoreLang.Spawn.GROUP_SIZE));
+        builder.add(TooltipBuilder.number(NumberExpr.uniformInt(spawn.minCount(), spawn.maxCount())).build(CoreLang.Spawn.GROUP_SIZE));
 
         if (spawn.cost() != null) {
             builder.add(TooltipBuilder.value(COST_FORMAT.format(spawn.cost().charge()), COST_FORMAT.format(spawn.cost().energyBudget())).build(CoreLang.Spawn.SPAWN_COST));

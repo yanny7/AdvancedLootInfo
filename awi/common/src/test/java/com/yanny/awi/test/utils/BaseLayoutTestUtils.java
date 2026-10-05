@@ -1,7 +1,7 @@
 package com.yanny.awi.test.utils;
 
 import com.mojang.serialization.Lifecycle;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.number.NumberFormatter;
 import com.yanny.awi.api.BlockInfo;
 import com.yanny.awi.api.ISurfaceRuleHandler;
 import com.yanny.awi.plugin.common.nodes.BandlandsLayout;
@@ -100,14 +100,14 @@ public class BaseLayoutTestUtils {
             StringBuilder ranges = new StringBuilder();
 
             for (int i = 0; i < info.ranges().size(); i++) {
-                ranges.append(i > 0 ? ", " : "").append(info.ranges().get(i).toIntString());
+                ranges.append(i > 0 ? ", " : "").append(NumberFormatter.slot(info.ranges().get(i)));
             }
 
             lines.add("%s %s [%s] %s %s%s%s".formatted(
                     net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(info.block()),
                     info.storageType(), ranges, info.water(), info.placement(),
                     info.layerShift() > 0 ? " shift=±" + info.layerShift() : "",
-                    info.heights().isEmpty() ? "" : " y=[" + String.join(", ", info.heights().stream().map(RangeValue::toIntString).toList()) + "]"));
+                    info.heights().isEmpty() ? "" : " y=[" + String.join(", ", info.heights().stream().map(NumberFormatter::slot).toList()) + "]"));
         }
 
         lines.sort(String::compareTo);

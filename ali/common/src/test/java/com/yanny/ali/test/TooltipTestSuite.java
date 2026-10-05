@@ -1,7 +1,7 @@
 package com.yanny.ali.test;
 
 import com.mojang.logging.LogUtils;
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.test.utils.TestUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipContext;
@@ -16,7 +16,6 @@ import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.glm.LootPage;
 import com.yanny.ali.plugin.glm.ParamState;
 import com.yanny.ali.plugin.glm.Verdict;
-import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.LootConditionTypes;
 import com.yanny.ali.plugin.server.LootFunctionTypes;
 import net.minecraft.DetectedVersion;
@@ -42,6 +41,8 @@ import net.minecraft.server.packs.resources.ReloadInstance;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.Unit;
+import net.minecraft.util.valueproviders.FloatProvider;
+import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -85,7 +86,9 @@ import java.util.concurrent.ExecutionException;
         UnwrapperTest.class,
         ServerUtilsTest.class,
         GlobalLootModifierTest.class,
-        ConfigTest.class
+        ConfigTest.class,
+        ValueCharacterizationTest.class,
+        EntryWeightTest.class
 })
 public class TooltipTestSuite {
     public static IServerUtils UTILS;
@@ -117,6 +120,18 @@ public class TooltipTestSuite {
             @Override
             public String getModId() {
                 return PluginManager.getInstance().serverRegistry.getModId();
+            }
+
+            @NotNull
+            @Override
+            public NumberExpr convertIntProvider(IServerUtils utils, IntProvider provider, List<TooltipNode> conditions) {
+                return PluginManager.getInstance().serverRegistry.convertIntProvider(utils, provider, conditions);
+            }
+
+            @NotNull
+            @Override
+            public NumberExpr convertFloatProvider(IServerUtils utils, FloatProvider provider, List<TooltipNode> conditions) {
+                return PluginManager.getInstance().serverRegistry.convertFloatProvider(utils, provider, conditions);
             }
 
             @NotNull
@@ -157,6 +172,18 @@ public class TooltipTestSuite {
 
             @NotNull
             @Override
+            public <T extends LootPoolEntryContainer> NumberExpr getEntryWeight(IServerUtils utils, T entry, List<TooltipNode> conditions) {
+                return PluginManager.getInstance().serverRegistry.getEntryWeight(utils, entry, conditions);
+            }
+
+            @NotNull
+            @Override
+            public <T extends LootPoolEntryContainer> List<LootPoolEntryContainer> getEntryChildren(IServerUtils utils, T entry) {
+                return PluginManager.getInstance().serverRegistry.getEntryChildren(utils, entry);
+            }
+
+            @NotNull
+            @Override
             public <T extends LootPoolEntryContainer> TooltipBuilder getEntryTooltip(IServerUtils utils, T entry) {
                 return PluginManager.getInstance().serverRegistry.getEntryTooltip(utils, entry);
             }
@@ -185,14 +212,16 @@ public class TooltipTestSuite {
                 return PluginManager.getInstance().serverRegistry.getValueTooltip(utils, value);
             }
 
+            @NotNull
             @Override
-            public <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, EnchantedRanges count) {
-                PluginManager.getInstance().serverRegistry.applyCountModifier(utils, function, count);
+            public <T extends LootItemFunction> NumberExpr applyCountModifier(IServerUtils utils, T function, NumberExpr count, List<TooltipNode> conditions) {
+                return PluginManager.getInstance().serverRegistry.applyCountModifier(utils, function, count, conditions);
             }
 
+            @NotNull
             @Override
-            public <T extends LootItemCondition> void applyChanceModifier(IServerUtils utils, T condition, EnchantedRanges chance) {
-                PluginManager.getInstance().serverRegistry.applyChanceModifier(utils, condition, chance);
+            public <T extends LootItemCondition> NumberExpr applyChanceModifier(IServerUtils utils, T condition, NumberExpr chance, List<TooltipNode> conditions) {
+                return PluginManager.getInstance().serverRegistry.applyChanceModifier(utils, condition, chance, conditions);
             }
 
             @NotNull
@@ -227,8 +256,14 @@ public class TooltipTestSuite {
 
             @NotNull
             @Override
-            public RangeValue convertNumber(IServerUtils utils, @Nullable NumberProvider numberProvider) {
-                return PluginManager.getInstance().serverRegistry.convertNumber(utils, numberProvider);
+            public NumberExpr convertNumber(IServerUtils utils, NumberProvider numberProvider, List<TooltipNode> conditions) {
+                return PluginManager.getInstance().serverRegistry.convertNumber(utils, numberProvider, conditions);
+            }
+
+            @NotNull
+            @Override
+            public NumberExpr convertIntNumber(IServerUtils utils, NumberProvider numberProvider, List<TooltipNode> conditions) {
+                return PluginManager.getInstance().serverRegistry.convertIntNumber(utils, numberProvider, conditions);
             }
 
             @NotNull

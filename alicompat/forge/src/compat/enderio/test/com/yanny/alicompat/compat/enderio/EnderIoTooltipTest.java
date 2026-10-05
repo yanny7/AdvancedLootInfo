@@ -18,7 +18,7 @@ public class EnderIoTooltipTest {
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
                 "Set Loot Capacitor:",
-                "  -> Range: 1-4"
+                "  -> Range: 1 to 4"
         ));
     }
 

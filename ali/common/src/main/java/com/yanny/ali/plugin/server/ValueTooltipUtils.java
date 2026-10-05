@@ -2,8 +2,8 @@ package com.yanny.ali.plugin.server;
 
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
-import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import net.minecraft.advancements.critereon.*;
@@ -22,7 +22,9 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -107,8 +109,8 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
-    public static <T> TooltipBuilder getTagPredicateTooltip(IServerUtils ignoredUtils, TagPredicate<T> tagPredicate) {
-        return TooltipBuilder.keyValue(tagPredicate.tag.location().toString(), Boolean.toString(tagPredicate.expected));
+    public static <T> TooltipBuilder getTagPredicateTooltip(IServerUtils utils, TagPredicate<T> tagPredicate) {
+        return utils.getValueTooltip(utils, tagPredicate.tag).key(tagPredicate.expected ? Lang.Value.TAG_IS : Lang.Value.TAG_IS_NOT);
     }
 
     @NotNull
@@ -368,18 +370,20 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getNumberProviderTooltip(IServerUtils utils, NumberProvider value) {
-        return TooltipBuilder.value(utils.convertNumber(utils, value));
+        return TooltipUtils.getNumberTooltip(utils, value);
     }
 
     @NotNull
     public static TooltipBuilder getIntRangeTooltip(IServerUtils utils, IntRange range) {
-        return TooltipBuilder.value(RangeValue.rangeToString(utils.convertNumber(utils, range.min), utils.convertNumber(utils, range.max)));
+        List<TooltipNode> conditions = new ArrayList<>();
+
+        return TooltipBuilder.number(GenericTooltipUtils.getRange(utils, range, conditions), conditions);
     }
 
     @NotNull
     public static TooltipBuilder getMinMaxBoundsTooltip(IServerUtils ignoredUtils, MinMaxBounds.Ints ints) {
         if (ints != MinMaxBounds.Ints.ANY) {
-            return TooltipBuilder.value(GenericTooltipUtils.toString(ints));
+            return TooltipBuilder.number(GenericTooltipUtils.getRange(ints));
         }
 
         return TooltipBuilder.empty();
@@ -388,7 +392,7 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getMinMaxBoundsTooltip(IServerUtils ignoredUtils, MinMaxBounds.Doubles doubles) {
         if (doubles != MinMaxBounds.Doubles.ANY) {
-            return TooltipBuilder.value(GenericTooltipUtils.toString(doubles));
+            return TooltipBuilder.number(GenericTooltipUtils.getRange(doubles));
         }
 
         return TooltipBuilder.empty();

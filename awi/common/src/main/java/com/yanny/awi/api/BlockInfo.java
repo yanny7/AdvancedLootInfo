@@ -1,18 +1,18 @@
 package com.yanny.awi.api;
 
-import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.NumberInterval;
 import net.minecraft.world.level.block.Block;
 
 import java.util.List;
 
 /**
  * Structured result for a single surface block: the block itself, how its positions are stored
- * ({@link StorageType}), the value {@link RangeValue}s in that storage's units, how far layers shift with X/Z
+ * ({@link StorageType}), the value {@link NumberInterval}s in that storage's units, how far layers shift with X/Z
  * ({@code layerShift}, 0 when they do not), its {@link WaterConstraint}, its {@link Placement} (floor vs. ceiling/overhang),
  * and for a depth-reported block the absolute Y it is confined to ({@code heights}, empty when it occurs at any height).
  */
-public record BlockInfo(Block block, StorageType storageType, List<RangeValue> ranges, int layerShift, WaterConstraint water,
-                        Placement placement, List<RangeValue> heights) {
+public record BlockInfo(Block block, StorageType storageType, List<NumberInterval> ranges, int layerShift, WaterConstraint water,
+                        Placement placement, List<NumberInterval> heights) {
     /**
      * How a block's vertical positions are stored/reported.
      * <ul>

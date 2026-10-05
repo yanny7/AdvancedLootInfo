@@ -43,7 +43,7 @@ public class LootJsConditionTooltipTest {
                 "And:",
                 "  -> Survives Explosion",
                 "  -> Weather Check:",
-                "    -> Is Raining: true"
+                "    -> Is Raining: True"
         ));
     }
 
@@ -93,7 +93,7 @@ public class LootJsConditionTooltipTest {
                 "  -> Structures:",
                 "    -> minecraft:igloo",
                 "    -> minecraft:village",
-                "  -> Exact: true"
+                "  -> Exact: True"
         ));
     }
 
@@ -118,8 +118,8 @@ public class LootJsConditionTooltipTest {
         Mockito.when(((MixinContainsLootCondition) condition).getExact()).thenReturn(true);
         assertTooltip(LootJsConditionTooltipUtils.containsLootConditionTooltip(UTILS, condition).build(), List.of(
                 "Match Loot:",
-                "  -> Item Filter: SWORD",
-                "  -> Exact: true"
+                "  -> Item Filter: Sword",
+                "  -> Exact: True"
         ));
     }
 
@@ -152,7 +152,7 @@ public class LootJsConditionTooltipTest {
         Mockito.when(((MixinIsLightLevel) condition).getMax()).thenReturn(7);
         assertTooltip(LootJsConditionTooltipUtils.isLightLevelTooltip(UTILS, condition).build(), List.of(
                 "Light Level:",
-                "  -> Value: 3 - 7"
+                "  -> Value: 3 to 7"
         ));
     }
 
@@ -163,7 +163,7 @@ public class LootJsConditionTooltipTest {
         Mockito.when(((MixinLootItemConditionWrapper) condition).getCondition()).thenReturn(WeatherCheck.weather().setThundering(false).build());
         assertTooltip(LootJsConditionTooltipUtils.lootItemConditionWrapperTooltip(UTILS, condition).build(), List.of(
                 "Weather Check:",
-                "  -> Is Thundering: false"
+                "  -> Is Thundering: False"
         ));
     }
 
@@ -184,15 +184,15 @@ public class LootJsConditionTooltipTest {
     public void testMatchEquipmentSlotTooltip() {
         assertTooltip(LootJsConditionTooltipUtils.getMatchEquipmentSlotTooltip(UTILS, matchEquipmentSlot(EquipmentSlot.MAINHAND)).build(), List.of(
                 "Match Mainhand:",
-                "  -> Item Filter: AXE"
+                "  -> Item Filter: Axe"
         ));
         assertTooltip(LootJsConditionTooltipUtils.getMatchEquipmentSlotTooltip(UTILS, matchEquipmentSlot(EquipmentSlot.OFFHAND)).build(), List.of(
                 "Match Offhand:",
-                "  -> Item Filter: AXE"
+                "  -> Item Filter: Axe"
         ));
         assertTooltip(LootJsConditionTooltipUtils.getMatchEquipmentSlotTooltip(UTILS, matchEquipmentSlot(EquipmentSlot.HEAD)).build(), List.of(
                 "Match Equipment Slot:",
-                "  -> Item Filter: AXE",
+                "  -> Item Filter: Axe",
                 "  -> Slot: Head"
         ));
     }
@@ -211,8 +211,8 @@ public class LootJsConditionTooltipTest {
         assertTooltip(LootJsConditionTooltipUtils.matchKillerDistanceTooltip(UTILS, condition).build(), List.of(
                 "Distance To Killer:",
                 "  -> Predicate:",
-                "    -> X: =10.0",
-                "    -> Absolute: ≤5.0"
+                "    -> X: 10",
+                "    -> Absolute: ≤ 5"
         ));
     }
 
@@ -254,7 +254,7 @@ public class LootJsConditionTooltipTest {
                 "Or:",
                 "  -> Survives Explosion",
                 "  -> Weather Check:",
-                "    -> Is Raining: true"
+                "    -> Is Raining: True"
         ));
     }
 
@@ -278,7 +278,7 @@ public class LootJsConditionTooltipTest {
                 "Match Damage Source:",
                 "  -> Predicate:",
                 "    -> Tags:",
-                "      -> minecraft:bypasses_armor: true",
+                "      -> Is: minecraft:bypasses_armor",
                 "  -> Source Names:",
                 "    -> minecraft:on_fire",
                 "    -> minecraft:lava"

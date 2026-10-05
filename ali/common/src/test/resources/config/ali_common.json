@@ -164,11 +164,25 @@
     "text": "gold",
     "value": "aqua",
     "error": "red",
-    "branch": "dark_gray"
+    "branch": "dark_gray",
+    "secondary": "gray",
+    "levels": [
+      "green",
+      "yellow",
+      "light_purple",
+      "blue",
+      "red",
+      "gold"
+    ]
+  },
+  "spawnInfo": {
+    "entities": [],
+    "whitelist": false
   },
   "logMoreStatistics": false,
   "showInGameNames": true,
   "hideDefaultBlockLoot": true,
   "showUnboundedGlobalLootModifiers": false,
-  "showEntitiesWithoutLoot": false
+  "showEntitiesWithoutLoot": false,
+  "showCharts": true
 }
