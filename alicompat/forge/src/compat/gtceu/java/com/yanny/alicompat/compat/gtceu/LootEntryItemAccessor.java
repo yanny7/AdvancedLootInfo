@@ -1,6 +1,8 @@
 package com.yanny.alicompat.compat.gtceu;
 
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.common.NodeUtils;
@@ -22,8 +24,8 @@ public class LootEntryItemAccessor extends BaseAccessor<LootItem> implements IEn
     }
 
     @Override
-    public IDataNode create(IServerUtils utils, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        return NodeUtils.getItemNode(utils, parent, chance, sumWeight, functions, conditions);
+    public IDataNode create(IServerUtils utils, NumberExpr chance, NumberExpr sumWeight, List<TooltipNode> chanceConditions, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        return NodeUtils.getItemNode(utils, parent, chance, sumWeight, chanceConditions, functions, conditions);
     }
 
     @Override

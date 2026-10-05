@@ -30,7 +30,7 @@ import java.util.stream.Stream;
 public class GlmNodeUtils {
     @NotNull
     public static IDataNode addedNode(IServerUtils utils, List<LootItemCondition> conditions, ItemStack item, float rawChance, NumberExpr count) {
-        NumberExpr chance = NodeUtils.getChance(utils, conditions, rawChance);
+        LootCount chance = NodeUtils.getChance(utils, conditions, rawChance);
         TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, LootCount.of(count), NodeUtils.getCountLimit(item), Collections.emptyList(), conditions);
 
         return new ItemNode(rawChance, count, item, tooltip.build(), Collections.emptyList(), conditions);
@@ -50,7 +50,7 @@ public class GlmNodeUtils {
     public static List<IDataNode> replacedNode(IServerUtils utils, List<LootItemCondition> conditions, IDataNode src, ItemStack item, NumberExpr count) {
         IItemNode node = (IItemNode) src;
         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), node.getConditions().stream()).toList();
-        NumberExpr chance = NodeUtils.getChance(utils, allConditions, node.getChance());
+        LootCount chance = NodeUtils.getChance(utils, allConditions, node.getChance());
         TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, LootCount.of(count), NodeUtils.getCountLimit(item), node.getFunctions(), allConditions);
         ItemNode replacement = new ItemNode(node.getChance(), count, item, tooltip.build(), node.getFunctions(), allConditions);
 
@@ -71,7 +71,7 @@ public class GlmNodeUtils {
 
         allConditions.add(new InvertedLootItemCondition(new AllOfCondition(conditions)));
 
-        NumberExpr chance = NodeUtils.getChance(utils, allConditions, node.getChance());
+        LootCount chance = NodeUtils.getChance(utils, allConditions, node.getChance());
         LootCount count;
 
         if (node.getFunctions().isEmpty()) {

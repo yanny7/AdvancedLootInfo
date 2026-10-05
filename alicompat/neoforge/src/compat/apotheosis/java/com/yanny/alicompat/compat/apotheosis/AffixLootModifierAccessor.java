@@ -8,6 +8,7 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
+import com.yanny.ali.plugin.common.nodes.LootPoolNode;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.ali.plugin.glm.LootPage;
@@ -65,7 +66,7 @@ public class AffixLootModifierAccessor extends BaseAccessor<AffixLootModifier> i
 
     @NotNull
     private static IDataNode getNode(IServerUtils utils, List<LootItemCondition> conditions, AffixLootModifier.AffixTableEntry entry) {
-        NumberExpr chance = NodeUtils.getChance(utils, conditions, entry.chance());
+        LootCount chance = NodeUtils.getChance(utils, conditions, entry.chance());
         TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, LootCount.of(NumberExpr.constant(1)), NodeUtils.getCountLimit(ApotheosisUtils.firstEntryStack(entry.entries())), Collections.emptyList(), conditions);
 
         tooltip.add(TooltipBuilder.keyOnly(ApotheosisLang.Conditions.REQUIRES_PLAYER));

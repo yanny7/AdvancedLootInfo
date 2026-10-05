@@ -1,15 +1,22 @@
 package com.yanny.awi.plugin.server.summary;
 
 import com.yanny.aci.api.NumberExpr;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.api.IServerUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.levelgen.placement.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PlacementPropagatorUtils {
     @NotNull
     public static PlacementContribution getCountPlacement(IServerUtils utils, CountPlacement placement, ColumnContext ignoredCtx) {
-        return PlacementContribution.ofCount(utils.convertIntProvider(utils, placement.count));
+        List<TooltipNode> conditions = new ArrayList<>();
+        NumberExpr count = utils.convertIntProvider(utils, placement.count, conditions);
+
+        return PlacementContribution.ofCount(count, conditions);
     }
 
     @NotNull
@@ -29,12 +36,15 @@ public class PlacementPropagatorUtils {
 
     @NotNull
     public static PlacementContribution getRarityFilter(IServerUtils ignoredUtils, RarityFilter placement, ColumnContext ignoredCtx) {
-        return PlacementContribution.ofChance(NumberExpr.constant(1.0 / placement.chance));
+        return PlacementContribution.ofChance(NumberExpr.constant(1.0 / placement.chance), List.of());
     }
 
     @NotNull
     public static PlacementContribution getHeightRangePlacement(IServerUtils utils, HeightRangePlacement placement, ColumnContext ctx) {
-        return PlacementContribution.ofHeight(HeightSpan.of(utils.convertHeightProvider(utils, placement.height, ctx)));
+        List<TooltipNode> conditions = new ArrayList<>();
+        NumberExpr height = utils.convertHeightProvider(utils, placement.height, ctx, conditions);
+
+        return PlacementContribution.ofHeight(HeightSpan.of(height, conditions));
     }
 
     @NotNull

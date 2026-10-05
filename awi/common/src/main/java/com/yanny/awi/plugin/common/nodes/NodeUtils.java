@@ -93,7 +93,8 @@ public class NodeUtils {
     public static class DimensionContext {
         private final HolderLookup.Provider codecLookup;
         private final SurfaceRules.RuleSource masterSurfaceRule;
-        private final SurfaceRules.Context context;
+        private final Supplier<SurfaceRules.Context> freshContext;
+        private SurfaceRules.Context context;
         private SurfaceRules.SurfaceRule compiledRule;
         /** Built on first use and reused for every biome of this dimension — the encode behind it is not free. */
         @Nullable
@@ -150,6 +151,10 @@ public class NodeUtils {
                     Blender.empty()
             );
 
+            this.freshContext = () -> new SurfaceRules.Context(
+                    new SurfaceSystem(randomState, settings.defaultBlock(), settings.seaLevel(), randomState.random), randomState, mockChunk,
+                    dummyNoiseChunk, biomeWrapper, biomeRegistry, genContext
+            );
             this.context = new SurfaceRules.Context(
                     randomState.surfaceSystem(), randomState, mockChunk,
                     dummyNoiseChunk, biomeWrapper, biomeRegistry, genContext
@@ -169,6 +174,8 @@ public class NodeUtils {
             }
 
             if (options.settings().specializeRulePerBiome()) {
+                // Mods caching compiled rules per SurfaceSystem (zmatcomp) would otherwise keep every biome's rule alive.
+                context = freshContext.get();
                 compiledRule = specializer.specialize(biome).apply(context);
                 markers = specializer.markers(biome);
             } else {

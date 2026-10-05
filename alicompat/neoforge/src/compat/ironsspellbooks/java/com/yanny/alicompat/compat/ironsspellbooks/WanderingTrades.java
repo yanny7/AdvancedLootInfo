@@ -33,6 +33,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
+import java.util.ArrayList;
 
 public class WanderingTrades {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
@@ -114,7 +115,7 @@ public class WanderingTrades {
 
         if (table != null) {
             for (LootPool pool : table.pools) {
-                rolls = NumberExpr.add(rolls, utils.convertIntNumber(utils, pool.rolls));
+                rolls = NumberExpr.add(rolls, utils.convertIntNumber(utils, pool.rolls, new ArrayList<>()));
             }
         }
 

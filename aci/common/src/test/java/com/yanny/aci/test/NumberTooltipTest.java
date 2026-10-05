@@ -1,5 +1,6 @@
 package com.yanny.aci.test;
 
+import com.yanny.aci.api.NumberConverter;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberFunction;
 import com.yanny.aci.api.NumberFunctions;
@@ -34,7 +35,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.BiFunction;
 
 import static com.yanny.aci.api.NumberExpr.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -270,21 +270,21 @@ public class NumberTooltipTest {
 
     @Test
     public void testFailingConverterGivesOpaque() {
-        ManagedRegistry<Class<?>, BiFunction<Object, Object, NumberExpr>> registry = new ManagedRegistry<>(MOD_ID, "test", true, HashMap::new, ManagedRegistry::classKeyName, null);
+        ManagedRegistry<Class<?>, NumberConverter<Object, Object>> registry = new ManagedRegistry<>(MOD_ID, "test", true, HashMap::new, ManagedRegistry::classKeyName, null);
 
-        registry.put(String.class, (u, t) -> {
+        registry.put(String.class, (u, t, c) -> {
             throw new IllegalStateException("broken shim");
         });
 
-        assertEquals(opaque("test:broken"), NumberConverters.convert(MOD_ID, registry, null, "value", (t) -> "test:broken"));
+        assertEquals(opaque("test:broken"), NumberConverters.convert(MOD_ID, registry, null, "value", List.of(), (t) -> "test:broken"));
     }
 
     @Test
     public void testMissingConverterGivesOpaque() {
-        ManagedRegistry<Class<?>, BiFunction<Object, Object, NumberExpr>> registry = new ManagedRegistry<>(MOD_ID, "test", true, HashMap::new, ManagedRegistry::classKeyName, null);
+        ManagedRegistry<Class<?>, NumberConverter<Object, Object>> registry = new ManagedRegistry<>(MOD_ID, "test", true, HashMap::new, ManagedRegistry::classKeyName, null);
 
-        assertEquals(opaque("test:missing"), NumberConverters.convert(MOD_ID, registry, null, 5, (t) -> "test:missing"));
-        assertEquals(opaque(Integer.class.getTypeName()), NumberConverters.convert(MOD_ID, registry, null, 5, (t) -> {
+        assertEquals(opaque("test:missing"), NumberConverters.convert(MOD_ID, registry, null, 5, List.of(), (t) -> "test:missing"));
+        assertEquals(opaque(Integer.class.getTypeName()), NumberConverters.convert(MOD_ID, registry, null, 5, List.of(), (t) -> {
             throw new IllegalStateException("no type");
         }));
     }

@@ -1,7 +1,9 @@
 package com.yanny.alicompat.compat.mantle;
 
 import com.mojang.datafixers.util.Either;
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
@@ -29,8 +31,8 @@ public class TagPreferenceLootEntryAccessor extends BaseAccessor<TagPreferenceLo
     }
 
     @Override
-    public IDataNode create(IServerUtils utils, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        return NodeUtils.getItemNode(utils, parent, (f) -> Either.right(tag), chance, sumWeight, functions, conditions);
+    public IDataNode create(IServerUtils utils, NumberExpr chance, NumberExpr sumWeight, List<TooltipNode> chanceConditions, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        return NodeUtils.getItemNode(utils, parent, (f) -> Either.right(tag), chance, sumWeight, chanceConditions, functions, conditions);
     }
 
     @NotNull

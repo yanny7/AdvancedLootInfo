@@ -1,5 +1,7 @@
 package com.yanny.aci.language;
 
+import com.yanny.aci.tooltip.CoreTooltipUtils;
+import net.minecraft.world.entity.MobCategory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -14,6 +16,8 @@ public final class CoreLang {
         TAG("tag", "Tag: %s"),
         NOT_IMPLEMENTED("missing", "Not implemented: %s"),
         REMOVED("removed", "REMOVED"),
+        TRUE("true", "True"),
+        FALSE("false", "False"),
         ;
 
         private final Translation translation;
@@ -65,6 +69,7 @@ public final class CoreLang {
         MODE_PEAK("mode_peak", "~%s"),
         DEPENDS("depends", "(%s)"),
         LEVEL_ROW("level_row", "%s %s: %s"),
+        VAR_ROW("var_row", "%s: %s"),
         WEIGHTED_ENTRY("weighted_entry", "%s (%s)"),
         OTHERWISE("otherwise", "otherwise %s"),
         FN_MOD("fn.mod", "mod"),
@@ -118,6 +123,24 @@ public final class CoreLang {
         register(TRANSLATION_MAP, Utils.class);
         register(TRANSLATION_MAP, Spawn.class);
         register(TRANSLATION_MAP, Numbers.class);
+
+        putMobCategory(MobCategory.MONSTER, "Monster");
+        putMobCategory(MobCategory.CREATURE, "Creature");
+        putMobCategory(MobCategory.AMBIENT, "Ambient");
+        putMobCategory(MobCategory.AXOLOTLS, "Axolotls");
+        putMobCategory(MobCategory.UNDERGROUND_WATER_CREATURE, "Underground Water Creature");
+        putMobCategory(MobCategory.WATER_CREATURE, "Water Creature");
+        putMobCategory(MobCategory.WATER_AMBIENT, "Water Ambient");
+        putMobCategory(MobCategory.MISC, "Misc");
+    }
+
+    @NotNull
+    public static String mobCategoryKey(MobCategory category) {
+        return CoreTooltipUtils.enumKey(com.yanny.aci.Utils.MOD_ID, "mob_category", category.name());
+    }
+
+    private static void putMobCategory(MobCategory category, String english) {
+        TRANSLATION_MAP.put(mobCategoryKey(category), english);
     }
 
     public static void register(Map<String, String> translationMap, Class<? extends ITooltipKey> enumClass) {

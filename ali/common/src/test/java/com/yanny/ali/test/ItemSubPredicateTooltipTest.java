@@ -142,8 +142,8 @@ public class ItemSubPredicateTooltipTest {
         ))).build(), List.of(
                 "Firework Explosion:",
                 "  -> Shape: Large Ball",
-                "  -> Trail: false",
-                "  -> Twinkle: true"
+                "  -> Trail: False",
+                "  -> Twinkle: True"
         ));
     }
 
@@ -201,7 +201,7 @@ public class ItemSubPredicateTooltipTest {
                 "  -> Author: Yanny",
                 "  -> Title: Testing",
                 "  -> Generation: 1 to 8",
-                "  -> Resolved: false"
+                "  -> Resolved: False"
         ));
     }
 

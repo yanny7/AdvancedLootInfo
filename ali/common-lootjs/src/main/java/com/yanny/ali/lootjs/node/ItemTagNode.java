@@ -151,7 +151,7 @@ public class ItemTagNode implements IDataNode, IItemNode {
 
     @NotNull
     private static TooltipNode getItemTooltip(IServerUtils utils, LootCount count, Either<ItemStack, TagKey<? extends ItemLike>> item, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        NumberExpr chanceExpr = NodeUtils.getChance(utils, conditions, chance);
+        LootCount chanceExpr = NodeUtils.getChance(utils, conditions, chance);
 
         return TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chanceExpr, count, NodeUtils.getCountLimit(item), functions, conditions).build();
     }

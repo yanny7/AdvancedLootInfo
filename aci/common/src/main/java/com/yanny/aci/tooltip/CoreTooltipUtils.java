@@ -34,6 +34,18 @@ public class CoreTooltipUtils {
     }
 
     @NotNull
+    public static <
+            T,
+            TServerUtils extends ICoreServerUtils<TServerUtils>
+            > TooltipBuilder getBuiltInRegistryTooltip(TServerUtils utils, Registry<T> registry, T value, boolean showName) {
+        if (showName) {
+            return TooltipBuilder.value(TooltipBuilder.registryEntry(registry, value));
+        }
+
+        return getBuiltInRegistryTooltip(utils, registry, value);
+    }
+
+    @NotNull
     public static String enumKey(String modId, String owner, String constantName) {
         return modId + ".enum." + owner + "." + constantName.toLowerCase(Locale.ROOT);
     }

@@ -51,6 +51,8 @@ nothing at all, since conditions ALI can run decide themselves. See `alicompat/C
 | Shape | Example |
 |---|---|
 | Loot entry | `placebo` → `StackLootEntryAccessor`, registered through **both** `PluginUtils.registerEntry` and `registerEntryTooltip`; one accessor serves two target classes (`StackLootEntry`, `EnchantedLootEntry`) |
+| Composite entry (own weight and children) | `spellengine` → `AffiliationGroupEntryAccessor` implements `IEntryWeight` (`NodeUtils.getTotalWeight` over its children) and `IEntryChildren` beside `IEntry`/`IEntryTooltip`, registered through `PluginUtils.registerEntryWeight` / `registerEntryChildren`; a `LootPoolSingletonContainer` subclass needs neither, it inherits the singleton rule |
+| Entry holding a whole pool | `spellengine` → `InlinePoolEntryAccessor`: `ReferenceNode` over a `LootTableNode` over `NodeUtils.getLootPoolNode(…, entryChance.value(), entryChance.conditions(), …)`, so the pool renders as a random pick with its rolls |
 | Ingredient needing no special rendering | `sophisticatedstorage` → `registry.registerIngredientTooltip(X.class, IngredientTooltipUtils::getIngredientTooltip)` — delegate to ALI's own util rather than writing one |
 | Value tooltip | `ironsspellbooks` → `SpellFilterAccessor` implements `IValueTooltip`; its `array` carries **no key** — the caller names it |
 | Number provider | no shim registers one. Implement `INumberProvider` and register through `PluginUtils.registerNumberProvider`; the converter shapes are in `ali/common`'s `Plugin` and ACI's `CommonNumberProviders` |

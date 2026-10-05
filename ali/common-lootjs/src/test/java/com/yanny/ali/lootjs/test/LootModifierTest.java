@@ -85,7 +85,7 @@ public class LootModifierTest {
                 "----- Modifiers -----",
                 "Set Count:",
                 "  -> Count: 3",
-                "  -> Add: false"
+                "  -> Add: False"
         ));
     }
 
@@ -182,7 +182,7 @@ public class LootModifierTest {
                 "----- Modifiers -----",
                 "Set Count:",
                 "  -> Count: 5",
-                "  -> Add: false"
+                "  -> Add: False"
         ));
     }
 
@@ -197,7 +197,7 @@ public class LootModifierTest {
                 "----- Modifiers -----",
                 "Set Count:",
                 "  -> Count: 7",
-                "  -> Add: false"
+                "  -> Add: False"
         ));
     }
 

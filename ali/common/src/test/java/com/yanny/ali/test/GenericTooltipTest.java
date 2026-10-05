@@ -82,7 +82,7 @@ public class GenericTooltipTest {
         assertTooltip(TooltipUtils.getTooltip(
                 UTILS,
                 0,
-                NumberExpr.constant(0.025),
+                LootCount.of(NumberExpr.constant(0.025)),
                 LootCount.of(NumberExpr.range(2, 10)),
                 null,
                 List.of(),
@@ -94,7 +94,7 @@ public class GenericTooltipTest {
         assertTooltip(TooltipUtils.getTooltip(
                 UTILS,
                 5,
-                chance,
+                LootCount.of(chance),
                 count,
                 null,
                 List.of(ApplyExplosionDecay.explosionDecay().when(ExplosionCondition.survivesExplosion()).build(), SmeltItemFunction.smelted().build()),
@@ -198,20 +198,20 @@ public class GenericTooltipTest {
                 .build()).build(Lang.Branch.PREDICATE), List.of(
                 "Predicate:",
                 "  -> Tags:",
-                "    -> minecraft:bypasses_armor: true",
-                "    -> minecraft:is_explosion: false",
+                "    -> Is: minecraft:bypasses_armor",
+                "    -> Is Not: minecraft:is_explosion",
                 "  -> Direct Entity:",
                 "    -> Entity Type: minecraft:arrow",
                 "  -> Source Entity:",
                 "    -> Entity Type: minecraft:bat",
-                "  -> Is Direct: false"
+                "  -> Is Direct: False"
         ));
     }
 
     @Test
     public void testTagPredicateTooltip() {
-        assertTooltip(ValueTooltipUtils.getTagPredicateTooltip(UTILS, TagPredicate.is(DamageTypeTags.BYPASSES_ARMOR)).build(), List.of("minecraft:bypasses_armor: true"));
-        assertTooltip(ValueTooltipUtils.getTagPredicateTooltip(UTILS, TagPredicate.isNot(DamageTypeTags.BYPASSES_ARMOR)).build(), List.of("minecraft:bypasses_armor: false"));
+        assertTooltip(ValueTooltipUtils.getTagPredicateTooltip(UTILS, TagPredicate.is(DamageTypeTags.BYPASSES_ARMOR)).build(), List.of("Is: minecraft:bypasses_armor"));
+        assertTooltip(ValueTooltipUtils.getTagPredicateTooltip(UTILS, TagPredicate.isNot(DamageTypeTags.BYPASSES_ARMOR)).build(), List.of("Is Not: minecraft:bypasses_armor"));
     }
 
     @Test
@@ -256,12 +256,12 @@ public class GenericTooltipTest {
                 "  -> Periodic Tick: 1000",
                 "  -> Mob Effects:",
                 "    -> minecraft:absorption",
-                "      -> Is Ambient: true",
+                "      -> Is Ambient: True",
                 "    -> minecraft:blindness",
-                "      -> Is Visible: false",
+                "      -> Is Visible: False",
                 "  -> Nbt: {range:5}",
                 "  -> Entity Flags:",
-                "    -> Is Baby: true",
+                "    -> Is Baby: True",
                 "  -> Entity Equipment:",
                 "    -> Head:",
                 "      -> Items:",
@@ -337,7 +337,7 @@ public class GenericTooltipTest {
                 "  -> Biome: minecraft:plains",
                 "  -> Structure: minecraft:mineshaft",
                 "  -> Dimension: minecraft:overworld",
-                "  -> Smokey: true",
+                "  -> Smokey: True",
                 "  -> Light: 10 to 15",
                 "  -> Block Predicate:",
                 "    -> Blocks:",
@@ -345,7 +345,7 @@ public class GenericTooltipTest {
                 "      -> minecraft:cobblestone",
                 "  -> Fluid Predicate:",
                 "    -> Fluid: minecraft:lava",
-                "  -> Can See Sky: true"
+                "  -> Can See Sky: True"
         ));
     }
 
@@ -435,8 +435,8 @@ public class GenericTooltipTest {
                 "  -> minecraft:absorption",
                 "    -> Amplifier: 10 to 15",
                 "    -> Duration: ≤ 5",
-                "    -> Is Ambient: true",
-                "    -> Is Visible: false",
+                "    -> Is Ambient: True",
+                "    -> Is Visible: False",
                 "  -> minecraft:blindness",
                 "    -> Amplifier: ≥ 5",
                 "    -> Duration: 1 to 2"
@@ -456,13 +456,13 @@ public class GenericTooltipTest {
                 .build()
         ).build(Lang.Branch.ENTITY_FLAGS), List.of(
                 "Entity Flags:",
-                "  -> Is On Ground: false",
-                "  -> Is On Fire: false",
-                "  -> Is Baby: true",
-                "  -> Is Crouching: true",
-                "  -> Is Sprinting: true",
-                "  -> Is Swimming: false",
-                "  -> Is Flying: true"
+                "  -> Is On Ground: False",
+                "  -> Is On Fire: False",
+                "  -> Is Baby: True",
+                "  -> Is Crouching: True",
+                "  -> Is Sprinting: True",
+                "  -> Is Swimming: False",
+                "  -> Is Flying: True"
         ));
     }
 
@@ -715,8 +715,8 @@ public class GenericTooltipTest {
         )).build(Lang.Branch.PREDICATE), List.of(
                 "Predicate:",
                 "  -> Shape: Creeper",
-                "  -> Trail: false",
-                "  -> Twinkle: true"
+                "  -> Trail: False",
+                "  -> Twinkle: True"
         ));
     }
 
@@ -781,8 +781,8 @@ public class GenericTooltipTest {
                 "  -> Shape: Star",
                 "  -> Colors: [1, 2, 3]",
                 "  -> Fade Colors: [3, 4, 5]",
-                "  -> Has Trail: true",
-                "  -> Has Twinkle: false"
+                "  -> Has Trail: True",
+                "  -> Has Twinkle: False"
         ));
     }
 
@@ -841,9 +841,9 @@ public class GenericTooltipTest {
                 "    -> Effect: minecraft:luck",
                 "    -> Duration: 1",
                 "    -> Amplifier: 0",
-                "    -> Ambient: false",
-                "    -> Is Visible: true",
-                "    -> Show Icon: true",
+                "    -> Ambient: False",
+                "    -> Is Visible: True",
+                "    -> Show Icon: True",
                 "  -> Probability: 0.5"
         ));
     }
@@ -863,16 +863,16 @@ public class GenericTooltipTest {
                 "  -> Effect: minecraft:bad_omen",
                 "  -> Duration: 1",
                 "  -> Amplifier: 2",
-                "  -> Ambient: true",
-                "  -> Is Visible: false",
-                "  -> Show Icon: true",
+                "  -> Ambient: True",
+                "  -> Is Visible: False",
+                "  -> Show Icon: True",
                 "  -> Hidden Effect:",
                 "    -> Effect: minecraft:unluck",
                 "    -> Duration: 5",
                 "    -> Amplifier: 0",
-                "    -> Ambient: false",
-                "    -> Is Visible: true",
-                "    -> Show Icon: true"
+                "    -> Ambient: False",
+                "    -> Is Visible: True",
+                "    -> Show Icon: True"
         ));
     }
 
@@ -887,7 +887,7 @@ public class GenericTooltipTest {
                 "  -> Blocks:",
                 "    -> minecraft:dirt",
                 "    -> minecraft:cobblestone",
-                "  -> Correct For Drops: true",
+                "  -> Correct For Drops: True",
                 "  -> Speed: 0.25"
         ));
     }
@@ -1010,9 +1010,30 @@ public class GenericTooltipTest {
         assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, LevelBasedValue.constant(2.5F)).build(Lang.Value.CHANCE), List.of("Chance: 2.5"));
         assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, new LevelBasedValue.Clamped(LevelBasedValue.constant(2.5F), 0.5F, 5F)).build(Lang.Value.CHANCE), List.of("Chance: 2.5"));
         assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, new LevelBasedValue.Fraction(LevelBasedValue.constant(2), LevelBasedValue.constant(3))).build(Lang.Value.CHANCE), List.of("Chance: 0.67"));
-        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, new LevelBasedValue.Linear(0.5F, 5F)).build(Lang.Value.CHANCE), List.of("Chance: 0.5 to 20.5 (enchantment level)"));
-        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, new LevelBasedValue.LevelsSquared(0.5F)).build(Lang.Value.CHANCE), List.of("Chance: 1.5 to 25.5 (enchantment level)"));
-        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, new LevelBasedValue.Lookup(List.of(0.5F, 1.5F, 2.5F), LevelBasedValue.constant(3.3F))).build(Lang.Value.CHANCE), List.of("Chance: 0.5 to 3.3 (enchantment level)"));
+        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, new LevelBasedValue.Linear(0.5F, 5F)).build(Lang.Value.CHANCE), List.of(
+                "Chance: 0.5 to 20.5 (enchantment level)",
+                "  -> Level 1: 0.5",
+                "  -> Level 2: 5.5",
+                "  -> Level 3: 10.5",
+                "  -> Level 4: 15.5",
+                "  -> Level 5: 20.5"
+        ));
+        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, new LevelBasedValue.LevelsSquared(0.5F)).build(Lang.Value.CHANCE), List.of(
+                "Chance: 1.5 to 25.5 (enchantment level)",
+                "  -> Level 1: 1.5",
+                "  -> Level 2: 4.5",
+                "  -> Level 3: 9.5",
+                "  -> Level 4: 16.5",
+                "  -> Level 5: 25.5"
+        ));
+        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(utils, new LevelBasedValue.Lookup(List.of(0.5F, 1.5F, 2.5F), LevelBasedValue.constant(3.3F))).build(Lang.Value.CHANCE), List.of(
+                "Chance: 0.5 to 3.3 (enchantment level)",
+                "  -> Level 1: 0.5",
+                "  -> Level 2: 1.5",
+                "  -> Level 3: 2.5",
+                "  -> Level 4: 3.3",
+                "  -> Level 5: 3.3"
+        ));
     }
 
     @NotNull

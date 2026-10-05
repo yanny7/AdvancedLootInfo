@@ -74,7 +74,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testUnbreakableTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getUnbreakableTooltip(UTILS, new Unbreakable(true)).build(), List.of("Show In Tooltip: true"));
+        assertTooltip(DataComponentTooltipUtils.getUnbreakableTooltip(UTILS, new Unbreakable(true)).build(), List.of("Show In Tooltip: True"));
     }
 
     @Test
@@ -122,7 +122,7 @@ public class DataComponentTooltipTest {
                         "  -> minecraft:fortune",
                         "    -> Level: 2"
                 ),
-                "Show In Tooltip: true"
+                "Show In Tooltip: True"
         ));
     }
 
@@ -163,7 +163,7 @@ public class DataComponentTooltipTest {
                 "  -> White Bed",
                 "  -> Yellow Bed",
                 "  -> Bell",
-                "Show In Tooltip: true"
+                "Show In Tooltip: True"
         ));
     }
 
@@ -207,7 +207,7 @@ public class DataComponentTooltipTest {
                 "      -> Amount: 1.25",
                 "      -> Operation: Multiply Total",
                 "    -> Slot: Hand",
-                "Show In Tooltip: false"
+                "Show In Tooltip: False"
         ));
     }
 
@@ -223,7 +223,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testBoolTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getBoolTooltip(UTILS, true).build(), List.of("Value: true"));
+        assertTooltip(DataComponentTooltipUtils.getBoolTooltip(UTILS, true).build(), List.of("Value: True"));
     }
 
     @Test
@@ -247,7 +247,7 @@ public class DataComponentTooltipTest {
         )).build(), List.of(
                 "Nutrition: 5",
                 "Saturation: 2.5",
-                "Can Always Eat: false",
+                "Can Always Eat: False",
                 "Eat Seconds: 3.5",
                 "Using Converts To:",
                 "  -> Item: minecraft:coal",
@@ -258,18 +258,18 @@ public class DataComponentTooltipTest {
                 "      -> Effect: minecraft:luck",
                 "      -> Duration: 0",
                 "      -> Amplifier: 0",
-                "      -> Ambient: false",
-                "      -> Is Visible: true",
-                "      -> Show Icon: true",
+                "      -> Ambient: False",
+                "      -> Is Visible: True",
+                "      -> Show Icon: True",
                 "    -> Probability: 0.5",
                 "  -> Entry:",
                 "    -> Effect:",
                 "      -> Effect: minecraft:blindness",
                 "      -> Duration: 5",
                 "      -> Amplifier: 0",
-                "      -> Ambient: false",
-                "      -> Is Visible: true",
-                "      -> Show Icon: true",
+                "      -> Ambient: False",
+                "      -> Is Visible: True",
+                "      -> Show Icon: True",
                 "    -> Probability: 0.25"
         ));
     }
@@ -297,7 +297,7 @@ public class DataComponentTooltipTest {
                 "    -> Blocks:",
                 "      -> minecraft:dirt",
                 "      -> minecraft:stone",
-                "    -> Correct For Drops: true",
+                "    -> Correct For Drops: True",
                 "    -> Speed: 2.5",
                 "  -> Block: minecraft:furnace",
                 "Default Mining Speed: 0.5",
@@ -312,7 +312,7 @@ public class DataComponentTooltipTest {
                 true
         )).build(), List.of(
                 "RGB: 12345",
-                "Show In Tooltip: true"
+                "Show In Tooltip: True"
         ));
     }
 
@@ -406,16 +406,16 @@ public class DataComponentTooltipTest {
                 "    -> Effect: minecraft:blindness",
                 "    -> Duration: 5",
                 "    -> Amplifier: 2",
-                "    -> Ambient: false",
-                "    -> Is Visible: true",
-                "    -> Show Icon: true",
+                "    -> Ambient: False",
+                "    -> Is Visible: True",
+                "    -> Show Icon: True",
                 "  -> Entry:",
                 "    -> Effect: minecraft:absorption",
                 "    -> Duration: 0",
                 "    -> Amplifier: 0",
-                "    -> Ambient: false",
-                "    -> Is Visible: true",
-                "    -> Show Icon: true"
+                "    -> Ambient: False",
+                "    -> Is Visible: True",
+                "    -> Show Icon: True"
         ));
     }
 
@@ -473,7 +473,7 @@ public class DataComponentTooltipTest {
                 "  -> Entry:",
                 "    -> Raw: Sum",
                 "    -> Filtered: Rum",
-                "Resolved: true"
+                "Resolved: True"
         ));
     }
 
@@ -486,7 +486,7 @@ public class DataComponentTooltipTest {
         )).build(), List.of(
                 "Material: minecraft:netherite",
                 "Pattern: minecraft:silence",
-                "Show In Tooltip: true"
+                "Show In Tooltip: True"
         ));
     }
 
@@ -519,14 +519,14 @@ public class DataComponentTooltipTest {
                 true
         )).build(), List.of(
                 "Song: minecraft:pigstep",
-                "Show In Tooltip: true"
+                "Show In Tooltip: True"
         ));
         assertTooltip(DataComponentTooltipUtils.getJukeboxPlayableTooltip(UTILS, new JukeboxPlayable(
                 EitherHolder.fromEither(Either.left(LOOKUP.lookupOrThrow(Registries.JUKEBOX_SONG).getOrThrow(JukeboxSongs.PIGSTEP))),
                 true
         )).build(), List.of(
                 "Song: minecraft:pigstep",
-                "Show In Tooltip: true"
+                "Show In Tooltip: True"
         ));
     }
 
@@ -551,7 +551,7 @@ public class DataComponentTooltipTest {
                 "Global Position:",
                 "  -> Dimension: minecraft:the_end",
                 "  -> Position: [X: 1, Y: 2, Z: 3]",
-                "Tracked: true"
+                "Tracked: True"
         ));
     }
 
@@ -567,8 +567,8 @@ public class DataComponentTooltipTest {
                 "Shape: Large Ball",
                 "Colors: [1, 2, 3]",
                 "Fade Colors: []",
-                "Has Trail: true",
-                "Has Twinkle: false"
+                "Has Trail: True",
+                "Has Twinkle: False"
         ));
     }
 
@@ -587,14 +587,14 @@ public class DataComponentTooltipTest {
                 "    -> Shape: Star",
                 "    -> Colors: []",
                 "    -> Fade Colors: []",
-                "    -> Has Trail: true",
-                "    -> Has Twinkle: true",
+                "    -> Has Trail: True",
+                "    -> Has Twinkle: True",
                 "  -> Entry:",
                 "    -> Shape: Creeper",
                 "    -> Colors: []",
                 "    -> Fade Colors: []",
-                "    -> Has Trail: true",
-                "    -> Has Twinkle: true"
+                "    -> Has Trail: True",
+                "    -> Has Twinkle: True"
         ));
     }
 

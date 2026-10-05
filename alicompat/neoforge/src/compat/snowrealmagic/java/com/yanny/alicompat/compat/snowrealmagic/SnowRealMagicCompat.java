@@ -1,12 +1,15 @@
 package com.yanny.alicompat.compat.snowrealmagic;
 
+import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.DynamicNode;
+import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.alicompat.IModCompat;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
@@ -30,13 +33,13 @@ public class SnowRealMagicCompat implements IModCompat {
     }
 
     @NotNull
-    private static IDataNode getNormalizeNode(IServerUtils utils, NormalizeLoot entry, float rawChance, int sumWeight,
+    private static IDataNode getNormalizeNode(IServerUtils utils, NormalizeLoot entry, NumberExpr rawChance, NumberExpr sumWeight, List<TooltipNode> chanceConditions,
                                               List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemFunction> allFunctions = NodeUtils.getAllFunctions(entry, functions);
         List<LootItemCondition> allConditions = NodeUtils.getAllConditions(entry, conditions);
-        float chance = NodeUtils.getChance(entry, rawChance, sumWeight);
+        LootCount chance = NodeUtils.getChance(utils, entry, rawChance, sumWeight, chanceConditions);
 
-        return new DynamicNode(chance, TooltipUtils.getDynamicTooltip(utils, entry.quality, chance, allFunctions, allConditions).build());
+        return new DynamicNode(NodeUtils.toFloat(chance.value()), TooltipUtils.getDynamicTooltip(utils, entry.quality, chance, allFunctions, allConditions).build());
     }
 
     @NotNull

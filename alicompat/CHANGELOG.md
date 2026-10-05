@@ -1,10 +1,14 @@
 ## []
 
+- Added Spell Engine support (RPG Series loot)
+- Entry chances account for quality and luck
 - Counts and prices show their distribution, fixed several Iron's Spellbooks and Farmer's Delight values
 - Grimoire of Gaia trades are read from their fields instead of rolled offers
 - Improved crash recovery when versions doesn't match
 - Fixed Villager Trading Plus enchanted book price of enchantments with double trade price
 - Fixed Supplementaries adventurer map price
+- Fixed Twilight Forest condition names showing `%s` on NeoForge
+- With `showInGameNames`, Moonlight villager types are shown translated
 
 ## [1.1.0]
 

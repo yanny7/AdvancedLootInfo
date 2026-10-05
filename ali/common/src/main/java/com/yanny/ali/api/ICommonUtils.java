@@ -12,4 +12,9 @@ import java.util.List;
 public interface ICommonUtils extends ICoreCommonUtils<AliConfig> {
     @NotNull
     List<Entity> createEntities(EntityType<?> type, Level level);
+
+    @Override
+    default boolean showInGameNames() {
+        return getConfiguration().showInGameNames;
+    }
 }

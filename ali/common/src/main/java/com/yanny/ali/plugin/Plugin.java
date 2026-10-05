@@ -7,6 +7,7 @@ import com.yanny.aci.api.NumberText;
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.tooltip.CommonNumberProviders;
 import com.yanny.aci.tooltip.CommonValueTooltip;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.datagen.LanguageHolder;
@@ -158,6 +159,12 @@ public class Plugin implements IPlugin {
         registry.registerLevelBasedValue(LevelBasedValue.Fraction.class, Plugin::convertLevelFraction);
         registry.registerLevelBasedValue(LevelBasedValue.Clamped.class, Plugin::convertLevelClamped);
         registry.registerLevelBasedValue(LevelBasedValue.Lookup.class, Plugin::convertLevelLookup);
+
+        registry.registerEntryWeight(LootPoolSingletonContainer.class, NodeUtils::getSingletonWeight);
+        registry.registerEntryWeight(CompositeEntryBase.class, NodeUtils::getCompositeWeight);
+        registry.registerEntryWeight(AlternativesEntry.class, NodeUtils::getAlternativesWeight);
+
+        registry.registerEntryChildren(CompositeEntryBase.class, NodeUtils::getCompositeChildren);
 
         registry.registerEntry(LootItem.class, NodeUtils::getItemNode);
         registry.registerEntry(TagEntry.class, NodeUtils::getTagNode);
@@ -542,37 +549,37 @@ public class Plugin implements IPlugin {
     }
 
     @NotNull
-    private static NumberExpr convertConstant(IServerUtils utils, ConstantValue numberProvider) {
+    private static NumberExpr convertConstant(IServerUtils utils, ConstantValue numberProvider, List<TooltipNode> conditions) {
         return NumberExpr.constant(numberProvider.getFloat(utils.getLootContext()));
     }
 
     @NotNull
-    private static NumberExpr convertUniform(IServerUtils utils, UniformGenerator numberProvider) {
-        return NumberExpr.fn(NumberFunctions.UNIFORM_FLOAT, utils.convertNumber(utils, numberProvider.min()), utils.convertNumber(utils, numberProvider.max()));
+    private static NumberExpr convertUniform(IServerUtils utils, UniformGenerator numberProvider, List<TooltipNode> conditions) {
+        return NumberExpr.fn(NumberFunctions.UNIFORM_FLOAT, utils.convertNumber(utils, numberProvider.min(), conditions), utils.convertNumber(utils, numberProvider.max(), conditions));
     }
 
     @NotNull
-    private static NumberExpr convertIntUniform(IServerUtils utils, UniformGenerator numberProvider) {
-        return NumberExpr.uniformInt(utils.convertIntNumber(utils, numberProvider.min()), utils.convertIntNumber(utils, numberProvider.max()));
+    private static NumberExpr convertIntUniform(IServerUtils utils, UniformGenerator numberProvider, List<TooltipNode> conditions) {
+        return NumberExpr.uniformInt(utils.convertIntNumber(utils, numberProvider.min(), conditions), utils.convertIntNumber(utils, numberProvider.max(), conditions));
     }
 
     @NotNull
-    private static NumberExpr convertBinomial(IServerUtils utils, BinomialDistributionGenerator numberProvider) {
-        return NumberExpr.binomial(utils.convertIntNumber(utils, numberProvider.n()), utils.convertNumber(utils, numberProvider.p()));
+    private static NumberExpr convertBinomial(IServerUtils utils, BinomialDistributionGenerator numberProvider, List<TooltipNode> conditions) {
+        return NumberExpr.binomial(utils.convertIntNumber(utils, numberProvider.n(), conditions), utils.convertNumber(utils, numberProvider.p(), conditions));
     }
 
     @NotNull
-    private static NumberExpr convertScore(IServerUtils utils, ScoreboardValue numberProvider) {
+    private static NumberExpr convertScore(IServerUtils utils, ScoreboardValue numberProvider, List<TooltipNode> conditions) {
         return NumberExpr.mul(getScore(numberProvider), NumberExpr.constant(numberProvider.scale()));
     }
 
     @NotNull
-    private static NumberExpr convertIntScore(IServerUtils utils, ScoreboardValue numberProvider) {
+    private static NumberExpr convertIntScore(IServerUtils utils, ScoreboardValue numberProvider, List<TooltipNode> conditions) {
         if (numberProvider.scale() == 1) {
             return getScore(numberProvider);
         }
 
-        return NumberExpr.fn(NumberFunctions.ROUND, convertScore(utils, numberProvider));
+        return NumberExpr.fn(NumberFunctions.ROUND, convertScore(utils, numberProvider, conditions));
     }
 
     @NotNull
@@ -601,18 +608,18 @@ public class Plugin implements IPlugin {
     }
 
     @NotNull
-    private static NumberExpr convertStorage(IServerUtils utils, StorageValue numberProvider) {
+    private static NumberExpr convertStorage(IServerUtils utils, StorageValue numberProvider, List<TooltipNode> conditions) {
         return new NumberExpr.Var(TooltipUtils.STORAGE, List.of(NumberText.str(numberProvider.storage().toString()), NumberText.str(numberProvider.path().toString())),
                 Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
     }
 
     @NotNull
-    private static NumberExpr convertIntStorage(IServerUtils utils, StorageValue numberProvider) {
-        return NumberExpr.fn(NumberFunctions.FLOOR, convertStorage(utils, numberProvider));
+    private static NumberExpr convertIntStorage(IServerUtils utils, StorageValue numberProvider, List<TooltipNode> conditions) {
+        return NumberExpr.fn(NumberFunctions.FLOOR, convertStorage(utils, numberProvider, conditions));
     }
 
     @NotNull
-    private static NumberExpr convertEnchantmentLevel(IServerUtils utils, EnchantmentLevelProvider numberProvider) {
+    private static NumberExpr convertEnchantmentLevel(IServerUtils utils, EnchantmentLevelProvider numberProvider, List<TooltipNode> conditions) {
         return utils.convertLevelBasedValue(utils, numberProvider.amount(), TooltipUtils.anyEnchantmentLevel(utils));
     }
 

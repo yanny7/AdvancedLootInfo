@@ -17,7 +17,6 @@ import dev.emi.emi.api.widget.Widget;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 
@@ -47,7 +46,7 @@ public class EmiBiomeLoot extends EmiBaseLoot {
     protected List<Widget> getAdditionalWidgets(WidgetHolder widgetHolder) {
         List<Widget> widgets = new LinkedList<>();
 
-        widgets.add(new TextWidget(Component.translatable("biome." + biome.getNamespace() + "." + biome.getPath()).getVisualOrderText(), 0, 0, 0, false));
+        widgets.add(new TextWidget(GenericUtils.getBiomeTitle(biome).getVisualOrderText(), 0, 0, 0, false));
 
         for (GenericUtils.SpawnSlot slot : GenericUtils.getSpawnSlots(biomeNode, CATEGORY_WIDTH, TITLE_HEIGHT)) {
             if (slot.egg() != null) {

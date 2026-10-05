@@ -1,6 +1,7 @@
 package com.yanny.alicompat.compat.twilightforest;
 
 import com.yanny.aci.api.NumberExpr;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
@@ -10,6 +11,8 @@ import net.minecraft.core.Holder;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import twilightforest.loot.LootingEnchantNumberProvider;
+
+import java.util.List;
 
 public class LootingEnchantNumberProviderAccessor extends BaseAccessor<LootingEnchantNumberProvider> implements INumberProvider {
     @FieldAccessor
@@ -23,7 +26,7 @@ public class LootingEnchantNumberProviderAccessor extends BaseAccessor<LootingEn
     }
 
     @Override
-    public NumberExpr convertNumber(IServerUtils utils) {
-        return NumberExpr.add(utils.convertNumber(utils, baseValue), TooltipUtils.level(enchantment));
+    public NumberExpr convertNumber(IServerUtils utils, List<TooltipNode> conditions) {
+        return NumberExpr.add(utils.convertNumber(utils, baseValue, conditions), TooltipUtils.level(enchantment));
     }
 }

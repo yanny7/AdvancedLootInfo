@@ -1,4 +1,12 @@
 {
+  "aci.enum.mob_category.ambient": "Ambient",
+  "aci.enum.mob_category.axolotls": "Axolotls",
+  "aci.enum.mob_category.creature": "Creature",
+  "aci.enum.mob_category.misc": "Misc",
+  "aci.enum.mob_category.monster": "Monster",
+  "aci.enum.mob_category.underground_water_creature": "Underground Water Creature",
+  "aci.enum.mob_category.water_ambient": "Water Ambient",
+  "aci.enum.mob_category.water_creature": "Water Creature",
   "aci.number.any": "any",
   "aci.number.at_least": "≥ %s",
   "aci.number.at_most": "≤ %s",
@@ -40,6 +48,7 @@
   "aci.number.var.level": "LVL",
   "aci.number.var.score": "score(%s; %s)",
   "aci.number.var.score.desc": "score \"%2$s\" (%1$s)",
+  "aci.number.var_row": "%s: %s",
   "aci.number.weighted_entry": "%s (%s)",
   "aci.spawn.biome_excluded": "- %s",
   "aci.spawn.biome_included": "+ %s",
@@ -52,7 +61,9 @@
   "aci.spawn.weight": "Weight: %s",
   "aci.util.auto_detected": "Auto-detected: %s",
   "aci.util.entry": "Entry:",
+  "aci.util.false": "False",
   "aci.util.missing": "Not implemented: %s",
   "aci.util.removed": "REMOVED",
-  "aci.util.tag": "Tag: %s"
+  "aci.util.tag": "Tag: %s",
+  "aci.util.true": "True"
 }

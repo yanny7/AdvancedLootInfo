@@ -4,5 +4,8 @@ import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import org.jetbrains.annotations.Nullable;
 
-public record PlacementSummary(@Nullable NumberExpr count, @Nullable TooltipNode countDetails, @Nullable NumberExpr chance, @Nullable HeightSpan height) {
+import java.util.List;
+
+public record PlacementSummary(@Nullable NumberExpr count, List<TooltipNode> countConditions, @Nullable TooltipNode countDetails,
+                               @Nullable NumberExpr chance, List<TooltipNode> chanceConditions, @Nullable HeightSpan height) {
 }

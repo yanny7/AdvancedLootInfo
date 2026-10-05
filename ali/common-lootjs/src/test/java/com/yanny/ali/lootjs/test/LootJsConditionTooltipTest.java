@@ -69,7 +69,7 @@ public class LootJsConditionTooltipTest {
                 "  -> Structures:",
                 "    -> minecraft:igloo",
                 "    -> minecraft:mineshaft",
-                "  -> Exact: true"
+                "  -> Exact: True"
         ));
     }
 
@@ -106,31 +106,31 @@ public class LootJsConditionTooltipTest {
     public void testMatchEquipmentSlotTooltip() {
         assertTooltip(LootJsConditionTooltipUtils.getMatchEquipmentSlotTooltip(UTILS, matchEquipmentSlot(EquipmentSlot.MAINHAND)).build(), List.of(
                 "Match Mainhand:",
-                "  -> Item Filter: ARMOR"
+                "  -> Item Filter: Armor"
         ));
         assertTooltip(LootJsConditionTooltipUtils.getMatchEquipmentSlotTooltip(UTILS, matchEquipmentSlot(EquipmentSlot.OFFHAND)).build(), List.of(
                 "Match Offhand:",
-                "  -> Item Filter: ARMOR"
+                "  -> Item Filter: Armor"
         ));
         assertTooltip(LootJsConditionTooltipUtils.getMatchEquipmentSlotTooltip(UTILS, matchEquipmentSlot(EquipmentSlot.FEET)).build(), List.of(
                 "Match Feet:",
-                "  -> Item Filter: ARMOR"
+                "  -> Item Filter: Armor"
         ));
         assertTooltip(LootJsConditionTooltipUtils.getMatchEquipmentSlotTooltip(UTILS, matchEquipmentSlot(EquipmentSlot.LEGS)).build(), List.of(
                 "Match Legs:",
-                "  -> Item Filter: ARMOR"
+                "  -> Item Filter: Armor"
         ));
         assertTooltip(LootJsConditionTooltipUtils.getMatchEquipmentSlotTooltip(UTILS, matchEquipmentSlot(EquipmentSlot.CHEST)).build(), List.of(
                 "Match Chest:",
-                "  -> Item Filter: ARMOR"
+                "  -> Item Filter: Armor"
         ));
         assertTooltip(LootJsConditionTooltipUtils.getMatchEquipmentSlotTooltip(UTILS, matchEquipmentSlot(EquipmentSlot.HEAD)).build(), List.of(
                 "Match Head:",
-                "  -> Item Filter: ARMOR"
+                "  -> Item Filter: Armor"
         ));
         assertTooltip(LootJsConditionTooltipUtils.getMatchEquipmentSlotTooltip(UTILS, matchEquipmentSlot(EquipmentSlot.BODY)).build(), List.of(
                 "Match Equipment Slot:",
-                "  -> Item Filter: ARMOR",
+                "  -> Item Filter: Armor",
                 "  -> Slot: Body"
         ));
     }
@@ -177,8 +177,8 @@ public class LootJsConditionTooltipTest {
     public void testMatchAnyInventorySlotTooltip() {
         assertTooltip(LootJsConditionTooltipUtils.matchAnyInventorySlot(UTILS, new MatchAnyInventorySlot(ItemFilter.ENCHANTED, true)).build(), List.of(
                 "Match Any Inventory Slot:",
-                "  -> Item Filter: ENCHANTED",
-                "  -> Hotbar: true"
+                "  -> Item Filter: Enchanted",
+                "  -> Hotbar: True"
         ));
     }
 
