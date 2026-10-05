@@ -1,6 +1,7 @@
 ## []
 
 - Added Spell Engine support (RPG Series loot)
+- Added The Undergarden support
 - Entry chances account for quality and luck
 - Counts and prices show their distribution
 - Improved crash recovery when versions doesn't match

@@ -35,7 +35,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
     <T extends LootPoolEntryContainer> void registerEntry(Class<T> type, EntryFactory<T> entryFactory);
@@ -99,9 +98,10 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
     /**
      * Registers a trader, so that its trades are scanned and listed under their own entry. A {@link TradeLevel.OfSet} is
      * looked up in the {@code minecraft:trade_set} registry when the scan runs, so it may name a set that a datapack
-     * provides; a {@link TradeLevel.OfTrades} carries trades a mod defines in code.
+     * provides; a {@link TradeLevel.OfTrades} carries trades a mod defines in code. {@code levels} is called when the
+     * scan runs, so it may read the server's registries through the {@link IServerUtils} it is given.
      */
-    void registerTrades(Identifier traderId, @Nullable EntityType<?> entityType, Supplier<Int2ObjectMap<TradeLevel>> levels);
+    void registerTrades(Identifier traderId, @Nullable EntityType<?> entityType, Function<IServerUtils, Int2ObjectMap<TradeLevel>> levels);
 
     void registerEnumTranslation(Class<? extends Enum<?>> type, String modId, String owner);
 

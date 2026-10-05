@@ -18,6 +18,7 @@
 - Fixed LootJS `replaceLoot` hiding the whole loot table
 - Broken loot modifications from LootJS, global loot modifiers or other mods are skipped instead of hiding the whole loot table
 - Invalid configuration values are skipped with a warning instead of silently resetting the whole option to defaults
+- Trader registration receives server utils, so trades can be read from datapack registries
 
 ## [2.3.0]
 

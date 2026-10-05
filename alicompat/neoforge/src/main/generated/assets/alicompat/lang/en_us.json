@@ -71,5 +71,7 @@
   "alicompat.spell_engine.property.value.spell_pool": "Spell Pool: %s",
   "alicompat.spell_engine.property.value.tier": "Tier: %s",
   "alicompat.spell_engine.type.entry.affiliation_group": "Affiliation Group:",
-  "alicompat.spell_engine.type.function.spell_bind_randomly": "Spell Bind Randomly:"
+  "alicompat.spell_engine.type.function.spell_bind_randomly": "Spell Bind Randomly:",
+  "alicompat.undergarden.type.consume_effect.modify_utheric_infection": "Modify Utheric Infection:",
+  "alicompat.undergarden.type.item_sub_predicate.infection_consume_effect": "Infection Consume Effect:"
 }

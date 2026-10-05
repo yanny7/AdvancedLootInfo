@@ -7,7 +7,7 @@ ALICompat is a consumer of ALI's public plugin API, nothing more: it registers n
 ## Module layout
 
 - `alicompat/common` — the compat framework: `IModCompat`, `IGlmModCompat`, `ModCompatManager`, `ICompatTranslations`, `Utils`, `platform/{ICompatPlatform, Services}`, plus the `accessor` package (see Writing a shim). Depends on `ali:common` (and through it `aci:common`), and takes ALI's access widener (`loom.accessWidenerPath = project(":ali:common").loom.accessWidenerPath`) so `ConditionalFunction`/`SingletonContainer` can read the vanilla fields it opens.
-- `alicompat/fabric`, `alicompat/forge`, `alicompat/neoforge` — loader entry points, the `ICompatPlatform` implementation, a `datagen` package (language only, see Translations), and one `src/compat/<slug>/` source set per target mod. `forge_enabled=false` on this branch, so `alicompat/forge` is not part of the build (and has not been ported to 1.21.11).
+- `alicompat/fabric`, `alicompat/forge`, `alicompat/neoforge` — loader entry points, the `ICompatPlatform` implementation, a `datagen` package (language only, see Translations), and one `src/compat/<slug>/` source set per target mod. `forge_enabled=false` on this branch, so `alicompat/forge` is not part of the build (and has not been ported to 26.1.2).
 
 There are no viewer subprojects — the compat shims register into ALI's registries and ALI's own viewer modules render the result.
 
