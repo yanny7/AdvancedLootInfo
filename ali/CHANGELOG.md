@@ -1,5 +1,6 @@
 ## []
 
+- Added `spawnInfo` configuration to hide entity spawn info
 - Chances and rolls depending on luck show one row per luck value
 - Entry chance accounts for quality and luck
 - Chances in pools with alternatives account for the weight of the alternative that is picked
@@ -13,6 +14,9 @@
 - Exponent level based values show their value instead of unknown
 - Enchantment level based values show as one number with level rows instead of a structure tree
 - Fixed names built from arguments (e.g. GregTech `%s Dust`)
+- Fixed LootJS `replaceLoot` hiding the whole loot table by updating to LootJS 3.7.0
+- Broken loot modifications from LootJS, global loot modifiers or other mods are skipped instead of hiding the whole loot table
+- Invalid configuration values are skipped with a warning instead of silently resetting the whole option to defaults
 
 ## [2.3.0]
 

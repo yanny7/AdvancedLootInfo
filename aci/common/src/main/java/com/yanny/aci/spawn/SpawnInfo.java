@@ -28,6 +28,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class SpawnInfo {
@@ -40,6 +41,7 @@ public class SpawnInfo {
 
     private final Logger logger;
     private final boolean showInGameNames;
+    private final Predicate<EntityType<?>> entityFilter;
     private final Map<Identifier, Set<Identifier>> dimensionBiomes = new TreeMap<>();
     private final Map<Identifier, List<Entry>> biomeEntries = new HashMap<>();
     private final Map<Identifier, List<Entry>> structureEntries = new TreeMap<>();
@@ -47,9 +49,11 @@ public class SpawnInfo {
     private final Map<EntityType<?>, Map<Identifier, List<Spawn>>> entityBiomes = new HashMap<>();
     private final Map<EntityType<?>, Map<Identifier, List<Spawn>>> entityStructures = new HashMap<>();
 
-    public SpawnInfo(String modId, RegistryAccess registryAccess, Function<Structure, Structure.StructureSettings> structureSettings, boolean showInGameNames) {
+    public SpawnInfo(String modId, RegistryAccess registryAccess, Function<Structure, Structure.StructureSettings> structureSettings,
+                     Predicate<EntityType<?>> entityFilter, boolean showInGameNames) {
         logger = CommonLogUtils.getLogger(modId);
         this.showInGameNames = showInGameNames;
+        this.entityFilter = entityFilter;
 
         for (Map.Entry<ResourceKey<LevelStem>, LevelStem> entry : entries(registryAccess, Registries.LEVEL_STEM)) {
             try {
@@ -186,6 +190,10 @@ public class SpawnInfo {
             for (Weighted<MobSpawnSettings.SpawnerData> weighted : settings.getMobs(category).unwrap()) {
                 MobSpawnSettings.SpawnerData data = weighted.value();
 
+                if (!entityFilter.test(data.type())) {
+                    continue;
+                }
+
                 entries.add(new Entry(data.type(), new Spawn(category, weighted.weight(), data.minCount(), data.maxCount(), settings.getMobSpawnCost(data.type()))));
             }
         }
@@ -207,6 +215,10 @@ public class SpawnInfo {
 
             for (Weighted<MobSpawnSettings.SpawnerData> weighted : override.spawns().unwrap()) {
                 MobSpawnSettings.SpawnerData data = weighted.value();
+
+                if (!entityFilter.test(data.type())) {
+                    continue;
+                }
 
                 entries.add(new Entry(data.type(), new Spawn(category, weighted.weight(), data.minCount(), data.maxCount(), null)));
             }

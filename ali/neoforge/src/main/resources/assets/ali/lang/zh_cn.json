@@ -535,6 +535,7 @@
   "ali.type.function.limit_count": "限制数量：",
   "ali.type.function.modify_contents": "修改内容：",
   "ali.type.function.player_action": "玩家行为：",
+  "ali.type.function.preserve_components": "保留组件：",
   "ali.type.function.reference": "引用：",
   "ali.type.function.sequence": "序列：",
   "ali.type.function.set_attributes": "设置属性：",

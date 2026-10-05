@@ -87,6 +87,7 @@ public final class Lang {
         TOGGLE_TOOLTIPS("toggle_tooltips", "Toggle Tooltips:"),
         // LootJS
         PLAYER_ACTION("player_action", "Player Action:"),
+        PRESERVE_COMPONENTS("preserve_components", "Preserve Components:"),
         // Trades
         DYED_RANDOMLY("dyed_randomly", "Dyed Randomly"),
         ;
