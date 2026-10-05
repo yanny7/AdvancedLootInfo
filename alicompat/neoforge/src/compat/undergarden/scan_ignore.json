@@ -1,0 +1,3 @@
+{
+  "quek.undergarden.entity.monster.stoneborn.trading.BuyForRegaliumAndItemTrade": "no trade list in the mod instantiates it; StonebornTrades.VAGABOND_TRADES holds only BuyForRegaliumTrade and SellForRegaliumTrade"
+}

@@ -1,4 +1,4 @@
-package com.yanny.alicompat.compat.adastra;
+package com.yanny.alicompat.compat.undergarden;
 
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.NumberExpr;
@@ -7,21 +7,22 @@ import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.alicompat.accessor.BaseAccessor;
-import com.yanny.alicompat.accessor.ClassAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.IItemListing;
-import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
+import quek.undergarden.entity.monster.stoneborn.trading.BuyForRegaliumTrade;
+import quek.undergarden.registry.UGItems;
 
-@ClassAccessor("earth.terrarium.adastra.common.entities.mob.lunarians.LunarianMerchantOffers$SellItemFactory")
-public class SellItemFactoryAccessor extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
+public class BuyForRegaliumTradeAccessor extends BaseAccessor<BuyForRegaliumTrade> implements IItemListing {
+    private static final int XP = 0;
+    private static final float PRICE_MULTIPLIER = 0F;
+
     @FieldAccessor
     private ItemStack sell;
 
     @FieldAccessor
-    private int price;
+    private int regaliumCount;
 
     @FieldAccessor
     private int count;
@@ -29,13 +30,7 @@ public class SellItemFactoryAccessor extends BaseAccessor<VillagerTrades.ItemLis
     @FieldAccessor
     private int maxUses;
 
-    @FieldAccessor
-    private int experience;
-
-    @FieldAccessor
-    private float multiplier;
-
-    public SellItemFactoryAccessor(VillagerTrades.ItemListing parent) {
+    public BuyForRegaliumTradeAccessor(BuyForRegaliumTrade parent) {
         super(parent);
     }
 
@@ -44,13 +39,13 @@ public class SellItemFactoryAccessor extends BaseAccessor<VillagerTrades.ItemLis
     public IDataNode getNode(IServerUtils utils, TooltipNode conditions) {
         return new ItemsToItemsNode(
                 utils,
-                Either.left(Items.EMERALD.getDefaultInstance()),
-                NumberExpr.constant(price),
-                Either.left(sell.copyWithCount(count)),
+                Either.left(UGItems.REGALIUM_CRYSTAL.get().getDefaultInstance()),
+                NumberExpr.constant(regaliumCount),
+                Either.left(new ItemStack(sell.getItem())),
                 NumberExpr.constant(count),
                 maxUses,
-                experience,
-                multiplier,
+                XP,
+                PRICE_MULTIPLIER,
                 conditions
         );
     }

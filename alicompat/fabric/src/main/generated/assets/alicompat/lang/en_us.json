@@ -1,4 +1,5 @@
 {
+  "alicompat.ad_astra.type.function.random_potion": "Random Potion",
   "alicompat.aether.property.value.config": "Config: %s",
   "alicompat.aether.type.condition.config_enabled": "Config Enabled:",
   "alicompat.aether.type.function.double_drops": "Double Drops:",
