@@ -234,6 +234,10 @@
       "gold"
     ]
   },
+  "spawnInfo": {
+    "entities": [],
+    "whitelist": false
+  },
   "logMoreStatistics": false,
   "showInGameNames": true,
   "hideDefaultBlockLoot": true,
