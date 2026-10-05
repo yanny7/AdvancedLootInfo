@@ -4,7 +4,7 @@ Guidance for `awi/forge` (`com.yanny.awi.forge`) — AWI's Forge loader entry po
 
 ## ⚠️ Not built on this branch
 
-`forge_enabled=false` in `gradle.properties`, so `settings.gradle` never includes `awi:forge` — Forge has been dropped on `1.21.5` in favour of NeoForge. The sources are still here but have never been compiled against 1.21.5, so treat everything below as a description of the last working (1.21.1) state; `datagen.DataGeneration` still uses the un-split `GatherDataEvent` + `event.includeClient()` shape that `awi/neoforge` had to abandon, which is the first thing to check if Forge is ever revived here. `ali/forge` is in the same state (see `ali/forge/CLAUDE.md`).
+`forge_enabled=false` in `gradle.properties`, so `settings.gradle` never includes `awi:forge` — Forge has been dropped on `26.2` in favour of NeoForge. The sources are still here but have never been compiled against 26.2, so treat everything below as a description of the last working (1.21.1) state; `datagen.DataGeneration` still uses the un-split `GatherDataEvent` + `event.includeClient()` shape that `awi/neoforge` had to abandon, which is the first thing to check if Forge is ever revived here. `ali/forge` is in the same state (see `ali/forge/CLAUDE.md`).
 
 ## Entry point
 

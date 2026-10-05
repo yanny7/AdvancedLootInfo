@@ -208,6 +208,17 @@ done
 Only a key present on both sides with a different value is a finding; keys on one side only are version differences.
 A value that differs on purpose (an empty `showEmpty` array has no colon) stays as it is.
 
+Neither the merge nor `git merge-file` reaches code that implements the same thing differently here: a module
+written against another major version of its target (LootJS 1 below, LootJS 3 here), a vanilla type that exists only
+here (`TypeSpecificTrade`), or a shim class the lower branch never had. Such a file usually conflicts as a whole or not
+at all, so take `ours` and port the merged change by its intent. Read each lower-branch commit's diff
+(`git show <commit>`), name the pattern it replaced (a hardcoded string turned `Lang` key, a `ResourceLocation` id
+turned `ResourceKey`, a `toString()` value, a call that gained an argument), and grep for the old pattern over
+`aci`, `ali`, `awi`, `alicompat/common` and the active source sets (`$S/active_dirs.txt`), leaving out tests. Every hit
+the merged change would have rewritten had the code existed below gets the same rewrite. A hit the lower branch left
+alone in its own equivalent code stays as it is. A `Lang` enum the merge brings in for code that differs here is
+reshaped to this branch's constants, not copied from below.
+
 **Stop here.** Report what merged, what was restored, and how many slugs are dormant. The user
 commits. Phase 2 does not begin until that commit exists.
 
@@ -249,6 +260,10 @@ switch on a shim nobody has ported.
 
 "0 portable" can be real: mods skip Minecraft versions. Before reporting that, confirm a few of them on
 CurseForge (`/v1/mods/<id>` → `latestFilesIndexes[].gameVersion`) and one active mod as a control.
+The scripts take only release and beta files, so a version listed there may still be "no file": check
+`releaseType` (`/v1/mods/<id>/files?gameVersion=<mc>`, 3 is alpha). A mod that ships only alphas on CurseForge
+often publishes releases on its own maven. Find that maven and report it, since adding a `maven` source to
+`scripts/supported_mods.json` is the user's decision.
 
 ### Take them in groups, not in bulk
 

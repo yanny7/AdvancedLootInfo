@@ -13,19 +13,14 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class GameplayLootCategory extends LootCategory<Identifier> {
-    private static final Codec<Pattern> PATTERN_CODEC = Codec.STRING.xmap(
-            Pattern::compile,
-            Pattern::pattern
-    );
     public static final MapCodec<GameplayLootCategory> CODEC = RecordCodecBuilder.mapCodec(instance ->
             instance.group(
                     Identifier.CODEC.fieldOf("key").forGetter(LootCategory::getKey),
                     BuiltInRegistries.ITEM.byNameCodec().fieldOf("icon").forGetter(LootCategory::getIcon),
                     Codec.BOOL.optionalFieldOf("hide", false).forGetter(LootCategory::isHidden),
-                    Ingredient.CODEC.listOf().optionalFieldOf("catalysts", Collections.emptyList()).forGetter(LootCategory::getCatalysts),
-                    PATTERN_CODEC.listOf().fieldOf("pattern").forGetter(src -> src.patterns)
-            ).apply(instance, GameplayLootCategory::new
-            )
+                    catalysts().optionalFieldOf("catalysts", Collections.emptyList()).forGetter(LootCategory::getCatalysts),
+                    lenientList(PATTERN_CODEC, "pattern").fieldOf("pattern").forGetter(src -> src.patterns)
+            ).apply(instance, GameplayLootCategory::new)
     );
 
     private final List<Pattern> patterns;

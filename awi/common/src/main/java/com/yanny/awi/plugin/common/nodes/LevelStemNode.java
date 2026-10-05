@@ -24,6 +24,7 @@ import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.Collections;
@@ -38,7 +39,7 @@ public class LevelStemNode extends ListNode {
     private final TooltipNode tooltip;
 
     public LevelStemNode(IServerUtils utils, LevelStem levelStem, Map<Holder<Biome>, NodeUtils.LayerHolder> baseLayouts,
-                         WorldgenNodeCache nodeCache, SpawnInfo spawnInfo) {
+                         WorldgenNodeCache nodeCache, @Nullable SpawnInfo spawnInfo) {
         ChunkGenerator generator = levelStem.generator();
         ColumnContext columnContext = new ColumnContext(generator.getMinY(), generator.getGenDepth());
         Block defaultBlock = Blocks.AIR;

@@ -31,7 +31,7 @@ public class FarlandersCompat implements IModCompat {
     private static void registerTrader(IServerRegistry registry, String name, String tradeSetPrefix, int levels) {
         Identifier traderId = id(name);
 
-        registry.registerTrades(traderId, BuiltInRegistries.ENTITY_TYPE.getValue(traderId), () -> TradeLevel.ofSets(tradeSets(tradeSetPrefix, levels)));
+        registry.registerTrades(traderId, BuiltInRegistries.ENTITY_TYPE.getValue(traderId), (utils) -> TradeLevel.ofSets(tradeSets(tradeSetPrefix, levels)));
     }
 
     @NotNull

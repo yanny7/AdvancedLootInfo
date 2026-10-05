@@ -104,7 +104,7 @@ public class SpawnInfoTest {
         biomes.freeze();
         levelStems.freeze();
         structures.freeze();
-        spawnInfo = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, structures)), OWN_SETTINGS, false);
+        spawnInfo = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, structures)), OWN_SETTINGS, (t) -> true, false);
     }
 
     @Test
@@ -271,7 +271,7 @@ public class SpawnInfoTest {
         MappedRegistry<Structure> registry = structures(Map.of(
                 "camp", spawnSettings(HolderSet.direct(biomes.getOrThrow(key(Registries.BIOME, "a"))), EntityTypes.ZOMBIE)
         ));
-        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, registry)), OWN_SETTINGS, false);
+        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, registry)), OWN_SETTINGS, (t) -> true, false);
         Map<EntityType<?>, TooltipNode> spawns = info.getBiomeSpawns(Identifier.fromNamespaceAndPath("test", "a"));
 
         assertEquals(List.of(EntityTypes.SKELETON, EntityTypes.SPIDER, EntityTypes.ZOMBIE, EntityTypes.COW), List.copyOf(spawns.keySet()));
@@ -300,7 +300,7 @@ public class SpawnInfoTest {
                         TerrainAdjustment.NONE
                 )
         ));
-        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, registry)), OWN_SETTINGS, false);
+        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, registry)), OWN_SETTINGS, (t) -> true, false);
 
         assertTooltip(info.getEntityTooltip(EntityTypes.WITCH), List.of(
                 "Spawns:",
@@ -337,7 +337,7 @@ public class SpawnInfoTest {
                 GenerationStep.Decoration.SURFACE_STRUCTURES,
                 TerrainAdjustment.NONE
         );
-        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, structures)), (s) -> modified, false);
+        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, structures)), (s) -> modified, (t) -> true, false);
 
         assertTrue(info.getEntityTooltip(EntityTypes.BLAZE).isBlank(false));
         assertTooltip(info.getEntityTooltip(EntityTypes.WITCH), List.of(
@@ -363,7 +363,7 @@ public class SpawnInfoTest {
             }
 
             return OWN_SETTINGS.apply(s);
-        }, false);
+        }, (t) -> true, false);
 
         assertTrue(info.getEntityTooltip(EntityTypes.BLAZE).isBlank(false));
         assertTooltip(info.getEntityTooltip(EntityTypes.WITCH), List.of(
@@ -390,7 +390,7 @@ public class SpawnInfoTest {
                 "fort", spawnSettings(HolderSet.direct(biomes.getOrThrow(key(Registries.BIOME, "e"))), EntityTypes.BLAZE),
                 "tagged", spawnSettings(unbound, EntityTypes.WITCH)
         ));
-        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, registry)), OWN_SETTINGS, false);
+        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, registry)), OWN_SETTINGS, (t) -> true, false);
 
         assertTrue(info.getEntityTypes().contains(EntityTypes.WITCH));
         assertTrue(info.getEntityTooltip(EntityTypes.WITCH).isBlank(false));
@@ -399,7 +399,7 @@ public class SpawnInfoTest {
 
     @Test
     public void testMissingRegistriesYieldNoSpawns() {
-        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes)), OWN_SETTINGS, false);
+        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes)), OWN_SETTINGS, (t) -> true, false);
 
         assertTrue(info.getEntityTooltip(EntityTypes.ZOMBIE).isBlank(false));
         assertEquals(Set.of(EntityTypes.ZOMBIE, EntityTypes.SKELETON, EntityTypes.SPIDER, EntityTypes.COW, EntityTypes.STRIDER, EntityTypes.CREEPER,

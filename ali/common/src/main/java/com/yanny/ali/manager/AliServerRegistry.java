@@ -121,6 +121,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     public void clearData() {
         super.clearData();
         failedRenderers.clear();
+        NodeUtils.clearFailedOperations();
         lootTableMap.clear();
         ingredientUnwrappers.clear();
         lootModifierGetters.clear();
@@ -287,7 +288,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
-    public void registerTrades(Identifier traderId, @Nullable EntityType<?> entityType, Supplier<Int2ObjectMap<TradeLevel>> levels) {
+    public void registerTrades(Identifier traderId, @Nullable EntityType<?> entityType, Function<IServerUtils, Int2ObjectMap<TradeLevel>> levels) {
         trades.put(traderId, new Trades(entityType, levels));
     }
 
@@ -630,7 +631,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     public IDataNode parseTrade(Trades trades) {
-        return new TradeNode(this, trades.entityType(), trades.levels().get());
+        return new TradeNode(this, trades.entityType(), trades.levels().apply(this));
     }
 
     // hitCount != null means this table is referenced from another table's tree; the paramSet check
@@ -701,7 +702,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         return String.valueOf(BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE.getKey(numberProvider.codec()));
     }
 
-    public record Trades(@Nullable EntityType<?> entityType, Supplier<Int2ObjectMap<TradeLevel>> levels) {}
+    public record Trades(@Nullable EntityType<?> entityType, Function<IServerUtils, Int2ObjectMap<TradeLevel>> levels) {}
 
     private static <T> void unwrap(IServerUtils utils, T value, ManagedRegistry<Class<?>, BiFunction<IServerUtils, T, List<T>>> unwrappers, Set<Object> visiting, List<T> result) {
         // predicate and item modifier references can form cycles, vanilla only logs them

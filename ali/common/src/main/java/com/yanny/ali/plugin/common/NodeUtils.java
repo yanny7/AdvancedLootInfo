@@ -1,10 +1,13 @@
 package com.yanny.ali.plugin.common;
 
 import com.mojang.datafixers.util.Either;
+import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberInterval;
+import com.yanny.aci.manager.ManagedRegistry;
 import com.yanny.aci.number.NumberEvaluator;
 import com.yanny.aci.tooltip.TooltipNode;
+import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.nodes.*;
@@ -27,16 +30,21 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
+import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class NodeUtils {
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
+    private static final Set<String> FAILED_OPERATIONS = new HashSet<>();
     private static final NumberInterval NON_NEGATIVE = new NumberInterval(0, Double.POSITIVE_INFINITY, true, false);
 
     @NotNull
@@ -481,10 +489,46 @@ public class NodeUtils {
             if (operation instanceof IOperation.AddOperation addOperation) {
                 node.addChildren(addOperation.node());
             } else if (operation instanceof IOperation.RemoveOperation(Predicate<ItemStack> predicate, Function<IDataNode, IDataNode> factory)) {
-                removeItem(node, factory, predicate);
+                removeItem(node, guarded(factory, factory, (n) -> n), guarded(factory, predicate));
             } else if (operation instanceof IOperation.ReplaceOperation(Predicate<ItemStack> predicate, Function<IDataNode, List<IDataNode>> factory)) {
-                replaceItem(node, factory, predicate);
+                replaceItem(node, guarded(factory, factory, List::of), guarded(factory, predicate));
             }
+        }
+    }
+
+    public static void clearFailedOperations() {
+        FAILED_OPERATIONS.clear();
+    }
+
+    @NotNull
+    private static Predicate<ItemStack> guarded(Object operation, Predicate<ItemStack> predicate) {
+        return (stack) -> {
+            try {
+                return predicate.test(stack);
+            } catch (Throwable e) {
+                logFailedOperation(operation, e);
+                return false;
+            }
+        };
+    }
+
+    @NotNull
+    private static <R> Function<IDataNode, R> guarded(Object operation, Function<IDataNode, R> factory, Function<IDataNode, R> unchanged) {
+        return (node) -> {
+            try {
+                return factory.apply(node);
+            } catch (Throwable e) {
+                logFailedOperation(operation, e);
+                return unchanged.apply(node);
+            }
+        };
+    }
+
+    private static void logFailedOperation(Object operation, Throwable e) {
+        String name = ManagedRegistry.classKeyName(operation.getClass());
+
+        if (FAILED_OPERATIONS.add(name)) {
+            LOGGER.warn("Failed to apply loot modifier operation {}, skipping it: {}", name, e.getMessage(), e);
         }
     }
 
