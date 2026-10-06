@@ -1,4 +1,4 @@
-## []
+## [1.3.0]
 
 - Added `spawnInfo` configuration to hide biome mob spawns
 - Invalid configuration values are skipped with a warning instead of silently resetting the whole option to defaults

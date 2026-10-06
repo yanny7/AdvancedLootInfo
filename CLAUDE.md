@@ -203,6 +203,8 @@ A changelog section header states the release status of what is under it:
 
 So: if the top section carries a version number, open a new `## []` section above it; if it is already `## []`, append to it. The version number is filled in when the mod is actually published.
 
+An entry is one short line saying what changed for the player or the plugin author, not how it was done: `Added …`, `Fixed …`, `Faster …`/`Lower …`, or the new behaviour stated plainly (`Biome shows spawn eggs of mobs that spawn in it`), with no trailing period. Things are named in plain words (`global loot modifier`, `custom ingredients`), never by class or method. A code name appears, in backticks, only where the reader has to type it: a configuration option (``Added `dimensions` configuration to hide dimensions``) or, in ACI's changelog, a published API member. A translation update credits its translator in parentheses.
+
 `gradle.properties` follows from that. Bump the mod's version property only when the version currently in it has been published — i.e. when you are opening a new `## []` section. While an unreleased `## []` section already exists, the property already points at the coming release and stays untouched no matter how many further changes land. Size the bump to the change: a feature or other significant change raises the minor (`1.0.1` → `1.1.0`), a plain fix raises the patch.
 
 ### ACI is published API
