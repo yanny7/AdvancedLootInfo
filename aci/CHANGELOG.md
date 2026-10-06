@@ -1,3 +1,7 @@
+## []
+
+- Added `registerEnumTranslation` and `getEnumTranslation` to the shared server registry and utils
+
 ## [1.4.0]
 
 - Added `SpawnInfoFilter` configuration block

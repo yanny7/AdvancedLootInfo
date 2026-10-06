@@ -74,8 +74,6 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     void registerTrades(ResourceLocation traderId, @Nullable EntityType<?> entityType, Supplier<Int2ObjectMap<VillagerTrades.ItemListing[]>> itemListings, IntFunction<TradeLevelInfo> levelInfo);
 
-    void registerEnumTranslation(Class<? extends Enum<?>> type, String modId, String owner);
-
     @FunctionalInterface
     interface EntryFactory<T extends LootPoolEntryContainer> {
         IDataNode create(IServerUtils utils, T entry, NumberExpr chance, NumberExpr sumWeight, List<TooltipNode> chanceConditions, List<LootItemFunction> functions, List<LootItemCondition> conditions);

@@ -8,7 +8,6 @@ import com.yanny.aci.manager.ClassKeyedMap;
 import com.yanny.aci.manager.CoreServerRegistry;
 import com.yanny.aci.manager.ManagedRegistry;
 import com.yanny.aci.manager.NumberConverters;
-import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.aci.tooltip.TooltipNode;
@@ -26,7 +25,6 @@ import com.yanny.ali.plugin.server.TooltipUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -86,8 +84,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     // global loot modifier pages
     private final ManagedRegistry<Class<?>, IPageResolver<Object>> pageResolvers = registerClassKeyed("global loot modifier page resolvers", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, IEntitySubPredicateResolver<EntitySubPredicate>> entitySubPredicateResolvers = registerClassKeyed("entity sub-predicate resolvers", false, HashMap::new, null);
-    // translations
-    private final ManagedRegistry<Class<?>, EnumTranslation> enumValues = registerClassKeyed("enum values", true, HashMap::new, null);
 
     private final Set<String> fallbackItemListings = new HashSet<>();
     private final Set<String> failedRenderers = new HashSet<>();
@@ -262,11 +258,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     public Map<ResourceLocation, Trades> getTrades() {
         return trades.entries();
-    }
-
-    @Override
-    public void registerEnumTranslation(Class<? extends Enum<?>> type, String modId, String owner) {
-        enumValues.put(type, new EnumTranslation(modId, owner));
     }
 
     @NotNull
@@ -497,16 +488,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
             return fallback.get();
         }
-    }
-
-    @NotNull
-    @Override
-    public TooltipBuilder getEnumTranslation(IServerUtils utils, Enum<?> value) {
-        Class<?> type = value.getDeclaringClass();
-        EnumTranslation translation = enumValues.get(type).orElseGet(() -> new EnumTranslation(Utils.MOD_ID, CoreTooltipUtils.enumOwnerPath(type)));
-        String key = CoreTooltipUtils.enumKey(translation.modId(), translation.owner(), value.name());
-
-        return TooltipBuilder.component(Component.translatableWithFallback(key, value.name()));
     }
 
     @NotNull
