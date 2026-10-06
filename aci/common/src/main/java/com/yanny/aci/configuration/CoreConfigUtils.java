@@ -2,6 +2,9 @@ package com.yanny.aci.configuration;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.yanny.aci.CommonLogUtils;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +17,9 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class CoreConfigUtils {
@@ -68,9 +74,11 @@ public class CoreConfigUtils {
                 return load(modId, configFile, type, factory, gson);
             } catch (Exception e) {
                 logger.warn("Failed to rotate outdated config file!", e);
+                return loadedConfig;
             }
         }
 
+        addMissingKeys(modId, configFile, loadedConfig, gson);
         return loadedConfig;
     }
 
@@ -98,6 +106,49 @@ public class CoreConfigUtils {
         } catch (Exception e) {
             logger.warn("Error while reading configuration file: {}", e.getMessage(), e);
             return factory.get();
+        }
+    }
+
+    private static void addMissingKeys(String modId, Path configFilePath, ICoreConfig config, Gson gson) {
+        Logger logger = CommonLogUtils.getLogger(modId);
+
+        try {
+            JsonElement file;
+
+            try (Reader reader = Files.newBufferedReader(configFilePath)) {
+                file = JsonParser.parseReader(reader);
+            }
+
+            if (!(file instanceof JsonObject fileObject) || !(gson.toJsonTree(config) instanceof JsonObject defaults)) {
+                return;
+            }
+
+            List<String> added = new ArrayList<>();
+
+            addMissingKeys(fileObject, defaults, "", added);
+
+            if (!added.isEmpty()) {
+                try (FileWriter writer = new FileWriter(configFilePath.toFile())) {
+                    gson.toJson(fileObject, writer);
+                }
+
+                logger.info("Added missing keys {} to configuration file {}", added, configFilePath);
+            }
+        } catch (Exception e) {
+            logger.warn("Failed to add missing keys to configuration file: {}", e.getMessage(), e);
+        }
+    }
+
+    private static void addMissingKeys(JsonObject target, JsonObject defaults, String path, List<String> added) {
+        for (Map.Entry<String, JsonElement> entry : defaults.entrySet()) {
+            JsonElement existing = target.get(entry.getKey());
+
+            if (existing == null) {
+                target.add(entry.getKey(), entry.getValue().deepCopy());
+                added.add(path + entry.getKey());
+            } else if (existing instanceof JsonObject existingObject && entry.getValue() instanceof JsonObject defaultObject) {
+                addMissingKeys(existingObject, defaultObject, path + entry.getKey() + ".", added);
+            }
         }
     }
 
