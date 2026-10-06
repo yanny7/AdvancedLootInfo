@@ -1,4 +1,5 @@
 {
+  "alicompat.ad_astra.type.function.random_potion": "Random Potion",
   "alicompat.aether.property.value.config": "Config: %s",
   "alicompat.aether.type.condition.config_enabled": "Config Enabled:",
   "alicompat.aether.type.function.double_drops": "Double Drops:",
@@ -94,6 +95,10 @@
   "alicompat.morejs.type.function.random_potion": "Random Potion",
   "alicompat.morered.type.function.set_wire_count": "Set Wire Count",
   "alicompat.placebo.type.entry.stack": "Stack:",
+  "alicompat.rats.type.condition.has_toga_and_in_ratlantis": "Rat has toga in Ratlantis",
+  "alicompat.rats.type.condition.killer_has_upgrade": "Killer Rat Has Upgrade:",
+  "alicompat.rats.type.condition.rat_has_plague": "Rat has plague",
+  "alicompat.rats.type.condition.ratlantis_loaded": "Ratlantis loaded",
   "alicompat.refinedstorage.type.function.copy_crafter_name": "Copy Crafter Name:",
   "alicompat.refinedstorage.type.function.copy_portable_grid_data": "Copy Portable Grid Data:",
   "alicompat.refinedstorage.type.function.copy_storage_id": "Copy Storage Id:",

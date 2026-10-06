@@ -1,6 +1,7 @@
 ## []
 
 - Added Spell Engine support (RPG Series loot)
+- Added Ad Astra, Rats and The Undergarden support
 - Entry chances account for quality and luck
 - Counts and prices show their distribution, fixed several Iron's Spellbooks and Farmer's Delight values
 - Grimoire of Gaia trades are read from their fields instead of rolled offers

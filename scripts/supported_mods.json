@@ -1,5 +1,11 @@
 [
   {
+    "key": "adastra",
+    "name": "Ad Astra",
+    "mod_ids": ["ad_astra"],
+    "curseforge": ["ad-astra-635042"]
+  },
+  {
     "key": "advancedperipherals",
     "name": "Advanced Peripherals",
     "mod_ids": ["advancedperipherals"],
@@ -198,6 +204,12 @@
     ]
   },
   {
+    "key": "rats",
+    "name": "Rats",
+    "mod_ids": ["rats"],
+    "curseforge": ["rats-323596"]
+  },
+  {
     "key": "refinedstorage",
     "name": "Refined Storage",
     "mod_ids": ["refinedstorage"],
@@ -262,6 +274,12 @@
     "name": "The Twilight Forest",
     "mod_ids": ["twilightforest"],
     "curseforge": ["the-twilight-forest-227639"]
+  },
+  {
+    "key": "undergarden",
+    "name": "The Undergarden",
+    "mod_ids": ["undergarden"],
+    "curseforge": ["the-undergarden-379849"]
   },
   {
     "key": "villagertradingplus",
