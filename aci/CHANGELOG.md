@@ -1,3 +1,7 @@
+## []
+
+- Fixed widget textures being sampled one pixel off
+
 ## [1.4.0]
 
 - Added `SpawnInfoFilter` configuration block

@@ -58,7 +58,7 @@ public class WidgetUtils {
     }
 
     public static void blit(GuiGraphics guiGraphics, Identifier pAtlasLocation, int pX, int pY, int pWidth, int pHeight, float pUOffset, float pVOffset, int pUWidth, int pVHeight) {
-        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, pAtlasLocation, pX, pY, pUOffset, pVOffset, pWidth, pHeight, pUWidth, pVHeight, 255, 255 );
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, pAtlasLocation, pX, pY, pUOffset, pVOffset, pWidth, pHeight, pUWidth, pVHeight, 256, 256);
     }
 
     public static void blit(GuiGraphics guiGraphics, Identifier pAtlasLocation, int pX, int pY, float pUOffset, float pVOffset, int pWidth, int pHeight) {

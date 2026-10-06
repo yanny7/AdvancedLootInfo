@@ -1,3 +1,7 @@
+## []
+
+- Fixed widget textures being sampled one pixel off
+
 ## [1.3.0]
 
 - Added `spawnInfo` configuration to hide biome mob spawns
