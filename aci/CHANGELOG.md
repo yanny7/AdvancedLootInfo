@@ -2,6 +2,7 @@
 
 - Added `registerEnumTranslation` and `getEnumTranslation` to the shared server registry and utils
 - Options missing from an existing config file are added to it with their default values
+- Every config reset keeps its own timestamped backup instead of overwriting the previous one
 
 ## [1.4.0]
 

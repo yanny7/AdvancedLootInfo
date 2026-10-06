@@ -17,12 +17,16 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
 public class CoreConfigUtils {
+    private static final DateTimeFormatter BACKUP_TIMESTAMP = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
+
     @NotNull
     public static <T extends ICoreConfig> T readConfiguration(@Nullable Path configDir, String modId, String fileName,
                                                               Class<T> type, Supplier<T> factory, Gson gson) {
@@ -58,13 +62,7 @@ public class CoreConfigUtils {
             logger.info("Config version mismatch (found {}, expected {}). Re-creating...", loadedConfig.getConfigVersion(), currentVersion);
 
             try {
-                File backupFile = new File(config.getAbsolutePath() + ".bak");
-
-                if (backupFile.exists()) {
-                    if (!backupFile.delete()) {
-                        logger.warn("Failed to delete backup file {}", backupFile);
-                    }
-                }
+                File backupFile = backupFile(config);
 
                 if (!config.renameTo(backupFile)) {
                     logger.warn("Failed to rename config file {} to {}", config, backupFile);
@@ -80,6 +78,18 @@ public class CoreConfigUtils {
 
         addMissingKeys(modId, configFile, loadedConfig, gson);
         return loadedConfig;
+    }
+
+    @NotNull
+    private static File backupFile(File config) {
+        String stamp = LocalDateTime.now().format(BACKUP_TIMESTAMP);
+        File backupFile = new File(config.getAbsolutePath() + "." + stamp + ".bak");
+
+        for (int i = 1; backupFile.exists(); i++) {
+            backupFile = new File(config.getAbsolutePath() + "." + stamp + "_" + i + ".bak");
+        }
+
+        return backupFile;
     }
 
     @NotNull

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.yanny.aci.configuration.CoreConfigUtils;
+import com.yanny.aci.test.utils.TestUtils;
 import net.minecraft.resources.ResourceLocation;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -30,7 +31,7 @@ public class CoreConfigUtilsTest {
 
         assertTrue(Files.exists(configFile()));
         assertEquals(TestConfig.CURRENT_VERSION, config.configVersion);
-        assertFalse(Files.exists(backupFile()));
+        assertTrue(backups().isEmpty());
 
         JsonObject written = writtenConfig();
 
@@ -47,7 +48,7 @@ public class CoreConfigUtilsTest {
         read();
 
         assertEquals(created, Files.readString(configFile()));
-        assertFalse(Files.exists(backupFile()));
+        assertTrue(backups().isEmpty());
     }
 
     @Test
@@ -86,20 +87,19 @@ public class CoreConfigUtilsTest {
 
         TestConfig config = read();
 
-        assertTrue(Files.exists(backupFile()));
-        assertEquals(outdated, Files.readString(backupFile()));
+        assertEquals(List.of(outdated), backups());
         assertEquals(TestConfig.CURRENT_VERSION, config.configVersion);
         assertTrue(config.flag);
     }
 
     @Test
-    public void testExistingBackupIsReplaced() throws IOException {
+    public void testExistingBackupsAreKept() throws IOException {
         writeConfig("{\"configVersion\": 0}");
-        Files.writeString(backupFile(), "previous backup");
-
+        read();
+        writeConfig("{\"configVersion\": 0, \"flag\": false}");
         read();
 
-        assertEquals("{\"configVersion\": 0}", Files.readString(backupFile()));
+        assertEquals(List.of("{\"configVersion\": 0}", "{\"configVersion\": 0, \"flag\": false}"), backups());
     }
 
     @Test
@@ -120,8 +120,7 @@ public class CoreConfigUtilsTest {
 
         TestConfig config = read();
 
-        assertTrue(Files.exists(backupFile()));
-        assertEquals(malformed, Files.readString(backupFile()));
+        assertEquals(List.of(malformed), backups());
         assertEquals(TestConfig.CURRENT_VERSION, config.configVersion);
         assertEquals(TestConfig.CURRENT_VERSION, writtenConfig().get("configVersion").getAsInt());
     }
@@ -157,8 +156,8 @@ public class CoreConfigUtilsTest {
         return configDir.resolve(MOD_ID).resolve(FILE_NAME);
     }
 
-    private Path backupFile() {
-        return configDir.resolve(MOD_ID).resolve(FILE_NAME + ".bak");
+    private List<String> backups() throws IOException {
+        return TestUtils.readBackups(configDir.resolve(MOD_ID), FILE_NAME);
     }
 
     private void writeConfig(String content) {
