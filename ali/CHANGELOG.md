@@ -12,6 +12,7 @@
 - Broken loot entry, tooltip or trade support from other mods shows that part as unsupported instead of hiding the whole loot table or trader
 - Fixed names built from arguments (e.g. GregTech `%s Dust`)
 - Broken loot modifications from LootJS, global loot modifiers or other mods are skipped instead of hiding the whole loot table
+- Blocks dropping only themselves stay hidden when only auto-detected global loot modifiers apply to them
 
 ## [2.3.0]
 

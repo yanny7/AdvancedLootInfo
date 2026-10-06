@@ -11,4 +11,8 @@ public interface IPageLootModifier {
 
     @NotNull
     List<IOperation> getOperations(LootPage page, PageMatch match);
+
+    default boolean isAutoDetected() {
+        return false;
+    }
 }

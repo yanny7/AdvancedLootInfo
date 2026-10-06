@@ -268,7 +268,7 @@
     },
     "hideDefaultBlockLoot": {
       "type": "boolean",
-      "description": "If true, hides loot tables of blocks that only drop themselves (vanilla dropSelf), unless a global loot modifier or fake loot table adds something to them.",
+      "description": "If true, hides loot tables of blocks that only drop themselves (vanilla dropSelf), unless a global loot modifier ALI recognises or a fake loot table adds something to them.",
       "default": true
     },
     "showUnboundedGlobalLootModifiers": {
