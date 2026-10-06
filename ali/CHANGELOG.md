@@ -17,6 +17,7 @@
 - Broken loot modifications from LootJS, global loot modifiers or other mods are skipped instead of hiding the whole loot table
 - Invalid configuration values are skipped with a warning instead of silently resetting the whole option to defaults
 - Blocks dropping only themselves stay hidden when only auto-detected global loot modifiers apply to them
+- Fixed untranslated equipment slots in entity equipment loot on Fabric
 
 ## [2.3.0]
 

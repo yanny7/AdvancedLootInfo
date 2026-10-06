@@ -2,6 +2,7 @@ package com.yanny.ali.plugin;
 
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.ali.Utils;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.DyeColor;
@@ -24,6 +25,7 @@ public class EnumTypes {
     public static final Map<Class<? extends Enum<?>>, String> TRANSLATED_ENUMS = new LinkedHashMap<>();
 
     static {
+        TRANSLATED_ENUMS.put(EquipmentSlot.class, "equipment_slot");
         TRANSLATED_ENUMS.put(EquipmentSlotGroup.class, "equipment_slot");
         TRANSLATED_ENUMS.put(DyeColor.class, "dye_color");
         TRANSLATED_ENUMS.put(GameType.class, "game_type");
