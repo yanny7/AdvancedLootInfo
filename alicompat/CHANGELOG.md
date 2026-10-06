@@ -1,4 +1,4 @@
-## []
+## [1.2.0]
 
 - Added Spell Engine support (RPG Series loot)
 - Added Ad Astra and The Undergarden support

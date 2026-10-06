@@ -519,7 +519,7 @@ public abstract class AbstractServer {
                     continue;
                 }
 
-                if (pending.kind() == PageKind.BLOCK && config.hideDefaultBlockLoot && lootModifiers.isEmpty() && !fakeLootTables.containsKey(location)
+                if (pending.kind() == PageKind.BLOCK && config.hideDefaultBlockLoot && lootModifiers.stream().allMatch(AbstractServer::isAutoDetected) && !fakeLootTables.containsKey(location)
                         && page.blocks().stream().anyMatch((b) -> isDefaultBlockDrop(serverRegistry, config, b, pending.lootTable()))) {
                     defaultDropLootTables++;
                     continue;
@@ -648,6 +648,10 @@ public abstract class AbstractServer {
 
         matched.forEach((c) -> attachedLootModifiers.add(c.source()));
         return matched;
+    }
+
+    private static boolean isAutoDetected(Candidate candidate) {
+        return candidate.source() instanceof IPageLootModifier modifier && modifier.isAutoDetected();
     }
 
     private static boolean addsItems(Candidate candidate) {
