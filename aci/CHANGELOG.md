@@ -1,4 +1,4 @@
-## []
+## [1.4.0]
 
 - Added `SpawnInfoFilter` configuration block
 - Invalid configuration values fall back to defaults with a warning, invalid list entries are skipped one by one

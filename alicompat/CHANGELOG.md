@@ -1,4 +1,4 @@
-## []
+## [1.2.0]
 
 - Added Spell Engine support (RPG Series loot)
 - Entry chances account for quality and luck
