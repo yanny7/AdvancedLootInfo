@@ -1,4 +1,4 @@
-## []
+## [2.4.0]
 
 - Added `spawnInfo` configuration to hide entity spawn info
 - Chances and rolls depending on luck show one row per luck value

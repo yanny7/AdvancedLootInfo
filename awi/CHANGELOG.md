@@ -1,4 +1,4 @@
-## []
+## [1.3.0]
 
 - Added `spawnInfo` configuration to hide biome mob spawns
 - Height converters and placement contributions carry the condition tooltips of their conditional numbers

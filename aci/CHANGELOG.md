@@ -1,4 +1,4 @@
-## []
+## [1.4.0]
 
 - Added `SpawnInfoFilter` configuration block
 - Variables with a finite domain containing 0 (luck) get a row per value, like enchantment levels
