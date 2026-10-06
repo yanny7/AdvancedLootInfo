@@ -1,4 +1,4 @@
-## []
+## [1.2.0]
 
 - Entry chances account for quality and luck
 - Counts and prices show their distribution

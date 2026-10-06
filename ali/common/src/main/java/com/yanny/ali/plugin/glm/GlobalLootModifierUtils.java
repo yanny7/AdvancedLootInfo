@@ -92,7 +92,7 @@ public class GlobalLootModifierUtils {
 
     public static Optional<IPageLootModifier> getMissingGlobalLootModifier(IServerUtils utils, IGlobalLootModifierWrapper modifier) {
         if (modifier.isLootModifier()) {
-            return Optional.of(getLootModifier(utils, modifier.getLootModifier(), modifier.getConditions(), (page, conditions) -> {
+            return Optional.of(new AutoDetected(getLootModifier(utils, modifier.getLootModifier(), modifier.getConditions(), (page, conditions) -> {
                 Optional<List<IOperation>> serialized = SERIALIZED_OPERATIONS.computeIfAbsent(modifier, (m) -> getSerializedOperations(utils, m));
 
                 if (serialized.isPresent()) {
@@ -107,7 +107,7 @@ public class GlobalLootModifierUtils {
                     b.add(utils.getValueTooltip(utils, conditions));
                 });
                 return List.of(new IOperation.AddOperation((i) -> true, new GlobalLootModifierNode(tooltip.build())));
-            }));
+            })));
         }
 
         return Optional.empty();
@@ -340,5 +340,24 @@ public class GlobalLootModifierUtils {
                 || predicate.team().isPresent()
                 || predicate.slots().isPresent()
                 || !predicate.components().isEmpty();
+    }
+
+    private record AutoDetected(IPageLootModifier delegate) implements IPageLootModifier {
+        @NotNull
+        @Override
+        public PageMatch test(LootPage page) {
+            return delegate.test(page);
+        }
+
+        @NotNull
+        @Override
+        public List<IOperation> getOperations(LootPage page, PageMatch match) {
+            return delegate.getOperations(page, match);
+        }
+
+        @Override
+        public boolean isAutoDetected() {
+            return true;
+        }
     }
 }
