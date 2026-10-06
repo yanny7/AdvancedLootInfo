@@ -35,7 +35,7 @@ public class GoblinTradersCompat implements IModCompat {
     private static void registerTrader(IServerRegistry registry, String name) {
         Identifier traderId = id(name);
 
-        registry.registerTrades(traderId, BuiltInRegistries.ENTITY_TYPE.getValue(traderId), () -> TradeLevel.ofSets(tradeSets(name)));
+        registry.registerTrades(traderId, BuiltInRegistries.ENTITY_TYPE.getValue(traderId), (utils) -> TradeLevel.ofSets(tradeSets(name)));
     }
 
     // a goblin adds every rarity set instead of picking one - keyed as levels here

@@ -81,7 +81,17 @@ against this version's jar and the current ALI/ALICompat API anyway, so any work
 ### Other recurring conflicts
 
 - **`alicompat/<loader>/src/main/generated/**`** is datagen output, so it is never merged by hand. Take either
-  side, build, then regenerate with `./gradlew runAlicompat<Loader>Datagen` for every enabled loader.
+  side, build, then regenerate with `./gradlew runAlicompat<Loader>Datagen` for every enabled loader. It merges
+  silently too, typically with keys of a slug that is dormant here. Datagen rewrites a file only when its output hash
+  differs from the one in `generated/.cache/`, not from the file on disk, so it leaves a merged file in place
+  (`written: 0`). Compare the cache entry with the `HEAD` file (`git show HEAD:<path> | sha1sum`). If they match,
+  restore the file with `git checkout HEAD -- <path>`. Otherwise delete the file and run datagen again.
+- **Branch self-references in the `CLAUDE.md` tree**: sentences such as "on this `<version>` branch", "unported to
+  `<version>`", "this one, `ali_<x>/`", or which modules and run tasks are built here. They usually auto-merge without
+  a conflict and arrive naming the lower branch. After the merge, grep the docs the merge touched for the lower
+  branch's version, and for any other version used as "this branch". Rewrite each such line to this branch's version
+  and to the flags in this `gradle.properties` (`<loader>_enabled`, `<viewer>_enabled`, `lootjs_enabled`). Leave
+  references that mean a real other version alone ("1.21.5 split `GatherDataEvent`").
 - **`alicompat/CHANGELOG.md`**: keep this branch's `## []` entries, add the lower branch's entries that apply here
   (cross-cutting changes), and drop "Added X support" for a slug that is dormant here, because this branch does not ship it.
 - **`Lang` enums and the lang JSONs** (generated `en_us` and the hand-kept translations): a key deleted below sits next
@@ -208,6 +218,17 @@ done
 Only a key present on both sides with a different value is a finding; keys on one side only are version differences.
 A value that differs on purpose (an empty `showEmpty` array has no colon) stays as it is.
 
+Neither the merge nor `git merge-file` reaches code that implements the same thing differently here: a module
+written against another major version of its target (LootJS 1 below, LootJS 3 here), a vanilla type that exists only
+here (`TypeSpecificTrade`), or a shim class the lower branch never had. Such a file usually conflicts as a whole or not
+at all, so take `ours` and port the merged change by its intent. Read each lower-branch commit's diff
+(`git show <commit>`), name the pattern it replaced (a hardcoded string turned `Lang` key, a `ResourceLocation` id
+turned `ResourceKey`, a `toString()` value, a call that gained an argument), and grep for the old pattern over
+`aci`, `ali`, `awi`, `alicompat/common` and the active source sets (`$S/active_dirs.txt`), leaving out tests. Every hit
+the merged change would have rewritten had the code existed below gets the same rewrite. A hit the lower branch left
+alone in its own equivalent code stays as it is. A `Lang` enum the merge brings in for code that differs here is
+reshaped to this branch's constants, not copied from below.
+
 **Stop here.** Report what merged, what was restored, and how many slugs are dormant. The user
 commits. Phase 2 does not begin until that commit exists.
 
@@ -247,8 +268,14 @@ are phase 2's worklist, the rest cannot be written here at all. The script leave
 strictly alone — it neither pins nor scaffolds them — so a `--update` run after the merge cannot
 switch on a shim nobody has ported.
 
-"0 portable" can be real: mods skip Minecraft versions. Before reporting that, confirm a few of them on
-CurseForge (`/v1/mods/<id>` → `latestFilesIndexes[].gameVersion`) and one active mod as a control.
+"0 portable" can be real: mods skip Minecraft versions. Before reporting that, check it on CurseForge in one pass
+over every project in `scripts/supported_mods.json` (`/v1/mods/<id>` → `latestFilesIndexes[]` whose `gameVersion` is
+this one). Print each project's hits together with its `modLoader` and `releaseType`, and print an active mod
+whether it has hits or not, as the control.
+The scripts take only release and beta files, so a version listed there may still be "no file": check
+`releaseType` (`/v1/mods/<id>/files?gameVersion=<mc>`, 3 is alpha). A mod that ships only alphas on CurseForge
+often publishes releases on its own maven. Find that maven and report it, since adding a `maven` source to
+`scripts/supported_mods.json` is the user's decision.
 
 ### Take them in groups, not in bulk
 

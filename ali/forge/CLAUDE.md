@@ -4,7 +4,7 @@ Guidance for `ali/forge` (`com.yanny.ali.forge`) — ALI's Forge loader entry po
 
 ## ⚠️ Not built on this branch
 
-`forge_enabled=false` in `gradle.properties`, so `settings.gradle` never includes `ali:forge` — Forge has been dropped on `1.21.5` in favour of NeoForge. The sources are still here but were **not ported to 1.21.5** and would not compile if the flag were flipped on: `ForgePlatformHelper` still `@Override`s a `getLookupProvider()` that no longer exists on `IPlatformHelper`, and `AliMod.onAddReloadListener` still calls the no-arg `SERVER.getFakeLootDataManager()` (now `getFakeLootDataManager(HolderLookup.Provider)`). Treat everything below as a description of the last working (1.21.1) state, and port from `ali/neoforge` if Forge is ever revived here.
+`forge_enabled=false` in `gradle.properties`, so `settings.gradle` never includes `ali:forge` — Forge has been dropped on `26.2` in favour of NeoForge. The sources are still here but were **not ported to 26.2** and would not compile if the flag were flipped on: `ForgePlatformHelper` still `@Override`s a `getLookupProvider()` that no longer exists on `IPlatformHelper`, and `AliMod.onAddReloadListener` still calls the no-arg `SERVER.getFakeLootDataManager()` (now `getFakeLootDataManager(HolderLookup.Provider)`). Treat everything below as a description of the last working (1.21.1) state, and port from `ali/neoforge` if Forge is ever revived here.
 
 ## Entry point
 

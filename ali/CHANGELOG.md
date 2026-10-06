@@ -1,5 +1,6 @@
-## []
+## [2.4.0]
 
+- Added `spawnInfo` configuration to hide entity spawn info
 - Chances and rolls depending on luck show one row per luck value
 - Entry chance accounts for quality and luck
 - Chances in pools with alternatives account for the weight of the alternative that is picked
@@ -17,6 +18,10 @@
 - Scoreboard and storage number providers show their fallback value
 - Trade prices, uses, experience and offer counts show the conditions of their conditional values
 - Fixed names built from arguments (e.g. GregTech `%s Dust`)
+- Broken loot modifications from LootJS, global loot modifiers or other mods are skipped instead of hiding the whole loot table
+- Invalid configuration values are skipped with a warning instead of silently resetting the whole option to defaults
+- Trader registration receives server utils, so trades can be read from datapack registries
+- Blocks dropping only themselves stay hidden when only auto-detected global loot modifiers apply to them
 
 ## [2.3.0]
 

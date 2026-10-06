@@ -192,6 +192,24 @@
       "description": "List of entities that will not be used for gathering loot tables.",
       "items": { "$ref": "#/definitions/Identifier" }
     },
+    "spawnInfo": {
+      "type": "object",
+      "description": "Which entities show where they spawn naturally. An empty whitelist turns spawn info off completely, and then it is not even collected. An entity without loot whose spawn info is hidden is not listed by showEntitiesWithoutLoot.",
+      "additionalProperties": false,
+      "properties": {
+        "entities": {
+          "type": "array",
+          "description": "Entities whose spawn info is hidden, or with whitelist the only entities whose spawn info is shown.",
+          "items": { "$ref": "#/definitions/ResourceLocation" },
+          "default": []
+        },
+        "whitelist": {
+          "type": "boolean",
+          "description": "If true, entities is a whitelist instead of a blacklist.",
+          "default": false
+        }
+      }
+    },
     "tooltipColors": {
       "type": "object",
       "description": "Colors used when rendering tooltips. Changes take effect on restart.",
@@ -250,7 +268,7 @@
     },
     "hideDefaultBlockLoot": {
       "type": "boolean",
-      "description": "If true, hides loot tables of blocks that only drop themselves (vanilla dropSelf), unless a global loot modifier or fake loot table adds something to them.",
+      "description": "If true, hides loot tables of blocks that only drop themselves (vanilla dropSelf), unless a global loot modifier ALI recognises or a fake loot table adds something to them.",
       "default": true
     },
     "showUnboundedGlobalLootModifiers": {

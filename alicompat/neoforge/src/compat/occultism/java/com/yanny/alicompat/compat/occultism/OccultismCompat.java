@@ -53,7 +53,7 @@ public class OccultismCompat implements IGlmModCompat {
 
     // WonderingTraderEntity#updateTrades and #updateOtherTrades - keyed as levels here, the vanilla sets in between
     @NotNull
-    private static Int2ObjectMap<TradeLevel> getWonderingTraderLevels() {
+    private static Int2ObjectMap<TradeLevel> getWonderingTraderLevels(IServerUtils ignoredUtils) {
         Int2ObjectMap<TradeLevel> levels = new Int2ObjectOpenHashMap<>();
 
         levels.put(1, getLevel(WonderingTrades.HINT, new TradeLevelInfo(NumberExpr.constant(1)), OccultismLang.Value.WITHOUT_THIRD_EYE));

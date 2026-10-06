@@ -495,6 +495,8 @@
   "ali.type.function.furnace_smelt": "Furnace Smelt",
   "ali.type.function.limit_count": "Limit Count:",
   "ali.type.function.modify_contents": "Modify Contents:",
+  "ali.type.function.player_action": "Player Action:",
+  "ali.type.function.preserve_components": "Preserve Components:",
   "ali.type.function.reference": "Reference:",
   "ali.type.function.sequence": "Sequence:",
   "ali.type.function.set_attributes": "Set Attributes:",
