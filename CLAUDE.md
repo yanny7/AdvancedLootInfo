@@ -195,6 +195,10 @@ An entry is one short line saying what changed for the player or the plugin auth
 
 `gradle.properties` follows from that. Bump the mod's version property only when the version currently in it has been published — i.e. when you are opening a new `## []` section. While an unreleased `## []` section already exists, the property already points at the coming release and stays untouched no matter how many further changes land. Size the bump to the change: a feature or other significant change raises the minor (`1.0.1` → `1.1.0`), a plain fix raises the patch.
 
+A version number belongs to the mod, not to the branch: once it is published from any branch, it is taken on all of them. Numbering a `## []` section happens only at release, when the user asks for it, and only then is the number checked against the highest version of that mod released on **any** active branch (the topmost `## [X.Y.Z]` in its `CHANGELOG.md` there) — a hotfix released from another branch alone moves it. If that version is equal to or above the one in the property, the section gets the next number above it and the property is raised to match. Outside a release, a version that another branch has overtaken is left as it is.
+
+Numbering a release on `master` also checks that its `minecraft_version` is offered in the `Minecraft version` dropdowns of `.github/ISSUE_TEMPLATE/bug_report.yml` and `feature_request.yml` (newest first), and adds it there if not — `master` is the only branch whose Minecraft version can be released before it is listed.
+
 ### ACI is published API
 
 ACI ships as its own jar and is a **mandatory** dependency of both ALI and AWI, so `com.yanny.aci.api`, `com.yanny.aci.tooltip` and `com.yanny.aci.manager` are published API — a breaking change there is not free.
