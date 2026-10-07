@@ -1,3 +1,7 @@
+## []
+
+- Tooltips wider than the window wrap their lines
+
 ## [2.4.0]
 
 - Added `spawnInfo` configuration to hide entity spawn info
