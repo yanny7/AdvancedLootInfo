@@ -11,6 +11,7 @@ import com.yanny.ali.lootjs.node.ItemTagNode;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.server.MissingTooltipUtils;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
@@ -65,8 +66,7 @@ public class Utils {
                     return getMissingNode(utils, value);
                 }
             } else {
-                LOGGER.warn("Ingredient of {} has no entries", generator.getClass().getCanonicalName());
-                return getMissingNode(utils, ingredient);
+                return new ItemStackNode(utils, ItemStack.EMPTY, (float) weight / sumWeight, allFunctions, allConditions, preservedCount);
             }
         } else {
             LOGGER.warn("Unexpected generator type {}", generator.getClass().getCanonicalName());

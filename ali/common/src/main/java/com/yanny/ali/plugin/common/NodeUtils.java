@@ -581,6 +581,19 @@ public class NodeUtils {
         }
     }
 
+    public static void replaceEmptyItems(IDataNode node) {
+        if (node instanceof ListNode listNode) {
+            listNode.nodes().replaceAll((n) -> {
+                if (n instanceof IItemNode itemNode && itemNode.getItem().left().filter(ItemStack::isEmpty).isPresent()) {
+                    return new EmptyNode(n.getChance(), n.getTooltip());
+                }
+
+                replaceEmptyItems(n);
+                return n;
+            });
+        }
+    }
+
     /**
      * The stacks an {@link IItemNode} stands for, resolved against the current registry - a tag becomes its members,
      * an empty stack becomes nothing. The returned list is mutable, so that {@link IItemNode#retainItems} can narrow

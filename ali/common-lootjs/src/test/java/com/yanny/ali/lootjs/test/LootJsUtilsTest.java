@@ -93,8 +93,8 @@ public class LootJsUtilsTest {
     public void testRandomIngredientGeneratorEmptyIngredient() {
         IDataNode node = getEntry(new LootEntry.RandomIngredientGenerator(Ingredient.EMPTY), 1, 1, null);
 
-        Assertions.assertEquals(MissingNode.ID, node.getId());
-        assertTooltip(node.getTooltip(), List.of("Not implemented: [net.minecraft.world.item.crafting.Ingredient]"));
+        Assertions.assertEquals(ItemStackNode.ID, node.getId());
+        Assertions.assertTrue(((ItemStackNode) node).getItem().left().orElseThrow().isEmpty());
     }
 
     @Test

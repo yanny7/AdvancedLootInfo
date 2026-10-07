@@ -209,6 +209,8 @@ public abstract class AbstractServer {
         for (Map.Entry<ResourceLocation, IDataNode> entry : lootNodes.entrySet()) {
             IDataNode node = entry.getValue();
 
+            NodeUtils.replaceEmptyItems(node);
+
             if (node instanceof ListNode listNode) {
                 listNode.optimizeList();
             }
