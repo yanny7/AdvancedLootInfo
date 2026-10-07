@@ -1,4 +1,4 @@
-## []
+## [1.4.1]
 
 - Fixed scrollable tooltip sometimes showing one line less than fits on screen
 

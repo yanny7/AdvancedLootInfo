@@ -1,4 +1,4 @@
-## []
+## [1.3.1]
 
 - Fixed crash on game start
 

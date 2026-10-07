@@ -1,4 +1,4 @@
-## []
+## [2.4.1]
 
 - Fixed crash on game start
 
