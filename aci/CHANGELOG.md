@@ -1,3 +1,7 @@
+## []
+
+- Fixed scrollable tooltip sometimes showing one line less than fits on screen
+
 ## [1.4.0]
 
 - Added `SpawnInfoFilter` configuration block

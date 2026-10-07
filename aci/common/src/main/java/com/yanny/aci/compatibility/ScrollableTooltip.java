@@ -34,6 +34,7 @@ public class ScrollableTooltip implements TooltipComponent, ClientTooltipCompone
     private static final long ACTIVE_MILLIS = 100;
 
     private static List<ClientTooltipComponent> renderedComponents = List.of();
+    private static boolean extraSpaceAfterFirstLine = false;
     private static List<TooltipLine> activeLines = List.of();
     private static int offset = 0;
     private static int overflow = 0;
@@ -92,8 +93,9 @@ public class ScrollableTooltip implements TooltipComponent, ClientTooltipCompone
         this.contentWidth = width;
     }
 
-    public static void setRenderedComponents(List<ClientTooltipComponent> components) {
+    public static void setRenderedComponents(List<ClientTooltipComponent> components, boolean extraSpace) {
         renderedComponents = components;
+        extraSpaceAfterFirstLine = extraSpace;
     }
 
     public static boolean onMouseScrolled(double scrollDeltaY) {
@@ -273,7 +275,7 @@ public class ScrollableTooltip implements TooltipComponent, ClientTooltipCompone
             }
         }
 
-        return renderedComponents.size() > 1 ? height + TITLE_GAP : height;
+        return extraSpaceAfterFirstLine && renderedComponents.size() > 1 ? height + TITLE_GAP : height;
     }
 
     private record Panel(int x, int row, int width) {
