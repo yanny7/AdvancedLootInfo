@@ -9,12 +9,15 @@ import com.yanny.ali.lootjs.mixin.MixinLootEntry;
 import com.yanny.ali.lootjs.node.ItemStackNode;
 import com.yanny.ali.lootjs.node.ItemTagNode;
 import com.yanny.ali.plugin.common.NodeUtils;
+import com.yanny.ali.plugin.common.nodes.EmptyNode;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
+import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.MissingTooltipUtils;
-import net.minecraft.world.item.ItemStack;
+import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.entries.TagEntry;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -36,6 +39,10 @@ public class Utils {
         int weight = mixinLootEntry.getWeight();
 
         if (generator instanceof LootEntry.ItemGenerator itemGenerator) {
+            if (itemGenerator.item().isEmpty()) {
+                return getEmptyNode(utils, (float) weight / sumWeight, allFunctions, allConditions);
+            }
+
             return new ItemStackNode(utils, itemGenerator.item(), (float) weight / sumWeight, allFunctions, allConditions, preservedCount);
         } else if (generator instanceof LootEntry.VanillaWrappedLootEntry lootEntry) {
             LootPoolEntryContainer entryContainer = lootEntry.entry();
@@ -66,12 +73,19 @@ public class Utils {
                     return getMissingNode(utils, value);
                 }
             } else {
-                return new ItemStackNode(utils, ItemStack.EMPTY, (float) weight / sumWeight, allFunctions, allConditions, preservedCount);
+                return getEmptyNode(utils, (float) weight / sumWeight, allFunctions, allConditions);
             }
         } else {
             LOGGER.warn("Unexpected generator type {}", generator.getClass().getCanonicalName());
             return getMissingNode(utils, generator);
         }
+    }
+
+    @NotNull
+    private static IDataNode getEmptyNode(IServerUtils utils, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        LootCount chanceExpr = NodeUtils.getChance(utils, conditions, chance);
+
+        return new EmptyNode(chance, TooltipUtils.getEmptyTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chanceExpr, functions, conditions).build());
     }
 
     @NotNull

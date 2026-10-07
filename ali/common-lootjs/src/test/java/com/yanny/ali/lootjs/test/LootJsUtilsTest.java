@@ -10,6 +10,7 @@ import com.yanny.ali.lootjs.mixin.MixinLootEntry;
 import com.yanny.ali.lootjs.node.ItemStackNode;
 import com.yanny.ali.lootjs.node.ItemTagNode;
 import com.yanny.ali.plugin.client.TooltipUtils;
+import com.yanny.ali.plugin.common.nodes.EmptyNode;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import net.minecraft.tags.ItemTags;
@@ -40,6 +41,18 @@ public class LootJsUtilsTest {
         ItemStackNode node = (ItemStackNode) getEntry(new LootEntry.ItemGenerator(new ItemStack(Items.DIAMOND, 3)), 1, 4, null);
 
         Assertions.assertEquals(0.25F, node.getChance());
+    }
+
+    @Test
+    public void testItemGeneratorAirNode() {
+        IDataNode node = getEntry(new LootEntry.ItemGenerator(new ItemStack(Items.AIR)), 1, 4, null);
+
+        Assertions.assertEquals(EmptyNode.ID, node.getId());
+        Assertions.assertEquals(0.25F, node.getChance());
+        assertTooltip(node.getTooltip(), List.of(
+                "Drops nothing",
+                "Chance: 25%"
+        ));
     }
 
     @Test
@@ -93,8 +106,8 @@ public class LootJsUtilsTest {
     public void testRandomIngredientGeneratorEmptyIngredient() {
         IDataNode node = getEntry(new LootEntry.RandomIngredientGenerator(Ingredient.EMPTY), 1, 1, null);
 
-        Assertions.assertEquals(ItemStackNode.ID, node.getId());
-        Assertions.assertTrue(((ItemStackNode) node).getItem().left().orElseThrow().isEmpty());
+        Assertions.assertEquals(EmptyNode.ID, node.getId());
+        assertTooltip(node.getTooltip(), List.of("Drops nothing"));
     }
 
     @Test

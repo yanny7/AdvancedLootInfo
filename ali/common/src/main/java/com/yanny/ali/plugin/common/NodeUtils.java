@@ -567,17 +567,17 @@ public class NodeUtils {
         }
     }
 
-    private static boolean hasItems(IDataNode node) {
+    private static boolean hasContent(IDataNode node) {
         if (node instanceof ListNode listNode) {
-            return listNode.nodes().stream().anyMatch(NodeUtils::hasItems);
+            return listNode.nodes().stream().anyMatch(NodeUtils::hasContent);
         } else {
-            return node instanceof IItemNode;
+            return !(node instanceof EmptyNode);
         }
     }
 
     private static void removeEmptyNodes(IDataNode node) {
         if (node instanceof ListNode listNode) {
-            listNode.nodes().removeIf((n) -> !hasItems(n));
+            listNode.nodes().removeIf((n) -> n instanceof ListNode && !hasContent(n));
         }
     }
 

@@ -2,6 +2,7 @@
 
 - Tooltips wider than the window wrap their lines
 - Air in loot tables shows as an empty entry
+- Fixed empty, dynamic and unsupported entries and global loot modifiers disappearing when a loot modifier removes an item from the same loot table
 
 ## [2.4.0]
 

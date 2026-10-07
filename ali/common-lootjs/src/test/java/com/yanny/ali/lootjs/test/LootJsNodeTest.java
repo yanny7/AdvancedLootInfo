@@ -14,6 +14,7 @@ import com.yanny.ali.api.ListNode;
 import com.yanny.ali.lootjs.mixin.*;
 import com.yanny.ali.lootjs.node.*;
 import com.yanny.ali.plugin.client.TooltipUtils;
+import com.yanny.ali.plugin.common.nodes.EmptyNode;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.random.SimpleWeightedRandomList;
@@ -200,7 +201,7 @@ public class LootJsNodeTest {
                 entry(new LootEntry.RandomIngredientGenerator(Ingredient.EMPTY), 1)
         ), List.of(), List.of());
 
-        Assertions.assertEquals(ItemStackNode.ID, child(node, 0).getId());
+        Assertions.assertEquals(EmptyNode.ID, child(node, 0).getId());
     }
 
     @Test
