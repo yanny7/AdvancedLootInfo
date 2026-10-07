@@ -1,3 +1,7 @@
+## []
+
+- Fixed crash on game start
+
 ## [2.4.0]
 
 - Added `spawnInfo` configuration to hide entity spawn info
