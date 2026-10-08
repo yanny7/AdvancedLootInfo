@@ -73,5 +73,14 @@
   "alicompat.spell_engine.type.entry.affiliation_group": "Affiliation Group:",
   "alicompat.spell_engine.type.function.spell_bind_randomly": "Spell Bind Randomly:",
   "alicompat.undergarden.type.consume_effect.modify_utheric_infection": "Modify Utheric Infection:",
-  "alicompat.undergarden.type.item_sub_predicate.infection_consume_effect": "Infection Consume Effect:"
+  "alicompat.undergarden.type.item_sub_predicate.infection_consume_effect": "Infection Consume Effect:",
+  "alicompat.villagerconfig.property.branch.dye_colors": "Dye Colors:",
+  "alicompat.villagerconfig.property.branch.exclude": "Exclude:",
+  "alicompat.villagerconfig.property.branch.include": "Include:",
+  "alicompat.villagerconfig.property.value.max_level": "Max Level: %s",
+  "alicompat.villagerconfig.property.value.min_level": "Min Level: %s",
+  "alicompat.villagerconfig.property.value.price_multiplier": "Price Multiplier: %s",
+  "alicompat.villagerconfig.property.value.reward_experience": "Reward Experience: %s",
+  "alicompat.villagerconfig.type.function.enchant_randomly": "Enchant Randomly:",
+  "alicompat.villagerconfig.type.function.set_dye": "Set Dye:"
 }

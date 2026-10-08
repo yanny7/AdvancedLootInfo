@@ -1,12 +1,12 @@
 package com.yanny.alicompat.compat.villagerconfig;
 
 import com.yanny.aci.api.NumberExpr;
-import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.common.trades.TradeGroupNode;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
+import com.yanny.alicompat.accessor.ReflectionUtils;
 import me.drex.villagerconfig.common.data.BehaviorTrade;
 import me.drex.villagerconfig.common.data.TradeGroup;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -32,7 +32,7 @@ public class TradeGroupAccessor extends BaseAccessor<TradeGroup> {
 
     @NotNull
     public List<IDataNode> getTrades(IServerUtils utils) {
-        return trades.stream().map((t) -> utils.getItemListing(utils, t, TooltipNode.empty())).toList();
+        return trades.stream().map((t) -> ReflectionUtils.copyClassData(BehaviorTradeAccessor.class, t, BehaviorTrade.class).getNode(utils)).toList();
     }
 
     @NotNull

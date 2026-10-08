@@ -8,14 +8,10 @@ import com.yanny.alicompat.accessor.PluginUtils;
 import com.yanny.alicompat.accessor.ReflectionUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import me.drex.villagerconfig.common.VillagerConfig;
-import me.drex.villagerconfig.common.data.BehaviorTrade;
 import me.drex.villagerconfig.common.data.TradeTable;
 import me.drex.villagerconfig.common.util.TradeProvider;
 import me.drex.villagerconfig.common.util.loot.function.EnchantRandomlyLootFunction;
 import me.drex.villagerconfig.common.util.loot.function.SetDyeFunction;
-import me.drex.villagerconfig.common.util.loot.number.AddLootNumberProvider;
-import me.drex.villagerconfig.common.util.loot.number.MultiplyLootNumberProvider;
-import me.drex.villagerconfig.common.util.loot.number.ReferenceLootNumberProvider;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
@@ -36,11 +32,6 @@ public class VillagerConfigCompat implements IModCompat {
         PluginUtils.registerItemStackModifier(registry, EnchantRandomlyLootFunction.class, EnchantRandomlyLootFunctionAccessor.class);
         PluginUtils.registerFunctionTooltip(registry, SetDyeFunction.class, SetDyeFunctionAccessor.class);
 
-        PluginUtils.registerNumberProvider(registry, AddLootNumberProvider.class, AddLootNumberProviderAccessor::new);
-        PluginUtils.registerNumberProvider(registry, MultiplyLootNumberProvider.class, MultiplyLootNumberProviderAccessor::new);
-        PluginUtils.registerNumberProvider(registry, ReferenceLootNumberProvider.class, ReferenceLootNumberProviderAccessor::new);
-
-        PluginUtils.registerItemListing(registry, BehaviorTrade.class, BehaviorTradeAccessor.class);
         registry.registerTradeOverride(VillagerConfigCompat::getTradeLevels);
     }
 
