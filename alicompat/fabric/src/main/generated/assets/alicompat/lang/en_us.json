@@ -22,5 +22,16 @@
   "alicompat.farmersdelight.type.consume_effect.heal": "Heal:",
   "alicompat.farmersdelight.type.consume_effect.remove_random_effects": "Remove Random Effects:",
   "alicompat.farmersdelight.type.function.copy_skillet": "Copy Skillet:",
-  "alicompat.farmersdelight.type.function.smoker_cook": "Smoker Cook:"
+  "alicompat.farmersdelight.type.function.smoker_cook": "Smoker Cook:",
+  "alicompat.number.var.villagerconfig.enchantment_level": "enchantment level",
+  "alicompat.number.var.villagerconfig.enchantment_level.desc": "enchantment level",
+  "alicompat.number.var.villagerconfig.treasure_multiplier": "treasure multiplier",
+  "alicompat.number.var.villagerconfig.treasure_multiplier.desc": "treasure multiplier",
+  "alicompat.villagerconfig.property.branch.dye_colors": "Dye Colors:",
+  "alicompat.villagerconfig.property.branch.exclude": "Exclude:",
+  "alicompat.villagerconfig.property.branch.include": "Include:",
+  "alicompat.villagerconfig.property.value.max_level": "Max Level: %s",
+  "alicompat.villagerconfig.property.value.min_level": "Min Level: %s",
+  "alicompat.villagerconfig.type.function.enchant_randomly": "Enchant Randomly:",
+  "alicompat.villagerconfig.type.function.set_dye": "Set Dye:"
 }

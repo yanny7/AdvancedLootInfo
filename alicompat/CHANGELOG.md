@@ -1,3 +1,7 @@
+## []
+
+- Added VillagerConfig support
+
 ## [1.2.0]
 
 - Entry chances account for quality and luck

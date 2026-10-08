@@ -17,12 +17,12 @@ import me.drex.villagerconfig.common.util.loot.number.AddLootNumberProvider;
 import me.drex.villagerconfig.common.util.loot.number.MultiplyLootNumberProvider;
 import me.drex.villagerconfig.common.util.loot.number.ReferenceLootNumberProvider;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class VillagerConfigCompat implements IModCompat {
-    private static final ResourceLocation WANDERING_TRADER = ResourceLocation.withDefaultNamespace("wandering_trader");
+    private static final Identifier WANDERING_TRADER = Identifier.withDefaultNamespace("wandering_trader");
 
     @NotNull
     @Override
@@ -45,7 +45,7 @@ public class VillagerConfigCompat implements IModCompat {
     }
 
     @Nullable
-    private static Int2ObjectMap<TradeLevel> getTradeLevels(IServerUtils utils, ResourceLocation traderId) {
+    private static Int2ObjectMap<TradeLevel> getTradeLevels(IServerUtils utils, Identifier traderId) {
         TradeTable tradeTable = getTradeTable(traderId);
 
         if (tradeTable == null) {
@@ -56,7 +56,7 @@ public class VillagerConfigCompat implements IModCompat {
     }
 
     @Nullable
-    private static TradeTable getTradeTable(ResourceLocation traderId) {
+    private static TradeTable getTradeTable(Identifier traderId) {
         if (traderId.equals(WANDERING_TRADER)) {
             return VillagerConfig.TRADE_MANAGER.getTrade(TradeProvider.WANDERING_TRADER_ID);
         }

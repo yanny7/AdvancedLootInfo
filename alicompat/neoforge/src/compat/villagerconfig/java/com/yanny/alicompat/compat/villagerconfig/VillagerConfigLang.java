@@ -6,7 +6,7 @@ import com.yanny.aci.language.Translation;
 import com.yanny.aci.number.NumberFormatter;
 import com.yanny.alicompat.ICompatTranslations;
 import com.yanny.alicompat.Utils;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -14,8 +14,8 @@ import java.util.Map;
 
 public class VillagerConfigLang implements ICompatTranslations {
     static final String MOD_ID = "villagerconfig";
-    static final ResourceLocation ENCHANTMENT_LEVEL = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, MOD_ID + ".enchantment_level");
-    static final ResourceLocation TREASURE_MULTIPLIER = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, MOD_ID + ".treasure_multiplier");
+    static final Identifier ENCHANTMENT_LEVEL = Identifier.fromNamespaceAndPath(Utils.MOD_ID, MOD_ID + ".enchantment_level");
+    static final Identifier TREASURE_MULTIPLIER = Identifier.fromNamespaceAndPath(Utils.MOD_ID, MOD_ID + ".treasure_multiplier");
 
     public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 
@@ -83,7 +83,7 @@ public class VillagerConfigLang implements ICompatTranslations {
 
         private final Translation translation;
 
-        Numbers(ResourceLocation type, String suffix, String e) {
+        Numbers(Identifier type, String suffix, String e) {
             translation = new Translation(NumberFormatter.varKey(type) + suffix, e);
         }
 
