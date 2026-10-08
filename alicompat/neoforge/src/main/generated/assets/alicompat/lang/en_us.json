@@ -18,5 +18,14 @@
   "alicompat.spell_engine.property.value.spell_pool": "Spell Pool: %s",
   "alicompat.spell_engine.property.value.tier": "Tier: %s",
   "alicompat.spell_engine.type.entry.affiliation_group": "Affiliation Group:",
-  "alicompat.spell_engine.type.function.spell_bind_randomly": "Spell Bind Randomly:"
+  "alicompat.spell_engine.type.function.spell_bind_randomly": "Spell Bind Randomly:",
+  "alicompat.villagerconfig.property.branch.dye_colors": "Dye Colors:",
+  "alicompat.villagerconfig.property.branch.exclude": "Exclude:",
+  "alicompat.villagerconfig.property.branch.include": "Include:",
+  "alicompat.villagerconfig.property.value.max_level": "Max Level: %s",
+  "alicompat.villagerconfig.property.value.min_level": "Min Level: %s",
+  "alicompat.villagerconfig.property.value.price_multiplier": "Price Multiplier: %s",
+  "alicompat.villagerconfig.property.value.reward_experience": "Reward Experience: %s",
+  "alicompat.villagerconfig.type.function.enchant_randomly": "Enchant Randomly:",
+  "alicompat.villagerconfig.type.function.set_dye": "Set Dye:"
 }
