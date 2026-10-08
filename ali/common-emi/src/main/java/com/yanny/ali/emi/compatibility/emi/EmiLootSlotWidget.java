@@ -7,9 +7,11 @@ import com.yanny.aci.number.NumberFormatter;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.plugin.client.TooltipUtils;
 import com.yanny.ali.plugin.client.WidgetUtils;
 import dev.emi.emi.api.stack.EmiIngredient;
+import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.SlotWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -20,22 +22,25 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class EmiLootSlotWidget extends SlotWidget {
-    private final IDataNode entry;
-    private final boolean hasPredicates;
-    @Nullable
-    private Component count;
-    private boolean isRange = false;
+    private static final long CYCLE_MILLIS = 1000;
 
-    public EmiLootSlotWidget(IDataNode entry, EmiIngredient ingredient, int x, int y, NumberInterval count, boolean hasPredicates) {
-        super(ingredient, x, y);
-        this.entry = entry;
-        this.hasPredicates = hasPredicates;
-        setCount(count);
+    private final List<Option> options;
+    private final boolean hasPredicates;
+
+    public EmiLootSlotWidget(List<IDataNode> options, int x, int y) {
+        super(getIngredient(options.get(0)), x, y);
+        this.options = options.stream().map(Option::of).toList();
+        this.hasPredicates = options.stream().anyMatch((o) -> ((IItemNode) o).hasPredicates());
+    }
+
+    @Override
+    public EmiIngredient getStack() {
+        return getOption().ingredient;
     }
 
     @Override
     protected void addSlotTooltip(List<ClientTooltipComponent> list) {
-        List<TooltipLine> lines = CoreTooltipUtils.toLines(entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle(), TooltipUtils.getNumberOptions());
+        List<TooltipLine> lines = CoreTooltipUtils.toLines(getOption().entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle(), TooltipUtils.getNumberOptions());
 
         if (!lines.isEmpty()) {
             list.add(new ScrollableTooltip(lines));
@@ -55,22 +60,23 @@ public class EmiLootSlotWidget extends SlotWidget {
 
     @Override
     public void drawOverlay(GuiGraphicsExtractor draw, int mouseX, int mouseY, float delta) {
-        if (count != null) {
+        Option option = getOption();
+
+        if (option.count != null) {
             Font font = Minecraft.getInstance().font;
             PoseStack stack = draw.pose();
 
             stack.pushPose();
 
-            if (isRange) {
+            if (option.isRange) {
                 stack.translate(x + 17, y + 13, 200);
                 stack.pushPose();
                 stack.scale(0.5f, 0.5f, 0.5f);
-                //draw.fill(-font.width(count) - 2, -2, 2, 10, 255<<24 | 0);
-                draw.drawString(font, count, -font.width(count), 0, -1, false);
+                draw.drawString(font, option.count, -font.width(option.count), 0, -1, false);
                 stack.popPose();
             } else {
                 stack.translate(x + 18, y + 10, 200);
-                draw.drawString(font, count, -font.width(count), 0, -1, true);
+                draw.drawString(font, option.count, -font.width(option.count), 0, -1, true);
             }
 
             stack.popPose();
@@ -79,10 +85,27 @@ public class EmiLootSlotWidget extends SlotWidget {
         super.drawOverlay(draw, mouseX, mouseY, delta);
     }
 
-    private void setCount(NumberInterval count) {
-        if (!count.isPoint() || count.lo() > 1) {
-            this.count = Component.literal(NumberFormatter.slot(count));
-            isRange = !count.isPoint();
+    private Option getOption() {
+        if (options.size() == 1) {
+            return options.get(0);
+        }
+
+        return options.get((int) (System.currentTimeMillis() / CYCLE_MILLIS % options.size()));
+    }
+
+    private static EmiIngredient getIngredient(IDataNode entry) {
+        return ((IItemNode) entry).getItem().map(EmiStack::of, EmiIngredient::of);
+    }
+
+    private record Option(IDataNode entry, EmiIngredient ingredient, @Nullable Component count, boolean isRange) {
+        private static Option of(IDataNode entry) {
+            NumberInterval count = TooltipUtils.getSlotCount((IItemNode) entry);
+
+            if (!count.isPoint() || count.lo() > 1) {
+                return new Option(entry, getIngredient(entry), Component.literal(NumberFormatter.slot(count)), !count.isPoint());
+            }
+
+            return new Option(entry, getIngredient(entry), null, false);
         }
     }
 }

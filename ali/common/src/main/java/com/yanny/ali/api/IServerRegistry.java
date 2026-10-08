@@ -103,7 +103,7 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
      */
     void registerTrades(Identifier traderId, @Nullable EntityType<?> entityType, Function<IServerUtils, Int2ObjectMap<TradeLevel>> levels);
 
-    void registerEnumTranslation(Class<? extends Enum<?>> type, String modId, String owner);
+    void registerTradeOverride(BiFunction<IServerUtils, Identifier, @Nullable Int2ObjectMap<TradeLevel>> override);
 
     @FunctionalInterface
     interface EntryFactory<T extends LootPoolEntryContainer> {

@@ -10,7 +10,6 @@ import com.yanny.aci.manager.ClassKeyedMap;
 import com.yanny.aci.manager.CoreServerRegistry;
 import com.yanny.aci.manager.ManagedRegistry;
 import com.yanny.aci.manager.NumberConverters;
-import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.aci.tooltip.TooltipContext;
@@ -29,7 +28,6 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -98,13 +96,12 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     // global loot modifier pages
     private final ManagedRegistry<Class<?>, IPageResolver<Object>> pageResolvers = registerClassKeyed("global loot modifier page resolvers", false, HashMap::new, null);
     private final ManagedRegistry<MapCodec<?>, IEntitySubPredicateResolver<EntitySubPredicate>> entitySubPredicateResolvers = register("entity sub-predicate resolvers", false, HashMap::new, AliServerRegistry::mapCodecNameGetter, null);
-    // translations
-    private final ManagedRegistry<Class<?>, EnumTranslation> enumValues = registerClassKeyed("enum values", true, HashMap::new, null);
 
     private final Set<String> failedRenderers = new HashSet<>();
     private final Map<Identifier, LootTable> lootTableMap = new HashMap<>();
     private final Map<Identifier, Integer> hitMap = new HashMap<>();
     private final List<Function<IServerUtils, List<ILootModifier<?>>>> lootModifierGetters = new LinkedList<>();
+    private final List<BiFunction<IServerUtils, Identifier, Int2ObjectMap<TradeLevel>>> tradeOverrides = new LinkedList<>();
     private final List<Function<Ingredient, Object>> ingredientUnwrappers = new LinkedList<>();
     private final List<ILootModifier<?>> lootModifierMap = new LinkedList<>();
     private final List<Function<IServerUtils, List<IPageLootModifier>>> pageLootModifierGetters = new LinkedList<>();
@@ -125,6 +122,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         lootTableMap.clear();
         ingredientUnwrappers.clear();
         lootModifierGetters.clear();
+        tradeOverrides.clear();
         lootModifierMap.clear();
         pageLootModifierGetters.clear();
         pageLootModifiers.clear();
@@ -293,13 +291,13 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         trades.put(traderId, new Trades(entityType, levels));
     }
 
-    public Map<Identifier, Trades> getTrades() {
-        return trades.entries();
+    @Override
+    public void registerTradeOverride(BiFunction<IServerUtils, Identifier, @Nullable Int2ObjectMap<TradeLevel>> override) {
+        tradeOverrides.add(override);
     }
 
-    @Override
-    public void registerEnumTranslation(Class<? extends Enum<?>> type, String modId, String owner) {
-        enumValues.put(type, new EnumTranslation(modId, owner));
+    public Map<Identifier, Trades> getTrades() {
+        return trades.entries();
     }
 
     @NotNull
@@ -539,16 +537,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     @NotNull
     @Override
-    public TooltipBuilder getEnumTranslation(IServerUtils utils, Enum<?> value) {
-        Class<?> type = value.getDeclaringClass();
-        EnumTranslation translation = enumValues.get(type).orElseGet(() -> new EnumTranslation(Utils.MOD_ID, CoreTooltipUtils.enumOwnerPath(type)));
-        String key = CoreTooltipUtils.enumKey(translation.modId(), translation.owner(), value.name());
-
-        return TooltipBuilder.component(utils.lookupProvider(), Component.translatableWithFallback(key, value.name()));
-    }
-
-    @NotNull
-    @Override
     public NumberExpr convertNumber(IServerUtils utils, NumberProvider numberProvider, List<TooltipNode> conditions) {
         return NumberConverters.convert(getModId(), numberConverters, utils, numberProvider, conditions, AliServerRegistry::numberProviderTypeId);
     }
@@ -630,8 +618,21 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         return NodeUtils.getLootTableNode(operations);
     }
 
-    public IDataNode parseTrade(Trades trades) {
-        return new TradeNode(this, trades.entityType(), trades.levels().apply(this));
+    public TradeNode parseTrade(Identifier traderId, Trades trades) {
+        return new TradeNode(this, trades.entityType(), getTradeLevels(traderId, trades));
+    }
+
+    @NotNull
+    private Int2ObjectMap<TradeLevel> getTradeLevels(Identifier traderId, Trades trades) {
+        for (BiFunction<IServerUtils, Identifier, Int2ObjectMap<TradeLevel>> override : tradeOverrides) {
+            Int2ObjectMap<TradeLevel> levels = override.apply(this, traderId);
+
+            if (levels != null) {
+                return levels;
+            }
+        }
+
+        return trades.levels().apply(this);
     }
 
     // hitCount != null means this table is referenced from another table's tree; the paramSet check

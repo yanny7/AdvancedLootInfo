@@ -13,6 +13,7 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.datagen.LanguageHolder;
 import com.yanny.ali.plugin.client.widget.*;
 import com.yanny.ali.plugin.client.widget.trades.ItemListingWidget;
+import com.yanny.ali.plugin.client.widget.trades.SubTradesWidget;
 import com.yanny.ali.plugin.client.widget.trades.TradeLevelWidget;
 import com.yanny.ali.plugin.client.widget.trades.TradeWidget;
 import com.yanny.ali.plugin.common.EntityUtils;
@@ -131,6 +132,7 @@ public class Plugin implements IPlugin {
 
         registry.registerWidget(TradeNode.ID, TradeWidget::new);
         registry.registerWidget(TradeLevelNode.ID, TradeLevelWidget::new);
+        registry.registerWidget(TradeGroupNode.ID, SubTradesWidget::new);
         registry.registerWidget(ItemsToItemsNode.ID, ItemListingWidget::new);
 
         registry.registerDataNode(LootTableNode.ID, LootTableNode::new);
@@ -150,6 +152,7 @@ public class Plugin implements IPlugin {
 
         registry.registerDataNode(TradeNode.ID, TradeNode::new);
         registry.registerDataNode(TradeLevelNode.ID, TradeLevelNode::new);
+        registry.registerDataNode(TradeGroupNode.ID, TradeGroupNode::new);
         registry.registerDataNode(ItemsToItemsNode.ID, ItemsToItemsNode::new);
     }
 

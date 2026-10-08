@@ -6,9 +6,8 @@ import com.yanny.aci.api.WidgetDirection;
 import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IWidgetUtils;
-import com.yanny.ali.api.ListNode;
 import com.yanny.ali.plugin.client.WidgetUtils;
-import com.yanny.ali.plugin.client.widget.ItemWidget;
+import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,14 +27,14 @@ public class ItemListingWidget implements IWidget {
     private final RelativeRect bounds;
 
     public ItemListingWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
-        ListNode node = (ListNode) entry;
+        ItemsToItemsNode node = (ItemsToItemsNode) entry;
 
         widgets = new ArrayList<>();
 
-        addWidget(utils, rect, node.nodes().get(0), 0, maxWidth);
-        addWidget(utils, rect, node.nodes().get(1), SECOND_COST_OFFSET, maxWidth);
+        addSlot(utils, rect, node.getSlotOptions(0), 0);
+        addSlot(utils, rect, node.getSlotOptions(1), SECOND_COST_OFFSET);
         widgets.add(WidgetUtils.getArrowWidget(new RelativeRect(ARROW_OFFSET, 0, ARROW_WIDTH, SLOT_SIZE, rect), entry));
-        addWidget(utils, rect, node.nodes().get(2), RESULT_OFFSET, maxWidth);
+        addSlot(utils, rect, node.getSlotOptions(2), RESULT_OFFSET);
 
         bounds = rect;
         bounds.setDimensions(WIDTH, SLOT_SIZE);
@@ -76,7 +75,9 @@ public class ItemListingWidget implements IWidget {
         }
     }
 
-    private void addWidget(IWidgetUtils utils, RelativeRect rect, IDataNode node, int offsetX, int maxWidth) {
-        widgets.add(new ItemWidget(utils, node, new RelativeRect(offsetX, 0, SLOT_SIZE, SLOT_SIZE, rect), maxWidth));
+    private static void addSlot(IWidgetUtils utils, RelativeRect rect, List<IDataNode> options, int offsetX) {
+        if (!options.isEmpty()) {
+            utils.addSlotWidget(options, new RelativeRect(offsetX, 0, SLOT_SIZE, SLOT_SIZE, rect));
+        }
     }
 }

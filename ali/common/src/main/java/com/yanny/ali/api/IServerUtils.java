@@ -81,9 +81,6 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
     List<LootItemCondition> unwrapCondition(IServerUtils utils, LootItemCondition condition);
 
     @NotNull
-    TooltipBuilder getEnumTranslation(IServerUtils utils, Enum<?> value);
-
-    @NotNull
     NumberExpr convertNumber(IServerUtils utils, NumberProvider numberProvider, List<TooltipNode> conditions);
 
     @NotNull

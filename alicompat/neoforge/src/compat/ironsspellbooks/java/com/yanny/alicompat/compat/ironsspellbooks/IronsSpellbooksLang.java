@@ -37,7 +37,6 @@ public class IronsSpellbooksLang implements ICompatTranslations {
     }
 
     public enum Branch implements ITooltipKey {
-        ALTERNATIVE("alternative", "Alternative:"),
         APPLICABLE_SPELLS("applicable_spells", "Applicable Spells:"),
         SPELLS("spells", "Spells:"),
         SPELL_FILTER("spell_filter", "Spell Filter:"),

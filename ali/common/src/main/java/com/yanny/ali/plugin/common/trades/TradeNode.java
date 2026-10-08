@@ -44,8 +44,13 @@ public class TradeNode extends ListNode {
             switch (entry.getValue()) {
                 case TradeLevel.OfSet(ResourceKey<TradeSet> tradeSet) ->
                         lookup.get(tradeSet).ifPresent((reference) -> addChildren(new TradeLevelNode(utils, level, reference.value())));
-                case TradeLevel.OfTrades(TradeLevelInfo levelInfo, Function<IServerUtils, List<IDataNode>> trades) ->
-                        addChildren(new TradeLevelNode(level, levelInfo, trades.apply(utils)));
+                case TradeLevel.OfTrades(TradeLevelInfo levelInfo, Function<IServerUtils, List<IDataNode>> trades) -> {
+                    List<IDataNode> nodes = trades.apply(utils);
+
+                    if (!nodes.isEmpty()) {
+                        addChildren(new TradeLevelNode(level, levelInfo, nodes));
+                    }
+                }
             }
         }
 

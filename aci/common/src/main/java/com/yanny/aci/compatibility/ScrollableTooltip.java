@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
@@ -17,6 +18,7 @@ import java.util.List;
 public class ScrollableTooltip implements TooltipComponent, ClientTooltipComponent {
     private static final int LINE_HEIGHT = TooltipLine.LINE_HEIGHT;
     private static final int SCREEN_MARGIN = 10;
+    private static final int WINDOW_MARGIN = 8;
     private static final int TITLE_GAP = 2;
     private static final int SCROLL_LINES = 3;
     private static final int SCROLL_STEP_DIVISOR = 8;
@@ -41,55 +43,10 @@ public class ScrollableTooltip implements TooltipComponent, ClientTooltipCompone
     private static long lastRender = 0;
 
     private final List<TooltipLine> lines;
-    private final List<FormattedCharSequence> text;
-    private final List<ChartLayout> layouts;
-    private final int[] lineCounts;
-    private final int totalLines;
-    private final int contentWidth;
+    private Layout layout;
 
     public ScrollableTooltip(List<TooltipLine> lines) {
-        Font font = Minecraft.getInstance().font;
-        List<FormattedCharSequence> text = new ArrayList<>(lines.size());
-        List<ChartLayout> layouts = new ArrayList<>(lines.size());
-        int[] lineCounts = new int[lines.size()];
-        int textWidth = 0;
-        int total = 0;
-
-        for (TooltipLine line : lines) {
-            if (line instanceof TooltipLine.Text t) {
-                FormattedCharSequence sequence = t.component().getVisualOrderText();
-
-                text.add(sequence);
-                textWidth = Math.max(textWidth, font.width(sequence));
-            } else {
-                text.add(null);
-            }
-        }
-
-        int width = textWidth;
-
-        for (int i = 0; i < lines.size(); i++) {
-            if (lines.get(i) instanceof TooltipLine.Chart c) {
-                int indent = indentWidth(font, c);
-                ChartLayout layout = layout(font, c, textWidth - indent);
-
-                layouts.add(layout);
-                lineCounts[i] = layout.rows() * TooltipLine.Chart.PANEL_LINES;
-                width = Math.max(width, indent + layout.width());
-            } else {
-                layouts.add(null);
-                lineCounts[i] = 1;
-            }
-
-            total += lineCounts[i];
-        }
-
         this.lines = lines;
-        this.text = text;
-        this.layouts = layouts;
-        this.lineCounts = lineCounts;
-        this.totalLines = total;
-        this.contentWidth = width;
     }
 
     public static void setRenderedComponents(List<ClientTooltipComponent> components) {
@@ -109,17 +66,21 @@ public class ScrollableTooltip implements TooltipComponent, ClientTooltipCompone
 
     @Override
     public int getHeight(Font font) {
-        return getVisibleLines(font) * LINE_HEIGHT;
+        return getLayout(font).visibleLines() * LINE_HEIGHT;
     }
 
     @Override
     public int getWidth(Font font) {
-        return getVisibleLines(font) < totalLines ? contentWidth + SCROLLBAR_GAP + SCROLLBAR_WIDTH : contentWidth;
+        Layout layout = getLayout(font);
+
+        return layout.visibleLines() < layout.totalLines() ? layout.contentWidth() + SCROLLBAR_GAP + SCROLLBAR_WIDTH : layout.contentWidth();
     }
 
     @Override
     public void extractImage(Font font, int x, int y, int ignoredWidth, int ignoredHeight, GuiGraphicsExtractor guiGraphics) {
-        int visible = getVisibleLines(font);
+        Layout layout = getLayout(font);
+        int visible = layout.visibleLines();
+        int totalLines = layout.totalLines();
         long now = Util.getMillis();
 
         if (now - lastRender > ACTIVE_MILLIS || !lines.equals(activeLines)) {
@@ -136,25 +97,30 @@ public class ScrollableTooltip implements TooltipComponent, ClientTooltipCompone
 
         for (int i = 0; i < lines.size(); i++) {
             TooltipLine line = lines.get(i);
+            int lineCount = layout.lineCounts()[i];
             int first = Math.max(position, offset);
-            int last = Math.min(position + lineCounts[i], offset + visible);
+            int last = Math.min(position + lineCount, offset + visible);
 
             if (first < last) {
                 int top = y + (position - offset) * LINE_HEIGHT;
 
                 if (line instanceof TooltipLine.Chart chart) {
-                    renderChart(font, guiGraphics, chart, layouts.get(i), x, top, y + (first - offset) * LINE_HEIGHT, y + (last - offset) * LINE_HEIGHT);
+                    renderChart(font, guiGraphics, chart, layout.charts().get(i), x, top, y + (first - offset) * LINE_HEIGHT, y + (last - offset) * LINE_HEIGHT);
                 } else {
-                    guiGraphics.text(font, text.get(i), x, top, -1);
+                    List<FormattedCharSequence> rows = layout.text().get(i);
+
+                    for (int row = first - position; row < last - position; row++) {
+                        guiGraphics.text(font, rows.get(row), x, top + row * LINE_HEIGHT, -1);
+                    }
                 }
             }
 
-            position += lineCounts[i];
+            position += lineCount;
         }
 
         if (overflow > 0) {
             int height = visible * LINE_HEIGHT;
-            int trackX = x + contentWidth + SCROLLBAR_GAP;
+            int trackX = x + layout.contentWidth() + SCROLLBAR_GAP;
             int thumbHeight = Math.max(LINE_HEIGHT, height * visible / totalLines);
             int thumbY = y + (height - thumbHeight) * offset / overflow;
 
@@ -258,10 +224,108 @@ public class ScrollableTooltip implements TooltipComponent, ClientTooltipCompone
         return Math.max(columns * chart.columnWidth(), font.width(series.min()) + LABEL_GAP + font.width(series.max()));
     }
 
-    private int getVisibleLines(Font font) {
+    @NotNull
+    private Layout getLayout(Font font) {
+        int wrapWidth = Math.max(1, Minecraft.getInstance().getWindow().getGuiScaledWidth() - WINDOW_MARGIN);
+        int capacity = getCapacity(font);
+
+        if (layout == null || layout.wrapWidth() != wrapWidth || layout.capacity() != capacity) {
+            Layout fitted = layout(font, wrapWidth, wrapWidth, capacity);
+
+            if (fitted.totalLines() > capacity) {
+                fitted = layout(font, wrapWidth, wrapWidth - SCROLLBAR_GAP - SCROLLBAR_WIDTH, capacity);
+            }
+
+            layout = fitted;
+        }
+
+        return layout;
+    }
+
+    @NotNull
+    private Layout layout(Font font, int wrapWidth, int maxWidth, int capacity) {
+        List<List<FormattedCharSequence>> text = new ArrayList<>(lines.size());
+        List<ChartLayout> charts = new ArrayList<>(lines.size());
+        int[] lineCounts = new int[lines.size()];
+        int textWidth = 0;
+        int total = 0;
+
+        for (TooltipLine line : lines) {
+            if (line instanceof TooltipLine.Text t) {
+                List<FormattedCharSequence> rows = wrap(font, t, maxWidth);
+
+                for (FormattedCharSequence row : rows) {
+                    textWidth = Math.max(textWidth, font.width(row));
+                }
+
+                text.add(rows);
+            } else {
+                text.add(null);
+            }
+        }
+
+        int width = textWidth;
+
+        for (int i = 0; i < lines.size(); i++) {
+            if (lines.get(i) instanceof TooltipLine.Chart c) {
+                int indent = indentWidth(font, c);
+                ChartLayout chart = layout(font, c, textWidth - indent);
+
+                charts.add(chart);
+                lineCounts[i] = chart.rows() * TooltipLine.Chart.PANEL_LINES;
+                width = Math.max(width, indent + chart.width());
+            } else {
+                charts.add(null);
+                lineCounts[i] = text.get(i).size();
+            }
+
+            total += lineCounts[i];
+        }
+
+        return new Layout(wrapWidth, capacity, text, charts, lineCounts, total, Math.min(total, capacity), width);
+    }
+
+    @NotNull
+    private static List<FormattedCharSequence> wrap(Font font, TooltipLine.Text line, int maxWidth) {
+        String indent = leadingSpaces(line.component().getString());
+        int indentWidth = font.width(indent);
+        List<FormattedCharSequence> rows = font.split(line.component(), Math.max(1, maxWidth - indentWidth));
+
+        if (rows.isEmpty()) {
+            return List.of(FormattedCharSequence.EMPTY);
+        }
+
+        if (rows.size() == 1 || indent.isEmpty()) {
+            return rows;
+        }
+
+        List<FormattedCharSequence> indented = new ArrayList<>(rows.size());
+        FormattedCharSequence prefix = FormattedCharSequence.forward(indent, Style.EMPTY);
+
+        indented.add(rows.get(0));
+
+        for (int i = 1; i < rows.size(); i++) {
+            indented.add(FormattedCharSequence.composite(prefix, rows.get(i)));
+        }
+
+        return indented;
+    }
+
+    @NotNull
+    private static String leadingSpaces(String text) {
+        int i = 0;
+
+        while (i < text.length() && text.charAt(i) == ' ') {
+            i++;
+        }
+
+        return text.substring(0, i);
+    }
+
+    private int getCapacity(Font font) {
         int screenHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
 
-        return Math.min(totalLines, Math.max(1, (screenHeight - SCREEN_MARGIN - getOtherComponentsHeight(font)) / LINE_HEIGHT));
+        return Math.max(1, (screenHeight - SCREEN_MARGIN - getOtherComponentsHeight(font)) / LINE_HEIGHT);
     }
 
     private int getOtherComponentsHeight(Font font) {
@@ -280,5 +344,9 @@ public class ScrollableTooltip implements TooltipComponent, ClientTooltipCompone
     }
 
     private record ChartLayout(List<Panel> panels, int rows, int width) {
+    }
+
+    private record Layout(int wrapWidth, int capacity, List<List<FormattedCharSequence>> text, List<ChartLayout> charts, int[] lineCounts,
+                          int totalLines, int visibleLines, int contentWidth) {
     }
 }
