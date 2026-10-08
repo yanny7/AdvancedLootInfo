@@ -5,6 +5,7 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;
+import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ListNode;
 import com.yanny.ali.api.TradeLevelInfo;
@@ -13,6 +14,8 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class TradeLevelNode extends ListNode {
     public static final Identifier ID = Utils.modLoc("trade_level");
@@ -34,14 +37,17 @@ public class TradeLevelNode extends ListNode {
             }
         }
 
-        tooltip = TooltipBuilder.branch((b) -> {
-            b.add(TooltipBuilder.value(this.level).build(Lang.Value.LEVEL));
-            b.add(TooltipBuilder.number(this.selectionCount).build(Lang.Description.RANDOM_TRADE_SELECTION));
+        tooltip = getTooltip(level, selectionCount, chance);
+    }
 
-            if (this.chance < 1.0f) {
-                b.add(TooltipBuilder.percent(NumberExpr.constant(this.chance)).build(Lang.Description.CHANCE));
-            }
-        }).build();
+    public TradeLevelNode(int level, TradeLevelInfo levelInfo, List<IDataNode> trades) {
+        int tradeCount = trades.stream().mapToInt((t) -> t instanceof TradeGroupNode group ? group.nodes().size() : 1).sum();
+
+        this.level = level;
+        this.selectionCount = NumberExpr.min(levelInfo.offers(), NumberExpr.constant(tradeCount));
+        this.chance = levelInfo.chance();
+        trades.forEach(this::addChildren);
+        tooltip = getTooltip(level, selectionCount, chance);
     }
 
     public TradeLevelNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
@@ -70,5 +76,17 @@ public class TradeLevelNode extends ListNode {
     @Override
     public Identifier getId() {
         return ID;
+    }
+
+    @NotNull
+    private static TooltipNode getTooltip(int level, NumberExpr selectionCount, float chance) {
+        return TooltipBuilder.branch((b) -> {
+            b.add(TooltipBuilder.value(level).build(Lang.Value.LEVEL));
+            b.add(TooltipBuilder.number(selectionCount).build(Lang.Description.RANDOM_TRADE_SELECTION));
+
+            if (chance < 1.0f) {
+                b.add(TooltipBuilder.percent(NumberExpr.constant(chance)).build(Lang.Description.CHANCE));
+            }
+        }).build();
     }
 }

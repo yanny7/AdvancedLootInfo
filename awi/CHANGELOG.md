@@ -1,5 +1,6 @@
 ## []
 
+- Tooltips wider than the window wrap their lines
 - Fixed widget textures being sampled one pixel off
 
 ## [1.3.0]

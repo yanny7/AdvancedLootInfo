@@ -14,4 +14,6 @@ public interface ICoreServerRegistry<TServerUtils extends ICoreServerUtils<?>> {
     <T extends IntProvider> void registerIntProvider(Class<T> type, NumberConverter<TServerUtils, T> converter);
 
     <T extends FloatProvider> void registerFloatProvider(Class<T> type, NumberConverter<TServerUtils, T> converter);
+
+    void registerEnumTranslation(Class<? extends Enum<?>> type, String modId, String owner);
 }

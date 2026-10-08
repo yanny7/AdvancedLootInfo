@@ -1,6 +1,5 @@
 package com.yanny.alicompat.compat.apotheosis;
 
-import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
@@ -8,6 +7,7 @@ import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
+import com.yanny.ali.plugin.common.trades.TradeUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.IItemListing;
@@ -18,6 +18,7 @@ import dev.shadowsoffire.apotheosis.tiers.WorldTier;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Set;
@@ -41,7 +42,7 @@ public class AutomaticAffixTradeAccessor extends BaseAccessor<AutomaticAffixTrad
 
     @Override
     public IDataNode getNode(IServerUtils utils, TooltipNode conditions) {
-        ItemStack affixStack = ApotheosisUtils.firstEntryStack(entries);
+        List<ItemStack> results = getResults();
         TooltipNode result = TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, rarities).build(ApotheosisLang.Branch.RARITY));
             b.add(utils.getValueTooltip(utils, entries).build(Lang.Branch.ENTRIES));
@@ -49,19 +50,20 @@ public class AutomaticAffixTradeAccessor extends BaseAccessor<AutomaticAffixTrad
 
         return new ItemsToItemsNode(
                 utils,
-                Either.left(ApotheosisUtils.repairMaterial(affixStack)),
-                NumberExpr.constant(REPAIR_MATERIAL_COUNT),
-                TooltipNode.empty(),
-                Either.left(Items.EMERALD.getDefaultInstance()),
-                NumberExpr.add(NumberExpr.constant(1), NumberExpr.mul(NumberExpr.constant(EMERALDS_PER_TIER), NumberExpr.range(0, WorldTier.values().length - 1))),
-                TooltipNode.empty(),
-                Either.left(affixStack),
-                NumberExpr.constant(1),
-                result,
+                TradeUtils.getItemSlotNode(results.stream().map(ApotheosisUtils::repairMaterial).toList(), NumberExpr.constant(REPAIR_MATERIAL_COUNT), TooltipNode.empty()),
+                TradeUtils.getItemSlotNode(List.of(Items.EMERALD.getDefaultInstance()), NumberExpr.add(NumberExpr.constant(1), NumberExpr.mul(NumberExpr.constant(EMERALDS_PER_TIER), NumberExpr.range(0, WorldTier.values().length - 1))), TooltipNode.empty()),
+                TradeUtils.getItemSlotNode(results, NumberExpr.constant(1), result),
                 MAX_TRADES,
                 XP,
                 PRICE_MULTIPLIER,
                 conditions
         );
+    }
+
+    @NotNull
+    private List<ItemStack> getResults() {
+        List<ItemStack> stacks = entries.stream().filter(DynamicHolder::isBound).map((h) -> h.get().stack().copy()).toList();
+
+        return stacks.isEmpty() ? List.of(ItemStack.EMPTY) : stacks;
     }
 }

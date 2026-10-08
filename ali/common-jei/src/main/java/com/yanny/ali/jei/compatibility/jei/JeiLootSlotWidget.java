@@ -12,23 +12,32 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix3x2fStack;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 public class JeiLootSlotWidget implements ISlottedRecipeWidget {
     private final Rect rect;
     private final IRecipeSlotDrawable slotDrawable;
+    private final Function<ItemStack, NumberInterval> countGetter;
+    @Nullable
+    private NumberInterval shownCount;
     @Nullable
     private Component count;
     private boolean isRange = false;
 
     public JeiLootSlotWidget(IRecipeSlotDrawable slotDrawable, int x, int y, NumberInterval count) {
+        this(slotDrawable, x, y, (s) -> count);
+    }
+
+    public JeiLootSlotWidget(IRecipeSlotDrawable slotDrawable, int x, int y, Function<ItemStack, NumberInterval> countGetter) {
         this.slotDrawable = slotDrawable;
+        this.countGetter = countGetter;
         rect = new Rect(x, y, 18, 18);
-        setCount(count);
     }
 
     @NotNull
@@ -54,6 +63,7 @@ public class JeiLootSlotWidget implements ISlottedRecipeWidget {
         stack.translate(1, 1);
         slotDrawable.draw(guiGraphics);
         stack.translate(-1, -1);
+        setCount(countGetter.apply(slotDrawable.getDisplayedItemStack().orElse(ItemStack.EMPTY)));
 
         if (count != null) {
             Font font = Minecraft.getInstance().font;
@@ -83,6 +93,14 @@ public class JeiLootSlotWidget implements ISlottedRecipeWidget {
     }
 
     private void setCount(NumberInterval count) {
+        if (count.equals(shownCount)) {
+            return;
+        }
+
+        shownCount = count;
+        this.count = null;
+        isRange = false;
+
         if (!count.isPoint() || count.lo() > 1) {
             this.count = Component.literal(NumberFormatter.slot(count));
             isRange = !count.isPoint();

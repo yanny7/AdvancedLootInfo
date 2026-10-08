@@ -44,7 +44,6 @@ import oshi.util.tuples.Pair;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory<RecipeHolder<T>> {
@@ -103,22 +102,25 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
         for (int i = 0; i < slotParams.size(); i++) {
             Holder h = slotParams.get(i);
             IRecipeSlotBuilder slotBuilder = builder.addSlot(RecipeIngredientRole.RENDER_ONLY)
-                    .setBackground(getSlotBackground(((IItemNode) h.entry()).hasPredicates()), -1, -1)
+                    .setBackground(getSlotBackground(h.options.stream().anyMatch((o) -> ((IItemNode) o).hasPredicates())), -1, -1)
                     .setSlotName(String.valueOf(i))
                     .setPosition(h.rect.getX(), h.rect.getY())
                     .addRichTooltipCallback((iRecipeSlotView, tooltipBuilder) -> {
-                        List<TooltipLine> lines = CoreTooltipUtils.toLines(h.entry().getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle(), TooltipUtils.getNumberOptions());
+                        IDataNode option = TooltipUtils.getDisplayedOption(h.options, iRecipeSlotView.getDisplayedItemStack().orElse(ItemStack.EMPTY));
+                        List<TooltipLine> lines = CoreTooltipUtils.toLines(option.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle(), TooltipUtils.getNumberOptions());
 
                         if (!lines.isEmpty()) {
                             tooltipBuilder.add(new ScrollableTooltip(lines));
                         }
                     });
-            Optional<ItemStack> left = h.item.left();
-            Optional<TagKey<? extends ItemLike>> right = h.item.right();
 
-            left.ifPresent(slotBuilder::add);
-            //noinspection unchecked
-            right.ifPresent((t) -> slotBuilder.add(Ingredient.of(BuiltInRegistries.ITEM.get((TagKey<Item>) t).map((f) -> f.stream().map(net.minecraft.core.Holder::value)).orElse(Stream.of()))));
+            for (IDataNode option : h.options) {
+                Either<ItemStack, TagKey<? extends ItemLike>> item = ((IItemNode) option).getItem();
+
+                item.left().ifPresent(slotBuilder::add);
+                //noinspection unchecked
+                item.right().ifPresent((t) -> slotBuilder.add(Ingredient.of(BuiltInRegistries.ITEM.get((TagKey<Item>) t).map((f) -> f.stream().map(net.minecraft.core.Holder::value)).orElse(Stream.of()))));
+            }
         }
     }
 
@@ -137,7 +139,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
             Holder h = slotParams.get(i);
 
             builder.getRecipeSlots().findSlotByName(String.valueOf(i)).ifPresent((slotDrawable) -> {
-                scrollWidgets.add(new JeiLootSlotWidget(slotDrawable, h.rect.getX(), h.rect.getY(), TooltipUtils.getSlotCount((IItemNode) h.entry)));
+                scrollWidgets.add(new JeiLootSlotWidget(slotDrawable, h.rect.getX(), h.rect.getY(), (s) -> TooltipUtils.getSlotCount((IItemNode) TooltipUtils.getDisplayedOption(h.options, s))));
                 slotDrawables.add(slotDrawable);
             });
         }
@@ -228,13 +230,13 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
             }
 
             @Override
-            public void addSlotWidget(Either<ItemStack, TagKey<? extends ItemLike>> item, IDataNode entry, RelativeRect rect) {
-                slotParams.add(new Holder(item, entry, rect));
+            public void addSlotWidget(List<IDataNode> options, RelativeRect rect) {
+                slotParams.add(new Holder(options, rect));
             }
         };
     }
 
-    public record Holder(Either<ItemStack, TagKey<? extends ItemLike>> item, IDataNode entry, RelativeRect rect) {
+    public record Holder(List<IDataNode> options, RelativeRect rect) {
     }
 
     private record Layout(JeiWidgetWrapper widget, List<Holder> slots) {}

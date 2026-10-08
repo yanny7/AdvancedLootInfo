@@ -11,6 +11,7 @@ body:
         - ALI (Advanced Loot Info)
         - AWI (Advanced Worldgen Info)
         - ACI (Advanced Core Info)
+        - ALICompat
         - Not sure
     validations:
       required: true
@@ -28,6 +29,7 @@ body:
       description: Version you are playing on. Pick "All versions" if the request is not tied to one.
       options:
         - All versions
+        - "26.3"
         - "26.2"
         - "26.1.2"
         - "1.21.11"

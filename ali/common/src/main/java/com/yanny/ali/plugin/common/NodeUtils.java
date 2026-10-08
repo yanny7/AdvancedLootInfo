@@ -580,17 +580,30 @@ public class NodeUtils {
         }
     }
 
-    private static boolean hasItems(IDataNode node) {
+    private static boolean hasContent(IDataNode node) {
         if (node instanceof ListNode listNode) {
-            return listNode.nodes().stream().anyMatch(NodeUtils::hasItems);
+            return listNode.nodes().stream().anyMatch(NodeUtils::hasContent);
         } else {
-            return node instanceof IItemNode;
+            return !(node instanceof EmptyNode);
         }
     }
 
     private static void removeEmptyNodes(IDataNode node) {
         if (node instanceof ListNode listNode) {
-            listNode.nodes().removeIf((n) -> !hasItems(n));
+            listNode.nodes().removeIf((n) -> n instanceof ListNode && !hasContent(n));
+        }
+    }
+
+    public static void replaceEmptyItems(IDataNode node) {
+        if (node instanceof ListNode listNode) {
+            listNode.nodes().replaceAll((n) -> {
+                if (n instanceof IItemNode itemNode && itemNode.getItem().left().filter(ItemStack::isEmpty).isPresent()) {
+                    return new EmptyNode(n.getChance(), n.getTooltip());
+                }
+
+                replaceEmptyItems(n);
+                return n;
+            });
         }
     }
 
