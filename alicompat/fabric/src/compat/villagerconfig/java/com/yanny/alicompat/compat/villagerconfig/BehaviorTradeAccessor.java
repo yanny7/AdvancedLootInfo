@@ -10,11 +10,13 @@ import com.yanny.ali.plugin.server.TooltipUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import me.drex.villagerconfig.common.data.BehaviorTrade;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -28,11 +30,11 @@ public class BehaviorTradeAccessor extends BaseAccessor<BehaviorTrade> {
     @FieldAccessor
     private LootPoolEntryContainer result;
     @FieldAccessor
-    private NumberProvider priceMultiplier;
+    private Holder<ContextFloatProvider> priceMultiplier;
     @FieldAccessor
-    private NumberProvider traderExperience;
+    private Holder<ContextIntProvider> traderExperience;
     @FieldAccessor
-    private NumberProvider maxUses;
+    private Holder<ContextIntProvider> maxUses;
     @FieldAccessor
     private List<LootItemCondition> conditions;
     @FieldAccessor

@@ -38,14 +38,14 @@ public class EnchantRandomlyLootFunctionAccessor extends BaseAccessor<EnchantRan
             b.add(utils.getValueTooltip(utils, exclude).build(VillagerConfigLang.Branch.EXCLUDE));
             b.add(utils.getValueTooltip(utils, minLevel).build(VillagerConfigLang.Value.MIN_LEVEL));
             b.add(utils.getValueTooltip(utils, maxLevel).build(VillagerConfigLang.Value.MAX_LEVEL));
-            b.add(utils.getValueTooltip(utils, parent.predicates).build(Lang.Branch.PREDICATES));
+            b.add(utils.getValueTooltip(utils, parent.condition).build(Lang.Branch.PREDICATES));
         }, VillagerConfigLang.Functions.ENCHANT_RANDOMLY);
     }
 
     @NotNull
     @Override
     public ItemStack applyItemStackModifier(IServerUtils utils, ItemStack itemStack) {
-        if (parent.predicates.isEmpty() && itemStack.is(Items.BOOK)) {
+        if (parent.condition.isEmpty() && itemStack.is(Items.BOOK)) {
             return Items.ENCHANTED_BOOK.getDefaultInstance();
         }
 

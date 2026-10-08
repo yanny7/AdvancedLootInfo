@@ -29,7 +29,7 @@ public class SetDyeFunctionAccessor extends BaseAccessor<SetDyeFunction> impleme
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, dyeColors).build(VillagerConfigLang.Branch.DYE_COLORS));
             b.add(utils.getValueTooltip(utils, add).build(Lang.Value.ADD));
-            b.add(utils.getValueTooltip(utils, parent.predicates).build(Lang.Branch.PREDICATES));
+            b.add(utils.getValueTooltip(utils, parent.condition).build(Lang.Branch.PREDICATES));
         }, VillagerConfigLang.Functions.SET_DYE);
     }
 }

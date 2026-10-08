@@ -9,7 +9,8 @@ import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.ReflectionUtils;
 import me.drex.villagerconfig.common.data.BehaviorTrade;
 import me.drex.villagerconfig.common.data.TradeGroup;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.core.Holder;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.List;
 
 public class TradeGroupAccessor extends BaseAccessor<TradeGroup> {
     @FieldAccessor
-    private NumberProvider numToSelect;
+    private Holder<ContextIntProvider> numToSelect;
     @FieldAccessor
     private List<BehaviorTrade> trades;
 
@@ -27,7 +28,7 @@ public class TradeGroupAccessor extends BaseAccessor<TradeGroup> {
 
     @NotNull
     public NumberExpr getSelectionCount(IServerUtils utils) {
-        return NumberExpr.min(utils.convertIntNumber(utils, numToSelect, new ArrayList<>()), NumberExpr.constant(trades.size()));
+        return NumberExpr.min(utils.convertContextInt(utils, numToSelect, new ArrayList<>()), NumberExpr.constant(trades.size()));
     }
 
     @NotNull
@@ -37,6 +38,6 @@ public class TradeGroupAccessor extends BaseAccessor<TradeGroup> {
 
     @NotNull
     public IDataNode getNode(IServerUtils utils) {
-        return new TradeGroupNode(utils.convertIntNumber(utils, numToSelect, new ArrayList<>()), getTrades(utils));
+        return new TradeGroupNode(utils.convertContextInt(utils, numToSelect, new ArrayList<>()), getTrades(utils));
     }
 }
