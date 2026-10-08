@@ -23,6 +23,7 @@ import com.yanny.ali.plugin.glm.*;
 import com.yanny.ali.plugin.server.MissingTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -90,6 +91,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final Map<ResourceLocation, LootTable> lootTableMap = new HashMap<>();
     private final Map<ResourceLocation, Integer> hitMap = new HashMap<>();
     private final List<Function<IServerUtils, List<ILootModifier<?>>>> lootModifierGetters = new LinkedList<>();
+    private final List<BiFunction<IServerUtils, ResourceLocation, Int2ObjectMap<TradeLevel>>> tradeOverrides = new LinkedList<>();
     private final List<Function<Ingredient, Object>> ingredientUnwrappers = new LinkedList<>();
     private final List<ILootModifier<?>> lootModifierMap = new LinkedList<>();
     private final List<Function<IServerUtils, List<IPageLootModifier>>> pageLootModifierGetters = new LinkedList<>();
@@ -116,6 +118,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         lootTableMap.clear();
         ingredientUnwrappers.clear();
         lootModifierGetters.clear();
+        tradeOverrides.clear();
         lootModifierMap.clear();
         pageLootModifierGetters.clear();
         pageLootModifiers.clear();
@@ -254,6 +257,11 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @Override
     public void registerTrades(ResourceLocation traderId, @Nullable EntityType<?> entityType, Supplier<Int2ObjectMap<VillagerTrades.ItemListing[]>> itemListings, IntFunction<TradeLevelInfo> levelInfo) {
         trades.put(traderId, new Trades(entityType, itemListings, levelInfo));
+    }
+
+    @Override
+    public void registerTradeOverride(BiFunction<IServerUtils, ResourceLocation, @Nullable Int2ObjectMap<TradeLevel>> override) {
+        tradeOverrides.add(override);
     }
 
     public Map<ResourceLocation, Trades> getTrades() {
@@ -555,8 +563,28 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         return NodeUtils.getLootTableNode(operations);
     }
 
-    public IDataNode parseTrade(Trades trades) {
-        return new TradeNode(this, trades.entityType(), trades.itemListings().get(), trades.levelInfo());
+    public TradeNode parseTrade(ResourceLocation traderId, Trades trades) {
+        return new TradeNode(this, trades.entityType(), getTradeLevels(traderId, trades));
+    }
+
+    @NotNull
+    private Int2ObjectMap<TradeLevel> getTradeLevels(ResourceLocation traderId, Trades trades) {
+        for (BiFunction<IServerUtils, ResourceLocation, Int2ObjectMap<TradeLevel>> override : tradeOverrides) {
+            Int2ObjectMap<TradeLevel> levels = override.apply(this, traderId);
+
+            if (levels != null) {
+                return levels;
+            }
+        }
+
+        Int2ObjectMap<TradeLevel> levels = new Int2ObjectOpenHashMap<>();
+        Int2ObjectMap<VillagerTrades.ItemListing[]> itemListings = trades.itemListings().get();
+
+        if (itemListings != null) {
+            itemListings.int2ObjectEntrySet().forEach((e) -> levels.put(e.getIntKey(), new TradeLevel.OfListings(e.getValue(), trades.levelInfo().apply(e.getIntKey()))));
+        }
+
+        return levels;
     }
 
     // hitCount != null means this table is referenced from another table's tree; the paramSet check

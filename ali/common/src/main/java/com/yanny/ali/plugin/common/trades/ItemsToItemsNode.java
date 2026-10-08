@@ -31,11 +31,6 @@ public class ItemsToItemsNode extends ListNode implements ITradeNode {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     private final TooltipNode tooltip;
-    /**
-     * How many of the leading children are the trade's costs - the rest is its result. The children are added in that
-     * order below and stay in it through the wire: every one of them carries chance 1, and {@code CoreListNode}'s
-     * decode sorts them by chance with a stable sort, so equal keys cannot reorder.
-     */
     private final int inputCount;
 
     public ItemsToItemsNode(IServerUtils utils,
@@ -78,16 +73,23 @@ public class ItemsToItemsNode extends ListNode implements ITradeNode {
                             int xp,
                             float priceMultiplier,
                             TooltipNode condition) {
-        addChildren(getChildren(input1, input1Count, input1Condition));
-        addChildren(getChildren(input2, input2Count, input2Condition));
-        addChildren(getChildren(output, outputCount, outputCondition));
+        this(getChildren(input1, input1Count, input1Condition),
+                getChildren(input2, input2Count, input2Condition),
+                getChildren(output, outputCount, outputCondition),
+                TooltipBuilder.array((b) -> b
+                        .add(condition)
+                        .add(utils.getValueTooltip(utils, maxUses).build(Lang.Value.USES))
+                        .add(utils.getValueTooltip(utils, xp).build(Lang.Value.VILLAGER_XP))
+                        .add(utils.getValueTooltip(utils, priceMultiplier).build(Lang.Value.PRICE_MULTIPLIER))
+                ).build());
+    }
+
+    public ItemsToItemsNode(IDataNode costA, IDataNode costB, IDataNode result, TooltipNode tooltip) {
+        addChildren(costA);
+        addChildren(costB);
+        addChildren(result);
         inputCount = 2;
-        tooltip = TooltipBuilder.array((b) -> b
-                .add(condition)
-                .add(utils.getValueTooltip(utils, maxUses).build(Lang.Value.USES))
-                .add(utils.getValueTooltip(utils, xp).build(Lang.Value.VILLAGER_XP))
-                .add(utils.getValueTooltip(utils, priceMultiplier).build(Lang.Value.PRICE_MULTIPLIER))
-        ).build();
+        this.tooltip = tooltip;
     }
 
     public ItemsToItemsNode(IClientUtils utils, FriendlyByteBuf buf) {
@@ -123,6 +125,22 @@ public class ItemsToItemsNode extends ListNode implements ITradeNode {
         return true;
     }
 
+    @Override
+    protected boolean isOrdered() {
+        return true;
+    }
+
+    @NotNull
+    public List<IDataNode> getSlotOptions(int index) {
+        List<IDataNode> options = new ArrayList<>();
+
+        if (index < nodes().size()) {
+            collectOptions(nodes().get(index), options);
+        }
+
+        return options;
+    }
+
     @NotNull
     @Override
     public TooltipNode getTooltip() {
@@ -143,16 +161,25 @@ public class ItemsToItemsNode extends ListNode implements ITradeNode {
 
     @NotNull
     private List<ItemStack> collectItems(int fromIndex, int toIndex) {
-        List<IDataNode> nodes = nodes();
         List<ItemStack> items = new ArrayList<>();
 
-        for (int i = Math.max(0, fromIndex); i < Math.min(toIndex, nodes.size()); i++) {
-            if (nodes.get(i) instanceof IItemNode itemNode) {
-                items.addAll(itemNode.getItems());
+        for (int i = Math.max(0, fromIndex); i < Math.min(toIndex, nodes().size()); i++) {
+            for (IDataNode option : getSlotOptions(i)) {
+                items.addAll(((IItemNode) option).getItems());
             }
         }
 
         return items;
+    }
+
+    private static void collectOptions(IDataNode node, List<IDataNode> options) {
+        if (node instanceof IItemNode) {
+            options.add(node);
+        } else if (node instanceof ListNode listNode) {
+            for (IDataNode child : listNode.nodes()) {
+                collectOptions(child, options);
+            }
+        }
     }
 
     private static IDataNode getChildren(Either<ItemStack, TagKey<? extends ItemLike>> item, NumberExpr count, TooltipNode condition) {

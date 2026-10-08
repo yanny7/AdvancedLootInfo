@@ -4,17 +4,37 @@ import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
+import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
+import com.yanny.ali.plugin.common.NodeUtils;
+import com.yanny.ali.plugin.common.nodes.ItemNode;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SuspiciousStewItem;
 import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TradeUtils {
+    @NotNull
+    public static IDataNode getSlotNode(IServerUtils utils, LootPoolEntryContainer entry) {
+        List<TooltipNode> conditions = new ArrayList<>();
+        NumberExpr sumWeight = NodeUtils.getTotalWeight(utils, List.of(entry), conditions);
+
+        return NodeUtils.getChildren(utils, new LootPoolEntryContainer[]{entry}, NumberExpr.constant(1), sumWeight, conditions, List.of(), List.of()).get(0);
+    }
+
+    @NotNull
+    public static IDataNode getEmptySlotNode() {
+        return new ItemNode(1, NumberExpr.constant(1), ItemStack.EMPTY, TooltipNode.empty(), List.of(), List.of());
+    }
+
     @NotNull
     public static ItemsToItemsNode getNode(IServerUtils utils, MerchantOffer offer, TooltipNode condition) {
         return new ItemsToItemsNode(

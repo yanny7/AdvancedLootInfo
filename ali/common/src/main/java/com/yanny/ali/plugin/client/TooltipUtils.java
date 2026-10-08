@@ -5,11 +5,15 @@ import com.yanny.aci.number.NumberFormatter;
 import com.yanny.aci.tooltip.NumberOptions;
 import com.yanny.aci.tooltip.TooltipStyle;
 import com.yanny.ali.Utils;
+import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.manager.AliClientRegistry;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.common.NodeUtils;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class TooltipUtils {
     @NotNull
@@ -40,5 +44,16 @@ public class TooltipUtils {
         NumberInterval limit = NodeUtils.getCountLimit(node.getItem());
 
         return limit != null ? bounds.clamp(limit.lo(), limit.hi()) : bounds;
+    }
+
+    @NotNull
+    public static IDataNode getDisplayedOption(List<IDataNode> options, ItemStack displayed) {
+        for (IDataNode option : options) {
+            if (((IItemNode) option).getItems().stream().anyMatch((s) -> ItemStack.isSameItemSameTags(s, displayed))) {
+                return option;
+            }
+        }
+
+        return options.get(0);
     }
 }
