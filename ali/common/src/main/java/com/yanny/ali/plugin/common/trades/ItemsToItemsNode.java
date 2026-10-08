@@ -73,15 +73,23 @@ public class ItemsToItemsNode extends ListNode implements ITradeNode {
                             int xp,
                             float priceMultiplier,
                             TooltipNode condition) {
-        this(getChildren(input1, input1Count, input1Condition),
+        this(utils,
+                getChildren(input1, input1Count, input1Condition),
                 getChildren(input2, input2Count, input2Condition),
                 getChildren(output, outputCount, outputCondition),
-                TooltipBuilder.array((b) -> b
-                        .add(condition)
-                        .add(utils.getValueTooltip(utils, maxUses).build(Lang.Value.USES))
-                        .add(utils.getValueTooltip(utils, xp).build(Lang.Value.VILLAGER_XP))
-                        .add(utils.getValueTooltip(utils, priceMultiplier).build(Lang.Value.PRICE_MULTIPLIER))
-                ).build());
+                maxUses,
+                xp,
+                priceMultiplier,
+                condition);
+    }
+
+    public ItemsToItemsNode(IServerUtils utils, IDataNode costA, IDataNode costB, IDataNode result, int maxUses, int xp, float priceMultiplier, TooltipNode condition) {
+        this(costA, costB, result, TooltipBuilder.array((b) -> b
+                .add(condition)
+                .add(utils.getValueTooltip(utils, maxUses).build(Lang.Value.USES))
+                .add(utils.getValueTooltip(utils, xp).build(Lang.Value.VILLAGER_XP))
+                .add(utils.getValueTooltip(utils, priceMultiplier).build(Lang.Value.PRICE_MULTIPLIER))
+        ).build());
     }
 
     public ItemsToItemsNode(IDataNode costA, IDataNode costB, IDataNode result, TooltipNode tooltip) {

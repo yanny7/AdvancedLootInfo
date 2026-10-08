@@ -25,10 +25,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.entries.LootTableReference;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -49,9 +47,8 @@ public class WanderingTrades {
         registry.registerItemListing(AdditionalWanderingTrades.SimpleTrade.class, WanderingTrades::rolledNode);
 
         registerNested(registry, "RandomCurioTrade", (utils, condition) ->
-                lootTableNode(utils, condition, BASIC_CURIOS, NumberExpr.constant(64), null));
-        registerNested(registry, "ScrollPouchTrade", (utils, condition) ->
-                lootTableNode(utils, condition, SCROLL_POUCH, scrollPouchCost(utils), scrollPouch()));
+                lootTableNode(utils, condition, BASIC_CURIOS, NumberExpr.constant(64)));
+        registerNested(registry, "ScrollPouchTrade", WanderingTrades::scrollPouchNode);
     }
 
     @NotNull
@@ -82,11 +79,16 @@ public class WanderingTrades {
     }
 
     @NotNull
-    private static IDataNode lootTableNode(IServerUtils utils, TooltipNode condition, ResourceLocation lootTable, NumberExpr cost, @Nullable ItemStack forSale) {
-        ItemStack result = forSale != null ? forSale : firstItem(utils, lootTable);
+    private static IDataNode lootTableNode(IServerUtils utils, TooltipNode condition, ResourceLocation lootTable, NumberExpr cost) {
+        return WizardTrade.of(new ItemStack(Items.EMERALD), cost, ItemStack.EMPTY, NumberExpr.constant(1), 1, 5, 0.5f)
+                .withResultSlot((u) -> TradeUtils.getSlotNode(u, LootTableReference.lootTableReference(lootTable).build()))
+                .getNode(utils, condition);
+    }
 
-        return WizardTrade.of(new ItemStack(Items.EMERALD), cost, result, NumberExpr.constant(1), 1, 5, 0.5f)
-                .withResultTooltip((u) -> u.getValueTooltip(u, lootTable).build(Lang.Value.LOOT_TABLE))
+    @NotNull
+    private static IDataNode scrollPouchNode(IServerUtils utils, TooltipNode condition) {
+        return WizardTrade.of(new ItemStack(Items.EMERALD), scrollPouchCost(utils), scrollPouch(), NumberExpr.constant(1), 1, 5, 0.5f)
+                .withResultTooltip((u) -> u.getValueTooltip(u, SCROLL_POUCH).build(Lang.Value.LOOT_TABLE))
                 .getNode(utils, condition);
     }
 
@@ -118,24 +120,6 @@ public class WanderingTrades {
         }
 
         return rolls;
-    }
-
-    @NotNull
-    private static ItemStack firstItem(IServerUtils utils, ResourceLocation lootTable) {
-        LootTable table = utils.getLootTable(lootTable);
-
-        if (table != null) {
-            for (LootPool pool : utils.getLootPools(table)) {
-                for (LootPoolEntryContainer entry : pool.entries) {
-                    if (entry instanceof LootItem lootItem) {
-                        return new ItemStack(lootItem.item);
-                    }
-                }
-            }
-        }
-
-        LOGGER.warn("No item entry found in loot table {}", lootTable);
-        return new ItemStack(Items.BARRIER);
     }
 
     @NotNull

@@ -198,6 +198,14 @@ record constructors) — `aci/CLAUDE.md`'s "Number model" is the reference:
   enough that an end value of the widest range is not missed — 256 samples for a 16-value range — and still read
   the decompile to know which shape the sampled `min`/`max` stand for.
 - Every `range` that stays says why in the summary: which world state it depends on, or why it cannot be derived.
+- A value another part of the same trade or loot roll writes at runtime (VillagerConfig's `reference` provider
+  reading the enchantment level its own `enchant_randomly` rolled) is a named variable rather than an
+  anonymous range: `new NumberExpr.Var(type, List.of(), min, max)` renders as "depends on <name>". Its two
+  keys are `NumberFormatter.varKey(type)` and that plus `.desc`, so pick `type` as
+  `alicompat:<modid>.<name>` and build the `Lang` constants from `varKey` — the only keys outside
+  `alicompat.<modid>.`. Keep `min > 0` or `max < 0`: a finite range spanning 0 makes ACI render one row per
+  value, which is meant for luck. Values a trade declares for itself and its providers read by name are
+  converted from the declaring provider, with the declared map held for the trade's build only.
 
 ## Step 3 — accessor shape follows field visibility
 
@@ -317,10 +325,11 @@ puts every constructor argument in the lambda's capture. Work down this list:
   Class<T>)` pulls them **by type** off the lambda's synthetic fields. Type-keyed, so it survives a
   recompile as long as the capture is unique in its type; two captures of the same type come back in
   capture order and that ordering is the fragile part. A captured `null` yields no entry at all.
-- Captures nothing but rolls a loot table → render *from that table* instead of rolling it: ALI's
-  access widener opens `LootPool.entries` and `LootItem.item`, so a representative stack and the
-  table id (`Lang.Value.LOOT_TABLE`) cost ten lines and stay correct when the table changes.
-  `utils.getLootTable` / `getLootPools` / `convertNumber` give the rolls for a cost bound.
+- Captures nothing but rolls a loot table → render *that table* as the slot instead of rolling it:
+  `TradeUtils.getSlotNode(utils, LootTableReference.lootTableReference(id).build())` builds the reference
+  ALI's entry factory builds, so the slot cycles through what the table can drop and stays correct when it
+  changes. ALI's access widener opens `LootPool.entries`, so `utils.getLootTable` / `getLootPools` /
+  `convertNumber` give the rolls for a cost bound.
 - Captures nothing and two instances are indistinguishable → one roll, but pass a real
   `RandomSource.create()`. ALI's own fallback fails on these only because it passes `null` for both
   arguments; most such lambdas never touch the trader, so supplying the random alone revives them.
@@ -331,6 +340,27 @@ vanilla listing, including the tooltip conventions for a random result (`ENCHANT
 (all enchantments, all potions) must not be listed line by line — render the label alone and list the
 entries only once a script or config has narrowed them.
 
+**A slot is a node subtree, not one stack.** `new ItemsToItemsNode(utils, costA, costB, result, maxUses, xp,
+priceMultiplier, condition)` takes one `IDataNode` per slot, and every `IItemNode` leaf below it is an
+option the viewer cycles through, each with its own count and tooltip. So a slot whose item the target
+picks at runtime from a known set is all of that set, never a representative plus a list in the tooltip:
+
+- `TradeUtils.getItemSlotNode(stacks, count, tooltip)` — one option per stack, sharing the count. A fixed
+  stack is the same call with `List.of(stack)`; `TradeUtils.getEmptySlotNode()` is the absent second cost.
+- `TradeUtils.getSlotNode(List<IDataNode>)` — options that differ in count (Iron's Spellbooks' `inkBuy` pays
+  in emeralds *or* arcane essence, each with its own roll): build each with `getItemSlotNode`, then join.
+- `TradeUtils.getSlotNode(utils, entry)` — a slot the target describes as a loot pool entry (VillagerConfig's
+  `cost_a`/`result`); the entry's functions and conditions apply as in a loot table.
+- Two slots that vary *together* (a log and its stripped log, Sawmill; a log and its wood, Charm) are built
+  from one list in one order, so both slots have the same option count and every viewer shows matching
+  pairs. Never filter one side alone.
+- The set comes from the target, not from vanilla: read the mod's own table (Sawmill's private
+  `TYPE_MAP` by reflection, every villager type falling back to oak as the mod does) rather than
+  hand-copying it. A whole-registry default still renders the label alone, as above.
+
+The cycling replaces the old "first item in the slot, the rest under an `Alternative:` key" shape; do not
+reintroduce that key.
+
 ## Step 3c — trading entities with no `ItemListing[]`
 
 `registerTrades` wants an `Int2ObjectMap<ItemListing[]>`, but a custom trader often has none: it fills
@@ -340,7 +370,8 @@ static filler lists. Mirror that list with **shim-owned** listings — one class
 result tooltip — rather than reusing the target's listing objects. You then know every constructor
 argument, because you are the one passing it, and the same builders serve the wandering-trader path.
 
-`TradeLevelInfo` carries one chance for a whole level, so **each RNG gate becomes its own level**:
+`TradeLevelInfo` carries one chance for a whole level, and a `TradeGroupNode` carries a pick count but no
+chance, so **each RNG gate becomes its own level**:
 `new TradeLevelInfo(NumberExpr.constant(1), 0.25f)` reads as "selects 1 of these, 25% chance", and a
 `NumberExpr.uniformInt(3, 4)` over a filler pool (`createRandomOffers(3, 4)`) reads as "selects 3-4 of these" —
 read the pick count off the target's code like any other roll (Step 2b). Ten small levels on a trader
@@ -349,10 +380,33 @@ with no real levels is the honest encoding; one level loses every probability. A
 private static `List<ItemListing>` of lambda-backed entries is not, since the entries are unreadable
 anyway — hand-write those.
 
-A trade whose result varies between two items (pay in emeralds *or* the mod's own currency) gets the
-common item in the slot and the other under a shim `Branch.ALTERNATIVE` key with its own count —
-`ItemsToItemsNode` has one stack per slot, and `requiresAllChildren()` means an empty result silently
-drops the whole trade.
+A trade whose result varies between two items (pay in emeralds *or* the mod's own currency) gets both
+as slot options (Step 3b). `requiresAllChildren()` still means an empty slot silently drops the whole
+trade, so a slot with no option left is `List.of(ItemStack.EMPTY)` only where the target really offers
+nothing there.
+
+## Step 3d — a mod that replaces a trader's trades
+
+A mod that swaps a trader's whole trade list for its own data (VillagerConfig's datapack trade tables,
+replacing professions and the wandering trader) needs no listing registration for the traders — it gets
+`registry.registerTradeOverride((utils, traderId) -> …)`. ALI asks every override, in registration order,
+for every registered trader at scan time; the first non-`null` answer replaces that trader's levels, so
+answer `null` for every trader the mod leaves alone (no data file loaded for it, a trader id the mod does
+not handle — check which ids it reads: VillagerConfig keys professions by registry id and the wandering
+trader as `minecraft:wanderingtrader`, while ALI registers it as `minecraft:wandering_trader`).
+
+The answer is an `Int2ObjectMap<TradeLevel>`:
+
+- `TradeLevel.OfListings(listings, levelInfo)` — the mod's data is listing objects; ALI renders each through
+  `registerItemListing` as usual, so the listing class still gets its own registration.
+- `TradeLevel.OfTrades(levelInfo, (utils) -> nodes)` — prebuilt nodes. A level whose trades the target
+  picks from several pools separately (VillagerConfig's tier → groups, each with its own `num_to_select`)
+  holds one `TradeGroupNode(pickCount, trades)` per pool; the level's own `TradeLevelInfo` pick count is
+  the sum of the groups' (`NumberExpr.add` over each `min(pick, size)`), since ALI caps it at the trades
+  below the level. A level with a single pool lists its trades directly — a group under a level that picks
+  the same number says it twice.
+- Read the target's data **at scan time**, inside the override, never in `registerServer`: data-driven
+  trades are loaded by a reload listener and change with every datapack reload.
 
 ## Step 4 — Global Loot Modifiers: check where the modifier lands
 

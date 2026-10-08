@@ -1,26 +1,27 @@
-package com.yanny.alicompat.compat.ironsspellbooks;
+package com.yanny.alicompat.compat.villagerconfig;
 
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.language.ITooltipKey;
 import com.yanny.aci.language.Translation;
+import com.yanny.aci.number.NumberFormatter;
 import com.yanny.alicompat.ICompatTranslations;
 import com.yanny.alicompat.Utils;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class IronsSpellbooksLang implements ICompatTranslations {
-    static final String MOD_ID = "irons_spellbooks";
+public class VillagerConfigLang implements ICompatTranslations {
+    static final String MOD_ID = "villagerconfig";
+    static final ResourceLocation ENCHANTMENT_LEVEL = new ResourceLocation(Utils.MOD_ID, MOD_ID + ".enchantment_level");
+    static final ResourceLocation TREASURE_MULTIPLIER = new ResourceLocation(Utils.MOD_ID, MOD_ID + ".treasure_multiplier");
 
     public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 
     public enum Functions implements ITooltipKey {
-        RANDOMIZE_RING_ENHANCEMENT("randomize_ring_enhancement", "Randomize Ring Enhancement:"),
-        RANDOMIZE_SPELL("randomize_spell", "Randomize Spell:"),
-        RANDOM_POTION("random_potion", "Random Potion"),
-        RANDOM_SPELL_SCROLL("random_spell_scroll", "Random Spell Scroll:"),
-        SET_FURLED_MAP("set_furled_map", "Set Furled Map:"),
+        ENCHANT_RANDOMLY("enchant_randomly", "Enchant Randomly:"),
+        SET_DYE("set_dye", "Set Dye:"),
         ;
 
         private final Translation translation;
@@ -37,9 +38,9 @@ public class IronsSpellbooksLang implements ICompatTranslations {
     }
 
     public enum Branch implements ITooltipKey {
-        APPLICABLE_SPELLS("applicable_spells", "Applicable Spells:"),
-        SPELLS("spells", "Spells:"),
-        SPELL_FILTER("spell_filter", "Spell Filter:"),
+        DYE_COLORS("dye_colors", "Dye Colors:"),
+        EXCLUDE("exclude", "Exclude:"),
+        INCLUDE("include", "Include:"),
         ;
 
         private final Translation translation;
@@ -56,10 +57,7 @@ public class IronsSpellbooksLang implements ICompatTranslations {
     }
 
     public enum Value implements ITooltipKey {
-        FORCE("force", "Force: %s"),
-        SCHOOL("school", "School: %s"),
-        SPELL("spell", "Spell: %s"),
-        SPELL_LEVEL("spell_level", "Spell Level: %s"),
+        TRADE_ENCHANTMENTS("trade_enchantments", "Trade Enchantments: %s"),
         ;
 
         private final Translation translation;
@@ -75,10 +73,31 @@ public class IronsSpellbooksLang implements ICompatTranslations {
         }
     }
 
+    public enum Numbers implements ITooltipKey {
+        ENCHANTMENT_LEVEL(VillagerConfigLang.ENCHANTMENT_LEVEL, "", "enchantment level"),
+        ENCHANTMENT_LEVEL_DESC(VillagerConfigLang.ENCHANTMENT_LEVEL, ".desc", "enchantment level"),
+        TREASURE_MULTIPLIER(VillagerConfigLang.TREASURE_MULTIPLIER, "", "treasure multiplier"),
+        TREASURE_MULTIPLIER_DESC(VillagerConfigLang.TREASURE_MULTIPLIER, ".desc", "treasure multiplier"),
+        ;
+
+        private final Translation translation;
+
+        Numbers(ResourceLocation type, String suffix, String e) {
+            translation = new Translation(NumberFormatter.varKey(type) + suffix, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
     static {
         CoreLang.register(TRANSLATION_MAP, Functions.class);
         CoreLang.register(TRANSLATION_MAP, Branch.class);
         CoreLang.register(TRANSLATION_MAP, Value.class);
+        CoreLang.register(TRANSLATION_MAP, Numbers.class);
     }
 
     @NotNull

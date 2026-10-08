@@ -3,8 +3,9 @@ package com.yanny.alicompat.compat.ironsspellbooks;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.TradeLevelInfo;
-import com.yanny.ali.language.Lang;
+import com.yanny.ali.plugin.common.trades.TradeUtils;
 import com.yanny.alicompat.Utils;
 import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
 import io.redspace.ironsspellbooks.api.spells.SchoolType;
@@ -182,10 +183,10 @@ public class WizardTrades {
         NumberExpr essence = NumberExpr.uniformInt(5 * rarity / 2 + 2, 5 * rarity / 2 + 3);
 
         return WizardTrade.of(new ItemStack(ink), NumberExpr.constant(1), emeralds(), NumberExpr.uniformInt(5 * rarity + 2, 5 * rarity + 3), 8, 1, 0.05f)
-                .withResultTooltip((utils) -> TooltipBuilder.array((b) -> {
-                    b.add(utils.getValueTooltip(utils, ItemRegistry.ARCANE_ESSENCE.get()).build(Lang.Value.ITEM));
-                    b.add(TooltipBuilder.number(essence).build(Lang.Value.COUNT));
-                }, IronsSpellbooksLang.Branch.ALTERNATIVE).build());
+                .withResultSlot((utils) -> TradeUtils.getSlotNode(List.of(
+                        TradeUtils.getItemSlotNode(List.of(emeralds()), NumberExpr.uniformInt(5 * rarity + 2, 5 * rarity + 3), TooltipNode.empty()),
+                        TradeUtils.getItemSlotNode(List.of(new ItemStack(ItemRegistry.ARCANE_ESSENCE.get())), essence, TooltipNode.empty())
+                )));
     }
 
     @NotNull

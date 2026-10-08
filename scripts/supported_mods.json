@@ -282,6 +282,12 @@
     "curseforge": ["the-undergarden-379849"]
   },
   {
+    "key": "villagerconfig",
+    "name": "VillagerConfig",
+    "mod_ids": ["villagerconfig"],
+    "curseforge": ["villagerconfig-400741"]
+  },
+  {
     "key": "villagertradingplus",
     "name": "VillagerTradingPlus",
     "mod_ids": ["villagertradingplus"],

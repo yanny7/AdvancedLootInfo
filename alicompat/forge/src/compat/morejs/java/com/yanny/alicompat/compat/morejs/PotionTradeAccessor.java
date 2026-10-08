@@ -2,14 +2,13 @@ package com.yanny.alicompat.compat.morejs;
 
 import com.almostreliable.morejs.features.villager.TradeItem;
 import com.almostreliable.morejs.features.villager.trades.PotionTrade;
-import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
+import com.yanny.ali.plugin.common.trades.TradeUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.IItemListing;
@@ -60,31 +59,19 @@ public class PotionTradeAccessor extends BaseAccessor<PotionTrade> implements II
         TradeItemAccessor second = TradeItemAccessor.of(secondInput);
         List<Potion> allowed = potions.stream().filter(this::isAllowed).toList();
         long allPotions = BuiltInRegistries.POTION.stream().filter(this::isAllowed).count();
-        ItemStack result = new ItemStack(itemForPotion);
-        TooltipNode tooltip;
+        IDataNode result;
 
-        if (allowed.size() == 1) {
-            result = PotionUtils.setPotion(result, allowed.get(0));
-            tooltip = TooltipNode.empty();
-        } else if (allowed.isEmpty() || allowed.size() >= allPotions) {
-            tooltip = TooltipBuilder.keyOnly(MoreJSLang.Functions.RANDOM_POTION).build();
+        if (allowed.isEmpty() || allowed.size() >= allPotions) {
+            result = TradeUtils.getItemSlotNode(List.of(new ItemStack(itemForPotion)), NumberExpr.constant(1), TooltipBuilder.keyOnly(MoreJSLang.Functions.RANDOM_POTION).build());
         } else {
-            tooltip = TooltipBuilder.array((b) ->
-                    allowed.forEach((potion) -> b.add(utils.getValueTooltip(utils, potion).build(Lang.Value.POTION)))
-            ).build();
+            result = TradeUtils.getItemSlotNode(allowed.stream().map((p) -> PotionUtils.setPotion(new ItemStack(itemForPotion), p)).toList(), NumberExpr.constant(1), TooltipNode.empty());
         }
 
         return new ItemsToItemsNode(
                 utils,
-                Either.left(first.getStack()),
-                first.getCount(),
-                TooltipNode.empty(),
-                Either.left(second.getStack()),
-                second.getCount(),
-                TooltipNode.empty(),
-                Either.left(result),
-                NumberExpr.constant(1),
-                tooltip,
+                TradeUtils.getItemSlotNode(List.of(first.getStack()), first.getCount(), TooltipNode.empty()),
+                TradeUtils.getItemSlotNode(List.of(second.getStack()), second.getCount(), TooltipNode.empty()),
+                result,
                 maxUses,
                 villagerExperience,
                 priceMultiplier,

@@ -1,16 +1,15 @@
 package com.yanny.alicompat.compat.charm;
 
-import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
+import com.yanny.ali.plugin.common.trades.TradeUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.IItemListing;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
 import svenhjol.charm.feature.lumberjacks.LumberjackTradeOffers;
@@ -36,19 +35,11 @@ public class SaplingsForEmeraldsAccessor extends BaseAccessor<LumberjackTradeOff
     @NotNull
     @Override
     public IDataNode getNode(IServerUtils utils, TooltipNode conditions) {
-        ItemStack sapling = saplings.isEmpty() ? ItemStack.EMPTY : saplings.get(0).getDefaultInstance();
-
         return new ItemsToItemsNode(
                 utils,
-                Either.left(Items.EMERALD.getDefaultInstance()),
-                NumberExpr.uniformInt(baseEmeralds, baseEmeralds + extraEmeralds),
-                TooltipNode.empty(),
-                Either.left(ItemStack.EMPTY),
-                NumberExpr.constant(1),
-                TooltipNode.empty(),
-                Either.left(sapling),
-                NumberExpr.constant(1),
-                utils.getValueTooltip(utils, saplings.stream().skip(1).toList()).build(CharmLang.Branch.ALTERNATIVE),
+                TradeUtils.getItemSlotNode(List.of(Items.EMERALD.getDefaultInstance()), NumberExpr.uniformInt(baseEmeralds, baseEmeralds + extraEmeralds), TooltipNode.empty()),
+                TradeUtils.getEmptySlotNode(),
+                TradeUtils.getItemSlotNode(saplings.stream().map(Item::getDefaultInstance).toList(), NumberExpr.constant(1), TooltipNode.empty()),
                 maxUses,
                 villagerXp,
                 0.2F,

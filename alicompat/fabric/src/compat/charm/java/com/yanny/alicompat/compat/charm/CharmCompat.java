@@ -9,10 +9,12 @@ import svenhjol.charm.feature.lumberjacks.LumberjackTradeOffers;
 import svenhjol.charmony.helper.GenericTradeOffers;
 
 public class CharmCompat implements IModCompat {
+    static final String MOD_ID = "charm";
+
     @NotNull
     @Override
     public String targetModId() {
-        return CharmLang.MOD_ID;
+        return MOD_ID;
     }
 
     @Override
