@@ -1,5 +1,6 @@
 package com.yanny.ali.plugin.client;
 
+import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.ali.Utils;
@@ -10,8 +11,11 @@ import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.PluginManager;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,6 +45,11 @@ public abstract class ClientUtils implements IWidgetUtils, IClientUtils {
     @Override
     public List<Entity> createEntities(EntityType<?> type, Level level) {
         return PluginManager.getInstance().clientRegistry.createEntities(type, level);
+    }
+
+    @Override
+    public final void addSlotWidget(Either<ItemStack, TagKey<? extends ItemLike>> item, IDataNode entry, RelativeRect rect) {
+        addSlotWidget(List.of(entry), rect);
     }
 
     @NotNull

@@ -9,9 +9,14 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.lootjs.node.ItemStackNode;
 import com.yanny.ali.lootjs.node.ItemTagNode;
 import com.yanny.ali.plugin.common.NodeUtils;
+import com.yanny.ali.plugin.common.nodes.EmptyNode;
+import com.yanny.ali.plugin.server.LootCount;
+import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.entries.TagEntry;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -77,8 +82,13 @@ public class Utils {
             case LootItem lootItem -> {
                 List<LootItemCondition> allConditions = NodeUtils.getAllConditions(lootItem, conditions);
                 List<LootItemFunction> allFunctions = NodeUtils.getAllFunctions(lootItem, functions);
+                ItemStack stack = lootItem.item.value().getDefaultInstance();
 
-                return new ItemStackNode(utils, lootItem.item.value().getDefaultInstance(), chance, allFunctions, allConditions, preservedCount);
+                if (stack.isEmpty()) {
+                    return getEmptyNode(utils, chance, allFunctions, allConditions);
+                }
+
+                return new ItemStackNode(utils, stack, chance, allFunctions, allConditions, preservedCount);
             }
             case TagEntry tagEntry -> {
                 List<LootItemCondition> allConditions = NodeUtils.getAllConditions(tagEntry, conditions);
@@ -91,5 +101,12 @@ public class Utils {
                 return utils.getEntryFactory(utils, vanillaEntry).create(utils, vanillaEntry, NumberExpr.constant(chance), NumberExpr.constant(1), List.of(), functions, conditions);
             }
         }
+    }
+
+    @NotNull
+    private static IDataNode getEmptyNode(IServerUtils utils, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        LootCount chanceExpr = NodeUtils.getChance(utils, conditions, chance);
+
+        return new EmptyNode(chance, TooltipUtils.getEmptyTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chanceExpr, functions, conditions).build());
     }
 }

@@ -2,6 +2,7 @@ package com.yanny.ali.test;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.yanny.aci.test.utils.TestUtils;
 import com.yanny.ali.Utils;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.configuration.ConfigUtils;
@@ -51,7 +52,7 @@ public class ConfigTest {
         AliConfig config = ConfigUtils.readConfiguration();
         AliConfig defaults = new AliConfig();
 
-        assertFalse(Files.exists(backupFile()));
+        assertTrue(backups().isEmpty());
         assertTrue(config.hideDefaultBlockLoot);
         assertTrue(config.showInGameNames);
         assertFalse(config.logMoreStatistics);
@@ -120,8 +121,7 @@ public class ConfigTest {
 
         AliConfig config = ConfigUtils.readConfiguration();
 
-        assertTrue(Files.exists(backupFile()));
-        assertEquals("{\"configVersion\": 0, \"logMoreStatistics\": true}", Files.readString(backupFile()));
+        assertEquals(List.of("{\"configVersion\": 0, \"logMoreStatistics\": true}"), backups());
         assertEquals(expectedConfig(), writtenConfig());
         assertEquals(AliConfig.CURRENT_VERSION, config.configVersion);
         assertFalse(config.logMoreStatistics);
@@ -131,8 +131,8 @@ public class ConfigTest {
         return configDir.resolve(Utils.MOD_ID).resolve(Utils.COMMON_CONFIG_NAME);
     }
 
-    private Path backupFile() {
-        return configDir.resolve(Utils.MOD_ID).resolve(Utils.COMMON_CONFIG_NAME + ".bak");
+    private List<String> backups() throws IOException {
+        return TestUtils.readBackups(configDir.resolve(Utils.MOD_ID), Utils.COMMON_CONFIG_NAME);
     }
 
     private void writeConfig(String content) {

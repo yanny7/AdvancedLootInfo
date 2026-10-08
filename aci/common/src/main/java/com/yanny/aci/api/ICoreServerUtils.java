@@ -35,4 +35,7 @@ public interface ICoreServerUtils<SELF extends ICoreServerUtils<?>> {
 
     @NotNull
     NumberExpr convertFloatProvider(SELF utils, FloatProvider provider, List<TooltipNode> conditions);
+
+    @NotNull
+    TooltipBuilder getEnumTranslation(SELF utils, Enum<?> value);
 }

@@ -29,7 +29,6 @@ import me.shedaniel.rei.api.client.gui.widgets.Tooltip;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.client.gui.widgets.Widgets;
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory;
-import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.entry.EntryStack;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
 import me.shedaniel.rei.api.common.util.EntryStacks;
@@ -43,9 +42,12 @@ import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.IdentityHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
+import java.util.function.Supplier;
 
 public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements DisplayCategory<T> {
     static final int CATEGORY_WIDTH = 9 * 18;
@@ -137,39 +139,33 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
         widgets.add(Widgets.createTooltip(widgetWrapper::getTooltip));
         widgets.add(widgetWrapper);
         slotWidgets.forEach((h) -> {
-            Optional<ItemStack> left = h.item.left();
-            Optional<TagKey<? extends ItemLike>> right = h.item.right();
-            IItemNode node = (IItemNode) h.entry;
             Point point = new Point(h.rect.getX() + bounds.getX() + 1, h.rect.getY() + bounds.getY() + 1);
             Rectangle slotBounds = new Rectangle(h.rect.getX() + bounds.getX(), h.rect.getY() + bounds.getY(), SLOT_SIZE, SLOT_SIZE);
-            Slot slot = null;
+            Map<EntryStack<?>, IDataNode> optionByStack = new IdentityHashMap<>();
+            List<EntryStack<?>> stacks = new ArrayList<>();
 
-            if (left.isPresent()) {
-                ItemStack itemStack = left.get();
-                EntryStack<ItemStack> stack = EntryStacks.of(itemStack);
+            for (IDataNode option : h.options) {
+                Either<ItemStack, TagKey<? extends ItemLike>> item = ((IItemNode) option).getItem();
+                List<EntryStack<ItemStack>> optionStacks = item.map((i) -> List.of(EntryStacks.of(i)), (t) -> EntryIngredients.ofItemTag(t).castAsList());
 
-                stack.tooltipProcessor((s, tooltip) -> addLootTooltip(tooltip, h.entry));
-                slot = Widgets.createSlot(point).entry(stack).markOutput();
-            } else if (right.isPresent()) {
-                TagKey<? extends ItemLike> tagKey = right.get();
-                EntryIngredient ingredient = EntryIngredients.ofItemTag(tagKey);
-
-                ingredient.map((stack) -> stack.tooltipProcessor((s, tooltip) -> addLootTooltip(tooltip, h.entry)));
-                slot = Widgets.createSlot(point).entries(ingredient).markOutput();
-            }
-
-            if (slot != null) {
-                if (node.hasPredicates()) {
-                    // the slot draws its own background right before the item, so draw base + tint ourselves to get the tint in between
-                    slot.disableBackground();
-                    widgets.add(Widgets.createSlotBackground(point));
-                    widgets.add(Widgets.wrapRenderer(slotBounds, new PredicatesRenderer()));
+                for (EntryStack<ItemStack> stack : optionStacks) {
+                    stack.tooltipProcessor((s, tooltip) -> addLootTooltip(tooltip, option));
+                    optionByStack.put(stack, option);
+                    stacks.add(stack);
                 }
-
-                widgets.add(slot);
             }
 
-            widgets.add(Widgets.wrapRenderer(slotBounds, new SlotCountRenderer(TooltipUtils.getSlotCount(node))));
+            Slot slot = Widgets.createSlot(point).entries(stacks).markOutput();
+
+            if (h.options.stream().anyMatch((o) -> ((IItemNode) o).hasPredicates())) {
+                // the slot draws its own background right before the item, so draw base + tint ourselves to get the tint in between
+                slot.disableBackground();
+                widgets.add(Widgets.createSlotBackground(point));
+                widgets.add(Widgets.wrapRenderer(slotBounds, new PredicatesRenderer()));
+            }
+
+            widgets.add(slot);
+            widgets.add(Widgets.wrapRenderer(slotBounds, new SlotCountRenderer(() -> TooltipUtils.getSlotCount((IItemNode) optionByStack.getOrDefault(slot.getCurrentEntry(), h.options.get(0))))));
         });
         return new WidgetHolder(widgets, widget.getRect());
     }
@@ -190,8 +186,8 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
             }
 
             @Override
-            public void addSlotWidget(Either<ItemStack, TagKey<? extends ItemLike>> item, IDataNode entry, RelativeRect rect) {
-                widgets.add(new Holder(item, entry, rect));
+            public void addSlotWidget(List<IDataNode> options, RelativeRect rect) {
+                widgets.add(new Holder(options, rect));
             }
         };
     }
@@ -202,7 +198,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
         return lines.isEmpty() ? tooltip : tooltip.add(new ScrollableTooltip(lines));
     }
 
-    private record Holder(Either<ItemStack, TagKey<? extends ItemLike>> item, IDataNode entry, RelativeRect rect) {}
+    private record Holder(List<IDataNode> options, RelativeRect rect) {}
 
     private static class PredicatesRenderer implements Renderer {
         @Override
@@ -212,19 +208,21 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
     }
 
     private static class SlotCountRenderer implements Renderer {
+        private final Supplier<NumberInterval> countGetter;
+        @Nullable
+        private NumberInterval shownCount;
         @Nullable
         private Component count;
         private boolean isRange = false;
 
-        public SlotCountRenderer(NumberInterval count) {
-            if (!count.isPoint() || count.lo() > 1) {
-                this.count = Component.literal(NumberFormatter.slot(count));
-                isRange = !count.isPoint();
-            }
+        public SlotCountRenderer(Supplier<NumberInterval> countGetter) {
+            this.countGetter = countGetter;
         }
 
         @Override
         public void render(GuiGraphics guiGraphics, Rectangle bounds, int mouseX, int mouseY, float delta) {
+            setCount(countGetter.get());
+
             if (count != null) {
                 Font font = Minecraft.getInstance().font;
                 PoseStack stack = guiGraphics.pose();
@@ -245,6 +243,21 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
                 }
 
                 stack.popPose();
+            }
+        }
+
+        private void setCount(NumberInterval count) {
+            if (count.equals(shownCount)) {
+                return;
+            }
+
+            shownCount = count;
+            this.count = null;
+            isRange = false;
+
+            if (!count.isPoint() || count.lo() > 1) {
+                this.count = Component.literal(NumberFormatter.slot(count));
+                isRange = !count.isPoint();
             }
         }
     }

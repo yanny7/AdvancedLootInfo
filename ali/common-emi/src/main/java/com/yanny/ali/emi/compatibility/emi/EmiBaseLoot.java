@@ -1,22 +1,18 @@
 package com.yanny.ali.emi.compatibility.emi;
 
-import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.compatibility.AbstractScrollWidget;
 import com.yanny.aci.tooltip.TooltipNodePalette;
 import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.client.ClientUtils;
-import com.yanny.ali.plugin.client.TooltipUtils;
 import dev.emi.emi.api.EmiApi;
 import dev.emi.emi.api.recipe.BasicEmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
-import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.Bounds;
 import dev.emi.emi.api.widget.Widget;
@@ -26,10 +22,8 @@ import dev.emi.emi.config.SidebarSide;
 import dev.emi.emi.screen.RecipeScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -62,9 +56,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         List<Widget> widgets = new ArrayList<>();
 
         widgets.addAll(layout.slots().stream().map((h) -> {
-            EmiIngredient ingredient = h.item.map(EmiStack::of, EmiIngredient::of);
-            IItemNode node = (IItemNode) h.entry;
-            EmiLootSlotWidget widget = new EmiLootSlotWidget(h.entry, ingredient, h.rect.getX(), h.rect.getY(), TooltipUtils.getSlotCount(node), node.hasPredicates());
+            EmiLootSlotWidget widget = new EmiLootSlotWidget(h.options, h.rect.getX(), h.rect.getY());
 
             widget.recipeContext(h.recipe);
             return (Widget) widget;
@@ -164,13 +156,13 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
             }
 
             @Override
-            public void addSlotWidget(Either<ItemStack, TagKey<? extends ItemLike>> item, IDataNode entry, RelativeRect rect) {
-                slotWidgets.add(new EmiBaseLoot.Holder(this, item, entry, rect, recipe));
+            public void addSlotWidget(List<IDataNode> options, RelativeRect rect) {
+                slotWidgets.add(new Holder(options, rect, recipe));
             }
         };
     }
 
     private record Layout(Widget widget, List<Holder> slots) {}
 
-    private record Holder(IWidgetUtils utils, Either<ItemStack, TagKey<? extends ItemLike>> item, IDataNode entry, RelativeRect rect, EmiRecipe recipe) {}
+    private record Holder(List<IDataNode> options, RelativeRect rect, EmiRecipe recipe) {}
 }

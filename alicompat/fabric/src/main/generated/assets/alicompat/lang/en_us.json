@@ -13,7 +13,6 @@
   "alicompat.artifacts.type.condition.config_value_chance": "Config Value Chance:",
   "alicompat.artifacts.type.condition.is_april_fools": "Is April Fools",
   "alicompat.artifacts.type.function.replace_with_loot_table": "Replace With Loot Table:",
-  "alicompat.charm.property.branch.alternative": "Alternative:",
   "alicompat.deeperdarker.type.function.set_painting_variant": "Set Painting Variant:",
   "alicompat.enum.farmersdelight.item_ability.axe_dig": "Axe Dig",
   "alicompat.enum.farmersdelight.item_ability.axe_strip": "Axe Strip",

@@ -3,21 +3,20 @@ package com.yanny.ali.plugin.common.trades;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;
+import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ListNode;
-import com.yanny.ali.api.TradeLevelInfo;
+import com.yanny.ali.api.TradeLevel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.npc.VillagerTrades;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.IntFunction;
 
 public class TradeNode extends ListNode {
     public static final ResourceLocation ID = Utils.modLoc("trade");
@@ -26,15 +25,23 @@ public class TradeNode extends ListNode {
     @Nullable
     private final EntityType<?> entityType;
 
-    public TradeNode(IServerUtils utils, @Nullable EntityType<?> entityType, Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap, IntFunction<TradeLevelInfo> levelInfo) {
-        List<Int2ObjectMap.Entry<VillagerTrades.ItemListing[]>> entries = itemListingMap.int2ObjectEntrySet()
+    public TradeNode(IServerUtils utils, @Nullable EntityType<?> entityType, Int2ObjectMap<TradeLevel> levels) {
+        List<Int2ObjectMap.Entry<TradeLevel>> entries = levels.int2ObjectEntrySet()
                 .stream()
                 .sorted(Comparator.comparingInt(Int2ObjectMap.Entry::getIntKey))
                 .toList();
 
-        for (Int2ObjectMap.Entry<VillagerTrades.ItemListing[]> entry : entries) {
-            if (entry.getValue().length > 0) {
-                addChildren(new TradeLevelNode(utils, entry.getIntKey(), entry.getValue(), levelInfo.apply(entry.getIntKey())));
+        for (Int2ObjectMap.Entry<TradeLevel> entry : entries) {
+            if (entry.getValue() instanceof TradeLevel.OfListings listings) {
+                if (listings.listings().length > 0) {
+                    addChildren(new TradeLevelNode(utils, entry.getIntKey(), listings.listings(), listings.levelInfo()));
+                }
+            } else if (entry.getValue() instanceof TradeLevel.OfTrades trades) {
+                List<IDataNode> nodes = trades.trades().apply(utils);
+
+                if (!nodes.isEmpty()) {
+                    addChildren(new TradeLevelNode(entry.getIntKey(), trades.levelInfo(), nodes));
+                }
             }
         }
 

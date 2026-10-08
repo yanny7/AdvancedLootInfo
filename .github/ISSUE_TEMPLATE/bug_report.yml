@@ -1,5 +1,5 @@
 name: Bug report
-description: Report a problem with ALI, AWI or ACI
+description: Report a problem with ALI, AWI, ACI or ALICompat
 labels: ["bug"]
 body:
   - type: dropdown
@@ -11,6 +11,7 @@ body:
         - ALI (Advanced Loot Info)
         - AWI (Advanced Worldgen Info)
         - ACI (Advanced Core Info)
+        - ALICompat
         - Not sure
     validations:
       required: true
@@ -28,6 +29,7 @@ body:
     attributes:
       label: Minecraft version
       options:
+        - "26.3"
         - "26.2"
         - "26.1.2"
         - "1.21.11"

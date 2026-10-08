@@ -1,12 +1,12 @@
 package com.yanny.alicompat.compat.immersiveengineering;
 
 import blusunrize.immersiveengineering.common.register.IEItems.Ingredients;
-import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
+import com.yanny.ali.plugin.common.trades.TradeUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.ClassAccessor;
 import com.yanny.alicompat.accessor.IItemListing;
@@ -28,16 +28,9 @@ public class RevolverPieceForEmeraldsAccessor extends BaseAccessor<VillagerTrade
     public IDataNode getNode(IServerUtils utils, TooltipNode conditions) {
         return new ItemsToItemsNode(
                 utils,
-                Either.left(Items.EMERALD.getDefaultInstance()),
-                NumberExpr.add(NumberExpr.mul(NumberExpr.constant(5), NumberExpr.range(1, 5)), NumberExpr.uniformInt(0, 4)),
-                TooltipNode.empty(),
-                Either.left(ItemStack.EMPTY),
-                NumberExpr.constant(1),
-                TooltipNode.empty(),
-                Either.left(new ItemStack(Ingredients.GUNPART_BARREL)),
-                NumberExpr.constant(1),
-                utils.getValueTooltip(utils, List.of(Ingredients.GUNPART_DRUM.asItem(), Ingredients.GUNPART_HAMMER.asItem()))
-                        .build(ImmersiveEngineeringLang.Branch.ALTERNATIVE),
+                TradeUtils.getItemSlotNode(List.of(Items.EMERALD.getDefaultInstance()), NumberExpr.add(NumberExpr.mul(NumberExpr.constant(5), NumberExpr.range(1, 5)), NumberExpr.uniformInt(0, 4)), TooltipNode.empty()),
+                TradeUtils.getEmptySlotNode(),
+                TradeUtils.getItemSlotNode(List.of(new ItemStack(Ingredients.GUNPART_BARREL), new ItemStack(Ingredients.GUNPART_DRUM), new ItemStack(Ingredients.GUNPART_HAMMER)), NumberExpr.constant(1), TooltipNode.empty()),
                 1,
                 45,
                 0.25F,

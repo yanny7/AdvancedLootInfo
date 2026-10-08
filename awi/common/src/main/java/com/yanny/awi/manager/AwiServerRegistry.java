@@ -7,19 +7,19 @@ import com.yanny.aci.manager.ClassKeyedMap;
 import com.yanny.aci.manager.CoreServerRegistry;
 import com.yanny.aci.manager.ManagedRegistry;
 import com.yanny.aci.manager.NumberConverters;
-import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
-import com.yanny.awi.Utils;
 import com.yanny.awi.api.ICommonUtils;
 import com.yanny.awi.api.IServerRegistry;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ISurfaceRuleHandler;
 import com.yanny.awi.configuration.AwiConfig;
 import com.yanny.awi.plugin.server.MissingTooltipUtils;
-import com.yanny.awi.plugin.server.summary.*;
+import com.yanny.awi.plugin.server.summary.ColumnContext;
+import com.yanny.awi.plugin.server.summary.HeightConverter;
+import com.yanny.awi.plugin.server.summary.PlacementContribution;
+import com.yanny.awi.plugin.server.summary.PlacementPropagator;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
@@ -71,8 +71,6 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
     private final ManagedRegistry<Class<?>, PlacementPropagator<PlacementModifier>> placementPropagators = registerClassKeyed("placement propagators", false, HashMap::new, BuiltInRegistries.PLACEMENT_MODIFIER_TYPE);
     // surface rules
     private final ManagedRegistry<ResourceLocation, Function<ISurfaceRuleHandler.Context, ISurfaceRuleHandler>> surfaceRuleHandlers = register("surface rule handlers", false, HashMap::new, ResourceLocation::toString, BuiltInRegistries.MATERIAL_RULE);
-    // translations
-    private final ManagedRegistry<Class<?>, EnumTranslation> enumValues = registerClassKeyed("enum values", true, HashMap::new, null);
 
     public AwiServerRegistry(AwiCommonRegistry registry, ServerLevel level) {
         super(registry, level);
@@ -194,11 +192,6 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
     @Override
     public <T> void registerValueTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
         valueTooltips.put(type, (u, v) -> getter.apply(u, type.cast(v)));
-    }
-
-    @Override
-    public void registerEnumTranslation(Class<? extends Enum<?>> type, String modId, String owner) {
-        enumValues.put(type, new EnumTranslation(modId, owner));
     }
 
     @NotNull
@@ -361,16 +354,6 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
                     .map((v) -> v.apply(utils, value))
                     .orElseGet(() -> MissingTooltipUtils.getMissingValueTooltip(utils, value));
         }
-    }
-
-    @NotNull
-    @Override
-    public TooltipBuilder getEnumTranslation(IServerUtils utils, Enum<?> value) {
-        Class<?> type = value.getDeclaringClass();
-        EnumTranslation translation = enumValues.get(type).orElseGet(() -> new EnumTranslation(Utils.MOD_ID, CoreTooltipUtils.enumOwnerPath(type)));
-        String key = CoreTooltipUtils.enumKey(translation.modId(), translation.owner(), value.name());
-
-        return TooltipBuilder.component(utils.lookupProvider(), Component.translatableWithFallback(key, value.name()));
     }
 
     @Override

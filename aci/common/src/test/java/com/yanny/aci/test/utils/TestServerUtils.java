@@ -71,4 +71,10 @@ public class TestServerUtils implements ICoreServerUtils<TestServerUtils> {
     public NumberExpr convertFloatProvider(TestServerUtils utils, FloatProvider provider, List<TooltipNode> conditions) {
         throw new UnsupportedOperationException();
     }
+
+    @NotNull
+    @Override
+    public TooltipBuilder getEnumTranslation(TestServerUtils utils, Enum<?> value) {
+        throw new UnsupportedOperationException();
+    }
 }

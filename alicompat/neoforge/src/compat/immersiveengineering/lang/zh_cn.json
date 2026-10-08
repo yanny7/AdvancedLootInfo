@@ -1,6 +1,4 @@
 {
-  "alicompat.immersiveengineering.property.branch.alternative": "备选：",
-  "alicompat.immersiveengineering.property.value.alternative": "备选：%s",
   "alicompat.immersiveengineering.type.condition.block_state_from_location": "目标位置方块状态：",
   "alicompat.immersiveengineering.type.entry.drop_inventory": "掉落库存：",
   "alicompat.immersiveengineering.type.entry.multiblock_drops": "多方块掉落：",

@@ -20,6 +20,7 @@ import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.common.EntityLootTableResolver;
 import com.yanny.ali.plugin.common.NodeUtils;
+import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.common.nodes.EntityLootTableNode;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.glm.IPageLootModifier;
@@ -28,7 +29,6 @@ import com.yanny.ali.plugin.glm.Match;
 import com.yanny.ali.plugin.glm.PageMatch;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -40,7 +40,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.DefaultAttributes;
-import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -212,6 +211,8 @@ public abstract class AbstractServer {
 
         for (Map.Entry<ResourceLocation, IDataNode> entry : lootNodes.entrySet()) {
             IDataNode node = entry.getValue();
+
+            NodeUtils.replaceEmptyItems(node);
 
             if (node instanceof ListNode listNode) {
                 listNode.optimizeList();
@@ -589,10 +590,10 @@ public abstract class AbstractServer {
 
             if (config.tradeCategories.stream().filter((f) -> f.validate(location)).findFirst().map((f) -> !f.isHidden()).orElse(false)) {
                 try {
-                    Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap = entry.getValue().itemListings().get();
+                    TradeNode tradeNode = serverRegistry.parseTrade(location, entry.getValue());
 
-                    if (itemListingMap != null && itemListingMap.int2ObjectEntrySet().stream().anyMatch((e) -> e.getValue().length > 0)) {
-                        nodes.put(location, serverRegistry.parseTrade(entry.getValue()));
+                    if (!tradeNode.nodes().isEmpty()) {
+                        nodes.put(location, tradeNode);
                     } else {
                         LOGGER.warn("No trades defined for {}", location);
                     }

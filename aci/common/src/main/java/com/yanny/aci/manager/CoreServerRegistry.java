@@ -5,10 +5,13 @@ import com.yanny.aci.api.ICoreCommonUtils;
 import com.yanny.aci.api.ICoreServerUtils;
 import com.yanny.aci.api.NumberConverter;
 import com.yanny.aci.api.NumberExpr;
+import com.yanny.aci.tooltip.CoreTooltipUtils;
+import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.aci.tooltip.TooltipNodePalette;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.valueproviders.FloatProvider;
 import net.minecraft.util.valueproviders.IntProvider;
@@ -35,6 +38,7 @@ public abstract class CoreServerRegistry<
     private final List<Runnable> cacheCleaners = new ArrayList<>();
     private final ManagedRegistry<Class<?>, NumberConverter<TServerUtils, IntProvider>> intProviders = registerClassKeyed("int providers", true, HashMap::new, BuiltInRegistries.INT_PROVIDER_TYPE);
     private final ManagedRegistry<Class<?>, NumberConverter<TServerUtils, FloatProvider>> floatProviders = registerClassKeyed("float providers", true, HashMap::new, BuiltInRegistries.FLOAT_PROVIDER_TYPE);
+    private final ManagedRegistry<Class<?>, EnumTranslation> enumValues = registerClassKeyed("enum values", true, HashMap::new, null);
     protected final TCommonUtils commonUtils;
 
     public CoreServerRegistry(TCommonUtils registry, ServerLevel level) {
@@ -83,6 +87,10 @@ public abstract class CoreServerRegistry<
         floatProviders.put(type, (u, t, c) -> converter.convert(u, (T) t, c));
     }
 
+    public void registerEnumTranslation(Class<? extends Enum<?>> type, String modId, String owner) {
+        enumValues.put(type, new EnumTranslation(modId, owner));
+    }
+
     @NotNull
     @Override
     public NumberExpr convertIntProvider(TServerUtils utils, IntProvider provider, List<TooltipNode> conditions) {
@@ -93,6 +101,16 @@ public abstract class CoreServerRegistry<
     @Override
     public NumberExpr convertFloatProvider(TServerUtils utils, FloatProvider provider, List<TooltipNode> conditions) {
         return NumberConverters.convert(getModId(), floatProviders, utils, provider, conditions, (p) -> String.valueOf(BuiltInRegistries.FLOAT_PROVIDER_TYPE.getKey(p.getType())));
+    }
+
+    @NotNull
+    @Override
+    public TooltipBuilder getEnumTranslation(TServerUtils utils, Enum<?> value) {
+        Class<?> type = value.getDeclaringClass();
+        EnumTranslation translation = enumValues.get(type).orElseGet(() -> new EnumTranslation(getModId(), CoreTooltipUtils.enumOwnerPath(type)));
+        String key = CoreTooltipUtils.enumKey(translation.modId(), translation.owner(), value.name());
+
+        return TooltipBuilder.component(utils.lookupProvider(), Component.translatableWithFallback(key, value.name()));
     }
 
     public void clearCaches() {
@@ -117,5 +135,8 @@ public abstract class CoreServerRegistry<
     public int getTranslationKeyIndex(String key) {
         Integer value = commonUtils.getDictionary().getOrDefault(key, -1);
         return value == null ? -1 : value;
+    }
+
+    private record EnumTranslation(String modId, String owner) {
     }
 }

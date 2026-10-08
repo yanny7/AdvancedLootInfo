@@ -1,3 +1,7 @@
+## []
+
+- Tooltips wider than the window wrap their lines
+
 ## [1.3.0]
 
 - Added `spawnInfo` configuration to hide biome mob spawns
