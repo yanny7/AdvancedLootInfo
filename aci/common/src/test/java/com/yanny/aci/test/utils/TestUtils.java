@@ -34,8 +34,12 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class TestUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -244,5 +248,22 @@ public class TestUtils {
             return Optional.empty();
         }, Style.EMPTY);
         return builder.toString();
+    }
+
+    @NotNull
+    public static List<String> readBackups(Path dir, String fileName) throws IOException {
+        List<Path> backups;
+
+        try (Stream<Path> files = Files.list(dir)) {
+            backups = files.filter((f) -> f.getFileName().toString().matches(Pattern.quote(fileName) + "\\..+\\.bak")).sorted().toList();
+        }
+
+        List<String> contents = new ArrayList<>();
+
+        for (Path backup : backups) {
+            contents.add(Files.readString(backup));
+        }
+
+        return contents;
     }
 }

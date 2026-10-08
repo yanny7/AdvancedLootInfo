@@ -2,6 +2,7 @@ package com.yanny.awi.test;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.yanny.aci.test.utils.TestUtils;
 import com.yanny.awi.Utils;
 import com.yanny.awi.configuration.AwiConfig;
 import com.yanny.awi.configuration.ConfigUtils;
@@ -16,6 +17,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -48,7 +50,7 @@ public class ConfigTest {
 
         AwiConfig config = ConfigUtils.readConfiguration();
 
-        assertFalse(Files.exists(backupFile()));
+        assertTrue(backups().isEmpty());
         assertFalse(config.logMoreStatistics);
         assertTrue(config.showInGameNames);
     }
@@ -75,8 +77,7 @@ public class ConfigTest {
 
         AwiConfig config = ConfigUtils.readConfiguration();
 
-        assertTrue(Files.exists(backupFile()));
-        assertEquals("{\"configVersion\": 0, \"showInGameNames\": false}", Files.readString(backupFile()));
+        assertEquals(List.of("{\"configVersion\": 0, \"showInGameNames\": false}"), backups());
         assertEquals(expectedConfig(), writtenConfig());
         assertEquals(AwiConfig.CURRENT_VERSION, config.configVersion);
         assertTrue(config.showInGameNames);
@@ -86,8 +87,8 @@ public class ConfigTest {
         return configDir.resolve(Utils.MOD_ID).resolve(Utils.COMMON_CONFIG_NAME);
     }
 
-    private Path backupFile() {
-        return configDir.resolve(Utils.MOD_ID).resolve(Utils.COMMON_CONFIG_NAME + ".bak");
+    private List<String> backups() throws IOException {
+        return TestUtils.readBackups(configDir.resolve(Utils.MOD_ID), Utils.COMMON_CONFIG_NAME);
     }
 
     private void writeConfig(String content) {

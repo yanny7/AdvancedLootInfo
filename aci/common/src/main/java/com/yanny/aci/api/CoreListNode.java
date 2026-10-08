@@ -38,7 +38,10 @@ public abstract class CoreListNode<
                 nodes.add(utils.getDataNodeFactory(buf.readIdentifier()).apply(utils, buf));
             }
 
-            Collections.sort(nodes);
+            if (!isOrdered()) {
+                Collections.sort(nodes);
+            }
+
             this.nodes = Collections.unmodifiableList(nodes);
         }
     }
@@ -62,6 +65,11 @@ public abstract class CoreListNode<
      * is dropped by {@link #prune} as soon as a single child is rejected, instead of keeping the remainder.
      */
     protected boolean requiresAllChildren() {
+        return false;
+    }
+
+    // called from the decoding constructor, before any subclass field is assigned
+    protected boolean isOrdered() {
         return false;
     }
 

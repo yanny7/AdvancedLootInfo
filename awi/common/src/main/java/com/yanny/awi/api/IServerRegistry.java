@@ -64,6 +64,4 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
     <T extends PlacementModifier> void registerPlacementPropagator(Class<T> type, PlacementPropagator<T> getter);
 
     void registerSurfaceRuleHandler(Identifier ruleType, Function<ISurfaceRuleHandler.Context, @Nullable ISurfaceRuleHandler> factory);
-
-    void registerEnumTranslation(Class<? extends Enum<?>> type, String modId, String owner);
 }
