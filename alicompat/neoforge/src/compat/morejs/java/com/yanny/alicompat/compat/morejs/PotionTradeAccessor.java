@@ -2,14 +2,13 @@ package com.yanny.alicompat.compat.morejs;
 
 import com.almostreliable.morejs.features.villager.TradeItem;
 import com.almostreliable.morejs.features.villager.trades.PotionTrade;
-import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
+import com.yanny.ali.plugin.common.trades.TradeUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.IItemListing;
@@ -21,6 +20,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.alchemy.PotionContents;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -67,36 +67,32 @@ public class PotionTradeAccessor extends BaseAccessor<PotionTrade> implements II
         Stream<Holder<Potion>> declared = potions == null ? BuiltInRegistries.POTION.holders().map((h) -> h) : potions.stream();
         List<Holder<Potion>> allowed = declared.filter((potion) -> isAllowed(brewing, potion)).toList();
         long allPotions = BuiltInRegistries.POTION.holders().filter((potion) -> isAllowed(brewing, potion)).count();
-        ItemStack result = new ItemStack(itemForPotion);
-        TooltipNode tooltip;
+        IDataNode result;
 
-        if (allowed.size() == 1) {
-            result.set(DataComponents.POTION_CONTENTS, new PotionContents(allowed.getFirst()));
-            tooltip = TooltipNode.empty();
-        } else if (allowed.isEmpty() || allowed.size() >= allPotions) {
-            tooltip = TooltipBuilder.keyOnly(MoreJSLang.Functions.RANDOM_POTION).build();
+        if (allowed.isEmpty() || allowed.size() >= allPotions) {
+            result = TradeUtils.getItemSlotNode(List.of(new ItemStack(itemForPotion)), NumberExpr.constant(1), TooltipBuilder.keyOnly(MoreJSLang.Functions.RANDOM_POTION).build());
         } else {
-            tooltip = TooltipBuilder.array((b) ->
-                    allowed.forEach((potion) -> b.add(utils.getValueTooltip(utils, potion).build(Lang.Value.POTION)))
-            ).build();
+            result = TradeUtils.getItemSlotNode(allowed.stream().map(this::potionStack).toList(), NumberExpr.constant(1), TooltipNode.empty());
         }
 
         return new ItemsToItemsNode(
                 utils,
-                Either.left(first.getStack()),
-                first.getCount(),
-                TooltipNode.empty(),
-                Either.left(second.getStack()),
-                second.getCount(),
-                TooltipNode.empty(),
-                Either.left(result),
-                NumberExpr.constant(1),
-                tooltip,
+                TradeUtils.getItemSlotNode(List.of(first.getStack()), first.getCount(), TooltipNode.empty()),
+                TradeUtils.getItemSlotNode(List.of(second.getStack()), second.getCount(), TooltipNode.empty()),
+                result,
                 maxUses,
                 villagerExperience,
                 priceMultiplier,
                 conditions
         );
+    }
+
+    @NotNull
+    private ItemStack potionStack(Holder<Potion> potion) {
+        ItemStack stack = new ItemStack(itemForPotion);
+
+        stack.set(DataComponents.POTION_CONTENTS, new PotionContents(potion));
+        return stack;
     }
 
     private boolean isAllowed(PotionBrewing brewing, Holder<Potion> potion) {

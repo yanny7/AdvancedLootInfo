@@ -18,7 +18,9 @@ import io.redspace.ironsspellbooks.api.spells.SpellRarity;
 import io.redspace.ironsspellbooks.item.InkItem;
 import io.redspace.ironsspellbooks.player.AdditionalWanderingTrades;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -27,10 +29,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -51,9 +51,8 @@ public class WanderingTrades {
         registry.registerItemListing(AdditionalWanderingTrades.SimpleTrade.class, WanderingTrades::rolledNode);
 
         registerNested(registry, "RandomCurioTrade", (utils, condition) ->
-                lootTableNode(utils, condition, BASIC_CURIOS, NumberExpr.constant(64), null));
-        registerNested(registry, "ScrollPouchTrade", (utils, condition) ->
-                lootTableNode(utils, condition, SCROLL_POUCH, scrollPouchCost(utils), scrollPouch()));
+                lootTableNode(utils, condition, BASIC_CURIOS, NumberExpr.constant(64)));
+        registerNested(registry, "ScrollPouchTrade", WanderingTrades::scrollPouchNode);
     }
 
     @NotNull
@@ -84,11 +83,16 @@ public class WanderingTrades {
     }
 
     @NotNull
-    private static IDataNode lootTableNode(IServerUtils utils, TooltipNode condition, ResourceLocation lootTable, NumberExpr cost, @Nullable ItemStack forSale) {
-        ItemStack result = forSale != null ? forSale : firstItem(utils, lootTable);
+    private static IDataNode lootTableNode(IServerUtils utils, TooltipNode condition, ResourceLocation lootTable, NumberExpr cost) {
+        return WizardTrade.of(new ItemStack(Items.EMERALD), cost, ItemStack.EMPTY, NumberExpr.constant(1), 1, 5, 0.5f)
+                .withResultSlot((u) -> TradeUtils.getSlotNode(u, NestedLootTable.lootTableReference(ResourceKey.create(Registries.LOOT_TABLE, lootTable)).build()))
+                .getNode(utils, condition);
+    }
 
-        return WizardTrade.of(new ItemStack(Items.EMERALD), cost, result, NumberExpr.constant(1), 1, 5, 0.5f)
-                .withResultTooltip((u) -> u.getValueTooltip(u, lootTable).build(Lang.Value.LOOT_TABLE))
+    @NotNull
+    private static IDataNode scrollPouchNode(IServerUtils utils, TooltipNode condition) {
+        return WizardTrade.of(new ItemStack(Items.EMERALD), scrollPouchCost(utils), scrollPouch(), NumberExpr.constant(1), 1, 5, 0.5f)
+                .withResultTooltip((u) -> u.getValueTooltip(u, SCROLL_POUCH).build(Lang.Value.LOOT_TABLE))
                 .getNode(utils, condition);
     }
 
@@ -120,24 +124,6 @@ public class WanderingTrades {
         }
 
         return rolls;
-    }
-
-    @NotNull
-    private static ItemStack firstItem(IServerUtils utils, ResourceLocation lootTable) {
-        LootTable table = utils.getLootTable(Either.left(lootTable));
-
-        if (table != null) {
-            for (LootPool pool : table.pools) {
-                for (LootPoolEntryContainer entry : pool.entries) {
-                    if (entry instanceof LootItem lootItem) {
-                        return new ItemStack(lootItem.item);
-                    }
-                }
-            }
-        }
-
-        LOGGER.warn("No item entry found in loot table {}", lootTable);
-        return new ItemStack(Items.BARRIER);
     }
 
     @NotNull

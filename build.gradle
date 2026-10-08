@@ -505,12 +505,15 @@ uploadTargets.each { target, targetInfo ->
     }
 }
 
-enabled_platforms.split(",").findAll { project.findProperty("${it}_enabled") == "true" }.each { platform ->
+def modpackPlatforms = enabled_platforms.split(",").findAll { project.findProperty("${it}_enabled") == "true" }
+def modpackRunConfigName = { platform -> "Modpack ${platform.capitalize()} (${project.property("alicompat_mod_name")})" }
+
+modpackPlatforms.each { platform ->
     pythonRunConfigs << [
             task       : "generateModpackRunConfig${platform.capitalize()}",
             group      : "Modpack",
             description: "Writes an IntelliJ Python run configuration that builds the ${platform} ALICompat modpack",
-            name       : "Modpack ${platform.capitalize()} (${project.property("alicompat_mod_name")})",
+            name       : modpackRunConfigName(platform),
             script     : "scripts/modpack.py",
             parameters : ["--loader=${platform}", "--viewer=rei"].join(" "),
             file       : file(".idea/runConfigurations/Modpack_${platform.capitalize()}.xml"),
@@ -558,7 +561,29 @@ def writePythonRunConfig = { spec ->
 """
 }
 
-def pythonRunConfigTasks = pythonRunConfigs.collect { spec ->
+def compoundRunConfigs = [
+        [
+                task       : "generateModpackRunConfigAll",
+                group      : "Modpack",
+                description: "Writes an IntelliJ compound run configuration that builds the ALICompat modpack for every enabled loader",
+                name       : "Modpack ALL (${project.property("alicompat_mod_name")})",
+                children   : modpackPlatforms.collect(modpackRunConfigName),
+                file       : file(".idea/runConfigurations/Modpack_ALL.xml"),
+        ],
+]
+
+def writeCompoundRunConfig = { spec ->
+    spec.file.parentFile.mkdirs()
+    spec.file.text = """<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="${spec.name}" type="CompoundRunConfigurationType" folderName="${spec.group}">
+${spec.children.collect { "    <toRun name=\"${it}\" type=\"PythonConfigurationType\"/>" }.join("\n")}
+    <method v="2"/>
+  </configuration>
+</component>
+"""
+}
+
+def registerRunConfigTask = { spec, writer ->
     tasks.register(spec.task) {
         group = "ide"
         description = spec.description
@@ -566,11 +591,14 @@ def pythonRunConfigTasks = pythonRunConfigs.collect { spec ->
         outputs.file(spec.file)
 
         doLast {
-            writePythonRunConfig(spec)
+            writer(spec)
             logger.lifecycle("Wrote ${spec.file}")
         }
     }
 }
+
+def pythonRunConfigTasks = pythonRunConfigs.collect { registerRunConfigTask(it, writePythonRunConfig) } +
+        compoundRunConfigs.collect { registerRunConfigTask(it, writeCompoundRunConfig) }
 
 tasks.register("generatePythonRunConfigs") {
     group = "ide"
@@ -581,4 +609,5 @@ tasks.register("generatePythonRunConfigs") {
 // IntelliJ only configures the build on a refresh, so a task cannot do this - the files are written here.
 if (Boolean.getBoolean("idea.sync.active")) {
     pythonRunConfigs.each(writePythonRunConfig)
+    compoundRunConfigs.each(writeCompoundRunConfig)
 }

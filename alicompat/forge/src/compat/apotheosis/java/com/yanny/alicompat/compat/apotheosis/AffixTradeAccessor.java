@@ -1,6 +1,5 @@
 package com.yanny.alicompat.compat.apotheosis;
 
-import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
@@ -8,6 +7,7 @@ import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
+import com.yanny.ali.plugin.common.trades.TradeUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.IItemListing;
@@ -16,6 +16,7 @@ import dev.shadowsoffire.apotheosis.adventure.loot.AffixLootEntry;
 import dev.shadowsoffire.apotheosis.adventure.loot.RarityClamp;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -49,19 +50,20 @@ public class AffixTradeAccessor extends BaseAccessor<AffixTrade> implements IIte
 
         return new ItemsToItemsNode(
                 utils,
-                Either.left(price),
-                NumberExpr.constant(price.getCount()),
-                TooltipNode.empty(),
-                Either.left(price2),
-                NumberExpr.constant(Math.max(1, price2.getCount())),
-                TooltipNode.empty(),
-                Either.left(ApotheosisUtils.firstEntryStack(entries)),
-                NumberExpr.constant(1),
-                result,
+                TradeUtils.getItemSlotNode(List.of(price), NumberExpr.constant(price.getCount()), TooltipNode.empty()),
+                TradeUtils.getItemSlotNode(List.of(price2), NumberExpr.constant(Math.max(1, price2.getCount())), TooltipNode.empty()),
+                TradeUtils.getItemSlotNode(getResults(), NumberExpr.constant(1), result),
                 MAX_TRADES,
                 XP,
                 PRICE_MULTIPLIER,
                 conditions
         );
+    }
+
+    @NotNull
+    private List<ItemStack> getResults() {
+        List<ItemStack> stacks = entries.stream().filter(DynamicHolder::isBound).map((h) -> h.get().getStack().copy()).toList();
+
+        return stacks.isEmpty() ? List.of(ItemStack.EMPTY) : stacks;
     }
 }

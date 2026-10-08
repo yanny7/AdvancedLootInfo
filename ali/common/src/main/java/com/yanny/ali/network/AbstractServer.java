@@ -16,6 +16,7 @@ import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.common.EntityLootTableResolver;
 import com.yanny.ali.plugin.common.NodeUtils;
+import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.common.nodes.EntityLootTableNode;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.glm.IPageLootModifier;
@@ -216,6 +217,8 @@ public abstract class AbstractServer {
 
         for (Map.Entry<Identifier, IDataNode> entry : lootNodes.entrySet()) {
             IDataNode node = entry.getValue();
+
+            NodeUtils.replaceEmptyItems(node);
 
             if (node instanceof ListNode listNode) {
                 listNode.optimizeList();
@@ -586,12 +589,12 @@ public abstract class AbstractServer {
 
             if (config.tradeCategories.stream().filter((f) -> f.validate(location)).findFirst().map((f) -> !f.isHidden()).orElse(false)) {
                 try {
-                    IDataNode node = serverRegistry.parseTrade(entry.getValue());
+                    TradeNode tradeNode = serverRegistry.parseTrade(location, entry.getValue());
 
-                    if (((ListNode) node).nodes().isEmpty()) {
+                    if (tradeNode.nodes().isEmpty()) {
                         LOGGER.warn("No trades defined for {}", location);
                     } else {
-                        nodes.put(location, node);
+                        nodes.put(location, tradeNode);
                     }
                 } catch (Throwable e) {
                     LOGGER.warn("Failed to parse trade for {} with error {}", location, e.getMessage(), e);

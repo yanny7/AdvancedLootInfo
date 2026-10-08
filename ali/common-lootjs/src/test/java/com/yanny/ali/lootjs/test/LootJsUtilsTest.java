@@ -4,10 +4,12 @@ import com.almostreliable.lootjs.core.LootType;
 import com.almostreliable.lootjs.core.entry.ItemLootEntry;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.number.NumberFormatter;
+import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.lootjs.Utils;
 import com.yanny.ali.lootjs.node.ItemStackNode;
 import com.yanny.ali.plugin.client.TooltipUtils;
+import com.yanny.ali.plugin.common.nodes.EmptyNode;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -86,6 +88,18 @@ public class LootJsUtilsTest {
         ItemStackNode node = (ItemStackNode) Utils.getEntry(UTILS, itemEntry(Items.DIAMOND, 4), 1, List.of(), List.of(), NumberExpr.constant(6));
 
         Assertions.assertEquals("6", slot(node));
+    }
+
+    @Test
+    public void testGetEntryAirIsEmptyNode() {
+        IDataNode node = Utils.getEntry(UTILS, new ItemLootEntry((LootItem) LootItem.lootTableItem(Items.AIR).build()), 0.25F, List.of(), List.of(), null);
+
+        Assertions.assertEquals(EmptyNode.ID, node.getId());
+        Assertions.assertEquals(0.25F, node.getChance());
+        assertTooltip(node.getTooltip(), List.of(
+                "Drops nothing",
+                "Chance: 25%"
+        ));
     }
 
     @Test

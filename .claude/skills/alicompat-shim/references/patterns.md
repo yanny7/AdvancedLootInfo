@@ -55,7 +55,7 @@ nothing at all, since conditions ALI can run decide themselves. See `alicompat/C
 | Entry holding a whole pool | `spellengine` → `InlinePoolEntryAccessor`: `ReferenceNode` over a `LootTableNode` over `NodeUtils.getLootPoolNode(…, entryChance.value(), entryChance.conditions(), …)`, so the pool renders as a random pick with its rolls |
 | Custom ingredient | `sophisticatedstorage` → `registry.registerValueTooltip(BaseTierWoodenStorageIngredient.class, …)` — a value tooltip, never `registerIngredientTooltip`: NeoForge and Fabric hand ALI the unwrapped `ICustomIngredient`/`CustomIngredient`, not an `Ingredient` subclass |
 | Value tooltip | `ironsspellbooks` → `SpellFilterAccessor` implements `IValueTooltip`; its `array` carries **no key** — the caller names it |
-| Number provider | no shim registers one. Implement `INumberProvider` and register through `PluginUtils.registerContextIntProvider`/`registerContextFloatProvider`; the converter shapes are in `ali/common`'s `Plugin` and ACI's `CommonNumberProviders` |
+| Number provider | `villagerconfig` → three `INumberProvider` accessors registered through `PluginUtils.registerContextIntProvider`/`registerContextFloatProvider`; the vanilla converter shapes are in `ali/common`'s `Plugin` and ACI's `CommonNumberProviders` |
 
 ## Villager trades
 
@@ -69,6 +69,12 @@ nothing at all, since conditions ALI can run decide themselves. See `alicompat/C
 | Trader configured by the mod | `goblintraders` → `getLevelInfo` reads `getMinValue()`/`getMaxValue()`/`includeChance()` into `TradeLevelInfo(NumberExpr.uniformInt(min, max), chance)` — the entity rolls `min + nextInt(max - min + 1)` |
 | Trader with no `ItemListing[]` at all | `ironsspellbooks` → `WizardTrades` mirrors the target's `getOffers()` by hand with shim-owned listings; each RNG gate becomes its own level (`new TradeLevelInfo(NumberExpr.constant(1), 0.25f)`) |
 | Listing whose data is captured in a lambda | `ironsspellbooks` → `SimpleTradeAccessor` and the notes in `WanderingTrades`; uses `com.yanny.ali.plugin.common.ReflectionUtils.getCapturedInstances`, which matches **by type** |
+| Slot picked at runtime from a set — cycling options | `charm` → `SaplingsForEmeraldsAccessor`, `TallFlowerForEmeraldsAccessor`, `AnvilRepairAccessor` (`TradeUtils.getItemSlotNode(stacks, count, tooltip)`); `morejs` → `PotionTradeAccessor` (one option per allowed potion) |
+| Two slots varying together | `charm` → `BarkForLogsAccessor` (paired `LOGS`/`WOODS` lists); `sawmill` → `SawmillCompat.getLogStrippingListingNode` (log and stripped log from one filtered wood-type list, read from the mod's private `TYPE_MAP`) |
+| Options with different counts | `ironsspellbooks` → `WizardTrades.inkBuy` — `TradeUtils.getSlotNode(List.of(getItemSlotNode(…), getItemSlotNode(…)))` |
+| Slot from a loot table or loot entry | `ironsspellbooks` → `WanderingTrades.lootTableNode` (`TradeUtils.getSlotNode(utils, NestedLootTable.lootTableReference(id).build())`); `villagerconfig` → `BehaviorTradeAccessor` (entries as `cost_a`/`cost_b`/`result`) |
+| Mod replaces a trader's trades | `villagerconfig` → `VillagerConfigCompat.getTradeLevels` via `registerTradeOverride`, `null` for traders without data |
+| Separately picked pools within one level | `villagerconfig` → `TradeTierAccessor` — `TradeLevel.OfTrades` of `TradeGroupNode`s, level pick count summed over the groups, one pool listed flat |
 
 ## Numbers (Step 2b)
 
@@ -82,6 +88,8 @@ nothing at all, since conditions ALI can run decide themselves. See `alicompat/C
 | Depends on an enchantment level | `apotheosis` → `WardenLootModifierAccessor`: `add(constant(1), binomial(constant(1), 0.1 + 0.1 × TooltipUtils.level(MOB_LOOTING)))` |
 | Mod's own weighting function | `cognition` → `AddSingleItemAccessor.getCount` mirrors `weightedRandInt`, falling back to `uniformInt` exactly where the target does |
 | Part of it cannot be known | `immersiveengineering` → `RevolverPieceForEmeraldsAccessor`: `add(mul(constant(5), range(1, 5)), uniformInt(0, 4))`, the tier coming from luck-dependent perks |
+| Value written at runtime by another part of the roll | `villagerconfig` → `ReferenceLootNumberProviderAccessor`: a declared reference converts its provider; `enchantmentLevel`/`treasureMultiplier` become `NumberExpr.Var`s keyed in `VillagerConfigLang.Numbers` |
+| Mod's own add/multiply providers | `villagerconfig` → `AddLootNumberProviderAccessor` / `MultiplyLootNumberProviderAccessor` (`reduce` over `NumberExpr::add` / `mul`) |
 
 ## Whole shims worth reading end to end
 
@@ -90,6 +98,8 @@ nothing at all, since conditions ALI can run decide themselves. See `alicompat/C
 - `twilightforest` — conditions, a function, an item-stack modifier, GLMs, a page resolver and entity
   variants in one file.
 - `ironsspellbooks` — the trade-heavy end: custom traders, lambda captures, a value tooltip, a GLM.
+- `villagerconfig` — a mod that replaces whole traders from datapack data: trade override, trade groups,
+  loot-entry slots, its own functions and number providers.
 
 ## Language keys
 
