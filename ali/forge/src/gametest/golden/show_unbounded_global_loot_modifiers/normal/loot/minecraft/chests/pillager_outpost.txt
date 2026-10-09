@@ -1,0 +1,67 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 0 to 1
+    ali:item minecraft:crossbow x1 {Damage:0}
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 3
+    ali:item minecraft:wheat x1
+      | Chance: 41.18%
+      | Count: 3 to 5
+    ali:item minecraft:potato x1
+      | Chance: 29.41%
+      | Count: 2 to 5
+    ali:item minecraft:carrot x1
+      | Chance: 29.41%
+      | Count: 3 to 5
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 3
+    ali:item minecraft:dark_oak_log x1
+      | Count: 2 to 3
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 3
+    ali:item minecraft:experience_bottle x1
+      | Chance: 31.82%
+      | Count: 1
+    ali:item minecraft:string x1
+      | Chance: 18.18%
+      | Count: 1 to 6
+    ali:item minecraft:arrow x1
+      | Chance: 18.18%
+      | Count: 2 to 7
+    ali:item minecraft:tripwire_hook x1
+      | Chance: 13.64%
+      | Count: 1 to 3
+    ali:item minecraft:iron_ingot x1
+      | Chance: 13.64%
+      | Count: 1 to 3
+    ali:item minecraft:enchanted_book x1
+      | Chance: 4.55%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 0 to 1
+    ali:item minecraft:goat_horn x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Instrument:
+      |   -> Options: minecraft:regular_goat_horns
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 75%
+    ali:item minecraft:sentry_armor_trim_smithing_template x1
+      | Chance: 25%
+      | Count: 2
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1

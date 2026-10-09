@@ -1,0 +1,32 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:rabbit_hide x1
+      | Chance: 16.13%
+      | Count: 1
+    ali:item minecraft:rabbit_foot x1
+      | Chance: 16.13%
+      | Count: 1
+    ali:item minecraft:chicken x1
+      | Chance: 16.13%
+      | Count: 1
+    ali:item minecraft:feather x1
+      | Chance: 16.13%
+      | Count: 1
+    ali:item minecraft:rotten_flesh x1
+      | Chance: 16.13%
+      | Count: 1
+    ali:item minecraft:string x1
+      | Chance: 16.13%
+      | Count: 1
+    ali:item minecraft:phantom_membrane x1
+      | Chance: 3.23%
+      | Count: 1
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1
+    | ----- Predicates -----
+    | Random Chance:
+    |   -> Probability: 0.01

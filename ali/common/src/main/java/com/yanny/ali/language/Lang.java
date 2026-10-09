@@ -451,6 +451,7 @@ public final class Lang {
     public enum Error implements ITooltipKey {
         DETAIL_NOT_AVAILABLE("detail_not_available", "Detail Not Available"),
         MODIFIED_ITEM("modified_item", "Modified dynamically!"),
+        RECURSIVE_REFERENCE("recursive_reference", "Recursive Reference:"),
         ;
 
         private final Translation translation;

@@ -1,0 +1,28 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item minecraft:campfire x1
+        | Count: 1
+        | ----- Predicates -----
+        | Match Tool:
+        |   -> Enchantments:
+        |     -> Enchantment: Silk Touch
+        |     -> Level: ≥ 1
+      ali:item minecraft:charcoal x1
+        | Count: 2
+        | ----- Predicates -----
+        | Survives Explosion
+        | ----- Modifiers -----
+        | Set Count:
+        |   -> Count: 2
+        |   -> Add: False
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1
+    | ----- Predicates -----
+    | Random Chance:
+    |   -> Probability: 0.01

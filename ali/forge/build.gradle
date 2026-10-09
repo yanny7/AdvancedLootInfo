@@ -7,6 +7,15 @@ architectury {
     forge()
 }
 
+sourceSets {
+    gametest {
+        java.srcDir project(":ali:common").file("src/gametest/java")
+        resources.srcDir project(":ali:common").file("src/gametest/resources")
+        compileClasspath += sourceSets.main.compileClasspath + sourceSets.main.output
+        runtimeClasspath += sourceSets.main.runtimeClasspath + sourceSets.main.output
+    }
+}
+
 loom {
     accessWidenerPath = project(":ali:common").loom.accessWidenerPath
 
@@ -37,6 +46,33 @@ loom {
             programArgs "--output", "${file('src/main/generated/')}"
             programArgs "--existing", "${file("src/main/resources").absolutePath}"
         }
+        gametest {
+            environment "gametestserver"
+            forgeTemplate "gameTestServer"
+            name "Minecraft GameTest"
+            source sourceSets.gametest
+            property "forge.enabledGameTestNamespaces", ali_mod_id
+            property "ali.golden.dir", project.file("src/gametest/golden").absolutePath
+            property "ali.golden.actual", project.file("build/gametest/golden").absolutePath
+            property "ali.golden.regenerate", (project.findProperty("ali_golden_regenerate") ?: "false").toString()
+
+            runDir "build/gametest/run"
+
+            mods {
+                main {
+                    sourceSet sourceSets.main
+                    sourceSet sourceSets.gametest
+                }
+            }
+        }
+    }
+}
+
+tasks.matching { it.name == "runGametest" }.configureEach {
+    timeout = java.time.Duration.ofMinutes(10)
+
+    doFirst {
+        delete "build/gametest/run/config"
     }
 }
 

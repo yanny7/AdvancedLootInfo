@@ -6,6 +6,7 @@ import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.manager.ManagedRegistry;
 import com.yanny.aci.number.NumberEvaluator;
+import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
@@ -38,6 +39,7 @@ import java.util.stream.Stream;
 public class NodeUtils {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
     private static final Set<String> FAILED_OPERATIONS = new HashSet<>();
+    private static final ThreadLocal<Set<ResourceLocation>> EXPANDING_TABLES = ThreadLocal.withInitial(HashSet::new);
 
     @NotNull
     public static IDataNode getItemNode(IServerUtils utils, LootItem entry, NumberExpr rawChance, NumberExpr sumWeight, List<TooltipNode> chanceConditions, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
@@ -124,31 +126,43 @@ public class NodeUtils {
         List<LootItemFunction> allFunctions = getAllFunctions(entry, functions);
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
         LootCount chance = getChance(utils, entry, rawChance, sumWeight, chanceConditions);
-        LootTable lootTable = utils.getLootTable(entry.name);
         TooltipNode tooltip = TooltipUtils.getReferenceTooltip(entry, chance).build();
-        List<IDataNode> children;
-
-        if (lootTable != null) {
-            children = Collections.singletonList(getLootTableNode(Collections.emptyList(), utils, lootTable, chance.value(), chance.conditions(), allFunctions, allConditions));
-        } else {
-            children = Collections.singletonList(new MissingNode(utils.getValueTooltip(utils, entry.name).build(Lang.Value.LOOT_TABLE)));
-        }
+        List<IDataNode> children = getReferencedTable(utils, entry.name,
+                (lootTable) -> getLootTableNode(Collections.emptyList(), utils, lootTable, chance.value(), chance.conditions(), allFunctions, allConditions));
 
         return new ReferenceNode(children, toFloat(chance.value()), tooltip);
     }
 
     @NotNull
     public static ReferenceNode getReferenceNode(IServerUtils utils, ResourceLocation table, List<LootItemCondition> conditions, TooltipNode tooltip) {
-        LootTable lootTable = utils.getLootTable(table);
-        List<IDataNode> children;
-
-        if (lootTable != null) {
-            children = Collections.singletonList(getLootTableNode(Collections.emptyList(), utils, lootTable, 1, Collections.emptyList(), conditions));
-        } else {
-            children = Collections.singletonList(new MissingNode(utils.getValueTooltip(utils, table).build(Lang.Value.LOOT_TABLE)));
-        }
+        List<IDataNode> children = getReferencedTable(utils, table,
+                (lootTable) -> getLootTableNode(Collections.emptyList(), utils, lootTable, 1, Collections.emptyList(), conditions));
 
         return new ReferenceNode(children, 1, tooltip);
+    }
+
+    @Unmodifiable
+    @NotNull
+    private static List<IDataNode> getReferencedTable(IServerUtils utils, ResourceLocation table, Function<LootTable, IDataNode> factory) {
+        LootTable lootTable = utils.getLootTable(table);
+
+        if (lootTable == null) {
+            return Collections.singletonList(new MissingNode(utils.getValueTooltip(utils, table).build(Lang.Value.LOOT_TABLE)));
+        }
+
+        Set<ResourceLocation> expanding = EXPANDING_TABLES.get();
+
+        if (!expanding.add(table)) {
+            TooltipNode tooltip = TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, table).build(Lang.Value.LOOT_TABLE)), Lang.Error.RECURSIVE_REFERENCE).build();
+
+            return Collections.singletonList(new MissingNode(tooltip));
+        }
+
+        try {
+            return Collections.singletonList(factory.apply(lootTable));
+        } finally {
+            expanding.remove(table);
+        }
     }
 
     @NotNull

@@ -1,0 +1,22 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item minecraft:soul_campfire x1
+        | Count: 1
+        | ----- Predicates -----
+        | Match Tool:
+        |   -> Enchantments:
+        |     -> Enchantment: Silk Touch
+        |     -> Level: ≥ 1
+      ali:item minecraft:soul_soil x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion
+        | ----- Modifiers -----
+        | Set Count:
+        |   -> Count: 1
+        |   -> Add: False

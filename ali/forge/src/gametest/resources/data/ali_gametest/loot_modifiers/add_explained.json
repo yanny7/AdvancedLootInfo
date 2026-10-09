@@ -1,0 +1,11 @@
+{
+  "type": "ali:gametest_add_item",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "ali_gametest:glm/target"
+    }
+  ],
+  "item": "minecraft:emerald",
+  "count": 2
+}

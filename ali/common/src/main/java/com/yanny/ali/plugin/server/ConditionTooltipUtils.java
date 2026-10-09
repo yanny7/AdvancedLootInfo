@@ -97,7 +97,7 @@ public class ConditionTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getReferenceTooltip(IServerUtils utils, ConditionReference cond) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.name).build(Lang.Value.LOOT_TABLE)), Lang.Conditions.REFERENCE);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.name).build(Lang.Value.NAME)), Lang.Conditions.REFERENCE);
     }
 
     @NotNull

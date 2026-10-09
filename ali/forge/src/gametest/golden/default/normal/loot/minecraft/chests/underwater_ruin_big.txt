@@ -1,0 +1,51 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 8
+    ali:item minecraft:coal x1
+      | Chance: 32.26%
+      | Count: 1 to 4
+    ali:item minecraft:gold_nugget x1
+      | Chance: 32.26%
+      | Count: 1 to 3
+    ali:item minecraft:wheat x1
+      | Chance: 32.26%
+      | Count: 2 to 3
+    ali:item minecraft:emerald x1
+      | Chance: 3.23%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:map x1 {display:{Name:'{"translate":"filled_map.buried_treasure"}'}}
+      | Chance: 43.48%
+      | Count: 1
+      | ----- Modifiers -----
+      | Exploration Map:
+      |   -> Destination: minecraft:on_treasure_maps
+      |   -> Map Decoration: Red X
+      |   -> Zoom: 1
+      |   -> Search Radius: 50
+      |   -> Skip Known Structures: False
+      | Set Name:
+      |   -> Name: Buried Treasure Map
+    ali:item minecraft:enchanted_book x1
+      | Chance: 21.74%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item minecraft:fishing_rod x1 {Damage:0}
+      | Chance: 21.74%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item minecraft:golden_apple x1
+      | Chance: 4.35%
+      | Count: 1
+    ali:item minecraft:leather_chestplate x1 {Damage:0}
+      | Chance: 4.35%
+      | Count: 1
+    ali:item minecraft:golden_helmet x1 {Damage:0}
+      | Chance: 4.35%
+      | Count: 1

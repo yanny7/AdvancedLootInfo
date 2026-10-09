@@ -4,6 +4,8 @@
 - Air in loot tables shows as an empty entry
 - Fixed empty, dynamic and unsupported entries and global loot modifiers disappearing when a loot modifier removes an item from the same loot table
 - Plugins can replace a trader's trades, split a trade level into separately picked groups and use loot entries as trade items
+- Fixed loot tables referencing each other in a loop being nested hundreds of levels deep, the loop ends at a recursive reference
+- Fixed predicate references labelled as loot tables
 
 ## [2.4.0]
 

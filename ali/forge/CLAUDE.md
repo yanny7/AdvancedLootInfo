@@ -24,3 +24,12 @@ Larger set than Fabric's: `MixinLootTableForge`, `MixinMinecraftServer` (calls `
 ## Boilerplate vs genuine glue
 
 The `AliMod` entrypoint shape, `NetworkUtils` registration, and `ForgePlatformHelper` scaffolding are the Forge-side rewrite of the same contract `ali/fabric` implements. Genuinely loader-specific: the mixins (Forge's `LootTable`/internal-handler class shapes differ from Fabric's), the reload-listener wiring, and the Forge-only compat plugins above.
+
+## Gametest
+
+The `gametest` source set (see `ali/CLAUDE.md`'s gametest section) is wired into the `gametest` loom run differently from Fabric:
+
+- The run sets `environment "gametestserver"` together with `forgeTemplate "gameTestServer"`. Loom takes the launch target from `launch.cfg` by environment, so `server()` would start the dedicated server (`forgeserveruserdev`), which stops at the EULA and never exits.
+- A per-run `mods { main { … } }` puts the gametest source set into the `ali` mod, so Forge scans its annotations; outside this run the classes do not exist. The plugin in it, `GameTestPlugin`, therefore reports `ali` as its mod id — plugins of a mod that is not loaded are skipped.
+- `forge.enabledGameTestNamespaces=ali` enables the test, which is `@GameTestHolder("ali")` with `@PrefixGameTestTemplate(false)` and uses the structure `ali:empty` (`data/ali/structures/empty.nbt`); Forge ships no empty structure.
+- The Forge-only fixtures are the global loot modifiers: `GameTestLootModifiers` registers three codecs (`ali:gametest_add_item`, `ali:gametest_remove_item`, `ali:gametest_unadapted`), `GameTestPlugin` adapts the first two and leaves the third to auto-detection, and the datapack under `src/gametest/resources/data/` binds them to test tables, a block page, an entity page and no page at all. The wrapper adds the `show_unbounded_global_loot_modifiers` variant, which has nothing to show on Fabric.

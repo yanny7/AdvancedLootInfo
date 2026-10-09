@@ -106,6 +106,7 @@
   "ali.enum.name_source.this": "This Entity",
   "ali.error.detail_not_available": "Detail Not Available",
   "ali.error.modified_item": "Modified dynamically!",
+  "ali.error.recursive_reference": "Recursive Reference:",
   "ali.number.var.luck": "luck",
   "ali.number.var.luck.desc": "luck",
   "ali.number.var.luck.row": "Luck %s",

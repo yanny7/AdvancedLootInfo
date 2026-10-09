@@ -1,0 +1,20 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 5
+    ali:item minecraft:bread x1
+      | Chance: 50%
+      | Count: 1 to 4
+    ali:item minecraft:iron_ingot x1
+      | Chance: 25%
+      | Count: 1 to 3
+    ali:item minecraft:iron_helmet x1 {Damage:0}
+      | Chance: 12.5%
+      | Count: 1
+    ali:item minecraft:emerald x1
+      | Chance: 12.5%
+      | Count: 1
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1

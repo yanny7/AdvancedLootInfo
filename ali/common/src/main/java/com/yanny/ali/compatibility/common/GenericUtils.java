@@ -14,13 +14,12 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.manager.AliClientRegistry;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.network.AbstractClient;
+import com.yanny.ali.network.LootDataReader;
 import com.yanny.ali.network.RequestLootDataMessage;
 import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.client.TooltipUtils;
 import com.yanny.ali.plugin.common.nodes.EntityLootTableNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -52,8 +51,6 @@ import org.slf4j.Logger;
 import oshi.util.tuples.Pair;
 import oshi.util.tuples.Triplet;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.BiConsumer;
@@ -61,7 +58,6 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.zip.GZIPInputStream;
 
 public class GenericUtils {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
@@ -187,21 +183,10 @@ public class GenericUtils {
             return new Pair<>(lootData, tradeData);
         }
 
-        ByteArrayInputStream bis = new ByteArrayInputStream(fullCompressedData);
-        ByteBuf decompressedBuf = Unpooled.buffer();
-
-        try (GZIPInputStream gzip = new GZIPInputStream(bis)) {
-            decompressedBuf.writeBytes(gzip.readAllBytes());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        FriendlyByteBuf buf = new FriendlyByteBuf(decompressedBuf);
+        FriendlyByteBuf buf = LootDataReader.decompress(fullCompressedData);
 
         try {
-            utils.getTooltipCache().decode(utils, buf);
-            readLootData(utils, buf, lootData);
-            readTradeData(utils, buf, tradeData);
+            LootDataReader.decode(utils, buf, lootData, tradeData);
         } catch (Throwable e) {
             LOGGER.warn("Failed to decode loot data!", e);
         } finally {
@@ -567,26 +552,5 @@ public class GenericUtils {
                 .filter(s -> !s.isEmpty())
                 .map(word -> Character.toUpperCase(word.charAt(0)) + word.substring(1))
                 .collect(Collectors.joining(" "));
-    }
-
-    private static void readLootData(IClientUtils utils, FriendlyByteBuf readerBuf, Map<ResourceLocation, IDataNode> lootData) {
-        int lootDataCount = readerBuf.readInt();
-
-        for (int i = 0; i < lootDataCount; i++) {
-            ResourceLocation location = readerBuf.readResourceLocation();
-            ResourceLocation id = readerBuf.readResourceLocation();
-
-            lootData.put(location, utils.getDataNodeFactory(id).apply(utils, readerBuf));
-        }
-    }
-
-    private static void readTradeData(IClientUtils utils, FriendlyByteBuf buf, Map<ResourceLocation, IDataNode> tradeData) {
-        int tradeDataCount = buf.readInt();
-
-        for (int i = 0; i < tradeDataCount; i++) {
-            ResourceLocation location = buf.readResourceLocation();
-
-            tradeData.put(location, utils.getDataNodeFactory(TradeNode.ID).apply(utils, buf));
-        }
     }
 }

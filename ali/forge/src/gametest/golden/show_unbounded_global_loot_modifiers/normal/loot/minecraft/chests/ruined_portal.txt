@@ -1,0 +1,101 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4 to 8
+    ali:item minecraft:obsidian x1
+      | Chance: 10.05%
+      | Count: 1 to 2
+    ali:item minecraft:flint x1
+      | Chance: 10.05%
+      | Count: 1 to 4
+    ali:item minecraft:iron_nugget x1
+      | Chance: 10.05%
+      | Count: 9 to 18
+    ali:item minecraft:flint_and_steel x1 {Damage:0}
+      | Chance: 10.05%
+      | Count: 1
+    ali:item minecraft:fire_charge x1
+      | Chance: 10.05%
+      | Count: 1
+    ali:item minecraft:golden_apple x1
+      | Chance: 3.77%
+      | Count: 1
+    ali:item minecraft:gold_nugget x1
+      | Chance: 3.77%
+      | Count: 4 to 24
+    ali:item minecraft:golden_sword x1 {Damage:0}
+      | Chance: 3.77%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item minecraft:golden_axe x1 {Damage:0}
+      | Chance: 3.77%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item minecraft:golden_hoe x1 {Damage:0}
+      | Chance: 3.77%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item minecraft:golden_shovel x1 {Damage:0}
+      | Chance: 3.77%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item minecraft:golden_pickaxe x1 {Damage:0}
+      | Chance: 3.77%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item minecraft:golden_boots x1 {Damage:0}
+      | Chance: 3.77%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item minecraft:golden_chestplate x1 {Damage:0}
+      | Chance: 3.77%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item minecraft:golden_helmet x1 {Damage:0}
+      | Chance: 3.77%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item minecraft:golden_leggings x1 {Damage:0}
+      | Chance: 3.77%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item minecraft:glistering_melon_slice x1
+      | Chance: 1.26%
+      | Count: 4 to 12
+    ali:item minecraft:golden_horse_armor x1
+      | Chance: 1.26%
+      | Count: 1
+    ali:item minecraft:light_weighted_pressure_plate x1
+      | Chance: 1.26%
+      | Count: 1
+    ali:item minecraft:golden_carrot x1
+      | Chance: 1.26%
+      | Count: 4 to 12
+    ali:item minecraft:clock x1
+      | Chance: 1.26%
+      | Count: 1
+    ali:item minecraft:gold_ingot x1
+      | Chance: 1.26%
+      | Count: 2 to 8
+    ali:item minecraft:bell x1
+      | Chance: 0.25%
+      | Count: 1
+    ali:item minecraft:enchanted_golden_apple x1
+      | Chance: 0.25%
+      | Count: 1
+    ali:item minecraft:gold_block x1
+      | Chance: 0.25%
+      | Count: 1 to 2
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1

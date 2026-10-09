@@ -1,0 +1,20 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 5
+    ali:item minecraft:paper x1
+      | Chance: 30%
+      | Count: 1 to 5
+    ali:item minecraft:bread x1
+      | Chance: 30%
+      | Count: 1 to 4
+    ali:item minecraft:map x1
+      | Chance: 20%
+      | Count: 1 to 3
+    ali:item minecraft:compass x1
+      | Chance: 10%
+      | Count: 1
+    ali:item minecraft:stick x1
+      | Chance: 10%
+      | Count: 1 to 2

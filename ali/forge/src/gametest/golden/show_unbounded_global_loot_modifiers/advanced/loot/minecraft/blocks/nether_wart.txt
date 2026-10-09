@@ -1,0 +1,47 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:nether_wart x1
+      | Count: 
+      |   -> max(0; U[2; 4]) | 1
+      |     -> Block State Property:
+      |       -> Block: Nether Wart
+      |       -> Properties:
+      |         -> age: 3
+      |     -> Fortune LVL: (max(0; U[2; 4]) | 1) + U[0; LVL]
+      |     -> Fortune I: 1 to 5
+      |     -> Fortune II: 1 to 6
+      |     -> Fortune III: 1 to 7
+      |   -> otherwise max(0; U[2; 4])
+      |     -> Block State Property:
+      |       -> Block: Nether Wart
+      |       -> Properties:
+      |         -> age: 3
+      |   -> otherwise 1
+      | ----- Modifiers -----
+      | Explosion Decay
+      | Set Count:
+      |   -> Count: 2 to 4
+      |   -> Add: False
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Nether Wart
+      |       -> Properties:
+      |         -> age: 3
+      | Apply Bonus:
+      |   -> Enchantment: Fortune
+      |   -> Formula: minecraft:uniform_bonus_count
+      |     -> Bonus Multiplier: 1
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Nether Wart
+      |       -> Properties:
+      |         -> age: 3
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1
+    | ----- Predicates -----
+    | Random Chance:
+    |   -> Probability: 0.01

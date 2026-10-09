@@ -1,0 +1,102 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:red_dye x1
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Predicates -----
+      | Any Of:
+      |   -> Match Tool:
+      |     -> Item: Shears
+      |   -> All Of:
+      |     -> Killed by player
+    ali:item minecraft:orange_dye x1
+      | Chance: 0.83%
+      |   -> Looting I: 1%
+      |   -> Looting II: 1.17%
+      |   -> Looting III: 1.33%
+      | Count: 1
+    ali:item minecraft:yellow_dye x1
+      | Chance: 0.83%
+      |   -> Fortune I: 1.67%
+      |   -> Fortune II: 3.33%
+      |   -> Fortune III: 3.33%
+      | Count: 1
+    ali:item minecraft:lime_dye x1
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Predicates -----
+      | Entity Properties:
+      |   -> Target: This Entity
+      |   -> Predicate:
+      |     -> Entity Types:
+      |       -> Tag: minecraft:skeletons
+      |     -> Mob Effects:
+      |       -> Poison
+      |         -> Amplifier: ≥ 1
+      |     -> Entity Flags:
+      |       -> Is Baby: False
+    ali:item minecraft:green_dye x1
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Predicates -----
+      | Location Check:
+      |   -> Location:
+      |     -> Y: 60 to 80
+      |     -> Biome: Desert
+      |   -> Offset: [X: 0, Y: 1, Z: 0]
+    ali:item minecraft:cyan_dye x1
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Predicates -----
+      | Time Check:
+      |   -> Period: 24000
+      |   -> Value: 0 to 12000
+    ali:item minecraft:light_blue_dye x1
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Predicates -----
+      | Value Check:
+      |   -> Provider: any (score "points" (gametest))
+      |   -> Range: ≥ 5
+    ali:item minecraft:blue_dye x1
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Predicates -----
+      | Weather Check:
+      |   -> Is Raining: True
+      |   -> Is Thundering: False
+    ali:item minecraft:purple_dye x1
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Predicates -----
+      | Block State Property:
+      |   -> Block: Wheat Crops
+      |   -> Properties:
+      |     -> age: 7
+    ali:item minecraft:magenta_dye x1
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Predicates -----
+      | Damage Source Properties:
+      |   -> Tags:
+      |     -> Is: minecraft:is_fire
+    ali:item minecraft:pink_dye x1
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Predicates -----
+      | Entity Scores:
+      |   -> Target: Killer
+      |   -> Scores:
+      |     -> kills
+      |       -> Limit: ≥ 3
+    ali:item minecraft:white_dye x1
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Predicates -----
+      | Survives Explosion
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1

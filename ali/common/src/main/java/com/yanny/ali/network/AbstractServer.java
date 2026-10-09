@@ -67,6 +67,10 @@ public abstract class AbstractServer {
         return fakeLootDataManager;
     }
 
+    public List<LootDataChunkMessage> getChunks() {
+        return Collections.unmodifiableList(chunks);
+    }
+
     public final void readLootTables(LootDataManager manager) {
         AliServerRegistry serverRegistry = PluginManager.getInstance().serverRegistry;
 

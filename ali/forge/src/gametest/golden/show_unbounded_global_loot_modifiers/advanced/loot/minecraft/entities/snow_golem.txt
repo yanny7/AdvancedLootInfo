@@ -1,0 +1,17 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:snowball x1
+      | Count: max(0; U[0; 15])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 0 to 15
+      |   -> Add: False
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1
+    | ----- Predicates -----
+    | Random Chance:
+    |   -> Probability: 0.01

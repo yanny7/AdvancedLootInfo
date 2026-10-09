@@ -1,0 +1,194 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:alternatives
+        | Selects only first successful entry
+        ali:item minecraft:snowball x1
+          | Count: 1
+          | ----- Predicates -----
+          | Entity Properties:
+          |   -> Target: This Entity
+          | Inverted:
+          |   -> Match Tool:
+          |     -> Enchantments:
+          |       -> Enchantment: Silk Touch
+          |       -> Level: ≥ 1
+          | Block State Property:
+          |   -> Block: Snow
+          |   -> Properties:
+          |     -> layers: 1
+        ali:item minecraft:snowball x1
+          | Count: 2
+          | ----- Predicates -----
+          | Entity Properties:
+          |   -> Target: This Entity
+          | Inverted:
+          |   -> Match Tool:
+          |     -> Enchantments:
+          |       -> Enchantment: Silk Touch
+          |       -> Level: ≥ 1
+          | Block State Property:
+          |   -> Block: Snow
+          |   -> Properties:
+          |     -> layers: 2
+        ali:item minecraft:snowball x1
+          | Count: 3
+          | ----- Predicates -----
+          | Entity Properties:
+          |   -> Target: This Entity
+          | Inverted:
+          |   -> Match Tool:
+          |     -> Enchantments:
+          |       -> Enchantment: Silk Touch
+          |       -> Level: ≥ 1
+          | Block State Property:
+          |   -> Block: Snow
+          |   -> Properties:
+          |     -> layers: 3
+        ali:item minecraft:snowball x1
+          | Count: 4
+          | ----- Predicates -----
+          | Entity Properties:
+          |   -> Target: This Entity
+          | Inverted:
+          |   -> Match Tool:
+          |     -> Enchantments:
+          |       -> Enchantment: Silk Touch
+          |       -> Level: ≥ 1
+          | Block State Property:
+          |   -> Block: Snow
+          |   -> Properties:
+          |     -> layers: 4
+        ali:item minecraft:snowball x1
+          | Count: 5
+          | ----- Predicates -----
+          | Entity Properties:
+          |   -> Target: This Entity
+          | Inverted:
+          |   -> Match Tool:
+          |     -> Enchantments:
+          |       -> Enchantment: Silk Touch
+          |       -> Level: ≥ 1
+          | Block State Property:
+          |   -> Block: Snow
+          |   -> Properties:
+          |     -> layers: 5
+        ali:item minecraft:snowball x1
+          | Count: 6
+          | ----- Predicates -----
+          | Entity Properties:
+          |   -> Target: This Entity
+          | Inverted:
+          |   -> Match Tool:
+          |     -> Enchantments:
+          |       -> Enchantment: Silk Touch
+          |       -> Level: ≥ 1
+          | Block State Property:
+          |   -> Block: Snow
+          |   -> Properties:
+          |     -> layers: 6
+        ali:item minecraft:snowball x1
+          | Count: 7
+          | ----- Predicates -----
+          | Entity Properties:
+          |   -> Target: This Entity
+          | Inverted:
+          |   -> Match Tool:
+          |     -> Enchantments:
+          |       -> Enchantment: Silk Touch
+          |       -> Level: ≥ 1
+          | Block State Property:
+          |   -> Block: Snow
+          |   -> Properties:
+          |     -> layers: 7
+        ali:item minecraft:snowball x1
+          | Count: 8
+          | ----- Predicates -----
+          | Entity Properties:
+          |   -> Target: This Entity
+          | Inverted:
+          |   -> Match Tool:
+          |     -> Enchantments:
+          |       -> Enchantment: Silk Touch
+          |       -> Level: ≥ 1
+          | Block State Property:
+          |   -> Block: Snow
+          |   -> Properties:
+          |     -> layers: 8
+      ali:alternatives
+        | Selects only first successful entry
+        ali:item minecraft:snow x1
+          | Count: 1
+          | ----- Predicates -----
+          | Entity Properties:
+          |   -> Target: This Entity
+          | Block State Property:
+          |   -> Block: Snow
+          |   -> Properties:
+          |     -> layers: 1
+        ali:item minecraft:snow x1
+          | Count: 2
+          | ----- Predicates -----
+          | Entity Properties:
+          |   -> Target: This Entity
+          | Block State Property:
+          |   -> Block: Snow
+          |   -> Properties:
+          |     -> layers: 2
+        ali:item minecraft:snow x1
+          | Count: 3
+          | ----- Predicates -----
+          | Entity Properties:
+          |   -> Target: This Entity
+          | Block State Property:
+          |   -> Block: Snow
+          |   -> Properties:
+          |     -> layers: 3
+        ali:item minecraft:snow x1
+          | Count: 4
+          | ----- Predicates -----
+          | Entity Properties:
+          |   -> Target: This Entity
+          | Block State Property:
+          |   -> Block: Snow
+          |   -> Properties:
+          |     -> layers: 4
+        ali:item minecraft:snow x1
+          | Count: 5
+          | ----- Predicates -----
+          | Entity Properties:
+          |   -> Target: This Entity
+          | Block State Property:
+          |   -> Block: Snow
+          |   -> Properties:
+          |     -> layers: 5
+        ali:item minecraft:snow x1
+          | Count: 6
+          | ----- Predicates -----
+          | Entity Properties:
+          |   -> Target: This Entity
+          | Block State Property:
+          |   -> Block: Snow
+          |   -> Properties:
+          |     -> layers: 6
+        ali:item minecraft:snow x1
+          | Count: 7
+          | ----- Predicates -----
+          | Entity Properties:
+          |   -> Target: This Entity
+          | Block State Property:
+          |   -> Block: Snow
+          |   -> Properties:
+          |     -> layers: 7
+        ali:item minecraft:snow_block x1
+          | Count: 1
+          | ----- Predicates -----
+          | Entity Properties:
+          |   -> Target: This Entity
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1

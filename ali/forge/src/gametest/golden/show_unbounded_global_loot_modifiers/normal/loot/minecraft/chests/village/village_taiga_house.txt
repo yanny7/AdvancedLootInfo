@@ -1,0 +1,44 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 8
+    ali:item minecraft:potato x1
+      | Chance: 18.52%
+      | Count: 1 to 7
+    ali:item minecraft:bread x1
+      | Chance: 18.52%
+      | Count: 1 to 4
+    ali:item minecraft:spruce_log x1
+      | Chance: 18.52%
+      | Count: 1 to 5
+    ali:item minecraft:sweet_berries x1
+      | Chance: 9.26%
+      | Count: 1 to 7
+    ali:item minecraft:pumpkin_seeds x1
+      | Chance: 9.26%
+      | Count: 1 to 5
+    ali:item minecraft:spruce_sapling x1
+      | Chance: 9.26%
+      | Count: 1 to 5
+    ali:item minecraft:fern x1
+      | Chance: 3.7%
+      | Count: 1
+    ali:item minecraft:large_fern x1
+      | Chance: 3.7%
+      | Count: 1
+    ali:item minecraft:emerald x1
+      | Chance: 3.7%
+      | Count: 1 to 4
+    ali:item minecraft:iron_nugget x1
+      | Chance: 1.85%
+      | Count: 1 to 5
+    ali:item minecraft:pumpkin_pie x1
+      | Chance: 1.85%
+      | Count: 1
+    ali:item minecraft:spruce_sign x1
+      | Chance: 1.85%
+      | Count: 1
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1

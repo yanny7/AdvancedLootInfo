@@ -1,0 +1,26 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 5
+    ali:item minecraft:porkchop x1
+      | Chance: 21.43%
+      | Count: 1 to 3
+    ali:item minecraft:wheat x1
+      | Chance: 21.43%
+      | Count: 1 to 3
+    ali:item minecraft:beef x1
+      | Chance: 21.43%
+      | Count: 1 to 3
+    ali:item minecraft:mutton x1
+      | Chance: 21.43%
+      | Count: 1 to 3
+    ali:item minecraft:coal x1
+      | Chance: 10.71%
+      | Count: 1 to 3
+    ali:item minecraft:emerald x1
+      | Chance: 3.57%
+      | Count: 1
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1

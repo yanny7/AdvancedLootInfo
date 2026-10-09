@@ -1,0 +1,30 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:cod x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Furnace Smelt
+      |   -> Predicates:
+      |     -> Entity Properties:
+      |       -> Target: This Entity
+      |       -> Predicate:
+      |         -> Entity Flags:
+      |           -> Is On Fire: True
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:bone_meal x1
+      | Chance: 5%
+      | Count: 1
+      | ----- Predicates -----
+      | Random Chance:
+      |   -> Probability: 0.05
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1
+    | ----- Predicates -----
+    | Random Chance:
+    |   -> Probability: 0.01

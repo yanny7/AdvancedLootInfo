@@ -223,7 +223,7 @@ public class ConditionTooltipTest {
     public void testReferenceTooltip() {
         assertTooltip(ConditionTooltipUtils.getReferenceTooltip(UTILS, (ConditionReference) ConditionReference.conditionReference(new ResourceLocation("test")).build()).build(), List.of(
                 "Reference:",
-                "  -> Loot Table: minecraft:test"
+                "  -> Name: minecraft:test"
         ));
     }
 

@@ -27,3 +27,7 @@ Per-target-mod compatibility is **not** here — it ships in the separate ALICom
 ## Boilerplate vs genuine glue
 
 `CommonAliMod`/`ClientAliMod`, `NetworkUtils` registration, and the `PlatformHelper` scaffolding (config dir, plugin loading) are structurally identical rewrites of the same contract implemented independently in `ali/forge` — treat changes here as needing a mirrored change there, not a shared refactor (there's no shared loader-glue base class). Genuinely loader-specific and non-portable: the mixins (loader-specific class shapes — e.g. `LootTable`'s pool field differs Fabric vs Forge), the `FakeLootDataManager` reload-listener wiring, and the third-party compat plugins above.
+
+## Gametest
+
+The `gametest` source set (see `ali/CLAUDE.md`'s gametest section) is its own small mod, `ali_gametest`, whose `fabric.mod.json` registers the test class under the `fabric-gametest` entrypoint. The `gametest` loom run is a `server()` run with `-Dfabric-api.gametest`, which makes Fabric API start the GameTest server instead of the dedicated one and write a JUnit report to `build/gametest/report.xml`; the test uses Fabric API's empty structure (`FabricGameTest.EMPTY_STRUCTURE`).

@@ -1,0 +1,48 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item minecraft:jungle_leaves x1
+        | Count: 1
+        | ----- Predicates -----
+        | Any Of:
+        |   -> Can Tool Perform Action:
+        |     -> shears_dig
+        |   -> Match Tool:
+        |     -> Enchantments:
+        |       -> Enchantment: Silk Touch
+        |       -> Level: ≥ 1
+      ali:item minecraft:jungle_sapling x1
+        | Chance: 2.5%
+        |   -> Fortune I: 2.78%
+        |   -> Fortune II: 3.13%
+        |   -> Fortune III: 4.17%
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:stick x1
+      | Chance: 2%
+      |   -> Fortune I: 2.22%
+      |   -> Fortune II: 2.5%
+      |   -> Fortune III: 3.33%
+      | Count: 1 to 2
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Any Of:
+      |     -> Can Tool Perform Action:
+      |       -> shears_dig
+      |     -> Match Tool:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Explosion Decay
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1

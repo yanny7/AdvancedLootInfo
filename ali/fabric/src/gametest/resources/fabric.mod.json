@@ -1,0 +1,16 @@
+{
+    "schemaVersion": 1,
+    "id": "ali_gametest",
+    "version": "1.0.0",
+    "name": "ALI GameTest",
+    "environment": "*",
+    "entrypoints": {
+        "fabric-gametest": [
+            "com.yanny.ali.fabric.gametest.LootDataGameTest"
+        ]
+    },
+    "depends": {
+        "ali": "*",
+        "fabric-gametest-api-v1": "*"
+    }
+}

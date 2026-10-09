@@ -1,0 +1,44 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:name_tag x1
+      | Chance: 16.67%
+      | Count: 1
+    ali:item minecraft:saddle x1
+      | Chance: 16.67%
+      | Count: 1
+    ali:item minecraft:bow x1 {Damage:0}
+      | Chance: 16.67%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 0% to 25%
+      |   -> Add: False
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Treasure: True
+    ali:item minecraft:fishing_rod x1 {Damage:0}
+      | Chance: 16.67%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 0% to 25%
+      |   -> Add: False
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Treasure: True
+    ali:item minecraft:enchanted_book x1
+      | Chance: 16.67%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Treasure: True
+    ali:item minecraft:nautilus_shell x1
+      | Chance: 16.67%
+      | Count: 1
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1
