@@ -45,7 +45,10 @@ removed is resolved by keeping it removed (`git rm`).
 `compat_mods` and every `<mod>_<loader>_dep` line: each `_dep` pins a CurseForge file id or maven artifact
 versions for one specific Minecraft version, so anything merged up from below names a file for the wrong version, and
 `compat_mods` states what this branch has actually ported. Do not try to reconcile them and do not
-ask about them. `scripts/supported_mods.json` is the opposite case — it holds no Minecraft-version-specific
+ask about them. Part of the block usually merges without a conflict (a slug appended to `compat_mods`), so resolving
+the markers is not enough: afterwards the block must equal `HEAD`'s byte for byte
+(`diff <(git show HEAD:gradle.properties | sed -n '/^compat_mods=/,/end of generated block/p') <(sed -n '/^compat_mods=/,/end of generated block/p' gradle.properties)`
+prints nothing). `scripts/supported_mods.json` is the opposite case — it holds no Minecraft-version-specific
 data, so it merges like any other file and a new entry arriving from below is kept. The rest of the file — loader versions, viewer versions, enabled platforms —
 conflicts like any other code and is resolved on its merits.
 
@@ -65,12 +68,16 @@ against this version's jar and the current ALI/ALICompat API anyway, so any work
 - A grep, sed or script that brings shims in line with a changed API — ALI's, ALICompat's or vanilla's (a
   constructor turned factory method) — runs over active source sets only, never over `alicompat` or
   `alicompat/*/src/compat/*` as a whole. Activity is per slug *and* loader: a source set is active when its
-  `<slug>_<loader>_dep` line exists. Build the list first (`$S` is your scratchpad) and feed every sweep from it:
+  `<slug>_<loader>_dep` line exists **in this branch's committed `gradle.properties`**. Read it from `HEAD`, never
+  from the working tree: during the merge that file holds the lower branch's `_dep` lines inside conflict markers or
+  already auto-merged, so every slug active below would count as active here. Build the list first (`$S` is your
+  scratchpad) and feed every sweep from it:
 
   ```bash
+  git show HEAD:gradle.properties > "$S/head.properties"
   for d in alicompat/*/src/compat/*/; do
     l=$(echo $d | cut -d/ -f2); s=$(basename $d)
-    grep -q "^${s}_${l}_dep=" gradle.properties && echo $d
+    grep -q "^${s}_${l}_dep=" "$S/head.properties" && echo $d
   done > "$S/active_dirs.txt"
   ```
 
@@ -132,6 +139,15 @@ properties, do not assume which exist:
 
 ```bash
 ./gradlew :aci:<loader>:build :ali:<loader>:build :awi:<loader>:build :alicompat:<loader>:build
+```
+
+When the merge moved `aci_version`, clear the old ACI first, then build `:aci:<loader>:build` for every enabled loader
+on its own before anything else: the ALI/AWI/ALICompat loader modules resolve the ACI jar of the new version at
+configuration time, and a dev or datagen run keeps loading the remapped copy of the old one.
+
+```bash
+rm -rf .gradle/loom-cache/remapped_mods/*/com/yanny/aci
+rm -f aci/*/build/libs/*-<old aci_version>*
 ```
 
 A failure in `alicompat/common` is a merge problem and belongs here. A failure in a shim means its

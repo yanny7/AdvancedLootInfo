@@ -19,6 +19,16 @@ single `return`, delegation through `getValueTooltip`, null and `Optional`, key 
 references over lambdas, the `Lang` enum, comments. Read that section before writing the first line
 of Java; nothing about code shape is repeated here.
 
+Vanilla and ALI API names below are the ones on `1.20.1`, where this skill is kept. Later branches rename them,
+so take the current spelling from an active shim on the checkout in hand, never from this text. Known renames:
+
+| Here | `26.3` |
+|---|---|
+| `LootItemConditionalFunction.predicates` (`List`) | `condition` (`Optional`) |
+| a `NumberProvider` field | `Holder<ContextIntProvider>` / `Holder<ContextFloatProvider>` |
+| `utils.convertNumber` / `convertIntNumber` | `utils.convertContextFloat` / `convertContextInt` |
+| `LootTableReference.lootTableReference(id)` | `NestedLootTable.lootTableReference(ResourceKey<LootTable>)` |
+
 ## Step 0 — where the finding list comes from
 
 Three starting points, and they decide how much of Step 1 applies.
