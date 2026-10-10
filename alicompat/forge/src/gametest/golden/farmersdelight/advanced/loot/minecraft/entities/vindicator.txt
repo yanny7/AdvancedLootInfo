@@ -1,0 +1,73 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:emerald x1
+      | Count: max(0; U[0; 1])
+      |   -> Looting LVL: max(0; U[0; 1]) + round(LVL × U[0; 1))
+      |   -> Looting I: 0 to 2  ~1 (50%)
+      |   -> Looting II: 0 to 3  ~1 to 2 (38%)
+      |   -> Looting III: 0 to 4  ~2 (33%)
+      |   [chart 0..1 0-1 base=true modes=[false, false, false, false, false] heights=1.0000,1.0000,0.0000,0.0000,0.0000 | 0..2 0-2 base=false modes=[false, true, false, false, false] heights=0.5000,1.0000,0.5000,0.0000,0.0000 | 0..3 0-3 base=false modes=[false, true, true, false, false] heights=0.2500,0.7500,0.7500,0.2500,0.0000 | 0..4 0-4 base=false modes=[false, false, true, false, false] heights=0.1667,0.5000,0.6667,0.5000,0.1667]
+      | ----- Predicates -----
+      | Killed by player
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 0 to 1
+      |   -> Add: False
+      | Looting Enchant:
+      |   -> Value: U[0; 1)
+  ali:item farmersdelight:onion x1
+    | Chance: 2%
+    |   -> Looting LVL: 2% + LVL × 1%
+    |   -> Looting I: 3%
+    |   -> Looting II: 4%
+    |   -> Looting III: 5%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Entity Properties:
+    |     -> Target: This Entity
+    |     -> Predicate:
+    |       -> Entity Type: Pillager
+    |   -> Entity Properties:
+    |     -> Target: This Entity
+    |     -> Predicate:
+    |       -> Entity Type: Evoker
+    |   -> Entity Properties:
+    |     -> Target: This Entity
+    |     -> Predicate:
+    |       -> Entity Type: Vindicator
+    | Killed by player
+    | Random Chance With Looting:
+    |   -> Percent: 0.02
+    |   -> Multiplier: 0.01
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:iron_axe x1 {Damage:0}
+      | Chance: 8.5%
+      |   -> Looting LVL: 8.5% + LVL × 1%
+      |   -> Looting I: 9.5%
+      |   -> Looting II: 10.5%
+      |   -> Looting III: 11.5%
+      | Count: 1
+      | ----- Predicates -----
+      | Random Chance With Looting:
+      |   -> Percent: 0.085
+      |   -> Multiplier: 0.01
+      | Entity Properties:
+      |   -> Target: This Entity
+      |   -> Predicate:
+      |     -> Entity Equipment:
+      |       -> Main Hand:
+      |         -> Item: Iron Axe
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Predicates:
+      |     -> Random Chance:
+      |       -> Probability: 0.25
+      | Set Damage:
+      |   -> Damage: U[0%; 100%)
+      |   -> Add: False

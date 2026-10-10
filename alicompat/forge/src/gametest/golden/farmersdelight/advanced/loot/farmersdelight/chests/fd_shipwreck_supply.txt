@@ -1,0 +1,46 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 2
+    ali:item farmersdelight:tomato_seeds x1
+      | Chance: 25%
+      | Count: max(0; U[2; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 4
+      |   -> Add: False
+    ali:item farmersdelight:cabbage_seeds x1
+      | Chance: 25%
+      | Count: max(0; U[2; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 4
+      |   -> Add: False
+    ali:item farmersdelight:onion x1
+      | Chance: 25%
+      | Count: max(0; U[2; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 4
+      |   -> Add: False
+    ali:item farmersdelight:rice x1
+      | Chance: 25%
+      | Count: max(0; U[2; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 4
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 3
+    ali:item farmersdelight:rope x1
+      | Chance: 66.67%
+      | Count: max(0; U[4; 12])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4 to 12
+      |   -> Add: False
+    ali:empty
+      | Drops nothing
+      | Chance: 33.33%

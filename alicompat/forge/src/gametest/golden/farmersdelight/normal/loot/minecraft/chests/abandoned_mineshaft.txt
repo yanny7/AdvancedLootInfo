@@ -1,0 +1,123 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:name_tag x1
+      | Chance: 42.25%
+      | Count: 1
+    ali:item minecraft:golden_apple x1
+      | Chance: 28.17%
+      | Count: 1
+    ali:item minecraft:enchanted_book x1
+      | Chance: 14.08%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item minecraft:iron_pickaxe x1 {Damage:0}
+      | Chance: 7.04%
+      | Count: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 7.04%
+    ali:item minecraft:enchanted_golden_apple x1
+      | Chance: 1.41%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 4
+    ali:item minecraft:bread x1
+      | Chance: 15.31%
+      | Count: 1 to 3
+    ali:item minecraft:glow_berries x1
+      | Chance: 15.31%
+      | Count: 3 to 6
+    ali:item minecraft:iron_ingot x1
+      | Chance: 10.2%
+      | Count: 1 to 5
+    ali:item minecraft:coal x1
+      | Chance: 10.2%
+      | Count: 3 to 8
+    ali:item minecraft:melon_seeds x1
+      | Chance: 10.2%
+      | Count: 2 to 4
+    ali:item minecraft:pumpkin_seeds x1
+      | Chance: 10.2%
+      | Count: 2 to 4
+    ali:item minecraft:beetroot_seeds x1
+      | Chance: 10.2%
+      | Count: 2 to 4
+    ali:item minecraft:gold_ingot x1
+      | Chance: 5.1%
+      | Count: 1 to 3
+    ali:item minecraft:redstone x1
+      | Chance: 5.1%
+      | Count: 4 to 9
+    ali:item minecraft:lapis_lazuli x1
+      | Chance: 5.1%
+      | Count: 4 to 9
+    ali:item minecraft:diamond x1
+      | Chance: 3.06%
+      | Count: 1 to 2
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3
+    ali:item minecraft:rail x1
+      | Chance: 40%
+      | Count: 4 to 8
+    ali:item minecraft:torch x1
+      | Chance: 30%
+      | Count: 1 to 16
+    ali:item minecraft:powered_rail x1
+      | Chance: 10%
+      | Count: 1 to 4
+    ali:item minecraft:detector_rail x1
+      | Chance: 10%
+      | Count: 1 to 4
+    ali:item minecraft:activator_rail x1
+      | Chance: 10%
+      | Count: 1 to 4
+  ali:reference
+    | Selects all entries
+    ali:loot_table
+      | Selects all entries
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1
+        ali:empty
+          | Drops nothing
+          | Chance: 75%
+        ali:item farmersdelight:cooking_pot x1
+          | Chance: 12.5%
+          | Count: 1
+        ali:item farmersdelight:skillet x1 {Damage:0}
+          | Chance: 12.5%
+          | Count: 1
+          | ----- Modifiers -----
+          | Set Damage:
+          |   -> Damage: 15% to 80%
+          |   -> Add: False
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1 to 4
+        ali:empty
+          | Drops nothing
+          | Chance: 40%
+        ali:item farmersdelight:tomato_seeds x1
+          | Chance: 20%
+          | Count: 2 to 4
+        ali:item farmersdelight:cabbage_seeds x1
+          | Chance: 20%
+          | Count: 2 to 4
+        ali:item farmersdelight:rice x1
+          | Chance: 20%
+          | Count: 2 to 4
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 3
+        ali:empty
+          | Drops nothing
+          | Chance: 66.67%
+        ali:item farmersdelight:rope x1
+          | Chance: 33.33%
+          | Count: 2 to 12

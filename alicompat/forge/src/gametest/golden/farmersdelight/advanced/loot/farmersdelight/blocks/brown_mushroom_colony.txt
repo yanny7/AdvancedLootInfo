@@ -1,0 +1,69 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item minecraft:brown_mushroom x1
+        | Count: 2
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Brown Mushroom Colony
+        |   -> Properties:
+        |     -> age: 0
+        | ----- Modifiers -----
+        | Explosion Decay
+        | Set Count:
+        |   -> Count: 2
+        |   -> Add: False
+      ali:item minecraft:brown_mushroom x1
+        | Count: 3
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Brown Mushroom Colony
+        |   -> Properties:
+        |     -> age: 1
+        | ----- Modifiers -----
+        | Explosion Decay
+        | Set Count:
+        |   -> Count: 3
+        |   -> Add: False
+      ali:item minecraft:brown_mushroom x1
+        | Count: 4
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Brown Mushroom Colony
+        |   -> Properties:
+        |     -> age: 2
+        | ----- Modifiers -----
+        | Explosion Decay
+        | Set Count:
+        |   -> Count: 4
+        |   -> Add: False
+      ali:item minecraft:brown_mushroom x1
+        | Count: 5
+        | ----- Predicates -----
+        | Inverted:
+        |   -> Can Tool Perform Action:
+        |     -> shears_harvest
+        | Block State Property:
+        |   -> Block: Brown Mushroom Colony
+        |   -> Properties:
+        |     -> age: 3
+        | ----- Modifiers -----
+        | Explosion Decay
+        | Set Count:
+        |   -> Count: 5
+        |   -> Add: False
+      ali:item farmersdelight:brown_mushroom_colony x1
+        | Count: 1
+        | ----- Predicates -----
+        | Can Tool Perform Action:
+        |   -> shears_harvest
+        | Block State Property:
+        |   -> Block: Brown Mushroom Colony
+        |   -> Properties:
+        |     -> age: 3
+        | ----- Modifiers -----
+        | Explosion Decay
