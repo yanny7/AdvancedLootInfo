@@ -1,0 +1,132 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 8
+    ali:item minecraft:stick x1
+      | Chance: 37.74%
+      | Count: 1 to 3
+    ali:item minecraft:bread x1
+      | Chance: 28.3%
+      | Count: 1 to 3
+    ali:item minecraft:iron_ingot x1
+      | Chance: 9.43%
+      | Count: 1 to 5
+    ali:item minecraft:iron_pickaxe x1 {Damage:0}
+      | Chance: 9.43%
+      | Count: 1
+    ali:item minecraft:iron_shovel x1 {Damage:0}
+      | Chance: 9.43%
+      | Count: 1
+    ali:item minecraft:diamond x1
+      | Chance: 1.89%
+      | Count: 1 to 3
+    ali:item minecraft:gold_ingot x1
+      | Chance: 1.89%
+      | Count: 1 to 3
+    ali:item minecraft:coal x1
+      | Chance: 1.89%
+      | Count: 1 to 3
+  ali:reference
+    | Selects all entries
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/village/village_armorer
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/village/village_toolsmith
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/village/village_weaponsmith
+    ali:loot_table
+      | Selects all entries
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 0 to 2
+        ali:item enderio:copper_alloy_ingot x1
+          | Chance: 2.5%
+          | Count: 1 to 2
+          | ----- Predicates -----
+          | Any Of:
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_armorer
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_toolsmith
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_weaponsmith
+        ali:item enderio:redstone_alloy_ingot x1
+          | Chance: 4.37%
+          | Count: 1 to 3
+          | ----- Predicates -----
+          | Any Of:
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_armorer
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_toolsmith
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_weaponsmith
+        ali:item enderio:pulsating_alloy_ingot x1
+          | Chance: 3.75%
+          | Count: 1
+          | ----- Predicates -----
+          | Any Of:
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_armorer
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_toolsmith
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_weaponsmith
+        ali:item enderio:vibrant_alloy_ingot x1
+          | Chance: 2.5%
+          | Count: 1
+          | ----- Predicates -----
+          | Any Of:
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_armorer
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_toolsmith
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_weaponsmith
+        ali:item enderio:stone_gear x1
+          | Chance: 5%
+          | Count: 1 to 2
+          | ----- Predicates -----
+          | Any Of:
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_armorer
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_toolsmith
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_weaponsmith
+        ali:item enderio:iron_gear x1
+          | Chance: 3.13%
+          | Count: 1
+          | ----- Predicates -----
+          | Any Of:
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_armorer
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_toolsmith
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_weaponsmith
+        ali:item enderio:energized_gear x1
+          | Chance: 1.56%
+          | Count: 1
+          | ----- Predicates -----
+          | Any Of:
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_armorer
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_toolsmith
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_weaponsmith
+        ali:item enderio:vibrant_gear x1
+          | Chance: 0.78%
+          | Count: 1
+          | ----- Predicates -----
+          | Any Of:
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_armorer
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_toolsmith
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_weaponsmith

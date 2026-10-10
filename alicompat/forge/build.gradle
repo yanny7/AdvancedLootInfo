@@ -33,7 +33,7 @@ if (gametestMod) {
 def gametestCoordinates = gametestModIds ? ["${gametestMod}_forge_dep", "${gametestMod}_forge_runtime_deps"].collectMany { (project.findProperty(it) ?: "").split(",")*.trim().findAll { it } } : []
 def gametestNestedMods = null
 
-// a Forge dev launch does not unpack jar-in-jar: nested mods using Minecraft go through loom to be remapped, the rest into mods/
+// a Forge dev launch does not unpack jar-in-jar: jars using Minecraft go through loom to be remapped, the rest into mods/
 def extractGametestNested = {
     if (gametestNestedMods != null) {
         return gametestNestedMods
@@ -59,6 +59,15 @@ def extractGametestNested = {
 
         match?.find() ? match.group(1) : null
     }
+    def packagesOf = { Collection<String> names -> names.findAll { it.endsWith(".class") && it.contains("/") }.collect { it.substring(0, it.lastIndexOf("/")) } as Set }
+    def providedArtifacts = configurations.minecraftLibraries.resolvedConfiguration.resolvedArtifacts.collect { it.name } as Set
+    def providedPackages = configurations.minecraftLibraries.resolve().collectMany { jar ->
+        def zip = new java.util.zip.ZipFile(jar)
+        def packages = packagesOf(zip.entries().collect { it.name })
+
+        zip.close()
+        packages
+    } as Set
     def outerJars = configurations.detachedConfiguration(*gametestCoordinates.collect { dependencies.create(it) }).tap { transitive = false }.resolve()
     def provided = outerJars.collect { modIdOf(readJar(it.bytes).entries) }.findAll { it } as Set
 
@@ -77,8 +86,14 @@ def extractGametestNested = {
 
             def referencesMinecraft = content.entries.any { entryName, data -> entryName.endsWith(".class") && new String(data, "ISO-8859-1").contains("net/minecraft/") }
 
-            if (modId && referencesMinecraft) {
-                if (provided.add(modId)) {
+            def providedLibrary = providedArtifacts.any { name.startsWith("$it-") } || packagesOf(content.entries.keySet()).any { providedPackages.contains(it) }
+
+            if (!modId && !referencesMinecraft && providedLibrary) {
+                return
+            }
+
+            if (referencesMinecraft) {
+                if (!modId || provided.add(modId)) {
                     def target = new File(nestedDir, "mods/$name")
 
                     target.bytes = bytes

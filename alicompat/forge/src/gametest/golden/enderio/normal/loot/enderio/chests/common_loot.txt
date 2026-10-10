@@ -1,0 +1,27 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 3
+    ali:item enderio:dark_steel_ingot x1
+      | Chance: 5%
+      | Count: 1 to 3
+    ali:item minecraft:ender_pearl x1
+      | Chance: 6%
+      | Count: 1
+    ali:item enderio:wood_gear x1
+      | Chance: 10%
+      | Count: 1
+    ali:item enderio:loot_capacitor x1
+      | Chance: 3%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Loot Capacitor:
+      |   -> Range: 1 to 4
+    ali:item enderio:dark_steel_sword x1 {Damage:0}
+      | Chance: 2%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 100% to 200000%
+      |   -> Add: False
