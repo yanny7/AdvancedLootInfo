@@ -8,6 +8,7 @@ import com.yanny.ali.plugin.EnumTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -112,6 +113,10 @@ public class LanguageHolder {
         put(CopyNameFunction.NameSource.KILLER, "Killer");
         put(CopyNameFunction.NameSource.KILLER_PLAYER, "Killer Player");
         put(CopyNameFunction.NameSource.BLOCK_ENTITY, "Block Entity");
+
+        put(Explosion.BlockInteraction.KEEP, "Keep Blocks");
+        put(Explosion.BlockInteraction.DESTROY, "Destroy Blocks");
+        put(Explosion.BlockInteraction.DESTROY_WITH_DECAY, "Destroy Blocks With Decay");
 
         verifyEnumTranslations();
 

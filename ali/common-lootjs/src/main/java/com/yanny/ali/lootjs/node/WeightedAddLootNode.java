@@ -39,7 +39,7 @@ public class WeightedAddLootNode extends ListNode {
         tooltip = getTooltip(utils, action);
 
         for (WeightedEntry.Wrapper<LootEntry> wrapper : weightedList.getAliItems()) {
-            addChildren(Utils.getEntry(utils, wrapper.getData(), sumWeight, functions, conditions, null));
+            addChildren(Utils.getEntry(utils, wrapper.getData(), 1, sumWeight, functions, conditions, null));
         }
     }
 

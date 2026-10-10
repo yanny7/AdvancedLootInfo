@@ -68,3 +68,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 10
       |   -> Add: False
+  lootjs:add_loot
+    | Selects all entries
+    lootjs:item_stack minecraft:nautilus_shell x1
+      | Count: 1

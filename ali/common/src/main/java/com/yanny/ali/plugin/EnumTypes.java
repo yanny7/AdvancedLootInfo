@@ -5,6 +5,7 @@ import com.yanny.ali.Utils;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -27,6 +28,7 @@ public class EnumTypes {
         TRANSLATED_ENUMS.put(AttributeModifier.Operation.class, "attribute_operation");
         TRANSLATED_ENUMS.put(LootContext.EntityTarget.class, "entity_target");
         TRANSLATED_ENUMS.put(CopyNameFunction.NameSource.class, "name_source");
+        TRANSLATED_ENUMS.put(Explosion.BlockInteraction.class, "block_interaction");
     }
 
     @NotNull

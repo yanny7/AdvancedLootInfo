@@ -305,6 +305,10 @@ ali:loot_table
             |   -> Predicate:
             |     -> Entity Sub Predicate:
             |       -> Is In Open Water: True
+  lootjs:add_loot
+    | Selects all entries
+    lootjs:item_stack minecraft:nautilus_shell x1
+      | Count: 1
   ali:item minecraft:diamond x1
     | Chance: 1%
     | Count: 1

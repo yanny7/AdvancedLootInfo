@@ -27,6 +27,10 @@ ali:entity_loot_table
       |   -> Predicate:
       |     -> Entity Types:
       |       -> Tag: minecraft:skeletons
+  lootjs:add_loot
+    | Selects all entries
+    lootjs:item_stack minecraft:tnt x1
+      | Count: 1
   ali:item minecraft:diamond x1
     | Chance: 1%
     | Count: 1

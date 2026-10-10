@@ -93,6 +93,9 @@ public final class Lang {
         SET_STEW_EFFECT("set_stew_effect", "Set Stew Effect:"),
         // LootJS
         CUSTOM_PLAYER("custom_player", "Custom Player Modifier:"),
+        DROP_EXPERIENCE("drop_experience", "Drop Experience:"),
+        EXPLODE("explode", "Explode:"),
+        LIGHTNING_STRIKE("lightning_strike", "Lightning Strike:"),
         // Trades
         DYED_RANDOMLY("dyed_randomly", "Dyed Randomly"),
         ;
@@ -147,10 +150,12 @@ public final class Lang {
         BLOCK("block", "Block: %s"),
         BLOCKS_ON_FIRE("blocks_on_fire", "Blocks On Fire: %s"),
         BLOCK_ENTITY_TYPE("block_entity_type", "Block Entity Type: %s"),
+        BLOCK_INTERACTION("block_interaction", "Block Interaction: %s"),
         BONUS_MULTIPLIER("bonus_multiplier", "Bonus Multiplier: %s"),
         COLOR("color", "Color: %s"),
         COUNT("count", "Count: %s"),
         DAMAGE("damage", "Damage: %s"),
+        DAMAGE_ENTITY("damage_entity", "Damage Entity: %s"),
         DESTINATION("destination", "Destination: %s"),
         DIMENSION("dimension", "Dimension: %s"),
         DONE("done", "Done: %s"),
@@ -203,6 +208,7 @@ public final class Lang {
         PROBABILITY("probability", "Probability: %s"),
         PROPERTY("property", "Property: %s"),
         PROVIDER("provider", "Provider: %s"),
+        RADIUS("radius", "Radius: %s"),
         RANGE("range", "Range: %s"),
         RANGED_ANY("ranged_property_any", "%s: any"),
         RANGED_BOTH("ranged_property_both", "%s: %s-%s"),

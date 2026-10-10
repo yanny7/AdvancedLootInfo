@@ -1,0 +1,24 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    lootjs:item_stack minecraft:arrow x1
+      | Chance: 50%
+      | Count: 1
+      | ----- Modifiers -----
+      | Modified dynamically!
+    lootjs:item_stack minecraft:spectral_arrow x1
+      | Chance: 25%
+      | Count: 1
+      | ----- Predicates -----
+      | Random Chance:
+      |   -> Probability: 0.5
+      | ----- Modifiers -----
+      | Modified dynamically!
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1
+    | ----- Predicates -----
+    | Random Chance:
+    |   -> Probability: 0.01

@@ -1,11 +1,24 @@
 package com.yanny.ali.lootjs;
 
+import com.almostreliable.lootjs.core.ILootHandler;
 import com.almostreliable.lootjs.core.LootEntry;
+import com.almostreliable.lootjs.loot.action.CustomPlayerAction;
+import com.almostreliable.lootjs.loot.action.DropExperienceAction;
+import com.almostreliable.lootjs.loot.action.ExplodeAction;
+import com.almostreliable.lootjs.loot.action.LightningStrikeAction;
+import com.almostreliable.lootjs.loot.action.LootItemFunctionWrapperAction;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.lootjs.mixin.MixinDropExperienceAction;
+import com.yanny.ali.lootjs.mixin.MixinExplodeAction;
+import com.yanny.ali.lootjs.mixin.MixinLightningStrikeAction;
 import com.yanny.ali.lootjs.mixin.MixinLootEntry;
+import com.yanny.ali.lootjs.modifier.CustomPlayerFunction;
+import com.yanny.ali.lootjs.modifier.DropExperienceFunction;
+import com.yanny.ali.lootjs.modifier.ExplodeFunction;
+import com.yanny.ali.lootjs.modifier.LightningStrikeFunction;
 import com.yanny.ali.lootjs.node.ItemStackNode;
 import com.yanny.ali.lootjs.node.ItemTagNode;
 import com.yanny.ali.plugin.common.NodeUtils;
@@ -31,7 +44,7 @@ import java.util.stream.Stream;
 public class Utils {
     private static final Logger LOGGER = CommonLogUtils.getLogger(com.yanny.ali.Utils.MOD_ID);
 
-    public static IDataNode getEntry(IServerUtils utils, LootEntry entry, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions, @Nullable NumberExpr preservedCount) {
+    public static IDataNode getEntry(IServerUtils utils, LootEntry entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions, @Nullable NumberExpr preservedCount) {
         MixinLootEntry mixinLootEntry = (MixinLootEntry) entry;
         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), mixinLootEntry.getPostModifications().stream()).toList();
         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), mixinLootEntry.getConditions().stream()).toList();
@@ -40,24 +53,24 @@ public class Utils {
 
         if (generator instanceof LootEntry.ItemGenerator itemGenerator) {
             if (itemGenerator.item().isEmpty()) {
-                return getEmptyNode(utils, (float) weight / sumWeight, allFunctions, allConditions);
+                return getEmptyNode(utils, rawChance * weight / sumWeight, allFunctions, allConditions);
             }
 
-            return new ItemStackNode(utils, itemGenerator.item(), (float) weight / sumWeight, allFunctions, allConditions, preservedCount);
+            return new ItemStackNode(utils, itemGenerator.item(), rawChance * weight / sumWeight, allFunctions, allConditions, preservedCount);
         } else if (generator instanceof LootEntry.VanillaWrappedLootEntry lootEntry) {
             LootPoolEntryContainer entryContainer = lootEntry.entry();
 
             if (preservedCount != null) {
                 if (entryContainer instanceof LootItem lootItem) {
-                    return new ItemStackNode(utils, lootItem.item.getDefaultInstance(), (float) lootItem.weight / sumWeight,
+                    return new ItemStackNode(utils, lootItem.item.getDefaultInstance(), rawChance * lootItem.weight / sumWeight,
                             NodeUtils.getAllFunctions(lootItem, allFunctions), NodeUtils.getAllConditions(lootItem, allConditions), preservedCount);
                 } else if (entryContainer instanceof TagEntry tagEntry) {
-                    return new ItemTagNode(utils, tagEntry.tag, (float) tagEntry.weight / sumWeight,
+                    return new ItemTagNode(utils, tagEntry.tag, rawChance * tagEntry.weight / sumWeight,
                             NodeUtils.getAllFunctions(tagEntry, allFunctions), NodeUtils.getAllConditions(tagEntry, allConditions), preservedCount);
                 }
             }
 
-            return utils.getEntryFactory(utils, entryContainer).create(utils, entryContainer, NumberExpr.constant(1), NumberExpr.constant(sumWeight), List.of(), allFunctions, allConditions);
+            return utils.getEntryFactory(utils, entryContainer).create(utils, entryContainer, NumberExpr.constant(rawChance), NumberExpr.constant(sumWeight), List.of(), allFunctions, allConditions);
         } else if (generator instanceof LootEntry.RandomIngredientGenerator ingredientGenerator) {
             Ingredient ingredient = ingredientGenerator.ingredient();
 
@@ -65,20 +78,42 @@ public class Utils {
                 Ingredient.Value value = ingredient.values[0];
 
                 if (value instanceof Ingredient.ItemValue itemValue) {
-                    return new ItemStackNode(utils, itemValue.item, (float) weight / sumWeight, allFunctions, allConditions, preservedCount);
+                    return new ItemStackNode(utils, itemValue.item, rawChance * weight / sumWeight, allFunctions, allConditions, preservedCount);
                 } else if (value instanceof Ingredient.TagValue tagValue) {
-                    return new ItemTagNode(utils, tagValue.tag, (float) weight / sumWeight, allFunctions, allConditions, preservedCount);
+                    return new ItemTagNode(utils, tagValue.tag, rawChance * weight / sumWeight, allFunctions, allConditions, preservedCount);
                 } else {
                     LOGGER.warn("Unexpected ingredient type {}", value.getClass().getCanonicalName());
                     return getMissingNode(utils, value);
                 }
             } else {
-                return getEmptyNode(utils, (float) weight / sumWeight, allFunctions, allConditions);
+                return getEmptyNode(utils, rawChance * weight / sumWeight, allFunctions, allConditions);
             }
         } else {
             LOGGER.warn("Unexpected generator type {}", generator.getClass().getCanonicalName());
             return getMissingNode(utils, generator);
         }
+    }
+
+    public static boolean collectHandler(ILootHandler handler, List<LootItemCondition> conditions, List<LootItemFunction> functions) {
+        if (handler instanceof LootItemCondition lootItemCondition) {
+            conditions.add(lootItemCondition);
+        } else if (handler instanceof LootItemFunctionWrapperAction lootFunctionAction) {
+            functions.add(lootFunctionAction.getLootItemFunction());
+        } else if (handler instanceof CustomPlayerAction customPlayerAction) {
+            functions.add(new CustomPlayerFunction(customPlayerAction));
+        } else if (handler instanceof DropExperienceAction action) {
+            functions.add(new DropExperienceFunction(((MixinDropExperienceAction) action).getAmount()));
+        } else if (handler instanceof ExplodeAction action) {
+            MixinExplodeAction explode = (MixinExplodeAction) action;
+
+            functions.add(new ExplodeFunction(explode.getRadius(), explode.getMode(), explode.getFire()));
+        } else if (handler instanceof LightningStrikeAction action) {
+            functions.add(new LightningStrikeFunction(((MixinLightningStrikeAction) action).getShouldDamageEntity()));
+        } else {
+            return false;
+        }
+
+        return true;
     }
 
     @NotNull

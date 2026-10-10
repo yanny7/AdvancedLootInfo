@@ -1,0 +1,22 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:cod x1
+      | Count: 1
+  lootjs:add_loot
+    | Selects all entries
+    lootjs:item_stack minecraft:string x1
+      | Count: 1
+      | ----- Predicates -----
+      | Or:
+      |   -> Any Dimension:
+      |     -> Dimension: minecraft:the_nether
+      |   -> Light Level:
+      |     -> Value: 0 to 7
+      | Not:
+      |   -> Any Structure:
+      |     -> Structures:
+      |       -> minecraft:village_plains
+      |     -> Exact: False

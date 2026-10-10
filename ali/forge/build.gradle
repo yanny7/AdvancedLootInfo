@@ -18,6 +18,7 @@ sourceSets {
 
 loom {
     accessWidenerPath = project(":ali:common").loom.accessWidenerPath
+    createRemapConfigurations(sourceSets.gametest)
 
     forge {
         convertAccessWideners = true
@@ -72,7 +73,11 @@ tasks.matching { it.name == "runGametest" }.configureEach {
     timeout = java.time.Duration.ofMinutes(10)
 
     doFirst {
-        delete "build/gametest/run/config"
+        delete "build/gametest/run/config", "build/gametest/run/kubejs"
+        copy {
+            from project(":ali:common").file("src/gametest/kubejs")
+            into "build/gametest/run/kubejs"
+        }
     }
 }
 
@@ -95,9 +100,15 @@ dependencies {
     }
 
     // LootJS
-    modCompileOnly "curse.maven:kubejs-238086:5853326"
-    modCompileOnly "curse.maven:rhino-416294:6186971"
-    modCompileOnly "curse.maven:lootjs-570630:7551186"
+    [
+            "curse.maven:kubejs-238086:5853326",
+            "curse.maven:rhino-416294:6186971",
+            "dev.architectury:architectury-forge:${architectury_version}",
+            "curse.maven:lootjs-570630:7551186",
+    ].each {
+        modCompileOnly it
+        modGametestRuntimeOnly it
+    }
 }
 
 shadowJar {

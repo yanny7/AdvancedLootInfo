@@ -7,6 +7,9 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.lootjs.mixin.MixinAbstractLootModification;
 import com.yanny.ali.lootjs.mixin.MixinLootModificationsAPI;
 import com.yanny.ali.lootjs.modifier.CustomPlayerFunction;
+import com.yanny.ali.lootjs.modifier.DropExperienceFunction;
+import com.yanny.ali.lootjs.modifier.ExplodeFunction;
+import com.yanny.ali.lootjs.modifier.LightningStrikeFunction;
 import com.yanny.ali.lootjs.modifier.ModifiedItemFunction;
 import com.yanny.ali.lootjs.node.*;
 import com.yanny.ali.lootjs.server.LootJsConditionTooltipUtils;
@@ -97,6 +100,9 @@ public class LootJsPlugin implements IPlugin {
         registry.registerConditionTooltip(WrappedDamageSourceCondition.class, LootJsConditionTooltipUtils::wrapperDamageSourceConditionTooltip);
 
         registry.registerFunctionTooltip(CustomPlayerFunction.class, LootJsFunctionTooltipUtils::customPlayerTooltip);
+        registry.registerFunctionTooltip(DropExperienceFunction.class, LootJsFunctionTooltipUtils::dropExperienceTooltip);
+        registry.registerFunctionTooltip(ExplodeFunction.class, LootJsFunctionTooltipUtils::explodeTooltip);
+        registry.registerFunctionTooltip(LightningStrikeFunction.class, LootJsFunctionTooltipUtils::lightningStrikeTooltip);
         registry.registerFunctionTooltip(ModifiedItemFunction.class, LootJsFunctionTooltipUtils::modifiedItemTooltip);
 
         registry.registerValueTooltip(AnyStructure.StructureLocator.class, LootJsGenericTooltipUtils::getStructureLocatorTooltip);

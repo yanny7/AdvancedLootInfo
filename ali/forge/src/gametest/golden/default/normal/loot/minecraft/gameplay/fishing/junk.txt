@@ -64,3 +64,7 @@ ali:loot_table
     ali:item minecraft:ink_sac x1
       | Chance: 0.91%
       | Count: 10
+  lootjs:add_loot
+    | Selects all entries
+    lootjs:item_stack minecraft:nautilus_shell x1
+      | Count: 1

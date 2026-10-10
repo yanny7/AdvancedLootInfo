@@ -14,22 +14,6 @@ ali:loot_table
         |     -> Level: ≥ 1
       ali:alternatives
         | Selects only first successful entry
-        ali:item minecraft:flint x1
-          | Chance: 10%
-          |   -> Fortune LVL: [10%; 14.29%; 25%; 100%][min(LVL; 3)]
-          |   -> Fortune I: 14.29%
-          |   -> Fortune II: 25%
-          |   -> Fortune III: 100%
-          | Count: 1
-          | ----- Predicates -----
-          | Survives Explosion
-          | Table Bonus:
-          |   -> Enchantment: Fortune
-          |   -> Values: 10%
-          |     -> Fortune LVL: [10%; 14.29%; 25%; 100%][min(LVL; 3)]
-          |     -> Fortune I: 14.29%
-          |     -> Fortune II: 25%
-          |     -> Fortune III: 100%
         ali:item minecraft:gravel x1
           | Count: 1
           | ----- Predicates -----

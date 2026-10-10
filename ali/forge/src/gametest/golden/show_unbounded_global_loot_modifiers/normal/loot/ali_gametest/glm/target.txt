@@ -5,11 +5,6 @@ ali:loot_table
     | Rolls: 1
     ali:item minecraft:cod x1
       | Count: 1
-  ali:item minecraft:emerald x1
-    | Count: 2
-  ali:item minecraft:gold_nugget x1
-    | Chance: 50%
-    | Count: 1
   ali:glm
     | Auto-detected: ali_gametest:unadapted
     |   -> conditions:
@@ -17,6 +12,11 @@ ali:loot_table
     |       -> forge:loot_table_id
     |       -> ali_gametest:glm/target
     |   -> item: minecraft:stick
+  ali:item minecraft:gold_nugget x1
+    | Chance: 50%
+    | Count: 1
+  ali:item minecraft:emerald x1
+    | Count: 2
   ali:item minecraft:diamond x1
     | Chance: 1%
     | Count: 1

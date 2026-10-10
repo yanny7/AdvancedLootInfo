@@ -13,6 +13,7 @@ import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.network.AbstractServer;
 import com.yanny.ali.network.LootDataChunkMessage;
 import com.yanny.ali.network.LootDataReader;
+import dev.latvian.mods.kubejs.script.ScriptType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -88,11 +89,17 @@ public class LootDataGolden {
                 differences.add("output after a datapack reload differs from the output of the startup scan");
             }
 
+            differences.addAll(scriptErrors());
+
             if (!differences.isEmpty()) {
                 throw new GameTestAssertException(differences.size() + " golden difference(s): " + differences.subList(0, Math.min(10, differences.size())));
             }
         });
         sequence.thenSucceed();
+    }
+
+    private static List<String> scriptErrors() {
+        return ScriptType.SERVER.console.errors.stream().map((line) -> "KubeJS: " + line.getText()).toList();
     }
 
     private static void reload(GameTestSequence sequence, MinecraftServer server, Runnable before) {

@@ -15,6 +15,10 @@ ali:loot_table
     ali:item minecraft:tropical_fish x1
       | Chance: 2%
       | Count: 1
+  lootjs:add_loot
+    | Selects all entries
+    lootjs:item_stack minecraft:nautilus_shell x1
+      | Count: 1
   ali:item minecraft:diamond x1
     | Chance: 1%
     | Count: 1

@@ -14,7 +14,6 @@ import com.yanny.ali.lootjs.mixin.MixinCompositeLootAction;
 import com.yanny.ali.lootjs.mixin.MixinModifyLootAction;
 import com.yanny.ali.lootjs.mixin.MixinRemoveLootAction;
 import com.yanny.ali.lootjs.mixin.MixinReplaceLootAction;
-import com.yanny.ali.lootjs.modifier.CustomPlayerFunction;
 import com.yanny.ali.lootjs.modifier.ModifiedItemFunction;
 import com.yanny.ali.lootjs.node.*;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
@@ -51,13 +50,11 @@ public abstract class LootModifier<T> implements ILootModifier<T> {
         List<LootItemFunction> functions = new LinkedList<>();
 
         for (ILootHandler handler : handlers) {
-            if (handler instanceof LootItemCondition lootItemCondition) {
-                conditions.add(lootItemCondition);
-            } else if (handler instanceof LootItemFunctionWrapperAction lootFunctionAction) {
-                functions.add(lootFunctionAction.getLootItemFunction());
-            } else if (handler instanceof CustomPlayerAction customPlayerAction) {
-                functions.add(new CustomPlayerFunction(customPlayerAction));
-            } else if (handler instanceof ILootAction lootAction) {
+            if (Utils.collectHandler(handler, conditions, functions)) {
+                continue;
+            }
+
+            if (handler instanceof ILootAction lootAction) {
                 processAction(utils, lootAction, new ArrayList<>(conditions), new ArrayList<>(functions));
             } else {
                 LOGGER.warn("Unhandled handler: {} [{}]", handler, handler.getClass().getCanonicalName());
@@ -122,9 +119,9 @@ public abstract class LootModifier<T> implements ILootModifier<T> {
                 List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), node.getFunctions().stream()).toList();
 
                 if (!conditions.isEmpty()) {
-                    nodes.add(new ModifiedNode(utils, c, Utils.getEntry(utils, entry, 1, allFunctions, allConditions, preservedCount)));
+                    nodes.add(new ModifiedNode(utils, c, Utils.getEntry(utils, entry, node.getChance(), entry.getWeight(), allFunctions, allConditions, preservedCount)));
                 } else {
-                    nodes.add(Utils.getEntry(utils, entry, 1, allFunctions, allConditions, preservedCount));
+                    nodes.add(Utils.getEntry(utils, entry, node.getChance(), entry.getWeight(), allFunctions, allConditions, preservedCount));
                 }
 
                 return nodes;

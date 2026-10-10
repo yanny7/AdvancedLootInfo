@@ -10,6 +10,7 @@ import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ListNode;
 import com.yanny.ali.lootjs.LootJsPlugin;
+import com.yanny.ali.lootjs.Utils;
 import com.yanny.ali.lootjs.mixin.MixinCompositeLootAction;
 import com.yanny.ali.lootjs.mixin.MixinGroupedLootAction;
 import com.yanny.ali.plugin.server.LootCount;
@@ -36,11 +37,18 @@ public class GroupLootNode extends ListNode {
 
         tooltip = TooltipUtils.getLootPoolTooltip(new LootCount(rolls, rollConditions)).build();
 
+        List<LootItemCondition> groupConditions = new ArrayList<>(conditions);
+        List<LootItemFunction> groupFunctions = new ArrayList<>(functions);
+
         for (ILootHandler entry : ((MixinCompositeLootAction) lootPool).getHandlers()) {
+            if (Utils.collectHandler(entry, groupConditions, groupFunctions)) {
+                continue;
+            }
+
             if (entry instanceof AddLootAction addLootAction) {
-                addChildren(new AddLootNode(utils, addLootAction, functions, conditions));
+                addChildren(new AddLootNode(utils, addLootAction, List.copyOf(groupFunctions), List.copyOf(groupConditions)));
             } else if (entry instanceof WeightedAddLootAction weightedAddLootNode) {
-                addChildren(new WeightedAddLootNode(utils, weightedAddLootNode, functions, conditions));
+                addChildren(new WeightedAddLootNode(utils, weightedAddLootNode, List.copyOf(groupFunctions), List.copyOf(groupConditions)));
             }
         }
     }
