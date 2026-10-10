@@ -1,13 +1,13 @@
 package com.yanny.ali.gametest;
 
-import com.yanny.aci.tooltip.CoreTooltipUtils;
+import com.yanny.aci.api.ICoreDataNode;
+import com.yanny.aci.gametest.GoldenFiles;
+import com.yanny.aci.gametest.GoldenRenderer;
 import com.yanny.aci.tooltip.NumberOptions;
-import com.yanny.aci.tooltip.TooltipLine;
-import com.yanny.aci.tooltip.TooltipStyle;
+import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IItemNode;
-import com.yanny.ali.api.ListNode;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.network.AbstractServer;
@@ -25,10 +25,6 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
@@ -143,8 +139,8 @@ public class LootDataGolden {
         Map<String, String> files = new TreeMap<>();
 
         pages.forEach((key, node) -> {
-            files.put("normal/" + key, render(node, false, new NumberOptions(false, config.showCharts, Locale.ROOT)));
-            files.put("advanced/" + key, render(node, true, new NumberOptions(true, config.showCharts, Locale.ROOT)));
+            files.put("normal/" + key, renderer(false, config).render(node));
+            files.put("advanced/" + key, renderer(true, config).render(node));
         });
 
         return files;
@@ -166,51 +162,13 @@ public class LootDataGolden {
     }
 
     @NotNull
-    private static String render(IDataNode node, boolean isAdvanced, NumberOptions options) {
-        StringBuilder builder = new StringBuilder();
-
-        render(builder, node, 0, isAdvanced, options);
-        return builder.toString();
-    }
-
-    private static void render(StringBuilder builder, IDataNode node, int depth, boolean isAdvanced, NumberOptions options) {
-        String indent = "  ".repeat(depth);
-
-        builder.append(indent).append(node.getId());
-
-        if (node instanceof IItemNode itemNode) {
-            builder.append(' ').append(itemNode.getItem().map(LootDataGolden::stackToString, (tag) -> "#" + tag.location()));
-        }
-
-        builder.append('\n');
-
-        for (TooltipLine line : CoreTooltipUtils.toLines(node.getTooltip(), 0, isAdvanced, TooltipStyle.DEFAULT, options)) {
-            builder.append(indent).append("  | ").append(lineToString(line)).append('\n');
-        }
-
-        if (node instanceof ListNode listNode) {
-            for (IDataNode child : listNode.nodes()) {
-                render(builder, child, depth + 1, isAdvanced, options);
+    private static GoldenRenderer renderer(boolean isAdvanced, AliConfig config) {
+        return new GoldenRenderer(isAdvanced, new NumberOptions(isAdvanced, config.showCharts, Locale.ROOT)) {
+            @Override
+            protected String describe(ICoreDataNode<?> node) {
+                return node instanceof IItemNode itemNode ? itemNode.getItem().map(LootDataGolden::stackToString, (tag) -> "#" + tag.location()) : null;
             }
-        }
-    }
-
-    @NotNull
-    private static String lineToString(TooltipLine line) {
-        if (line instanceof TooltipLine.Text text) {
-            return text.component().getString();
-        }
-
-        TooltipLine.Chart chart = (TooltipLine.Chart) line;
-
-        return "  ".repeat(chart.indent()) + "[chart " + chart.series().stream().map(LootDataGolden::seriesToString).collect(Collectors.joining(" | ")) + "]";
-    }
-
-    @NotNull
-    private static String seriesToString(TooltipLine.Series series) {
-        String heights = series.heights().stream().map((h) -> String.format(Locale.ROOT, "%.4f", h)).collect(Collectors.joining(","));
-
-        return series.first() + ".." + series.last() + " " + series.min().getString() + "-" + series.max().getString() + " base=" + series.base() + " modes=" + series.modes() + " heights=" + heights;
+        };
     }
 
     @NotNull
@@ -240,70 +198,7 @@ public class LootDataGolden {
 
     @NotNull
     private static List<String> compare(String variant, Map<String, String> actual) {
-        Path goldenDir = Path.of(System.getProperty("ali.golden.dir")).resolve(variant);
-        Path actualDir = Path.of(System.getProperty("ali.golden.actual")).resolve(variant);
-        boolean regenerate = Boolean.getBoolean("ali.golden.regenerate");
-
-        write(regenerate ? goldenDir : actualDir, actual);
-
-        if (regenerate) {
-            return List.of();
-        }
-
-        if (!Files.isDirectory(goldenDir)) {
-            return List.of(variant + ": no golden files in " + goldenDir);
-        }
-
-        Map<String, String> expected = read(goldenDir);
-        List<String> differences = new ArrayList<>();
-
-        expected.keySet().stream().filter((key) -> !actual.containsKey(key)).forEach((key) -> differences.add(variant + ": missing " + key));
-        actual.keySet().stream().filter((key) -> !expected.containsKey(key)).forEach((key) -> differences.add(variant + ": new " + key));
-        actual.forEach((key, value) -> {
-            if (expected.containsKey(key) && !expected.get(key).equals(value)) {
-                differences.add(variant + ": changed " + key);
-            }
-        });
-
-        return differences;
-    }
-
-    private static void write(Path dir, Map<String, String> files) {
-        try {
-            if (Files.isDirectory(dir)) {
-                try (var paths = Files.walk(dir)) {
-                    for (Path path : paths.sorted(Comparator.reverseOrder()).toList()) {
-                        Files.delete(path);
-                    }
-                }
-            }
-
-            Files.createDirectories(dir);
-
-            for (Map.Entry<String, String> entry : files.entrySet()) {
-                Path path = dir.resolve(entry.getKey());
-
-                Files.createDirectories(path.getParent());
-                Files.writeString(path, entry.getValue());
-            }
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-
-    @NotNull
-    private static Map<String, String> read(Path dir) {
-        Map<String, String> files = new TreeMap<>();
-
-        try (var paths = Files.walk(dir)) {
-            for (Path path : paths.filter(Files::isRegularFile).toList()) {
-                files.put(dir.relativize(path).toString().replace('\\', '/'), Files.readString(path));
-            }
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-
-        return files;
+        return GoldenFiles.fromProperties(Utils.MOD_ID).resolve(variant).compare(actual).stream().map((difference) -> variant + ": " + difference).toList();
     }
 
     public record Variant(String name, Function<AliConfig, Runnable> apply) {

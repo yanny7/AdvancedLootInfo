@@ -1,0 +1,19 @@
+{
+    "schemaVersion": 1,
+    "id": "awi_gametest",
+    "version": "1.0.0",
+    "name": "AWI GameTest",
+    "environment": "*",
+    "entrypoints": {
+        "fabric-gametest": [
+            "com.yanny.awi.fabric.gametest.WorldgenDataGameTest"
+        ]
+    },
+    "mixins": [
+        "awi.gametest.mixins.json"
+    ],
+    "depends": {
+        "awi": "*",
+        "fabric-gametest-api-v1": "*"
+    }
+}

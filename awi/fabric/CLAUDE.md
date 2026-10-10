@@ -14,3 +14,7 @@ Guidance for `awi/fabric` (`com.yanny.awi.fabric`) — AWI's Fabric loader entry
 ## Mixins
 
 The `mixin` package is empty except for `package-info.java` — no Fabric mixins are needed for AWI (contrast with `ali/fabric`'s `MixinLootTableFabric`/`MixinCombinedIngredient`, which exist because ALI needs to reach into loot-table internals AWI has no equivalent of).
+
+## Gametest
+
+The `gametest` source set (see `awi/CLAUDE.md`'s gametest section) is its own small mod, `awi_gametest`, whose `fabric.mod.json` registers the test class under the `fabric-gametest` entrypoint and `awi.gametest.mixins.json`. The run is wired like ALI's (see `ali/fabric/CLAUDE.md`).

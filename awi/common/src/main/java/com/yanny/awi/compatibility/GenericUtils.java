@@ -14,13 +14,12 @@ import com.yanny.awi.configuration.DimensionFilter;
 import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.network.AbstractClient;
 import com.yanny.awi.network.RequestWorldgenDataMessage;
+import com.yanny.awi.network.WorldgenDataReader;
 import com.yanny.awi.platform.Services;
 import com.yanny.awi.plugin.client.TooltipUtils;
 import com.yanny.awi.plugin.client.WidgetUtils;
 import com.yanny.awi.plugin.common.nodes.BiomeNode;
 import com.yanny.awi.plugin.common.nodes.LevelStemNode;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -41,8 +40,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
@@ -51,7 +48,6 @@ import java.util.Map;
 import java.util.concurrent.*;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
-import java.util.zip.GZIPInputStream;
 
 public class GenericUtils {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
@@ -66,20 +62,10 @@ public class GenericUtils {
             return worldgenData;
         }
 
-        ByteArrayInputStream bis = new ByteArrayInputStream(fullCompressedData);
-        ByteBuf decompressedBuf = Unpooled.buffer();
-
-        try (GZIPInputStream gzip = new GZIPInputStream(bis)) {
-            decompressedBuf.writeBytes(gzip.readAllBytes());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        FriendlyByteBuf buf = new FriendlyByteBuf(decompressedBuf);
+        FriendlyByteBuf buf = WorldgenDataReader.decompress(fullCompressedData);
 
         try {
-            utils.getTooltipCache().decode(utils, buf);
-            readWorldgenData(utils, buf, worldgenData);
+            WorldgenDataReader.decode(utils, buf, worldgenData);
 
             if (buf.isReadable()) {
                 LOGGER.warn("Worldgen payload has {} trailing byte(s) after decoding - the stream is desynchronized!", buf.readableBytes());
@@ -301,27 +287,5 @@ public class GenericUtils {
         }
 
         return cleanNamespace + " › " + cleanPath;
-    }
-
-    private static void readWorldgenData(IClientUtils utils, FriendlyByteBuf readerBuf, Map<ResourceLocation, LevelStemNode> lootData) {
-        int levelCount = readerBuf.readInt();
-
-        if (levelCount < 0 || levelCount > 4096) {
-            throw new IllegalStateException("Implausible level count " + levelCount + " at reader index "
-                    + readerBuf.readerIndex() + " - the stream is desynchronized.");
-        }
-
-        for (int i = 0; i < levelCount; i++) {
-            int startOfNode = readerBuf.readerIndex();
-            ResourceLocation location = readerBuf.readResourceLocation();
-
-            try {
-                lootData.put(location, (LevelStemNode) utils.getDataNodeFactory(LevelStemNode.ID).apply(utils, readerBuf));
-            } catch (Throwable e) {
-                LOGGER.error("Failed to decode level {}/{} {} - started at buffer offset {}, failed at {} ({} byte(s) left unread). Aborting, remaining levels will be missing.",
-                        i + 1, levelCount, location, startOfNode, readerBuf.readerIndex(), readerBuf.readableBytes(), e);
-                throw e;
-            }
-        }
     }
 }

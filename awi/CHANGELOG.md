@@ -1,6 +1,7 @@
 ## []
 
 - Tooltips wider than the window wrap their lines
+- Fixed blocks of a placed feature changing their order after every server restart
 
 ## [1.3.0]
 
