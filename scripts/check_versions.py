@@ -29,6 +29,7 @@ from modpack import (
     read_gradle_properties,
     read_pinned_deps,
     read_supported_mods,
+    version_key,
 )
 
 BLOCK_START = "# --- generated from supported_mods.json by check_versions.py, do not edit by hand ---"
@@ -259,7 +260,10 @@ def resolve(client: CurseForge, maven: Maven, entry: dict, pinned: dict):
     result = {"key": entry["key"], "loader": client.loader, "entry": entry}
     matches = pick_project(client, entry)
     current = pinned.get(entry["key"])
-    picked = None if matches else maven.pick(entry)
+    picked = maven.pick(entry)
+
+    if matches and picked and not newer_than_file(picked["version"], matches[0][2], client.minecraft_version):
+        picked = None
 
     if not matches and not picked:
         result["state"] = "unavailable" if current is None else "gone"
@@ -272,10 +276,10 @@ def resolve(client: CurseForge, maven: Maven, entry: dict, pinned: dict):
     if len(matches) > 1:
         result["ambiguous"] = [slug for slug, _, _ in matches]
 
-    if matches:
-        result["slug"], result["project_id"], result["latest"] = matches[0]
-    else:
+    if picked:
         result["latest"] = picked
+    else:
+        result["slug"], result["project_id"], result["latest"] = matches[0]
 
     pin = pin_of(result)
 
@@ -288,6 +292,12 @@ def resolve(client: CurseForge, maven: Maven, entry: dict, pinned: dict):
         result["state"] = "current"
 
     return result
+
+
+def newer_than_file(version: str, file: dict, minecraft_version: str):
+    """Whether a maven version is newer than the version a CurseForge file name carries; an unparsable name keeps the file."""
+    found = [found for found in re.findall(r"\d+(?:\.\d+)+", file["fileName"]) if found != minecraft_version]
+    return bool(found) and version_key(version) > version_key(found[-1])
 
 
 def current_file(client: CurseForge, maven: Maven, entry: dict, current: dict):
@@ -304,10 +314,14 @@ def read_runtime_deps(properties: dict, loader: str):
     }
 
 
-def resolve_runtime_deps(client: CurseForge, pins: dict, keys: list):
+def resolve_runtime_deps(client: CurseForge, entries: dict, pins: dict, keys: list):
     """The required dependencies of each pinned mod's file, recursively, as curse.maven coordinates:
-    a dependency that is itself pinned keeps its pin, anything else takes its newest file."""
+    a dependency that is itself a pinned registry mod keeps its pin, anything else takes its newest file."""
     pinned_projects = {pin["project_id"]: pin for pin in pins.values() if "project_id" in pin}
+    maven_projects = {
+        project_id: pins[key] for key, entry in entries.items() if "coordinates" in pins.get(key, {})
+        for _, project_id in map(parse_project, entry.get("curseforge", []))
+    }
     files = {}
     resolved = {}
 
@@ -345,6 +359,10 @@ def resolve_runtime_deps(client: CurseForge, pins: dict, keys: list):
                 mod = client.get_mods([project_id])
 
                 if not mod or mod[0]["slug"] in RUNTIME_EXCLUDED_SLUGS:
+                    continue
+
+                if project_id in maven_projects:
+                    found += maven_projects[project_id]["coordinates"]
                     continue
 
                 dependency_file = file_of(project_id)
@@ -427,11 +445,11 @@ def write_block(block: str, init: bool):
     return True
 
 
-def update_runtime_deps(clients, pins: dict, runtime: dict, deps: dict, enabled: set, checked_loaders: list, only):
+def update_runtime_deps(clients, entries: dict, pins: dict, runtime: dict, deps: dict, enabled: set, checked_loaders: list, only):
     for loader in checked_loaders:
         keys = sorted(key for key, owner in deps if owner == loader and key in enabled and (only is None or key == only))
         print(f"\nResolving the gametest runtime dependencies of {len(keys)} {loader} mods")
-        resolved = resolve_runtime_deps(clients[loader], pins[loader], keys)
+        resolved = resolve_runtime_deps(clients[loader], entries, pins[loader], keys)
 
         for key in keys:
             runtime.pop((key, loader), None)
@@ -485,7 +503,7 @@ def main():
 
     if args.runtime_deps:
         deps = {(key, loader): pin for loader in platforms for key, pin in pinned[loader].items() if key in entries}
-        update_runtime_deps(clients, pinned, runtime, deps, enabled, checked_loaders, None)
+        update_runtime_deps(clients, entries, pinned, runtime, deps, enabled, checked_loaders, None)
         return 0 if write_block(render_block(deps, entries, runtime), False) else 1
 
     deps = {}
@@ -623,7 +641,7 @@ def main():
         for result in scaffolds:
             print(f"\nScaffolded {scaffold(result['loader'], result['entry'])}")
 
-        update_runtime_deps(clients, {loader: {key: pin for (key, owner), pin in deps.items() if owner == loader} for loader in platforms},
+        update_runtime_deps(clients, entries, {loader: {key: pin for (key, owner), pin in deps.items() if owner == loader} for loader in platforms},
                             runtime, deps, enabled, checked_loaders, args.scaffold)
 
         if not write_block(render_block(deps, entries, runtime), args.init):

@@ -63,7 +63,19 @@
     "key": "computercraft",
     "name": "CC: Tweaked",
     "mod_ids": ["computercraft"],
-    "curseforge": ["cc-tweaked-282001"]
+    "curseforge": ["cc-tweaked-282001"],
+    "maven": [
+      {
+        "repo": "https://maven.squiddev.cc/",
+        "loaders": ["forge"],
+        "artifacts": ["cc.tweaked:cc-tweaked-1.20.1-forge"]
+      },
+      {
+        "repo": "https://maven.squiddev.cc/",
+        "loaders": ["fabric"],
+        "artifacts": ["cc.tweaked:cc-tweaked-1.20.1-fabric"]
+      }
+    ]
   },
   {
     "key": "deeperdarker",

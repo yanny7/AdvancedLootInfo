@@ -25,11 +25,9 @@ if (gametestMod) {
     def entry = new groovy.json.JsonSlurper().parse(rootProject.file("scripts/supported_mods.json")).find { it.key == gametestMod }
     def enabled = (project.findProperty("compat_mods") ?: "").split(",")*.trim().contains(gametestMod)
 
-    if (!entry || !enabled || !project.findProperty("${gametestMod}_${project.name}_dep")) {
-        throw new GradleException("alicompat_gametest=${gametestMod} is not a mod enabled in compat_mods with a ${project.name} dependency")
+    if (entry && enabled && project.findProperty("${gametestMod}_${project.name}_dep")) {
+        gametestModIds = entry.mod_ids.join(",")
     }
-
-    gametestModIds = entry.mod_ids.join(",")
 }
 
 loom {
@@ -71,6 +69,10 @@ tasks.matching { it.name == "runGametest" }.configureEach {
     timeout = java.time.Duration.ofMinutes(10)
 
     doFirst {
+        if (gametestMod && !gametestModIds) {
+            throw new GradleException("alicompat_gametest=${gametestMod} is not a mod enabled in compat_mods with a ${project.name} dependency")
+        }
+
         delete "build/gametest/run/config", "build/gametest/run/world", "build/gametest/run/mods"
 
         def modsDir = file("build/gametest/run/mods")
@@ -79,7 +81,7 @@ tasks.matching { it.name == "runGametest" }.configureEach {
         configurations.gametestNested.each { jar ->
             def outer = new java.util.zip.ZipFile(jar)
 
-            outer.entries().findAll { it.name ==~ /META-INF\/jars\/[^\/]+\.jar/ }.each { nested ->
+            outer.entries().findAll { it.name ==~ /META-INF\/(jars|jarjar)\/[^\/]+\.jar/ }.each { nested ->
                 def bytes = outer.getInputStream(nested).readAllBytes()
                 def input = new java.util.jar.JarInputStream(new ByteArrayInputStream(bytes))
                 def manifest = input.manifest ?: new java.util.jar.Manifest()

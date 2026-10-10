@@ -47,7 +47,7 @@
       },
       "maven": {
         "type": "array",
-        "description": "Maven repositories publishing this mod, consulted in order for a loader on which no CurseForge project has a file for the Minecraft version. The first source whose artifacts all share a version naming that Minecraft version wins, and the newest such version is pinned.",
+        "description": "Maven repositories publishing this mod, consulted in order for every loader they list. The first source whose artifacts all share a version naming that Minecraft version (in the version or in the artifact name) wins, and the newest such version is taken. It is pinned when no CurseForge project has a file for the loader, or when its version is newer than the one in the CurseForge file name.",
         "minItems": 1,
         "items": {
           "type": "object",

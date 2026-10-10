@@ -430,6 +430,13 @@ allprojects {
                 includeGroup "io.github.fabricators_of_create.Porting-Lib"
             }
         }
+        maven {
+            name = "CC: Tweaked"
+            url = "https://maven.squiddev.cc/"
+            content {
+                includeGroup "cc.tweaked"
+            }
+        }
         maven { // CurseForge
             url "https://www.cursemaven.com"
             content {

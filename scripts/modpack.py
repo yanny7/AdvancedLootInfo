@@ -167,12 +167,13 @@ class Maven:
         return [source for source in entry.get("maven", []) if self.loader in source["loaders"]]
 
     def pick(self, entry: dict):
-        """The newest version naming this Minecraft version that every artifact of the first such source has."""
+        """The newest version naming this Minecraft version, or of artifacts named after it, that every artifact of the first such source has."""
         pattern = re.compile(rf"(?<![\d.]){re.escape(self.minecraft_version)}(?![\d.])")
 
         for source in self.sources(entry):
             shared = set.intersection(*(self.versions(source["repo"], artifact) for artifact in source["artifacts"]))
-            matching = [version for version in shared if pattern.search(version)]
+            named = all(pattern.search(artifact) for artifact in source["artifacts"])
+            matching = [version for version in shared if named or pattern.search(version)]
 
             if matching:
                 version = max(matching, key=version_key)
