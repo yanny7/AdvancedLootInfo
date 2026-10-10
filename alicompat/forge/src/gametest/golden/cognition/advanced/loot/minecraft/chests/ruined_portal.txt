@@ -1,0 +1,151 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4 to 8
+    ali:item minecraft:obsidian x1
+      | Chance: 10.05%
+      | Count: max(0; U[1; 2])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
+    ali:item minecraft:flint x1
+      | Chance: 10.05%
+      | Count: max(0; U[1; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False
+    ali:item minecraft:iron_nugget x1
+      | Chance: 10.05%
+      | Count: max(0; U[9; 18])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 9 to 18
+      |   -> Add: False
+    ali:item minecraft:flint_and_steel x1 {Damage:0}
+      | Chance: 10.05%
+      | Count: 1
+    ali:item minecraft:fire_charge x1
+      | Chance: 10.05%
+      | Count: 1
+    ali:item minecraft:golden_apple x1
+      | Chance: 3.77%
+      | Count: 1
+    ali:item minecraft:gold_nugget x1
+      | Chance: 3.77%
+      | Count: max(0; U[4; 24])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4 to 24
+      |   -> Add: False
+    ali:item minecraft:golden_sword x1 {Damage:0}
+      | Chance: 3.77%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item minecraft:golden_axe x1 {Damage:0}
+      | Chance: 3.77%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item minecraft:golden_hoe x1 {Damage:0}
+      | Chance: 3.77%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item minecraft:golden_shovel x1 {Damage:0}
+      | Chance: 3.77%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item minecraft:golden_pickaxe x1 {Damage:0}
+      | Chance: 3.77%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item minecraft:golden_boots x1 {Damage:0}
+      | Chance: 3.77%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item minecraft:golden_chestplate x1 {Damage:0}
+      | Chance: 3.77%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item minecraft:golden_helmet x1 {Damage:0}
+      | Chance: 3.77%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item minecraft:golden_leggings x1 {Damage:0}
+      | Chance: 3.77%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item minecraft:glistering_melon_slice x1
+      | Chance: 1.26%
+      | Count: max(0; U[4; 12])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4 to 12
+      |   -> Add: False
+    ali:item minecraft:golden_horse_armor x1
+      | Chance: 1.26%
+      | Count: 1
+    ali:item minecraft:light_weighted_pressure_plate x1
+      | Chance: 1.26%
+      | Count: 1
+    ali:item minecraft:golden_carrot x1
+      | Chance: 1.26%
+      | Count: max(0; U[4; 12])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4 to 12
+      |   -> Add: False
+    ali:item minecraft:clock x1
+      | Chance: 1.26%
+      | Count: 1
+    ali:item minecraft:gold_ingot x1
+      | Chance: 1.26%
+      | Count: max(0; U[2; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 8
+      |   -> Add: False
+    ali:item minecraft:bell x1
+      | Chance: 0.25%
+      | Count: 1
+    ali:item minecraft:enchanted_golden_apple x1
+      | Chance: 0.25%
+      | Count: 1
+    ali:item minecraft:gold_block x1
+      | Chance: 0.25%
+      | Count: max(0; U[1; 2])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
+  ali:item experienceobelisk:cognitive_flux x1
+    | Chance: 60%
+    | Count: 4 to 20  ~4 (7%)
+    |   -> 4 (7.47%)
+    |   -> 5 (7.27%)
+    |   -> 6 (7.08%)
+    |   -> 7 (6.88%)
+    |   -> 8 (6.68%)
+    |   -> 9 (6.48%)
+    |   -> 10 (6.28%)
+    |   -> 11 (6.08%)
+    |   -> 12 (5.88%)
+    |   -> 13 (5.68%)
+    |   -> 14 (5.48%)
+    |   -> 15 (5.29%)
+    |   -> 16 (5.09%)
+    |   -> 17 (4.89%)
+    |   -> 18 (4.69%)
+    |   -> 19 (4.49%)
+    |   -> 20 (4.29%)
+    |   [chart 0..16 4-20 base=true modes=[true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false] heights=1.0000,0.9734,0.9468,0.9202,0.8936,0.8670,0.8404,0.8138,0.7872,0.7606,0.7340,0.7074,0.6808,0.6542,0.6276,0.6010,0.5743]
