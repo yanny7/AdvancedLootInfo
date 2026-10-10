@@ -1,0 +1,3080 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      | Chance: 80%
+      |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck)))
+      |   -> Bad Luck: 100%
+      |   -> Luck 1: 66.67%
+      |   -> Luck 2: 57.14%
+      |   -> Luck 3: 50%
+      |   -> Luck 4: 44.44%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:reference
+            | Selects all entries
+            | Chance: 25.86%
+            |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 32.32%
+            |   -> Bad Luck: 32.32%
+            |   -> Luck 1: 21.55%
+            |   -> Luck 2: 18.47%
+            |   -> Luck 3: 16.16%
+            |   -> Luck 4: 14.37%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:efficiency",lvl:5}]}
+                  | Chance: 1.62%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 2.02%
+                  |   -> Luck 1: 1.35%
+                  |   -> Luck 2: 1.15%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 0.9%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:efficiency",lvl:5}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:unbreaking",lvl:3}]}
+                  | Chance: 1.62%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 2.02%
+                  |   -> Luck 1: 1.35%
+                  |   -> Luck 2: 1.15%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 0.9%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:unbreaking",lvl:3}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:fortune",lvl:3}]}
+                  | Chance: 1.62%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 2.02%
+                  |   -> Luck 1: 1.35%
+                  |   -> Luck 2: 1.15%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 0.9%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:fortune",lvl:3}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:protection",lvl:4}]}
+                  | Chance: 1.62%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 2.02%
+                  |   -> Luck 1: 1.35%
+                  |   -> Luck 2: 1.15%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 0.9%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:protection",lvl:4}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:respiration",lvl:3}]}
+                  | Chance: 1.62%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 2.02%
+                  |   -> Luck 1: 1.35%
+                  |   -> Luck 2: 1.15%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 0.9%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:respiration",lvl:3}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:thorns",lvl:3}]}
+                  | Chance: 1.62%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 2.02%
+                  |   -> Luck 1: 1.35%
+                  |   -> Luck 2: 1.15%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 0.9%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:thorns",lvl:3}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:depth_strider",lvl:3}]}
+                  | Chance: 1.62%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 2.02%
+                  |   -> Luck 1: 1.35%
+                  |   -> Luck 2: 1.15%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 0.9%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:depth_strider",lvl:3}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:sharpness",lvl:5}]}
+                  | Chance: 1.62%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 2.02%
+                  |   -> Luck 1: 1.35%
+                  |   -> Luck 2: 1.15%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 0.9%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:sharpness",lvl:5}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:fire_aspect",lvl:2}]}
+                  | Chance: 1.62%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 2.02%
+                  |   -> Luck 1: 1.35%
+                  |   -> Luck 2: 1.15%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 0.9%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:fire_aspect",lvl:2}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:looting",lvl:3}]}
+                  | Chance: 1.62%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 2.02%
+                  |   -> Luck 1: 1.35%
+                  |   -> Luck 2: 1.15%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 0.9%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:looting",lvl:3}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:sweeping",lvl:3}]}
+                  | Chance: 1.62%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 2.02%
+                  |   -> Luck 1: 1.35%
+                  |   -> Luck 2: 1.15%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 0.9%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:sweeping",lvl:3}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:power",lvl:5}]}
+                  | Chance: 1.62%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 2.02%
+                  |   -> Luck 1: 1.35%
+                  |   -> Luck 2: 1.15%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 0.9%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:power",lvl:5}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:loyalty",lvl:3}]}
+                  | Chance: 1.62%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 2.02%
+                  |   -> Luck 1: 1.35%
+                  |   -> Luck 2: 1.15%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 0.9%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:loyalty",lvl:3}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:impaling",lvl:5}]}
+                  | Chance: 1.62%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 2.02%
+                  |   -> Luck 1: 1.35%
+                  |   -> Luck 2: 1.15%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 0.9%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:impaling",lvl:5}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:piercing",lvl:4}]}
+                  | Chance: 1.62%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 2.02%
+                  |   -> Luck 1: 1.35%
+                  |   -> Luck 2: 1.15%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 0.9%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:piercing",lvl:4}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:quick_charge",lvl:3}]}
+                  | Chance: 1.62%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 2.02%
+                  |   -> Luck 1: 1.35%
+                  |   -> Luck 2: 1.15%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 0.9%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:quick_charge",lvl:3}]}
+          ali:reference
+            | Selects all entries
+            | Chance: 16.16%
+            |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 20.2%
+            |   -> Bad Luck: 20.2%
+            |   -> Luck 1: 13.47%
+            |   -> Luck 2: 11.54%
+            |   -> Luck 3: 10.1%
+            |   -> Luck 4: 8.98%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:reference
+                  | Selects all entries
+                  | Chance: 2.69%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 3.37%
+                  |   -> Bad Luck: 3.37%
+                  |   -> Luck 1: 2.24%
+                  |   -> Luck 2: 1.92%
+                  |   -> Luck 3: 1.68%
+                  |   -> Luck 4: 1.5%
+                  ali:loot_table
+                    | Selects all entries
+                    ali:loot_pool
+                      | Selects random entry
+                      | Rolls: 27
+                      ali:item minecraft:cooked_beef x1
+                        | Chance: 0.85%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 1.06%
+                        |   -> Bad Luck: 1.06%
+                        |   -> Luck 1: 0.71%
+                        |   -> Luck 2: 0.61%
+                        |   -> Luck 3: 0.53%
+                        |   -> Luck 4: 0.47%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:carrot x1
+                        | Chance: 0.28%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.35%
+                        |   -> Bad Luck: 0.35%
+                        |   -> Luck 1: 0.24%
+                        |   -> Luck 2: 0.2%
+                        |   -> Luck 3: 0.18%
+                        |   -> Luck 4: 0.16%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:sweet_berries x1
+                        | Chance: 0.28%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.35%
+                        |   -> Bad Luck: 0.35%
+                        |   -> Luck 1: 0.24%
+                        |   -> Luck 2: 0.2%
+                        |   -> Luck 3: 0.18%
+                        |   -> Luck 4: 0.16%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:cooked_cod x1
+                        | Chance: 0.28%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.35%
+                        |   -> Bad Luck: 0.35%
+                        |   -> Luck 1: 0.24%
+                        |   -> Luck 2: 0.2%
+                        |   -> Luck 3: 0.18%
+                        |   -> Luck 4: 0.16%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:bread x1
+                        | Chance: 0.21%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.27%
+                        |   -> Bad Luck: 0.27%
+                        |   -> Luck 1: 0.18%
+                        |   -> Luck 2: 0.15%
+                        |   -> Luck 3: 0.13%
+                        |   -> Luck 4: 0.12%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:glow_berries x1
+                        | Chance: 0.21%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.27%
+                        |   -> Bad Luck: 0.27%
+                        |   -> Luck 1: 0.18%
+                        |   -> Luck 2: 0.15%
+                        |   -> Luck 3: 0.13%
+                        |   -> Luck 4: 0.12%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:honey_bottle x1
+                        | Chance: 0.21%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.27%
+                        |   -> Bad Luck: 0.27%
+                        |   -> Luck 1: 0.18%
+                        |   -> Luck 2: 0.15%
+                        |   -> Luck 3: 0.13%
+                        |   -> Luck 4: 0.12%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:apple x1
+                        | Chance: 0.21%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.27%
+                        |   -> Bad Luck: 0.27%
+                        |   -> Luck 1: 0.18%
+                        |   -> Luck 2: 0.15%
+                        |   -> Luck 3: 0.13%
+                        |   -> Luck 4: 0.12%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:cookie x1
+                        | Chance: 0.14%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.18%
+                        |   -> Bad Luck: 0.18%
+                        |   -> Luck 1: 0.12%
+                        |   -> Luck 2: 0.1%
+                        |   -> Luck 3: 0.09%
+                        |   -> Luck 4: 0.08%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                ali:reference
+                  | Selects all entries
+                  | Chance: 2.69%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 3.37%
+                  |   -> Bad Luck: 3.37%
+                  |   -> Luck 1: 2.24%
+                  |   -> Luck 2: 1.92%
+                  |   -> Luck 3: 1.68%
+                  |   -> Luck 4: 1.5%
+                  ali:loot_table
+                    | Selects all entries
+                    ali:loot_pool
+                      | Selects random entry
+                      | Rolls: 27
+                      ali:item minecraft:white_concrete x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:orange_concrete x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:magenta_concrete x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:light_blue_concrete x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:yellow_concrete x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:lime_concrete x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:pink_concrete x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:gray_concrete x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:light_gray_concrete x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:cyan_concrete x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:purple_concrete x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:blue_concrete x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:brown_concrete x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:green_concrete x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:red_concrete x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:black_concrete x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:white_terracotta x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:orange_terracotta x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:magenta_terracotta x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:light_blue_terracotta x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:yellow_terracotta x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:lime_terracotta x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:pink_terracotta x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:gray_terracotta x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:light_gray_terracotta x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:cyan_terracotta x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:purple_terracotta x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:blue_terracotta x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:brown_terracotta x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:green_terracotta x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:red_terracotta x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:black_terracotta x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                ali:reference
+                  | Selects all entries
+                  | Chance: 2.69%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 3.37%
+                  |   -> Bad Luck: 3.37%
+                  |   -> Luck 1: 2.24%
+                  |   -> Luck 2: 1.92%
+                  |   -> Luck 3: 1.68%
+                  |   -> Luck 4: 1.5%
+                  ali:loot_table
+                    | Selects all entries
+                    ali:loot_pool
+                      | Selects random entry
+                      | Rolls: 27
+                      ali:item minecraft:tinted_glass x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:white_stained_glass x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:orange_stained_glass x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:magenta_stained_glass x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:light_blue_stained_glass x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:yellow_stained_glass x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:lime_stained_glass x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:pink_stained_glass x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:gray_stained_glass x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:light_gray_stained_glass x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:cyan_stained_glass x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:purple_stained_glass x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:blue_stained_glass x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:brown_stained_glass x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:green_stained_glass x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:red_stained_glass x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:black_stained_glass x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:white_stained_glass_pane x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:orange_stained_glass_pane x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:magenta_stained_glass_pane x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:light_blue_stained_glass_pane x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:yellow_stained_glass_pane x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:lime_stained_glass_pane x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:pink_stained_glass_pane x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:gray_stained_glass_pane x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:light_gray_stained_glass_pane x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:cyan_stained_glass_pane x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:purple_stained_glass_pane x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:blue_stained_glass_pane x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:brown_stained_glass_pane x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:green_stained_glass_pane x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:red_stained_glass_pane x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:black_stained_glass_pane x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                ali:reference
+                  | Selects all entries
+                  | Chance: 2.69%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 3.37%
+                  |   -> Bad Luck: 3.37%
+                  |   -> Luck 1: 2.24%
+                  |   -> Luck 2: 1.92%
+                  |   -> Luck 3: 1.68%
+                  |   -> Luck 4: 1.5%
+                  ali:loot_table
+                    | Selects all entries
+                    ali:loot_pool
+                      | Selects random entry
+                      | Rolls: 27
+                      ali:item minecraft:redstone x1
+                        | Chance: 1.58%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 1.98%
+                        |   -> Bad Luck: 1.98%
+                        |   -> Luck 1: 1.32%
+                        |   -> Luck 2: 1.13%
+                        |   -> Luck 3: 0.99%
+                        |   -> Luck 4: 0.88%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:hopper x1
+                        | Chance: 0.32%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.4%
+                        |   -> Bad Luck: 0.4%
+                        |   -> Luck 1: 0.26%
+                        |   -> Luck 2: 0.23%
+                        |   -> Luck 3: 0.2%
+                        |   -> Luck 4: 0.18%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:redstone_torch x1
+                        | Chance: 0.16%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.2%
+                        |   -> Bad Luck: 0.2%
+                        |   -> Luck 1: 0.13%
+                        |   -> Luck 2: 0.11%
+                        |   -> Luck 3: 0.1%
+                        |   -> Luck 4: 0.09%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:repeater x1
+                        | Chance: 0.16%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.2%
+                        |   -> Bad Luck: 0.2%
+                        |   -> Luck 1: 0.13%
+                        |   -> Luck 2: 0.11%
+                        |   -> Luck 3: 0.1%
+                        |   -> Luck 4: 0.09%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:piston x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.04%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:sticky_piston x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.04%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:comparator x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.04%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:daylight_detector x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.04%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:redstone_lamp x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.04%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:observer x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.1%
+                        |   -> Bad Luck: 0.1%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.04%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                ali:reference
+                  | Selects all entries
+                  | Chance: 2.69%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 3.37%
+                  |   -> Bad Luck: 3.37%
+                  |   -> Luck 1: 2.24%
+                  |   -> Luck 2: 1.92%
+                  |   -> Luck 3: 1.68%
+                  |   -> Luck 4: 1.5%
+                  ali:loot_table
+                    | Selects all entries
+                    ali:loot_pool
+                      | Selects random entry
+                      | Rolls: 27
+                      ali:item minecraft:white_wool x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:orange_wool x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:magenta_wool x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:light_blue_wool x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:yellow_wool x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:lime_wool x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:pink_wool x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:gray_wool x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:light_gray_wool x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:cyan_wool x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:purple_wool x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:blue_wool x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:brown_wool x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:green_wool x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:red_wool x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:black_wool x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:white_banner x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:orange_banner x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:magenta_banner x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:light_blue_banner x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:yellow_banner x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:lime_banner x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:pink_banner x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:gray_banner x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:light_gray_banner x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:cyan_banner x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:purple_banner x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:blue_banner x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:brown_banner x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:green_banner x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:red_banner x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:black_banner x1
+                        | Chance: 0.08%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.11%
+                        |   -> Bad Luck: 0.11%
+                        |   -> Luck 1: 0.07%
+                        |   -> Luck 2: 0.06%
+                        |   -> Luck 3: 0.05%
+                        |   -> Luck 4: 0.05%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                ali:reference
+                  | Selects all entries
+                  | Chance: 2.69%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 3.37%
+                  |   -> Bad Luck: 3.37%
+                  |   -> Luck 1: 2.24%
+                  |   -> Luck 2: 1.92%
+                  |   -> Luck 3: 1.68%
+                  |   -> Luck 4: 1.5%
+                  ali:loot_table
+                    | Selects all entries
+                    ali:loot_pool
+                      | Selects random entry
+                      | Rolls: 27
+                      ali:item minecraft:brick x1
+                        | Chance: 0.81%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 1.01%
+                        |   -> Bad Luck: 1.01%
+                        |   -> Luck 1: 0.67%
+                        |   -> Luck 2: 0.58%
+                        |   -> Luck 3: 0.51%
+                        |   -> Luck 4: 0.45%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:clay_ball x1
+                        | Chance: 0.54%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.67%
+                        |   -> Bad Luck: 0.67%
+                        |   -> Luck 1: 0.45%
+                        |   -> Luck 2: 0.38%
+                        |   -> Luck 3: 0.34%
+                        |   -> Luck 4: 0.3%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:clay x1
+                        | Chance: 0.27%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.34%
+                        |   -> Bad Luck: 0.34%
+                        |   -> Luck 1: 0.22%
+                        |   -> Luck 2: 0.19%
+                        |   -> Luck 3: 0.17%
+                        |   -> Luck 4: 0.15%
+                        | Count: max(0; U[2; 4])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 2 to 4
+                        |   -> Add: False
+                      ali:item minecraft:flower_pot x1
+                        | Chance: 0.27%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.34%
+                        |   -> Bad Luck: 0.34%
+                        |   -> Luck 1: 0.22%
+                        |   -> Luck 2: 0.19%
+                        |   -> Luck 3: 0.17%
+                        |   -> Luck 4: 0.15%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:decorated_pot x1
+                        | Chance: 0.27%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.34%
+                        |   -> Bad Luck: 0.34%
+                        |   -> Luck 1: 0.22%
+                        |   -> Luck 2: 0.19%
+                        |   -> Luck 3: 0.17%
+                        |   -> Luck 4: 0.15%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:furnace x1
+                        | Chance: 0.27%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.34%
+                        |   -> Bad Luck: 0.34%
+                        |   -> Luck 1: 0.22%
+                        |   -> Luck 2: 0.19%
+                        |   -> Luck 3: 0.17%
+                        |   -> Luck 4: 0.15%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:reference
+                        | Selects all entries
+                        | Chance: 0.27%
+                        |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.34%
+                        |   -> Bad Luck: 0.34%
+                        |   -> Luck 1: 0.22%
+                        |   -> Luck 2: 0.19%
+                        |   -> Luck 3: 0.17%
+                        |   -> Luck 4: 0.15%
+                        ali:loot_table
+                          | Selects all entries
+                          ali:loot_pool
+                            | Selects random entry
+                            | Rolls: 1
+                            ali:item minecraft:angler_pottery_sherd x1
+                              | Chance: 0.01%
+                              |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.02%
+                              |   -> Bad Luck: 0.02%
+                              |   -> Luck 1: 0.01%
+                              |   -> Luck 2: 0.01%
+                              |   -> Luck 3: 0.01%
+                              |   -> Luck 4: 0.01%
+                              | Count: 1
+                            ali:item minecraft:archer_pottery_sherd x1
+                              | Chance: 0.01%
+                              |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.02%
+                              |   -> Bad Luck: 0.02%
+                              |   -> Luck 1: 0.01%
+                              |   -> Luck 2: 0.01%
+                              |   -> Luck 3: 0.01%
+                              |   -> Luck 4: 0.01%
+                              | Count: 1
+                            ali:item minecraft:arms_up_pottery_sherd x1
+                              | Chance: 0.01%
+                              |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.02%
+                              |   -> Bad Luck: 0.02%
+                              |   -> Luck 1: 0.01%
+                              |   -> Luck 2: 0.01%
+                              |   -> Luck 3: 0.01%
+                              |   -> Luck 4: 0.01%
+                              | Count: 1
+                            ali:item minecraft:blade_pottery_sherd x1
+                              | Chance: 0.01%
+                              |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.02%
+                              |   -> Bad Luck: 0.02%
+                              |   -> Luck 1: 0.01%
+                              |   -> Luck 2: 0.01%
+                              |   -> Luck 3: 0.01%
+                              |   -> Luck 4: 0.01%
+                              | Count: 1
+                            ali:item minecraft:brewer_pottery_sherd x1
+                              | Chance: 0.01%
+                              |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.02%
+                              |   -> Bad Luck: 0.02%
+                              |   -> Luck 1: 0.01%
+                              |   -> Luck 2: 0.01%
+                              |   -> Luck 3: 0.01%
+                              |   -> Luck 4: 0.01%
+                              | Count: 1
+                            ali:item minecraft:burn_pottery_sherd x1
+                              | Chance: 0.01%
+                              |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.02%
+                              |   -> Bad Luck: 0.02%
+                              |   -> Luck 1: 0.01%
+                              |   -> Luck 2: 0.01%
+                              |   -> Luck 3: 0.01%
+                              |   -> Luck 4: 0.01%
+                              | Count: 1
+                            ali:item minecraft:danger_pottery_sherd x1
+                              | Chance: 0.01%
+                              |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.02%
+                              |   -> Bad Luck: 0.02%
+                              |   -> Luck 1: 0.01%
+                              |   -> Luck 2: 0.01%
+                              |   -> Luck 3: 0.01%
+                              |   -> Luck 4: 0.01%
+                              | Count: 1
+                            ali:item minecraft:explorer_pottery_sherd x1
+                              | Chance: 0.01%
+                              |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.02%
+                              |   -> Bad Luck: 0.02%
+                              |   -> Luck 1: 0.01%
+                              |   -> Luck 2: 0.01%
+                              |   -> Luck 3: 0.01%
+                              |   -> Luck 4: 0.01%
+                              | Count: 1
+                            ali:item minecraft:friend_pottery_sherd x1
+                              | Chance: 0.01%
+                              |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.02%
+                              |   -> Bad Luck: 0.02%
+                              |   -> Luck 1: 0.01%
+                              |   -> Luck 2: 0.01%
+                              |   -> Luck 3: 0.01%
+                              |   -> Luck 4: 0.01%
+                              | Count: 1
+                            ali:item minecraft:heart_pottery_sherd x1
+                              | Chance: 0.01%
+                              |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.02%
+                              |   -> Bad Luck: 0.02%
+                              |   -> Luck 1: 0.01%
+                              |   -> Luck 2: 0.01%
+                              |   -> Luck 3: 0.01%
+                              |   -> Luck 4: 0.01%
+                              | Count: 1
+                            ali:item minecraft:heartbreak_pottery_sherd x1
+                              | Chance: 0.01%
+                              |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.02%
+                              |   -> Bad Luck: 0.02%
+                              |   -> Luck 1: 0.01%
+                              |   -> Luck 2: 0.01%
+                              |   -> Luck 3: 0.01%
+                              |   -> Luck 4: 0.01%
+                              | Count: 1
+                            ali:item minecraft:howl_pottery_sherd x1
+                              | Chance: 0.01%
+                              |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.02%
+                              |   -> Bad Luck: 0.02%
+                              |   -> Luck 1: 0.01%
+                              |   -> Luck 2: 0.01%
+                              |   -> Luck 3: 0.01%
+                              |   -> Luck 4: 0.01%
+                              | Count: 1
+                            ali:item minecraft:miner_pottery_sherd x1
+                              | Chance: 0.01%
+                              |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.02%
+                              |   -> Bad Luck: 0.02%
+                              |   -> Luck 1: 0.01%
+                              |   -> Luck 2: 0.01%
+                              |   -> Luck 3: 0.01%
+                              |   -> Luck 4: 0.01%
+                              | Count: 1
+                            ali:item minecraft:mourner_pottery_sherd x1
+                              | Chance: 0.01%
+                              |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.02%
+                              |   -> Bad Luck: 0.02%
+                              |   -> Luck 1: 0.01%
+                              |   -> Luck 2: 0.01%
+                              |   -> Luck 3: 0.01%
+                              |   -> Luck 4: 0.01%
+                              | Count: 1
+                            ali:item minecraft:plenty_pottery_sherd x1
+                              | Chance: 0.01%
+                              |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.02%
+                              |   -> Bad Luck: 0.02%
+                              |   -> Luck 1: 0.01%
+                              |   -> Luck 2: 0.01%
+                              |   -> Luck 3: 0.01%
+                              |   -> Luck 4: 0.01%
+                              | Count: 1
+                            ali:item minecraft:prize_pottery_sherd x1
+                              | Chance: 0.01%
+                              |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.02%
+                              |   -> Bad Luck: 0.02%
+                              |   -> Luck 1: 0.01%
+                              |   -> Luck 2: 0.01%
+                              |   -> Luck 3: 0.01%
+                              |   -> Luck 4: 0.01%
+                              | Count: 1
+                            ali:item minecraft:sheaf_pottery_sherd x1
+                              | Chance: 0.01%
+                              |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.02%
+                              |   -> Bad Luck: 0.02%
+                              |   -> Luck 1: 0.01%
+                              |   -> Luck 2: 0.01%
+                              |   -> Luck 3: 0.01%
+                              |   -> Luck 4: 0.01%
+                              | Count: 1
+                            ali:item minecraft:shelter_pottery_sherd x1
+                              | Chance: 0.01%
+                              |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.02%
+                              |   -> Bad Luck: 0.02%
+                              |   -> Luck 1: 0.01%
+                              |   -> Luck 2: 0.01%
+                              |   -> Luck 3: 0.01%
+                              |   -> Luck 4: 0.01%
+                              | Count: 1
+                            ali:item minecraft:skull_pottery_sherd x1
+                              | Chance: 0.01%
+                              |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.02%
+                              |   -> Bad Luck: 0.02%
+                              |   -> Luck 1: 0.01%
+                              |   -> Luck 2: 0.01%
+                              |   -> Luck 3: 0.01%
+                              |   -> Luck 4: 0.01%
+                              | Count: 1
+                            ali:item minecraft:snort_pottery_sherd x1
+                              | Chance: 0.01%
+                              |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.02%
+                              |   -> Bad Luck: 0.02%
+                              |   -> Luck 1: 0.01%
+                              |   -> Luck 2: 0.01%
+                              |   -> Luck 3: 0.01%
+                              |   -> Luck 4: 0.01%
+                              | Count: 1
+          ali:item dimdungeons:item_portal_key x1
+            | Chance: 3.23%
+            |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 4.04%
+            |   -> Bad Luck: 4.04%
+            |   -> Luck 1: 2.69%
+            |   -> Luck 2: 2.31%
+            |   -> Luck 3: 2.02%
+            |   -> Luck 4: 1.8%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1
+            |   -> Add: False
+          ali:item minecraft:emerald x1
+            | Chance: 2.42%
+            |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 3.03%
+            |   -> Bad Luck: 3.03%
+            |   -> Luck 1: 2.02%
+            |   -> Luck 2: 1.73%
+            |   -> Luck 3: 1.52%
+            |   -> Luck 4: 1.35%
+            | Count: max(0; U[12; 24])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 12 to 24
+            |   -> Add: False
+          ali:item minecraft:lapis_block x1
+            | Chance: 2.42%
+            |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 3.03%
+            |   -> Bad Luck: 3.03%
+            |   -> Luck 1: 2.02%
+            |   -> Luck 2: 1.73%
+            |   -> Luck 3: 1.52%
+            |   -> Luck 4: 1.35%
+            | Count: max(0; U[3; 5])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 3 to 5
+            |   -> Add: False
+          ali:item minecraft:honey_block x1
+            | Chance: 2.42%
+            |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 3.03%
+            |   -> Bad Luck: 3.03%
+            |   -> Luck 1: 2.02%
+            |   -> Luck 2: 1.73%
+            |   -> Luck 3: 1.52%
+            |   -> Luck 4: 1.35%
+            | Count: max(0; U[6; 12])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 6 to 12
+            |   -> Add: False
+          ali:item minecraft:tnt x1
+            | Chance: 2.42%
+            |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 3.03%
+            |   -> Bad Luck: 3.03%
+            |   -> Luck 1: 2.02%
+            |   -> Luck 2: 1.73%
+            |   -> Luck 3: 1.52%
+            |   -> Luck 4: 1.35%
+            | Count: max(0; U[10; 20])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 10 to 20
+            |   -> Add: False
+          ali:item minecraft:golden_apple x1
+            | Chance: 2.42%
+            |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 3.03%
+            |   -> Bad Luck: 3.03%
+            |   -> Luck 1: 2.02%
+            |   -> Luck 2: 1.73%
+            |   -> Luck 3: 1.52%
+            |   -> Luck 4: 1.35%
+            | Count: max(0; U[1; 2])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1 to 2
+            |   -> Add: False
+          ali:item minecraft:turtle_egg x1
+            | Chance: 2.42%
+            |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 3.03%
+            |   -> Bad Luck: 3.03%
+            |   -> Luck 1: 2.02%
+            |   -> Luck 2: 1.73%
+            |   -> Luck 3: 1.52%
+            |   -> Luck 4: 1.35%
+            | Count: max(0; U[1; 2])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1 to 2
+            |   -> Add: False
+          ali:item minecraft:potion x1 {Potion:"minecraft:luck"}
+            | Chance: 2.42%
+            |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 3.03%
+            |   -> Bad Luck: 3.03%
+            |   -> Luck 1: 2.02%
+            |   -> Luck 2: 1.73%
+            |   -> Luck 3: 1.52%
+            |   -> Luck 4: 1.35%
+            | Count: max(0; U[1; 2])
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {Potion:"minecraft:luck"}
+            | Set Count:
+            |   -> Count: 1 to 2
+            |   -> Add: False
+          ali:item minecraft:splash_potion x1 {Potion:"minecraft:strong_harming"}
+            | Chance: 2.42%
+            |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 3.03%
+            |   -> Bad Luck: 3.03%
+            |   -> Luck 1: 2.02%
+            |   -> Luck 2: 1.73%
+            |   -> Luck 3: 1.52%
+            |   -> Luck 4: 1.35%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {Potion:"minecraft:strong_harming"}
+          ali:item minecraft:potion x1 {Potion:"minecraft:strong_leaping"}
+            | Chance: 2.42%
+            |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 3.03%
+            |   -> Bad Luck: 3.03%
+            |   -> Luck 1: 2.02%
+            |   -> Luck 2: 1.73%
+            |   -> Luck 3: 1.52%
+            |   -> Luck 4: 1.35%
+            | Count: max(0; U[1; 2])
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {Potion:"minecraft:strong_leaping"}
+            | Set Count:
+            |   -> Count: 1 to 2
+            |   -> Add: False
+          ali:item minecraft:potion x1 {Potion:"minecraft:regeneration"}
+            | Chance: 2.42%
+            |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 3.03%
+            |   -> Bad Luck: 3.03%
+            |   -> Luck 1: 2.02%
+            |   -> Luck 2: 1.73%
+            |   -> Luck 3: 1.52%
+            |   -> Luck 4: 1.35%
+            | Count: max(0; U[1; 2])
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {Potion:"minecraft:regeneration"}
+            | Set Count:
+            |   -> Count: 1 to 2
+            |   -> Add: False
+          ali:item minecraft:potion x1 {Potion:"minecraft:invisibility"}
+            | Chance: 2.42%
+            |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 3.03%
+            |   -> Bad Luck: 3.03%
+            |   -> Luck 1: 2.02%
+            |   -> Luck 2: 1.73%
+            |   -> Luck 3: 1.52%
+            |   -> Luck 4: 1.35%
+            | Count: max(0; U[1; 2])
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {Potion:"minecraft:invisibility"}
+            | Set Count:
+            |   -> Count: 1 to 2
+            |   -> Add: False
+          ali:item minecraft:firework_rocket x1 {Fireworks:{Flight:1b}}
+            | Chance: 2.42%
+            |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 3.03%
+            |   -> Bad Luck: 3.03%
+            |   -> Luck 1: 2.02%
+            |   -> Luck 2: 1.73%
+            |   -> Luck 3: 1.52%
+            |   -> Luck 4: 1.35%
+            | Count: max(0; U[24; 40])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 24 to 40
+            |   -> Add: False
+          ali:item minecraft:dragon_breath x1
+            | Chance: 2.42%
+            |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 3.03%
+            |   -> Bad Luck: 3.03%
+            |   -> Luck 1: 2.02%
+            |   -> Luck 2: 1.73%
+            |   -> Luck 3: 1.52%
+            |   -> Luck 4: 1.35%
+            | Count: max(0; U[3; 6])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 3 to 6
+            |   -> Add: False
+          ali:item minecraft:ender_pearl x1
+            | Chance: 2.42%
+            |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 3.03%
+            |   -> Bad Luck: 3.03%
+            |   -> Luck 1: 2.02%
+            |   -> Luck 2: 1.73%
+            |   -> Luck 3: 1.52%
+            |   -> Luck 4: 1.35%
+            | Count: max(0; U[4; 6])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 4 to 6
+            |   -> Add: False
+          ali:reference
+            | Selects all entries
+            | Chance: 0.81%
+            |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 1.01%
+            |   -> Bad Luck: 1.01%
+            |   -> Luck 1: 0.67%
+            |   -> Luck 2: 0.58%
+            |   -> Luck 3: 0.51%
+            |   -> Luck 4: 0.45%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:item dimdungeons:item_trophy_1 x1 {display:{Name:'{"bold":true,"color":"yellow","text":"1UP Mushroom"}'}}
+                  | Chance: 0.1%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.13%
+                  |   -> Bad Luck: 0.13%
+                  |   -> Luck 1: 0.08%
+                  |   -> Luck 2: 0.07%
+                  |   -> Luck 3: 0.06%
+                  |   -> Luck 4: 0.06%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Lore:
+                  |   -> Replace: True
+                  |   -> Lore:
+                  |     -> Trophy 1/8
+                  |     -> A rare mushroom. It will not grow on mycelium.
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                  | Set Name:
+                  |   -> Name: 1UP Mushroom
+                ali:item dimdungeons:item_trophy_2 x1 {display:{Name:'{"bold":true,"color":"yellow","text":"Master Sword"}'}}
+                  | Chance: 0.1%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.13%
+                  |   -> Bad Luck: 0.13%
+                  |   -> Luck 1: 0.08%
+                  |   -> Luck 2: 0.07%
+                  |   -> Luck 3: 0.06%
+                  |   -> Luck 4: 0.06%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Lore:
+                  |   -> Replace: True
+                  |   -> Lore:
+                  |     -> Trophy 2/8
+                  |     -> This blessed sword sleeps, waiting for a specific hero.
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                  | Set Name:
+                  |   -> Name: Master Sword
+                ali:item dimdungeons:item_trophy_3 x1 {display:{Name:'{"bold":true,"color":"yellow","text":"Ist Rune"}'}}
+                  | Chance: 0.1%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.13%
+                  |   -> Bad Luck: 0.13%
+                  |   -> Luck 1: 0.08%
+                  |   -> Luck 2: 0.07%
+                  |   -> Luck 3: 0.06%
+                  |   -> Luck 4: 0.06%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Lore:
+                  |   -> Replace: True
+                  |   -> Lore:
+                  |     -> Trophy 3/8
+                  |     -> A coveted symbol of greed. But aren't diamonds worth more than stone?
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                  | Set Name:
+                  |   -> Name: Ist Rune
+                ali:item dimdungeons:item_trophy_4 x1 {display:{Name:'{"bold":true,"color":"yellow","text":"The Terrarian"}'}}
+                  | Chance: 0.1%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.13%
+                  |   -> Bad Luck: 0.13%
+                  |   -> Luck 1: 0.08%
+                  |   -> Luck 2: 0.07%
+                  |   -> Luck 3: 0.06%
+                  |   -> Luck 4: 0.06%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Lore:
+                  |   -> Replace: True
+                  |   -> Lore:
+                  |     -> Trophy 4/8
+                  |     -> A most legendary yoyo from another world's moon.
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                  | Set Name:
+                  |   -> Name: The Terrarian
+                ali:item dimdungeons:item_trophy_5 x1 {display:{Name:'{"bold":true,"color":"yellow","text":"Matter Manipulator"}'}}
+                  | Chance: 0.1%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.13%
+                  |   -> Bad Luck: 0.13%
+                  |   -> Luck 1: 0.08%
+                  |   -> Luck 2: 0.07%
+                  |   -> Luck 3: 0.06%
+                  |   -> Luck 4: 0.06%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Lore:
+                  |   -> Replace: True
+                  |   -> Lore:
+                  |     -> Trophy 5/8
+                  |     -> A powerful mining tool from a far away galaxy.
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                  | Set Name:
+                  |   -> Name: Matter Manipulator
+                ali:item dimdungeons:item_trophy_6 x1 {display:{Name:'{"bold":true,"color":"yellow","text":"Sunlight Medal"}'}}
+                  | Chance: 0.1%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.13%
+                  |   -> Bad Luck: 0.13%
+                  |   -> Luck 1: 0.08%
+                  |   -> Luck 2: 0.07%
+                  |   -> Luck 3: 0.06%
+                  |   -> Luck 4: 0.06%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Lore:
+                  |   -> Replace: True
+                  |   -> Lore:
+                  |     -> Trophy 6/8
+                  |     -> Give this to a friend in the name of jolly cooperation!
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                  | Set Name:
+                  |   -> Name: Sunlight Medal
+                ali:item dimdungeons:item_trophy_7 x1 {display:{Name:'{"bold":true,"color":"yellow","text":"Pink Arrow Panel"}'}}
+                  | Chance: 0.1%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.13%
+                  |   -> Bad Luck: 0.13%
+                  |   -> Luck 1: 0.08%
+                  |   -> Luck 2: 0.07%
+                  |   -> Luck 3: 0.06%
+                  |   -> Luck 4: 0.06%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Lore:
+                  |   -> Replace: True
+                  |   -> Lore:
+                  |     -> Trophy 7/8
+                  |     -> What purpose does this magenta terracotta pressure plate serve?
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                  | Set Name:
+                  |   -> Name: Pink Arrow Panel
+                ali:item dimdungeons:item_trophy_8 x1 {display:{Name:'{"bold":true,"color":"yellow","text":"Ultros Painting"}'}}
+                  | Chance: 0.1%
+                  |   -> luck: 400% ÷ (400% + max(0%; 100% + floor(luck))) × 0.13%
+                  |   -> Bad Luck: 0.13%
+                  |   -> Luck 1: 0.08%
+                  |   -> Luck 2: 0.07%
+                  |   -> Luck 3: 0.06%
+                  |   -> Luck 4: 0.06%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Lore:
+                  |   -> Replace: True
+                  |   -> Lore:
+                  |     -> Trophy 8/8
+                  |     -> An image of a mischievous octopus from another world.
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                  | Set Name:
+                  |   -> Name: Ultros Painting
+    ali:reference
+      | Selects all entries
+      | Quality: 1
+      | Chance: 20%
+      |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck)))
+      |   -> Bad Luck: 0%
+      |   -> Luck 1: 33.33%
+      |   -> Luck 2: 42.86%
+      |   -> Luck 3: 50%
+      |   -> Luck 4: 55.56%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:reference
+            | Selects all entries
+            | Chance: 6.46%
+            |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 32.32%
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 10.77%
+            |   -> Luck 2: 13.85%
+            |   -> Luck 3: 16.16%
+            |   -> Luck 4: 17.96%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:unbreaking",lvl:3},{id:"minecraft:mending",lvl:1}]}
+                  | Chance: 0.81%
+                  |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 4.04%
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 1.35%
+                  |   -> Luck 2: 1.73%
+                  |   -> Luck 3: 2.02%
+                  |   -> Luck 4: 2.24%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:unbreaking",lvl:3},{id:"minecraft:mending",lvl:1}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:unbreaking",lvl:3},{id:"minecraft:silk_touch",lvl:1}]}
+                  | Chance: 0.4%
+                  |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 0.67%
+                  |   -> Luck 2: 0.87%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 1.12%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:unbreaking",lvl:3},{id:"minecraft:silk_touch",lvl:1}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:efficiency",lvl:5},{id:"minecraft:fortune",lvl:3}]}
+                  | Chance: 0.4%
+                  |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 0.67%
+                  |   -> Luck 2: 0.87%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 1.12%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:efficiency",lvl:5},{id:"minecraft:fortune",lvl:3}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:protection",lvl:4},{id:"minecraft:feather_falling",lvl:4}]}
+                  | Chance: 0.4%
+                  |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 0.67%
+                  |   -> Luck 2: 0.87%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 1.12%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:protection",lvl:4},{id:"minecraft:feather_falling",lvl:4}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:respiration",lvl:3},{id:"minecraft:aqua_affinity",lvl:1}]}
+                  | Chance: 0.4%
+                  |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 0.67%
+                  |   -> Luck 2: 0.87%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 1.12%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:respiration",lvl:3},{id:"minecraft:aqua_affinity",lvl:1}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:protection",lvl:4},{id:"minecraft:thorns",lvl:3}]}
+                  | Chance: 0.4%
+                  |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 0.67%
+                  |   -> Luck 2: 0.87%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 1.12%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:protection",lvl:4},{id:"minecraft:thorns",lvl:3}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:efficiency",lvl:5},{id:"minecraft:sharpness",lvl:5}]}
+                  | Chance: 0.4%
+                  |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 0.67%
+                  |   -> Luck 2: 0.87%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 1.12%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:efficiency",lvl:5},{id:"minecraft:sharpness",lvl:5}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:power",lvl:5},{id:"minecraft:infinity",lvl:1}]}
+                  | Chance: 0.4%
+                  |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 0.67%
+                  |   -> Luck 2: 0.87%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 1.12%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:power",lvl:5},{id:"minecraft:infinity",lvl:1}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:power",lvl:5},{id:"minecraft:mending",lvl:1}]}
+                  | Chance: 0.4%
+                  |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 0.67%
+                  |   -> Luck 2: 0.87%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 1.12%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:power",lvl:5},{id:"minecraft:mending",lvl:1}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:quick_charge",lvl:3},{id:"minecraft:piercing",lvl:4}]}
+                  | Chance: 0.4%
+                  |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 0.67%
+                  |   -> Luck 2: 0.87%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 1.12%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:quick_charge",lvl:3},{id:"minecraft:piercing",lvl:4}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:quick_charge",lvl:3},{id:"minecraft:multishot",lvl:1}]}
+                  | Chance: 0.4%
+                  |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 0.67%
+                  |   -> Luck 2: 0.87%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 1.12%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:quick_charge",lvl:3},{id:"minecraft:multishot",lvl:1}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:impaling",lvl:5},{id:"minecraft:loyalty",lvl:3}]}
+                  | Chance: 0.4%
+                  |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 0.67%
+                  |   -> Luck 2: 0.87%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 1.12%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:impaling",lvl:5},{id:"minecraft:loyalty",lvl:3}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:impaling",lvl:5},{id:"minecraft:riptide",lvl:3}]}
+                  | Chance: 0.4%
+                  |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 0.67%
+                  |   -> Luck 2: 0.87%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 1.12%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:impaling",lvl:5},{id:"minecraft:riptide",lvl:3}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:sharpness",lvl:5},{id:"minecraft:looting",lvl:3}]}
+                  | Chance: 0.4%
+                  |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 0.67%
+                  |   -> Luck 2: 0.87%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 1.12%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:sharpness",lvl:5},{id:"minecraft:looting",lvl:3}]}
+                ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:sharpness",lvl:5},{id:"minecraft:sweeping",lvl:3}]}
+                  | Chance: 0.4%
+                  |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 2.02%
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 0.67%
+                  |   -> Luck 2: 0.87%
+                  |   -> Luck 3: 1.01%
+                  |   -> Luck 4: 1.12%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {StoredEnchantments:[{id:"minecraft:sharpness",lvl:5},{id:"minecraft:sweeping",lvl:3}]}
+          ali:item dimdungeons:item_portal_key x1
+            | Chance: 1.41%
+            |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 7.07%
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 2.36%
+            |   -> Luck 2: 3.03%
+            |   -> Luck 3: 3.54%
+            |   -> Luck 4: 3.93%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1
+            |   -> Add: False
+          ali:item minecraft:diamond_chestplate x1 {Damage:0}
+            | Chance: 0.81%
+            |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 4.04%
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 1.35%
+            |   -> Luck 2: 1.73%
+            |   -> Luck 3: 2.02%
+            |   -> Luck 4: 2.24%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant With Levels:
+            |   -> Levels: 30 to 40
+            |   -> Treasure: False
+          ali:item minecraft:diamond_helmet x1 {Damage:0}
+            | Chance: 0.81%
+            |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 4.04%
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 1.35%
+            |   -> Luck 2: 1.73%
+            |   -> Luck 3: 2.02%
+            |   -> Luck 4: 2.24%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant With Levels:
+            |   -> Levels: 30 to 40
+            |   -> Treasure: False
+          ali:item minecraft:diamond_leggings x1 {Damage:0}
+            | Chance: 0.81%
+            |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 4.04%
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 1.35%
+            |   -> Luck 2: 1.73%
+            |   -> Luck 3: 2.02%
+            |   -> Luck 4: 2.24%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant With Levels:
+            |   -> Levels: 30 to 40
+            |   -> Treasure: False
+          ali:item minecraft:diamond_boots x1 {Damage:0}
+            | Chance: 0.81%
+            |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 4.04%
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 1.35%
+            |   -> Luck 2: 1.73%
+            |   -> Luck 3: 2.02%
+            |   -> Luck 4: 2.24%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant With Levels:
+            |   -> Levels: 30 to 40
+            |   -> Treasure: False
+          ali:item minecraft:diamond_pickaxe x1 {Damage:0}
+            | Chance: 0.81%
+            |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 4.04%
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 1.35%
+            |   -> Luck 2: 1.73%
+            |   -> Luck 3: 2.02%
+            |   -> Luck 4: 2.24%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant With Levels:
+            |   -> Levels: 30 to 40
+            |   -> Treasure: False
+          ali:item dimdungeons:item_secret_bell x1
+            | Chance: 0.81%
+            |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 4.04%
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 1.35%
+            |   -> Luck 2: 1.73%
+            |   -> Luck 3: 2.02%
+            |   -> Luck 4: 2.24%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1
+            |   -> Add: False
+          ali:item dimdungeons:block_key_charger x1
+            | Chance: 0.81%
+            |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 4.04%
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 1.35%
+            |   -> Luck 2: 1.73%
+            |   -> Luck 3: 2.02%
+            |   -> Luck 4: 2.24%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1
+            |   -> Add: False
+          ali:item dimdungeons:item_blank_teleporter_key x1
+            | Chance: 0.81%
+            |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 4.04%
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 1.35%
+            |   -> Luck 2: 1.73%
+            |   -> Luck 3: 2.02%
+            |   -> Luck 4: 2.24%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1
+            |   -> Add: False
+          ali:item minecraft:ancient_debris x1
+            | Chance: 0.61%
+            |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 3.03%
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 1.01%
+            |   -> Luck 2: 1.3%
+            |   -> Luck 3: 1.52%
+            |   -> Luck 4: 1.68%
+            | Count: max(0; U[1; 3])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1 to 3
+            |   -> Add: False
+          ali:item minecraft:totem_of_undying x1
+            | Chance: 0.61%
+            |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 3.03%
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 1.01%
+            |   -> Luck 2: 1.3%
+            |   -> Luck 3: 1.52%
+            |   -> Luck 4: 1.68%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1
+            |   -> Add: False
+          ali:item minecraft:shulker_box x1
+            | Chance: 0.61%
+            |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 3.03%
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 1.01%
+            |   -> Luck 2: 1.3%
+            |   -> Luck 3: 1.52%
+            |   -> Luck 4: 1.68%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1
+            |   -> Add: False
+          ali:item minecraft:ghast_tear x1
+            | Chance: 0.61%
+            |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 3.03%
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 1.01%
+            |   -> Luck 2: 1.3%
+            |   -> Luck 3: 1.52%
+            |   -> Luck 4: 1.68%
+            | Count: max(0; U[3; 6])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 3 to 6
+            |   -> Add: False
+          ali:item minecraft:trident x1 {Damage:0}
+            | Chance: 0.61%
+            |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 3.03%
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 1.01%
+            |   -> Luck 2: 1.3%
+            |   -> Luck 3: 1.52%
+            |   -> Luck 4: 1.68%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1
+            |   -> Add: False
+          ali:item minecraft:enchanted_golden_apple x1
+            | Chance: 0.61%
+            |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 3.03%
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 1.01%
+            |   -> Luck 2: 1.3%
+            |   -> Luck 3: 1.52%
+            |   -> Luck 4: 1.68%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1
+            |   -> Add: False
+          ali:item minecraft:diamond_sword x1 {Damage:0}
+            | Chance: 0.61%
+            |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 3.03%
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 1.01%
+            |   -> Luck 2: 1.3%
+            |   -> Luck 3: 1.52%
+            |   -> Luck 4: 1.68%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant With Levels:
+            |   -> Levels: 30 to 40
+            |   -> Treasure: False
+          ali:item minecraft:crossbow x1 {Damage:0}
+            | Chance: 0.61%
+            |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 3.03%
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 1.01%
+            |   -> Luck 2: 1.3%
+            |   -> Luck 3: 1.52%
+            |   -> Luck 4: 1.68%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant With Levels:
+            |   -> Levels: 30 to 40
+            |   -> Treasure: False
+          ali:item minecraft:bow x1 {Damage:0}
+            | Chance: 0.61%
+            |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 3.03%
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 1.01%
+            |   -> Luck 2: 1.3%
+            |   -> Luck 3: 1.52%
+            |   -> Luck 4: 1.68%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant With Levels:
+            |   -> Levels: 30 to 40
+            |   -> Treasure: False
+          ali:reference
+            | Selects all entries
+            | Chance: 0.2%
+            |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 1.01%
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 0.34%
+            |   -> Luck 2: 0.43%
+            |   -> Luck 3: 0.51%
+            |   -> Luck 4: 0.56%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:item dimdungeons:item_trophy_1 x1 {display:{Name:'{"bold":true,"color":"yellow","text":"1UP Mushroom"}'}}
+                  | Chance: 0.03%
+                  |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 0.13%
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 0.04%
+                  |   -> Luck 2: 0.05%
+                  |   -> Luck 3: 0.06%
+                  |   -> Luck 4: 0.07%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Lore:
+                  |   -> Replace: True
+                  |   -> Lore:
+                  |     -> Trophy 1/8
+                  |     -> A rare mushroom. It will not grow on mycelium.
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                  | Set Name:
+                  |   -> Name: 1UP Mushroom
+                ali:item dimdungeons:item_trophy_2 x1 {display:{Name:'{"bold":true,"color":"yellow","text":"Master Sword"}'}}
+                  | Chance: 0.03%
+                  |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 0.13%
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 0.04%
+                  |   -> Luck 2: 0.05%
+                  |   -> Luck 3: 0.06%
+                  |   -> Luck 4: 0.07%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Lore:
+                  |   -> Replace: True
+                  |   -> Lore:
+                  |     -> Trophy 2/8
+                  |     -> This blessed sword sleeps, waiting for a specific hero.
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                  | Set Name:
+                  |   -> Name: Master Sword
+                ali:item dimdungeons:item_trophy_3 x1 {display:{Name:'{"bold":true,"color":"yellow","text":"Ist Rune"}'}}
+                  | Chance: 0.03%
+                  |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 0.13%
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 0.04%
+                  |   -> Luck 2: 0.05%
+                  |   -> Luck 3: 0.06%
+                  |   -> Luck 4: 0.07%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Lore:
+                  |   -> Replace: True
+                  |   -> Lore:
+                  |     -> Trophy 3/8
+                  |     -> A coveted symbol of greed. But aren't diamonds worth more than stone?
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                  | Set Name:
+                  |   -> Name: Ist Rune
+                ali:item dimdungeons:item_trophy_4 x1 {display:{Name:'{"bold":true,"color":"yellow","text":"The Terrarian"}'}}
+                  | Chance: 0.03%
+                  |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 0.13%
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 0.04%
+                  |   -> Luck 2: 0.05%
+                  |   -> Luck 3: 0.06%
+                  |   -> Luck 4: 0.07%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Lore:
+                  |   -> Replace: True
+                  |   -> Lore:
+                  |     -> Trophy 4/8
+                  |     -> A most legendary yoyo from another world's moon.
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                  | Set Name:
+                  |   -> Name: The Terrarian
+                ali:item dimdungeons:item_trophy_5 x1 {display:{Name:'{"bold":true,"color":"yellow","text":"Matter Manipulator"}'}}
+                  | Chance: 0.03%
+                  |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 0.13%
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 0.04%
+                  |   -> Luck 2: 0.05%
+                  |   -> Luck 3: 0.06%
+                  |   -> Luck 4: 0.07%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Lore:
+                  |   -> Replace: True
+                  |   -> Lore:
+                  |     -> Trophy 5/8
+                  |     -> A powerful mining tool from a far away galaxy.
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                  | Set Name:
+                  |   -> Name: Matter Manipulator
+                ali:item dimdungeons:item_trophy_6 x1 {display:{Name:'{"bold":true,"color":"yellow","text":"Sunlight Medal"}'}}
+                  | Chance: 0.03%
+                  |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 0.13%
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 0.04%
+                  |   -> Luck 2: 0.05%
+                  |   -> Luck 3: 0.06%
+                  |   -> Luck 4: 0.07%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Lore:
+                  |   -> Replace: True
+                  |   -> Lore:
+                  |     -> Trophy 6/8
+                  |     -> Give this to a friend in the name of jolly cooperation!
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                  | Set Name:
+                  |   -> Name: Sunlight Medal
+                ali:item dimdungeons:item_trophy_7 x1 {display:{Name:'{"bold":true,"color":"yellow","text":"Pink Arrow Panel"}'}}
+                  | Chance: 0.03%
+                  |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 0.13%
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 0.04%
+                  |   -> Luck 2: 0.05%
+                  |   -> Luck 3: 0.06%
+                  |   -> Luck 4: 0.07%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Lore:
+                  |   -> Replace: True
+                  |   -> Lore:
+                  |     -> Trophy 7/8
+                  |     -> What purpose does this magenta terracotta pressure plate serve?
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                  | Set Name:
+                  |   -> Name: Pink Arrow Panel
+                ali:item dimdungeons:item_trophy_8 x1 {display:{Name:'{"bold":true,"color":"yellow","text":"Ultros Painting"}'}}
+                  | Chance: 0.03%
+                  |   -> luck: max(0%; 100% + floor(luck)) ÷ (400% + max(0%; 100% + floor(luck))) × 0.13%
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 0.04%
+                  |   -> Luck 2: 0.05%
+                  |   -> Luck 3: 0.06%
+                  |   -> Luck 4: 0.07%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Lore:
+                  |   -> Replace: True
+                  |   -> Lore:
+                  |     -> Trophy 8/8
+                  |     -> An image of a mischievous octopus from another world.
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                  | Set Name:
+                  |   -> Name: Ultros Painting
