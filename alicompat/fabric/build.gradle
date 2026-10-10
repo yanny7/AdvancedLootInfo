@@ -14,7 +14,7 @@ sourceSets {
         java.srcDir project(":alicompat:common").file("src/gametest/java")
         java.exclude "com/yanny/ali/gametest/LootDataGolden.java"
         compileClasspath += sourceSets.main.compileClasspath + sourceSets.main.output
-        runtimeClasspath += sourceSets.main.runtimeClasspath + sourceSets.main.output
+        runtimeClasspath += sourceSets.main.runtimeClasspath.filter { !(it.name ==~ /(jei|emi)-.*/) } + sourceSets.main.output
     }
 }
 

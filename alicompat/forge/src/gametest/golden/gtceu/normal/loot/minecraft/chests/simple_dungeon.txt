@@ -1,0 +1,383 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 3
+    ali:item gtceu:silver_ingot x1
+      | Quality: 1
+      | Chance: 14.83%
+      |   -> Bad Luck: 15.01%
+      |   -> Luck 1: 14.67%
+      |   -> Luck 2: 14.51%
+      |   -> Luck 3: 14.35%
+      |   -> Luck 4: 14.2%
+      | Count: 1 to 6
+      | ----- Modifiers -----
+      | Random Weight:
+      |   -> Item:
+      |     -> Item: Silver Ingot
+      |     -> Count: 1
+      |   -> Count: 1 to 6
+    ali:item gtceu:purple_drink x1
+      | Quality: 1
+      | Chance: 9.89%
+      |   -> Bad Luck: 9.96%
+      |   -> Luck 1: 9.82%
+      |   -> Luck 2: 9.75%
+      |   -> Luck 3: 9.68%
+      |   -> Luck 4: 9.62%
+      | Count: 4 to 8
+      | ----- Modifiers -----
+      | Random Weight:
+      |   -> Item:
+      |     -> Item: Purple Drink
+      |     -> Count: 1
+      |   -> Count: 4 to 8
+    ali:item gtceu:steel_ingot x1
+      | Quality: 1
+      | Chance: 7.42%
+      |   -> Bad Luck: 7.44%
+      |   -> Luck 1: 7.39%
+      |   -> Luck 2: 7.37%
+      |   -> Luck 3: 7.35%
+      |   -> Luck 4: 7.33%
+      | Count: 1 to 6
+      | ----- Modifiers -----
+      | Random Weight:
+      |   -> Item:
+      |     -> Item: Steel Ingot
+      |     -> Count: 1
+      |   -> Count: 1 to 6
+    ali:item gtceu:bronze_ingot x1
+      | Quality: 1
+      | Chance: 7.42%
+      |   -> Bad Luck: 7.44%
+      |   -> Luck 1: 7.39%
+      |   -> Luck 2: 7.37%
+      |   -> Luck 3: 7.35%
+      |   -> Luck 4: 7.33%
+      | Count: 1 to 6
+      | ----- Modifiers -----
+      | Random Weight:
+      |   -> Item:
+      |     -> Item: Bronze Ingot
+      |     -> Count: 1
+      |   -> Count: 1 to 6
+    ali:item gtceu:manganese_ingot x1
+      | Quality: 1
+      | Chance: 7.42%
+      |   -> Bad Luck: 7.44%
+      |   -> Luck 1: 7.39%
+      |   -> Luck 2: 7.37%
+      |   -> Luck 3: 7.35%
+      |   -> Luck 4: 7.33%
+      | Count: 1 to 6
+      | ----- Modifiers -----
+      | Random Weight:
+      |   -> Item:
+      |     -> Item: Manganese Ingot
+      |     -> Count: 1
+      |   -> Count: 1 to 6
+    ali:item gtceu:red_garnet_gem x1
+      | Quality: 1
+      | Chance: 4.94%
+      |   -> Bad Luck: 4.92%
+      |   -> Luck 1: 4.97%
+      |   -> Luck 2: 4.99%
+      |   -> Luck 3: 5.02%
+      |   -> Luck 4: 5.04%
+      | Count: 1 to 6
+      | ----- Modifiers -----
+      | Random Weight:
+      |   -> Item:
+      |     -> Item: Red Garnet
+      |     -> Count: 1
+      |   -> Count: 1 to 6
+    ali:item gtceu:yellow_garnet_gem x1
+      | Quality: 1
+      | Chance: 4.94%
+      |   -> Bad Luck: 4.92%
+      |   -> Luck 1: 4.97%
+      |   -> Luck 2: 4.99%
+      |   -> Luck 3: 5.02%
+      |   -> Luck 4: 5.04%
+      | Count: 1 to 6
+      | ----- Modifiers -----
+      | Random Weight:
+      |   -> Item:
+      |     -> Item: Yellow Garnet
+      |     -> Count: 1
+      |   -> Count: 1 to 6
+    ali:item gtceu:neodymium_dust x1
+      | Quality: 1
+      | Chance: 4.94%
+      |   -> Bad Luck: 4.92%
+      |   -> Luck 1: 4.97%
+      |   -> Luck 2: 4.99%
+      |   -> Luck 3: 5.02%
+      |   -> Luck 4: 5.04%
+      | Count: 1 to 6
+      | ----- Modifiers -----
+      | Random Weight:
+      |   -> Item:
+      |     -> Item: Neodymium Dust
+      |     -> Count: 1
+      |   -> Count: 1 to 6
+    ali:item gtceu:chromium_dust x1
+      | Quality: 1
+      | Chance: 4.94%
+      |   -> Bad Luck: 4.92%
+      |   -> Luck 1: 4.97%
+      |   -> Luck 2: 4.99%
+      |   -> Luck 3: 5.02%
+      |   -> Luck 4: 5.04%
+      | Count: 1 to 3
+      | ----- Modifiers -----
+      | Random Weight:
+      |   -> Item:
+      |     -> Item: Chromium Dust
+      |     -> Count: 1
+      |   -> Count: 1 to 3
+    ali:item gtceu:lead_ingot x1
+      | Quality: 1
+      | Chance: 3.71%
+      |   -> Bad Luck: 3.66%
+      |   -> Luck 1: 3.76%
+      |   -> Luck 2: 3.8%
+      |   -> Luck 3: 3.85%
+      |   -> Luck 4: 3.89%
+      | Count: 1 to 6
+      | ----- Modifiers -----
+      | Random Weight:
+      |   -> Item:
+      |     -> Item: Lead Ingot
+      |     -> Count: 1
+      |   -> Count: 1 to 6
+    ali:item minecraft:saddle x1
+      | Chance: 2.47%
+      |   -> Bad Luck: 2.52%
+      |   -> Luck 1: 2.42%
+      |   -> Luck 2: 2.38%
+      |   -> Luck 3: 2.33%
+      |   -> Luck 4: 2.29%
+      | Count: 1
+    ali:item minecraft:name_tag x1
+      | Chance: 2.47%
+      |   -> Bad Luck: 2.52%
+      |   -> Luck 1: 2.42%
+      |   -> Luck 2: 2.38%
+      |   -> Luck 3: 2.33%
+      |   -> Luck 4: 2.29%
+      | Count: 1
+    ali:item minecraft:emerald x1
+      | Quality: 1
+      | Chance: 2.47%
+      |   -> Bad Luck: 2.4%
+      |   -> Luck 1: 2.55%
+      |   -> Luck 2: 2.62%
+      |   -> Luck 3: 2.68%
+      |   -> Luck 4: 2.75%
+      | Count: 1 to 6
+      | ----- Modifiers -----
+      | Random Weight:
+      |   -> Item:
+      |     -> Item: Emerald
+      |     -> Count: 1
+      |   -> Count: 1 to 6
+    ali:item gtceu:ruby_gem x1
+      | Quality: 1
+      | Chance: 2.47%
+      |   -> Bad Luck: 2.4%
+      |   -> Luck 1: 2.55%
+      |   -> Luck 2: 2.62%
+      |   -> Luck 3: 2.68%
+      |   -> Luck 4: 2.75%
+      | Count: 1 to 6
+      | ----- Modifiers -----
+      | Random Weight:
+      |   -> Item:
+      |     -> Item: Ruby
+      |     -> Count: 1
+      |   -> Count: 1 to 6
+    ali:item gtceu:sapphire_gem x1
+      | Quality: 1
+      | Chance: 2.47%
+      |   -> Bad Luck: 2.4%
+      |   -> Luck 1: 2.55%
+      |   -> Luck 2: 2.62%
+      |   -> Luck 3: 2.68%
+      |   -> Luck 4: 2.75%
+      | Count: 1 to 6
+      | ----- Modifiers -----
+      | Random Weight:
+      |   -> Item:
+      |     -> Item: Sapphire
+      |     -> Count: 1
+      |   -> Count: 1 to 6
+    ali:item gtceu:green_sapphire_gem x1
+      | Quality: 1
+      | Chance: 2.47%
+      |   -> Bad Luck: 2.4%
+      |   -> Luck 1: 2.55%
+      |   -> Luck 2: 2.62%
+      |   -> Luck 3: 2.68%
+      |   -> Luck 4: 2.75%
+      | Count: 1 to 6
+      | ----- Modifiers -----
+      | Random Weight:
+      |   -> Item:
+      |     -> Item: Green Sapphire
+      |     -> Count: 1
+      |   -> Count: 1 to 6
+    ali:item gtceu:olivine_gem x1
+      | Quality: 1
+      | Chance: 2.47%
+      |   -> Bad Luck: 2.4%
+      |   -> Luck 1: 2.55%
+      |   -> Luck 2: 2.62%
+      |   -> Luck 3: 2.68%
+      |   -> Luck 4: 2.75%
+      | Count: 1 to 6
+      | ----- Modifiers -----
+      | Random Weight:
+      |   -> Item:
+      |     -> Item: Olivine
+      |     -> Count: 1
+      |   -> Count: 1 to 6
+    ali:item minecraft:golden_apple x1
+      | Chance: 1.85%
+      |   -> Bad Luck: 1.89%
+      |   -> Luck 1: 1.82%
+      |   -> Luck 2: 1.78%
+      |   -> Luck 3: 1.75%
+      |   -> Luck 4: 1.72%
+      | Count: 1
+    ali:item minecraft:music_disc_13 x1
+      | Chance: 1.85%
+      |   -> Bad Luck: 1.89%
+      |   -> Luck 1: 1.82%
+      |   -> Luck 2: 1.78%
+      |   -> Luck 3: 1.75%
+      |   -> Luck 4: 1.72%
+      | Count: 1
+    ali:item minecraft:music_disc_cat x1
+      | Chance: 1.85%
+      |   -> Bad Luck: 1.89%
+      |   -> Luck 1: 1.82%
+      |   -> Luck 2: 1.78%
+      |   -> Luck 3: 1.75%
+      |   -> Luck 4: 1.72%
+      | Count: 1
+    ali:item minecraft:iron_horse_armor x1
+      | Chance: 1.85%
+      |   -> Bad Luck: 1.89%
+      |   -> Luck 1: 1.82%
+      |   -> Luck 2: 1.78%
+      |   -> Luck 3: 1.75%
+      |   -> Luck 4: 1.72%
+      | Count: 1
+    ali:item minecraft:golden_horse_armor x1
+      | Chance: 1.24%
+      |   -> Bad Luck: 1.26%
+      |   -> Luck 1: 1.21%
+      |   -> Luck 2: 1.19%
+      |   -> Luck 3: 1.17%
+      |   -> Luck 4: 1.15%
+      | Count: 1
+    ali:item minecraft:enchanted_book x1
+      | Chance: 1.24%
+      |   -> Bad Luck: 1.26%
+      |   -> Luck 1: 1.21%
+      |   -> Luck 2: 1.19%
+      |   -> Luck 3: 1.17%
+      |   -> Luck 4: 1.15%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item gtceu:damascus_steel_ingot x1
+      | Quality: 1
+      | Chance: 1.24%
+      |   -> Bad Luck: 1.13%
+      |   -> Luck 1: 1.33%
+      |   -> Luck 2: 1.43%
+      |   -> Luck 3: 1.52%
+      |   -> Luck 4: 1.6%
+      | Count: 1 to 6
+      | ----- Modifiers -----
+      | Random Weight:
+      |   -> Item:
+      |     -> Item: Damascus Steel Ingot
+      |     -> Count: 1
+      |   -> Count: 1 to 6
+    ali:item minecraft:diamond_horse_armor x1
+      | Chance: 0.62%
+      |   -> Bad Luck: 0.63%
+      |   -> Luck 1: 0.61%
+      |   -> Luck 2: 0.59%
+      |   -> Luck 3: 0.58%
+      |   -> Luck 4: 0.57%
+      | Count: 1
+    ali:item minecraft:enchanted_golden_apple x1
+      | Chance: 0.25%
+      |   -> Bad Luck: 0.25%
+      |   -> Luck 1: 0.24%
+      |   -> Luck 2: 0.24%
+      |   -> Luck 3: 0.23%
+      |   -> Luck 4: 0.23%
+      | Count: 1
+    ali:item minecraft:music_disc_otherside x1
+      | Chance: 0.25%
+      |   -> Bad Luck: 0.25%
+      |   -> Luck 1: 0.24%
+      |   -> Luck 2: 0.24%
+      |   -> Luck 3: 0.23%
+      |   -> Luck 4: 0.23%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 4
+    ali:item minecraft:bread x1
+      | Chance: 16%
+      | Count: 1
+    ali:item minecraft:wheat x1
+      | Chance: 16%
+      | Count: 1 to 4
+    ali:item minecraft:redstone x1
+      | Chance: 12%
+      | Count: 1 to 4
+    ali:item minecraft:coal x1
+      | Chance: 12%
+      | Count: 1 to 4
+    ali:item minecraft:iron_ingot x1
+      | Chance: 8%
+      | Count: 1 to 4
+    ali:item minecraft:bucket x1
+      | Chance: 8%
+      | Count: 1
+    ali:item minecraft:melon_seeds x1
+      | Chance: 8%
+      | Count: 2 to 4
+    ali:item minecraft:pumpkin_seeds x1
+      | Chance: 8%
+      | Count: 2 to 4
+    ali:item minecraft:beetroot_seeds x1
+      | Chance: 8%
+      | Count: 2 to 4
+    ali:item minecraft:gold_ingot x1
+      | Chance: 4%
+      | Count: 1 to 4
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3
+    ali:item minecraft:bone x1
+      | Chance: 25%
+      | Count: 1 to 8
+    ali:item minecraft:gunpowder x1
+      | Chance: 25%
+      | Count: 1 to 8
+    ali:item minecraft:rotten_flesh x1
+      | Chance: 25%
+      | Count: 1 to 8
+    ali:item minecraft:string x1
+      | Chance: 25%
+      | Count: 1 to 8

@@ -1,0 +1,28 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 2
+    ali:item minecraft:arrow x1
+      | Chance: 50%
+      |   -> Bad Luck: 50.85%
+      |   -> Luck 1: 49.18%
+      |   -> Luck 2: 48.39%
+      |   -> Luck 3: 47.62%
+      |   -> Luck 4: 46.88%
+      | Count: 2 to 7
+    ali:item minecraft:fire_charge x1
+      | Quality: 1
+      | Chance: 50%
+      |   -> Bad Luck: 49.15%
+      |   -> Luck 1: 50.82%
+      |   -> Luck 2: 51.61%
+      |   -> Luck 3: 52.38%
+      |   -> Luck 4: 53.13%
+      | Count: 2 to 8
+      | ----- Modifiers -----
+      | Random Weight:
+      |   -> Item:
+      |     -> Item: Fire Charge
+      |     -> Count: 1
+      |   -> Count: 2 to 8

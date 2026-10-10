@@ -14,7 +14,7 @@ sourceSets {
         java.srcDir project(":alicompat:common").file("src/gametest/java")
         java.exclude "com/yanny/ali/gametest/LootDataGolden.java"
         compileClasspath += sourceSets.main.compileClasspath + sourceSets.main.output
-        runtimeClasspath += sourceSets.main.runtimeClasspath + sourceSets.main.output
+        runtimeClasspath += sourceSets.main.runtimeClasspath.filter { !(it.name ==~ /(jei|emi)-.*/) } + sourceSets.main.output
     }
 }
 
@@ -31,17 +31,18 @@ if (gametestMod) {
 }
 
 def gametestCoordinates = gametestModIds ? ["${gametestMod}_forge_dep", "${gametestMod}_forge_runtime_deps"].collectMany { (project.findProperty(it) ?: "").split(",")*.trim().findAll { it } } : []
-def gametestNestedMods = null
+def compatCoordinates = (project.findProperty("compat_mods") ?: "").split(",")*.trim().findAll { it }.collectMany { mod ->
+    ["${mod}_forge_dep", "${mod}_forge_runtime_deps"].collectMany { (project.findProperty(it) ?: "").split(",")*.trim().findAll { it } }
+}.unique()
+def nestedCache = [:]
 
 // a Forge dev launch does not unpack jar-in-jar: jars using Minecraft go through loom to be remapped, the rest into mods/
-def extractGametestNested = {
-    if (gametestNestedMods != null) {
-        return gametestNestedMods
+def extractNested = { List<String> coordinates, File nestedDir, boolean minecraftOnly ->
+    if (nestedCache.containsKey(nestedDir)) {
+        return nestedCache[nestedDir]
     }
 
-    gametestNestedMods = []
-
-    def nestedDir = file("build/gametest/nested")
+    def nestedMods = []
     def readJar = { byte[] bytes ->
         def input = new java.util.jar.JarInputStream(new ByteArrayInputStream(bytes))
         def entries = [:]
@@ -60,15 +61,15 @@ def extractGametestNested = {
         match?.find() ? match.group(1) : null
     }
     def packagesOf = { Collection<String> names -> names.findAll { it.endsWith(".class") && it.contains("/") }.collect { it.substring(0, it.lastIndexOf("/")) } as Set }
-    def providedArtifacts = configurations.minecraftLibraries.resolvedConfiguration.resolvedArtifacts.collect { it.name } as Set
-    def providedPackages = configurations.minecraftLibraries.resolve().collectMany { jar ->
+    def providedArtifacts = minecraftOnly ? [] as Set : configurations.minecraftLibraries.resolvedConfiguration.resolvedArtifacts.collect { it.name } as Set
+    def providedPackages = minecraftOnly ? [] as Set : configurations.minecraftLibraries.resolve().collectMany { jar ->
         def zip = new java.util.zip.ZipFile(jar)
         def packages = packagesOf(zip.entries().collect { it.name })
 
         zip.close()
         packages
     } as Set
-    def outerJars = configurations.detachedConfiguration(*gametestCoordinates.collect { dependencies.create(it) }).tap { transitive = false }.resolve()
+    def outerJars = configurations.detachedConfiguration(*coordinates.collect { dependencies.create(it) }).tap { transitive = false }.resolve()
     def provided = outerJars.collect { modIdOf(readJar(it.bytes).entries) }.findAll { it } as Set
 
     nestedDir.deleteDir()
@@ -83,23 +84,22 @@ def extractGametestNested = {
             def bytes = outer.getInputStream(nested).readAllBytes()
             def content = readJar(bytes)
             def modId = modIdOf(content.entries)
-
             def referencesMinecraft = content.entries.any { entryName, data -> entryName.endsWith(".class") && new String(data, "ISO-8859-1").contains("net/minecraft/") }
-
-            def providedLibrary = providedArtifacts.any { name.startsWith("$it-") } || packagesOf(content.entries.keySet()).any { providedPackages.contains(it) }
-
-            if (!modId && !referencesMinecraft && providedLibrary) {
-                return
-            }
 
             if (referencesMinecraft) {
                 if (!modId || provided.add(modId)) {
                     def target = new File(nestedDir, "mods/$name")
 
                     target.bytes = bytes
-                    gametestNestedMods << target
+                    nestedMods << target
                 }
-            } else if (!modId || provided.add(modId)) {
+            } else if (!minecraftOnly && (!modId || provided.add(modId))) {
+                def providedLibrary = providedArtifacts.any { name.startsWith("$it-") } || packagesOf(content.entries.keySet()).any { providedPackages.contains(it) }
+
+                if (!modId && providedLibrary) {
+                    return
+                }
+
                 def manifest = content.manifest
 
                 if (!modId && !manifest.mainAttributes.getValue("FMLModType")) {
@@ -122,8 +122,10 @@ def extractGametestNested = {
         outer.close()
     }
 
-    return gametestNestedMods
+    nestedCache[nestedDir] = nestedMods
+    return nestedMods
 }
+def extractGametestNested = { extractNested(gametestCoordinates, file("build/gametest/nested"), false) }
 
 loom {
     accessWidenerPath = project(":ali:common").loom.accessWidenerPath
@@ -199,6 +201,10 @@ dependencies {
     gametestCoordinates.each { modGametestRuntimeOnly it }
     if (gametestCoordinates) {
         modGametestRuntimeOnly files({ extractGametestNested() })
+    }
+
+    if (compatCoordinates) {
+        modCompileOnly files({ extractNested(compatCoordinates, file("build/compat-nested"), true) })
     }
     rootProject.project(":ali:forge").ext.commonProjects.each { p ->
         common(project(path: p, configuration: "namedElements")) { transitive false }
