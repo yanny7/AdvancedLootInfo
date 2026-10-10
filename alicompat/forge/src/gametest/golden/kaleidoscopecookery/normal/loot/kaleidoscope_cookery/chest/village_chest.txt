@@ -1,0 +1,43 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 8
+    ali:item kaleidoscope_cookery:tomato x1
+      | Chance: 9.62%
+      | Count: 1 to 7
+    ali:item kaleidoscope_cookery:red_chili x1
+      | Chance: 9.62%
+      | Count: 1 to 4
+    ali:item kaleidoscope_cookery:oil x1
+      | Chance: 9.62%
+      | Count: 1 to 5
+    ali:item kaleidoscope_cookery:tomato_seed x1
+      | Chance: 9.62%
+      | Count: 1 to 3
+    ali:item kaleidoscope_cookery:chili_seed x1
+      | Chance: 9.62%
+      | Count: 1 to 3
+    ali:item kaleidoscope_cookery:lettuce_seed x1
+      | Chance: 9.62%
+      | Count: 1 to 3
+    ali:item kaleidoscope_cookery:wild_rice x1
+      | Chance: 9.62%
+      | Count: 1 to 3
+    ali:item kaleidoscope_cookery:rice_panicle x1
+      | Chance: 7.69%
+      | Count: 2 to 3
+    ali:item kaleidoscope_cookery:straw_block x1
+      | Chance: 7.69%
+      | Count: 1 to 2
+    ali:item kaleidoscope_cookery:recipe_item x1
+      | Chance: 7.69%
+      | Count: 1
+      | ----- Modifiers -----
+      | Random Recipe:
+    ali:item kaleidoscope_cookery:iron_kitchen_knife x1 {Damage:0}
+      | Chance: 4.81%
+      | Count: 1
+    ali:item kaleidoscope_cookery:straw_hat x1 {Damage:0}
+      | Chance: 4.81%
+      | Count: 1

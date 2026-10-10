@@ -1,0 +1,19 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item kaleidoscope_cookery:red_chili x1
+        | Count: 3
+        | ----- Predicates -----
+        | Survives Explosion
+        | Block State Property:
+        |   -> Block: Chili Ristra
+        |   -> Properties:
+        |     -> sheared: true
+      ali:item kaleidoscope_cookery:red_chili x1
+        | Count: 6
+        | ----- Predicates -----
+        | Survives Explosion

@@ -1,0 +1,36 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item kaleidoscope_cookery:fresh_tea_leaves x1
+        | Count: 1
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: block.kaleidoscope_cookery.tea_tree
+        |   -> Properties:
+        |     -> age: 5
+        | ----- Modifiers -----
+        | Explosion Decay
+      ali:item kaleidoscope_cookery:tea_seed x1
+        | Count: 1
+        | ----- Modifiers -----
+        | Explosion Decay
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item kaleidoscope_cookery:tea_seed x1
+      | Count: 1 to 4  ~3 (42%)
+      |   -> Fortune I: 1 to 5  ~3 (36%)
+      |   -> Fortune II: 1 to 6  ~4 (34%)
+      |   -> Fortune III: 1 to 7  ~4 to 5 (29%)
+      |   [chart 0..3 1-4 base=true modes=[false, false, true, false, false, false, false] heights=0.1875,0.7500,1.0000,0.4444,0.0000,0.0000,0.0000 | 0..4 1-5 base=false modes=[false, false, true, false, false, false, false] heights=0.0804,0.4286,0.8571,0.7619,0.2540,0.0000,0.0000 | 0..5 1-6 base=false modes=[false, false, false, true, false, false, false] heights=0.0344,0.2296,0.6122,0.8163,0.5442,0.1451,0.0000 | 0..6 1-7 base=false modes=[false, false, false, true, true, false, false] heights=0.0148,0.1181,0.3936,0.6997,0.6997,0.3732,0.0829]
+      | ----- Predicates -----
+      | Block State Property:
+      |   -> Block: block.kaleidoscope_cookery.tea_tree
+      |   -> Properties:
+      |     -> age: 5
+      | ----- Modifiers -----
+      | Explosion Decay

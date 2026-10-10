@@ -1,0 +1,243 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 16
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item kaleidoscope_cookery:tomato x12
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 16
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item kaleidoscope_cookery:lettuce x16
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 16
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item kaleidoscope_cookery:rice x20
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 16
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item kaleidoscope_cookery:red_chili x12
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 2
+      | Price Multiplier: 0.1
+      ali:item kaleidoscope_cookery:green_chili x8
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 2
+      | Price Multiplier: 0.1
+      ali:item kaleidoscope_cookery:caterpillar x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+  ali:trade_level
+    | Level: 2
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 4
+      | Price Multiplier: 0.1
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item kaleidoscope_cookery:kitchen_shovel x1 {Damage:0}
+    ali:items_to_items
+      | Uses: 12
+      | XP: 4
+      | Price Multiplier: 0.2
+      ali:item minecraft:emerald x8
+      ali:item minecraft:air x0
+      ali:item kaleidoscope_cookery:iron_kitchen_knife x1 {Damage:0}
+    ali:items_to_items
+      | Uses: 16
+      | XP: 4
+      | Price Multiplier: 0.1
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item kaleidoscope_cookery:stockpot_lid x1 {Damage:0}
+    ali:items_to_items
+      | Uses: 16
+      | XP: 4
+      | Price Multiplier: 0.1
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item kaleidoscope_cookery:recipe_item x1 {RecipeRecord:{flexRecipe:0b,input:[{Count:1b,id:"kaleidoscope_cookery:fried_egg"},{Count:1b,id:"kaleidoscope_cookery:fried_egg"},{Count:1b,id:"kaleidoscope_cookery:fried_egg"},{Count:1b,id:"kaleidoscope_cookery:tomato"},{Count:1b,id:"kaleidoscope_cookery:tomato"},{Count:1b,id:"kaleidoscope_cookery:tomato"}],output:{Count:1b,id:"kaleidoscope_cookery:scramble_egg_with_tomatoes"},type:"kaleidoscope_cookery:pot"}}
+    ali:items_to_items
+      | Uses: 16
+      | XP: 4
+      | Price Multiplier: 0.1
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item kaleidoscope_cookery:recipe_item x1 {RecipeRecord:{flexRecipe:0b,input:[{Count:1b,id:"kaleidoscope_cookery:raw_cow_offal"},{Count:1b,id:"kaleidoscope_cookery:raw_cow_offal"},{Count:1b,id:"kaleidoscope_cookery:green_chili"},{Count:1b,id:"kaleidoscope_cookery:green_chili"}],output:{Count:1b,id:"kaleidoscope_cookery:braised_beef"},type:"kaleidoscope_cookery:pot"}}
+    ali:items_to_items
+      | Uses: 16
+      | XP: 4
+      | Price Multiplier: 0.1
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item kaleidoscope_cookery:recipe_item x1 {RecipeRecord:{flexRecipe:0b,input:[{Count:1b,id:"minecraft:sugar"},{Count:1b,id:"minecraft:sugar"},{Count:1b,id:"minecraft:sugar"},{Count:1b,id:"minecraft:porkchop"},{Count:1b,id:"minecraft:porkchop"},{Count:1b,id:"minecraft:porkchop"}],output:{Count:1b,id:"kaleidoscope_cookery:sweet_and_sour_pork"},type:"kaleidoscope_cookery:pot"}}
+    ali:items_to_items
+      | Uses: 16
+      | XP: 4
+      | Price Multiplier: 0.1
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item kaleidoscope_cookery:recipe_item x1 {RecipeRecord:{flexRecipe:0b,input:[{Count:1b,id:"minecraft:brown_mushroom"},{Count:1b,id:"minecraft:brown_mushroom"},{Count:1b,id:"minecraft:porkchop"},{Count:1b,id:"minecraft:porkchop"},{Count:1b,id:"minecraft:porkchop"},{Count:1b,id:"kaleidoscope_cookery:green_chili"}],output:{Count:1b,id:"kaleidoscope_cookery:fish_flavored_shredded_pork"},type:"kaleidoscope_cookery:pot"}}
+  ali:trade_level
+    | Level: 3
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 16
+      | XP: 5
+      | Price Multiplier: 0.1
+      ali:item kaleidoscope_cookery:dark_cuisine x5
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x2
+    ali:items_to_items
+      | Uses: 16
+      | XP: 4
+      | Price Multiplier: 0.1
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item kaleidoscope_cookery:recipe_item x1 {RecipeRecord:{flexRecipe:0b,input:[{Count:1b,id:"minecraft:pufferfish"},{Count:1b,id:"minecraft:pufferfish"},{Count:1b,id:"minecraft:pufferfish"},{Count:1b,id:"minecraft:seagrass"},{Count:1b,id:"minecraft:seagrass"}],output:{Count:1b,id:"kaleidoscope_cookery:pufferfish_soup"},type:"kaleidoscope_cookery:stockpot"}}
+    ali:items_to_items
+      | Uses: 16
+      | XP: 4
+      | Price Multiplier: 0.1
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item kaleidoscope_cookery:recipe_item x1 {RecipeRecord:{flexRecipe:0b,input:[{Count:1b,id:"minecraft:beef"},{Count:1b,id:"minecraft:beef"},{Count:1b,id:"kaleidoscope_cookery:tomato"},{Count:1b,id:"kaleidoscope_cookery:tomato"},{Count:1b,id:"kaleidoscope_cookery:lettuce"}],output:{Count:1b,id:"kaleidoscope_cookery:borscht"},type:"kaleidoscope_cookery:stockpot"}}
+    ali:items_to_items
+      | Uses: 16
+      | XP: 4
+      | Price Multiplier: 0.1
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item kaleidoscope_cookery:recipe_item x1 {RecipeRecord:{flexRecipe:0b,input:[{Count:1b,id:"minecraft:beef"},{Count:1b,id:"minecraft:beef"},{Count:1b,id:"minecraft:beef"},{Count:1b,id:"minecraft:potato"},{Count:1b,id:"minecraft:potato"},{Count:1b,id:"minecraft:potato"},{Count:1b,id:"minecraft:potato"}],output:{Count:1b,id:"kaleidoscope_cookery:braised_beef_with_potatoes"},type:"kaleidoscope_cookery:stockpot"}}
+  ali:trade_level
+    | Level: 4
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 16
+      | XP: 10
+      | Price Multiplier: 0.1
+      ali:item kaleidoscope_cookery:pork_bone_soup x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 16
+      | XP: 10
+      | Price Multiplier: 0.1
+      ali:item kaleidoscope_cookery:pufferfish_soup x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x4
+    ali:items_to_items
+      | Uses: 16
+      | XP: 10
+      | Price Multiplier: 0.1
+      ali:item kaleidoscope_cookery:seafood_miso_soup x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 16
+      | XP: 10
+      | Price Multiplier: 0.1
+      ali:item kaleidoscope_cookery:lamb_and_radish_soup x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x2
+    ali:items_to_items
+      | Uses: 16
+      | XP: 10
+      | Price Multiplier: 0.1
+      ali:item kaleidoscope_cookery:braised_beef_with_potatoes x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x2
+    ali:items_to_items
+      | Uses: 16
+      | XP: 10
+      | Price Multiplier: 0.1
+      ali:item kaleidoscope_cookery:wild_mushroom_rabbit_soup x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x3
+    ali:items_to_items
+      | Uses: 16
+      | XP: 10
+      | Price Multiplier: 0.1
+      ali:item kaleidoscope_cookery:borscht x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x2
+    ali:items_to_items
+      | Uses: 16
+      | XP: 10
+      | Price Multiplier: 0.1
+      ali:item kaleidoscope_cookery:beef_meatball_soup x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x3
+    ali:items_to_items
+      | Uses: 16
+      | XP: 10
+      | Price Multiplier: 0.1
+      ali:item kaleidoscope_cookery:fearsome_thick_soup x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x5
+    ali:items_to_items
+      | Uses: 16
+      | XP: 4
+      | Price Multiplier: 0.1
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item kaleidoscope_cookery:recipe_item x1 {RecipeRecord:{flexRecipe:0b,input:[{Count:1b,id:"minecraft:bamboo"},{Count:1b,id:"minecraft:bamboo"},{Count:1b,id:"minecraft:porkchop"},{Count:1b,id:"minecraft:porkchop"},{Count:1b,id:"minecraft:porkchop"},{Count:1b,id:"minecraft:porkchop"},{Count:1b,id:"minecraft:porkchop"},{Count:1b,id:"minecraft:porkchop"}],output:{Count:1b,id:"kaleidoscope_cookery:dongpo_pork"},type:"kaleidoscope_cookery:pot"}}
+    ali:items_to_items
+      | Uses: 16
+      | XP: 4
+      | Price Multiplier: 0.1
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item kaleidoscope_cookery:recipe_item x1 {RecipeRecord:{flexRecipe:0b,input:[{Count:1b,id:"minecraft:cod"},{Count:1b,id:"minecraft:cod"},{Count:1b,id:"minecraft:cod"},{Count:1b,id:"minecraft:cod"},{Count:1b,id:"minecraft:cod"},{Count:1b,id:"minecraft:pumpkin_pie"}],output:{Count:1b,id:"kaleidoscope_cookery:stargazy_pie"},type:"kaleidoscope_cookery:pot"}}
+    ali:items_to_items
+      | Uses: 16
+      | XP: 4
+      | Price Multiplier: 0.1
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item kaleidoscope_cookery:recipe_item x1 {RecipeRecord:{flexRecipe:0b,input:[{Count:1b,id:"minecraft:crimson_fungus"},{Count:1b,id:"minecraft:crimson_fungus"},{Count:1b,id:"minecraft:warped_fungus"},{Count:1b,id:"minecraft:warped_fungus"},{Count:1b,id:"minecraft:tropical_fish"},{Count:1b,id:"minecraft:tropical_fish"},{Count:1b,id:"minecraft:tropical_fish"},{Count:1b,id:"minecraft:tropical_fish"}],output:{Count:1b,id:"kaleidoscope_cookery:nether_style_sashimi"},type:"kaleidoscope_cookery:pot"}}
+    ali:items_to_items
+      | Uses: 16
+      | XP: 4
+      | Price Multiplier: 0.1
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item kaleidoscope_cookery:recipe_item x1 {RecipeRecord:{flexRecipe:0b,input:[{Count:1b,id:"minecraft:slime_ball"},{Count:1b,id:"minecraft:slime_ball"},{Count:1b,id:"minecraft:slime_ball"},{Count:1b,id:"minecraft:slime_ball"}],output:{Count:1b,id:"kaleidoscope_cookery:slime_ball_meal"},type:"kaleidoscope_cookery:pot"}}
+    ali:items_to_items
+      | Uses: 16
+      | XP: 4
+      | Price Multiplier: 0.1
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item kaleidoscope_cookery:recipe_item x1 {RecipeRecord:{flexRecipe:0b,input:[{Count:1b,id:"kaleidoscope_cookery:red_chili"},{Count:1b,id:"kaleidoscope_cookery:red_chili"},{Count:1b,id:"kaleidoscope_cookery:red_chili"},{Count:1b,id:"kaleidoscope_cookery:red_chili"},{Count:1b,id:"kaleidoscope_cookery:red_chili"},{Count:1b,id:"minecraft:chicken"},{Count:1b,id:"minecraft:chicken"},{Count:1b,id:"minecraft:chicken"},{Count:1b,id:"minecraft:chicken"}],output:{Count:1b,id:"kaleidoscope_cookery:spicy_chicken"},type:"kaleidoscope_cookery:pot"}}
+  ali:trade_level
+    | Level: 5
+    | Randomly Selects 1 Of These Trades
+    ali:items_to_items
+      | Uses: 3
+      | XP: 30
+      | Price Multiplier: 0.2
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item kaleidoscope_cookery:diamond_kitchen_knife x1 {Damage:0}
+        | Enchant With Levels:
+        |   -> Levels: 5 to 19
+        |   -> Treasure: False
