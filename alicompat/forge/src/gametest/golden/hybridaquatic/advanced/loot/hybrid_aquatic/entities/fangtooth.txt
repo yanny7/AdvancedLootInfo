@@ -1,0 +1,13 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item hybrid_aquatic:raw_fish_meat x1
+      | Count: max(0; U[1; 2])
+      | ----- Modifiers -----
+      | Looting Enchant:
+      |   -> Value: 1
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
