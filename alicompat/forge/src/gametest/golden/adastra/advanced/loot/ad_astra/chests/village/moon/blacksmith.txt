@@ -1,0 +1,67 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 9
+    ali:item ad_astra:desh_ingot x1
+      | Chance: 28.57%
+      | Count: max(0; U[2; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 6
+      |   -> Add: False
+    ali:item minecraft:coal x1
+      | Chance: 28.57%
+      | Count: max(0; U[3; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 3 to 6
+      |   -> Add: False
+    ali:item minecraft:emerald x1
+      | Chance: 14.29%
+      | Count: max(0; U[2; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 4
+      |   -> Add: False
+    ali:item minecraft:redstone x1
+      | Chance: 14.29%
+      | Count: max(0; U[2; 5])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 5
+      |   -> Add: False
+    ali:item minecraft:diamond x1
+      | Chance: 8.57%
+      | Count: max(0; U[1; 2])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
+    ali:item ad_astra:launch_pad x1
+      | Chance: 5.71%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 2
+    ali:item minecraft:bucket x1
+      | Chance: 25%
+      | Count: 1
+    ali:item ad_astra:fuel_bucket x1
+      | Chance: 12.5%
+      | Count: 1
+    ali:item ad_astra:gas_tank x1
+      | Chance: 12.5%
+      | Count: 1
+    ali:item ad_astra:space_helmet x1 {Damage:0}
+      | Chance: 12.5%
+      | Count: 1
+    ali:item ad_astra:space_suit x1 {Damage:0}
+      | Chance: 12.5%
+      | Count: 1
+    ali:item ad_astra:space_pants x1 {Damage:0}
+      | Chance: 12.5%
+      | Count: 1
+    ali:item ad_astra:space_boots x1 {Damage:0}
+      | Chance: 12.5%
+      | Count: 1

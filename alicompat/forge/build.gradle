@@ -7,8 +7,34 @@ architectury {
     forge()
 }
 
+sourceSets {
+    gametest {
+        java.srcDir project(":aci:common").file("src/gametest/java")
+        java.srcDir project(":ali:common").file("src/gametest/java")
+        java.srcDir project(":alicompat:common").file("src/gametest/java")
+        java.exclude "com/yanny/ali/gametest/LootDataGolden.java"
+        compileClasspath += sourceSets.main.compileClasspath + sourceSets.main.output
+        runtimeClasspath += sourceSets.main.runtimeClasspath + sourceSets.main.output
+    }
+}
+
+def gametestMod = project.findProperty("alicompat_gametest")
+def gametestModIds = ""
+
+if (gametestMod) {
+    def entry = new groovy.json.JsonSlurper().parse(rootProject.file("scripts/supported_mods.json")).find { it.key == gametestMod }
+    def enabled = (project.findProperty("compat_mods") ?: "").split(",")*.trim().contains(gametestMod)
+
+    if (!entry || !enabled || !project.findProperty("${gametestMod}_${project.name}_dep")) {
+        throw new GradleException("alicompat_gametest=${gametestMod} is not a mod enabled in compat_mods with a ${project.name} dependency")
+    }
+
+    gametestModIds = entry.mod_ids.join(",")
+}
+
 loom {
     accessWidenerPath = project(":ali:common").loom.accessWidenerPath
+    createRemapConfigurations(sourceSets.gametest)
 
     runs {
         data {
@@ -17,6 +43,72 @@ loom {
             programArgs "--output", "${file('src/main/generated/')}"
             programArgs "--existing", "${file("src/main/resources").absolutePath}"
         }
+        gametest {
+            environment "gametestserver"
+            forgeTemplate "gameTestServer"
+            name "Minecraft GameTest"
+            source sourceSets.gametest
+            property "forge.enabledGameTestNamespaces", alicompat_mod_id
+            property "alicompat.golden.dir", project.file("src/gametest/golden").absolutePath
+            property "alicompat.golden.actual", project.file("build/gametest/golden").absolutePath
+            property "alicompat.golden.regenerate", (project.findProperty("alicompat_golden_regenerate") ?: "false").toString()
+            property "alicompat.gametest.mod", (gametestMod ?: "base").toString()
+            property "alicompat.gametest.modids", gametestModIds
+
+            runDir "build/gametest/run"
+
+            mods {
+                main {
+                    sourceSet sourceSets.main
+                    sourceSet sourceSets.gametest
+                }
+            }
+        }
+    }
+}
+
+tasks.matching { it.name == "runGametest" }.configureEach {
+    timeout = java.time.Duration.ofMinutes(10)
+
+    doFirst {
+        delete "build/gametest/run/config", "build/gametest/run/world", "build/gametest/run/mods"
+
+        def modsDir = file("build/gametest/run/mods")
+
+        modsDir.mkdirs()
+        configurations.gametestNested.each { jar ->
+            def outer = new java.util.zip.ZipFile(jar)
+
+            outer.entries().findAll { it.name ==~ /META-INF\/jars\/[^\/]+\.jar/ }.each { nested ->
+                def bytes = outer.getInputStream(nested).readAllBytes()
+                def input = new java.util.jar.JarInputStream(new ByteArrayInputStream(bytes))
+                def manifest = input.manifest ?: new java.util.jar.Manifest()
+                def entries = [:]
+
+                for (def entry = input.nextJarEntry; entry != null; entry = input.nextJarEntry) {
+                    entries[entry.name] = input.readAllBytes()
+                }
+
+                input.close()
+
+                if (!entries.containsKey("META-INF/mods.toml") && !manifest.mainAttributes.getValue("FMLModType")) {
+                    manifest.mainAttributes.putValue("Manifest-Version", "1.0")
+                    manifest.mainAttributes.putValue("FMLModType", "GAMELIBRARY")
+                }
+
+                def output = new java.util.jar.JarOutputStream(new FileOutputStream(new File(modsDir, nested.name.substring(nested.name.lastIndexOf("/") + 1))), manifest)
+
+                entries.each { name, data ->
+                    output.putNextEntry(new java.util.jar.JarEntry(name))
+                    output.write(data)
+                    output.closeEntry()
+                }
+
+                output.close()
+            }
+
+            outer.close()
+        }
     }
 }
 
@@ -24,6 +116,7 @@ evaluationDependsOn(":ali:forge")
 
 configurations {
     common
+    gametestNested { transitive = false }
     shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
     compileClasspath.extendsFrom common
     runtimeClasspath.extendsFrom common
@@ -37,6 +130,16 @@ dependencies {
     common(project(path: ":ali:common", configuration: "namedElements")) { transitive false }
     runtimeOnly project(path: ":aci:forge", configuration: "namedElements")
     runtimeOnly project(path: ":ali:forge", configuration: "namedElements")
+    gametestCompileOnly project(path: ":ali:forge", configuration: "namedElements")
+
+    if (gametestMod) {
+        ["${gametestMod}_forge_dep", "${gametestMod}_forge_runtime_deps"].each { name ->
+            (project.findProperty(name) ?: "").split(",")*.trim().findAll { it }.each {
+                modGametestRuntimeOnly it
+                gametestNested it
+            }
+        }
+    }
     rootProject.project(":ali:forge").ext.commonProjects.each { p ->
         common(project(path: p, configuration: "namedElements")) { transitive false }
     }

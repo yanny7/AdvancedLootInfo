@@ -1,0 +1,35 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 8
+    ali:item ad_astra:moon_sand x1
+      | Chance: 33.33%
+      | Count: 6 to 12
+    ali:item ad_astra:cheese x1
+      | Chance: 12.5%
+      | Count: 2 to 4
+    ali:item minecraft:iron_nugget x1
+      | Chance: 8.33%
+      | Count: 1 to 3
+    ali:item minecraft:iron_ingot x1
+      | Chance: 8.33%
+      | Count: 3 to 12
+    ali:item minecraft:bread x1
+      | Chance: 8.33%
+      | Count: 2 to 4
+    ali:item minecraft:soul_torch x1
+      | Chance: 8.33%
+      | Count: 3 to 9
+    ali:item minecraft:coal x1
+      | Chance: 8.33%
+      | Count: 2 to 4
+    ali:item ad_astra:desh_ingot x1
+      | Chance: 4.17%
+      | Count: 1 to 3
+    ali:item ad_astra:desh_nugget x1
+      | Chance: 4.17%
+      | Count: 3 to 12
+    ali:item minecraft:emerald x1
+      | Chance: 4.17%
+      | Count: 1 to 2

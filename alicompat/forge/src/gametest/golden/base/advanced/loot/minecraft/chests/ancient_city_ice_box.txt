@@ -1,0 +1,45 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4 to 10
+    ali:item minecraft:snowball x1
+      | Chance: 44.44%
+      | Count: max(0; U[2; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 6
+      |   -> Add: False
+    ali:item minecraft:packed_ice x1
+      | Chance: 22.22%
+      | Count: max(0; U[2; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 6
+      |   -> Add: False
+    ali:item minecraft:suspicious_stew x1
+      | Chance: 11.11%
+      | Count: max(0; U[2; 6])
+      | ----- Modifiers -----
+      | Set Stew Effect:
+      |   -> Blindness
+      |     -> Duration: 5 to 7
+      |   -> Night Vision
+      |     -> Duration: 7 to 10
+      | Set Count:
+      |   -> Count: 2 to 6
+      |   -> Add: False
+    ali:item minecraft:golden_carrot x1
+      | Chance: 11.11%
+      | Count: max(0; U[1; 10])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 10
+      |   -> Add: False
+    ali:item minecraft:baked_potato x1
+      | Chance: 11.11%
+      | Count: max(0; U[1; 10])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 10
+      |   -> Add: False

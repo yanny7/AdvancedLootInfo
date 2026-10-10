@@ -14,6 +14,7 @@ from modpack import (
     MOD_LOADER_TYPE,
     PROJECT_DIR,
     RELEASE_TYPES,
+    REQUIRED_RELATION_TYPE,
     SUPPORTED_MODS_FILE,
     CurseForge,
     Maven,
@@ -35,6 +36,7 @@ BLOCK_END = "# --- end of generated block ---"
 LEGACY_BLOCK_START = "# ALICompat target mods"
 CURSEFORGE_URL = "https://www.curseforge.com/minecraft/mc-mods"
 SERVICE_FILE = "com.yanny.alicompat.IModCompat"
+RUNTIME_EXCLUDED_SLUGS = {"fabric-api", "jei", "emi", "roughly-enough-items"}
 REPORT_FILE = PROJECT_DIR / "build" / "compat_scan.txt"
 
 
@@ -295,7 +297,73 @@ def current_file(client: CurseForge, maven: Maven, entry: dict, current: dict):
     return client.get(f"/mods/{current['project_id']}/files/{current['file_id']}")
 
 
-def render_block(deps: dict, entries: dict):
+def read_runtime_deps(properties: dict, loader: str):
+    return {
+        match.group(1): value for key, value in properties.items()
+        for match in [re.fullmatch(rf"(\w+)_{loader}_runtime_deps", key)] if match and value.strip()
+    }
+
+
+def resolve_runtime_deps(client: CurseForge, pins: dict, keys: list):
+    """The required dependencies of each pinned mod's file, recursively, as curse.maven coordinates:
+    a dependency that is itself pinned keeps its pin, anything else takes its newest file."""
+    pinned_projects = {pin["project_id"]: pin for pin in pins.values() if "project_id" in pin}
+    files = {}
+    resolved = {}
+
+    def file_of(project_id: int):
+        if project_id not in files:
+            pin = pinned_projects.get(project_id)
+            files[project_id] = client.get(f"/mods/{project_id}/files/{pin['file_id']}") if pin else client.pick_file(project_id)
+
+        return files[project_id]
+
+    for index, key in enumerate(keys, start=1):
+        progress(index, len(keys), key)
+        pin = pins[key]
+
+        if "project_id" not in pin:
+            continue
+
+        pending = [pin["project_id"]]
+        seen = {pin["project_id"]}
+        found = []
+
+        while pending:
+            file = file_of(pending.pop(0))
+
+            if not file:
+                continue
+
+            for dependency in file.get("dependencies", []):
+                project_id = dependency["modId"]
+
+                if dependency["relationType"] != REQUIRED_RELATION_TYPE or project_id in seen:
+                    continue
+
+                seen.add(project_id)
+                mod = client.get_mods([project_id])
+
+                if not mod or mod[0]["slug"] in RUNTIME_EXCLUDED_SLUGS:
+                    continue
+
+                dependency_file = file_of(project_id)
+
+                if not dependency_file:
+                    print(f"\nWarning: {key} ({client.loader}) requires {mod[0]['slug']}, which has no file here")
+                    continue
+
+                found.append(f"curse.maven:{mod[0]['slug']}-{project_id}:{dependency_file['id']}")
+                pending.append(project_id)
+
+        if found:
+            resolved[key] = ",".join(sorted(found))
+
+    progress_done()
+    return resolved
+
+
+def render_block(deps: dict, entries: dict, runtime: dict):
     mods = sorted({key for key, _ in deps})
     lines = [BLOCK_START]
 
@@ -321,6 +389,9 @@ def render_block(deps: dict, entries: dict):
                 rendered[source] = True
 
             lines.append(f"{key}_{loader}_dep={render_dep(dep)}")
+
+            if (key, loader) in runtime:
+                lines.append(f"{key}_{loader}_runtime_deps={runtime[(key, loader)]}")
 
     lines.append(BLOCK_END)
     return "\n".join(lines)
@@ -356,12 +427,30 @@ def write_block(block: str, init: bool):
     return True
 
 
+def update_runtime_deps(clients, pins: dict, runtime: dict, deps: dict, enabled: set, checked_loaders: list, only):
+    for loader in checked_loaders:
+        keys = sorted(key for key, owner in deps if owner == loader and key in enabled and (only is None or key == only))
+        print(f"\nResolving the gametest runtime dependencies of {len(keys)} {loader} mods")
+        resolved = resolve_runtime_deps(clients[loader], pins[loader], keys)
+
+        for key in keys:
+            runtime.pop((key, loader), None)
+
+            if key in resolved:
+                runtime[(key, loader)] = resolved[key]
+
+    for key, loader in list(runtime):
+        if (key, loader) not in deps:
+            del runtime[(key, loader)]
+
+
 def main():
     parser = argparse.ArgumentParser(description="Resolves the supported_mods.json registry against CurseForge, then the maven repositories it lists.")
     parser.add_argument("--loader", choices=sorted(MOD_LOADER_TYPE), help="Mod loader to check (default: every enabled platform)")
     parser.add_argument("--update", action="store_true", help="Regenerate the block in gradle.properties and scaffold missing shims")
     parser.add_argument("--init", action="store_true", help="Pin and enable every registry mod, ignoring the current compat_mods; implies --update")
     parser.add_argument("--scaffold", metavar="MOD", help="Do all of that for one registry mod only: scaffold its missing source sets, pin it, enable it; implies --update")
+    parser.add_argument("--runtime-deps", action="store_true", help="Only re-resolve the gametest runtime dependencies of the current pins, nothing is repinned")
     parser.add_argument("--no-scan", action="store_true", help="Skip the shim scan, only resolve versions")
     parser.add_argument("--curseforge-api-key", help="CurseForge API Key (default: $CURSEFORGE_API_KEY)")
     args = parser.parse_args()
@@ -392,6 +481,12 @@ def main():
     pinned = {loader: read_pinned_deps(properties, loader) for loader in platforms}
     clients = {loader: CurseForge(api_key, minecraft_version, loader) for loader in checked_loaders}
     mavens = {loader: Maven(minecraft_version, loader) for loader in checked_loaders}
+    runtime = {(key, loader): value for loader in platforms for key, value in read_runtime_deps(properties, loader).items()}
+
+    if args.runtime_deps:
+        deps = {(key, loader): pin for loader in platforms for key, pin in pinned[loader].items() if key in entries}
+        update_runtime_deps(clients, pinned, runtime, deps, enabled, checked_loaders, None)
+        return 0 if write_block(render_block(deps, entries, runtime), False) else 1
 
     deps = {}
     dormant = []
@@ -528,7 +623,10 @@ def main():
         for result in scaffolds:
             print(f"\nScaffolded {scaffold(result['loader'], result['entry'])}")
 
-        if not write_block(render_block(deps, entries), args.init):
+        update_runtime_deps(clients, {loader: {key: pin for (key, owner), pin in deps.items() if owner == loader} for loader in platforms},
+                            runtime, deps, enabled, checked_loaders, args.scaffold)
+
+        if not write_block(render_block(deps, entries, runtime), args.init):
             return 1
 
         print(f"\nWrote {len(deps)} dependency lines and {len({key for key, _ in deps})} compat_mods entries to gradle.properties")

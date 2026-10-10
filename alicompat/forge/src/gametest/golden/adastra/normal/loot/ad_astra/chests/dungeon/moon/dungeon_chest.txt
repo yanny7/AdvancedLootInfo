@@ -1,0 +1,43 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 8
+    ali:item ad_astra:moon_sand x1
+      | Chance: 25%
+      | Count: 10 to 20
+    ali:item minecraft:emerald x1
+      | Chance: 18.75%
+      | Count: 3 to 6
+    ali:item minecraft:ice x1
+      | Chance: 12.5%
+      | Count: 5 to 10
+    ali:item ad_astra:cheese x1
+      | Chance: 6.25%
+      | Count: 1 to 3
+    ali:item minecraft:raw_iron x1
+      | Chance: 6.25%
+      | Count: 8 to 12
+    ali:item ad_astra:ice_shard x1
+      | Chance: 6.25%
+      | Count: 9 to 18
+    ali:item minecraft:rotten_flesh x1
+      | Chance: 6.25%
+      | Count: 4 to 8
+    ali:item minecraft:bone x1
+      | Chance: 6.25%
+      | Count: 3 to 6
+    ali:item ad_astra:raw_desh x1
+      | Chance: 4.38%
+      | Count: 2 to 6
+    ali:item minecraft:golden_apple x1
+      | Chance: 3.13%
+      | Count: 1
+    ali:item minecraft:enchanted_book x1
+      | Chance: 3.13%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item ad_astra:space_painting x1
+      | Chance: 1.88%
+      | Count: 1

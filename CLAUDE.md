@@ -156,6 +156,13 @@ ALI's integration test is a GameTest run per loader: a headless server with the 
 ./gradlew :ali:forge:runGametest -Precipe_viewer=none -Pali_golden_regenerate=true
 ```
 
+ALICompat's GameTest runs once per target mod and stores what that mod changes against a base run without target mods (see `alicompat/CLAUDE.md`'s gametest section); the base has to be regenerated before the mods whenever ALI's output changes:
+```
+./gradlew :alicompat:forge:runGametest -Precipe_viewer=none
+./gradlew :alicompat:forge:runGametest -Precipe_viewer=none -Palicompat_gametest=adastra
+./gradlew :alicompat:fabric:runGametest -Precipe_viewer=none -Palicompat_gametest=adastra -Palicompat_golden_regenerate=true
+```
+
 AWI has the same per-loader GameTest over a vanilla world with seed 0 (see `awi/CLAUDE.md`'s gametest section), regenerated with `-Pawi_golden_regenerate=true`:
 ```
 ./gradlew :awi:fabric:runGametest -Precipe_viewer=none
@@ -179,8 +186,9 @@ python3 scripts/check_versions.py --loader forge
 python3 scripts/check_versions.py --update
 python3 scripts/check_versions.py --init
 python3 scripts/check_versions.py --scaffold twilightforest
+python3 scripts/check_versions.py --runtime-deps
 ```
-`--init` is the from-scratch variant: it ignores `compat_mods` entirely, pins and enables every registry mod that has a file here, and writes the block even when the file has none — for setting a branch up, never on a fresh merge, where it would switch on every dormant shim at once. `--scaffold <mod>` is the same thing narrowed to one registry entry: it creates that mod's missing source sets, pins it, enables it, and leaves every other line of the block untouched — the way a new shim is started. Repinning only swaps the file id or artifact version, so a build belongs after every `--update`. It is also the first step after merging into a branch, where the pinned ids arrived from a lower branch and name files for the wrong Minecraft version.
+Each pinned mod also gets `<slug>_<loader>_runtime_deps`, the required dependencies its file declares, resolved recursively for the ALICompat gametest; `--runtime-deps` re-resolves only those, for the current pins. `--init` is the from-scratch variant: it ignores `compat_mods` entirely, pins and enables every registry mod that has a file here, and writes the block even when the file has none — for setting a branch up, never on a fresh merge, where it would switch on every dormant shim at once. `--scaffold <mod>` is the same thing narrowed to one registry entry: it creates that mod's missing source sets, pins it, enables it, and leaves every other line of the block untouched — the way a new shim is started. Repinning only swaps the file id or artifact version, so a build belongs after every `--update`. It is also the first step after merging into a branch, where the pinned ids arrived from a lower branch and name files for the wrong Minecraft version.
 
 Every run then diffs each built shim against the jar it is measured against — the one it is pinned to, or, under `--update`, the one it has just been repinned to — and prints one line per shim and loader plus a report in `build/compat_scan.txt`. `--no-scan` skips it. Findings come in four kinds; `+` and `~` are judgement calls, `-` and `!` are always defects:
 

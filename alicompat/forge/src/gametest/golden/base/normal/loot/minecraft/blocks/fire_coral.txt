@@ -1,0 +1,12 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:fire_coral x1
+      | Count: 1
+      | ----- Predicates -----
+      | Match Tool:
+      |   -> Enchantments:
+      |     -> Enchantment: Silk Touch
+      |     -> Level: ≥ 1

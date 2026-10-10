@@ -1,0 +1,16 @@
+{
+    "schemaVersion": 1,
+    "id": "alicompat_gametest",
+    "version": "1.0.0",
+    "name": "ALICompat GameTest",
+    "environment": "*",
+    "entrypoints": {
+        "fabric-gametest": [
+            "com.yanny.alicompat.fabric.gametest.CompatDataGameTest"
+        ]
+    },
+    "depends": {
+        "alicompat": "*",
+        "fabric-gametest-api-v1": "*"
+    }
+}

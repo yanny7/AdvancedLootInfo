@@ -216,10 +216,12 @@ subprojects {
 
                 compatMods.each { mod ->
                     def deps = project.findProperty("${mod}_${project.name}_dep")
+                    def runtimeDeps = project.findProperty("${mod}_${project.name}_runtime_deps")
 
                     // compile-only on purpose: a target mod on the run classpath drags its own datagen entrypoint into ours
-                    if (deps) {
-                        deps.split(",")*.trim().each { dep ->
+                    // the runtime deps are here too: loom remaps a mod once, and without its supertypes it keeps their names
+                    [deps, runtimeDeps].findAll { it }.each { list ->
+                        list.split(",")*.trim().each { dep ->
                             modCompileOnly project.name == "fabric" ? project.explosion.fabric(dep) : dep
                         }
                     }

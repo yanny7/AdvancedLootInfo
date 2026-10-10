@@ -7,8 +7,11 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public record GoldenFiles(Path goldenDir, Path actualDir, boolean regenerate) {
+    private static final String REMOVED_FILE = "removed.txt";
+
     @NotNull
     public static GoldenFiles fromProperties(String modId) {
         return new GoldenFiles(Path.of(System.getProperty(modId + ".golden.dir")), Path.of(System.getProperty(modId + ".golden.actual")),
@@ -18,6 +21,33 @@ public record GoldenFiles(Path goldenDir, Path actualDir, boolean regenerate) {
     @NotNull
     public GoldenFiles resolve(String variant) {
         return new GoldenFiles(goldenDir.resolve(variant), actualDir.resolve(variant), regenerate);
+    }
+
+    @NotNull
+    public static Map<String, String> diff(Map<String, String> base, Map<String, String> actual) {
+        Map<String, String> files = new TreeMap<>();
+        String removed = base.keySet().stream().filter((key) -> !actual.containsKey(key)).map((key) -> key + "\n").collect(Collectors.joining());
+
+        actual.forEach((key, value) -> {
+            if (!value.equals(base.get(key))) {
+                files.put(key, value);
+            }
+        });
+
+        if (!removed.isEmpty()) {
+            files.put(REMOVED_FILE, removed);
+        }
+
+        return files;
+    }
+
+    @NotNull
+    public Map<String, String> expected() {
+        if (!Files.isDirectory(goldenDir)) {
+            throw new IllegalStateException("no golden files in " + goldenDir);
+        }
+
+        return read(goldenDir);
     }
 
     @NotNull

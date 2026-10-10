@@ -1,0 +1,196 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects 5 Of These Trades
+    ali:items_to_items
+      | Uses: 6
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item ad_astra:cheese x3
+    ali:items_to_items
+      | Uses: 2
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item ad_astra:space_painting x1
+    ali:items_to_items
+      | Uses: 3
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item ad_astra:gas_tank x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:soul_torch x12
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:soul_campfire x1
+    ali:items_to_items
+      | Uses: 2
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item ad_astra:wrench x1
+    ali:items_to_items
+      | Uses: 3
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item ad_astra:white_flag x1
+    ali:items_to_items
+      | Uses: 2
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item ad_astra:space_helmet x1 {Damage:0}
+    ali:items_to_items
+      | Uses: 2
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item ad_astra:space_suit x1 {Damage:0}
+    ali:items_to_items
+      | Uses: 2
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item ad_astra:space_pants x1 {Damage:0}
+    ali:items_to_items
+      | Uses: 2
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item ad_astra:space_boots x1 {Damage:0}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:coal x5
+    ali:items_to_items
+      | Uses: 2
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item ad_astra:oxygen_bucket x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:copper_ingot x4
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:water_bucket x1
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:lava_bucket x1
+    ali:items_to_items
+      | Uses: 20
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item ad_astra:desh_ingot x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 20
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item ad_astra:ostrum_ingot x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 20
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item ad_astra:calorite_ingot x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+  ali:trade_level
+    | Level: 2
+    | Randomly Selects 1 Of These Trades
+    ali:items_to_items
+      | Uses: 3
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item ad_astra:gas_tank x1 {BotariumData:{StoredFluids:[{Amount:1000L,Fluid:"ad_astra:oxygen"}]}}
+    ali:items_to_items
+      | Uses: 3
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item ad_astra:launch_pad x1
+    ali:items_to_items
+      | Uses: 3
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item ad_astra:launch_pad x1
+    ali:items_to_items
+      | Uses: 20
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item ad_astra:glacian_log x16
+    ali:items_to_items
+      | Uses: 20
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item ad_astra:glacian_leaves x16
+    ali:items_to_items
+      | Uses: 20
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item ad_astra:aeronos_stem x16
+    ali:items_to_items
+      | Uses: 20
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item ad_astra:strophar_stem x16
+    ali:items_to_items
+      | Uses: 6
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item ad_astra:fuel_bucket x1

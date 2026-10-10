@@ -7,8 +7,34 @@ architectury {
     fabric()
 }
 
+sourceSets {
+    gametest {
+        java.srcDir project(":aci:common").file("src/gametest/java")
+        java.srcDir project(":ali:common").file("src/gametest/java")
+        java.srcDir project(":alicompat:common").file("src/gametest/java")
+        java.exclude "com/yanny/ali/gametest/LootDataGolden.java"
+        compileClasspath += sourceSets.main.compileClasspath + sourceSets.main.output
+        runtimeClasspath += sourceSets.main.runtimeClasspath + sourceSets.main.output
+    }
+}
+
+def gametestMod = project.findProperty("alicompat_gametest")
+def gametestModIds = ""
+
+if (gametestMod) {
+    def entry = new groovy.json.JsonSlurper().parse(rootProject.file("scripts/supported_mods.json")).find { it.key == gametestMod }
+    def enabled = (project.findProperty("compat_mods") ?: "").split(",")*.trim().contains(gametestMod)
+
+    if (!entry || !enabled || !project.findProperty("${gametestMod}_${project.name}_dep")) {
+        throw new GradleException("alicompat_gametest=${gametestMod} is not a mod enabled in compat_mods with a ${project.name} dependency")
+    }
+
+    gametestModIds = entry.mod_ids.join(",")
+}
+
 loom {
     accessWidenerPath = project(":ali:common").loom.accessWidenerPath
+    createRemapConfigurations(sourceSets.gametest)
 
     runs {
         datagen {
@@ -20,6 +46,28 @@ loom {
 
             runDir "build/datagen"
         }
+        gametest {
+            server()
+            name "Minecraft GameTest"
+            source sourceSets.gametest
+            vmArg "-Dfabric-api.gametest"
+            vmArg "-Dfabric-api.gametest.report-file=${project.file("build/gametest/report.xml")}"
+            vmArg "-Dalicompat.golden.dir=${project.file("src/gametest/golden")}"
+            vmArg "-Dalicompat.golden.actual=${project.file("build/gametest/golden")}"
+            vmArg "-Dalicompat.golden.regenerate=${project.findProperty("alicompat_golden_regenerate") ?: false}"
+            vmArg "-Dalicompat.gametest.mod=${gametestMod ?: "base"}"
+            vmArg "-Dalicompat.gametest.modids=${gametestModIds}"
+
+            runDir "build/gametest/run"
+        }
+    }
+}
+
+tasks.matching { it.name == "runGametest" }.configureEach {
+    timeout = java.time.Duration.ofMinutes(10)
+
+    doFirst {
+        delete "build/gametest/run/config", "build/gametest/run/world"
     }
 }
 
@@ -41,6 +89,13 @@ dependencies {
     common(project(path: ":ali:common", configuration: "namedElements")) { transitive false }
     runtimeOnly project(path: ":aci:fabric", configuration: "namedElements")
     runtimeOnly project(path: ":ali:fabric", configuration: "namedElements")
+    gametestCompileOnly project(path: ":ali:fabric", configuration: "namedElements")
+
+    if (gametestMod) {
+        ["${gametestMod}_fabric_dep", "${gametestMod}_fabric_runtime_deps"].each { name ->
+            (project.findProperty(name) ?: "").split(",")*.trim().findAll { it }.each { modGametestRuntimeOnly it }
+        }
+    }
     rootProject.project(":ali:fabric").ext.commonProjects.each { p ->
         common(project(path: p, configuration: "namedElements")) { transitive false }
     }

@@ -57,9 +57,9 @@ A shim is switched on by `compat_mods` and its `<slug>_<loader>_dep`, never by t
 
 A dormant shim is dead code until it is ported: an API change in ACI or ALI updates only the shims in `compat_mods` and leaves dormant sources untouched, even when they no longer compile against it. They are brought up to the current API when they are activated, together with re-deriving their class list.
 
-On Fabric the dependency notation goes through the `explosion` plugin: Fabric mods bundle their libraries as jar-in-jar and a dev launch does not unpack them.
+On Fabric the dependency notation goes through the `explosion` plugin: Fabric mods bundle their libraries as jar-in-jar and a dev launch does not unpack them. Each mod's `<slug>_<loader>_runtime_deps` (its required dependencies, see Gametests) are `modCompileOnly` as well: loom remaps a mod jar once and caches it, and a mod remapped without the dependencies its classes extend keeps the SRG names of every method it inherits through them.
 
-Target mods stay **compile-only** and are deliberately kept off the run classpath. Fabric's data generator constructs the `fabric-datagen` entrypoint of every mod it can see and calls its `buildRegistry` before `fabric-api.datagen.modid` filters anything, so a target mod in the dev runtime (Porting Lib ships such an entrypoint) runs its own datagen inside ALICompat's. To play-test a shim, drop the target mod's jar into the run's `mods/` directory by hand.
+Target mods stay **compile-only** and are deliberately kept off the run classpath (the gametest run below is the one exception). Fabric's data generator constructs the `fabric-datagen` entrypoint of every mod it can see and calls its `buildRegistry` before `fabric-api.datagen.modid` filters anything, so a target mod in the dev runtime (Porting Lib ships such an entrypoint) runs its own datagen inside ALICompat's. To play-test a shim, drop the target mod's jar into the run's `mods/` directory by hand.
 
 ## Writing a shim
 
@@ -128,3 +128,13 @@ They are published through **`ICompatTranslations`, a service of its own** — d
 Other locales stay hand-written next to the shim, in `src/compat/<slug>/lang/<locale>.json` rather than under `resources/`, where two shims' files of one name would collide in the jar; `generateCompatServices` merges them.
 
 Register nothing ALI already registers: node ids, widgets and data-node factories for ALI's own node kinds (`ModifiedNode` and friends) come from `ali/common`'s `Plugin.registerClient`.
+
+## Gametests
+
+One server-side GameTest per loader, in a `gametest` source set of `alicompat/fabric` and `alicompat/forge`, run once per target mod — `-Palicompat_gametest=<slug>` — so a shim is checked against the real mod in a real loader. It compiles ACI's shared gametest classes and ALI's `LootDataCapture` (see `ali/CLAUDE.md`'s gametest section) next to `alicompat/common/src/gametest/java/.../CompatDataGolden`, and each loader adds only the `@GameTest` wrapper.
+
+- **Base and mods.** Without the property the run is the base: ALI and ALICompat over vanilla data, every page stored under `golden/base/`. With it the run puts that mod's `<slug>_<loader>_dep` plus `<slug>_<loader>_runtime_deps` on the gametest runtime classpath (`modGametestRuntimeOnly`) and stores only the pages that differ from the stored base, plus `removed.txt`, under `golden/<slug>/` — a mod's own tables and trades, and the vanilla pages its global loot modifiers or loot changes touch. A mod run therefore needs the base golden files to be current. The run fails when one of the slug's `mod_ids` is not loaded, so a mod that silently failed to load cannot pass as "nothing changed".
+- **Findings.** Every line of a stored page that holds an `ali:missing` node or a `Not implemented` tooltip is listed in `findings.txt` beside the pages, grouped by page — that file is the shim's to-do list and shows up in the diff whenever it changes.
+- **Runtime dependencies** are pinned in the generated block by `scripts/check_versions.py`: every required dependency of the pinned file, recursively, a dependency that is itself a pinned registry mod keeping its pin and anything else taking its newest file; Fabric API and the recipe viewers are left out, since the run already has them. `--update` resolves them for whatever it repins, `--runtime-deps` re-resolves them for the current pins without repinning anything.
+- **Forge jar-in-jar.** A Forge dev launch does not unpack the `META-INF/jars/` of a mod on the classpath, so `runGametest` extracts them from the target mod and its dependencies into the run's `mods/` folder, where Forge loads them itself — they reference no Minecraft class, so they need no remapping. A nested jar with neither `mods.toml` nor `FMLModType` gets `FMLModType: GAMELIBRARY` in its manifest, as JarJar would give it, otherwise Forge skips it.
+- **Regenerating.** `-Palicompat_golden_regenerate=true` rewrites the golden files of the run's slug (or of the base). `runGametest` deletes the run's `config` and `world` first.
