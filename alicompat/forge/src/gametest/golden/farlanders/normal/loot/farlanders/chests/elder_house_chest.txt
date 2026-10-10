@@ -1,0 +1,35 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 5
+    ali:item farlanders:endumium_crystal x1
+      | Chance: 19.05%
+      | Count: 1 to 2
+    ali:item minecraft:iron_ingot x1
+      | Chance: 16.67%
+      | Count: 3 to 4
+    ali:item minecraft:gold_ingot x1
+      | Chance: 14.29%
+      | Count: 1
+    ali:item minecraft:emerald x1
+      | Chance: 11.9%
+      | Count: 1 to 2
+    ali:item minecraft:coal x1
+      | Chance: 11.9%
+      | Count: 4 to 5
+    ali:item minecraft:spider_eye x1
+      | Chance: 7.14%
+      | Count: 2 to 4
+    ali:item minecraft:slime_ball x1
+      | Chance: 7.14%
+      | Count: 1 to 2
+    ali:item minecraft:experience_bottle x1
+      | Chance: 4.76%
+      | Count: 1
+    ali:item minecraft:ender_pearl x1
+      | Chance: 4.76%
+      | Count: 1 to 2
+    ali:item minecraft:blaze_powder x1
+      | Chance: 2.38%
+      | Count: 1 to 2

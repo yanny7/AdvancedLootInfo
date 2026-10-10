@@ -1,0 +1,13 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:arrow x1
+      | Count: max(0; U[1; 4])
+      | ----- Modifiers -----
+      | Looting Enchant:
+      |   -> Value: U[0; 2)
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False

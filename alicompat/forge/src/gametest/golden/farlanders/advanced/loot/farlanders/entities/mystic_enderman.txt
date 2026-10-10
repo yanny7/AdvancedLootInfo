@@ -1,0 +1,68 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item farlanders:mystic_wand_ore x1 {Damage:0}
+            | Chance: 25%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Equipment:
+            |       -> Main Hand:
+            |         -> Items:
+            |           -> Mystic Wand
+            |           -> Mystic Wand
+            |           -> Mystic Wand
+            |           -> Mystic Wand
+          ali:item farlanders:mystic_wand_teleport x1 {Damage:0}
+            | Chance: 25%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Equipment:
+            |       -> Main Hand:
+            |         -> Items:
+            |           -> Mystic Wand
+            |           -> Mystic Wand
+            |           -> Mystic Wand
+            |           -> Mystic Wand
+          ali:item farlanders:mystic_wand_regen x1 {Damage:0}
+            | Chance: 25%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Equipment:
+            |       -> Main Hand:
+            |         -> Items:
+            |           -> Mystic Wand
+            |           -> Mystic Wand
+            |           -> Mystic Wand
+            |           -> Mystic Wand
+          ali:item farlanders:mystic_wand_invisible x1 {Damage:0}
+            | Chance: 25%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Equipment:
+            |       -> Main Hand:
+            |         -> Items:
+            |           -> Mystic Wand
+            |           -> Mystic Wand
+            |           -> Mystic Wand
+            |           -> Mystic Wand

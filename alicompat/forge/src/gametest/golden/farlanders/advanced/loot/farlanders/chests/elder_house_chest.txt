@@ -1,0 +1,67 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 5
+    ali:item farlanders:endumium_crystal x1
+      | Chance: 19.05%
+      | Count: max(0; U[1; 2])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
+    ali:item minecraft:iron_ingot x1
+      | Chance: 16.67%
+      | Count: max(0; U[3; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 3 to 4
+      |   -> Add: False
+    ali:item minecraft:gold_ingot x1
+      | Chance: 14.29%
+      | Count: 1
+    ali:item minecraft:emerald x1
+      | Chance: 11.9%
+      | Count: max(0; U[1; 2])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
+    ali:item minecraft:coal x1
+      | Chance: 11.9%
+      | Count: max(0; U[4; 5])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4 to 5
+      |   -> Add: False
+    ali:item minecraft:spider_eye x1
+      | Chance: 7.14%
+      | Count: max(0; U[2; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 4
+      |   -> Add: False
+    ali:item minecraft:slime_ball x1
+      | Chance: 7.14%
+      | Count: max(0; U[1; 2])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
+    ali:item minecraft:experience_bottle x1
+      | Chance: 4.76%
+      | Count: 1
+    ali:item minecraft:ender_pearl x1
+      | Chance: 4.76%
+      | Count: max(0; U[1; 2])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
+    ali:item minecraft:blaze_powder x1
+      | Chance: 2.38%
+      | Count: max(0; U[1; 2])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
