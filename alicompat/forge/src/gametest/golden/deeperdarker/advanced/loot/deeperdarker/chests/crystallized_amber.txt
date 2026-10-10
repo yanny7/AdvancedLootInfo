@@ -1,0 +1,42 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:gold_ingot x1
+      | Chance: 14.04%
+      | Count: 1
+    ali:item deeperdarker:sculk_bone x1
+      | Chance: 14.04%
+      | Count: 1
+    ali:item deeperdarker:soul_dust x1
+      | Chance: 14.04%
+      | Count: 1
+    ali:item minecraft:iron_ingot x1
+      | Chance: 12.28%
+      | Count: 1
+    ali:item minecraft:quartz x1
+      | Chance: 12.28%
+      | Count: 1
+    ali:item minecraft:amethyst_shard x1
+      | Chance: 8.77%
+      | Count: 1
+    ali:item minecraft:diamond x1
+      | Chance: 7.02%
+      | Count: 1
+    ali:item minecraft:iron_boots x1 {Damage:0}
+      | Chance: 7.02%
+      | Count: 1
+    ali:item minecraft:iron_boots x1 {Damage:0}
+      | Chance: 5.26%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20 to 30
+      |   -> Treasure: True
+    ali:item minecraft:emerald x1
+      | Chance: 3.51%
+      | Count: 1
+    ali:item minecraft:diamond_axe x1 {Damage:0}
+      | Chance: 1.75%
+      | Count: 1

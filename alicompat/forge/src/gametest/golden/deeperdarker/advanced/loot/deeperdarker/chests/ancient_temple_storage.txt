@@ -1,0 +1,82 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 5
+    ali:item deeperdarker:sculk_stone x1
+      | Chance: 15.24%
+      | Count: max(0; U[1; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 6
+      |   -> Add: False
+    ali:item minecraft:cobblestone x1
+      | Chance: 15.24%
+      | Count: max(0; U[2; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 8
+      |   -> Add: False
+    ali:item deeperdarker:echo_log x1
+      | Chance: 12.38%
+      | Count: max(0; U[2; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 8
+      |   -> Add: False
+    ali:item minecraft:amethyst_shard x1
+      | Chance: 10.48%
+      | Count: max(0; U[3; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 3 to 6
+      |   -> Add: False
+    ali:item minecraft:redstone x1
+      | Chance: 9.52%
+      | Count: max(0; U[3; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 3 to 6
+      |   -> Add: False
+    ali:item minecraft:lapis_lazuli x1
+      | Chance: 9.52%
+      | Count: max(0; U[1; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 8
+      |   -> Add: False
+    ali:item minecraft:raw_iron x1
+      | Chance: 7.62%
+      | Count: max(0; U[1; 10])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 10
+      |   -> Add: False
+    ali:item minecraft:raw_copper x1
+      | Chance: 7.62%
+      | Count: max(0; U[1; 10])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 10
+      |   -> Add: False
+    ali:item minecraft:raw_gold x1
+      | Chance: 6.67%
+      | Count: max(0; U[1; 10])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 10
+      |   -> Add: False
+    ali:item minecraft:emerald x1
+      | Chance: 2.86%
+      | Count: max(0; U[1; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False
+    ali:item minecraft:diamond x1
+      | Chance: 2.86%
+      | Count: max(0; U[1; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False

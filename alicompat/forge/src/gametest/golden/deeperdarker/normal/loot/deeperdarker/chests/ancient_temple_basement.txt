@@ -1,0 +1,164 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4 to 6
+    ali:item minecraft:sculk x1
+      | Chance: 10.85%
+      | Count: 6 to 8
+    ali:item minecraft:soul_soil x1
+      | Chance: 10.51%
+      | Count: 3 to 7
+    ali:item deeperdarker:soul_dust x1
+      | Chance: 10.51%
+      | Count: 3 to 7
+    ali:item minecraft:echo_shard x1
+      | Chance: 10.17%
+      | Count: 4 to 7
+    ali:item deeperdarker:grime_brick x1
+      | Chance: 9.49%
+      | Count: 5 to 13
+    ali:item minecraft:name_tag x1
+      | Chance: 8.81%
+      | Count: 1
+    ali:item deeperdarker:sculk_bone x1
+      | Chance: 8.47%
+      | Count: 2 to 7
+    ali:item minecraft:string x1
+      | Chance: 6.78%
+      | Count: 9 to 16
+    ali:item deeperdarker:crystallized_amber x1
+      | Chance: 6.1%
+      | Count: 2 to 5
+    ali:item minecraft:iron_ingot x1
+      | Chance: 5.42%
+      | Count: 7 to 14
+    ali:item minecraft:gold_ingot x1
+      | Chance: 4.41%
+      | Count: 7 to 12
+    ali:item minecraft:diamond x1
+      | Chance: 3.39%
+      | Count: 3 to 7
+    ali:item minecraft:enchanted_book x1
+      | Chance: 2.71%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item minecraft:enchanted_golden_apple x1
+      | Chance: 1.02%
+      | Count: 1 to 2
+    ali:item minecraft:music_disc_otherside x1
+      | Chance: 0.68%
+      | Count: 1
+    ali:item minecraft:enchanted_book x1
+      | Chance: 0.34%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Catalysis
+    ali:item deeperdarker:warden_carapace x1
+      | Chance: 0.34%
+      | Count: 1 to 2
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item minecraft:potion x1 {Potion:"minecraft:strong_strength"}
+      | Chance: 19.61%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Strength
+    ali:item minecraft:iron_leggings x1 {Damage:0}
+      | Chance: 13.73%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 25 to 35
+      |   -> Treasure: True
+      | Set Damage:
+      |   -> Damage: 20% to 50%
+      |   -> Add: False
+    ali:item minecraft:iron_shovel x1 {Damage:0}
+      | Chance: 13.73%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 15 to 30
+      |   -> Treasure: False
+      | Set Damage:
+      |   -> Damage: 30% to 90%
+      |   -> Add: False
+    ali:item minecraft:diamond_boots x1 {Damage:0}
+      | Chance: 9.8%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 25 to 40
+      |   -> Treasure: False
+      | Set Damage:
+      |   -> Damage: 10% to 20%
+      |   -> Add: False
+    ali:item minecraft:iron_hoe x1 {Damage:0}
+      | Chance: 9.8%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20 to 40
+      |   -> Treasure: False
+    ali:item minecraft:diamond_sword x1 {Damage:0}
+      | Chance: 7.84%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30 to 40
+      |   -> Treasure: True
+      | Set Damage:
+      |   -> Damage: 40% to 80%
+      |   -> Add: False
+    ali:item minecraft:diamond_helmet x1 {Damage:0}
+      | Chance: 5.88%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 35 to 50
+      |   -> Treasure: False
+    ali:item minecraft:diamond_hoe x1 {Damage:0}
+      | Chance: 5.88%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30 to 50
+      |   -> Treasure: False
+      | Set Damage:
+      |   -> Damage: 50% to 90%
+      |   -> Add: False
+    ali:item minecraft:diamond_leggings x1 {Damage:0}
+      | Chance: 5.88%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 40 to 50
+      |   -> Treasure: True
+      | Set Damage:
+      |   -> Damage: 15% to 40%
+      |   -> Add: False
+    ali:item minecraft:diamond_axe x1 {Damage:0}
+      | Chance: 3.92%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 40 to 50
+      |   -> Treasure: True
+      | Set Damage:
+      |   -> Damage: 50% to 70%
+      |   -> Add: False
+    ali:item minecraft:diamond_chestplate x1 {Damage:0}
+      | Chance: 3.92%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 40 to 50
+      |   -> Treasure: True
+      | Set Damage:
+      |   -> Damage: 30% to 70%
+      |   -> Add: False
