@@ -16,7 +16,7 @@ ali:loot_table
         |       -> Enchantment: Silk Touch
         |       -> Level: ≥ 1
         | ----- Modifiers -----
-        | Double Drops:
+        | Double Drops
       ali:item aether:skyroot_stick x1
         | Chance: 2%
         |   -> Fortune I: 2.22%
@@ -24,5 +24,5 @@ ali:loot_table
         |   -> Fortune III: 3.33%
         | Count: 1 to 2
         | ----- Modifiers -----
-        | Double Drops:
+        | Double Drops
         | Explosion Decay

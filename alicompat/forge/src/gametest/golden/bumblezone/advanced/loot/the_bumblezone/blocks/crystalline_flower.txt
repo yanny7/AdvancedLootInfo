@@ -21,4 +21,4 @@ ali:loot_table
       |       -> Source: guid
       |       -> Target: BlockEntityTag.guid
       |       -> Merge Strategy: Replace
-      | Drop Container Items:
+      | Drop Container Items

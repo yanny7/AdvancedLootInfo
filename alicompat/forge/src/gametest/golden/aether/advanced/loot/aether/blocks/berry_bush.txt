@@ -22,7 +22,7 @@ ali:loot_table
         |       -> Enchantment: Silk Touch
         |       -> Level: ≥ 1
         | ----- Modifiers -----
-        | Double Drops:
+        | Double Drops
         | Set Count:
         |   -> Count: 1 to 3
         |   -> Add: False
@@ -45,7 +45,7 @@ ali:loot_table
         |       -> Enchantment: Silk Touch
         |       -> Level: ≥ 1
         | ----- Modifiers -----
-        | Double Drops:
+        | Double Drops
         | Set Count:
         |   -> Count: 1 to 3
         |   -> Add: False

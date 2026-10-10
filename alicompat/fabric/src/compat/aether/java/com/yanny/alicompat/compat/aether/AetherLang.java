@@ -33,9 +33,9 @@ public class AetherLang implements ICompatTranslations {
     }
 
     public enum Functions implements ITooltipKey {
-        DOUBLE_DROPS("double_drops", "Double Drops:"),
-        SPAWN_TNT("spawn_tnt", "Spawn TNT:"),
-        SPAWN_XP("spawn_xp", "Spawn XP:"),
+        DOUBLE_DROPS("double_drops", "Double Drops"),
+        SPAWN_TNT("spawn_tnt", "Spawn TNT"),
+        SPAWN_XP("spawn_xp", "Spawn XP"),
         WHIRLWIND_SPAWN_ENTITY("whirlwind_spawn_entity", "Whirlwind Spawn Entity:"),
         ;
 

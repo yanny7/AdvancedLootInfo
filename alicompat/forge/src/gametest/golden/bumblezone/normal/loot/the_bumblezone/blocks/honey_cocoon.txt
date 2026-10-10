@@ -22,12 +22,12 @@ ali:loot_table
         |     -> Source: Items
         |     -> Target: BlockEntityTag.Items
         |     -> Merge Strategy: Replace
-        | Uniquify If Has Items:
+        | Uniquify If Has Items
       ali:item the_bumblezone:honey_cocoon x1
         | Count: 1
         | ----- Predicates -----
         | Survives Explosion
         | ----- Modifiers -----
-        | Drop Container Items:
+        | Drop Container Items
         | Copy Name:
         |   -> Source: Block Entity

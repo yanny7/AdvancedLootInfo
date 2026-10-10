@@ -13,10 +13,10 @@ ali:loot_table
         |     -> Enchantment: Silk Touch
         |     -> Level: ≥ 1
         | ----- Modifiers -----
-        | Double Drops:
+        | Double Drops
       ali:item aether:aether_dirt x1
         | Count: 1
         | ----- Predicates -----
         | Survives Explosion
         | ----- Modifiers -----
-        | Double Drops:
+        | Double Drops

@@ -13,7 +13,7 @@ ali:loot_table
       |       -> Enchantment: Silk Touch
       |       -> Level: ≥ 1
       | ----- Modifiers -----
-      | Spawn TNT:
+      | Spawn TNT
     ali:empty
       | Chance: 25%
       | Count: 1
@@ -24,7 +24,7 @@ ali:loot_table
       |       -> Enchantment: Silk Touch
       |       -> Level: ≥ 1
       | ----- Modifiers -----
-      | Spawn XP:
+      | Spawn XP
     ali:item aether:gingerbread_man x1
       | Chance: 22.22%
       | Count: 5 to 6

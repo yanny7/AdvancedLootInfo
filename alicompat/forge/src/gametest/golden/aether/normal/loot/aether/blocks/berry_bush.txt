@@ -19,7 +19,7 @@ ali:loot_table
         |       -> Enchantment: Silk Touch
         |       -> Level: ≥ 1
         | ----- Modifiers -----
-        | Double Drops:
+        | Double Drops
         | Explosion Decay
       ali:item aether:blue_berry x1
         | Count: 1 to 3
@@ -34,7 +34,7 @@ ali:loot_table
         |       -> Enchantment: Silk Touch
         |       -> Level: ≥ 1
         | ----- Modifiers -----
-        | Double Drops:
+        | Double Drops
         | Explosion Decay
   ali:loot_pool
     | Selects random entry
