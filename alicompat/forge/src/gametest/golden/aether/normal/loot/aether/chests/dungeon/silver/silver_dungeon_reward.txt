@@ -1,0 +1,293 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item aether:valkyrie_helmet x1 {Damage:0}
+            | Chance: 11.76%
+            | Count: 1
+          ali:item aether:valkyrie_chestplate x1 {Damage:0}
+            | Chance: 11.76%
+            | Count: 1
+          ali:item aether:valkyrie_leggings x1 {Damage:0}
+            | Chance: 11.76%
+            | Count: 1
+          ali:item aether:valkyrie_boots x1 {Damage:0}
+            | Chance: 11.76%
+            | Count: 1
+          ali:item aether:valkyrie_gloves x1 {Damage:0}
+            | Chance: 11.76%
+            | Count: 1
+          ali:reference
+            | Selects all entries
+            | Chance: 8.82%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:item aether:valkyrie_cape x1
+                  | Chance: 4.41%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Config Enabled:
+                  |   -> Config: [Loot, Valkyrie Cape in loot]
+                ali:item aether:golden_feather x1
+                  | Chance: 4.41%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Config Enabled:
+                  |   -> Config: [Loot, Golden Feather in loot]
+          ali:item aether:valkyrie_pickaxe x1 {Damage:0}
+            | Chance: 8.82%
+            | Count: 1
+          ali:item aether:valkyrie_axe x1 {Damage:0}
+            | Chance: 8.82%
+            | Count: 1
+          ali:item aether:valkyrie_shovel x1 {Damage:0}
+            | Chance: 8.82%
+            | Count: 1
+          ali:item aether:valkyrie_hoe x1 {Damage:0}
+            | Chance: 5.88%
+            | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 3
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:reference
+            | Selects all entries
+            | Chance: 50%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:item aether:valkyrie_helmet x1 {Damage:0}
+                  | Chance: 5.88%
+                  | Count: 1
+                ali:item aether:valkyrie_chestplate x1 {Damage:0}
+                  | Chance: 5.88%
+                  | Count: 1
+                ali:item aether:valkyrie_leggings x1 {Damage:0}
+                  | Chance: 5.88%
+                  | Count: 1
+                ali:item aether:valkyrie_boots x1 {Damage:0}
+                  | Chance: 5.88%
+                  | Count: 1
+                ali:item aether:valkyrie_gloves x1 {Damage:0}
+                  | Chance: 5.88%
+                  | Count: 1
+                ali:reference
+                  | Selects all entries
+                  | Chance: 4.41%
+                  ali:loot_table
+                    | Selects all entries
+                    ali:loot_pool
+                      | Selects random entry
+                      | Rolls: 1
+                      ali:item aether:valkyrie_cape x1
+                        | Chance: 2.21%
+                        | Count: 1
+                        | ----- Predicates -----
+                        | Config Enabled:
+                        |   -> Config: [Loot, Valkyrie Cape in loot]
+                      ali:item aether:golden_feather x1
+                        | Chance: 2.21%
+                        | Count: 1
+                        | ----- Predicates -----
+                        | Config Enabled:
+                        |   -> Config: [Loot, Golden Feather in loot]
+                ali:item aether:valkyrie_pickaxe x1 {Damage:0}
+                  | Chance: 4.41%
+                  | Count: 1
+                ali:item aether:valkyrie_axe x1 {Damage:0}
+                  | Chance: 4.41%
+                  | Count: 1
+                ali:item aether:valkyrie_shovel x1 {Damage:0}
+                  | Chance: 4.41%
+                  | Count: 1
+                ali:item aether:valkyrie_hoe x1 {Damage:0}
+                  | Chance: 2.94%
+                  | Count: 1
+          ali:item aether:regeneration_stone x1
+            | Chance: 18.75%
+            | Count: 1
+          ali:item aether:lightning_sword x1 {Damage:0}
+            | Chance: 12.5%
+            | Count: 1
+          ali:item aether:holy_sword x1 {Damage:0}
+            | Chance: 12.5%
+            | Count: 1
+          ali:item aether:invisibility_cloak x1
+            | Chance: 6.25%
+            | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 3
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item aether:golden_gummy_swet x1
+            | Chance: 75%
+            | Count: 1 to 4
+          ali:item aether:blue_gummy_swet x1
+            | Chance: 25%
+            | Count: 1 to 4
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 6 to 10
+    ali:reference
+      | Selects all entries
+      | Chance: 11.11%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item aether:valkyrie_helmet x1 {Damage:0}
+            | Chance: 1.31%
+            | Count: 1
+          ali:item aether:valkyrie_chestplate x1 {Damage:0}
+            | Chance: 1.31%
+            | Count: 1
+          ali:item aether:valkyrie_leggings x1 {Damage:0}
+            | Chance: 1.31%
+            | Count: 1
+          ali:item aether:valkyrie_boots x1 {Damage:0}
+            | Chance: 1.31%
+            | Count: 1
+          ali:item aether:valkyrie_gloves x1 {Damage:0}
+            | Chance: 1.31%
+            | Count: 1
+          ali:reference
+            | Selects all entries
+            | Chance: 0.98%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:item aether:valkyrie_cape x1
+                  | Chance: 0.49%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Config Enabled:
+                  |   -> Config: [Loot, Valkyrie Cape in loot]
+                ali:item aether:golden_feather x1
+                  | Chance: 0.49%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Config Enabled:
+                  |   -> Config: [Loot, Golden Feather in loot]
+          ali:item aether:valkyrie_pickaxe x1 {Damage:0}
+            | Chance: 0.98%
+            | Count: 1
+          ali:item aether:valkyrie_axe x1 {Damage:0}
+            | Chance: 0.98%
+            | Count: 1
+          ali:item aether:valkyrie_shovel x1 {Damage:0}
+            | Chance: 0.98%
+            | Count: 1
+          ali:item aether:valkyrie_hoe x1 {Damage:0}
+            | Chance: 0.65%
+            | Count: 1
+    ali:item aether:enchanted_dart_shooter x1
+      | Chance: 8.89%
+      | Count: 1
+    ali:item aether:enchanted_berry x1
+      | Chance: 8.89%
+      | Count: 2 to 8
+    ali:item aether:blue_berry x1
+      | Chance: 8.89%
+      | Count: 2 to 10
+    ali:item aether:invisibility_cloak x1
+      | Chance: 6.67%
+      | Count: 1
+    ali:item aether:poison_dart_shooter x1
+      | Chance: 6.67%
+      | Count: 1
+    ali:item minecraft:saddle x1
+      | Chance: 6.67%
+      | Count: 1
+    ali:item aether:golden_amber x1
+      | Chance: 6.67%
+      | Count: 1 to 4
+    ali:item aether:zanite_gemstone x1
+      | Chance: 6.67%
+      | Count: 1 to 4
+    ali:item aether:lightning_sword x1 {Damage:0}
+      | Chance: 4.44%
+      | Count: 1
+    ali:item aether:holy_sword x1 {Damage:0}
+      | Chance: 4.44%
+      | Count: 1
+    ali:item minecraft:golden_sword x1 {Damage:0}
+      | Chance: 4.44%
+      | Count: 1
+    ali:item minecraft:iron_sword x1 {Damage:0}
+      | Chance: 4.44%
+      | Count: 1
+    ali:reference
+      | Selects all entries
+      | Chance: 3.33%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item aether:gravitite_helmet x1 {Damage:0}
+            | Chance: 0.44%
+            | Count: 1
+          ali:item aether:gravitite_chestplate x1 {Damage:0}
+            | Chance: 0.44%
+            | Count: 1
+          ali:item aether:gravitite_leggings x1 {Damage:0}
+            | Chance: 0.44%
+            | Count: 1
+          ali:item aether:gravitite_boots x1 {Damage:0}
+            | Chance: 0.44%
+            | Count: 1
+          ali:item aether:gravitite_gloves x1 {Damage:0}
+            | Chance: 0.44%
+            | Count: 1
+          ali:item aether:gravitite_sword x1 {Damage:0}
+            | Chance: 0.33%
+            | Count: 1
+          ali:item aether:gravitite_axe x1 {Damage:0}
+            | Chance: 0.33%
+            | Count: 1
+          ali:item aether:gravitite_pickaxe x1 {Damage:0}
+            | Chance: 0.33%
+            | Count: 1
+          ali:item aether:gravitite_ore x1
+            | Chance: 0.11%
+            | Count: 1
+    ali:item aether:regeneration_stone x1
+      | Chance: 3.33%
+      | Count: 1
+    ali:item aether:angelic_stone x1
+      | Chance: 2.22%
+      | Count: 1
+    ali:item aether:music_disc_aether_tune x1
+      | Chance: 1.11%
+      | Count: 1
+    ali:item aether:music_disc_ascending_dawn x1
+      | Chance: 1.11%
+      | Count: 1

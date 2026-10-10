@@ -30,6 +30,86 @@ if (gametestMod) {
     }
 }
 
+def gametestCoordinates = gametestModIds ? ["${gametestMod}_forge_dep", "${gametestMod}_forge_runtime_deps"].collectMany { (project.findProperty(it) ?: "").split(",")*.trim().findAll { it } } : []
+def gametestNestedMods = null
+
+// a Forge dev launch does not unpack jar-in-jar: nested mods using Minecraft go through loom to be remapped, the rest into mods/
+def extractGametestNested = {
+    if (gametestNestedMods != null) {
+        return gametestNestedMods
+    }
+
+    gametestNestedMods = []
+
+    def nestedDir = file("build/gametest/nested")
+    def readJar = { byte[] bytes ->
+        def input = new java.util.jar.JarInputStream(new ByteArrayInputStream(bytes))
+        def entries = [:]
+
+        for (def entry = input.nextJarEntry; entry != null; entry = input.nextJarEntry) {
+            entries[entry.name] = input.readAllBytes()
+        }
+
+        input.close()
+        [manifest: input.manifest ?: new java.util.jar.Manifest(), entries: entries]
+    }
+    def modIdOf = { Map entries ->
+        def toml = entries["META-INF/mods.toml"]
+        def match = toml ? new String(toml, "UTF-8") =~ /modId\s*=\s*"([^"]+)"/ : null
+
+        match?.find() ? match.group(1) : null
+    }
+    def outerJars = configurations.detachedConfiguration(*gametestCoordinates.collect { dependencies.create(it) }).tap { transitive = false }.resolve()
+    def provided = outerJars.collect { modIdOf(readJar(it.bytes).entries) }.findAll { it } as Set
+
+    nestedDir.deleteDir()
+    new File(nestedDir, "mods").mkdirs()
+    new File(nestedDir, "libs").mkdirs()
+
+    outerJars.each { jar ->
+        def outer = new java.util.zip.ZipFile(jar)
+
+        outer.entries().findAll { it.name ==~ /META-INF\/(jars|jarjar)\/[^\/]+\.jar/ }.each { nested ->
+            def name = nested.name.substring(nested.name.lastIndexOf("/") + 1)
+            def bytes = outer.getInputStream(nested).readAllBytes()
+            def content = readJar(bytes)
+            def modId = modIdOf(content.entries)
+
+            def referencesMinecraft = content.entries.any { entryName, data -> entryName.endsWith(".class") && new String(data, "ISO-8859-1").contains("net/minecraft/") }
+
+            if (modId && referencesMinecraft) {
+                if (provided.add(modId)) {
+                    def target = new File(nestedDir, "mods/$name")
+
+                    target.bytes = bytes
+                    gametestNestedMods << target
+                }
+            } else if (!modId || provided.add(modId)) {
+                def manifest = content.manifest
+
+                if (!modId && !manifest.mainAttributes.getValue("FMLModType")) {
+                    manifest.mainAttributes.putValue("Manifest-Version", "1.0")
+                    manifest.mainAttributes.putValue("FMLModType", "GAMELIBRARY")
+                }
+
+                def output = new java.util.jar.JarOutputStream(new FileOutputStream(new File(nestedDir, "libs/$name")), manifest)
+
+                content.entries.each { entryName, data ->
+                    output.putNextEntry(new java.util.jar.JarEntry(entryName))
+                    output.write(data)
+                    output.closeEntry()
+                }
+
+                output.close()
+            }
+        }
+
+        outer.close()
+    }
+
+    return gametestNestedMods
+}
+
 loom {
     accessWidenerPath = project(":ali:common").loom.accessWidenerPath
     createRemapConfigurations(sourceSets.gametest)
@@ -74,42 +154,10 @@ tasks.matching { it.name == "runGametest" }.configureEach {
         }
 
         delete "build/gametest/run/config", "build/gametest/run/world", "build/gametest/run/mods"
-
-        def modsDir = file("build/gametest/run/mods")
-
-        modsDir.mkdirs()
-        configurations.gametestNested.each { jar ->
-            def outer = new java.util.zip.ZipFile(jar)
-
-            outer.entries().findAll { it.name ==~ /META-INF\/(jars|jarjar)\/[^\/]+\.jar/ }.each { nested ->
-                def bytes = outer.getInputStream(nested).readAllBytes()
-                def input = new java.util.jar.JarInputStream(new ByteArrayInputStream(bytes))
-                def manifest = input.manifest ?: new java.util.jar.Manifest()
-                def entries = [:]
-
-                for (def entry = input.nextJarEntry; entry != null; entry = input.nextJarEntry) {
-                    entries[entry.name] = input.readAllBytes()
-                }
-
-                input.close()
-
-                if (!entries.containsKey("META-INF/mods.toml") && !manifest.mainAttributes.getValue("FMLModType")) {
-                    manifest.mainAttributes.putValue("Manifest-Version", "1.0")
-                    manifest.mainAttributes.putValue("FMLModType", "GAMELIBRARY")
-                }
-
-                def output = new java.util.jar.JarOutputStream(new FileOutputStream(new File(modsDir, nested.name.substring(nested.name.lastIndexOf("/") + 1))), manifest)
-
-                entries.each { name, data ->
-                    output.putNextEntry(new java.util.jar.JarEntry(name))
-                    output.write(data)
-                    output.closeEntry()
-                }
-
-                output.close()
-            }
-
-            outer.close()
+        extractGametestNested()
+        copy {
+            from "build/gametest/nested/libs"
+            into "build/gametest/run/mods"
         }
     }
 }
@@ -118,7 +166,6 @@ evaluationDependsOn(":ali:forge")
 
 configurations {
     common
-    gametestNested { transitive = false }
     shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
     compileClasspath.extendsFrom common
     runtimeClasspath.extendsFrom common
@@ -134,13 +181,9 @@ dependencies {
     runtimeOnly project(path: ":ali:forge", configuration: "namedElements")
     gametestCompileOnly project(path: ":ali:forge", configuration: "namedElements")
 
-    if (gametestMod) {
-        ["${gametestMod}_forge_dep", "${gametestMod}_forge_runtime_deps"].each { name ->
-            (project.findProperty(name) ?: "").split(",")*.trim().findAll { it }.each {
-                modGametestRuntimeOnly it
-                gametestNested it
-            }
-        }
+    gametestCoordinates.each { modGametestRuntimeOnly it }
+    if (gametestCoordinates) {
+        modGametestRuntimeOnly files({ extractGametestNested() })
     }
     rootProject.project(":ali:forge").ext.commonProjects.each { p ->
         common(project(path: p, configuration: "namedElements")) { transitive false }
