@@ -1,0 +1,423 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:ancient_debris x1
+      | Chance: 13.48%
+      | Count: 1
+    ali:item minecraft:golden_carrot x1
+      | Chance: 13.48%
+      | Count: 6 to 17
+    ali:item minecraft:spectral_arrow x1
+      | Chance: 11.24%
+      | Count: 10 to 22
+    ali:item minecraft:enchanted_book x1
+      | Chance: 11.24%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Soul Speed
+    ali:item minecraft:piglin_banner_pattern x1
+      | Chance: 10.11%
+      | Count: 1
+    ali:item minecraft:golden_apple x1
+      | Chance: 10.11%
+      | Count: 1
+    ali:item minecraft:diamond_pickaxe x1 {Damage:0}
+      | Chance: 6.74%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item minecraft:diamond_shovel x1 {Damage:0}
+      | Chance: 6.74%
+      | Count: 1
+    ali:item minecraft:crossbow x1 {Damage:0}
+      | Chance: 6.74%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 10% to 90%
+      |   -> Add: False
+      | Enchant Randomly:
+    ali:item minecraft:music_disc_pigstep x1
+      | Chance: 5.62%
+      | Count: 1
+    ali:item minecraft:netherite_scrap x1
+      | Chance: 4.49%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item minecraft:iron_sword x1 {Damage:0}
+      | Chance: 10%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 10% to 90%
+      |   -> Add: False
+      | Enchant Randomly:
+    ali:item minecraft:iron_block x1
+      | Chance: 10%
+      | Count: 1
+    ali:item minecraft:gold_block x1
+      | Chance: 10%
+      | Count: 1
+    ali:item minecraft:gold_ingot x1
+      | Chance: 10%
+      | Count: 1 to 6
+    ali:item minecraft:iron_ingot x1
+      | Chance: 10%
+      | Count: 1 to 6
+    ali:item minecraft:crying_obsidian x1
+      | Chance: 10%
+      | Count: 1 to 5
+    ali:item minecraft:golden_boots x1 {Damage:0}
+      | Chance: 5%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Soul Speed
+    ali:item minecraft:golden_axe x1 {Damage:0}
+      | Chance: 5%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item minecraft:crossbow x1 {Damage:0}
+      | Chance: 5%
+      | Count: 1
+    ali:item minecraft:golden_sword x1 {Damage:0}
+      | Chance: 5%
+      | Count: 1
+    ali:item minecraft:golden_chestplate x1 {Damage:0}
+      | Chance: 5%
+      | Count: 1
+    ali:item minecraft:golden_helmet x1 {Damage:0}
+      | Chance: 5%
+      | Count: 1
+    ali:item minecraft:golden_leggings x1 {Damage:0}
+      | Chance: 5%
+      | Count: 1
+    ali:item minecraft:golden_boots x1 {Damage:0}
+      | Chance: 5%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 4
+    ali:item minecraft:gilded_blackstone x1
+      | Chance: 15.38%
+      | Count: 1 to 5
+    ali:item minecraft:magma_cream x1
+      | Chance: 15.38%
+      | Count: 2 to 6
+    ali:item minecraft:arrow x1
+      | Chance: 15.38%
+      | Count: 5 to 17
+    ali:item minecraft:chain x1
+      | Chance: 7.69%
+      | Count: 2 to 10
+    ali:item minecraft:bone_block x1
+      | Chance: 7.69%
+      | Count: 3 to 6
+    ali:item minecraft:iron_nugget x1
+      | Chance: 7.69%
+      | Count: 2 to 8
+    ali:item minecraft:obsidian x1
+      | Chance: 7.69%
+      | Count: 4 to 6
+    ali:item minecraft:gold_nugget x1
+      | Chance: 7.69%
+      | Count: 2 to 8
+    ali:item minecraft:string x1
+      | Chance: 7.69%
+      | Count: 4 to 6
+    ali:item minecraft:cooked_porkchop x1
+      | Chance: 7.69%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 91.67%
+    ali:item minecraft:snout_armor_trim_smithing_template x1
+      | Chance: 8.33%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 90%
+    ali:item minecraft:netherite_upgrade_smithing_template x1
+      | Chance: 10%
+      | Count: 1
+  ali:reference
+    | Selects all entries
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_other
+    ali:loot_table
+      | Selects all entries
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1
+        ali:item irons_spellbooks:arcane_essence x1
+          | Chance: 75%
+          | Count: 1 to 7
+          | ----- Predicates -----
+          | Any Of:
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/nether_bridge
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/bastion_treasure
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/bastion_bridge
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/bastion_other
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1
+        ali:reference
+          | Selects all entries
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:item irons_spellbooks:silver_ring x1
+                | Chance: 0.58%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/nether_bridge
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_bridge
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_other
+              ali:item irons_spellbooks:cooldown_ring x1
+                | Chance: 0.58%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/nether_bridge
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_bridge
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_other
+              ali:item irons_spellbooks:heavy_chain_necklace x1
+                | Chance: 0.58%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/nether_bridge
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_bridge
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_other
+              ali:item irons_spellbooks:emerald_stoneplate_ring x1
+                | Chance: 0.58%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/nether_bridge
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_bridge
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_other
+              ali:item irons_spellbooks:fireward_ring x1
+                | Chance: 0.58%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/nether_bridge
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_bridge
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_other
+              ali:item irons_spellbooks:frostward_ring x1
+                | Chance: 0.58%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/nether_bridge
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_bridge
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_other
+              ali:item irons_spellbooks:cast_time_ring x1
+                | Chance: 0.58%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/nether_bridge
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_bridge
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_other
+              ali:item irons_spellbooks:conjurers_talisman x1
+                | Chance: 0.58%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/nether_bridge
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_bridge
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_other
+              ali:item irons_spellbooks:poisonward_ring x1
+                | Chance: 0.58%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/nether_bridge
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_bridge
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_other
+              ali:item irons_spellbooks:concentration_amulet x1
+                | Chance: 0.58%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/nether_bridge
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_bridge
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_other
+              ali:item irons_spellbooks:invisibility_ring x1
+                | Chance: 0.58%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/nether_bridge
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_bridge
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_other
+              ali:item irons_spellbooks:teleportation_amulet x1
+                | Chance: 0.58%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/nether_bridge
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_bridge
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_other
+              ali:item irons_spellbooks:affinity_ring x1
+                | Chance: 0.58%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/nether_bridge
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_bridge
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/bastion_other
+                | ----- Modifiers -----
+                | Randomize Ring Enhancement:
+                |   -> Spell Filter:
+                |     -> Force: False
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1
+        ali:item irons_spellbooks:scroll x1
+          | Chance: 30%
+          | Count: 1
+          | ----- Predicates -----
+          | Any Of:
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/nether_bridge
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/bastion_treasure
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/bastion_bridge
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/bastion_other
+          | ----- Modifiers -----
+          | Randomize Spell:
+          |   -> Quality: 0.2 to 0.8
+          |   -> Applicable Spells:
+          |     -> Force: False
+        ali:item irons_spellbooks:scroll x1
+          | Chance: 30%
+          | Count: 1
+          | ----- Predicates -----
+          | Any Of:
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/nether_bridge
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/bastion_treasure
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/bastion_bridge
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/bastion_other
+          | ----- Modifiers -----
+          | Randomize Spell:
+          |   -> Quality: 0.2 to 0.8
+          |   -> Applicable Spells:
+          |     -> School: Fire
+          |     -> Force: False
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1
+        ali:item irons_spellbooks:blank_rune x1
+          | Chance: 15%
+          | Count: 1
+          | ----- Predicates -----
+          | Any Of:
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/nether_bridge
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/bastion_treasure
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/bastion_bridge
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/bastion_other

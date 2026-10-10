@@ -1,0 +1,68 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 46.3%
+    ali:item irons_spellbooks:scroll x1
+      | Chance: 22.22%
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Spell:
+      |   -> Quality: 0.8 to 1
+      |   -> Applicable Spells:
+      |     -> Force: False
+    ali:item irons_spellbooks:autoloader_crossbow x1 {Damage:0}
+      | Chance: 14.81%
+      | Count: 1
+    ali:item irons_spellbooks:upgrade_orb x1
+      | Chance: 12.96%
+      | Count: 1
+    ali:item irons_spellbooks:weapon_parts x1
+      | Chance: 3.7%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 33.33%
+    ali:item irons_spellbooks:scroll x1
+      | Chance: 33.33%
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Spell:
+      |   -> Quality: 0.5 to 1
+      |   -> Applicable Spells:
+      |     -> Force: False
+    ali:reference
+      | Selects all entries
+      | Chance: 20.83%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item irons_spellbooks:epic_ink x1
+            | Chance: 8.71%
+            | Count: 1
+          ali:item irons_spellbooks:rare_ink x1
+            | Chance: 6.44%
+            | Count: 1
+          ali:item irons_spellbooks:legendary_ink x1
+            | Chance: 3.79%
+            | Count: 1
+          ali:item irons_spellbooks:uncommon_ink x1
+            | Chance: 1.89%
+            | Count: 1
+    ali:item irons_spellbooks:arcane_essence x1
+      | Chance: 12.5%
+      | Count: 10 to 20
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:visibility_ring x1
+      | Chance: 7.5%
+      | Count: 1

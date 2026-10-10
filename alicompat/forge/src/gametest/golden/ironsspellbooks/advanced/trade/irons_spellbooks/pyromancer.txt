@@ -1,0 +1,163 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects min(U[2; 3]; 7) Of These Trades
+    ali:items_to_items
+      | Uses: 16
+      | XP: 0
+      | Price Multiplier: 0.05
+      ali:item minecraft:candle x4
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 0
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:candle x4
+    ali:items_to_items
+      | Uses: 8
+      | XP: 0
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:fire_charge x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 0
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:lantern x3
+    ali:items_to_items
+      | Uses: 16
+      | XP: 0
+      | Price Multiplier: 0.05
+      ali:item minecraft:honey_bottle x2
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 16
+      | XP: 0
+      | Price Multiplier: 0.05
+      ali:item minecraft:blaze_rod x3
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 5
+      | XP: 0
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:firework_rocket x5 {Fireworks:{Explosions:[{Colors:[I;11743535,15435844,14602026],Flicker:1b,Trail:1b,Type:4b}],Flight:3b}}
+  ali:trade_level
+    | Level: 2
+    | Randomly Selects 1 Of These Trades
+    | Chance: 25%
+    ali:items_to_items
+      | Uses: 8
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item irons_spellbooks:common_ink x1
+      ali:item minecraft:air x0
+      ali:group
+        ali:item minecraft:emerald x1
+        ali:item irons_spellbooks:arcane_essence x1
+  ali:trade_level
+    | Level: 3
+    | Randomly Selects 1 Of These Trades
+    | Chance: 25%
+    ali:items_to_items
+      | Uses: 8
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item irons_spellbooks:uncommon_ink x1
+      ali:item minecraft:air x0
+      ali:group
+        ali:item minecraft:emerald x1
+        ali:item irons_spellbooks:arcane_essence x1
+  ali:trade_level
+    | Level: 4
+    | Randomly Selects 1 Of These Trades
+    | Chance: 25%
+    ali:items_to_items
+      | Uses: 8
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item irons_spellbooks:rare_ink x1
+      ali:item minecraft:air x0
+      ali:group
+        ali:item minecraft:emerald x1
+        ali:item irons_spellbooks:arcane_essence x1
+  ali:trade_level
+    | Level: 5
+    | Randomly Selects 1 Of These Trades
+    ali:items_to_items
+      | Uses: 1
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item irons_spellbooks:scroll x1
+        | Random Spell Scroll:
+        |   -> Spell Filter:
+        |     -> School: Fire
+        |     -> Force: False
+        |   -> Spell Level: 1
+  ali:trade_level
+    | Level: 6
+    | Randomly Selects 1 Of These Trades
+    | Chance: 80%
+    ali:items_to_items
+      | Uses: 1
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item irons_spellbooks:scroll x1
+        | Random Spell Scroll:
+        |   -> Spell Filter:
+        |     -> School: Fire
+        |     -> Force: False
+        |   -> Spell Level: 1
+  ali:trade_level
+    | Level: 7
+    | Randomly Selects 1 Of These Trades
+    | Chance: 80%
+    ali:items_to_items
+      | Uses: 1
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item irons_spellbooks:scroll x1
+        | Random Spell Scroll:
+        |   -> Spell Filter:
+        |     -> School: Fire
+        |     -> Force: False
+        |   -> Spell Level: 1
+  ali:trade_level
+    | Level: 8
+    | Randomly Selects 3 Of These Trades
+    ali:items_to_items
+      | Uses: 3
+      | XP: 0
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item irons_spellbooks:fire_ale x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 5
+      | Price Multiplier: 10.0
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item irons_spellbooks:furled_map x1 {display:{Lore:['{"color":"gold","translate":"item.irons_spellbooks.furled_map_descriptor_framing","with":[{"translate":"item.irons_spellbooks.alchemical_trade_route"}]}']},"irons_spellbooks:furled_map_data":{descriptionOverride:{translate:"item.irons_spellbooks.alchemical_trade_route"},destination:"irons_spellbooks:mangrove_hut",dimension:"minecraft:overworld"}}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 5
+      | Price Multiplier: 0.1
+      ali:item irons_spellbooks:chained_book x4
+      ali:item minecraft:air x0
+      ali:item irons_spellbooks:fire_rune x1

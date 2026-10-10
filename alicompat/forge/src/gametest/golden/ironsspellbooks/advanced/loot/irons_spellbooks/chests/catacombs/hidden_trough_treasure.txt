@@ -1,0 +1,51 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:rotten_spell_book x1 {"irons_spellbooks:spell_container":{data:[],maxSpells:8,mustEquip:1b,spellWheel:1b}}
+      | Chance: 5%
+      | Count: 1
+      | ----- Predicates -----
+      | Random Chance:
+      |   -> Probability: 0.05
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:scroll x1
+      | Chance: 66.67%
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Spell:
+      |   -> Quality: U[0.3; 1)
+      |   -> Applicable Spells:
+      |     -> Force: False
+    ali:item irons_spellbooks:blank_rune x1
+      | Chance: 33.33%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 12
+    ali:item minecraft:wheat x1
+      | Chance: 83.33%
+      | Count: max(0; U[1; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False
+    ali:item minecraft:hay_block x1
+      | Chance: 16.67%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3
+    ali:item minecraft:emerald x1
+      | Chance: 83.33%
+      | Count: max(0; U[1; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False
+    ali:item minecraft:diamond x1
+      | Chance: 16.67%
+      | Count: 1

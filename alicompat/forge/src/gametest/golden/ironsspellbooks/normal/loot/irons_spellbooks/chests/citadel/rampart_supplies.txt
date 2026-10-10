@@ -1,0 +1,42 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:ominous_bottle x1
+      | Chance: 10%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 2
+    ali:item minecraft:crossbow x1 {Damage:0}
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 15% to 35%
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:arrow x1
+      | Count: 0 to 32
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:lantern x1
+      | Count: 0 to 8
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3
+    ali:item minecraft:soul_sand x1
+      | Chance: 25%
+      | Count: 4 to 8
+    ali:item minecraft:bone x1
+      | Chance: 25%
+      | Count: 4 to 8
+    ali:item minecraft:flint x1
+      | Chance: 25%
+      | Count: 4 to 8
+    ali:item irons_spellbooks:arcane_essence x1
+      | Chance: 25%
+      | Count: 2 to 5

@@ -1,0 +1,938 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 5
+    ali:item minecraft:paper x1
+      | Chance: 30%
+      | Count: max(0; U[1; 5])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 5
+      |   -> Add: False
+    ali:item minecraft:bread x1
+      | Chance: 30%
+      | Count: max(0; U[1; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False
+    ali:item minecraft:map x1
+      | Chance: 20%
+      | Count: max(0; U[1; 3])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 3
+      |   -> Add: False
+    ali:item minecraft:compass x1
+      | Chance: 10%
+      | Count: 1
+    ali:item minecraft:stick x1
+      | Chance: 10%
+      | Count: max(0; U[1; 2])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
+  ali:reference
+    | Selects all entries
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/buried_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/shipwreck_map
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/village/village_cartographer
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/village/village_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    ali:loot_table
+      | Selects all entries
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1
+        ali:item irons_spellbooks:arcane_essence x1
+          | Chance: 35%
+          | Count: max(0; U[1; 3])
+          | ----- Predicates -----
+          | Any Of:
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/buried_treasure
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/desert_pyramid
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/jungle_temple
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/pillager_outpost
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/shipwreck_map
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/simple_dungeon
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/stronghold_crossing
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/stronghold_corridor
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/underwater_ruin_big
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/underwater_ruin_small
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/woodland_mansion
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_cartographer
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_temple
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/ruined_portal
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/abandoned_mineshaft
+          | Random Chance:
+          |   -> Probability: 0.35
+          | ----- Modifiers -----
+          | Set Count:
+          |   -> Count: 1 to 3
+          |   -> Add: False
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1
+        ali:item irons_spellbooks:arcane_essence x1
+          | Chance: 15%
+          | Count: max(0; U[3; 10])
+          | ----- Predicates -----
+          | Any Of:
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/buried_treasure
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/desert_pyramid
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/jungle_temple
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/pillager_outpost
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/shipwreck_map
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/simple_dungeon
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/stronghold_crossing
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/stronghold_corridor
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/underwater_ruin_big
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/underwater_ruin_small
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/woodland_mansion
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_cartographer
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_temple
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/ruined_portal
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/abandoned_mineshaft
+          | Random Chance:
+          |   -> Probability: 0.15
+          | ----- Modifiers -----
+          | Set Count:
+          |   -> Count: 3 to 10
+          |   -> Add: False
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 2
+        ali:empty
+          | Drops nothing
+          | Chance: 56.25%
+          | ----- Predicates -----
+          | Any Of:
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/buried_treasure
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/desert_pyramid
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/jungle_temple
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/pillager_outpost
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/shipwreck_map
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/simple_dungeon
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/stronghold_crossing
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/stronghold_corridor
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/underwater_ruin_big
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/underwater_ruin_small
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/woodland_mansion
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_cartographer
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_temple
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/ruined_portal
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/abandoned_mineshaft
+          | Random Chance:
+          |   -> Probability: 0.75
+        ali:item irons_spellbooks:scroll x1
+          | Chance: 18.75%
+          | Count: 1
+          | ----- Predicates -----
+          | Any Of:
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/buried_treasure
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/desert_pyramid
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/jungle_temple
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/pillager_outpost
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/shipwreck_map
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/simple_dungeon
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/stronghold_crossing
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/stronghold_corridor
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/underwater_ruin_big
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/underwater_ruin_small
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/woodland_mansion
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_cartographer
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_temple
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/ruined_portal
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/abandoned_mineshaft
+          | Random Chance:
+          |   -> Probability: 0.75
+          | ----- Modifiers -----
+          | Randomize Spell:
+          |   -> Quality: U[0; 0.3)
+          |   -> Applicable Spells:
+          |     -> Force: False
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1
+        ali:item irons_spellbooks:rotten_spell_book x1 {"irons_spellbooks:spell_container":{data:[],maxSpells:8,mustEquip:1b,spellWheel:1b}}
+          | Chance: 1%
+          | Count: 1
+          | ----- Predicates -----
+          | Any Of:
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/buried_treasure
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/desert_pyramid
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/jungle_temple
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/pillager_outpost
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/shipwreck_map
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/simple_dungeon
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/stronghold_crossing
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/stronghold_corridor
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/underwater_ruin_big
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/underwater_ruin_small
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/woodland_mansion
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_cartographer
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_temple
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/ruined_portal
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/abandoned_mineshaft
+          | Random Chance:
+          |   -> Probability: 0.01
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1
+        ali:item irons_spellbooks:blank_rune x1
+          | Chance: 4%
+          | Count: 1
+          | ----- Predicates -----
+          | Any Of:
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/buried_treasure
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/desert_pyramid
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/jungle_temple
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/pillager_outpost
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/shipwreck_map
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/simple_dungeon
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/stronghold_crossing
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/stronghold_corridor
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/underwater_ruin_big
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/underwater_ruin_small
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/woodland_mansion
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_cartographer
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/village/village_temple
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/ruined_portal
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/abandoned_mineshaft
+          | Random Chance:
+          |   -> Probability: 0.04
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1
+        ali:reference
+          | Selects all entries
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:item irons_spellbooks:silver_ring x1
+                | Chance: 0.38%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/buried_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/desert_pyramid
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/jungle_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/pillager_outpost
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/shipwreck_map
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/simple_dungeon
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_crossing
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_corridor
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_big
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_small
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/woodland_mansion
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_cartographer
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/ruined_portal
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/abandoned_mineshaft
+                | Random Chance:
+                |   -> Probability: 0.05
+              ali:item irons_spellbooks:cooldown_ring x1
+                | Chance: 0.38%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/buried_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/desert_pyramid
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/jungle_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/pillager_outpost
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/shipwreck_map
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/simple_dungeon
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_crossing
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_corridor
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_big
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_small
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/woodland_mansion
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_cartographer
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/ruined_portal
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/abandoned_mineshaft
+                | Random Chance:
+                |   -> Probability: 0.05
+              ali:item irons_spellbooks:heavy_chain_necklace x1
+                | Chance: 0.38%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/buried_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/desert_pyramid
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/jungle_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/pillager_outpost
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/shipwreck_map
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/simple_dungeon
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_crossing
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_corridor
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_big
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_small
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/woodland_mansion
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_cartographer
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/ruined_portal
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/abandoned_mineshaft
+                | Random Chance:
+                |   -> Probability: 0.05
+              ali:item irons_spellbooks:emerald_stoneplate_ring x1
+                | Chance: 0.38%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/buried_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/desert_pyramid
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/jungle_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/pillager_outpost
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/shipwreck_map
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/simple_dungeon
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_crossing
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_corridor
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_big
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_small
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/woodland_mansion
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_cartographer
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/ruined_portal
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/abandoned_mineshaft
+                | Random Chance:
+                |   -> Probability: 0.05
+              ali:item irons_spellbooks:fireward_ring x1
+                | Chance: 0.38%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/buried_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/desert_pyramid
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/jungle_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/pillager_outpost
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/shipwreck_map
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/simple_dungeon
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_crossing
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_corridor
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_big
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_small
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/woodland_mansion
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_cartographer
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/ruined_portal
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/abandoned_mineshaft
+                | Random Chance:
+                |   -> Probability: 0.05
+              ali:item irons_spellbooks:frostward_ring x1
+                | Chance: 0.38%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/buried_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/desert_pyramid
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/jungle_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/pillager_outpost
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/shipwreck_map
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/simple_dungeon
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_crossing
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_corridor
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_big
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_small
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/woodland_mansion
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_cartographer
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/ruined_portal
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/abandoned_mineshaft
+                | Random Chance:
+                |   -> Probability: 0.05
+              ali:item irons_spellbooks:cast_time_ring x1
+                | Chance: 0.38%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/buried_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/desert_pyramid
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/jungle_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/pillager_outpost
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/shipwreck_map
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/simple_dungeon
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_crossing
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_corridor
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_big
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_small
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/woodland_mansion
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_cartographer
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/ruined_portal
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/abandoned_mineshaft
+                | Random Chance:
+                |   -> Probability: 0.05
+              ali:item irons_spellbooks:conjurers_talisman x1
+                | Chance: 0.38%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/buried_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/desert_pyramid
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/jungle_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/pillager_outpost
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/shipwreck_map
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/simple_dungeon
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_crossing
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_corridor
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_big
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_small
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/woodland_mansion
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_cartographer
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/ruined_portal
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/abandoned_mineshaft
+                | Random Chance:
+                |   -> Probability: 0.05
+              ali:item irons_spellbooks:poisonward_ring x1
+                | Chance: 0.38%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/buried_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/desert_pyramid
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/jungle_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/pillager_outpost
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/shipwreck_map
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/simple_dungeon
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_crossing
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_corridor
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_big
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_small
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/woodland_mansion
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_cartographer
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/ruined_portal
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/abandoned_mineshaft
+                | Random Chance:
+                |   -> Probability: 0.05
+              ali:item irons_spellbooks:concentration_amulet x1
+                | Chance: 0.38%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/buried_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/desert_pyramid
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/jungle_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/pillager_outpost
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/shipwreck_map
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/simple_dungeon
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_crossing
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_corridor
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_big
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_small
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/woodland_mansion
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_cartographer
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/ruined_portal
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/abandoned_mineshaft
+                | Random Chance:
+                |   -> Probability: 0.05
+              ali:item irons_spellbooks:invisibility_ring x1
+                | Chance: 0.38%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/buried_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/desert_pyramid
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/jungle_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/pillager_outpost
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/shipwreck_map
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/simple_dungeon
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_crossing
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_corridor
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_big
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_small
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/woodland_mansion
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_cartographer
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/ruined_portal
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/abandoned_mineshaft
+                | Random Chance:
+                |   -> Probability: 0.05
+              ali:item irons_spellbooks:teleportation_amulet x1
+                | Chance: 0.38%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/buried_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/desert_pyramid
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/jungle_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/pillager_outpost
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/shipwreck_map
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/simple_dungeon
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_crossing
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_corridor
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_big
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_small
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/woodland_mansion
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_cartographer
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/ruined_portal
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/abandoned_mineshaft
+                | Random Chance:
+                |   -> Probability: 0.05
+              ali:item irons_spellbooks:affinity_ring x1
+                | Chance: 0.38%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/buried_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/desert_pyramid
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/jungle_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/pillager_outpost
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/shipwreck_map
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/simple_dungeon
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_crossing
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_corridor
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_big
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_small
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/woodland_mansion
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_cartographer
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/ruined_portal
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/abandoned_mineshaft
+                | Random Chance:
+                |   -> Probability: 0.05
+                | ----- Modifiers -----
+                | Randomize Ring Enhancement:
+                |   -> Spell Filter:
+                |     -> Force: False
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 2
+        ali:reference
+          | Selects all entries
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:item irons_spellbooks:common_ink x1
+                | Chance: 7.8%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/buried_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/desert_pyramid
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/jungle_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/pillager_outpost
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/shipwreck_map
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/simple_dungeon
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_crossing
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_corridor
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_big
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_small
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/woodland_mansion
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_cartographer
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/ruined_portal
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/abandoned_mineshaft
+                | Random Chance:
+                |   -> Probability: 0.1
+              ali:item irons_spellbooks:uncommon_ink x1
+                | Chance: 2%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/buried_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/desert_pyramid
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/jungle_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/pillager_outpost
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/shipwreck_map
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/simple_dungeon
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_crossing
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_corridor
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_big
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_small
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/woodland_mansion
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_cartographer
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/ruined_portal
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/abandoned_mineshaft
+                | Random Chance:
+                |   -> Probability: 0.1
+              ali:item irons_spellbooks:rare_ink x1
+                | Chance: 0.2%
+                | Count: 1
+                | ----- Predicates -----
+                | Any Of:
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/buried_treasure
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/desert_pyramid
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/jungle_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/pillager_outpost
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/shipwreck_map
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/simple_dungeon
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_crossing
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/stronghold_corridor
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_big
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/underwater_ruin_small
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/woodland_mansion
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_cartographer
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/village/village_temple
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/ruined_portal
+                |   -> Loot Table Id:
+                |     -> minecraft:chests/abandoned_mineshaft
+                | Random Chance:
+                |   -> Probability: 0.1

@@ -1,0 +1,174 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:arcane_essence x1
+      | Count: 0 to 15
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 0 to 2
+    ali:item irons_spellbooks:scroll x1
+      | Chance: 50%
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Spell:
+      |   -> Quality: 0.4 to 1
+      |   -> Applicable Spells:
+      |     -> Force: False
+    ali:item irons_spellbooks:scroll x1
+      | Chance: 50%
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Spell:
+      |   -> Quality: 0.4 to 1
+      |   -> Applicable Spells:
+      |     -> School: Ender
+      |     -> Force: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 0 to 2
+    ali:reference
+      | Selects all entries
+      | Chance: 66.67%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item irons_spellbooks:evasion_elixir x1
+            | Chance: 13.33%
+            | Count: 1
+          ali:item irons_spellbooks:oakskin_elixir x1
+            | Chance: 13.33%
+            | Count: 1
+          ali:item irons_spellbooks:invisibility_elixir x1
+            | Chance: 13.33%
+            | Count: 1
+          ali:item irons_spellbooks:greater_evasion_elixir x1
+            | Chance: 6.67%
+            | Count: 1
+          ali:item irons_spellbooks:greater_oakskin_elixir x1
+            | Chance: 6.67%
+            | Count: 1
+          ali:item irons_spellbooks:greater_invisibility_elixir x1
+            | Chance: 6.67%
+            | Count: 1
+          ali:item irons_spellbooks:greater_healing_potion x1
+            | Chance: 6.67%
+            | Count: 1
+    ali:item minecraft:potion x1 {Potion:"irons_spellbooks:instant_mana_one"}
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Mana
+    ali:item minecraft:potion x1 {Potion:"irons_spellbooks:instant_mana_two"}
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Mana
+    ali:item minecraft:potion x1 {Potion:"irons_spellbooks:instant_mana_three"}
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Mana
+    ali:item minecraft:potion x1 {Potion:"irons_spellbooks:instant_mana_four"}
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Mana
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:blank_rune x1
+      | Chance: 30%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item irons_spellbooks:silver_ring x1
+            | Chance: 3.85%
+            | Count: 1
+          ali:item irons_spellbooks:cooldown_ring x1
+            | Chance: 3.85%
+            | Count: 1
+          ali:item irons_spellbooks:heavy_chain_necklace x1
+            | Chance: 3.85%
+            | Count: 1
+          ali:item irons_spellbooks:emerald_stoneplate_ring x1
+            | Chance: 3.85%
+            | Count: 1
+          ali:item irons_spellbooks:fireward_ring x1
+            | Chance: 3.85%
+            | Count: 1
+          ali:item irons_spellbooks:frostward_ring x1
+            | Chance: 3.85%
+            | Count: 1
+          ali:item irons_spellbooks:cast_time_ring x1
+            | Chance: 3.85%
+            | Count: 1
+          ali:item irons_spellbooks:conjurers_talisman x1
+            | Chance: 3.85%
+            | Count: 1
+          ali:item irons_spellbooks:poisonward_ring x1
+            | Chance: 3.85%
+            | Count: 1
+          ali:item irons_spellbooks:concentration_amulet x1
+            | Chance: 3.85%
+            | Count: 1
+          ali:item irons_spellbooks:invisibility_ring x1
+            | Chance: 3.85%
+            | Count: 1
+          ali:item irons_spellbooks:teleportation_amulet x1
+            | Chance: 3.85%
+            | Count: 1
+          ali:item irons_spellbooks:affinity_ring x1
+            | Chance: 3.85%
+            | Count: 1
+            | ----- Modifiers -----
+            | Randomize Ring Enhancement:
+            |   -> Spell Filter:
+            |     -> Force: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3
+    ali:reference
+      | Selects all entries
+      | Chance: 50%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item irons_spellbooks:uncommon_ink x1
+            | Chance: 24.39%
+            | Count: 1
+          ali:item irons_spellbooks:common_ink x1
+            | Chance: 14.63%
+            | Count: 1
+          ali:item irons_spellbooks:rare_ink x1
+            | Chance: 7.32%
+            | Count: 1
+          ali:item irons_spellbooks:epic_ink x1
+            | Chance: 3.66%
+            | Count: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 50%
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:ancient_knowledge_fragment x1
+      | Chance: 20%
+      | Count: 0 to 3

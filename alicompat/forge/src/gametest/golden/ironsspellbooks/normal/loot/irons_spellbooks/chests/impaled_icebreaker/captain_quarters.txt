@@ -1,0 +1,91 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item irons_spellbooks:silver_ring x1
+            | Chance: 1.92%
+            | Count: 1
+          ali:item irons_spellbooks:cooldown_ring x1
+            | Chance: 1.92%
+            | Count: 1
+          ali:item irons_spellbooks:heavy_chain_necklace x1
+            | Chance: 1.92%
+            | Count: 1
+          ali:item irons_spellbooks:emerald_stoneplate_ring x1
+            | Chance: 1.92%
+            | Count: 1
+          ali:item irons_spellbooks:fireward_ring x1
+            | Chance: 1.92%
+            | Count: 1
+          ali:item irons_spellbooks:frostward_ring x1
+            | Chance: 1.92%
+            | Count: 1
+          ali:item irons_spellbooks:cast_time_ring x1
+            | Chance: 1.92%
+            | Count: 1
+          ali:item irons_spellbooks:conjurers_talisman x1
+            | Chance: 1.92%
+            | Count: 1
+          ali:item irons_spellbooks:poisonward_ring x1
+            | Chance: 1.92%
+            | Count: 1
+          ali:item irons_spellbooks:concentration_amulet x1
+            | Chance: 1.92%
+            | Count: 1
+          ali:item irons_spellbooks:invisibility_ring x1
+            | Chance: 1.92%
+            | Count: 1
+          ali:item irons_spellbooks:teleportation_amulet x1
+            | Chance: 1.92%
+            | Count: 1
+          ali:item irons_spellbooks:affinity_ring x1
+            | Chance: 1.92%
+            | Count: 1
+            | ----- Modifiers -----
+            | Randomize Ring Enhancement:
+            |   -> Spell Filter:
+            |     -> Force: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:bundle x1 {Items:[{Count:1b,id:"minecraft:paper",tag:{display:{Lore:['{"translate":"item.irons_spellbooks.handwritten_invoice.desc","color":"gray"}'],Name:'{"translate":"item.irons_spellbooks.handwritten_invoice"}'}}},{Count:48b,id:"minecraft:emerald"}]}
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {Items:[{Count:1b,id:"minecraft:paper",tag:{display:{Lore:['{"translate":"item.irons_spellbooks.handwritten_invoice.desc","color":"gray"}'],Name:'{"translate":"item.irons_spellbooks.handwritten_invoice"}'}}},{Count:48b,id:"minecraft:emerald"}]}
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:permafrost_shard x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:spyglass x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:epic_ink x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:goat_horn x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Instrument:
+      |   -> Options: irons_spellbooks:fog_horn
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:paper x1
+      | Count: 27 to 35

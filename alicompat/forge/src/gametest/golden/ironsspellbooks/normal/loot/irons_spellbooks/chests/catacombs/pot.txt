@@ -1,0 +1,29 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 33.33%
+    ali:item minecraft:emerald x1
+      | Chance: 14.81%
+      | Count: 1 to 5
+    ali:item minecraft:bone x1
+      | Chance: 14.81%
+      | Count: 1 to 3
+    ali:item minecraft:cobweb x1
+      | Chance: 14.81%
+      | Count: 1 to 2
+    ali:item irons_spellbooks:arcane_essence x1
+      | Chance: 11.11%
+      | Count: 2 to 7
+    ali:item irons_spellbooks:music_disc_dead_king_lullaby x1
+      | Chance: 3.7%
+      | Count: 1
+    ali:item minecraft:diamond x1
+      | Chance: 3.7%
+      | Count: 1
+    ali:item minecraft:skeleton_skull x1
+      | Chance: 3.7%
+      | Count: 1

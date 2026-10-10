@@ -1,0 +1,79 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 25%
+    ali:item minecraft:potion x1 {Potion:"irons_spellbooks:instant_mana_one"}
+      | Chance: 25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Mana
+    ali:item minecraft:potion x1 {Potion:"irons_spellbooks:instant_mana_two"}
+      | Chance: 25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Mana
+    ali:item minecraft:tipped_arrow x1 {Potion:"minecraft:healing"}
+      | Chance: 25%
+      | Count: 2 to 5
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Healing
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 5
+    ali:item minecraft:bone x1
+      | Chance: 38.46%
+      | Count: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 23.08%
+    ali:item minecraft:gold_ingot x1
+      | Chance: 23.08%
+      | Count: 2 to 5
+    ali:item minecraft:diamond x1
+      | Chance: 7.69%
+      | Count: 1
+    ali:item minecraft:emerald x1
+      | Chance: 7.69%
+      | Count: 1 to 3
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 66.67%
+    ali:item irons_spellbooks:scroll x1
+      | Chance: 33.33%
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Spell:
+      |   -> Quality: 0 to 0.5
+      |   -> Applicable Spells:
+      |     -> Force: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 50%
+    ali:item irons_spellbooks:arcane_essence x1
+      | Chance: 50%
+      | Count: 1 to 16
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:dead_king_phylactery_shard x1
+      | Chance: 25%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:ominous_bottle x1
+      | Chance: 15%
+      | Count: 1

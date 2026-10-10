@@ -1,0 +1,82 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:affinity_ring x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Ring Enhancement:
+      |   -> Spell Filter:
+      |     -> School: Fire
+      |     -> Force: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:affinity_ring x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Ring Enhancement:
+      |   -> Spell Filter:
+      |     -> School: Ice
+      |     -> Force: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:affinity_ring x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Ring Enhancement:
+      |   -> Spell Filter:
+      |     -> School: Lightning
+      |     -> Force: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:affinity_ring x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Ring Enhancement:
+      |   -> Spell Filter:
+      |     -> School: Holy
+      |     -> Force: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:affinity_ring x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Ring Enhancement:
+      |   -> Spell Filter:
+      |     -> School: Ender
+      |     -> Force: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:affinity_ring x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Ring Enhancement:
+      |   -> Spell Filter:
+      |     -> School: Blood
+      |     -> Force: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:affinity_ring x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Ring Enhancement:
+      |   -> Spell Filter:
+      |     -> School: Evocation
+      |     -> Force: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:affinity_ring x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Ring Enhancement:
+      |   -> Spell Filter:
+      |     -> School: Nature
+      |     -> Force: False

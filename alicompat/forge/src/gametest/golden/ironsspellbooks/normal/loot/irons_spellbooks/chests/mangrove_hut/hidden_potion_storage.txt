@@ -1,0 +1,129 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 15
+    ali:item minecraft:emerald x1
+      | Chance: 50%
+      | Count: 2
+    ali:item irons_spellbooks:arcane_essence x1
+      | Chance: 50%
+      | Count: 2
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 5
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:reference
+            | Selects all entries
+            | Chance: 66.67%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:item minecraft:potion x1 {Potion:"minecraft:fire_resistance"}
+                  | Chance: 6.06%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Potion:
+                  |   -> Potion: Potion of Fire Resistance
+                ali:item minecraft:potion x1 {Potion:"minecraft:healing"}
+                  | Chance: 6.06%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Potion:
+                  |   -> Potion: Potion of Healing
+                ali:item minecraft:potion x1 {Potion:"minecraft:strong_healing"}
+                  | Chance: 6.06%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Potion:
+                  |   -> Potion: Potion of Healing
+                ali:item minecraft:potion x1 {Potion:"minecraft:weakness"}
+                  | Chance: 6.06%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Potion:
+                  |   -> Potion: Potion of Weakness
+                ali:item minecraft:potion x1 {Potion:"minecraft:leaping"}
+                  | Chance: 6.06%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Potion:
+                  |   -> Potion: Potion of Leaping
+                ali:item minecraft:potion x1 {Potion:"minecraft:swiftness"}
+                  | Chance: 6.06%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Potion:
+                  |   -> Potion: Potion of Swiftness
+                ali:item minecraft:potion x1 {Potion:"minecraft:long_swiftness"}
+                  | Chance: 6.06%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Potion:
+                  |   -> Potion: Potion of Swiftness
+                ali:item minecraft:potion x1 {Potion:"minecraft:strength"}
+                  | Chance: 6.06%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Potion:
+                  |   -> Potion: Potion of Strength
+                ali:item minecraft:potion x1 {Potion:"minecraft:regeneration"}
+                  | Chance: 6.06%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Potion:
+                  |   -> Potion: Potion of Regeneration
+                ali:item minecraft:potion x1 {Potion:"irons_spellbooks:instant_mana_one"}
+                  | Chance: 6.06%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Potion:
+                  |   -> Potion: Potion of Mana
+                ali:item minecraft:potion x1 {Potion:"irons_spellbooks:instant_mana_two"}
+                  | Chance: 6.06%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Potion:
+                  |   -> Potion: Potion of Mana
+          ali:reference
+            | Selects all entries
+            | Chance: 33.33%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:item irons_spellbooks:evasion_elixir x1
+                  | Chance: 6.67%
+                  | Count: 1
+                ali:item irons_spellbooks:oakskin_elixir x1
+                  | Chance: 6.67%
+                  | Count: 1
+                ali:item irons_spellbooks:invisibility_elixir x1
+                  | Chance: 6.67%
+                  | Count: 1
+                ali:item irons_spellbooks:greater_evasion_elixir x1
+                  | Chance: 3.33%
+                  | Count: 1
+                ali:item irons_spellbooks:greater_oakskin_elixir x1
+                  | Chance: 3.33%
+                  | Count: 1
+                ali:item irons_spellbooks:greater_invisibility_elixir x1
+                  | Chance: 3.33%
+                  | Count: 1
+                ali:item irons_spellbooks:greater_healing_potion x1
+                  | Chance: 3.33%
+                  | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 5
+    ali:item irons_spellbooks:netherward_tincture x1
+      | Count: 1

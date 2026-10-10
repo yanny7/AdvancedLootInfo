@@ -1,0 +1,37 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 0 to 2
+    ali:item irons_spellbooks:fire_ale x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 9
+    ali:item minecraft:glass_bottle x1
+      | Chance: 12.5%
+      | Count: 1
+    ali:item minecraft:potion x1 {Potion:"minecraft:water"}
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Water Bottle
+    ali:item minecraft:pumpkin x1
+      | Chance: 12.5%
+      | Count: 1
+    ali:item minecraft:sugar x1
+      | Chance: 12.5%
+      | Count: 1
+    ali:item minecraft:honeycomb x1
+      | Chance: 12.5%
+      | Count: 1
+    ali:item minecraft:fermented_spider_eye x1
+      | Chance: 12.5%
+      | Count: 1
+    ali:item minecraft:wheat x1
+      | Chance: 12.5%
+      | Count: 1
+    ali:item minecraft:water_bucket x1
+      | Chance: 12.5%
+      | Count: 1
