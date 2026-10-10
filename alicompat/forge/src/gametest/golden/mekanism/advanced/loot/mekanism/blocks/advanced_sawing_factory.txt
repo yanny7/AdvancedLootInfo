@@ -1,0 +1,49 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item mekanism:advanced_sawing_factory x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Copy Name:
+      |   -> Source: Block Entity
+      | Copy Nbt:
+      |   -> Nbt Provider: minecraft:context
+      |   -> Operations:
+      |     -> Entry:
+      |       -> Source: componentSecurity.owner
+      |       -> Target: mekData.owner
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: componentSecurity.securityMode
+      |       -> Target: mekData.securityMode
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: componentUpgrade
+      |       -> Target: mekData.componentUpgrade
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: componentConfig
+      |       -> Target: mekData.componentConfig
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: componentEjector
+      |       -> Target: mekData.componentEjector
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: sorting
+      |       -> Target: mekData.sorting
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: controlType
+      |       -> Target: mekData.controlType
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: EnergyContainers
+      |       -> Target: mekData.EnergyContainers
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: Items
+      |       -> Target: mekData.Items
+      |       -> Merge Strategy: Replace

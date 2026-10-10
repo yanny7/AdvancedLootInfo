@@ -1,0 +1,53 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item mekanism:logistical_sorter x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Copy Name:
+      |   -> Source: Block Entity
+      | Copy Nbt:
+      |   -> Nbt Provider: minecraft:context
+      |   -> Operations:
+      |     -> Entry:
+      |       -> Source: componentSecurity.owner
+      |       -> Target: mekData.owner
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: componentSecurity.securityMode
+      |       -> Target: mekData.securityMode
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: componentUpgrade
+      |       -> Target: mekData.componentUpgrade
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: singleItem
+      |       -> Target: mekData.singleItem
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: color
+      |       -> Target: mekData.color
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: filters
+      |       -> Target: mekData.filters
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: eject
+      |       -> Target: mekData.eject
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: roundRobin
+      |       -> Target: mekData.roundRobin
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: controlType
+      |       -> Target: mekData.controlType
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: Items
+      |       -> Target: mekData.Items
+      |       -> Merge Strategy: Replace
