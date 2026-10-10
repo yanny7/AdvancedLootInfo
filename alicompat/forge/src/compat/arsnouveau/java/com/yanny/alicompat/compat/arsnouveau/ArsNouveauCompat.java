@@ -19,6 +19,7 @@ public class ArsNouveauCompat implements IGlmModCompat {
     @Override
     public void registerServer(IServerRegistry registry) {
         PluginUtils.registerIngredientTooltip(registry, PotionIngredient.class, PotionIngredientAccessor::new);
+        registry.registerTradeOverride(ShardsTraderTrades::getTradeLevels);
     }
 
     @Override

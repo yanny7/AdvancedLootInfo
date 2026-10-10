@@ -342,17 +342,22 @@ def resolve_runtime_deps(client: CurseForge, entries: dict, pins: dict, keys: li
         pending = [pin["project_id"]]
         seen = {pin["project_id"]}
         found = []
+        undeclared = [project_id for _, project_id in map(parse_project, entries[key].get("requires", []))]
 
         while pending:
-            file = file_of(pending.pop(0))
+            project_id = pending.pop(0)
+            file = file_of(project_id)
 
             if not file:
                 continue
 
-            for dependency in file.get("dependencies", []):
-                project_id = dependency["modId"]
+            required = [dependency["modId"] for dependency in file.get("dependencies", []) if dependency["relationType"] == REQUIRED_RELATION_TYPE]
 
-                if dependency["relationType"] != REQUIRED_RELATION_TYPE or project_id in seen:
+            if project_id == pin["project_id"]:
+                required += undeclared
+
+            for project_id in required:
+                if project_id in seen:
                     continue
 
                 seen.add(project_id)

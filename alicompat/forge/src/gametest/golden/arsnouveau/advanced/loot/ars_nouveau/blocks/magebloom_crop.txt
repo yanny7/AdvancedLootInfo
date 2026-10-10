@@ -1,0 +1,42 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item ars_nouveau:magebloom x1
+        | Count: 1
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Magebloom Seed
+        |   -> Properties:
+        |     -> age: 7
+        | ----- Modifiers -----
+        | Explosion Decay
+      ali:item ars_nouveau:magebloom_crop x1
+        | Count: 1
+        | ----- Modifiers -----
+        | Explosion Decay
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item ars_nouveau:magebloom_crop x1
+      | Count: 1 + binom(0; 57.14%)
+      |   -> Fortune LVL: 1 + binom(LVL; 57.14%)
+      |   -> Fortune I: 1 to 2  ~2 (57%)
+      |   -> Fortune II: 1 to 3  ~2 (49%)
+      |   -> Fortune III: 1 to 4  ~3 (42%)
+      |   [chart 0..1 1-2 base=false modes=[false, true, false, false] heights=0.7500,1.0000,0.0000,0.0000 | 0..2 1-3 base=false modes=[false, true, false, false] heights=0.3214,0.8571,0.5714,0.0000 | 0..3 1-4 base=false modes=[false, false, true, false] heights=0.1378,0.5510,0.7347,0.3265]
+      | ----- Predicates -----
+      | Block State Property:
+      |   -> Block: Magebloom Seed
+      |   -> Properties:
+      |     -> age: 7
+      | ----- Modifiers -----
+      | Explosion Decay
+      | Apply Bonus:
+      |   -> Enchantment: Fortune
+      |   -> Formula: minecraft:binomial_with_bonus_count
+      |     -> Extra Rounds: 0
+      |     -> Probability: 0.5714286
