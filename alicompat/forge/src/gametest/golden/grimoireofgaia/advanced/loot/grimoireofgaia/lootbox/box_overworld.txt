@@ -1,0 +1,57 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:iron_ore x1
+      | Chance: 17.65%
+      | Count: max(0; U[1; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False
+    ali:item minecraft:copper_ore x1
+      | Chance: 17.65%
+      | Count: max(0; U[1; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False
+    ali:item minecraft:coal_ore x1
+      | Chance: 17.65%
+      | Count: max(0; U[2; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 8
+      |   -> Add: False
+    ali:item minecraft:gold_ore x1
+      | Chance: 11.76%
+      | Count: max(0; U[1; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False
+    ali:item minecraft:lapis_ore x1
+      | Chance: 11.76%
+      | Count: max(0; U[1; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False
+    ali:item minecraft:redstone_ore x1
+      | Chance: 11.76%
+      | Count: max(0; U[2; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 8
+      |   -> Add: False
+    ali:item minecraft:diamond_ore x1
+      | Chance: 5.88%
+      | Count: max(0; U[1; 2])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
+    ali:item minecraft:emerald_ore x1
+      | Chance: 5.88%
+      | Count: 1

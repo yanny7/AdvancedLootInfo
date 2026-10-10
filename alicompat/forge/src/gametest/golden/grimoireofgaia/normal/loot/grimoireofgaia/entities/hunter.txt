@@ -1,0 +1,30 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item grimoireofgaia:rotten_heart x1
+      | Count: 0 to 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item #forge:nuggets/iron
+      | Count: 0 to 3
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item grimoireofgaia:box_iron x1
+      | Chance: 2.5%
+      |   -> Looting I: 3.5%
+      |   -> Looting II: 4.5%
+      |   -> Looting III: 5.5%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item grimoireofgaia:bag_arrows x1
+      | Chance: 1%
+      |   -> Looting I: 2%
+      |   -> Looting II: 3%
+      |   -> Looting III: 4%
+      | Count: 1
