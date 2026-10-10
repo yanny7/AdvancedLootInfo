@@ -12,7 +12,7 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Enchantment: Silk Touch
         |     -> Level: ≥ 1
-      ali:item minecraft:melon_slice x1
+      ali:item minecraft:melon_slice x3-9
         | Count: min(max(0; U[3; 7]); 9)
         |   -> Fortune LVL: min(max(0; U[3; 7]) + U[0; LVL]; 9)
         |   -> Fortune I: 3 to 8  ~4 to 7 (20%)

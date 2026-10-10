@@ -11,7 +11,7 @@ ali:entity_loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item minecraft:gunpowder x1
+          ali:item minecraft:gunpowder x0-5
             | Chance: 16.67%
             | Count: 0 to 2
             |   -> Looting I: 0 to 3  ~1 to 2 (33%)
@@ -24,7 +24,7 @@ ali:entity_loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item #minecraft:creeper_drop_music_discs
+          ali:item #minecraft:creeper_drop_music_discs x1
             | Chance: 16.67%
             | Count: 1
             | ----- Predicates -----
@@ -41,7 +41,7 @@ ali:entity_loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item minecraft:string x1
+          ali:item minecraft:string x0-5
             | Chance: 16.67%
             | Count: 0 to 2
             |   -> Looting I: 0 to 3  ~1 to 2 (33%)
@@ -54,7 +54,7 @@ ali:entity_loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item minecraft:spider_eye x1
+          ali:item minecraft:spider_eye x0-4
             | Chance: 16.67%
             | Count: 0 to 1  ~0 (67%)
             |   -> Looting I: 0 to 2  ~1 (50%)
@@ -74,7 +74,7 @@ ali:entity_loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item minecraft:ender_pearl x1
+          ali:item minecraft:ender_pearl x0-4
             | Chance: 16.67%
             | Count: 0 to 1
             |   -> Looting I: 0 to 2  ~1 (50%)
@@ -92,7 +92,7 @@ ali:entity_loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item minecraft:slime_ball x1
+          ali:item minecraft:slime_ball x0-5
             | Chance: 8.33%
             | Count: 0 to 2
             |   -> Looting I: 0 to 3  ~1 to 2 (33%)
@@ -132,7 +132,7 @@ ali:entity_loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item minecraft:rotten_flesh x1
+          ali:item minecraft:rotten_flesh x0-5
             | Chance: 16.67%
             | Count: 0 to 2
             |   -> Looting I: 0 to 3  ~1 to 2 (33%)
@@ -185,7 +185,7 @@ ali:entity_loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item minecraft:arrow x1
+          ali:item minecraft:arrow x0-5
             | Chance: 16.67%
             | Count: 0 to 2
             |   -> Looting I: 0 to 3  ~1 to 2 (33%)
@@ -198,7 +198,7 @@ ali:entity_loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item minecraft:bone x1
+          ali:item minecraft:bone x0-5
             | Chance: 16.67%
             | Count: 0 to 2
             |   -> Looting I: 0 to 3  ~1 to 2 (33%)
@@ -211,7 +211,7 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item #forge:nuggets/iron
+    ali:item #forge:nuggets/iron x0-3
       | Count: 0 to 3
   ali:loot_pool
     | Selects random entry

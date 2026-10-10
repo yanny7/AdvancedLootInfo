@@ -14,7 +14,7 @@ ali:loot_table
         |     -> Level: ≥ 1
         | ----- Modifiers -----
         | Double Drops
-      ali:item aether:ambrosium_shard x1
+      ali:item aether:ambrosium_shard x1-4
         | Count: 1
         |   -> Fortune I: 1 to 2  ~1 (67%)
         |   -> Fortune II: 1 to 3  ~1 (50%)

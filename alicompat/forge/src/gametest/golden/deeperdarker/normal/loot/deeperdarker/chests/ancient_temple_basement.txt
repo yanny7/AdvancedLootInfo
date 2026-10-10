@@ -3,40 +3,40 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 4 to 6
-    ali:item minecraft:sculk x1
+    ali:item minecraft:sculk x6-8
       | Chance: 10.85%
       | Count: 6 to 8
-    ali:item minecraft:soul_soil x1
+    ali:item minecraft:soul_soil x3-7
       | Chance: 10.51%
       | Count: 3 to 7
-    ali:item deeperdarker:soul_dust x1
+    ali:item deeperdarker:soul_dust x3-7
       | Chance: 10.51%
       | Count: 3 to 7
-    ali:item minecraft:echo_shard x1
+    ali:item minecraft:echo_shard x4-7
       | Chance: 10.17%
       | Count: 4 to 7
-    ali:item deeperdarker:grime_brick x1
+    ali:item deeperdarker:grime_brick x5-13
       | Chance: 9.49%
       | Count: 5 to 13
     ali:item minecraft:name_tag x1
       | Chance: 8.81%
       | Count: 1
-    ali:item deeperdarker:sculk_bone x1
+    ali:item deeperdarker:sculk_bone x2-7
       | Chance: 8.47%
       | Count: 2 to 7
-    ali:item minecraft:string x1
+    ali:item minecraft:string x9-16
       | Chance: 6.78%
       | Count: 9 to 16
-    ali:item deeperdarker:crystallized_amber x1
+    ali:item deeperdarker:crystallized_amber x2-5
       | Chance: 6.1%
       | Count: 2 to 5
-    ali:item minecraft:iron_ingot x1
+    ali:item minecraft:iron_ingot x7-14
       | Chance: 5.42%
       | Count: 7 to 14
-    ali:item minecraft:gold_ingot x1
+    ali:item minecraft:gold_ingot x7-12
       | Chance: 4.41%
       | Count: 7 to 12
-    ali:item minecraft:diamond x1
+    ali:item minecraft:diamond x3-7
       | Chance: 3.39%
       | Count: 3 to 7
     ali:item minecraft:enchanted_book x1
@@ -44,7 +44,7 @@ ali:loot_table
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
-    ali:item minecraft:enchanted_golden_apple x1
+    ali:item minecraft:enchanted_golden_apple x1-2
       | Chance: 1.02%
       | Count: 1 to 2
     ali:item minecraft:music_disc_otherside x1
@@ -56,7 +56,7 @@ ali:loot_table
       | ----- Modifiers -----
       | Enchant Randomly:
       |   -> Catalysis
-    ali:item deeperdarker:warden_carapace x1
+    ali:item deeperdarker:warden_carapace x1-2
       | Chance: 0.34%
       | Count: 1 to 2
   ali:loot_pool

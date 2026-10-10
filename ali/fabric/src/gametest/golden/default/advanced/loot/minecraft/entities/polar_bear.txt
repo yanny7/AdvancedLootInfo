@@ -3,7 +3,7 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:cod x1
+    ali:item minecraft:cod x0-5
       | Chance: 75%
       | Count: max(0; U[0; 2])
       |   -> Looting LVL: max(0; U[0; 2]) + round(LVL × U[0; 1))
@@ -24,7 +24,7 @@ ali:entity_loot_table
       |   -> Add: False
       | Looting Enchant:
       |   -> Value: U[0; 1)
-    ali:item minecraft:salmon x1
+    ali:item minecraft:salmon x0-5
       | Chance: 25%
       | Count: max(0; U[0; 2])
       |   -> Looting LVL: max(0; U[0; 2]) + round(LVL × U[0; 1))

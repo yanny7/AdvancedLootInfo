@@ -316,7 +316,7 @@ ali:loot_table
                     ali:loot_pool
                       | Selects random entry
                       | Rolls: 27
-                      ali:item minecraft:white_concrete x1
+                      ali:item minecraft:white_concrete x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -324,7 +324,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:orange_concrete x1
+                      ali:item minecraft:orange_concrete x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -332,7 +332,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:magenta_concrete x1
+                      ali:item minecraft:magenta_concrete x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -340,7 +340,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:light_blue_concrete x1
+                      ali:item minecraft:light_blue_concrete x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -348,7 +348,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:yellow_concrete x1
+                      ali:item minecraft:yellow_concrete x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -356,7 +356,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:lime_concrete x1
+                      ali:item minecraft:lime_concrete x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -364,7 +364,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:pink_concrete x1
+                      ali:item minecraft:pink_concrete x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -372,7 +372,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:gray_concrete x1
+                      ali:item minecraft:gray_concrete x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -380,7 +380,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:light_gray_concrete x1
+                      ali:item minecraft:light_gray_concrete x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -388,7 +388,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:cyan_concrete x1
+                      ali:item minecraft:cyan_concrete x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -396,7 +396,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:purple_concrete x1
+                      ali:item minecraft:purple_concrete x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -404,7 +404,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:blue_concrete x1
+                      ali:item minecraft:blue_concrete x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -412,7 +412,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:brown_concrete x1
+                      ali:item minecraft:brown_concrete x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -420,7 +420,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:green_concrete x1
+                      ali:item minecraft:green_concrete x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -428,7 +428,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:red_concrete x1
+                      ali:item minecraft:red_concrete x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -436,7 +436,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:black_concrete x1
+                      ali:item minecraft:black_concrete x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -444,7 +444,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:white_terracotta x1
+                      ali:item minecraft:white_terracotta x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -452,7 +452,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:orange_terracotta x1
+                      ali:item minecraft:orange_terracotta x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -460,7 +460,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:magenta_terracotta x1
+                      ali:item minecraft:magenta_terracotta x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -468,7 +468,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:light_blue_terracotta x1
+                      ali:item minecraft:light_blue_terracotta x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -476,7 +476,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:yellow_terracotta x1
+                      ali:item minecraft:yellow_terracotta x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -484,7 +484,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:lime_terracotta x1
+                      ali:item minecraft:lime_terracotta x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -492,7 +492,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:pink_terracotta x1
+                      ali:item minecraft:pink_terracotta x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -500,7 +500,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:gray_terracotta x1
+                      ali:item minecraft:gray_terracotta x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -508,7 +508,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:light_gray_terracotta x1
+                      ali:item minecraft:light_gray_terracotta x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -516,7 +516,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:cyan_terracotta x1
+                      ali:item minecraft:cyan_terracotta x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -524,7 +524,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:purple_terracotta x1
+                      ali:item minecraft:purple_terracotta x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -532,7 +532,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:blue_terracotta x1
+                      ali:item minecraft:blue_terracotta x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -540,7 +540,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:brown_terracotta x1
+                      ali:item minecraft:brown_terracotta x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -548,7 +548,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:green_terracotta x1
+                      ali:item minecraft:green_terracotta x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -556,7 +556,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:red_terracotta x1
+                      ali:item minecraft:red_terracotta x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -564,7 +564,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:black_terracotta x1
+                      ali:item minecraft:black_terracotta x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -585,7 +585,7 @@ ali:loot_table
                     ali:loot_pool
                       | Selects random entry
                       | Rolls: 27
-                      ali:item minecraft:tinted_glass x1
+                      ali:item minecraft:tinted_glass x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -593,7 +593,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:white_stained_glass x1
+                      ali:item minecraft:white_stained_glass x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -601,7 +601,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:orange_stained_glass x1
+                      ali:item minecraft:orange_stained_glass x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -609,7 +609,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:magenta_stained_glass x1
+                      ali:item minecraft:magenta_stained_glass x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -617,7 +617,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:light_blue_stained_glass x1
+                      ali:item minecraft:light_blue_stained_glass x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -625,7 +625,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:yellow_stained_glass x1
+                      ali:item minecraft:yellow_stained_glass x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -633,7 +633,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:lime_stained_glass x1
+                      ali:item minecraft:lime_stained_glass x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -641,7 +641,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:pink_stained_glass x1
+                      ali:item minecraft:pink_stained_glass x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -649,7 +649,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:gray_stained_glass x1
+                      ali:item minecraft:gray_stained_glass x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -657,7 +657,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:light_gray_stained_glass x1
+                      ali:item minecraft:light_gray_stained_glass x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -665,7 +665,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:cyan_stained_glass x1
+                      ali:item minecraft:cyan_stained_glass x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -673,7 +673,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:purple_stained_glass x1
+                      ali:item minecraft:purple_stained_glass x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -681,7 +681,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:blue_stained_glass x1
+                      ali:item minecraft:blue_stained_glass x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -689,7 +689,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:brown_stained_glass x1
+                      ali:item minecraft:brown_stained_glass x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -697,7 +697,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:green_stained_glass x1
+                      ali:item minecraft:green_stained_glass x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -705,7 +705,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:red_stained_glass x1
+                      ali:item minecraft:red_stained_glass x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -713,7 +713,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:black_stained_glass x1
+                      ali:item minecraft:black_stained_glass x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -721,7 +721,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:white_stained_glass_pane x1
+                      ali:item minecraft:white_stained_glass_pane x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -729,7 +729,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:orange_stained_glass_pane x1
+                      ali:item minecraft:orange_stained_glass_pane x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -737,7 +737,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:magenta_stained_glass_pane x1
+                      ali:item minecraft:magenta_stained_glass_pane x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -745,7 +745,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:light_blue_stained_glass_pane x1
+                      ali:item minecraft:light_blue_stained_glass_pane x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -753,7 +753,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:yellow_stained_glass_pane x1
+                      ali:item minecraft:yellow_stained_glass_pane x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -761,7 +761,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:lime_stained_glass_pane x1
+                      ali:item minecraft:lime_stained_glass_pane x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -769,7 +769,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:pink_stained_glass_pane x1
+                      ali:item minecraft:pink_stained_glass_pane x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -777,7 +777,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:gray_stained_glass_pane x1
+                      ali:item minecraft:gray_stained_glass_pane x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -785,7 +785,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:light_gray_stained_glass_pane x1
+                      ali:item minecraft:light_gray_stained_glass_pane x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -793,7 +793,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:cyan_stained_glass_pane x1
+                      ali:item minecraft:cyan_stained_glass_pane x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -801,7 +801,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:purple_stained_glass_pane x1
+                      ali:item minecraft:purple_stained_glass_pane x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -809,7 +809,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:blue_stained_glass_pane x1
+                      ali:item minecraft:blue_stained_glass_pane x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -817,7 +817,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:brown_stained_glass_pane x1
+                      ali:item minecraft:brown_stained_glass_pane x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -825,7 +825,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:green_stained_glass_pane x1
+                      ali:item minecraft:green_stained_glass_pane x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -833,7 +833,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:red_stained_glass_pane x1
+                      ali:item minecraft:red_stained_glass_pane x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -841,7 +841,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:black_stained_glass_pane x1
+                      ali:item minecraft:black_stained_glass_pane x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.1%
                         |   -> Luck 1: 0.07%
@@ -955,7 +955,7 @@ ali:loot_table
                     ali:loot_pool
                       | Selects random entry
                       | Rolls: 27
-                      ali:item minecraft:white_wool x1
+                      ali:item minecraft:white_wool x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -963,7 +963,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:orange_wool x1
+                      ali:item minecraft:orange_wool x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -971,7 +971,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:magenta_wool x1
+                      ali:item minecraft:magenta_wool x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -979,7 +979,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:light_blue_wool x1
+                      ali:item minecraft:light_blue_wool x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -987,7 +987,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:yellow_wool x1
+                      ali:item minecraft:yellow_wool x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -995,7 +995,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:lime_wool x1
+                      ali:item minecraft:lime_wool x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -1003,7 +1003,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:pink_wool x1
+                      ali:item minecraft:pink_wool x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -1011,7 +1011,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:gray_wool x1
+                      ali:item minecraft:gray_wool x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -1019,7 +1019,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:light_gray_wool x1
+                      ali:item minecraft:light_gray_wool x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -1027,7 +1027,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:cyan_wool x1
+                      ali:item minecraft:cyan_wool x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -1035,7 +1035,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:purple_wool x1
+                      ali:item minecraft:purple_wool x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -1043,7 +1043,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:blue_wool x1
+                      ali:item minecraft:blue_wool x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -1051,7 +1051,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:brown_wool x1
+                      ali:item minecraft:brown_wool x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -1059,7 +1059,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:green_wool x1
+                      ali:item minecraft:green_wool x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -1067,7 +1067,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:red_wool x1
+                      ali:item minecraft:red_wool x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -1075,7 +1075,7 @@ ali:loot_table
                         |   -> Luck 3: 0.05%
                         |   -> Luck 4: 0.05%
                         | Count: 5 to 9
-                      ali:item minecraft:black_wool x1
+                      ali:item minecraft:black_wool x5-9
                         | Chance: 0.08%
                         |   -> Bad Luck: 0.11%
                         |   -> Luck 1: 0.07%
@@ -1224,7 +1224,7 @@ ali:loot_table
                     ali:loot_pool
                       | Selects random entry
                       | Rolls: 27
-                      ali:item minecraft:brick x1
+                      ali:item minecraft:brick x5-9
                         | Chance: 0.81%
                         |   -> Bad Luck: 1.01%
                         |   -> Luck 1: 0.67%
@@ -1232,7 +1232,7 @@ ali:loot_table
                         |   -> Luck 3: 0.51%
                         |   -> Luck 4: 0.45%
                         | Count: 5 to 9
-                      ali:item minecraft:clay_ball x1
+                      ali:item minecraft:clay_ball x5-9
                         | Chance: 0.54%
                         |   -> Bad Luck: 0.67%
                         |   -> Luck 1: 0.45%
@@ -1240,7 +1240,7 @@ ali:loot_table
                         |   -> Luck 3: 0.34%
                         |   -> Luck 4: 0.3%
                         | Count: 5 to 9
-                      ali:item minecraft:clay x1
+                      ali:item minecraft:clay x2-4
                         | Chance: 0.27%
                         |   -> Bad Luck: 0.34%
                         |   -> Luck 1: 0.22%
@@ -1248,7 +1248,7 @@ ali:loot_table
                         |   -> Luck 3: 0.17%
                         |   -> Luck 4: 0.15%
                         | Count: 2 to 4
-                      ali:item minecraft:flower_pot x1
+                      ali:item minecraft:flower_pot x5-9
                         | Chance: 0.27%
                         |   -> Bad Luck: 0.34%
                         |   -> Luck 1: 0.22%
@@ -1453,7 +1453,7 @@ ali:loot_table
             |   -> Luck 3: 2.02%
             |   -> Luck 4: 1.8%
             | Count: 1
-          ali:item minecraft:emerald x1
+          ali:item minecraft:emerald x12-24
             | Chance: 2.42%
             |   -> Bad Luck: 3.03%
             |   -> Luck 1: 2.02%
@@ -1461,7 +1461,7 @@ ali:loot_table
             |   -> Luck 3: 1.52%
             |   -> Luck 4: 1.35%
             | Count: 12 to 24
-          ali:item minecraft:lapis_block x1
+          ali:item minecraft:lapis_block x3-5
             | Chance: 2.42%
             |   -> Bad Luck: 3.03%
             |   -> Luck 1: 2.02%
@@ -1469,7 +1469,7 @@ ali:loot_table
             |   -> Luck 3: 1.52%
             |   -> Luck 4: 1.35%
             | Count: 3 to 5
-          ali:item minecraft:honey_block x1
+          ali:item minecraft:honey_block x6-12
             | Chance: 2.42%
             |   -> Bad Luck: 3.03%
             |   -> Luck 1: 2.02%
@@ -1477,7 +1477,7 @@ ali:loot_table
             |   -> Luck 3: 1.52%
             |   -> Luck 4: 1.35%
             | Count: 6 to 12
-          ali:item minecraft:tnt x1
+          ali:item minecraft:tnt x10-20
             | Chance: 2.42%
             |   -> Bad Luck: 3.03%
             |   -> Luck 1: 2.02%
@@ -1485,7 +1485,7 @@ ali:loot_table
             |   -> Luck 3: 1.52%
             |   -> Luck 4: 1.35%
             | Count: 10 to 20
-          ali:item minecraft:golden_apple x1
+          ali:item minecraft:golden_apple x1-2
             | Chance: 2.42%
             |   -> Bad Luck: 3.03%
             |   -> Luck 1: 2.02%
@@ -1493,7 +1493,7 @@ ali:loot_table
             |   -> Luck 3: 1.52%
             |   -> Luck 4: 1.35%
             | Count: 1 to 2
-          ali:item minecraft:turtle_egg x1
+          ali:item minecraft:turtle_egg x1-2
             | Chance: 2.42%
             |   -> Bad Luck: 3.03%
             |   -> Luck 1: 2.02%
@@ -1556,7 +1556,7 @@ ali:loot_table
             | ----- Modifiers -----
             | Set Nbt:
             |   -> Tag: {Potion:"minecraft:invisibility"}
-          ali:item minecraft:firework_rocket x1 {Fireworks:{Flight:1b}}
+          ali:item minecraft:firework_rocket x24-40 {Fireworks:{Flight:1b}}
             | Chance: 2.42%
             |   -> Bad Luck: 3.03%
             |   -> Luck 1: 2.02%
@@ -1564,7 +1564,7 @@ ali:loot_table
             |   -> Luck 3: 1.52%
             |   -> Luck 4: 1.35%
             | Count: 24 to 40
-          ali:item minecraft:dragon_breath x1
+          ali:item minecraft:dragon_breath x3-6
             | Chance: 2.42%
             |   -> Bad Luck: 3.03%
             |   -> Luck 1: 2.02%
@@ -1572,7 +1572,7 @@ ali:loot_table
             |   -> Luck 3: 1.52%
             |   -> Luck 4: 1.35%
             | Count: 3 to 6
-          ali:item minecraft:ender_pearl x1
+          ali:item minecraft:ender_pearl x4-6
             | Chance: 2.42%
             |   -> Bad Luck: 3.03%
             |   -> Luck 1: 2.02%
@@ -2021,7 +2021,7 @@ ali:loot_table
             |   -> Luck 3: 2.02%
             |   -> Luck 4: 2.24%
             | Count: 1
-          ali:item minecraft:ancient_debris x1
+          ali:item minecraft:ancient_debris x1-3
             | Chance: 0.61%
             |   -> Bad Luck: 0%
             |   -> Luck 1: 1.01%
@@ -2045,7 +2045,7 @@ ali:loot_table
             |   -> Luck 3: 1.52%
             |   -> Luck 4: 1.68%
             | Count: 1
-          ali:item minecraft:ghast_tear x1
+          ali:item minecraft:ghast_tear x3-6
             | Chance: 0.61%
             |   -> Bad Luck: 0%
             |   -> Luck 1: 1.01%

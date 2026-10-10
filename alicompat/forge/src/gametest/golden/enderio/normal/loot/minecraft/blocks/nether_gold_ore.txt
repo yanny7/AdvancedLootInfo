@@ -25,7 +25,7 @@ ali:loot_table
           |   -> Enchantments:
           |     -> Enchantment: Silk Touch
           |     -> Level: ≥ 1
-      ali:item minecraft:gold_nugget x1
+      ali:item minecraft:gold_nugget x2-24
         | Count: 2 to 6
         |   -> Fortune I: 2 to 12
         |   -> Fortune II: 2 to 18  ~6 (20%)

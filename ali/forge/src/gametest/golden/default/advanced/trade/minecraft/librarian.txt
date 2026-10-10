@@ -6,14 +6,14 @@ ali:trade
       | Uses: 16
       | XP: 2
       | Price Multiplier: 0.05
-      ali:item minecraft:paper x1
+      ali:item minecraft:paper x24
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 12
       | XP: 1
       | Price Multiplier: 0.2
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x5-64
       ali:item minecraft:air x0
       ali:item minecraft:enchanted_book x1
         | Enchant Randomly:
@@ -21,7 +21,7 @@ ali:trade
       | Uses: 12
       | XP: 1
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x9
       ali:item minecraft:air x0
       ali:item minecraft:bookshelf x1
   ali:trade_level
@@ -31,14 +31,14 @@ ali:trade
       | Uses: 12
       | XP: 10
       | Price Multiplier: 0.05
-      ali:item minecraft:book x1
+      ali:item minecraft:book x4
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 12
       | XP: 5
       | Price Multiplier: 0.2
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x5-64
       ali:item minecraft:air x0
       ali:item minecraft:enchanted_book x1
         | Enchant Randomly:
@@ -56,14 +56,14 @@ ali:trade
       | Uses: 12
       | XP: 20
       | Price Multiplier: 0.05
-      ali:item minecraft:ink_sac x1
+      ali:item minecraft:ink_sac x5
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 12
       | XP: 10
       | Price Multiplier: 0.2
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x5-64
       ali:item minecraft:air x0
       ali:item minecraft:enchanted_book x1
         | Enchant Randomly:
@@ -73,7 +73,7 @@ ali:trade
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:glass x1
+      ali:item minecraft:glass x4
   ali:trade_level
     | Level: 4
     | Randomly Selects 2 Of These Trades
@@ -88,7 +88,7 @@ ali:trade
       | Uses: 12
       | XP: 15
       | Price Multiplier: 0.2
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x5-64
       ali:item minecraft:air x0
       ali:item minecraft:enchanted_book x1
         | Enchant Randomly:
@@ -96,14 +96,14 @@ ali:trade
       | Uses: 12
       | XP: 15
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x5
       ali:item minecraft:air x0
       ali:item minecraft:clock x1
     ali:items_to_items
       | Uses: 12
       | XP: 15
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x4
       ali:item minecraft:air x0
       ali:item minecraft:compass x1
   ali:trade_level
@@ -113,6 +113,6 @@ ali:trade
       | Uses: 12
       | XP: 30
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x20
       ali:item minecraft:air x0
       ali:item minecraft:name_tag x1

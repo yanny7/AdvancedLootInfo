@@ -7,5 +7,5 @@ ali:entity_loot_table
       | Count: 1
   ali:item deeperdarker:heart_of_the_deep x1
     | Count: 1
-  ali:item deeperdarker:warden_carapace x1
+  ali:item deeperdarker:warden_carapace x1-3
     | Count: 1 to 3

@@ -3,7 +3,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 4
-    ali:item the_bumblezone:bee_bread x1
+    ali:item the_bumblezone:bee_bread x1-2
       | Chance: 36%
       |   -> Bad Luck: 36.73%
       |   -> Luck 1: 34.62%
@@ -11,7 +11,7 @@ ali:loot_table
       |   -> Luck 3: 32.14%
       |   -> Luck 4: 31.03%
       | Count: 1 to 2
-    ali:item minecraft:honeycomb x1
+    ali:item minecraft:honeycomb x1-3
       | Chance: 24%
       |   -> Bad Luck: 24.49%
       |   -> Luck 1: 23.08%
@@ -32,7 +32,7 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item #minecraft:flowers
+          ali:item #minecraft:flowers x1
             | Chance: 20%
             |   -> Bad Luck: 20.41%
             |   -> Luck 1: 19.23%
@@ -43,7 +43,7 @@ ali:loot_table
             | ----- Modifiers -----
             | Tag Item Removals:
             |   -> Tag: Disallowed Bumblezone Structure Flower Loots
-    ali:item the_bumblezone:bee_stinger x1
+    ali:item the_bumblezone:bee_stinger x2-4
       | Chance: 12%
       |   -> Bad Luck: 12.24%
       |   -> Luck 1: 11.54%
@@ -118,7 +118,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item the_bumblezone:bee_stinger x1
+    ali:item the_bumblezone:bee_stinger x1-5
       | Count: 1 to 5
   ali:loot_pool
     | Selects random entry

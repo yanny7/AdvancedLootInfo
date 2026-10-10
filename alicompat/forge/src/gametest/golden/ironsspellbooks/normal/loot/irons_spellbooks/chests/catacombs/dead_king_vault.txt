@@ -62,19 +62,19 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 3
-    ali:item minecraft:gold_ingot x1
+    ali:item minecraft:gold_ingot x2-5
       | Chance: 20%
       | Count: 2 to 5
     ali:item minecraft:diamond x1
       | Chance: 20%
       | Count: 1
-    ali:item irons_spellbooks:magic_cloth x1
+    ali:item irons_spellbooks:magic_cloth x1-2
       | Chance: 20%
       | Count: 1 to 2
-    ali:item irons_spellbooks:arcane_ingot x1
+    ali:item irons_spellbooks:arcane_ingot x1-2
       | Chance: 20%
       | Count: 1 to 2
-    ali:item minecraft:emerald x1
+    ali:item minecraft:emerald x1-6
       | Chance: 20%
       | Count: 1 to 6
   ali:loot_pool
@@ -122,10 +122,10 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 2
-    ali:item irons_spellbooks:blood_vial x1
+    ali:item irons_spellbooks:blood_vial x1-4
       | Count: 1 to 4
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item irons_spellbooks:dead_king_phylactery_shard x1
+    ali:item irons_spellbooks:dead_king_phylactery_shard x1-3
       | Count: 1 to 3

@@ -3,7 +3,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item experienceobelisk:forgotten_dust x1
+    ali:item experienceobelisk:forgotten_dust x4-64
       | Count: max(0; U[4; 16]) × max(1; U[0; 1])
       |   -> Fortune LVL: max(0; U[4; 16]) × max(1; U[0; LVL + 1])
       |   -> Fortune I: 4 to 32

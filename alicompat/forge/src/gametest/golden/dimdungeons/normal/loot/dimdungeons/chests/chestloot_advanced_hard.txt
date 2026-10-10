@@ -155,7 +155,7 @@ ali:loot_table
           ali:item dimdungeons:item_blank_teleporter_key x1
             | Chance: 4.04%
             | Count: 1
-          ali:item minecraft:ancient_debris x1
+          ali:item minecraft:ancient_debris x1-3
             | Chance: 3.03%
             | Count: 1 to 3
           ali:item minecraft:totem_of_undying x1
@@ -164,7 +164,7 @@ ali:loot_table
           ali:item minecraft:shulker_box x1
             | Chance: 3.03%
             | Count: 1
-          ali:item minecraft:ghast_tear x1
+          ali:item minecraft:ghast_tear x3-6
             | Chance: 3.03%
             | Count: 3 to 6
           ali:item minecraft:trident x1 {Damage:0}

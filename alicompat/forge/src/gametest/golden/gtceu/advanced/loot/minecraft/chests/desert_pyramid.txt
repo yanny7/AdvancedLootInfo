@@ -3,7 +3,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 2 to 4
-    ali:item minecraft:bone x1
+    ali:item minecraft:bone x4-6
       | Chance: 9.47%
       |   -> luck: 2500% ÷ (23200% + max(0%; 1200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 400% + floor(luck)))
       |   -> Bad Luck: 9.77%
@@ -16,7 +16,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 4 to 6
       |   -> Add: False
-    ali:item minecraft:spider_eye x1
+    ali:item minecraft:spider_eye x1-3
       | Chance: 9.47%
       |   -> luck: 2500% ÷ (23200% + max(0%; 1200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 400% + floor(luck)))
       |   -> Bad Luck: 9.77%
@@ -29,7 +29,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1 to 3
       |   -> Add: False
-    ali:item minecraft:rotten_flesh x1
+    ali:item minecraft:rotten_flesh x3-7
       | Chance: 9.47%
       |   -> luck: 2500% ÷ (23200% + max(0%; 1200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 400% + floor(luck)))
       |   -> Bad Luck: 9.77%
@@ -71,7 +71,7 @@ ali:loot_table
       |   -> Luck 3: 6.94%
       |   -> Luck 4: 6.76%
       | Count: 1
-    ali:item minecraft:iron_ingot x1
+    ali:item minecraft:iron_ingot x1-5
       | Chance: 5.68%
       |   -> luck: 1500% ÷ (23200% + max(0%; 1200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 400% + floor(luck)))
       |   -> Bad Luck: 5.86%
@@ -84,7 +84,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1 to 5
       |   -> Add: False
-    ali:item minecraft:gold_ingot x1
+    ali:item minecraft:gold_ingot x2-7
       | Chance: 5.68%
       |   -> luck: 1500% ÷ (23200% + max(0%; 1200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 400% + floor(luck)))
       |   -> Bad Luck: 5.86%
@@ -97,7 +97,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 2 to 7
       |   -> Add: False
-    ali:item minecraft:emerald x1
+    ali:item minecraft:emerald x1-3
       | Chance: 5.68%
       |   -> luck: 1500% ÷ (23200% + max(0%; 1200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 400% + floor(luck)))
       |   -> Bad Luck: 5.86%
@@ -128,7 +128,7 @@ ali:loot_table
       |   -> Luck 2: 5.36%
       |   -> Luck 3: 5.21%
       |   -> Luck 4: 5.07%
-    ali:item gtceu:silver_ingot x1
+    ali:item gtceu:silver_ingot x4-16
       | Quality: 1
       | Chance: 4.55%
       |   -> luck: max(0%; 1200% + floor(luck)) ÷ (23200% + max(0%; 1200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 400% + floor(luck)))
@@ -153,7 +153,7 @@ ali:loot_table
       |   -> Luck 3: 3.47%
       |   -> Luck 4: 3.38%
       | Count: 1
-    ali:item minecraft:diamond x1
+    ali:item minecraft:diamond x1-3
       | Chance: 1.89%
       |   -> luck: 500% ÷ (23200% + max(0%; 1200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 400% + floor(luck)))
       |   -> Bad Luck: 1.95%
@@ -175,7 +175,7 @@ ali:loot_table
       |   -> Luck 3: 1.74%
       |   -> Luck 4: 1.69%
       | Count: 1
-    ali:item gtceu:platinum_ingot x1
+    ali:item gtceu:platinum_ingot x2-8
       | Quality: 1
       | Chance: 1.52%
       |   -> luck: max(0%; 400% + floor(luck)) ÷ (23200% + max(0%; 1200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 400% + floor(luck)))
@@ -191,7 +191,7 @@ ali:loot_table
       |     -> Item: Platinum Ingot
       |     -> Count: 1
       |   -> Count: 2 to 8
-    ali:item gtceu:red_garnet_gem x1
+    ali:item gtceu:red_garnet_gem x2-8
       | Quality: 1
       | Chance: 1.52%
       |   -> luck: max(0%; 400% + floor(luck)) ÷ (23200% + max(0%; 1200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 400% + floor(luck)))
@@ -207,7 +207,7 @@ ali:loot_table
       |     -> Item: Red Garnet
       |     -> Count: 1
       |   -> Count: 2 to 8
-    ali:item gtceu:yellow_garnet_gem x1
+    ali:item gtceu:yellow_garnet_gem x2-8
       | Quality: 1
       | Chance: 1.52%
       |   -> luck: max(0%; 400% + floor(luck)) ÷ (23200% + max(0%; 1200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 400% + floor(luck)))
@@ -232,7 +232,7 @@ ali:loot_table
       |   -> Luck 3: 0.69%
       |   -> Luck 4: 0.68%
       | Count: 1
-    ali:item gtceu:ruby_gem x1
+    ali:item gtceu:ruby_gem x2-8
       | Quality: 1
       | Chance: 0.76%
       |   -> luck: max(0%; 200% + floor(luck)) ÷ (23200% + max(0%; 1200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 400% + floor(luck)))
@@ -248,7 +248,7 @@ ali:loot_table
       |     -> Item: Ruby
       |     -> Count: 1
       |   -> Count: 2 to 8
-    ali:item gtceu:sapphire_gem x1
+    ali:item gtceu:sapphire_gem x2-8
       | Quality: 1
       | Chance: 0.76%
       |   -> luck: max(0%; 200% + floor(luck)) ÷ (23200% + max(0%; 1200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 400% + floor(luck)))
@@ -264,7 +264,7 @@ ali:loot_table
       |     -> Item: Sapphire
       |     -> Count: 1
       |   -> Count: 2 to 8
-    ali:item gtceu:green_sapphire_gem x1
+    ali:item gtceu:green_sapphire_gem x2-8
       | Quality: 1
       | Chance: 0.76%
       |   -> luck: max(0%; 200% + floor(luck)) ÷ (23200% + max(0%; 1200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 400% + floor(luck)))
@@ -280,7 +280,7 @@ ali:loot_table
       |     -> Item: Green Sapphire
       |     -> Count: 1
       |   -> Count: 2 to 8
-    ali:item gtceu:olivine_gem x1
+    ali:item gtceu:olivine_gem x2-8
       | Quality: 1
       | Chance: 0.76%
       |   -> luck: max(0%; 200% + floor(luck)) ÷ (23200% + max(0%; 1200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 400% + floor(luck)) + max(0%; 400% + floor(luck)))
@@ -299,35 +299,35 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 4
-    ali:item minecraft:bone x1
+    ali:item minecraft:bone x1-8
       | Chance: 20%
       | Count: max(0; U[1; 8])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 8
       |   -> Add: False
-    ali:item minecraft:gunpowder x1
+    ali:item minecraft:gunpowder x1-8
       | Chance: 20%
       | Count: max(0; U[1; 8])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 8
       |   -> Add: False
-    ali:item minecraft:rotten_flesh x1
+    ali:item minecraft:rotten_flesh x1-8
       | Chance: 20%
       | Count: max(0; U[1; 8])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 8
       |   -> Add: False
-    ali:item minecraft:string x1
+    ali:item minecraft:string x1-8
       | Chance: 20%
       | Count: max(0; U[1; 8])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 8
       |   -> Add: False
-    ali:item minecraft:sand x1
+    ali:item minecraft:sand x1-8
       | Chance: 20%
       | Count: max(0; U[1; 8])
       | ----- Modifiers -----
@@ -340,7 +340,7 @@ ali:loot_table
     ali:empty
       | Drops nothing
       | Chance: 85.71%
-    ali:item minecraft:dune_armor_trim_smithing_template x1
+    ali:item minecraft:dune_armor_trim_smithing_template x2
       | Chance: 14.29%
       | Count: 2
       | ----- Modifiers -----

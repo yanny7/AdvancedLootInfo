@@ -3,13 +3,13 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 3
-    ali:item minecraft:cookie x1
+    ali:item minecraft:cookie x2-3
       | Chance: 35.71%
       | Count: 2 to 3
-    ali:item minecraft:carrot x1
+    ali:item minecraft:carrot x2-3
       | Chance: 35.71%
       | Count: 2 to 3
-    ali:item minecraft:bread x1
+    ali:item minecraft:bread x1-3
       | Chance: 21.43%
       | Count: 1 to 3
     ali:item the_bumblezone:bee_soup x1
@@ -18,21 +18,21 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 2
-    ali:item the_bumblezone:sugar_infused_cobblestone x1
+    ali:item the_bumblezone:sugar_infused_cobblestone x2-4
       | Chance: 50%
       | Count: 2 to 4
-    ali:item the_bumblezone:sugar_infused_stone x1
+    ali:item the_bumblezone:sugar_infused_stone x2-4
       | Chance: 50%
       | Count: 2 to 4
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item the_bumblezone:honey_crystal_shards x1
+    ali:item the_bumblezone:honey_crystal_shards x8-17
       | Count: 8 to 17
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item the_bumblezone:bee_stinger x1
+    ali:item the_bumblezone:bee_stinger x2-6
       | Count: 2 to 6
   ali:loot_pool
     | Selects random entry

@@ -3,7 +3,7 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:cod x1
+    ali:item minecraft:cod x0-5
       | Chance: 75%
       | Count: 0 to 2
       |   -> Looting I: 0 to 3  ~1 to 2 (33%)
@@ -20,7 +20,7 @@ ali:entity_loot_table
       |           -> Is On Fire: True
       | Looting Enchant:
       |   -> Value: 0 to 1
-    ali:item minecraft:salmon x1
+    ali:item minecraft:salmon x0-5
       | Chance: 25%
       | Count: 0 to 2
       |   -> Looting I: 0 to 3  ~1 to 2 (33%)

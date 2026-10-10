@@ -12,7 +12,7 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Enchantment: Silk Touch
         |     -> Level: ≥ 1
-      ali:item mekanism:raw_osmium x1
+      ali:item mekanism:raw_osmium x1-4
         | Count: 1
         |   -> Fortune I: 1 to 2  ~1 (67%)
         |   -> Fortune II: 1 to 3  ~1 (50%)

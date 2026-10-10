@@ -104,7 +104,7 @@ ali:loot_table
     ali:item aether:agility_cape x1
       | Chance: 7.69%
       | Count: 1
-    ali:item aether:zanite_gemstone x1
+    ali:item aether:zanite_gemstone x1-2
       | Chance: 5.77%
       | Count: max(0; U[1; 2])
       | ----- Modifiers -----

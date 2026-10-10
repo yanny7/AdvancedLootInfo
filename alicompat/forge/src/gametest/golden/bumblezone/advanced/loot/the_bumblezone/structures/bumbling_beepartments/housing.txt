@@ -3,14 +3,14 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 3
-    ali:item minecraft:honey_bottle x1
+    ali:item minecraft:honey_bottle x1-2
       | Chance: 38.46%
       | Count: max(0; U[1; 2])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 2
       |   -> Add: False
-    ali:item the_bumblezone:honey_crystal x1
+    ali:item the_bumblezone:honey_crystal x1-6
       | Chance: 23.08%
       | Count: max(0; U[1; 6])
       | ----- Modifiers -----
@@ -25,13 +25,13 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item #minecraft:flowers
+          ali:item #minecraft:flowers x1
             | Chance: 15.38%
             | Count: 1
             | ----- Modifiers -----
             | Tag Item Removals:
             |   -> Tag: Disallowed Bumblezone Structure Flower Loots
-    ali:item the_bumblezone:bee_stinger x1
+    ali:item the_bumblezone:bee_stinger x1-2
       | Chance: 15.38%
       | Count: max(0; U[1; 2])
       | ----- Modifiers -----

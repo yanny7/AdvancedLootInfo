@@ -8,7 +8,7 @@ ali:entity_loot_table
     |   -> Luck 2: 3
     |   -> Luck 3: 4
     |   -> Luck 4: 5
-    ali:item minecraft:emerald x1
+    ali:item minecraft:emerald x1-5
       | Chance: 50%
       | Count: 1 to 2
       |   -> Looting I: 1 to 3  ~2 (50%)
@@ -20,7 +20,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Looting Enchant:
       |   -> Value: 0 to 1
-    ali:item immersiveengineering:shader_bag_ie_masterwork x1
+    ali:item immersiveengineering:shader_bag_ie_masterwork x0-1
       | Chance: 50%
       | Count: 0 to 1
       | ----- Predicates -----

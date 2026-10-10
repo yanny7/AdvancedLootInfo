@@ -12,7 +12,7 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Enchantment: Silk Touch
         |     -> Level: ≥ 1
-      ali:item minecraft:charcoal x1
+      ali:item minecraft:charcoal x2
         | Count: 2
         | ----- Predicates -----
         | Survives Explosion

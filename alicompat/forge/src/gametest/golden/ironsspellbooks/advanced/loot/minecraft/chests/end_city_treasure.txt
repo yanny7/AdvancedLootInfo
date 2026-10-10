@@ -3,28 +3,28 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 2 to 6
-    ali:item minecraft:gold_ingot x1
+    ali:item minecraft:gold_ingot x2-7
       | Chance: 17.65%
       | Count: max(0; U[2; 7])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 2 to 7
       |   -> Add: False
-    ali:item minecraft:iron_ingot x1
+    ali:item minecraft:iron_ingot x4-8
       | Chance: 11.76%
       | Count: max(0; U[4; 8])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 4 to 8
       |   -> Add: False
-    ali:item minecraft:diamond x1
+    ali:item minecraft:diamond x2-7
       | Chance: 5.88%
       | Count: max(0; U[2; 7])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 2 to 7
       |   -> Add: False
-    ali:item minecraft:beetroot_seeds x1
+    ali:item minecraft:beetroot_seeds x1-10
       | Chance: 5.88%
       | Count: max(0; U[1; 10])
       | ----- Modifiers -----
@@ -132,7 +132,7 @@ ali:loot_table
       | Enchant With Levels:
       |   -> Levels: 20 to 39
       |   -> Treasure: True
-    ali:item minecraft:emerald x1
+    ali:item minecraft:emerald x2-6
       | Chance: 2.35%
       | Count: max(0; U[2; 6])
       | ----- Modifiers -----
@@ -164,7 +164,7 @@ ali:loot_table
       ali:loot_pool
         | Selects random entry
         | Rolls: 1
-        ali:item irons_spellbooks:arcane_essence x1
+        ali:item irons_spellbooks:arcane_essence x0-15
           | Count: max(0; U[0; 15])
           | ----- Modifiers -----
           | Set Count:
@@ -376,7 +376,7 @@ ali:loot_table
       ali:loot_pool
         | Selects random entry
         | Rolls: 1
-        ali:item irons_spellbooks:ancient_knowledge_fragment x1
+        ali:item irons_spellbooks:ancient_knowledge_fragment x0-3
           | Chance: 20%
           | Count: max(0; U[0; 3])
           | ----- Predicates -----

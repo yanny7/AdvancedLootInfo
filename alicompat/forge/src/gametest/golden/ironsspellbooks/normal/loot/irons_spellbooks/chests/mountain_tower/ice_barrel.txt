@@ -31,9 +31,9 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 6 to 12
-    ali:item minecraft:snowball x1
+    ali:item minecraft:snowball x1-2
       | Chance: 50%
       | Count: 1 to 2
-    ali:item minecraft:ice x1
+    ali:item minecraft:ice x2-4
       | Chance: 50%
       | Count: 2 to 4

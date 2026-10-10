@@ -11,7 +11,7 @@ ali:loot_table
       | Count: 1
   lootjs:add_loot
     | Selects all entries
-    lootjs:item_stack minecraft:emerald x1
+    lootjs:item_stack minecraft:emerald x3
       | Count: 3
   lootjs:weighted_add_loot
     | Selects random entry

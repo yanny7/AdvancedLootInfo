@@ -12,7 +12,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 12
-    ali:item minecraft:wheat x1
+    ali:item minecraft:wheat x1-4
       | Chance: 83.33%
       | Count: max(0; U[1; 4])
       | ----- Modifiers -----

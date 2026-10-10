@@ -3,10 +3,10 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 4 to 8
-    ali:item minecraft:glowstone_dust x1
+    ali:item minecraft:glowstone_dust x1-3
       | Chance: 10.78%
       | Count: 1 to 3
-    ali:item minecraft:feather x1
+    ali:item minecraft:feather x2-8
       | Chance: 10.78%
       | Count: 2 to 8
     ali:item minecraft:bucket x1
@@ -15,10 +15,10 @@ ali:loot_table
     ali:item minecraft:water_bucket x1
       | Chance: 10.78%
       | Count: 1
-    ali:item aether:blue_berry x1
+    ali:item aether:blue_berry x4-12
       | Chance: 4.04%
       | Count: 4 to 12
-    ali:item minecraft:iron_nugget x1
+    ali:item minecraft:iron_nugget x4-24
       | Chance: 4.04%
       | Count: 4 to 24
     ali:item minecraft:iron_sword x1 {Damage:0}
@@ -77,7 +77,7 @@ ali:loot_table
     ali:item minecraft:heavy_weighted_pressure_plate x1
       | Chance: 1.35%
       | Count: 1
-    ali:item aether:enchanted_berry x1
+    ali:item aether:enchanted_berry x2-6
       | Chance: 1.35%
       | Count: 2 to 6
     ali:item minecraft:compass x1
@@ -86,9 +86,9 @@ ali:loot_table
     ali:item aether:book_of_lore x1
       | Chance: 1.35%
       | Count: 1
-    ali:item minecraft:iron_ingot x1
+    ali:item minecraft:iron_ingot x2-8
       | Chance: 1.35%
       | Count: 2 to 8
-    ali:item minecraft:iron_block x1
+    ali:item minecraft:iron_block x1-2
       | Chance: 0.27%
       | Count: 1 to 2

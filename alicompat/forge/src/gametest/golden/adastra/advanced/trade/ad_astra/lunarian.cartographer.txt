@@ -6,14 +6,14 @@ ali:trade
       | Uses: 16
       | XP: 2
       | Price Multiplier: 0.05
-      ali:item minecraft:paper x1
+      ali:item minecraft:paper x24
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 12
       | XP: 1
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x7
       ali:item minecraft:air x0
       ali:item minecraft:map x1
   ali:trade_level
@@ -23,7 +23,7 @@ ali:trade
       | Uses: 16
       | XP: 10
       | Price Multiplier: 0.05
-      ali:item minecraft:glass_pane x1
+      ali:item minecraft:glass_pane x11
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
   ali:trade_level
@@ -43,105 +43,105 @@ ali:trade
       | Uses: 12
       | XP: 15
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x7
       ali:item minecraft:air x0
       ali:item minecraft:item_frame x1
     ali:items_to_items
       | Uses: 12
       | XP: 25
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item ad_astra:white_flag x1
     ali:items_to_items
       | Uses: 12
       | XP: 25
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item ad_astra:blue_flag x1
     ali:items_to_items
       | Uses: 12
       | XP: 25
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item ad_astra:light_blue_flag x1
     ali:items_to_items
       | Uses: 12
       | XP: 25
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item ad_astra:red_flag x1
     ali:items_to_items
       | Uses: 12
       | XP: 25
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item ad_astra:pink_flag x1
     ali:items_to_items
       | Uses: 12
       | XP: 25
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item ad_astra:green_flag x1
     ali:items_to_items
       | Uses: 12
       | XP: 25
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item ad_astra:lime_flag x1
     ali:items_to_items
       | Uses: 12
       | XP: 25
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item ad_astra:gray_flag x1
     ali:items_to_items
       | Uses: 12
       | XP: 25
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item ad_astra:purple_flag x1
     ali:items_to_items
       | Uses: 12
       | XP: 25
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item ad_astra:magenta_flag x1
     ali:items_to_items
       | Uses: 12
       | XP: 25
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item ad_astra:cyan_flag x1
     ali:items_to_items
       | Uses: 12
       | XP: 25
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item ad_astra:brown_flag x1
     ali:items_to_items
       | Uses: 12
       | XP: 25
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item ad_astra:yellow_flag x1
     ali:items_to_items
       | Uses: 12
       | XP: 25
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item ad_astra:orange_flag x1
   ali:trade_level
@@ -151,6 +151,6 @@ ali:trade
       | Uses: 12
       | XP: 45
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x6
       ali:item minecraft:air x0
       ali:item minecraft:globe_banner_pattern x1

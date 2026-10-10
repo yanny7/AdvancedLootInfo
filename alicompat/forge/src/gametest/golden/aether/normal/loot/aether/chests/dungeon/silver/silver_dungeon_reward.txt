@@ -144,10 +144,10 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item aether:golden_gummy_swet x1
+          ali:item aether:golden_gummy_swet x1-4
             | Chance: 75%
             | Count: 1 to 4
-          ali:item aether:blue_gummy_swet x1
+          ali:item aether:blue_gummy_swet x1-4
             | Chance: 25%
             | Count: 1 to 4
   ali:loot_pool
@@ -211,10 +211,10 @@ ali:loot_table
     ali:item aether:enchanted_dart_shooter x1
       | Chance: 8.89%
       | Count: 1
-    ali:item aether:enchanted_berry x1
+    ali:item aether:enchanted_berry x2-8
       | Chance: 8.89%
       | Count: 2 to 8
-    ali:item aether:blue_berry x1
+    ali:item aether:blue_berry x2-10
       | Chance: 8.89%
       | Count: 2 to 10
     ali:item aether:invisibility_cloak x1
@@ -226,10 +226,10 @@ ali:loot_table
     ali:item minecraft:saddle x1
       | Chance: 6.67%
       | Count: 1
-    ali:item aether:golden_amber x1
+    ali:item aether:golden_amber x1-4
       | Chance: 6.67%
       | Count: 1 to 4
-    ali:item aether:zanite_gemstone x1
+    ali:item aether:zanite_gemstone x1-4
       | Chance: 6.67%
       | Count: 1 to 4
     ali:item aether:lightning_sword x1 {Damage:0}

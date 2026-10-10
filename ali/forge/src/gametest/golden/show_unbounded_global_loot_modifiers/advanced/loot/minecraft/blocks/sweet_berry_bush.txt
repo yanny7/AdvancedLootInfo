@@ -3,7 +3,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:sweet_berries x1
+    ali:item minecraft:sweet_berries x2-6
       | Count: max(0; U[2; 3])
       |   -> Fortune LVL: max(0; U[2; 3]) + U[0; LVL]
       |   -> Fortune I: 2 to 4  ~3 (50%)
@@ -27,7 +27,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:sweet_berries x1
+    ali:item minecraft:sweet_berries x1-5
       | Count: max(0; U[1; 2])
       |   -> Fortune LVL: max(0; U[1; 2]) + U[0; LVL]
       |   -> Fortune I: 1 to 3  ~2 (50%)

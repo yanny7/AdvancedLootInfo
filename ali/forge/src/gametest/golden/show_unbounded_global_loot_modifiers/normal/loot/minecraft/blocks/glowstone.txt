@@ -12,7 +12,7 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Enchantment: Silk Touch
         |     -> Level: ≥ 1
-      ali:item minecraft:glowstone_dust x1
+      ali:item minecraft:glowstone_dust x2-4
         | Count: 2 to 4
         |   -> Fortune I: 2 to 4  ~4 (50%)
         |   -> Fortune II: 2 to 4  ~4 (67%)

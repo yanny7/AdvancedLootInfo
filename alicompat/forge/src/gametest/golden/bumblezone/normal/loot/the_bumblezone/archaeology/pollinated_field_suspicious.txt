@@ -27,7 +27,7 @@ ali:loot_table
     ali:item the_bumblezone:bee_bread x1
       | Chance: 4.85%
       | Count: 1
-    ali:item the_bumblezone:honey_crystal_shards x1
+    ali:item the_bumblezone:honey_crystal_shards x2-4
       | Chance: 4.85%
       | Count: 2 to 4
     ali:item minecraft:compass x1
@@ -62,7 +62,7 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item #minecraft:flowers
+          ali:item #minecraft:flowers x1
             | Chance: 2.77%
             | Count: 1
             | ----- Modifiers -----
@@ -207,6 +207,6 @@ ali:loot_table
     ali:item minecraft:flower_banner_pattern x1
       | Chance: 0.42%
       | Count: 1
-    ali:item #the_bumblezone:banner_patterns
+    ali:item #the_bumblezone:banner_patterns x1
       | Chance: 0.42%
       | Count: 1

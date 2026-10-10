@@ -3,7 +3,7 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item deeperdarker:soul_dust x1
+    ali:item deeperdarker:soul_dust x0-4
       | Count: max(0; U[0; 1])
       |   -> Looting LVL: max(0; U[0; 1]) + round(LVL × U[0; 1))
       |   -> Looting I: 0 to 2  ~1 (50%)

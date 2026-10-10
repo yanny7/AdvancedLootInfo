@@ -126,7 +126,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:paper x1
+    ali:item minecraft:paper x27-35
       | Count: max(0; U[27; 35])
       | ----- Modifiers -----
       | Set Count:

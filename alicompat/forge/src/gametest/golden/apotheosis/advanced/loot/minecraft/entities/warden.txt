@@ -5,7 +5,7 @@ ali:entity_loot_table
     | Rolls: 1
     ali:item minecraft:sculk_catalyst x1
       | Count: 1
-  ali:item apotheosis:warden_tendril x1
+  ali:item apotheosis:warden_tendril x1-2
     | Count: 1 + binom(1; 10%)  ~1 (90%)
     |   -> Looting LVL: 1 + binom(1; 10% + 10% × LVL)
     |   -> Looting I: 1 to 2  ~1 (80%)

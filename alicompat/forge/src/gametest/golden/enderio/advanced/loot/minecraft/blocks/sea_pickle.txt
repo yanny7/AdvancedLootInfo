@@ -5,7 +5,7 @@ ali:loot_table
     | Rolls: 1
     ali:modified
       | Selects only first successful entry
-      ali:item minecraft:lime_dye x1
+      ali:item minecraft:lime_dye x1-4
         | Count: 
         |   -> 4
         |   -> otherwise 3
@@ -42,7 +42,7 @@ ali:loot_table
         |       -> Properties:
         |         -> pickles: 4
         | Explosion Decay
-      ali:item minecraft:sea_pickle x1
+      ali:item minecraft:sea_pickle x1-4
         | Count: 
         |   -> 4
         |     -> Block State Property:

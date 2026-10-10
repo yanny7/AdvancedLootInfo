@@ -12,7 +12,7 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Enchantment: Silk Touch
         |     -> Level: ≥ 1
-      ali:item mekanism:salt x1
+      ali:item mekanism:salt x4
         | Count: 4
         | ----- Modifiers -----
         | Explosion Decay

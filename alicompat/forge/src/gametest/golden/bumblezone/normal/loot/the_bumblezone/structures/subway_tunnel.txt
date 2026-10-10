@@ -3,16 +3,16 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 3
-    ali:item the_bumblezone:bee_bread x1
+    ali:item the_bumblezone:bee_bread x1-2
       | Chance: 9.52%
       | Count: 1 to 2
-    ali:item minecraft:bread x1
+    ali:item minecraft:bread x1-2
       | Chance: 9.52%
       | Count: 1 to 2
-    ali:item minecraft:cookie x1
+    ali:item minecraft:cookie x1-3
       | Chance: 9.52%
       | Count: 1 to 3
-    ali:item minecraft:honeycomb x1
+    ali:item minecraft:honeycomb x1-3
       | Chance: 9.52%
       | Count: 1 to 3
     ali:reference
@@ -23,46 +23,46 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item #minecraft:flowers
+          ali:item #minecraft:flowers x1
             | Chance: 9.52%
             | Count: 1
             | ----- Modifiers -----
             | Tag Item Removals:
             |   -> Tag: Disallowed Bumblezone Structure Flower Loots
-    ali:item the_bumblezone:bee_stinger x1
+    ali:item the_bumblezone:bee_stinger x2-4
       | Chance: 9.52%
       | Count: 2 to 4
     ali:item the_bumblezone:bee_soup x1
       | Chance: 4.76%
       | Count: 1
-    ali:item the_bumblezone:sugar_water_bottle x1
+    ali:item the_bumblezone:sugar_water_bottle x1-3
       | Chance: 4.76%
       | Count: 1 to 3
     ali:item minecraft:beetroot_soup x1
       | Chance: 4.76%
       | Count: 1
-    ali:item minecraft:pumpkin_pie x1
+    ali:item minecraft:pumpkin_pie x1-2
       | Chance: 4.76%
       | Count: 1 to 2
-    ali:item minecraft:baked_potato x1
+    ali:item minecraft:baked_potato x1-2
       | Chance: 4.76%
       | Count: 1 to 2
-    ali:item minecraft:string x1
+    ali:item minecraft:string x2-4
       | Chance: 3.17%
       | Count: 2 to 4
-    ali:item minecraft:arrow x1
+    ali:item minecraft:arrow x2-4
       | Chance: 3.17%
       | Count: 2 to 4
-    ali:item minecraft:glass_bottle x1
+    ali:item minecraft:glass_bottle x1-2
       | Chance: 3.17%
       | Count: 1 to 2
-    ali:item minecraft:gold_nugget x1
+    ali:item minecraft:gold_nugget x2-4
       | Chance: 3.17%
       | Count: 2 to 4
-    ali:item minecraft:iron_nugget x1
+    ali:item minecraft:iron_nugget x2-4
       | Chance: 3.17%
       | Count: 2 to 4
-    ali:item minecraft:paper x1
+    ali:item minecraft:paper x2-4
       | Chance: 3.17%
       | Count: 2 to 4
   ali:loot_pool
@@ -92,7 +92,7 @@ ali:loot_table
     ali:item minecraft:clock x1
       | Chance: 5.71%
       | Count: 1
-    ali:item minecraft:rabbit_foot x1
+    ali:item minecraft:rabbit_foot x1-2
       | Chance: 5.71%
       | Count: 1 to 2
     ali:item minecraft:shears x1 {Damage:0}
@@ -113,10 +113,10 @@ ali:loot_table
     ali:item minecraft:bowl x1
       | Chance: 2.86%
       | Count: 1
-    ali:item minecraft:potato x1
+    ali:item minecraft:potato x1-2
       | Chance: 2.86%
       | Count: 1 to 2
-    ali:item minecraft:poisonous_potato x1
+    ali:item minecraft:poisonous_potato x1-2
       | Chance: 2.86%
       | Count: 1 to 2
     ali:item minecraft:leather_boots x1 {Damage:0,display:{color:16701501}}
@@ -200,7 +200,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item the_bumblezone:bee_stinger x1
+    ali:item the_bumblezone:bee_stinger x1-5
       | Chance: 98.57%
       | Count: 1 to 5
     ali:item the_bumblezone:buzzing_briefcase x1

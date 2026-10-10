@@ -57,7 +57,7 @@ ali:loot_table
           ali:item irons_spellbooks:uncommon_ink x1
             | Chance: 1.89%
             | Count: 1
-    ali:item irons_spellbooks:arcane_essence x1
+    ali:item irons_spellbooks:arcane_essence x10-20
       | Chance: 12.5%
       | Count: max(0; U[10; 20])
       | ----- Modifiers -----

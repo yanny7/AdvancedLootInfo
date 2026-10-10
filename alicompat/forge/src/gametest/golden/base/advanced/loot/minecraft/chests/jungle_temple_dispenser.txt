@@ -3,7 +3,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 2
-    ali:item minecraft:arrow x1
+    ali:item minecraft:arrow x2-7
       | Count: max(0; U[2; 7])
       | ----- Modifiers -----
       | Set Count:

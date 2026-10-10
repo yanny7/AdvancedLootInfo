@@ -3,21 +3,21 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 4 to 8
-    ali:item minecraft:obsidian x1
+    ali:item minecraft:obsidian x1-2
       | Chance: 10.05%
       | Count: max(0; U[1; 2])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 2
       |   -> Add: False
-    ali:item minecraft:flint x1
+    ali:item minecraft:flint x1-4
       | Chance: 10.05%
       | Count: max(0; U[1; 4])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 4
       |   -> Add: False
-    ali:item minecraft:iron_nugget x1
+    ali:item minecraft:iron_nugget x9-18
       | Chance: 10.05%
       | Count: max(0; U[9; 18])
       | ----- Modifiers -----
@@ -33,7 +33,7 @@ ali:loot_table
     ali:item minecraft:golden_apple x1
       | Chance: 3.77%
       | Count: 1
-    ali:item minecraft:gold_nugget x1
+    ali:item minecraft:gold_nugget x4-24
       | Chance: 3.77%
       | Count: max(0; U[4; 24])
       | ----- Modifiers -----
@@ -85,7 +85,7 @@ ali:loot_table
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
-    ali:item minecraft:glistering_melon_slice x1
+    ali:item minecraft:glistering_melon_slice x4-12
       | Chance: 1.26%
       | Count: max(0; U[4; 12])
       | ----- Modifiers -----
@@ -98,7 +98,7 @@ ali:loot_table
     ali:item minecraft:light_weighted_pressure_plate x1
       | Chance: 1.26%
       | Count: 1
-    ali:item minecraft:golden_carrot x1
+    ali:item minecraft:golden_carrot x4-12
       | Chance: 1.26%
       | Count: max(0; U[4; 12])
       | ----- Modifiers -----
@@ -108,7 +108,7 @@ ali:loot_table
     ali:item minecraft:clock x1
       | Chance: 1.26%
       | Count: 1
-    ali:item minecraft:gold_ingot x1
+    ali:item minecraft:gold_ingot x2-8
       | Chance: 1.26%
       | Count: max(0; U[2; 8])
       | ----- Modifiers -----
@@ -121,7 +121,7 @@ ali:loot_table
     ali:item minecraft:enchanted_golden_apple x1
       | Chance: 0.25%
       | Count: 1
-    ali:item minecraft:gold_block x1
+    ali:item minecraft:gold_block x1-2
       | Chance: 0.25%
       | Count: max(0; U[1; 2])
       | ----- Modifiers -----

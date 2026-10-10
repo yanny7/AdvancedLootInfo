@@ -3,7 +3,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 2 to 3
-    ali:item minecraft:bread x1
+    ali:item minecraft:bread x1-3
       | Chance: 13.39%
       |   -> luck: 1500% ÷ (10000% + max(0%; 600% + floor(luck)) + max(0%; 600% + floor(luck)))
       |   -> Bad Luck: 13.64%
@@ -16,7 +16,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1 to 3
       |   -> Add: False
-    ali:item minecraft:apple x1
+    ali:item minecraft:apple x1-3
       | Chance: 13.39%
       |   -> luck: 1500% ÷ (10000% + max(0%; 600% + floor(luck)) + max(0%; 600% + floor(luck)))
       |   -> Bad Luck: 13.64%
@@ -38,7 +38,7 @@ ali:loot_table
       |   -> Luck 3: 8.47%
       |   -> Luck 4: 8.33%
       | Count: 1
-    ali:item minecraft:iron_ingot x1
+    ali:item minecraft:iron_ingot x1-5
       | Chance: 8.93%
       |   -> luck: 1000% ÷ (10000% + max(0%; 600% + floor(luck)) + max(0%; 600% + floor(luck)))
       |   -> Bad Luck: 9.09%
@@ -51,7 +51,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1 to 5
       |   -> Add: False
-    ali:item gtceu:damascus_steel_ingot x1
+    ali:item gtceu:damascus_steel_ingot x2-8
       | Quality: 1
       | Chance: 5.36%
       |   -> luck: max(0%; 600% + floor(luck)) ÷ (10000% + max(0%; 600% + floor(luck)) + max(0%; 600% + floor(luck)))
@@ -67,7 +67,7 @@ ali:loot_table
       |     -> Item: Damascus Steel Ingot
       |     -> Count: 1
       |   -> Count: 2 to 8
-    ali:item gtceu:damascus_steel_ingot x1
+    ali:item gtceu:damascus_steel_ingot x3-12
       | Quality: 1
       | Chance: 5.36%
       |   -> luck: max(0%; 600% + floor(luck)) ÷ (10000% + max(0%; 600% + floor(luck)) + max(0%; 600% + floor(luck)))
@@ -83,7 +83,7 @@ ali:loot_table
       |     -> Item: Damascus Steel Ingot
       |     -> Count: 1
       |   -> Count: 3 to 12
-    ali:item minecraft:gold_ingot x1
+    ali:item minecraft:gold_ingot x1-3
       | Chance: 4.46%
       |   -> luck: 500% ÷ (10000% + max(0%; 600% + floor(luck)) + max(0%; 600% + floor(luck)))
       |   -> Bad Luck: 4.55%
@@ -96,7 +96,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1 to 3
       |   -> Add: False
-    ali:item minecraft:redstone x1
+    ali:item minecraft:redstone x4-9
       | Chance: 4.46%
       |   -> luck: 500% ÷ (10000% + max(0%; 600% + floor(luck)) + max(0%; 600% + floor(luck)))
       |   -> Bad Luck: 4.55%
@@ -163,7 +163,7 @@ ali:loot_table
       |   -> Luck 3: 4.24%
       |   -> Luck 4: 4.17%
       | Count: 1
-    ali:item minecraft:diamond x1
+    ali:item minecraft:diamond x1-3
       | Chance: 2.68%
       |   -> luck: 300% ÷ (10000% + max(0%; 600% + floor(luck)) + max(0%; 600% + floor(luck)))
       |   -> Bad Luck: 2.73%

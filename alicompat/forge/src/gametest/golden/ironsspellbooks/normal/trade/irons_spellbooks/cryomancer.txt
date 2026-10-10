@@ -10,8 +10,8 @@ ali:trade
       ali:item irons_spellbooks:common_ink x1
       ali:item minecraft:air x0
       ali:group
-        ali:item minecraft:emerald x1
-        ali:item irons_spellbooks:arcane_essence x1
+        ali:item minecraft:emerald x2-3
+        ali:item irons_spellbooks:arcane_essence x2-3
   ali:trade_level
     | Level: 2
     | Randomly Selects 1 Of These Trades
@@ -23,8 +23,8 @@ ali:trade
       ali:item irons_spellbooks:uncommon_ink x1
       ali:item minecraft:air x0
       ali:group
-        ali:item minecraft:emerald x1
-        ali:item irons_spellbooks:arcane_essence x1
+        ali:item minecraft:emerald x7-8
+        ali:item irons_spellbooks:arcane_essence x4-5
   ali:trade_level
     | Level: 3
     | Randomly Selects 1 Of These Trades
@@ -36,8 +36,8 @@ ali:trade
       ali:item irons_spellbooks:rare_ink x1
       ali:item minecraft:air x0
       ali:group
-        ali:item minecraft:emerald x1
-        ali:item irons_spellbooks:arcane_essence x1
+        ali:item minecraft:emerald x12-13
+        ali:item irons_spellbooks:arcane_essence x7-8
   ali:trade_level
     | Level: 4
     | Randomly Selects 1 Of These Trades
@@ -45,7 +45,7 @@ ali:trade
       | Uses: 1
       | XP: 5
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x4-7
       ali:item minecraft:air x0
       ali:item irons_spellbooks:scroll x1
         | Random Spell Scroll:
@@ -61,7 +61,7 @@ ali:trade
       | Uses: 1
       | XP: 5
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x4-7
       ali:item minecraft:air x0
       ali:item irons_spellbooks:scroll x1
         | Random Spell Scroll:
@@ -77,7 +77,7 @@ ali:trade
       | Uses: 1
       | XP: 5
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x4-7
       ali:item minecraft:air x0
       ali:item irons_spellbooks:scroll x1
         | Random Spell Scroll:
@@ -92,14 +92,14 @@ ali:trade
       | Uses: 1
       | XP: 5
       | Price Multiplier: 10.0
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x32
       ali:item minecraft:air x0
       ali:item irons_spellbooks:furled_map x1 {display:{Lore:['{"color":"gold","translate":"item.irons_spellbooks.furled_map_descriptor_framing","with":[{"translate":"item.irons_spellbooks.failed_arctic_voyage_map"}]}']},"irons_spellbooks:furled_map_data":{descriptionOverride:{translate:"item.irons_spellbooks.failed_arctic_voyage_map"},destination:"irons_spellbooks:impaled_icebreaker",dimension:"minecraft:overworld"}}
     ali:items_to_items
       | Uses: 1
       | XP: 5
       | Price Multiplier: 10.0
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x32
       ali:item minecraft:air x0
       ali:item irons_spellbooks:furled_map x1 {display:{Lore:['{"color":"gold","translate":"item.irons_spellbooks.furled_map_descriptor_framing","with":[{"translate":"item.irons_spellbooks.ice_spider_den_map"}]}']},"irons_spellbooks:furled_map_data":{descriptionOverride:{translate:"item.irons_spellbooks.ice_spider_den_map"},destination:"irons_spellbooks:ice_spider_den",dimension:"minecraft:overworld"}}
   ali:trade_level

@@ -25,7 +25,7 @@ ali:loot_table
           | Set Count:
           |   -> Count: 1
           |   -> Add: False
-        ali:item minecraft:snowball x1
+        ali:item minecraft:snowball x2
           | Count: 2
           | ----- Predicates -----
           | Entity Properties:
@@ -43,7 +43,7 @@ ali:loot_table
           | Set Count:
           |   -> Count: 2
           |   -> Add: False
-        ali:item minecraft:snowball x1
+        ali:item minecraft:snowball x3
           | Count: 3
           | ----- Predicates -----
           | Entity Properties:
@@ -61,7 +61,7 @@ ali:loot_table
           | Set Count:
           |   -> Count: 3
           |   -> Add: False
-        ali:item minecraft:snowball x1
+        ali:item minecraft:snowball x4
           | Count: 4
           | ----- Predicates -----
           | Entity Properties:
@@ -79,7 +79,7 @@ ali:loot_table
           | Set Count:
           |   -> Count: 4
           |   -> Add: False
-        ali:item minecraft:snowball x1
+        ali:item minecraft:snowball x5
           | Count: 5
           | ----- Predicates -----
           | Entity Properties:
@@ -97,7 +97,7 @@ ali:loot_table
           | Set Count:
           |   -> Count: 5
           |   -> Add: False
-        ali:item minecraft:snowball x1
+        ali:item minecraft:snowball x6
           | Count: 6
           | ----- Predicates -----
           | Entity Properties:
@@ -115,7 +115,7 @@ ali:loot_table
           | Set Count:
           |   -> Count: 6
           |   -> Add: False
-        ali:item minecraft:snowball x1
+        ali:item minecraft:snowball x7
           | Count: 7
           | ----- Predicates -----
           | Entity Properties:
@@ -133,7 +133,7 @@ ali:loot_table
           | Set Count:
           |   -> Count: 7
           |   -> Add: False
-        ali:item minecraft:snowball x1
+        ali:item minecraft:snowball x8
           | Count: 8
           | ----- Predicates -----
           | Entity Properties:
@@ -166,7 +166,7 @@ ali:loot_table
           | Set Count:
           |   -> Count: 1
           |   -> Add: False
-        ali:item minecraft:snow x1
+        ali:item minecraft:snow x2
           | Count: 2
           | ----- Predicates -----
           | Entity Properties:
@@ -179,7 +179,7 @@ ali:loot_table
           | Set Count:
           |   -> Count: 2
           |   -> Add: False
-        ali:item minecraft:snow x1
+        ali:item minecraft:snow x3
           | Count: 3
           | ----- Predicates -----
           | Entity Properties:
@@ -192,7 +192,7 @@ ali:loot_table
           | Set Count:
           |   -> Count: 3
           |   -> Add: False
-        ali:item minecraft:snow x1
+        ali:item minecraft:snow x4
           | Count: 4
           | ----- Predicates -----
           | Entity Properties:
@@ -205,7 +205,7 @@ ali:loot_table
           | Set Count:
           |   -> Count: 4
           |   -> Add: False
-        ali:item minecraft:snow x1
+        ali:item minecraft:snow x5
           | Count: 5
           | ----- Predicates -----
           | Entity Properties:
@@ -218,7 +218,7 @@ ali:loot_table
           | Set Count:
           |   -> Count: 5
           |   -> Add: False
-        ali:item minecraft:snow x1
+        ali:item minecraft:snow x6
           | Count: 6
           | ----- Predicates -----
           | Entity Properties:
@@ -231,7 +231,7 @@ ali:loot_table
           | Set Count:
           |   -> Count: 6
           |   -> Add: False
-        ali:item minecraft:snow x1
+        ali:item minecraft:snow x7
           | Count: 7
           | ----- Predicates -----
           | Entity Properties:

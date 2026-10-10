@@ -6,14 +6,14 @@ ali:trade
       | Uses: 16
       | XP: 2
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x1-8
       ali:item minecraft:air x0
       ali:item immersiveengineering:shader_bag_common x1
     ali:items_to_items
       | Uses: 16
       | XP: 1
       | Price Multiplier: 0.05
-      ali:item immersiveengineering:hemp_fabric x1
+      ali:item immersiveengineering:hemp_fabric x8-12
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
   ali:trade_level
@@ -23,28 +23,28 @@ ali:trade
       | Uses: 16
       | XP: 5
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x4-12
       ali:item minecraft:air x0
       ali:item immersiveengineering:shader_bag_uncommon x1
     ali:items_to_items
       | Uses: 3
       | XP: 20
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x10-20
       ali:item minecraft:air x0
       ali:item immersiveengineering:bannerpattern_hammer x1
     ali:items_to_items
       | Uses: 3
       | XP: 20
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x4-20
       ali:item minecraft:air x0
       ali:item immersiveengineering:bannerpattern_windmill x1
     ali:items_to_items
       | Uses: 3
       | XP: 20
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x4-20
       ali:item minecraft:air x0
       ali:item immersiveengineering:bannerpattern_ornate x1
   ali:trade_level
@@ -54,21 +54,21 @@ ali:trade
       | Uses: 16
       | XP: 15
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x8-16
       ali:item minecraft:air x0
       ali:item immersiveengineering:shader_bag_rare x1
     ali:items_to_items
       | Uses: 16
       | XP: 10
       | Price Multiplier: 0.05
-      ali:item #forge:dusts/silver
+      ali:item #forge:dusts/silver x4-12
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 8
       | XP: 5
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x4-12
       ali:item minecraft:air x0
       ali:item immersiveengineering:shader_bag_uncommon x1
   ali:trade_level
@@ -78,21 +78,21 @@ ali:trade
       | Uses: 3
       | XP: 20
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x12-20
       ali:item minecraft:air x0
       ali:item immersiveengineering:shader_bag_epic x1
     ali:items_to_items
       | Uses: 16
       | XP: 15
       | Price Multiplier: 0.05
-      ali:item #forge:dusts/gold
+      ali:item #forge:dusts/gold x4-12
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 8
       | XP: 15
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x8-16
       ali:item minecraft:air x0
       ali:item immersiveengineering:shader_bag_rare x1
   ali:trade_level
@@ -102,6 +102,6 @@ ali:trade
       | Uses: 3
       | XP: 30
       | Price Multiplier: 0.2
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x16-28
       ali:item minecraft:air x0
       ali:item immersiveengineering:shader_bag_epic x1

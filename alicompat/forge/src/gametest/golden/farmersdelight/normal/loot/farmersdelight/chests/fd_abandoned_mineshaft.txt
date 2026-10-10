@@ -22,13 +22,13 @@ ali:loot_table
     ali:empty
       | Drops nothing
       | Chance: 40%
-    ali:item farmersdelight:tomato_seeds x1
+    ali:item farmersdelight:tomato_seeds x2-4
       | Chance: 20%
       | Count: 2 to 4
-    ali:item farmersdelight:cabbage_seeds x1
+    ali:item farmersdelight:cabbage_seeds x2-4
       | Chance: 20%
       | Count: 2 to 4
-    ali:item farmersdelight:rice x1
+    ali:item farmersdelight:rice x2-4
       | Chance: 20%
       | Count: 2 to 4
   ali:loot_pool
@@ -37,6 +37,6 @@ ali:loot_table
     ali:empty
       | Drops nothing
       | Chance: 66.67%
-    ali:item farmersdelight:rope x1
+    ali:item farmersdelight:rope x2-12
       | Chance: 33.33%
       | Count: 2 to 12

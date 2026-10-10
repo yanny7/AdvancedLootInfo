@@ -6,7 +6,7 @@ ali:trade
       | Uses: 16
       | XP: 6
       | Price Multiplier: 0.05
-      ali:item ad_astra:iron_rod x1
+      ali:item ad_astra:iron_rod x8
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
@@ -21,8 +21,8 @@ ali:trade
       | XP: 1
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
-      ali:item minecraft:gravel x1
-      ali:item minecraft:flint x1
+      ali:item minecraft:gravel x10
+      ali:item minecraft:flint x10
   ali:trade_level
     | Level: 2
     | Randomly Selects 2 Of These Trades
@@ -30,14 +30,14 @@ ali:trade
       | Uses: 12
       | XP: 10
       | Price Multiplier: 0.05
-      ali:item minecraft:flint x1
+      ali:item minecraft:flint x26
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 12
       | XP: 5
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x2
       ali:item minecraft:air x0
       ali:item minecraft:bow x1 {Damage:0}
   ali:trade_level
@@ -47,14 +47,14 @@ ali:trade
       | Uses: 16
       | XP: 20
       | Price Multiplier: 0.05
-      ali:item minecraft:string x1
+      ali:item minecraft:string x14
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 12
       | XP: 10
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item minecraft:crossbow x1 {Damage:0}
   ali:trade_level
@@ -64,14 +64,14 @@ ali:trade
       | Uses: 16
       | XP: 30
       | Price Multiplier: 0.05
-      ali:item minecraft:feather x1
+      ali:item minecraft:feather x24
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 3
       | XP: 15
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x7-21
       ali:item minecraft:air x0
       ali:item minecraft:bow x1 {Damage:0}
         | Enchant With Levels:
@@ -84,14 +84,14 @@ ali:trade
       | Uses: 12
       | XP: 30
       | Price Multiplier: 0.05
-      ali:item minecraft:tripwire_hook x1
+      ali:item minecraft:tripwire_hook x8
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 3
       | XP: 15
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x8-22
       ali:item minecraft:air x0
       ali:item minecraft:crossbow x1 {Damage:0}
         | Enchant With Levels:
@@ -101,7 +101,7 @@ ali:trade
       | Uses: 12
       | XP: 30
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
-      ali:item minecraft:arrow x1
-      ali:item minecraft:tipped_arrow x1
+      ali:item minecraft:emerald x2
+      ali:item minecraft:arrow x5
+      ali:item minecraft:tipped_arrow x5
         | Random Potion

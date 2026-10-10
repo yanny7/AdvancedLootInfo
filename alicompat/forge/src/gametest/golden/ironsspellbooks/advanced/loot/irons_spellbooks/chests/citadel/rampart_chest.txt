@@ -42,7 +42,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:lantern x1
+    ali:item minecraft:lantern x0-8
       | Count: max(0; U[0; 8])
       | ----- Modifiers -----
       | Set Count:
@@ -51,28 +51,28 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 3
-    ali:item minecraft:soul_sand x1
+    ali:item minecraft:soul_sand x4-8
       | Chance: 25%
       | Count: max(0; U[4; 8])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 4 to 8
       |   -> Add: False
-    ali:item minecraft:bone x1
+    ali:item minecraft:bone x4-8
       | Chance: 25%
       | Count: max(0; U[4; 8])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 4 to 8
       |   -> Add: False
-    ali:item minecraft:flint x1
+    ali:item minecraft:flint x4-8
       | Chance: 25%
       | Count: max(0; U[4; 8])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 4 to 8
       |   -> Add: False
-    ali:item irons_spellbooks:arcane_essence x1
+    ali:item irons_spellbooks:arcane_essence x2-5
       | Chance: 25%
       | Count: max(0; U[2; 5])
       | ----- Modifiers -----
@@ -82,14 +82,14 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:emerald x1
+    ali:item minecraft:emerald x4-8
       | Chance: 25%
       | Count: max(0; U[4; 8])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 4 to 8
       |   -> Add: False
-    ali:item minecraft:diamond x1
+    ali:item minecraft:diamond x1-2
       | Chance: 25%
       | Count: max(0; U[1; 2])
       | ----- Modifiers -----
@@ -120,14 +120,14 @@ ali:loot_table
     ali:item irons_spellbooks:blank_rune x1
       | Chance: 18.52%
       | Count: 1
-    ali:item minecraft:emerald x1
+    ali:item minecraft:emerald x4-8
       | Chance: 3.7%
       | Count: max(0; U[4; 8])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 4 to 8
       |   -> Add: False
-    ali:item minecraft:diamond x1
+    ali:item minecraft:diamond x1-2
       | Chance: 3.7%
       | Count: max(0; U[1; 2])
       | ----- Modifiers -----

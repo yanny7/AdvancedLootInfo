@@ -12,7 +12,7 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Enchantment: Silk Touch
         |     -> Level: ≥ 1
-      ali:item minecraft:raw_iron x1
+      ali:item minecraft:raw_iron x2
         | Count: 2
         | ----- Modifiers -----
         | Set Count:
@@ -22,7 +22,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item gtceu:endstone_dust x1
+    ali:item gtceu:endstone_dust x0-1
       | Count: clamp(max(0; U[0; 1]); 0; 2)
       | ----- Predicates -----
       | Inverted:

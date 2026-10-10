@@ -14,7 +14,7 @@ ali:loot_table
         |     -> Level: ≥ 1
       ali:alternatives
         | Selects only first successful entry
-        ali:item minecraft:gold_nugget x1
+        ali:item minecraft:gold_nugget x2-5
           | Chance: 10%
           |   -> Fortune LVL: [10%; 14.29%; 25%; 100%][min(LVL; 3)]
           |   -> Fortune I: 14.29%

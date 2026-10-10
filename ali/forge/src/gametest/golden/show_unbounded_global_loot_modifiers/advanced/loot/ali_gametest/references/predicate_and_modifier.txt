@@ -12,7 +12,7 @@ ali:loot_table
       | ----- Modifiers -----
       | Reference:
       |   -> Name: ali_gametest:named
-    ali:item minecraft:string x1
+    ali:item minecraft:string x4-6
       | Chance: 12.5%
       | Count: 4 to 6
       |   -> 6 (50%)

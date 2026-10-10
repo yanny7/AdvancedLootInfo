@@ -3,35 +3,35 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 3 to 9
-    ali:item ad_astra:desh_ingot x1
+    ali:item ad_astra:desh_ingot x2-6
       | Chance: 28.57%
       | Count: max(0; U[2; 6])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 2 to 6
       |   -> Add: False
-    ali:item minecraft:coal x1
+    ali:item minecraft:coal x3-6
       | Chance: 28.57%
       | Count: max(0; U[3; 6])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 3 to 6
       |   -> Add: False
-    ali:item minecraft:emerald x1
+    ali:item minecraft:emerald x2-4
       | Chance: 14.29%
       | Count: max(0; U[2; 4])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 2 to 4
       |   -> Add: False
-    ali:item minecraft:redstone x1
+    ali:item minecraft:redstone x2-5
       | Chance: 14.29%
       | Count: max(0; U[2; 5])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 2 to 5
       |   -> Add: False
-    ali:item minecraft:diamond x1
+    ali:item minecraft:diamond x1-2
       | Chance: 8.57%
       | Count: max(0; U[1; 2])
       | ----- Modifiers -----

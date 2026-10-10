@@ -3,9 +3,9 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 3
-    ali:item farmersdelight:tomato_seeds x1
+    ali:item farmersdelight:tomato_seeds x1-3
       | Chance: 50%
       | Count: 1 to 3
-    ali:item farmersdelight:cabbage_seeds x1
+    ali:item farmersdelight:cabbage_seeds x1-3
       | Chance: 50%
       | Count: 1 to 3

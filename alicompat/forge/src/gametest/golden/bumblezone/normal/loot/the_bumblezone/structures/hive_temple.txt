@@ -3,22 +3,22 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 4
-    ali:item the_bumblezone:bee_stinger x1
+    ali:item the_bumblezone:bee_stinger x1-4
       | Chance: 24.69%
       | Count: 1 to 4
-    ali:item the_bumblezone:bee_bread x1
+    ali:item the_bumblezone:bee_bread x2-6
       | Chance: 22.22%
       | Count: 2 to 6
-    ali:item the_bumblezone:carvable_wax x1
+    ali:item the_bumblezone:carvable_wax x2-6
       | Chance: 18.52%
       | Count: 2 to 6
-    ali:item the_bumblezone:pollen_puff x1
+    ali:item the_bumblezone:pollen_puff x3-6
       | Chance: 12.35%
       | Count: 3 to 6
-    ali:item the_bumblezone:bee_soup x1
+    ali:item the_bumblezone:bee_soup x1-2
       | Chance: 12.35%
       | Count: 1 to 2
-    ali:item the_bumblezone:honeycomb_brood_block x1
+    ali:item the_bumblezone:honeycomb_brood_block x1-3
       | Chance: 6.17%
       | Count: 1 to 3
     ali:reference
@@ -29,7 +29,7 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item #minecraft:flowers
+          ali:item #minecraft:flowers x1
             | Chance: 3.7%
             | Count: 1
             | ----- Modifiers -----
@@ -38,10 +38,10 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 2
-    ali:item minecraft:honey_bottle x1
+    ali:item minecraft:honey_bottle x3-6
       | Chance: 33.33%
       | Count: 3 to 6
-    ali:item minecraft:honey_block x1
+    ali:item minecraft:honey_block x1-3
       | Chance: 22.22%
       | Count: 1 to 3
     ali:item minecraft:leather_boots x1 {Damage:0,display:{color:16701501}}

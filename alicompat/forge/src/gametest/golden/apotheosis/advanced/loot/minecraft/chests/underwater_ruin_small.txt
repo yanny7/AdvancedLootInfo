@@ -16,14 +16,14 @@ ali:loot_table
       ali:item minecraft:stone_axe x1 {Damage:0}
         | Chance: 7.14%
         | Count: 1
-    ali:item minecraft:coal x1
+    ali:item minecraft:coal x1-4
       | Chance: 35.71%
       | Count: max(0; U[1; 4])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 4
       |   -> Add: False
-    ali:item minecraft:wheat x1
+    ali:item minecraft:wheat x2-3
       | Chance: 35.71%
       | Count: max(0; U[2; 3])
       | ----- Modifiers -----

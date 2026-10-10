@@ -10,7 +10,7 @@ ali:loot_table
     |   -> Luck 3: 8 to 17  ~9 to 16 (11%)
     |   -> Luck 4: 9 to 21  ~10 to 20 (8%)
     |   [chart 4..5 5-6 base=true modes=[false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false] heights=0.0000,0.0000,0.0000,0.0000,1.0000,1.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000 | 0..3 1-4 base=false modes=[false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false] heights=0.3333,0.6667,0.6667,0.3333,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000 | 5..8 6-9 base=false modes=[false, false, false, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false] heights=0.0000,0.0000,0.0000,0.0000,0.0000,0.3333,0.6667,0.6667,0.3333,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000 | 6..12 7-13 base=false modes=[false, false, false, false, false, false, false, true, true, true, true, true, false, false, false, false, false, false, false, false, false] heights=0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.1667,0.3333,0.3333,0.3333,0.3333,0.3333,0.1667,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000 | 7..16 8-17 base=false modes=[false, false, false, false, false, false, false, false, true, true, true, true, true, true, true, true, false, false, false, false, false] heights=0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.1111,0.2222,0.2222,0.2222,0.2222,0.2222,0.2222,0.2222,0.2222,0.1111,0.0000,0.0000,0.0000,0.0000 | 8..20 9-21 base=false modes=[false, false, false, false, false, false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, false] heights=0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0833,0.1667,0.1667,0.1667,0.1667,0.1667,0.1667,0.1667,0.1667,0.1667,0.1667,0.1667,0.0833]
-    ali:item minecraft:iron_ingot x1
+    ali:item minecraft:iron_ingot x1-5
       | Quality: 1
       | Chance: 15.63%
       |   -> luck: max(0%; 1000% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 300% + floor(400% × luck)) + max(0%; 300% + floor(400% × luck)) + max(0%; 1000% + floor(luck)) + max(0%; 1000% + floor(300% × luck)) + max(0%; 100% + floor(200% × luck)) + max(0%; 500% + floor(luck)) + max(0%; 500% + floor(luck)) + max(0%; 300% + floor(luck)) + max(0%; 100% + floor(300% × luck)) + 1200% + max(0%; 300% + floor(500% × luck)))
@@ -20,7 +20,7 @@ ali:loot_table
       |   -> Luck 3: 7.98%
       |   -> Luck 4: 7.14%
       | Count: 1 to 5
-    ali:item minecraft:gold_ingot x1
+    ali:item minecraft:gold_ingot x1-5
       | Quality: 3
       | Chance: 15.63%
       |   -> luck: max(0%; 1000% + floor(300% × luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 300% + floor(400% × luck)) + max(0%; 300% + floor(400% × luck)) + max(0%; 1000% + floor(luck)) + max(0%; 1000% + floor(300% × luck)) + max(0%; 100% + floor(200% × luck)) + max(0%; 500% + floor(luck)) + max(0%; 500% + floor(luck)) + max(0%; 300% + floor(luck)) + max(0%; 100% + floor(300% × luck)) + 1200% + max(0%; 300% + floor(500% × luck)))
@@ -50,7 +50,7 @@ ali:loot_table
       |   -> Luck 3: 4.91%
       |   -> Luck 4: 4.59%
       | Count: 1
-    ali:item minecraft:diamond x1
+    ali:item minecraft:diamond x1-3
       | Quality: 4
       | Chance: 4.69%
       |   -> luck: max(0%; 300% + floor(400% × luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 300% + floor(400% × luck)) + max(0%; 300% + floor(400% × luck)) + max(0%; 1000% + floor(luck)) + max(0%; 1000% + floor(300% × luck)) + max(0%; 100% + floor(200% × luck)) + max(0%; 500% + floor(luck)) + max(0%; 500% + floor(luck)) + max(0%; 300% + floor(luck)) + max(0%; 100% + floor(300% × luck)) + 1200% + max(0%; 300% + floor(500% × luck)))
@@ -60,7 +60,7 @@ ali:loot_table
       |   -> Luck 3: 9.2%
       |   -> Luck 4: 9.69%
       | Count: 1 to 3
-    ali:item minecraft:emerald x1
+    ali:item minecraft:emerald x1-3
       | Quality: 4
       | Chance: 4.69%
       |   -> luck: max(0%; 300% + floor(400% × luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 300% + floor(400% × luck)) + max(0%; 300% + floor(400% × luck)) + max(0%; 1000% + floor(luck)) + max(0%; 1000% + floor(300% × luck)) + max(0%; 100% + floor(200% × luck)) + max(0%; 500% + floor(luck)) + max(0%; 500% + floor(luck)) + max(0%; 300% + floor(luck)) + max(0%; 100% + floor(300% × luck)) + 1200% + max(0%; 300% + floor(500% × luck)))
@@ -80,7 +80,7 @@ ali:loot_table
       |   -> Luck 3: 3.68%
       |   -> Luck 4: 3.57%
       | Count: 1
-    ali:item minecraft:slime_ball x1
+    ali:item minecraft:slime_ball x1-3
       | Chance: 4.69%
       |   -> luck: 300% ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 300% + floor(400% × luck)) + max(0%; 300% + floor(400% × luck)) + max(0%; 1000% + floor(luck)) + max(0%; 1000% + floor(300% × luck)) + max(0%; 100% + floor(200% × luck)) + max(0%; 500% + floor(luck)) + max(0%; 500% + floor(luck)) + max(0%; 300% + floor(luck)) + max(0%; 100% + floor(300% × luck)) + 1200% + max(0%; 300% + floor(500% × luck)))
       |   -> Bad Luck: 7.89%
@@ -107,7 +107,7 @@ ali:loot_table
       |   -> Luck 3: 1.84%
       |   -> Luck 4: 1.53%
       | Count: 1
-    ali:item minecraft:obsidian x1
+    ali:item minecraft:obsidian x3-8
       | Chance: 4.69%
       |   -> luck: 300% ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 300% + floor(400% × luck)) + max(0%; 300% + floor(400% × luck)) + max(0%; 1000% + floor(luck)) + max(0%; 1000% + floor(300% × luck)) + max(0%; 100% + floor(200% × luck)) + max(0%; 500% + floor(luck)) + max(0%; 500% + floor(luck)) + max(0%; 300% + floor(luck)) + max(0%; 100% + floor(300% × luck)) + 1200% + max(0%; 300% + floor(500% × luck)))
       |   -> Bad Luck: 7.89%
@@ -128,7 +128,7 @@ ali:loot_table
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
-    ali:item minecraft:creeper_spawn_egg x1
+    ali:item minecraft:creeper_spawn_egg x1-3
       | Quality: 1
       | Chance: 1.56%
       |   -> luck: max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 300% + floor(400% × luck)) + max(0%; 300% + floor(400% × luck)) + max(0%; 1000% + floor(luck)) + max(0%; 1000% + floor(300% × luck)) + max(0%; 100% + floor(200% × luck)) + max(0%; 500% + floor(luck)) + max(0%; 500% + floor(luck)) + max(0%; 300% + floor(luck)) + max(0%; 100% + floor(300% × luck)) + 1200% + max(0%; 300% + floor(500% × luck)))
@@ -138,7 +138,7 @@ ali:loot_table
       |   -> Luck 3: 2.45%
       |   -> Luck 4: 2.55%
       | Count: 1 to 3
-    ali:item minecraft:skeleton_spawn_egg x1
+    ali:item minecraft:skeleton_spawn_egg x1-3
       | Quality: 1
       | Chance: 1.56%
       |   -> luck: max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 300% + floor(400% × luck)) + max(0%; 300% + floor(400% × luck)) + max(0%; 1000% + floor(luck)) + max(0%; 1000% + floor(300% × luck)) + max(0%; 100% + floor(200% × luck)) + max(0%; 500% + floor(luck)) + max(0%; 500% + floor(luck)) + max(0%; 300% + floor(luck)) + max(0%; 100% + floor(300% × luck)) + 1200% + max(0%; 300% + floor(500% × luck)))
@@ -148,7 +148,7 @@ ali:loot_table
       |   -> Luck 3: 2.45%
       |   -> Luck 4: 2.55%
       | Count: 1 to 3
-    ali:item minecraft:spider_spawn_egg x1
+    ali:item minecraft:spider_spawn_egg x1-3
       | Quality: 1
       | Chance: 1.56%
       |   -> luck: max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 300% + floor(400% × luck)) + max(0%; 300% + floor(400% × luck)) + max(0%; 1000% + floor(luck)) + max(0%; 1000% + floor(300% × luck)) + max(0%; 100% + floor(200% × luck)) + max(0%; 500% + floor(luck)) + max(0%; 500% + floor(luck)) + max(0%; 300% + floor(luck)) + max(0%; 100% + floor(300% × luck)) + 1200% + max(0%; 300% + floor(500% × luck)))
@@ -158,7 +158,7 @@ ali:loot_table
       |   -> Luck 3: 2.45%
       |   -> Luck 4: 2.55%
       | Count: 1 to 3
-    ali:item minecraft:zombie_spawn_egg x1
+    ali:item minecraft:zombie_spawn_egg x1-3
       | Quality: 1
       | Chance: 1.56%
       |   -> luck: max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 300% + floor(400% × luck)) + max(0%; 300% + floor(400% × luck)) + max(0%; 1000% + floor(luck)) + max(0%; 1000% + floor(300% × luck)) + max(0%; 100% + floor(200% × luck)) + max(0%; 500% + floor(luck)) + max(0%; 500% + floor(luck)) + max(0%; 300% + floor(luck)) + max(0%; 100% + floor(300% × luck)) + 1200% + max(0%; 300% + floor(500% × luck)))
@@ -168,7 +168,7 @@ ali:loot_table
       |   -> Luck 3: 2.45%
       |   -> Luck 4: 2.55%
       | Count: 1 to 3
-    ali:item minecraft:slime_spawn_egg x1
+    ali:item minecraft:slime_spawn_egg x1-3
       | Quality: 1
       | Chance: 1.56%
       |   -> luck: max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 300% + floor(400% × luck)) + max(0%; 300% + floor(400% × luck)) + max(0%; 1000% + floor(luck)) + max(0%; 1000% + floor(300% × luck)) + max(0%; 100% + floor(200% × luck)) + max(0%; 500% + floor(luck)) + max(0%; 500% + floor(luck)) + max(0%; 300% + floor(luck)) + max(0%; 100% + floor(300% × luck)) + 1200% + max(0%; 300% + floor(500% × luck)))
@@ -178,7 +178,7 @@ ali:loot_table
       |   -> Luck 3: 2.45%
       |   -> Luck 4: 2.55%
       | Count: 1 to 3
-    ali:item minecraft:enderman_spawn_egg x1
+    ali:item minecraft:enderman_spawn_egg x1-3
       | Quality: 1
       | Chance: 1.56%
       |   -> luck: max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 300% + floor(400% × luck)) + max(0%; 300% + floor(400% × luck)) + max(0%; 1000% + floor(luck)) + max(0%; 1000% + floor(300% × luck)) + max(0%; 100% + floor(200% × luck)) + max(0%; 500% + floor(luck)) + max(0%; 500% + floor(luck)) + max(0%; 300% + floor(luck)) + max(0%; 100% + floor(300% × luck)) + 1200% + max(0%; 300% + floor(500% × luck)))
@@ -188,7 +188,7 @@ ali:loot_table
       |   -> Luck 3: 2.45%
       |   -> Luck 4: 2.55%
       | Count: 1 to 3
-    ali:item minecraft:cave_spider_spawn_egg x1
+    ali:item minecraft:cave_spider_spawn_egg x1-3
       | Quality: 1
       | Chance: 1.56%
       |   -> luck: max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 300% + floor(400% × luck)) + max(0%; 300% + floor(400% × luck)) + max(0%; 1000% + floor(luck)) + max(0%; 1000% + floor(300% × luck)) + max(0%; 100% + floor(200% × luck)) + max(0%; 500% + floor(luck)) + max(0%; 500% + floor(luck)) + max(0%; 300% + floor(luck)) + max(0%; 100% + floor(300% × luck)) + 1200% + max(0%; 300% + floor(500% × luck)))
@@ -198,7 +198,7 @@ ali:loot_table
       |   -> Luck 3: 2.45%
       |   -> Luck 4: 2.55%
       | Count: 1 to 3
-    ali:item minecraft:silverfish_spawn_egg x1
+    ali:item minecraft:silverfish_spawn_egg x1-3
       | Quality: 1
       | Chance: 1.56%
       |   -> luck: max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 300% + floor(400% × luck)) + max(0%; 300% + floor(400% × luck)) + max(0%; 1000% + floor(luck)) + max(0%; 1000% + floor(300% × luck)) + max(0%; 100% + floor(200% × luck)) + max(0%; 500% + floor(luck)) + max(0%; 500% + floor(luck)) + max(0%; 300% + floor(luck)) + max(0%; 100% + floor(300% × luck)) + 1200% + max(0%; 300% + floor(500% × luck)))

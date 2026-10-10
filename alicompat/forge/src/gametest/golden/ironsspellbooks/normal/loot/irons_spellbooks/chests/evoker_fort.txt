@@ -6,13 +6,13 @@ ali:loot_table
     ali:item minecraft:emerald x1
       | Chance: 25.81%
       | Count: 1
-    ali:item minecraft:arrow x1
+    ali:item minecraft:arrow x0-4
       | Chance: 19.35%
       | Count: 0 to 4
-    ali:item irons_spellbooks:arcane_essence x1
+    ali:item irons_spellbooks:arcane_essence x1-3
       | Chance: 16.13%
       | Count: 1 to 3
-    ali:item minecraft:raw_iron x1
+    ali:item minecraft:raw_iron x0-4
       | Chance: 16.13%
       | Count: 0 to 4
     ali:item minecraft:experience_bottle x1

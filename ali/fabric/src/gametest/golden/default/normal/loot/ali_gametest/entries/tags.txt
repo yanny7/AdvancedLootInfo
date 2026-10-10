@@ -3,10 +3,10 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item #minecraft:wool
+    ali:item #minecraft:wool x1
       | Count: 1
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item #minecraft:anvil
+    ali:item #minecraft:anvil x1
       | Count: 1

@@ -11,7 +11,7 @@ ali:loot_table
       |   -> Luck 3: 33.33%
       |   -> Luck 4: 30%
       | Count: 1
-    ali:item gtceu:purple_drink x1
+    ali:item gtceu:purple_drink x8-16
       | Quality: 1
       | Chance: 33.33%
       |   -> Bad Luck: 20%
@@ -46,42 +46,42 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 3
-    ali:item minecraft:apple x1
+    ali:item minecraft:apple x1-2
       | Chance: 45.45%
       | Count: 1 to 2
-    ali:item minecraft:bread x1
+    ali:item minecraft:bread x1-2
       | Chance: 27.27%
       | Count: 1 to 2
-    ali:item minecraft:salmon x1
+    ali:item minecraft:salmon x1-2
       | Chance: 27.27%
       | Count: 1 to 2
   ali:loot_pool
     | Selects random entry
     | Rolls: 4
-    ali:item minecraft:stick x1
+    ali:item minecraft:stick x1-12
       | Chance: 24.39%
       | Count: 1 to 12
-    ali:item minecraft:oak_planks x1
+    ali:item minecraft:oak_planks x1-12
       | Chance: 24.39%
       | Count: 1 to 12
-    ali:item minecraft:oak_log x1
+    ali:item minecraft:oak_log x1-3
       | Chance: 7.32%
       | Count: 1 to 3
-    ali:item minecraft:spruce_log x1
+    ali:item minecraft:spruce_log x1-3
       | Chance: 7.32%
       | Count: 1 to 3
-    ali:item minecraft:birch_log x1
+    ali:item minecraft:birch_log x1-3
       | Chance: 7.32%
       | Count: 1 to 3
-    ali:item minecraft:jungle_log x1
+    ali:item minecraft:jungle_log x1-3
       | Chance: 7.32%
       | Count: 1 to 3
-    ali:item minecraft:acacia_log x1
+    ali:item minecraft:acacia_log x1-3
       | Chance: 7.32%
       | Count: 1 to 3
-    ali:item minecraft:dark_oak_log x1
+    ali:item minecraft:dark_oak_log x1-3
       | Chance: 7.32%
       | Count: 1 to 3
-    ali:item minecraft:mangrove_log x1
+    ali:item minecraft:mangrove_log x1-3
       | Chance: 7.32%
       | Count: 1 to 3

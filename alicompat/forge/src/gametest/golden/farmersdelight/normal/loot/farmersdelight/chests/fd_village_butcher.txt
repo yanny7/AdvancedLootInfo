@@ -15,13 +15,13 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 2
-    ali:item farmersdelight:minced_beef x1
+    ali:item farmersdelight:minced_beef x2-6
       | Chance: 27.27%
       | Count: 2 to 6
-    ali:item farmersdelight:bacon x1
+    ali:item farmersdelight:bacon x2-6
       | Chance: 27.27%
       | Count: 2 to 6
-    ali:item farmersdelight:mutton_chops x1
+    ali:item farmersdelight:mutton_chops x2-6
       | Chance: 27.27%
       | Count: 2 to 6
     ali:item farmersdelight:ham x1

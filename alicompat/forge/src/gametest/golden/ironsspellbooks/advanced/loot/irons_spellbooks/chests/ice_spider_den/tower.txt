@@ -119,21 +119,21 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 6 to 12
-    ali:item minecraft:snowball x1
+    ali:item minecraft:snowball x1-2
       | Chance: 33.33%
       | Count: max(0; U[1; 2])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 2
       |   -> Add: False
-    ali:item minecraft:ice x1
+    ali:item minecraft:ice x2-4
       | Chance: 33.33%
       | Count: max(0; U[2; 4])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 2 to 4
       |   -> Add: False
-    ali:item minecraft:cobweb x1
+    ali:item minecraft:cobweb x2-4
       | Chance: 33.33%
       | Count: max(0; U[2; 4])
       | ----- Modifiers -----
@@ -143,7 +143,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item irons_spellbooks:arcane_essence x1
+    ali:item irons_spellbooks:arcane_essence x5-20
       | Count: max(0; U[5; 20])
       | ----- Modifiers -----
       | Set Count:

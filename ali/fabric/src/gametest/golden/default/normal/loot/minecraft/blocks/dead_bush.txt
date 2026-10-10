@@ -10,7 +10,7 @@ ali:loot_table
         | ----- Predicates -----
         | Match Tool:
         |   -> Item: Shears
-      ali:item minecraft:stick x1
+      ali:item minecraft:stick x0-2
         | Count: 0 to 2
         | ----- Modifiers -----
         | Explosion Decay

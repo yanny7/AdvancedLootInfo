@@ -3,10 +3,10 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 2 to 10
-    ali:item minecraft:book x1
+    ali:item minecraft:book x1-3
       | Chance: 38.46%
       | Count: 1 to 3
-    ali:item minecraft:paper x1
+    ali:item minecraft:paper x2-7
       | Chance: 38.46%
       | Count: 2 to 7
     ali:item minecraft:enchanted_book x1
@@ -34,7 +34,7 @@ ali:loot_table
       ali:loot_pool
         | Selects random entry
         | Rolls: 1
-        ali:item irons_spellbooks:arcane_essence x1
+        ali:item irons_spellbooks:arcane_essence x2-15
           | Chance: 30%
           | Count: 2 to 15
       ali:loot_pool
@@ -145,6 +145,6 @@ ali:loot_table
       ali:loot_pool
         | Selects random entry
         | Rolls: 1
-        ali:item irons_spellbooks:ancient_knowledge_fragment x1
+        ali:item irons_spellbooks:ancient_knowledge_fragment x1-3
           | Chance: 80%
           | Count: 1 to 3

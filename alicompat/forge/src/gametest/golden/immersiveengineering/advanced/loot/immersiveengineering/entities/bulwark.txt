@@ -9,7 +9,7 @@ ali:entity_loot_table
     |   -> Luck 2: 3
     |   -> Luck 3: 4
     |   -> Luck 4: 5
-    ali:item minecraft:emerald x1
+    ali:item minecraft:emerald x1-5
       | Chance: 50%
       | Count: max(0; U[1; 2])
       |   -> Looting LVL: max(0; U[1; 2]) + round(LVL × U[0; 1))
@@ -25,7 +25,7 @@ ali:entity_loot_table
       |   -> Add: False
       | Looting Enchant:
       |   -> Value: U[0; 1)
-    ali:item immersiveengineering:shader_bag_ie_masterwork x1
+    ali:item immersiveengineering:shader_bag_ie_masterwork x0-1
       | Chance: 50%
       | Count: max(0; U[0; 1])
       | ----- Predicates -----

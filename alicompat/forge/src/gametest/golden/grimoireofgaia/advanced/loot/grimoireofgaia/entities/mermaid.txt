@@ -3,7 +3,7 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item grimoireofgaia:shiny_pearl x1
+    ali:item grimoireofgaia:shiny_pearl x0-6
       | Count: max(0; U[0; 3])
       |   -> Looting LVL: max(0; U[0; 3]) + round(LVL × U[0; 1))
       |   -> Looting I: 0 to 4  ~1 to 3 (25%)
@@ -19,7 +19,7 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:prismarine_shard x1
+    ali:item minecraft:prismarine_shard x0-4
       | Count: max(0; U[0; 1])
       |   -> Looting LVL: max(0; U[0; 1]) + round(LVL × U[0; 1))
       |   -> Looting I: 0 to 2  ~1 (50%)
@@ -35,7 +35,7 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item #forge:nuggets/gold
+    ali:item #forge:nuggets/gold x0-3
       | Count: max(0; U[0; 3])
       | ----- Modifiers -----
       | Set Count:

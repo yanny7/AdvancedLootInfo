@@ -18,7 +18,7 @@ ali:loot_table
     | ----- Predicates -----
     | Random Chance:
     |   -> Probability: 0.5
-  ali:item minecraft:emerald x1
+  ali:item minecraft:emerald x2
     | Count: 2
   ali:item minecraft:diamond x1
     | Chance: 1%

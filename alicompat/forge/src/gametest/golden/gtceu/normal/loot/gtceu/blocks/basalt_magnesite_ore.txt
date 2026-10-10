@@ -12,14 +12,14 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Enchantment: Silk Touch
         |     -> Level: ≥ 1
-      ali:item gtceu:raw_magnesite x1
+      ali:item gtceu:raw_magnesite x2
         | Count: 2
         | ----- Modifiers -----
         | Explosion Decay
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item gtceu:basalt_dust x1
+    ali:item gtceu:basalt_dust x0-1
       | Count: 0 to 1
       | ----- Predicates -----
       | Inverted:

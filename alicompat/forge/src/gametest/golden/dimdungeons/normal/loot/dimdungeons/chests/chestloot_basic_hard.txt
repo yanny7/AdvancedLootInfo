@@ -139,22 +139,22 @@ ali:loot_table
           ali:item dimdungeons:block_key_charger x1
             | Chance: 4%
             | Count: 1
-          ali:item minecraft:emerald x1
+          ali:item minecraft:emerald x8-16
             | Chance: 3%
             | Count: 8 to 16
-          ali:item minecraft:diamond x1
+          ali:item minecraft:diamond x2-6
             | Chance: 3%
             | Count: 2 to 6
-          ali:item minecraft:sea_lantern x1
+          ali:item minecraft:sea_lantern x8-12
             | Chance: 3%
             | Count: 8 to 12
           ali:item minecraft:ender_chest x1
             | Chance: 3%
             | Count: 1
-          ali:item minecraft:ghast_tear x1
+          ali:item minecraft:ghast_tear x2-4
             | Chance: 3%
             | Count: 2 to 4
-          ali:item minecraft:sculk_catalyst x1
+          ali:item minecraft:sculk_catalyst x1-3
             | Chance: 3%
             | Count: 1 to 3
           ali:item minecraft:diamond_chestplate x1 {Damage:0}

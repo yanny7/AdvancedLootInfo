@@ -27,7 +27,7 @@ ali:loot_table
           |     -> Level: ≥ 1
       ali:modified
         | Selects only first successful entry
-        ali:item minecraft:gold_ingot x1
+        ali:item minecraft:gold_ingot x1-4
           | Count: 1
           |   -> Fortune I: 1 to 2  ~1 (67%)
           |   -> Fortune II: 1 to 3  ~1 (50%)
@@ -40,7 +40,7 @@ ali:loot_table
           |     -> Level: ≥ 1
           | ----- Modifiers -----
           | Explosion Decay
-        ali:item minecraft:raw_gold x1
+        ali:item minecraft:raw_gold x1-4
           | Count: 1
           |   -> Fortune I: 1 to 2  ~1 (67%)
           |   -> Fortune II: 1 to 3  ~1 (50%)

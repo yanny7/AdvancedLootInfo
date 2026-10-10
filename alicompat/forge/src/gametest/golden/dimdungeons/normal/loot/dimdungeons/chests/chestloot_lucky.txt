@@ -34,55 +34,55 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 2 to 4
-          ali:item minecraft:bread x1
+          ali:item minecraft:bread x1-3
             | Chance: 2.19%
             | Count: 1 to 3
-          ali:item minecraft:glow_berries x1
+          ali:item minecraft:glow_berries x3-6
             | Chance: 2.19%
             | Count: 3 to 6
-          ali:item minecraft:iron_ingot x1
+          ali:item minecraft:iron_ingot x1-5
             | Chance: 1.46%
             | Count: 1 to 5
-          ali:item minecraft:coal x1
+          ali:item minecraft:coal x3-8
             | Chance: 1.46%
             | Count: 3 to 8
-          ali:item minecraft:melon_seeds x1
+          ali:item minecraft:melon_seeds x2-4
             | Chance: 1.46%
             | Count: 2 to 4
-          ali:item minecraft:pumpkin_seeds x1
+          ali:item minecraft:pumpkin_seeds x2-4
             | Chance: 1.46%
             | Count: 2 to 4
-          ali:item minecraft:beetroot_seeds x1
+          ali:item minecraft:beetroot_seeds x2-4
             | Chance: 1.46%
             | Count: 2 to 4
-          ali:item minecraft:gold_ingot x1
+          ali:item minecraft:gold_ingot x1-3
             | Chance: 0.73%
             | Count: 1 to 3
-          ali:item minecraft:redstone x1
+          ali:item minecraft:redstone x4-9
             | Chance: 0.73%
             | Count: 4 to 9
-          ali:item minecraft:lapis_lazuli x1
+          ali:item minecraft:lapis_lazuli x4-9
             | Chance: 0.73%
             | Count: 4 to 9
-          ali:item minecraft:diamond x1
+          ali:item minecraft:diamond x1-2
             | Chance: 0.44%
             | Count: 1 to 2
         ali:loot_pool
           | Selects random entry
           | Rolls: 3
-          ali:item minecraft:rail x1
+          ali:item minecraft:rail x4-8
             | Chance: 5.71%
             | Count: 4 to 8
-          ali:item minecraft:torch x1
+          ali:item minecraft:torch x1-16
             | Chance: 4.29%
             | Count: 1 to 16
-          ali:item minecraft:powered_rail x1
+          ali:item minecraft:powered_rail x1-4
             | Chance: 1.43%
             | Count: 1 to 4
-          ali:item minecraft:detector_rail x1
+          ali:item minecraft:detector_rail x1-4
             | Chance: 1.43%
             | Count: 1 to 4
-          ali:item minecraft:activator_rail x1
+          ali:item minecraft:activator_rail x1-4
             | Chance: 1.43%
             | Count: 1 to 4
     ali:reference
@@ -93,13 +93,13 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 2 to 4
-          ali:item minecraft:bone x1
+          ali:item minecraft:bone x4-6
             | Chance: 1.54%
             | Count: 4 to 6
-          ali:item minecraft:spider_eye x1
+          ali:item minecraft:spider_eye x1-3
             | Chance: 1.54%
             | Count: 1 to 3
-          ali:item minecraft:rotten_flesh x1
+          ali:item minecraft:rotten_flesh x3-7
             | Chance: 1.54%
             | Count: 3 to 7
           ali:item minecraft:saddle x1
@@ -113,13 +113,13 @@ ali:loot_table
           ali:item minecraft:golden_apple x1
             | Chance: 1.23%
             | Count: 1
-          ali:item minecraft:iron_ingot x1
+          ali:item minecraft:iron_ingot x1-5
             | Chance: 0.92%
             | Count: 1 to 5
-          ali:item minecraft:gold_ingot x1
+          ali:item minecraft:gold_ingot x2-7
             | Chance: 0.92%
             | Count: 2 to 7
-          ali:item minecraft:emerald x1
+          ali:item minecraft:emerald x1-3
             | Chance: 0.92%
             | Count: 1 to 3
           ali:item minecraft:iron_horse_armor x1
@@ -131,7 +131,7 @@ ali:loot_table
           ali:item minecraft:golden_horse_armor x1
             | Chance: 0.62%
             | Count: 1
-          ali:item minecraft:diamond x1
+          ali:item minecraft:diamond x1-3
             | Chance: 0.31%
             | Count: 1 to 3
           ali:item minecraft:diamond_horse_armor x1
@@ -143,19 +143,19 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 4
-          ali:item minecraft:bone x1
+          ali:item minecraft:bone x1-8
             | Chance: 2.86%
             | Count: 1 to 8
-          ali:item minecraft:gunpowder x1
+          ali:item minecraft:gunpowder x1-8
             | Chance: 2.86%
             | Count: 1 to 8
-          ali:item minecraft:rotten_flesh x1
+          ali:item minecraft:rotten_flesh x1-8
             | Chance: 2.86%
             | Count: 1 to 8
-          ali:item minecraft:string x1
+          ali:item minecraft:string x1-8
             | Chance: 2.86%
             | Count: 1 to 8
-          ali:item minecraft:sand x1
+          ali:item minecraft:sand x1-8
             | Chance: 2.86%
             | Count: 1 to 8
         ali:loot_pool
@@ -164,7 +164,7 @@ ali:loot_table
           ali:empty
             | Drops nothing
             | Chance: 12.24%
-          ali:item minecraft:dune_armor_trim_smithing_template x1
+          ali:item minecraft:dune_armor_trim_smithing_template x2
             | Chance: 2.04%
             | Count: 2
     ali:reference
@@ -175,28 +175,28 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 2 to 6
-          ali:item minecraft:bone x1
+          ali:item minecraft:bone x4-6
             | Chance: 3.25%
             | Count: 4 to 6
-          ali:item minecraft:rotten_flesh x1
+          ali:item minecraft:rotten_flesh x3-7
             | Chance: 2.6%
             | Count: 3 to 7
-          ali:item minecraft:gold_ingot x1
+          ali:item minecraft:gold_ingot x2-7
             | Chance: 2.44%
             | Count: 2 to 7
-          ali:item minecraft:bamboo x1
+          ali:item minecraft:bamboo x1-3
             | Chance: 2.44%
             | Count: 1 to 3
-          ali:item minecraft:iron_ingot x1
+          ali:item minecraft:iron_ingot x1-5
             | Chance: 1.62%
             | Count: 1 to 5
-          ali:item minecraft:diamond x1
+          ali:item minecraft:diamond x1-3
             | Chance: 0.49%
             | Count: 1 to 3
           ali:item minecraft:saddle x1
             | Chance: 0.49%
             | Count: 1
-          ali:item minecraft:emerald x1
+          ali:item minecraft:emerald x1-3
             | Chance: 0.32%
             | Count: 1 to 3
           ali:item minecraft:iron_horse_armor x1
@@ -221,7 +221,7 @@ ali:loot_table
           ali:empty
             | Drops nothing
             | Chance: 9.52%
-          ali:item minecraft:wild_armor_trim_smithing_template x1
+          ali:item minecraft:wild_armor_trim_smithing_template x2
             | Chance: 4.76%
             | Count: 2
     ali:reference
@@ -270,46 +270,46 @@ ali:loot_table
           ali:item minecraft:bread x1
             | Chance: 2.29%
             | Count: 1
-          ali:item minecraft:wheat x1
+          ali:item minecraft:wheat x1-4
             | Chance: 2.29%
             | Count: 1 to 4
-          ali:item minecraft:redstone x1
+          ali:item minecraft:redstone x1-4
             | Chance: 1.71%
             | Count: 1 to 4
-          ali:item minecraft:coal x1
+          ali:item minecraft:coal x1-4
             | Chance: 1.71%
             | Count: 1 to 4
-          ali:item minecraft:iron_ingot x1
+          ali:item minecraft:iron_ingot x1-4
             | Chance: 1.14%
             | Count: 1 to 4
           ali:item minecraft:bucket x1
             | Chance: 1.14%
             | Count: 1
-          ali:item minecraft:melon_seeds x1
+          ali:item minecraft:melon_seeds x2-4
             | Chance: 1.14%
             | Count: 2 to 4
-          ali:item minecraft:pumpkin_seeds x1
+          ali:item minecraft:pumpkin_seeds x2-4
             | Chance: 1.14%
             | Count: 2 to 4
-          ali:item minecraft:beetroot_seeds x1
+          ali:item minecraft:beetroot_seeds x2-4
             | Chance: 1.14%
             | Count: 2 to 4
-          ali:item minecraft:gold_ingot x1
+          ali:item minecraft:gold_ingot x1-4
             | Chance: 0.57%
             | Count: 1 to 4
         ali:loot_pool
           | Selects random entry
           | Rolls: 3
-          ali:item minecraft:bone x1
+          ali:item minecraft:bone x1-8
             | Chance: 3.57%
             | Count: 1 to 8
-          ali:item minecraft:gunpowder x1
+          ali:item minecraft:gunpowder x1-8
             | Chance: 3.57%
             | Count: 1 to 8
-          ali:item minecraft:rotten_flesh x1
+          ali:item minecraft:rotten_flesh x1-8
             | Chance: 3.57%
             | Count: 1 to 8
-          ali:item minecraft:string x1
+          ali:item minecraft:string x1-8
             | Chance: 3.57%
             | Count: 1 to 8
         ali:loot_pool
@@ -370,46 +370,46 @@ ali:loot_table
           ali:item minecraft:bread x1
             | Chance: 2.29%
             | Count: 1
-          ali:item minecraft:wheat x1
+          ali:item minecraft:wheat x1-4
             | Chance: 2.29%
             | Count: 1 to 4
-          ali:item minecraft:redstone x1
+          ali:item minecraft:redstone x1-4
             | Chance: 1.71%
             | Count: 1 to 4
-          ali:item minecraft:coal x1
+          ali:item minecraft:coal x1-4
             | Chance: 1.71%
             | Count: 1 to 4
-          ali:item minecraft:iron_ingot x1
+          ali:item minecraft:iron_ingot x1-4
             | Chance: 1.14%
             | Count: 1 to 4
           ali:item minecraft:bucket x1
             | Chance: 1.14%
             | Count: 1
-          ali:item minecraft:melon_seeds x1
+          ali:item minecraft:melon_seeds x2-4
             | Chance: 1.14%
             | Count: 2 to 4
-          ali:item minecraft:pumpkin_seeds x1
+          ali:item minecraft:pumpkin_seeds x2-4
             | Chance: 1.14%
             | Count: 2 to 4
-          ali:item minecraft:beetroot_seeds x1
+          ali:item minecraft:beetroot_seeds x2-4
             | Chance: 1.14%
             | Count: 2 to 4
-          ali:item minecraft:gold_ingot x1
+          ali:item minecraft:gold_ingot x1-4
             | Chance: 0.57%
             | Count: 1 to 4
         ali:loot_pool
           | Selects random entry
           | Rolls: 3
-          ali:item minecraft:bone x1
+          ali:item minecraft:bone x1-8
             | Chance: 3.57%
             | Count: 1 to 8
-          ali:item minecraft:gunpowder x1
+          ali:item minecraft:gunpowder x1-8
             | Chance: 3.57%
             | Count: 1 to 8
-          ali:item minecraft:rotten_flesh x1
+          ali:item minecraft:rotten_flesh x1-8
             | Chance: 3.57%
             | Count: 1 to 8
-          ali:item minecraft:string x1
+          ali:item minecraft:string x1-8
             | Chance: 3.57%
             | Count: 1 to 8
     ali:reference
@@ -420,22 +420,22 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1 to 4
-          ali:item minecraft:bread x1
+          ali:item minecraft:bread x1-3
             | Chance: 3.46%
             | Count: 1 to 3
-          ali:item minecraft:apple x1
+          ali:item minecraft:apple x1-3
             | Chance: 3.46%
             | Count: 1 to 3
-          ali:item minecraft:iron_ingot x1
+          ali:item minecraft:iron_ingot x1-5
             | Chance: 2.3%
             | Count: 1 to 5
-          ali:item minecraft:coal x1
+          ali:item minecraft:coal x3-8
             | Chance: 2.3%
             | Count: 3 to 8
-          ali:item minecraft:gold_ingot x1
+          ali:item minecraft:gold_ingot x1-3
             | Chance: 1.15%
             | Count: 1 to 3
-          ali:item minecraft:redstone x1
+          ali:item minecraft:redstone x4-9
             | Chance: 1.15%
             | Count: 4 to 9
           ali:item minecraft:iron_pickaxe x1 {Damage:0}
@@ -456,10 +456,10 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 2 to 10
-          ali:item minecraft:book x1
+          ali:item minecraft:book x1-3
             | Chance: 5.49%
             | Count: 1 to 3
-          ali:item minecraft:paper x1
+          ali:item minecraft:paper x2-7
             | Chance: 5.49%
             | Count: 2 to 7
           ali:item minecraft:enchanted_book x1

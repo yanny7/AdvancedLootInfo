@@ -3,28 +3,28 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 4
-    ali:item the_bumblezone:bee_bread x1
+    ali:item the_bumblezone:bee_bread x2-6
       | Chance: 28.57%
       | Count: 2 to 6
-    ali:item minecraft:honeycomb x1
+    ali:item minecraft:honeycomb x2-6
       | Chance: 28.57%
       | Count: 2 to 6
-    ali:item the_bumblezone:bee_stinger x1
+    ali:item the_bumblezone:bee_stinger x3-7
       | Chance: 21.43%
       | Count: 3 to 7
-    ali:item the_bumblezone:pollen_puff x1
+    ali:item the_bumblezone:pollen_puff x3-6
       | Chance: 10.71%
       | Count: 3 to 6
-    ali:item minecraft:raw_gold x1
+    ali:item minecraft:raw_gold x3-5
       | Chance: 7.14%
       | Count: 3 to 5
-    ali:item minecraft:raw_gold_block x1
+    ali:item minecraft:raw_gold_block x1-2
       | Chance: 3.57%
       | Count: 1 to 2
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 3
-    ali:item minecraft:honey_block x1
+    ali:item minecraft:honey_block x1-3
       | Chance: 25.35%
       | Count: 1 to 3
     ali:item minecraft:stone_sword x1 {Damage:0}
@@ -57,13 +57,13 @@ ali:loot_table
     ali:item minecraft:iron_sword x1 {Damage:0}
       | Chance: 8.45%
       | Count: 1
-    ali:item the_bumblezone:bee_soup x1
+    ali:item the_bumblezone:bee_soup x1-2
       | Chance: 5.63%
       | Count: 1 to 2
     ali:item the_bumblezone:honey_compass x1
       | Chance: 2.82%
       | Count: 1
-    ali:item #the_bumblezone:banner_patterns
+    ali:item #the_bumblezone:banner_patterns x1
       | Chance: 1.41%
       | Count: 1
   ali:loot_pool

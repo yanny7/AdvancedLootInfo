@@ -116,6 +116,6 @@ ali:loot_table
     ali:item minecraft:sniffer_egg x1
       | Chance: 1.06%
       | Count: 1
-    ali:item #minecraft:decorated_pot_sherds
+    ali:item #minecraft:decorated_pot_sherds x1
       | Chance: 1.06%
       | Count: 1

@@ -142,7 +142,7 @@ ali:loot_table
       |   -> Luck 3: 3.55%
       |   -> Luck 4: 3.64%
       | Count: 1
-    ali:item minecraft:diamond x1
+    ali:item minecraft:diamond x1-3
       | Quality: 2
       | Chance: 1.62%
       |   -> Bad Luck: 1.38%
@@ -159,7 +159,7 @@ ali:loot_table
       |   -> Luck 3: 1.37%
       |   -> Luck 4: 1.3%
       | Count: 1
-    ali:item minecraft:emerald x1
+    ali:item minecraft:emerald x1-3
       | Quality: 1
       | Chance: 1.29%
       |   -> Bad Luck: 1.21%
@@ -168,7 +168,7 @@ ali:loot_table
       |   -> Luck 3: 1.5%
       |   -> Luck 4: 1.56%
       | Count: 1 to 3
-    ali:item minecraft:iron_ingot x1
+    ali:item minecraft:iron_ingot x1-5
       | Chance: 0.81%
       |   -> Bad Luck: 0.86%
       |   -> Luck 1: 0.76%
@@ -176,7 +176,7 @@ ali:loot_table
       |   -> Luck 3: 0.68%
       |   -> Luck 4: 0.65%
       | Count: 1 to 5
-    ali:item minecraft:gold_ingot x1
+    ali:item minecraft:gold_ingot x1-5
       | Quality: 1
       | Chance: 0.81%
       |   -> Bad Luck: 0.69%
@@ -194,7 +194,7 @@ ali:loot_table
       |   -> Luck 3: 1.5%
       |   -> Luck 4: 1.69%
       | Count: 1
-    ali:item minecraft:name_tag x1
+    ali:item minecraft:name_tag x1-2
       | Chance: 0.81%
       |   -> Bad Luck: 0.86%
       |   -> Luck 1: 0.76%
@@ -202,7 +202,7 @@ ali:loot_table
       |   -> Luck 3: 0.68%
       |   -> Luck 4: 0.65%
       | Count: 1 to 2
-    ali:item minecraft:lead x1
+    ali:item minecraft:lead x1-2
       | Chance: 0.81%
       |   -> Bad Luck: 0.86%
       |   -> Luck 1: 0.76%

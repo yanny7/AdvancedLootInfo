@@ -3,7 +3,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:gold_block x1
+    ali:item minecraft:gold_block x2-4
       | Chance: 16%
       | Count: 2 to 4
     ali:item minecraft:diamond_shovel x1 {Damage:0}
@@ -28,7 +28,7 @@ ali:loot_table
     ali:item minecraft:saddle x1
       | Chance: 12%
       | Count: 1
-    ali:item minecraft:golden_carrot x1
+    ali:item minecraft:golden_carrot x8-17
       | Chance: 10%
       | Count: 8 to 17
     ali:item minecraft:golden_apple x1
@@ -37,7 +37,7 @@ ali:loot_table
     ali:item minecraft:netherite_scrap x1
       | Chance: 8%
       | Count: 1
-    ali:item minecraft:ancient_debris x1
+    ali:item minecraft:ancient_debris x2
       | Chance: 5%
       | Count: 2
   ali:loot_pool
@@ -48,43 +48,43 @@ ali:loot_table
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
-    ali:item minecraft:crying_obsidian x1
+    ali:item minecraft:crying_obsidian x1-5
       | Chance: 7.14%
       | Count: 1 to 5
-    ali:item minecraft:glowstone x1
+    ali:item minecraft:glowstone x3-6
       | Chance: 7.14%
       | Count: 3 to 6
-    ali:item minecraft:gilded_blackstone x1
+    ali:item minecraft:gilded_blackstone x2-5
       | Chance: 7.14%
       | Count: 2 to 5
-    ali:item minecraft:soul_sand x1
+    ali:item minecraft:soul_sand x2-7
       | Chance: 7.14%
       | Count: 2 to 7
-    ali:item minecraft:crimson_nylium x1
+    ali:item minecraft:crimson_nylium x2-7
       | Chance: 7.14%
       | Count: 2 to 7
-    ali:item minecraft:gold_nugget x1
+    ali:item minecraft:gold_nugget x2-8
       | Chance: 7.14%
       | Count: 2 to 8
-    ali:item minecraft:leather x1
+    ali:item minecraft:leather x1-3
       | Chance: 7.14%
       | Count: 1 to 3
-    ali:item minecraft:arrow x1
+    ali:item minecraft:arrow x5-17
       | Chance: 7.14%
       | Count: 5 to 17
-    ali:item minecraft:string x1
+    ali:item minecraft:string x3-8
       | Chance: 7.14%
       | Count: 3 to 8
-    ali:item minecraft:porkchop x1
+    ali:item minecraft:porkchop x2-5
       | Chance: 7.14%
       | Count: 2 to 5
-    ali:item minecraft:cooked_porkchop x1
+    ali:item minecraft:cooked_porkchop x2-5
       | Chance: 7.14%
       | Count: 2 to 5
-    ali:item minecraft:crimson_fungus x1
+    ali:item minecraft:crimson_fungus x2-7
       | Chance: 7.14%
       | Count: 2 to 7
-    ali:item minecraft:crimson_roots x1
+    ali:item minecraft:crimson_roots x2-7
       | Chance: 7.14%
       | Count: 2 to 7
   ali:loot_pool
@@ -131,10 +131,10 @@ ali:loot_table
       ali:loot_pool
         | Selects random entry
         | Rolls: 1 to 2
-        ali:item farmersdelight:ham x1
+        ali:item farmersdelight:ham x2-5
           | Chance: 50%
           | Count: 2 to 5
-        ali:item farmersdelight:smoked_ham x1
+        ali:item farmersdelight:smoked_ham x2-5
           | Chance: 25%
           | Count: 2 to 5
         ali:empty

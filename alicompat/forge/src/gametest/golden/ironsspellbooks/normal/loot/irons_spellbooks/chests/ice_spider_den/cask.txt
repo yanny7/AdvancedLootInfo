@@ -3,20 +3,20 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:honey_bottle x1
+    ali:item minecraft:honey_bottle x1-4
       | Count: 1 to 4
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:glass_bottle x1
+    ali:item minecraft:glass_bottle x4-10
       | Count: 4 to 10
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:sweet_berries x1
+    ali:item minecraft:sweet_berries x5-16
       | Count: 5 to 16
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:ice x1
+    ali:item minecraft:ice x15-25
       | Count: 15 to 25

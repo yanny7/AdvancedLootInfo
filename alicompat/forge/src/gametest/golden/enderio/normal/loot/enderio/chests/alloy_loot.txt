@@ -3,10 +3,10 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 0 to 2
-    ali:item enderio:copper_alloy_ingot x1
+    ali:item enderio:copper_alloy_ingot x1-2
       | Chance: 2.5%
       | Count: 1 to 2
-    ali:item enderio:redstone_alloy_ingot x1
+    ali:item enderio:redstone_alloy_ingot x1-3
       | Chance: 4.37%
       | Count: 1 to 3
     ali:item enderio:pulsating_alloy_ingot x1
@@ -15,7 +15,7 @@ ali:loot_table
     ali:item enderio:vibrant_alloy_ingot x1
       | Chance: 2.5%
       | Count: 1
-    ali:item enderio:stone_gear x1
+    ali:item enderio:stone_gear x1-2
       | Chance: 5%
       | Count: 1 to 2
     ali:item enderio:iron_gear x1

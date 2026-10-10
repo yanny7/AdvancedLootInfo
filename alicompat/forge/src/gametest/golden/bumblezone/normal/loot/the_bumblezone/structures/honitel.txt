@@ -3,7 +3,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 3 to 6
-    ali:item the_bumblezone:bee_bread x1
+    ali:item the_bumblezone:bee_bread x1-2
       | Chance: 15.29%
       |   -> Bad Luck: 15.47%
       |   -> Luck 1: 15.11%
@@ -11,7 +11,7 @@ ali:loot_table
       |   -> Luck 3: 14.76%
       |   -> Luck 4: 14.6%
       | Count: 1 to 2
-    ali:item minecraft:honeycomb x1
+    ali:item minecraft:honeycomb x1-3
       | Chance: 15.29%
       |   -> Bad Luck: 15.47%
       |   -> Luck 1: 15.11%
@@ -19,7 +19,7 @@ ali:loot_table
       |   -> Luck 3: 14.76%
       |   -> Luck 4: 14.6%
       | Count: 1 to 3
-    ali:item minecraft:cookie x1
+    ali:item minecraft:cookie x1-3
       | Chance: 13.52%
       |   -> Bad Luck: 13.68%
       |   -> Luck 1: 13.36%
@@ -27,7 +27,7 @@ ali:loot_table
       |   -> Luck 3: 13.06%
       |   -> Luck 4: 12.91%
       | Count: 1 to 3
-    ali:item the_bumblezone:bee_stinger x1
+    ali:item the_bumblezone:bee_stinger x1-2
       | Chance: 11.76%
       |   -> Bad Luck: 11.9%
       |   -> Luck 1: 11.62%
@@ -35,7 +35,7 @@ ali:loot_table
       |   -> Luck 3: 11.36%
       |   -> Luck 4: 11.23%
       | Count: 1 to 2
-    ali:item the_bumblezone:sticky_honey_residue x1
+    ali:item the_bumblezone:sticky_honey_residue x3-5
       | Chance: 3.53%
       |   -> Bad Luck: 3.57%
       |   -> Luck 1: 3.49%
@@ -43,7 +43,7 @@ ali:loot_table
       |   -> Luck 3: 3.41%
       |   -> Luck 4: 3.37%
       | Count: 3 to 5
-    ali:item the_bumblezone:sugar_water_bottle x1
+    ali:item the_bumblezone:sugar_water_bottle x1-3
       | Chance: 3.53%
       |   -> Bad Luck: 3.57%
       |   -> Luck 1: 3.49%
@@ -59,7 +59,7 @@ ali:loot_table
       |   -> Luck 3: 3.41%
       |   -> Luck 4: 3.37%
       | Count: 1
-    ali:item minecraft:pumpkin_pie x1
+    ali:item minecraft:pumpkin_pie x1-2
       | Chance: 3.53%
       |   -> Bad Luck: 3.57%
       |   -> Luck 1: 3.49%
@@ -80,7 +80,7 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item #minecraft:flowers
+          ali:item #minecraft:flowers x1
             | Chance: 3.53%
             |   -> Bad Luck: 3.57%
             |   -> Luck 1: 3.49%
@@ -132,7 +132,7 @@ ali:loot_table
       |   -> Luck 3: 1.36%
       |   -> Luck 4: 1.35%
       | Count: 1
-    ali:item minecraft:bowl x1
+    ali:item minecraft:bowl x3-5
       | Chance: 1%
       |   -> Bad Luck: 1.01%
       |   -> Luck 1: 0.99%
@@ -180,7 +180,7 @@ ali:loot_table
       |   -> Luck 3: 0.97%
       |   -> Luck 4: 0.95%
       | Count: 1
-    ali:item minecraft:name_tag x1
+    ali:item minecraft:name_tag x1-2
       | Chance: 1%
       |   -> Bad Luck: 1.01%
       |   -> Luck 1: 0.99%
@@ -188,7 +188,7 @@ ali:loot_table
       |   -> Luck 3: 0.97%
       |   -> Luck 4: 0.95%
       | Count: 1 to 2
-    ali:item minecraft:map x1
+    ali:item minecraft:map x1-2
       | Chance: 1%
       |   -> Bad Luck: 1.01%
       |   -> Luck 1: 0.99%
@@ -220,7 +220,7 @@ ali:loot_table
       |   -> Luck 3: 0.97%
       |   -> Luck 4: 0.95%
       | Count: 1
-    ali:item minecraft:daylight_detector x1
+    ali:item minecraft:daylight_detector x1-2
       | Chance: 1%
       |   -> Bad Luck: 1.01%
       |   -> Luck 1: 0.99%
@@ -228,7 +228,7 @@ ali:loot_table
       |   -> Luck 3: 0.97%
       |   -> Luck 4: 0.95%
       | Count: 1 to 2
-    ali:item minecraft:note_block x1
+    ali:item minecraft:note_block x1-2
       | Chance: 1%
       |   -> Bad Luck: 1.01%
       |   -> Luck 1: 0.99%
@@ -244,7 +244,7 @@ ali:loot_table
       |   -> Luck 3: 0.97%
       |   -> Luck 4: 0.95%
       | Count: 1
-    ali:item minecraft:bookshelf x1
+    ali:item minecraft:bookshelf x2-4
       | Chance: 1%
       |   -> Bad Luck: 1.01%
       |   -> Luck 1: 0.99%
@@ -268,7 +268,7 @@ ali:loot_table
       |   -> Luck 3: 0.11%
       |   -> Luck 4: 0.11%
       | Count: 1
-    ali:item #the_bumblezone:banner_patterns
+    ali:item #the_bumblezone:banner_patterns x1
       | Chance: 0.12%
       |   -> Bad Luck: 0.12%
       |   -> Luck 1: 0.12%
@@ -276,7 +276,7 @@ ali:loot_table
       |   -> Luck 3: 0.11%
       |   -> Luck 4: 0.11%
       | Count: 1
-    ali:item #minecraft:candles
+    ali:item #minecraft:candles x2-5
       | Chance: 0.06%
       |   -> Bad Luck: 0.06%
       |   -> Luck 1: 0.06%
@@ -284,7 +284,7 @@ ali:loot_table
       |   -> Luck 3: 0.06%
       |   -> Luck 4: 0.06%
       | Count: 2 to 5
-    ali:item #the_bumblezone:super_candles
+    ali:item #the_bumblezone:super_candles x2-4
       | Chance: 0.06%
       |   -> Bad Luck: 0.06%
       |   -> Luck 1: 0.06%
@@ -295,10 +295,10 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item the_bumblezone:bee_stinger x1
+    ali:item the_bumblezone:bee_stinger x1-4
       | Chance: 66.67%
       | Count: 1 to 4
-    ali:item minecraft:honeycomb x1
+    ali:item minecraft:honeycomb x2-5
       | Chance: 33.33%
       | Count: 2 to 5
   ali:loot_pool

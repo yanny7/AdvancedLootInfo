@@ -12,7 +12,7 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Enchantment: Silk Touch
         |     -> Level: ≥ 1
-      ali:item minecraft:clay_ball x1
+      ali:item minecraft:clay_ball x4
         | Count: 4
         | ----- Modifiers -----
         | Set Count:

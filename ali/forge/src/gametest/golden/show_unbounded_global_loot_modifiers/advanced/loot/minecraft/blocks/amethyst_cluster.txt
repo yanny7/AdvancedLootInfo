@@ -14,7 +14,7 @@ ali:loot_table
         |     -> Level: ≥ 1
       ali:alternatives
         | Selects only first successful entry
-        ali:item minecraft:amethyst_shard x1
+        ali:item minecraft:amethyst_shard x4-16
           | Count: 4 × max(1; U[0; 1])
           |   -> Fortune LVL: 4 × max(1; U[0; LVL + 1])
           |   -> Fortune I: 4 to 8  ~4 (67%)
@@ -31,7 +31,7 @@ ali:loot_table
           | Apply Bonus:
           |   -> Enchantment: Fortune
           |   -> Formula: minecraft:ore_drops
-        ali:item minecraft:amethyst_shard x1
+        ali:item minecraft:amethyst_shard x2
           | Count: 2
           | ----- Modifiers -----
           | Set Count:

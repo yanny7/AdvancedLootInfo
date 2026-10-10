@@ -3,10 +3,10 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 2 to 8
-    ali:item minecraft:coal x1
+    ali:item minecraft:coal x1-4
       | Chance: 35.71%
       | Count: 1 to 4
-    ali:item minecraft:wheat x1
+    ali:item minecraft:wheat x2-3
       | Chance: 35.71%
       | Count: 2 to 3
     ali:item minecraft:rotten_flesh x1
@@ -91,7 +91,7 @@ ali:loot_table
       ali:loot_pool
         | Selects random entry
         | Rolls: 1 to 3
-        ali:item enderio:dark_steel_ingot x1
+        ali:item enderio:dark_steel_ingot x1-3
           | Chance: 5%
           | Count: 1 to 3
           | ----- Predicates -----

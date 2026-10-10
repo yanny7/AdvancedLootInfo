@@ -3,7 +3,7 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item grimoireofgaia:stone_coal x1
+    ali:item grimoireofgaia:stone_coal x0-5
       | Count: 0 to 2
       |   -> Looting I: 0 to 3  ~1 to 2 (33%)
       |   -> Looting II: 0 to 4  ~2 (33%)
@@ -15,7 +15,7 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item #forge:nuggets/gold
+    ali:item #forge:nuggets/gold x0-3
       | Count: 0 to 3
   ali:loot_pool
     | Selects random entry

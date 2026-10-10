@@ -235,7 +235,7 @@ ali:trade
       | Uses: 3
       | XP: 30
       | Price Multiplier: 0.2
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x13-27
       ali:item minecraft:air x0
       ali:item kaleidoscope_cookery:diamond_kitchen_knife x1 {Damage:0}
         | Enchant With Levels:

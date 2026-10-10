@@ -8,25 +8,25 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 5 to 8
-    ali:item minecraft:iron_ingot x1
+    ali:item minecraft:iron_ingot x1-4
       | Chance: 57.14%
       | Count: 1 to 4
-    ali:item minecraft:gold_ingot x1
+    ali:item minecraft:gold_ingot x1-4
       | Chance: 28.57%
       | Count: 1 to 4
-    ali:item minecraft:tnt x1
+    ali:item minecraft:tnt x1-2
       | Chance: 14.29%
       | Count: 1 to 2
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 3
-    ali:item minecraft:emerald x1
+    ali:item minecraft:emerald x4-8
       | Chance: 33.33%
       | Count: 4 to 8
-    ali:item minecraft:diamond x1
+    ali:item minecraft:diamond x1-2
       | Chance: 33.33%
       | Count: 1 to 2
-    ali:item minecraft:prismarine_crystals x1
+    ali:item minecraft:prismarine_crystals x1-5
       | Chance: 33.33%
       | Count: 1 to 5
   ali:loot_pool
@@ -41,10 +41,10 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 2
-    ali:item minecraft:cooked_cod x1
+    ali:item minecraft:cooked_cod x2-4
       | Chance: 50%
       | Count: 2 to 4
-    ali:item minecraft:cooked_salmon x1
+    ali:item minecraft:cooked_salmon x2-4
       | Chance: 50%
       | Count: 2 to 4
   ali:loot_pool

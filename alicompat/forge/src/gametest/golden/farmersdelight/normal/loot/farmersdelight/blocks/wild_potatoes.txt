@@ -10,7 +10,7 @@ ali:loot_table
         | ----- Predicates -----
         | Can Tool Perform Action:
         |   -> shears_harvest
-      ali:item minecraft:potato x1
+      ali:item minecraft:potato x1-7
         | Count: 1
         |   -> Fortune I: 1 to 3
         |   -> Fortune II: 1 to 5

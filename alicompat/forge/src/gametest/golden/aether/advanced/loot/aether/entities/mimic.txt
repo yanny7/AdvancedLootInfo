@@ -3,7 +3,7 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:chest x1
+    ali:item minecraft:chest x1-4
       | Count: 1
       |   -> Looting LVL: 1 + round(LVL × U[0; 1))
       |   -> Looting I: 1 to 2
@@ -19,21 +19,21 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 3
-    ali:item aether:golden_dart x1
+    ali:item aether:golden_dart x4
       | Chance: 9.09%
       | Count: 4
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 4
       |   -> Add: False
-    ali:item aether:enchanted_dart x1
+    ali:item aether:enchanted_dart x4
       | Chance: 9.09%
       | Count: 4
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 4
       |   -> Add: False
-    ali:item aether:poison_dart x1
+    ali:item aether:poison_dart x4
       | Chance: 9.09%
       | Count: 4
       | ----- Modifiers -----

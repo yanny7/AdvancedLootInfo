@@ -6,14 +6,14 @@ ali:trade
       | Uses: 16
       | XP: 2
       | Price Multiplier: 0.05
-      ali:item minecraft:leather x1
+      ali:item minecraft:leather x6
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 12
       | XP: 1
       | Price Multiplier: 0.2
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item minecraft:leather_leggings x1 {Damage:0}
         | Dyed Randomly
@@ -21,7 +21,7 @@ ali:trade
       | Uses: 12
       | XP: 1
       | Price Multiplier: 0.2
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x7
       ali:item minecraft:air x0
       ali:item minecraft:leather_chestplate x1 {Damage:0}
         | Dyed Randomly
@@ -32,14 +32,14 @@ ali:trade
       | Uses: 12
       | XP: 10
       | Price Multiplier: 0.05
-      ali:item minecraft:flint x1
+      ali:item minecraft:flint x26
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 12
       | XP: 5
       | Price Multiplier: 0.2
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x5
       ali:item minecraft:air x0
       ali:item minecraft:leather_helmet x1 {Damage:0}
         | Dyed Randomly
@@ -47,7 +47,7 @@ ali:trade
       | Uses: 12
       | XP: 5
       | Price Multiplier: 0.2
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x4
       ali:item minecraft:air x0
       ali:item minecraft:leather_boots x1 {Damage:0}
         | Dyed Randomly
@@ -58,14 +58,14 @@ ali:trade
       | Uses: 12
       | XP: 20
       | Price Multiplier: 0.05
-      ali:item minecraft:rabbit_hide x1
+      ali:item minecraft:rabbit_hide x9
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 12
       | XP: 1
       | Price Multiplier: 0.2
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x7
       ali:item minecraft:air x0
       ali:item minecraft:leather_chestplate x1 {Damage:0}
         | Dyed Randomly
@@ -76,14 +76,14 @@ ali:trade
       | Uses: 12
       | XP: 30
       | Price Multiplier: 0.05
-      ali:item minecraft:scute x1
+      ali:item minecraft:scute x4
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 12
       | XP: 15
       | Price Multiplier: 0.2
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x6
       ali:item minecraft:air x0
       ali:item minecraft:leather_horse_armor x1
         | Dyed Randomly
@@ -94,14 +94,14 @@ ali:trade
       | Uses: 12
       | XP: 30
       | Price Multiplier: 0.2
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x6
       ali:item minecraft:air x0
       ali:item minecraft:saddle x1
     ali:items_to_items
       | Uses: 12
       | XP: 30
       | Price Multiplier: 0.2
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x5
       ali:item minecraft:air x0
       ali:item minecraft:leather_helmet x1 {Damage:0}
         | Dyed Randomly

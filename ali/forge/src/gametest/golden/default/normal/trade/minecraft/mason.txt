@@ -6,7 +6,7 @@ ali:trade
       | Uses: 16
       | XP: 2
       | Price Multiplier: 0.05
-      ali:item minecraft:clay_ball x1
+      ali:item minecraft:clay_ball x10
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
@@ -15,7 +15,7 @@ ali:trade
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:brick x1
+      ali:item minecraft:brick x10
   ali:trade_level
     | Level: 2
     | Randomly Selects 2 Of These Trades
@@ -23,7 +23,7 @@ ali:trade
       | Uses: 16
       | XP: 10
       | Price Multiplier: 0.05
-      ali:item minecraft:stone x1
+      ali:item minecraft:stone x20
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
@@ -32,7 +32,7 @@ ali:trade
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:chiseled_stone_bricks x1
+      ali:item minecraft:chiseled_stone_bricks x4
   ali:trade_level
     | Level: 3
     | Randomly Selects 2 Of These Trades
@@ -40,21 +40,21 @@ ali:trade
       | Uses: 16
       | XP: 20
       | Price Multiplier: 0.05
-      ali:item minecraft:granite x1
+      ali:item minecraft:granite x16
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 16
       | XP: 20
       | Price Multiplier: 0.05
-      ali:item minecraft:andesite x1
+      ali:item minecraft:andesite x16
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 16
       | XP: 20
       | Price Multiplier: 0.05
-      ali:item minecraft:diorite x1
+      ali:item minecraft:diorite x16
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
@@ -63,28 +63,28 @@ ali:trade
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:dripstone_block x1
+      ali:item minecraft:dripstone_block x4
     ali:items_to_items
       | Uses: 16
       | XP: 10
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:polished_andesite x1
+      ali:item minecraft:polished_andesite x4
     ali:items_to_items
       | Uses: 16
       | XP: 10
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:polished_diorite x1
+      ali:item minecraft:polished_diorite x4
     ali:items_to_items
       | Uses: 16
       | XP: 10
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:polished_granite x1
+      ali:item minecraft:polished_granite x4
   ali:trade_level
     | Level: 4
     | Randomly Selects 2 Of These Trades
@@ -92,7 +92,7 @@ ali:trade
       | Uses: 12
       | XP: 30
       | Price Multiplier: 0.05
-      ali:item minecraft:quartz x1
+      ali:item minecraft:quartz x12
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items

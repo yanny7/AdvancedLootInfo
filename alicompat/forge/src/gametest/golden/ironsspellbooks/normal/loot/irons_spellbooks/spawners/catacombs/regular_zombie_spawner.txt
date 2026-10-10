@@ -18,7 +18,7 @@ ali:loot_table
       | ----- Modifiers -----
       | Set Potion:
       |   -> Potion: Potion of Mana
-    ali:item minecraft:tipped_arrow x1 {Potion:"minecraft:healing"}
+    ali:item minecraft:tipped_arrow x2-5 {Potion:"minecraft:healing"}
       | Chance: 25%
       | Count: 2 to 5
       | ----- Modifiers -----
@@ -33,13 +33,13 @@ ali:loot_table
     ali:empty
       | Drops nothing
       | Chance: 23.08%
-    ali:item minecraft:gold_ingot x1
+    ali:item minecraft:gold_ingot x2-5
       | Chance: 23.08%
       | Count: 2 to 5
     ali:item minecraft:diamond x1
       | Chance: 7.69%
       | Count: 1
-    ali:item minecraft:emerald x1
+    ali:item minecraft:emerald x1-3
       | Chance: 7.69%
       | Count: 1 to 3
   ali:loot_pool
@@ -62,7 +62,7 @@ ali:loot_table
     ali:empty
       | Drops nothing
       | Chance: 50%
-    ali:item irons_spellbooks:arcane_essence x1
+    ali:item irons_spellbooks:arcane_essence x1-16
       | Chance: 50%
       | Count: 1 to 16
   ali:loot_pool

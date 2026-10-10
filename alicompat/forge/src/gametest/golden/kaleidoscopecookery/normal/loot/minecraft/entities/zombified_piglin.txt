@@ -3,7 +3,7 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:rotten_flesh x1
+    ali:item minecraft:rotten_flesh x0-4
       | Count: 0 to 1
       |   -> Looting I: 0 to 2  ~1 (50%)
       |   -> Looting II: 0 to 3  ~1 to 2 (38%)
@@ -15,7 +15,7 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:gold_nugget x1
+    ali:item minecraft:gold_nugget x0-4
       | Count: 0 to 1
       |   -> Looting I: 0 to 2  ~1 (50%)
       |   -> Looting II: 0 to 3  ~1 to 2 (38%)
@@ -42,7 +42,7 @@ ali:entity_loot_table
       ali:loot_pool
         | Selects random entry
         | Rolls: 1
-        ali:item kaleidoscope_cookery:oil x1
+        ali:item kaleidoscope_cookery:oil x1-5
           | Count: 1 to 2
           |   -> Looting I: 1 to 3  ~2 (50%)
           |   -> Looting II: 1 to 4  ~2 to 3 (38%)

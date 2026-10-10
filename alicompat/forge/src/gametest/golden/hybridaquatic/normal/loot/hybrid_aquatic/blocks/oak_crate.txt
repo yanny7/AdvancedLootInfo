@@ -30,25 +30,25 @@ ali:loot_table
               | ----- Predicates -----
               | Match Tool:
               |   -> Tag: minecraft:axes
-            ali:item minecraft:iron_ingot x1
+            ali:item minecraft:iron_ingot x3-9
               | Chance: 11.11%
               | Count: 3 to 9
               | ----- Predicates -----
               | Match Tool:
               |   -> Tag: minecraft:axes
-            ali:item minecraft:gold_ingot x1
+            ali:item minecraft:gold_ingot x3-9
               | Chance: 11.11%
               | Count: 3 to 9
               | ----- Predicates -----
               | Match Tool:
               |   -> Tag: minecraft:axes
-            ali:item minecraft:diamond x1
+            ali:item minecraft:diamond x1-3
               | Chance: 11.11%
               | Count: 1 to 3
               | ----- Predicates -----
               | Match Tool:
               |   -> Tag: minecraft:axes
-            ali:item minecraft:emerald x1
+            ali:item minecraft:emerald x1-3
               | Chance: 11.11%
               | Count: 1 to 3
               | ----- Predicates -----
@@ -60,7 +60,7 @@ ali:loot_table
               | ----- Predicates -----
               | Match Tool:
               |   -> Tag: minecraft:axes
-            ali:item minecraft:coast_armor_trim_smithing_template x1
+            ali:item minecraft:coast_armor_trim_smithing_template x1-4
               | Chance: 11.11%
               | Count: 1 to 4
               | ----- Predicates -----
@@ -69,7 +69,7 @@ ali:loot_table
           ali:loot_pool
             | Selects random entry
             | Rolls: 1
-            ali:item hybrid_aquatic:driftwood_log x1
+            ali:item hybrid_aquatic:driftwood_log x16-32
               | Chance: 50%
               | Count: 16 to 32
               | ----- Predicates -----
@@ -123,19 +123,19 @@ ali:loot_table
           ali:loot_pool
             | Selects random entry
             | Rolls: 1
-            ali:item minecraft:oak_log x1
+            ali:item minecraft:oak_log x8-32
               | Chance: 33.33%
               | Count: 8 to 32
               | ----- Predicates -----
               | Match Tool:
               |   -> Tag: minecraft:axes
-            ali:item minecraft:oak_sapling x1
+            ali:item minecraft:oak_sapling x1-4
               | Chance: 33.33%
               | Count: 1 to 4
               | ----- Predicates -----
               | Match Tool:
               |   -> Tag: minecraft:axes
-            ali:item minecraft:apple x1
+            ali:item minecraft:apple x3-9
               | Chance: 33.33%
               | Count: 3 to 9
               | ----- Predicates -----

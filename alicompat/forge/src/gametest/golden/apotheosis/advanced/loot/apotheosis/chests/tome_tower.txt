@@ -21,7 +21,7 @@ ali:loot_table
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
-    ali:item minecraft:iron_ingot x1
+    ali:item minecraft:iron_ingot x1-5
       | Chance: 11.49%
       |   -> luck: 10000% ÷ (max(0%; 3000% + floor(luck)) + max(0%; 3000% + floor(200% × luck)) + 63000% + max(0%; 2000% + floor(luck)) + max(0%; 8000% + floor(500% × luck)) + max(0%; 8000% + floor(500% × luck)))
       |   -> Bad Luck: 11.68%
@@ -30,7 +30,7 @@ ali:loot_table
       |   -> Luck 3: 10.96%
       |   -> Luck 4: 10.8%
       | Count: 1 to 5
-    ali:item minecraft:gold_ingot x1
+    ali:item minecraft:gold_ingot x1-5
       | Chance: 11.49%
       |   -> luck: 10000% ÷ (max(0%; 3000% + floor(luck)) + max(0%; 3000% + floor(200% × luck)) + 63000% + max(0%; 2000% + floor(luck)) + max(0%; 8000% + floor(500% × luck)) + max(0%; 8000% + floor(500% × luck)))
       |   -> Bad Luck: 11.68%
@@ -59,7 +59,7 @@ ali:loot_table
       |   -> Luck 3: 10.42%
       |   -> Luck 4: 10.8%
       | Count: 1
-    ali:item minecraft:diamond x1
+    ali:item minecraft:diamond x1-3
       | Quality: 1
       | Chance: 3.45%
       |   -> luck: max(0%; 3000% + floor(luck)) ÷ (max(0%; 3000% + floor(luck)) + max(0%; 3000% + floor(200% × luck)) + 63000% + max(0%; 2000% + floor(luck)) + max(0%; 8000% + floor(500% × luck)) + max(0%; 8000% + floor(500% × luck)))
@@ -69,7 +69,7 @@ ali:loot_table
       |   -> Luck 3: 3.62%
       |   -> Luck 4: 3.67%
       | Count: 1 to 3
-    ali:item minecraft:emerald x1
+    ali:item minecraft:emerald x1-5
       | Quality: 2
       | Chance: 3.45%
       |   -> luck: max(0%; 3000% + floor(200% × luck)) ÷ (max(0%; 3000% + floor(luck)) + max(0%; 3000% + floor(200% × luck)) + 63000% + max(0%; 2000% + floor(luck)) + max(0%; 8000% + floor(500% × luck)) + max(0%; 8000% + floor(500% × luck)))
@@ -79,7 +79,7 @@ ali:loot_table
       |   -> Luck 3: 3.95%
       |   -> Luck 4: 4.1%
       | Count: 1 to 5
-    ali:item minecraft:name_tag x1
+    ali:item minecraft:name_tag x1-2
       | Chance: 2.3%
       |   -> luck: 2000% ÷ (max(0%; 3000% + floor(luck)) + max(0%; 3000% + floor(200% × luck)) + 63000% + max(0%; 2000% + floor(luck)) + max(0%; 8000% + floor(500% × luck)) + max(0%; 8000% + floor(500% × luck)))
       |   -> Bad Luck: 2.34%
@@ -88,7 +88,7 @@ ali:loot_table
       |   -> Luck 3: 2.19%
       |   -> Luck 4: 2.16%
       | Count: 1 to 2
-    ali:item minecraft:lead x1
+    ali:item minecraft:lead x1-2
       | Chance: 2.3%
       |   -> luck: 2000% ÷ (max(0%; 3000% + floor(luck)) + max(0%; 3000% + floor(200% × luck)) + 63000% + max(0%; 2000% + floor(luck)) + max(0%; 8000% + floor(500% × luck)) + max(0%; 8000% + floor(500% × luck)))
       |   -> Bad Luck: 2.34%
@@ -107,7 +107,7 @@ ali:loot_table
       |   -> Luck 3: 2.52%
       |   -> Luck 4: 2.59%
       | Count: 1
-    ali:item minecraft:slime_ball x1
+    ali:item minecraft:slime_ball x3-6
       | Chance: 2.3%
       |   -> luck: 2000% ÷ (max(0%; 3000% + floor(luck)) + max(0%; 3000% + floor(200% × luck)) + 63000% + max(0%; 2000% + floor(luck)) + max(0%; 8000% + floor(500% × luck)) + max(0%; 8000% + floor(500% × luck)))
       |   -> Bad Luck: 2.34%

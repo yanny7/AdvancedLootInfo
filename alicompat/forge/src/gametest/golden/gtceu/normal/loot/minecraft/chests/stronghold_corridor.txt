@@ -3,7 +3,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 2 to 3
-    ali:item minecraft:bread x1
+    ali:item minecraft:bread x1-3
       | Chance: 13.39%
       |   -> Bad Luck: 13.64%
       |   -> Luck 1: 13.16%
@@ -11,7 +11,7 @@ ali:loot_table
       |   -> Luck 3: 12.71%
       |   -> Luck 4: 12.5%
       | Count: 1 to 3
-    ali:item minecraft:apple x1
+    ali:item minecraft:apple x1-3
       | Chance: 13.39%
       |   -> Bad Luck: 13.64%
       |   -> Luck 1: 13.16%
@@ -27,7 +27,7 @@ ali:loot_table
       |   -> Luck 3: 8.47%
       |   -> Luck 4: 8.33%
       | Count: 1
-    ali:item minecraft:iron_ingot x1
+    ali:item minecraft:iron_ingot x1-5
       | Chance: 8.93%
       |   -> Bad Luck: 9.09%
       |   -> Luck 1: 8.77%
@@ -35,7 +35,7 @@ ali:loot_table
       |   -> Luck 3: 8.47%
       |   -> Luck 4: 8.33%
       | Count: 1 to 5
-    ali:item gtceu:damascus_steel_ingot x1
+    ali:item gtceu:damascus_steel_ingot x2-8
       | Quality: 1
       | Chance: 5.36%
       |   -> Bad Luck: 4.55%
@@ -50,7 +50,7 @@ ali:loot_table
       |     -> Item: Damascus Steel Ingot
       |     -> Count: 1
       |   -> Count: 2 to 8
-    ali:item gtceu:damascus_steel_ingot x1
+    ali:item gtceu:damascus_steel_ingot x3-12
       | Quality: 1
       | Chance: 5.36%
       |   -> Bad Luck: 4.55%
@@ -65,7 +65,7 @@ ali:loot_table
       |     -> Item: Damascus Steel Ingot
       |     -> Count: 1
       |   -> Count: 3 to 12
-    ali:item minecraft:gold_ingot x1
+    ali:item minecraft:gold_ingot x1-3
       | Chance: 4.46%
       |   -> Bad Luck: 4.55%
       |   -> Luck 1: 4.39%
@@ -73,7 +73,7 @@ ali:loot_table
       |   -> Luck 3: 4.24%
       |   -> Luck 4: 4.17%
       | Count: 1 to 3
-    ali:item minecraft:redstone x1
+    ali:item minecraft:redstone x4-9
       | Chance: 4.46%
       |   -> Bad Luck: 4.55%
       |   -> Luck 1: 4.39%
@@ -129,7 +129,7 @@ ali:loot_table
       |   -> Luck 3: 4.24%
       |   -> Luck 4: 4.17%
       | Count: 1
-    ali:item minecraft:diamond x1
+    ali:item minecraft:diamond x1-3
       | Chance: 2.68%
       |   -> Bad Luck: 2.73%
       |   -> Luck 1: 2.63%

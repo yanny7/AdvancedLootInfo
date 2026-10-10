@@ -11,14 +11,14 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item #irons_spellbooks:lootable_focus
+          ali:item #irons_spellbooks:lootable_focus x1-5
             | Chance: 66.67%
             | Count: max(0; U[1; 5])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 5
             |   -> Add: False
-    ali:item irons_spellbooks:arcane_essence x1
+    ali:item irons_spellbooks:arcane_essence x1-2
       | Chance: 16.67%
       | Count: max(0; U[1; 2])
       | ----- Modifiers -----

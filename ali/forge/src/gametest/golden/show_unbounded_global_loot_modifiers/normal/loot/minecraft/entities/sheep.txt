@@ -3,7 +3,7 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:mutton x1
+    ali:item minecraft:mutton x1-5
       | Count: 1 to 2
       |   -> Looting I: 1 to 3  ~2 (50%)
       |   -> Looting II: 1 to 4  ~2 to 3 (38%)

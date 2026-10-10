@@ -12,7 +12,7 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Enchantment: Silk Touch
         |     -> Level: ≥ 1
-      ali:item #ae2:inscriber_presses
+      ali:item #ae2:inscriber_presses x1
         | Count: 1
         | ----- Predicates -----
         | Survives Explosion

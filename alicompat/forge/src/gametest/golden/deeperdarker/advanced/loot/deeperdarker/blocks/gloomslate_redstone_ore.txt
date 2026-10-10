@@ -12,7 +12,7 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Enchantment: Silk Touch
         |     -> Level: ≥ 1
-      ali:item minecraft:redstone x1
+      ali:item minecraft:redstone x4-8
         | Count: max(0; U[4; 5])
         |   -> Fortune LVL: max(0; U[4; 5]) + U[0; LVL]
         |   -> Fortune I: 4 to 6  ~5 (50%)

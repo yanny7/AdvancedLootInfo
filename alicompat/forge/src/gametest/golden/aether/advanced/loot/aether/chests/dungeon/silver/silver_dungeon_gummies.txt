@@ -3,14 +3,14 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item aether:golden_gummy_swet x1
+    ali:item aether:golden_gummy_swet x1-4
       | Chance: 75%
       | Count: max(0; U[1; 4])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 4
       |   -> Add: False
-    ali:item aether:blue_gummy_swet x1
+    ali:item aether:blue_gummy_swet x1-4
       | Chance: 25%
       | Count: max(0; U[1; 4])
       | ----- Modifiers -----

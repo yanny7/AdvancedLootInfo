@@ -3,10 +3,10 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 5 to 12
-    ali:item aether:ambrosium_shard x1
+    ali:item aether:ambrosium_shard x1-3
       | Chance: 23.08%
       | Count: 1 to 3
-    ali:item aether:ambrosium_torch x1
+    ali:item aether:ambrosium_torch x2-8
       | Chance: 19.23%
       | Count: 2 to 8
     ali:item minecraft:flint x1
@@ -21,10 +21,10 @@ ali:loot_table
     ali:item aether:zanite_gemstone x1
       | Chance: 7.69%
       | Count: 1
-    ali:item aether:pillar x1
+    ali:item aether:pillar x1-3
       | Chance: 3.85%
       | Count: 1 to 3
-    ali:item aether:pillar_top x1
+    ali:item aether:pillar_top x1-3
       | Chance: 3.85%
       | Count: 1 to 3
     ali:item aether:angelic_stone x1

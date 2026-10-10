@@ -10,7 +10,7 @@ ali:loot_table
         | ----- Predicates -----
         | Match Tool:
         |   -> Item: Shears
-      ali:item minecraft:wheat_seeds x1
+      ali:item minecraft:wheat_seeds x1-7
         | Chance: 12.5%
         | Count: 1
         |   -> Fortune LVL: 1 + U[0; 2 × LVL]

@@ -12,7 +12,7 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Enchantment: Silk Touch
         |     -> Level: ≥ 1
-      ali:item deeperdarker:grime_ball x1
+      ali:item deeperdarker:grime_ball x2-4
         | Count: max(0; U[2; 4])
         | ----- Modifiers -----
         | Set Count:

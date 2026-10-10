@@ -196,7 +196,7 @@ ali:loot_table
             | Set Damage:
             |   -> Damage: 0% to 90%
             |   -> Add: False
-          ali:item minecraft:ink_sac x1
+          ali:item minecraft:ink_sac x10
             | Chance: 0.09%
             | Count: 10
             | ----- Predicates -----
@@ -770,7 +770,7 @@ ali:loot_table
                 |   -> Destination: the_bumblezone:honey_compass/lesser_misc_locating
                 |   -> Search Radius: 50
                 |   -> Skip Known Structures: False
-              ali:item #the_bumblezone:music_discs
+              ali:item #the_bumblezone:music_discs x1
                 | Chance: 0.07%
                 | Count: 1
                 | ----- Predicates -----

@@ -45,7 +45,7 @@ ali:loot_table
     ali:item minecraft:flower_banner_pattern x1
       | Chance: 2.33%
       | Count: 1
-    ali:item #the_bumblezone:banner_patterns
+    ali:item #the_bumblezone:banner_patterns x1
       | Chance: 2.33%
       | Count: 1
     ali:item minecraft:book x1 {Enchantments:[{id:"the_bumblezone:hive_lifeline",lvl:1s}]}

@@ -3,7 +3,7 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item irons_spellbooks:arcane_essence x1
+    ali:item irons_spellbooks:arcane_essence x4-22
       | Count: 4 to 16
       |   -> Looting I: 4 to 18  ~6 to 16 (8%)
       |   -> Looting II: 4 to 20  ~8 to 16 (8%)
@@ -15,7 +15,7 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:string x1
+    ali:item minecraft:string x2-8
       | Count: 2 to 5
       |   -> Looting I: 2 to 6  ~3 to 5 (25%)
       |   -> Looting II: 2 to 7  ~4 to 5 (25%)

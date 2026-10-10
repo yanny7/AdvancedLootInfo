@@ -140,15 +140,15 @@ ali:loot_table
     ali:item minecraft:sniffer_egg x1
       | Chance: 0.99%
       | Count: 1
-    ali:item #minecraft:decorated_pot_sherds
+    ali:item #minecraft:decorated_pot_sherds x1
       | Chance: 0.99%
       | Count: 1
-    ali:item #minecraft:trim_templates
+    ali:item #minecraft:trim_templates x1
       | Chance: 0.99%
       | Count: 1
     ali:item minecraft:flower_banner_pattern x1
       | Chance: 0.99%
       | Count: 1
-    ali:item #the_bumblezone:banner_patterns
+    ali:item #the_bumblezone:banner_patterns x1
       | Chance: 0.99%
       | Count: 1

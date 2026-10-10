@@ -3,7 +3,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 2 to 6
-    ali:item minecraft:bone x1
+    ali:item minecraft:bone x4-6
       | Chance: 17.09%
       |   -> Bad Luck: 18.35%
       |   -> Luck 1: 16%
@@ -11,7 +11,7 @@ ali:loot_table
       |   -> Luck 3: 14.18%
       |   -> Luck 4: 13.42%
       | Count: 4 to 6
-    ali:item minecraft:rotten_flesh x1
+    ali:item minecraft:rotten_flesh x3-7
       | Chance: 13.68%
       |   -> Bad Luck: 14.68%
       |   -> Luck 1: 12.8%
@@ -19,7 +19,7 @@ ali:loot_table
       |   -> Luck 3: 11.35%
       |   -> Luck 4: 10.74%
       | Count: 3 to 7
-    ali:item minecraft:gold_ingot x1
+    ali:item minecraft:gold_ingot x2-7
       | Chance: 12.82%
       |   -> Bad Luck: 13.76%
       |   -> Luck 1: 12%
@@ -27,7 +27,7 @@ ali:loot_table
       |   -> Luck 3: 10.64%
       |   -> Luck 4: 10.07%
       | Count: 2 to 7
-    ali:item minecraft:bamboo x1
+    ali:item minecraft:bamboo x1-3
       | Chance: 12.82%
       |   -> Bad Luck: 13.76%
       |   -> Luck 1: 12%
@@ -35,7 +35,7 @@ ali:loot_table
       |   -> Luck 3: 10.64%
       |   -> Luck 4: 10.07%
       | Count: 1 to 3
-    ali:item gtceu:bronze_ingot x1
+    ali:item gtceu:bronze_ingot x4-16
       | Quality: 1
       | Chance: 10.26%
       |   -> Bad Luck: 10.09%
@@ -50,7 +50,7 @@ ali:loot_table
       |     -> Item: Bronze Ingot
       |     -> Count: 1
       |   -> Count: 4 to 16
-    ali:item minecraft:iron_ingot x1
+    ali:item minecraft:iron_ingot x1-5
       | Chance: 8.55%
       |   -> Bad Luck: 9.17%
       |   -> Luck 1: 8%
@@ -58,7 +58,7 @@ ali:loot_table
       |   -> Luck 3: 7.09%
       |   -> Luck 4: 6.71%
       | Count: 1 to 5
-    ali:item gtceu:red_garnet_gem x1
+    ali:item gtceu:red_garnet_gem x2-8
       | Quality: 1
       | Chance: 3.42%
       |   -> Bad Luck: 2.75%
@@ -73,7 +73,7 @@ ali:loot_table
       |     -> Item: Red Garnet
       |     -> Count: 1
       |   -> Count: 2 to 8
-    ali:item gtceu:yellow_garnet_gem x1
+    ali:item gtceu:yellow_garnet_gem x2-8
       | Quality: 1
       | Chance: 3.42%
       |   -> Bad Luck: 2.75%
@@ -88,7 +88,7 @@ ali:loot_table
       |     -> Item: Yellow Garnet
       |     -> Count: 1
       |   -> Count: 2 to 8
-    ali:item minecraft:diamond x1
+    ali:item minecraft:diamond x1-3
       | Chance: 2.56%
       |   -> Bad Luck: 2.75%
       |   -> Luck 1: 2.4%
@@ -104,7 +104,7 @@ ali:loot_table
       |   -> Luck 3: 2.13%
       |   -> Luck 4: 2.01%
       | Count: 1
-    ali:item minecraft:emerald x1
+    ali:item minecraft:emerald x1-3
       | Chance: 1.71%
       |   -> Bad Luck: 1.83%
       |   -> Luck 1: 1.6%
@@ -112,7 +112,7 @@ ali:loot_table
       |   -> Luck 3: 1.42%
       |   -> Luck 4: 1.34%
       | Count: 1 to 3
-    ali:item gtceu:ruby_gem x1
+    ali:item gtceu:ruby_gem x2-8
       | Quality: 1
       | Chance: 1.71%
       |   -> Bad Luck: 0.92%
@@ -127,7 +127,7 @@ ali:loot_table
       |     -> Item: Ruby
       |     -> Count: 1
       |   -> Count: 2 to 8
-    ali:item gtceu:sapphire_gem x1
+    ali:item gtceu:sapphire_gem x2-8
       | Quality: 1
       | Chance: 1.71%
       |   -> Bad Luck: 0.92%
@@ -142,7 +142,7 @@ ali:loot_table
       |     -> Item: Sapphire
       |     -> Count: 1
       |   -> Count: 2 to 8
-    ali:item gtceu:green_sapphire_gem x1
+    ali:item gtceu:green_sapphire_gem x2-8
       | Quality: 1
       | Chance: 1.71%
       |   -> Bad Luck: 0.92%
@@ -157,7 +157,7 @@ ali:loot_table
       |     -> Item: Green Sapphire
       |     -> Count: 1
       |   -> Count: 2 to 8
-    ali:item gtceu:olivine_gem x1
+    ali:item gtceu:olivine_gem x2-8
       | Quality: 1
       | Chance: 1.71%
       |   -> Bad Luck: 0.92%
@@ -230,6 +230,6 @@ ali:loot_table
     ali:empty
       | Drops nothing
       | Chance: 66.67%
-    ali:item minecraft:wild_armor_trim_smithing_template x1
+    ali:item minecraft:wild_armor_trim_smithing_template x2
       | Chance: 33.33%
       | Count: 2

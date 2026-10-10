@@ -9,10 +9,10 @@ ali:loot_table
     ali:item minecraft:amethyst_shard x1
       | Chance: 20.69%
       | Count: 1
-    ali:item irons_spellbooks:arcane_essence x1
+    ali:item irons_spellbooks:arcane_essence x1-3
       | Chance: 17.24%
       | Count: 1 to 3
-    ali:item minecraft:paper x1
+    ali:item minecraft:paper x1-5
       | Chance: 17.24%
       | Count: 1 to 5
     ali:item minecraft:rabbit_stew x1

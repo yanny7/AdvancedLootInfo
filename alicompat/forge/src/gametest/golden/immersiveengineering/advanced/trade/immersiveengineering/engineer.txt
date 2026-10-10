@@ -6,7 +6,7 @@ ali:trade
       | Uses: 16
       | XP: 2
       | Price Multiplier: 0.05
-      ali:item #forge:treated_wood
+      ali:item #forge:treated_wood x4-6
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
@@ -15,14 +15,14 @@ ali:trade
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item immersiveengineering:treated_scaffold x1
+      ali:item immersiveengineering:treated_scaffold x5-8
     ali:items_to_items
       | Uses: 12
       | XP: 2
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item immersiveengineering:balloon x1
+      ali:item immersiveengineering:balloon x1-3
   ali:trade_level
     | Level: 2
     | Randomly Selects 2 Of These Trades
@@ -30,14 +30,14 @@ ali:trade
       | Uses: 16
       | XP: 10
       | Price Multiplier: 0.05
-      ali:item #forge:rods/iron
+      ali:item #forge:rods/iron x4-8
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 16
       | XP: 10
       | Price Multiplier: 0.05
-      ali:item #forge:rods/iron
+      ali:item #forge:rods/iron x4-8
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
@@ -46,14 +46,14 @@ ali:trade
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item immersiveengineering:steel_scaffolding_standard x1
+      ali:item immersiveengineering:steel_scaffolding_standard x2-4
     ali:items_to_items
       | Uses: 12
       | XP: 5
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item immersiveengineering:alu_scaffolding_standard x1
+      ali:item immersiveengineering:alu_scaffolding_standard x2-4
   ali:trade_level
     | Level: 3
     | Randomly Selects 2 Of These Trades
@@ -63,19 +63,19 @@ ali:trade
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item immersiveengineering:wirecoil_structure_rope x1
+      ali:item immersiveengineering:wirecoil_structure_rope x4-6
     ali:items_to_items
       | Uses: 16
       | XP: 10
       | Price Multiplier: 0.05
-      ali:item immersiveengineering:connector_structural x1
+      ali:item immersiveengineering:connector_structural x4-8
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 8
       | XP: 15
       | Price Multiplier: 0.05
-      ali:item immersiveengineering:concrete x1
+      ali:item immersiveengineering:concrete x4-8
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
@@ -84,7 +84,7 @@ ali:trade
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item immersiveengineering:concrete_leaded x1
+      ali:item immersiveengineering:concrete_leaded x4-6
   ali:trade_level
     | Level: 4
     | Randomly Selects 2 Of These Trades
@@ -94,26 +94,26 @@ ali:trade
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item immersiveengineering:treated_post x1
+      ali:item immersiveengineering:treated_post x2-3
     ali:items_to_items
       | Uses: 16
       | XP: 10
       | Price Multiplier: 0.05
-      ali:item immersiveengineering:insulating_glass x1
+      ali:item immersiveengineering:insulating_glass x2-6
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 16
       | XP: 10
       | Price Multiplier: 0.05
-      ali:item immersiveengineering:duroplast x1
+      ali:item immersiveengineering:duroplast x2-6
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 1
       | XP: 30
       | Price Multiplier: 0.5
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x8-15
       ali:item minecraft:compass x1
       ali:item minecraft:filled_map x1 {display:{Name:'{"translate":"item.immersiveengineering.map_orevein"}'}}
   ali:trade_level
@@ -123,6 +123,6 @@ ali:trade
       | Uses: 1
       | XP: 30
       | Price Multiplier: 0.5
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x8-15
       ali:item minecraft:compass x1
       ali:item minecraft:filled_map x1 {display:{Name:'{"translate":"item.immersiveengineering.map_orevein"}'}}

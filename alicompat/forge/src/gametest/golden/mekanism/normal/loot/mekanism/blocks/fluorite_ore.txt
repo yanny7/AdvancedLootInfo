@@ -12,7 +12,7 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Enchantment: Silk Touch
         |     -> Level: ≥ 1
-      ali:item mekanism:fluorite_gem x1
+      ali:item mekanism:fluorite_gem x2-16
         | Count: 2 to 4
         |   -> Fortune I: 2 to 8  ~4 (33%)
         |   -> Fortune II: 2 to 12  ~4 (25%)

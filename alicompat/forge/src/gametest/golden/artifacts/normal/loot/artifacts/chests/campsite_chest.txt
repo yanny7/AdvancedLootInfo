@@ -57,55 +57,55 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 4
-    ali:item minecraft:gunpowder x1
+    ali:item minecraft:gunpowder x2-8
       | Chance: 11.11%
       | Count: 2 to 8
-    ali:item minecraft:rotten_flesh x1
+    ali:item minecraft:rotten_flesh x2-8
       | Chance: 11.11%
       | Count: 2 to 8
-    ali:item minecraft:spider_eye x1
+    ali:item minecraft:spider_eye x2-8
       | Chance: 11.11%
       | Count: 2 to 8
-    ali:item minecraft:string x1
+    ali:item minecraft:string x2-8
       | Chance: 11.11%
       | Count: 2 to 8
-    ali:item minecraft:paper x1
+    ali:item minecraft:paper x2-8
       | Chance: 11.11%
       | Count: 2 to 8
-    ali:item minecraft:bone x1
+    ali:item minecraft:bone x2-8
       | Chance: 11.11%
       | Count: 2 to 8
-    ali:item minecraft:stick x1
+    ali:item minecraft:stick x2-8
       | Chance: 6.67%
       | Count: 2 to 8
-    ali:item minecraft:glass_bottle x1
+    ali:item minecraft:glass_bottle x2-8
       | Chance: 6.67%
       | Count: 2 to 8
-    ali:item minecraft:leather x1
+    ali:item minecraft:leather x2-8
       | Chance: 6.67%
       | Count: 2 to 8
-    ali:item minecraft:flint x1
+    ali:item minecraft:flint x2-8
       | Chance: 6.67%
       | Count: 2 to 8
-    ali:item minecraft:feather x1
+    ali:item minecraft:feather x2-8
       | Chance: 6.67%
       | Count: 2 to 8
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 4
-    ali:item minecraft:coal x1
+    ali:item minecraft:coal x4-8
       | Chance: 37.5%
       | Count: 4 to 8
-    ali:item minecraft:raw_copper x1
+    ali:item minecraft:raw_copper x2-8
       | Chance: 18.75%
       | Count: 2 to 8
-    ali:item minecraft:raw_iron x1
+    ali:item minecraft:raw_iron x2-8
       | Chance: 18.75%
       | Count: 2 to 8
-    ali:item minecraft:raw_gold x1
+    ali:item minecraft:raw_gold x2-8
       | Chance: 18.75%
       | Count: 2 to 8
-    ali:item minecraft:diamond x1
+    ali:item minecraft:diamond x1-4
       | Chance: 6.25%
       | Count: 1 to 4
   ali:loot_pool

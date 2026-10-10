@@ -3,55 +3,55 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 5 to 6
-    ali:item minecraft:sculk x1
+    ali:item minecraft:sculk x5-8
       | Chance: 9.09%
       | Count: 5 to 8
-    ali:item deeperdarker:sculk_bone x1
+    ali:item deeperdarker:sculk_bone x2-6
       | Chance: 8.87%
       | Count: 2 to 6
-    ali:item minecraft:echo_shard x1
+    ali:item minecraft:echo_shard x5-9
       | Chance: 8.87%
       | Count: 5 to 9
-    ali:item deeperdarker:grime_brick x1
+    ali:item deeperdarker:grime_brick x7-13
       | Chance: 8.2%
       | Count: 7 to 13
-    ali:item deeperdarker:grime_ball x1
+    ali:item deeperdarker:grime_ball x8-18
       | Chance: 7.54%
       | Count: 8 to 18
-    ali:item minecraft:tnt x1
+    ali:item minecraft:tnt x4-9
       | Chance: 6.65%
       | Count: 4 to 9
-    ali:item minecraft:flint x1
+    ali:item minecraft:flint x1-6
       | Chance: 6.65%
       | Count: 1 to 6
-    ali:item minecraft:iron_ingot x1
+    ali:item minecraft:iron_ingot x4-10
       | Chance: 5.99%
       | Count: 4 to 10
-    ali:item minecraft:quartz x1
+    ali:item minecraft:quartz x5-13
       | Chance: 4.88%
       | Count: 5 to 13
-    ali:item minecraft:redstone x1
+    ali:item minecraft:redstone x3-12
       | Chance: 3.99%
       | Count: 3 to 12
-    ali:item minecraft:disc_fragment_5 x1
+    ali:item minecraft:disc_fragment_5 x1-3
       | Chance: 3.77%
       | Count: 1 to 3
-    ali:item minecraft:lapis_lazuli x1
+    ali:item minecraft:lapis_lazuli x7-19
       | Chance: 3.77%
       | Count: 7 to 19
-    ali:item minecraft:diamond x1
+    ali:item minecraft:diamond x4-8
       | Chance: 3.77%
       | Count: 4 to 8
-    ali:item minecraft:emerald x1
+    ali:item minecraft:emerald x3-9
       | Chance: 3.33%
       | Count: 3 to 9
-    ali:item deeperdarker:crystallized_amber x1
+    ali:item deeperdarker:crystallized_amber x1-3
       | Chance: 3.33%
       | Count: 1 to 3
-    ali:item minecraft:sculk_sensor x1
+    ali:item minecraft:sculk_sensor x1-3
       | Chance: 2.66%
       | Count: 1 to 3
-    ali:item minecraft:sculk_catalyst x1
+    ali:item minecraft:sculk_catalyst x1-2
       | Chance: 2.66%
       | Count: 1 to 2
     ali:item minecraft:iron_helmet x1 {Damage:0}

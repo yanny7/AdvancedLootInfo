@@ -3,7 +3,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 3 to 8
-    ali:item minecraft:bread x1
+    ali:item minecraft:bread x1-3
       | Chance: 9.68%
       |   -> luck: 1500% ÷ (9400% + max(0%; 600% + floor(luck)) + max(0%; 600% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 100% + floor(luck)))
       |   -> Bad Luck: 10.14%
@@ -16,7 +16,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1 to 3
       |   -> Add: False
-    ali:item minecraft:apple x1
+    ali:item minecraft:apple x1-3
       | Chance: 9.68%
       |   -> luck: 1500% ÷ (9400% + max(0%; 600% + floor(luck)) + max(0%; 600% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 100% + floor(luck)))
       |   -> Bad Luck: 10.14%
@@ -29,7 +29,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1 to 3
       |   -> Add: False
-    ali:item gtceu:manganese_ingot x1
+    ali:item gtceu:manganese_ingot x2-8
       | Quality: 1
       | Chance: 7.74%
       |   -> luck: max(0%; 1200% + floor(luck)) ÷ (9400% + max(0%; 600% + floor(luck)) + max(0%; 600% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 100% + floor(luck)))
@@ -45,7 +45,7 @@ ali:loot_table
       |     -> Item: Manganese Ingot
       |     -> Count: 1
       |   -> Count: 2 to 8
-    ali:item gtceu:steel_ingot x1
+    ali:item gtceu:steel_ingot x4-12
       | Quality: 1
       | Chance: 7.74%
       |   -> luck: max(0%; 1200% + floor(luck)) ÷ (9400% + max(0%; 600% + floor(luck)) + max(0%; 600% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 100% + floor(luck)))
@@ -61,7 +61,7 @@ ali:loot_table
       |     -> Item: Steel Ingot
       |     -> Count: 1
       |   -> Count: 4 to 12
-    ali:item gtceu:bronze_ingot x1
+    ali:item gtceu:bronze_ingot x4-12
       | Quality: 1
       | Chance: 7.74%
       |   -> luck: max(0%; 1200% + floor(luck)) ÷ (9400% + max(0%; 600% + floor(luck)) + max(0%; 600% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 100% + floor(luck)))
@@ -77,7 +77,7 @@ ali:loot_table
       |     -> Item: Bronze Ingot
       |     -> Count: 1
       |   -> Count: 4 to 12
-    ali:item gtceu:brass_ingot x1
+    ali:item gtceu:brass_ingot x4-12
       | Quality: 1
       | Chance: 7.74%
       |   -> luck: max(0%; 1200% + floor(luck)) ÷ (9400% + max(0%; 600% + floor(luck)) + max(0%; 600% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 100% + floor(luck)))
@@ -93,7 +93,7 @@ ali:loot_table
       |     -> Item: Brass Ingot
       |     -> Count: 1
       |   -> Count: 4 to 12
-    ali:item minecraft:iron_ingot x1
+    ali:item minecraft:iron_ingot x1-5
       | Chance: 6.45%
       |   -> luck: 1000% ÷ (9400% + max(0%; 600% + floor(luck)) + max(0%; 600% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 100% + floor(luck)))
       |   -> Bad Luck: 6.76%
@@ -106,7 +106,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1 to 5
       |   -> Add: False
-    ali:item gtceu:chromium_dust x1
+    ali:item gtceu:chromium_dust x1-4
       | Quality: 1
       | Chance: 3.87%
       |   -> luck: max(0%; 600% + floor(luck)) ÷ (9400% + max(0%; 600% + floor(luck)) + max(0%; 600% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 100% + floor(luck)))
@@ -122,7 +122,7 @@ ali:loot_table
       |     -> Item: Chromium Dust
       |     -> Count: 1
       |   -> Count: 1 to 4
-    ali:item gtceu:neodymium_dust x1
+    ali:item gtceu:neodymium_dust x2-8
       | Quality: 1
       | Chance: 3.87%
       |   -> luck: max(0%; 600% + floor(luck)) ÷ (9400% + max(0%; 600% + floor(luck)) + max(0%; 600% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 100% + floor(luck)))
@@ -138,7 +138,7 @@ ali:loot_table
       |     -> Item: Neodymium Dust
       |     -> Count: 1
       |   -> Count: 2 to 8
-    ali:item minecraft:gold_ingot x1
+    ali:item minecraft:gold_ingot x1-3
       | Chance: 3.23%
       |   -> luck: 500% ÷ (9400% + max(0%; 600% + floor(luck)) + max(0%; 600% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 100% + floor(luck)))
       |   -> Bad Luck: 3.38%
@@ -205,7 +205,7 @@ ali:loot_table
       |   -> Luck 3: 2.84%
       |   -> Luck 4: 2.73%
       | Count: 1
-    ali:item minecraft:obsidian x1
+    ali:item minecraft:obsidian x3-7
       | Chance: 3.23%
       |   -> luck: 500% ÷ (9400% + max(0%; 600% + floor(luck)) + max(0%; 600% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 100% + floor(luck)))
       |   -> Bad Luck: 3.38%
@@ -218,7 +218,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 3 to 7
       |   -> Add: False
-    ali:item minecraft:oak_sapling x1
+    ali:item minecraft:oak_sapling x3-7
       | Chance: 3.23%
       |   -> luck: 500% ÷ (9400% + max(0%; 600% + floor(luck)) + max(0%; 600% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 100% + floor(luck)))
       |   -> Bad Luck: 3.38%
@@ -231,7 +231,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 3 to 7
       |   -> Add: False
-    ali:item minecraft:diamond x1
+    ali:item minecraft:diamond x1-3
       | Chance: 1.94%
       |   -> luck: 300% ÷ (9400% + max(0%; 600% + floor(luck)) + max(0%; 600% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 100% + floor(luck)))
       |   -> Bad Luck: 2.03%
@@ -280,7 +280,7 @@ ali:loot_table
       |   -> Luck 3: 0.57%
       |   -> Luck 4: 0.55%
       | Count: 1
-    ali:item gtceu:damascus_steel_ingot x1
+    ali:item gtceu:damascus_steel_ingot x4-12
       | Quality: 1
       | Chance: 0.65%
       |   -> luck: max(0%; 100% + floor(luck)) ÷ (9400% + max(0%; 600% + floor(luck)) + max(0%; 600% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 1200% + floor(luck)) + max(0%; 100% + floor(luck)))

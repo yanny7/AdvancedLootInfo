@@ -155,21 +155,21 @@ ali:loot_table
             | Set Count:
             |   -> Count: 1
             |   -> Add: False
-          ali:item minecraft:emerald x1
+          ali:item minecraft:emerald x8-16
             | Chance: 3%
             | Count: max(0; U[8; 16])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 8 to 16
             |   -> Add: False
-          ali:item minecraft:diamond x1
+          ali:item minecraft:diamond x2-6
             | Chance: 3%
             | Count: max(0; U[2; 6])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 2 to 6
             |   -> Add: False
-          ali:item minecraft:sea_lantern x1
+          ali:item minecraft:sea_lantern x8-12
             | Chance: 3%
             | Count: max(0; U[8; 12])
             | ----- Modifiers -----
@@ -183,14 +183,14 @@ ali:loot_table
             | Set Count:
             |   -> Count: 1
             |   -> Add: False
-          ali:item minecraft:ghast_tear x1
+          ali:item minecraft:ghast_tear x2-4
             | Chance: 3%
             | Count: max(0; U[2; 4])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 2 to 4
             |   -> Add: False
-          ali:item minecraft:sculk_catalyst x1
+          ali:item minecraft:sculk_catalyst x1-3
             | Chance: 3%
             | Count: max(0; U[1; 3])
             | ----- Modifiers -----

@@ -25,7 +25,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item aether:skyroot_stick x1
+    ali:item aether:skyroot_stick x1-2
       | Chance: 2%
       |   -> Fortune I: 2.22%
       |   -> Fortune II: 2.5%

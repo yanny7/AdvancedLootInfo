@@ -6,16 +6,16 @@ ali:loot_table
     ali:empty
       | Drops nothing
       | Chance: 33.33%
-    ali:item the_bumblezone:bee_bread x1
+    ali:item the_bumblezone:bee_bread x1-2
       | Chance: 11.11%
       | Count: 1 to 2
-    ali:item minecraft:bread x1
+    ali:item minecraft:bread x1-3
       | Chance: 11.11%
       | Count: 1 to 3
-    ali:item minecraft:cookie x1
+    ali:item minecraft:cookie x1-3
       | Chance: 11.11%
       | Count: 1 to 3
-    ali:item minecraft:sweet_berries x1
+    ali:item minecraft:sweet_berries x1-3
       | Chance: 11.11%
       | Count: 1 to 3
     ali:item the_bumblezone:bee_soup x1

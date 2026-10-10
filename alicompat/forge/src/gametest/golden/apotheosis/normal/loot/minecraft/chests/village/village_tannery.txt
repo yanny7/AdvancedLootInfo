@@ -43,16 +43,16 @@ ali:loot_table
       ali:item minecraft:leather_leggings x1 {Damage:0}
         | Chance: 12.5%
         | Count: 1
-    ali:item minecraft:bread x1
+    ali:item minecraft:bread x1-4
       | Chance: 31.25%
       | Count: 1 to 4
-    ali:item minecraft:leather x1
+    ali:item minecraft:leather x1-3
       | Chance: 6.25%
       | Count: 1 to 3
     ali:item minecraft:saddle x1
       | Chance: 6.25%
       | Count: 1
-    ali:item minecraft:emerald x1
+    ali:item minecraft:emerald x1-4
       | Chance: 6.25%
       | Count: 1 to 4
   ali:loot_pool

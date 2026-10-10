@@ -12,7 +12,7 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Enchantment: Silk Touch
         |     -> Level: ≥ 1
-      ali:item hybrid_aquatic:sulfur x1
+      ali:item hybrid_aquatic:sulfur x2-8
         | Count: clamp(max(0; U[2; 5]); 1; 9)
         |   -> Fortune LVL: clamp(max(0; U[2; 5]) + U[0; LVL]; 1; 9)
         |   -> Fortune I: 2 to 6  ~3 to 5 (25%)

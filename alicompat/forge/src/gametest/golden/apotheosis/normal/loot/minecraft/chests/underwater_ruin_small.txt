@@ -13,10 +13,10 @@ ali:loot_table
       ali:item minecraft:stone_axe x1 {Damage:0}
         | Chance: 7.14%
         | Count: 1
-    ali:item minecraft:coal x1
+    ali:item minecraft:coal x1-4
       | Chance: 35.71%
       | Count: 1 to 4
-    ali:item minecraft:wheat x1
+    ali:item minecraft:wheat x2-3
       | Chance: 35.71%
       | Count: 2 to 3
     ali:item minecraft:rotten_flesh x1

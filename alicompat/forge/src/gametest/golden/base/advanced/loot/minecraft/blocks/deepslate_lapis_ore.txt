@@ -12,7 +12,7 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Enchantment: Silk Touch
         |     -> Level: ≥ 1
-      ali:item minecraft:lapis_lazuli x1
+      ali:item minecraft:lapis_lazuli x4-36
         | Count: max(0; U[4; 9]) × max(1; U[0; 1])
         |   -> Fortune LVL: max(0; U[4; 9]) × max(1; U[0; LVL + 1])
         |   -> Fortune I: 4 to 18  ~8 (17%)

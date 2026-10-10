@@ -3,7 +3,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:paper x1
+    ali:item minecraft:paper x8-16
       | Count: max(0; U[8; 16])
       | ----- Modifiers -----
       | Set Count:
@@ -12,7 +12,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item irons_spellbooks:ancient_knowledge_fragment x1
+    ali:item irons_spellbooks:ancient_knowledge_fragment x0-5
       | Count: max(0; binom(5; 5%))  ~0 (77%)
       |   [chart 0..5 0-5 base=true modes=[true, false, false, false, false, false] heights=1.0000,0.2632,0.0277,0.0015,0.0000,0.0000]
       | ----- Modifiers -----
@@ -23,7 +23,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item irons_spellbooks:chained_book x1
+    ali:item irons_spellbooks:chained_book x0-2
       | Count: max(0; binom(2; 15%))  ~0 (72%)
       |   [chart 0..2 0-2 base=true modes=[true, false, false] heights=1.0000,0.3529,0.0311]
       | ----- Modifiers -----
@@ -87,7 +87,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:book x1
+    ali:item minecraft:book x0-8
       | Count: max(0; binom(8; 25%))  ~2 (31%)
       |   [chart 0..8 0-8 base=true modes=[false, false, true, false, false, false, false, false, false] heights=0.3214,0.8571,1.0000,0.6667,0.2778,0.0741,0.0123,0.0012,0.0000]
       | ----- Modifiers -----

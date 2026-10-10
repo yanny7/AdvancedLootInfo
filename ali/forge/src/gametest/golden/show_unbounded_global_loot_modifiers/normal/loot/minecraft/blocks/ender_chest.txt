@@ -12,7 +12,7 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Enchantment: Silk Touch
         |     -> Level: ≥ 1
-      ali:item minecraft:obsidian x1
+      ali:item minecraft:obsidian x8
         | Count: 8
         | ----- Modifiers -----
         | Explosion Decay

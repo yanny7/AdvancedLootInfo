@@ -6,21 +6,21 @@ ali:trade
       | Uses: 16
       | XP: 2
       | Price Multiplier: 0.05
-      ali:item immersiveengineering:empty_casing x1
+      ali:item immersiveengineering:empty_casing x6-12
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 16
       | XP: 2
       | Price Multiplier: 0.05
-      ali:item immersiveengineering:empty_shell x1
+      ali:item immersiveengineering:empty_shell x6-12
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 1
       | XP: 12
       | Price Multiplier: 0.2
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x2-4
       ali:item minecraft:air x0
       ali:item immersiveengineering:wooden_grip x1
   ali:trade_level
@@ -30,7 +30,7 @@ ali:trade
       | Uses: 1
       | XP: 25
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x3-6
       ali:item minecraft:air x0
       ali:item immersiveengineering:blueprint x1 {blueprint:"bullet"}
     ali:items_to_items
@@ -39,19 +39,19 @@ ali:trade
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item immersiveengineering:casull x1
+      ali:item immersiveengineering:casull x2-4
     ali:items_to_items
       | Uses: 12
       | XP: 5
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item immersiveengineering:buckshot x1
+      ali:item immersiveengineering:buckshot x2-6
     ali:items_to_items
       | Uses: 1
       | XP: 45
       | Price Multiplier: 0.25
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x5-29
       ali:item minecraft:air x0
       ali:group
         ali:item immersiveengineering:gunpart_barrel x1
@@ -64,7 +64,7 @@ ali:trade
       | Uses: 1
       | XP: 45
       | Price Multiplier: 0.25
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x5-29
       ali:item minecraft:air x0
       ali:group
         ali:item immersiveengineering:gunpart_barrel x1
@@ -76,12 +76,12 @@ ali:trade
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item immersiveengineering:flare x1
+      ali:item immersiveengineering:flare x1-2
     ali:items_to_items
       | Uses: 1
       | XP: 30
       | Price Multiplier: 0.2
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x5-9
       ali:item minecraft:air x0
       ali:item immersiveengineering:blueprint x1 {blueprint:"specialBullet"}
   ali:trade_level
@@ -91,7 +91,7 @@ ali:trade
       | Uses: 1
       | XP: 45
       | Price Multiplier: 0.25
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x5-29
       ali:item minecraft:air x0
       ali:group
         ali:item immersiveengineering:gunpart_barrel x1
@@ -103,12 +103,12 @@ ali:trade
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item immersiveengineering:silver x1
+      ali:item immersiveengineering:silver x1-4
     ali:items_to_items
       | Uses: 8
       | XP: 15
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x2-4
       ali:item minecraft:air x0
       ali:item immersiveengineering:he x1
   ali:trade_level
@@ -118,7 +118,7 @@ ali:trade
       | Uses: 1
       | XP: 45
       | Price Multiplier: 0.25
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x5-29
       ali:item minecraft:air x0
       ali:group
         ali:item immersiveengineering:gunpart_barrel x1
@@ -128,7 +128,7 @@ ali:trade
       | Uses: 1
       | XP: 45
       | Price Multiplier: 0.25
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x5-29
       ali:item minecraft:air x0
       ali:group
         ali:item immersiveengineering:gunpart_barrel x1
@@ -138,7 +138,7 @@ ali:trade
       | Uses: 1
       | XP: 45
       | Price Multiplier: 0.25
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x5-29
       ali:item minecraft:air x0
       ali:group
         ali:item immersiveengineering:gunpart_barrel x1

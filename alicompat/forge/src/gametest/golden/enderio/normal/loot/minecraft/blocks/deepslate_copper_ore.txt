@@ -27,7 +27,7 @@ ali:loot_table
           |     -> Level: ≥ 1
       ali:modified
         | Selects only first successful entry
-        ali:item minecraft:copper_ingot x1
+        ali:item minecraft:copper_ingot x2-20
           | Count: 2 to 5
           |   -> Fortune I: 2 to 10  ~4 (25%)
           |   -> Fortune II: 2 to 15  ~4 (19%)
@@ -40,7 +40,7 @@ ali:loot_table
           |     -> Level: ≥ 1
           | ----- Modifiers -----
           | Explosion Decay
-        ali:item minecraft:raw_copper x1
+        ali:item minecraft:raw_copper x2-20
           | Count: 2 to 5
           |   -> Fortune I: 2 to 10  ~4 (25%)
           |   -> Fortune II: 2 to 15  ~4 (19%)

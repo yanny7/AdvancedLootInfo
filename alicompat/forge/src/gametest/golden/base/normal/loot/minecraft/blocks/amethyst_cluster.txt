@@ -14,7 +14,7 @@ ali:loot_table
         |     -> Level: ≥ 1
       ali:alternatives
         | Selects only first successful entry
-        ali:item minecraft:amethyst_shard x1
+        ali:item minecraft:amethyst_shard x4-16
           | Count: 4
           |   -> Fortune I: 4 to 8  ~4 (67%)
           |   -> Fortune II: 4 to 12  ~4 (50%)
@@ -23,7 +23,7 @@ ali:loot_table
           | ----- Predicates -----
           | Match Tool:
           |   -> Tag: minecraft:cluster_max_harvestables
-        ali:item minecraft:amethyst_shard x1
+        ali:item minecraft:amethyst_shard x2
           | Count: 2
           | ----- Modifiers -----
           | Explosion Decay

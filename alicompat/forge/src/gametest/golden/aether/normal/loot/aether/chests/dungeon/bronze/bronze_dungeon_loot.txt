@@ -30,13 +30,13 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 2 to 6
-    ali:item aether:golden_dart x1
+    ali:item aether:golden_dart x4-10
       | Chance: 13.04%
       | Count: 4 to 10
-    ali:item aether:enchanted_dart x1
+    ali:item aether:enchanted_dart x2-6
       | Chance: 13.04%
       | Count: 2 to 6
-    ali:item aether:poison_dart x1
+    ali:item aether:poison_dart x2-5
       | Chance: 13.04%
       | Count: 2 to 5
     ali:item aether:skyroot_pickaxe x1 {Damage:0}
@@ -57,22 +57,22 @@ ali:loot_table
     ali:item aether:holystone_pickaxe x1 {Damage:0}
       | Chance: 4.35%
       | Count: 1
-    ali:item aether:icestone x1
+    ali:item aether:icestone x1-5
       | Chance: 4.35%
       | Count: 1 to 5
-    ali:item aether:ambrosium_shard x1
+    ali:item aether:ambrosium_shard x1-4
       | Chance: 4.35%
       | Count: 1 to 4
-    ali:item aether:ambrosium_torch x1
+    ali:item aether:ambrosium_torch x2-10
       | Chance: 4.35%
       | Count: 2 to 10
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 4
-    ali:item aether:ambrosium_shard x1
+    ali:item aether:ambrosium_shard x1-4
       | Chance: 25%
       | Count: 1 to 4
-    ali:item aether:ambrosium_torch x1
+    ali:item aether:ambrosium_torch x2-10
       | Chance: 20.83%
       | Count: 2 to 10
     ali:item minecraft:flint x1
@@ -84,12 +84,12 @@ ali:loot_table
     ali:item minecraft:string x1
       | Chance: 8.33%
       | Count: 1
-    ali:item minecraft:arrow x1
+    ali:item minecraft:arrow x2-10
       | Chance: 8.33%
       | Count: 2 to 10
     ali:item aether:golden_ring x1
       | Chance: 8.33%
       | Count: 1
-    ali:item aether:skyroot_planks x1
+    ali:item aether:skyroot_planks x1-3
       | Chance: 8.33%
       | Count: 1 to 3

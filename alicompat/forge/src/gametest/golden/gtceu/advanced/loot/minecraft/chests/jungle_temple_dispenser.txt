@@ -3,7 +3,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 2
-    ali:item minecraft:arrow x1
+    ali:item minecraft:arrow x2-7
       | Chance: 50%
       |   -> luck: 3000% ÷ (3000% + max(0%; 3000% + floor(luck)))
       |   -> Bad Luck: 50.85%
@@ -16,7 +16,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 2 to 7
       |   -> Add: False
-    ali:item minecraft:fire_charge x1
+    ali:item minecraft:fire_charge x2-8
       | Quality: 1
       | Chance: 50%
       |   -> luck: max(0%; 3000% + floor(luck)) ÷ (3000% + max(0%; 3000% + floor(luck)))

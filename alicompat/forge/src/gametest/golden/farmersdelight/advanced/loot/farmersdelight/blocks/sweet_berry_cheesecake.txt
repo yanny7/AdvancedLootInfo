@@ -1,6 +1,6 @@
 ali:loot_table
   | Selects all entries
-  ali:item farmersdelight:sweet_berry_cheesecake_slice x1
+  ali:item farmersdelight:sweet_berry_cheesecake_slice x1-7
     | Count: 1 to 7
     | ----- Predicates -----
     | Match Tool:

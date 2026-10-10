@@ -5,7 +5,7 @@ ali:loot_table
     | Rolls: 1
     ali:alternatives
       | Selects only first successful entry
-      ali:item kaleidoscope_cookery:red_chili x1
+      ali:item kaleidoscope_cookery:red_chili x3
         | Count: 3
         | ----- Predicates -----
         | Survives Explosion
@@ -17,7 +17,7 @@ ali:loot_table
         | Set Count:
         |   -> Count: 3
         |   -> Add: False
-      ali:item kaleidoscope_cookery:red_chili x1
+      ali:item kaleidoscope_cookery:red_chili x6
         | Count: 6
         | ----- Predicates -----
         | Survives Explosion

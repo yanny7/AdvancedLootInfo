@@ -3,7 +3,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 2 to 4
-    ali:item minecraft:honeycomb x1
+    ali:item minecraft:honeycomb x1-3
       | Chance: 25%
       |   -> luck: 300% ÷ (900% + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)))
       |   -> Bad Luck: 33.33%
@@ -16,7 +16,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1 to 3
       |   -> Add: False
-    ali:item minecraft:glow_berries x1
+    ali:item minecraft:glow_berries x1-4
       | Chance: 16.67%
       |   -> luck: 200% ÷ (900% + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)))
       |   -> Bad Luck: 22.22%
@@ -29,7 +29,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1 to 4
       |   -> Add: False
-    ali:item minecraft:gunpowder x1
+    ali:item minecraft:gunpowder x1-3
       | Chance: 16.67%
       |   -> luck: 200% ÷ (900% + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)))
       |   -> Bad Luck: 22.22%
@@ -51,7 +51,7 @@ ali:loot_table
       |   -> Luck 3: 4.76%
       |   -> Luck 4: 4.17%
       | Count: 1
-    ali:item minecraft:book x1
+    ali:item minecraft:book x1-3
       | Chance: 8.33%
       |   -> luck: 100% ÷ (900% + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)))
       |   -> Bad Luck: 11.11%
@@ -97,7 +97,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 2
-    ali:item minecraft:amethyst_shard x1
+    ali:item minecraft:amethyst_shard x3-7
       | Chance: 27.61%
       |   -> luck: 9000% ÷ (31300% + max(0%; 600% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 500% + floor(200% × luck)))
       |   -> Bad Luck: 28.04%
@@ -110,7 +110,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 3 to 7
       |   -> Add: False
-    ali:item minecraft:emerald x1
+    ali:item minecraft:emerald x1-3
       | Chance: 19.94%
       |   -> luck: 6500% ÷ (31300% + max(0%; 600% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 500% + floor(200% × luck)))
       |   -> Bad Luck: 20.25%
@@ -123,7 +123,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1 to 3
       |   -> Add: False
-    ali:item minecraft:diamond x1
+    ali:item minecraft:diamond x1-2
       | Chance: 16.87%
       |   -> luck: 5500% ÷ (31300% + max(0%; 600% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 500% + floor(200% × luck)))
       |   -> Bad Luck: 17.13%
@@ -413,7 +413,7 @@ ali:loot_table
       | Enchant With Levels:
       |   -> Levels: 30
       |   -> Treasure: True
-    ali:item #minecraft:decorated_pot_sherds
+    ali:item #minecraft:decorated_pot_sherds x1
       | Quality: 1
       | Chance: 0.31%
       |   -> luck: max(0%; 100% + floor(luck)) ÷ (31300% + max(0%; 600% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 500% + floor(200% × luck)))
@@ -423,7 +423,7 @@ ali:loot_table
       |   -> Luck 3: 1.17%
       |   -> Luck 4: 1.45%
       | Count: 1
-    ali:item #minecraft:trim_templates
+    ali:item #minecraft:trim_templates x1
       | Quality: 1
       | Chance: 0.31%
       |   -> luck: max(0%; 100% + floor(luck)) ÷ (31300% + max(0%; 600% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 500% + floor(200% × luck)))
@@ -438,7 +438,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 3
-    ali:item the_bumblezone:bee_stinger x1
+    ali:item the_bumblezone:bee_stinger x1-2
       | Chance: 20%
       |   -> luck: 500% ÷ (1900% + max(0%; 300% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
       |   -> Bad Luck: 22.73%
@@ -451,7 +451,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1 to 2
       |   -> Add: False
-    ali:item minecraft:purple_dye x1
+    ali:item minecraft:purple_dye x1-3
       | Quality: 1
       | Chance: 12%
       |   -> luck: max(0%; 300% + floor(luck)) ÷ (1900% + max(0%; 300% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
@@ -465,7 +465,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1 to 3
       |   -> Add: False
-    ali:item minecraft:spider_eye x1
+    ali:item minecraft:spider_eye x1-4
       | Chance: 12%
       |   -> luck: 300% ÷ (1900% + max(0%; 300% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
       |   -> Bad Luck: 13.64%
@@ -478,7 +478,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1 to 4
       |   -> Add: False
-    ali:item minecraft:string x1
+    ali:item minecraft:string x1-4
       | Chance: 12%
       |   -> luck: 300% ÷ (1900% + max(0%; 300% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
       |   -> Bad Luck: 13.64%
@@ -491,7 +491,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1 to 4
       |   -> Add: False
-    ali:item minecraft:bone x1
+    ali:item minecraft:bone x1-3
       | Chance: 12%
       |   -> luck: 300% ÷ (1900% + max(0%; 300% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
       |   -> Bad Luck: 13.64%
@@ -504,7 +504,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1 to 3
       |   -> Add: False
-    ali:item minecraft:paper x1
+    ali:item minecraft:paper x1-3
       | Chance: 8%
       |   -> luck: 200% ÷ (1900% + max(0%; 300% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
       |   -> Bad Luck: 9.09%

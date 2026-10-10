@@ -3,7 +3,7 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:poppy x1
+    ali:item minecraft:poppy x0-2
       | Count: max(0; U[0; 2])
       | ----- Modifiers -----
       | Set Count:
@@ -12,7 +12,7 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:iron_ingot x1
+    ali:item minecraft:iron_ingot x3-5
       | Count: max(0; U[3; 5])
       | ----- Modifiers -----
       | Set Count:

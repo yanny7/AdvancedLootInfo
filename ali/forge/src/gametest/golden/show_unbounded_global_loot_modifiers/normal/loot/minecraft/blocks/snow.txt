@@ -21,7 +21,7 @@ ali:loot_table
           |   -> Block: Snow
           |   -> Properties:
           |     -> layers: 1
-        ali:item minecraft:snowball x1
+        ali:item minecraft:snowball x2
           | Count: 2
           | ----- Predicates -----
           | Entity Properties:
@@ -35,7 +35,7 @@ ali:loot_table
           |   -> Block: Snow
           |   -> Properties:
           |     -> layers: 2
-        ali:item minecraft:snowball x1
+        ali:item minecraft:snowball x3
           | Count: 3
           | ----- Predicates -----
           | Entity Properties:
@@ -49,7 +49,7 @@ ali:loot_table
           |   -> Block: Snow
           |   -> Properties:
           |     -> layers: 3
-        ali:item minecraft:snowball x1
+        ali:item minecraft:snowball x4
           | Count: 4
           | ----- Predicates -----
           | Entity Properties:
@@ -63,7 +63,7 @@ ali:loot_table
           |   -> Block: Snow
           |   -> Properties:
           |     -> layers: 4
-        ali:item minecraft:snowball x1
+        ali:item minecraft:snowball x5
           | Count: 5
           | ----- Predicates -----
           | Entity Properties:
@@ -77,7 +77,7 @@ ali:loot_table
           |   -> Block: Snow
           |   -> Properties:
           |     -> layers: 5
-        ali:item minecraft:snowball x1
+        ali:item minecraft:snowball x6
           | Count: 6
           | ----- Predicates -----
           | Entity Properties:
@@ -91,7 +91,7 @@ ali:loot_table
           |   -> Block: Snow
           |   -> Properties:
           |     -> layers: 6
-        ali:item minecraft:snowball x1
+        ali:item minecraft:snowball x7
           | Count: 7
           | ----- Predicates -----
           | Entity Properties:
@@ -105,7 +105,7 @@ ali:loot_table
           |   -> Block: Snow
           |   -> Properties:
           |     -> layers: 7
-        ali:item minecraft:snowball x1
+        ali:item minecraft:snowball x8
           | Count: 8
           | ----- Predicates -----
           | Entity Properties:
@@ -130,7 +130,7 @@ ali:loot_table
           |   -> Block: Snow
           |   -> Properties:
           |     -> layers: 1
-        ali:item minecraft:snow x1
+        ali:item minecraft:snow x2
           | Count: 2
           | ----- Predicates -----
           | Entity Properties:
@@ -139,7 +139,7 @@ ali:loot_table
           |   -> Block: Snow
           |   -> Properties:
           |     -> layers: 2
-        ali:item minecraft:snow x1
+        ali:item minecraft:snow x3
           | Count: 3
           | ----- Predicates -----
           | Entity Properties:
@@ -148,7 +148,7 @@ ali:loot_table
           |   -> Block: Snow
           |   -> Properties:
           |     -> layers: 3
-        ali:item minecraft:snow x1
+        ali:item minecraft:snow x4
           | Count: 4
           | ----- Predicates -----
           | Entity Properties:
@@ -157,7 +157,7 @@ ali:loot_table
           |   -> Block: Snow
           |   -> Properties:
           |     -> layers: 4
-        ali:item minecraft:snow x1
+        ali:item minecraft:snow x5
           | Count: 5
           | ----- Predicates -----
           | Entity Properties:
@@ -166,7 +166,7 @@ ali:loot_table
           |   -> Block: Snow
           |   -> Properties:
           |     -> layers: 5
-        ali:item minecraft:snow x1
+        ali:item minecraft:snow x6
           | Count: 6
           | ----- Predicates -----
           | Entity Properties:
@@ -175,7 +175,7 @@ ali:loot_table
           |   -> Block: Snow
           |   -> Properties:
           |     -> layers: 6
-        ali:item minecraft:snow x1
+        ali:item minecraft:snow x7
           | Count: 7
           | ----- Predicates -----
           | Entity Properties:

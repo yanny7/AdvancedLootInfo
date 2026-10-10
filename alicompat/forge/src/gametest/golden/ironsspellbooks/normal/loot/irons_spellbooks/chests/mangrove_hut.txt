@@ -6,7 +6,7 @@ ali:loot_table
     ali:item minecraft:fern x1
       | Chance: 28.57%
       | Count: 1
-    ali:item irons_spellbooks:arcane_essence x1
+    ali:item irons_spellbooks:arcane_essence x1-3
       | Chance: 17.86%
       | Count: 1 to 3
     ali:item minecraft:nether_wart x1

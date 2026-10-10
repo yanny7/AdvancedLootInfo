@@ -61,7 +61,7 @@ ali:loot_table
       | Set Damage:
       |   -> Damage: 0% to 90%
       |   -> Add: False
-    ali:item minecraft:ink_sac x1
+    ali:item minecraft:ink_sac x10
       | Chance: 0.91%
       | Count: 10
   lootjs:add_loot

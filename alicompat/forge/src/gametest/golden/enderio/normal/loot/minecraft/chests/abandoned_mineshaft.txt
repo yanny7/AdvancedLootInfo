@@ -26,55 +26,55 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 2 to 4
-    ali:item minecraft:bread x1
+    ali:item minecraft:bread x1-3
       | Chance: 15.31%
       | Count: 1 to 3
-    ali:item minecraft:glow_berries x1
+    ali:item minecraft:glow_berries x3-6
       | Chance: 15.31%
       | Count: 3 to 6
-    ali:item minecraft:iron_ingot x1
+    ali:item minecraft:iron_ingot x1-5
       | Chance: 10.2%
       | Count: 1 to 5
-    ali:item minecraft:coal x1
+    ali:item minecraft:coal x3-8
       | Chance: 10.2%
       | Count: 3 to 8
-    ali:item minecraft:melon_seeds x1
+    ali:item minecraft:melon_seeds x2-4
       | Chance: 10.2%
       | Count: 2 to 4
-    ali:item minecraft:pumpkin_seeds x1
+    ali:item minecraft:pumpkin_seeds x2-4
       | Chance: 10.2%
       | Count: 2 to 4
-    ali:item minecraft:beetroot_seeds x1
+    ali:item minecraft:beetroot_seeds x2-4
       | Chance: 10.2%
       | Count: 2 to 4
-    ali:item minecraft:gold_ingot x1
+    ali:item minecraft:gold_ingot x1-3
       | Chance: 5.1%
       | Count: 1 to 3
-    ali:item minecraft:redstone x1
+    ali:item minecraft:redstone x4-9
       | Chance: 5.1%
       | Count: 4 to 9
-    ali:item minecraft:lapis_lazuli x1
+    ali:item minecraft:lapis_lazuli x4-9
       | Chance: 5.1%
       | Count: 4 to 9
-    ali:item minecraft:diamond x1
+    ali:item minecraft:diamond x1-2
       | Chance: 3.06%
       | Count: 1 to 2
   ali:loot_pool
     | Selects random entry
     | Rolls: 3
-    ali:item minecraft:rail x1
+    ali:item minecraft:rail x4-8
       | Chance: 40%
       | Count: 4 to 8
-    ali:item minecraft:torch x1
+    ali:item minecraft:torch x1-16
       | Chance: 30%
       | Count: 1 to 16
-    ali:item minecraft:powered_rail x1
+    ali:item minecraft:powered_rail x1-4
       | Chance: 10%
       | Count: 1 to 4
-    ali:item minecraft:detector_rail x1
+    ali:item minecraft:detector_rail x1-4
       | Chance: 10%
       | Count: 1 to 4
-    ali:item minecraft:activator_rail x1
+    ali:item minecraft:activator_rail x1-4
       | Chance: 10%
       | Count: 1 to 4
   ali:reference
@@ -124,7 +124,7 @@ ali:loot_table
       ali:loot_pool
         | Selects random entry
         | Rolls: 1 to 3
-        ali:item enderio:dark_steel_ingot x1
+        ali:item enderio:dark_steel_ingot x1-3
           | Chance: 5%
           | Count: 1 to 3
           | ----- Predicates -----

@@ -3,14 +3,14 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 2
-    ali:item farmersdelight:onion x1
+    ali:item farmersdelight:onion x4-12
       | Chance: 55.56%
       | Count: max(0; U[4; 12])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 4 to 12
       |   -> Add: False
-    ali:item farmersdelight:onion_crate x1
+    ali:item farmersdelight:onion_crate x1-3
       | Chance: 22.22%
       | Count: max(0; U[1; 3])
       | ----- Modifiers -----

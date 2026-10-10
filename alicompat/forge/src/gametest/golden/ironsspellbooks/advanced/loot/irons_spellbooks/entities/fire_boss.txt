@@ -37,7 +37,7 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 2
-    ali:item irons_spellbooks:arcane_essence x1
+    ali:item irons_spellbooks:arcane_essence x28-63
       | Count: max(0; U[28; 45])
       |   -> Looting LVL: max(0; U[28; 45]) + round(LVL × U[2; 6))
       |   -> Looting I: 30 to 51  ~34 to 47 (6%)
@@ -53,7 +53,7 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item irons_spellbooks:cinder_essence x1
+    ali:item irons_spellbooks:cinder_essence x1-49
       | Count: 1
       |   -> Looting LVL: 1 + round(LVL × U[8; 16))
       |   -> Looting I: 9 to 17  ~10 to 16 (13%)

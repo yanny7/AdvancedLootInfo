@@ -13,22 +13,22 @@ ali:loot_table
       ali:item minecraft:iron_pickaxe x1 {Damage:0}
         | Chance: 1.61%
         | Count: 1
-    ali:item minecraft:bread x1
+    ali:item minecraft:bread x1-3
       | Chance: 24.19%
       | Count: 1 to 3
-    ali:item minecraft:apple x1
+    ali:item minecraft:apple x1-3
       | Chance: 24.19%
       | Count: 1 to 3
-    ali:item minecraft:iron_ingot x1
+    ali:item minecraft:iron_ingot x1-5
       | Chance: 16.13%
       | Count: 1 to 5
-    ali:item minecraft:coal x1
+    ali:item minecraft:coal x3-8
       | Chance: 16.13%
       | Count: 3 to 8
-    ali:item minecraft:gold_ingot x1
+    ali:item minecraft:gold_ingot x1-3
       | Chance: 8.06%
       | Count: 1 to 3
-    ali:item minecraft:redstone x1
+    ali:item minecraft:redstone x4-9
       | Chance: 8.06%
       | Count: 4 to 9
     ali:item minecraft:enchanted_book x1

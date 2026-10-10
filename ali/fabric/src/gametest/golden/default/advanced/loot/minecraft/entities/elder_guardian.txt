@@ -3,7 +3,7 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:prismarine_shard x1
+    ali:item minecraft:prismarine_shard x0-5
       | Count: max(0; U[0; 2])
       |   -> Looting LVL: max(0; U[0; 2]) + round(LVL × U[0; 1))
       |   -> Looting I: 0 to 3  ~1 to 2 (33%)
@@ -19,7 +19,7 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:cod x1
+    ali:item minecraft:cod x1-4
       | Chance: 50%
       | Count: 1
       |   -> Looting LVL: 1 + round(LVL × U[0; 1))
@@ -37,7 +37,7 @@ ali:entity_loot_table
       |       -> Predicate:
       |         -> Entity Flags:
       |           -> Is On Fire: True
-    ali:item minecraft:prismarine_crystals x1
+    ali:item minecraft:prismarine_crystals x1-4
       | Chance: 33.33%
       | Count: 1
       |   -> Looting LVL: 1 + round(LVL × U[0; 1))

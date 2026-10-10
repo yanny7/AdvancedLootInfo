@@ -25,7 +25,7 @@ ali:loot_table
       |       -> Level: ≥ 1
       | ----- Modifiers -----
       | Spawn XP
-    ali:item aether:gingerbread_man x1
+    ali:item aether:gingerbread_man x5-6
       | Chance: 22.22%
       | Count: 5 to 6
       | ----- Predicates -----

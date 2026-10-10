@@ -34,77 +34,77 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 2 to 4
-          ali:item minecraft:bread x1
+          ali:item minecraft:bread x1-3
             | Chance: 2.19%
             | Count: max(0; U[1; 3])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 3
             |   -> Add: False
-          ali:item minecraft:glow_berries x1
+          ali:item minecraft:glow_berries x3-6
             | Chance: 2.19%
             | Count: max(0; U[3; 6])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 3 to 6
             |   -> Add: False
-          ali:item minecraft:iron_ingot x1
+          ali:item minecraft:iron_ingot x1-5
             | Chance: 1.46%
             | Count: max(0; U[1; 5])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 5
             |   -> Add: False
-          ali:item minecraft:coal x1
+          ali:item minecraft:coal x3-8
             | Chance: 1.46%
             | Count: max(0; U[3; 8])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 3 to 8
             |   -> Add: False
-          ali:item minecraft:melon_seeds x1
+          ali:item minecraft:melon_seeds x2-4
             | Chance: 1.46%
             | Count: max(0; U[2; 4])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 2 to 4
             |   -> Add: False
-          ali:item minecraft:pumpkin_seeds x1
+          ali:item minecraft:pumpkin_seeds x2-4
             | Chance: 1.46%
             | Count: max(0; U[2; 4])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 2 to 4
             |   -> Add: False
-          ali:item minecraft:beetroot_seeds x1
+          ali:item minecraft:beetroot_seeds x2-4
             | Chance: 1.46%
             | Count: max(0; U[2; 4])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 2 to 4
             |   -> Add: False
-          ali:item minecraft:gold_ingot x1
+          ali:item minecraft:gold_ingot x1-3
             | Chance: 0.73%
             | Count: max(0; U[1; 3])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 3
             |   -> Add: False
-          ali:item minecraft:redstone x1
+          ali:item minecraft:redstone x4-9
             | Chance: 0.73%
             | Count: max(0; U[4; 9])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 4 to 9
             |   -> Add: False
-          ali:item minecraft:lapis_lazuli x1
+          ali:item minecraft:lapis_lazuli x4-9
             | Chance: 0.73%
             | Count: max(0; U[4; 9])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 4 to 9
             |   -> Add: False
-          ali:item minecraft:diamond x1
+          ali:item minecraft:diamond x1-2
             | Chance: 0.44%
             | Count: max(0; U[1; 2])
             | ----- Modifiers -----
@@ -114,35 +114,35 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 3
-          ali:item minecraft:rail x1
+          ali:item minecraft:rail x4-8
             | Chance: 5.71%
             | Count: max(0; U[4; 8])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 4 to 8
             |   -> Add: False
-          ali:item minecraft:torch x1
+          ali:item minecraft:torch x1-16
             | Chance: 4.29%
             | Count: max(0; U[1; 16])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 16
             |   -> Add: False
-          ali:item minecraft:powered_rail x1
+          ali:item minecraft:powered_rail x1-4
             | Chance: 1.43%
             | Count: max(0; U[1; 4])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 4
             |   -> Add: False
-          ali:item minecraft:detector_rail x1
+          ali:item minecraft:detector_rail x1-4
             | Chance: 1.43%
             | Count: max(0; U[1; 4])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 4
             |   -> Add: False
-          ali:item minecraft:activator_rail x1
+          ali:item minecraft:activator_rail x1-4
             | Chance: 1.43%
             | Count: max(0; U[1; 4])
             | ----- Modifiers -----
@@ -157,21 +157,21 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 2 to 4
-          ali:item minecraft:bone x1
+          ali:item minecraft:bone x4-6
             | Chance: 1.54%
             | Count: max(0; U[4; 6])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 4 to 6
             |   -> Add: False
-          ali:item minecraft:spider_eye x1
+          ali:item minecraft:spider_eye x1-3
             | Chance: 1.54%
             | Count: max(0; U[1; 3])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 3
             |   -> Add: False
-          ali:item minecraft:rotten_flesh x1
+          ali:item minecraft:rotten_flesh x3-7
             | Chance: 1.54%
             | Count: max(0; U[3; 7])
             | ----- Modifiers -----
@@ -189,21 +189,21 @@ ali:loot_table
           ali:item minecraft:golden_apple x1
             | Chance: 1.23%
             | Count: 1
-          ali:item minecraft:iron_ingot x1
+          ali:item minecraft:iron_ingot x1-5
             | Chance: 0.92%
             | Count: max(0; U[1; 5])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 5
             |   -> Add: False
-          ali:item minecraft:gold_ingot x1
+          ali:item minecraft:gold_ingot x2-7
             | Chance: 0.92%
             | Count: max(0; U[2; 7])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 2 to 7
             |   -> Add: False
-          ali:item minecraft:emerald x1
+          ali:item minecraft:emerald x1-3
             | Chance: 0.92%
             | Count: max(0; U[1; 3])
             | ----- Modifiers -----
@@ -219,7 +219,7 @@ ali:loot_table
           ali:item minecraft:golden_horse_armor x1
             | Chance: 0.62%
             | Count: 1
-          ali:item minecraft:diamond x1
+          ali:item minecraft:diamond x1-3
             | Chance: 0.31%
             | Count: max(0; U[1; 3])
             | ----- Modifiers -----
@@ -235,35 +235,35 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 4
-          ali:item minecraft:bone x1
+          ali:item minecraft:bone x1-8
             | Chance: 2.86%
             | Count: max(0; U[1; 8])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 8
             |   -> Add: False
-          ali:item minecraft:gunpowder x1
+          ali:item minecraft:gunpowder x1-8
             | Chance: 2.86%
             | Count: max(0; U[1; 8])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 8
             |   -> Add: False
-          ali:item minecraft:rotten_flesh x1
+          ali:item minecraft:rotten_flesh x1-8
             | Chance: 2.86%
             | Count: max(0; U[1; 8])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 8
             |   -> Add: False
-          ali:item minecraft:string x1
+          ali:item minecraft:string x1-8
             | Chance: 2.86%
             | Count: max(0; U[1; 8])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 8
             |   -> Add: False
-          ali:item minecraft:sand x1
+          ali:item minecraft:sand x1-8
             | Chance: 2.86%
             | Count: max(0; U[1; 8])
             | ----- Modifiers -----
@@ -276,7 +276,7 @@ ali:loot_table
           ali:empty
             | Drops nothing
             | Chance: 12.24%
-          ali:item minecraft:dune_armor_trim_smithing_template x1
+          ali:item minecraft:dune_armor_trim_smithing_template x2
             | Chance: 2.04%
             | Count: 2
             | ----- Modifiers -----
@@ -291,42 +291,42 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 2 to 6
-          ali:item minecraft:bone x1
+          ali:item minecraft:bone x4-6
             | Chance: 3.25%
             | Count: max(0; U[4; 6])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 4 to 6
             |   -> Add: False
-          ali:item minecraft:rotten_flesh x1
+          ali:item minecraft:rotten_flesh x3-7
             | Chance: 2.6%
             | Count: max(0; U[3; 7])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 3 to 7
             |   -> Add: False
-          ali:item minecraft:gold_ingot x1
+          ali:item minecraft:gold_ingot x2-7
             | Chance: 2.44%
             | Count: max(0; U[2; 7])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 2 to 7
             |   -> Add: False
-          ali:item minecraft:bamboo x1
+          ali:item minecraft:bamboo x1-3
             | Chance: 2.44%
             | Count: max(0; U[1; 3])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 3
             |   -> Add: False
-          ali:item minecraft:iron_ingot x1
+          ali:item minecraft:iron_ingot x1-5
             | Chance: 1.62%
             | Count: max(0; U[1; 5])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 5
             |   -> Add: False
-          ali:item minecraft:diamond x1
+          ali:item minecraft:diamond x1-3
             | Chance: 0.49%
             | Count: max(0; U[1; 3])
             | ----- Modifiers -----
@@ -336,7 +336,7 @@ ali:loot_table
           ali:item minecraft:saddle x1
             | Chance: 0.49%
             | Count: 1
-          ali:item minecraft:emerald x1
+          ali:item minecraft:emerald x1-3
             | Chance: 0.32%
             | Count: max(0; U[1; 3])
             | ----- Modifiers -----
@@ -365,7 +365,7 @@ ali:loot_table
           ali:empty
             | Drops nothing
             | Chance: 9.52%
-          ali:item minecraft:wild_armor_trim_smithing_template x1
+          ali:item minecraft:wild_armor_trim_smithing_template x2
             | Chance: 4.76%
             | Count: 2
             | ----- Modifiers -----
@@ -418,28 +418,28 @@ ali:loot_table
           ali:item minecraft:bread x1
             | Chance: 2.29%
             | Count: 1
-          ali:item minecraft:wheat x1
+          ali:item minecraft:wheat x1-4
             | Chance: 2.29%
             | Count: max(0; U[1; 4])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 4
             |   -> Add: False
-          ali:item minecraft:redstone x1
+          ali:item minecraft:redstone x1-4
             | Chance: 1.71%
             | Count: max(0; U[1; 4])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 4
             |   -> Add: False
-          ali:item minecraft:coal x1
+          ali:item minecraft:coal x1-4
             | Chance: 1.71%
             | Count: max(0; U[1; 4])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 4
             |   -> Add: False
-          ali:item minecraft:iron_ingot x1
+          ali:item minecraft:iron_ingot x1-4
             | Chance: 1.14%
             | Count: max(0; U[1; 4])
             | ----- Modifiers -----
@@ -449,28 +449,28 @@ ali:loot_table
           ali:item minecraft:bucket x1
             | Chance: 1.14%
             | Count: 1
-          ali:item minecraft:melon_seeds x1
+          ali:item minecraft:melon_seeds x2-4
             | Chance: 1.14%
             | Count: max(0; U[2; 4])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 2 to 4
             |   -> Add: False
-          ali:item minecraft:pumpkin_seeds x1
+          ali:item minecraft:pumpkin_seeds x2-4
             | Chance: 1.14%
             | Count: max(0; U[2; 4])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 2 to 4
             |   -> Add: False
-          ali:item minecraft:beetroot_seeds x1
+          ali:item minecraft:beetroot_seeds x2-4
             | Chance: 1.14%
             | Count: max(0; U[2; 4])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 2 to 4
             |   -> Add: False
-          ali:item minecraft:gold_ingot x1
+          ali:item minecraft:gold_ingot x1-4
             | Chance: 0.57%
             | Count: max(0; U[1; 4])
             | ----- Modifiers -----
@@ -480,28 +480,28 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 3
-          ali:item minecraft:bone x1
+          ali:item minecraft:bone x1-8
             | Chance: 3.57%
             | Count: max(0; U[1; 8])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 8
             |   -> Add: False
-          ali:item minecraft:gunpowder x1
+          ali:item minecraft:gunpowder x1-8
             | Chance: 3.57%
             | Count: max(0; U[1; 8])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 8
             |   -> Add: False
-          ali:item minecraft:rotten_flesh x1
+          ali:item minecraft:rotten_flesh x1-8
             | Chance: 3.57%
             | Count: max(0; U[1; 8])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 8
             |   -> Add: False
-          ali:item minecraft:string x1
+          ali:item minecraft:string x1-8
             | Chance: 3.57%
             | Count: max(0; U[1; 8])
             | ----- Modifiers -----
@@ -566,28 +566,28 @@ ali:loot_table
           ali:item minecraft:bread x1
             | Chance: 2.29%
             | Count: 1
-          ali:item minecraft:wheat x1
+          ali:item minecraft:wheat x1-4
             | Chance: 2.29%
             | Count: max(0; U[1; 4])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 4
             |   -> Add: False
-          ali:item minecraft:redstone x1
+          ali:item minecraft:redstone x1-4
             | Chance: 1.71%
             | Count: max(0; U[1; 4])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 4
             |   -> Add: False
-          ali:item minecraft:coal x1
+          ali:item minecraft:coal x1-4
             | Chance: 1.71%
             | Count: max(0; U[1; 4])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 4
             |   -> Add: False
-          ali:item minecraft:iron_ingot x1
+          ali:item minecraft:iron_ingot x1-4
             | Chance: 1.14%
             | Count: max(0; U[1; 4])
             | ----- Modifiers -----
@@ -597,28 +597,28 @@ ali:loot_table
           ali:item minecraft:bucket x1
             | Chance: 1.14%
             | Count: 1
-          ali:item minecraft:melon_seeds x1
+          ali:item minecraft:melon_seeds x2-4
             | Chance: 1.14%
             | Count: max(0; U[2; 4])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 2 to 4
             |   -> Add: False
-          ali:item minecraft:pumpkin_seeds x1
+          ali:item minecraft:pumpkin_seeds x2-4
             | Chance: 1.14%
             | Count: max(0; U[2; 4])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 2 to 4
             |   -> Add: False
-          ali:item minecraft:beetroot_seeds x1
+          ali:item minecraft:beetroot_seeds x2-4
             | Chance: 1.14%
             | Count: max(0; U[2; 4])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 2 to 4
             |   -> Add: False
-          ali:item minecraft:gold_ingot x1
+          ali:item minecraft:gold_ingot x1-4
             | Chance: 0.57%
             | Count: max(0; U[1; 4])
             | ----- Modifiers -----
@@ -628,28 +628,28 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 3
-          ali:item minecraft:bone x1
+          ali:item minecraft:bone x1-8
             | Chance: 3.57%
             | Count: max(0; U[1; 8])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 8
             |   -> Add: False
-          ali:item minecraft:gunpowder x1
+          ali:item minecraft:gunpowder x1-8
             | Chance: 3.57%
             | Count: max(0; U[1; 8])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 8
             |   -> Add: False
-          ali:item minecraft:rotten_flesh x1
+          ali:item minecraft:rotten_flesh x1-8
             | Chance: 3.57%
             | Count: max(0; U[1; 8])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 8
             |   -> Add: False
-          ali:item minecraft:string x1
+          ali:item minecraft:string x1-8
             | Chance: 3.57%
             | Count: max(0; U[1; 8])
             | ----- Modifiers -----
@@ -664,42 +664,42 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1 to 4
-          ali:item minecraft:bread x1
+          ali:item minecraft:bread x1-3
             | Chance: 3.46%
             | Count: max(0; U[1; 3])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 3
             |   -> Add: False
-          ali:item minecraft:apple x1
+          ali:item minecraft:apple x1-3
             | Chance: 3.46%
             | Count: max(0; U[1; 3])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 3
             |   -> Add: False
-          ali:item minecraft:iron_ingot x1
+          ali:item minecraft:iron_ingot x1-5
             | Chance: 2.3%
             | Count: max(0; U[1; 5])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 5
             |   -> Add: False
-          ali:item minecraft:coal x1
+          ali:item minecraft:coal x3-8
             | Chance: 2.3%
             | Count: max(0; U[3; 8])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 3 to 8
             |   -> Add: False
-          ali:item minecraft:gold_ingot x1
+          ali:item minecraft:gold_ingot x1-3
             | Chance: 1.15%
             | Count: max(0; U[1; 3])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 3
             |   -> Add: False
-          ali:item minecraft:redstone x1
+          ali:item minecraft:redstone x4-9
             | Chance: 1.15%
             | Count: max(0; U[4; 9])
             | ----- Modifiers -----
@@ -724,14 +724,14 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 2 to 10
-          ali:item minecraft:book x1
+          ali:item minecraft:book x1-3
             | Chance: 5.49%
             | Count: max(0; U[1; 3])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 3
             |   -> Add: False
-          ali:item minecraft:paper x1
+          ali:item minecraft:paper x2-7
             | Chance: 5.49%
             | Count: max(0; U[2; 7])
             | ----- Modifiers -----

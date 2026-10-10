@@ -2,6 +2,7 @@ package com.yanny.ali.gametest;
 
 import com.yanny.aci.api.ICoreDataNode;
 import com.yanny.aci.gametest.GoldenRenderer;
+import com.yanny.aci.number.NumberFormatter;
 import com.yanny.aci.tooltip.NumberOptions;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IDataNode;
@@ -11,6 +12,7 @@ import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.network.AbstractServer;
 import com.yanny.ali.network.LootDataChunkMessage;
 import com.yanny.ali.network.LootDataReader;
+import com.yanny.ali.plugin.client.TooltipUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.network.FriendlyByteBuf;
@@ -78,14 +80,21 @@ public class LootDataCapture {
         return new GoldenRenderer(isAdvanced, new NumberOptions(isAdvanced, config.showCharts, Locale.ROOT)) {
             @Override
             protected String describe(ICoreDataNode<?> node) {
-                return node instanceof IItemNode itemNode ? itemNode.getItem().map(LootDataCapture::stackToString, (tag) -> "#" + tag.location()) : null;
+                return node instanceof IItemNode itemNode ? itemToString(itemNode) : null;
             }
         };
     }
 
     @NotNull
-    private static String stackToString(ItemStack stack) {
-        String text = BuiltInRegistries.ITEM.getKey(stack.getItem()) + " x" + stack.getCount();
+    private static String itemToString(IItemNode node) {
+        String count = " x" + NumberFormatter.slot(TooltipUtils.getSlotCount(node));
+
+        return node.getItem().map((stack) -> stackToString(stack, count), (tag) -> "#" + tag.location() + count);
+    }
+
+    @NotNull
+    private static String stackToString(ItemStack stack, String count) {
+        String text = BuiltInRegistries.ITEM.getKey(stack.getItem()) + (stack.isEmpty() ? " x0" : count);
 
         return stack.hasTag() ? text + " " + stack.getTag() : text;
     }

@@ -3,10 +3,10 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 4
-    ali:item minecraft:honeycomb x1
+    ali:item minecraft:honeycomb x1-3
       | Chance: 31.37%
       | Count: 1 to 3
-    ali:item minecraft:gold_nugget x1
+    ali:item minecraft:gold_nugget x2-6
       | Chance: 19.61%
       | Count: 2 to 6
     ali:item minecraft:name_tag x1
@@ -82,7 +82,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 2
-    ali:item minecraft:emerald x1
+    ali:item minecraft:emerald x1-3
       | Chance: 50%
       | Count: 1 to 3
     ali:item minecraft:diamond x1
@@ -91,19 +91,19 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 2
-    ali:item minecraft:spider_eye x1
+    ali:item minecraft:spider_eye x1-4
       | Chance: 20%
       | Count: 1 to 4
-    ali:item minecraft:string x1
+    ali:item minecraft:string x2-5
       | Chance: 20%
       | Count: 2 to 5
-    ali:item the_bumblezone:bee_stinger x1
+    ali:item the_bumblezone:bee_stinger x2-6
       | Chance: 20%
       | Count: 2 to 6
-    ali:item minecraft:cobweb x1
+    ali:item minecraft:cobweb x1-4
       | Chance: 20%
       | Count: 1 to 4
-    ali:item minecraft:fermented_spider_eye x1
+    ali:item minecraft:fermented_spider_eye x1-2
       | Chance: 20%
       | Count: 1 to 2
   ali:loot_pool

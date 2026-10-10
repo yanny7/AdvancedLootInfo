@@ -6,28 +6,28 @@ ali:trade
       | Uses: 16
       | XP: 2
       | Price Multiplier: 0.05
-      ali:item minecraft:wheat x1
+      ali:item minecraft:wheat x20
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 16
       | XP: 2
       | Price Multiplier: 0.05
-      ali:item minecraft:potato x1
+      ali:item minecraft:potato x26
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 16
       | XP: 2
       | Price Multiplier: 0.05
-      ali:item minecraft:carrot x1
+      ali:item minecraft:carrot x22
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 16
       | XP: 2
       | Price Multiplier: 0.05
-      ali:item minecraft:beetroot x1
+      ali:item minecraft:beetroot x15
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
@@ -36,13 +36,13 @@ ali:trade
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:bread x1
+      ali:item minecraft:bread x6
     ali:items_to_items
       | Uses: 4
       | XP: 3
       | Price Multiplier: 0.2
-      ali:item minecraft:apple x1
-      ali:item minecraft:sugar x1
+      ali:item minecraft:apple x3-7
+      ali:item minecraft:sugar x2
       ali:item minecraft:cake x1
   ali:trade_level
     | Level: 2
@@ -51,7 +51,7 @@ ali:trade
       | Uses: 12
       | XP: 10
       | Price Multiplier: 0.05
-      ali:item minecraft:pumpkin x1
+      ali:item minecraft:pumpkin x6
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
@@ -60,19 +60,19 @@ ali:trade
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:pumpkin_pie x1
+      ali:item minecraft:pumpkin_pie x4
     ali:items_to_items
       | Uses: 16
       | XP: 5
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:apple x1
+      ali:item minecraft:apple x4
     ali:items_to_items
       | Uses: 16
       | XP: 2
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x2
       ali:item minecraft:air x0
       ali:item minecraft:suspicious_stew x1 {Effects:[{EffectDuration:200,EffectId:8,"forge:effect_id":"minecraft:jump_boost"}]}
         | Effect: Night Vision
@@ -85,14 +85,14 @@ ali:trade
       | Uses: 12
       | XP: 10
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
-      ali:item minecraft:cookie x1
+      ali:item minecraft:cookie x18
     ali:items_to_items
       | Uses: 12
       | XP: 20
       | Price Multiplier: 0.05
-      ali:item minecraft:melon x1
+      ali:item minecraft:melon x4
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
   ali:trade_level
@@ -166,13 +166,13 @@ ali:trade
       | Uses: 12
       | XP: 30
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
-      ali:item minecraft:golden_carrot x1
+      ali:item minecraft:golden_carrot x3
     ali:items_to_items
       | Uses: 12
       | XP: 30
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x4
       ali:item minecraft:air x0
-      ali:item minecraft:glistering_melon_slice x1
+      ali:item minecraft:glistering_melon_slice x3

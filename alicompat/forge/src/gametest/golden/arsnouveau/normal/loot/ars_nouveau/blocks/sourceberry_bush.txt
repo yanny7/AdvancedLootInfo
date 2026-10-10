@@ -3,7 +3,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item ars_nouveau:sourceberry_bush x1
+    ali:item ars_nouveau:sourceberry_bush x2-6
       | Count: 2 to 3
       |   -> Fortune I: 2 to 4  ~3 (50%)
       |   -> Fortune II: 2 to 5  ~3 to 4 (33%)
@@ -19,7 +19,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item ars_nouveau:sourceberry_bush x1
+    ali:item ars_nouveau:sourceberry_bush x1-5
       | Count: 1 to 2
       |   -> Fortune I: 1 to 3  ~2 (50%)
       |   -> Fortune II: 1 to 4  ~2 to 3 (33%)

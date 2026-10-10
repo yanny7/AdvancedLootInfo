@@ -3,43 +3,43 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 2 to 4
-    ali:item minecraft:honeycomb x1
+    ali:item minecraft:honeycomb x1-3
       | Chance: 17.39%
       | Count: 1 to 3
-    ali:item minecraft:glow_berries x1
+    ali:item minecraft:glow_berries x1-3
       | Chance: 17.39%
       | Count: 1 to 3
-    ali:item minecraft:rabbit_foot x1
+    ali:item minecraft:rabbit_foot x1-3
       | Chance: 13.04%
       | Count: 1 to 3
-    ali:item the_bumblezone:luminescent_wax_node x1
+    ali:item the_bumblezone:luminescent_wax_node x2-4
       | Chance: 8.7%
       | Count: 2 to 4
-    ali:item the_bumblezone:luminescent_wax_channel x1
+    ali:item the_bumblezone:luminescent_wax_channel x2-4
       | Chance: 8.7%
       | Count: 2 to 4
-    ali:item minecraft:gunpowder x1
+    ali:item minecraft:gunpowder x2-4
       | Chance: 4.35%
       | Count: 2 to 4
-    ali:item minecraft:paper x1
+    ali:item minecraft:paper x2-4
       | Chance: 4.35%
       | Count: 2 to 4
-    ali:item minecraft:raw_gold x1
+    ali:item minecraft:raw_gold x2-4
       | Chance: 4.35%
       | Count: 2 to 4
-    ali:item minecraft:echo_shard x1
+    ali:item minecraft:echo_shard x2-4
       | Chance: 4.35%
       | Count: 2 to 4
-    ali:item minecraft:amethyst_shard x1
+    ali:item minecraft:amethyst_shard x2-4
       | Chance: 4.35%
       | Count: 2 to 4
-    ali:item minecraft:emerald x1
+    ali:item minecraft:emerald x1-3
       | Chance: 4.35%
       | Count: 1 to 3
-    ali:item minecraft:diamond x1
+    ali:item minecraft:diamond x1-2
       | Chance: 4.35%
       | Count: 1 to 2
-    ali:item minecraft:ender_pearl x1
+    ali:item minecraft:ender_pearl x2-3
       | Chance: 4.35%
       | Count: 2 to 3
   ali:loot_pool
@@ -72,13 +72,13 @@ ali:loot_table
     ali:item minecraft:name_tag x1
       | Chance: 7.8%
       | Count: 1
-    ali:item minecraft:firework_star x1 {Explosion:{Colors:[I;16028160],FadeColors:[I;9664512],Flicker:1b,Trail:1b,Type:4b}}
+    ali:item minecraft:firework_star x1-3 {Explosion:{Colors:[I;16028160],FadeColors:[I;9664512],Flicker:1b,Trail:1b,Type:4b}}
       | Chance: 7.8%
       | Count: 1 to 3
       | ----- Modifiers -----
       | Set Nbt:
       |   -> Tag: {Explosion:{Colors:[I;16028160],FadeColors:[I;9664512],Flicker:1b,Trail:1b,Type:4b}}
-    ali:item minecraft:firework_star x1 {Explosion:{Colors:[I;9664512],FadeColors:[I;16028160],Flicker:1b,Trail:1b,Type:4b}}
+    ali:item minecraft:firework_star x1-3 {Explosion:{Colors:[I;9664512],FadeColors:[I;16028160],Flicker:1b,Trail:1b,Type:4b}}
       | Chance: 7.8%
       | Count: 1 to 3
       | ----- Modifiers -----
@@ -96,7 +96,7 @@ ali:loot_table
     ali:item the_bumblezone:bumble_bee_chestplate_2 x1 {Damage:0}
       | Chance: 5.85%
       | Count: 1
-    ali:item #the_bumblezone:banner_patterns
+    ali:item #the_bumblezone:banner_patterns x1
       | Chance: 0.49%
       | Count: 1
   ali:loot_pool

@@ -15,7 +15,7 @@ ali:loot_table
   ali:item minecraft:gold_nugget x1
     | Chance: 50%
     | Count: 1
-  ali:item minecraft:emerald x1
+  ali:item minecraft:emerald x2
     | Count: 2
   ali:item minecraft:diamond x1
     | Chance: 1%

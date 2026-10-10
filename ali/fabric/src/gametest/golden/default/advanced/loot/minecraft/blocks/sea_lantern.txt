@@ -12,7 +12,7 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Enchantment: Silk Touch
         |     -> Level: ≥ 1
-      ali:item minecraft:prismarine_crystals x1
+      ali:item minecraft:prismarine_crystals x2-5
         | Count: clamp(max(0; U[2; 3]); 1; 5)
         |   -> Fortune LVL: clamp(max(0; U[2; 3]) + U[0; LVL]; 1; 5)
         |   -> Fortune I: 2 to 4  ~3 (50%)

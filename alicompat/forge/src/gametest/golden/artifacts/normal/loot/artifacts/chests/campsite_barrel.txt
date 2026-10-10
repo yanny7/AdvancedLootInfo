@@ -3,34 +3,34 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:cod x1
+    ali:item minecraft:cod x4-16
       | Chance: 3.5%
       | Count: 4 to 16
-    ali:item minecraft:salmon x1
+    ali:item minecraft:salmon x4-16
       | Chance: 3.5%
       | Count: 4 to 16
-    ali:item minecraft:rotten_flesh x1
+    ali:item minecraft:rotten_flesh x4-16
       | Chance: 3.5%
       | Count: 4 to 16
-    ali:item minecraft:bone x1
+    ali:item minecraft:bone x2-10
       | Chance: 3.5%
       | Count: 2 to 10
-    ali:item minecraft:paper x1
+    ali:item minecraft:paper x4-16
       | Chance: 3.5%
       | Count: 4 to 16
-    ali:item minecraft:sugar_cane x1
+    ali:item minecraft:sugar_cane x4-16
       | Chance: 3.5%
       | Count: 4 to 16
-    ali:item minecraft:wheat x1
+    ali:item minecraft:wheat x4-16
       | Chance: 3.5%
       | Count: 4 to 16
-    ali:item minecraft:book x1
+    ali:item minecraft:book x4-16
       | Chance: 3.5%
       | Count: 4 to 16
-    ali:item minecraft:sugar x1
+    ali:item minecraft:sugar x4-16
       | Chance: 3.5%
       | Count: 4 to 16
-    ali:item minecraft:coal x1
+    ali:item minecraft:coal x4-16
       | Chance: 3.5%
       | Count: 4 to 16
     ali:reference
@@ -41,7 +41,7 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 3
-          ali:item minecraft:gunpowder x1
+          ali:item minecraft:gunpowder x1-5
             | Chance: 2.8%
             | Count: 1 to 5
           ali:item minecraft:tnt x1
@@ -50,10 +50,10 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item minecraft:sand x1
+          ali:item minecraft:sand x8-40
             | Chance: 2.33%
             | Count: 8 to 40
-          ali:item minecraft:red_sand x1
+          ali:item minecraft:red_sand x8-40
             | Chance: 1.17%
             | Count: 8 to 40
     ali:reference
@@ -64,13 +64,13 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item minecraft:cobweb x1
+          ali:item minecraft:cobweb x3-8
             | Chance: 3.5%
             | Count: 3 to 8
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item minecraft:string x1
+          ali:item minecraft:string x6-16
             | Chance: 3.5%
             | Count: 6 to 16
     ali:reference
@@ -81,25 +81,25 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 2
-          ali:item minecraft:raw_gold x1
+          ali:item minecraft:raw_gold x4-20
             | Chance: 1.17%
             | Count: 4 to 20
-          ali:item minecraft:raw_iron x1
+          ali:item minecraft:raw_iron x4-20
             | Chance: 1.17%
             | Count: 4 to 20
-          ali:item minecraft:raw_copper x1
+          ali:item minecraft:raw_copper x4-20
             | Chance: 1.17%
             | Count: 4 to 20
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item minecraft:raw_gold_block x1
+          ali:item minecraft:raw_gold_block x2-8
             | Chance: 1.17%
             | Count: 2 to 8
-          ali:item minecraft:raw_iron_block x1
+          ali:item minecraft:raw_iron_block x2-8
             | Chance: 1.17%
             | Count: 2 to 8
-          ali:item minecraft:raw_copper_block x1
+          ali:item minecraft:raw_copper_block x2-8
             | Chance: 1.17%
             | Count: 2 to 8
     ali:reference
@@ -110,25 +110,25 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 2
-          ali:item minecraft:gold_ingot x1
+          ali:item minecraft:gold_ingot x4-16
             | Chance: 1.17%
             | Count: 4 to 16
-          ali:item minecraft:iron_ingot x1
+          ali:item minecraft:iron_ingot x4-16
             | Chance: 1.17%
             | Count: 4 to 16
-          ali:item minecraft:copper_ingot x1
+          ali:item minecraft:copper_ingot x4-16
             | Chance: 1.17%
             | Count: 4 to 16
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item minecraft:gold_block x1
+          ali:item minecraft:gold_block x1-6
             | Chance: 1.17%
             | Count: 1 to 6
-          ali:item minecraft:iron_block x1
+          ali:item minecraft:iron_block x1-6
             | Chance: 1.17%
             | Count: 1 to 6
-          ali:item minecraft:copper_block x1
+          ali:item minecraft:copper_block x4-16
             | Chance: 1.17%
             | Count: 4 to 16
     ali:reference
@@ -139,13 +139,13 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 3
-          ali:item minecraft:amethyst_shard x1
+          ali:item minecraft:amethyst_shard x1-8
             | Chance: 2.1%
             | Count: 1 to 8
-          ali:item minecraft:diamond x1
+          ali:item minecraft:diamond x1-4
             | Chance: 0.7%
             | Count: 1 to 4
-          ali:item minecraft:emerald x1
+          ali:item minecraft:emerald x1-4
             | Chance: 0.7%
             | Count: 1 to 4
     ali:reference
@@ -156,25 +156,25 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 2
-          ali:item minecraft:potato x1
+          ali:item minecraft:potato x2-12
             | Chance: 0.5%
             | Count: 2 to 12
-          ali:item minecraft:carrot x1
+          ali:item minecraft:carrot x2-12
             | Chance: 0.5%
             | Count: 2 to 12
-          ali:item minecraft:beetroot x1
+          ali:item minecraft:beetroot x2-12
             | Chance: 0.5%
             | Count: 2 to 12
-          ali:item minecraft:wheat x1
+          ali:item minecraft:wheat x2-12
             | Chance: 0.5%
             | Count: 2 to 12
-          ali:item minecraft:melon_slice x1
+          ali:item minecraft:melon_slice x2-12
             | Chance: 0.5%
             | Count: 2 to 12
-          ali:item minecraft:pumpkin x1
+          ali:item minecraft:pumpkin x2-12
             | Chance: 0.5%
             | Count: 2 to 12
-          ali:item minecraft:apple x1
+          ali:item minecraft:apple x2-12
             | Chance: 0.5%
             | Count: 2 to 12
     ali:reference
@@ -185,16 +185,16 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 3
-          ali:item minecraft:bread x1
+          ali:item minecraft:bread x2-12
             | Chance: 0.58%
             | Count: 2 to 12
-          ali:item minecraft:pumpkin_pie x1
+          ali:item minecraft:pumpkin_pie x2-12
             | Chance: 0.58%
             | Count: 2 to 12
           ali:item minecraft:cake x1
             | Chance: 0.58%
             | Count: 1
-          ali:item minecraft:cookie x1
+          ali:item minecraft:cookie x2-12
             | Chance: 0.58%
             | Count: 2 to 12
           ali:item minecraft:mushroom_stew x1
@@ -211,10 +211,10 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 3
-          ali:item minecraft:cobblestone x1
+          ali:item minecraft:cobblestone x16-64
             | Chance: 1.75%
             | Count: 16 to 64
-          ali:item minecraft:cobbled_deepslate x1
+          ali:item minecraft:cobbled_deepslate x16-64
             | Chance: 1.75%
             | Count: 16 to 64
     ali:reference
@@ -225,16 +225,16 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 4
-          ali:item minecraft:rail x1
+          ali:item minecraft:rail x4-16
             | Chance: 1.75%
             | Count: 4 to 16
-          ali:item minecraft:powered_rail x1
+          ali:item minecraft:powered_rail x4-16
             | Chance: 0.87%
             | Count: 4 to 16
-          ali:item minecraft:activator_rail x1
+          ali:item minecraft:activator_rail x2-5
             | Chance: 0.44%
             | Count: 2 to 5
-          ali:item minecraft:detector_rail x1
+          ali:item minecraft:detector_rail x2-5
             | Chance: 0.44%
             | Count: 2 to 5
     ali:reference
@@ -260,6 +260,6 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item minecraft:rail x1
+          ali:item minecraft:rail x4-16
             | Chance: 3.5%
             | Count: 4 to 16

@@ -14,7 +14,7 @@ ali:loot_table
         |     -> Level: ≥ 1
       ali:modified
         | Selects only first successful entry
-        ali:item minecraft:copper_ingot x1
+        ali:item minecraft:copper_ingot x2-20
           | Count: max(0; U[2; 5]) × max(1; U[0; 1])
           |   -> Fortune LVL: max(0; U[2; 5]) × max(1; U[0; LVL + 1])
           |   -> Fortune I: 2 to 10  ~4 (25%)
@@ -29,7 +29,7 @@ ali:loot_table
           |   -> Enchantment: Fortune
           |   -> Formula: minecraft:ore_drops
           | Explosion Decay
-        ali:item minecraft:raw_copper x1
+        ali:item minecraft:raw_copper x2-20
           | Count: max(0; U[2; 5]) × max(1; U[0; 1])
           |   -> Fortune LVL: max(0; U[2; 5]) × max(1; U[0; LVL + 1])
           |   -> Fortune I: 2 to 10  ~4 (25%)

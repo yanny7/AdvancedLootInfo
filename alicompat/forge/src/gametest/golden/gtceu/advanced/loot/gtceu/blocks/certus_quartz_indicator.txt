@@ -3,7 +3,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item gtceu:tiny_certus_quartz_dust x1
+    ali:item gtceu:tiny_certus_quartz_dust x3-5
       | Count: max(0; U[3; 5])
       | ----- Modifiers -----
       | Apply Bonus:

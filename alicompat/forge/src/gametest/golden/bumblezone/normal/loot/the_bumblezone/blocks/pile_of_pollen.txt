@@ -5,7 +5,7 @@ ali:loot_table
     | Rolls: 1
     ali:alternatives
       | Selects only first successful entry
-      ali:item the_bumblezone:pollen_puff x1
+      ali:item the_bumblezone:pollen_puff x0-1
         | Count: 0
         |   -> Fortune I: 0 to 1
         |   -> Fortune II: 0 to 1  ~1 (67%)
@@ -17,7 +17,7 @@ ali:loot_table
         |   -> Block: Pile of Pollen
         |   -> Properties:
         |     -> layers: 1
-      ali:item the_bumblezone:pollen_puff x1
+      ali:item the_bumblezone:pollen_puff x0-2
         | Count: 0 to 1
         |   -> Fortune I: 0 to 2  ~1 (50%)
         |   -> Fortune II: 0 to 2  ~2 (50%)
@@ -29,7 +29,7 @@ ali:loot_table
         |   -> Block: Pile of Pollen
         |   -> Properties:
         |     -> layers: 2
-      ali:item the_bumblezone:pollen_puff x1
+      ali:item the_bumblezone:pollen_puff x0-3
         | Count: 0 to 1
         |   -> Fortune I: 0 to 2  ~1 (50%)
         |   -> Fortune II: 0 to 3  ~1 to 2 (33%)
@@ -41,7 +41,7 @@ ali:loot_table
         |   -> Block: Pile of Pollen
         |   -> Properties:
         |     -> layers: 3
-      ali:item the_bumblezone:pollen_puff x1
+      ali:item the_bumblezone:pollen_puff x0-4
         | Count: 0 to 2
         |   -> Fortune I: 0 to 4  ~2 (33%)
         |   -> Fortune II: 0 to 4  ~4 (40%)
@@ -53,7 +53,7 @@ ali:loot_table
         |   -> Block: Pile of Pollen
         |   -> Properties:
         |     -> layers: 4
-      ali:item the_bumblezone:pollen_puff x1
+      ali:item the_bumblezone:pollen_puff x1-5
         | Count: 1 to 2  ~1 (67%)
         |   -> Fortune I: 1 to 4  ~1 to 2 (33%)
         |   -> Fortune II: 1 to 5
@@ -65,7 +65,7 @@ ali:loot_table
         |   -> Block: Pile of Pollen
         |   -> Properties:
         |     -> layers: 5
-      ali:item the_bumblezone:pollen_puff x1
+      ali:item the_bumblezone:pollen_puff x1-6
         | Count: 1 to 3
         |   -> Fortune I: 1 to 5  ~3 (33%)
         |   -> Fortune II: 1 to 6  ~3 to 6 (20%)
@@ -77,7 +77,7 @@ ali:loot_table
         |   -> Block: Pile of Pollen
         |   -> Properties:
         |     -> layers: 6
-      ali:item the_bumblezone:pollen_puff x1
+      ali:item the_bumblezone:pollen_puff x1-7
         | Count: 1 to 3
         |   -> Fortune I: 1 to 5  ~3 (33%)
         |   -> Fortune II: 1 to 7  ~3 to 5 (20%)
@@ -89,7 +89,7 @@ ali:loot_table
         |   -> Block: Pile of Pollen
         |   -> Properties:
         |     -> layers: 7
-      ali:item the_bumblezone:pollen_puff x1
+      ali:item the_bumblezone:pollen_puff x1-8
         | Count: 1 to 3
         |   -> Fortune I: 1 to 6  ~3 to 4 (25%)
         |   -> Fortune II: 1 to 8  ~3 to 8 (14%)

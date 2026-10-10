@@ -15,7 +15,7 @@ ali:loot_table
         |     -> Enchantments:
         |       -> Enchantment: Silk Touch
         |       -> Level: ≥ 1
-      ali:item minecraft:stick x1
+      ali:item minecraft:stick x1-2
         | Chance: 2%
         |   -> Fortune I: 2.22%
         |   -> Fortune II: 2.5%

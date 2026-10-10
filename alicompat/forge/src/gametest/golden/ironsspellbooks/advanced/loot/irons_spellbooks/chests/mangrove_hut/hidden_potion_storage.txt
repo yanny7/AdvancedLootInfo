@@ -3,14 +3,14 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 15
-    ali:item minecraft:emerald x1
+    ali:item minecraft:emerald x2
       | Chance: 50%
       | Count: 2
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 2
       |   -> Add: False
-    ali:item irons_spellbooks:arcane_essence x1
+    ali:item irons_spellbooks:arcane_essence x2
       | Chance: 50%
       | Count: 2
       | ----- Modifiers -----

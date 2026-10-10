@@ -145,7 +145,7 @@ ali:loot_table
       |   -> Destination: the_bumblezone:honey_compass/lesser_misc_locating
       |   -> Search Radius: 50
       |   -> Skip Known Structures: False
-    ali:item #the_bumblezone:music_discs
+    ali:item #the_bumblezone:music_discs x1
       | Chance: 1.16%
       |   -> Bad Luck: 1.2%
       |   -> Luck 1: 1.12%

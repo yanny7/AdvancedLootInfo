@@ -3,7 +3,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 3
-    ali:item enderio:dark_steel_ingot x1
+    ali:item enderio:dark_steel_ingot x1-3
       | Chance: 5%
       | Count: 1 to 3
     ali:item minecraft:ender_pearl x1

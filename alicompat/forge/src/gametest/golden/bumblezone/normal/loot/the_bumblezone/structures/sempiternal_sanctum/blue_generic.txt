@@ -3,7 +3,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 2 to 4
-    ali:item minecraft:honeycomb x1
+    ali:item minecraft:honeycomb x1-3
       | Chance: 25%
       |   -> Bad Luck: 33.33%
       |   -> Luck 1: 20%
@@ -11,7 +11,7 @@ ali:loot_table
       |   -> Luck 3: 14.29%
       |   -> Luck 4: 12.5%
       | Count: 1 to 3
-    ali:item minecraft:glow_berries x1
+    ali:item minecraft:glow_berries x1-4
       | Chance: 16.67%
       |   -> Bad Luck: 22.22%
       |   -> Luck 1: 13.33%
@@ -19,7 +19,7 @@ ali:loot_table
       |   -> Luck 3: 9.52%
       |   -> Luck 4: 8.33%
       | Count: 1 to 4
-    ali:item minecraft:gunpowder x1
+    ali:item minecraft:gunpowder x1-3
       | Chance: 16.67%
       |   -> Bad Luck: 22.22%
       |   -> Luck 1: 13.33%
@@ -35,7 +35,7 @@ ali:loot_table
       |   -> Luck 3: 4.76%
       |   -> Luck 4: 4.17%
       | Count: 1
-    ali:item minecraft:book x1
+    ali:item minecraft:book x1-3
       | Chance: 8.33%
       |   -> Bad Luck: 11.11%
       |   -> Luck 1: 6.67%
@@ -73,7 +73,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 2
-    ali:item minecraft:amethyst_shard x1
+    ali:item minecraft:amethyst_shard x3-7
       | Chance: 27.61%
       |   -> Bad Luck: 28.04%
       |   -> Luck 1: 27.19%
@@ -81,7 +81,7 @@ ali:loot_table
       |   -> Luck 3: 26.39%
       |   -> Luck 4: 26.01%
       | Count: 3 to 7
-    ali:item minecraft:emerald x1
+    ali:item minecraft:emerald x1-3
       | Chance: 19.94%
       |   -> Bad Luck: 20.25%
       |   -> Luck 1: 19.64%
@@ -89,7 +89,7 @@ ali:loot_table
       |   -> Luck 3: 19.06%
       |   -> Luck 4: 18.79%
       | Count: 1 to 3
-    ali:item minecraft:diamond x1
+    ali:item minecraft:diamond x1-2
       | Chance: 16.87%
       |   -> Bad Luck: 17.13%
       |   -> Luck 1: 16.62%
@@ -353,7 +353,7 @@ ali:loot_table
       | Enchant With Levels:
       |   -> Levels: 30
       |   -> Treasure: True
-    ali:item #minecraft:decorated_pot_sherds
+    ali:item #minecraft:decorated_pot_sherds x1
       | Quality: 1
       | Chance: 0.31%
       |   -> Bad Luck: 0%
@@ -362,7 +362,7 @@ ali:loot_table
       |   -> Luck 3: 1.17%
       |   -> Luck 4: 1.45%
       | Count: 1
-    ali:item #minecraft:trim_templates
+    ali:item #minecraft:trim_templates x1
       | Quality: 1
       | Chance: 0.31%
       |   -> Bad Luck: 0%
@@ -376,7 +376,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 3
-    ali:item the_bumblezone:bee_stinger x1
+    ali:item the_bumblezone:bee_stinger x1-2
       | Chance: 20%
       |   -> Bad Luck: 22.73%
       |   -> Luck 1: 17.86%
@@ -384,7 +384,7 @@ ali:loot_table
       |   -> Luck 3: 14.71%
       |   -> Luck 4: 13.51%
       | Count: 1 to 2
-    ali:item minecraft:blue_dye x1
+    ali:item minecraft:blue_dye x1-3
       | Quality: 1
       | Chance: 12%
       |   -> Bad Luck: 9.09%
@@ -393,7 +393,7 @@ ali:loot_table
       |   -> Luck 3: 17.65%
       |   -> Luck 4: 18.92%
       | Count: 1 to 3
-    ali:item minecraft:spider_eye x1
+    ali:item minecraft:spider_eye x1-4
       | Chance: 12%
       |   -> Bad Luck: 13.64%
       |   -> Luck 1: 10.71%
@@ -401,7 +401,7 @@ ali:loot_table
       |   -> Luck 3: 8.82%
       |   -> Luck 4: 8.11%
       | Count: 1 to 4
-    ali:item minecraft:string x1
+    ali:item minecraft:string x1-4
       | Chance: 12%
       |   -> Bad Luck: 13.64%
       |   -> Luck 1: 10.71%
@@ -409,7 +409,7 @@ ali:loot_table
       |   -> Luck 3: 8.82%
       |   -> Luck 4: 8.11%
       | Count: 1 to 4
-    ali:item minecraft:bone x1
+    ali:item minecraft:bone x1-3
       | Chance: 12%
       |   -> Bad Luck: 13.64%
       |   -> Luck 1: 10.71%
@@ -417,7 +417,7 @@ ali:loot_table
       |   -> Luck 3: 8.82%
       |   -> Luck 4: 8.11%
       | Count: 1 to 3
-    ali:item minecraft:paper x1
+    ali:item minecraft:paper x1-3
       | Chance: 8%
       |   -> Bad Luck: 9.09%
       |   -> Luck 1: 7.14%

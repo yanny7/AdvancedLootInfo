@@ -3,98 +3,98 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 4 to 6
-    ali:item minecraft:cobweb x1
+    ali:item minecraft:cobweb x1-6
       | Chance: 14.93%
       | Count: max(0; U[1; 6])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 6
       |   -> Add: False
-    ali:item minecraft:string x1
+    ali:item minecraft:string x2-10
       | Chance: 14.03%
       | Count: max(0; U[2; 10])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 2 to 10
       |   -> Add: False
-    ali:item minecraft:cobblestone x1
+    ali:item minecraft:cobblestone x3-8
       | Chance: 12.67%
       | Count: max(0; U[3; 8])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 3 to 8
       |   -> Add: False
-    ali:item minecraft:sculk x1
+    ali:item minecraft:sculk x3-10
       | Chance: 11.31%
       | Count: max(0; U[3; 10])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 3 to 10
       |   -> Add: False
-    ali:item minecraft:gold_ingot x1
+    ali:item minecraft:gold_ingot x3-8
       | Chance: 7.24%
       | Count: max(0; U[3; 8])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 3 to 8
       |   -> Add: False
-    ali:item minecraft:iron_ingot x1
+    ali:item minecraft:iron_ingot x4-8
       | Chance: 7.24%
       | Count: max(0; U[4; 8])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 4 to 8
       |   -> Add: False
-    ali:item minecraft:redstone x1
+    ali:item minecraft:redstone x4-9
       | Chance: 6.33%
       | Count: max(0; U[4; 9])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 4 to 9
       |   -> Add: False
-    ali:item minecraft:raw_copper x1
+    ali:item minecraft:raw_copper x2-10
       | Chance: 5.88%
       | Count: max(0; U[2; 10])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 2 to 10
       |   -> Add: False
-    ali:item deeperdarker:soul_dust x1
+    ali:item deeperdarker:soul_dust x2-5
       | Chance: 4.52%
       | Count: max(0; U[2; 5])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 2 to 5
       |   -> Add: False
-    ali:item minecraft:gold_nugget x1
+    ali:item minecraft:gold_nugget x5-17
       | Chance: 4.07%
       | Count: max(0; U[5; 17])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 5 to 17
       |   -> Add: False
-    ali:item minecraft:quartz x1
+    ali:item minecraft:quartz x1-7
       | Chance: 4.07%
       | Count: max(0; U[1; 7])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 7
       |   -> Add: False
-    ali:item minecraft:diamond x1
+    ali:item minecraft:diamond x3-6
       | Chance: 3.62%
       | Count: max(0; U[3; 6])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 3 to 6
       |   -> Add: False
-    ali:item minecraft:sculk_sensor x1
+    ali:item minecraft:sculk_sensor x1-2
       | Chance: 1.81%
       | Count: max(0; U[1; 2])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 2
       |   -> Add: False
-    ali:item minecraft:sculk_catalyst x1
+    ali:item minecraft:sculk_catalyst x1-2
       | Chance: 1.36%
       | Count: max(0; U[1; 2])
       | ----- Modifiers -----
@@ -108,7 +108,7 @@ ali:loot_table
       | Enchant With Levels:
       |   -> Levels: 20 to 50
       |   -> Treasure: True
-    ali:item deeperdarker:soul_crystal x1
+    ali:item deeperdarker:soul_crystal x1-2
       | Chance: 0.45%
       | Count: max(0; U[1; 2])
       | ----- Modifiers -----

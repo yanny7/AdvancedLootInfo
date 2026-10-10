@@ -3,7 +3,7 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 3
-    ali:item minecraft:stick x1
+    ali:item minecraft:stick x0-5
       | Chance: 25%
       | Count: 0 to 2
       |   -> Looting I: 0 to 3  ~1 to 2 (33%)
@@ -13,7 +13,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Looting Enchant:
       |   -> Value: 0 to 1
-    ali:item minecraft:glowstone_dust x1
+    ali:item minecraft:glowstone_dust x0-5
       | Chance: 12.5%
       | Count: 0 to 2
       |   -> Looting I: 0 to 3  ~1 to 2 (33%)
@@ -23,7 +23,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Looting Enchant:
       |   -> Value: 0 to 1
-    ali:item minecraft:sugar x1
+    ali:item minecraft:sugar x0-5
       | Chance: 12.5%
       | Count: 0 to 2
       |   -> Looting I: 0 to 3  ~1 to 2 (33%)
@@ -33,7 +33,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Looting Enchant:
       |   -> Value: 0 to 1
-    ali:item minecraft:redstone x1
+    ali:item minecraft:redstone x0-5
       | Chance: 12.5%
       | Count: 0 to 2
       |   -> Looting I: 0 to 3  ~1 to 2 (33%)
@@ -43,7 +43,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Looting Enchant:
       |   -> Value: 0 to 1
-    ali:item minecraft:spider_eye x1
+    ali:item minecraft:spider_eye x0-5
       | Chance: 12.5%
       | Count: 0 to 2
       |   -> Looting I: 0 to 3  ~1 to 2 (33%)
@@ -53,7 +53,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Looting Enchant:
       |   -> Value: 0 to 1
-    ali:item minecraft:glass_bottle x1
+    ali:item minecraft:glass_bottle x0-5
       | Chance: 12.5%
       | Count: 0 to 2
       |   -> Looting I: 0 to 3  ~1 to 2 (33%)
@@ -63,7 +63,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Looting Enchant:
       |   -> Value: 0 to 1
-    ali:item minecraft:gunpowder x1
+    ali:item minecraft:gunpowder x0-5
       | Chance: 12.5%
       | Count: 0 to 2
       |   -> Looting I: 0 to 3  ~1 to 2 (33%)

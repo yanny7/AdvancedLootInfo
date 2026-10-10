@@ -6,7 +6,7 @@ ali:trade
       | Uses: 1
       | XP: 5
       | Price Multiplier: 10.0
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x24
       ali:item minecraft:air x0
       ali:item irons_spellbooks:furled_map x1 {display:{Lore:['{"color":"gold","translate":"item.irons_spellbooks.furled_map_descriptor_framing","with":[{"translate":"item.irons_spellbooks.evoker_fort_battle_plans"}]}']},"irons_spellbooks:furled_map_data":{descriptionOverride:{translate:"item.irons_spellbooks.evoker_fort_battle_plans"},destination:"irons_spellbooks:evoker_fort",dimension:"minecraft:overworld"}}
     ali:items_to_items
@@ -15,12 +15,12 @@ ali:trade
       | Price Multiplier: 0.2
       ali:item irons_spellbooks:greater_healing_potion x1
       ali:item minecraft:air x0
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x18
     ali:items_to_items
       | Uses: 2
       | XP: 0
       | Price Multiplier: 0.2
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x6
       ali:item minecraft:air x0
       ali:item minecraft:potion x1 {Potion:"minecraft:healing"}
     ali:items_to_items

@@ -51,7 +51,7 @@ ali:loot_table
     ali:item minecraft:ward_armor_trim_smithing_template x1
       | Chance: 4.44%
       | Count: 1
-    ali:item #the_bumblezone:banner_patterns
+    ali:item #the_bumblezone:banner_patterns x1
       | Chance: 2.22%
       | Count: 1
     ali:item the_bumblezone:buzzing_briefcase x1

@@ -27,7 +27,7 @@ ali:loot_table
           |     -> Level: ≥ 1
       ali:modified
         | Selects only first successful entry
-        ali:item minecraft:brick x1
+        ali:item minecraft:brick x4
           | Count: 4
           | ----- Predicates -----
           | Match Tool:
@@ -36,7 +36,7 @@ ali:loot_table
           |     -> Level: ≥ 1
           | ----- Modifiers -----
           | Explosion Decay
-        ali:item minecraft:clay_ball x1
+        ali:item minecraft:clay_ball x4
           | Count: 4
           | ----- Modifiers -----
           | Explosion Decay

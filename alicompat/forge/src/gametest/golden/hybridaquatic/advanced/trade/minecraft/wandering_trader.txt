@@ -6,28 +6,28 @@ ali:trade
       | Uses: 5
       | XP: 1
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x2
       ali:item minecraft:air x0
       ali:item minecraft:sea_pickle x1
     ali:items_to_items
       | Uses: 5
       | XP: 1
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x4
       ali:item minecraft:air x0
       ali:item minecraft:slime_ball x1
     ali:items_to_items
       | Uses: 5
       | XP: 1
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x2
       ali:item minecraft:air x0
       ali:item minecraft:glowstone x1
     ali:items_to_items
       | Uses: 5
       | XP: 1
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x5
       ali:item minecraft:air x0
       ali:item minecraft:nautilus_shell x1
     ali:items_to_items
@@ -55,14 +55,14 @@ ali:trade
       | Uses: 12
       | XP: 1
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item minecraft:kelp x1
     ali:items_to_items
       | Uses: 8
       | XP: 1
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item minecraft:cactus x1
     ali:items_to_items
@@ -181,56 +181,56 @@ ali:trade
       | Uses: 8
       | XP: 1
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x5
       ali:item minecraft:air x0
       ali:item minecraft:acacia_sapling x1
     ali:items_to_items
       | Uses: 8
       | XP: 1
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x5
       ali:item minecraft:air x0
       ali:item minecraft:birch_sapling x1
     ali:items_to_items
       | Uses: 8
       | XP: 1
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x5
       ali:item minecraft:air x0
       ali:item minecraft:dark_oak_sapling x1
     ali:items_to_items
       | Uses: 8
       | XP: 1
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x5
       ali:item minecraft:air x0
       ali:item minecraft:jungle_sapling x1
     ali:items_to_items
       | Uses: 8
       | XP: 1
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x5
       ali:item minecraft:air x0
       ali:item minecraft:oak_sapling x1
     ali:items_to_items
       | Uses: 8
       | XP: 1
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x5
       ali:item minecraft:air x0
       ali:item minecraft:spruce_sapling x1
     ali:items_to_items
       | Uses: 8
       | XP: 1
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x5
       ali:item minecraft:air x0
       ali:item minecraft:cherry_sapling x1
     ali:items_to_items
       | Uses: 8
       | XP: 1
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x5
       ali:item minecraft:air x0
       ali:item minecraft:mangrove_propagule x1
     ali:items_to_items
@@ -239,145 +239,145 @@ ali:trade
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:red_dye x1
+      ali:item minecraft:red_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:white_dye x1
+      ali:item minecraft:white_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:blue_dye x1
+      ali:item minecraft:blue_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:pink_dye x1
+      ali:item minecraft:pink_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:black_dye x1
+      ali:item minecraft:black_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:green_dye x1
+      ali:item minecraft:green_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:light_gray_dye x1
+      ali:item minecraft:light_gray_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:magenta_dye x1
+      ali:item minecraft:magenta_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:yellow_dye x1
+      ali:item minecraft:yellow_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:gray_dye x1
+      ali:item minecraft:gray_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:purple_dye x1
+      ali:item minecraft:purple_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:light_blue_dye x1
+      ali:item minecraft:light_blue_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:lime_dye x1
+      ali:item minecraft:lime_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:orange_dye x1
+      ali:item minecraft:orange_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:brown_dye x1
+      ali:item minecraft:brown_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:cyan_dye x1
+      ali:item minecraft:cyan_dye x3
     ali:items_to_items
       | Uses: 8
       | XP: 1
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item minecraft:brain_coral_block x1
     ali:items_to_items
       | Uses: 8
       | XP: 1
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item minecraft:bubble_coral_block x1
     ali:items_to_items
       | Uses: 8
       | XP: 1
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item minecraft:fire_coral_block x1
     ali:items_to_items
       | Uses: 8
       | XP: 1
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item minecraft:horn_coral_block x1
     ali:items_to_items
       | Uses: 8
       | XP: 1
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item minecraft:tube_coral_block x1
     ali:items_to_items
@@ -407,49 +407,49 @@ ali:trade
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:lily_pad x1
+      ali:item minecraft:lily_pad x2
     ali:items_to_items
       | Uses: 5
       | XP: 1
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:small_dripleaf x1
+      ali:item minecraft:small_dripleaf x2
     ali:items_to_items
       | Uses: 8
       | XP: 1
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:sand x1
+      ali:item minecraft:sand x8
     ali:items_to_items
       | Uses: 6
       | XP: 1
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:red_sand x1
+      ali:item minecraft:red_sand x4
     ali:items_to_items
       | Uses: 5
       | XP: 1
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:pointed_dripstone x1
+      ali:item minecraft:pointed_dripstone x2
     ali:items_to_items
       | Uses: 5
       | XP: 1
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:rooted_dirt x1
+      ali:item minecraft:rooted_dirt x2
     ali:items_to_items
       | Uses: 5
       | XP: 1
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:moss_block x1
+      ali:item minecraft:moss_block x2
   ali:trade_level
     | Level: 2
     | Randomly Selects 1 Of These Trades
@@ -457,28 +457,28 @@ ali:trade
       | Uses: 4
       | XP: 1
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x5
       ali:item minecraft:air x0
       ali:item minecraft:tropical_fish_bucket x1
     ali:items_to_items
       | Uses: 4
       | XP: 1
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x5
       ali:item minecraft:air x0
       ali:item minecraft:pufferfish_bucket x1
     ali:items_to_items
       | Uses: 6
       | XP: 1
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item minecraft:packed_ice x1
     ali:items_to_items
       | Uses: 6
       | XP: 1
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x6
       ali:item minecraft:air x0
       ali:item minecraft:blue_ice x1
     ali:items_to_items
@@ -492,9 +492,9 @@ ali:trade
       | Uses: 6
       | XP: 1
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
-      ali:item minecraft:podzol x1
+      ali:item minecraft:podzol x3
     ali:items_to_items
       | Uses: 1
       | XP: 2

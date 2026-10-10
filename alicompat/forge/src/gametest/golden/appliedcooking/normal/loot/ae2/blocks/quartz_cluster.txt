@@ -12,7 +12,7 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Enchantment: Silk Touch
         |     -> Level: ≥ 1
-      ali:item ae2:certus_quartz_crystal x1
+      ali:item ae2:certus_quartz_crystal x4-7
         | Count: 4
         |   -> Fortune I: 4 to 5
         |   -> Fortune II: 4 to 6

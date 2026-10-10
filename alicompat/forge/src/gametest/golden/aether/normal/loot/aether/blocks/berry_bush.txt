@@ -5,7 +5,7 @@ ali:loot_table
     | Rolls: 1
     ali:modified
       | Selects only first successful entry
-      ali:item aether:blue_berry x1
+      ali:item aether:blue_berry x2-7
         | Chance: 50%
         | Count: 2 to 4
         |   -> Fortune I: 2 to 5  ~3 to 4 (33%)
@@ -21,7 +21,7 @@ ali:loot_table
         | ----- Modifiers -----
         | Double Drops
         | Explosion Decay
-      ali:item aether:blue_berry x1
+      ali:item aether:blue_berry x1-6
         | Count: 1 to 3
         |   -> Fortune I: 1 to 4  ~2 to 3 (33%)
         |   -> Fortune II: 1 to 5  ~3 (33%)

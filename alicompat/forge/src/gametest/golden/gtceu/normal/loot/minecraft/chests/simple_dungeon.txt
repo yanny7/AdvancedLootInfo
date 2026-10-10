@@ -3,7 +3,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 3
-    ali:item gtceu:silver_ingot x1
+    ali:item gtceu:silver_ingot x1-6
       | Quality: 1
       | Chance: 14.83%
       |   -> Bad Luck: 15.01%
@@ -18,7 +18,7 @@ ali:loot_table
       |     -> Item: Silver Ingot
       |     -> Count: 1
       |   -> Count: 1 to 6
-    ali:item gtceu:purple_drink x1
+    ali:item gtceu:purple_drink x4-8
       | Quality: 1
       | Chance: 9.89%
       |   -> Bad Luck: 9.96%
@@ -33,7 +33,7 @@ ali:loot_table
       |     -> Item: Purple Drink
       |     -> Count: 1
       |   -> Count: 4 to 8
-    ali:item gtceu:steel_ingot x1
+    ali:item gtceu:steel_ingot x1-6
       | Quality: 1
       | Chance: 7.42%
       |   -> Bad Luck: 7.44%
@@ -48,7 +48,7 @@ ali:loot_table
       |     -> Item: Steel Ingot
       |     -> Count: 1
       |   -> Count: 1 to 6
-    ali:item gtceu:bronze_ingot x1
+    ali:item gtceu:bronze_ingot x1-6
       | Quality: 1
       | Chance: 7.42%
       |   -> Bad Luck: 7.44%
@@ -63,7 +63,7 @@ ali:loot_table
       |     -> Item: Bronze Ingot
       |     -> Count: 1
       |   -> Count: 1 to 6
-    ali:item gtceu:manganese_ingot x1
+    ali:item gtceu:manganese_ingot x1-6
       | Quality: 1
       | Chance: 7.42%
       |   -> Bad Luck: 7.44%
@@ -78,7 +78,7 @@ ali:loot_table
       |     -> Item: Manganese Ingot
       |     -> Count: 1
       |   -> Count: 1 to 6
-    ali:item gtceu:red_garnet_gem x1
+    ali:item gtceu:red_garnet_gem x1-6
       | Quality: 1
       | Chance: 4.94%
       |   -> Bad Luck: 4.92%
@@ -93,7 +93,7 @@ ali:loot_table
       |     -> Item: Red Garnet
       |     -> Count: 1
       |   -> Count: 1 to 6
-    ali:item gtceu:yellow_garnet_gem x1
+    ali:item gtceu:yellow_garnet_gem x1-6
       | Quality: 1
       | Chance: 4.94%
       |   -> Bad Luck: 4.92%
@@ -108,7 +108,7 @@ ali:loot_table
       |     -> Item: Yellow Garnet
       |     -> Count: 1
       |   -> Count: 1 to 6
-    ali:item gtceu:neodymium_dust x1
+    ali:item gtceu:neodymium_dust x1-6
       | Quality: 1
       | Chance: 4.94%
       |   -> Bad Luck: 4.92%
@@ -123,7 +123,7 @@ ali:loot_table
       |     -> Item: Neodymium Dust
       |     -> Count: 1
       |   -> Count: 1 to 6
-    ali:item gtceu:chromium_dust x1
+    ali:item gtceu:chromium_dust x1-3
       | Quality: 1
       | Chance: 4.94%
       |   -> Bad Luck: 4.92%
@@ -138,7 +138,7 @@ ali:loot_table
       |     -> Item: Chromium Dust
       |     -> Count: 1
       |   -> Count: 1 to 3
-    ali:item gtceu:lead_ingot x1
+    ali:item gtceu:lead_ingot x1-6
       | Quality: 1
       | Chance: 3.71%
       |   -> Bad Luck: 3.66%
@@ -169,7 +169,7 @@ ali:loot_table
       |   -> Luck 3: 2.33%
       |   -> Luck 4: 2.29%
       | Count: 1
-    ali:item minecraft:emerald x1
+    ali:item minecraft:emerald x1-6
       | Quality: 1
       | Chance: 2.47%
       |   -> Bad Luck: 2.4%
@@ -184,7 +184,7 @@ ali:loot_table
       |     -> Item: Emerald
       |     -> Count: 1
       |   -> Count: 1 to 6
-    ali:item gtceu:ruby_gem x1
+    ali:item gtceu:ruby_gem x1-6
       | Quality: 1
       | Chance: 2.47%
       |   -> Bad Luck: 2.4%
@@ -199,7 +199,7 @@ ali:loot_table
       |     -> Item: Ruby
       |     -> Count: 1
       |   -> Count: 1 to 6
-    ali:item gtceu:sapphire_gem x1
+    ali:item gtceu:sapphire_gem x1-6
       | Quality: 1
       | Chance: 2.47%
       |   -> Bad Luck: 2.4%
@@ -214,7 +214,7 @@ ali:loot_table
       |     -> Item: Sapphire
       |     -> Count: 1
       |   -> Count: 1 to 6
-    ali:item gtceu:green_sapphire_gem x1
+    ali:item gtceu:green_sapphire_gem x1-6
       | Quality: 1
       | Chance: 2.47%
       |   -> Bad Luck: 2.4%
@@ -229,7 +229,7 @@ ali:loot_table
       |     -> Item: Green Sapphire
       |     -> Count: 1
       |   -> Count: 1 to 6
-    ali:item gtceu:olivine_gem x1
+    ali:item gtceu:olivine_gem x1-6
       | Quality: 1
       | Chance: 2.47%
       |   -> Bad Luck: 2.4%
@@ -294,7 +294,7 @@ ali:loot_table
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
-    ali:item gtceu:damascus_steel_ingot x1
+    ali:item gtceu:damascus_steel_ingot x1-6
       | Quality: 1
       | Chance: 1.24%
       |   -> Bad Luck: 1.13%
@@ -339,45 +339,45 @@ ali:loot_table
     ali:item minecraft:bread x1
       | Chance: 16%
       | Count: 1
-    ali:item minecraft:wheat x1
+    ali:item minecraft:wheat x1-4
       | Chance: 16%
       | Count: 1 to 4
-    ali:item minecraft:redstone x1
+    ali:item minecraft:redstone x1-4
       | Chance: 12%
       | Count: 1 to 4
-    ali:item minecraft:coal x1
+    ali:item minecraft:coal x1-4
       | Chance: 12%
       | Count: 1 to 4
-    ali:item minecraft:iron_ingot x1
+    ali:item minecraft:iron_ingot x1-4
       | Chance: 8%
       | Count: 1 to 4
     ali:item minecraft:bucket x1
       | Chance: 8%
       | Count: 1
-    ali:item minecraft:melon_seeds x1
+    ali:item minecraft:melon_seeds x2-4
       | Chance: 8%
       | Count: 2 to 4
-    ali:item minecraft:pumpkin_seeds x1
+    ali:item minecraft:pumpkin_seeds x2-4
       | Chance: 8%
       | Count: 2 to 4
-    ali:item minecraft:beetroot_seeds x1
+    ali:item minecraft:beetroot_seeds x2-4
       | Chance: 8%
       | Count: 2 to 4
-    ali:item minecraft:gold_ingot x1
+    ali:item minecraft:gold_ingot x1-4
       | Chance: 4%
       | Count: 1 to 4
   ali:loot_pool
     | Selects random entry
     | Rolls: 3
-    ali:item minecraft:bone x1
+    ali:item minecraft:bone x1-8
       | Chance: 25%
       | Count: 1 to 8
-    ali:item minecraft:gunpowder x1
+    ali:item minecraft:gunpowder x1-8
       | Chance: 25%
       | Count: 1 to 8
-    ali:item minecraft:rotten_flesh x1
+    ali:item minecraft:rotten_flesh x1-8
       | Chance: 25%
       | Count: 1 to 8
-    ali:item minecraft:string x1
+    ali:item minecraft:string x1-8
       | Chance: 25%
       | Count: 1 to 8

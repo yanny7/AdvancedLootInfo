@@ -36,7 +36,7 @@ ali:loot_table
     ali:item minecraft:flower_banner_pattern x1
       | Chance: 4%
       | Count: 1
-    ali:item #the_bumblezone:banner_patterns
+    ali:item #the_bumblezone:banner_patterns x1
       | Chance: 4%
       | Count: 1
     ali:item minecraft:wild_armor_trim_smithing_template x1

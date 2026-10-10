@@ -12,7 +12,7 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Enchantment: Silk Touch
         |     -> Level: ≥ 1
-      ali:item minecraft:raw_copper x1
+      ali:item minecraft:raw_copper x2-20
         | Count: 2 to 5
         |   -> Fortune I: 2 to 10  ~4 (25%)
         |   -> Fortune II: 2 to 15  ~4 (19%)

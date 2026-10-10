@@ -3,13 +3,13 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 4
-    ali:item the_bumblezone:pollen_puff x1
+    ali:item the_bumblezone:pollen_puff x3-6
       | Chance: 16.48%
       | Count: 3 to 6
-    ali:item the_bumblezone:dirt_pellet x1
+    ali:item the_bumblezone:dirt_pellet x2-6
       | Chance: 16.48%
       | Count: 2 to 6
-    ali:item the_bumblezone:honey_crystal_shards x1
+    ali:item the_bumblezone:honey_crystal_shards x2-5
       | Chance: 16.48%
       | Count: 2 to 5
     ali:reference
@@ -20,52 +20,52 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item #minecraft:flowers
+          ali:item #minecraft:flowers x1
             | Chance: 10.99%
             | Count: 1
             | ----- Modifiers -----
             | Tag Item Removals:
             |   -> Tag: Disallowed Bumblezone Structure Flower Loots
-    ali:item minecraft:honeycomb x1
+    ali:item minecraft:honeycomb x2-6
       | Chance: 10.99%
       | Count: 2 to 6
-    ali:item the_bumblezone:bee_bread x1
+    ali:item the_bumblezone:bee_bread x2-6
       | Chance: 5.49%
       | Count: 2 to 6
-    ali:item the_bumblezone:sticky_honey_residue x1
+    ali:item the_bumblezone:sticky_honey_residue x2-6
       | Chance: 5.49%
       | Count: 2 to 6
-    ali:item the_bumblezone:honey_web x1
+    ali:item the_bumblezone:honey_web x2-6
       | Chance: 5.49%
       | Count: 2 to 6
-    ali:item the_bumblezone:filled_porous_honeycomb_block x1
+    ali:item the_bumblezone:filled_porous_honeycomb_block x1-3
       | Chance: 5.49%
       | Count: 1 to 3
-    ali:item the_bumblezone:honeycomb_brood_block x1
+    ali:item the_bumblezone:honeycomb_brood_block x1-3
       | Chance: 5.49%
       | Count: 1 to 3
-    ali:item the_bumblezone:bee_stinger x1
+    ali:item the_bumblezone:bee_stinger x1-2
       | Chance: 1.1%
       | Count: 1 to 2
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 2
-    ali:item the_bumblezone:honey_crystal x1
+    ali:item the_bumblezone:honey_crystal x1-6
       | Chance: 18.18%
       | Count: 1 to 6
-    ali:item minecraft:honey_block x1
+    ali:item minecraft:honey_block x1-3
       | Chance: 12.73%
       | Count: 1 to 3
-    ali:item minecraft:candle x1
+    ali:item minecraft:candle x1-2
       | Chance: 12.73%
       | Count: 1 to 2
-    ali:item minecraft:yellow_candle x1
+    ali:item minecraft:yellow_candle x1-2
       | Chance: 12.73%
       | Count: 1 to 2
-    ali:item minecraft:green_candle x1
+    ali:item minecraft:green_candle x1-2
       | Chance: 12.73%
       | Count: 1 to 2
-    ali:item minecraft:lime_candle x1
+    ali:item minecraft:lime_candle x1-2
       | Chance: 12.73%
       | Count: 1 to 2
     ali:item the_bumblezone:honey_crystal_shield x1 {Damage:0}

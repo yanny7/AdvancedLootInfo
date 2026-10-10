@@ -18,7 +18,7 @@ ali:loot_table
       | ----- Modifiers -----
       | Set Potion:
       |   -> Potion: Potion of Mana
-    ali:item minecraft:tipped_arrow x1 {Potion:"minecraft:healing"}
+    ali:item minecraft:tipped_arrow x2-5 {Potion:"minecraft:healing"}
       | Chance: 25%
       | Count: 2 to 5
       | ----- Modifiers -----
@@ -30,13 +30,13 @@ ali:loot_table
     ali:item minecraft:bone x1
       | Chance: 50%
       | Count: 1
-    ali:item minecraft:gold_ingot x1
+    ali:item minecraft:gold_ingot x2-5
       | Chance: 30%
       | Count: 2 to 5
     ali:item minecraft:diamond x1
       | Chance: 10%
       | Count: 1
-    ali:item minecraft:emerald x1
+    ali:item minecraft:emerald x1-3
       | Chance: 10%
       | Count: 1 to 3
   ali:loot_pool
@@ -56,7 +56,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item irons_spellbooks:arcane_essence x1
+    ali:item irons_spellbooks:arcane_essence x1-16
       | Chance: 25%
       | Count: 1 to 16
     ali:reference
@@ -67,16 +67,16 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item irons_spellbooks:uncommon_ink x1
+          ali:item irons_spellbooks:uncommon_ink x1-2
             | Chance: 12.2%
             | Count: 1 to 2
-          ali:item irons_spellbooks:common_ink x1
+          ali:item irons_spellbooks:common_ink x1-2
             | Chance: 7.32%
             | Count: 1 to 2
-          ali:item irons_spellbooks:rare_ink x1
+          ali:item irons_spellbooks:rare_ink x1-2
             | Chance: 3.66%
             | Count: 1 to 2
-          ali:item irons_spellbooks:epic_ink x1
+          ali:item irons_spellbooks:epic_ink x1-2
             | Chance: 1.83%
             | Count: 1 to 2
     ali:reference

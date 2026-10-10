@@ -3,7 +3,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 5 to 10
-    ali:item minecraft:coal x1
+    ali:item minecraft:coal x6-15
       | Chance: 8.14%
       | Count: 6 to 15
     ali:item minecraft:potion x1 {Potion:"minecraft:strong_regeneration"}
@@ -17,19 +17,19 @@ ali:loot_table
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
-    ali:item minecraft:book x1
+    ali:item minecraft:book x3-10
       | Chance: 5.81%
       | Count: 3 to 10
-    ali:item minecraft:bone x1
+    ali:item minecraft:bone x1-15
       | Chance: 5.81%
       | Count: 1 to 15
-    ali:item minecraft:soul_torch x1
+    ali:item minecraft:soul_torch x1-15
       | Chance: 5.81%
       | Count: 1 to 15
-    ali:item minecraft:echo_shard x1
+    ali:item minecraft:echo_shard x1-3
       | Chance: 4.65%
       | Count: 1 to 3
-    ali:item minecraft:disc_fragment_5 x1
+    ali:item minecraft:disc_fragment_5 x1-3
       | Chance: 4.65%
       | Count: 1 to 3
     ali:item minecraft:enchanted_book x1
@@ -38,22 +38,22 @@ ali:loot_table
       | ----- Modifiers -----
       | Enchant Randomly:
       |   -> Swift Sneak
-    ali:item minecraft:sculk x1
+    ali:item minecraft:sculk x4-10
       | Chance: 3.49%
       | Count: 4 to 10
-    ali:item minecraft:sculk_sensor x1
+    ali:item minecraft:sculk_sensor x1-3
       | Chance: 3.49%
       | Count: 1 to 3
-    ali:item minecraft:candle x1
+    ali:item minecraft:candle x1-4
       | Chance: 3.49%
       | Count: 1 to 4
-    ali:item minecraft:amethyst_shard x1
+    ali:item minecraft:amethyst_shard x1-15
       | Chance: 3.49%
       | Count: 1 to 15
-    ali:item minecraft:experience_bottle x1
+    ali:item minecraft:experience_bottle x1-3
       | Chance: 3.49%
       | Count: 1 to 3
-    ali:item minecraft:glow_berries x1
+    ali:item minecraft:glow_berries x1-15
       | Chance: 3.49%
       | Count: 1 to 15
     ali:item minecraft:iron_leggings x1 {Damage:0}
@@ -66,7 +66,7 @@ ali:loot_table
     ali:item minecraft:compass x1
       | Chance: 2.33%
       | Count: 1
-    ali:item minecraft:sculk_catalyst x1
+    ali:item minecraft:sculk_catalyst x1-2
       | Chance: 2.33%
       | Count: 1 to 2
     ali:item minecraft:name_tag x1
@@ -104,7 +104,7 @@ ali:loot_table
       | Enchant With Levels:
       |   -> Levels: 30 to 50
       |   -> Treasure: True
-    ali:item minecraft:enchanted_golden_apple x1
+    ali:item minecraft:enchanted_golden_apple x1-2
       | Chance: 1.16%
       | Count: 1 to 2
     ali:item minecraft:music_disc_otherside x1
@@ -129,7 +129,7 @@ ali:loot_table
       ali:loot_pool
         | Selects random entry
         | Rolls: 1
-        ali:item irons_spellbooks:arcane_essence x1
+        ali:item irons_spellbooks:arcane_essence x1-7
           | Count: 1 to 7
       ali:loot_pool
         | Selects random entry

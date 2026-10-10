@@ -3,7 +3,7 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:arrow x1
+    ali:item minecraft:arrow x0-5
       | Count: max(0; U[0; 2])
       |   -> Looting LVL: max(0; U[0; 2]) + round(LVL × U[0; 1))
       |   -> Looting I: 0 to 3  ~1 to 2 (33%)
@@ -19,7 +19,7 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:bone x1
+    ali:item minecraft:bone x0-5
       | Count: max(0; U[0; 2])
       |   -> Looting LVL: max(0; U[0; 2]) + round(LVL × U[0; 1))
       |   -> Looting I: 0 to 3  ~1 to 2 (33%)
@@ -35,7 +35,7 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:tipped_arrow x1 {Potion:"minecraft:slowness"}
+    ali:item minecraft:tipped_arrow x0-1 {Potion:"minecraft:slowness"}
       | Count: min(max(0; U[0; 1]); 1)
       |   -> Looting LVL: min(max(0; U[0; 1]) + round(LVL × U[0; 1)); 1)
       |   -> Looting I: 0 to 1  ~1 (75%)
@@ -60,7 +60,7 @@ ali:entity_loot_table
       ali:loot_pool
         | Selects random entry
         | Rolls: 1
-        ali:item irons_spellbooks:frozen_bone x1
+        ali:item irons_spellbooks:frozen_bone x0-6
           | Count: max(0; U[0; 3])
           |   -> Looting LVL: max(0; U[0; 3]) + round(LVL × U[0; 1))
           |   -> Looting I: 0 to 4  ~1 to 3 (25%)

@@ -12,73 +12,73 @@ ali:loot_table
           ali:loot_pool
             | Selects random entry
             | Rolls: 1
-            ali:item hybrid_aquatic:coconut_crab_claw x1
+            ali:item hybrid_aquatic:coconut_crab_claw x1-3
               | Chance: 8.33%
               | Count: 1 to 3
               | ----- Predicates -----
               | Match Tool:
               |   -> Tag: minecraft:axes
-            ali:item hybrid_aquatic:ghost_crab_claw x1
+            ali:item hybrid_aquatic:ghost_crab_claw x1-3
               | Chance: 8.33%
               | Count: 1 to 3
               | ----- Predicates -----
               | Match Tool:
               |   -> Tag: minecraft:axes
-            ali:item hybrid_aquatic:yeti_crab_claw x1
+            ali:item hybrid_aquatic:yeti_crab_claw x1-3
               | Chance: 8.33%
               | Count: 1 to 3
               | ----- Predicates -----
               | Match Tool:
               |   -> Tag: minecraft:axes
-            ali:item hybrid_aquatic:spider_crab_claw x1
+            ali:item hybrid_aquatic:spider_crab_claw x1-3
               | Chance: 8.33%
               | Count: 1 to 3
               | ----- Predicates -----
               | Match Tool:
               |   -> Tag: minecraft:axes
-            ali:item hybrid_aquatic:vampire_crab_claw x1
+            ali:item hybrid_aquatic:vampire_crab_claw x1-3
               | Chance: 8.33%
               | Count: 1 to 3
               | ----- Predicates -----
               | Match Tool:
               |   -> Tag: minecraft:axes
-            ali:item hybrid_aquatic:dungeness_crab_claw x1
+            ali:item hybrid_aquatic:dungeness_crab_claw x1-3
               | Chance: 8.33%
               | Count: 1 to 3
               | ----- Predicates -----
               | Match Tool:
               |   -> Tag: minecraft:axes
-            ali:item hybrid_aquatic:lightfoot_crab_claw x1
+            ali:item hybrid_aquatic:lightfoot_crab_claw x1-3
               | Chance: 8.33%
               | Count: 1 to 3
               | ----- Predicates -----
               | Match Tool:
               |   -> Tag: minecraft:axes
-            ali:item hybrid_aquatic:fiddler_crab_claw x1
+            ali:item hybrid_aquatic:fiddler_crab_claw x1-3
               | Chance: 8.33%
               | Count: 1 to 3
               | ----- Predicates -----
               | Match Tool:
               |   -> Tag: minecraft:axes
-            ali:item hybrid_aquatic:flower_crab_claw x1
+            ali:item hybrid_aquatic:flower_crab_claw x1-3
               | Chance: 8.33%
               | Count: 1 to 3
               | ----- Predicates -----
               | Match Tool:
               |   -> Tag: minecraft:axes
-            ali:item hybrid_aquatic:raw_shrimp x1
+            ali:item hybrid_aquatic:raw_shrimp x1-3
               | Chance: 8.33%
               | Count: 1 to 3
               | ----- Predicates -----
               | Match Tool:
               |   -> Tag: minecraft:axes
-            ali:item hybrid_aquatic:lobster_claw x1
+            ali:item hybrid_aquatic:lobster_claw x1-3
               | Chance: 8.33%
               | Count: 1 to 3
               | ----- Predicates -----
               | Match Tool:
               |   -> Tag: minecraft:axes
-            ali:item hybrid_aquatic:raw_lobster_tail x1
+            ali:item hybrid_aquatic:raw_lobster_tail x1-3
               | Chance: 8.33%
               | Count: 1 to 3
               | ----- Predicates -----

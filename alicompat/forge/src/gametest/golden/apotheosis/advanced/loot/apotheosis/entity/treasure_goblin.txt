@@ -157,7 +157,7 @@ ali:loot_table
       |   -> Luck 3: 3.55%
       |   -> Luck 4: 3.64%
       | Count: 1
-    ali:item minecraft:diamond x1
+    ali:item minecraft:diamond x1-3
       | Quality: 2
       | Chance: 1.62%
       |   -> luck: max(0%; 1000% + floor(200% × luck)) ÷ (max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 1000% + floor(200% × luck)) + max(0%; 800% + floor(luck)) + 7000% + max(0%; 500% + floor(luck)) + max(0%; 500% + floor(200% × luck)) + max(0%; 8000% + floor(300% × luck)) + max(0%; 8000% + floor(300% × luck)) + max(0%; 4000% + floor(500% × luck)) + max(0%; 6000% + floor(400% × luck)) + max(0%; 10000% + floor(luck)))
@@ -176,7 +176,7 @@ ali:loot_table
       |   -> Luck 3: 1.37%
       |   -> Luck 4: 1.3%
       | Count: 1
-    ali:item minecraft:emerald x1
+    ali:item minecraft:emerald x1-3
       | Quality: 1
       | Chance: 1.29%
       |   -> luck: max(0%; 800% + floor(luck)) ÷ (max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 1000% + floor(200% × luck)) + max(0%; 800% + floor(luck)) + 7000% + max(0%; 500% + floor(luck)) + max(0%; 500% + floor(200% × luck)) + max(0%; 8000% + floor(300% × luck)) + max(0%; 8000% + floor(300% × luck)) + max(0%; 4000% + floor(500% × luck)) + max(0%; 6000% + floor(400% × luck)) + max(0%; 10000% + floor(luck)))
@@ -186,7 +186,7 @@ ali:loot_table
       |   -> Luck 3: 1.5%
       |   -> Luck 4: 1.56%
       | Count: 1 to 3
-    ali:item minecraft:iron_ingot x1
+    ali:item minecraft:iron_ingot x1-5
       | Chance: 0.81%
       |   -> luck: 500% ÷ (max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 1000% + floor(200% × luck)) + max(0%; 800% + floor(luck)) + 7000% + max(0%; 500% + floor(luck)) + max(0%; 500% + floor(200% × luck)) + max(0%; 8000% + floor(300% × luck)) + max(0%; 8000% + floor(300% × luck)) + max(0%; 4000% + floor(500% × luck)) + max(0%; 6000% + floor(400% × luck)) + max(0%; 10000% + floor(luck)))
       |   -> Bad Luck: 0.86%
@@ -195,7 +195,7 @@ ali:loot_table
       |   -> Luck 3: 0.68%
       |   -> Luck 4: 0.65%
       | Count: 1 to 5
-    ali:item minecraft:gold_ingot x1
+    ali:item minecraft:gold_ingot x1-5
       | Quality: 1
       | Chance: 0.81%
       |   -> luck: max(0%; 500% + floor(luck)) ÷ (max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 1000% + floor(200% × luck)) + max(0%; 800% + floor(luck)) + 7000% + max(0%; 500% + floor(luck)) + max(0%; 500% + floor(200% × luck)) + max(0%; 8000% + floor(300% × luck)) + max(0%; 8000% + floor(300% × luck)) + max(0%; 4000% + floor(500% × luck)) + max(0%; 6000% + floor(400% × luck)) + max(0%; 10000% + floor(luck)))
@@ -215,7 +215,7 @@ ali:loot_table
       |   -> Luck 3: 1.5%
       |   -> Luck 4: 1.69%
       | Count: 1
-    ali:item minecraft:name_tag x1
+    ali:item minecraft:name_tag x1-2
       | Chance: 0.81%
       |   -> luck: 500% ÷ (max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 1000% + floor(200% × luck)) + max(0%; 800% + floor(luck)) + 7000% + max(0%; 500% + floor(luck)) + max(0%; 500% + floor(200% × luck)) + max(0%; 8000% + floor(300% × luck)) + max(0%; 8000% + floor(300% × luck)) + max(0%; 4000% + floor(500% × luck)) + max(0%; 6000% + floor(400% × luck)) + max(0%; 10000% + floor(luck)))
       |   -> Bad Luck: 0.86%
@@ -224,7 +224,7 @@ ali:loot_table
       |   -> Luck 3: 0.68%
       |   -> Luck 4: 0.65%
       | Count: 1 to 2
-    ali:item minecraft:lead x1
+    ali:item minecraft:lead x1-2
       | Chance: 0.81%
       |   -> luck: 500% ÷ (max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 1000% + floor(200% × luck)) + max(0%; 800% + floor(luck)) + 7000% + max(0%; 500% + floor(luck)) + max(0%; 500% + floor(200% × luck)) + max(0%; 8000% + floor(300% × luck)) + max(0%; 8000% + floor(300% × luck)) + max(0%; 4000% + floor(500% × luck)) + max(0%; 6000% + floor(400% × luck)) + max(0%; 10000% + floor(luck)))
       |   -> Bad Luck: 0.86%

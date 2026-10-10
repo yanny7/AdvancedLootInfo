@@ -3,16 +3,16 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 3 to 8
-    ali:item minecraft:bread x1
+    ali:item minecraft:bread x1-3
       | Chance: 15.96%
       | Count: 1 to 3
-    ali:item minecraft:apple x1
+    ali:item minecraft:apple x1-3
       | Chance: 15.96%
       | Count: 1 to 3
-    ali:item minecraft:iron_ingot x1
+    ali:item minecraft:iron_ingot x1-5
       | Chance: 10.64%
       | Count: 1 to 5
-    ali:item minecraft:gold_ingot x1
+    ali:item minecraft:gold_ingot x1-3
       | Chance: 5.32%
       | Count: 1 to 3
     ali:item minecraft:iron_pickaxe x1 {Damage:0}
@@ -33,13 +33,13 @@ ali:loot_table
     ali:item minecraft:iron_boots x1 {Damage:0}
       | Chance: 5.32%
       | Count: 1
-    ali:item minecraft:obsidian x1
+    ali:item minecraft:obsidian x3-7
       | Chance: 5.32%
       | Count: 3 to 7
-    ali:item minecraft:oak_sapling x1
+    ali:item minecraft:oak_sapling x3-7
       | Chance: 5.32%
       | Count: 3 to 7
-    ali:item minecraft:diamond x1
+    ali:item minecraft:diamond x1-3
       | Chance: 3.19%
       | Count: 1 to 3
     ali:item minecraft:saddle x1
@@ -69,7 +69,7 @@ ali:loot_table
       ali:loot_pool
         | Selects random entry
         | Rolls: 0 to 2
-        ali:item enderio:copper_alloy_ingot x1
+        ali:item enderio:copper_alloy_ingot x1-2
           | Chance: 2.5%
           | Count: 1 to 2
           | ----- Predicates -----
@@ -80,7 +80,7 @@ ali:loot_table
           |     -> minecraft:chests/village/village_toolsmith
           |   -> Loot Table Id:
           |     -> minecraft:chests/village/village_weaponsmith
-        ali:item enderio:redstone_alloy_ingot x1
+        ali:item enderio:redstone_alloy_ingot x1-3
           | Chance: 4.37%
           | Count: 1 to 3
           | ----- Predicates -----
@@ -113,7 +113,7 @@ ali:loot_table
           |     -> minecraft:chests/village/village_toolsmith
           |   -> Loot Table Id:
           |     -> minecraft:chests/village/village_weaponsmith
-        ali:item enderio:stone_gear x1
+        ali:item enderio:stone_gear x1-2
           | Chance: 5%
           | Count: 1 to 2
           | ----- Predicates -----

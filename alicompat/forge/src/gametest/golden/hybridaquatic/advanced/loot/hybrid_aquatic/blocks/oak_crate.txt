@@ -30,7 +30,7 @@ ali:loot_table
               | ----- Predicates -----
               | Match Tool:
               |   -> Tag: minecraft:axes
-            ali:item minecraft:iron_ingot x1
+            ali:item minecraft:iron_ingot x3-9
               | Chance: 11.11%
               | Count: max(0; U[3; 9])
               | ----- Predicates -----
@@ -40,7 +40,7 @@ ali:loot_table
               | Set Count:
               |   -> Count: 3 to 9
               |   -> Add: False
-            ali:item minecraft:gold_ingot x1
+            ali:item minecraft:gold_ingot x3-9
               | Chance: 11.11%
               | Count: max(0; U[3; 9])
               | ----- Predicates -----
@@ -50,7 +50,7 @@ ali:loot_table
               | Set Count:
               |   -> Count: 3 to 9
               |   -> Add: False
-            ali:item minecraft:diamond x1
+            ali:item minecraft:diamond x1-3
               | Chance: 11.11%
               | Count: max(0; U[1; 3])
               | ----- Predicates -----
@@ -60,7 +60,7 @@ ali:loot_table
               | Set Count:
               |   -> Count: 1 to 3
               |   -> Add: False
-            ali:item minecraft:emerald x1
+            ali:item minecraft:emerald x1-3
               | Chance: 11.11%
               | Count: max(0; U[1; 3])
               | ----- Predicates -----
@@ -76,7 +76,7 @@ ali:loot_table
               | ----- Predicates -----
               | Match Tool:
               |   -> Tag: minecraft:axes
-            ali:item minecraft:coast_armor_trim_smithing_template x1
+            ali:item minecraft:coast_armor_trim_smithing_template x1-4
               | Chance: 11.11%
               | Count: max(0; U[1; 4])
               | ----- Predicates -----
@@ -89,7 +89,7 @@ ali:loot_table
           ali:loot_pool
             | Selects random entry
             | Rolls: 1
-            ali:item hybrid_aquatic:driftwood_log x1
+            ali:item hybrid_aquatic:driftwood_log x16-32
               | Chance: 50%
               | Count: max(0; U[16; 32])
               | ----- Predicates -----
@@ -163,7 +163,7 @@ ali:loot_table
           ali:loot_pool
             | Selects random entry
             | Rolls: 1
-            ali:item minecraft:oak_log x1
+            ali:item minecraft:oak_log x8-32
               | Chance: 33.33%
               | Count: max(0; U[8; 32])
               | ----- Predicates -----
@@ -173,7 +173,7 @@ ali:loot_table
               | Set Count:
               |   -> Count: 8 to 32
               |   -> Add: False
-            ali:item minecraft:oak_sapling x1
+            ali:item minecraft:oak_sapling x1-4
               | Chance: 33.33%
               | Count: max(0; U[1; 4])
               | ----- Predicates -----
@@ -183,7 +183,7 @@ ali:loot_table
               | Set Count:
               |   -> Count: 1 to 4
               |   -> Add: False
-            ali:item minecraft:apple x1
+            ali:item minecraft:apple x3-9
               | Chance: 33.33%
               | Count: max(0; U[3; 9])
               | ----- Predicates -----

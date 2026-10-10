@@ -3,19 +3,19 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 3 to 9
-    ali:item ad_astra:desh_ingot x1
+    ali:item ad_astra:desh_ingot x2-6
       | Chance: 28.57%
       | Count: 2 to 6
-    ali:item minecraft:coal x1
+    ali:item minecraft:coal x3-6
       | Chance: 28.57%
       | Count: 3 to 6
-    ali:item minecraft:emerald x1
+    ali:item minecraft:emerald x2-4
       | Chance: 14.29%
       | Count: 2 to 4
-    ali:item minecraft:redstone x1
+    ali:item minecraft:redstone x2-5
       | Chance: 14.29%
       | Count: 2 to 5
-    ali:item minecraft:diamond x1
+    ali:item minecraft:diamond x1-2
       | Chance: 8.57%
       | Count: 1 to 2
     ali:item ad_astra:launch_pad x1

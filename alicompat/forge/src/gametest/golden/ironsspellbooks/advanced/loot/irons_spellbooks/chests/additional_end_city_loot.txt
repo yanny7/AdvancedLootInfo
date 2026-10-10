@@ -3,7 +3,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item irons_spellbooks:arcane_essence x1
+    ali:item irons_spellbooks:arcane_essence x0-15
       | Count: max(0; U[0; 15])
       | ----- Modifiers -----
       | Set Count:
@@ -215,7 +215,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item irons_spellbooks:ancient_knowledge_fragment x1
+    ali:item irons_spellbooks:ancient_knowledge_fragment x0-3
       | Chance: 20%
       | Count: max(0; U[0; 3])
       | ----- Predicates -----

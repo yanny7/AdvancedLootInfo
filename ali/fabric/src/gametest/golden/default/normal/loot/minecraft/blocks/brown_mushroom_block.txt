@@ -12,7 +12,7 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Enchantment: Silk Touch
         |     -> Level: ≥ 1
-      ali:item minecraft:brown_mushroom x1
+      ali:item minecraft:brown_mushroom x0-2
         | Count: 0 to 2  ~0 (78%)
         |   [chart 0..2 0-2 base=true modes=[true, false, false] heights=1.0000,0.1429,0.1429]
         | ----- Modifiers -----

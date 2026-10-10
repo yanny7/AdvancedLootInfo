@@ -3,7 +3,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item kaleidoscope_cookery:tomato_seed x1
+    ali:item kaleidoscope_cookery:tomato_seed x1-7
       | Chance: 1.56%
       | Count: 1
       |   -> Fortune LVL: 1 + U[0; 2 × LVL]
@@ -21,7 +21,7 @@ ali:loot_table
       |   -> Enchantment: Fortune
       |   -> Formula: minecraft:uniform_bonus_count
       |     -> Bonus Multiplier: 2
-    ali:item kaleidoscope_cookery:chili_seed x1
+    ali:item kaleidoscope_cookery:chili_seed x1-7
       | Chance: 1.56%
       | Count: 1
       |   -> Fortune LVL: 1 + U[0; 2 × LVL]
@@ -39,7 +39,7 @@ ali:loot_table
       |   -> Enchantment: Fortune
       |   -> Formula: minecraft:uniform_bonus_count
       |     -> Bonus Multiplier: 2
-    ali:item kaleidoscope_cookery:lettuce_seed x1
+    ali:item kaleidoscope_cookery:lettuce_seed x1-7
       | Chance: 1.56%
       | Count: 1
       |   -> Fortune LVL: 1 + U[0; 2 × LVL]
@@ -57,7 +57,7 @@ ali:loot_table
       |   -> Enchantment: Fortune
       |   -> Formula: minecraft:uniform_bonus_count
       |     -> Bonus Multiplier: 2
-    ali:item kaleidoscope_cookery:wild_rice x1
+    ali:item kaleidoscope_cookery:wild_rice x1-7
       | Chance: 1.56%
       | Count: 1
       |   -> Fortune LVL: 1 + U[0; 2 × LVL]
@@ -75,7 +75,7 @@ ali:loot_table
       |   -> Enchantment: Fortune
       |   -> Formula: minecraft:uniform_bonus_count
       |     -> Bonus Multiplier: 2
-    ali:item kaleidoscope_cookery:tea_seed x1
+    ali:item kaleidoscope_cookery:tea_seed x1-7
       | Chance: 1.56%
       | Count: 1
       |   -> Fortune LVL: 1 + U[0; 2 × LVL]
@@ -93,7 +93,7 @@ ali:loot_table
       |   -> Enchantment: Fortune
       |   -> Formula: minecraft:uniform_bonus_count
       |     -> Bonus Multiplier: 2
-    ali:item minecraft:beetroot_seeds x1
+    ali:item minecraft:beetroot_seeds x1-7
       | Chance: 0.25%
       | Count: 1
       |   -> Fortune LVL: 1 + U[0; 2 × LVL]
@@ -111,7 +111,7 @@ ali:loot_table
       |   -> Enchantment: Fortune
       |   -> Formula: minecraft:uniform_bonus_count
       |     -> Bonus Multiplier: 2
-    ali:item minecraft:pumpkin_seeds x1
+    ali:item minecraft:pumpkin_seeds x1-7
       | Chance: 0.25%
       | Count: 1
       |   -> Fortune LVL: 1 + U[0; 2 × LVL]
@@ -129,7 +129,7 @@ ali:loot_table
       |   -> Enchantment: Fortune
       |   -> Formula: minecraft:uniform_bonus_count
       |     -> Bonus Multiplier: 2
-    ali:item minecraft:melon_seeds x1
+    ali:item minecraft:melon_seeds x1-7
       | Chance: 0.25%
       | Count: 1
       |   -> Fortune LVL: 1 + U[0; 2 × LVL]

@@ -3,91 +3,91 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 3 to 8
-    ali:item ad_astra:moon_sand x1
+    ali:item ad_astra:moon_sand x10-30
       | Chance: 18.18%
       | Count: max(0; U[10; 30])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 10 to 30
       |   -> Add: False
-    ali:item minecraft:emerald x1
+    ali:item minecraft:emerald x4-8
       | Chance: 13.64%
       | Count: max(0; U[4; 8])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 4 to 8
       |   -> Add: False
-    ali:item minecraft:ice x1
+    ali:item minecraft:ice x5-15
       | Chance: 9.09%
       | Count: max(0; U[5; 15])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 5 to 15
       |   -> Add: False
-    ali:item ad_astra:cheese x1
+    ali:item ad_astra:cheese x2-4
       | Chance: 4.55%
       | Count: max(0; U[2; 4])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 2 to 4
       |   -> Add: False
-    ali:item ad_astra:raw_desh x1
+    ali:item ad_astra:raw_desh x5-10
       | Chance: 4.55%
       | Count: max(0; U[5; 10])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 5 to 10
       |   -> Add: False
-    ali:item minecraft:raw_iron x1
+    ali:item minecraft:raw_iron x10-15
       | Chance: 4.55%
       | Count: max(0; U[10; 15])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 10 to 15
       |   -> Add: False
-    ali:item ad_astra:ice_shard x1
+    ali:item ad_astra:ice_shard x15-20
       | Chance: 4.55%
       | Count: max(0; U[15; 20])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 15 to 20
       |   -> Add: False
-    ali:item minecraft:rotten_flesh x1
+    ali:item minecraft:rotten_flesh x5-10
       | Chance: 4.55%
       | Count: max(0; U[5; 10])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 5 to 10
       |   -> Add: False
-    ali:item minecraft:bone x1
+    ali:item minecraft:bone x4-8
       | Chance: 4.55%
       | Count: max(0; U[4; 8])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 4 to 8
       |   -> Add: False
-    ali:item minecraft:diamond x1
+    ali:item minecraft:diamond x2-4
       | Chance: 4.55%
       | Count: max(0; U[2; 4])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 2 to 4
       |   -> Add: False
-    ali:item minecraft:gold_ingot x1
+    ali:item minecraft:gold_ingot x3-6
       | Chance: 4.55%
       | Count: max(0; U[3; 6])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 3 to 6
       |   -> Add: False
-    ali:item minecraft:coal x1
+    ali:item minecraft:coal x5-10
       | Chance: 4.55%
       | Count: max(0; U[5; 10])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 5 to 10
       |   -> Add: False
-    ali:item minecraft:stick x1
+    ali:item minecraft:stick x5-10
       | Chance: 4.55%
       | Count: max(0; U[5; 10])
       | ----- Modifiers -----
@@ -102,21 +102,21 @@ ali:loot_table
     ali:item minecraft:golden_apple x1
       | Chance: 3.18%
       | Count: 1
-    ali:item minecraft:lapis_lazuli x1
+    ali:item minecraft:lapis_lazuli x6-12
       | Chance: 2.27%
       | Count: max(0; U[6; 12])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 6 to 12
       |   -> Add: False
-    ali:item minecraft:redstone x1
+    ali:item minecraft:redstone x6-12
       | Chance: 2.27%
       | Count: max(0; U[6; 12])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 6 to 12
       |   -> Add: False
-    ali:item ad_astra:space_painting x1
+    ali:item ad_astra:space_painting x1-2
       | Chance: 1.36%
       | Count: max(0; U[1; 2])
       | ----- Modifiers -----

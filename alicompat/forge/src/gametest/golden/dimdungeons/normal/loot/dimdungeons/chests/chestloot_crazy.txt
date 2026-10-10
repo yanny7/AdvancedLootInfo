@@ -17,19 +17,19 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 2 to 3
-          ali:item minecraft:wheat x1
+          ali:item minecraft:wheat x3-5
             | Chance: 6.86%
             | Count: 3 to 5
-          ali:item minecraft:potato x1
+          ali:item minecraft:potato x2-5
             | Chance: 4.9%
             | Count: 2 to 5
-          ali:item minecraft:carrot x1
+          ali:item minecraft:carrot x3-5
             | Chance: 4.9%
             | Count: 3 to 5
         ali:loot_pool
           | Selects random entry
           | Rolls: 1 to 3
-          ali:item minecraft:dark_oak_log x1
+          ali:item minecraft:dark_oak_log x2-3
             | Chance: 16.67%
             | Count: 2 to 3
         ali:loot_pool
@@ -38,16 +38,16 @@ ali:loot_table
           ali:item minecraft:experience_bottle x1
             | Chance: 5.3%
             | Count: 1
-          ali:item minecraft:string x1
+          ali:item minecraft:string x1-6
             | Chance: 3.03%
             | Count: 1 to 6
-          ali:item minecraft:arrow x1
+          ali:item minecraft:arrow x2-7
             | Chance: 3.03%
             | Count: 2 to 7
-          ali:item minecraft:tripwire_hook x1
+          ali:item minecraft:tripwire_hook x1-3
             | Chance: 2.27%
             | Count: 1 to 3
-          ali:item minecraft:iron_ingot x1
+          ali:item minecraft:iron_ingot x1-3
             | Chance: 2.27%
             | Count: 1 to 3
           ali:item minecraft:enchanted_book x1
@@ -70,7 +70,7 @@ ali:loot_table
           ali:empty
             | Drops nothing
             | Chance: 12.5%
-          ali:item minecraft:sentry_armor_trim_smithing_template x1
+          ali:item minecraft:sentry_armor_trim_smithing_template x2
             | Chance: 4.17%
             | Count: 2
     ali:reference
@@ -81,13 +81,13 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 3 to 6
-          ali:item minecraft:iron_ingot x1
+          ali:item minecraft:iron_ingot x1-5
             | Chance: 10%
             | Count: 1 to 5
-          ali:item minecraft:emerald x1
+          ali:item minecraft:emerald x1-5
             | Chance: 4.44%
             | Count: 1 to 5
-          ali:item minecraft:gold_ingot x1
+          ali:item minecraft:gold_ingot x1-5
             | Chance: 1.11%
             | Count: 1 to 5
           ali:item minecraft:diamond x1
@@ -99,13 +99,13 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 2 to 5
-          ali:item minecraft:iron_nugget x1
+          ali:item minecraft:iron_nugget x1-10
             | Chance: 10.42%
             | Count: 1 to 10
-          ali:item minecraft:lapis_lazuli x1
+          ali:item minecraft:lapis_lazuli x1-10
             | Chance: 4.17%
             | Count: 1 to 10
-          ali:item minecraft:gold_nugget x1
+          ali:item minecraft:gold_nugget x1-10
             | Chance: 2.08%
             | Count: 1 to 10
         ali:loot_pool
@@ -114,7 +114,7 @@ ali:loot_table
           ali:empty
             | Drops nothing
             | Chance: 13.89%
-          ali:item minecraft:coast_armor_trim_smithing_template x1
+          ali:item minecraft:coast_armor_trim_smithing_template x2
             | Chance: 2.78%
             | Count: 2
     ali:reference
@@ -125,7 +125,7 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 5 to 10
-          ali:item minecraft:coal x1
+          ali:item minecraft:coal x6-15
             | Chance: 1.36%
             | Count: 6 to 15
           ali:item minecraft:potion x1 {Potion:"minecraft:strong_regeneration"}
@@ -139,19 +139,19 @@ ali:loot_table
             | Count: 1
             | ----- Modifiers -----
             | Enchant Randomly:
-          ali:item minecraft:book x1
+          ali:item minecraft:book x3-10
             | Chance: 0.97%
             | Count: 3 to 10
-          ali:item minecraft:bone x1
+          ali:item minecraft:bone x1-15
             | Chance: 0.97%
             | Count: 1 to 15
-          ali:item minecraft:soul_torch x1
+          ali:item minecraft:soul_torch x1-15
             | Chance: 0.97%
             | Count: 1 to 15
-          ali:item minecraft:echo_shard x1
+          ali:item minecraft:echo_shard x1-3
             | Chance: 0.78%
             | Count: 1 to 3
-          ali:item minecraft:disc_fragment_5 x1
+          ali:item minecraft:disc_fragment_5 x1-3
             | Chance: 0.78%
             | Count: 1 to 3
           ali:item minecraft:enchanted_book x1
@@ -160,22 +160,22 @@ ali:loot_table
             | ----- Modifiers -----
             | Enchant Randomly:
             |   -> Swift Sneak
-          ali:item minecraft:sculk x1
+          ali:item minecraft:sculk x4-10
             | Chance: 0.58%
             | Count: 4 to 10
-          ali:item minecraft:sculk_sensor x1
+          ali:item minecraft:sculk_sensor x1-3
             | Chance: 0.58%
             | Count: 1 to 3
-          ali:item minecraft:candle x1
+          ali:item minecraft:candle x1-4
             | Chance: 0.58%
             | Count: 1 to 4
-          ali:item minecraft:amethyst_shard x1
+          ali:item minecraft:amethyst_shard x1-15
             | Chance: 0.58%
             | Count: 1 to 15
-          ali:item minecraft:experience_bottle x1
+          ali:item minecraft:experience_bottle x1-3
             | Chance: 0.58%
             | Count: 1 to 3
-          ali:item minecraft:glow_berries x1
+          ali:item minecraft:glow_berries x1-15
             | Chance: 0.58%
             | Count: 1 to 15
           ali:item minecraft:iron_leggings x1 {Damage:0}
@@ -188,7 +188,7 @@ ali:loot_table
           ali:item minecraft:compass x1
             | Chance: 0.39%
             | Count: 1
-          ali:item minecraft:sculk_catalyst x1
+          ali:item minecraft:sculk_catalyst x1-2
             | Chance: 0.39%
             | Count: 1 to 2
           ali:item minecraft:name_tag x1
@@ -226,7 +226,7 @@ ali:loot_table
             | Enchant With Levels:
             |   -> Levels: 30 to 50
             |   -> Treasure: True
-          ali:item minecraft:enchanted_golden_apple x1
+          ali:item minecraft:enchanted_golden_apple x1-2
             | Chance: 0.19%
             | Count: 1 to 2
           ali:item minecraft:music_disc_otherside x1
@@ -252,16 +252,16 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 2 to 6
-          ali:item minecraft:gold_ingot x1
+          ali:item minecraft:gold_ingot x2-7
             | Chance: 2.94%
             | Count: 2 to 7
-          ali:item minecraft:iron_ingot x1
+          ali:item minecraft:iron_ingot x4-8
             | Chance: 1.96%
             | Count: 4 to 8
-          ali:item minecraft:diamond x1
+          ali:item minecraft:diamond x2-7
             | Chance: 0.98%
             | Count: 2 to 7
-          ali:item minecraft:beetroot_seeds x1
+          ali:item minecraft:beetroot_seeds x1-10
             | Chance: 0.98%
             | Count: 1 to 10
           ali:item minecraft:saddle x1
@@ -365,7 +365,7 @@ ali:loot_table
             | Enchant With Levels:
             |   -> Levels: 20 to 39
             |   -> Treasure: True
-          ali:item minecraft:emerald x1
+          ali:item minecraft:emerald x2-6
             | Chance: 0.39%
             | Count: 2 to 6
           ali:item minecraft:iron_horse_armor x1
@@ -394,7 +394,7 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 2 to 4
-          ali:item minecraft:gold_ingot x1
+          ali:item minecraft:gold_ingot x1-3
             | Chance: 3.42%
             | Count: 1 to 3
           ali:item minecraft:saddle x1
@@ -403,10 +403,10 @@ ali:loot_table
           ali:item minecraft:golden_horse_armor x1
             | Chance: 1.83%
             | Count: 1
-          ali:item minecraft:diamond x1
+          ali:item minecraft:diamond x1-3
             | Chance: 1.14%
             | Count: 1 to 3
-          ali:item minecraft:iron_ingot x1
+          ali:item minecraft:iron_ingot x1-5
             | Chance: 1.14%
             | Count: 1 to 5
           ali:item minecraft:golden_sword x1 {Damage:0}
@@ -418,7 +418,7 @@ ali:loot_table
           ali:item minecraft:flint_and_steel x1 {Damage:0}
             | Chance: 1.14%
             | Count: 1
-          ali:item minecraft:nether_wart x1
+          ali:item minecraft:nether_wart x3-7
             | Chance: 1.14%
             | Count: 3 to 7
           ali:item minecraft:iron_horse_armor x1
@@ -427,7 +427,7 @@ ali:loot_table
           ali:item minecraft:diamond_horse_armor x1
             | Chance: 0.68%
             | Count: 1
-          ali:item minecraft:obsidian x1
+          ali:item minecraft:obsidian x2-4
             | Chance: 0.46%
             | Count: 2 to 4
         ali:loot_pool
@@ -450,10 +450,10 @@ ali:loot_table
           ali:item minecraft:ancient_debris x1
             | Chance: 2.25%
             | Count: 1
-          ali:item minecraft:golden_carrot x1
+          ali:item minecraft:golden_carrot x6-17
             | Chance: 2.25%
             | Count: 6 to 17
-          ali:item minecraft:spectral_arrow x1
+          ali:item minecraft:spectral_arrow x10-22
             | Chance: 1.87%
             | Count: 10 to 22
           ali:item minecraft:enchanted_book x1
@@ -507,13 +507,13 @@ ali:loot_table
           ali:item minecraft:gold_block x1
             | Chance: 1.67%
             | Count: 1
-          ali:item minecraft:gold_ingot x1
+          ali:item minecraft:gold_ingot x1-6
             | Chance: 1.67%
             | Count: 1 to 6
-          ali:item minecraft:iron_ingot x1
+          ali:item minecraft:iron_ingot x1-6
             | Chance: 1.67%
             | Count: 1 to 6
-          ali:item minecraft:crying_obsidian x1
+          ali:item minecraft:crying_obsidian x1-5
             | Chance: 1.67%
             | Count: 1 to 5
           ali:item minecraft:golden_boots x1 {Damage:0}
@@ -548,31 +548,31 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 3 to 4
-          ali:item minecraft:gilded_blackstone x1
+          ali:item minecraft:gilded_blackstone x1-5
             | Chance: 2.56%
             | Count: 1 to 5
-          ali:item minecraft:magma_cream x1
+          ali:item minecraft:magma_cream x2-6
             | Chance: 2.56%
             | Count: 2 to 6
-          ali:item minecraft:arrow x1
+          ali:item minecraft:arrow x5-17
             | Chance: 2.56%
             | Count: 5 to 17
-          ali:item minecraft:chain x1
+          ali:item minecraft:chain x2-10
             | Chance: 1.28%
             | Count: 2 to 10
-          ali:item minecraft:bone_block x1
+          ali:item minecraft:bone_block x3-6
             | Chance: 1.28%
             | Count: 3 to 6
-          ali:item minecraft:iron_nugget x1
+          ali:item minecraft:iron_nugget x2-8
             | Chance: 1.28%
             | Count: 2 to 8
-          ali:item minecraft:obsidian x1
+          ali:item minecraft:obsidian x4-6
             | Chance: 1.28%
             | Count: 4 to 6
-          ali:item minecraft:gold_nugget x1
+          ali:item minecraft:gold_nugget x2-8
             | Chance: 1.28%
             | Count: 2 to 8
-          ali:item minecraft:string x1
+          ali:item minecraft:string x4-6
             | Chance: 1.28%
             | Count: 4 to 6
           ali:item minecraft:cooked_porkchop x1

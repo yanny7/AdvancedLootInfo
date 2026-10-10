@@ -213,7 +213,7 @@ ali:loot_table
             | Set Damage:
             |   -> Damage: U[0%; 90%)
             |   -> Add: False
-          ali:item minecraft:ink_sac x1
+          ali:item minecraft:ink_sac x10
             | Chance: 0.09%
             |   -> luck: max(0%; 1000% + floor(−200% × luck)) ÷ (max(0%; 1000% + floor(−200% × luck)) + max(0%; 500% + floor(200% × luck)) + max(0%; 8500% + floor(−100% × luck))) × 0.91%
             |   -> Bad Luck: 0.11%

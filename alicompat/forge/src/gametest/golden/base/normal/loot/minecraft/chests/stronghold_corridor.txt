@@ -3,22 +3,22 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 2 to 3
-    ali:item minecraft:bread x1
+    ali:item minecraft:bread x1-3
       | Chance: 15%
       | Count: 1 to 3
-    ali:item minecraft:apple x1
+    ali:item minecraft:apple x1-3
       | Chance: 15%
       | Count: 1 to 3
     ali:item minecraft:ender_pearl x1
       | Chance: 10%
       | Count: 1
-    ali:item minecraft:iron_ingot x1
+    ali:item minecraft:iron_ingot x1-5
       | Chance: 10%
       | Count: 1 to 5
-    ali:item minecraft:gold_ingot x1
+    ali:item minecraft:gold_ingot x1-3
       | Chance: 5%
       | Count: 1 to 3
-    ali:item minecraft:redstone x1
+    ali:item minecraft:redstone x4-9
       | Chance: 5%
       | Count: 4 to 9
     ali:item minecraft:iron_pickaxe x1 {Damage:0}
@@ -39,7 +39,7 @@ ali:loot_table
     ali:item minecraft:iron_boots x1 {Damage:0}
       | Chance: 5%
       | Count: 1
-    ali:item minecraft:diamond x1
+    ali:item minecraft:diamond x1-3
       | Chance: 3%
       | Count: 1 to 3
     ali:item minecraft:golden_apple x1

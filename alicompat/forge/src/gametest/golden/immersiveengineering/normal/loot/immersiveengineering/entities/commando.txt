@@ -3,7 +3,7 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:emerald x1
+    ali:item minecraft:emerald x0-4
       | Chance: 25%
       | Count: 0 to 1
       |   -> Looting I: 0 to 2  ~1 (50%)
@@ -15,21 +15,21 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Looting Enchant:
       |   -> Value: 0 to 1
-    ali:item immersiveengineering:gunpart_barrel x1
+    ali:item immersiveengineering:gunpart_barrel x0-1
       | Chance: 25%
       | Count: 0 to 1
       | ----- Predicates -----
       | Killed by player
       | ----- Modifiers -----
       | Revolver Perks
-    ali:item immersiveengineering:gunpart_drum x1
+    ali:item immersiveengineering:gunpart_drum x0-1
       | Chance: 25%
       | Count: 0 to 1
       | ----- Predicates -----
       | Killed by player
       | ----- Modifiers -----
       | Revolver Perks
-    ali:item immersiveengineering:gunpart_hammer x1
+    ali:item immersiveengineering:gunpart_hammer x0-1
       | Chance: 25%
       | Count: 0 to 1
       | ----- Predicates -----

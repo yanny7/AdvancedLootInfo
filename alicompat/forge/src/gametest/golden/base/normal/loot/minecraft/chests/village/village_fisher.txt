@@ -3,24 +3,24 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 5
-    ali:item minecraft:wheat_seeds x1
+    ali:item minecraft:wheat_seeds x1-3
       | Chance: 27.27%
       | Count: 1 to 3
-    ali:item minecraft:cod x1
+    ali:item minecraft:cod x1-3
       | Chance: 18.18%
       | Count: 1 to 3
-    ali:item minecraft:coal x1
+    ali:item minecraft:coal x1-3
       | Chance: 18.18%
       | Count: 1 to 3
     ali:item minecraft:emerald x1
       | Chance: 9.09%
       | Count: 1
-    ali:item minecraft:salmon x1
+    ali:item minecraft:salmon x1-3
       | Chance: 9.09%
       | Count: 1 to 3
     ali:item minecraft:water_bucket x1
       | Chance: 9.09%
       | Count: 1
-    ali:item minecraft:barrel x1
+    ali:item minecraft:barrel x1-3
       | Chance: 9.09%
       | Count: 1 to 3

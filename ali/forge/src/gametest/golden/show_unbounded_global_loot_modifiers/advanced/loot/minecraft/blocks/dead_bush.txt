@@ -10,7 +10,7 @@ ali:loot_table
         | ----- Predicates -----
         | Can Tool Perform Action:
         |   -> shears_dig
-      ali:item minecraft:stick x1
+      ali:item minecraft:stick x0-2
         | Count: max(0; U[0; 2])
         | ----- Modifiers -----
         | Set Count:

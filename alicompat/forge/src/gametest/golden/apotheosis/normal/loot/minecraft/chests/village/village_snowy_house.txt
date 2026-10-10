@@ -3,19 +3,19 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 3 to 8
-    ali:item minecraft:potato x1
+    ali:item minecraft:potato x1-7
       | Chance: 18.87%
       | Count: 1 to 7
-    ali:item minecraft:bread x1
+    ali:item minecraft:bread x1-4
       | Chance: 18.87%
       | Count: 1 to 4
-    ali:item minecraft:beetroot_seeds x1
+    ali:item minecraft:beetroot_seeds x1-5
       | Chance: 18.87%
       | Count: 1 to 5
-    ali:item minecraft:snowball x1
+    ali:item minecraft:snowball x1-7
       | Chance: 18.87%
       | Count: 1 to 7
-    ali:item minecraft:coal x1
+    ali:item minecraft:coal x1-4
       | Chance: 9.43%
       | Count: 1 to 4
     ali:item minecraft:snow_block x1
@@ -30,7 +30,7 @@ ali:loot_table
     ali:item minecraft:furnace x1
       | Chance: 1.89%
       | Count: 1
-    ali:item minecraft:emerald x1
+    ali:item minecraft:emerald x1-4
       | Chance: 1.89%
       | Count: 1 to 4
   ali:loot_pool

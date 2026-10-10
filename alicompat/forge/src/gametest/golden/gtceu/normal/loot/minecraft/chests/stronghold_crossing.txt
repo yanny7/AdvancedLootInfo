@@ -3,7 +3,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 4
-    ali:item minecraft:bread x1
+    ali:item minecraft:bread x1-3
       | Chance: 12.93%
       |   -> Bad Luck: 13.64%
       |   -> Luck 1: 12.3%
@@ -11,7 +11,7 @@ ali:loot_table
       |   -> Luck 3: 11.19%
       |   -> Luck 4: 10.71%
       | Count: 1 to 3
-    ali:item minecraft:apple x1
+    ali:item minecraft:apple x1-3
       | Chance: 12.93%
       |   -> Bad Luck: 13.64%
       |   -> Luck 1: 12.3%
@@ -19,7 +19,7 @@ ali:loot_table
       |   -> Luck 3: 11.19%
       |   -> Luck 4: 10.71%
       | Count: 1 to 3
-    ali:item gtceu:steel_ingot x1
+    ali:item gtceu:steel_ingot x8-16
       | Quality: 1
       | Chance: 10.34%
       |   -> Bad Luck: 10%
@@ -34,7 +34,7 @@ ali:loot_table
       |     -> Item: Steel Ingot
       |     -> Count: 1
       |   -> Count: 8 to 16
-    ali:item gtceu:bronze_ingot x1
+    ali:item gtceu:bronze_ingot x8-16
       | Quality: 1
       | Chance: 10.34%
       |   -> Bad Luck: 10%
@@ -49,7 +49,7 @@ ali:loot_table
       |     -> Item: Bronze Ingot
       |     -> Count: 1
       |   -> Count: 8 to 16
-    ali:item gtceu:manganese_ingot x1
+    ali:item gtceu:manganese_ingot x4-8
       | Quality: 1
       | Chance: 10.34%
       |   -> Bad Luck: 10%
@@ -64,7 +64,7 @@ ali:loot_table
       |     -> Item: Manganese Ingot
       |     -> Count: 1
       |   -> Count: 4 to 8
-    ali:item minecraft:iron_ingot x1
+    ali:item minecraft:iron_ingot x1-5
       | Chance: 8.62%
       |   -> Bad Luck: 9.09%
       |   -> Luck 1: 8.2%
@@ -72,7 +72,7 @@ ali:loot_table
       |   -> Luck 3: 7.46%
       |   -> Luck 4: 7.14%
       | Count: 1 to 5
-    ali:item minecraft:coal x1
+    ali:item minecraft:coal x3-8
       | Chance: 8.62%
       |   -> Bad Luck: 9.09%
       |   -> Luck 1: 8.2%
@@ -80,7 +80,7 @@ ali:loot_table
       |   -> Luck 3: 7.46%
       |   -> Luck 4: 7.14%
       | Count: 3 to 8
-    ali:item gtceu:damascus_steel_ingot x1
+    ali:item gtceu:damascus_steel_ingot x4-8
       | Quality: 1
       | Chance: 5.17%
       |   -> Bad Luck: 4.55%
@@ -95,7 +95,7 @@ ali:loot_table
       |     -> Item: Damascus Steel Ingot
       |     -> Count: 1
       |   -> Count: 4 to 8
-    ali:item gtceu:neodymium_dust x1
+    ali:item gtceu:neodymium_dust x4-8
       | Quality: 1
       | Chance: 5.17%
       |   -> Bad Luck: 4.55%
@@ -110,7 +110,7 @@ ali:loot_table
       |     -> Item: Neodymium Dust
       |     -> Count: 1
       |   -> Count: 4 to 8
-    ali:item gtceu:chromium_dust x1
+    ali:item gtceu:chromium_dust x2-4
       | Quality: 1
       | Chance: 5.17%
       |   -> Bad Luck: 4.55%
@@ -125,7 +125,7 @@ ali:loot_table
       |     -> Item: Chromium Dust
       |     -> Count: 1
       |   -> Count: 2 to 4
-    ali:item minecraft:gold_ingot x1
+    ali:item minecraft:gold_ingot x1-3
       | Chance: 4.31%
       |   -> Bad Luck: 4.55%
       |   -> Luck 1: 4.1%
@@ -133,7 +133,7 @@ ali:loot_table
       |   -> Luck 3: 3.73%
       |   -> Luck 4: 3.57%
       | Count: 1 to 3
-    ali:item minecraft:redstone x1
+    ali:item minecraft:redstone x4-9
       | Chance: 4.31%
       |   -> Bad Luck: 4.55%
       |   -> Luck 1: 4.1%

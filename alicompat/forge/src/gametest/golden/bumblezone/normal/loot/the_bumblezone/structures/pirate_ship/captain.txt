@@ -3,22 +3,22 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 4
-    ali:item minecraft:honeycomb x1
+    ali:item minecraft:honeycomb x2-6
       | Chance: 47.06%
       | Count: 2 to 6
-    ali:item minecraft:honey_block x1
+    ali:item minecraft:honey_block x1-3
       | Chance: 29.41%
       | Count: 1 to 3
-    ali:item minecraft:honey_bottle x1
+    ali:item minecraft:honey_bottle x1-3
       | Chance: 23.53%
       | Count: 1 to 3
   ali:loot_pool
     | Selects random entry
     | Rolls: 3 to 5
-    ali:item minecraft:raw_gold x1
+    ali:item minecraft:raw_gold x3-5
       | Chance: 35.71%
       | Count: 3 to 5
-    ali:item minecraft:raw_gold_block x1
+    ali:item minecraft:raw_gold_block x1-2
       | Chance: 21.43%
       | Count: 1 to 2
     ali:item minecraft:spyglass x1
