@@ -1,0 +1,38 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:modified
+      | Selects only first successful entry
+      ali:item minecraft:stone_pickaxe x1 {Damage:0}
+        | Chance: 8.75%
+        | Count: 1
+        | Min Rarity: apotheosis:common
+        | Max Rarity: apotheosis:rare
+      ali:item minecraft:stone_pickaxe x1 {Damage:0}
+        | Chance: 25%
+        | Count: 1
+    ali:modified
+      | Selects only first successful entry
+      ali:item minecraft:stone_axe x1 {Damage:0}
+        | Chance: 8.75%
+        | Count: 1
+        | Min Rarity: apotheosis:common
+        | Max Rarity: apotheosis:rare
+      ali:item minecraft:stone_axe x1 {Damage:0}
+        | Chance: 25%
+        | Count: 1
+    ali:modified
+      | Selects only first successful entry
+      ali:item minecraft:stone_shovel x1 {Damage:0}
+        | Chance: 8.75%
+        | Count: 1
+        | Min Rarity: apotheosis:common
+        | Max Rarity: apotheosis:rare
+      ali:item minecraft:stone_shovel x1 {Damage:0}
+        | Chance: 25%
+        | Count: 1
+    ali:item minecraft:stone_hoe x1 {Damage:0}
+      | Chance: 25%
+      | Count: 1

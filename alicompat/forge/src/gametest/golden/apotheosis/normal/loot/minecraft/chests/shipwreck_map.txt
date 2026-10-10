@@ -1,0 +1,590 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:map x1 {display:{Name:'{"translate":"filled_map.buried_treasure"}'}}
+      | Count: 1
+      | ----- Modifiers -----
+      | Exploration Map:
+      |   -> Destination: minecraft:on_treasure_maps
+      |   -> Map Decoration: Red X
+      |   -> Zoom: 1
+      |   -> Search Radius: 50
+      |   -> Skip Known Structures: False
+      | Set Name:
+      |   -> Name: Buried Treasure Map
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3
+    ali:item minecraft:paper x1
+      | Chance: 52.63%
+      | Count: 1 to 10
+    ali:item minecraft:feather x1
+      | Chance: 26.32%
+      | Count: 1 to 5
+    ali:item minecraft:book x1
+      | Chance: 13.16%
+      | Count: 1 to 5
+    ali:item minecraft:compass x1
+      | Chance: 2.63%
+      | Count: 1
+    ali:item minecraft:map x1
+      | Chance: 2.63%
+      | Count: 1
+    ali:item minecraft:clock x1
+      | Chance: 2.63%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 83.33%
+    ali:item minecraft:coast_armor_trim_smithing_template x1
+      | Chance: 16.67%
+      | Count: 2
+  ali:loot_pool
+    | Random Affix Item:
+    |   -> Selects random entry
+    |   -> Probability: 0.35
+    |   -> Requires a player
+    ali:item minecraft:trident x1 {Damage:0}
+      | Chance: 0.82%
+      | Count: 1
+      | Weight: 125
+      | Quality: 2.5
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: minecraft:the_nether
+    ali:item minecraft:diamond_shovel x1 {Damage:0}
+      | Chance: 0.66%
+      | Count: 1
+      | Weight: 100
+      | Quality: 5.0
+      | Min Rarity: apotheosis:rare
+      | Max Rarity: apotheosis:mythic
+      | Dimension: minecraft:the_end
+    ali:item minecraft:diamond_pickaxe x1 {Damage:0}
+      | Chance: 0.66%
+      | Count: 1
+      | Weight: 100
+      | Quality: 5.0
+      | Min Rarity: apotheosis:rare
+      | Max Rarity: apotheosis:mythic
+      | Dimension: minecraft:the_end
+    ali:item minecraft:iron_shovel x1 {Damage:0}
+      | Chance: 0.66%
+      | Count: 1
+      | Weight: 100
+      | Quality: 1.0
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: minecraft:the_nether
+    ali:item minecraft:iron_pickaxe x1 {Damage:0}
+      | Chance: 0.66%
+      | Count: 1
+      | Weight: 100
+      | Quality: 1.0
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: minecraft:the_nether
+    ali:item minecraft:iron_sword x1 {Damage:0}
+      | Chance: 0.66%
+      | Count: 1
+      | Weight: 100
+      | Quality: 1.0
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: minecraft:the_nether
+    ali:item minecraft:diamond_leggings x1 {Damage:0}
+      | Chance: 0.66%
+      | Count: 1
+      | Weight: 100
+      | Quality: 5.0
+      | Min Rarity: apotheosis:rare
+      | Max Rarity: apotheosis:mythic
+      | Dimension: minecraft:the_end
+    ali:item minecraft:diamond_chestplate x1 {Damage:0}
+      | Chance: 0.66%
+      | Count: 1
+      | Weight: 100
+      | Quality: 5.0
+      | Min Rarity: apotheosis:rare
+      | Max Rarity: apotheosis:mythic
+      | Dimension: minecraft:the_end
+    ali:item minecraft:iron_axe x1 {Damage:0}
+      | Chance: 0.66%
+      | Count: 1
+      | Weight: 100
+      | Quality: 1.0
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: minecraft:the_nether
+    ali:item minecraft:iron_boots x1 {Damage:0}
+      | Chance: 0.66%
+      | Count: 1
+      | Weight: 100
+      | Quality: 1.0
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: minecraft:the_nether
+    ali:item minecraft:iron_helmet x1 {Damage:0}
+      | Chance: 0.66%
+      | Count: 1
+      | Weight: 100
+      | Quality: 1.0
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: minecraft:the_nether
+    ali:item minecraft:diamond_helmet x1 {Damage:0}
+      | Chance: 0.66%
+      | Count: 1
+      | Weight: 100
+      | Quality: 5.0
+      | Min Rarity: apotheosis:rare
+      | Max Rarity: apotheosis:mythic
+      | Dimension: minecraft:the_end
+    ali:item minecraft:iron_leggings x1 {Damage:0}
+      | Chance: 0.66%
+      | Count: 1
+      | Weight: 100
+      | Quality: 1.0
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: minecraft:the_nether
+    ali:item minecraft:diamond_axe x1 {Damage:0}
+      | Chance: 0.66%
+      | Count: 1
+      | Weight: 100
+      | Quality: 5.0
+      | Min Rarity: apotheosis:rare
+      | Max Rarity: apotheosis:mythic
+      | Dimension: minecraft:the_end
+    ali:item minecraft:diamond_boots x1 {Damage:0}
+      | Chance: 0.66%
+      | Count: 1
+      | Weight: 100
+      | Quality: 5.0
+      | Min Rarity: apotheosis:rare
+      | Max Rarity: apotheosis:mythic
+      | Dimension: minecraft:the_end
+    ali:item minecraft:iron_chestplate x1 {Damage:0}
+      | Chance: 0.66%
+      | Count: 1
+      | Weight: 100
+      | Quality: 1.0
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: minecraft:the_nether
+    ali:item minecraft:diamond_sword x1 {Damage:0}
+      | Chance: 0.66%
+      | Count: 1
+      | Weight: 100
+      | Quality: 5.0
+      | Min Rarity: apotheosis:rare
+      | Max Rarity: apotheosis:mythic
+      | Dimension: minecraft:the_end
+    ali:item minecraft:trident x1 {Damage:0}
+      | Chance: 0.66%
+      | Count: 1
+      | Weight: 100
+      | Quality: 2.5
+      | Min Rarity: apotheosis:common
+      | Max Rarity: apotheosis:rare
+      | Dimension: minecraft:overworld
+    ali:item minecraft:shield x1 {Damage:0}
+      | Chance: 0.66%
+      | Count: 1
+      | Weight: 100
+      | Quality: 2.5
+      | Min Rarity: apotheosis:common
+      | Max Rarity: apotheosis:rare
+      | Dimension: minecraft:overworld
+    ali:item minecraft:golden_shovel x1 {Damage:0}
+      | Chance: 0.56%
+      | Count: 1
+      | Weight: 85
+      | Quality: 5.0
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: minecraft:the_nether
+    ali:item minecraft:iron_axe x1 {Damage:0}
+      | Chance: 0.56%
+      | Count: 1
+      | Weight: 85
+      | Quality: 4.0
+      | Min Rarity: apotheosis:common
+      | Max Rarity: apotheosis:rare
+      | Dimension: minecraft:overworld
+    ali:item minecraft:golden_axe x1 {Damage:0}
+      | Chance: 0.56%
+      | Count: 1
+      | Weight: 85
+      | Quality: 5.0
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: minecraft:the_nether
+    ali:item minecraft:golden_chestplate x1 {Damage:0}
+      | Chance: 0.56%
+      | Count: 1
+      | Weight: 85
+      | Quality: 3.0
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: minecraft:the_nether
+    ali:item minecraft:iron_shovel x1 {Damage:0}
+      | Chance: 0.56%
+      | Count: 1
+      | Weight: 85
+      | Quality: 4.0
+      | Min Rarity: apotheosis:common
+      | Max Rarity: apotheosis:rare
+      | Dimension: minecraft:overworld
+    ali:item minecraft:chainmail_leggings x1 {Damage:0}
+      | Chance: 0.56%
+      | Count: 1
+      | Weight: 85
+      | Quality: 3.0
+      | Min Rarity: apotheosis:common
+      | Max Rarity: apotheosis:rare
+      | Dimension: minecraft:overworld
+    ali:item minecraft:chainmail_helmet x1 {Damage:0}
+      | Chance: 0.56%
+      | Count: 1
+      | Weight: 85
+      | Quality: 3.0
+      | Min Rarity: apotheosis:common
+      | Max Rarity: apotheosis:rare
+      | Dimension: minecraft:overworld
+    ali:item minecraft:golden_leggings x1 {Damage:0}
+      | Chance: 0.56%
+      | Count: 1
+      | Weight: 85
+      | Quality: 3.0
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: minecraft:the_nether
+    ali:item minecraft:chainmail_boots x1 {Damage:0}
+      | Chance: 0.56%
+      | Count: 1
+      | Weight: 85
+      | Quality: 3.0
+      | Min Rarity: apotheosis:common
+      | Max Rarity: apotheosis:rare
+      | Dimension: minecraft:overworld
+    ali:item minecraft:golden_boots x1 {Damage:0}
+      | Chance: 0.56%
+      | Count: 1
+      | Weight: 85
+      | Quality: 3.0
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: minecraft:the_nether
+    ali:item minecraft:chainmail_chestplate x1 {Damage:0}
+      | Chance: 0.56%
+      | Count: 1
+      | Weight: 85
+      | Quality: 3.0
+      | Min Rarity: apotheosis:common
+      | Max Rarity: apotheosis:rare
+      | Dimension: minecraft:overworld
+    ali:item minecraft:iron_pickaxe x1 {Damage:0}
+      | Chance: 0.56%
+      | Count: 1
+      | Weight: 85
+      | Quality: 4.0
+      | Min Rarity: apotheosis:common
+      | Max Rarity: apotheosis:rare
+      | Dimension: minecraft:overworld
+    ali:item minecraft:golden_helmet x1 {Damage:0}
+      | Chance: 0.56%
+      | Count: 1
+      | Weight: 85
+      | Quality: 3.0
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: minecraft:the_nether
+    ali:item minecraft:golden_sword x1 {Damage:0}
+      | Chance: 0.56%
+      | Count: 1
+      | Weight: 85
+      | Quality: 5.0
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: minecraft:the_nether
+    ali:item minecraft:golden_pickaxe x1 {Damage:0}
+      | Chance: 0.56%
+      | Count: 1
+      | Weight: 85
+      | Quality: 5.0
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: minecraft:the_nether
+    ali:item minecraft:iron_sword x1 {Damage:0}
+      | Chance: 0.56%
+      | Count: 1
+      | Weight: 85
+      | Quality: 4.0
+      | Min Rarity: apotheosis:common
+      | Max Rarity: apotheosis:rare
+      | Dimension: minecraft:overworld
+    ali:item minecraft:turtle_helmet x1 {Damage:0}
+      | Chance: 0.49%
+      | Count: 1
+      | Weight: 75
+      | Quality: 3.5
+      | Min Rarity: apotheosis:common
+      | Max Rarity: apotheosis:rare
+      | Dimension: minecraft:overworld
+    ali:item minecraft:trident x1 {Damage:0}
+      | Chance: 0.49%
+      | Count: 1
+      | Weight: 75
+      | Quality: 2.5
+      | Min Rarity: apotheosis:rare
+      | Max Rarity: apotheosis:mythic
+      | Dimension: minecraft:the_end
+    ali:item minecraft:diamond_sword x1 {Damage:0}
+      | Chance: 0.46%
+      | Count: 1
+      | Weight: 70
+      | Quality: 6.0
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: minecraft:the_nether
+    ali:item minecraft:netherite_helmet x1 {Damage:0}
+      | Chance: 0.46%
+      | Count: 1
+      | Weight: 70
+      | Quality: 10.0
+      | Min Rarity: apotheosis:rare
+      | Max Rarity: apotheosis:mythic
+      | Dimension: minecraft:the_end
+    ali:item minecraft:iron_boots x1 {Damage:0}
+      | Chance: 0.46%
+      | Count: 1
+      | Weight: 70
+      | Quality: 5.0
+      | Min Rarity: apotheosis:common
+      | Max Rarity: apotheosis:rare
+      | Dimension: minecraft:overworld
+    ali:item minecraft:iron_leggings x1 {Damage:0}
+      | Chance: 0.46%
+      | Count: 1
+      | Weight: 70
+      | Quality: 5.0
+      | Min Rarity: apotheosis:common
+      | Max Rarity: apotheosis:rare
+      | Dimension: minecraft:overworld
+    ali:item minecraft:netherite_boots x1 {Damage:0}
+      | Chance: 0.46%
+      | Count: 1
+      | Weight: 70
+      | Quality: 10.0
+      | Min Rarity: apotheosis:rare
+      | Max Rarity: apotheosis:mythic
+      | Dimension: minecraft:the_end
+    ali:item minecraft:diamond_boots x1 {Damage:0}
+      | Chance: 0.46%
+      | Count: 1
+      | Weight: 70
+      | Quality: 5.0
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: minecraft:the_nether
+    ali:item minecraft:netherite_pickaxe x1 {Damage:0}
+      | Chance: 0.46%
+      | Count: 1
+      | Weight: 70
+      | Quality: 10.0
+      | Min Rarity: apotheosis:rare
+      | Max Rarity: apotheosis:mythic
+      | Dimension: minecraft:the_end
+    ali:item minecraft:diamond_chestplate x1 {Damage:0}
+      | Chance: 0.46%
+      | Count: 1
+      | Weight: 70
+      | Quality: 5.0
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: minecraft:the_nether
+    ali:item minecraft:iron_chestplate x1 {Damage:0}
+      | Chance: 0.46%
+      | Count: 1
+      | Weight: 70
+      | Quality: 5.0
+      | Min Rarity: apotheosis:common
+      | Max Rarity: apotheosis:rare
+      | Dimension: minecraft:overworld
+    ali:item minecraft:netherite_axe x1 {Damage:0}
+      | Chance: 0.46%
+      | Count: 1
+      | Weight: 70
+      | Quality: 10.0
+      | Min Rarity: apotheosis:rare
+      | Max Rarity: apotheosis:mythic
+      | Dimension: minecraft:the_end
+    ali:item minecraft:netherite_sword x1 {Damage:0}
+      | Chance: 0.46%
+      | Count: 1
+      | Weight: 70
+      | Quality: 10.0
+      | Min Rarity: apotheosis:rare
+      | Max Rarity: apotheosis:mythic
+      | Dimension: minecraft:the_end
+    ali:item minecraft:diamond_leggings x1 {Damage:0}
+      | Chance: 0.46%
+      | Count: 1
+      | Weight: 70
+      | Quality: 5.0
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: minecraft:the_nether
+    ali:item minecraft:diamond_pickaxe x1 {Damage:0}
+      | Chance: 0.46%
+      | Count: 1
+      | Weight: 70
+      | Quality: 6.0
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: minecraft:the_nether
+    ali:item minecraft:diamond_axe x1 {Damage:0}
+      | Chance: 0.46%
+      | Count: 1
+      | Weight: 70
+      | Quality: 6.0
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: minecraft:the_nether
+    ali:item minecraft:diamond_helmet x1 {Damage:0}
+      | Chance: 0.46%
+      | Count: 1
+      | Weight: 70
+      | Quality: 5.0
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: minecraft:the_nether
+    ali:item minecraft:diamond_shovel x1 {Damage:0}
+      | Chance: 0.46%
+      | Count: 1
+      | Weight: 70
+      | Quality: 6.0
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: minecraft:the_nether
+    ali:item minecraft:netherite_shovel x1 {Damage:0}
+      | Chance: 0.46%
+      | Count: 1
+      | Weight: 70
+      | Quality: 10.0
+      | Min Rarity: apotheosis:rare
+      | Max Rarity: apotheosis:mythic
+      | Dimension: minecraft:the_end
+    ali:item minecraft:iron_helmet x1 {Damage:0}
+      | Chance: 0.46%
+      | Count: 1
+      | Weight: 70
+      | Quality: 5.0
+      | Min Rarity: apotheosis:common
+      | Max Rarity: apotheosis:rare
+      | Dimension: minecraft:overworld
+    ali:item minecraft:netherite_chestplate x1 {Damage:0}
+      | Chance: 0.46%
+      | Count: 1
+      | Weight: 70
+      | Quality: 10.0
+      | Min Rarity: apotheosis:rare
+      | Max Rarity: apotheosis:mythic
+      | Dimension: minecraft:the_end
+    ali:item minecraft:netherite_leggings x1 {Damage:0}
+      | Chance: 0.46%
+      | Count: 1
+      | Weight: 70
+      | Quality: 10.0
+      | Min Rarity: apotheosis:rare
+      | Max Rarity: apotheosis:mythic
+      | Dimension: minecraft:the_end
+    ali:item minecraft:bow x1 {Damage:0}
+      | Chance: 0.33%
+      | Count: 1
+      | Weight: 50
+      | Quality: 2.5
+      | Min Rarity: apotheosis:rare
+      | Max Rarity: apotheosis:mythic
+      | Dimension: minecraft:the_end
+    ali:item minecraft:bow x1 {Damage:0}
+      | Chance: 0.33%
+      | Count: 1
+      | Weight: 50
+      | Quality: 2.5
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: minecraft:the_nether
+    ali:item minecraft:crossbow x1 {Damage:0}
+      | Chance: 0.33%
+      | Count: 1
+      | Weight: 50
+      | Quality: 2.5
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: minecraft:the_nether
+    ali:item minecraft:shield x1 {Damage:0}
+      | Chance: 0.33%
+      | Count: 1
+      | Weight: 50
+      | Quality: 2.5
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: twilightforest:twilight_forest
+    ali:item minecraft:bow x1 {Damage:0}
+      | Chance: 0.33%
+      | Count: 1
+      | Weight: 50
+      | Quality: 2.5
+      | Min Rarity: apotheosis:common
+      | Max Rarity: apotheosis:rare
+      | Dimension: minecraft:overworld
+    ali:item minecraft:trident x1 {Damage:0}
+      | Chance: 0.33%
+      | Count: 1
+      | Weight: 50
+      | Quality: 2.5
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: twilightforest:twilight_forest
+    ali:item minecraft:crossbow x1 {Damage:0}
+      | Chance: 0.33%
+      | Count: 1
+      | Weight: 50
+      | Quality: 2.5
+      | Min Rarity: apotheosis:rare
+      | Max Rarity: apotheosis:mythic
+      | Dimension: minecraft:the_end
+    ali:item minecraft:shield x1 {Damage:0}
+      | Chance: 0.33%
+      | Count: 1
+      | Weight: 50
+      | Quality: 2.5
+      | Min Rarity: apotheosis:rare
+      | Max Rarity: apotheosis:mythic
+      | Dimension: minecraft:the_end
+    ali:item minecraft:shield x1 {Damage:0}
+      | Chance: 0.33%
+      | Count: 1
+      | Weight: 50
+      | Quality: 2.5
+      | Min Rarity: apotheosis:uncommon
+      | Max Rarity: apotheosis:epic
+      | Dimension: minecraft:the_nether
+    ali:item minecraft:crossbow x1 {Damage:0}
+      | Chance: 0.33%
+      | Count: 1
+      | Weight: 50
+      | Quality: 2.5
+      | Min Rarity: apotheosis:common
+      | Max Rarity: apotheosis:rare
+      | Dimension: minecraft:overworld
+  ali:item apotheosis:gem x1
+    | Chance: 25%
+    | Count: 1

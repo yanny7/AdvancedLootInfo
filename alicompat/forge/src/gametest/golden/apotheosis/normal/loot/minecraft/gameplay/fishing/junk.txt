@@ -1,0 +1,77 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:modified
+      | Selects only first successful entry
+      ali:item minecraft:leather_boots x1 {Damage:0}
+        | Chance: 3.18%
+        | Count: 1
+        | ----- Modifiers -----
+        | Set Damage:
+        |   -> Damage: 0% to 90%
+        |   -> Add: False
+        | Min Rarity: apotheosis:common
+        | Max Rarity: apotheosis:rare
+      ali:item minecraft:leather_boots x1 {Damage:0}
+        | Chance: 9.09%
+        | Count: 1
+        | ----- Modifiers -----
+        | Set Damage:
+        |   -> Damage: 0% to 90%
+        |   -> Add: False
+    ali:item minecraft:lily_pad x1
+      | Chance: 15.45%
+      | Count: 1
+    ali:item minecraft:leather x1
+      | Chance: 9.09%
+      | Count: 1
+    ali:item minecraft:bone x1
+      | Chance: 9.09%
+      | Count: 1
+    ali:item minecraft:potion x1 {Potion:"minecraft:water"}
+      | Chance: 9.09%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Water Bottle
+    ali:item minecraft:bowl x1
+      | Chance: 9.09%
+      | Count: 1
+    ali:item minecraft:tripwire_hook x1
+      | Chance: 9.09%
+      | Count: 1
+    ali:item minecraft:rotten_flesh x1
+      | Chance: 9.09%
+      | Count: 1
+    ali:item minecraft:bamboo x1
+      | Chance: 9.09%
+      | Count: 1
+      | ----- Predicates -----
+      | Any Of:
+      |   -> Location Check:
+      |     -> Location:
+      |       -> Biome: Jungle
+      |   -> Location Check:
+      |     -> Location:
+      |       -> Biome: Sparse Jungle
+      |   -> Location Check:
+      |     -> Location:
+      |       -> Biome: Bamboo Jungle
+    ali:item minecraft:string x1
+      | Chance: 4.55%
+      | Count: 1
+    ali:item minecraft:stick x1
+      | Chance: 4.55%
+      | Count: 1
+    ali:item minecraft:fishing_rod x1 {Damage:0}
+      | Chance: 1.82%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 0% to 90%
+      |   -> Add: False
+    ali:item minecraft:ink_sac x1
+      | Chance: 0.91%
+      | Count: 10
