@@ -17,7 +17,7 @@ public class FarmersDelightTooltipTest {
         LootItemFunction function = CopyMealFunction.builder().build();
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Copy Meal:"
+                "Copy Meal"
         ));
     }
 
@@ -26,7 +26,7 @@ public class FarmersDelightTooltipTest {
         LootItemFunction function = CopyMealFunction.builder().when(ExplosionCondition.survivesExplosion()).build();
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Copy Meal:",
+                "Copy Meal",
                 "  -> Predicates:",
                 "    -> Survives Explosion"
         ));
@@ -37,7 +37,7 @@ public class FarmersDelightTooltipTest {
         LootItemFunction function = CopySkilletFunction.builder().build();
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Copy Skillet:"
+                "Copy Skillet"
         ));
     }
 
@@ -46,7 +46,7 @@ public class FarmersDelightTooltipTest {
         LootItemFunction function = CopySkilletFunction.builder().when(ExplosionCondition.survivesExplosion()).build();
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Copy Skillet:",
+                "Copy Skillet",
                 "  -> Predicates:",
                 "    -> Survives Explosion"
         ));

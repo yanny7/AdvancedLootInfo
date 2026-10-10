@@ -22,7 +22,7 @@ public class RefinedStorageTooltipTest {
         LootItemFunction function = ControllerLootFunction.builder().build();
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Copy Stored Energy:"
+                "Copy Stored Energy"
         ));
     }
 
@@ -31,7 +31,7 @@ public class RefinedStorageTooltipTest {
         LootItemFunction function = ControllerLootFunction.builder().when(ExplosionCondition.survivesExplosion()).build();
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Copy Stored Energy:",
+                "Copy Stored Energy",
                 "  -> Predicates:",
                 "    -> Survives Explosion"
         ));
@@ -42,7 +42,7 @@ public class RefinedStorageTooltipTest {
         LootItemFunction function = CrafterLootFunction.builder().build();
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Copy Crafter Name:"
+                "Copy Crafter Name"
         ));
     }
 
@@ -51,7 +51,7 @@ public class RefinedStorageTooltipTest {
         LootItemFunction function = CrafterLootFunction.builder().when(ExplosionCondition.survivesExplosion()).build();
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Copy Crafter Name:",
+                "Copy Crafter Name",
                 "  -> Predicates:",
                 "    -> Survives Explosion"
         ));
@@ -60,7 +60,7 @@ public class RefinedStorageTooltipTest {
     @Test
     public void testPortableGridBlockFunction() {
         assertTooltip(UTILS.getFunctionTooltip(UTILS, create(PortableGridBlockLootFunction.class)).build(), List.of(
-                "Copy Portable Grid Data:"
+                "Copy Portable Grid Data"
         ));
     }
 
@@ -69,7 +69,7 @@ public class RefinedStorageTooltipTest {
         LootItemFunction function = create(PortableGridBlockLootFunction.class, ExplosionCondition.survivesExplosion().build());
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Copy Portable Grid Data:",
+                "Copy Portable Grid Data",
                 "  -> Predicates:",
                 "    -> Survives Explosion"
         ));
@@ -78,7 +78,7 @@ public class RefinedStorageTooltipTest {
     @Test
     public void testStorageBlockFunction() {
         assertTooltip(UTILS.getFunctionTooltip(UTILS, create(StorageBlockLootFunction.class)).build(), List.of(
-                "Copy Storage Id:"
+                "Copy Storage Id"
         ));
     }
 
@@ -87,7 +87,7 @@ public class RefinedStorageTooltipTest {
         LootItemFunction function = create(StorageBlockLootFunction.class, ExplosionCondition.survivesExplosion().build());
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Copy Storage Id:",
+                "Copy Storage Id",
                 "  -> Predicates:",
                 "    -> Survives Explosion"
         ));

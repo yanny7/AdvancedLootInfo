@@ -1,0 +1,24 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item immersiveengineering:slab_slag_brick x1
+      | Count: 
+      |   -> 2
+      |     -> Block State Property:
+      |       -> Block: Slag Brick Slab
+      |       -> Properties:
+      |         -> type: double
+      |   -> otherwise 1
+      | ----- Predicates -----
+      | Survives Explosion
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2
+      |   -> Add: False
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Slag Brick Slab
+      |       -> Properties:
+      |         -> type: double

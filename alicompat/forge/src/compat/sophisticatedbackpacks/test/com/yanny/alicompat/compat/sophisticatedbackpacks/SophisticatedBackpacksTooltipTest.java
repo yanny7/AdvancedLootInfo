@@ -18,7 +18,7 @@ public class SophisticatedBackpacksTooltipTest {
         LootItemFunction function = CopyBackpackDataFunction.builder().build();
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Copy Backpack Data:"
+                "Copy Backpack Data"
         ));
     }
 
@@ -27,7 +27,7 @@ public class SophisticatedBackpacksTooltipTest {
         LootItemFunction function = CopyBackpackDataFunction.builder().when(ExplosionCondition.survivesExplosion()).build();
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Copy Backpack Data:",
+                "Copy Backpack Data",
                 "  -> Predicates:",
                 "    -> Survives Explosion"
         ));

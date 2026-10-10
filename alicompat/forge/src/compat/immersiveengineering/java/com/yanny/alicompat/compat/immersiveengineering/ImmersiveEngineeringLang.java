@@ -35,11 +35,11 @@ public class ImmersiveEngineeringLang implements ICompatTranslations {
     }
 
     public enum Functions implements ITooltipKey {
-        CONVEYOR_COVER("conveyor_cover", "Conveyor Cover:"),
+        CONVEYOR_COVER("conveyor_cover", "Conveyor Cover"),
         PROPERTY_COUNT("property_count", "Property Count:"),
-        REVOLVERPERK("revolverperk", "Revolver Perks:"),
-        SECRET_BLUPRINTZ("secret_bluprintz", "Secret Bluprintz:"),
-        WINDMILL("windmill", "Windmill Sails:"),
+        REVOLVERPERK("revolverperk", "Revolver Perks"),
+        SECRET_BLUPRINTZ("secret_bluprintz", "Secret Bluprintz"),
+        WINDMILL("windmill", "Windmill Sails"),
         ;
 
         private final Translation translation;
