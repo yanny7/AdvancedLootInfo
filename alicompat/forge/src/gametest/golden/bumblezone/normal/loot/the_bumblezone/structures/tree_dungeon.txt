@@ -1,0 +1,377 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 4
+    ali:item the_bumblezone:pollen_puff x1
+      | Chance: 16.48%
+      | Count: 3 to 6
+    ali:item the_bumblezone:dirt_pellet x1
+      | Chance: 16.48%
+      | Count: 2 to 6
+    ali:item the_bumblezone:honey_crystal_shards x1
+      | Chance: 16.48%
+      | Count: 2 to 5
+    ali:reference
+      | Selects all entries
+      | Chance: 10.99%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item #minecraft:flowers
+            | Chance: 10.99%
+            | Count: 1
+            | ----- Modifiers -----
+            | Tag Item Removals:
+            |   -> Tag: Disallowed Bumblezone Structure Flower Loots
+    ali:item minecraft:honeycomb x1
+      | Chance: 10.99%
+      | Count: 2 to 6
+    ali:item the_bumblezone:bee_bread x1
+      | Chance: 5.49%
+      | Count: 2 to 6
+    ali:item the_bumblezone:sticky_honey_residue x1
+      | Chance: 5.49%
+      | Count: 2 to 6
+    ali:item the_bumblezone:honey_web x1
+      | Chance: 5.49%
+      | Count: 2 to 6
+    ali:item the_bumblezone:filled_porous_honeycomb_block x1
+      | Chance: 5.49%
+      | Count: 1 to 3
+    ali:item the_bumblezone:honeycomb_brood_block x1
+      | Chance: 5.49%
+      | Count: 1 to 3
+    ali:item the_bumblezone:bee_stinger x1
+      | Chance: 1.1%
+      | Count: 1 to 2
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 2
+    ali:item the_bumblezone:honey_crystal x1
+      | Chance: 18.18%
+      | Count: 1 to 6
+    ali:item minecraft:honey_block x1
+      | Chance: 12.73%
+      | Count: 1 to 3
+    ali:item minecraft:candle x1
+      | Chance: 12.73%
+      | Count: 1 to 2
+    ali:item minecraft:yellow_candle x1
+      | Chance: 12.73%
+      | Count: 1 to 2
+    ali:item minecraft:green_candle x1
+      | Chance: 12.73%
+      | Count: 1 to 2
+    ali:item minecraft:lime_candle x1
+      | Chance: 12.73%
+      | Count: 1 to 2
+    ali:item the_bumblezone:honey_crystal_shield x1 {Damage:0}
+      | Chance: 1.82%
+      | Count: 1
+    ali:item minecraft:leather_boots x1 {Damage:0,display:{color:16701501}}
+      | Chance: 1.82%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {display:{color:16701501}}
+    ali:item minecraft:leather_boots x1 {Damage:0,display:{color:16701501}}
+      | Chance: 1.82%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      | Set Nbt:
+      |   -> Tag: {display:{color:16701501}}
+    ali:item minecraft:leather_leggings x1 {Damage:0,display:{color:16701501}}
+      | Chance: 1.82%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {display:{color:16701501}}
+    ali:item minecraft:leather_leggings x1 {Damage:0,display:{color:16701501}}
+      | Chance: 1.82%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      | Set Nbt:
+      |   -> Tag: {display:{color:16701501}}
+    ali:item minecraft:leather_chestplate x1 {Damage:0,display:{color:16701501}}
+      | Chance: 1.82%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {display:{color:16701501}}
+    ali:item minecraft:leather_chestplate x1 {Damage:0,display:{color:16701501}}
+      | Chance: 1.82%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      | Set Nbt:
+      |   -> Tag: {display:{color:16701501}}
+    ali:item minecraft:leather_helmet x1 {Damage:0,display:{color:16701501}}
+      | Chance: 1.82%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {display:{color:16701501}}
+    ali:item minecraft:leather_helmet x1 {Damage:0,display:{color:16701501}}
+      | Chance: 1.82%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      | Set Nbt:
+      |   -> Tag: {display:{color:16701501}}
+    ali:item the_bumblezone:stinger_spear x1 {Damage:0}
+      | Chance: 1.82%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 0
+    |   -> Bad Luck: 0
+    |   -> Luck 1: 1
+    |   -> Luck 2: 2
+    |   -> Luck 3: 3
+    |   -> Luck 4: 4
+    ali:empty
+      | Drops nothing
+      | Chance: 48.78%
+    ali:item the_bumblezone:honey_crystal_shards x1
+      | Chance: 24.39%
+      | Count: 1
+    ali:item the_bumblezone:honey_crystal x1
+      | Chance: 14.63%
+      | Count: 1
+    ali:item the_bumblezone:stinger_spear x1 {Damage:0}
+      | Chance: 2.44%
+      | Count: 1
+    ali:item minecraft:leather_boots x1 {Damage:0,display:{color:16701501}}
+      | Chance: 2.44%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      | Set Nbt:
+      |   -> Tag: {display:{color:16701501}}
+    ali:item minecraft:leather_leggings x1 {Damage:0,display:{color:16701501}}
+      | Chance: 2.44%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      | Set Nbt:
+      |   -> Tag: {display:{color:16701501}}
+    ali:item minecraft:leather_chestplate x1 {Damage:0,display:{color:16701501}}
+      | Chance: 2.44%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      | Set Nbt:
+      |   -> Tag: {display:{color:16701501}}
+    ali:item minecraft:leather_helmet x1 {Damage:0,display:{color:16701501}}
+      | Chance: 2.44%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      | Set Nbt:
+      |   -> Tag: {display:{color:16701501}}
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    |   -> Bad Luck: 0
+    |   -> Luck 1: 2
+    |   -> Luck 2: 3
+    |   -> Luck 3: 4
+    |   -> Luck 4: 5
+    ali:empty
+      | Drops nothing
+      | Chance: 71.43%
+      |   -> Bad Luck: 76.92%
+      |   -> Luck 1: 66.67%
+      |   -> Luck 2: 62.5%
+      |   -> Luck 3: 58.82%
+      |   -> Luck 4: 55.56%
+    ali:item the_bumblezone:honey_compass x1
+      | Chance: 21.43%
+      |   -> Bad Luck: 23.08%
+      |   -> Luck 1: 20%
+      |   -> Luck 2: 18.75%
+      |   -> Luck 3: 17.65%
+      |   -> Luck 4: 16.67%
+      | Count: 1
+    ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_lesser_mystery_structure_description",CustomName:"item.the_bumblezone.honey_compass_lesser_mystery_structure",Locked:1b}
+      | Quality: 1
+      | Chance: 7.14%
+      |   -> Bad Luck: 0%
+      |   -> Luck 1: 13.33%
+      |   -> Luck 2: 18.75%
+      |   -> Luck 3: 23.53%
+      |   -> Luck 4: 27.78%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_lesser_mystery_structure"}
+      | Set Nbt:
+      |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_lesser_mystery_structure_description"}
+      | Set Nbt:
+      |   -> Tag: {Locked:1b}
+      | Honey Compass Locate Structure:
+      |   -> Destination: the_bumblezone:honey_compass/lesser_misc_locating
+      |   -> Search Radius: 50
+      |   -> Skip Known Structures: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item the_bumblezone:honeycomb_brood_block x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:empty
+            | Drops nothing
+            | Chance: 92.5%
+            |   -> Bad Luck: 100%
+            |   -> Luck 1: 86.05%
+            |   -> Luck 2: 80.43%
+            |   -> Luck 3: 75.51%
+            |   -> Luck 4: 71.15%
+            | ----- Predicates -----
+            | Player carries an Essence of the Bees
+          ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_red_sanctum_structure_description",CustomName:"item.the_bumblezone.honey_compass_sanctum_structure",Locked:1b}
+            | Quality: 1
+            | Chance: 1.25%
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 2.33%
+            |   -> Luck 2: 3.26%
+            |   -> Luck 3: 4.08%
+            |   -> Luck 4: 4.81%
+            | Count: 1
+            | ----- Predicates -----
+            | Player carries an Essence of the Bees
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_sanctum_structure"}
+            | Set Nbt:
+            |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_red_sanctum_structure_description"}
+            | Set Nbt:
+            |   -> Tag: {Locked:1b}
+            | Honey Compass Locate Structure:
+            |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/red
+            |   -> Search Radius: 50
+            |   -> Skip Known Structures: False
+          ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_purple_sanctum_structure_description",CustomName:"item.the_bumblezone.honey_compass_sanctum_structure",Locked:1b}
+            | Quality: 1
+            | Chance: 1.25%
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 2.33%
+            |   -> Luck 2: 3.26%
+            |   -> Luck 3: 4.08%
+            |   -> Luck 4: 4.81%
+            | Count: 1
+            | ----- Predicates -----
+            | Player carries an Essence of the Bees
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_sanctum_structure"}
+            | Set Nbt:
+            |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_purple_sanctum_structure_description"}
+            | Set Nbt:
+            |   -> Tag: {Locked:1b}
+            | Honey Compass Locate Structure:
+            |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/purple
+            |   -> Search Radius: 50
+            |   -> Skip Known Structures: False
+          ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_blue_sanctum_structure_description",CustomName:"item.the_bumblezone.honey_compass_sanctum_structure",Locked:1b}
+            | Quality: 1
+            | Chance: 1.25%
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 2.33%
+            |   -> Luck 2: 3.26%
+            |   -> Luck 3: 4.08%
+            |   -> Luck 4: 4.81%
+            | Count: 1
+            | ----- Predicates -----
+            | Player carries an Essence of the Bees
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_sanctum_structure"}
+            | Set Nbt:
+            |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_blue_sanctum_structure_description"}
+            | Set Nbt:
+            |   -> Tag: {Locked:1b}
+            | Honey Compass Locate Structure:
+            |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/blue
+            |   -> Search Radius: 50
+            |   -> Skip Known Structures: False
+          ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_green_sanctum_structure_description",CustomName:"item.the_bumblezone.honey_compass_sanctum_structure",Locked:1b}
+            | Quality: 1
+            | Chance: 1.25%
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 2.33%
+            |   -> Luck 2: 3.26%
+            |   -> Luck 3: 4.08%
+            |   -> Luck 4: 4.81%
+            | Count: 1
+            | ----- Predicates -----
+            | Player carries an Essence of the Bees
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_sanctum_structure"}
+            | Set Nbt:
+            |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_green_sanctum_structure_description"}
+            | Set Nbt:
+            |   -> Tag: {Locked:1b}
+            | Honey Compass Locate Structure:
+            |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/green
+            |   -> Search Radius: 50
+            |   -> Skip Known Structures: False
+          ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_yellow_sanctum_structure_description",CustomName:"item.the_bumblezone.honey_compass_sanctum_structure",Locked:1b}
+            | Quality: 1
+            | Chance: 1.25%
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 2.33%
+            |   -> Luck 2: 3.26%
+            |   -> Luck 3: 4.08%
+            |   -> Luck 4: 4.81%
+            | Count: 1
+            | ----- Predicates -----
+            | Player carries an Essence of the Bees
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_sanctum_structure"}
+            | Set Nbt:
+            |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_yellow_sanctum_structure_description"}
+            | Set Nbt:
+            |   -> Tag: {Locked:1b}
+            | Honey Compass Locate Structure:
+            |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/yellow
+            |   -> Search Radius: 50
+            |   -> Skip Known Structures: False
+          ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_white_sanctum_structure_description",CustomName:"item.the_bumblezone.honey_compass_sanctum_structure",Locked:1b}
+            | Quality: 1
+            | Chance: 1.25%
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 2.33%
+            |   -> Luck 2: 3.26%
+            |   -> Luck 3: 4.08%
+            |   -> Luck 4: 4.81%
+            | Count: 1
+            | ----- Predicates -----
+            | Player carries an Essence of the Bees
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_sanctum_structure"}
+            | Set Nbt:
+            |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_white_sanctum_structure_description"}
+            | Set Nbt:
+            |   -> Tag: {Locked:1b}
+            | Honey Compass Locate Structure:
+            |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/white
+            |   -> Search Radius: 50
+            |   -> Skip Known Structures: False

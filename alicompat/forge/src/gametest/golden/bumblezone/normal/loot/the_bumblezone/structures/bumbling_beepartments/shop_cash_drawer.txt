@@ -1,0 +1,14 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 6
+    ali:item minecraft:honeycomb x1
+      | Chance: 57.14%
+      | Count: 1 to 3
+    ali:item minecraft:honey_bottle x1
+      | Chance: 28.57%
+      | Count: 1 to 2
+    ali:item the_bumblezone:bee_soup x1
+      | Chance: 14.29%
+      | Count: 1

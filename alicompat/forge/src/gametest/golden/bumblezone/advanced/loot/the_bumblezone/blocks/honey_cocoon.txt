@@ -1,0 +1,33 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item the_bumblezone:honey_cocoon x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion
+        | Match Tool:
+        |   -> Enchantments:
+        |     -> Enchantment: Silk Touch
+        |     -> Level: ≥ 1
+        | ----- Modifiers -----
+        | Copy Name:
+        |   -> Source: Block Entity
+        | Copy Nbt:
+        |   -> Nbt Provider: minecraft:context
+        |   -> Operations:
+        |     -> Source: Items
+        |     -> Target: BlockEntityTag.Items
+        |     -> Merge Strategy: Replace
+        | Uniquify If Has Items:
+      ali:item the_bumblezone:honey_cocoon x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion
+        | ----- Modifiers -----
+        | Drop Container Items:
+        | Copy Name:
+        |   -> Source: Block Entity

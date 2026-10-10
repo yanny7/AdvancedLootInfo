@@ -1,0 +1,643 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      | Quality: -4
+      | Chance: 93.75%
+      |   -> luck: max(0%; 7500% + floor(−400% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck)))
+      |   -> Bad Luck: 96.34%
+      |   -> Luck 1: 91.03%
+      |   -> Luck 2: 88.16%
+      |   -> Luck 3: 85.14%
+      |   -> Luck 4: 81.94%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item the_bumblezone:bee_stinger x1
+            | Chance: 13.17%
+            |   -> luck: max(0%; 7500% + floor(−400% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 14.05%
+            |   -> Bad Luck: 13.54%
+            |   -> Luck 1: 12.79%
+            |   -> Luck 2: 12.39%
+            |   -> Luck 3: 11.96%
+            |   -> Luck 4: 11.51%
+            | Count: 1
+          ali:item the_bumblezone:dirt_pellet x1
+            | Chance: 7.75%
+            |   -> luck: max(0%; 7500% + floor(−400% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 8.26%
+            |   -> Bad Luck: 7.96%
+            |   -> Luck 1: 7.52%
+            |   -> Luck 2: 7.29%
+            |   -> Luck 3: 7.04%
+            |   -> Luck 4: 6.77%
+            | Count: 1
+          ali:item the_bumblezone:honey_crystal_shards x1
+            | Chance: 7.75%
+            |   -> luck: max(0%; 7500% + floor(−400% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 8.26%
+            |   -> Bad Luck: 7.96%
+            |   -> Luck 1: 7.52%
+            |   -> Luck 2: 7.29%
+            |   -> Luck 3: 7.04%
+            |   -> Luck 4: 6.77%
+            | Count: 1
+          ali:item minecraft:string x1
+            | Chance: 7.75%
+            |   -> luck: max(0%; 7500% + floor(−400% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 8.26%
+            |   -> Bad Luck: 7.96%
+            |   -> Luck 1: 7.52%
+            |   -> Luck 2: 7.29%
+            |   -> Luck 3: 7.04%
+            |   -> Luck 4: 6.77%
+            | Count: 1
+          ali:item the_bumblezone:sugar_water_bottle x1
+            | Chance: 7.75%
+            |   -> luck: max(0%; 7500% + floor(−400% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 8.26%
+            |   -> Bad Luck: 7.96%
+            |   -> Luck 1: 7.52%
+            |   -> Luck 2: 7.29%
+            |   -> Luck 3: 7.04%
+            |   -> Luck 4: 6.77%
+            | Count: 1
+          ali:item minecraft:bowl x1
+            | Chance: 7.75%
+            |   -> luck: max(0%; 7500% + floor(−400% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 8.26%
+            |   -> Bad Luck: 7.96%
+            |   -> Luck 1: 7.52%
+            |   -> Luck 2: 7.29%
+            |   -> Luck 3: 7.04%
+            |   -> Luck 4: 6.77%
+            | Count: 1
+          ali:item the_bumblezone:dirt_pellet x1
+            | Chance: 7.75%
+            |   -> luck: max(0%; 7500% + floor(−400% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 8.26%
+            |   -> Bad Luck: 7.96%
+            |   -> Luck 1: 7.52%
+            |   -> Luck 2: 7.29%
+            |   -> Luck 3: 7.04%
+            |   -> Luck 4: 6.77%
+            | Count: 1
+            | ----- Predicates -----
+            | Any Of:
+            |   -> Location Check:
+            |     -> Location:
+            |       -> Biome: Floral Meadows
+          ali:item the_bumblezone:honey_crystal_shards x1
+            | Chance: 7.75%
+            |   -> luck: max(0%; 7500% + floor(−400% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 8.26%
+            |   -> Bad Luck: 7.96%
+            |   -> Luck 1: 7.52%
+            |   -> Luck 2: 7.29%
+            |   -> Luck 3: 7.04%
+            |   -> Luck 4: 6.77%
+            | Count: 1
+            | ----- Predicates -----
+            | Any Of:
+            |   -> Location Check:
+            |     -> Location:
+            |       -> Biome: Crystal Canyon
+          ali:item minecraft:tripwire_hook x1
+            | Chance: 6.2%
+            |   -> luck: max(0%; 7500% + floor(−400% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 6.61%
+            |   -> Bad Luck: 6.37%
+            |   -> Luck 1: 6.02%
+            |   -> Luck 2: 5.83%
+            |   -> Luck 3: 5.63%
+            |   -> Luck 4: 5.42%
+            | Count: 1
+          ali:item minecraft:stick x1
+            | Chance: 6.2%
+            |   -> luck: max(0%; 7500% + floor(−400% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 6.61%
+            |   -> Bad Luck: 6.37%
+            |   -> Luck 1: 6.02%
+            |   -> Luck 2: 5.83%
+            |   -> Luck 3: 5.63%
+            |   -> Luck 4: 5.42%
+            | Count: 1
+          ali:item minecraft:leather_boots x1 {Damage:0}
+            | Chance: 6.2%
+            |   -> luck: max(0%; 7500% + floor(−400% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 6.61%
+            |   -> Bad Luck: 6.37%
+            |   -> Luck 1: 6.02%
+            |   -> Luck 2: 5.83%
+            |   -> Luck 3: 5.63%
+            |   -> Luck 4: 5.42%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Damage:
+            |   -> Damage: U[2%; 90%)
+            |   -> Add: False
+          ali:item minecraft:honeycomb x1
+            | Chance: 6.2%
+            |   -> luck: max(0%; 7500% + floor(−400% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 6.61%
+            |   -> Bad Luck: 6.37%
+            |   -> Luck 1: 6.02%
+            |   -> Luck 2: 5.83%
+            |   -> Luck 3: 5.63%
+            |   -> Luck 4: 5.42%
+            | Count: 1
+          ali:item minecraft:fishing_rod x1 {Damage:0}
+            | Chance: 1.55%
+            |   -> luck: max(0%; 7500% + floor(−400% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 1.65%
+            |   -> Bad Luck: 1.59%
+            |   -> Luck 1: 1.5%
+            |   -> Luck 2: 1.46%
+            |   -> Luck 3: 1.41%
+            |   -> Luck 4: 1.35%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Damage:
+            |   -> Damage: U[0%; 90%)
+            |   -> Add: False
+    ali:reference
+      | Selects all entries
+      | Quality: 2
+      | Chance: 6.25%
+      |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck)))
+      |   -> Bad Luck: 3.66%
+      |   -> Luck 1: 8.97%
+      |   -> Luck 2: 11.84%
+      |   -> Luck 3: 14.86%
+      |   -> Luck 4: 18.06%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item minecraft:name_tag x1
+            | Chance: 0.87%
+            |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 1200% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
+            |   -> Bad Luck: 0.53%
+            |   -> Luck 1: 1.21%
+            |   -> Luck 2: 1.54%
+            |   -> Luck 3: 1.88%
+            |   -> Luck 4: 2.21%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Is In Open Water: True
+          ali:item minecraft:enchanted_book x1
+            | Chance: 0.87%
+            |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 1200% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
+            |   -> Bad Luck: 0.53%
+            |   -> Luck 1: 1.21%
+            |   -> Luck 2: 1.54%
+            |   -> Luck 3: 1.88%
+            |   -> Luck 4: 2.21%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Is In Open Water: True
+            | ----- Modifiers -----
+            | Enchant With Levels:
+            |   -> Levels: 30
+            |   -> Treasure: True
+          ali:item minecraft:fishing_rod x1 {Damage:0}
+            | Chance: 0.73%
+            |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 1000% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
+            |   -> Bad Luck: 0.44%
+            |   -> Luck 1: 1.01%
+            |   -> Luck 2: 1.29%
+            |   -> Luck 3: 1.56%
+            |   -> Luck 4: 1.84%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Is In Open Water: True
+            | ----- Modifiers -----
+            | Set Damage:
+            |   -> Damage: U[25%; 75%)
+            |   -> Add: False
+            | Enchant With Levels:
+            |   -> Levels: 30
+            |   -> Treasure: True
+          ali:item minecraft:saddle x1
+            | Chance: 0.73%
+            |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 1000% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
+            |   -> Bad Luck: 0.44%
+            |   -> Luck 1: 1.01%
+            |   -> Luck 2: 1.29%
+            |   -> Luck 3: 1.56%
+            |   -> Luck 4: 1.84%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Is In Open Water: True
+          ali:item the_bumblezone:buzzing_briefcase x1
+            | Chance: 0.73%
+            |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 1000% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
+            |   -> Bad Luck: 0.44%
+            |   -> Luck 1: 1.01%
+            |   -> Luck 2: 1.29%
+            |   -> Luck 3: 1.56%
+            |   -> Luck 4: 1.84%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Is In Open Water: True
+          ali:item the_bumblezone:bee_cannon x1 {Damage:0}
+            | Chance: 0.73%
+            |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 1000% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
+            |   -> Bad Luck: 0.44%
+            |   -> Luck 1: 1.01%
+            |   -> Luck 2: 1.29%
+            |   -> Luck 3: 1.56%
+            |   -> Luck 4: 1.84%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Is In Open Water: True
+            | ----- Modifiers -----
+            | Set Damage:
+            |   -> Damage: U[2%; 25%)
+            |   -> Add: False
+            | Enchant With Levels:
+            |   -> Levels: 30
+            |   -> Treasure: True
+          ali:item the_bumblezone:crystal_cannon x1 {Damage:0}
+            | Chance: 0.44%
+            |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 600% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
+            |   -> Bad Luck: 0.26%
+            |   -> Luck 1: 0.61%
+            |   -> Luck 2: 0.77%
+            |   -> Luck 3: 0.94%
+            |   -> Luck 4: 1.11%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Is In Open Water: True
+            | ----- Modifiers -----
+            | Set Damage:
+            |   -> Damage: U[2%; 25%)
+            |   -> Add: False
+            | Enchant With Levels:
+            |   -> Levels: 30
+            |   -> Treasure: True
+          ali:item the_bumblezone:crystalline_flower x1
+            | Chance: 0.44%
+            |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 600% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
+            |   -> Bad Luck: 0.26%
+            |   -> Luck 1: 0.61%
+            |   -> Luck 2: 0.77%
+            |   -> Luck 3: 0.94%
+            |   -> Luck 4: 1.11%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Is In Open Water: True
+            | Any Of:
+            |   -> Location Check:
+            |     -> Location:
+            |       -> Biome: Crystal Canyon
+          ali:item the_bumblezone:honey_compass x1
+            | Chance: 0.15%
+            |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 200% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
+            |   -> Bad Luck: 0.09%
+            |   -> Luck 1: 0.2%
+            |   -> Luck 2: 0.26%
+            |   -> Luck 3: 0.31%
+            |   -> Luck 4: 0.37%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Is In Open Water: True
+          ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_mystery_structure_description",CustomName:"item.the_bumblezone.honey_compass_mystery_structure",Locked:1b}
+            | Quality: 1
+            | Chance: 0.15%
+            |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × max(0%; 200% + floor(luck)) ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
+            |   -> Bad Luck: 0.04%
+            |   -> Luck 1: 0.3%
+            |   -> Luck 2: 0.51%
+            |   -> Luck 3: 0.78%
+            |   -> Luck 4: 1.11%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Is In Open Water: True
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_mystery_structure"}
+            | Set Nbt:
+            |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_mystery_structure_description"}
+            | Set Nbt:
+            |   -> Tag: {Locked:1b}
+            | Honey Compass Locate Structure:
+            |   -> Destination: the_bumblezone:honey_compass/misc_locating
+            |   -> Search Radius: 50
+            |   -> Skip Known Structures: False
+          ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_lesser_mystery_structure_description",CustomName:"item.the_bumblezone.honey_compass_lesser_mystery_structure",Locked:1b}
+            | Quality: 1
+            | Chance: 0.15%
+            |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × max(0%; 200% + floor(luck)) ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
+            |   -> Bad Luck: 0.04%
+            |   -> Luck 1: 0.3%
+            |   -> Luck 2: 0.51%
+            |   -> Luck 3: 0.78%
+            |   -> Luck 4: 1.11%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Is In Open Water: True
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_lesser_mystery_structure"}
+            | Set Nbt:
+            |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_lesser_mystery_structure_description"}
+            | Set Nbt:
+            |   -> Tag: {Locked:1b}
+            | Honey Compass Locate Structure:
+            |   -> Destination: the_bumblezone:honey_compass/lesser_misc_locating
+            |   -> Search Radius: 50
+            |   -> Skip Known Structures: False
+          ali:item #the_bumblezone:music_discs
+            | Chance: 0.07%
+            |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 100% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
+            |   -> Bad Luck: 0.04%
+            |   -> Luck 1: 0.1%
+            |   -> Luck 2: 0.13%
+            |   -> Luck 3: 0.16%
+            |   -> Luck 4: 0.18%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Is In Open Water: True
+          ali:item the_bumblezone:sentry_watcher_spawn_egg x1
+            | Chance: 0.07%
+            |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 100% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
+            |   -> Bad Luck: 0.04%
+            |   -> Luck 1: 0.1%
+            |   -> Luck 2: 0.13%
+            |   -> Luck 3: 0.16%
+            |   -> Luck 4: 0.18%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Is In Open Water: True
+          ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_throne_description",CustomName:"item.the_bumblezone.honey_compass_throne_structure",Locked:1b}
+            | Quality: 1
+            | Chance: 0.07%
+            |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × max(0%; 100% + floor(luck)) ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 0.2%
+            |   -> Luck 2: 0.39%
+            |   -> Luck 3: 0.63%
+            |   -> Luck 4: 0.92%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Is In Open Water: True
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_throne_structure"}
+            | Set Nbt:
+            |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_throne_description"}
+            | Set Nbt:
+            |   -> Tag: {Locked:1b}
+            | Honey Compass Locate Structure:
+            |   -> Destination: the_bumblezone:honey_compass/throne_locating
+            |   -> Search Radius: 40
+            |   -> Skip Known Structures: False
+          ali:reference
+            | Selects all entries
+            | Chance: 0.07%
+            |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 100% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
+            |   -> Bad Luck: 0.04%
+            |   -> Luck 1: 0.1%
+            |   -> Luck 2: 0.13%
+            |   -> Luck 3: 0.16%
+            |   -> Luck 4: 0.18%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:empty
+                  | Drops nothing
+                  | Chance: 0.07%
+                  |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 100% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck))) × 7400% ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + 7400%)
+                  |   -> Bad Luck: 0.04%
+                  |   -> Luck 1: 0.09%
+                  |   -> Luck 2: 0.1%
+                  |   -> Luck 3: 0.12%
+                  |   -> Luck 4: 0.13%
+                  | ----- Predicates -----
+                  | Entity Properties:
+                  |   -> Target: This Entity
+                  |   -> Predicate:
+                  |     -> Entity Sub Predicate:
+                  |       -> Is In Open Water: True
+                  | Player carries an Essence of the Bees
+                ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_red_sanctum_structure_description",CustomName:"item.the_bumblezone.honey_compass_sanctum_structure",Locked:1b}
+                  | Quality: 1
+                  | Chance: 0%
+                  |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 100% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck))) × max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + 7400%)
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 0%
+                  |   -> Luck 2: 0%
+                  |   -> Luck 3: 0.01%
+                  |   -> Luck 4: 0.01%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Entity Properties:
+                  |   -> Target: This Entity
+                  |   -> Predicate:
+                  |     -> Entity Sub Predicate:
+                  |       -> Is In Open Water: True
+                  | Player carries an Essence of the Bees
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_sanctum_structure"}
+                  | Set Nbt:
+                  |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_red_sanctum_structure_description"}
+                  | Set Nbt:
+                  |   -> Tag: {Locked:1b}
+                  | Honey Compass Locate Structure:
+                  |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/red
+                  |   -> Search Radius: 50
+                  |   -> Skip Known Structures: False
+                ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_purple_sanctum_structure_description",CustomName:"item.the_bumblezone.honey_compass_sanctum_structure",Locked:1b}
+                  | Quality: 1
+                  | Chance: 0%
+                  |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 100% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck))) × max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + 7400%)
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 0%
+                  |   -> Luck 2: 0%
+                  |   -> Luck 3: 0.01%
+                  |   -> Luck 4: 0.01%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Entity Properties:
+                  |   -> Target: This Entity
+                  |   -> Predicate:
+                  |     -> Entity Sub Predicate:
+                  |       -> Is In Open Water: True
+                  | Player carries an Essence of the Bees
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_sanctum_structure"}
+                  | Set Nbt:
+                  |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_purple_sanctum_structure_description"}
+                  | Set Nbt:
+                  |   -> Tag: {Locked:1b}
+                  | Honey Compass Locate Structure:
+                  |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/purple
+                  |   -> Search Radius: 50
+                  |   -> Skip Known Structures: False
+                ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_blue_sanctum_structure_description",CustomName:"item.the_bumblezone.honey_compass_sanctum_structure",Locked:1b}
+                  | Quality: 1
+                  | Chance: 0%
+                  |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 100% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck))) × max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + 7400%)
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 0%
+                  |   -> Luck 2: 0%
+                  |   -> Luck 3: 0.01%
+                  |   -> Luck 4: 0.01%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Entity Properties:
+                  |   -> Target: This Entity
+                  |   -> Predicate:
+                  |     -> Entity Sub Predicate:
+                  |       -> Is In Open Water: True
+                  | Player carries an Essence of the Bees
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_sanctum_structure"}
+                  | Set Nbt:
+                  |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_blue_sanctum_structure_description"}
+                  | Set Nbt:
+                  |   -> Tag: {Locked:1b}
+                  | Honey Compass Locate Structure:
+                  |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/blue
+                  |   -> Search Radius: 50
+                  |   -> Skip Known Structures: False
+                ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_green_sanctum_structure_description",CustomName:"item.the_bumblezone.honey_compass_sanctum_structure",Locked:1b}
+                  | Quality: 1
+                  | Chance: 0%
+                  |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 100% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck))) × max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + 7400%)
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 0%
+                  |   -> Luck 2: 0%
+                  |   -> Luck 3: 0.01%
+                  |   -> Luck 4: 0.01%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Entity Properties:
+                  |   -> Target: This Entity
+                  |   -> Predicate:
+                  |     -> Entity Sub Predicate:
+                  |       -> Is In Open Water: True
+                  | Player carries an Essence of the Bees
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_sanctum_structure"}
+                  | Set Nbt:
+                  |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_green_sanctum_structure_description"}
+                  | Set Nbt:
+                  |   -> Tag: {Locked:1b}
+                  | Honey Compass Locate Structure:
+                  |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/green
+                  |   -> Search Radius: 50
+                  |   -> Skip Known Structures: False
+                ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_yellow_sanctum_structure_description",CustomName:"item.the_bumblezone.honey_compass_sanctum_structure",Locked:1b}
+                  | Quality: 1
+                  | Chance: 0%
+                  |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 100% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck))) × max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + 7400%)
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 0%
+                  |   -> Luck 2: 0%
+                  |   -> Luck 3: 0.01%
+                  |   -> Luck 4: 0.01%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Entity Properties:
+                  |   -> Target: This Entity
+                  |   -> Predicate:
+                  |     -> Entity Sub Predicate:
+                  |       -> Is In Open Water: True
+                  | Player carries an Essence of the Bees
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_sanctum_structure"}
+                  | Set Nbt:
+                  |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_yellow_sanctum_structure_description"}
+                  | Set Nbt:
+                  |   -> Tag: {Locked:1b}
+                  | Honey Compass Locate Structure:
+                  |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/yellow
+                  |   -> Search Radius: 50
+                  |   -> Skip Known Structures: False
+                ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_white_sanctum_structure_description",CustomName:"item.the_bumblezone.honey_compass_sanctum_structure",Locked:1b}
+                  | Quality: 1
+                  | Chance: 0%
+                  |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 100% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck))) × max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + 7400%)
+                  |   -> Bad Luck: 0%
+                  |   -> Luck 1: 0%
+                  |   -> Luck 2: 0%
+                  |   -> Luck 3: 0.01%
+                  |   -> Luck 4: 0.01%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Entity Properties:
+                  |   -> Target: This Entity
+                  |   -> Predicate:
+                  |     -> Entity Sub Predicate:
+                  |       -> Is In Open Water: True
+                  | Player carries an Essence of the Bees
+                  | ----- Modifiers -----
+                  | Set Nbt:
+                  |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_sanctum_structure"}
+                  | Set Nbt:
+                  |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_white_sanctum_structure_description"}
+                  | Set Nbt:
+                  |   -> Tag: {Locked:1b}
+                  | Honey Compass Locate Structure:
+                  |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/white
+                  |   -> Search Radius: 50
+                  |   -> Skip Known Structures: False

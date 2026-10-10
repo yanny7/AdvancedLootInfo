@@ -1,0 +1,461 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 4
+    ali:item minecraft:honeycomb x1
+      | Chance: 25%
+      |   -> Bad Luck: 33.33%
+      |   -> Luck 1: 20%
+      |   -> Luck 2: 16.67%
+      |   -> Luck 3: 14.29%
+      |   -> Luck 4: 12.5%
+      | Count: 1 to 3
+    ali:item minecraft:glow_berries x1
+      | Chance: 16.67%
+      |   -> Bad Luck: 22.22%
+      |   -> Luck 1: 13.33%
+      |   -> Luck 2: 11.11%
+      |   -> Luck 3: 9.52%
+      |   -> Luck 4: 8.33%
+      | Count: 1 to 4
+    ali:item minecraft:gunpowder x1
+      | Chance: 16.67%
+      |   -> Bad Luck: 22.22%
+      |   -> Luck 1: 13.33%
+      |   -> Luck 2: 11.11%
+      |   -> Luck 3: 9.52%
+      |   -> Luck 4: 8.33%
+      | Count: 1 to 3
+    ali:item minecraft:writable_book x1
+      | Chance: 8.33%
+      |   -> Bad Luck: 11.11%
+      |   -> Luck 1: 6.67%
+      |   -> Luck 2: 5.56%
+      |   -> Luck 3: 4.76%
+      |   -> Luck 4: 4.17%
+      | Count: 1
+    ali:item minecraft:book x1
+      | Chance: 8.33%
+      |   -> Bad Luck: 11.11%
+      |   -> Luck 1: 6.67%
+      |   -> Luck 2: 5.56%
+      |   -> Luck 3: 4.76%
+      |   -> Luck 4: 4.17%
+      | Count: 1 to 3
+    ali:item minecraft:raw_gold x1
+      | Quality: 1
+      | Chance: 8.33%
+      |   -> Bad Luck: 0%
+      |   -> Luck 1: 13.33%
+      |   -> Luck 2: 16.67%
+      |   -> Luck 3: 19.05%
+      |   -> Luck 4: 20.83%
+      | Count: 1
+    ali:item minecraft:raw_iron x1
+      | Quality: 1
+      | Chance: 8.33%
+      |   -> Bad Luck: 0%
+      |   -> Luck 1: 13.33%
+      |   -> Luck 2: 16.67%
+      |   -> Luck 3: 19.05%
+      |   -> Luck 4: 20.83%
+      | Count: 1
+    ali:item minecraft:raw_copper x1
+      | Quality: 1
+      | Chance: 8.33%
+      |   -> Bad Luck: 0%
+      |   -> Luck 1: 13.33%
+      |   -> Luck 2: 16.67%
+      |   -> Luck 3: 19.05%
+      |   -> Luck 4: 20.83%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 2
+    ali:item minecraft:amethyst_shard x1
+      | Chance: 27.61%
+      |   -> Bad Luck: 28.04%
+      |   -> Luck 1: 27.19%
+      |   -> Luck 2: 26.79%
+      |   -> Luck 3: 26.39%
+      |   -> Luck 4: 26.01%
+      | Count: 3 to 7
+    ali:item minecraft:emerald x1
+      | Chance: 19.94%
+      |   -> Bad Luck: 20.25%
+      |   -> Luck 1: 19.64%
+      |   -> Luck 2: 19.35%
+      |   -> Luck 3: 19.06%
+      |   -> Luck 4: 18.79%
+      | Count: 1 to 3
+    ali:item minecraft:diamond x1
+      | Chance: 16.87%
+      |   -> Bad Luck: 17.13%
+      |   -> Luck 1: 16.62%
+      |   -> Luck 2: 16.37%
+      |   -> Luck 3: 16.13%
+      |   -> Luck 4: 15.9%
+      | Count: 1 to 2
+      | ----- Predicates -----
+      | Player carries an Essence of the Bees
+    ali:item minecraft:decorated_pot x1
+      | Chance: 7.67%
+      |   -> Bad Luck: 7.79%
+      |   -> Luck 1: 7.55%
+      |   -> Luck 2: 7.44%
+      |   -> Luck 3: 7.33%
+      |   -> Luck 4: 7.23%
+      | Count: 1
+    ali:item the_bumblezone:stinger_spear x1 {Damage:0}
+      | Chance: 6.13%
+      |   -> Bad Luck: 6.23%
+      |   -> Luck 1: 6.04%
+      |   -> Luck 2: 5.95%
+      |   -> Luck 3: 5.87%
+      |   -> Luck 4: 5.78%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Treasure: True
+    ali:item minecraft:netherite_scrap x1
+      | Chance: 4.6%
+      |   -> Bad Luck: 4.67%
+      |   -> Luck 1: 4.53%
+      |   -> Luck 2: 4.46%
+      |   -> Luck 3: 4.4%
+      |   -> Luck 4: 4.34%
+      | Count: 1
+      | ----- Predicates -----
+      | Player carries an Essence of the Bees
+    ali:item the_bumblezone:banner_pattern_arrows x1
+      | Quality: 1
+      | Chance: 1.84%
+      |   -> Bad Luck: 1.56%
+      |   -> Luck 1: 2.11%
+      |   -> Luck 2: 2.38%
+      |   -> Luck 3: 2.64%
+      |   -> Luck 4: 2.89%
+      | Count: 1
+    ali:item the_bumblezone:honey_crystal_shield x1 {Damage:0,ShieldLevel:5}
+      | Chance: 1.84%
+      |   -> Bad Luck: 1.87%
+      |   -> Luck 1: 1.81%
+      |   -> Luck 2: 1.79%
+      |   -> Luck 3: 1.76%
+      |   -> Luck 4: 1.73%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {ShieldLevel:5}
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Treasure: True
+    ali:item the_bumblezone:honey_crystal_shield x1 {Damage:0,ShieldLevel:6}
+      | Chance: 1.53%
+      |   -> Bad Luck: 1.56%
+      |   -> Luck 1: 1.51%
+      |   -> Luck 2: 1.49%
+      |   -> Luck 3: 1.47%
+      |   -> Luck 4: 1.45%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {ShieldLevel:6}
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Treasure: True
+    ali:item the_bumblezone:royal_jelly_bottle x1
+      | Quality: 2
+      | Chance: 1.53%
+      |   -> Bad Luck: 0.93%
+      |   -> Luck 1: 2.11%
+      |   -> Luck 2: 2.68%
+      |   -> Luck 3: 3.23%
+      |   -> Luck 4: 3.76%
+      | Count: 1
+      | ----- Predicates -----
+      | Player carries an Essence of the Bees
+    ali:item the_bumblezone:honey_crystal_shield x1 {Damage:0,ShieldLevel:7}
+      | Chance: 1.23%
+      |   -> Bad Luck: 1.25%
+      |   -> Luck 1: 1.21%
+      |   -> Luck 2: 1.19%
+      |   -> Luck 3: 1.17%
+      |   -> Luck 4: 1.16%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {ShieldLevel:7}
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Treasure: True
+    ali:item the_bumblezone:honey_crystal_shield x1 {Damage:0,ShieldLevel:8}
+      | Chance: 0.92%
+      |   -> Bad Luck: 0.93%
+      |   -> Luck 1: 0.91%
+      |   -> Luck 2: 0.89%
+      |   -> Luck 3: 0.88%
+      |   -> Luck 4: 0.87%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {ShieldLevel:8}
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Treasure: True
+    ali:item the_bumblezone:stingless_bee_helmet_1 x1 {Damage:0}
+      | Chance: 0.92%
+      |   -> Bad Luck: 0.93%
+      |   -> Luck 1: 0.91%
+      |   -> Luck 2: 0.89%
+      |   -> Luck 3: 0.88%
+      |   -> Luck 4: 0.87%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Treasure: True
+    ali:item the_bumblezone:stingless_bee_helmet_2 x1 {Damage:0}
+      | Chance: 0.92%
+      |   -> Bad Luck: 0.93%
+      |   -> Luck 1: 0.91%
+      |   -> Luck 2: 0.89%
+      |   -> Luck 3: 0.88%
+      |   -> Luck 4: 0.87%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Treasure: True
+    ali:item the_bumblezone:honey_bee_leggings_1 x1 {Damage:0}
+      | Chance: 0.92%
+      |   -> Bad Luck: 0.93%
+      |   -> Luck 1: 0.91%
+      |   -> Luck 2: 0.89%
+      |   -> Luck 3: 0.88%
+      |   -> Luck 4: 0.87%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Treasure: True
+    ali:item the_bumblezone:honey_bee_leggings_2 x1 {Damage:0}
+      | Chance: 0.92%
+      |   -> Bad Luck: 0.93%
+      |   -> Luck 1: 0.91%
+      |   -> Luck 2: 0.89%
+      |   -> Luck 3: 0.88%
+      |   -> Luck 4: 0.87%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Treasure: True
+    ali:item the_bumblezone:carpenter_bee_boots_1 x1 {Damage:0}
+      | Chance: 0.92%
+      |   -> Bad Luck: 0.93%
+      |   -> Luck 1: 0.91%
+      |   -> Luck 2: 0.89%
+      |   -> Luck 3: 0.88%
+      |   -> Luck 4: 0.87%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Treasure: True
+    ali:item the_bumblezone:carpenter_bee_boots_2 x1 {Damage:0}
+      | Chance: 0.92%
+      |   -> Bad Luck: 0.93%
+      |   -> Luck 1: 0.91%
+      |   -> Luck 2: 0.89%
+      |   -> Luck 3: 0.88%
+      |   -> Luck 4: 0.87%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Treasure: True
+    ali:item the_bumblezone:honey_crystal_shield x1 {Damage:0,ShieldLevel:9}
+      | Chance: 0.61%
+      |   -> Bad Luck: 0.62%
+      |   -> Luck 1: 0.6%
+      |   -> Luck 2: 0.6%
+      |   -> Luck 3: 0.59%
+      |   -> Luck 4: 0.58%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {ShieldLevel:9}
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Treasure: True
+    ali:item the_bumblezone:honey_crystal_shield x1 {Damage:0,ShieldLevel:10}
+      | Chance: 0.31%
+      |   -> Bad Luck: 0.31%
+      |   -> Luck 1: 0.3%
+      |   -> Luck 2: 0.3%
+      |   -> Luck 3: 0.29%
+      |   -> Luck 4: 0.29%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {ShieldLevel:10}
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Treasure: True
+    ali:item the_bumblezone:bumble_bee_chestplate_1 x1 {Damage:0}
+      | Chance: 0.31%
+      |   -> Bad Luck: 0.31%
+      |   -> Luck 1: 0.3%
+      |   -> Luck 2: 0.3%
+      |   -> Luck 3: 0.29%
+      |   -> Luck 4: 0.29%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Treasure: True
+    ali:item the_bumblezone:bumble_bee_chestplate_2 x1 {Damage:0}
+      | Chance: 0.31%
+      |   -> Bad Luck: 0.31%
+      |   -> Luck 1: 0.3%
+      |   -> Luck 2: 0.3%
+      |   -> Luck 3: 0.29%
+      |   -> Luck 4: 0.29%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Treasure: True
+    ali:item the_bumblezone:bumble_bee_chestplate_trans_1 x1 {Damage:0}
+      | Chance: 0.31%
+      |   -> Bad Luck: 0.31%
+      |   -> Luck 1: 0.3%
+      |   -> Luck 2: 0.3%
+      |   -> Luck 3: 0.29%
+      |   -> Luck 4: 0.29%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Treasure: True
+    ali:item the_bumblezone:bumble_bee_chestplate_trans_2 x1 {Damage:0}
+      | Chance: 0.31%
+      |   -> Bad Luck: 0.31%
+      |   -> Luck 1: 0.3%
+      |   -> Luck 2: 0.3%
+      |   -> Luck 3: 0.29%
+      |   -> Luck 4: 0.29%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Treasure: True
+    ali:item #minecraft:decorated_pot_sherds
+      | Quality: 1
+      | Chance: 0.31%
+      |   -> Bad Luck: 0%
+      |   -> Luck 1: 0.6%
+      |   -> Luck 2: 0.89%
+      |   -> Luck 3: 1.17%
+      |   -> Luck 4: 1.45%
+      | Count: 1
+    ali:item #minecraft:trim_templates
+      | Quality: 1
+      | Chance: 0.31%
+      |   -> Bad Luck: 0%
+      |   -> Luck 1: 0.6%
+      |   -> Luck 2: 0.89%
+      |   -> Luck 3: 1.17%
+      |   -> Luck 4: 1.45%
+      | Count: 1
+      | ----- Predicates -----
+      | Player carries an Essence of the Bees
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3
+    ali:item the_bumblezone:bee_stinger x1
+      | Chance: 20%
+      |   -> Bad Luck: 22.73%
+      |   -> Luck 1: 17.86%
+      |   -> Luck 2: 16.13%
+      |   -> Luck 3: 14.71%
+      |   -> Luck 4: 13.51%
+      | Count: 1 to 2
+    ali:item minecraft:white_dye x1
+      | Quality: 1
+      | Chance: 12%
+      |   -> Bad Luck: 9.09%
+      |   -> Luck 1: 14.29%
+      |   -> Luck 2: 16.13%
+      |   -> Luck 3: 17.65%
+      |   -> Luck 4: 18.92%
+      | Count: 1 to 3
+    ali:item minecraft:spider_eye x1
+      | Chance: 12%
+      |   -> Bad Luck: 13.64%
+      |   -> Luck 1: 10.71%
+      |   -> Luck 2: 9.68%
+      |   -> Luck 3: 8.82%
+      |   -> Luck 4: 8.11%
+      | Count: 1 to 4
+    ali:item minecraft:string x1
+      | Chance: 12%
+      |   -> Bad Luck: 13.64%
+      |   -> Luck 1: 10.71%
+      |   -> Luck 2: 9.68%
+      |   -> Luck 3: 8.82%
+      |   -> Luck 4: 8.11%
+      | Count: 1 to 4
+    ali:item minecraft:bone x1
+      | Chance: 12%
+      |   -> Bad Luck: 13.64%
+      |   -> Luck 1: 10.71%
+      |   -> Luck 2: 9.68%
+      |   -> Luck 3: 8.82%
+      |   -> Luck 4: 8.11%
+      | Count: 1 to 3
+    ali:item minecraft:paper x1
+      | Chance: 8%
+      |   -> Bad Luck: 9.09%
+      |   -> Luck 1: 7.14%
+      |   -> Luck 2: 6.45%
+      |   -> Luck 3: 5.88%
+      |   -> Luck 4: 5.41%
+      | Count: 1 to 3
+    ali:item minecraft:cobweb x1
+      | Chance: 8%
+      |   -> Bad Luck: 9.09%
+      |   -> Luck 1: 7.14%
+      |   -> Luck 2: 6.45%
+      |   -> Luck 3: 5.88%
+      |   -> Luck 4: 5.41%
+      | Count: 1
+    ali:item minecraft:white_candle x1
+      | Quality: 1
+      | Chance: 8%
+      |   -> Bad Luck: 4.55%
+      |   -> Luck 1: 10.71%
+      |   -> Luck 2: 12.9%
+      |   -> Luck 3: 14.71%
+      |   -> Luck 4: 16.22%
+      | Count: 1
+    ali:item minecraft:chain x1
+      | Chance: 4%
+      |   -> Bad Luck: 4.55%
+      |   -> Luck 1: 3.57%
+      |   -> Luck 2: 3.23%
+      |   -> Luck 3: 2.94%
+      |   -> Luck 4: 2.7%
+      | Count: 1
+    ali:item minecraft:flower_pot x1
+      | Quality: 1
+      | Chance: 4%
+      |   -> Bad Luck: 0%
+      |   -> Luck 1: 7.14%
+      |   -> Luck 2: 9.68%
+      |   -> Luck 3: 11.76%
+      |   -> Luck 4: 13.51%
+      | Count: 1
