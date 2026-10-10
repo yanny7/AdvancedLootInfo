@@ -89,6 +89,7 @@
   "alicompat.moonlight.type.condition.loot_table_id_pattern": "Loot Table Id Pattern:",
   "alicompat.moonlight.type.condition.optional_block_state_property": "Optional Block State Property:",
   "alicompat.moonlight.type.entry.optional_item": "Optional Item:",
+  "alicompat.morejs.property.branch.destinations": "Destinations:",
   "alicompat.morejs.type.function.random_potion": "Random Potion",
   "alicompat.morered.type.function.set_wire_count": "Set Wire Count",
   "alicompat.placebo.type.entry.stack": "Stack:",

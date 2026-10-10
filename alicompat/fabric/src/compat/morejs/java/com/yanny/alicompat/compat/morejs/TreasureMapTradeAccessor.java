@@ -1,7 +1,9 @@
 package com.yanny.alicompat.compat.morejs;
 
 import com.almostreliable.morejs.features.villager.TradeItem;
+import com.almostreliable.morejs.features.villager.trades.MapPosInfo;
 import com.almostreliable.morejs.features.villager.trades.TreasureMapTrade;
+import com.almostreliable.morejs.util.WeightedList;
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
@@ -9,6 +11,7 @@ import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
+import com.yanny.ali.plugin.common.ReflectionUtils;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
@@ -25,6 +28,9 @@ public class TreasureMapTradeAccessor extends BaseAccessor<TreasureMapTrade> imp
 
     @FieldAccessor
     private TradeItem secondInput;
+
+    @FieldAccessor
+    private MapPosInfo.Provider destinationPositionFunc;
 
     @Nullable
     @FieldAccessor
@@ -60,6 +66,7 @@ public class TreasureMapTradeAccessor extends BaseAccessor<TreasureMapTrade> imp
         }
 
         TooltipNode tooltip = TooltipBuilder.array((b) -> b
+                .add(utils.getValueTooltip(utils, ReflectionUtils.getCapturedInstances(destinationPositionFunc, WeightedList.class).stream().findFirst()).build(MoreJSLang.Branch.DESTINATIONS))
                 .add(utils.getValueTooltip(utils, destinationType).build(Lang.Value.MAP_DECORATION))
                 .add(utils.getValueTooltip(utils, (int) mapViewScale).build(Lang.Value.ZOOM))
         ).build();

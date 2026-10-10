@@ -28,6 +28,7 @@
   "alicompat.kaleidoscope_cookery.type.condition.advance_entity_match_tool": "Killer Equipment:",
   "alicompat.moonlight.type.condition.optional_block_state_property": "Optional Block State Property:",
   "alicompat.moonlight.type.entry.optional_item": "Optional Item:",
+  "alicompat.morejs.property.branch.destinations": "Destinations:",
   "alicompat.morejs.type.function.random_potion": "Random Potion",
   "alicompat.number.var.villagerconfig.enchantment_level": "enchantment level",
   "alicompat.number.var.villagerconfig.enchantment_level.desc": "enchantment level",

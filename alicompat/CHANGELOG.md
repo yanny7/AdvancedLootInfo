@@ -2,6 +2,7 @@
 
 - Added VillagerConfig support on Fabric
 - Trade slots whose item is picked at random cycle through every possible item (Sawmill, Charm, MoreJS, Iron's Spellbooks, Immersive Engineering, Apotheosis, Ars Nouveau)
+- MoreJS map trades show their structure or biome destinations
 - Fixed a stray colon after loot functions that carry no values (Aether, Applied Cooking, Bumblezone, ExtraStorage, Farmer's Delight, Immersive Engineering, Mantle, Refined Storage, Sophisticated Backpacks and Storage)
 
 ## [1.2.0]

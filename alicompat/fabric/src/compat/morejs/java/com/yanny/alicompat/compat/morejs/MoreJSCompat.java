@@ -1,6 +1,8 @@
 package com.yanny.alicompat.compat.morejs;
 
 import com.almostreliable.morejs.features.villager.trades.*;
+import com.almostreliable.morejs.util.ResourceOrTag;
+import com.almostreliable.morejs.util.WeightedList;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
@@ -33,6 +35,10 @@ public class MoreJSCompat implements IModCompat {
         PluginUtils.registerItemListing(registry, PotionTrade.class, PotionTradeAccessor.class);
         PluginUtils.registerItemListing(registry, TreasureMapTrade.class, TreasureMapTradeAccessor.class);
         registry.registerItemListing(CustomTrade.class, MoreJSCompat::getCustomTradeNode);
+
+        PluginUtils.registerValueTooltip(registry, WeightedList.class, WeightedListAccessor.class);
+        PluginUtils.registerValueTooltip(registry, WeightedListEntryAccessor.class);
+        PluginUtils.registerValueTooltip(registry, ResourceOrTag.class, ResourceOrTagAccessor.class);
     }
 
     @NotNull

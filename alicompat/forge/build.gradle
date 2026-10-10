@@ -170,7 +170,11 @@ tasks.matching { it.name == "runGametest" }.configureEach {
             throw new GradleException("alicompat_gametest=${gametestMod} is not a mod enabled in compat_mods with a ${project.name} dependency")
         }
 
-        delete "build/gametest/run/config", "build/gametest/run/world", "build/gametest/run/mods"
+        delete "build/gametest/run/config", "build/gametest/run/world", "build/gametest/run/mods", "build/gametest/run/kubejs"
+        copy {
+            from project(":alicompat:common").file("src/gametest/kubejs/${gametestMod ?: "base"}")
+            into "build/gametest/run/kubejs"
+        }
         extractGametestNested()
         copy {
             from "build/gametest/nested/libs"

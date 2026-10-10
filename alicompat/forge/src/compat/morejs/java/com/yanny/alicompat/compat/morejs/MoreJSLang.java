@@ -32,8 +32,26 @@ public class MoreJSLang implements ICompatTranslations {
         }
     }
 
+    public enum Branch implements ITooltipKey {
+        DESTINATIONS("destinations", "Destinations:"),
+        ;
+
+        private final Translation translation;
+
+        Branch(String k, String e) {
+            translation = new Translation(Utils.langKey(MOD_ID, "property.branch", k), e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
     static {
         CoreLang.register(TRANSLATION_MAP, Functions.class);
+        CoreLang.register(TRANSLATION_MAP, Branch.class);
     }
 
     @NotNull
