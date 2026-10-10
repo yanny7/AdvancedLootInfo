@@ -2,6 +2,7 @@
 
 - Added VillagerConfig support on Fabric
 - Trade slots whose item is picked at random cycle through every possible item (Sawmill, Charm, MoreJS, Iron's Spellbooks, Immersive Engineering, Apotheosis)
+- Fixed a stray colon after the data-copying loot functions of Applied Cooking, Refined Storage and Sophisticated Backpacks and Storage
 
 ## [1.2.0]
 
