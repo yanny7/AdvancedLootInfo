@@ -28,7 +28,7 @@ awi/neoforge/CLAUDE.md         — AWI's NeoForge loader glue (references ali/ne
 alicompat/CLAUDE.md            — ALICompat mod: ALI compatibility for mods that ship no ALI plugin of their own
 ```
 
-On this `master` branch `forge_enabled`, `emi_enabled`, `rei_enabled` and `lootjs_enabled` are all `false`, so `ali/forge`, `awi/forge`, `ali/common-emi`, `awi/common-emi`, `ali/common-rei`, `awi/common-rei` and `ali/common-lootjs` are **not part of the build** (see "Module layout" below). Their sources and docs are still in the tree; the Forge ones in particular have *not* been ported and would not compile as-is.
+On this `master` branch `forge_enabled`, `emi_enabled` and `lootjs_enabled` are all `false`, so `ali/forge`, `awi/forge`, `ali/common-emi`, `awi/common-emi` and `ali/common-lootjs` are **not part of the build** (see "Module layout" below). Their sources and docs are still in the tree; the Forge ones in particular have *not* been ported and would not compile as-is. `rei_enabled` is `true`: `ali/common-rei`/`awi/common-rei` build on Fabric and NeoForge (`forge_rei_enabled` stays `false`, so Forge still gets neither).
 
 Cross-cutting mechanisms are documented **once**, in whichever doc owns them, and referenced (not restated) everywhere else: the tooltip tree system lives in `aci/CLAUDE.md`; the recipe-viewer integration pattern lives in `ali/common-emi/CLAUDE.md`; the networking pattern lives in `ali/CLAUDE.md` (AWI's is a byte-for-byte structural mirror, documented as a diff in `awi/CLAUDE.md`). When editing one of these, check whether the change belongs in the canonical doc or a per-instance one before writing anything.
 
@@ -123,11 +123,15 @@ Build/work on a single mod or module:
 Run the game (client) with a given loader/viewer combination — generated per-platform tasks follow the pattern `run<Ali|Awi><Fabric|Forge|NeoForge><Emi|Jei|Rei>Client`:
 ```
 ./gradlew runAliFabricJeiClient
+./gradlew runAliFabricReiClient
 ./gradlew runAliNeoforgeJeiClient
+./gradlew runAliNeoforgeReiClient
 ./gradlew runAwiFabricJeiClient
+./gradlew runAwiFabricReiClient
 ./gradlew runAwiNeoforgeJeiClient
+./gradlew runAwiNeoforgeReiClient
 ```
-(Only combinations enabled via `gradle.properties` flags on the current branch are registered as tasks. On this branch that is exactly the four above: JEI is the only viewer enabled (`emi_enabled`/`rei_enabled=false`), on Fabric and NeoForge; no `run*Forge*`, `run*Emi*` or `run*Rei*` task exists.)
+(Only combinations enabled via `gradle.properties` flags on the current branch are registered as tasks. On this branch that is exactly the eight above: JEI and REI are enabled (`emi_enabled=false`), on Fabric and NeoForge; no `run*Forge*` or `run*Emi*` task exists.)
 
 Run all tests (JUnit 5 via `junit-platform-suite`, in `common` modules only — recipe-viewer modules have empty/placeholder test dirs):
 ```

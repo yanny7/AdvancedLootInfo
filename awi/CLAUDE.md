@@ -5,7 +5,7 @@ Guidance for working on **AWI** (`AdvancedWorldgenInfo`, `com.yanny.awi`) — th
 ## Module layout
 
 - `awi/common` — platform-agnostic mod logic, covered by this file.
-- `awi/common-emi`, `awi/common-jei`, `awi/common-rei` — recipe-viewer integrations. See `awi/common-emi/CLAUDE.md`, `awi/common-jei/CLAUDE.md`, `awi/common-rei/CLAUDE.md` (all reference `ali/common-emi/CLAUDE.md` for the shared pattern). `awi/common-emi` and `awi/common-rei` are **not built on this branch** (`emi_enabled`/`rei_enabled=false`); JEI is the only viewer.
+- `awi/common-emi`, `awi/common-jei`, `awi/common-rei` — recipe-viewer integrations. See `awi/common-emi/CLAUDE.md`, `awi/common-jei/CLAUDE.md`, `awi/common-rei/CLAUDE.md` (all reference `ali/common-emi/CLAUDE.md` for the shared pattern). `awi/common-emi` is **not built on this branch** (`emi_enabled=false`); JEI and REI are the two enabled viewers.
 - `awi/fabric` — Fabric loader module. See `awi/fabric/CLAUDE.md`.
 - `awi/neoforge` — NeoForge loader module (enabled via `neoforge_enabled`). See `awi/neoforge/CLAUDE.md`.
 - `awi/forge` — Forge loader module; **excluded from the build on this branch** (`forge_enabled=false`) and unported. See `awi/forge/CLAUDE.md`.
