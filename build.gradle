@@ -216,7 +216,11 @@ subprojects {
                     // the runtime deps are here too: loom remaps a mod once, and without its supertypes it keeps their names
                     [deps, runtimeDeps].findAll { it }.each { list ->
                         list.split(",")*.trim().each { dep ->
-                            modCompileOnly dep
+                            if (project.name == "fabric") {
+                                modCompileOnly(dep) { transitive = false }
+                            } else {
+                                modCompileOnly dep
+                            }
                         }
                     }
                 }

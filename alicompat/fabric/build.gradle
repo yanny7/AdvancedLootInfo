@@ -209,7 +209,7 @@ dependencies {
     gametestMods.findAll { gametestCoordinates(it) }.each { mod ->
         def configuration = "mod" + gametestName(mod).capitalize() + "RuntimeOnly"
 
-        gametestCoordinates(mod).each { add(configuration, it) }
+        gametestCoordinates(mod).each { add(configuration, it) { transitive = false } }
         add(configuration, files({ extractNested(gametestCoordinates(mod), file("build/gametest/nested/${mod}")) }))
     }
 
