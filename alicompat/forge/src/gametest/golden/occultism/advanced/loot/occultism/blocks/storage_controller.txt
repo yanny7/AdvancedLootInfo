@@ -1,0 +1,37 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item occultism:storage_controller x1
+      | Count: 1
+      | ----- Predicates -----
+      | Survives Explosion
+      | ----- Modifiers -----
+      | Copy Nbt:
+      |   -> Nbt Provider: minecraft:context
+      |   -> Operations:
+      |     -> Entry:
+      |       -> Source: items
+      |       -> Target: BlockEntityTag.items
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: sortDirection
+      |       -> Target: BlockEntityTag.sortDirection
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: sortType
+      |       -> Target: BlockEntityTag.sortType
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: maxSlots
+      |       -> Target: BlockEntityTag.maxSlots
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: matrix
+      |       -> Target: BlockEntityTag.matrix
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: orderStack
+      |       -> Target: BlockEntityTag.orderStack
+      |       -> Merge Strategy: Replace
