@@ -1,5 +1,6 @@
 ## []
 
+- Fixed mixins failing when ALI is used as a dependency in a Forge mod development environment
 - Tooltips wider than the window wrap their lines
 - Air in loot tables shows as an empty entry
 - References to the empty loot table show as an empty entry
