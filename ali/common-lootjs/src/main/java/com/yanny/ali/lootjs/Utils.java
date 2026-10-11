@@ -38,6 +38,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -59,18 +60,19 @@ public class Utils {
             return new ItemStackNode(utils, itemGenerator.item(), rawChance * weight / sumWeight, allFunctions, allConditions, preservedCount);
         } else if (generator instanceof LootEntry.VanillaWrappedLootEntry lootEntry) {
             LootPoolEntryContainer entryContainer = lootEntry.entry();
+            float chance = rawChance * weight / sumWeight;
 
             if (preservedCount != null) {
                 if (entryContainer instanceof LootItem lootItem) {
-                    return new ItemStackNode(utils, lootItem.item.getDefaultInstance(), rawChance * lootItem.weight / sumWeight,
+                    return new ItemStackNode(utils, lootItem.item.getDefaultInstance(), chance,
                             NodeUtils.getAllFunctions(lootItem, allFunctions), NodeUtils.getAllConditions(lootItem, allConditions), preservedCount);
                 } else if (entryContainer instanceof TagEntry tagEntry) {
-                    return new ItemTagNode(utils, tagEntry.tag, rawChance * tagEntry.weight / sumWeight,
+                    return new ItemTagNode(utils, tagEntry.tag, chance,
                             NodeUtils.getAllFunctions(tagEntry, allFunctions), NodeUtils.getAllConditions(tagEntry, allConditions), preservedCount);
                 }
             }
 
-            return utils.getEntryFactory(utils, entryContainer).create(utils, entryContainer, NumberExpr.constant(rawChance), NumberExpr.constant(sumWeight), List.of(), allFunctions, allConditions);
+            return utils.getEntryFactory(utils, entryContainer).create(utils, entryContainer, NumberExpr.constant(chance), getOwnWeight(utils, entryContainer), List.of(), allFunctions, allConditions);
         } else if (generator instanceof LootEntry.RandomIngredientGenerator ingredientGenerator) {
             Ingredient ingredient = ingredientGenerator.ingredient();
 
@@ -97,8 +99,8 @@ public class Utils {
     public static boolean collectHandler(ILootHandler handler, List<LootItemCondition> conditions, List<LootItemFunction> functions) {
         if (handler instanceof LootItemCondition lootItemCondition) {
             conditions.add(lootItemCondition);
-        } else if (handler instanceof LootItemFunctionWrapperAction lootFunctionAction) {
-            functions.add(lootFunctionAction.getLootItemFunction());
+        } else if (handler instanceof LootItemFunctionWrapperAction) {
+            return true;
         } else if (handler instanceof CustomPlayerAction customPlayerAction) {
             functions.add(new CustomPlayerFunction(customPlayerAction));
         } else if (handler instanceof DropExperienceAction action) {
@@ -114,6 +116,26 @@ public class Utils {
         }
 
         return true;
+    }
+
+    @NotNull
+    public static List<LootItemFunction> withLaterFunctions(List<LootItemFunction> functions, List<ILootHandler> handlers, int index) {
+        List<LootItemFunction> result = new ArrayList<>(functions);
+
+        for (ILootHandler handler : handlers.subList(index + 1, handlers.size())) {
+            if (handler instanceof LootItemFunctionWrapperAction lootFunctionAction) {
+                result.add(lootFunctionAction.getLootItemFunction());
+            }
+        }
+
+        return result;
+    }
+
+    @NotNull
+    private static NumberExpr getOwnWeight(IServerUtils utils, LootPoolEntryContainer entry) {
+        NumberExpr weight = utils.getEntryWeight(utils, entry, new ArrayList<>());
+
+        return weight instanceof NumberExpr.Const c && c.value() > 0 ? weight : NumberExpr.constant(1);
     }
 
     @NotNull

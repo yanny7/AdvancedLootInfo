@@ -23,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class GroupLootNode extends ListNode {
     public static final ResourceLocation ID = new ResourceLocation(LootJsPlugin.ID, "grouped_loot");
@@ -37,18 +38,23 @@ public class GroupLootNode extends ListNode {
 
         tooltip = TooltipUtils.getLootPoolTooltip(new LootCount(rolls, rollConditions)).build();
 
+        List<ILootHandler> handlers = List.copyOf(((MixinCompositeLootAction) lootPool).getHandlers());
         List<LootItemCondition> groupConditions = new ArrayList<>(conditions);
-        List<LootItemFunction> groupFunctions = new ArrayList<>(functions);
+        List<LootItemFunction> groupFunctions = new ArrayList<>();
 
-        for (ILootHandler entry : ((MixinCompositeLootAction) lootPool).getHandlers()) {
+        for (int i = 0; i < handlers.size(); i++) {
+            ILootHandler entry = handlers.get(i);
+
             if (Utils.collectHandler(entry, groupConditions, groupFunctions)) {
                 continue;
             }
 
+            List<LootItemFunction> entryFunctions = Stream.concat(Utils.withLaterFunctions(groupFunctions, handlers, i).stream(), functions.stream()).toList();
+
             if (entry instanceof AddLootAction addLootAction) {
-                addChildren(new AddLootNode(utils, addLootAction, List.copyOf(groupFunctions), List.copyOf(groupConditions)));
+                addChildren(new AddLootNode(utils, addLootAction, entryFunctions, List.copyOf(groupConditions)));
             } else if (entry instanceof WeightedAddLootAction weightedAddLootNode) {
-                addChildren(new WeightedAddLootNode(utils, weightedAddLootNode, List.copyOf(groupFunctions), List.copyOf(groupConditions)));
+                addChildren(new WeightedAddLootNode(utils, weightedAddLootNode, entryFunctions, List.copyOf(groupConditions)));
             }
         }
     }

@@ -11,6 +11,7 @@
 - LootJS experience drops, explosions and lightning strikes show on the loot they come with
 - Fixed conditions inside LootJS pools being ignored
 - Fixed loot replaced by LootJS losing the chance of the entry it replaces
+- Fixed LootJS loot functions shown on the loot added after them instead of the loot they change
 
 ## [2.4.0]
 

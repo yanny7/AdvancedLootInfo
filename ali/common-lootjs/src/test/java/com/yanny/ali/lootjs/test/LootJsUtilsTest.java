@@ -136,7 +136,7 @@ public class LootJsUtilsTest {
                 List.of(SetItemCountFunction.setCount(ConstantValue.exactly(5), true).build()),
                 List.of(LootItemRandomChanceCondition.randomChance(0.5F).build())
         );
-        ItemStackNode node = (ItemStackNode) Utils.getEntry(UTILS, entry, 1,
+        ItemStackNode node = (ItemStackNode) Utils.getEntry(UTILS, entry, 1, 1,
                 List.of(SetItemCountFunction.setCount(ConstantValue.exactly(2)).build()),
                 List.of(LootItemRandomChanceCondition.randomChance(0.25F).build()),
                 null
@@ -162,7 +162,7 @@ public class LootJsUtilsTest {
     }
 
     private static IDataNode getEntry(LootEntry.Generator generator, int weight, int sumWeight, NumberExpr preservedCount) {
-        return Utils.getEntry(UTILS, entry(generator, weight, List.of(), List.of()), sumWeight, List.of(), List.of(), preservedCount);
+        return Utils.getEntry(UTILS, entry(generator, weight, List.of(), List.of()), 1, sumWeight, List.of(), List.of(), preservedCount);
     }
 
     private static LootEntry entry(LootEntry.Generator generator, int weight, List<LootItemFunction> postModifications, List<LootItemCondition> conditions) {

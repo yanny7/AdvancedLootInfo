@@ -13,6 +13,7 @@ import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.api.ListNode;
 import com.yanny.ali.lootjs.LootModifier;
 import com.yanny.ali.lootjs.mixin.*;
 import com.yanny.ali.lootjs.node.AddLootNode;
@@ -25,6 +26,8 @@ import com.yanny.ali.plugin.common.nodes.ModifiedNode;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
@@ -43,25 +46,92 @@ import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 
 public class LootModifierTest {
     @Test
-    public void testConditionAndFunctionHandlersApplyToLaterActions() {
+    public void testConditionHandlerAppliesToLaterActions() {
         List<IOperation> operations = operations(
+                addLootAction(itemEntry(Items.EMERALD)),
                 wrap(LootItemRandomChanceCondition.randomChance(0.25F).build()),
-                new LootItemFunctionWrapperAction(SetItemCountFunction.setCount(ConstantValue.exactly(3)).build()),
                 addLootAction(itemEntry(Items.DIAMOND))
         );
-        AddLootNode node = (AddLootNode) ((IOperation.AddOperation) operations.get(0)).node();
 
-        Assertions.assertEquals(1, operations.size());
-        assertTooltip(node.nodes().get(0).getTooltip(), List.of(
-                "Count: 3",
+        assertTooltip(child(node(operations, 0), 0).getTooltip(), List.of(
+                "Count: 1"
+        ));
+        assertTooltip(child(node(operations, 1), 0).getTooltip(), List.of(
+                "Count: 1",
                 "----- Predicates -----",
                 "Random Chance:",
-                "  -> Probability: 0.25",
+                "  -> Probability: 0.25"
+        ));
+    }
+
+    @Test
+    public void testFunctionHandlerAppliesToEarlierActions() {
+        List<IOperation> operations = operations(
+                addLootAction(itemEntry(Items.EMERALD)),
+                setCount(3),
+                addLootAction(itemEntry(Items.DIAMOND))
+        );
+
+        assertTooltip(child(node(operations, 0), 0).getTooltip(), List.of(
+                "Count: 3",
                 "----- Modifiers -----",
                 "Set Count:",
                 "  -> Count: 3",
                 "  -> Add: False"
         ));
+        assertTooltip(child(node(operations, 1), 0).getTooltip(), List.of(
+                "Count: 1"
+        ));
+    }
+
+    @Test
+    public void testFunctionHandlerAppliesToReplacedItem() {
+        IOperation.ReplaceOperation operation = (IOperation.ReplaceOperation) operations(
+                setCount(5),
+                replaceLootAction(itemEntry(Items.EMERALD), false),
+                setCount(3)
+        ).get(0);
+
+        Assertions.assertEquals("3", slot((IItemNode) operation.factory().apply(itemNode(1)).get(0)));
+    }
+
+    @Test
+    public void testGroupConditionHandlerAppliesToLaterEntries() {
+        GroupLootNode group = (GroupLootNode) node(operations(groupedLootAction(
+                addLootAction(itemEntry(Items.EMERALD)),
+                wrap(LootItemRandomChanceCondition.randomChance(0.25F).build()),
+                addLootAction(itemEntry(Items.DIAMOND))
+        )), 0);
+
+        assertTooltip(child(child(group, 0), 0).getTooltip(), List.of(
+                "Count: 1"
+        ));
+        assertTooltip(child(child(group, 1), 0).getTooltip(), List.of(
+                "Count: 1",
+                "----- Predicates -----",
+                "Random Chance:",
+                "  -> Probability: 0.25"
+        ));
+    }
+
+    @Test
+    public void testGroupFunctionHandlerAppliesToEarlierEntriesBeforeOuterOnes() {
+        GroupLootNode group = (GroupLootNode) node(operations(
+                setCount(9),
+                groupedLootAction(
+                        addLootAction(itemEntry(Items.EMERALD)),
+                        setCount(2),
+                        addLootAction(itemEntry(Items.DIAMOND))
+                ),
+                setCount(5)
+        ), 0);
+        IItemNode emerald = (IItemNode) child(child(group, 0), 0);
+        IItemNode diamond = (IItemNode) child(child(group, 1), 0);
+
+        Assertions.assertEquals("5", slot(emerald));
+        Assertions.assertEquals(2, emerald.getFunctions().size());
+        Assertions.assertEquals("5", slot(diamond));
+        Assertions.assertEquals(1, diamond.getFunctions().size());
     }
 
     @Test
@@ -201,6 +271,27 @@ public class LootModifierTest {
     }
 
     @Test
+    public void testReplaceActionWithVanillaEntryKeepsReplacedChance() {
+        IOperation.ReplaceOperation operation = (IOperation.ReplaceOperation) operations(
+                replaceLootAction(vanillaEntry(LootItem.lootTableItem(Items.EMERALD).setWeight(5).build()), false)
+        ).get(0);
+        IItemNode result = (IItemNode) operation.factory().apply(itemNode(0.5F, 3)).get(0);
+
+        Assertions.assertEquals(0.5F, result.getChance(), 1e-6F);
+    }
+
+    @Test
+    public void testReplaceActionWithVanillaEntryPreservingCountKeepsReplacedChance() {
+        IOperation.ReplaceOperation operation = (IOperation.ReplaceOperation) operations(
+                replaceLootAction(vanillaEntry(LootItem.lootTableItem(Items.EMERALD).setWeight(5).build()), true)
+        ).get(0);
+        IItemNode result = (IItemNode) operation.factory().apply(itemNode(0.5F, 3)).get(0);
+
+        Assertions.assertEquals(0.5F, result.getChance(), 1e-6F);
+        Assertions.assertEquals("3", slot(result));
+    }
+
+    @Test
     public void testReplaceActionWithConditionsWrapsInModifiedNode() {
         IOperation.ReplaceOperation operation = (IOperation.ReplaceOperation) operations(
                 wrap(LootItemRandomChanceCondition.randomChance(0.25F).build()),
@@ -245,8 +336,31 @@ public class LootModifierTest {
         return new TestLootModifier(UTILS, modification).getOperations();
     }
 
+    private static IDataNode child(IDataNode node, int index) {
+        return ((ListNode) node).nodes().get(index);
+    }
+
+    private static LootItemFunctionWrapperAction setCount(int count) {
+        return new LootItemFunctionWrapperAction(SetItemCountFunction.setCount(ConstantValue.exactly(count)).build());
+    }
+
     private static ItemNode itemNode(int count, LootItemFunction... functions) {
-        return new ItemNode(1.0F, NumberExpr.constant(count), new ItemStack(Items.DIAMOND), TooltipBuilder.empty().build(), List.of(functions), List.of());
+        return itemNode(1.0F, count, functions);
+    }
+
+    private static ItemNode itemNode(float chance, int count, LootItemFunction... functions) {
+        return new ItemNode(chance, NumberExpr.constant(count), new ItemStack(Items.DIAMOND), TooltipBuilder.empty().build(), List.of(functions), List.of());
+    }
+
+    private static LootEntry vanillaEntry(LootPoolEntryContainer container) {
+        LootEntry entry = mock(LootEntry.class, MixinLootEntry.class);
+
+        Mockito.when(((MixinLootEntry) entry).getGenerator()).thenReturn(new LootEntry.VanillaWrappedLootEntry(container));
+        Mockito.when(((MixinLootEntry) entry).getPostModifications()).thenReturn(List.of());
+        Mockito.when(((MixinLootEntry) entry).getConditions()).thenReturn(List.of());
+        Mockito.when(((MixinLootEntry) entry).getWeight()).thenReturn(1);
+        Mockito.when(entry.getWeight()).thenReturn(1);
+        return entry;
     }
 
     private static ItemStackNode itemStackNode() {

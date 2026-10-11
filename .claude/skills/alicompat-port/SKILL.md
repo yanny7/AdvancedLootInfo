@@ -1,6 +1,6 @@
 ---
 name: alicompat-port
-description: Carry ALICompat work from one Minecraft version branch to the next — merge the branch below, keep the target-mod block as ours, get ACI/ALI/AWI compiling, and afterwards activate the shims that arrived dormant by repinning their jars and re-deriving their class lists. Use when the user asks to merge a branch upward, port shims to a newer Minecraft version, asks why a shim present on a lower branch does nothing here, or asks which shims on this branch are still dormant.
+description: Carry ALICompat work from one Minecraft version branch to the next — merge the branch below, keep the target-mod block as ours, get ACI/ALI/AWI compiling, and afterwards activate the shims that arrived dormant by repinning their jars, re-deriving their class lists and regenerating their gametest goldens. Use when the user asks to merge a branch upward, port shims to a newer Minecraft version, asks why a shim present on a lower branch does nothing here, or asks which shims on this branch are still dormant.
 ---
 
 # Porting ALICompat between version branches
@@ -164,6 +164,13 @@ A conflict in a golden test file (`src/test/resources/*.json` guarded by a `-D<m
 merged by hand: take `ours`, run the owning `common` module's whole `test` task with the switch (a single `--tests`
 class skips the suite's bootstrap and fails), and check the resulting diff contains only what the merged change
 explains.
+
+GameTest golden files (`ali/<loader>/src/gametest/golden/`, `awi/…`, `alicompat/<loader>/src/gametest/golden/`)
+describe one Minecraft version's output, so the lower branch's copy is never right here. A conflict takes `ours`. A
+`golden/<slug>/` arriving for a slug that is dormant here stays as it came, unread, like its source set — phase 2
+replaces it. After the build, run ALI's and ALICompat's gametests in compare mode
+(`-Palicompat_gametest=all` covers the ALICompat base and every active slug) and regenerate only when every
+difference is one the merged change explains; anything else is reported, not regenerated.
 
 A merged change that alters rendered output (a number format, a tooltip shape) also breaks tests that exist only on
 this branch, because their expectations still hold the old output. Run the `common` modules' `test` tasks and take the
@@ -329,6 +336,9 @@ This is a full port, not a merge. It runs `alicompat-shim` from its Step 0:
   while it was dormant (key scheme, helper signatures, removed interfaces) lands here as a compile error
 - add the slug to `compat_mods`, then `python3 scripts/check_versions.py --update` to pin its `_dep` lines
   and rewrite the block (the slug's order in the list is the script's business, not yours)
+- run its gametest with `-Palicompat_golden_regenerate=true` on every loader it is now pinned for (`alicompat-shim`
+  Step 6b): the `golden/<slug>/` merged with it is the lower version's output, and a fixture under
+  `alicompat/common/src/gametest/` is re-checked against this version's datapack or script format
 - if the mod has no file for this version or loader, write no shim, delete no source set, and say why
 - if the mod has a file but nothing left to register — its loot and trade classes are gone, or ALI already renders
   what replaced them — reduce the source set to the `--scaffold` skeleton (an `IModCompat` returning only the mod id,
@@ -341,10 +351,11 @@ This is a full port, not a merge. It runs `alicompat-shim` from its Step 0:
 - the merge is a commit of the user's making, with ACI/ALI/AWI/ALICompat building
 - activated slugs are in `compat_mods` with file ids or artifact versions resolved for **this** version
 - `META-INF/services/com.yanny.alicompat.IModCompat` in the built jars lists the new shims
+- every activated slug has a golden regenerated on this version, and `-Palicompat_gametest=all` passes
 - no source set was deleted to express dormancy
 
 ## Tell the user
 
 Which step of the chain this was and whether another follows; what was restored and what was
-deliberately left out; how many slugs are still dormant; and which port is least certain. Nothing
-here is run in game.
+deliberately left out; how many slugs are still dormant; which port is least certain; and what the
+gametests showed. Nothing here is played in a client.

@@ -45,17 +45,19 @@ public abstract class LootModifier<T> implements ILootModifier<T> {
     private final List<IOperation> operations = new ArrayList<>();
 
     public LootModifier(IServerUtils utils, AbstractLootModification byBlock) {
-        Collection<ILootHandler> handlers = ((MixinCompositeLootAction) byBlock).getHandlers();
+        List<ILootHandler> handlers = List.copyOf(((MixinCompositeLootAction) byBlock).getHandlers());
         List<LootItemCondition> conditions = new LinkedList<>();
         List<LootItemFunction> functions = new LinkedList<>();
 
-        for (ILootHandler handler : handlers) {
+        for (int i = 0; i < handlers.size(); i++) {
+            ILootHandler handler = handlers.get(i);
+
             if (Utils.collectHandler(handler, conditions, functions)) {
                 continue;
             }
 
             if (handler instanceof ILootAction lootAction) {
-                processAction(utils, lootAction, new ArrayList<>(conditions), new ArrayList<>(functions));
+                processAction(utils, lootAction, new ArrayList<>(conditions), Utils.withLaterFunctions(functions, handlers, i));
             } else {
                 LOGGER.warn("Unhandled handler: {} [{}]", handler, handler.getClass().getCanonicalName());
             }
