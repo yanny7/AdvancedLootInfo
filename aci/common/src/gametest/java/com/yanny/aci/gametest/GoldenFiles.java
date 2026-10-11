@@ -58,11 +58,7 @@ public record GoldenFiles(Path goldenDir, Path actualDir, boolean regenerate) {
             return List.of();
         }
 
-        if (!Files.isDirectory(goldenDir)) {
-            return List.of("no golden files in " + goldenDir);
-        }
-
-        Map<String, String> expected = read(goldenDir);
+        Map<String, String> expected = Files.isDirectory(goldenDir) ? read(goldenDir) : Map.of();
         List<String> differences = new ArrayList<>();
 
         expected.keySet().stream().filter((key) -> !actual.containsKey(key)).forEach((key) -> differences.add("missing " + key));
