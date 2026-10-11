@@ -220,7 +220,8 @@
     "key": "rats",
     "name": "Rats",
     "mod_ids": ["rats"],
-    "curseforge": ["rats-323596"]
+    "curseforge": ["rats-323596"],
+    "requires": ["citadel-331936"]
   },
   {
     "key": "refinedstorage",
