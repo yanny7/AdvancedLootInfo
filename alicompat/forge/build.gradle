@@ -195,6 +195,10 @@ gametestMods.eachWithIndex { mod, index ->
                 from project(":alicompat:common").file("src/gametest/kubejs/${mod}")
                 into "${runDir}/kubejs"
             }
+            copy {
+                from project(":alicompat:common").file("src/gametest/datapacks/${mod}")
+                into "${runDir}/world/datapacks/${mod}"
+            }
             if (gametestCoordinates(mod)) {
                 extractGametestNested(mod)
                 copy {
