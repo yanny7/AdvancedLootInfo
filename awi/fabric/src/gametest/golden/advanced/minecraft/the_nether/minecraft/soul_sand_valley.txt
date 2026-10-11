@@ -1,0 +1,511 @@
+awi:biome minecraft:soul_sand_valley
+  | Sea Level: 32
+  spawn minecraft:blaze
+    | Structure: minecraft:fortress
+    |   -> Category: Monster
+    |   -> Weight: 10
+    |   -> Group size: 2 to 3
+  spawn minecraft:enderman
+    | Category: Monster
+    | Weight: 1
+    | Group size: 4
+    | Spawn cost: charge 0.7, budget 0.15
+  spawn minecraft:ghast
+    | Category: Monster
+    | Weight: 50
+    | Group size: 4
+    | Spawn cost: charge 0.7, budget 0.15
+  spawn minecraft:magma_cube
+    | Structure: minecraft:fortress
+    |   -> Category: Monster
+    |   -> Weight: 3
+    |   -> Group size: 4
+  spawn minecraft:skeleton
+    | Category: Monster
+    | Weight: 20
+    | Group size: 5
+    | Spawn cost: charge 0.7, budget 0.15
+    | Structure: minecraft:fortress
+    |   -> Category: Monster
+    |   -> Weight: 2
+    |   -> Group size: 5
+  spawn minecraft:strider
+    | Category: Creature
+    | Weight: 60
+    | Group size: 1 to 2
+    | Spawn cost: charge 0.7, budget 0.15
+  spawn minecraft:wither_skeleton
+    | Structure: minecraft:fortress
+    |   -> Category: Monster
+    |   -> Weight: 8
+    |   -> Group size: 5
+  spawn minecraft:zombified_piglin
+    | Structure: minecraft:fortress
+    |   -> Category: Monster
+    |   -> Weight: 5
+    |   -> Group size: 4
+  awi:base_layout
+    | Generation Step: Base Terrain
+    awi:block minecraft:netherrack
+      | Default Block
+    awi:block minecraft:lava
+      | Default Fluid
+    awi:block minecraft:bedrock
+      | Absolute Y: 0 to 4, 123 to 127
+    awi:block minecraft:gravel
+      | Depth Below Surface: 0 to 4
+      | At Y: 25 to 33
+    awi:block minecraft:soul_sand
+      | Absolute Y: 1 to 121
+    awi:block minecraft:soul_soil
+      | Absolute Y: 1 to 121
+  awi:generation_step 2
+    | Generation Step: Local Modifications
+    awi:placed_feature minecraft:basalt_pillar
+      | Attempts Per Chunk: 10
+      | Height: 0 to 127
+      | Configured Feature:
+      |   -> Feature: minecraft:basalt_pillar
+      |   -> None Feature:
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 10
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Above Bottom: 0
+      |       -> Max:
+      |         -> Below Top: 0
+      awi:block minecraft:basalt
+  awi:generation_step 7
+    | Generation Step: Underground Decoration
+    awi:placed_feature minecraft:spring_open
+      | Attempts Per Chunk: 8
+      | Height: 4 to 123
+      | Configured Feature:
+      |   -> Feature: minecraft:spring_feature
+      |   -> Spring:
+      |     -> State:
+      |       -> Fluid: minecraft:lava
+      |       -> Properties:
+      |         -> falling: true
+      |     -> Requires Block Below: False
+      |     -> Rock Count: 4
+      |     -> Hole Count: 1
+      |     -> Valid Block: Netherrack
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 8
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Above Bottom: 4
+      |       -> Max:
+      |         -> Below Top: 4
+      awi:block minecraft:lava
+    awi:placed_feature minecraft:patch_fire
+      | Attempts Per Chunk: 0 to 5
+      | Height: 4 to 123
+      | Configured Feature:
+      |   -> Feature: minecraft:random_patch
+      |   -> Random Patch:
+      |     -> Tries: 96
+      |     -> XZ Spread: 7
+      |     -> Y Spread: 3
+      |     -> Feature:
+      |       -> Feature:
+      |         -> Feature: minecraft:simple_block
+      |         -> Config:
+      |           -> Simple Block:
+      |             -> To Place:
+      |               -> Simple:
+      |                 -> State:
+      |                   -> Block: Fire
+      |                   -> Properties:
+      |                     -> age: 0
+      |                     -> east: false
+      |                     -> north: false
+      |                     -> south: false
+      |                     -> up: false
+      |                     -> west: false
+      |       -> Placement:
+      |         -> Block Predicate Filter:
+      |           -> All Of:
+      |             -> Predicates:
+      |               -> Matching Blocks:
+      |                 -> Block: Air
+      |               -> Matching Blocks:
+      |                 -> Block: Netherrack
+      |                 -> Offset: [0,-1,0]
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 0 to 5
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Above Bottom: 4
+      |       -> Max:
+      |         -> Below Top: 4
+      awi:block minecraft:fire
+    awi:placed_feature minecraft:patch_soul_fire
+      | Attempts Per Chunk: 0 to 5
+      | Height: 4 to 123
+      | Configured Feature:
+      |   -> Feature: minecraft:random_patch
+      |   -> Random Patch:
+      |     -> Tries: 96
+      |     -> XZ Spread: 7
+      |     -> Y Spread: 3
+      |     -> Feature:
+      |       -> Feature:
+      |         -> Feature: minecraft:simple_block
+      |         -> Config:
+      |           -> Simple Block:
+      |             -> To Place:
+      |               -> Simple:
+      |                 -> State:
+      |                   -> Block: Soul Fire
+      |       -> Placement:
+      |         -> Block Predicate Filter:
+      |           -> All Of:
+      |             -> Predicates:
+      |               -> Matching Blocks:
+      |                 -> Block: Air
+      |               -> Matching Blocks:
+      |                 -> Block: Soul Soil
+      |                 -> Offset: [0,-1,0]
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 0 to 5
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Above Bottom: 4
+      |       -> Max:
+      |         -> Below Top: 4
+      awi:block minecraft:soul_fire
+    awi:placed_feature minecraft:glowstone_extra
+      | Attempts Per Chunk: biased(0; 9)  ~0 (29%)
+      |   [chart 0..9 0-9 base=true modes=[true, false, false, false, false, false, false, false, false, false] heights=1.0000,0.6586,0.4879,0.3741,0.2887,0.2204,0.1635,0.1148,0.0721,0.0341]
+      | Height: 4 to 123
+      | Configured Feature:
+      |   -> Feature: minecraft:glowstone_blob
+      |   -> None Feature:
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> biased(0; 9)  ~0 (29%)
+      |         [chart 0..9 0-9 base=true modes=[true, false, false, false, false, false, false, false, false, false] heights=1.0000,0.6586,0.4879,0.3741,0.2887,0.2204,0.1635,0.1148,0.0721,0.0341]
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Above Bottom: 4
+      |       -> Max:
+      |         -> Below Top: 4
+      awi:block minecraft:glowstone
+    awi:placed_feature minecraft:glowstone
+      | Attempts Per Chunk: 10
+      | Height: 0 to 127
+      | Configured Feature:
+      |   -> Feature: minecraft:glowstone_blob
+      |   -> None Feature:
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 10
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Above Bottom: 0
+      |       -> Max:
+      |         -> Below Top: 0
+      awi:block minecraft:glowstone
+    awi:placed_feature minecraft:patch_crimson_roots
+      | Height: 0 to 127
+      | Configured Feature:
+      |   -> Feature: minecraft:random_patch
+      |   -> Random Patch:
+      |     -> Tries: 96
+      |     -> XZ Spread: 7
+      |     -> Y Spread: 3
+      |     -> Feature:
+      |       -> Feature:
+      |         -> Feature: minecraft:simple_block
+      |         -> Config:
+      |           -> Simple Block:
+      |             -> To Place:
+      |               -> Simple:
+      |                 -> State:
+      |                   -> Block: Crimson Roots
+      |       -> Placement:
+      |         -> Block Predicate Filter:
+      |           -> Matching Blocks:
+      |             -> Block: Air
+      | Placement:
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Above Bottom: 0
+      |       -> Max:
+      |         -> Below Top: 0
+      awi:block minecraft:crimson_roots
+    awi:placed_feature minecraft:ore_magma
+      | Attempts Per Chunk: 4
+      | Height: 27 to 36
+      | Configured Feature:
+      |   -> Feature: minecraft:ore
+      |   -> Ore:
+      |     -> Discard Chance On Air Exposure: 0.0
+      |     -> Size: 33
+      |     -> Target States:
+      |       -> State:
+      |         -> Block: Magma Block
+      |       -> Target:
+      |         -> Block Match:
+      |           -> Block: Netherrack
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 4
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Absolute Y: 27
+      |       -> Max:
+      |         -> Absolute Y: 36
+      awi:block minecraft:magma_block
+    awi:placed_feature minecraft:spring_closed
+      | Attempts Per Chunk: 16
+      | Height: 10 to 117
+      | Configured Feature:
+      |   -> Feature: minecraft:spring_feature
+      |   -> Spring:
+      |     -> State:
+      |       -> Fluid: minecraft:lava
+      |       -> Properties:
+      |         -> falling: true
+      |     -> Requires Block Below: False
+      |     -> Rock Count: 5
+      |     -> Hole Count: 0
+      |     -> Valid Block: Netherrack
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 16
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Above Bottom: 10
+      |       -> Max:
+      |         -> Below Top: 10
+      awi:block minecraft:lava
+    awi:placed_feature minecraft:ore_soul_sand
+      | Attempts Per Chunk: 12
+      | Height: 0 to 31
+      | Configured Feature:
+      |   -> Feature: minecraft:ore
+      |   -> Ore:
+      |     -> Discard Chance On Air Exposure: 0.0
+      |     -> Size: 12
+      |     -> Target States:
+      |       -> State:
+      |         -> Block: Soul Sand
+      |       -> Target:
+      |         -> Block Match:
+      |           -> Block: Netherrack
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 12
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Above Bottom: 0
+      |       -> Max:
+      |         -> Absolute Y: 31
+      awi:block minecraft:soul_sand
+    awi:placed_feature minecraft:ore_gravel_nether
+      | Attempts Per Chunk: 2
+      | Height: 5 to 41
+      | Configured Feature:
+      |   -> Feature: minecraft:ore
+      |   -> Ore:
+      |     -> Discard Chance On Air Exposure: 0.0
+      |     -> Size: 33
+      |     -> Target States:
+      |       -> State:
+      |         -> Block: Gravel
+      |       -> Target:
+      |         -> Block Match:
+      |           -> Block: Netherrack
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 2
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Absolute Y: 5
+      |       -> Max:
+      |         -> Absolute Y: 41
+      awi:block minecraft:gravel
+    awi:placed_feature minecraft:ore_blackstone
+      | Attempts Per Chunk: 2
+      | Height: 5 to 31
+      | Configured Feature:
+      |   -> Feature: minecraft:ore
+      |   -> Ore:
+      |     -> Discard Chance On Air Exposure: 0.0
+      |     -> Size: 33
+      |     -> Target States:
+      |       -> State:
+      |         -> Block: Blackstone
+      |       -> Target:
+      |         -> Block Match:
+      |           -> Block: Netherrack
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 2
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Absolute Y: 5
+      |       -> Max:
+      |         -> Absolute Y: 31
+      awi:block minecraft:blackstone
+    awi:placed_feature minecraft:ore_gold_nether
+      | Attempts Per Chunk: 10
+      | Height: 10 to 117
+      | Configured Feature:
+      |   -> Feature: minecraft:ore
+      |   -> Ore:
+      |     -> Discard Chance On Air Exposure: 0.0
+      |     -> Size: 10
+      |     -> Target States:
+      |       -> State:
+      |         -> Block: Nether Gold Ore
+      |       -> Target:
+      |         -> Block Match:
+      |           -> Block: Netherrack
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 10
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Above Bottom: 10
+      |       -> Max:
+      |         -> Below Top: 10
+      awi:block minecraft:nether_gold_ore
+    awi:placed_feature minecraft:ore_quartz_nether
+      | Attempts Per Chunk: 16
+      | Height: 10 to 117
+      | Configured Feature:
+      |   -> Feature: minecraft:ore
+      |   -> Ore:
+      |     -> Discard Chance On Air Exposure: 0.0
+      |     -> Size: 14
+      |     -> Target States:
+      |       -> State:
+      |         -> Block: Nether Quartz Ore
+      |       -> Target:
+      |         -> Block Match:
+      |           -> Block: Netherrack
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 16
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Above Bottom: 10
+      |       -> Max:
+      |         -> Below Top: 10
+      awi:block minecraft:nether_quartz_ore
+    awi:placed_feature minecraft:ore_ancient_debris_large
+      | Height: trapezoid(8; 24; 0)  ~16 (11%)
+      |   [chart 0..16 8-24 base=true modes=[false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false] heights=0.1111,0.2222,0.3333,0.4444,0.5556,0.6667,0.7778,0.8889,1.0000,0.8889,0.7778,0.6667,0.5556,0.4444,0.3333,0.2222,0.1111]
+      | Configured Feature:
+      |   -> Feature: minecraft:scattered_ore
+      |   -> Ore:
+      |     -> Discard Chance On Air Exposure: 1.0
+      |     -> Size: 3
+      |     -> Target States:
+      |       -> State:
+      |         -> Block: Ancient Debris
+      |       -> Target:
+      |         -> Tag Match:
+      |           -> Tag: minecraft:base_stone_nether
+      | Placement:
+      |   -> Height Range Placement:
+      |     -> Trapezoid:
+      |       -> Min:
+      |         -> Absolute Y: 8
+      |       -> Max:
+      |         -> Absolute Y: 24
+      |       -> Plateau: 0
+      awi:block minecraft:ancient_debris
+    awi:placed_feature minecraft:ore_debris_small
+      | Height: 8 to 119
+      | Configured Feature:
+      |   -> Feature: minecraft:scattered_ore
+      |   -> Ore:
+      |     -> Discard Chance On Air Exposure: 1.0
+      |     -> Size: 2
+      |     -> Target States:
+      |       -> State:
+      |         -> Block: Ancient Debris
+      |       -> Target:
+      |         -> Tag Match:
+      |           -> Tag: minecraft:base_stone_nether
+      | Placement:
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Above Bottom: 8
+      |       -> Max:
+      |         -> Below Top: 8
+      awi:block minecraft:ancient_debris
+  awi:generation_step 9
+    | Generation Step: Vegetation Decoration
+    awi:placed_feature minecraft:spring_lava
+      | Attempts Per Chunk: 20
+      | Height: very_biased(0; 119; 8)  ~0 to 7 (4%)
+      |   [chart 0..62 0-125 base=true modes=[true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,1.0000,0.8911,0.7700,0.6691,0.5828,0.5105,0.4514,0.4021,0.3602,0.3242,0.2929,0.2655,0.2412,0.2196,0.2003,0.1829,0.1672,0.1530,0.1401,0.1284,0.1177,0.1078,0.0988,0.0905,0.0829,0.0759,0.0694,0.0634,0.0579,0.0528,0.0481,0.0437,0.0397,0.0360,0.0325,0.0293,0.0264,0.0237,0.0212,0.0188,0.0167,0.0148,0.0130,0.0113,0.0098,0.0085,0.0072,0.0061,0.0051,0.0042,0.0034,0.0027,0.0021,0.0016,0.0011,0.0008,0.0005,0.0003,0.0001,0.0000]
+      | Configured Feature:
+      |   -> Feature: minecraft:spring_feature
+      |   -> Spring:
+      |     -> State:
+      |       -> Fluid: minecraft:lava
+      |       -> Properties:
+      |         -> falling: true
+      |     -> Requires Block Below: True
+      |     -> Rock Count: 4
+      |     -> Hole Count: 1
+      |     -> Valid Blocks:
+      |       -> Stone
+      |       -> Granite
+      |       -> Diorite
+      |       -> Andesite
+      |       -> Deepslate
+      |       -> Tuff
+      |       -> Calcite
+      |       -> Dirt
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 20
+      |   -> Height Range Placement:
+      |     -> Very Biased To Bottom:
+      |       -> Min:
+      |         -> Above Bottom: 0
+      |       -> Max:
+      |         -> Below Top: 8
+      |       -> Inner: 8
+      awi:block minecraft:lava

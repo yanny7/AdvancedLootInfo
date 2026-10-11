@@ -33,7 +33,8 @@
     "key": "arsnouveau",
     "name": "Ars Nouveau",
     "mod_ids": ["ars_nouveau"],
-    "curseforge": ["ars-nouveau-401955"]
+    "curseforge": ["ars-nouveau-401955"],
+    "requires": ["patchouli-306770", "curios-309927", "geckolib-388172"]
   },
   {
     "key": "artifacts",
@@ -63,7 +64,19 @@
     "key": "computercraft",
     "name": "CC: Tweaked",
     "mod_ids": ["computercraft"],
-    "curseforge": ["cc-tweaked-282001"]
+    "curseforge": ["cc-tweaked-282001"],
+    "maven": [
+      {
+        "repo": "https://maven.squiddev.cc/",
+        "loaders": ["forge"],
+        "artifacts": ["cc.tweaked:cc-tweaked-1.20.1-forge"]
+      },
+      {
+        "repo": "https://maven.squiddev.cc/",
+        "loaders": ["fabric"],
+        "artifacts": ["cc.tweaked:cc-tweaked-1.20.1-fabric"]
+      }
+    ]
   },
   {
     "key": "deeperdarker",
@@ -207,7 +220,8 @@
     "key": "rats",
     "name": "Rats",
     "mod_ids": ["rats"],
-    "curseforge": ["rats-323596"]
+    "curseforge": ["rats-323596"],
+    "requires": ["citadel-331936"]
   },
   {
     "key": "refinedstorage",
@@ -219,13 +233,15 @@
     "key": "relics",
     "name": "Relics",
     "mod_ids": ["relics"],
-    "curseforge": ["relics-mod-445274"]
+    "curseforge": ["relics-mod-445274"],
+    "requires": ["architectury-api-419699"]
   },
   {
     "key": "repurposedstructures",
     "name": "Repurposed Structures",
     "mod_ids": ["repurposed_structures"],
-    "curseforge": ["repurposed-structures-368293", "repurposed-structures-fabric-391366"]
+    "curseforge": ["repurposed-structures-368293", "repurposed-structures-fabric-391366"],
+    "requires": ["midnightlib-488090"]
   },
   {
     "key": "ribbits",

@@ -1,0 +1,23 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:modified
+      | Selects only first successful entry
+      ali:item minecraft:smooth_stone x1
+        | Count: 1
+        | ----- Predicates -----
+        | Match Tool:
+        |   -> Item: Fiery Pickaxe
+        | Match Tool:
+        |   -> Enchantments:
+        |     -> Enchantment: Silk Touch
+        |     -> Level: ≥ 1
+      ali:item minecraft:stone x1
+        | Count: 1
+        | ----- Predicates -----
+        | Match Tool:
+        |   -> Enchantments:
+        |     -> Enchantment: Silk Touch
+        |     -> Level: ≥ 1

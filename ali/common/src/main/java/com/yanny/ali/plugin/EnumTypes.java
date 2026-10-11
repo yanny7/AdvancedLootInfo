@@ -9,6 +9,7 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.component.FireworkExplosion;
 import net.minecraft.world.item.component.MapPostProcessing;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
@@ -39,6 +40,7 @@ public class EnumTypes {
         TRANSLATED_ENUMS.put(SetNameFunction.Target.class, "name_target");
         TRANSLATED_ENUMS.put(ListOperation.Type.class, "list_operation");
         TRANSLATED_ENUMS.put(CopyComponentsFunction.Source.class, "component_source");
+        TRANSLATED_ENUMS.put(Explosion.BlockInteraction.class, "block_interaction");
     }
 
     @NotNull

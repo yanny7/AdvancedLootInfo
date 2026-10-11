@@ -1,0 +1,47 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item mekanism:qio_importer x1
+      | Count: 1
+      | ----- Predicates -----
+      | Survives Explosion
+      | ----- Modifiers -----
+      | Copy Name:
+      |   -> Source: Block Entity
+      | Copy Nbt:
+      |   -> Nbt Provider: minecraft:context
+      |   -> Operations:
+      |     -> Entry:
+      |       -> Source: componentFrequency
+      |       -> Target: mekData.componentFrequency
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: componentSecurity.owner
+      |       -> Target: mekData.owner
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: componentSecurity.securityMode
+      |       -> Target: mekData.securityMode
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: componentUpgrade
+      |       -> Target: mekData.componentUpgrade
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: color
+      |       -> Target: mekData.color
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: filters
+      |       -> Target: mekData.filters
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: auto
+      |       -> Target: mekData.auto
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: controlType
+      |       -> Target: mekData.controlType
+      |       -> Merge Strategy: Replace

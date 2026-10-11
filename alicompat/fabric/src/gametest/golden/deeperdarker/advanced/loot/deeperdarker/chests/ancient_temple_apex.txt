@@ -1,0 +1,212 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 5 to 6
+    ali:item minecraft:sculk x5-8
+      | Chance: 9.09%
+      | Count: max(0; U[5; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 8
+      |   -> Add: False
+    ali:item deeperdarker:sculk_bone x2-6
+      | Chance: 8.87%
+      | Count: max(0; U[2; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 6
+      |   -> Add: False
+    ali:item minecraft:echo_shard x5-9
+      | Chance: 8.87%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item deeperdarker:grime_brick x7-13
+      | Chance: 8.2%
+      | Count: max(0; U[7; 13])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 7 to 13
+      |   -> Add: False
+    ali:item deeperdarker:grime_ball x8-18
+      | Chance: 7.54%
+      | Count: max(0; U[8; 18])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 8 to 18
+      |   -> Add: False
+    ali:item minecraft:tnt x4-9
+      | Chance: 6.65%
+      | Count: max(0; U[4; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4 to 9
+      |   -> Add: False
+    ali:item minecraft:flint x1-6
+      | Chance: 6.65%
+      | Count: max(0; U[1; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 6
+      |   -> Add: False
+    ali:item minecraft:iron_ingot x4-10
+      | Chance: 5.99%
+      | Count: max(0; U[4; 10])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4 to 10
+      |   -> Add: False
+    ali:item minecraft:quartz x5-13
+      | Chance: 4.88%
+      | Count: max(0; U[5; 13])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 13
+      |   -> Add: False
+    ali:item minecraft:redstone x3-12
+      | Chance: 3.99%
+      | Count: max(0; U[3; 12])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 3 to 12
+      |   -> Add: False
+    ali:item minecraft:disc_fragment_5 x1-3
+      | Chance: 3.77%
+      | Count: max(0; U[1; 3])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 3
+      |   -> Add: False
+    ali:item minecraft:lapis_lazuli x7-19
+      | Chance: 3.77%
+      | Count: max(0; U[7; 19])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 7 to 19
+      |   -> Add: False
+    ali:item minecraft:diamond x4-8
+      | Chance: 3.77%
+      | Count: max(0; U[4; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4 to 8
+      |   -> Add: False
+    ali:item minecraft:emerald x3-9
+      | Chance: 3.33%
+      | Count: max(0; U[3; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 3 to 9
+      |   -> Add: False
+    ali:item deeperdarker:crystallized_amber x1-3
+      | Chance: 3.33%
+      | Count: max(0; U[1; 3])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 3
+      |   -> Add: False
+    ali:item minecraft:sculk_sensor x1-3
+      | Chance: 2.66%
+      | Count: max(0; U[1; 3])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 3
+      |   -> Add: False
+    ali:item minecraft:sculk_catalyst x1-2
+      | Chance: 2.66%
+      | Count: max(0; U[1; 2])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
+    ali:item minecraft:iron_helmet x1 {Damage:0}
+      | Chance: 1.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30 to 40
+      |   -> Treasure: False
+      | Set Damage:
+      |   -> Damage: U[50%; 90%)
+      |   -> Add: False
+    ali:item minecraft:iron_sword x1 {Damage:0}
+      | Chance: 1.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30 to 40
+      |   -> Treasure: False
+      | Set Damage:
+      |   -> Damage: U[30%; 60%)
+      |   -> Add: False
+    ali:item minecraft:diamond_boots x1 {Damage:0}
+      | Chance: 0.89%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30 to 50
+      |   -> Treasure: False
+      | Set Damage:
+      |   -> Damage: U[40%; 70%)
+      |   -> Add: False
+    ali:item minecraft:diamond_helmet x1 {Damage:0}
+      | Chance: 0.89%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30 to 50
+      |   -> Treasure: False
+      | Set Damage:
+      |   -> Damage: U[80%; 100%)
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 0.67%
+      | Count: max(0; U[1; 2])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
+      | Enchant Randomly:
+    ali:item minecraft:diamond_chestplate x1 {Damage:0}
+      | Chance: 0.44%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 40 to 50
+      |   -> Treasure: False
+      | Set Damage:
+      |   -> Damage: U[60%; 90%)
+      |   -> Add: False
+    ali:item minecraft:diamond_leggings x1 {Damage:0}
+      | Chance: 0.44%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 40 to 50
+      |   -> Treasure: False
+      | Set Damage:
+      |   -> Damage: U[60%; 80%)
+      |   -> Add: False
+    ali:item minecraft:enchanted_golden_apple x1
+      | Chance: 0.22%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30 to 50
+      |   -> Treasure: False
+      | Set Damage:
+      |   -> Damage: U[50%; 90%)
+      |   -> Add: False
+    ali:item deeperdarker:warden_carapace x1
+      | Chance: 0.22%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30 to 50
+      |   -> Treasure: False
+      | Set Damage:
+      |   -> Damage: U[50%; 90%)
+      |   -> Add: False

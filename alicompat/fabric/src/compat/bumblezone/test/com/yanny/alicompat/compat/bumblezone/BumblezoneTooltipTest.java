@@ -31,7 +31,7 @@ public class BumblezoneTooltipTest {
     @Test
     public void testDropContainerLootFunction() {
         assertTooltip(UTILS.getFunctionTooltip(UTILS, new DropContainerLoot(List.of())).build(), List.of(
-                "Drop Container Items:"
+                "Drop Container Items"
         ));
     }
 
@@ -41,7 +41,7 @@ public class BumblezoneTooltipTest {
         LootItemFunction function = new DropContainerLoot(conditions);
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Drop Container Items:",
+                "Drop Container Items",
                 "  -> Predicates:",
                 "    -> Survives Explosion"
         ));
@@ -50,7 +50,7 @@ public class BumblezoneTooltipTest {
     @Test
     public void testUniquifyIfHasItemsFunction() {
         assertTooltip(UTILS.getFunctionTooltip(UTILS, new UniquifyIfHasItems(List.of())).build(), List.of(
-                "Uniquify If Has Items:"
+                "Uniquify If Has Items"
         ));
     }
 
@@ -60,7 +60,7 @@ public class BumblezoneTooltipTest {
         LootItemFunction function = new UniquifyIfHasItems(conditions);
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Uniquify If Has Items:",
+                "Uniquify If Has Items",
                 "  -> Predicates:",
                 "    -> Survives Explosion"
         ));

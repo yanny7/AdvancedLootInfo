@@ -1,0 +1,26 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:poppy x0-2
+      | Count: max(0; U[0; 2])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 0 to 2
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:iron_ingot x3-5
+      | Count: max(0; U[3; 5])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 3 to 5
+      |   -> Add: False
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1
+    | ----- Predicates -----
+    | Random Chance:
+    |   -> Probability: 0.01

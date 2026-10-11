@@ -1,0 +1,25 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:bee_nest x1
+      | Count: 1
+      | ----- Predicates -----
+      | Match Tool:
+      |   -> Enchantments:
+      |     -> Enchantment: Silk Touch
+      |     -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Copy Nbt:
+      |   -> Nbt Provider: minecraft:context
+      |   -> Operations:
+      |     -> Source: Bees
+      |     -> Target: BlockEntityTag.Bees
+      |     -> Merge Strategy: Replace
+      | Copy State:
+      |   -> Block: Bee Nest
+      |   -> Property: honey_level
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1

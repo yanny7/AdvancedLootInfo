@@ -19,3 +19,7 @@ Guidance for `awi/fabric` (`com.yanny.awi.fabric`) — AWI's Fabric loader entry
 `awi.fabric.mixins.json` declares exactly one `client` mixin: `MixinClientPlayNetworkAddon` — a copy of `ali/fabric`'s, injecting `ClientPlayNetworkAddon.receive` HEAD to re-dispatch `StartMessage`/`WorldgenDataChunkMessage`/`DoneMessage` **on the networking thread** (avoiding the deadlock Fabric's default main-thread hand-off causes for the bulk data sync), then cancelling the original call. It touches Fabric's `impl` package, so it is the most upgrade-fragile piece in this module; its injected method is still named `ali$reload`, a copy-paste leftover.
 
 There is no server-side mixin here (nor in `awi/forge`/`awi/neoforge` — the worldgen scan is not re-run on reload) and no client level-unload mixin (AWI has no per-level client cache, unlike `ali/fabric`'s `MixinMinecraft` → `EntityStorage`). Contrast with `ali/fabric`'s `MixinLootTableFabric`/`MixinCombinedIngredient`, which exist because ALI needs to reach into loot-table internals AWI has no equivalent of.
+
+## Gametest
+
+The `gametest` source set (see `awi/CLAUDE.md`'s gametest section) is its own small mod, `awi_gametest`, whose `fabric.mod.json` registers the test class under the `fabric-gametest` entrypoint and `awi.gametest.mixins.json`. The run is wired like ALI's (see `ali/fabric/CLAUDE.md`).

@@ -11,6 +11,7 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.component.FireworkExplosion;
 import net.minecraft.world.item.component.MapPostProcessing;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
@@ -119,6 +120,10 @@ public class LanguageHolder {
         put(ListOperation.Type.APPEND, "Append");
 
         put(CopyComponentsFunction.Source.BLOCK_ENTITY, "Block Entity");
+
+        put(Explosion.BlockInteraction.KEEP, "Keep Blocks");
+        put(Explosion.BlockInteraction.DESTROY, "Destroy Blocks");
+        put(Explosion.BlockInteraction.DESTROY_WITH_DECAY, "Destroy Blocks With Decay");
 
         verifyEnumTranslations();
 

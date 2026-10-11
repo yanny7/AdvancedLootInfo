@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,10 @@ public abstract class AbstractServer {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     private final List<WorldgenDataChunkMessage> chunks = new ArrayList<>();
+
+    public List<WorldgenDataChunkMessage> getChunks() {
+        return Collections.unmodifiableList(chunks);
+    }
 
     public void readWorldgenInfo(ServerLevel level) {
         AwiServerRegistry serverRegistry = PluginManager.getInstance().serverRegistry;

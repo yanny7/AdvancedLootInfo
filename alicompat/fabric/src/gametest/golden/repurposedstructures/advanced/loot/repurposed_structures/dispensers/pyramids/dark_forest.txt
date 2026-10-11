@@ -1,0 +1,23 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 3
+    ali:item minecraft:tipped_arrow x2-4 {Potion:"minecraft:strong_harming"}
+      | Chance: 50%
+      | Count: max(0; U[2; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 4
+      |   -> Add: False
+      | Set Nbt:
+      |   -> Tag: {Potion:"minecraft:strong_harming"}
+    ali:item minecraft:tipped_arrow x2-4 {Potion:"minecraft:strong_poison"}
+      | Chance: 50%
+      | Count: max(0; U[2; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 4
+      |   -> Add: False
+      | Set Nbt:
+      |   -> Tag: {Potion:"minecraft:strong_poison"}

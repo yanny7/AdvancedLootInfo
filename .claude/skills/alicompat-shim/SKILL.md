@@ -1,6 +1,6 @@
 ---
 name: alicompat-shim
-description: Write or update one ALICompat compatibility shim for a target mod — fetch that mod's jar for this checkout's Minecraft version, work out which of its loot/trade classes ALI cannot render, and produce the source set, accessors, services fragments, gradle.properties wiring, tooltip keys and changelog entry, then compile it. Use when the user names a mod to support ("start twilight forest", "add Apotheosis support", "write the shim for irons_spellbooks"), asks to cover a specific loot function/condition/GLM/trading entity from another mod, or asks to update an existing shim after its target mod released a new version.
+description: Write or update one ALICompat compatibility shim for a target mod — fetch that mod's jar for this checkout's Minecraft version, work out which of its loot/trade classes ALI cannot render, and produce the source set, accessors, services fragments, gradle.properties wiring, tooltip keys and changelog entry, then compile it and run its ALICompat gametest. Use when the user names a mod to support ("start twilight forest", "add Apotheosis support", "write the shim for irons_spellbooks"), asks to cover a specific loot function/condition/GLM/trading entity from another mod, or asks to update an existing shim after its target mod released a new version.
 ---
 
 # Writing one ALICompat shim
@@ -18,6 +18,16 @@ it is cheaper than rediscovering the conventions.
 single `return`, delegation through `getValueTooltip`, null and `Optional`, key placement, method
 references over lambdas, the `Lang` enum, comments. Read that section before writing the first line
 of Java; nothing about code shape is repeated here.
+
+Vanilla and ALI API names below are the ones on `1.20.1`, where this skill is kept. Later branches rename them,
+so take the current spelling from an active shim on the checkout in hand, never from this text. Known renames:
+
+| Here | `26.3` |
+|---|---|
+| `LootItemConditionalFunction.predicates` (`List`) | `condition` (`Optional`) |
+| a `NumberProvider` field | `Holder<ContextIntProvider>` / `Holder<ContextFloatProvider>` |
+| `utils.convertNumber` / `convertIntNumber` | `utils.convertContextFloat` / `convertContextInt` |
+| `LootTableReference.lootTableReference(id)` | `NestedLootTable.lootTableReference(ResourceKey<LootTable>)` |
 
 ## Step 0 — where the finding list comes from
 
@@ -51,7 +61,8 @@ python3 scripts/check_versions.py --update                   # repin the file id
 of the run does the class-list diff for you — find the shim's rows in the output or in
 `build/compat_scan.txt`: `-` is a class the new jar no longer has, `!` is one it still has but
 re-parented away from the hook, `+` is one it gained. A target mod's refactor shows up there as a
-missing class, not as a broken tooltip. Build immediately after.
+missing class, not as a broken tooltip. Build immediately after, then run the gametest in compare mode
+(Step 6b): the diff against the stored golden is what the new version changed on screen.
 
 ## Step 1 — a finding list is for one Minecraft version only
 
@@ -542,6 +553,8 @@ Porting a dormant shim (merged from a lower branch, slug already in `scripts/sup
 entry: `--scaffold <slug>` pins it, enables it and creates only the loaders' missing source sets. Fill those from the
 lower branch's source set for another loader, copy its `scan_ignore.json`, and re-check every entry of it against this
 version's jar. A loader with no file keeps its merged source set untouched — no `_dep` line means nothing compiles it.
+The `golden/<slug>/` and any fixture merged up with the shim are the lower version's; Step 6b regenerates the golden
+and re-checks the fixture against this version's data format, never compares against them.
 A changelog line merged up for a loader this branch has no file on is removed from `## []` here.
 
 The merged source set is the lower version's class list, so diff it against this version's jar before copying it
@@ -567,8 +580,45 @@ unzip -p alicompat/<loader>/build/libs/ALICompat-<loader>-*-$v.jar \
   META-INF/services/com.yanny.alicompat.IModCompat
 ```
 
-Compiling is not playing. Close the task by telling the user, explicitly: that the shim was never
-run in game and which part is least certain (GLM rendering, usually); whether datagen was re-run
+Compiling is not running. Step 6b runs it.
+
+## Step 6b — the gametest
+
+Every shim ships with its gametest golden (`alicompat/CLAUDE.md`, "Gametests"); a shim without one is not
+done. Run it on each loader the shim has a source set for, Forge first. The mod's diff is taken against
+`golden/base/`, so regenerate the base first whenever ALI's output changed since it was written:
+
+```bash
+./gradlew :alicompat:<loader>:runGametest -Precipe_viewer=none -Palicompat_gametest=<slug> -Palicompat_golden_regenerate=true
+./gradlew :alicompat:<loader>:test
+```
+
+Read what it wrote:
+
+```bash
+d=alicompat/<loader>/src/gametest/golden/<slug>
+find $d -type f -path "*/normal/*" | sed "s#$d/##" | cut -d/ -f1-3 | sort | uniq -c
+cat $d/removed.txt $d/findings.txt 2>/dev/null
+grep -a -E "\[ali(compat)?\]" alicompat/<loader>/build/gametest/run/<slug>/logs/latest.log | grep -a -i -E "warn|error|failed"
+```
+
+- A run that fails because a `mod_ids` entry is not loaded, or that the watchdog kills, is a missing dependency
+  in almost every case: the CurseForge file does not declare it. Add it to the registry entry's `requires`, then
+  `python3 scripts/check_versions.py --runtime-deps --loader <loader>`.
+- Every class the shim registers should show up on some page. One that does not is either used by none of the
+  mod's data (say so in the summary — a recipe-only ingredient, a function only advancements use) or a sign the
+  registration never fires.
+- An empty diff from a mod that has content means its content exists only through scripts or datapacks: write a
+  fixture (`alicompat/common/src/gametest/kubejs/<slug>/` or `datapacks/<slug>/`) that exercises every hook.
+  A library mod with no data of its own is covered by the run of a registry mod that depends on it — name that run.
+- Run the same slug twice in compare mode (without `-Palicompat_golden_regenerate`). A diff between two runs is
+  an unstable golden: sort what the target keeps in a hash set, strip per-instance random tags, never show an
+  unseeded roll.
+- A finding the shim cannot fix without an ALI or ACI change is asked about, not worked around in the shim.
+
+Close the task by telling the user, explicitly: what the gametest showed (own pages, trades, the vanilla
+pages its GLMs touch, findings left) and that it was never played in a client, so viewer layout is
+unverified; which part is least certain (GLM rendering, usually); whether datagen was re-run
 (Step 5); and what the row still leaves open — an `entityLootTables` config entry is an
 `ali_config` change, not Java, and belongs to the user's decision, not this shim. The wiki's
 `Users/ALI Compat` page (`../ali_wiki/Users-Loot-Info-ALI-Compat.md`) gets the new mod for this

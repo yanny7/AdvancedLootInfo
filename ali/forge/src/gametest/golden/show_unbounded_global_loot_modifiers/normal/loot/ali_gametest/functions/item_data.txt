@@ -1,0 +1,93 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:stick x1 {CustomModelData:7}
+      | Chance: 11.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {CustomModelData:7}
+    ali:item minecraft:iron_sword x1 {Damage:0}
+      | Chance: 11.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 10% to 50%
+      |   -> Add: False
+      | Enchant Randomly:
+      |   -> Sharpness
+      |   -> Smite
+      | Set Attributes:
+      |   -> Name: gametest
+      |   -> Attribute: Attack Damage
+      |   -> Operation: Addition
+      |   -> Amount: 1 to 5
+      |   -> Equipment Slot: Main Hand
+    ali:item minecraft:enchanted_book x1
+      | Chance: 11.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 5 to 30
+      |   -> Treasure: True
+    ali:item minecraft:diamond_pickaxe x1 {Damage:0}
+      | Chance: 11.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Efficiency
+      |       -> Levels: 5
+      |     -> Unbreaking
+      |       -> Levels: 1 to 3
+      |   -> Add: True
+    ali:item minecraft:potion x1 {Potion:"minecraft:healing"}
+      | Chance: 11.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Healing
+    ali:item minecraft:suspicious_stew x1
+      | Chance: 11.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Stew Effect:
+      |   -> Speed
+      |     -> Duration: 3 to 7
+    ali:item minecraft:paper x1 {display:{Name:'{"color":"gold","text":"Gametest"}'}}
+      | Chance: 11.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Name:
+      |   -> Name: Gametest
+      | Set Lore:
+      |   -> Replace: True
+      |   -> Lore:
+      |     -> line 1
+      |     -> line 2
+    ali:item minecraft:map x1
+      | Chance: 11.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Exploration Map:
+      |   -> Destination: minecraft:on_treasure_maps
+      |   -> Map Decoration: Red X
+      |   -> Zoom: 1
+      |   -> Search Radius: 50
+      |   -> Skip Known Structures: False
+    ali:item minecraft:beef x1
+      | Chance: 11.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Furnace Smelt
+      |   -> Predicates:
+      |     -> Entity Properties:
+      |       -> Target: This Entity
+      |       -> Predicate:
+      |         -> Entity Flags:
+      |           -> Is On Fire: True
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1

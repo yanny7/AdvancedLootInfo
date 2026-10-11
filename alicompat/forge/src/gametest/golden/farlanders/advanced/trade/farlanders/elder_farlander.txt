@@ -1,0 +1,135 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x3
+      ali:item minecraft:air x0
+      ali:item minecraft:iron_ingot x2
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item minecraft:amethyst_shard x12
+      ali:item minecraft:air x0
+      ali:item farlanders:endumium_crystal x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item farlanders:endumium_crystal x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x1
+      ali:item minecraft:air x0
+      ali:item minecraft:lapis_lazuli x8
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x5
+      ali:item minecraft:air x0
+      ali:item minecraft:glowstone_dust x8
+  ali:trade_level
+    | Level: 2
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x3
+      ali:item minecraft:air x0
+      ali:item minecraft:experience_bottle x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x8
+      ali:item minecraft:air x0
+      ali:item minecraft:brewing_stand x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x5
+      ali:item minecraft:air x0
+      ali:item minecraft:rail x25
+    ali:items_to_items
+      | Uses: 12
+      | XP: 10
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x5
+      ali:item minecraft:air x0
+      ali:item minecraft:powered_rail x15
+    ali:items_to_items
+      | Uses: 12
+      | XP: 7
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x5
+      ali:item minecraft:air x0
+      ali:item minecraft:detector_rail x20
+  ali:trade_level
+    | Level: 3
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 10
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x8
+      ali:item minecraft:air x0
+      ali:item minecraft:jukebox x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 8
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x3
+      ali:item minecraft:air x0
+      ali:item minecraft:tnt x8
+    ali:items_to_items
+      | Uses: 12
+      | XP: 9
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x8
+      ali:item minecraft:air x0
+      ali:item minecraft:saddle x1
+  ali:trade_level
+    | Level: 4
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x3
+      ali:item minecraft:air x0
+      ali:item minecraft:obsidian x5
+    ali:items_to_items
+      | Uses: 12
+      | XP: 14
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x12
+      ali:item minecraft:air x0
+      ali:item minecraft:sponge x1
+  ali:trade_level
+    | Level: 5
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 16
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x40
+      ali:item minecraft:air x0
+      ali:item minecraft:ender_chest x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x32
+      ali:item minecraft:ender_pearl x2
+      ali:item minecraft:ender_eye x1

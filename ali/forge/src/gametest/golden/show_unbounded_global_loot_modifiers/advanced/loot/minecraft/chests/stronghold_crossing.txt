@@ -1,0 +1,63 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 4
+    ali:item minecraft:bread x1-3
+      | Chance: 24.19%
+      | Count: max(0; U[1; 3])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 3
+      |   -> Add: False
+    ali:item minecraft:apple x1-3
+      | Chance: 24.19%
+      | Count: max(0; U[1; 3])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 3
+      |   -> Add: False
+    ali:item minecraft:iron_ingot x1-5
+      | Chance: 16.13%
+      | Count: max(0; U[1; 5])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 5
+      |   -> Add: False
+    ali:item minecraft:coal x3-8
+      | Chance: 16.13%
+      | Count: max(0; U[3; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 3 to 8
+      |   -> Add: False
+    ali:item minecraft:gold_ingot x1-3
+      | Chance: 8.06%
+      | Count: max(0; U[1; 3])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 3
+      |   -> Add: False
+    ali:item minecraft:redstone x4-9
+      | Chance: 8.06%
+      | Count: max(0; U[4; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4 to 9
+      |   -> Add: False
+    ali:item minecraft:iron_pickaxe x1 {Damage:0}
+      | Chance: 1.61%
+      | Count: 1
+    ali:item minecraft:enchanted_book x1
+      | Chance: 1.61%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Treasure: True
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1
+    | ----- Predicates -----
+    | Random Chance:
+    |   -> Probability: 0.01

@@ -1,0 +1,31 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item enderio:powered_spawner x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Copy Nbt:
+      |   -> Nbt Provider: minecraft:context
+      |   -> Operations:
+      |     -> Entry:
+      |       -> Source: EntityStorage
+      |       -> Target: BlockEntityTag.EntityStorage
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: Energy
+      |       -> Target: BlockEntityTag.Energy
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: IoConfig
+      |       -> Target: BlockEntityTag.IoConfig
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: RedstoneControl
+      |       -> Target: BlockEntityTag.RedstoneControl
+      |       -> Merge Strategy: Replace
+      |     -> Entry:
+      |       -> Source: Items
+      |       -> Target: BlockEntityTag.Items
+      |       -> Merge Strategy: Replace

@@ -1,0 +1,14 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:melon_seeds x0-3
+      | Count: max(0; binom(3; 53.33%))  ~2 (40%)
+      |   [chart 0..3 0-3 base=true modes=[false, false, true, false] heights=0.2552,0.8750,1.0000,0.3810]
+      | ----- Modifiers -----
+      | Explosion Decay
+      | Set Count:
+      |   -> Count: binom(3; 53.33%)  ~2 (40%)
+      |     [chart 0..3 0-3 base=true modes=[false, false, true, false] heights=0.2552,0.8750,1.0000,0.3810]
+      |   -> Add: False

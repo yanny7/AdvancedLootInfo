@@ -1,0 +1,119 @@
+{
+  "_comment": "Every condition type there is, once each, plus the two that take an alternative form. A condition block is a cross-cutting extra field: it works on EVERY trade type, is never a type of its own, and defaults to AND. Conditions are evaluated ONCE, at the moment the offer is generated as the villager levels up - so a world-state condition (weather, day_night, moon_phase, gamerule) is a snapshot of that moment and does not re-check itself afterwards. Location conditions (biome, dimension, job_site_block, config_flag) are stable for a settled villager and therefore the reliable ones. An unknown condition type does NOT disable the gate: the trade is withheld and the type is logged, because offering it ungated would be the more harmful guess.",
+  "profession": "minecraft:farmer",
+  "trades": {
+    "novice": [
+      {
+        "_comment": "biome, form 1 of 2: a 'tag' STRING matches any biome in that tag. dimension takes the dimension id. Default logic is AND, so both must hold.",
+        "type": "villagertradingplus:sell_item",
+        "sell": { "item": "minecraft:melon_slice", "count": 6 },
+        "priceIn": { "item": "minecraft:emerald", "count": 1 },
+        "conditions": [
+          { "type": "biome", "tag": "minecraft:is_jungle" },
+          { "type": "dimension", "dimension": "minecraft:overworld" }
+        ],
+        "max_uses": 12,
+        "villager_experience": 2
+      },
+      {
+        "_comment": "biome, form 2 of 2: a 'biomes' ARRAY matches exact biome ids. Use this when no tag covers what you mean.",
+        "type": "villagertradingplus:sell_item",
+        "sell": { "item": "minecraft:cactus", "count": 2 },
+        "priceIn": { "item": "minecraft:emerald", "count": 1 },
+        "conditions": [
+          { "type": "biome", "biomes": [ "minecraft:desert", "minecraft:badlands" ] }
+        ],
+        "max_uses": 12,
+        "villager_experience": 2
+      }
+    ],
+    "apprentice": [
+      {
+        "_comment": "weather takes 'state': rain, thunder or clear. day_night takes 'time': day or night. \"logic\": \"or\" turns the whole block into 'any of these' - it sits on the TRADE, not inside the conditions array.",
+        "type": "villagertradingplus:sell_item",
+        "sell": { "item": "minecraft:wheat_seeds", "count": 8 },
+        "priceIn": { "item": "minecraft:emerald", "count": 1 },
+        "logic": "or",
+        "conditions": [
+          { "type": "weather", "state": "rain" },
+          { "type": "day_night", "time": "night" }
+        ],
+        "max_uses": 16,
+        "villager_experience": 5
+      },
+      {
+        "_comment": "moon_phase takes a 'phases' ARRAY of lunar days, 0 = full moon .. 7. By default it also requires the moon to actually be up, because the lunar day alone runs on through the following daylight hours - without that a 'full moon' trade would sit there unlocked at noon. Set \"require_night\": false to gate on the bare lunar day anyway.",
+        "type": "villagertradingplus:sell_item",
+        "sell": { "item": "minecraft:pumpkin_pie", "count": 1 },
+        "priceIn": { "item": "minecraft:emerald", "count": 3 },
+        "conditions": [
+          { "type": "moon_phase", "phases": [0], "require_night": true }
+        ],
+        "max_uses": 4,
+        "villager_experience": 5
+      }
+    ],
+    "journeyman": [
+      {
+        "_comment": "gamerule reads a BOOLEAN world gamerule by its in-game name; config_flag reads a public boolean field off the VillagerTradingPlus config. Both take an optional 'value' that defaults to true, so omitting it means 'must be on'. Together they let one datapack react to how a server is set up instead of shipping two.",
+        "type": "villagertradingplus:sell_item",
+        "sell": { "item": "minecraft:golden_carrot", "count": 3 },
+        "priceIn": { "item": "minecraft:emerald", "count": 4 },
+        "conditions": [
+          { "type": "gamerule", "rule": "doDaylightCycle", "value": true },
+          { "type": "config_flag", "field": "enable_conditional_trades", "value": true }
+        ],
+        "max_uses": 8,
+        "villager_experience": 10
+      }
+    ],
+    "expert": [
+      {
+        "_comment": "job_site_block, form 1 of 2: a 'blocks' ARRAY of exact block ids, matched against the block the villager is actually employed at.",
+        "type": "villagertradingplus:sell_item",
+        "sell": { "item": "minecraft:hay_block", "count": 1 },
+        "priceIn": { "item": "minecraft:emerald", "count": 2 },
+        "conditions": [
+          { "type": "job_site_block", "blocks": [ "minecraft:composter" ] }
+        ],
+        "max_uses": 6,
+        "villager_experience": 15
+      },
+      {
+        "_comment": "job_site_block, form 2 of 2: 'wood_variant' is a substring matched against the block id's PATH. That is how one rule tells the flower tub's twelve wood types apart without listing them.",
+        "type": "villagertradingplus:sell_item",
+        "sell": { "item": "minecraft:cherry_sapling", "count": 1 },
+        "priceIn": { "item": "minecraft:emerald", "count": 5 },
+        "conditions": [
+          { "type": "job_site_block", "wood_variant": "cherry" }
+        ],
+        "max_uses": 4,
+        "villager_experience": 15
+      }
+    ],
+    "master": [
+      {
+        "_comment": "All eight types stacked in one AND block. This is a demonstration of the syntax, not advice - a trade gated this hard will almost never be rolled.",
+        "type": "villagertradingplus:sell_item",
+        "sell": {
+          "item": "minecraft:enchanted_golden_apple",
+          "name": "{\"text\":\"Harvest Moon\",\"color\":\"gold\",\"italic\":false}",
+          "lore": [ "Grown under a full moon" ]
+        },
+        "priceIn": { "item": "minecraft:emerald", "count": 40 },
+        "conditions": [
+          { "type": "biome", "tag": "minecraft:is_overworld" },
+          { "type": "dimension", "dimension": "minecraft:overworld" },
+          { "type": "weather", "state": "clear" },
+          { "type": "day_night", "time": "night" },
+          { "type": "moon_phase", "phases": [0], "require_night": false },
+          { "type": "gamerule", "rule": "doDaylightCycle", "value": true },
+          { "type": "config_flag", "field": "enable_conditional_trades", "value": true },
+          { "type": "job_site_block", "blocks": [ "minecraft:composter" ] }
+        ],
+        "max_uses": 1,
+        "villager_experience": 30
+      }
+    ]
+  }
+}

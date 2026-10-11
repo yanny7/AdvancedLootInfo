@@ -1,0 +1,106 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 16
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item minecraft:stick x32
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:arrow x16
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:gravel x10
+      ali:item minecraft:emerald x1
+      ali:item minecraft:flint x10
+  ali:trade_level
+    | Level: 2
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 10
+      | Price Multiplier: 0.05
+      ali:item minecraft:flint x26
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item minecraft:bow x1 {Damage:0}
+  ali:trade_level
+    | Level: 3
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 16
+      | XP: 20
+      | Price Multiplier: 0.05
+      ali:item minecraft:string x14
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 10
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:crossbow x1 {Damage:0}
+  ali:trade_level
+    | Level: 4
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 16
+      | XP: 30
+      | Price Multiplier: 0.05
+      ali:item minecraft:feather x24
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 3
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x7-21
+      ali:item minecraft:air x0
+      ali:item minecraft:bow x1 {Damage:0}
+        | Enchant With Levels:
+        |   -> Levels: 5 to 19
+        |   -> Treasure: False
+  ali:trade_level
+    | Level: 5
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 30
+      | Price Multiplier: 0.05
+      ali:item minecraft:tripwire_hook x8
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 3
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x8-22
+      ali:item minecraft:air x0
+      ali:item minecraft:crossbow x1 {Damage:0}
+        | Enchant With Levels:
+        |   -> Levels: 5 to 19
+        |   -> Treasure: False
+    ali:items_to_items
+      | Uses: 12
+      | XP: 30
+      | Price Multiplier: 0.05
+      ali:item minecraft:arrow x5
+      ali:item minecraft:emerald x2
+      ali:item minecraft:tipped_arrow x5

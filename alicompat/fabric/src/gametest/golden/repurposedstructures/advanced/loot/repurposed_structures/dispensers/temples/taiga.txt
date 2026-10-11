@@ -1,0 +1,13 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 2
+    ali:item minecraft:tipped_arrow x2-7 {Potion:"minecraft:poison"}
+      | Count: max(0; U[2; 7])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 7
+      |   -> Add: False
+      | Set Nbt:
+      |   -> Tag: {Potion:"minecraft:poison"}

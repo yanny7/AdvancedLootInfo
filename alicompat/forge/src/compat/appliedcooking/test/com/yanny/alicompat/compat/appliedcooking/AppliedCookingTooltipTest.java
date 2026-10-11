@@ -14,7 +14,7 @@ public class AppliedCookingTooltipTest {
     @Test
     public void testKitchenStationFunction() {
         assertTooltip(UTILS.getFunctionTooltip(UTILS, new KitchenStationBlockLootFunction(new LootItemCondition[0])).build(), List.of(
-                "Copy Kitchen Station Data:"
+                "Copy Kitchen Station Data"
         ));
     }
 
@@ -23,7 +23,7 @@ public class AppliedCookingTooltipTest {
         LootItemCondition[] conditions = {ExplosionCondition.survivesExplosion().build()};
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, new KitchenStationBlockLootFunction(conditions)).build(), List.of(
-                "Copy Kitchen Station Data:",
+                "Copy Kitchen Station Data",
                 "  -> Predicates:",
                 "    -> Survives Explosion"
         ));

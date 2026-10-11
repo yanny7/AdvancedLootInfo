@@ -1,0 +1,82 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:map x1 {display:{Name:'{"translate":"Nether Fortress Map"}'}}
+      | Chance: 49.02%
+      | Count: 1
+      | ----- Modifiers -----
+      | Exploration Map:
+      |   -> Destination: repurposed_structures:explorer_maps/nether_fortress
+      |   -> Map Decoration: Red Banner
+      |   -> Zoom: 2
+      |   -> Search Radius: 50
+      |   -> Skip Known Structures: False
+      | Set Name:
+      |   -> Name: Nether Fortress Map
+    ali:item minecraft:map x1 {display:{Name:'{"translate":"Bastion Remnant Map"}'}}
+      | Chance: 49.02%
+      | Count: 1
+      | ----- Modifiers -----
+      | Exploration Map:
+      |   -> Destination: repurposed_structures:explorer_maps/bastion_remnant
+      |   -> Map Decoration: Black Banner
+      |   -> Zoom: 2
+      |   -> Search Radius: 50
+      |   -> Skip Known Structures: False
+      | Set Name:
+      |   -> Name: Bastion Remnant Map
+    ali:item minecraft:map x1 {display:{Name:'{"translate":"Nether City Map"}'}}
+      | Chance: 1.96%
+      | Count: 1
+      | ----- Modifiers -----
+      | Exploration Map:
+      |   -> Destination: repurposed_structures:explorer_maps/city_nether
+      |   -> Map Decoration: Gray Banner
+      |   -> Zoom: 2
+      |   -> Search Radius: 50
+      |   -> Skip Known Structures: False
+      | Set Name:
+      |   -> Name: Nether City Map
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 5
+    ali:item minecraft:paper x1-8
+      | Chance: 28.3%
+      | Count: 1 to 8
+    ali:item minecraft:nether_wart x1-4
+      | Chance: 28.3%
+      | Count: 1 to 4
+    ali:item minecraft:map x1-3
+      | Chance: 18.87%
+      | Count: 1 to 3
+    ali:item minecraft:compass x1
+      | Chance: 15.09%
+      | Count: 1
+    ali:item minecraft:redstone x2-6
+      | Chance: 9.43%
+      | Count: 2 to 6
+  ali:reference
+    | Selects all entries
+    | Only items added by other mods
+    ali:loot_table
+      | Selects all entries
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1 to 5
+        ali:item minecraft:paper x1-5
+          | Chance: 30%
+          | Count: 1 to 5
+        ali:item minecraft:bread x1-4
+          | Chance: 30%
+          | Count: 1 to 4
+        ali:item minecraft:map x1-3
+          | Chance: 20%
+          | Count: 1 to 3
+        ali:item minecraft:compass x1
+          | Chance: 10%
+          | Count: 1
+        ali:item minecraft:stick x1-2
+          | Chance: 10%
+          | Count: 1 to 2

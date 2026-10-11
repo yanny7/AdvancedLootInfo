@@ -1,0 +1,17 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4 to 6
+    ali:item minecraft:red_mushroom x1-5
+      | Chance: 27.78%
+      | Count: 1 to 5
+    ali:item minecraft:brown_mushroom x1-5
+      | Chance: 27.78%
+      | Count: 1 to 5
+    ali:item ribbits:giant_lilypad x1-2
+      | Chance: 27.78%
+      | Count: 1 to 2
+    ali:item minecraft:amethyst_shard x1-2
+      | Chance: 16.67%
+      | Count: 1 to 2

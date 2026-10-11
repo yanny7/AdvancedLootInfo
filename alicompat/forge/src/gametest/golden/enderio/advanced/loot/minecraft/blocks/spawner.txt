@@ -1,0 +1,4 @@
+ali:loot_table
+  | Selects all entries
+  ali:item enderio:broken_spawner x1
+    | Count: 1

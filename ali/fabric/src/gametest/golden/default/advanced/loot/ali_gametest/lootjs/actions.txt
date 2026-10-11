@@ -1,0 +1,37 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:cod x1
+      | Count: 1
+  lootjs:add_loot
+    | Selects all entries
+    lootjs:item_stack minecraft:feather x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Drop Experience:
+      |   -> Amount: 5
+  lootjs:add_loot
+    | Selects all entries
+    lootjs:item_stack minecraft:blaze_rod x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Lightning Strike:
+      |   -> Damage Entity: False
+  lootjs:add_loot
+    | Selects all entries
+    lootjs:item_stack minecraft:ender_pearl x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Custom Player Modifier:
+      |   -> Detail Not Available
+  lootjs:add_loot
+    | Selects all entries
+    lootjs:item_stack minecraft:gunpowder x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Explode:
+      |   -> Radius: 1.0
+      |   -> Block Interaction: Keep Blocks
+      |   -> Blocks On Fire: False

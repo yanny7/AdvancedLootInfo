@@ -1,0 +1,15 @@
+awi:biome minecraft:the_end
+  spawn minecraft:enderman
+    | Category: Monster
+    | Weight: 10
+    | Group size: 4
+  awi:base_layout
+    | Generation Step: Base Terrain
+    awi:block minecraft:end_stone
+      | Default Block
+  awi:generation_step 4
+    | Generation Step: Surface Structures
+    awi:placed_feature minecraft:end_spike
+      awi:block minecraft:bedrock
+      awi:block minecraft:iron_bars
+      awi:block minecraft:obsidian

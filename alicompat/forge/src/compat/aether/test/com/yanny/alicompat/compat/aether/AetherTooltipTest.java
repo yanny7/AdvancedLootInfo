@@ -20,7 +20,7 @@ public class AetherTooltipTest {
     @Test
     public void testDoubleDropsFunction() {
         assertTooltip(UTILS.getFunctionTooltip(UTILS, DoubleDrops.builder().build()).build(), List.of(
-                "Double Drops:"
+                "Double Drops"
         ));
     }
 
@@ -29,7 +29,7 @@ public class AetherTooltipTest {
         LootItemFunction function = DoubleDrops.builder().when(ExplosionCondition.survivesExplosion()).build();
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Double Drops:",
+                "Double Drops",
                 "  -> Predicates:",
                 "    -> Survives Explosion"
         ));
@@ -38,7 +38,7 @@ public class AetherTooltipTest {
     @Test
     public void testSpawnTntFunction() {
         assertTooltip(UTILS.getFunctionTooltip(UTILS, SpawnTNT.builder().build()).build(), List.of(
-                "Spawn TNT:"
+                "Spawn TNT"
         ));
     }
 
@@ -47,7 +47,7 @@ public class AetherTooltipTest {
         LootItemFunction function = SpawnTNT.builder().when(ExplosionCondition.survivesExplosion()).build();
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Spawn TNT:",
+                "Spawn TNT",
                 "  -> Predicates:",
                 "    -> Survives Explosion"
         ));
@@ -56,7 +56,7 @@ public class AetherTooltipTest {
     @Test
     public void testSpawnXpFunction() {
         assertTooltip(UTILS.getFunctionTooltip(UTILS, SpawnXP.builder().build()).build(), List.of(
-                "Spawn XP:"
+                "Spawn XP"
         ));
     }
 
@@ -65,7 +65,7 @@ public class AetherTooltipTest {
         LootItemFunction function = SpawnXP.builder().when(ExplosionCondition.survivesExplosion()).build();
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Spawn XP:",
+                "Spawn XP",
                 "  -> Predicates:",
                 "    -> Survives Explosion"
         ));

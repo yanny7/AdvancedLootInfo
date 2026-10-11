@@ -6,7 +6,7 @@ Guidance for `ali/forge` (`com.yanny.ali.forge`) — ALI's Forge loader entry po
 
 Single `AliMod` (`@Mod`). Its static initializer builds the `SimpleChannel` (`net.minecraftforge.network.ChannelBuilder.named(...)`, int protocol version `2`, `.optional()`), constructs `SERVER`, and registers message handlers via `network.NetworkUtils`. The constructor wires `FMLJavaModLoadingContext` mod-bus listeners (`DataGeneration::generate`, common/client setup → `PluginManager`) and registers itself on `MinecraftForge.EVENT_BUS` for `@SubscribeEvent onAddReloadListener(AddReloadListenerEvent)`, which publishes `event.getRegistries()` into `ForgePlatformHelper.PROVIDER` (the backing store for `getLookupProvider()`) and registers `SERVER.getFakeLootDataManager()` as a reload listener (see `ali/CLAUDE.md`'s `configuration`/`datagen` section for `FakeLootDataManager`).
 
-`ForgeCommonBusSubscriber` and `ForgeClientBusSubscriber` are the Forge-bus halves (server start/stop; client level unload and login/logout). `ForgeClientModBusSubscriber` (mod bus, client only) registers the identity factory for `ScrollableTooltip` that JEI on Forge needs (see `aci/CLAUDE.md`); it is a separate `Dist.CLIENT` class because the event references client-only types.
+`ForgeCommonBusSubscriber` and `ForgeClientBusSubscriber` are the Forge-bus halves (server start/stop; client level unload and login/logout). The server-start scan runs at `EventPriority.LOWEST`, after other mods' `ServerStartingEvent` listeners, since a mod may still fill `VillagerTrades` or loot data there. `ForgeClientModBusSubscriber` (mod bus, client only) registers the identity factory for `ScrollableTooltip` that JEI on Forge needs (see `aci/CLAUDE.md`); it is a separate `Dist.CLIENT` class because the event references client-only types.
 
 ## Platform + networking implementation
 
@@ -37,3 +37,12 @@ Forge's custom ingredients extend `AbstractIngredient extends Ingredient`, so th
 ## Boilerplate vs genuine glue
 
 The `AliMod` entrypoint shape, `NetworkUtils` registration, and `ForgePlatformHelper` scaffolding are the Forge-side rewrite of the same contract `ali/fabric` implements. Genuinely loader-specific: the mixins (Forge's internal-handler/GLM class shapes differ from NeoForge's), the reload-listener wiring, and the Forge-only compat plugins above.
+
+## Gametest
+
+The `gametest` source set (see `ali/CLAUDE.md`'s gametest section) is wired into the `gametest` loom run differently from Fabric:
+
+- The run sets `environment "gametestserver"` together with `forgeTemplate "gameTestServer"`. Loom takes the launch target from `launch.cfg` by environment, so `server()` would start the dedicated server (`forgeserveruserdev`), which stops at the EULA and never exits.
+- A per-run `mods { main { … } }` puts the gametest source set into the `ali` mod, so Forge scans its annotations; outside this run the classes do not exist. The plugin in it, `GameTestPlugin`, therefore reports `ali` as its mod id — plugins of a mod that is not loaded are skipped.
+- `forge.enabledGameTestNamespaces=ali` enables the test, which is `@GameTestHolder("ali")` with `@PrefixGameTestTemplate(false)` and uses the structure `ali:empty` (`data/ali/structures/empty.nbt`); Forge ships no empty structure.
+- The Forge-only fixtures are the global loot modifiers: `GameTestLootModifiers` registers three codecs (`ali:gametest_add_item`, `ali:gametest_remove_item`, `ali:gametest_unadapted`), `GameTestPlugin` adapts the first two and leaves the third to auto-detection, and the datapack under `src/gametest/resources/data/` binds them to test tables, a block page, an entity page and no page at all. The wrapper adds the `show_unbounded_global_loot_modifiers` variant, which has nothing to show on Fabric.

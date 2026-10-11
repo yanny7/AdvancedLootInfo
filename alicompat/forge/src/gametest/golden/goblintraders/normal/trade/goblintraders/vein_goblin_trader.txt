@@ -1,0 +1,367 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects 4 Of These Trades
+    ali:items_to_items
+      | Uses: 24
+      | XP: 4
+      | Price Multiplier: 0.0
+      ali:item minecraft:carrot x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 32
+      | XP: 4
+      | Price Multiplier: 0.0
+      ali:item minecraft:glowstone x1
+      ali:item minecraft:air x0
+      ali:item minecraft:glowstone_dust x4
+    ali:items_to_items
+      | Uses: 64
+      | XP: 4
+      | Price Multiplier: 0.0
+      ali:item minecraft:netherrack x64
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 4
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:nether_wart x2
+  ali:trade_level
+    | Level: 2
+    | Randomly Selects 3 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 10
+      | Price Multiplier: 0.0
+      ali:item minecraft:netherite_ingot x2
+      ali:item minecraft:air x0
+      ali:item minecraft:totem_of_undying x1
+    ali:items_to_items
+      | Uses: 20
+      | XP: 50
+      | Price Multiplier: 0.0
+      ali:item minecraft:ancient_debris x4
+      ali:item minecraft:air x0
+      ali:item minecraft:netherite_scrap x5
+    ali:items_to_items
+      | Uses: 128
+      | XP: 4
+      | Price Multiplier: 0.0
+      ali:item minecraft:nether_wart x1
+      ali:item minecraft:nether_brick x1
+      ali:item minecraft:red_nether_bricks x1
+  ali:trade_level
+    | Level: 3
+    | Randomly Selects 3 to 4 Of These Trades
+    ali:items_to_items
+      | Uses: 1
+      | XP: 200
+      | Price Multiplier: 0.0
+      ali:item minecraft:diamond_sword x1 {Damage:0}
+      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:sharpness",lvl:5s}]}
+      ali:item minecraft:diamond_sword x1 {Damage:0,Enchantments:[{id:"minecraft:sharpness",lvl:6s}]}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 200
+      | Price Multiplier: 0.0
+      ali:item minecraft:diamond_sword x1 {Damage:0}
+      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:looting",lvl:3s}]}
+      ali:item minecraft:diamond_sword x1 {Damage:0,Enchantments:[{id:"minecraft:looting",lvl:4s}]}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 200
+      | Price Multiplier: 0.0
+      ali:item minecraft:diamond_sword x1 {Damage:0}
+      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:sweeping",lvl:3s}]}
+      ali:item minecraft:diamond_sword x1 {Damage:0,Enchantments:[{id:"minecraft:sweeping",lvl:4s}]}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 200
+      | Price Multiplier: 0.0
+      ali:item minecraft:diamond_sword x1 {Damage:0}
+      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:fire_aspect",lvl:2s}]}
+      ali:item minecraft:diamond_sword x1 {Damage:0,Enchantments:[{id:"minecraft:fire_aspect",lvl:3s}]}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 200
+      | Price Multiplier: 0.0
+      ali:item minecraft:diamond_sword x1 {Damage:0}
+      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:knockback",lvl:2s}]}
+      ali:item minecraft:diamond_sword x1 {Damage:0,Enchantments:[{id:"minecraft:knockback",lvl:3s}]}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 200
+      | Price Multiplier: 0.0
+      ali:item minecraft:diamond_sword x1 {Damage:0}
+      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:bane_of_arthropods",lvl:5s}]}
+      ali:item minecraft:diamond_sword x1 {Damage:0,Enchantments:[{id:"minecraft:bane_of_arthropods",lvl:6s}]}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 200
+      | Price Multiplier: 0.0
+      ali:item minecraft:diamond_sword x1 {Damage:0}
+      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:smite",lvl:5s}]}
+      ali:item minecraft:diamond_sword x1 {Damage:0,Enchantments:[{id:"minecraft:smite",lvl:6s}]}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 200
+      | Price Multiplier: 0.0
+      ali:item minecraft:diamond_helmet x1 {Damage:0}
+      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:blast_protection",lvl:4s}]}
+      ali:item minecraft:diamond_helmet x1 {Damage:0,Enchantments:[{id:"minecraft:blast_protection",lvl:5s}]}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 200
+      | Price Multiplier: 0.0
+      ali:item minecraft:diamond_helmet x1 {Damage:0}
+      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:fire_protection",lvl:4s}]}
+      ali:item minecraft:diamond_helmet x1 {Damage:0,Enchantments:[{id:"minecraft:fire_protection",lvl:5s}]}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 200
+      | Price Multiplier: 0.0
+      ali:item minecraft:diamond_helmet x1 {Damage:0}
+      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:projectile_protection",lvl:4s}]}
+      ali:item minecraft:diamond_helmet x1 {Damage:0,Enchantments:[{id:"minecraft:projectile_protection",lvl:5s}]}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 200
+      | Price Multiplier: 0.0
+      ali:item minecraft:diamond_helmet x1 {Damage:0}
+      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:protection",lvl:4s}]}
+      ali:item minecraft:diamond_helmet x1 {Damage:0,Enchantments:[{id:"minecraft:protection",lvl:5s}]}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 200
+      | Price Multiplier: 0.0
+      ali:item minecraft:diamond_helmet x1 {Damage:0}
+      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:unbreaking",lvl:3s}]}
+      ali:item minecraft:diamond_helmet x1 {Damage:0,Enchantments:[{id:"minecraft:unbreaking",lvl:4s}]}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 200
+      | Price Multiplier: 0.0
+      ali:item minecraft:diamond_chestplate x1 {Damage:0}
+      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:blast_protection",lvl:4s}]}
+      ali:item minecraft:diamond_chestplate x1 {Damage:0,Enchantments:[{id:"minecraft:blast_protection",lvl:5s}]}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 200
+      | Price Multiplier: 0.0
+      ali:item minecraft:diamond_chestplate x1 {Damage:0}
+      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:fire_protection",lvl:4s}]}
+      ali:item minecraft:diamond_chestplate x1 {Damage:0,Enchantments:[{id:"minecraft:fire_protection",lvl:5s}]}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 200
+      | Price Multiplier: 0.0
+      ali:item minecraft:diamond_chestplate x1 {Damage:0}
+      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:projectile_protection",lvl:4s}]}
+      ali:item minecraft:diamond_chestplate x1 {Damage:0,Enchantments:[{id:"minecraft:projectile_protection",lvl:5s}]}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 200
+      | Price Multiplier: 0.0
+      ali:item minecraft:diamond_chestplate x1 {Damage:0}
+      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:protection",lvl:4s}]}
+      ali:item minecraft:diamond_chestplate x1 {Damage:0,Enchantments:[{id:"minecraft:protection",lvl:5s}]}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 200
+      | Price Multiplier: 0.0
+      ali:item minecraft:diamond_chestplate x1 {Damage:0}
+      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:unbreaking",lvl:3s}]}
+      ali:item minecraft:diamond_chestplate x1 {Damage:0,Enchantments:[{id:"minecraft:unbreaking",lvl:4s}]}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 200
+      | Price Multiplier: 0.0
+      ali:item minecraft:diamond_leggings x1 {Damage:0}
+      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:blast_protection",lvl:4s}]}
+      ali:item minecraft:diamond_leggings x1 {Damage:0,Enchantments:[{id:"minecraft:blast_protection",lvl:5s}]}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 200
+      | Price Multiplier: 0.0
+      ali:item minecraft:diamond_leggings x1 {Damage:0}
+      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:fire_protection",lvl:4s}]}
+      ali:item minecraft:diamond_leggings x1 {Damage:0,Enchantments:[{id:"minecraft:fire_protection",lvl:5s}]}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 200
+      | Price Multiplier: 0.0
+      ali:item minecraft:diamond_leggings x1 {Damage:0}
+      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:projectile_protection",lvl:4s}]}
+      ali:item minecraft:diamond_leggings x1 {Damage:0,Enchantments:[{id:"minecraft:projectile_protection",lvl:5s}]}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 200
+      | Price Multiplier: 0.0
+      ali:item minecraft:diamond_leggings x1 {Damage:0}
+      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:protection",lvl:4s}]}
+      ali:item minecraft:diamond_leggings x1 {Damage:0,Enchantments:[{id:"minecraft:protection",lvl:5s}]}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 200
+      | Price Multiplier: 0.0
+      ali:item minecraft:diamond_leggings x1 {Damage:0}
+      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:unbreaking",lvl:3s}]}
+      ali:item minecraft:diamond_leggings x1 {Damage:0,Enchantments:[{id:"minecraft:unbreaking",lvl:4s}]}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 200
+      | Price Multiplier: 0.0
+      ali:item minecraft:diamond_boots x1 {Damage:0}
+      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:blast_protection",lvl:4s}]}
+      ali:item minecraft:diamond_boots x1 {Damage:0,Enchantments:[{id:"minecraft:blast_protection",lvl:5s}]}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 200
+      | Price Multiplier: 0.0
+      ali:item minecraft:diamond_boots x1 {Damage:0}
+      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:fire_protection",lvl:4s}]}
+      ali:item minecraft:diamond_boots x1 {Damage:0,Enchantments:[{id:"minecraft:fire_protection",lvl:5s}]}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 200
+      | Price Multiplier: 0.0
+      ali:item minecraft:diamond_boots x1 {Damage:0}
+      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:projectile_protection",lvl:4s}]}
+      ali:item minecraft:diamond_boots x1 {Damage:0,Enchantments:[{id:"minecraft:projectile_protection",lvl:5s}]}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 200
+      | Price Multiplier: 0.0
+      ali:item minecraft:diamond_boots x1 {Damage:0}
+      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:protection",lvl:4s}]}
+      ali:item minecraft:diamond_boots x1 {Damage:0,Enchantments:[{id:"minecraft:protection",lvl:5s}]}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 200
+      | Price Multiplier: 0.0
+      ali:item minecraft:diamond_boots x1 {Damage:0}
+      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:unbreaking",lvl:3s}]}
+      ali:item minecraft:diamond_boots x1 {Damage:0,Enchantments:[{id:"minecraft:unbreaking",lvl:4s}]}
+    ali:items_to_items
+      | Uses: 8
+      | XP: 100
+      | Price Multiplier: 0.5
+      ali:item minecraft:emerald x15
+      ali:item minecraft:potion x1 {Potion:"minecraft:awkward"}
+      ali:item minecraft:potion x1 {Potion:"goblintraders:extended_night_vision"}
+    ali:items_to_items
+      | Uses: 8
+      | XP: 100
+      | Price Multiplier: 0.5
+      ali:item minecraft:emerald x15
+      ali:item minecraft:potion x1 {Potion:"minecraft:awkward"}
+      ali:item minecraft:potion x1 {Potion:"goblintraders:extended_invisibility"}
+    ali:items_to_items
+      | Uses: 8
+      | XP: 100
+      | Price Multiplier: 0.5
+      ali:item minecraft:emerald x15
+      ali:item minecraft:potion x1 {Potion:"minecraft:awkward"}
+      ali:item minecraft:potion x1 {Potion:"goblintraders:powerful_jump_boost"}
+    ali:items_to_items
+      | Uses: 8
+      | XP: 100
+      | Price Multiplier: 0.5
+      ali:item minecraft:emerald x15
+      ali:item minecraft:potion x1 {Potion:"minecraft:awkward"}
+      ali:item minecraft:potion x1 {Potion:"goblintraders:extended_fire_resistance"}
+    ali:items_to_items
+      | Uses: 8
+      | XP: 100
+      | Price Multiplier: 0.5
+      ali:item minecraft:emerald x15
+      ali:item minecraft:potion x1 {Potion:"minecraft:awkward"}
+      ali:item minecraft:potion x1 {Potion:"goblintraders:powerful_speed"}
+    ali:items_to_items
+      | Uses: 8
+      | XP: 100
+      | Price Multiplier: 0.5
+      ali:item minecraft:emerald x15
+      ali:item minecraft:potion x1 {Potion:"minecraft:awkward"}
+      ali:item minecraft:potion x1 {Potion:"goblintraders:extended_water_breathing"}
+    ali:items_to_items
+      | Uses: 8
+      | XP: 100
+      | Price Multiplier: 0.5
+      ali:item minecraft:emerald x15
+      ali:item minecraft:potion x1 {Potion:"minecraft:awkward"}
+      ali:item minecraft:potion x1 {Potion:"goblintraders:powerful_instant_health"}
+    ali:items_to_items
+      | Uses: 8
+      | XP: 100
+      | Price Multiplier: 0.5
+      ali:item minecraft:emerald x15
+      ali:item minecraft:potion x1 {Potion:"minecraft:awkward"}
+      ali:item minecraft:potion x1 {Potion:"goblintraders:powerful_regeneration"}
+    ali:items_to_items
+      | Uses: 8
+      | XP: 100
+      | Price Multiplier: 0.5
+      ali:item minecraft:emerald x15
+      ali:item minecraft:potion x1 {Potion:"minecraft:awkward"}
+      ali:item minecraft:potion x1 {Potion:"goblintraders:extended_slow_falling"}
+  ali:trade_level
+    | Level: 4
+    | Randomly Selects 0 to 2 Of These Trades
+    ali:items_to_items
+      | Uses: 4
+      | XP: 100
+      | Price Multiplier: 0.5
+      ali:item minecraft:emerald x25
+      ali:item minecraft:potion x1 {Potion:"minecraft:awkward"}
+      ali:item minecraft:potion x1 {Potion:"goblintraders:haste"}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 100
+      | Price Multiplier: 0.5
+      ali:item minecraft:emerald x25
+      ali:item minecraft:potion x1 {Potion:"minecraft:awkward"}
+      ali:item minecraft:potion x1 {Potion:"goblintraders:absorption"}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 100
+      | Price Multiplier: 0.5
+      ali:item minecraft:emerald x25
+      ali:item minecraft:potion x1 {Potion:"minecraft:awkward"}
+      ali:item minecraft:potion x1 {Potion:"goblintraders:levitation"}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 100
+      | Price Multiplier: 0.5
+      ali:item minecraft:emerald x25
+      ali:item minecraft:potion x1 {Potion:"minecraft:awkward"}
+      ali:item minecraft:potion x1 {Potion:"goblintraders:luck"}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 100
+      | Price Multiplier: 0.5
+      ali:item minecraft:emerald x25
+      ali:item minecraft:potion x1 {Potion:"minecraft:awkward"}
+      ali:item minecraft:potion x1 {Potion:"goblintraders:dolphins_grace"}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 100
+      | Price Multiplier: 0.5
+      ali:item minecraft:emerald x25
+      ali:item minecraft:potion x1 {Potion:"minecraft:awkward"}
+      ali:item minecraft:potion x1 {Potion:"goblintraders:powerful_strength"}
+  ali:trade_level
+    | Level: 5
+    | Randomly Selects 1 Of These Trades
+    | Chance: 75%
+    ali:items_to_items
+      | Uses: 1
+      | XP: 1000
+      | Price Multiplier: 0.0
+      ali:item minecraft:dragon_head x5
+      ali:item minecraft:diamond_sword x1 {Damage:0}
+      ali:item minecraft:diamond_sword x1 {Damage:0,Enchantments:[{id:"minecraft:sharpness",lvl:7s},{id:"minecraft:unbreaking",lvl:7s}]}

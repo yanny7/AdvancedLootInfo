@@ -1,0 +1,45 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:emerald x1
+      | Chance: 13.33%
+      | Count: 1
+    ali:item minecraft:coal x1
+      | Chance: 13.33%
+      | Count: 1
+    ali:item minecraft:gold_nugget x1
+      | Chance: 13.33%
+      | Count: 1
+    ali:item minecraft:angler_pottery_sherd x1
+      | Chance: 6.67%
+      | Count: 1
+    ali:item minecraft:shelter_pottery_sherd x1
+      | Chance: 6.67%
+      | Count: 1
+    ali:item minecraft:snort_pottery_sherd x1
+      | Chance: 6.67%
+      | Count: 1
+    ali:item minecraft:sniffer_egg x1
+      | Chance: 6.67%
+      | Count: 1
+    ali:item minecraft:iron_axe x1 {Damage:0}
+      | Chance: 6.67%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: U[10%; 70%)
+      |   -> Add: False
+    ali:item minecraft:poisonous_potato x1
+      | Chance: 6.67%
+      | Count: 1
+    ali:item minecraft:potato x1
+      | Chance: 6.67%
+      | Count: 1
+    ali:item minecraft:bucket x1
+      | Chance: 6.67%
+      | Count: 1
+    ali:item minecraft:bowl x1
+      | Chance: 6.67%
+      | Count: 1

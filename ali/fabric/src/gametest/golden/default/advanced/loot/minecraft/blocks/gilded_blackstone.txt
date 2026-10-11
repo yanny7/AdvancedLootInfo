@@ -1,0 +1,40 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item minecraft:gilded_blackstone x1
+        | Count: 1
+        | ----- Predicates -----
+        | Match Tool:
+        |   -> Enchantments:
+        |     -> Enchantment: Silk Touch
+        |     -> Level: ≥ 1
+      ali:alternatives
+        | Selects only first successful entry
+        ali:item minecraft:gold_nugget x2-5
+          | Chance: 10%
+          |   -> Fortune LVL: [10%; 14.29%; 25%; 100%][min(LVL; 3)]
+          |   -> Fortune I: 14.29%
+          |   -> Fortune II: 25%
+          |   -> Fortune III: 100%
+          | Count: max(0; U[2; 5])
+          | ----- Predicates -----
+          | Survives Explosion
+          | Table Bonus:
+          |   -> Enchantment: Fortune
+          |   -> Values: 10%
+          |     -> Fortune LVL: [10%; 14.29%; 25%; 100%][min(LVL; 3)]
+          |     -> Fortune I: 14.29%
+          |     -> Fortune II: 25%
+          |     -> Fortune III: 100%
+          | ----- Modifiers -----
+          | Set Count:
+          |   -> Count: 2 to 5
+          |   -> Add: False
+        ali:item minecraft:gilded_blackstone x1
+          | Count: 1
+          | ----- Predicates -----
+          | Survives Explosion

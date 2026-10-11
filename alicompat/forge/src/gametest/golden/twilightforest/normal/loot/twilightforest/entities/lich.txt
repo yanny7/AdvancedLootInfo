@@ -1,0 +1,84 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item twilightforest:twilight_scepter x1 {Damage:0}
+      | Chance: 25%
+      | Count: 1
+    ali:item twilightforest:lifedrain_scepter x1 {Damage:0}
+      | Chance: 25%
+      | Count: 1
+    ali:item twilightforest:zombie_scepter x1 {Damage:0}
+      | Chance: 25%
+      | Count: 1
+    ali:item twilightforest:fortification_scepter x1 {Damage:0}
+      | Chance: 25%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 4
+    ali:item minecraft:golden_sword x1 {Damage:0}
+      | Chance: 20%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 10 to 40
+      |   -> Treasure: False
+    ali:item minecraft:golden_helmet x1 {Damage:0}
+      | Chance: 20%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 10 to 40
+      |   -> Treasure: False
+    ali:item minecraft:golden_chestplate x1 {Damage:0}
+      | Chance: 20%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 10 to 40
+      |   -> Treasure: False
+    ali:item minecraft:golden_leggings x1 {Damage:0}
+      | Chance: 20%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 10 to 40
+      |   -> Treasure: False
+    ali:item minecraft:golden_boots x1 {Damage:0}
+      | Chance: 20%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 10 to 40
+      |   -> Treasure: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:ender_pearl x1-7
+      | Count: 1 to 4
+      |   -> Looting I: 1 to 5  ~2 to 4 (25%)
+      |   -> Looting II: 1 to 6  ~3 to 4 (25%)
+      |   -> Looting III: 1 to 7  ~4 (25%)
+      |   [chart 0..3 1-4 base=true modes=[false, false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,1.0000,0.0000,0.0000,0.0000 | 0..4 1-5 base=false modes=[false, true, true, true, false, false, false] heights=0.5000,1.0000,1.0000,1.0000,0.5000,0.0000,0.0000 | 0..5 1-6 base=false modes=[false, false, true, true, false, false, false] heights=0.2500,0.7500,1.0000,1.0000,0.7500,0.2500,0.0000 | 0..6 1-7 base=false modes=[false, false, false, true, false, false, false] heights=0.1667,0.5000,0.8333,1.0000,0.8333,0.5000,0.1667]
+      | ----- Modifiers -----
+      | Looting Enchant:
+      |   -> Value: 0 to 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:bone x5-12
+      | Count: 5 to 9
+      |   -> Looting I: 5 to 10  ~6 to 9 (20%)
+      |   -> Looting II: 5 to 11  ~7 to 9 (20%)
+      |   -> Looting III: 5 to 12  ~8 to 9 (20%)
+      |   [chart 0..4 5-9 base=true modes=[false, false, false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,1.0000,1.0000,0.0000,0.0000,0.0000 | 0..5 5-10 base=false modes=[false, true, true, true, true, false, false, false] heights=0.5000,1.0000,1.0000,1.0000,1.0000,0.5000,0.0000,0.0000 | 0..6 5-11 base=false modes=[false, false, true, true, true, false, false, false] heights=0.2500,0.7500,1.0000,1.0000,1.0000,0.7500,0.2500,0.0000 | 0..7 5-12 base=false modes=[false, false, false, true, true, false, false, false] heights=0.1667,0.5000,0.8333,1.0000,1.0000,0.8333,0.5000,0.1667]
+      | ----- Modifiers -----
+      | Looting Enchant:
+      |   -> Value: 0 to 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item twilightforest:lich_trophy x1
+      | Count: 1

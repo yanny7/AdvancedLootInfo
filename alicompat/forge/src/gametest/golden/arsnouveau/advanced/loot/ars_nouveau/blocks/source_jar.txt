@@ -1,0 +1,21 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item ars_nouveau:source_jar x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Copy Name:
+      |   -> Source: Block Entity
+      | Copy Nbt:
+      |   -> Nbt Provider: minecraft:context
+      |   -> Operations:
+      |     -> Source: source
+      |     -> Target: BlockEntityTag.source
+      |     -> Merge Strategy: Replace
+      | Set Contents:
+      |   -> Block Entity Type: ars_nouveau:source_jar
+      |   -> Entries:
+      |     -> Dynamic:
+      |       -> Name: minecraft:contents

@@ -1,0 +1,28 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item aether:crystal_leaves x1
+        | Count: 1
+        | ----- Predicates -----
+        | Any Of:
+        |   -> Match Tool:
+        |     -> Tag: Shears
+        |   -> Match Tool:
+        |     -> Enchantments:
+        |       -> Enchantment: Silk Touch
+        |       -> Level: ≥ 1
+        | ----- Modifiers -----
+        | Double Drops
+      ali:item aether:skyroot_stick x1-2
+        | Chance: 2%
+        |   -> Fortune I: 2.22%
+        |   -> Fortune II: 2.5%
+        |   -> Fortune III: 3.33%
+        | Count: 1 to 2
+        | ----- Modifiers -----
+        | Double Drops
+        | Explosion Decay

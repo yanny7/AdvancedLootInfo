@@ -1,0 +1,47 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 9
+    ali:item ad_astra:desh_ingot x2-6
+      | Chance: 28.57%
+      | Count: 2 to 6
+    ali:item minecraft:coal x3-6
+      | Chance: 28.57%
+      | Count: 3 to 6
+    ali:item minecraft:emerald x2-4
+      | Chance: 14.29%
+      | Count: 2 to 4
+    ali:item minecraft:redstone x2-5
+      | Chance: 14.29%
+      | Count: 2 to 5
+    ali:item minecraft:diamond x1-2
+      | Chance: 8.57%
+      | Count: 1 to 2
+    ali:item ad_astra:launch_pad x1
+      | Chance: 5.71%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 2
+    ali:item minecraft:bucket x1
+      | Chance: 25%
+      | Count: 1
+    ali:item ad_astra:fuel_bucket x1
+      | Chance: 12.5%
+      | Count: 1
+    ali:item ad_astra:gas_tank x1
+      | Chance: 12.5%
+      | Count: 1
+    ali:item ad_astra:space_helmet x1 {Damage:0}
+      | Chance: 12.5%
+      | Count: 1
+    ali:item ad_astra:space_suit x1 {Damage:0}
+      | Chance: 12.5%
+      | Count: 1
+    ali:item ad_astra:space_pants x1 {Damage:0}
+      | Chance: 12.5%
+      | Count: 1
+    ali:item ad_astra:space_boots x1 {Damage:0}
+      | Chance: 12.5%
+      | Count: 1

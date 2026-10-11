@@ -1,0 +1,119 @@
+{
+  "_comment": "A complete profession across all five levels, showing how the trade types combine in one real file. Drop this into data/villagersplus/default_villager_trades/butcher.json to replace the vanilla butcher, or into data/villagersplus/villager_trades/butcher.json to add these on top of the vanilla ones. The README documents each type on its own; this file shows what a finished profession looks like.",
+  "profession": "minecraft:butcher",
+  "trades": {
+    "novice": [
+      {
+        "type": "villagertradingplus:buy_item",
+        "buy": { "item": "minecraft:chicken", "count": 14 },
+        "reward": { "item": "minecraft:emerald", "count": 1 },
+        "max_uses": 16,
+        "villager_experience": 2
+      },
+      {
+        "_comment": "One random member of the tag per generated offer, so no two butchers sell the same thing.",
+        "type": "villagertradingplus:sell_tagged_item",
+        "sell": { "tag": "minecraft:saplings", "count": 1 },
+        "priceIn": { "item": "minecraft:emerald", "count": 1 },
+        "max_uses": 16,
+        "villager_experience": 1
+      }
+    ],
+    "apprentice": [
+      {
+        "_comment": "A weighted pool: the common option is picked ten times as often as the rare one.",
+        "type": "villagertradingplus:weighted_pool",
+        "pool": [
+          {
+            "weight": 10,
+            "trade": {
+              "type": "villagertradingplus:sell_item",
+              "sell": { "item": "minecraft:cooked_porkchop", "count": 5 },
+              "priceIn": { "item": "minecraft:emerald", "count": 1 },
+              "max_uses": 16,
+              "villager_experience": 5
+            }
+          },
+          {
+            "weight": 1,
+            "trade": {
+              "type": "villagertradingplus:sell_item",
+              "sell": { "item": "minecraft:golden_carrot", "count": 3 },
+              "priceIn": { "item": "minecraft:emerald", "count": 4 },
+              "max_uses": 8,
+              "villager_experience": 5
+            }
+          }
+        ]
+      },
+      {
+        "type": "villagertradingplus:process_item",
+        "sell": { "item": "minecraft:cooked_beef", "count": 1 },
+        "convertible": { "item": "minecraft:beef", "count": 1 },
+        "priceIn": { "item": "minecraft:emerald", "count": 1 },
+        "max_uses": 16,
+        "villager_experience": 5
+      }
+    ],
+    "journeyman": [
+      {
+        "_comment": "Two inputs and one output. Vanilla has exactly two buy slots, so one of the inputs IS the currency.",
+        "type": "villagertradingplus:multi_input",
+        "input_a": { "item": "minecraft:emerald", "count": 3 },
+        "input_b": { "item": "minecraft:leather", "count": 4 },
+        "sell": { "item": "minecraft:saddle", "count": 1 },
+        "max_uses": 6,
+        "villager_experience": 10
+      },
+      {
+        "_comment": "Only offered while it is raining at the moment the villager levels up.",
+        "type": "villagertradingplus:sell_item",
+        "sell": { "item": "minecraft:rabbit_stew", "count": 1 },
+        "priceIn": { "item": "minecraft:emerald", "count": 2 },
+        "conditions": [
+          { "type": "weather", "state": "rain" }
+        ],
+        "max_uses": 8,
+        "villager_experience": 10
+      }
+    ],
+    "expert": [
+      {
+        "_comment": "A guaranteed enchantment at a fixed level, unlike sell_enchanted_tool which rolls randomly.",
+        "type": "villagertradingplus:sell_specific_enchanted_tool",
+        "sell": { "item": "minecraft:iron_axe", "count": 1 },
+        "basePriceIn": { "item": "minecraft:emerald", "count": 12 },
+        "enchantment": "minecraft:sharpness",
+        "level": 2,
+        "max_uses": 3,
+        "villager_experience": 15
+      },
+      {
+        "_comment": "demand seeds vanilla's demand pricing: the price climbs as players use the trade and decays again over time.",
+        "type": "villagertradingplus:buy_item",
+        "buy": { "item": "minecraft:sweet_berries", "count": 10 },
+        "reward": { "item": "minecraft:emerald", "count": 1 },
+        "price_multiplier": 0.05,
+        "demand": 5,
+        "max_uses": 12,
+        "villager_experience": 15
+      }
+    ],
+    "master": [
+      {
+        "_comment": "A named, enchanted, unbreakable item. Any trade type accepts this NBT sugar - no special type needed.",
+        "type": "villagertradingplus:sell_item",
+        "sell": {
+          "item": "minecraft:iron_sword",
+          "name": "{\"text\":\"Butcher's Cleaver\",\"color\":\"red\",\"italic\":false}",
+          "lore": [ "Sharpened on the block" ],
+          "enchantments": [ { "id": "minecraft:looting", "lvl": 3 } ],
+          "nbt": "{Unbreakable:1b}"
+        },
+        "priceIn": { "item": "minecraft:emerald", "count": 30 },
+        "max_uses": 2,
+        "villager_experience": 30
+      }
+    ]
+  }
+}

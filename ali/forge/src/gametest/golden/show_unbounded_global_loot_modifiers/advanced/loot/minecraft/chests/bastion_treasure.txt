@@ -1,0 +1,188 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3
+    ali:item minecraft:netherite_ingot x1
+      | Chance: 15%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:ancient_debris x1
+      | Chance: 10%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:netherite_scrap x1
+      | Chance: 8%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:diamond_sword x1 {Damage:0}
+      | Chance: 6%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: U[80%; 100%)
+      |   -> Add: False
+      | Enchant Randomly:
+    ali:item minecraft:diamond_chestplate x1 {Damage:0}
+      | Chance: 6%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: U[80%; 100%)
+      |   -> Add: False
+      | Enchant Randomly:
+    ali:item minecraft:diamond_helmet x1 {Damage:0}
+      | Chance: 6%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: U[80%; 100%)
+      |   -> Add: False
+      | Enchant Randomly:
+    ali:item minecraft:diamond_leggings x1 {Damage:0}
+      | Chance: 6%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: U[80%; 100%)
+      |   -> Add: False
+      | Enchant Randomly:
+    ali:item minecraft:diamond_boots x1 {Damage:0}
+      | Chance: 6%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: U[80%; 100%)
+      |   -> Add: False
+      | Enchant Randomly:
+    ali:item minecraft:diamond_sword x1 {Damage:0}
+      | Chance: 6%
+      | Count: 1
+    ali:item minecraft:diamond_chestplate x1 {Damage:0}
+      | Chance: 5%
+      | Count: 1
+    ali:item minecraft:diamond_helmet x1 {Damage:0}
+      | Chance: 5%
+      | Count: 1
+    ali:item minecraft:diamond_boots x1 {Damage:0}
+      | Chance: 5%
+      | Count: 1
+    ali:item minecraft:diamond_leggings x1 {Damage:0}
+      | Chance: 5%
+      | Count: 1
+    ali:item minecraft:diamond x2-6
+      | Chance: 5%
+      | Count: max(0; U[2; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 6
+      |   -> Add: False
+    ali:item minecraft:ancient_debris x2
+      | Chance: 4%
+      | Count: 2
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2
+      |   -> Add: False
+    ali:item minecraft:enchanted_golden_apple x1
+      | Chance: 2%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 4
+    ali:item minecraft:spectral_arrow x12-25
+      | Chance: 11.11%
+      | Count: max(0; U[12; 25])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 12 to 25
+      |   -> Add: False
+    ali:item minecraft:gold_block x2-5
+      | Chance: 11.11%
+      | Count: max(0; U[2; 5])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 5
+      |   -> Add: False
+    ali:item minecraft:iron_block x2-5
+      | Chance: 11.11%
+      | Count: max(0; U[2; 5])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 5
+      |   -> Add: False
+    ali:item minecraft:gold_ingot x3-9
+      | Chance: 11.11%
+      | Count: max(0; U[3; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 3 to 9
+      |   -> Add: False
+    ali:item minecraft:iron_ingot x3-9
+      | Chance: 11.11%
+      | Count: max(0; U[3; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 3 to 9
+      |   -> Add: False
+    ali:item minecraft:crying_obsidian x3-5
+      | Chance: 11.11%
+      | Count: max(0; U[3; 5])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 3 to 5
+      |   -> Add: False
+    ali:item minecraft:quartz x8-23
+      | Chance: 11.11%
+      | Count: max(0; U[8; 23])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 8 to 23
+      |   -> Add: False
+    ali:item minecraft:gilded_blackstone x5-15
+      | Chance: 11.11%
+      | Count: max(0; U[5; 15])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 15
+      |   -> Add: False
+    ali:item minecraft:magma_cream x3-8
+      | Chance: 11.11%
+      | Count: max(0; U[3; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 3 to 8
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 91.67%
+    ali:item minecraft:snout_armor_trim_smithing_template x1
+      | Chance: 8.33%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:netherite_upgrade_smithing_template x1
+      | Count: 1
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1
+    | ----- Predicates -----
+    | Random Chance:
+    |   -> Probability: 0.01

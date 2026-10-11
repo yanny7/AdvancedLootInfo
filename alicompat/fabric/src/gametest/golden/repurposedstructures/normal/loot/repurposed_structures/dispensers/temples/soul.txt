@@ -1,0 +1,14 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 3
+    ali:item minecraft:tipped_arrow x5-9 {Potion:"minecraft:long_slowness"}
+      | Chance: 60%
+      | Count: 5 to 9
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {Potion:"minecraft:long_slowness"}
+    ali:item minecraft:fire_charge x1-3
+      | Chance: 40%
+      | Count: 1 to 3

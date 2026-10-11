@@ -1,0 +1,53 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 5
+    ali:item minecraft:white_wool x1-8
+      | Chance: 26.09%
+      | Count: max(0; U[1; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 8
+      |   -> Add: False
+    ali:item minecraft:wheat x1-6
+      | Chance: 26.09%
+      | Count: max(0; U[1; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 6
+      |   -> Add: False
+    ali:item minecraft:black_wool x1-3
+      | Chance: 13.04%
+      | Count: max(0; U[1; 3])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 3
+      |   -> Add: False
+    ali:item minecraft:gray_wool x1-3
+      | Chance: 8.7%
+      | Count: max(0; U[1; 3])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 3
+      |   -> Add: False
+    ali:item minecraft:brown_wool x1-3
+      | Chance: 8.7%
+      | Count: max(0; U[1; 3])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 3
+      |   -> Add: False
+    ali:item minecraft:light_gray_wool x1-3
+      | Chance: 8.7%
+      | Count: max(0; U[1; 3])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 3
+      |   -> Add: False
+    ali:item minecraft:emerald x1
+      | Chance: 4.35%
+      | Count: 1
+    ali:item minecraft:shears x1 {Damage:0}
+      | Chance: 4.35%
+      | Count: 1

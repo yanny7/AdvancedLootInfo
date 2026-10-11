@@ -40,14 +40,17 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Statically discovers the blocks and block tags a {@link Feature} places directly in its {@code place()} method,
@@ -259,7 +262,19 @@ public final class FeatureBytecodeScanner {
         tags.addAll(guarded.tags());
         conditionalBlocks.removeAll(unguarded.blocks());
 
-        return new ScanResult(blocks, conditionalBlocks, tags, analyzed, truncated);
+        return new ScanResult(sortBlocks(blocks), sortBlocks(conditionalBlocks), sortTags(tags), analyzed, truncated);
+    }
+
+    private static Set<Block> sortBlocks(Set<Block> blocks) {
+        return blocks.stream()
+                .sorted(Comparator.comparing((block) -> BuiltInRegistries.BLOCK.getKey(block).toString()))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    private static Set<TagKey<Block>> sortTags(Set<TagKey<Block>> tags) {
+        return tags.stream()
+                .sorted(Comparator.comparing((tag) -> tag.location().toString()))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     private void analyzeMethod(ClassLoader cl, ClassNode owner, MethodNode method, Candidates guarded, Candidates unguarded,

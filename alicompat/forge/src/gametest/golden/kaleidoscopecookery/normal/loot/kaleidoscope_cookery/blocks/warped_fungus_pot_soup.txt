@@ -1,0 +1,19 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item kaleidoscope_cookery:warped_fungus_pot_soup x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion
+        | Block State Property:
+        |   -> Block: Warped Fungus Pot Soup
+        |   -> Properties:
+        |     -> bites: 0
+      ali:item minecraft:flower_pot x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion

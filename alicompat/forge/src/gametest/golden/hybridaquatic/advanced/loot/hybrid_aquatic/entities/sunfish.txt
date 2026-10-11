@@ -1,0 +1,13 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item hybrid_aquatic:sunfish x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Looting Enchant:
+      |   -> Value: 1
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False

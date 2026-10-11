@@ -1,0 +1,32 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item farmersdelight:flint_knife x1 {Damage:0}
+      | Chance: 33.33%
+      | Count: 1
+    ali:item farmersdelight:iron_knife x1 {Damage:0}
+      | Chance: 33.33%
+      | Count: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 33.33%
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 2
+    ali:item farmersdelight:minced_beef x2-6
+      | Chance: 27.27%
+      | Count: 2 to 6
+    ali:item farmersdelight:bacon x2-6
+      | Chance: 27.27%
+      | Count: 2 to 6
+    ali:item farmersdelight:mutton_chops x2-6
+      | Chance: 27.27%
+      | Count: 2 to 6
+    ali:item farmersdelight:ham x1
+      | Chance: 9.09%
+      | Count: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 9.09%

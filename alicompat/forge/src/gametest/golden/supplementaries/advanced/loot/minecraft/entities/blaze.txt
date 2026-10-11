@@ -1,0 +1,37 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:blaze_rod x0-4
+      | Count: max(0; U[0; 1])
+      |   -> Looting LVL: max(0; U[0; 1]) + round(LVL × U[0; 1))
+      |   -> Looting I: 0 to 2  ~1 (50%)
+      |   -> Looting II: 0 to 3  ~1 to 2 (38%)
+      |   -> Looting III: 0 to 4  ~2 (33%)
+      |   [chart 0..1 0-1 base=true modes=[false, false, false, false, false] heights=1.0000,1.0000,0.0000,0.0000,0.0000 | 0..2 0-2 base=false modes=[false, true, false, false, false] heights=0.5000,1.0000,0.5000,0.0000,0.0000 | 0..3 0-3 base=false modes=[false, true, true, false, false] heights=0.2500,0.7500,0.7500,0.2500,0.0000 | 0..4 0-4 base=false modes=[false, false, true, false, false] heights=0.1667,0.5000,0.6667,0.5000,0.1667]
+      | ----- Predicates -----
+      | Killed by player
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 0 to 1
+      |   -> Add: False
+      | Looting Enchant:
+      |   -> Value: U[0; 1)
+  ali:item supplementaries:ash x1
+    | Chance: 15%
+    | Count: 1
+    | ----- Predicates -----
+    | Random Chance:
+    |   -> Probability: 0.15
+    | Inverted:
+    |   -> Entity Properties:
+    |     -> Target: This Entity
+    |     -> Predicate:
+    |       -> Entity Types:
+    |         -> Tag: supplementaries:ash_blacklist
+    | Entity Properties:
+    |   -> Target: This Entity
+    |   -> Predicate:
+    |     -> Entity Flags:
+    |       -> Is On Fire: True

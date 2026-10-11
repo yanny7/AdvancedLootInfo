@@ -1,0 +1,7 @@
+ali:loot_table
+  | Selects all entries
+  ali:item rats:tiny_coin x1
+    | Count: 1
+    | ----- Predicates -----
+    | Killer Rat Has Upgrade:
+    |   -> Item: Rat Upgrade: Aristoc-RAT

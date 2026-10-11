@@ -1,0 +1,9 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4
+    ali:item irons_spellbooks:blank_rune x1
+      | Count: 1
+      | ----- Predicates -----
+      | Killed by player

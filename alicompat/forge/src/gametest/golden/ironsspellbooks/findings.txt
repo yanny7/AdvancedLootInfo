@@ -1,0 +1,2 @@
+advanced/loot/irons_spellbooks/chests/citadel/citadel_bookshelf.txt
+  ali:missing

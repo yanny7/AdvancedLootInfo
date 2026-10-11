@@ -1,0 +1,7 @@
+ali:loot_table
+  | Selects all entries
+  ali:item farmersdelight:cake_slice x1-7
+    | Count: 1 to 7
+    | ----- Predicates -----
+    | Match Tool:
+    |   -> Tag: Knives

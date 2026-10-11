@@ -1,0 +1,36 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item farmersdelight:rice x1
+        | Count: 1
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Rice Panicles
+        |   -> Properties:
+        |     -> age: 3
+        | Match Tool:
+        |   -> Tag: Knives
+        | ----- Modifiers -----
+        | Explosion Decay
+      ali:item farmersdelight:rice_panicle x1
+        | Count: 1
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Rice Panicles
+        |   -> Properties:
+        |     -> age: 3
+        | ----- Modifiers -----
+        | Explosion Decay
+  ali:item farmersdelight:straw x1
+    | Count: 1
+    | ----- Predicates -----
+    | Match Tool:
+    |   -> Tag: Straw Harvesters
+    | Block State Property:
+    |   -> Block: Rice Panicles
+    |   -> Properties:
+    |     -> age: 3

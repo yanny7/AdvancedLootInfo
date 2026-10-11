@@ -16,7 +16,7 @@ public class SophisticatedStorageTooltipTest {
         LootItemFunction function = CopyStorageDataFunction.builder().build();
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Copy Storage Data:"
+                "Copy Storage Data"
         ));
     }
 
@@ -25,7 +25,7 @@ public class SophisticatedStorageTooltipTest {
         LootItemFunction function = CopyStorageDataFunction.builder().when(ExplosionCondition.survivesExplosion()).build();
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Copy Storage Data:",
+                "Copy Storage Data",
                 "  -> Predicates:",
                 "    -> Survives Explosion"
         ));

@@ -1,0 +1,37 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item grimoireofgaia:withered_brain x0-1
+      | Count: 0 to 1  ~1 (67%)
+      |   -> Looting I: 0 to 1  ~1 (83%)
+      |   -> Looting II: 0 to 1  ~1 (92%)
+      |   -> Looting III: 0 to 1  ~1 (94%)
+      |   [chart 0..1 0-1 base=true modes=[false, true] heights=0.3529,0.7059 | 0..1 0-1 base=false modes=[false, true] heights=0.1765,0.8824 | 0..1 0-1 base=false modes=[false, true] heights=0.0882,0.9706 | 0..1 0-1 base=false modes=[false, true] heights=0.0588,1.0000]
+      | ----- Modifiers -----
+      | Looting Enchant:
+      |   -> Value: 0 to 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:quartz x1
+      | Chance: 50%
+      | Count: 1
+    ali:item minecraft:glowstone_dust x1
+      | Chance: 50%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item #forge:nuggets/iron x0-3
+      | Count: 0 to 3
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item grimoireofgaia:box_nether x1
+      | Chance: 2.5%
+      |   -> Looting I: 3.5%
+      |   -> Looting II: 4.5%
+      |   -> Looting III: 5.5%
+      | Count: 1

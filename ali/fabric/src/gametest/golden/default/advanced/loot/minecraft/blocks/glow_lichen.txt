@@ -1,0 +1,87 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:glow_lichen x0-6
+      | Count: max(0; (max(0; (max(0; (max(0; (max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (max(0; (max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) − 1)
+      |   -> Block State Property:
+      |     -> Block: Glow Lichen
+      |     -> Properties:
+      |       -> down: true
+      |   -> Block State Property:
+      |     -> Block: Glow Lichen
+      |     -> Properties:
+      |       -> up: true
+      |   -> Block State Property:
+      |     -> Block: Glow Lichen
+      |     -> Properties:
+      |       -> north: true
+      |   -> Block State Property:
+      |     -> Block: Glow Lichen
+      |     -> Properties:
+      |       -> south: true
+      |   -> Block State Property:
+      |     -> Block: Glow Lichen
+      |     -> Properties:
+      |       -> west: true
+      |   -> Block State Property:
+      |     -> Block: Glow Lichen
+      |     -> Properties:
+      |       -> east: true
+      | ----- Predicates -----
+      | Match Tool:
+      |   -> Item: Shears
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: True
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Glow Lichen
+      |       -> Properties:
+      |         -> down: true
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: True
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Glow Lichen
+      |       -> Properties:
+      |         -> up: true
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: True
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Glow Lichen
+      |       -> Properties:
+      |         -> north: true
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: True
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Glow Lichen
+      |       -> Properties:
+      |         -> south: true
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: True
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Glow Lichen
+      |       -> Properties:
+      |         -> west: true
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: True
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Glow Lichen
+      |       -> Properties:
+      |         -> east: true
+      | Set Count:
+      |   -> Count: −1
+      |   -> Add: True
+      | Explosion Decay

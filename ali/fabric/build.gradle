@@ -7,8 +7,20 @@ architectury {
     fabric()
 }
 
+sourceSets {
+    gametest {
+        java.srcDir project(":aci:common").file("src/gametest/java")
+        resources.srcDir project(":aci:common").file("src/gametest/resources")
+        java.srcDir project(":ali:common").file("src/gametest/java")
+        resources.srcDir project(":ali:common").file("src/gametest/resources")
+        compileClasspath += sourceSets.main.compileClasspath + sourceSets.main.output
+        runtimeClasspath += sourceSets.main.runtimeClasspath + sourceSets.main.output
+    }
+}
+
 loom {
     accessWidenerPath = project(":ali:common").loom.accessWidenerPath
+    createRemapConfigurations(sourceSets.gametest)
 
     runs {
         datagen {
@@ -19,6 +31,30 @@ loom {
             vmArg "-Dfabric-api.datagen.modid=${ali_mod_id}"
 
             runDir "build/datagen"
+        }
+        gametest {
+            server()
+            name "Minecraft GameTest"
+            source sourceSets.gametest
+            vmArg "-Dfabric-api.gametest"
+            vmArg "-Dfabric-api.gametest.report-file=${project.file("build/gametest/report.xml")}"
+            vmArg "-Dali.golden.dir=${project.file("src/gametest/golden")}"
+            vmArg "-Dali.golden.actual=${project.file("build/gametest/golden")}"
+            vmArg "-Dali.golden.regenerate=${project.findProperty("ali_golden_regenerate") ?: false}"
+
+            runDir "build/gametest/run"
+        }
+    }
+}
+
+tasks.matching { it.name == "runGametest" }.configureEach {
+    timeout = java.time.Duration.ofMinutes(10)
+
+    doFirst {
+        delete "build/gametest/run/config", "build/gametest/run/kubejs"
+        copy {
+            from project(":ali:common").file("src/gametest/kubejs")
+            into "build/gametest/run/kubejs"
         }
     }
 }

@@ -1,0 +1,72 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:arms_up_pottery_sherd x1
+      | Chance: 25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Replace With Loot Table:
+      |   -> Loot Table: artifacts:inject/archaeology/desert_well
+      |   -> Predicates:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+    ali:item minecraft:brewer_pottery_sherd x1
+      | Chance: 25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Replace With Loot Table:
+      |   -> Loot Table: artifacts:inject/archaeology/desert_well
+      |   -> Predicates:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+    ali:item minecraft:brick x1
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Modifiers -----
+      | Replace With Loot Table:
+      |   -> Loot Table: artifacts:inject/archaeology/desert_well
+      |   -> Predicates:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+    ali:item minecraft:emerald x1
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Modifiers -----
+      | Replace With Loot Table:
+      |   -> Loot Table: artifacts:inject/archaeology/desert_well
+      |   -> Predicates:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+    ali:item minecraft:stick x1
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Modifiers -----
+      | Replace With Loot Table:
+      |   -> Loot Table: artifacts:inject/archaeology/desert_well
+      |   -> Predicates:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+    ali:item minecraft:suspicious_stew x1
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Modifiers -----
+      | Replace With Loot Table:
+      |   -> Loot Table: artifacts:inject/archaeology/desert_well
+      |   -> Predicates:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+      | Set Stew Effect:
+      |   -> Blindness
+      |     -> Duration: 5 to 7
+      |   -> Jump Boost
+      |     -> Duration: 7 to 10
+      |   -> Night Vision
+      |     -> Duration: 7 to 10
+      |   -> Poison
+      |     -> Duration: 10 to 20
+      |   -> Saturation
+      |     -> Duration: 7 to 10
+      |   -> Weakness
+      |     -> Duration: 6 to 8

@@ -1,0 +1,70 @@
+{
+  "_comment": "Conditions and pricing on realistic trades. Both work on EVERY trade type - they are extra fields, not types of their own. Timing matters: conditions are evaluated once, when the offer is generated as the villager levels up. Location conditions (biome, dimension, job_site_block, config_flag) are stable for a settled villager and therefore reliable. World-state conditions (weather, day_night, moon_phase, gamerule) are a snapshot of that moment - a trade gated on 'night' stays available in daylight once it has been rolled.",
+  "profession": "minecraft:fisherman",
+  "trades": {
+    "novice": [
+      {
+        "_comment": "Default logic is AND: both must hold. 'biome' takes either a 'tag' string for a biome tag, or a 'biomes' ARRAY of exact biome ids.",
+        "type": "villagertradingplus:sell_item",
+        "sell": { "item": "minecraft:heart_of_the_sea", "count": 1 },
+        "priceIn": { "item": "minecraft:emerald", "count": 30 },
+        "conditions": [
+          { "type": "biome", "tag": "minecraft:is_ocean" },
+          { "type": "dimension", "dimension": "minecraft:overworld" }
+        ],
+        "max_uses": 1,
+        "villager_experience": 2
+      },
+      {
+        "_comment": "\"logic\": \"or\" flips the block to 'any of these'.",
+        "type": "villagertradingplus:sell_item",
+        "sell": { "item": "minecraft:prismarine_crystals", "count": 4 },
+        "priceIn": { "item": "minecraft:emerald", "count": 2 },
+        "logic": "or",
+        "conditions": [
+          { "type": "weather", "state": "rain" },
+          { "type": "weather", "state": "thunder" }
+        ],
+        "max_uses": 12,
+        "villager_experience": 2
+      }
+    ],
+    "apprentice": [
+      {
+        "_comment": "config_flag reads a boolean from the VillagersPlus config, gamerule reads a world gamerule. Both let a datapack react to how the server is set up.",
+        "type": "villagertradingplus:sell_item",
+        "sell": { "item": "minecraft:tropical_fish", "count": 1 },
+        "priceIn": { "item": "minecraft:emerald", "count": 1 },
+        "conditions": [
+          { "type": "moon_phase", "phases": [0] },
+          { "type": "gamerule", "rule": "doInsomnia", "value": true }
+        ],
+        "max_uses": 6,
+        "villager_experience": 5
+      }
+    ],
+    "journeyman": [
+      {
+        "_comment": "Pricing. price_multiplier is vanilla's per-trade discount weight (how strongly reputation and Hero of the Village move the price). demand seeds vanilla's demand tracking: the price rises with use and decays over time. Both are scaled globally by trade_price_multiplier_scale and trade_cost_scale in the config; reputation and Hero of the Village discounts are applied by vanilla on top.",
+        "type": "villagertradingplus:sell_item",
+        "sell": { "item": "minecraft:nautilus_shell", "count": 1 },
+        "priceIn": { "item": "minecraft:emerald", "count": 12 },
+        "price_multiplier": 0.1,
+        "demand": 10,
+        "max_uses": 12,
+        "villager_experience": 10
+      },
+      {
+        "_comment": "job_site_block gates on the block the villager is employed at. Give it a 'blocks' ARRAY of block ids, or a 'wood_variant' string that is matched against the block id's path - that is how the flower tub's twelve wood types are told apart.",
+        "type": "villagertradingplus:sell_item",
+        "sell": { "item": "minecraft:sponge", "count": 1 },
+        "priceIn": { "item": "minecraft:emerald", "count": 8 },
+        "conditions": [
+          { "type": "job_site_block", "blocks": [ "villagertradingplus:oceanographer_table" ] }
+        ],
+        "max_uses": 4,
+        "villager_experience": 10
+      }
+    ]
+  }
+}
