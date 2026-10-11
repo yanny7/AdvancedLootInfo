@@ -1,0 +1,106 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:heart_of_the_sea x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 5 to 8
+    ali:item minecraft:iron_ingot x1-4
+      | Chance: 57.14%
+      | Count: max(0; U[1; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False
+    ali:item minecraft:gold_ingot x1-4
+      | Chance: 28.57%
+      | Count: max(0; U[1; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False
+    ali:item minecraft:tnt x1-2
+      | Chance: 14.29%
+      | Count: max(0; U[1; 2])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 3
+    ali:item minecraft:emerald x4-8
+      | Chance: 33.33%
+      | Count: max(0; U[4; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4 to 8
+      |   -> Add: False
+    ali:item minecraft:diamond x1-2
+      | Chance: 33.33%
+      | Count: max(0; U[1; 2])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
+    ali:item minecraft:prismarine_crystals x1-5
+      | Chance: 33.33%
+      | Count: max(0; U[1; 5])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 5
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 0 to 1
+    ali:item minecraft:leather_chestplate x1 {Damage:0}
+      | Chance: 50%
+      | Count: 1
+    ali:item minecraft:iron_sword x1 {Damage:0}
+      | Chance: 50%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item minecraft:cooked_cod x2-4
+      | Chance: 50%
+      | Count: max(0; U[2; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 4
+      |   -> Add: False
+    ali:item minecraft:cooked_salmon x2-4
+      | Chance: 50%
+      | Count: max(0; U[2; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 4
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 0 to 2
+    ali:item minecraft:potion x1 {Potion:"minecraft:water_breathing"}
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Water Breathing
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: max(0; binom(1; 20%))  ~0 (80%)
+    |   -> luck: max(0; binom(1; 20%) + floor(0.2 × luck))
+    |   -> Bad Luck: 0
+    |   -> Luck 1: 0 to 1  ~0 (80%)
+    |   -> Luck 2: 0 to 1  ~0 (80%)
+    |   -> Luck 3: 0 to 1  ~0 (80%)
+    |   -> Luck 4: 0 to 1  ~0 (80%)
+    |   [chart 0..1 0-1 base=true modes=[true, false] heights=1.0000,0.2500 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.2500 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.2500 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.2500 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.2500]
+    ali:item spell_engine:spell_scroll x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Spell Bind Randomly:
+      |   -> Tier: U[2; 3)
+      |   -> Spell Pool: spell_engine:treasure
+      |   -> Count: 1
