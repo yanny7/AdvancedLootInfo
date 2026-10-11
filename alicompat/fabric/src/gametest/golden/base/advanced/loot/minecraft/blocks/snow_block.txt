@@ -1,0 +1,21 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item minecraft:snow_block x1
+        | Count: 1
+        | ----- Predicates -----
+        | Match Tool:
+        |   -> Enchantments:
+        |     -> Enchantment: Silk Touch
+        |     -> Level: ≥ 1
+      ali:item minecraft:snowball x4
+        | Count: 4
+        | ----- Modifiers -----
+        | Set Count:
+        |   -> Count: 4
+        |   -> Add: False
+        | Explosion Decay
