@@ -2,6 +2,8 @@ plugins {
     id 'com.gradleup.shadow'
 }
 
+apply from: rootProject.file("alicompat/gametest.gradle")
+
 architectury {
     platformSetupLoomIde()
     forge()
@@ -10,6 +12,7 @@ architectury {
 sourceSets {
     gametest {
         java.srcDir project(":aci:common").file("src/gametest/java")
+        resources.srcDir project(":aci:common").file("src/gametest/resources")
         java.srcDir project(":ali:common").file("src/gametest/java")
         java.srcDir project(":alicompat:common").file("src/gametest/java")
         java.exclude "com/yanny/ali/gametest/LootDataGolden.java"
@@ -18,20 +21,14 @@ sourceSets {
     }
 }
 
-def gametestMod = project.findProperty("alicompat_gametest")
-def gametestModIds = ""
-
-if (gametestMod) {
-    def entry = new groovy.json.JsonSlurper().parse(rootProject.file("scripts/supported_mods.json")).find { it.key == gametestMod }
-    def enabled = (project.findProperty("compat_mods") ?: "").split(",")*.trim().contains(gametestMod)
-
-    if (entry && enabled && project.findProperty("${gametestMod}_${project.name}_dep")) {
-        gametestModIds = entry.mod_ids.join(",")
-    }
-}
-
-def gametestCoordinates = gametestModIds ? ["${gametestMod}_forge_dep", "${gametestMod}_forge_runtime_deps"].collectMany { (project.findProperty(it) ?: "").split(",")*.trim().findAll { it } } : []
-def compatCoordinates = (project.findProperty("compat_mods") ?: "").split(",")*.trim().findAll { it }.collectMany { mod ->
+def compatMods = (project.findProperty("compat_mods") ?: "").split(",")*.trim().findAll { it }
+def supportedMods = new groovy.json.JsonSlurper().parse(rootProject.file("scripts/supported_mods.json"))
+def gametestModIds = { String mod -> mod != "base" && compatMods.contains(mod) && project.findProperty("${mod}_${project.name}_dep") ? (supportedMods.find { it.key == mod }?.mod_ids?.join(",") ?: "") : "" }
+def gametestProperty = project.findProperty("alicompat_gametest")
+def gametestMods = gametestProperty == "all" ? ["base"] + compatMods.findAll { gametestModIds(it) }.sort() : [gametestProperty ?: "base"]
+def gametestName = { String mod -> "gametest" + mod.capitalize() }
+def gametestCoordinates = { String mod -> gametestModIds(mod) ? ["${mod}_forge_dep", "${mod}_forge_runtime_deps"].collectMany { (project.findProperty(it) ?: "").split(",")*.trim().findAll { it } } : [] }
+def compatCoordinates = compatMods.collectMany { mod ->
     ["${mod}_forge_dep", "${mod}_forge_runtime_deps"].collectMany { (project.findProperty(it) ?: "").split(",")*.trim().findAll { it } }
 }.unique()
 def nestedCache = [:]
@@ -125,11 +122,14 @@ def extractNested = { List<String> coordinates, File nestedDir, boolean minecraf
     nestedCache[nestedDir] = nestedMods
     return nestedMods
 }
-def extractGametestNested = { extractNested(gametestCoordinates, file("build/gametest/nested"), false) }
+def extractGametestNested = { String mod -> extractNested(gametestCoordinates(mod), file("build/gametest/nested/${mod}"), false) }
+
+gametestMods.findAll { gametestCoordinates(it) }.each { mod ->
+    loom.createRemapConfigurations(sourceSets.create(gametestName(mod)))
+}
 
 loom {
     accessWidenerPath = project(":ali:common").loom.accessWidenerPath
-    createRemapConfigurations(sourceSets.gametest)
 
     runs {
         data {
@@ -138,47 +138,85 @@ loom {
             programArgs "--output", "${file('src/main/generated/')}"
             programArgs "--existing", "${file("src/main/resources").absolutePath}"
         }
-        gametest {
-            environment "gametestserver"
-            forgeTemplate "gameTestServer"
-            name "Minecraft GameTest"
-            source sourceSets.gametest
-            property "forge.enabledGameTestNamespaces", alicompat_mod_id
-            property "alicompat.golden.dir", project.file("src/gametest/golden").absolutePath
-            property "alicompat.golden.actual", project.file("build/gametest/golden").absolutePath
-            property "alicompat.golden.regenerate", (project.findProperty("alicompat_golden_regenerate") ?: "false").toString()
-            property "alicompat.gametest.mod", (gametestMod ?: "base").toString()
-            property "alicompat.gametest.modids", gametestModIds
+        gametestMods.each { mod ->
+            create(gametestName(mod)) {
+                environment "gametestserver"
+                forgeTemplate "gameTestServer"
+                name mod == "base" ? "Minecraft GameTest" : "Minecraft GameTest ${mod}".toString()
+                source sourceSets.gametest
+                ideConfigGenerated mod == "base"
+                property "forge.enabledGameTestNamespaces", alicompat_mod_id
+                property "alicompat.golden.dir", project.file("src/gametest/golden").absolutePath
+                property "alicompat.golden.actual", project.file("build/gametest/golden").absolutePath
+                property "alicompat.golden.regenerate", (project.findProperty("alicompat_golden_regenerate") ?: "false").toString()
+                property "alicompat.gametest.mod", mod
+                property "alicompat.gametest.modids", gametestModIds(mod)
+                programArgs "--mixin.config", "aci.gametest.mixins.json"
 
-            runDir "build/gametest/run"
+                runDir "build/gametest/run/${mod}"
 
-            mods {
-                main {
-                    sourceSet sourceSets.main
-                    sourceSet sourceSets.gametest
+                mods {
+                    main {
+                        sourceSet sourceSets.main
+                        sourceSet sourceSets.gametest
+                    }
                 }
             }
         }
     }
 }
 
-tasks.matching { it.name == "runGametest" }.configureEach {
-    timeout = java.time.Duration.ofMinutes(10)
+def gametestFailures = []
+def gametestTasks = gametestMods.collect { "run" + gametestName(it).capitalize() }
 
-    doFirst {
-        if (gametestMod && !gametestModIds) {
-            throw new GradleException("alicompat_gametest=${gametestMod} is not a mod enabled in compat_mods with a ${project.name} dependency")
+gametestMods.eachWithIndex { mod, index ->
+    def runDir = "build/gametest/run/${mod}"
+
+    tasks.matching { it.name == gametestTasks[index] }.configureEach {
+        timeout = java.time.Duration.ofMinutes(10)
+        ignoreExitValue = true
+
+        if (index > 0) {
+            mustRunAfter gametestTasks[index - 1]
+        }
+        if (gametestCoordinates(mod)) {
+            classpath(sourceSets.named(gametestName(mod)).map { it.runtimeClasspath })
         }
 
-        delete "build/gametest/run/config", "build/gametest/run/world", "build/gametest/run/mods", "build/gametest/run/kubejs"
-        copy {
-            from project(":alicompat:common").file("src/gametest/kubejs/${gametestMod ?: "base"}")
-            into "build/gametest/run/kubejs"
+        doFirst { task ->
+            gametestWatchdog(task, mod)
+
+            if (mod != "base" && !gametestModIds(mod)) {
+                throw new GradleException("alicompat_gametest=${mod} is not a mod enabled in compat_mods with a ${project.name} dependency")
+            }
+
+            delete "${runDir}/config", "${runDir}/world", "${runDir}/mods", "${runDir}/kubejs"
+            copy {
+                from project(":alicompat:common").file("src/gametest/kubejs/${mod}")
+                into "${runDir}/kubejs"
+            }
+            if (gametestCoordinates(mod)) {
+                extractGametestNested(mod)
+                copy {
+                    from "build/gametest/nested/${mod}/libs"
+                    into "${runDir}/mods"
+                }
+            }
         }
-        extractGametestNested()
-        copy {
-            from "build/gametest/nested/libs"
-            into "build/gametest/run/mods"
+        doLast {
+            if (executionResult.get().exitValue != 0) {
+                gametestFailures << mod
+            }
+        }
+    }
+}
+
+tasks.register("runGametest") {
+    dependsOn gametestTasks
+
+    doLast {
+        if (gametestFailures) {
+            throw new GradleException("GameTests failed for ${gametestFailures.join(", ")}")
         }
     }
 }
@@ -202,9 +240,11 @@ dependencies {
     runtimeOnly project(path: ":ali:forge", configuration: "namedElements")
     gametestCompileOnly project(path: ":ali:forge", configuration: "namedElements")
 
-    gametestCoordinates.each { modGametestRuntimeOnly it }
-    if (gametestCoordinates) {
-        modGametestRuntimeOnly files({ extractGametestNested() })
+    gametestMods.findAll { gametestCoordinates(it) }.each { mod ->
+        def configuration = "mod" + gametestName(mod).capitalize() + "RuntimeOnly"
+
+        gametestCoordinates(mod).each { add(configuration, it) }
+        add(configuration, files({ extractGametestNested(mod) }))
     }
 
     if (compatCoordinates) {

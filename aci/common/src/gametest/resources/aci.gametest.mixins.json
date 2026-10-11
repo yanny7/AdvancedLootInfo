@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "com.yanny.aci.gametest.mixin",
+  "mixins": [
+    "MixinGameTestServer",
+    "MixinMinecraftServer"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}

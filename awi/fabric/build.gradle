@@ -10,6 +10,7 @@ architectury {
 sourceSets {
     gametest {
         java.srcDir project(":aci:common").file("src/gametest/java")
+        resources.srcDir project(":aci:common").file("src/gametest/resources")
         java.srcDir project(":awi:common").file("src/gametest/java")
         resources.srcDir project(":awi:common").file("src/gametest/resources")
         compileClasspath += sourceSets.main.compileClasspath + sourceSets.main.output

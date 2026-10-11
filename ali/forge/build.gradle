@@ -10,6 +10,7 @@ architectury {
 sourceSets {
     gametest {
         java.srcDir project(":aci:common").file("src/gametest/java")
+        resources.srcDir project(":aci:common").file("src/gametest/resources")
         java.srcDir project(":ali:common").file("src/gametest/java")
         resources.srcDir project(":ali:common").file("src/gametest/resources")
         compileClasspath += sourceSets.main.compileClasspath + sourceSets.main.output
@@ -57,6 +58,7 @@ loom {
             property "ali.golden.dir", project.file("src/gametest/golden").absolutePath
             property "ali.golden.actual", project.file("build/gametest/golden").absolutePath
             property "ali.golden.regenerate", (project.findProperty("ali_golden_regenerate") ?: "false").toString()
+            programArgs "--mixin.config", "aci.gametest.mixins.json"
 
             runDir "build/gametest/run"
 

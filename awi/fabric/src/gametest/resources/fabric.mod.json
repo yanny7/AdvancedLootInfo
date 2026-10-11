@@ -10,6 +10,7 @@
         ]
     },
     "mixins": [
+        "aci.gametest.mixins.json",
         "awi.gametest.mixins.json"
     ],
     "depends": {

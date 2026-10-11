@@ -2,6 +2,8 @@ plugins {
     id 'com.gradleup.shadow'
 }
 
+apply from: rootProject.file("alicompat/gametest.gradle")
+
 architectury {
     platformSetupLoomIde()
     fabric()
@@ -10,6 +12,7 @@ architectury {
 sourceSets {
     gametest {
         java.srcDir project(":aci:common").file("src/gametest/java")
+        resources.srcDir project(":aci:common").file("src/gametest/resources")
         java.srcDir project(":ali:common").file("src/gametest/java")
         java.srcDir project(":alicompat:common").file("src/gametest/java")
         java.exclude "com/yanny/ali/gametest/LootDataGolden.java"
@@ -18,21 +21,20 @@ sourceSets {
     }
 }
 
-def gametestMod = project.findProperty("alicompat_gametest")
-def gametestModIds = ""
+def compatMods = (project.findProperty("compat_mods") ?: "").split(",")*.trim().findAll { it }
+def supportedMods = new groovy.json.JsonSlurper().parse(rootProject.file("scripts/supported_mods.json"))
+def gametestModIds = { String mod -> mod != "base" && compatMods.contains(mod) && project.findProperty("${mod}_${project.name}_dep") ? (supportedMods.find { it.key == mod }?.mod_ids?.join(",") ?: "") : "" }
+def gametestProperty = project.findProperty("alicompat_gametest")
+def gametestMods = gametestProperty == "all" ? ["base"] + compatMods.findAll { gametestModIds(it) }.sort() : [gametestProperty ?: "base"]
+def gametestName = { String mod -> "gametest" + mod.capitalize() }
+def gametestCoordinates = { String mod -> gametestModIds(mod) ? ["${mod}_fabric_dep", "${mod}_fabric_runtime_deps"].collectMany { (project.findProperty(it) ?: "").split(",")*.trim().findAll { it } } : [] }
 
-if (gametestMod) {
-    def entry = new groovy.json.JsonSlurper().parse(rootProject.file("scripts/supported_mods.json")).find { it.key == gametestMod }
-    def enabled = (project.findProperty("compat_mods") ?: "").split(",")*.trim().contains(gametestMod)
-
-    if (entry && enabled && project.findProperty("${gametestMod}_${project.name}_dep")) {
-        gametestModIds = entry.mod_ids.join(",")
-    }
+gametestMods.findAll { gametestCoordinates(it) }.each { mod ->
+    loom.createRemapConfigurations(sourceSets.create(gametestName(mod)))
 }
 
 loom {
     accessWidenerPath = project(":ali:common").loom.accessWidenerPath
-    createRemapConfigurations(sourceSets.gametest)
 
     runs {
         datagen {
@@ -44,35 +46,70 @@ loom {
 
             runDir "build/datagen"
         }
-        gametest {
-            server()
-            name "Minecraft GameTest"
-            source sourceSets.gametest
-            vmArg "-Dfabric-api.gametest"
-            vmArg "-Dfabric-api.gametest.report-file=${project.file("build/gametest/report.xml")}"
-            vmArg "-Dalicompat.golden.dir=${project.file("src/gametest/golden")}"
-            vmArg "-Dalicompat.golden.actual=${project.file("build/gametest/golden")}"
-            vmArg "-Dalicompat.golden.regenerate=${project.findProperty("alicompat_golden_regenerate") ?: false}"
-            vmArg "-Dalicompat.gametest.mod=${gametestMod ?: "base"}"
-            vmArg "-Dalicompat.gametest.modids=${gametestModIds}"
+        gametestMods.each { mod ->
+            create(gametestName(mod)) {
+                server()
+                name mod == "base" ? "Minecraft GameTest" : "Minecraft GameTest ${mod}".toString()
+                source sourceSets.gametest
+                ideConfigGenerated mod == "base"
+                vmArg "-Dfabric-api.gametest"
+                vmArg "-Dfabric-api.gametest.report-file=${project.file("build/gametest/report-${mod}.xml")}"
+                vmArg "-Dalicompat.golden.dir=${project.file("src/gametest/golden")}"
+                vmArg "-Dalicompat.golden.actual=${project.file("build/gametest/golden")}"
+                vmArg "-Dalicompat.golden.regenerate=${project.findProperty("alicompat_golden_regenerate") ?: false}"
+                vmArg "-Dalicompat.gametest.mod=${mod}"
+                vmArg "-Dalicompat.gametest.modids=${gametestModIds(mod)}"
 
-            runDir "build/gametest/run"
+                runDir "build/gametest/run/${mod}"
+            }
         }
     }
 }
 
-tasks.matching { it.name == "runGametest" }.configureEach {
-    timeout = java.time.Duration.ofMinutes(10)
+def gametestFailures = []
+def gametestTasks = gametestMods.collect { "run" + gametestName(it).capitalize() }
 
-    doFirst {
-        if (gametestMod && !gametestModIds) {
-            throw new GradleException("alicompat_gametest=${gametestMod} is not a mod enabled in compat_mods with a ${project.name} dependency")
+gametestMods.eachWithIndex { mod, index ->
+    def runDir = "build/gametest/run/${mod}"
+
+    tasks.matching { it.name == gametestTasks[index] }.configureEach {
+        timeout = java.time.Duration.ofMinutes(10)
+        ignoreExitValue = true
+
+        if (index > 0) {
+            mustRunAfter gametestTasks[index - 1]
+        }
+        if (gametestCoordinates(mod)) {
+            classpath(sourceSets.named(gametestName(mod)).map { it.runtimeClasspath })
         }
 
-        delete "build/gametest/run/config", "build/gametest/run/world", "build/gametest/run/kubejs"
-        copy {
-            from project(":alicompat:common").file("src/gametest/kubejs/${gametestMod ?: "base"}")
-            into "build/gametest/run/kubejs"
+        doFirst { task ->
+            gametestWatchdog(task, mod)
+
+            if (mod != "base" && !gametestModIds(mod)) {
+                throw new GradleException("alicompat_gametest=${mod} is not a mod enabled in compat_mods with a ${project.name} dependency")
+            }
+
+            delete "${runDir}/config", "${runDir}/world", "${runDir}/kubejs"
+            copy {
+                from project(":alicompat:common").file("src/gametest/kubejs/${mod}")
+                into "${runDir}/kubejs"
+            }
+        }
+        doLast {
+            if (executionResult.get().exitValue != 0) {
+                gametestFailures << mod
+            }
+        }
+    }
+}
+
+tasks.register("runGametest") {
+    dependsOn gametestTasks
+
+    doLast {
+        if (gametestFailures) {
+            throw new GradleException("GameTests failed for ${gametestFailures.join(", ")}")
         }
     }
 }
@@ -97,10 +134,8 @@ dependencies {
     runtimeOnly project(path: ":ali:fabric", configuration: "namedElements")
     gametestCompileOnly project(path: ":ali:fabric", configuration: "namedElements")
 
-    if (gametestMod) {
-        ["${gametestMod}_fabric_dep", "${gametestMod}_fabric_runtime_deps"].each { name ->
-            (project.findProperty(name) ?: "").split(",")*.trim().findAll { it }.each { modGametestRuntimeOnly it }
-        }
+    gametestMods.findAll { gametestCoordinates(it) }.each { mod ->
+        gametestCoordinates(mod).each { add("mod" + gametestName(mod).capitalize() + "RuntimeOnly", it) }
     }
     rootProject.project(":ali:fabric").ext.commonProjects.each { p ->
         common(project(path: p, configuration: "namedElements")) { transitive false }

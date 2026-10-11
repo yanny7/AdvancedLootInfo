@@ -4,6 +4,9 @@
     "version": "1.0.0",
     "name": "ALI GameTest",
     "environment": "*",
+    "mixins": [
+        "aci.gametest.mixins.json"
+    ],
     "entrypoints": {
         "fabric-gametest": [
             "com.yanny.ali.fabric.gametest.LootDataGameTest"
