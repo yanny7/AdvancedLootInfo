@@ -1,0 +1,14 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item supplementaries:antique_ink x1
+      | Quality: 1
+      | Chance: 100%
+      |   -> Bad Luck: ?
+      |   -> Luck 1: 100%
+      |   -> Luck 2: 100%
+      |   -> Luck 3: 100%
+      |   -> Luck 4: 100%
+      | Count: 1

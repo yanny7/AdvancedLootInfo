@@ -1,0 +1,53 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item supplementaries:flax x1
+        | Count: 1
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Flax
+        |   -> Properties:
+        |     -> age: 7
+        |     -> half: lower
+        | ----- Modifiers -----
+        | Explosion Decay
+      ali:item supplementaries:flax_seeds x1
+        | Count: 1
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Flax
+        |   -> Properties:
+        |     -> half: lower
+        | ----- Modifiers -----
+        | Explosion Decay
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item supplementaries:flax_seeds x1-6
+      | Count: 1 + binom(2; 57.14%)  ~2 (49%)
+      |   -> Fortune LVL: 1 + binom(LVL + 2; 57.14%)
+      |   -> Fortune I: 1 to 4  ~3 (42%)
+      |   -> Fortune II: 1 to 5  ~3 (36%)
+      |   -> Fortune III: 1 to 6  ~4 (34%)
+      |   [chart 0..2 1-3 base=true modes=[false, true, false, false, false, false] heights=0.3750,1.0000,0.6667,0.0000,0.0000,0.0000 | 0..3 1-4 base=false modes=[false, false, true, false, false, false] heights=0.1607,0.6429,0.8571,0.3810,0.0000,0.0000 | 0..4 1-5 base=false modes=[false, false, true, false, false, false] heights=0.0689,0.3673,0.7347,0.6531,0.2177,0.0000 | 0..5 1-6 base=false modes=[false, false, false, true, false, false] heights=0.0295,0.1968,0.5248,0.6997,0.4665,0.1244]
+      | ----- Predicates -----
+      | Block State Property:
+      |   -> Block: Flax
+      |   -> Properties:
+      |     -> age: 7
+      |     -> half: lower
+      | Block State Property:
+      |   -> Block: Flax
+      |   -> Properties:
+      |     -> half: lower
+      | ----- Modifiers -----
+      | Explosion Decay
+      | Apply Bonus:
+      |   -> Enchantment: Fortune
+      |   -> Formula: minecraft:binomial_with_bonus_count
+      |     -> Extra Rounds: 2
+      |     -> Probability: 0.5714286

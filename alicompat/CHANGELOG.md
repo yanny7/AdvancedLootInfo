@@ -5,6 +5,7 @@
 - MoreJS map trades show their structure or biome destinations
 - Fixed a stray colon after loot functions that carry no values (Aether, Applied Cooking, Bumblezone, ExtraStorage, Farmer's Delight, Immersive Engineering, Mantle, Refined Storage, Sophisticated Backpacks and Storage)
 - Fixed Relics items in chest loot showing random stats
+- Supplementaries red merchant trades keep the same order on every server start
 
 ## [1.2.0]
 
