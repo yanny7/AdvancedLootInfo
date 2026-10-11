@@ -1,0 +1,22 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item charm:smooth_glowstone x1
+        | Count: 1
+        | ----- Predicates -----
+        | Match Tool:
+        |   -> Enchantments:
+        |     -> Enchantment: Silk Touch
+        |     -> Level: ≥ 1
+      ali:item minecraft:glowstone_dust x2-4
+        | Count: 2 to 4
+        |   -> Fortune I: 2 to 4  ~4 (50%)
+        |   -> Fortune II: 2 to 4  ~4 (67%)
+        |   -> Fortune III: 2 to 4  ~4 (75%)
+        |   [chart 0..2 2-4 base=true modes=[false, false, false] heights=0.4444,0.4444,0.4444 | 0..2 2-4 base=false modes=[false, false, true] heights=0.2222,0.4444,0.6667 | 0..2 2-4 base=false modes=[false, false, true] heights=0.1481,0.2963,0.8889 | 0..2 2-4 base=false modes=[false, false, true] heights=0.1111,0.2222,1.0000]
+        | ----- Modifiers -----
+        | Explosion Decay
