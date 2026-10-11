@@ -21,6 +21,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.*;
@@ -122,10 +123,17 @@ public class NodeUtils {
     }
 
     @NotNull
-    public static ReferenceNode getReferenceNode(IServerUtils utils, LootTableReference entry, NumberExpr rawChance, NumberExpr sumWeight, List<TooltipNode> chanceConditions, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public static IDataNode getReferenceNode(IServerUtils utils, LootTableReference entry, NumberExpr rawChance, NumberExpr sumWeight, List<TooltipNode> chanceConditions, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemFunction> allFunctions = getAllFunctions(entry, functions);
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
         LootCount chance = getChance(utils, entry, rawChance, sumWeight, chanceConditions);
+
+        if (BuiltInLootTables.EMPTY.equals(entry.name)) {
+            TooltipNode tooltip = TooltipUtils.getEmptyTooltip(utils, entry.quality, getChance(utils, allConditions, chance), allFunctions, allConditions).build();
+
+            return new EmptyNode(toFloat(chance.value()), tooltip);
+        }
+
         TooltipNode tooltip = TooltipUtils.getReferenceTooltip(entry, chance).build();
         List<IDataNode> children = getReferencedTable(utils, entry.name,
                 (lootTable) -> getLootTableNode(Collections.emptyList(), utils, lootTable, chance.value(), chance.conditions(), allFunctions, allConditions));

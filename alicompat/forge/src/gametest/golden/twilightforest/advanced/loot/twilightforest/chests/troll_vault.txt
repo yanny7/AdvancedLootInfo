@@ -1,0 +1,43 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4
+    ali:item minecraft:coal x1-16
+      | Chance: 33.33%
+      | Count: max(0; U[1; 16])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 16
+      |   -> Add: False
+    ali:item twilightforest:torchberries x1-16
+      | Chance: 33.33%
+      | Count: max(0; U[1; 16])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 16
+      |   -> Add: False
+    ali:item minecraft:emerald x1-6
+      | Chance: 33.33%
+      | Count: max(0; U[1; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 6
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item twilightforest:trollsteinn x1-6
+      | Chance: 50%
+      | Count: max(0; U[1; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 6
+      |   -> Add: False
+    ali:item minecraft:obsidian x1-6
+      | Chance: 50%
+      | Count: max(0; U[1; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 6
+      |   -> Add: False

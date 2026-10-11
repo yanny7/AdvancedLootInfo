@@ -1,0 +1,77 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4
+    ali:item minecraft:iron_ingot x1-4
+      | Chance: 16.67%
+      | Count: 1 to 4
+    ali:item minecraft:gunpowder x1-4
+      | Chance: 16.67%
+      | Count: 1 to 4
+    ali:item twilightforest:ironwood_ingot x1-4
+      | Chance: 16.67%
+      | Count: 1 to 4
+    ali:item minecraft:milk_bucket x1
+      | Chance: 16.67%
+      | Count: 1
+    ali:item twilightforest:maze_wafer x1-12
+      | Chance: 16.67%
+      | Count: 1 to 12
+    ali:item twilightforest:firefly x1-5
+      | Chance: 16.67%
+      | Count: 1 to 5
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item twilightforest:steeleaf_ingot x1-6
+      | Chance: 10%
+      | Count: 1 to 6
+    ali:item twilightforest:charm_of_keeping_1 x1
+      | Chance: 10%
+      | Count: 1
+    ali:item twilightforest:steeleaf_helmet x1 {Damage:0}
+      | Chance: 10%
+      | Count: 1
+    ali:item twilightforest:steeleaf_chestplate x1 {Damage:0}
+      | Chance: 10%
+      | Count: 1
+    ali:item twilightforest:steeleaf_leggings x1 {Damage:0}
+      | Chance: 10%
+      | Count: 1
+    ali:item twilightforest:steeleaf_boots x1 {Damage:0}
+      | Chance: 10%
+      | Count: 1
+    ali:item twilightforest:steeleaf_pickaxe x1 {Damage:0}
+      | Chance: 10%
+      | Count: 1
+    ali:item twilightforest:ironwood_chestplate x1 {Damage:0}
+      | Chance: 10%
+      | Count: 1
+    ali:item twilightforest:ironwood_sword x1 {Damage:0}
+      | Chance: 10%
+      | Count: 1
+    ali:item twilightforest:red_thread x5-15
+      | Chance: 10%
+      | Count: 5 to 15
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item twilightforest:maze_map_focus x1
+      | Chance: 25%
+      | Count: 1
+    ali:item minecraft:tnt x1-3
+      | Chance: 25%
+      | Count: 1 to 3
+    ali:item minecraft:enchanted_book x1
+      | Chance: 25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Fire React
+    ali:item minecraft:potion x1 {Potion:"minecraft:strong_healing"}
+      | Chance: 25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {Potion:"minecraft:strong_healing"}
