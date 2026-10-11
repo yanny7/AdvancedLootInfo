@@ -1,0 +1,53 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4 to 10
+    ali:item minecraft:snowball x2-6
+      | Chance: 44.44%
+      | Count: 2 to 6
+    ali:item minecraft:packed_ice x2-6
+      | Chance: 22.22%
+      | Count: 2 to 6
+    ali:item minecraft:suspicious_stew x1
+      | Chance: 11.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Stew Effect:
+      |   -> Blindness
+      |     -> Duration: 5 to 7
+      |   -> Night Vision
+      |     -> Duration: 7 to 10
+    ali:item minecraft:golden_carrot x1-10
+      | Chance: 11.11%
+      | Count: 1 to 10
+    ali:item minecraft:baked_potato x1-10
+      | Chance: 11.11%
+      | Count: 1 to 10
+  ali:item relics:horse_flute x1
+    | Chance: 2.5%
+    | Count: 1
+  ali:item relics:ice_breaker x1
+    | Chance: 2.5%
+    | Count: 1
+  ali:item relics:ice_skates x1
+    | Chance: 2.5%
+    | Count: 1
+  ali:item relics:magic_mirror x1
+    | Chance: 2.5%
+    | Count: 1
+  ali:item relics:midnight_robe x1
+    | Chance: 2.5%
+    | Count: 1
+  ali:item relics:roller_skates x1
+    | Chance: 2.5%
+    | Count: 1
+  ali:item relics:shadow_glaive x1
+    | Chance: 2.5%
+    | Count: 1
+  ali:item relics:spatial_sign x1
+    | Chance: 2.5%
+    | Count: 1
+  ali:item relics:wool_mitten x1
+    | Chance: 2.5%
+    | Count: 1

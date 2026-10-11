@@ -57,7 +57,7 @@ def extractNested = { List<String> coordinates, File nestedDir, boolean minecraf
 
         match?.find() ? match.group(1) : null
     }
-    def packagesOf = { Collection<String> names -> names.findAll { it.endsWith(".class") && it.contains("/") }.collect { it.substring(0, it.lastIndexOf("/")) } as Set }
+    def packagesOf = { Collection<String> names -> names.findAll { it.endsWith(".class") && it.contains("/") && !it.startsWith("META-INF/") }.collect { it.substring(0, it.lastIndexOf("/")) } as Set }
     def providedArtifacts = minecraftOnly ? [] as Set : configurations.minecraftLibraries.resolvedConfiguration.resolvedArtifacts.collect { it.name } as Set
     def providedPackages = minecraftOnly ? [] as Set : configurations.minecraftLibraries.resolve().collectMany { jar ->
         def zip = new java.util.zip.ZipFile(jar)

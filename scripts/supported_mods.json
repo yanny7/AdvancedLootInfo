@@ -233,7 +233,8 @@
     "key": "relics",
     "name": "Relics",
     "mod_ids": ["relics"],
-    "curseforge": ["relics-mod-445274"]
+    "curseforge": ["relics-mod-445274"],
+    "requires": ["architectury-api-419699"]
   },
   {
     "key": "repurposedstructures",
