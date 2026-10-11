@@ -1,0 +1,44 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 4
+    ali:item minecraft:cod x1-3
+      | Chance: 25%
+      | Count: 1 to 3
+    ali:item minecraft:salmon x1-3
+      | Chance: 25%
+      | Count: 1 to 3
+    ali:item minecraft:kelp x2-4
+      | Chance: 25%
+      | Count: 2 to 4
+    ali:item ribbits:giant_lilypad x1-2
+      | Chance: 25%
+      | Count: 1 to 2
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Chance: 83.33%
+      | Count: 1
+    ali:item minecraft:fishing_rod x1 {Damage:0}
+      | Chance: 5.56%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 10
+      |   -> Treasure: True
+    ali:item minecraft:fishing_rod x1 {Damage:0}
+      | Chance: 5.56%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20
+      |   -> Treasure: True
+    ali:item minecraft:fishing_rod x1 {Damage:0}
+      | Chance: 5.56%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Treasure: True
