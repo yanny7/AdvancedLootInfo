@@ -28,6 +28,74 @@ def gametestProperty = project.findProperty("alicompat_gametest")
 def gametestMods = gametestProperty == "all" ? ["base"] + compatMods.findAll { gametestModIds(it) }.sort() : [gametestProperty ?: "base"]
 def gametestName = { String mod -> "gametest" + mod.capitalize() }
 def gametestCoordinates = { String mod -> gametestModIds(mod) ? ["${mod}_fabric_dep", "${mod}_fabric_runtime_deps"].collectMany { (project.findProperty(it) ?: "").split(",")*.trim().findAll { it } } : [] }
+def compatCoordinates = compatMods.collectMany { mod ->
+    ["${mod}_fabric_dep", "${mod}_fabric_runtime_deps"].collectMany { (project.findProperty(it) ?: "").split(",")*.trim().findAll { it } }
+}.unique()
+def nestedCache = [:]
+
+// loom strips the jar-in-jar of a remapped mod, so nested jars are unpacked here and added as mods of their own
+def extractNested = { List<String> coordinates, File nestedDir ->
+    if (nestedCache.containsKey(nestedDir)) {
+        return nestedCache[nestedDir]
+    }
+
+    def readJar = { byte[] bytes ->
+        def input = new java.util.zip.ZipInputStream(new ByteArrayInputStream(bytes))
+        def entries = [:]
+
+        for (def entry = input.nextEntry; entry != null; entry = input.nextEntry) {
+            if (entry.name == "fabric.mod.json" || entry.name ==~ /META-INF\/jars\/[^\/]+\.jar/) {
+                entries[entry.name] = input.readAllBytes()
+            }
+        }
+
+        input.close()
+        entries
+    }
+    def modOf = { Map entries -> entries["fabric.mod.json"] ? new groovy.json.JsonSlurper().setType(groovy.json.JsonParserType.LAX).parse(entries["fabric.mod.json"], "UTF-8") : null }
+    def compareVersions = { String a, String b ->
+        def left = a.split(/[^0-9]+/).findAll { it }.collect { it as BigInteger }
+        def right = b.split(/[^0-9]+/).findAll { it }.collect { it as BigInteger }
+        def common = (0..<Math.min(left.size(), right.size())).collect { left[it] <=> right[it] }.find { it != 0 }
+
+        common ?: left.size() <=> right.size()
+    }
+    def outerJars = configurations.detachedConfiguration(*coordinates.collect { dependencies.create(it) }).tap { transitive = false }.resolve()
+    def fabricApi = configurations.detachedConfiguration(dependencies.create("net.fabricmc.fabric-api:fabric-api:${fabric_version}")).resolve()
+    def provided = (outerJars + fabricApi).collect { modOf(readJar(it.bytes))?.id }.findAll { it } as Set
+    def nested = [:]
+    def collect
+
+    collect = { Map entries ->
+        entries.findAll { name, bytes -> name.startsWith("META-INF/jars/") }.each { name, bytes ->
+            def content = readJar(bytes)
+            def mod = modOf(content)
+            def fileName = name.substring(name.lastIndexOf("/") + 1)
+            def key = mod?.id ?: fileName
+            def version = mod?.version?.toString() ?: ""
+
+            if (!provided.contains(key) && (!nested[key] || compareVersions(version, nested[key].version) > 0)) {
+                nested[key] = [version: version, name: fileName, bytes: bytes]
+            }
+
+            collect(content)
+        }
+    }
+    outerJars.each { collect(readJar(it.bytes)) }
+
+    nestedDir.deleteDir()
+    nestedDir.mkdirs()
+
+    def nestedJars = nested.values().collect {
+        def target = new File(nestedDir, it.name)
+
+        target.bytes = it.bytes
+        target
+    }
+
+    nestedCache[nestedDir] = nestedJars
+    return nestedJars
+}
 
 gametestMods.findAll { gametestCoordinates(it) }.each { mod ->
     loom.createRemapConfigurations(sourceSets.create(gametestName(mod)))
@@ -139,7 +207,14 @@ dependencies {
     gametestCompileOnly project(path: ":ali:fabric", configuration: "namedElements")
 
     gametestMods.findAll { gametestCoordinates(it) }.each { mod ->
-        gametestCoordinates(mod).each { add("mod" + gametestName(mod).capitalize() + "RuntimeOnly", it) }
+        def configuration = "mod" + gametestName(mod).capitalize() + "RuntimeOnly"
+
+        gametestCoordinates(mod).each { add(configuration, it) }
+        add(configuration, files({ extractNested(gametestCoordinates(mod), file("build/gametest/nested/${mod}")) }))
+    }
+
+    if (compatCoordinates) {
+        modCompileOnly files({ extractNested(compatCoordinates, file("build/compat-nested")) })
     }
     rootProject.project(":ali:fabric").ext.commonProjects.each { p ->
         common(project(path: p, configuration: "namedElements")) { transitive false }

@@ -2,7 +2,6 @@ plugins {
     id "architectury-plugin" version "3.5.169"
     id "dev.architectury.loom" version "1.17.491" apply false
     id "com.gradleup.shadow" version "8.3.6" apply false
-    id "lol.bai.explosion" version "0.3.1" apply false
 }
 
 architectury {
@@ -132,11 +131,6 @@ subprojects {
         } else if (isAliCompat) {
             project.ext.commonProjects << ":alicompat:common"
 
-            // Fabric target mods bundle their libraries as jar-in-jar, which a dev launch does not unpack
-            if (project.name == "fabric") {
-                apply plugin: "lol.bai.explosion"
-            }
-
             // a slug enabled on another loader keeps its sources here, so without a dependency none of them can compile
             def compatMods = (project.findProperty("compat_mods") ?: "").split(",")*.trim().findAll { project.findProperty("${it}_${project.name}_dep") }
 
@@ -222,7 +216,7 @@ subprojects {
                     // the runtime deps are here too: loom remaps a mod once, and without its supertypes it keeps their names
                     [deps, runtimeDeps].findAll { it }.each { list ->
                         list.split(",")*.trim().each { dep ->
-                            modCompileOnly project.name == "fabric" ? project.explosion.fabric(dep) : dep
+                            modCompileOnly dep
                         }
                     }
                 }
@@ -394,12 +388,6 @@ allprojects {
             url "https://www.cursemaven.com"
             content {
                 includeGroup "curse.maven"
-            }
-        }
-        maven { // ALICompat's explosion plugin resolves its jar-in-jar helper as a normal dependency
-            url "https://maven2.bai.lol"
-            content {
-                includeGroup "lol.bai.explosion"
             }
         }
         maven { // KubeJS
