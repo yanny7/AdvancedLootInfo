@@ -1,0 +1,13 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 2
+    ali:item minecraft:tipped_arrow x5-14 {Potion:"minecraft:strong_harming"}
+      | Count: max(0; U[5; 14])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 14
+      |   -> Add: False
+      | Set Nbt:
+      |   -> Tag: {Potion:"minecraft:strong_harming"}

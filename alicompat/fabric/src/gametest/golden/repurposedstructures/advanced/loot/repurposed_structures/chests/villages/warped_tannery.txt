@@ -1,0 +1,55 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 8
+    ali:item minecraft:nether_wart x1-4
+      | Chance: 19.23%
+      | Count: max(0; U[1; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False
+    ali:item minecraft:leather x2-6
+      | Chance: 11.54%
+      | Count: max(0; U[2; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 6
+      |   -> Add: False
+    ali:item minecraft:porkchop x1-4
+      | Chance: 11.54%
+      | Count: max(0; U[1; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False
+    ali:item minecraft:cooked_porkchop x1-4
+      | Chance: 11.54%
+      | Count: max(0; U[1; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False
+    ali:item minecraft:saddle x1
+      | Chance: 11.54%
+      | Count: 1
+    ali:item minecraft:leather_chestplate x1 {Damage:0}
+      | Chance: 7.69%
+      | Count: 1
+    ali:item minecraft:leather_boots x1 {Damage:0}
+      | Chance: 7.69%
+      | Count: 1
+    ali:item minecraft:leather_helmet x1 {Damage:0}
+      | Chance: 7.69%
+      | Count: 1
+    ali:item minecraft:leather_leggings x1 {Damage:0}
+      | Chance: 7.69%
+      | Count: 1
+    ali:item minecraft:gold_ingot x1-4
+      | Chance: 3.85%
+      | Count: max(0; U[1; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False

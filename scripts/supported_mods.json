@@ -240,7 +240,8 @@
     "key": "repurposedstructures",
     "name": "Repurposed Structures",
     "mod_ids": ["repurposed_structures"],
-    "curseforge": ["repurposed-structures-368293", "repurposed-structures-fabric-391366"]
+    "curseforge": ["repurposed-structures-368293", "repurposed-structures-fabric-391366"],
+    "requires": ["midnightlib-488090"]
   },
   {
     "key": "ribbits",
