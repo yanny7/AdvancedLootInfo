@@ -1,0 +1,197 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:reference
+        | Selects all entries
+        ali:loot_table
+          | Selects all entries
+          ali:loot_pool
+            | Selects random entry
+            | Rolls: 1
+            ali:item hybrid_aquatic:barbed_hook x1 {Damage:0}
+              | Chance: 11.11%
+              | Count: 1
+              | ----- Predicates -----
+              | Match Tool:
+              |   -> Tag: minecraft:axes
+            ali:item hybrid_aquatic:glowing_hook x1 {Damage:0}
+              | Chance: 11.11%
+              | Count: 1
+              | ----- Predicates -----
+              | Match Tool:
+              |   -> Tag: minecraft:axes
+            ali:item hybrid_aquatic:magnetic_hook x1 {Damage:0}
+              | Chance: 11.11%
+              | Count: 1
+              | ----- Predicates -----
+              | Match Tool:
+              |   -> Tag: minecraft:axes
+            ali:item minecraft:iron_ingot x3-9
+              | Chance: 11.11%
+              | Count: max(0; U[3; 9])
+              | ----- Predicates -----
+              | Match Tool:
+              |   -> Tag: minecraft:axes
+              | ----- Modifiers -----
+              | Set Count:
+              |   -> Count: 3 to 9
+              |   -> Add: False
+            ali:item minecraft:gold_ingot x3-9
+              | Chance: 11.11%
+              | Count: max(0; U[3; 9])
+              | ----- Predicates -----
+              | Match Tool:
+              |   -> Tag: minecraft:axes
+              | ----- Modifiers -----
+              | Set Count:
+              |   -> Count: 3 to 9
+              |   -> Add: False
+            ali:item minecraft:diamond x1-3
+              | Chance: 11.11%
+              | Count: max(0; U[1; 3])
+              | ----- Predicates -----
+              | Match Tool:
+              |   -> Tag: minecraft:axes
+              | ----- Modifiers -----
+              | Set Count:
+              |   -> Count: 1 to 3
+              |   -> Add: False
+            ali:item minecraft:emerald x1-3
+              | Chance: 11.11%
+              | Count: max(0; U[1; 3])
+              | ----- Predicates -----
+              | Match Tool:
+              |   -> Tag: minecraft:axes
+              | ----- Modifiers -----
+              | Set Count:
+              |   -> Count: 1 to 3
+              |   -> Add: False
+            ali:item minecraft:skull_banner_pattern x1
+              | Chance: 11.11%
+              | Count: 1
+              | ----- Predicates -----
+              | Match Tool:
+              |   -> Tag: minecraft:axes
+            ali:item minecraft:coast_armor_trim_smithing_template x1-4
+              | Chance: 11.11%
+              | Count: max(0; U[1; 4])
+              | ----- Predicates -----
+              | Match Tool:
+              |   -> Tag: minecraft:axes
+              | ----- Modifiers -----
+              | Set Count:
+              |   -> Count: 1 to 4
+              |   -> Add: False
+          ali:loot_pool
+            | Selects random entry
+            | Rolls: 1
+            ali:item hybrid_aquatic:driftwood_log x16-32
+              | Chance: 50%
+              | Count: max(0; U[16; 32])
+              | ----- Predicates -----
+              | Match Tool:
+              |   -> Tag: minecraft:axes
+              | Random Chance:
+              |   -> Probability: 0.5
+              | ----- Modifiers -----
+              | Set Count:
+              |   -> Count: 16 to 32
+              |   -> Add: False
+          ali:loot_pool
+            | Selects random entry
+            | Rolls: 1
+            ali:item hybrid_aquatic:great_white_shark_plushie x1
+              | Chance: 3.57%
+              | Count: 1
+              | ----- Predicates -----
+              | Match Tool:
+              |   -> Tag: minecraft:axes
+              | Random Chance:
+              |   -> Probability: 0.25
+            ali:item hybrid_aquatic:whale_shark_plushie x1
+              | Chance: 3.57%
+              | Count: 1
+              | ----- Predicates -----
+              | Match Tool:
+              |   -> Tag: minecraft:axes
+              | Random Chance:
+              |   -> Probability: 0.25
+            ali:item hybrid_aquatic:tiger_shark_plushie x1
+              | Chance: 3.57%
+              | Count: 1
+              | ----- Predicates -----
+              | Match Tool:
+              |   -> Tag: minecraft:axes
+              | Random Chance:
+              |   -> Probability: 0.25
+            ali:item hybrid_aquatic:hammerhead_shark_plushie x1
+              | Chance: 3.57%
+              | Count: 1
+              | ----- Predicates -----
+              | Match Tool:
+              |   -> Tag: minecraft:axes
+              | Random Chance:
+              |   -> Probability: 0.25
+            ali:item hybrid_aquatic:frilled_shark_plushie x1
+              | Chance: 3.57%
+              | Count: 1
+              | ----- Predicates -----
+              | Match Tool:
+              |   -> Tag: minecraft:axes
+              | Random Chance:
+              |   -> Probability: 0.25
+            ali:item hybrid_aquatic:basking_shark_plushie x1
+              | Chance: 3.57%
+              | Count: 1
+              | ----- Predicates -----
+              | Match Tool:
+              |   -> Tag: minecraft:axes
+              | Random Chance:
+              |   -> Probability: 0.25
+            ali:item hybrid_aquatic:thresher_shark_plushie x1
+              | Chance: 3.57%
+              | Count: 1
+              | ----- Predicates -----
+              | Match Tool:
+              |   -> Tag: minecraft:axes
+              | Random Chance:
+              |   -> Probability: 0.25
+          ali:loot_pool
+            | Selects random entry
+            | Rolls: 1
+            ali:item minecraft:cherry_log x8-32
+              | Chance: 33.33%
+              | Count: max(0; U[8; 32])
+              | ----- Predicates -----
+              | Match Tool:
+              |   -> Tag: minecraft:axes
+              | ----- Modifiers -----
+              | Set Count:
+              |   -> Count: 8 to 32
+              |   -> Add: False
+            ali:item minecraft:cherry_sapling x1-4
+              | Chance: 33.33%
+              | Count: max(0; U[1; 4])
+              | ----- Predicates -----
+              | Match Tool:
+              |   -> Tag: minecraft:axes
+              | ----- Modifiers -----
+              | Set Count:
+              |   -> Count: 1 to 4
+              |   -> Add: False
+            ali:item minecraft:pink_petals x4-12
+              | Chance: 33.33%
+              | Count: max(0; U[4; 12])
+              | ----- Predicates -----
+              | Match Tool:
+              |   -> Tag: minecraft:axes
+              | ----- Modifiers -----
+              | Set Count:
+              |   -> Count: 4 to 12
+              |   -> Add: False
+      ali:item hybrid_aquatic:cherry_crate x1
+        | Count: 1
