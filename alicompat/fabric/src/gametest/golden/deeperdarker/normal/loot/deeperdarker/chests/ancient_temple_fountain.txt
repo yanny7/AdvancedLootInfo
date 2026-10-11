@@ -1,0 +1,57 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4 to 6
+    ali:item minecraft:cobweb x1-6
+      | Chance: 14.93%
+      | Count: 1 to 6
+    ali:item minecraft:string x2-10
+      | Chance: 14.03%
+      | Count: 2 to 10
+    ali:item minecraft:cobblestone x3-8
+      | Chance: 12.67%
+      | Count: 3 to 8
+    ali:item minecraft:sculk x3-10
+      | Chance: 11.31%
+      | Count: 3 to 10
+    ali:item minecraft:gold_ingot x3-8
+      | Chance: 7.24%
+      | Count: 3 to 8
+    ali:item minecraft:iron_ingot x4-8
+      | Chance: 7.24%
+      | Count: 4 to 8
+    ali:item minecraft:redstone x4-9
+      | Chance: 6.33%
+      | Count: 4 to 9
+    ali:item minecraft:raw_copper x2-10
+      | Chance: 5.88%
+      | Count: 2 to 10
+    ali:item deeperdarker:soul_dust x2-5
+      | Chance: 4.52%
+      | Count: 2 to 5
+    ali:item minecraft:gold_nugget x5-17
+      | Chance: 4.07%
+      | Count: 5 to 17
+    ali:item minecraft:quartz x1-7
+      | Chance: 4.07%
+      | Count: 1 to 7
+    ali:item minecraft:diamond x3-6
+      | Chance: 3.62%
+      | Count: 3 to 6
+    ali:item minecraft:sculk_sensor x1-2
+      | Chance: 1.81%
+      | Count: 1 to 2
+    ali:item minecraft:sculk_catalyst x1-2
+      | Chance: 1.36%
+      | Count: 1 to 2
+    ali:item minecraft:diamond_sword x1 {Damage:0}
+      | Chance: 0.45%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20 to 50
+      |   -> Treasure: False
+    ali:item deeperdarker:soul_crystal x1-2
+      | Chance: 0.45%
+      | Count: 1 to 2

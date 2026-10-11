@@ -62,7 +62,8 @@ def extractNested = { List<String> coordinates, File nestedDir ->
     }
     def outerJars = configurations.detachedConfiguration(*coordinates.collect { dependencies.create(it) }).tap { transitive = false }.resolve()
     def fabricApi = configurations.detachedConfiguration(dependencies.create("net.fabricmc.fabric-api:fabric-api:${fabric_version}")).resolve()
-    def provided = (outerJars + fabricApi).collect { modOf(readJar(it.bytes))?.id }.findAll { it } as Set
+    def idsOf = { mod -> mod ? [mod.id] + (mod.provides ?: []) : [] }
+    def provided = (outerJars + fabricApi).collectMany { idsOf(modOf(readJar(it.bytes))) } as Set
     def nested = [:]
     def collect
 
@@ -74,7 +75,7 @@ def extractNested = { List<String> coordinates, File nestedDir ->
             def key = mod?.id ?: fileName
             def version = mod?.version?.toString() ?: ""
 
-            if (!provided.contains(key) && (!nested[key] || compareVersions(version, nested[key].version) > 0)) {
+            if (!idsOf(mod).any { provided.contains(it) } && (!nested[key] || compareVersions(version, nested[key].version) > 0)) {
                 nested[key] = [version: version, name: fileName, bytes: bytes]
             }
 
@@ -159,6 +160,8 @@ gametestMods.eachWithIndex { mod, index ->
             }
 
             delete "${runDir}/config", "${runDir}/world", "${runDir}/kubejs"
+            file(runDir).mkdirs()
+            file("${runDir}/eula.txt").text = "eula=true\n"
             copy {
                 from project(":alicompat:common").file("src/gametest/kubejs/${mod}")
                 into "${runDir}/kubejs"
