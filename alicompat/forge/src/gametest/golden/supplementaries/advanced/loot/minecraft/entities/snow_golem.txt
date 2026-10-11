@@ -1,0 +1,28 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:snowball x0-15
+      | Count: max(0; U[0; 15])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 0 to 15
+      |   -> Add: False
+  ali:item supplementaries:ash x1
+    | Chance: 15%
+    | Count: 1
+    | ----- Predicates -----
+    | Random Chance:
+    |   -> Probability: 0.15
+    | Inverted:
+    |   -> Entity Properties:
+    |     -> Target: This Entity
+    |     -> Predicate:
+    |       -> Entity Types:
+    |         -> Tag: supplementaries:ash_blacklist
+    | Entity Properties:
+    |   -> Target: This Entity
+    |   -> Predicate:
+    |     -> Entity Flags:
+    |       -> Is On Fire: True
