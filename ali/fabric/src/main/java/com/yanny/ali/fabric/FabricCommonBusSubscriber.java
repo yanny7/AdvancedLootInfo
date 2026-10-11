@@ -3,6 +3,7 @@ package com.yanny.ali.fabric;
 import com.yanny.ali.Utils;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.network.AbstractServer;
+import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
@@ -20,10 +21,13 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
 public class FabricCommonBusSubscriber {
+    private static final ResourceLocation AFTER_MODS = Utils.modLoc("after_mods");
+
     private static boolean serverLoaded = false;
 
     public static void registerEvents(AbstractServer server) {
-        ServerWorldEvents.LOAD.register(FabricCommonBusSubscriber::onServerStarting);
+        ServerWorldEvents.LOAD.addPhaseOrdering(Event.DEFAULT_PHASE, AFTER_MODS);
+        ServerWorldEvents.LOAD.register(AFTER_MODS, FabricCommonBusSubscriber::onServerStarting);
         ServerLifecycleEvents.SERVER_STOPPING.register(FabricCommonBusSubscriber::onServerStopping);
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register(FabricCommonBusSubscriber::onReload);
         ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(getReloadListener(server));

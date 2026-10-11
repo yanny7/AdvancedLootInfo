@@ -6,7 +6,7 @@ Guidance for `ali/fabric` (`com.yanny.ali.fabric`) — ALI's Fabric loader entry
 
 - `CommonAliMod implements ModInitializer` — holds `static final Server SERVER`.
 - `ClientAliMod implements ClientModInitializer` — holds `static final Client CLIENT`.
-- `FabricCommonBusSubscriber`/`FabricClientBusSubscriber` — wire Fabric lifecycle events (`ServerWorldEvents.LOAD`, `SERVER_STOPPING`, `END_DATA_PACK_RELOAD`) and register a fake-loot-table `IdentifiableResourceReloadListener` delegating to `SERVER.getFakeLootDataManager()` (see `ali/CLAUDE.md`'s `configuration`/`datagen` section for `FakeLootDataManager`).
+- `FabricCommonBusSubscriber`/`FabricClientBusSubscriber` — wire Fabric lifecycle events (`ServerWorldEvents.LOAD`, `SERVER_STOPPING`, `END_DATA_PACK_RELOAD`) — the `LOAD` scan in its own `ali:after_mods` phase after the default one, since mods (Bumblezone) fill `VillagerTrades` from that same event and listener order otherwise follows mod init order — and register a fake-loot-table `IdentifiableResourceReloadListener` delegating to `SERVER.getFakeLootDataManager()` (see `ali/CLAUDE.md`'s `configuration`/`datagen` section for `FakeLootDataManager`).
 
 ## Platform + networking implementation
 
