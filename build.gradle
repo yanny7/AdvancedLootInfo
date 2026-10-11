@@ -326,6 +326,32 @@ subprojects {
             filesMatching(["fabric.mod.json", "META-INF/mods.toml", "pack.mcmeta"]) {
                 expand project.ext.expandProps
             }
+
+            // strip a disabled viewer's entrypoint: its class isn't shadowed in, so Fabric can't find it either
+            def entrypointKeys = ["emi": "emi", "jei": "jei_mod_plugin", "rei": "rei_client"]
+            def viewerAvailability = ["emi": emi_available, "jei": jei_available, "rei": rei_available]
+
+            inputs.property("viewerAvailability", viewerAvailability)
+
+            doLast {
+                def modJsonFile = new File(destinationDir, "fabric.mod.json")
+
+                if (modJsonFile.exists()) {
+                    def modJson = new groovy.json.JsonSlurper().parse(modJsonFile)
+                    def changed = false
+
+                    viewerAvailability.each { viewer, available ->
+                        if (!available) {
+                            if (modJson.entrypoints?.remove(entrypointKeys[viewer])) changed = true
+                            if (modJson.suggests?.remove(viewer)) changed = true
+                        }
+                    }
+
+                    if (changed) {
+                        modJsonFile.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(modJson))
+                    }
+                }
+            }
         }
 
         sourceSets {
