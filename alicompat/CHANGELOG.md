@@ -1,7 +1,9 @@
 ## []
 
 - Added VillagerConfig support
-- Trade slots whose item is picked at random cycle through every possible item (Sawmill, Charm, MoreJS, Iron's Spellbooks, Immersive Engineering, Apotheosis)
+- Trade slots whose item is picked at random cycle through every possible item (Sawmill, Charm, MoreJS, Iron's Spellbooks, Immersive Engineering, Apotheosis, Ars Nouveau)
+- Fixed a stray colon after loot functions that carry no values (Aether, Applied Cooking, Bumblezone, ExtraStorage, Farmer's Delight, Immersive Engineering, Refined Storage, Sophisticated Backpacks and Sophisticated Storage)
+- Supplementaries red merchant trades keep the same order on every server start
 
 ## [1.2.0]
 
