@@ -2,7 +2,11 @@ package com.yanny.ali.plugin.common.trades;
 
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
-import com.yanny.ali.api.*;
+import com.yanny.ali.api.IClientUtils;
+import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.api.ListNode;
+import com.yanny.ali.plugin.common.nodes.EmptyNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +22,9 @@ public class SubTradesNode<T> extends ListNode {
         this.tooltip = condition;
 
         for (IDataNode subTrade : getSubTrades(utils, listing)) {
-            addChildren(subTrade);
+            if (!(subTrade instanceof EmptyNode)) {
+                addChildren(subTrade);
+            }
         }
     }
 

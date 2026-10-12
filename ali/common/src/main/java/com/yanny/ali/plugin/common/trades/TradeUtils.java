@@ -8,6 +8,7 @@ import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.NodeUtils;
+import com.yanny.ali.plugin.common.nodes.EmptyNode;
 import com.yanny.ali.plugin.common.nodes.GroupNode;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.server.DataComponentTooltipUtils;
@@ -27,11 +28,9 @@ import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class TradeUtils {
     @NotNull
@@ -156,6 +155,11 @@ public class TradeUtils {
     }
 
     @NotNull
+    public static EmptyNode getNode(IServerUtils ignoredUtils, VillagerTrades.FailureItemListing ignoredListing, TooltipNode condition) {
+        return new EmptyNode(1, condition);
+    }
+
+    @NotNull
     public static ItemsToItemsNode getNode(IServerUtils utils, VillagerTrades.ItemsAndEmeraldsToItems listing, TooltipNode condition) {
         return new ItemsToItemsNode(
                 utils,
@@ -263,7 +267,11 @@ public class TradeUtils {
             public List<IDataNode> getSubTrades(IServerUtils utils, VillagerTrades.TypeSpecificTrade listing) {
                 List<IDataNode> nodes = new ArrayList<>();
 
-                for (Map.Entry<VillagerType, VillagerTrades.ItemListing> entry : listing.trades().entrySet()) {
+                List<Map.Entry<VillagerType, VillagerTrades.ItemListing>> entries = new ArrayList<>(listing.trades().entrySet());
+
+                entries.sort(Comparator.comparingInt((entry) -> BuiltInRegistries.VILLAGER_TYPE.getId(entry.getKey())));
+
+                for (Map.Entry<VillagerType, VillagerTrades.ItemListing> entry : entries) {
                     VillagerType type = entry.getKey();
                     TooltipNode cond = utils.getValueTooltip(utils, ResourceKey.create(Registries.VILLAGER_TYPE, BuiltInRegistries.VILLAGER_TYPE.getKey(type))).build(Lang.Value.VILLAGER_TYPE);
 
