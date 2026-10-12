@@ -8,11 +8,21 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Furnace Smelt
       |   -> Predicates:
-      |     -> Entity Properties:
-      |       -> Target: This Entity
-      |       -> Predicate:
-      |         -> Entity Flags:
-      |           -> Is On Fire: True
+      |     -> Any Of:
+      |       -> Entity Properties:
+      |         -> Target: This Entity
+      |         -> Predicate:
+      |           -> Entity Flags:
+      |             -> Is On Fire: True
+      |       -> Entity Properties:
+      |         -> Target: Direct Attacker
+      |         -> Predicate:
+      |           -> Entity Equipment:
+      |             -> Main Hand:
+      |               -> Item Predicates:
+      |                 -> Enchantments:
+      |                   -> Enchantments:
+      |                     -> Tag: minecraft:smelts_loot
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -21,4 +31,4 @@ ali:entity_loot_table
       | Count: 1
       | ----- Predicates -----
       | Random Chance:
-      |   -> Probability: 0.05
+      |   -> Chance: 0.05

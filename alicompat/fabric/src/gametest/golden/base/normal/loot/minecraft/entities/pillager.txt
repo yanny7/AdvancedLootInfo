@@ -3,7 +3,23 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:crossbow x1 {Damage:0}
+    ali:item minecraft:ominous_bottle x1
+      | Count: 1
+      | ----- Predicates -----
+      | Entity Properties:
+      |   -> Target: This Entity
+      |   -> Predicate:
+      |     -> Entity Sub Predicate:
+      |       -> Raider:
+      |         -> Has Raid: False
+      |         -> Is Captain: True
+      | ----- Modifiers -----
+      | Set Ominous Bottle Amplifier:
+      |   -> Amplifier: 0 to 4
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:crossbow x1
       | Chance: 8.5%
       |   -> Looting I: 9.5%
       |   -> Looting II: 10.5%
@@ -17,6 +33,8 @@ ali:entity_loot_table
       |       -> Main Hand:
       |         -> Item: Crossbow
       | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Only Compatible: True
       | Set Damage:
       |   -> Damage: 0% to 100%
       |   -> Add: False

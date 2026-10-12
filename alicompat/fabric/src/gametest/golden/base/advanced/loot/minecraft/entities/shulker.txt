@@ -5,12 +5,15 @@ ali:entity_loot_table
     | Rolls: 1
     ali:item minecraft:shulker_shell x1
       | Chance: 50%
-      |   -> Looting LVL: 50% + LVL × 6.25%
+      |   -> Looting LVL: [50%][LVL] | 56.25% + 6.25% × (LVL − 100%)
       |   -> Looting I: 56.25%
       |   -> Looting II: 62.5%
       |   -> Looting III: 68.75%
       | Count: 1
       | ----- Predicates -----
-      | Random Chance With Looting:
-      |   -> Percent: 0.5
-      |   -> Multiplier: 0.0625
+      | Random Chance With Enchanted Bonus:
+      |   -> Chance: 0.5
+      |     -> Looting LVL: [0.5][LVL] | 0.56 + 0.06 × (LVL − 1)
+      |     -> Looting I: 0.56
+      |     -> Looting II: 0.63
+      |     -> Looting III: 0.69

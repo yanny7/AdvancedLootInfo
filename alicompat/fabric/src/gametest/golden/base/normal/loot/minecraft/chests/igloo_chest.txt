@@ -18,7 +18,7 @@ ali:loot_table
     ali:item minecraft:wheat x2-3
       | Chance: 15.87%
       | Count: 2 to 3
-    ali:item minecraft:stone_axe x1 {Damage:0}
+    ali:item minecraft:stone_axe x1
       | Chance: 3.17%
       | Count: 1
     ali:item minecraft:emerald x1

@@ -34,7 +34,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 2 to 3
       |   -> Add: False
-    ali:item minecraft:stone_axe x1 {Damage:0}
+    ali:item minecraft:stone_axe x1
       | Chance: 3.17%
       | Count: 1
     ali:item minecraft:emerald x1

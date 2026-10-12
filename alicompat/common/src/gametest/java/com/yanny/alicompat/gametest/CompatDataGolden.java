@@ -45,7 +45,7 @@ public class CompatDataGolden {
 
         AliConfig config = PluginManager.getInstance().commonRegistry.getConfiguration();
         GoldenFiles golden = GoldenFiles.fromProperties(Utils.MOD_ID);
-        Map<String, String> actual = LootDataCapture.capture(aliServer, config);
+        Map<String, String> actual = LootDataCapture.capture(aliServer, config, helper.getLevel().getServer().registryAccess());
         Map<String, String> files = BASE.equals(mod) ? actual : GoldenFiles.diff(golden.resolve(BASE).expected(), actual);
         String findings = findings(files);
 

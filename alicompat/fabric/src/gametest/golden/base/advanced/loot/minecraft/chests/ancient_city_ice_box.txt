@@ -17,15 +17,15 @@ ali:loot_table
       | Set Count:
       |   -> Count: 2 to 6
       |   -> Add: False
-    ali:item minecraft:suspicious_stew x1
+    ali:item minecraft:suspicious_stew x2-6
       | Chance: 11.11%
       | Count: max(0; U[2; 6])
       | ----- Modifiers -----
       | Set Stew Effect:
-      |   -> Blindness
-      |     -> Duration: 5 to 7
       |   -> Night Vision
       |     -> Duration: 7 to 10
+      |   -> Blindness
+      |     -> Duration: 5 to 7
       | Set Count:
       |   -> Count: 2 to 6
       |   -> Add: False

@@ -132,7 +132,7 @@ Register nothing ALI already registers: node ids, widgets and data-node factorie
 
 ## Gametests
 
-One server-side GameTest per loader, in a `gametest` source set of `alicompat/fabric` and `alicompat/forge`, run once per target mod — `-Palicompat_gametest=<slug>`, or `all` for the base and every mod at once — so a shim is checked against the real mod in a real loader. It compiles ACI's shared gametest classes and ALI's `LootDataCapture` (see `ali/CLAUDE.md`'s gametest section) next to `alicompat/common/src/gametest/java/.../CompatDataGolden`, and each loader adds only the `@GameTest` wrapper.
+One server-side GameTest per loader, in a `gametest` source set of `alicompat/fabric` and `alicompat/forge`, run once per target mod — `-Palicompat_gametest=<slug>`, or `all` for the base and every mod at once — so a shim is checked against the real mod in a real loader. It compiles ACI's shared gametest classes and ALI's `LootDataCapture` (see `ali/CLAUDE.md`'s gametest section) next to `alicompat/common/src/gametest/java/.../CompatDataGolden`, and each loader adds only the `@GameTest` wrapper — on Forge also `GameTestServerScan`, which starts ALI's scan on `ServerStartedEvent` because Forge's `GameTestServer` never posts `ServerStartingEvent`.
 
 Every slug in `compat_mods` has passed its run on every loader it is pinned for, so `-Palicompat_gametest=all` is the regression check of all shims at once; a new or newly activated shim keeps that true (step 5 of Adding a target mod).
 

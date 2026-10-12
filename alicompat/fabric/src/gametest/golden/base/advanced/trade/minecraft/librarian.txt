@@ -9,14 +9,70 @@ ali:trade
       ali:item minecraft:paper x24
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
-    ali:items_to_items
-      | Uses: 12
-      | XP: 1
-      | Price Multiplier: 0.2
-      ali:item minecraft:emerald x5-64
-      ali:item minecraft:air x0
-      ali:item minecraft:enchanted_book x1
-        | Enchant Randomly:
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:desert
+        | Uses: 12
+        | XP: 1
+        | Price Multiplier: 0.2
+        ali:item minecraft:emerald x5-64
+        ali:item minecraft:air x0
+        ali:item minecraft:enchanted_book x1
+          | Enchant Randomly:
+      ali:items_to_items
+        | Villager Type: minecraft:jungle
+        | Uses: 12
+        | XP: 1
+        | Price Multiplier: 0.2
+        ali:item minecraft:emerald x5-64
+        ali:item minecraft:air x0
+        ali:item minecraft:enchanted_book x1
+          | Enchant Randomly:
+      ali:items_to_items
+        | Villager Type: minecraft:plains
+        | Uses: 12
+        | XP: 1
+        | Price Multiplier: 0.2
+        ali:item minecraft:emerald x5-64
+        ali:item minecraft:air x0
+        ali:item minecraft:enchanted_book x1
+          | Enchant Randomly:
+      ali:items_to_items
+        | Villager Type: minecraft:savanna
+        | Uses: 12
+        | XP: 1
+        | Price Multiplier: 0.2
+        ali:item minecraft:emerald x5-64
+        ali:item minecraft:air x0
+        ali:item minecraft:enchanted_book x1
+          | Enchant Randomly:
+      ali:items_to_items
+        | Villager Type: minecraft:snow
+        | Uses: 12
+        | XP: 1
+        | Price Multiplier: 0.2
+        ali:item minecraft:emerald x5-64
+        ali:item minecraft:air x0
+        ali:item minecraft:enchanted_book x1
+          | Enchant Randomly:
+      ali:items_to_items
+        | Villager Type: minecraft:swamp
+        | Uses: 12
+        | XP: 1
+        | Price Multiplier: 0.2
+        ali:item minecraft:emerald x5-64
+        ali:item minecraft:air x0
+        ali:item minecraft:enchanted_book x1
+          | Enchant Randomly:
+      ali:items_to_items
+        | Villager Type: minecraft:taiga
+        | Uses: 12
+        | XP: 1
+        | Price Multiplier: 0.2
+        ali:item minecraft:emerald x5-64
+        ali:item minecraft:air x0
+        ali:item minecraft:enchanted_book x1
+          | Enchant Randomly:
     ali:items_to_items
       | Uses: 12
       | XP: 1
@@ -34,14 +90,70 @@ ali:trade
       ali:item minecraft:book x4
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
-    ali:items_to_items
-      | Uses: 12
-      | XP: 5
-      | Price Multiplier: 0.2
-      ali:item minecraft:emerald x5-64
-      ali:item minecraft:air x0
-      ali:item minecraft:enchanted_book x1
-        | Enchant Randomly:
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:desert
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.2
+        ali:item minecraft:emerald x5-64
+        ali:item minecraft:air x0
+        ali:item minecraft:enchanted_book x1
+          | Enchant Randomly:
+      ali:items_to_items
+        | Villager Type: minecraft:jungle
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.2
+        ali:item minecraft:emerald x5-64
+        ali:item minecraft:air x0
+        ali:item minecraft:enchanted_book x1
+          | Enchant Randomly:
+      ali:items_to_items
+        | Villager Type: minecraft:plains
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.2
+        ali:item minecraft:emerald x5-64
+        ali:item minecraft:air x0
+        ali:item minecraft:enchanted_book x1
+          | Enchant Randomly:
+      ali:items_to_items
+        | Villager Type: minecraft:savanna
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.2
+        ali:item minecraft:emerald x5-64
+        ali:item minecraft:air x0
+        ali:item minecraft:enchanted_book x1
+          | Enchant Randomly:
+      ali:items_to_items
+        | Villager Type: minecraft:snow
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.2
+        ali:item minecraft:emerald x5-64
+        ali:item minecraft:air x0
+        ali:item minecraft:enchanted_book x1
+          | Enchant Randomly:
+      ali:items_to_items
+        | Villager Type: minecraft:swamp
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.2
+        ali:item minecraft:emerald x5-64
+        ali:item minecraft:air x0
+        ali:item minecraft:enchanted_book x1
+          | Enchant Randomly:
+      ali:items_to_items
+        | Villager Type: minecraft:taiga
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.2
+        ali:item minecraft:emerald x5-64
+        ali:item minecraft:air x0
+        ali:item minecraft:enchanted_book x1
+          | Enchant Randomly:
     ali:items_to_items
       | Uses: 12
       | XP: 5
@@ -59,14 +171,70 @@ ali:trade
       ali:item minecraft:ink_sac x5
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
-    ali:items_to_items
-      | Uses: 12
-      | XP: 10
-      | Price Multiplier: 0.2
-      ali:item minecraft:emerald x5-64
-      ali:item minecraft:air x0
-      ali:item minecraft:enchanted_book x1
-        | Enchant Randomly:
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:desert
+        | Uses: 12
+        | XP: 10
+        | Price Multiplier: 0.2
+        ali:item minecraft:emerald x5-64
+        ali:item minecraft:air x0
+        ali:item minecraft:enchanted_book x1
+          | Enchant Randomly:
+      ali:items_to_items
+        | Villager Type: minecraft:jungle
+        | Uses: 12
+        | XP: 10
+        | Price Multiplier: 0.2
+        ali:item minecraft:emerald x5-64
+        ali:item minecraft:air x0
+        ali:item minecraft:enchanted_book x1
+          | Enchant Randomly:
+      ali:items_to_items
+        | Villager Type: minecraft:plains
+        | Uses: 12
+        | XP: 10
+        | Price Multiplier: 0.2
+        ali:item minecraft:emerald x5-64
+        ali:item minecraft:air x0
+        ali:item minecraft:enchanted_book x1
+          | Enchant Randomly:
+      ali:items_to_items
+        | Villager Type: minecraft:savanna
+        | Uses: 12
+        | XP: 10
+        | Price Multiplier: 0.2
+        ali:item minecraft:emerald x5-64
+        ali:item minecraft:air x0
+        ali:item minecraft:enchanted_book x1
+          | Enchant Randomly:
+      ali:items_to_items
+        | Villager Type: minecraft:snow
+        | Uses: 12
+        | XP: 10
+        | Price Multiplier: 0.2
+        ali:item minecraft:emerald x5-64
+        ali:item minecraft:air x0
+        ali:item minecraft:enchanted_book x1
+          | Enchant Randomly:
+      ali:items_to_items
+        | Villager Type: minecraft:swamp
+        | Uses: 12
+        | XP: 10
+        | Price Multiplier: 0.2
+        ali:item minecraft:emerald x5-64
+        ali:item minecraft:air x0
+        ali:item minecraft:enchanted_book x1
+          | Enchant Randomly:
+      ali:items_to_items
+        | Villager Type: minecraft:taiga
+        | Uses: 12
+        | XP: 10
+        | Price Multiplier: 0.2
+        ali:item minecraft:emerald x5-64
+        ali:item minecraft:air x0
+        ali:item minecraft:enchanted_book x1
+          | Enchant Randomly:
     ali:items_to_items
       | Uses: 12
       | XP: 10
@@ -81,17 +249,9 @@ ali:trade
       | Uses: 12
       | XP: 30
       | Price Multiplier: 0.05
-      ali:item minecraft:writable_book x1
+      ali:item minecraft:writable_book x2
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
-    ali:items_to_items
-      | Uses: 12
-      | XP: 15
-      | Price Multiplier: 0.2
-      ali:item minecraft:emerald x5-64
-      ali:item minecraft:air x0
-      ali:item minecraft:enchanted_book x1
-        | Enchant Randomly:
     ali:items_to_items
       | Uses: 12
       | XP: 15
@@ -108,7 +268,71 @@ ali:trade
       ali:item minecraft:compass x1
   ali:trade_level
     | Level: 5
-    | Randomly Selects 1 Of These Trades
+    | Randomly Selects 2 Of These Trades
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:desert
+        | Uses: 12
+        | XP: 30
+        | Price Multiplier: 0.2
+        ali:item minecraft:emerald x5-64
+        ali:item minecraft:air x0
+        ali:item minecraft:enchanted_book x1
+          | Enchant Randomly:
+      ali:items_to_items
+        | Villager Type: minecraft:jungle
+        | Uses: 12
+        | XP: 30
+        | Price Multiplier: 0.2
+        ali:item minecraft:emerald x5-64
+        ali:item minecraft:air x0
+        ali:item minecraft:enchanted_book x1
+          | Enchant Randomly:
+      ali:items_to_items
+        | Villager Type: minecraft:plains
+        | Uses: 12
+        | XP: 30
+        | Price Multiplier: 0.2
+        ali:item minecraft:emerald x5-64
+        ali:item minecraft:air x0
+        ali:item minecraft:enchanted_book x1
+          | Enchant Randomly:
+      ali:items_to_items
+        | Villager Type: minecraft:savanna
+        | Uses: 12
+        | XP: 30
+        | Price Multiplier: 0.2
+        ali:item minecraft:emerald x5-64
+        ali:item minecraft:air x0
+        ali:item minecraft:enchanted_book x1
+          | Enchant Randomly:
+      ali:items_to_items
+        | Villager Type: minecraft:snow
+        | Uses: 12
+        | XP: 30
+        | Price Multiplier: 0.2
+        ali:item minecraft:emerald x5-64
+        ali:item minecraft:air x0
+        ali:item minecraft:enchanted_book x1
+          | Enchant Randomly:
+      ali:items_to_items
+        | Villager Type: minecraft:swamp
+        | Uses: 12
+        | XP: 30
+        | Price Multiplier: 0.2
+        ali:item minecraft:emerald x5-64
+        ali:item minecraft:air x0
+        ali:item minecraft:enchanted_book x1
+          | Enchant Randomly:
+      ali:items_to_items
+        | Villager Type: minecraft:taiga
+        | Uses: 12
+        | XP: 30
+        | Price Multiplier: 0.2
+        ali:item minecraft:emerald x5-64
+        ali:item minecraft:air x0
+        ali:item minecraft:enchanted_book x1
+          | Enchant Randomly:
     ali:items_to_items
       | Uses: 12
       | XP: 30

@@ -9,21 +9,24 @@ ali:entity_loot_table
         | Count: 1
         | ----- Predicates -----
         | Entity Properties:
-        |   -> Target: Killer
+        |   -> Target: Attacker
         |   -> Predicate:
         |     -> Entity Type: Creeper
         |     -> Nbt: {powered:1b}
-      ali:item minecraft:golden_sword x1 {Damage:0}
+      ali:item minecraft:golden_sword x1
         | Chance: 8.5%
-        |   -> Looting LVL: 8.5% + LVL × 1%
+        |   -> Looting LVL: [8.5%][LVL] | 9.5% + 1% × (LVL − 100%)
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
         |   -> Looting III: 11.5%
         | Count: 1
         | ----- Predicates -----
-        | Random Chance With Looting:
-        |   -> Percent: 0.085
-        |   -> Multiplier: 0.01
+        | Random Chance With Enchanted Bonus:
+        |   -> Chance: 0.09
+        |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
+        |     -> Looting I: 0.09
+        |     -> Looting II: 0.1
+        |     -> Looting III: 0.11
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
@@ -32,23 +35,27 @@ ali:entity_loot_table
         |         -> Item: Golden Sword
         | ----- Modifiers -----
         | Enchant Randomly:
+        |   -> Only Compatible: True
         |   -> Predicates:
         |     -> Random Chance:
-        |       -> Probability: 0.25
+        |       -> Chance: 0.25
         | Set Damage:
         |   -> Damage: U[0%; 100%)
         |   -> Add: False
-      ali:item minecraft:crossbow x1 {Damage:0}
+      ali:item minecraft:crossbow x1
         | Chance: 8.5%
-        |   -> Looting LVL: 8.5% + LVL × 1%
+        |   -> Looting LVL: [8.5%][LVL] | 9.5% + 1% × (LVL − 100%)
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
         |   -> Looting III: 11.5%
         | Count: 1
         | ----- Predicates -----
-        | Random Chance With Looting:
-        |   -> Percent: 0.085
-        |   -> Multiplier: 0.01
+        | Random Chance With Enchanted Bonus:
+        |   -> Chance: 0.09
+        |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
+        |     -> Looting I: 0.09
+        |     -> Looting II: 0.1
+        |     -> Looting III: 0.11
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
@@ -57,23 +64,27 @@ ali:entity_loot_table
         |         -> Item: Crossbow
         | ----- Modifiers -----
         | Enchant Randomly:
+        |   -> Only Compatible: True
         |   -> Predicates:
         |     -> Random Chance:
-        |       -> Probability: 0.25
+        |       -> Chance: 0.25
         | Set Damage:
         |   -> Damage: U[0%; 100%)
         |   -> Add: False
-      ali:item minecraft:golden_helmet x1 {Damage:0}
+      ali:item minecraft:golden_helmet x1
         | Chance: 8.5%
-        |   -> Looting LVL: 8.5% + LVL × 1%
+        |   -> Looting LVL: [8.5%][LVL] | 9.5% + 1% × (LVL − 100%)
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
         |   -> Looting III: 11.5%
         | Count: 1
         | ----- Predicates -----
-        | Random Chance With Looting:
-        |   -> Percent: 0.085
-        |   -> Multiplier: 0.01
+        | Random Chance With Enchanted Bonus:
+        |   -> Chance: 0.09
+        |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
+        |     -> Looting I: 0.09
+        |     -> Looting II: 0.1
+        |     -> Looting III: 0.11
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
@@ -82,23 +93,27 @@ ali:entity_loot_table
         |         -> Item: Golden Helmet
         | ----- Modifiers -----
         | Enchant Randomly:
+        |   -> Only Compatible: True
         |   -> Predicates:
         |     -> Random Chance:
-        |       -> Probability: 0.5
+        |       -> Chance: 0.5
         | Set Damage:
         |   -> Damage: U[0%; 100%)
         |   -> Add: False
-      ali:item minecraft:golden_chestplate x1 {Damage:0}
+      ali:item minecraft:golden_chestplate x1
         | Chance: 8.5%
-        |   -> Looting LVL: 8.5% + LVL × 1%
+        |   -> Looting LVL: [8.5%][LVL] | 9.5% + 1% × (LVL − 100%)
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
         |   -> Looting III: 11.5%
         | Count: 1
         | ----- Predicates -----
-        | Random Chance With Looting:
-        |   -> Percent: 0.085
-        |   -> Multiplier: 0.01
+        | Random Chance With Enchanted Bonus:
+        |   -> Chance: 0.09
+        |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
+        |     -> Looting I: 0.09
+        |     -> Looting II: 0.1
+        |     -> Looting III: 0.11
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
@@ -107,23 +122,27 @@ ali:entity_loot_table
         |         -> Item: Golden Chestplate
         | ----- Modifiers -----
         | Enchant Randomly:
+        |   -> Only Compatible: True
         |   -> Predicates:
         |     -> Random Chance:
-        |       -> Probability: 0.5
+        |       -> Chance: 0.5
         | Set Damage:
         |   -> Damage: U[0%; 100%)
         |   -> Add: False
-      ali:item minecraft:golden_leggings x1 {Damage:0}
+      ali:item minecraft:golden_leggings x1
         | Chance: 8.5%
-        |   -> Looting LVL: 8.5% + LVL × 1%
+        |   -> Looting LVL: [8.5%][LVL] | 9.5% + 1% × (LVL − 100%)
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
         |   -> Looting III: 11.5%
         | Count: 1
         | ----- Predicates -----
-        | Random Chance With Looting:
-        |   -> Percent: 0.085
-        |   -> Multiplier: 0.01
+        | Random Chance With Enchanted Bonus:
+        |   -> Chance: 0.09
+        |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
+        |     -> Looting I: 0.09
+        |     -> Looting II: 0.1
+        |     -> Looting III: 0.11
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
@@ -132,23 +151,27 @@ ali:entity_loot_table
         |         -> Item: Golden Leggings
         | ----- Modifiers -----
         | Enchant Randomly:
+        |   -> Only Compatible: True
         |   -> Predicates:
         |     -> Random Chance:
-        |       -> Probability: 0.5
+        |       -> Chance: 0.5
         | Set Damage:
         |   -> Damage: U[0%; 100%)
         |   -> Add: False
-      ali:item minecraft:golden_boots x1 {Damage:0}
+      ali:item minecraft:golden_boots x1
         | Chance: 8.5%
-        |   -> Looting LVL: 8.5% + LVL × 1%
+        |   -> Looting LVL: [8.5%][LVL] | 9.5% + 1% × (LVL − 100%)
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
         |   -> Looting III: 11.5%
         | Count: 1
         | ----- Predicates -----
-        | Random Chance With Looting:
-        |   -> Percent: 0.085
-        |   -> Multiplier: 0.01
+        | Random Chance With Enchanted Bonus:
+        |   -> Chance: 0.09
+        |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
+        |     -> Looting I: 0.09
+        |     -> Looting II: 0.1
+        |     -> Looting III: 0.11
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
@@ -157,9 +180,10 @@ ali:entity_loot_table
         |         -> Item: Golden Boots
         | ----- Modifiers -----
         | Enchant Randomly:
+        |   -> Only Compatible: True
         |   -> Predicates:
         |     -> Random Chance:
-        |       -> Probability: 0.5
+        |       -> Chance: 0.5
         | Set Damage:
         |   -> Damage: U[0%; 100%)
         |   -> Add: False

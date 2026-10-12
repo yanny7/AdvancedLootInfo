@@ -6,7 +6,7 @@ ali:loot_table
     ali:item minecraft:lily_pad x1
       | Chance: 15.45%
       | Count: 1
-    ali:item minecraft:leather_boots x1 {Damage:0}
+    ali:item minecraft:leather_boots x1
       | Chance: 9.09%
       | Count: 1
       | ----- Modifiers -----
@@ -19,7 +19,7 @@ ali:loot_table
     ali:item minecraft:bone x1
       | Chance: 9.09%
       | Count: 1
-    ali:item minecraft:potion x1 {Potion:"minecraft:water"}
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:water"}}
       | Chance: 9.09%
       | Count: 1
       | ----- Modifiers -----
@@ -38,23 +38,19 @@ ali:loot_table
       | Chance: 9.09%
       | Count: 1
       | ----- Predicates -----
-      | Any Of:
-      |   -> Location Check:
-      |     -> Location:
-      |       -> Biome: Jungle
-      |   -> Location Check:
-      |     -> Location:
-      |       -> Biome: Sparse Jungle
-      |   -> Location Check:
-      |     -> Location:
-      |       -> Biome: Bamboo Jungle
+      | Location Check:
+      |   -> Location:
+      |     -> Biomes:
+      |       -> Jungle
+      |       -> Sparse Jungle
+      |       -> Bamboo Jungle
     ali:item minecraft:string x1
       | Chance: 4.55%
       | Count: 1
     ali:item minecraft:stick x1
       | Chance: 4.55%
       | Count: 1
-    ali:item minecraft:fishing_rod x1 {Damage:0}
+    ali:item minecraft:fishing_rod x1
       | Chance: 1.82%
       | Count: 1
       | ----- Modifiers -----

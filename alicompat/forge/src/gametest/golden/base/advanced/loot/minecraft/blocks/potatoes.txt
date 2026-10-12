@@ -41,6 +41,6 @@ ali:loot_table
       |   -> Properties:
       |     -> age: 7
       | Random Chance:
-      |   -> Probability: 0.02
+      |   -> Chance: 0.02
       | ----- Modifiers -----
       | Explosion Decay

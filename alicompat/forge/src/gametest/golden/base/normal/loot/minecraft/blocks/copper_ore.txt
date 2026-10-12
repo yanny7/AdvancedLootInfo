@@ -9,9 +9,10 @@ ali:loot_table
         | Count: 1
         | ----- Predicates -----
         | Match Tool:
-        |   -> Enchantments:
-        |     -> Enchantment: Silk Touch
-        |     -> Level: ≥ 1
+        |   -> Item Predicates:
+        |     -> Enchantments:
+        |       -> Enchantment: Silk Touch
+        |       -> Level: ≥ 1
       ali:item minecraft:raw_copper x2-20
         | Count: 2 to 5
         |   -> Fortune I: 2 to 10  ~4 (25%)

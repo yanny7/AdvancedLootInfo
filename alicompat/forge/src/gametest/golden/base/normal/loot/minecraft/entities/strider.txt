@@ -10,5 +10,6 @@ ali:entity_loot_table
       |   -> Looting III: 2 to 8  ~5 (25%)
       |   [chart 0..3 2-5 base=true modes=[false, false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,1.0000,0.0000,0.0000,0.0000 | 0..4 2-6 base=false modes=[false, true, true, true, false, false, false] heights=0.5000,1.0000,1.0000,1.0000,0.5000,0.0000,0.0000 | 0..5 2-7 base=false modes=[false, false, true, true, false, false, false] heights=0.2500,0.7500,1.0000,1.0000,0.7500,0.2500,0.0000 | 0..6 2-8 base=false modes=[false, false, false, true, false, false, false] heights=0.1667,0.5000,0.8333,1.0000,0.8333,0.5000,0.1667]
       | ----- Modifiers -----
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: 0 to 1

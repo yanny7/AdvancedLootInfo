@@ -45,7 +45,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 4 to 9
       |   -> Add: False
-    ali:item minecraft:iron_pickaxe x1 {Damage:0}
+    ali:item minecraft:iron_pickaxe x1
       | Chance: 1.61%
       | Count: 1
     ali:item minecraft:enchanted_book x1
@@ -54,4 +54,5 @@ ali:loot_table
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 30
-      |   -> Treasure: True
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot

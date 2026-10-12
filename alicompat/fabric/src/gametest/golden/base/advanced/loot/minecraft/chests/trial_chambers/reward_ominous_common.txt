@@ -1,0 +1,44 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:emerald x4-10
+      | Chance: 33.33%
+      | Count: max(0; U[4; 10])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4 to 10
+      |   -> Add: False
+    ali:item minecraft:wind_charge x8-12
+      | Chance: 26.67%
+      | Count: max(0; U[8; 12])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 8 to 12
+      |   -> Add: False
+    ali:item minecraft:tipped_arrow x4-12 {"minecraft:potion_contents":{potion:"minecraft:strong_slowness"}}
+      | Chance: 20%
+      | Count: max(0; U[4; 12])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4 to 12
+      |   -> Add: False
+      | Set Potion:
+      |   -> Potion: Potion of Slowness
+    ali:item minecraft:diamond x2-3
+      | Chance: 13.33%
+      | Count: max(0; U[2; 3])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 3
+      |   -> Add: False
+    ali:item minecraft:ominous_bottle x1
+      | Chance: 6.67%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+      | Set Ominous Bottle Amplifier:
+      |   -> Amplifier: 2 to 4

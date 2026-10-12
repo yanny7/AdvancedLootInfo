@@ -29,7 +29,8 @@ ali:loot_table
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
-      |   -> Soul Speed
+      |   -> Enchantment: Soul Speed
+      |   -> Only Compatible: True
     ali:item minecraft:piglin_banner_pattern x1
       | Chance: 10.11%
       | Count: 1
@@ -44,7 +45,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1
       |   -> Add: False
-    ali:item minecraft:diamond_pickaxe x1 {Damage:0}
+    ali:item minecraft:diamond_pickaxe x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 6.74%
       | Count: 1
       | ----- Modifiers -----
@@ -52,14 +53,17 @@ ali:loot_table
       |   -> Count: 1
       |   -> Add: False
       | Enchant Randomly:
-    ali:item minecraft:diamond_shovel x1 {Damage:0}
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:diamond_shovel x1
       | Chance: 6.74%
       | Count: 1
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1
       |   -> Add: False
-    ali:item minecraft:crossbow x1 {Damage:0}
+    ali:item minecraft:crossbow x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 6.74%
       | Count: 1
       | ----- Modifiers -----
@@ -67,6 +71,9 @@ ali:loot_table
       |   -> Damage: U[10%; 90%)
       |   -> Add: False
       | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
     ali:item minecraft:music_disc_pigstep x1
       | Chance: 5.62%
       | Count: 1
@@ -84,7 +91,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 2
-    ali:item minecraft:iron_sword x1 {Damage:0}
+    ali:item minecraft:iron_sword x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 10%
       | Count: 1
       | ----- Modifiers -----
@@ -95,6 +102,9 @@ ali:loot_table
       |   -> Count: 1
       |   -> Add: False
       | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
     ali:item minecraft:iron_block x1
       | Chance: 10%
       | Count: 1
@@ -130,7 +140,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1 to 5
       |   -> Add: False
-    ali:item minecraft:golden_boots x1 {Damage:0}
+    ali:item minecraft:golden_boots x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 5%
       | Count: 1
       | ----- Modifiers -----
@@ -138,8 +148,9 @@ ali:loot_table
       |   -> Count: 1
       |   -> Add: False
       | Enchant Randomly:
-      |   -> Soul Speed
-    ali:item minecraft:golden_axe x1 {Damage:0}
+      |   -> Enchantment: Soul Speed
+      |   -> Only Compatible: True
+    ali:item minecraft:golden_axe x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 5%
       | Count: 1
       | ----- Modifiers -----
@@ -147,42 +158,45 @@ ali:loot_table
       |   -> Count: 1
       |   -> Add: False
       | Enchant Randomly:
-    ali:item minecraft:crossbow x1 {Damage:0}
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:crossbow x1
       | Chance: 5%
       | Count: 1
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1
       |   -> Add: False
-    ali:item minecraft:golden_sword x1 {Damage:0}
+    ali:item minecraft:golden_sword x1
       | Chance: 5%
       | Count: 1
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1
       |   -> Add: False
-    ali:item minecraft:golden_chestplate x1 {Damage:0}
+    ali:item minecraft:golden_chestplate x1
       | Chance: 5%
       | Count: 1
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1
       |   -> Add: False
-    ali:item minecraft:golden_helmet x1 {Damage:0}
+    ali:item minecraft:golden_helmet x1
       | Chance: 5%
       | Count: 1
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1
       |   -> Add: False
-    ali:item minecraft:golden_leggings x1 {Damage:0}
+    ali:item minecraft:golden_leggings x1
       | Chance: 5%
       | Count: 1
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1
       |   -> Add: False
-    ali:item minecraft:golden_boots x1 {Damage:0}
+    ali:item minecraft:golden_boots x1
       | Chance: 5%
       | Count: 1
       | ----- Modifiers -----

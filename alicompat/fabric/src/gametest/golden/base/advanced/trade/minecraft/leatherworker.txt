@@ -15,7 +15,7 @@ ali:trade
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x3
       ali:item minecraft:air x0
-      ali:item minecraft:leather_leggings x1 {Damage:0}
+      ali:item minecraft:leather_leggings x1
         | Dyed Randomly
     ali:items_to_items
       | Uses: 12
@@ -23,7 +23,7 @@ ali:trade
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x7
       ali:item minecraft:air x0
-      ali:item minecraft:leather_chestplate x1 {Damage:0}
+      ali:item minecraft:leather_chestplate x1
         | Dyed Randomly
   ali:trade_level
     | Level: 2
@@ -41,7 +41,7 @@ ali:trade
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x5
       ali:item minecraft:air x0
-      ali:item minecraft:leather_helmet x1 {Damage:0}
+      ali:item minecraft:leather_helmet x1
         | Dyed Randomly
     ali:items_to_items
       | Uses: 12
@@ -49,7 +49,7 @@ ali:trade
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x4
       ali:item minecraft:air x0
-      ali:item minecraft:leather_boots x1 {Damage:0}
+      ali:item minecraft:leather_boots x1
         | Dyed Randomly
   ali:trade_level
     | Level: 3
@@ -67,7 +67,7 @@ ali:trade
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x7
       ali:item minecraft:air x0
-      ali:item minecraft:leather_chestplate x1 {Damage:0}
+      ali:item minecraft:leather_chestplate x1
         | Dyed Randomly
   ali:trade_level
     | Level: 4
@@ -76,7 +76,7 @@ ali:trade
       | Uses: 12
       | XP: 30
       | Price Multiplier: 0.05
-      ali:item minecraft:scute x4
+      ali:item minecraft:turtle_scute x4
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
@@ -103,5 +103,5 @@ ali:trade
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x5
       ali:item minecraft:air x0
-      ali:item minecraft:leather_helmet x1 {Damage:0}
+      ali:item minecraft:leather_helmet x1
         | Dyed Randomly

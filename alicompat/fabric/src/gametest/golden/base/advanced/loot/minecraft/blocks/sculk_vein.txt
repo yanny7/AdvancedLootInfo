@@ -31,9 +31,10 @@ ali:loot_table
       |       -> east: true
       | ----- Predicates -----
       | Match Tool:
-      |   -> Enchantments:
-      |     -> Enchantment: Silk Touch
-      |     -> Level: ≥ 1
+      |   -> Item Predicates:
+      |     -> Enchantments:
+      |       -> Enchantment: Silk Touch
+      |       -> Level: ≥ 1
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1
