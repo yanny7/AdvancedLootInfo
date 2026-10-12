@@ -206,6 +206,23 @@ class Maven:
 
         return found
 
+    def requirements(self, repo: str, coordinates: list):
+        """What the artifacts' POMs require from the same repository, recursively, the artifacts themselves excluded."""
+        pending = list(coordinates)
+        seen = set(coordinates)
+        found = []
+
+        while pending:
+            for dependency in self.dependencies(repo, pending.pop(0)):
+                artifact, version = dependency.rsplit(":", 1)
+
+                if dependency not in seen and version in self.versions(repo, artifact):
+                    seen.add(dependency)
+                    found.append(dependency)
+                    pending.append(dependency)
+
+        return found
+
 
 class CurseForge:
     def __init__(self, api_key: str, minecraft_version: str, loader: str):
@@ -321,21 +338,15 @@ def resolve_maven(maven: Maven, entries: list):
             missing.append(entry["key"])
             continue
 
-        pending = list(picked["coordinates"])
+        coordinates = picked["coordinates"] + maven.requirements(picked["repo"], picked["coordinates"])
 
-        while pending:
-            coordinate = pending.pop(0)
-
+        for index, coordinate in enumerate(coordinates, start=1):
             if coordinate in seen:
                 continue
 
             seen.add(coordinate)
-            progress(len(seen), len(seen) + len(pending), coordinate)
+            progress(index, len(coordinates), coordinate)
             jars.append(shimscan.maven_jar(maven.session, picked["repo"], coordinate))
-            pending += [
-                dependency for dependency in maven.dependencies(picked["repo"], coordinate)
-                if dependency.rsplit(":", 1)[1] in maven.versions(picked["repo"], dependency.rsplit(":", 1)[0])
-            ]
 
     progress_done()
     return jars, missing

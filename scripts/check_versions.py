@@ -314,9 +314,10 @@ def read_runtime_deps(properties: dict, loader: str):
     }
 
 
-def resolve_runtime_deps(client: CurseForge, entries: dict, pins: dict, keys: list):
+def resolve_runtime_deps(client: CurseForge, maven: Maven, entries: dict, pins: dict, keys: list):
     """The required dependencies of each pinned mod's file, recursively, as curse.maven coordinates:
-    a dependency that is itself a pinned registry mod keeps its pin, anything else takes its newest file."""
+    a dependency that is itself a pinned registry mod keeps its pin, anything else takes its newest file.
+    A maven pin takes what its POMs require from the same repository instead."""
     pinned_projects = {pin["project_id"]: pin for pin in pins.values() if "project_id" in pin}
     maven_projects = {
         project_id: pins[key] for key, entry in entries.items() if "coordinates" in pins.get(key, {})
@@ -337,6 +338,12 @@ def resolve_runtime_deps(client: CurseForge, entries: dict, pins: dict, keys: li
         pin = pins[key]
 
         if "project_id" not in pin:
+            located = maven.locate(entries[key], pin["coordinates"])
+            required = maven.requirements(located["repo"], pin["coordinates"]) if located else []
+
+            if required:
+                resolved[key] = ",".join(sorted(required))
+
             continue
 
         pending = [pin["project_id"]]
@@ -450,11 +457,11 @@ def write_block(block: str, init: bool):
     return True
 
 
-def update_runtime_deps(clients, entries: dict, pins: dict, runtime: dict, deps: dict, enabled: set, checked_loaders: list, only):
+def update_runtime_deps(clients, mavens, entries: dict, pins: dict, runtime: dict, deps: dict, enabled: set, checked_loaders: list, only):
     for loader in checked_loaders:
         keys = sorted(key for key, owner in deps if owner == loader and key in enabled and (only is None or key == only))
         print(f"\nResolving the gametest runtime dependencies of {len(keys)} {loader} mods")
-        resolved = resolve_runtime_deps(clients[loader], entries, pins[loader], keys)
+        resolved = resolve_runtime_deps(clients[loader], mavens[loader], entries, pins[loader], keys)
 
         for key in keys:
             runtime.pop((key, loader), None)
@@ -508,7 +515,7 @@ def main():
 
     if args.runtime_deps:
         deps = {(key, loader): pin for loader in platforms for key, pin in pinned[loader].items() if key in entries}
-        update_runtime_deps(clients, entries, pinned, runtime, deps, enabled, checked_loaders, None)
+        update_runtime_deps(clients, mavens, entries, pinned, runtime, deps, enabled, checked_loaders, None)
         return 0 if write_block(render_block(deps, entries, runtime), False) else 1
 
     deps = {}
@@ -646,7 +653,7 @@ def main():
         for result in scaffolds:
             print(f"\nScaffolded {scaffold(result['loader'], result['entry'])}")
 
-        update_runtime_deps(clients, entries, {loader: {key: pin for (key, owner), pin in deps.items() if owner == loader} for loader in platforms},
+        update_runtime_deps(clients, mavens, entries, {loader: {key: pin for (key, owner), pin in deps.items() if owner == loader} for loader in platforms},
                             runtime, deps, enabled, checked_loaders, args.scaffold)
 
         if not write_block(render_block(deps, entries, runtime), args.init):
