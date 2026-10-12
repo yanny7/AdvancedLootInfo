@@ -42,7 +42,8 @@ ali:loot_table
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 30
-      |   -> Treasure: True
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -96,12 +97,11 @@ ali:loot_table
           ali:item supplementaries:bamboo_spikes x1
             | Chance: 21.71%
             | Count: 1
-          ali:item supplementaries:bamboo_spikes_tipped x1 {Damage:0,Potion:"minecraft:poison"}
+          ali:item supplementaries:bamboo_spikes_tipped x1
             | Chance: 16.29%
             | Count: 1
             | ----- Modifiers -----
-            | Set Nbt:
-            |   -> Tag: {Potion:"minecraft:poison"}
-            | Set Damage:
-            |   -> Damage: 20% to 90%
-            |   -> Add: False
+            | Set Potion:
+            |   -> Potion: Potion of Poison
+            | Set Charges:
+            |   -> Amount: 20 to 200

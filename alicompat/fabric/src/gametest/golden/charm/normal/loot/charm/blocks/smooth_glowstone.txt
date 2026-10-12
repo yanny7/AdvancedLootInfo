@@ -7,11 +7,6 @@ ali:loot_table
       | Selects only first successful entry
       ali:item charm:smooth_glowstone x1
         | Count: 1
-        | ----- Predicates -----
-        | Match Tool:
-        |   -> Enchantments:
-        |     -> Enchantment: Silk Touch
-        |     -> Level: ≥ 1
       ali:item minecraft:glowstone_dust x2-4
         | Count: 2 to 4
         |   -> Fortune I: 2 to 4  ~4 (50%)

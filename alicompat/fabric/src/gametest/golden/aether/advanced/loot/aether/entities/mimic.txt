@@ -14,7 +14,8 @@ ali:entity_loot_table
       | Set Count:
       |   -> Count: 1
       |   -> Add: False
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: U[0; 1)
   ali:loot_pool
     | Selects random entry
@@ -40,7 +41,7 @@ ali:entity_loot_table
       | Set Count:
       |   -> Count: 4
       |   -> Add: False
-    ali:item aether:skyroot_pickaxe x1 {Damage:0}
+    ali:item aether:skyroot_pickaxe x1
       | Chance: 9.09%
       | Count: 1
       | ----- Modifiers -----
@@ -68,7 +69,7 @@ ali:entity_loot_table
       | Set Count:
       |   -> Count: 1
       |   -> Add: False
-    ali:item aether:holystone_pickaxe x1 {Damage:0}
+    ali:item aether:holystone_pickaxe x1
       | Chance: 9.09%
       | Count: 1
       | ----- Modifiers -----

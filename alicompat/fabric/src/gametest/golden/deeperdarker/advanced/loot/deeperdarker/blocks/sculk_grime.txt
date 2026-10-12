@@ -9,9 +9,10 @@ ali:loot_table
         | Count: 1
         | ----- Predicates -----
         | Match Tool:
-        |   -> Enchantments:
-        |     -> Enchantment: Silk Touch
-        |     -> Level: ≥ 1
+        |   -> Item Predicates:
+        |     -> Enchantments:
+        |       -> Enchantment: Silk Touch
+        |       -> Level: ≥ 1
       ali:item deeperdarker:grime_ball x2-4
         | Count: max(0; U[2; 4])
         | ----- Modifiers -----

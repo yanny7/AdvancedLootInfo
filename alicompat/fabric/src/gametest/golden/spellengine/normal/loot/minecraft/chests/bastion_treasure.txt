@@ -12,7 +12,7 @@ ali:loot_table
     ali:item minecraft:netherite_scrap x1
       | Chance: 8%
       | Count: 1
-    ali:item minecraft:diamond_sword x1 {Damage:0}
+    ali:item minecraft:diamond_sword x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 6%
       | Count: 1
       | ----- Modifiers -----
@@ -20,7 +20,10 @@ ali:loot_table
       |   -> Damage: 80% to 100%
       |   -> Add: False
       | Enchant Randomly:
-    ali:item minecraft:diamond_chestplate x1 {Damage:0}
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 6%
       | Count: 1
       | ----- Modifiers -----
@@ -28,7 +31,10 @@ ali:loot_table
       |   -> Damage: 80% to 100%
       |   -> Add: False
       | Enchant Randomly:
-    ali:item minecraft:diamond_helmet x1 {Damage:0}
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:diamond_helmet x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 6%
       | Count: 1
       | ----- Modifiers -----
@@ -36,7 +42,10 @@ ali:loot_table
       |   -> Damage: 80% to 100%
       |   -> Add: False
       | Enchant Randomly:
-    ali:item minecraft:diamond_leggings x1 {Damage:0}
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:diamond_leggings x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 6%
       | Count: 1
       | ----- Modifiers -----
@@ -44,7 +53,10 @@ ali:loot_table
       |   -> Damage: 80% to 100%
       |   -> Add: False
       | Enchant Randomly:
-    ali:item minecraft:diamond_boots x1 {Damage:0}
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:diamond_boots x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 6%
       | Count: 1
       | ----- Modifiers -----
@@ -52,19 +64,22 @@ ali:loot_table
       |   -> Damage: 80% to 100%
       |   -> Add: False
       | Enchant Randomly:
-    ali:item minecraft:diamond_sword x1 {Damage:0}
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:diamond_sword x1
       | Chance: 6%
       | Count: 1
-    ali:item minecraft:diamond_chestplate x1 {Damage:0}
+    ali:item minecraft:diamond_chestplate x1
       | Chance: 5%
       | Count: 1
-    ali:item minecraft:diamond_helmet x1 {Damage:0}
+    ali:item minecraft:diamond_helmet x1
       | Chance: 5%
       | Count: 1
-    ali:item minecraft:diamond_boots x1 {Damage:0}
+    ali:item minecraft:diamond_boots x1
       | Chance: 5%
       | Count: 1
-    ali:item minecraft:diamond_leggings x1 {Damage:0}
+    ali:item minecraft:diamond_leggings x1
       | Chance: 5%
       | Count: 1
     ali:item minecraft:diamond x2-6

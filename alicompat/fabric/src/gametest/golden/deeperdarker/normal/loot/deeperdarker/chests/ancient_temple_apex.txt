@@ -54,68 +54,77 @@ ali:loot_table
     ali:item minecraft:sculk_catalyst x1-2
       | Chance: 2.66%
       | Count: 1 to 2
-    ali:item minecraft:iron_helmet x1 {Damage:0}
+    ali:item minecraft:iron_helmet x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 1.11%
       | Count: 1
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 30 to 40
-      |   -> Treasure: False
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
       | Set Damage:
       |   -> Damage: 50% to 90%
       |   -> Add: False
-    ali:item minecraft:iron_sword x1 {Damage:0}
+    ali:item minecraft:iron_sword x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 1.11%
       | Count: 1
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 30 to 40
-      |   -> Treasure: False
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
       | Set Damage:
       |   -> Damage: 30% to 60%
       |   -> Add: False
-    ali:item minecraft:diamond_boots x1 {Damage:0}
+    ali:item minecraft:diamond_boots x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 0.89%
       | Count: 1
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 30 to 50
-      |   -> Treasure: False
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
       | Set Damage:
       |   -> Damage: 40% to 70%
       |   -> Add: False
-    ali:item minecraft:diamond_helmet x1 {Damage:0}
+    ali:item minecraft:diamond_helmet x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 0.89%
       | Count: 1
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 30 to 50
-      |   -> Treasure: False
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
       | Set Damage:
       |   -> Damage: 80% to 100%
       |   -> Add: False
-    ali:item minecraft:enchanted_book x1
+    ali:item minecraft:enchanted_book x1-2
       | Chance: 0.67%
-      | Count: 1
+      | Count: 1 to 2
       | ----- Modifiers -----
       | Enchant Randomly:
-    ali:item minecraft:diamond_chestplate x1 {Damage:0}
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 0.44%
       | Count: 1
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 40 to 50
-      |   -> Treasure: False
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
       | Set Damage:
       |   -> Damage: 60% to 90%
       |   -> Add: False
-    ali:item minecraft:diamond_leggings x1 {Damage:0}
+    ali:item minecraft:diamond_leggings x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 0.44%
       | Count: 1
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 40 to 50
-      |   -> Treasure: False
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
       | Set Damage:
       |   -> Damage: 60% to 80%
       |   -> Add: False
@@ -125,7 +134,8 @@ ali:loot_table
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 30 to 50
-      |   -> Treasure: False
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
       | Set Damage:
       |   -> Damage: 50% to 90%
       |   -> Add: False
@@ -135,7 +145,8 @@ ali:loot_table
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 30 to 50
-      |   -> Treasure: False
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
       | Set Damage:
       |   -> Damage: 50% to 90%
       |   -> Add: False

@@ -24,6 +24,6 @@ ali:loot_table
     ali:item aether:skyroot_planks x1-3
       | Chance: 8.7%
       | Count: 1 to 3
-    ali:item aether:skyroot_pickaxe x1 {Damage:0}
+    ali:item aether:skyroot_pickaxe x1
       | Chance: 4.35%
       | Count: 1

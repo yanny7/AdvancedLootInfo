@@ -85,25 +85,25 @@ ali:trade
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:group
-        ali:item minecraft:jungle_planks x12
-          | Wood type of the village
         ali:item minecraft:bamboo_planks x12
           | Wood type of the village
         ali:item minecraft:birch_planks x12
           | Wood type of the village
+        ali:item minecraft:dark_oak_planks x12
+          | Wood type of the village
+        ali:item minecraft:jungle_planks x12
+          | Wood type of the village
+        ali:item minecraft:mangrove_planks x12
+          | Wood type of the village
         ali:item minecraft:oak_planks x12
           | Wood type of the village
-        ali:item minecraft:acacia_planks x12
-          | Wood type of the village
         ali:item minecraft:spruce_planks x12
-          | Wood type of the village
-        ali:item minecraft:dark_oak_planks x12
           | Wood type of the village
     ali:items_to_items
       | Uses: 12
       | XP: 20
       | Price Multiplier: 0.2
-      ali:item minecraft:iron_axe x1 {Damage:0}
+      ali:item minecraft:iron_axe x1
       ali:item minecraft:air x0
       ali:item minecraft:emerald x2
     ali:items_to_items
@@ -111,35 +111,35 @@ ali:trade
       | XP: 10
       | Price Multiplier: 0.05
       ali:group
-        ali:item minecraft:jungle_log x4
-          | Wood type of the village
         ali:item minecraft:bamboo_block x4
           | Wood type of the village
         ali:item minecraft:birch_log x4
           | Wood type of the village
-        ali:item minecraft:oak_log x4
+        ali:item minecraft:dark_oak_log x4
           | Wood type of the village
-        ali:item minecraft:acacia_log x4
+        ali:item minecraft:jungle_log x4
+          | Wood type of the village
+        ali:item minecraft:mangrove_log x4
+          | Wood type of the village
+        ali:item minecraft:oak_log x4
           | Wood type of the village
         ali:item minecraft:spruce_log x4
           | Wood type of the village
-        ali:item minecraft:dark_oak_log x4
-          | Wood type of the village
       ali:item minecraft:emerald x1
       ali:group
-        ali:item minecraft:stripped_jungle_log x4
-          | Wood type of the village
         ali:item minecraft:stripped_bamboo_block x4
           | Wood type of the village
         ali:item minecraft:stripped_birch_log x4
           | Wood type of the village
+        ali:item minecraft:stripped_dark_oak_log x4
+          | Wood type of the village
+        ali:item minecraft:stripped_jungle_log x4
+          | Wood type of the village
+        ali:item minecraft:stripped_mangrove_log x4
+          | Wood type of the village
         ali:item minecraft:stripped_oak_log x4
           | Wood type of the village
-        ali:item minecraft:stripped_acacia_log x4
-          | Wood type of the village
         ali:item minecraft:stripped_spruce_log x4
-          | Wood type of the village
-        ali:item minecraft:stripped_dark_oak_log x4
           | Wood type of the village
     ali:items_to_items
       | Uses: 16
@@ -174,25 +174,25 @@ ali:trade
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:group
-        ali:item minecraft:jungle_chest_boat x1
-          | Wood type of the village
         ali:item minecraft:bamboo_chest_raft x1
           | Wood type of the village
         ali:item minecraft:birch_chest_boat x1
           | Wood type of the village
+        ali:item minecraft:dark_oak_chest_boat x1
+          | Wood type of the village
+        ali:item minecraft:jungle_chest_boat x1
+          | Wood type of the village
+        ali:item minecraft:mangrove_chest_boat x1
+          | Wood type of the village
         ali:item minecraft:oak_chest_boat x1
           | Wood type of the village
-        ali:item minecraft:acacia_chest_boat x1
-          | Wood type of the village
         ali:item minecraft:spruce_chest_boat x1
-          | Wood type of the village
-        ali:item minecraft:dark_oak_chest_boat x1
           | Wood type of the village
     ali:items_to_items
       | Uses: 12
       | XP: 30
       | Price Multiplier: 0.2
-      ali:item minecraft:diamond_axe x1 {Damage:0}
+      ali:item minecraft:diamond_axe x1
       ali:item minecraft:air x0
       ali:item minecraft:emerald x4
   ali:trade_level
@@ -205,19 +205,19 @@ ali:trade
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:group
-        ali:item minecraft:jungle_hanging_sign x1
-          | Wood type of the village
         ali:item minecraft:bamboo_hanging_sign x1
           | Wood type of the village
         ali:item minecraft:birch_hanging_sign x1
           | Wood type of the village
+        ali:item minecraft:dark_oak_hanging_sign x1
+          | Wood type of the village
+        ali:item minecraft:jungle_hanging_sign x1
+          | Wood type of the village
+        ali:item minecraft:mangrove_hanging_sign x1
+          | Wood type of the village
         ali:item minecraft:oak_hanging_sign x1
           | Wood type of the village
-        ali:item minecraft:acacia_hanging_sign x1
-          | Wood type of the village
         ali:item minecraft:spruce_hanging_sign x1
-          | Wood type of the village
-        ali:item minecraft:dark_oak_hanging_sign x1
           | Wood type of the village
     ali:items_to_items
       | Uses: 6

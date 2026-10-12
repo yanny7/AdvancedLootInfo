@@ -21,24 +21,27 @@ ali:loot_table
     ali:empty
       | Chance: 83.33%
       | Count: 1
-    ali:item minecraft:fishing_rod x1 {Damage:0}
+    ali:item minecraft:fishing_rod x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 5.56%
       | Count: 1
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 10
-      |   -> Treasure: True
-    ali:item minecraft:fishing_rod x1 {Damage:0}
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:fishing_rod x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 5.56%
       | Count: 1
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 20
-      |   -> Treasure: True
-    ali:item minecraft:fishing_rod x1 {Damage:0}
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:fishing_rod x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 5.56%
       | Count: 1
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 30
-      |   -> Treasure: True
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot

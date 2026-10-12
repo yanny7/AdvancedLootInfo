@@ -37,8 +37,24 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item artifacts:villager_hat x1
-            | Count: 1
-            | ----- Predicates -----
-            | Artifact Rarity Adjusted Chance:
-            |   -> Default Probability: 0.05
+          ali:reference
+            | Selects all entries
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:alternatives
+                  | Selects only first successful entry
+                  ali:item artifacts:villager_hat x1
+                    | Count: 1
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.05
+                    | Config Value:
+                    |   -> Config: villager_hat.generateAsLoot
+                  ali:empty
+                    | Drops nothing
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.05

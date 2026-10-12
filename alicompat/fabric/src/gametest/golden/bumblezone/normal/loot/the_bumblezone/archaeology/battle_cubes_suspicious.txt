@@ -45,9 +45,10 @@ ali:loot_table
     ali:item the_bumblezone:buzzing_briefcase x1
       | Chance: 4%
       | Count: 1
-    ali:item minecraft:book x1 {Enchantments:[{id:"the_bumblezone:hive_lifeline",lvl:1s}]}
+    ali:item minecraft:book x1 {"minecraft:enchantments":{levels:{"the_bumblezone:hive_lifeline":1}}}
       | Chance: 4%
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
-      |   -> Hive Lifeline
+      |   -> Enchantment: Hive Lifeline
+      |   -> Only Compatible: True

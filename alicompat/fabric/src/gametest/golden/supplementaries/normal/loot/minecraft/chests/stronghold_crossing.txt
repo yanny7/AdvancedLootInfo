@@ -21,7 +21,7 @@ ali:loot_table
     ali:item minecraft:redstone x4-9
       | Chance: 8.06%
       | Count: 4 to 9
-    ali:item minecraft:iron_pickaxe x1 {Damage:0}
+    ali:item minecraft:iron_pickaxe x1
       | Chance: 1.61%
       | Count: 1
     ali:item minecraft:enchanted_book x1
@@ -30,7 +30,8 @@ ali:loot_table
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 30
-      |   -> Treasure: True
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
   ali:loot_pool
     | Selects random entry
     | Rolls: 1

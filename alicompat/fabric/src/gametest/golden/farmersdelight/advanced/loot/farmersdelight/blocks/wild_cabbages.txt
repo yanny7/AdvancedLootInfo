@@ -8,10 +8,10 @@ ali:loot_table
       | Count: 1
       | ----- Predicates -----
       | Random Chance:
-      |   -> Probability: 0.2
+      |   -> Chance: 0.2
       | Inverted:
-      |   -> Match Tool:
-      |     -> Tag: Shears
+      |   -> Can Item Perform Ability:
+      |     -> Shears Harvest
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -20,8 +20,8 @@ ali:loot_table
       ali:item farmersdelight:wild_cabbages x1
         | Count: 1
         | ----- Predicates -----
-        | Match Tool:
-        |   -> Tag: Shears
+        | Can Item Perform Ability:
+        |   -> Shears Harvest
       ali:item farmersdelight:cabbage_seeds x1-7
         | Count: 1
         |   -> Fortune LVL: 1 + U[0; 2 × LVL]

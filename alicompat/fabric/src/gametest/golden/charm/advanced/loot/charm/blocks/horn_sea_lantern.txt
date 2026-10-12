@@ -7,11 +7,6 @@ ali:loot_table
       | Selects only first successful entry
       ali:item charm:horn_sea_lantern x1
         | Count: 1
-        | ----- Predicates -----
-        | Match Tool:
-        |   -> Enchantments:
-        |     -> Enchantment: Silk Touch
-        |     -> Level: ≥ 1
       ali:item minecraft:prismarine_crystals x2-5
         | Count: clamp(max(0; U[2; 3]); 1; 5)
         |   -> Fortune LVL: clamp(max(0; U[2; 3]) + U[0; LVL]; 1; 5)

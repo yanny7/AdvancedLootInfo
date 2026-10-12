@@ -5,14 +5,14 @@ ali:loot_table
     | Rolls: 1 to 5
     ali:modified
       | Selects only first successful entry
-      ali:item aether:iron_gloves x1 {Damage:0}
+      ali:item aether:iron_gloves x1
         | Chance: 3.13%
         | Count: 1
         | ----- Predicates -----
         | Inverted:
         |   -> Loot Table Id:
         |     -> aether:chests/ruined_portal
-      ali:item minecraft:iron_helmet x1 {Damage:0}
+      ali:item minecraft:iron_helmet x1
         | Chance: 12.5%
         | Count: 1
     ali:item minecraft:bread x1-4

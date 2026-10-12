@@ -10,19 +10,19 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item aether:valkyrie_helmet x1 {Damage:0}
+          ali:item aether:valkyrie_helmet x1
             | Chance: 11.76%
             | Count: 1
-          ali:item aether:valkyrie_chestplate x1 {Damage:0}
+          ali:item aether:valkyrie_chestplate x1
             | Chance: 11.76%
             | Count: 1
-          ali:item aether:valkyrie_leggings x1 {Damage:0}
+          ali:item aether:valkyrie_leggings x1
             | Chance: 11.76%
             | Count: 1
-          ali:item aether:valkyrie_boots x1 {Damage:0}
+          ali:item aether:valkyrie_boots x1
             | Chance: 11.76%
             | Count: 1
-          ali:item aether:valkyrie_gloves x1 {Damage:0}
+          ali:item aether:valkyrie_gloves x1
             | Chance: 11.76%
             | Count: 1
           ali:reference
@@ -53,16 +53,16 @@ ali:loot_table
                   | Set Count:
                   |   -> Count: 1
                   |   -> Add: False
-          ali:item aether:valkyrie_pickaxe x1 {Damage:0}
+          ali:item aether:valkyrie_pickaxe x1
             | Chance: 8.82%
             | Count: 1
-          ali:item aether:valkyrie_axe x1 {Damage:0}
+          ali:item aether:valkyrie_axe x1
             | Chance: 8.82%
             | Count: 1
-          ali:item aether:valkyrie_shovel x1 {Damage:0}
+          ali:item aether:valkyrie_shovel x1
             | Chance: 8.82%
             | Count: 1
-          ali:item aether:valkyrie_hoe x1 {Damage:0}
+          ali:item aether:valkyrie_hoe x1
             | Chance: 5.88%
             | Count: 1
   ali:loot_pool
@@ -83,19 +83,19 @@ ali:loot_table
               ali:loot_pool
                 | Selects random entry
                 | Rolls: 1
-                ali:item aether:valkyrie_helmet x1 {Damage:0}
+                ali:item aether:valkyrie_helmet x1
                   | Chance: 5.88%
                   | Count: 1
-                ali:item aether:valkyrie_chestplate x1 {Damage:0}
+                ali:item aether:valkyrie_chestplate x1
                   | Chance: 5.88%
                   | Count: 1
-                ali:item aether:valkyrie_leggings x1 {Damage:0}
+                ali:item aether:valkyrie_leggings x1
                   | Chance: 5.88%
                   | Count: 1
-                ali:item aether:valkyrie_boots x1 {Damage:0}
+                ali:item aether:valkyrie_boots x1
                   | Chance: 5.88%
                   | Count: 1
-                ali:item aether:valkyrie_gloves x1 {Damage:0}
+                ali:item aether:valkyrie_gloves x1
                   | Chance: 5.88%
                   | Count: 1
                 ali:reference
@@ -126,25 +126,25 @@ ali:loot_table
                         | Set Count:
                         |   -> Count: 1
                         |   -> Add: False
-                ali:item aether:valkyrie_pickaxe x1 {Damage:0}
+                ali:item aether:valkyrie_pickaxe x1
                   | Chance: 4.41%
                   | Count: 1
-                ali:item aether:valkyrie_axe x1 {Damage:0}
+                ali:item aether:valkyrie_axe x1
                   | Chance: 4.41%
                   | Count: 1
-                ali:item aether:valkyrie_shovel x1 {Damage:0}
+                ali:item aether:valkyrie_shovel x1
                   | Chance: 4.41%
                   | Count: 1
-                ali:item aether:valkyrie_hoe x1 {Damage:0}
+                ali:item aether:valkyrie_hoe x1
                   | Chance: 2.94%
                   | Count: 1
           ali:item aether:regeneration_stone x1
             | Chance: 18.75%
             | Count: 1
-          ali:item aether:lightning_sword x1 {Damage:0}
+          ali:item aether:lightning_sword x1
             | Chance: 12.5%
             | Count: 1
-          ali:item aether:holy_sword x1 {Damage:0}
+          ali:item aether:holy_sword x1
             | Chance: 12.5%
             | Count: 1
           ali:item aether:invisibility_cloak x1
@@ -185,19 +185,19 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item aether:valkyrie_helmet x1 {Damage:0}
+          ali:item aether:valkyrie_helmet x1
             | Chance: 1.31%
             | Count: 1
-          ali:item aether:valkyrie_chestplate x1 {Damage:0}
+          ali:item aether:valkyrie_chestplate x1
             | Chance: 1.31%
             | Count: 1
-          ali:item aether:valkyrie_leggings x1 {Damage:0}
+          ali:item aether:valkyrie_leggings x1
             | Chance: 1.31%
             | Count: 1
-          ali:item aether:valkyrie_boots x1 {Damage:0}
+          ali:item aether:valkyrie_boots x1
             | Chance: 1.31%
             | Count: 1
-          ali:item aether:valkyrie_gloves x1 {Damage:0}
+          ali:item aether:valkyrie_gloves x1
             | Chance: 1.31%
             | Count: 1
           ali:reference
@@ -228,16 +228,16 @@ ali:loot_table
                   | Set Count:
                   |   -> Count: 1
                   |   -> Add: False
-          ali:item aether:valkyrie_pickaxe x1 {Damage:0}
+          ali:item aether:valkyrie_pickaxe x1
             | Chance: 0.98%
             | Count: 1
-          ali:item aether:valkyrie_axe x1 {Damage:0}
+          ali:item aether:valkyrie_axe x1
             | Chance: 0.98%
             | Count: 1
-          ali:item aether:valkyrie_shovel x1 {Damage:0}
+          ali:item aether:valkyrie_shovel x1
             | Chance: 0.98%
             | Count: 1
-          ali:item aether:valkyrie_hoe x1 {Damage:0}
+          ali:item aether:valkyrie_hoe x1
             | Chance: 0.65%
             | Count: 1
     ali:item aether:enchanted_dart_shooter x1
@@ -280,16 +280,16 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1 to 4
       |   -> Add: False
-    ali:item aether:lightning_sword x1 {Damage:0}
+    ali:item aether:lightning_sword x1
       | Chance: 4.44%
       | Count: 1
-    ali:item aether:holy_sword x1 {Damage:0}
+    ali:item aether:holy_sword x1
       | Chance: 4.44%
       | Count: 1
-    ali:item minecraft:golden_sword x1 {Damage:0}
+    ali:item minecraft:golden_sword x1
       | Chance: 4.44%
       | Count: 1
-    ali:item minecraft:iron_sword x1 {Damage:0}
+    ali:item minecraft:iron_sword x1
       | Chance: 4.44%
       | Count: 1
     ali:reference
@@ -300,28 +300,28 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item aether:gravitite_helmet x1 {Damage:0}
+          ali:item aether:gravitite_helmet x1
             | Chance: 0.44%
             | Count: 1
-          ali:item aether:gravitite_chestplate x1 {Damage:0}
+          ali:item aether:gravitite_chestplate x1
             | Chance: 0.44%
             | Count: 1
-          ali:item aether:gravitite_leggings x1 {Damage:0}
+          ali:item aether:gravitite_leggings x1
             | Chance: 0.44%
             | Count: 1
-          ali:item aether:gravitite_boots x1 {Damage:0}
+          ali:item aether:gravitite_boots x1
             | Chance: 0.44%
             | Count: 1
-          ali:item aether:gravitite_gloves x1 {Damage:0}
+          ali:item aether:gravitite_gloves x1
             | Chance: 0.44%
             | Count: 1
-          ali:item aether:gravitite_sword x1 {Damage:0}
+          ali:item aether:gravitite_sword x1
             | Chance: 0.33%
             | Count: 1
-          ali:item aether:gravitite_axe x1 {Damage:0}
+          ali:item aether:gravitite_axe x1
             | Chance: 0.33%
             | Count: 1
-          ali:item aether:gravitite_pickaxe x1 {Damage:0}
+          ali:item aether:gravitite_pickaxe x1
             | Chance: 0.33%
             | Count: 1
           ali:item aether:gravitite_ore x1

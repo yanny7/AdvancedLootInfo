@@ -7,9 +7,10 @@ ali:loot_table
       | Count: 1
       | ----- Predicates -----
       | Match Tool:
-      |   -> Enchantments:
-      |     -> Enchantment: Silk Touch
-      |     -> Level: ≥ 1
+      |   -> Item Predicates:
+      |     -> Enchantments:
+      |       -> Enchantment: Silk Touch
+      |       -> Level: ≥ 1
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -49,6 +50,7 @@ ali:loot_table
                   |   -> Block: Urn
                   |   -> Properties:
                   |     -> treasure: true
+                  | Data Conditions
                   | ----- Modifiers -----
                   | Set Count:
                   |   -> Count: 2 to 8
@@ -103,6 +105,7 @@ ali:loot_table
                   |   -> Block: Urn
                   |   -> Properties:
                   |     -> treasure: true
+                  | Data Conditions
                   | ----- Modifiers -----
                   | Set Count:
                   |   -> Count: 1 to 2
@@ -154,6 +157,7 @@ ali:loot_table
                   |   -> Block: Urn
                   |   -> Properties:
                   |     -> treasure: true
+                  | Data Conditions
                   | ----- Modifiers -----
                   | Set Count:
                   |   -> Count: 2 to 6
@@ -208,6 +212,7 @@ ali:loot_table
                   |   -> Block: Urn
                   |   -> Properties:
                   |     -> treasure: true
+                  | Data Conditions
                   | ----- Modifiers -----
                   | Set Count:
                   |   -> Count: 1 to 4
@@ -244,6 +249,7 @@ ali:loot_table
                   |   -> Block: Urn
                   |   -> Properties:
                   |     -> treasure: true
+                  | Data Conditions
                   | ----- Modifiers -----
                   | Set Count:
                   |   -> Count: 1 to 3
@@ -327,7 +333,7 @@ ali:loot_table
                   | Set Count:
                   |   -> Count: 4 to 16
                   |   -> Add: False
-                ali:item minecraft:iron_helmet x1 {Damage:0}
+                ali:item minecraft:iron_helmet x1 {"minecraft:enchantment_glint_override":1b}
                   | Chance: 0.65%
                   |   -> luck: max(0%; 700% + floor(200% × luck)) ÷ (max(0%; 6000% + floor(−500% × luck)) + max(0%; 3200% + floor(−200% × luck)) + max(0%; 700% + floor(200% × luck)) + max(0%; 100% + floor(500% × luck))) × 9.26%
                   |   -> Bad Luck: 0.45%
@@ -344,13 +350,16 @@ ali:loot_table
                   | ----- Modifiers -----
                   | Enchant With Levels:
                   |   -> Levels: 15 to 35
-                  |   -> Treasure: True
+                  |   -> Options:
+                  |     -> Tag: minecraft:on_random_loot
                   | Set Damage:
                   |   -> Damage: U[25%; 75%)
                   |   -> Add: False
-                  | Curse Loot:
-                  |   -> Probability: 1.0
-                ali:item minecraft:iron_boots x1 {Damage:0}
+                  | Enchant Randomly:
+                  |   -> Enchantments:
+                  |     -> Tag: minecraft:curse
+                  |   -> Only Compatible: True
+                ali:item minecraft:iron_boots x1 {"minecraft:enchantment_glint_override":1b}
                   | Chance: 0.65%
                   |   -> luck: max(0%; 700% + floor(200% × luck)) ÷ (max(0%; 6000% + floor(−500% × luck)) + max(0%; 3200% + floor(−200% × luck)) + max(0%; 700% + floor(200% × luck)) + max(0%; 100% + floor(500% × luck))) × 9.26%
                   |   -> Bad Luck: 0.45%
@@ -367,12 +376,15 @@ ali:loot_table
                   | ----- Modifiers -----
                   | Enchant With Levels:
                   |   -> Levels: 15 to 35
-                  |   -> Treasure: True
+                  |   -> Options:
+                  |     -> Tag: minecraft:on_random_loot
                   | Set Damage:
                   |   -> Damage: U[25%; 75%)
                   |   -> Add: False
-                  | Curse Loot:
-                  |   -> Probability: 1.0
+                  | Enchant Randomly:
+                  |   -> Enchantments:
+                  |     -> Tag: minecraft:curse
+                  |   -> Only Compatible: True
                 ali:item minecraft:raw_iron x3-8
                   | Chance: 0.65%
                   |   -> luck: max(0%; 700% + floor(200% × luck)) ÷ (max(0%; 6000% + floor(−500% × luck)) + max(0%; 3200% + floor(−200% × luck)) + max(0%; 700% + floor(200% × luck)) + max(0%; 100% + floor(500% × luck))) × 9.26%
@@ -459,6 +471,7 @@ ali:loot_table
                   |   -> Block: Urn
                   |   -> Properties:
                   |     -> treasure: true
+                  | Data Conditions
                   | ----- Modifiers -----
                   | Set Count:
                   |   -> Count: 2 to 5
@@ -588,6 +601,7 @@ ali:loot_table
                   |   -> Block: Urn
                   |   -> Properties:
                   |     -> treasure: true
+                  | Data Conditions
                 ali:item minecraft:ender_pearl x1-4
                   | Chance: 0.17%
                   |   -> luck: max(0%; 100% + floor(500% × luck)) ÷ (max(0%; 6000% + floor(−500% × luck)) + max(0%; 3200% + floor(−200% × luck)) + max(0%; 700% + floor(200% × luck)) + max(0%; 100% + floor(500% × luck))) × 16.67%
@@ -624,7 +638,7 @@ ali:loot_table
                   | Set Count:
                   |   -> Count: 4 to 12
                   |   -> Add: False
-                ali:item minecraft:diamond_helmet x1 {Damage:0}
+                ali:item minecraft:diamond_helmet x1 {"minecraft:enchantment_glint_override":1b}
                   | Chance: 0.08%
                   |   -> luck: max(0%; 100% + floor(500% × luck)) ÷ (max(0%; 6000% + floor(−500% × luck)) + max(0%; 3200% + floor(−200% × luck)) + max(0%; 700% + floor(200% × luck)) + max(0%; 100% + floor(500% × luck))) × 8.33%
                   |   -> Bad Luck: 0%
@@ -641,13 +655,16 @@ ali:loot_table
                   | ----- Modifiers -----
                   | Enchant With Levels:
                   |   -> Levels: 34 to 91
-                  |   -> Treasure: True
+                  |   -> Options:
+                  |     -> Tag: minecraft:on_random_loot
                   | Set Damage:
                   |   -> Damage: U[30%; 80%)
                   |   -> Add: False
-                  | Curse Loot:
-                  |   -> Probability: 1.0
-                ali:item minecraft:diamond_boots x1 {Damage:0}
+                  | Enchant Randomly:
+                  |   -> Enchantments:
+                  |     -> Tag: minecraft:curse
+                  |   -> Only Compatible: True
+                ali:item minecraft:diamond_boots x1 {"minecraft:enchantment_glint_override":1b}
                   | Chance: 0.08%
                   |   -> luck: max(0%; 100% + floor(500% × luck)) ÷ (max(0%; 6000% + floor(−500% × luck)) + max(0%; 3200% + floor(−200% × luck)) + max(0%; 700% + floor(200% × luck)) + max(0%; 100% + floor(500% × luck))) × 8.33%
                   |   -> Bad Luck: 0%
@@ -664,9 +681,12 @@ ali:loot_table
                   | ----- Modifiers -----
                   | Enchant With Levels:
                   |   -> Levels: 34 to 91
-                  |   -> Treasure: True
+                  |   -> Options:
+                  |     -> Tag: minecraft:on_random_loot
                   | Set Damage:
                   |   -> Damage: U[30%; 80%)
                   |   -> Add: False
-                  | Curse Loot:
-                  |   -> Probability: 1.0
+                  | Enchant Randomly:
+                  |   -> Enchantments:
+                  |     -> Tag: minecraft:curse
+                  |   -> Only Compatible: True

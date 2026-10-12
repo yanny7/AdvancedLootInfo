@@ -6,7 +6,8 @@ ali:entity_loot_table
     ali:item hybrid_aquatic:raw_fish_meat x1-2
       | Count: max(0; U[1; 2])
       | ----- Modifiers -----
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: 1
       | Set Count:
       |   -> Count: 1 to 2

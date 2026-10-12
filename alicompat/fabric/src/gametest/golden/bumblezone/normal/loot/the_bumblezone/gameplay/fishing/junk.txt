@@ -43,7 +43,7 @@ ali:loot_table
     ali:item minecraft:stick x1
       | Chance: 6.61%
       | Count: 1
-    ali:item minecraft:leather_boots x1 {Damage:0}
+    ali:item minecraft:leather_boots x1
       | Chance: 6.61%
       | Count: 1
       | ----- Modifiers -----
@@ -53,7 +53,7 @@ ali:loot_table
     ali:item minecraft:honeycomb x1
       | Chance: 6.61%
       | Count: 1
-    ali:item minecraft:fishing_rod x1 {Damage:0}
+    ali:item minecraft:fishing_rod x1
       | Chance: 1.65%
       | Count: 1
       | ----- Modifiers -----

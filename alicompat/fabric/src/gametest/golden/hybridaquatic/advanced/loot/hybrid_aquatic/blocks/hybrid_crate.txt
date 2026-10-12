@@ -23,102 +23,119 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item hybrid_aquatic:manglerfish_lure x1
               | Chance: 5.88%
               | Count: 1
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item hybrid_aquatic:eel_scarf x1
               | Chance: 5.88%
               | Count: 1
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item hybrid_aquatic:striped_eel_scarf x1
               | Chance: 5.88%
               | Count: 1
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item hybrid_aquatic:pink_hatxolotl x1
               | Chance: 5.88%
               | Count: 1
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item hybrid_aquatic:gold_hatxolotl x1
               | Chance: 5.88%
               | Count: 1
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item hybrid_aquatic:brown_hatxolotl x1
               | Chance: 5.88%
               | Count: 1
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item hybrid_aquatic:blue_hatxolotl x1
               | Chance: 5.88%
               | Count: 1
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item hybrid_aquatic:cyan_hatxolotl x1
               | Chance: 5.88%
               | Count: 1
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item hybrid_aquatic:moon_jellyfish_hat x1
               | Chance: 5.88%
               | Count: 1
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item hybrid_aquatic:great_white_shark_plushie x1
               | Chance: 5.88%
               | Count: 1
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item hybrid_aquatic:whale_shark_plushie x1
               | Chance: 5.88%
               | Count: 1
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item hybrid_aquatic:tiger_shark_plushie x1
               | Chance: 5.88%
               | Count: 1
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item hybrid_aquatic:hammerhead_shark_plushie x1
               | Chance: 5.88%
               | Count: 1
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item hybrid_aquatic:frilled_shark_plushie x1
               | Chance: 5.88%
               | Count: 1
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item hybrid_aquatic:basking_shark_plushie x1
               | Chance: 5.88%
               | Count: 1
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item hybrid_aquatic:thresher_shark_plushie x1
               | Chance: 5.88%
               | Count: 1
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
       ali:item hybrid_aquatic:hybrid_crate x1
         | Count: 1

@@ -14,7 +14,8 @@ ali:entity_loot_table
       | Set Count:
       |   -> Count: 0 to 2
       |   -> Add: False
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: U[0; 1)
   ali:loot_pool
     | Selects random entry
@@ -29,19 +30,34 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Furnace Smelt
       |   -> Predicates:
-      |     -> Entity Properties:
-      |       -> Target: This Entity
-      |       -> Predicate:
-      |         -> Entity Flags:
-      |           -> Is On Fire: True
-      | Looting Enchant:
+      |     -> Any Of:
+      |       -> Entity Properties:
+      |         -> Target: This Entity
+      |         -> Predicate:
+      |           -> Entity Flags:
+      |             -> Is On Fire: True
+      |       -> Entity Properties:
+      |         -> Target: Direct Attacker
+      |         -> Predicate:
+      |           -> Entity Equipment:
+      |             -> Main Hand:
+      |               -> Item Predicates:
+      |                 -> Enchantments:
+      |                   -> Enchantments:
+      |                     -> Tag: minecraft:smelts_loot
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: U[0; 1)
-  ali:item minecraft:feather x1
-    | Count: 1
-    | ----- Predicates -----
-    | Entity Properties:
-    |   -> Target: Killer
-    |   -> Predicate:
-    |     -> Entity Equipment:
-    |       -> Main Hand:
-    |         -> Tag: Knives
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:feather x1
+      | Count: 1
+      | ----- Predicates -----
+      | Entity Properties:
+      |   -> Target: Attacker
+      |   -> Predicate:
+      |     -> Entity Equipment:
+      |       -> Main Hand:
+      |         -> Items:
+      |           -> Tag: Knives

@@ -7,9 +7,10 @@ ali:loot_table
       | Count: 1
       | ----- Predicates -----
       | Match Tool:
-      |   -> Enchantments:
-      |     -> Enchantment: Silk Touch
-      |     -> Level: ≥ 1
+      |   -> Item Predicates:
+      |     -> Enchantments:
+      |       -> Enchantment: Silk Touch
+      |       -> Level: ≥ 1
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 3
@@ -19,18 +20,20 @@ ali:loot_table
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
     ali:item minecraft:sand x1-6
       | Chance: 14.86%
       | Count: max(0; U[1; 6])
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 6
@@ -41,9 +44,10 @@ ali:loot_table
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 3 to 9
@@ -54,9 +58,10 @@ ali:loot_table
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 5 to 8
@@ -67,9 +72,10 @@ ali:loot_table
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 5
@@ -80,9 +86,10 @@ ali:loot_table
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 2 to 8
@@ -93,9 +100,10 @@ ali:loot_table
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 2
@@ -106,9 +114,10 @@ ali:loot_table
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 3
@@ -119,9 +128,10 @@ ali:loot_table
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 2
@@ -132,29 +142,35 @@ ali:loot_table
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
       | ----- Modifiers -----
       | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
     ali:item minecraft:enchanted_golden_apple x1
       | Chance: 1.35%
       | Count: 1
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
     ali:item deeperdarker:warden_carapace x1
       | Chance: 1.35%
       | Count: 1
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
   ali:loot_pool
     | Selects random entry
     | Rolls: 2
@@ -164,9 +180,10 @@ ali:loot_table
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 2
@@ -177,9 +194,10 @@ ali:loot_table
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 3 to 6
@@ -190,9 +208,10 @@ ali:loot_table
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 2
@@ -203,9 +222,10 @@ ali:loot_table
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 4
@@ -216,9 +236,10 @@ ali:loot_table
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 4
@@ -229,9 +250,10 @@ ali:loot_table
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 5 to 6
@@ -242,9 +264,10 @@ ali:loot_table
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 2

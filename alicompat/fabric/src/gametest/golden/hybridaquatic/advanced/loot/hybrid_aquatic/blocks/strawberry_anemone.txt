@@ -10,6 +10,7 @@ ali:loot_table
       |   -> Match Tool:
       |     -> Item: Shears
       |   -> Match Tool:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1

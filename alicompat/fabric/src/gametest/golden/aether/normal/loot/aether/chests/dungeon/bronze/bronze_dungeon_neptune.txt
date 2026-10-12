@@ -3,18 +3,18 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item aether:neptune_helmet x1 {Damage:0}
+    ali:item aether:neptune_helmet x1
       | Chance: 20%
       | Count: 1
-    ali:item aether:neptune_chestplate x1 {Damage:0}
+    ali:item aether:neptune_chestplate x1
       | Chance: 20%
       | Count: 1
-    ali:item aether:neptune_leggings x1 {Damage:0}
+    ali:item aether:neptune_leggings x1
       | Chance: 20%
       | Count: 1
-    ali:item aether:neptune_boots x1 {Damage:0}
+    ali:item aether:neptune_boots x1
       | Chance: 20%
       | Count: 1
-    ali:item aether:neptune_gloves x1 {Damage:0}
+    ali:item aether:neptune_gloves x1
       | Chance: 20%
       | Count: 1

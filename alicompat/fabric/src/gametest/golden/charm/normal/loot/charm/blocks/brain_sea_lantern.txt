@@ -7,11 +7,6 @@ ali:loot_table
       | Selects only first successful entry
       ali:item charm:brain_sea_lantern x1
         | Count: 1
-        | ----- Predicates -----
-        | Match Tool:
-        |   -> Enchantments:
-        |     -> Enchantment: Silk Touch
-        |     -> Level: ≥ 1
       ali:item minecraft:prismarine_crystals x2-5
         | Count: 2 to 3
         |   -> Fortune I: 2 to 4  ~3 (50%)

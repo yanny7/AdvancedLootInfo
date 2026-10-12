@@ -13,7 +13,8 @@ ali:entity_loot_table
       |       -> Predicate:
       |         -> Entity Flags:
       |           -> Is On Fire: True
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: U[0; 1)
       | Set Count:
       |   -> Count: 1 to 2

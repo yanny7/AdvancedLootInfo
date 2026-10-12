@@ -5,7 +5,7 @@ ali:loot_table
     | Rolls: 1
     ali:alternatives
       | Selects only first successful entry
-      ali:item minecraft:grass x2
+      ali:item minecraft:short_grass x2
         | Count: 2
         | ----- Predicates -----
         | Block State Property:
@@ -19,8 +19,8 @@ ali:loot_table
         |       -> Properties:
         |         -> half: upper
         |   -> Offset: [X: 0, Y: 1, Z: 0]
-        | Can Tool Perform Action:
-        |   -> shears_dig
+        | Match Tool:
+        |   -> Item: Shears
       ali:item minecraft:wheat_seeds x1
         | Chance: 12.5%
         | Count: 1
@@ -41,7 +41,7 @@ ali:loot_table
         |   -> All Of:
         |     -> Any Of:
         |       -> Block State Property:
-        |         -> Block: Grass
+        |         -> Block: Short Grass
         |       -> Block State Property:
         |         -> Block: Tall Grass
         |     -> Inverted:
@@ -52,7 +52,7 @@ ali:loot_table
     | Rolls: 1
     ali:alternatives
       | Selects only first successful entry
-      ali:item minecraft:grass x2
+      ali:item minecraft:short_grass x2
         | Count: 2
         | ----- Predicates -----
         | Block State Property:
@@ -66,8 +66,8 @@ ali:loot_table
         |       -> Properties:
         |         -> half: lower
         |   -> Offset: [X: 0, Y: -1, Z: 0]
-        | Can Tool Perform Action:
-        |   -> shears_dig
+        | Match Tool:
+        |   -> Item: Shears
       ali:item minecraft:wheat_seeds x1
         | Chance: 12.5%
         | Count: 1
@@ -88,7 +88,7 @@ ali:loot_table
         |   -> All Of:
         |     -> Any Of:
         |       -> Block State Property:
-        |         -> Block: Grass
+        |         -> Block: Short Grass
         |       -> Block State Property:
         |         -> Block: Tall Grass
         |     -> Inverted:

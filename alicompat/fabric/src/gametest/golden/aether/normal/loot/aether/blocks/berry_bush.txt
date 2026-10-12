@@ -15,11 +15,12 @@ ali:loot_table
         | ----- Predicates -----
         | Inverted:
         |   -> Match Tool:
-        |     -> Enchantments:
-        |       -> Enchantment: Silk Touch
-        |       -> Level: ≥ 1
+        |     -> Item Predicates:
+        |       -> Enchantments:
+        |         -> Enchantment: Silk Touch
+        |         -> Level: ≥ 1
         | ----- Modifiers -----
-        | Double Drops
+        | Double Drops:
         | Explosion Decay
       ali:item aether:blue_berry x1-6
         | Count: 1 to 3
@@ -30,11 +31,12 @@ ali:loot_table
         | ----- Predicates -----
         | Inverted:
         |   -> Match Tool:
-        |     -> Enchantments:
-        |       -> Enchantment: Silk Touch
-        |       -> Level: ≥ 1
+        |     -> Item Predicates:
+        |       -> Enchantments:
+        |         -> Enchantment: Silk Touch
+        |         -> Level: ≥ 1
         | ----- Modifiers -----
-        | Double Drops
+        | Double Drops:
         | Explosion Decay
   ali:loot_pool
     | Selects random entry
@@ -43,9 +45,10 @@ ali:loot_table
       | Count: 1
       | ----- Predicates -----
       | Match Tool:
-      |   -> Enchantments:
-      |     -> Enchantment: Silk Touch
-      |     -> Level: ≥ 1
+      |   -> Item Predicates:
+      |     -> Enchantments:
+      |       -> Enchantment: Silk Touch
+      |       -> Level: ≥ 1
   ali:loot_pool
     | Selects random entry
     | Rolls: 1

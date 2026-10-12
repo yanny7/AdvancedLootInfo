@@ -3,7 +3,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 0 to 1
-    ali:item minecraft:crossbow x1 {Damage:0}
+    ali:item minecraft:crossbow x1
       | Count: 1
   ali:loot_pool
     | Selects random entry
@@ -45,6 +45,9 @@ ali:loot_table
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
   ali:loot_pool
     | Selects random entry
     | Rolls: 0 to 1
@@ -62,6 +65,22 @@ ali:loot_table
     ali:item minecraft:sentry_armor_trim_smithing_template x2
       | Chance: 25%
       | Count: 2
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item supplementaries:quiver x1
+            | Chance: 15%
+            | Count: 1
+            | ----- Modifiers -----
+            | Random Arrows:
+            |   -> Amount: 4 to 18
   ali:loot_pool
     | Selects random entry
     | Rolls: 1

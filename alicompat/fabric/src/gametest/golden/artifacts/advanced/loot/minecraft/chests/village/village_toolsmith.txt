@@ -24,10 +24,10 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1 to 5
       |   -> Add: False
-    ali:item minecraft:iron_pickaxe x1 {Damage:0}
+    ali:item minecraft:iron_pickaxe x1
       | Chance: 9.43%
       | Count: 1
-    ali:item minecraft:iron_shovel x1 {Damage:0}
+    ali:item minecraft:iron_shovel x1
       | Chance: 9.43%
       | Count: 1
     ali:item minecraft:diamond x1-3
@@ -61,15 +61,51 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item artifacts:digging_claws x1
+          ali:reference
+            | Selects all entries
             | Chance: 50%
-            | Count: 1
-            | ----- Predicates -----
-            | Artifact Rarity Adjusted Chance:
-            |   -> Default Probability: 0.15
-          ali:item artifacts:pocket_piston x1
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:alternatives
+                  | Selects only first successful entry
+                  ali:item artifacts:digging_claws x1
+                    | Chance: 50%
+                    | Count: 1
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.15
+                    | Config Value:
+                    |   -> Config: digging_claws.generateAsLoot
+                  ali:empty
+                    | Drops nothing
+                    | Chance: 50%
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.15
+          ali:reference
+            | Selects all entries
             | Chance: 50%
-            | Count: 1
-            | ----- Predicates -----
-            | Artifact Rarity Adjusted Chance:
-            |   -> Default Probability: 0.15
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:alternatives
+                  | Selects only first successful entry
+                  ali:item artifacts:pocket_piston x1
+                    | Chance: 50%
+                    | Count: 1
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.15
+                    | Config Value:
+                    |   -> Config: pocket_piston.generateAsLoot
+                  ali:empty
+                    | Drops nothing
+                    | Chance: 50%
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.15

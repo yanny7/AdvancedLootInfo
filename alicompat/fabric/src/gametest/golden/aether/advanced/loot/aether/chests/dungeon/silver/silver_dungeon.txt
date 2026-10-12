@@ -11,7 +11,7 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item aether:zanite_sword x1 {Damage:0}
+          ali:item aether:zanite_sword x1
             | Chance: 12.83%
             | Count: 1
           ali:item aether:golden_dart_shooter x1
@@ -33,16 +33,16 @@ ali:loot_table
             | Set Count:
             |   -> Count: 1 to 3
             |   -> Add: False
-          ali:item aether:zanite_pickaxe x1 {Damage:0}
+          ali:item aether:zanite_pickaxe x1
             | Chance: 4.28%
             | Count: 1
-          ali:item aether:zanite_sword x1 {Damage:0}
+          ali:item aether:zanite_sword x1
             | Chance: 4.28%
             | Count: 1
           ali:item minecraft:name_tag x1
             | Chance: 4.28%
             | Count: 1
-          ali:item minecraft:shield x1 {Damage:0}
+          ali:item minecraft:shield x1
             | Chance: 4.28%
             | Count: 1
         ali:loot_pool
@@ -92,10 +92,10 @@ ali:loot_table
           ali:item aether:iron_pendant x1
             | Chance: 4.69%
             | Count: 1
-          ali:item aether:zanite_pendant x1 {Damage:0}
+          ali:item aether:zanite_pendant x1
             | Chance: 4.69%
             | Count: 1
-          ali:item aether:zanite_ring x1 {Damage:0}
+          ali:item aether:zanite_ring x1
             | Chance: 4.69%
             | Count: 1
           ali:item aether:healing_stone x1-3
@@ -244,7 +244,7 @@ ali:loot_table
             | Set Count:
             |   -> Count: 1 to 3
             |   -> Add: False
-          ali:item aether:holystone_sword x1 {Damage:0}
+          ali:item aether:holystone_sword x1
             | Chance: 0.96%
             | Count: 1
           ali:item minecraft:name_tag x1
@@ -304,7 +304,7 @@ ali:loot_table
           ali:item aether:light_angelic_stone x1
             | Chance: 0.35%
             | Count: 1
-          ali:item aether:holystone_sword x1 {Damage:0}
+          ali:item aether:holystone_sword x1
             | Chance: 0.35%
             | Count: 1
           ali:item minecraft:name_tag x1

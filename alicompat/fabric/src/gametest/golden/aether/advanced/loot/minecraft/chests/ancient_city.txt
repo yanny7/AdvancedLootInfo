@@ -5,7 +5,7 @@ ali:loot_table
     | Rolls: 5 to 10
     ali:modified
       | Selects only first successful entry
-      ali:item aether:iron_gloves x1 {Damage:0}
+      ali:item aether:iron_gloves x1
         | Chance: 0.87%
         | Count: 1
         | ----- Predicates -----
@@ -13,18 +13,20 @@ ali:loot_table
         |   -> Loot Table Id:
         |     -> aether:chests/ruined_portal
         | Random Chance:
-        |   -> Probability: 0.25
+        |   -> Chance: 0.25
         | ----- Modifiers -----
         | Enchant With Levels:
         |   -> Levels: 20 to 39
-        |   -> Treasure: True
-      ali:item minecraft:iron_leggings x1 {Damage:0}
+        |   -> Options:
+        |     -> Tag: minecraft:on_random_loot
+      ali:item minecraft:iron_leggings x1 {"minecraft:enchantment_glint_override":1b}
         | Chance: 3.49%
         | Count: 1
         | ----- Modifiers -----
         | Enchant With Levels:
         |   -> Levels: 20 to 39
-        |   -> Treasure: True
+        |   -> Options:
+        |     -> Tag: minecraft:on_random_loot
     ali:item minecraft:coal x6-15
       | Chance: 8.14%
       | Count: max(0; U[6; 15])
@@ -32,7 +34,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 6 to 15
       |   -> Add: False
-    ali:item minecraft:potion x1 {Potion:"minecraft:strong_regeneration"}
+    ali:item minecraft:potion x1-3 {"minecraft:potion_contents":{potion:"minecraft:strong_regeneration"}}
       | Chance: 5.81%
       | Count: max(0; U[1; 3])
       | ----- Modifiers -----
@@ -46,6 +48,9 @@ ali:loot_table
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
     ali:item minecraft:book x3-10
       | Chance: 5.81%
       | Count: max(0; U[3; 10])
@@ -86,7 +91,8 @@ ali:loot_table
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
-      |   -> Swift Sneak
+      |   -> Enchantment: Swift Sneak
+      |   -> Only Compatible: True
     ali:item minecraft:sculk x4-10
       | Chance: 3.49%
       | Count: max(0; U[4; 10])
@@ -146,7 +152,7 @@ ali:loot_table
     ali:item minecraft:name_tag x1
       | Chance: 2.33%
       | Count: 1
-    ali:item minecraft:diamond_hoe x1 {Damage:0}
+    ali:item minecraft:diamond_hoe x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 2.33%
       | Count: 1
       | ----- Modifiers -----
@@ -158,7 +164,8 @@ ali:loot_table
       |   -> Add: False
       | Enchant With Levels:
       |   -> Levels: 30 to 50
-      |   -> Treasure: True
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
     ali:item minecraft:lead x1
       | Chance: 2.33%
       | Count: 1
@@ -186,13 +193,14 @@ ali:loot_table
     ali:item minecraft:music_disc_cat x1
       | Chance: 2.33%
       | Count: 1
-    ali:item minecraft:diamond_leggings x1 {Damage:0}
+    ali:item minecraft:diamond_leggings x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 2.33%
       | Count: 1
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 30 to 50
-      |   -> Treasure: True
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
     ali:item minecraft:enchanted_golden_apple x1-2
       | Chance: 1.16%
       | Count: max(0; U[1; 2])

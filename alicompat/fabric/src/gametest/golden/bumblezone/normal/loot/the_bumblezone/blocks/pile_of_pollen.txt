@@ -103,8 +103,10 @@ ali:loot_table
         |     -> layers: 8
         | Inverted:
         |   -> Match Tool:
-        |     -> Enchantments:
-        |       -> Enchantment: Silk Touch
+        |     -> Item Predicates:
+        |       -> Enchantments:
+        |         -> Enchantment: Silk Touch
+        |         -> Level: ≥ 1
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -117,5 +119,7 @@ ali:loot_table
       |   -> Properties:
       |     -> layers: 8
       | Match Tool:
-      |   -> Enchantments:
-      |     -> Enchantment: Silk Touch
+      |   -> Item Predicates:
+      |     -> Enchantments:
+      |       -> Enchantment: Silk Touch
+      |       -> Level: ≥ 1

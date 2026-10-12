@@ -9,9 +9,10 @@ ali:loot_table
         | Count: 1
         | ----- Predicates -----
         | Match Tool:
-        |   -> Enchantments:
-        |     -> Enchantment: Silk Touch
-        |     -> Level: ≥ 1
+        |   -> Item Predicates:
+        |     -> Enchantments:
+        |       -> Enchantment: Silk Touch
+        |       -> Level: ≥ 1
       ali:item hybrid_aquatic:sulfur x2-8
         | Count: clamp(max(0; U[2; 5]); 1; 9)
         |   -> Fortune LVL: clamp(max(0; U[2; 5]) + U[0; LVL]; 1; 9)
@@ -29,3 +30,4 @@ ali:loot_table
         |     -> Bonus Multiplier: 1
         | Limit Count:
         |   -> Limit: 1 to 9
+        | Explosion Decay

@@ -8,5 +8,5 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:golden_sword x1 {Damage:0}
+    ali:item minecraft:golden_sword x1
       | Count: 1

@@ -3,21 +3,75 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item artifacts:cowboy_hat x1
-      | Chance: 0.03%
-      | Count: 1
-      | ----- Predicates -----
-      | Config Value Chance:
-      |   -> Config: entity_equipment
-    ali:item artifacts:bunny_hoppers x1
-      | Chance: 0.03%
-      | Count: 1
-      | ----- Predicates -----
-      | Config Value Chance:
-      |   -> Config: entity_equipment
-    ali:item artifacts:scarf_of_invisibility x1
-      | Chance: 0.03%
-      | Count: 1
-      | ----- Predicates -----
-      | Config Value Chance:
-      |   -> Config: entity_equipment
+    ali:reference
+      | Selects all entries
+      | Chance: 33.33%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:cowboy_hat x1
+              | Chance: 0.05%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value Chance:
+              |   -> Config: entity_equipment
+              | Config Value:
+              |   -> Config: cowboy_hat.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 0.05%
+              | ----- Predicates -----
+              | Config Value Chance:
+              |   -> Config: entity_equipment
+    ali:reference
+      | Selects all entries
+      | Chance: 33.33%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:bunny_hoppers x1
+              | Chance: 0.05%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value Chance:
+              |   -> Config: entity_equipment
+              | Config Value:
+              |   -> Config: bunny_hoppers.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 0.05%
+              | ----- Predicates -----
+              | Config Value Chance:
+              |   -> Config: entity_equipment
+    ali:reference
+      | Selects all entries
+      | Chance: 33.33%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:scarf_of_invisibility x1
+              | Chance: 0.05%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value Chance:
+              |   -> Config: entity_equipment
+              | Config Value:
+              |   -> Config: scarf_of_invisibility.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 0.05%
+              | ----- Predicates -----
+              | Config Value Chance:
+              |   -> Config: entity_equipment

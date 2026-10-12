@@ -8,8 +8,8 @@ ali:loot_table
       | Count: 1
       | ----- Predicates -----
       | Inverted:
-      |   -> Match Tool:
-      |     -> Tag: Shears
+      |   -> Can Item Perform Ability:
+      |     -> Shears Harvest
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -18,8 +18,8 @@ ali:loot_table
       ali:item farmersdelight:wild_beetroots x1
         | Count: 1
         | ----- Predicates -----
-        | Match Tool:
-        |   -> Tag: Shears
+        | Can Item Perform Ability:
+        |   -> Shears Harvest
       ali:item minecraft:beetroot_seeds x1-7
         | Count: 1
         |   -> Fortune I: 1 to 3

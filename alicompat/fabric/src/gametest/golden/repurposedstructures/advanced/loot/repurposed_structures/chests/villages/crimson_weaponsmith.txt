@@ -38,40 +38,40 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1 to 5
       |   -> Add: False
-    ali:item minecraft:iron_pickaxe x1 {Damage:0}
+    ali:item minecraft:iron_pickaxe x1
       | Chance: 3.21%
       | Count: 1
-    ali:item minecraft:iron_sword x1 {Damage:0}
+    ali:item minecraft:iron_sword x1
       | Chance: 3.21%
       | Count: 1
-    ali:item minecraft:iron_chestplate x1 {Damage:0}
+    ali:item minecraft:iron_chestplate x1
       | Chance: 3.21%
       | Count: 1
-    ali:item minecraft:iron_helmet x1 {Damage:0}
+    ali:item minecraft:iron_helmet x1
       | Chance: 3.21%
       | Count: 1
-    ali:item minecraft:iron_leggings x1 {Damage:0}
+    ali:item minecraft:iron_leggings x1
       | Chance: 3.21%
       | Count: 1
-    ali:item minecraft:iron_boots x1 {Damage:0}
+    ali:item minecraft:iron_boots x1
       | Chance: 3.21%
       | Count: 1
-    ali:item minecraft:golden_pickaxe x1 {Damage:0}
+    ali:item minecraft:golden_pickaxe x1
       | Chance: 3.21%
       | Count: 1
-    ali:item minecraft:golden_sword x1 {Damage:0}
+    ali:item minecraft:golden_sword x1
       | Chance: 3.21%
       | Count: 1
-    ali:item minecraft:golden_chestplate x1 {Damage:0}
+    ali:item minecraft:golden_chestplate x1
       | Chance: 3.21%
       | Count: 1
-    ali:item minecraft:golden_helmet x1 {Damage:0}
+    ali:item minecraft:golden_helmet x1
       | Chance: 3.21%
       | Count: 1
-    ali:item minecraft:golden_leggings x1 {Damage:0}
+    ali:item minecraft:golden_leggings x1
       | Chance: 3.21%
       | Count: 1
-    ali:item minecraft:golden_boots x1 {Damage:0}
+    ali:item minecraft:golden_boots x1
       | Chance: 3.21%
       | Count: 1
     ali:item minecraft:obsidian x3-7

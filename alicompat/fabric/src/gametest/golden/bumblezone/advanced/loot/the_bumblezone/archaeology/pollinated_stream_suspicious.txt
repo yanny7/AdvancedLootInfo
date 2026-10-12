@@ -18,13 +18,13 @@ ali:loot_table
     ali:item minecraft:amethyst_shard x1
       | Chance: 8.11%
       | Count: 1
-    ali:item minecraft:tipped_arrow x1 {Potion:"minecraft:poison"}
+    ali:item minecraft:tipped_arrow x1 {"minecraft:potion_contents":{potion:"minecraft:poison"}}
       | Chance: 8.11%
       | Count: 1
       | ----- Modifiers -----
-      | Set Nbt:
-      |   -> Tag: {Potion:"minecraft:poison"}
-    ali:item minecraft:fishing_rod x1 {Damage:0}
+      | Set Potion:
+      |   -> Potion: Potion of Poison
+    ali:item minecraft:fishing_rod x1
       | Chance: 8.11%
       | Count: 1
     ali:item minecraft:spider_eye x1
@@ -48,9 +48,10 @@ ali:loot_table
     ali:item #the_bumblezone:banner_patterns x1
       | Chance: 2.7%
       | Count: 1
-    ali:item minecraft:book x1 {Enchantments:[{id:"the_bumblezone:hive_lifeline",lvl:1s}]}
+    ali:item minecraft:book x1 {"minecraft:enchantments":{levels:{"the_bumblezone:hive_lifeline":1}}}
       | Chance: 2.7%
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
-      |   -> Hive Lifeline
+      |   -> Enchantment: Hive Lifeline
+      |   -> Only Compatible: True

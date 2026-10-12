@@ -5,17 +5,7 @@ ali:loot_table
     | Rolls: 1
     ali:item supplementaries:blackboard x1
       | Count: 1
-      | ----- Predicates -----
-      | Survives Explosion
       | ----- Modifiers -----
-      | Copy Nbt:
-      |   -> Nbt Provider: minecraft:context
-      |   -> Operations:
-      |     -> Entry:
-      |       -> Source: Pixels
-      |       -> Target: BlockEntityTag.Pixels
-      |       -> Merge Strategy: Replace
-      |     -> Entry:
-      |       -> Source: Waxed
-      |       -> Target: BlockEntityTag.Waxed
-      |       -> Merge Strategy: Replace
+      | Copy Components:
+      |   -> Source: Block Entity
+      |   -> Include: supplementaries:blackboard

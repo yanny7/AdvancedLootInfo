@@ -13,9 +13,11 @@ ali:entity_loot_table
       | ----- Predicates -----
       | Killer Equipment:
       |   -> Equipment Slot: Main Hand
-      |   -> Tag: kaleidoscope_cookery:kitchen_knife
+      |   -> Items:
+      |     -> Tag: kaleidoscope_cookery:kitchen_knife
       | ----- Modifiers -----
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: 0 to 1
     ali:empty
       | Drops nothing
@@ -23,7 +25,8 @@ ali:entity_loot_table
       | ----- Predicates -----
       | Killer Equipment:
       |   -> Equipment Slot: Main Hand
-      |   -> Tag: kaleidoscope_cookery:kitchen_knife
+      |   -> Items:
+      |     -> Tag: kaleidoscope_cookery:kitchen_knife
   ali:loot_pool
     | Selects random entry
     | Rolls: 2
@@ -37,9 +40,11 @@ ali:entity_loot_table
       | ----- Predicates -----
       | Killer Equipment:
       |   -> Equipment Slot: Main Hand
-      |   -> Tag: kaleidoscope_cookery:kitchen_knife
+      |   -> Items:
+      |     -> Tag: kaleidoscope_cookery:kitchen_knife
       | ----- Modifiers -----
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: 0 to 1
     ali:empty
       | Drops nothing
@@ -47,4 +52,5 @@ ali:entity_loot_table
       | ----- Predicates -----
       | Killer Equipment:
       |   -> Equipment Slot: Main Hand
-      |   -> Tag: kaleidoscope_cookery:kitchen_knife
+      |   -> Items:
+      |     -> Tag: kaleidoscope_cookery:kitchen_knife

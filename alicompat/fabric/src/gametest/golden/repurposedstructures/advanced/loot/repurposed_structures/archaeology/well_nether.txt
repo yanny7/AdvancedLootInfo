@@ -23,17 +23,17 @@ ali:loot_table
       | Count: 1
       | ----- Modifiers -----
       | Set Stew Effect:
-      |   -> Blindness
+      |   -> Night Vision
       |     -> Duration: 20 to 70
-      |   -> Fire Resistance
-      |     -> Duration: 25 to 55
       |   -> Jump Boost
       |     -> Duration: 20 to 70
-      |   -> Night Vision
+      |   -> Weakness
+      |     -> Duration: 30 to 50
+      |   -> Blindness
       |     -> Duration: 20 to 70
       |   -> Poison
       |     -> Duration: 10 to 20
       |   -> Saturation
       |     -> Duration: 20 to 70
-      |   -> Weakness
-      |     -> Duration: 30 to 50
+      |   -> Fire Resistance
+      |     -> Duration: 25 to 55

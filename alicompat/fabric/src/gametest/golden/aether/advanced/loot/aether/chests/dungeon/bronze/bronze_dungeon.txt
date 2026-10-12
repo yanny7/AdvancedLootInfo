@@ -11,13 +11,13 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item aether:zanite_pickaxe x1 {Damage:0}
+          ali:item aether:zanite_pickaxe x1
             | Chance: 18.82%
             | Count: 1
-          ali:item aether:zanite_axe x1 {Damage:0}
+          ali:item aether:zanite_axe x1
             | Chance: 14.12%
             | Count: 1
-          ali:item aether:zanite_sword x1 {Damage:0}
+          ali:item aether:zanite_sword x1
             | Chance: 14.12%
             | Count: 1
           ali:item aether:blue_gummy_swet x1
@@ -26,13 +26,13 @@ ali:loot_table
           ali:item aether:swet_cape x1
             | Chance: 9.41%
             | Count: 1
-          ali:item aether:ice_pendant x1 {Damage:0}
+          ali:item aether:ice_pendant x1
             | Chance: 4.71%
             | Count: 1
-          ali:item aether:zanite_shovel x1 {Damage:0}
+          ali:item aether:zanite_shovel x1
             | Chance: 4.71%
             | Count: 1
-          ali:item aether:zanite_hoe x1 {Damage:0}
+          ali:item aether:zanite_hoe x1
             | Chance: 4.71%
             | Count: 1
         ali:loot_pool
@@ -59,7 +59,7 @@ ali:loot_table
             | Set Count:
             |   -> Count: 2 to 5
             |   -> Add: False
-          ali:item aether:skyroot_pickaxe x1 {Damage:0}
+          ali:item aether:skyroot_pickaxe x1
             | Chance: 6.96%
             | Count: 1
           ali:item aether:skyroot_poison_bucket x1
@@ -74,7 +74,7 @@ ali:loot_table
           ali:item aether:zanite_gemstone x1
             | Chance: 6.96%
             | Count: 1
-          ali:item aether:holystone_pickaxe x1 {Damage:0}
+          ali:item aether:holystone_pickaxe x1
             | Chance: 3.48%
             | Count: 1
           ali:item aether:icestone x1-5
@@ -182,7 +182,7 @@ ali:loot_table
           ali:item aether:zanite_gemstone x1
             | Chance: 1.33%
             | Count: 1
-          ali:item aether:skyroot_pickaxe x1 {Damage:0}
+          ali:item aether:skyroot_pickaxe x1
             | Chance: 1.33%
             | Count: 1
     ali:reference
@@ -226,6 +226,6 @@ ali:loot_table
             | Set Count:
             |   -> Count: 1 to 3
             |   -> Add: False
-          ali:item aether:skyroot_pickaxe x1 {Damage:0}
+          ali:item aether:skyroot_pickaxe x1
             | Chance: 0.43%
             | Count: 1

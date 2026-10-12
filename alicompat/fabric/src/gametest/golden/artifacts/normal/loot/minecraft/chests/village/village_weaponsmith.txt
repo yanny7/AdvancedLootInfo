@@ -15,22 +15,22 @@ ali:loot_table
     ali:item minecraft:gold_ingot x1-3
       | Chance: 5.32%
       | Count: 1 to 3
-    ali:item minecraft:iron_pickaxe x1 {Damage:0}
+    ali:item minecraft:iron_pickaxe x1
       | Chance: 5.32%
       | Count: 1
-    ali:item minecraft:iron_sword x1 {Damage:0}
+    ali:item minecraft:iron_sword x1
       | Chance: 5.32%
       | Count: 1
-    ali:item minecraft:iron_chestplate x1 {Damage:0}
+    ali:item minecraft:iron_chestplate x1
       | Chance: 5.32%
       | Count: 1
-    ali:item minecraft:iron_helmet x1 {Damage:0}
+    ali:item minecraft:iron_helmet x1
       | Chance: 5.32%
       | Count: 1
-    ali:item minecraft:iron_leggings x1 {Damage:0}
+    ali:item minecraft:iron_leggings x1
       | Chance: 5.32%
       | Count: 1
-    ali:item minecraft:iron_boots x1 {Damage:0}
+    ali:item minecraft:iron_boots x1
       | Chance: 5.32%
       | Count: 1
     ali:item minecraft:obsidian x3-7
@@ -64,8 +64,51 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item artifacts:feral_claws x1
-            | Count: 1
-            | ----- Predicates -----
-            | Artifact Rarity Adjusted Chance:
-            |   -> Default Probability: 0.1
+          ali:reference
+            | Selects all entries
+            | Chance: 66.67%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:alternatives
+                  | Selects only first successful entry
+                  ali:item artifacts:feral_claws x1
+                    | Chance: 66.67%
+                    | Count: 1
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.1
+                    | Config Value:
+                    |   -> Config: feral_claws.generateAsLoot
+                  ali:empty
+                    | Drops nothing
+                    | Chance: 66.67%
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.1
+          ali:reference
+            | Selects all entries
+            | Chance: 33.33%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:alternatives
+                  | Selects only first successful entry
+                  ali:item artifacts:charm_of_shrinking x1
+                    | Chance: 33.33%
+                    | Count: 1
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.1
+                    | Config Value:
+                    |   -> Config: charm_of_shrinking.generateAsLoot
+                  ali:empty
+                    | Drops nothing
+                    | Chance: 33.33%
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.1

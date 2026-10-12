@@ -1,0 +1,101 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      | Chance: 25%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:charm_of_shrinking x1
+              | Chance: 25%
+              | Count: 1
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.15
+              | Config Value:
+              |   -> Config: charm_of_shrinking.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 25%
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.15
+    ali:reference
+      | Selects all entries
+      | Chance: 25%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:warp_drive x1
+              | Chance: 25%
+              | Count: 1
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.15
+              | Config Value:
+              |   -> Config: warp_drive.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 25%
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.15
+    ali:reference
+      | Selects all entries
+      | Chance: 25%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:withered_bracelet x1
+              | Chance: 25%
+              | Count: 1
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.15
+              | Config Value:
+              |   -> Config: withered_bracelet.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 25%
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.15
+    ali:reference
+      | Selects all entries
+      | Chance: 25%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:strider_shoes x1
+              | Chance: 25%
+              | Count: 1
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.15
+              | Config Value:
+              |   -> Config: strider_shoes.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 25%
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.15

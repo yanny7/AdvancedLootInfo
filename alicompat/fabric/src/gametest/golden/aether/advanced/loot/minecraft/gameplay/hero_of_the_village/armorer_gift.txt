@@ -5,7 +5,7 @@ ali:loot_table
     | Rolls: 1
     ali:modified
       | Selects only first successful entry
-      ali:item aether:chainmail_gloves x1 {Damage:0}
+      ali:item aether:chainmail_gloves x1
         | Chance: 6.25%
         | Count: 1
         | ----- Predicates -----
@@ -13,13 +13,13 @@ ali:loot_table
         |   -> Loot Table Id:
         |     -> aether:chests/dungeon/gold/gold_dungeon_reward
         | Random Chance:
-        |   -> Probability: 0.25
-      ali:item minecraft:chainmail_helmet x1 {Damage:0}
+        |   -> Chance: 0.25
+      ali:item minecraft:chainmail_helmet x1
         | Chance: 25%
         | Count: 1
     ali:modified
       | Selects only first successful entry
-      ali:item aether:chainmail_gloves x1 {Damage:0}
+      ali:item aether:chainmail_gloves x1
         | Chance: 6.25%
         | Count: 1
         | ----- Predicates -----
@@ -27,13 +27,13 @@ ali:loot_table
         |   -> Loot Table Id:
         |     -> aether:chests/dungeon/gold/gold_dungeon_reward
         | Random Chance:
-        |   -> Probability: 0.25
-      ali:item minecraft:chainmail_chestplate x1 {Damage:0}
+        |   -> Chance: 0.25
+      ali:item minecraft:chainmail_chestplate x1
         | Chance: 25%
         | Count: 1
     ali:modified
       | Selects only first successful entry
-      ali:item aether:chainmail_gloves x1 {Damage:0}
+      ali:item aether:chainmail_gloves x1
         | Chance: 6.25%
         | Count: 1
         | ----- Predicates -----
@@ -41,13 +41,13 @@ ali:loot_table
         |   -> Loot Table Id:
         |     -> aether:chests/dungeon/gold/gold_dungeon_reward
         | Random Chance:
-        |   -> Probability: 0.25
-      ali:item minecraft:chainmail_leggings x1 {Damage:0}
+        |   -> Chance: 0.25
+      ali:item minecraft:chainmail_leggings x1
         | Chance: 25%
         | Count: 1
     ali:modified
       | Selects only first successful entry
-      ali:item aether:chainmail_gloves x1 {Damage:0}
+      ali:item aether:chainmail_gloves x1
         | Chance: 6.25%
         | Count: 1
         | ----- Predicates -----
@@ -55,7 +55,7 @@ ali:loot_table
         |   -> Loot Table Id:
         |     -> aether:chests/dungeon/gold/gold_dungeon_reward
         | Random Chance:
-        |   -> Probability: 0.25
-      ali:item minecraft:chainmail_boots x1 {Damage:0}
+        |   -> Chance: 0.25
+      ali:item minecraft:chainmail_boots x1
         | Chance: 25%
         | Count: 1

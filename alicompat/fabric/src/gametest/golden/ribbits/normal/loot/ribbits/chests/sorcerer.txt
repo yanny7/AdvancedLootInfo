@@ -27,9 +27,11 @@ ali:loot_table
     ali:empty
       | Chance: 50%
       | Count: 1
-    ali:item minecraft:potion x1 {Potion:"minecraft:strong_leaping"}
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:strong_leaping"}}
       | Chance: 50%
       | Count: 1
       | ----- Modifiers -----
-      | Set Nbt:
-      |   -> Tag: {Potion:"minecraft:strong_leaping"}
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:potion_contents
+      |       -> Potion: Potion of Leaping

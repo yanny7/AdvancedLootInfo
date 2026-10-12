@@ -10,9 +10,10 @@ ali:loot_table
         | ----- Predicates -----
         | Survives Explosion
         | Match Tool:
-        |   -> Enchantments:
-        |     -> Enchantment: Silk Touch
-        |     -> Level: ≥ 1
+        |   -> Item Predicates:
+        |     -> Enchantments:
+        |       -> Enchantment: Silk Touch
+        |       -> Level: ≥ 1
       ali:item minecraft:honeycomb x1-4
         | Count: max(1; U[0; 1])
         |   -> Fortune LVL: max(1; U[0; LVL + 1])
@@ -36,6 +37,7 @@ ali:loot_table
       | Survives Explosion
       | Inverted:
       |   -> Match Tool:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1

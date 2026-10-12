@@ -22,7 +22,7 @@ ali:trade
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item #charmony:ladders x1
+      ali:item #charm:ladders x1
   ali:trade_level
     | Level: 2
     | Randomly Selects 2 Of These Trades
@@ -127,14 +127,14 @@ ali:trade
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x4-5
       ali:item minecraft:air x0
-      ali:item #charmony:barrels x1
+      ali:item #charm:barrels x1
     ali:items_to_items
       | Uses: 20
       | XP: 15
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x4-5
       ali:item minecraft:air x0
-      ali:item #charmony:chiseled_bookshelves x1
+      ali:item #charm:chiseled_bookshelves x1
     ali:items_to_items
       | Uses: 20
       | XP: 15

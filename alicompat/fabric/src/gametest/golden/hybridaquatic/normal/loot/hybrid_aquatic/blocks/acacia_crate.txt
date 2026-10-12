@@ -12,60 +12,69 @@ ali:loot_table
           ali:loot_pool
             | Selects random entry
             | Rolls: 1
-            ali:item hybrid_aquatic:barbed_hook x1 {Damage:0}
+            ali:item hybrid_aquatic:barbed_hook x1
               | Chance: 11.11%
               | Count: 1
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
-            ali:item hybrid_aquatic:glowing_hook x1 {Damage:0}
+              |   -> Items:
+              |     -> Tag: minecraft:axes
+            ali:item hybrid_aquatic:glowing_hook x1
               | Chance: 11.11%
               | Count: 1
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
-            ali:item hybrid_aquatic:magnetic_hook x1 {Damage:0}
+              |   -> Items:
+              |     -> Tag: minecraft:axes
+            ali:item hybrid_aquatic:magnetic_hook x1
               | Chance: 11.11%
               | Count: 1
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item minecraft:iron_ingot x3-9
               | Chance: 11.11%
               | Count: 3 to 9
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item minecraft:gold_ingot x3-9
               | Chance: 11.11%
               | Count: 3 to 9
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item minecraft:diamond x1-3
               | Chance: 11.11%
               | Count: 1 to 3
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item minecraft:emerald x1-3
               | Chance: 11.11%
               | Count: 1 to 3
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item minecraft:skull_banner_pattern x1
               | Chance: 11.11%
               | Count: 1
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item minecraft:coast_armor_trim_smithing_template x1-4
               | Chance: 11.11%
               | Count: 1 to 4
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
           ali:loot_pool
             | Selects random entry
             | Rolls: 1
@@ -74,7 +83,8 @@ ali:loot_table
               | Count: 16 to 32
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
           ali:loot_pool
             | Selects random entry
             | Rolls: 1
@@ -83,43 +93,50 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item hybrid_aquatic:whale_shark_plushie x1
               | Chance: 3.57%
               | Count: 1
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item hybrid_aquatic:tiger_shark_plushie x1
               | Chance: 3.57%
               | Count: 1
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item hybrid_aquatic:hammerhead_shark_plushie x1
               | Chance: 3.57%
               | Count: 1
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item hybrid_aquatic:frilled_shark_plushie x1
               | Chance: 3.57%
               | Count: 1
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item hybrid_aquatic:basking_shark_plushie x1
               | Chance: 3.57%
               | Count: 1
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item hybrid_aquatic:thresher_shark_plushie x1
               | Chance: 3.57%
               | Count: 1
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
           ali:loot_pool
             | Selects random entry
             | Rolls: 1
@@ -128,18 +145,21 @@ ali:loot_table
               | Count: 8 to 32
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item minecraft:acacia_sapling x1-4
               | Chance: 33.33%
               | Count: 1 to 4
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
             ali:item minecraft:beetroot x3-9
               | Chance: 33.33%
               | Count: 3 to 9
               | ----- Predicates -----
               | Match Tool:
-              |   -> Tag: minecraft:axes
+              |   -> Items:
+              |     -> Tag: minecraft:axes
       ali:item hybrid_aquatic:acacia_crate x1
         | Count: 1

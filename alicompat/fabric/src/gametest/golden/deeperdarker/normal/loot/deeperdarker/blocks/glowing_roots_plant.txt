@@ -12,9 +12,10 @@ ali:loot_table
         |   -> Match Tool:
         |     -> Item: Shears
         |   -> Match Tool:
-        |     -> Enchantments:
-        |       -> Enchantment: Silk Touch
-        |       -> Level: ≥ 1
+        |     -> Item Predicates:
+        |       -> Enchantments:
+        |         -> Enchantment: Silk Touch
+        |         -> Level: ≥ 1
       ali:item deeperdarker:glowing_roots x1
         | Chance: 33%
         |   -> Fortune I: 55%

@@ -6,5 +6,6 @@ ali:entity_loot_table
     ali:item hybrid_aquatic:sea_bass x1
       | Count: 1
       | ----- Modifiers -----
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: 0 to 1

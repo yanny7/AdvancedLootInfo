@@ -15,28 +15,28 @@ ali:trade
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x14
       ali:item minecraft:air x0
-      ali:item ad_astra:space_pants x1 {Damage:0}
+      ali:item ad_astra:space_pants x1
     ali:items_to_items
       | Uses: 12
       | XP: 4
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x8
       ali:item minecraft:air x0
-      ali:item ad_astra:space_boots x1 {Damage:0}
+      ali:item ad_astra:space_boots x1
     ali:items_to_items
       | Uses: 12
       | XP: 4
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x10
       ali:item minecraft:air x0
-      ali:item ad_astra:space_helmet x1 {Damage:0}
+      ali:item ad_astra:space_helmet x1
     ali:items_to_items
       | Uses: 12
       | XP: 8
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x36
       ali:item minecraft:air x0
-      ali:item ad_astra:space_suit x1 {Damage:0}
+      ali:item ad_astra:space_suit x1
   ali:trade_level
     | Level: 2
     | Randomly Selects 2 Of These Trades
@@ -60,14 +60,14 @@ ali:trade
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x8
       ali:item minecraft:air x0
-      ali:item ad_astra:space_boots x1 {Damage:0}
+      ali:item ad_astra:space_boots x1
     ali:items_to_items
       | Uses: 12
       | XP: 4
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x14
       ali:item minecraft:air x0
-      ali:item ad_astra:space_pants x1 {Damage:0}
+      ali:item ad_astra:space_pants x1
   ali:trade_level
     | Level: 3
     | Randomly Selects 2 Of These Trades
@@ -91,21 +91,21 @@ ali:trade
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x10
       ali:item minecraft:air x0
-      ali:item ad_astra:space_helmet x1 {Damage:0}
+      ali:item ad_astra:space_helmet x1
     ali:items_to_items
       | Uses: 12
       | XP: 8
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x36
       ali:item minecraft:air x0
-      ali:item ad_astra:space_suit x1 {Damage:0}
+      ali:item ad_astra:space_suit x1
     ali:items_to_items
       | Uses: 12
       | XP: 10
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x5
       ali:item minecraft:air x0
-      ali:item minecraft:shield x1 {Damage:0}
+      ali:item minecraft:shield x1
   ali:trade_level
     | Level: 4
     | Randomly Selects 2 Of These Trades
@@ -115,7 +115,7 @@ ali:trade
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x33-47
       ali:item minecraft:air x0
-      ali:item ad_astra:space_pants x1 {Damage:0}
+      ali:item ad_astra:space_pants x1
         | Enchant With Levels:
         |   -> Levels: 5 to 19
         |   -> Treasure: False
@@ -125,7 +125,7 @@ ali:trade
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x21-35
       ali:item minecraft:air x0
-      ali:item ad_astra:space_boots x1 {Damage:0}
+      ali:item ad_astra:space_boots x1
         | Enchant With Levels:
         |   -> Levels: 5 to 19
         |   -> Treasure: False
@@ -138,7 +138,7 @@ ali:trade
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x21-35
       ali:item minecraft:air x0
-      ali:item ad_astra:space_helmet x1 {Damage:0}
+      ali:item ad_astra:space_helmet x1
         | Enchant With Levels:
         |   -> Levels: 5 to 19
         |   -> Treasure: False
@@ -148,7 +148,7 @@ ali:trade
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x53-64
       ali:item minecraft:air x0
-      ali:item ad_astra:space_suit x1 {Damage:0}
+      ali:item ad_astra:space_suit x1
         | Enchant With Levels:
         |   -> Levels: 5 to 19
         |   -> Treasure: False
@@ -158,7 +158,7 @@ ali:trade
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x24
       ali:item minecraft:air x0
-      ali:item ad_astra:gas_tank x1 {BotariumData:{StoredFluids:[{Amount:81000L,Fluid:"ad_astra:oxygen"}]}}
+      ali:item ad_astra:gas_tank x1 {"ad_astra:fluids":[{amount:81000L,id:"ad_astra:oxygen"}]}
     ali:items_to_items
       | Uses: 1
       | XP: 60

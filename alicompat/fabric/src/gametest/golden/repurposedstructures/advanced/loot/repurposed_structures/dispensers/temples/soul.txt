@@ -3,15 +3,15 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 2 to 3
-    ali:item minecraft:tipped_arrow x5-9 {Potion:"minecraft:long_slowness"}
+    ali:item minecraft:tipped_arrow x5-9 {"minecraft:potion_contents":{potion:"minecraft:long_slowness"}}
       | Chance: 60%
       | Count: max(0; U[5; 9])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 5 to 9
       |   -> Add: False
-      | Set Nbt:
-      |   -> Tag: {Potion:"minecraft:long_slowness"}
+      | Set Potion:
+      |   -> Potion: Potion of Slowness
     ali:item minecraft:fire_charge x1-3
       | Chance: 40%
       | Count: max(0; U[1; 3])

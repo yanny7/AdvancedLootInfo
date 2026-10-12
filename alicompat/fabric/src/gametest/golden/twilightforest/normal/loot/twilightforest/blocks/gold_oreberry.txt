@@ -1,0 +1,35 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:modified
+            | Selects only first successful entry
+            ali:item minecraft:gold_nugget x1
+              | Count: 1
+              | ----- Predicates -----
+              | Match Tool:
+              |   -> Item: Fiery Pickaxe
+              | Block State Property:
+              |   -> Block: Gold Oreberry Bush
+              |   -> Properties:
+              |     -> age: 3
+            ali:item twilightforest:gold_berry x1
+              | Count: 1
+              | ----- Predicates -----
+              | Block State Property:
+              |   -> Block: Gold Oreberry Bush
+              |   -> Properties:
+              |     -> age: 3
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item twilightforest:gold_oreberry x1
+      | Count: 1

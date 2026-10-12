@@ -49,7 +49,7 @@ ali:trade
       | Uses: 128
       | XP: 4
       | Price Multiplier: 0.0
-      ali:item minecraft:cobblestone x32
+      ali:item minecraft:cobblestone x22-32
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
   ali:trade_level
@@ -88,14 +88,14 @@ ali:trade
       | XP: 10
       | Price Multiplier: 0.0
       ali:item minecraft:damaged_anvil x1
-      ali:item minecraft:iron_ingot x4
-      ali:item minecraft:chipped_anvil x1
+      ali:item minecraft:iron_ingot x2
+      ali:item minecraft:anvil x1
     ali:items_to_items
       | Uses: 2
       | XP: 10
       | Price Multiplier: 0.0
       ali:item minecraft:chipped_anvil x1
-      ali:item minecraft:iron_ingot x4
+      ali:item minecraft:iron_ingot x1
       ali:item minecraft:anvil x1
     ali:items_to_items
       | Uses: 64
@@ -109,7 +109,7 @@ ali:trade
       | XP: 4
       | Price Multiplier: 0.0
       ali:item minecraft:leather x1
-      ali:item minecraft:paper x3
+      ali:item minecraft:paper x2-3
       ali:item minecraft:book x2
     ali:items_to_items
       | Uses: 20
@@ -120,20 +120,20 @@ ali:trade
       ali:item minecraft:emerald x1
   ali:trade_level
     | Level: 3
-    | Randomly Selects min(U[3; 4]; 17) Of These Trades
+    | Randomly Selects min(U[2; 3]; 51) Of These Trades
     ali:items_to_items
       | Uses: 64
       | XP: 10
       | Price Multiplier: 0.0
-      ali:item minecraft:emerald x3
+      ali:item minecraft:emerald x2-3
       ali:item minecraft:air x0
       ali:item minecraft:experience_bottle x1
     ali:items_to_items
       | Uses: 2
       | XP: 10
       | Price Multiplier: 0.0
-      ali:item minecraft:emerald x24
-      ali:item minecraft:paper x8
+      ali:item minecraft:emerald x16
+      ali:item minecraft:paper x6-8
       ali:item minecraft:name_tag x1
     ali:items_to_items
       | Uses: 64
@@ -143,111 +143,536 @@ ali:trade
       ali:item minecraft:air x0
       ali:item minecraft:blue_ice x1
     ali:items_to_items
-      | Uses: 2
-      | XP: 30
-      | Price Multiplier: 0.5
-      ali:item minecraft:fishing_rod x1 {Damage:0}
-      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:luck_of_the_sea",lvl:3s}]}
-      ali:item minecraft:fishing_rod x1 {Damage:0,Enchantments:[{id:"minecraft:luck_of_the_sea",lvl:5s}]}
-    ali:items_to_items
-      | Uses: 2
-      | XP: 30
-      | Price Multiplier: 0.5
-      ali:item minecraft:fishing_rod x1 {Damage:0}
-      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:lure",lvl:3s}]}
-      ali:item minecraft:fishing_rod x1 {Damage:0,Enchantments:[{id:"minecraft:lure",lvl:5s}]}
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x16-28
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_11 x1
     ali:items_to_items
       | Uses: 1
       | XP: 100
       | Price Multiplier: 0.0
-      ali:item minecraft:emerald x32
+      ali:item minecraft:emerald x16-28
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_13 x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x16-28
       ali:item minecraft:air x0
       ali:item minecraft:music_disc_cat x1
     ali:items_to_items
       | Uses: 1
       | XP: 100
       | Price Multiplier: 0.0
-      ali:item minecraft:emerald x32
+      ali:item minecraft:emerald x16-28
       ali:item minecraft:air x0
       ali:item minecraft:music_disc_blocks x1
     ali:items_to_items
       | Uses: 1
       | XP: 100
       | Price Multiplier: 0.0
-      ali:item minecraft:emerald x32
+      ali:item minecraft:emerald x16-28
       ali:item minecraft:air x0
-      ali:item minecraft:music_disc_chirp x1
+      ali:item minecraft:music_disc_far x1
     ali:items_to_items
       | Uses: 1
       | XP: 100
       | Price Multiplier: 0.0
-      ali:item minecraft:emerald x32
+      ali:item minecraft:emerald x16-28
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_mall x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x16-28
       ali:item minecraft:air x0
       ali:item minecraft:music_disc_mellohi x1
     ali:items_to_items
       | Uses: 1
       | XP: 100
       | Price Multiplier: 0.0
-      ali:item minecraft:emerald x32
+      ali:item minecraft:emerald x16-28
       ali:item minecraft:air x0
       ali:item minecraft:music_disc_stal x1
     ali:items_to_items
       | Uses: 1
-      | XP: 200
+      | XP: 100
       | Price Multiplier: 0.0
-      ali:item minecraft:diamond_pickaxe x1 {Damage:0}
-      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:efficiency",lvl:5s}]}
-      ali:item minecraft:diamond_pickaxe x1 {Damage:0,Enchantments:[{id:"minecraft:efficiency",lvl:6s}]}
+      ali:item minecraft:emerald x16-28
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_strad x1
     ali:items_to_items
       | Uses: 1
-      | XP: 200
+      | XP: 100
       | Price Multiplier: 0.0
-      ali:item minecraft:diamond_pickaxe x1 {Damage:0}
-      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:unbreaking",lvl:3s}]}
-      ali:item minecraft:diamond_pickaxe x1 {Damage:0,Enchantments:[{id:"minecraft:unbreaking",lvl:4s}]}
+      ali:item minecraft:emerald x16-28
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_ward x1
     ali:items_to_items
       | Uses: 1
-      | XP: 200
+      | XP: 100
       | Price Multiplier: 0.0
-      ali:item minecraft:diamond_pickaxe x1 {Damage:0}
-      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:fortune",lvl:3s}]}
-      ali:item minecraft:diamond_pickaxe x1 {Damage:0,Enchantments:[{id:"minecraft:fortune",lvl:4s}]}
+      ali:item minecraft:emerald x16-28
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_wait x1
     ali:items_to_items
       | Uses: 1
-      | XP: 200
+      | XP: 100
       | Price Multiplier: 0.0
-      ali:item minecraft:diamond_axe x1 {Damage:0}
-      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:efficiency",lvl:5s}]}
-      ali:item minecraft:diamond_axe x1 {Damage:0,Enchantments:[{id:"minecraft:efficiency",lvl:6s}]}
+      ali:item minecraft:emerald x16-28
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_otherside x1
     ali:items_to_items
       | Uses: 1
-      | XP: 200
+      | XP: 100
       | Price Multiplier: 0.0
-      ali:item minecraft:diamond_axe x1 {Damage:0}
-      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:unbreaking",lvl:3s}]}
-      ali:item minecraft:diamond_axe x1 {Damage:0,Enchantments:[{id:"minecraft:unbreaking",lvl:4s}]}
+      ali:item minecraft:emerald x16-28
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_relic x1
     ali:items_to_items
       | Uses: 1
-      | XP: 200
+      | XP: 100
       | Price Multiplier: 0.0
-      ali:item minecraft:diamond_shovel x1 {Damage:0}
-      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:efficiency",lvl:5s}]}
-      ali:item minecraft:diamond_shovel x1 {Damage:0,Enchantments:[{id:"minecraft:efficiency",lvl:6s}]}
+      ali:item minecraft:emerald x16-28
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_precipice x1
     ali:items_to_items
       | Uses: 1
-      | XP: 200
+      | XP: 100
       | Price Multiplier: 0.0
-      ali:item minecraft:diamond_shovel x1 {Damage:0}
-      ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:unbreaking",lvl:3s}]}
-      ali:item minecraft:diamond_shovel x1 {Damage:0,Enchantments:[{id:"minecraft:unbreaking",lvl:4s}]}
+      ali:item minecraft:emerald x16-28
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_creator x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x16-28
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_creator_music_box x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x16-28
+      ali:item minecraft:air x0
+      ali:item minecraft:wayfinder_armor_trim_smithing_template x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x16-28
+      ali:item minecraft:air x0
+      ali:item minecraft:raiser_armor_trim_smithing_template x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x16-28
+      ali:item minecraft:air x0
+      ali:item minecraft:shaper_armor_trim_smithing_template x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x16-28
+      ali:item minecraft:air x0
+      ali:item minecraft:host_armor_trim_smithing_template x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x16-28
+      ali:item minecraft:air x0
+      ali:item minecraft:ward_armor_trim_smithing_template x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x16-28
+      ali:item minecraft:air x0
+      ali:item minecraft:silence_armor_trim_smithing_template x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x16-28
+      ali:item minecraft:air x0
+      ali:item minecraft:eye_armor_trim_smithing_template x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x16-28
+      ali:item minecraft:air x0
+      ali:item minecraft:bolt_armor_trim_smithing_template x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x16-28
+      ali:item minecraft:air x0
+      ali:item minecraft:flow_armor_trim_smithing_template x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:brick x1
+      ali:item minecraft:emerald x2-4
+      ali:item minecraft:angler_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:brick x1
+      ali:item minecraft:emerald x2-4
+      ali:item minecraft:archer_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:brick x1
+      ali:item minecraft:emerald x2-4
+      ali:item minecraft:arms_up_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:brick x1
+      ali:item minecraft:emerald x2-4
+      ali:item minecraft:blade_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:brick x1
+      ali:item minecraft:emerald x2-4
+      ali:item minecraft:brewer_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:brick x1
+      ali:item minecraft:emerald x2-4
+      ali:item minecraft:burn_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:brick x1
+      ali:item minecraft:emerald x2-4
+      ali:item minecraft:danger_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:brick x1
+      ali:item minecraft:emerald x2-4
+      ali:item minecraft:explorer_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:brick x1
+      ali:item minecraft:emerald x2-4
+      ali:item minecraft:flow_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:brick x1
+      ali:item minecraft:emerald x2-4
+      ali:item minecraft:friend_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:brick x1
+      ali:item minecraft:emerald x2-4
+      ali:item minecraft:guster_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:brick x1
+      ali:item minecraft:emerald x2-4
+      ali:item minecraft:heart_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:brick x1
+      ali:item minecraft:emerald x2-4
+      ali:item minecraft:heartbreak_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:brick x1
+      ali:item minecraft:emerald x2-4
+      ali:item minecraft:howl_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:brick x1
+      ali:item minecraft:emerald x2-4
+      ali:item minecraft:miner_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:brick x1
+      ali:item minecraft:emerald x2-4
+      ali:item minecraft:mourner_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:brick x1
+      ali:item minecraft:emerald x2-4
+      ali:item minecraft:plenty_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:brick x1
+      ali:item minecraft:emerald x2-4
+      ali:item minecraft:prize_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:brick x1
+      ali:item minecraft:emerald x2-4
+      ali:item minecraft:scrape_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:brick x1
+      ali:item minecraft:emerald x2-4
+      ali:item minecraft:sheaf_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:brick x1
+      ali:item minecraft:emerald x2-4
+      ali:item minecraft:shelter_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:brick x1
+      ali:item minecraft:emerald x2-4
+      ali:item minecraft:skull_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:brick x1
+      ali:item minecraft:emerald x2-4
+      ali:item minecraft:snort_pottery_sherd x1
+  ali:trade_level
+    | Level: 4
+    | Randomly Selects min(U[1; 2]; 22) Of These Trades
+    ali:items_to_items
+      | Uses: 1
+      | XP: 150
+      | Price Multiplier: 0.0
+      ali:item minecraft:iron_ingot x1-3
+      ali:item minecraft:emerald x6-14
+      ali:item minecraft:chainmail_helmet x1 {"minecraft:attribute_modifiers":{modifiers:[{amount:2.0d,id:"minecraft:armor.helmet",operation:"add_value",slot:"head",type:"minecraft:generic.armor"},{amount:0.0d,id:"minecraft:armor.helmet",operation:"add_value",slot:"head",type:"minecraft:generic.armor_toughness"},{amount:0.5d,id:"goblintraders:goblins_armour",operation:"add_multiplied_base",slot:"head",type:"minecraft:generic.armor"}]},"minecraft:lore":['{"color":"green","translate":"custom.goblintraders.tuned"}','{"color":"gray","translate":"custom.goblintraders.lore"}'],"minecraft:max_damage":1650,"minecraft:rarity":"epic"}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 150
+      | Price Multiplier: 0.0
+      ali:item minecraft:iron_ingot x1-3
+      ali:item minecraft:emerald x6-14
+      ali:item minecraft:chainmail_chestplate x1 {"minecraft:attribute_modifiers":{modifiers:[{amount:5.0d,id:"minecraft:armor.chestplate",operation:"add_value",slot:"chest",type:"minecraft:generic.armor"},{amount:0.0d,id:"minecraft:armor.chestplate",operation:"add_value",slot:"chest",type:"minecraft:generic.armor_toughness"},{amount:0.5d,id:"goblintraders:goblins_armour",operation:"add_multiplied_base",slot:"chest",type:"minecraft:generic.armor"}]},"minecraft:lore":['{"color":"green","translate":"custom.goblintraders.tuned"}','{"color":"gray","translate":"custom.goblintraders.lore"}'],"minecraft:max_damage":2400,"minecraft:rarity":"epic"}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 150
+      | Price Multiplier: 0.0
+      ali:item minecraft:iron_ingot x1-3
+      ali:item minecraft:emerald x6-14
+      ali:item minecraft:chainmail_leggings x1 {"minecraft:attribute_modifiers":{modifiers:[{amount:4.0d,id:"minecraft:armor.leggings",operation:"add_value",slot:"legs",type:"minecraft:generic.armor"},{amount:0.0d,id:"minecraft:armor.leggings",operation:"add_value",slot:"legs",type:"minecraft:generic.armor_toughness"},{amount:0.5d,id:"goblintraders:goblins_armour",operation:"add_multiplied_base",slot:"legs",type:"minecraft:generic.armor"}]},"minecraft:lore":['{"color":"green","translate":"custom.goblintraders.tuned"}','{"color":"gray","translate":"custom.goblintraders.lore"}'],"minecraft:max_damage":2250,"minecraft:rarity":"epic"}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 150
+      | Price Multiplier: 0.0
+      ali:item minecraft:iron_ingot x1-3
+      ali:item minecraft:emerald x6-14
+      ali:item minecraft:chainmail_boots x1 {"minecraft:attribute_modifiers":{modifiers:[{amount:1.0d,id:"minecraft:armor.boots",operation:"add_value",slot:"feet",type:"minecraft:generic.armor"},{amount:0.0d,id:"minecraft:armor.boots",operation:"add_value",slot:"feet",type:"minecraft:generic.armor_toughness"},{amount:0.5d,id:"goblintraders:goblins_armour",operation:"add_multiplied_base",slot:"feet",type:"minecraft:generic.armor"}]},"minecraft:lore":['{"color":"green","translate":"custom.goblintraders.tuned"}','{"color":"gray","translate":"custom.goblintraders.lore"}'],"minecraft:max_damage":1950,"minecraft:rarity":"epic"}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 150
+      | Price Multiplier: 0.0
+      ali:item minecraft:apple x8
+      ali:item minecraft:emerald x8-32
+      ali:item minecraft:leather_boots x1 {"minecraft:attribute_modifiers":{modifiers:[{amount:1.0d,id:"minecraft:armor.boots",operation:"add_value",slot:"feet",type:"minecraft:generic.armor"},{amount:0.0d,id:"minecraft:armor.boots",operation:"add_value",slot:"feet",type:"minecraft:generic.armor_toughness"},{amount:-0.0668d,id:"goblintraders:goblins_gravity",operation:"add_value",slot:"feet",type:"minecraft:generic.gravity"},{amount:-0.835d,id:"goblintraders:goblins_fall_damage",operation:"add_value",slot:"feet",type:"minecraft:generic.fall_damage_multiplier"},{amount:15.0d,id:"goblintraders:goblins_safe_fall",operation:"add_value",slot:"feet",type:"minecraft:generic.safe_fall_distance"}]},"minecraft:enchantment_glint_override":1b,"minecraft:item_name":'{"translate":"custom.goblintraders.moon_boots"}',"minecraft:lore":['{"color":"green","translate":"custom.goblintraders.tuned"}','{"color":"gray","translate":"custom.goblintraders.lore"}'],"minecraft:max_damage":650,"minecraft:rarity":"epic"}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x8-14
+      ali:item minecraft:air x0
+      ali:item minecraft:map x1 {"minecraft:item_name":'{"translate":"custom.goblintraders.mystery_map"}'}
+        | Destination: goblintraders:on_mystery_maps
+        | Map Decoration: minecraft:target_x
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:night_vision"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:invisibility"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:leaping"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:strong_leaping"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:fire_resistance"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:swiftness"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:strong_swiftness"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:water_breathing"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:healing"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:strong_healing"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:regeneration"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:long_regeneration"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:strong_regeneration"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:strength"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:strong_strength"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      | Price Multiplier: 0.0
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:slow_falling"}}
   ali:trade_level
     | Level: 5
     | Randomly Selects 1 Of These Trades
     | Chance: 75%
     ali:items_to_items
       | Uses: 1
-      | XP: 1000
+      | XP: 300
       | Price Multiplier: 0.0
-      ali:item minecraft:dragon_head x5
-      ali:item minecraft:diamond_pickaxe x1 {Damage:0}
-      ali:item minecraft:diamond_pickaxe x1 {Damage:0,Enchantments:[{id:"minecraft:fortune",lvl:5s},{id:"minecraft:unbreaking",lvl:5s}]}
+      ali:item minecraft:nether_star x1
+      ali:item minecraft:dragon_head x1
+      ali:item minecraft:diamond_pickaxe x1 {"minecraft:attribute_modifiers":{modifiers:[{amount:4.0d,id:"minecraft:base_attack_damage",operation:"add_value",slot:"mainhand",type:"minecraft:generic.attack_damage"},{amount:-2.799999952316284d,id:"minecraft:base_attack_speed",operation:"add_value",slot:"mainhand",type:"minecraft:generic.attack_speed"},{amount:1.0d,id:"goblintraders:goblins_break_speed",operation:"add_value",slot:"mainhand",type:"minecraft:player.block_break_speed"},{amount:2.0d,id:"goblintraders:goblins_block_range",operation:"add_value",slot:"mainhand",type:"minecraft:player.block_interaction_range"}]},"minecraft:lore":['{"color":"green","translate":"custom.goblintraders.tuned"}','{"color":"gray","translate":"custom.goblintraders.lore"}'],"minecraft:max_damage":15610,"minecraft:rarity":"epic"}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 300
+      | Price Multiplier: 0.0
+      ali:item minecraft:nether_star x1
+      ali:item minecraft:dragon_head x1
+      ali:item minecraft:diamond_shovel x1 {"minecraft:attribute_modifiers":{modifiers:[{amount:4.5d,id:"minecraft:base_attack_damage",operation:"add_value",slot:"mainhand",type:"minecraft:generic.attack_damage"},{amount:-3.0d,id:"minecraft:base_attack_speed",operation:"add_value",slot:"mainhand",type:"minecraft:generic.attack_speed"},{amount:1.0d,id:"goblintraders:goblins_break_speed",operation:"add_value",slot:"mainhand",type:"minecraft:player.block_break_speed"},{amount:2.0d,id:"goblintraders:goblins_block_range",operation:"add_value",slot:"mainhand",type:"minecraft:player.block_interaction_range"}]},"minecraft:lore":['{"color":"green","translate":"custom.goblintraders.tuned"}','{"color":"gray","translate":"custom.goblintraders.lore"}'],"minecraft:max_damage":15610,"minecraft:rarity":"epic"}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 300
+      | Price Multiplier: 0.0
+      ali:item minecraft:nether_star x1
+      ali:item minecraft:dragon_head x1
+      ali:item minecraft:diamond_axe x1 {"minecraft:attribute_modifiers":{modifiers:[{amount:8.0d,id:"minecraft:base_attack_damage",operation:"add_value",slot:"mainhand",type:"minecraft:generic.attack_damage"},{amount:-3.0d,id:"minecraft:base_attack_speed",operation:"add_value",slot:"mainhand",type:"minecraft:generic.attack_speed"},{amount:1.0d,id:"goblintraders:goblins_break_speed",operation:"add_value",slot:"mainhand",type:"minecraft:player.block_break_speed"},{amount:3.0d,id:"goblintraders:goblins_damage",operation:"add_value",slot:"mainhand",type:"minecraft:generic.attack_damage"},{amount:2.0d,id:"goblintraders:goblins_knockback",operation:"add_value",slot:"mainhand",type:"minecraft:generic.attack_knockback"},{amount:2.0d,id:"goblintraders:goblins_block_range",operation:"add_value",slot:"mainhand",type:"minecraft:player.block_interaction_range"}]},"minecraft:lore":['{"color":"green","translate":"custom.goblintraders.tuned"}','{"color":"gray","translate":"custom.goblintraders.lore"}'],"minecraft:max_damage":15610,"minecraft:rarity":"epic"}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 300
+      | Price Multiplier: 0.0
+      ali:item minecraft:nether_star x1
+      ali:item minecraft:dragon_head x1
+      ali:item minecraft:diamond_hoe x1 {"minecraft:attribute_modifiers":{modifiers:[{amount:0.0d,id:"minecraft:base_attack_damage",operation:"add_value",slot:"mainhand",type:"minecraft:generic.attack_damage"},{amount:0.0d,id:"minecraft:base_attack_speed",operation:"add_value",slot:"mainhand",type:"minecraft:generic.attack_speed"},{amount:2.0d,id:"goblintraders:goblins_block_range",operation:"add_value",slot:"mainhand",type:"minecraft:player.block_interaction_range"}]},"minecraft:lore":['{"color":"green","translate":"custom.goblintraders.tuned"}','{"color":"gray","translate":"custom.goblintraders.lore"}'],"minecraft:max_damage":15610,"minecraft:rarity":"epic"}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 500
+      | Price Multiplier: 0.0
+      ali:item minecraft:elytra x1
+      ali:item minecraft:emerald x24-36
+      ali:item minecraft:elytra x1 {"minecraft:lore":['{"color":"green","translate":"custom.goblintraders.tuned"}','{"color":"gray","translate":"custom.goblintraders.lore"}'],"minecraft:max_damage":4320,"minecraft:rarity":"epic"}

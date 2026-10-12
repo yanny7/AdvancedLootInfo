@@ -6,10 +6,12 @@ ali:loot_table
     ali:item deeperdarker:ice_lily x1
       | Count: 1
       | ----- Modifiers -----
-      | Set Nbt:
-      |   -> Tag: {has_flower:0b}
+      | Set Components:
+      |   -> Components:
+      |     -> deeperdarker:has_flower
+      |       -> Value: True
       |   -> Predicates:
       |     -> Block State Property:
       |       -> Block: Ice Lily
       |       -> Properties:
-      |         -> has_flower: false
+      |         -> has_flower: true

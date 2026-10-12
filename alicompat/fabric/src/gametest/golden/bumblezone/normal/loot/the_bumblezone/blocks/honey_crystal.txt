@@ -10,9 +10,10 @@ ali:loot_table
         | ----- Predicates -----
         | Survives Explosion
         | Match Tool:
-        |   -> Enchantments:
-        |     -> Enchantment: Silk Touch
-        |     -> Level: ≥ 1
+        |   -> Item Predicates:
+        |     -> Enchantments:
+        |       -> Enchantment: Silk Touch
+        |       -> Level: ≥ 1
       ali:item the_bumblezone:honey_crystal_shards x1-4
         | Count: 1
         |   -> Fortune I: 1 to 2  ~1 (67%)

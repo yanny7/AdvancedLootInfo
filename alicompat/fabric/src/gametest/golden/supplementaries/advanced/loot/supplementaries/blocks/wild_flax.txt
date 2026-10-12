@@ -9,12 +9,8 @@ ali:loot_table
         | Count: 1
         | ----- Predicates -----
         | Match Tool:
-        |   -> Tag: forge:shears
-      ali:item supplementaries:wild_flax x1
-        | Count: 1
-        | ----- Predicates -----
-        | Match Tool:
-        |   -> Item: Shears
+        |   -> Items:
+        |     -> Tag: Shears
       ali:item supplementaries:flax_seeds x1-7
         | Count: 1
         |   -> Fortune LVL: 1 + U[0; 2 × LVL]

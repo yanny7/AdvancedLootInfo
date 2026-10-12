@@ -3,19 +3,19 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 2 to 5
-    ali:item aether:phoenix_helmet x1 {Damage:0}
+    ali:item aether:phoenix_helmet x1
       | Chance: 18.18%
       | Count: 1
-    ali:item aether:phoenix_chestplate x1 {Damage:0}
+    ali:item aether:phoenix_chestplate x1
       | Chance: 18.18%
       | Count: 1
-    ali:item aether:phoenix_leggings x1 {Damage:0}
+    ali:item aether:phoenix_leggings x1
       | Chance: 18.18%
       | Count: 1
-    ali:item aether:phoenix_boots x1 {Damage:0}
+    ali:item aether:phoenix_boots x1
       | Chance: 18.18%
       | Count: 1
-    ali:item aether:phoenix_gloves x1 {Damage:0}
+    ali:item aether:phoenix_gloves x1
       | Chance: 18.18%
       | Count: 1
     ali:item aether:life_shard x1

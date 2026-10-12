@@ -88,4 +88,4 @@ ali:loot_table
             | Count: 1
             | ----- Predicates -----
             | Random Chance:
-            |   -> Probability: 0.25
+            |   -> Chance: 0.25

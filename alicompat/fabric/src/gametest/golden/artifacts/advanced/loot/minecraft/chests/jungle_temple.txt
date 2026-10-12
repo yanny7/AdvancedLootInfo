@@ -70,7 +70,8 @@ ali:loot_table
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 30
-      |   -> Treasure: True
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -94,27 +95,99 @@ ali:loot_table
         ali:loot_pool
           | Selects random entry
           | Rolls: 1
-          ali:item artifacts:kitty_slippers x1
+          ali:reference
+            | Selects all entries
             | Chance: 33.33%
-            | Count: 1
-            | ----- Predicates -----
-            | Artifact Rarity Adjusted Chance:
-            |   -> Default Probability: 0.35
-          ali:item artifacts:rooted_boots x1
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:alternatives
+                  | Selects only first successful entry
+                  ali:item artifacts:kitty_slippers x1
+                    | Chance: 33.33%
+                    | Count: 1
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.35
+                    | Config Value:
+                    |   -> Config: kitty_slippers.generateAsLoot
+                  ali:empty
+                    | Drops nothing
+                    | Chance: 33.33%
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.35
+          ali:reference
+            | Selects all entries
             | Chance: 33.33%
-            | Count: 1
-            | ----- Predicates -----
-            | Artifact Rarity Adjusted Chance:
-            |   -> Default Probability: 0.35
-          ali:item artifacts:bunny_hoppers x1
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:alternatives
+                  | Selects only first successful entry
+                  ali:item artifacts:rooted_boots x1
+                    | Chance: 33.33%
+                    | Count: 1
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.35
+                    | Config Value:
+                    |   -> Config: rooted_boots.generateAsLoot
+                  ali:empty
+                    | Drops nothing
+                    | Chance: 33.33%
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.35
+          ali:reference
+            | Selects all entries
             | Chance: 16.67%
-            | Count: 1
-            | ----- Predicates -----
-            | Artifact Rarity Adjusted Chance:
-            |   -> Default Probability: 0.35
-          ali:item artifacts:anglers_hat x1
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:alternatives
+                  | Selects only first successful entry
+                  ali:item artifacts:bunny_hoppers x1
+                    | Chance: 16.67%
+                    | Count: 1
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.35
+                    | Config Value:
+                    |   -> Config: bunny_hoppers.generateAsLoot
+                  ali:empty
+                    | Drops nothing
+                    | Chance: 16.67%
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.35
+          ali:reference
+            | Selects all entries
             | Chance: 16.67%
-            | Count: 1
-            | ----- Predicates -----
-            | Artifact Rarity Adjusted Chance:
-            |   -> Default Probability: 0.35
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:alternatives
+                  | Selects only first successful entry
+                  ali:item artifacts:anglers_hat x1
+                    | Chance: 16.67%
+                    | Count: 1
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.35
+                    | Config Value:
+                    |   -> Config: anglers_hat.generateAsLoot
+                  ali:empty
+                    | Drops nothing
+                    | Chance: 16.67%
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.35

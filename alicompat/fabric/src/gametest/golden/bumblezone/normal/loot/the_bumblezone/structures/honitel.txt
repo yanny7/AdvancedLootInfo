@@ -51,14 +51,14 @@ ali:loot_table
       |   -> Luck 3: 3.41%
       |   -> Luck 4: 3.37%
       | Count: 1 to 3
-    ali:item minecraft:beetroot_soup x1
+    ali:item minecraft:beetroot_soup x1-2
       | Chance: 3.53%
       |   -> Bad Luck: 3.57%
       |   -> Luck 1: 3.49%
       |   -> Luck 2: 3.45%
       |   -> Luck 3: 3.41%
       |   -> Luck 4: 3.37%
-      | Count: 1
+      | Count: 1 to 2
     ali:item minecraft:pumpkin_pie x1-2
       | Chance: 3.53%
       |   -> Bad Luck: 3.57%
@@ -196,7 +196,7 @@ ali:loot_table
       |   -> Luck 3: 0.97%
       |   -> Luck 4: 0.95%
       | Count: 1 to 2
-    ali:item minecraft:shears x1 {Damage:0}
+    ali:item minecraft:shears x1
       | Chance: 1%
       |   -> Bad Luck: 1.01%
       |   -> Luck 1: 0.99%
@@ -312,7 +312,7 @@ ali:loot_table
       |   -> Luck 2: 56.25%
       |   -> Luck 3: 50%
       |   -> Luck 4: 45%
-    ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_lesser_mystery_structure_description",CustomName:"item.the_bumblezone.honey_compass_lesser_mystery_structure",Locked:1b}
+    ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_lesser_mystery_structure_description",customName:"item.the_bumblezone.honey_compass_lesser_mystery_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
       | Quality: 1
       | Chance: 16.67%
       |   -> Bad Luck: 10%
@@ -322,17 +322,22 @@ ali:loot_table
       |   -> Luck 4: 30%
       | Count: 1
       | ----- Modifiers -----
-      | Set Nbt:
-      |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_lesser_mystery_structure"}
-      | Set Nbt:
-      |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_lesser_mystery_structure_description"}
-      | Set Nbt:
-      |   -> Tag: {Locked:1b}
+      | Set Components:
+      |   -> Components:
+      |     -> the_bumblezone:honey_compass_base_data
+      |       -> Type: 
+      |       -> Custom Name: item.the_bumblezone.honey_compass_lesser_mystery_structure
+      |       -> Description: item.the_bumblezone.honey_compass_lesser_mystery_structure_description
+      |     -> the_bumblezone:honey_compass_state_data
+      |       -> Locked: True
+      |       -> Is Loading: False
+      |       -> Is Failed: False
+      |       -> Located Special Structure: False
       | Honey Compass Locate Structure:
       |   -> Destination: the_bumblezone:honey_compass/lesser_misc_locating
       |   -> Search Radius: 50
       |   -> Skip Known Structures: False
-    ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_throne_description",CustomName:"item.the_bumblezone.honey_compass_throne_structure",Locked:1b}
+    ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_throne_description",customName:"item.the_bumblezone.honey_compass_throne_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
       | Quality: 1
       | Chance: 8.33%
       |   -> Bad Luck: 0%
@@ -342,12 +347,17 @@ ali:loot_table
       |   -> Luck 4: 25%
       | Count: 1
       | ----- Modifiers -----
-      | Set Nbt:
-      |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_throne_structure"}
-      | Set Nbt:
-      |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_throne_description"}
-      | Set Nbt:
-      |   -> Tag: {Locked:1b}
+      | Set Components:
+      |   -> Components:
+      |     -> the_bumblezone:honey_compass_base_data
+      |       -> Type: 
+      |       -> Custom Name: item.the_bumblezone.honey_compass_throne_structure
+      |       -> Description: item.the_bumblezone.honey_compass_throne_description
+      |     -> the_bumblezone:honey_compass_state_data
+      |       -> Locked: True
+      |       -> Is Loading: False
+      |       -> Is Failed: False
+      |       -> Located Special Structure: False
       | Honey Compass Locate Structure:
       |   -> Destination: the_bumblezone:honey_compass/throne_locating
       |   -> Search Radius: 40
@@ -372,7 +382,7 @@ ali:loot_table
             |   -> Luck 4: 71.15%
             | ----- Predicates -----
             | Player carries an Essence of the Bees
-          ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_red_sanctum_structure_description",CustomName:"item.the_bumblezone.honey_compass_sanctum_structure",Locked:1b}
+          ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_red_sanctum_structure_description",customName:"item.the_bumblezone.honey_compass_sanctum_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
             | Quality: 1
             | Chance: 1.25%
             |   -> Bad Luck: 0%
@@ -384,17 +394,22 @@ ali:loot_table
             | ----- Predicates -----
             | Player carries an Essence of the Bees
             | ----- Modifiers -----
-            | Set Nbt:
-            |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_sanctum_structure"}
-            | Set Nbt:
-            |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_red_sanctum_structure_description"}
-            | Set Nbt:
-            |   -> Tag: {Locked:1b}
+            | Set Components:
+            |   -> Components:
+            |     -> the_bumblezone:honey_compass_base_data
+            |       -> Type: 
+            |       -> Custom Name: item.the_bumblezone.honey_compass_sanctum_structure
+            |       -> Description: item.the_bumblezone.honey_compass_red_sanctum_structure_description
+            |     -> the_bumblezone:honey_compass_state_data
+            |       -> Locked: True
+            |       -> Is Loading: False
+            |       -> Is Failed: False
+            |       -> Located Special Structure: False
             | Honey Compass Locate Structure:
             |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/red
             |   -> Search Radius: 50
             |   -> Skip Known Structures: False
-          ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_purple_sanctum_structure_description",CustomName:"item.the_bumblezone.honey_compass_sanctum_structure",Locked:1b}
+          ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_purple_sanctum_structure_description",customName:"item.the_bumblezone.honey_compass_sanctum_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
             | Quality: 1
             | Chance: 1.25%
             |   -> Bad Luck: 0%
@@ -406,17 +421,22 @@ ali:loot_table
             | ----- Predicates -----
             | Player carries an Essence of the Bees
             | ----- Modifiers -----
-            | Set Nbt:
-            |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_sanctum_structure"}
-            | Set Nbt:
-            |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_purple_sanctum_structure_description"}
-            | Set Nbt:
-            |   -> Tag: {Locked:1b}
+            | Set Components:
+            |   -> Components:
+            |     -> the_bumblezone:honey_compass_base_data
+            |       -> Type: 
+            |       -> Custom Name: item.the_bumblezone.honey_compass_sanctum_structure
+            |       -> Description: item.the_bumblezone.honey_compass_purple_sanctum_structure_description
+            |     -> the_bumblezone:honey_compass_state_data
+            |       -> Locked: True
+            |       -> Is Loading: False
+            |       -> Is Failed: False
+            |       -> Located Special Structure: False
             | Honey Compass Locate Structure:
             |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/purple
             |   -> Search Radius: 50
             |   -> Skip Known Structures: False
-          ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_blue_sanctum_structure_description",CustomName:"item.the_bumblezone.honey_compass_sanctum_structure",Locked:1b}
+          ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_blue_sanctum_structure_description",customName:"item.the_bumblezone.honey_compass_sanctum_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
             | Quality: 1
             | Chance: 1.25%
             |   -> Bad Luck: 0%
@@ -428,17 +448,22 @@ ali:loot_table
             | ----- Predicates -----
             | Player carries an Essence of the Bees
             | ----- Modifiers -----
-            | Set Nbt:
-            |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_sanctum_structure"}
-            | Set Nbt:
-            |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_blue_sanctum_structure_description"}
-            | Set Nbt:
-            |   -> Tag: {Locked:1b}
+            | Set Components:
+            |   -> Components:
+            |     -> the_bumblezone:honey_compass_base_data
+            |       -> Type: 
+            |       -> Custom Name: item.the_bumblezone.honey_compass_sanctum_structure
+            |       -> Description: item.the_bumblezone.honey_compass_blue_sanctum_structure_description
+            |     -> the_bumblezone:honey_compass_state_data
+            |       -> Locked: True
+            |       -> Is Loading: False
+            |       -> Is Failed: False
+            |       -> Located Special Structure: False
             | Honey Compass Locate Structure:
             |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/blue
             |   -> Search Radius: 50
             |   -> Skip Known Structures: False
-          ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_green_sanctum_structure_description",CustomName:"item.the_bumblezone.honey_compass_sanctum_structure",Locked:1b}
+          ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_green_sanctum_structure_description",customName:"item.the_bumblezone.honey_compass_sanctum_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
             | Quality: 1
             | Chance: 1.25%
             |   -> Bad Luck: 0%
@@ -450,17 +475,22 @@ ali:loot_table
             | ----- Predicates -----
             | Player carries an Essence of the Bees
             | ----- Modifiers -----
-            | Set Nbt:
-            |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_sanctum_structure"}
-            | Set Nbt:
-            |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_green_sanctum_structure_description"}
-            | Set Nbt:
-            |   -> Tag: {Locked:1b}
+            | Set Components:
+            |   -> Components:
+            |     -> the_bumblezone:honey_compass_base_data
+            |       -> Type: 
+            |       -> Custom Name: item.the_bumblezone.honey_compass_sanctum_structure
+            |       -> Description: item.the_bumblezone.honey_compass_green_sanctum_structure_description
+            |     -> the_bumblezone:honey_compass_state_data
+            |       -> Locked: True
+            |       -> Is Loading: False
+            |       -> Is Failed: False
+            |       -> Located Special Structure: False
             | Honey Compass Locate Structure:
             |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/green
             |   -> Search Radius: 50
             |   -> Skip Known Structures: False
-          ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_yellow_sanctum_structure_description",CustomName:"item.the_bumblezone.honey_compass_sanctum_structure",Locked:1b}
+          ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_yellow_sanctum_structure_description",customName:"item.the_bumblezone.honey_compass_sanctum_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
             | Quality: 1
             | Chance: 1.25%
             |   -> Bad Luck: 0%
@@ -472,17 +502,22 @@ ali:loot_table
             | ----- Predicates -----
             | Player carries an Essence of the Bees
             | ----- Modifiers -----
-            | Set Nbt:
-            |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_sanctum_structure"}
-            | Set Nbt:
-            |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_yellow_sanctum_structure_description"}
-            | Set Nbt:
-            |   -> Tag: {Locked:1b}
+            | Set Components:
+            |   -> Components:
+            |     -> the_bumblezone:honey_compass_base_data
+            |       -> Type: 
+            |       -> Custom Name: item.the_bumblezone.honey_compass_sanctum_structure
+            |       -> Description: item.the_bumblezone.honey_compass_yellow_sanctum_structure_description
+            |     -> the_bumblezone:honey_compass_state_data
+            |       -> Locked: True
+            |       -> Is Loading: False
+            |       -> Is Failed: False
+            |       -> Located Special Structure: False
             | Honey Compass Locate Structure:
             |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/yellow
             |   -> Search Radius: 50
             |   -> Skip Known Structures: False
-          ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_white_sanctum_structure_description",CustomName:"item.the_bumblezone.honey_compass_sanctum_structure",Locked:1b}
+          ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_white_sanctum_structure_description",customName:"item.the_bumblezone.honey_compass_sanctum_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
             | Quality: 1
             | Chance: 1.25%
             |   -> Bad Luck: 0%
@@ -494,12 +529,17 @@ ali:loot_table
             | ----- Predicates -----
             | Player carries an Essence of the Bees
             | ----- Modifiers -----
-            | Set Nbt:
-            |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_sanctum_structure"}
-            | Set Nbt:
-            |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_white_sanctum_structure_description"}
-            | Set Nbt:
-            |   -> Tag: {Locked:1b}
+            | Set Components:
+            |   -> Components:
+            |     -> the_bumblezone:honey_compass_base_data
+            |       -> Type: 
+            |       -> Custom Name: item.the_bumblezone.honey_compass_sanctum_structure
+            |       -> Description: item.the_bumblezone.honey_compass_white_sanctum_structure_description
+            |     -> the_bumblezone:honey_compass_state_data
+            |       -> Locked: True
+            |       -> Is Loading: False
+            |       -> Is Failed: False
+            |       -> Located Special Structure: False
             | Honey Compass Locate Structure:
             |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/white
             |   -> Search Radius: 50

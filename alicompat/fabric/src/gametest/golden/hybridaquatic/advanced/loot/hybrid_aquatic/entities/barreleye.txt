@@ -6,7 +6,8 @@ ali:entity_loot_table
     ali:item hybrid_aquatic:glowslime x1
       | Count: 1
       | ----- Modifiers -----
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: U[0; 1)
       | Set Count:
       |   -> Count: 1
@@ -17,7 +18,8 @@ ali:entity_loot_table
     ali:item hybrid_aquatic:barreleye x1
       | Count: 1
       | ----- Modifiers -----
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: U[0; 1)
       | Set Count:
       |   -> Count: 1

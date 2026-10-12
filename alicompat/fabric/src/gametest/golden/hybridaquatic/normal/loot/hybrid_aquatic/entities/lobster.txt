@@ -13,7 +13,8 @@ ali:entity_loot_table
       |       -> Predicate:
       |         -> Entity Flags:
       |           -> Is On Fire: True
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: 0 to 1
   ali:loot_pool
     | Selects random entry
@@ -32,5 +33,6 @@ ali:entity_loot_table
       |       -> Predicate:
       |         -> Entity Flags:
       |           -> Is On Fire: True
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: 0 to 1

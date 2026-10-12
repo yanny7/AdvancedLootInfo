@@ -3,15 +3,18 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item farmersdelight:golden_knife x1 {Damage:0}
+    ali:item farmersdelight:golden_knife x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 40%
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
     ali:empty
       | Drops nothing
       | Chance: 40%
-    ali:item farmersdelight:diamond_knife x1 {Damage:0}
+    ali:item farmersdelight:diamond_knife x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 20%
       | Count: 1
       | ----- Modifiers -----
@@ -19,6 +22,9 @@ ali:loot_table
       |   -> Damage: 15% to 80%
       |   -> Add: False
       | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 2

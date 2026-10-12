@@ -53,21 +53,21 @@ ali:trade
       | Price Multiplier: 0.1
       ali:item minecraft:emerald x4
       ali:item minecraft:air x0
-      ali:item kaleidoscope_cookery:kitchen_shovel x1 {Damage:0}
+      ali:item kaleidoscope_cookery:kitchen_shovel x1
     ali:items_to_items
       | Uses: 12
       | XP: 4
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x8
       ali:item minecraft:air x0
-      ali:item kaleidoscope_cookery:iron_kitchen_knife x1 {Damage:0}
+      ali:item kaleidoscope_cookery:iron_kitchen_knife x1
     ali:items_to_items
       | Uses: 16
       | XP: 4
       | Price Multiplier: 0.1
       ali:item minecraft:emerald x3
       ali:item minecraft:air x0
-      ali:item kaleidoscope_cookery:stockpot_lid x1 {Damage:0}
+      ali:item kaleidoscope_cookery:stockpot_lid x1
   ali:trade_level
     | Level: 3
     | Randomly Selects 2 Of These Trades
@@ -174,7 +174,7 @@ ali:trade
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x13-27
       ali:item minecraft:air x0
-      ali:item kaleidoscope_cookery:diamond_kitchen_knife x1 {Damage:0}
+      ali:item kaleidoscope_cookery:diamond_kitchen_knife x1
         | Enchant With Levels:
         |   -> Levels: 5 to 19
         |   -> Treasure: False

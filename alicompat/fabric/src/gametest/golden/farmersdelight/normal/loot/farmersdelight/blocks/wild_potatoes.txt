@@ -8,8 +8,8 @@ ali:loot_table
       ali:item farmersdelight:wild_potatoes x1
         | Count: 1
         | ----- Predicates -----
-        | Match Tool:
-        |   -> Tag: Shears
+        | Can Item Perform Ability:
+        |   -> Shears Harvest
       ali:item minecraft:potato x1-7
         | Count: 1
         |   -> Fortune I: 1 to 3

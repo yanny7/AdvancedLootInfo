@@ -7,11 +7,6 @@ ali:loot_table
       | Selects only first successful entry
       ali:item charm:birch_bookshelf x1
         | Count: 1
-        | ----- Predicates -----
-        | Match Tool:
-        |   -> Enchantments:
-        |     -> Enchantment: Silk Touch
-        |     -> Level: ≥ 1
       ali:item minecraft:book x3
         | Count: 3
         | ----- Modifiers -----

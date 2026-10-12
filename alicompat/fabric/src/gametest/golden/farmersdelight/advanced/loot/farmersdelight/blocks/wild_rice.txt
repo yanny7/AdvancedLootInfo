@@ -19,8 +19,8 @@ ali:loot_table
         |       -> Properties:
         |         -> half: upper
         |   -> Offset: [X: 0, Y: 1, Z: 0]
-        | Match Tool:
-        |   -> Tag: Shears
+        | Can Item Perform Ability:
+        |   -> Shears Harvest
       ali:item farmersdelight:rice x1
         | Count: 1
         | ----- Predicates -----
@@ -55,8 +55,8 @@ ali:loot_table
         |       -> Properties:
         |         -> half: lower
         |   -> Offset: [X: 0, Y: -1, Z: 0]
-        | Match Tool:
-        |   -> Tag: Shears
+        | Can Item Perform Ability:
+        |   -> Shears Harvest
       ali:item farmersdelight:rice x1
         | Count: 1
         | ----- Predicates -----

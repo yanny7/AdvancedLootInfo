@@ -15,10 +15,12 @@ ali:entity_loot_table
       |   -> Target: This Entity
       |   -> Predicate:
       |     -> Entity Sub Predicate:
-      |       -> Size: 1
+      |       -> Slime:
+      |         -> Size: 1
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 0 to 1
       |   -> Add: False
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: U[0; 1)

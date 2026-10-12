@@ -69,42 +69,42 @@ ali:loot_table
     ali:item minecraft:poisonous_potato x1
       | Chance: 1.74%
       | Count: 1
-    ali:item minecraft:iron_sword x1 {Damage:0}
+    ali:item minecraft:iron_sword x1
       | Chance: 1.74%
       | Count: 1
       | ----- Modifiers -----
       | Set Damage:
       |   -> Damage: 10% to 70%
       |   -> Add: False
-    ali:item minecraft:iron_axe x1 {Damage:0}
+    ali:item minecraft:iron_axe x1
       | Chance: 1.74%
       | Count: 1
       | ----- Modifiers -----
       | Set Damage:
       |   -> Damage: 10% to 70%
       |   -> Add: False
-    ali:item minecraft:chainmail_boots x1 {Damage:0}
+    ali:item minecraft:chainmail_boots x1
       | Chance: 1.74%
       | Count: 1
       | ----- Modifiers -----
       | Set Damage:
       |   -> Damage: 10% to 70%
       |   -> Add: False
-    ali:item minecraft:chainmail_leggings x1 {Damage:0}
+    ali:item minecraft:chainmail_leggings x1
       | Chance: 1.74%
       | Count: 1
       | ----- Modifiers -----
       | Set Damage:
       |   -> Damage: 10% to 70%
       |   -> Add: False
-    ali:item minecraft:chainmail_chestplate x1 {Damage:0}
+    ali:item minecraft:chainmail_chestplate x1
       | Chance: 1.74%
       | Count: 1
       | ----- Modifiers -----
       | Set Damage:
       |   -> Damage: 10% to 70%
       |   -> Add: False
-    ali:item minecraft:chainmail_helmet x1 {Damage:0}
+    ali:item minecraft:chainmail_helmet x1
       | Chance: 1.74%
       | Count: 1
       | ----- Modifiers -----

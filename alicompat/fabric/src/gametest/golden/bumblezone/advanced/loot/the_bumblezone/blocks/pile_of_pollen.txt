@@ -181,8 +181,10 @@ ali:loot_table
         |     -> layers: 8
         | Inverted:
         |   -> Match Tool:
-        |     -> Enchantments:
-        |       -> Enchantment: Silk Touch
+        |     -> Item Predicates:
+        |       -> Enchantments:
+        |         -> Enchantment: Silk Touch
+        |         -> Level: ≥ 1
         | ----- Modifiers -----
         | Set Count:
         |   -> Count: 1 to 3
@@ -205,5 +207,7 @@ ali:loot_table
       |   -> Properties:
       |     -> layers: 8
       | Match Tool:
-      |   -> Enchantments:
-      |     -> Enchantment: Silk Touch
+      |   -> Item Predicates:
+      |     -> Enchantments:
+      |       -> Enchantment: Silk Touch
+      |       -> Level: ≥ 1

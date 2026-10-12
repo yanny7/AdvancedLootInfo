@@ -29,6 +29,9 @@ ali:loot_table
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
     ali:item minecraft:diamond_horse_armor x1
       | Chance: 3.88%
       | Count: 1
@@ -134,40 +137,43 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1 to 8
       |   -> Add: False
-  ali:reference
-    | Selects all entries
-    ali:loot_table
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
       | Selects all entries
-      ali:loot_pool
-        | Selects random entry
-        | Rolls: 1 to 4
-        ali:empty
-          | Drops nothing
-          | Chance: 50%
-        ali:item farmersdelight:tomato_seeds x2-4
-          | Chance: 25%
-          | Count: max(0; U[2; 4])
-          | ----- Modifiers -----
-          | Set Count:
-          |   -> Count: 2 to 4
-          |   -> Add: False
-        ali:item farmersdelight:cabbage_seeds x2-4
-          | Chance: 25%
-          | Count: max(0; U[2; 4])
-          | ----- Modifiers -----
-          | Set Count:
-          |   -> Count: 2 to 4
-          |   -> Add: False
-      ali:loot_pool
-        | Selects random entry
-        | Rolls: 3
-        ali:empty
-          | Drops nothing
-          | Chance: 66.67%
-        ali:item farmersdelight:rope x2-12
-          | Chance: 33.33%
-          | Count: max(0; U[2; 12])
-          | ----- Modifiers -----
-          | Set Count:
-          |   -> Count: 2 to 12
-          |   -> Add: False
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1 to 4
+          ali:empty
+            | Drops nothing
+            | Chance: 50%
+          ali:item farmersdelight:tomato_seeds x2-4
+            | Chance: 25%
+            | Count: max(0; U[2; 4])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 2 to 4
+            |   -> Add: False
+          ali:item farmersdelight:cabbage_seeds x2-4
+            | Chance: 25%
+            | Count: max(0; U[2; 4])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 2 to 4
+            |   -> Add: False
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 3
+          ali:empty
+            | Drops nothing
+            | Chance: 66.67%
+          ali:item farmersdelight:rope x2-12
+            | Chance: 33.33%
+            | Count: max(0; U[2; 12])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 2 to 12
+            |   -> Add: False

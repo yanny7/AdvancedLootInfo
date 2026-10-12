@@ -10,24 +10,27 @@ ali:loot_table
         | ----- Predicates -----
         | Survives Explosion
         | Match Tool:
-        |   -> Enchantments:
-        |     -> Enchantment: Silk Touch
-        |     -> Level: ≥ 1
+        |   -> Item Predicates:
+        |     -> Enchantments:
+        |       -> Enchantment: Silk Touch
+        |       -> Level: ≥ 1
         | ----- Modifiers -----
-        | Copy Name:
+        | Copy Components:
         |   -> Source: Block Entity
-        | Copy Nbt:
-        |   -> Nbt Provider: minecraft:context
-        |   -> Operations:
-        |     -> Source: Items
-        |     -> Target: BlockEntityTag.Items
-        |     -> Merge Strategy: Replace
-        | Uniquify If Has Items
+        |   -> Include:
+        |     -> minecraft:custom_name
+        |     -> minecraft:container
+        |     -> minecraft:lock
+        |     -> minecraft:container_loot
+        | Uniquify If Has Items:
       ali:item the_bumblezone:honey_cocoon x1
         | Count: 1
         | ----- Predicates -----
         | Survives Explosion
         | ----- Modifiers -----
-        | Drop Container Items
-        | Copy Name:
+        | Copy Components:
         |   -> Source: Block Entity
+        |   -> Include:
+        |     -> minecraft:custom_name
+        |     -> minecraft:lock
+        | Drop Container Items:

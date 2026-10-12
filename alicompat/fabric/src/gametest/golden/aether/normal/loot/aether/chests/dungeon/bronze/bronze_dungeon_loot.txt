@@ -3,13 +3,13 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item aether:zanite_pickaxe x1 {Damage:0}
+    ali:item aether:zanite_pickaxe x1
       | Chance: 23.53%
       | Count: 1
-    ali:item aether:zanite_axe x1 {Damage:0}
+    ali:item aether:zanite_axe x1
       | Chance: 17.65%
       | Count: 1
-    ali:item aether:zanite_sword x1 {Damage:0}
+    ali:item aether:zanite_sword x1
       | Chance: 17.65%
       | Count: 1
     ali:item aether:blue_gummy_swet x1
@@ -18,13 +18,13 @@ ali:loot_table
     ali:item aether:swet_cape x1
       | Chance: 11.76%
       | Count: 1
-    ali:item aether:ice_pendant x1 {Damage:0}
+    ali:item aether:ice_pendant x1
       | Chance: 5.88%
       | Count: 1
-    ali:item aether:zanite_shovel x1 {Damage:0}
+    ali:item aether:zanite_shovel x1
       | Chance: 5.88%
       | Count: 1
-    ali:item aether:zanite_hoe x1 {Damage:0}
+    ali:item aether:zanite_hoe x1
       | Chance: 5.88%
       | Count: 1
   ali:loot_pool
@@ -39,7 +39,7 @@ ali:loot_table
     ali:item aether:poison_dart x2-5
       | Chance: 13.04%
       | Count: 2 to 5
-    ali:item aether:skyroot_pickaxe x1 {Damage:0}
+    ali:item aether:skyroot_pickaxe x1
       | Chance: 8.7%
       | Count: 1
     ali:item aether:skyroot_poison_bucket x1
@@ -54,7 +54,7 @@ ali:loot_table
     ali:item aether:zanite_gemstone x1
       | Chance: 8.7%
       | Count: 1
-    ali:item aether:holystone_pickaxe x1 {Damage:0}
+    ali:item aether:holystone_pickaxe x1
       | Chance: 4.35%
       | Count: 1
     ali:item aether:icestone x1-5

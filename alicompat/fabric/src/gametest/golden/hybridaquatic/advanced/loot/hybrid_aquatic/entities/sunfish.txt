@@ -6,7 +6,8 @@ ali:entity_loot_table
     ali:item hybrid_aquatic:sunfish x1
       | Count: 1
       | ----- Modifiers -----
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: 1
       | Set Count:
       |   -> Count: 1

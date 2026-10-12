@@ -30,7 +30,7 @@ ali:loot_table
     ali:item aether:healing_stone x1-3
       | Chance: 10.53%
       | Count: 1 to 3
-    ali:item aether:holystone_sword x1 {Damage:0}
+    ali:item aether:holystone_sword x1
       | Chance: 5.26%
       | Count: 1
     ali:item minecraft:name_tag x1

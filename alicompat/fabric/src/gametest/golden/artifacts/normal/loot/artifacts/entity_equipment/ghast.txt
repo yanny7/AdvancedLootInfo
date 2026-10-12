@@ -3,69 +3,213 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item artifacts:plastic_drinking_hat x1
-      | Chance: 16.67%
-      | Count: 1
-      | ----- Predicates -----
-      | Is April Fools
-      | ----- Modifiers -----
-      | Set Enchantments:
-      |   -> Enchantments:
-      |     -> Curse of Vanishing
-      |       -> Levels: 1
-      |   -> Add: False
-    ali:item artifacts:anglers_hat x1
-      | Chance: 16.67%
-      | Count: 1
-      | ----- Predicates -----
-      | Is April Fools
-      | ----- Modifiers -----
-      | Set Enchantments:
-      |   -> Enchantments:
-      |     -> Curse of Vanishing
-      |       -> Levels: 1
-      |   -> Add: False
-    ali:item artifacts:cowboy_hat x1
-      | Chance: 16.67%
-      | Count: 1
-      | ----- Predicates -----
-      | Is April Fools
-      | ----- Modifiers -----
-      | Set Enchantments:
-      |   -> Enchantments:
-      |     -> Curse of Vanishing
-      |       -> Levels: 1
-      |   -> Add: False
-    ali:item artifacts:villager_hat x1
-      | Chance: 16.67%
-      | Count: 1
-      | ----- Predicates -----
-      | Is April Fools
-      | ----- Modifiers -----
-      | Set Enchantments:
-      |   -> Enchantments:
-      |     -> Curse of Vanishing
-      |       -> Levels: 1
-      |   -> Add: False
-    ali:item artifacts:night_vision_goggles x1
-      | Chance: 16.67%
-      | Count: 1
-      | ----- Predicates -----
-      | Is April Fools
-      | ----- Modifiers -----
-      | Set Enchantments:
-      |   -> Enchantments:
-      |     -> Curse of Vanishing
-      |       -> Levels: 1
-      |   -> Add: False
-    ali:item artifacts:snorkel x1
-      | Chance: 16.67%
-      | Count: 1
-      | ----- Predicates -----
-      | Is April Fools
-      | ----- Modifiers -----
-      | Set Enchantments:
-      |   -> Enchantments:
-      |     -> Curse of Vanishing
-      |       -> Levels: 1
-      |   -> Add: False
+    ali:reference
+      | Selects all entries
+      | Chance: 20%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:anglers_hat x1 {"minecraft:enchantment_glint_override":0b}
+              | Chance: 20%
+              | Count: 1
+              | ----- Predicates -----
+              | Is April Fools
+              | Config Value:
+              |   -> Config: anglers_hat.generateAsLoot
+              | ----- Modifiers -----
+              | Set Enchantments:
+              |   -> Enchantments:
+              |     -> Curse of Vanishing
+              |       -> Levels: 1
+              |   -> Add: False
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:enchantment_glint_override
+              |       -> Value: False
+            ali:empty
+              | Drops nothing
+              | Chance: 20%
+              | ----- Predicates -----
+              | Is April Fools
+              | ----- Modifiers -----
+              | Set Enchantments:
+              |   -> Enchantments:
+              |     -> Curse of Vanishing
+              |       -> Levels: 1
+              |   -> Add: False
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:enchantment_glint_override
+              |       -> Value: False
+    ali:reference
+      | Selects all entries
+      | Chance: 20%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:cowboy_hat x1 {"minecraft:enchantment_glint_override":0b}
+              | Chance: 20%
+              | Count: 1
+              | ----- Predicates -----
+              | Is April Fools
+              | Config Value:
+              |   -> Config: cowboy_hat.generateAsLoot
+              | ----- Modifiers -----
+              | Set Enchantments:
+              |   -> Enchantments:
+              |     -> Curse of Vanishing
+              |       -> Levels: 1
+              |   -> Add: False
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:enchantment_glint_override
+              |       -> Value: False
+            ali:empty
+              | Drops nothing
+              | Chance: 20%
+              | ----- Predicates -----
+              | Is April Fools
+              | ----- Modifiers -----
+              | Set Enchantments:
+              |   -> Enchantments:
+              |     -> Curse of Vanishing
+              |       -> Levels: 1
+              |   -> Add: False
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:enchantment_glint_override
+              |       -> Value: False
+    ali:reference
+      | Selects all entries
+      | Chance: 20%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:villager_hat x1 {"minecraft:enchantment_glint_override":0b}
+              | Chance: 20%
+              | Count: 1
+              | ----- Predicates -----
+              | Is April Fools
+              | Config Value:
+              |   -> Config: villager_hat.generateAsLoot
+              | ----- Modifiers -----
+              | Set Enchantments:
+              |   -> Enchantments:
+              |     -> Curse of Vanishing
+              |       -> Levels: 1
+              |   -> Add: False
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:enchantment_glint_override
+              |       -> Value: False
+            ali:empty
+              | Drops nothing
+              | Chance: 20%
+              | ----- Predicates -----
+              | Is April Fools
+              | ----- Modifiers -----
+              | Set Enchantments:
+              |   -> Enchantments:
+              |     -> Curse of Vanishing
+              |       -> Levels: 1
+              |   -> Add: False
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:enchantment_glint_override
+              |       -> Value: False
+    ali:reference
+      | Selects all entries
+      | Chance: 20%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:night_vision_goggles x1 {"minecraft:enchantment_glint_override":0b}
+              | Chance: 20%
+              | Count: 1
+              | ----- Predicates -----
+              | Is April Fools
+              | Config Value:
+              |   -> Config: night_vision_goggles.generateAsLoot
+              | ----- Modifiers -----
+              | Set Enchantments:
+              |   -> Enchantments:
+              |     -> Curse of Vanishing
+              |       -> Levels: 1
+              |   -> Add: False
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:enchantment_glint_override
+              |       -> Value: False
+            ali:empty
+              | Drops nothing
+              | Chance: 20%
+              | ----- Predicates -----
+              | Is April Fools
+              | ----- Modifiers -----
+              | Set Enchantments:
+              |   -> Enchantments:
+              |     -> Curse of Vanishing
+              |       -> Levels: 1
+              |   -> Add: False
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:enchantment_glint_override
+              |       -> Value: False
+    ali:reference
+      | Selects all entries
+      | Chance: 20%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:snorkel x1 {"minecraft:enchantment_glint_override":0b}
+              | Chance: 20%
+              | Count: 1
+              | ----- Predicates -----
+              | Is April Fools
+              | Config Value:
+              |   -> Config: snorkel.generateAsLoot
+              | ----- Modifiers -----
+              | Set Enchantments:
+              |   -> Enchantments:
+              |     -> Curse of Vanishing
+              |       -> Levels: 1
+              |   -> Add: False
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:enchantment_glint_override
+              |       -> Value: False
+            ali:empty
+              | Drops nothing
+              | Chance: 20%
+              | ----- Predicates -----
+              | Is April Fools
+              | ----- Modifiers -----
+              | Set Enchantments:
+              |   -> Enchantments:
+              |     -> Curse of Vanishing
+              |       -> Levels: 1
+              |   -> Add: False
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:enchantment_glint_override
+              |       -> Value: False

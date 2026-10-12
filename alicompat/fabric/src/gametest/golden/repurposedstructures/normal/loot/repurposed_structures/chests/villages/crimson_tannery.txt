@@ -18,16 +18,16 @@ ali:loot_table
     ali:item minecraft:saddle x1
       | Chance: 11.54%
       | Count: 1
-    ali:item minecraft:leather_chestplate x1 {Damage:0}
+    ali:item minecraft:leather_chestplate x1
       | Chance: 7.69%
       | Count: 1
-    ali:item minecraft:leather_boots x1 {Damage:0}
+    ali:item minecraft:leather_boots x1
       | Chance: 7.69%
       | Count: 1
-    ali:item minecraft:leather_helmet x1 {Damage:0}
+    ali:item minecraft:leather_helmet x1
       | Chance: 7.69%
       | Count: 1
-    ali:item minecraft:leather_leggings x1 {Damage:0}
+    ali:item minecraft:leather_leggings x1
       | Chance: 7.69%
       | Count: 1
     ali:item minecraft:gold_ingot x1-4

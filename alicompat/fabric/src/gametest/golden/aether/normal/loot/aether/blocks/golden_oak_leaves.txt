@@ -10,13 +10,15 @@ ali:loot_table
         | ----- Predicates -----
         | Any Of:
         |   -> Match Tool:
-        |     -> Tag: Shears
+        |     -> Items:
+        |       -> Tag: Shears
         |   -> Match Tool:
-        |     -> Enchantments:
-        |       -> Enchantment: Silk Touch
-        |       -> Level: ≥ 1
+        |     -> Item Predicates:
+        |       -> Enchantments:
+        |         -> Enchantment: Silk Touch
+        |         -> Level: ≥ 1
         | ----- Modifiers -----
-        | Double Drops
+        | Double Drops:
       ali:item aether:golden_oak_sapling x1
         | Chance: 5%
         |   -> Fortune I: 6.25%
@@ -26,7 +28,7 @@ ali:loot_table
         | ----- Predicates -----
         | Survives Explosion
         | ----- Modifiers -----
-        | Double Drops
+        | Double Drops:
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -42,11 +44,12 @@ ali:loot_table
       |     -> Match Tool:
       |       -> Item: Shears
       |     -> Match Tool:
-      |       -> Enchantments:
-      |         -> Enchantment: Silk Touch
-      |         -> Level: ≥ 1
+      |       -> Item Predicates:
+      |         -> Enchantments:
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
       | ----- Modifiers -----
-      | Double Drops
+      | Double Drops:
       | Explosion Decay
   ali:loot_pool
     | Selects random entry
@@ -63,9 +66,10 @@ ali:loot_table
       |     -> Match Tool:
       |       -> Item: Shears
       |     -> Match Tool:
-      |       -> Enchantments:
-      |         -> Enchantment: Silk Touch
-      |         -> Level: ≥ 1
+      |       -> Item Predicates:
+      |         -> Enchantments:
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
       | Survives Explosion
       | ----- Modifiers -----
-      | Double Drops
+      | Double Drops:

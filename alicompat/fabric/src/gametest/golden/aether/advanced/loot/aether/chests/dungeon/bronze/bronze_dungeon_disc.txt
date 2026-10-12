@@ -36,6 +36,6 @@ ali:loot_table
     ali:item aether:zanite_gemstone x1
       | Chance: 13.33%
       | Count: 1
-    ali:item aether:skyroot_pickaxe x1 {Damage:0}
+    ali:item aether:skyroot_pickaxe x1
       | Chance: 13.33%
       | Count: 1

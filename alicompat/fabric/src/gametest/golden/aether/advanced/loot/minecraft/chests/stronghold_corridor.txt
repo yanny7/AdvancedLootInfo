@@ -5,7 +5,7 @@ ali:loot_table
     | Rolls: 2 to 3
     ali:modified
       | Selects only first successful entry
-      ali:item aether:iron_gloves x1 {Damage:0}
+      ali:item aether:iron_gloves x1
         | Chance: 1.25%
         | Count: 1
         | ----- Predicates -----
@@ -13,13 +13,13 @@ ali:loot_table
         |   -> Loot Table Id:
         |     -> aether:chests/ruined_portal
         | Random Chance:
-        |   -> Probability: 0.25
-      ali:item minecraft:iron_chestplate x1 {Damage:0}
+        |   -> Chance: 0.25
+      ali:item minecraft:iron_chestplate x1
         | Chance: 5%
         | Count: 1
     ali:modified
       | Selects only first successful entry
-      ali:item aether:iron_gloves x1 {Damage:0}
+      ali:item aether:iron_gloves x1
         | Chance: 1.25%
         | Count: 1
         | ----- Predicates -----
@@ -27,13 +27,13 @@ ali:loot_table
         |   -> Loot Table Id:
         |     -> aether:chests/ruined_portal
         | Random Chance:
-        |   -> Probability: 0.25
-      ali:item minecraft:iron_helmet x1 {Damage:0}
+        |   -> Chance: 0.25
+      ali:item minecraft:iron_helmet x1
         | Chance: 5%
         | Count: 1
     ali:modified
       | Selects only first successful entry
-      ali:item aether:iron_gloves x1 {Damage:0}
+      ali:item aether:iron_gloves x1
         | Chance: 1.25%
         | Count: 1
         | ----- Predicates -----
@@ -41,13 +41,13 @@ ali:loot_table
         |   -> Loot Table Id:
         |     -> aether:chests/ruined_portal
         | Random Chance:
-        |   -> Probability: 0.25
-      ali:item minecraft:iron_leggings x1 {Damage:0}
+        |   -> Chance: 0.25
+      ali:item minecraft:iron_leggings x1
         | Chance: 5%
         | Count: 1
     ali:modified
       | Selects only first successful entry
-      ali:item aether:iron_gloves x1 {Damage:0}
+      ali:item aether:iron_gloves x1
         | Chance: 1.25%
         | Count: 1
         | ----- Predicates -----
@@ -55,9 +55,23 @@ ali:loot_table
         |   -> Loot Table Id:
         |     -> aether:chests/ruined_portal
         | Random Chance:
-        |   -> Probability: 0.25
-      ali:item minecraft:iron_boots x1 {Damage:0}
+        |   -> Chance: 0.25
+      ali:item minecraft:iron_boots x1
         | Chance: 5%
+        | Count: 1
+    ali:modified
+      | Selects only first successful entry
+      ali:item aether:iron_gloves x1
+        | Chance: 0.25%
+        | Count: 1
+        | ----- Predicates -----
+        | Inverted:
+        |   -> Loot Table Id:
+        |     -> aether:chests/ruined_portal
+        | Random Chance:
+        |   -> Chance: 0.25
+      ali:item minecraft:iron_horse_armor x1
+        | Chance: 1%
         | Count: 1
     ali:item minecraft:bread x1-3
       | Chance: 15%
@@ -97,10 +111,10 @@ ali:loot_table
       | Set Count:
       |   -> Count: 4 to 9
       |   -> Add: False
-    ali:item minecraft:iron_pickaxe x1 {Damage:0}
+    ali:item minecraft:iron_pickaxe x1
       | Chance: 5%
       | Count: 1
-    ali:item minecraft:iron_sword x1 {Damage:0}
+    ali:item minecraft:iron_sword x1
       | Chance: 5%
       | Count: 1
     ali:item minecraft:diamond x1-3
@@ -114,9 +128,6 @@ ali:loot_table
       | Chance: 1%
       | Count: 1
     ali:item minecraft:saddle x1
-      | Chance: 1%
-      | Count: 1
-    ali:item minecraft:iron_horse_armor x1
       | Chance: 1%
       | Count: 1
     ali:item minecraft:golden_horse_armor x1
@@ -134,7 +145,8 @@ ali:loot_table
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 30
-      |   -> Treasure: True
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
   ali:loot_pool
     | Selects random entry
     | Rolls: 1

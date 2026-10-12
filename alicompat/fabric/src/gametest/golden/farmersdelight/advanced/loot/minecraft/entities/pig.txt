@@ -16,54 +16,82 @@ ali:entity_loot_table
       |   -> Add: False
       | Furnace Smelt
       |   -> Predicates:
+      |     -> Any Of:
+      |       -> Entity Properties:
+      |         -> Target: This Entity
+      |         -> Predicate:
+      |           -> Entity Flags:
+      |             -> Is On Fire: True
+      |       -> Entity Properties:
+      |         -> Target: Direct Attacker
+      |         -> Predicate:
+      |           -> Entity Equipment:
+      |             -> Main Hand:
+      |               -> Item Predicates:
+      |                 -> Enchantments:
+      |                   -> Enchantments:
+      |                     -> Tag: minecraft:smelts_loot
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
+      |   -> Value: U[0; 1)
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item farmersdelight:ham x1
+      | Chance: 50%
+      |   -> Looting LVL: [50%][LVL] | 60% + 10% × (LVL − 100%)
+      |   -> Looting I: 60%
+      |   -> Looting II: 70%
+      |   -> Looting III: 80%
+      | Count: 1
+      | ----- Predicates -----
+      | All Of:
+      |   -> Entity Properties:
+      |     -> Target: Attacker
+      |     -> Predicate:
+      |       -> Entity Equipment:
+      |         -> Main Hand:
+      |           -> Items:
+      |             -> Tag: Knives
+      |   -> Entity Properties:
+      |     -> Target: This Entity
+      |     -> Predicate:
+      |       -> Entity Flags:
+      |         -> Is On Fire: False
+      |   -> Random Chance With Enchanted Bonus:
+      |     -> Chance: 0.5
+      |       -> Looting LVL: [0.5][LVL] | 0.6 + 0.1 × (LVL − 1)
+      |       -> Looting I: 0.6
+      |       -> Looting II: 0.7
+      |       -> Looting III: 0.8
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item farmersdelight:smoked_ham x1
+      | Chance: 50%
+      |   -> Looting LVL: [50%][LVL] | 60% + 10% × (LVL − 100%)
+      |   -> Looting I: 60%
+      |   -> Looting II: 70%
+      |   -> Looting III: 80%
+      | Count: 1
+      | ----- Predicates -----
+      | All Of:
+      |   -> Entity Properties:
+      |     -> Target: Attacker
+      |     -> Predicate:
+      |       -> Entity Equipment:
+      |         -> Main Hand:
+      |           -> Items:
+      |             -> Tag: Knives
+      |   -> All Of:
       |     -> Entity Properties:
       |       -> Target: This Entity
       |       -> Predicate:
       |         -> Entity Flags:
       |           -> Is On Fire: True
-      | Looting Enchant:
-      |   -> Value: U[0; 1)
-  ali:item farmersdelight:smoked_ham x1
-    | Chance: 50%
-    |   -> Looting LVL: 50% + LVL × 10%
-    |   -> Looting I: 60%
-    |   -> Looting II: 70%
-    |   -> Looting III: 80%
-    | Count: 1
-    | ----- Predicates -----
-    | Entity Properties:
-    |   -> Target: Killer
-    |   -> Predicate:
-    |     -> Entity Equipment:
-    |       -> Main Hand:
-    |         -> Tag: Knives
-    | Entity Properties:
-    |   -> Target: This Entity
-    |   -> Predicate:
-    |     -> Entity Flags:
-    |       -> Is On Fire: True
-    | Random Chance With Looting:
-    |   -> Percent: 0.5
-    |   -> Multiplier: 0.1
-  ali:item farmersdelight:ham x1
-    | Chance: 50%
-    |   -> Looting LVL: 50% + LVL × 10%
-    |   -> Looting I: 60%
-    |   -> Looting II: 70%
-    |   -> Looting III: 80%
-    | Count: 1
-    | ----- Predicates -----
-    | Entity Properties:
-    |   -> Target: Killer
-    |   -> Predicate:
-    |     -> Entity Equipment:
-    |       -> Main Hand:
-    |         -> Tag: Knives
-    | Entity Properties:
-    |   -> Target: This Entity
-    |   -> Predicate:
-    |     -> Entity Flags:
-    |       -> Is On Fire: False
-    | Random Chance With Looting:
-    |   -> Percent: 0.5
-    |   -> Multiplier: 0.1
+      |     -> Random Chance With Enchanted Bonus:
+      |       -> Chance: 0.5
+      |         -> Looting LVL: [0.5][LVL] | 0.6 + 0.1 × (LVL − 1)
+      |         -> Looting I: 0.6
+      |         -> Looting II: 0.7
+      |         -> Looting III: 0.8

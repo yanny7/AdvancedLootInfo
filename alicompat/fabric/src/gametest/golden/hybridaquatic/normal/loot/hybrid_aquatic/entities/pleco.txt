@@ -9,5 +9,6 @@ ali:entity_loot_table
       |   -> Looting II: 3
       |   -> Looting III: 4
       | ----- Modifiers -----
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: 1

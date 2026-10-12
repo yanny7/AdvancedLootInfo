@@ -30,13 +30,13 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1 to 5
       |   -> Add: False
-    ali:item minecraft:golden_sword x1 {Damage:0}
+    ali:item minecraft:golden_sword x1
       | Chance: 6.85%
       | Count: 1
-    ali:item minecraft:golden_chestplate x1 {Damage:0}
+    ali:item minecraft:golden_chestplate x1
       | Chance: 6.85%
       | Count: 1
-    ali:item minecraft:flint_and_steel x1 {Damage:0}
+    ali:item minecraft:flint_and_steel x1
       | Chance: 6.85%
       | Count: 1
     ali:item minecraft:nether_wart x3-7
@@ -89,7 +89,7 @@ ali:loot_table
             | Count: 1
             | ----- Predicates -----
             | Random Chance:
-            |   -> Probability: 0.035
+            |   -> Chance: 0.04
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -105,7 +105,7 @@ ali:loot_table
             | Count: max(0; U[1; 3])
             | ----- Predicates -----
             | Random Chance:
-            |   -> Probability: 0.145
+            |   -> Chance: 0.14
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 3

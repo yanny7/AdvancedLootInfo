@@ -15,28 +15,28 @@ ali:trade
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:stone_axe x1 {Damage:0}
+      ali:item minecraft:stone_axe x1
     ali:items_to_items
       | Uses: 12
       | XP: 1
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:stone_shovel x1 {Damage:0}
+      ali:item minecraft:stone_shovel x1
     ali:items_to_items
       | Uses: 12
       | XP: 1
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:stone_pickaxe x1 {Damage:0}
+      ali:item minecraft:stone_pickaxe x1
     ali:items_to_items
       | Uses: 12
       | XP: 1
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:stone_hoe x1 {Damage:0}
+      ali:item minecraft:stone_hoe x1
   ali:trade_level
     | Level: 2
     | Randomly Selects 2 Of These Trades
@@ -79,7 +79,7 @@ ali:trade
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x6-20
       ali:item minecraft:air x0
-      ali:item minecraft:iron_axe x1 {Damage:0}
+      ali:item minecraft:iron_axe x1
         | Enchant With Levels:
         |   -> Levels: 5 to 19
         |   -> Treasure: False
@@ -89,7 +89,7 @@ ali:trade
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x7-21
       ali:item minecraft:air x0
-      ali:item minecraft:iron_shovel x1 {Damage:0}
+      ali:item minecraft:iron_shovel x1
         | Enchant With Levels:
         |   -> Levels: 5 to 19
         |   -> Treasure: False
@@ -99,7 +99,7 @@ ali:trade
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x8-22
       ali:item minecraft:air x0
-      ali:item minecraft:iron_pickaxe x1 {Damage:0}
+      ali:item minecraft:iron_pickaxe x1
         | Enchant With Levels:
         |   -> Levels: 5 to 19
         |   -> Treasure: False
@@ -109,7 +109,7 @@ ali:trade
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x4
       ali:item minecraft:air x0
-      ali:item minecraft:diamond_hoe x1 {Damage:0}
+      ali:item minecraft:diamond_hoe x1
   ali:trade_level
     | Level: 4
     | Randomly Selects 2 Of These Trades
@@ -126,7 +126,7 @@ ali:trade
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x17-31
       ali:item minecraft:air x0
-      ali:item minecraft:diamond_axe x1 {Damage:0}
+      ali:item minecraft:diamond_axe x1
         | Enchant With Levels:
         |   -> Levels: 5 to 19
         |   -> Treasure: False
@@ -136,7 +136,7 @@ ali:trade
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x10-24
       ali:item minecraft:air x0
-      ali:item minecraft:diamond_shovel x1 {Damage:0}
+      ali:item minecraft:diamond_shovel x1
         | Enchant With Levels:
         |   -> Levels: 5 to 19
         |   -> Treasure: False
@@ -149,7 +149,7 @@ ali:trade
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x18-32
       ali:item minecraft:air x0
-      ali:item minecraft:diamond_pickaxe x1 {Damage:0}
+      ali:item minecraft:diamond_pickaxe x1
         | Enchant With Levels:
         |   -> Levels: 5 to 19
         |   -> Treasure: False

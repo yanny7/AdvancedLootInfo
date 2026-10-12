@@ -6,7 +6,7 @@ ali:trade
       | Uses: 20
       | XP: 2
       | Price Multiplier: 0.2
-      ali:item #charm:beekeeper_sells_flowers x14-16
+      ali:item #charm:beekeepers_sell_flowers x14-16
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
@@ -87,7 +87,7 @@ ali:trade
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x47-52
       ali:item minecraft:air x0
-      ali:item minecraft:beehive x1 {display:{Name:'{"translate":"item.charm.populated_beehive"}'}}
+      ali:item minecraft:beehive x1 {"minecraft:custom_name":'{"translate":"item.charm.populated_beehive"}'}
     ali:items_to_items
       | Uses: 20
       | XP: 30
@@ -101,7 +101,7 @@ ali:trade
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x6-15
       ali:item minecraft:air x0
-      ali:item minecraft:shears x1 {Damage:0}
+      ali:item minecraft:shears x1
         | Set Enchantments:
         |   -> Enchantment: Unbreaking
         |   -> Levels: 1 to 3  ~1 to 2 (45%)

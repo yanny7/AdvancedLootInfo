@@ -1,0 +1,257 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:water"}}
+      | Chance: 7.5%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Water Bottle
+    ali:item minecraft:rotten_flesh x1-6
+      | Chance: 7.5%
+      | Count: max(0; U[1; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 6
+      |   -> Add: False
+    ali:item minecraft:poisonous_potato x1-2
+      | Chance: 7.5%
+      | Count: max(0; U[1; 2])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
+    ali:item minecraft:wheat x1-6
+      | Chance: 7.5%
+      | Count: max(0; U[1; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 6
+      |   -> Add: False
+    ali:item minecraft:potato x1-6
+      | Chance: 7.5%
+      | Count: max(0; U[1; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 6
+      |   -> Add: False
+    ali:item minecraft:carrot x1-6
+      | Chance: 7.5%
+      | Count: max(0; U[1; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 6
+      |   -> Add: False
+    ali:item minecraft:melon_slice x1-6
+      | Chance: 7.5%
+      | Count: max(0; U[1; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 6
+      |   -> Add: False
+    ali:item minecraft:water_bucket x1
+      | Chance: 7.5%
+      | Count: 1
+    ali:item minecraft:torch x1-12
+      | Chance: 7.5%
+      | Count: max(0; U[1; 12])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 12
+      |   -> Add: False
+    ali:item minecraft:mushroom_stew x1
+      | Chance: 7.5%
+      | Count: 1
+    ali:item minecraft:milk_bucket x1
+      | Chance: 7.5%
+      | Count: 1
+    ali:item minecraft:sweet_berries x2-7
+      | Chance: 7.5%
+      | Count: max(0; U[2; 7])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 7
+      |   -> Add: False
+    ali:item minecraft:melon_seeds x1-5
+      | Chance: 7.5%
+      | Count: max(0; U[1; 5])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 5
+      |   -> Add: False
+    ali:reference
+      | Selects all entries
+      | Chance: 2.5%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item minecraft:poppy x1-4
+            | Chance: 0.25%
+            | Count: max(0; U[1; 4])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1 to 4
+            |   -> Add: False
+          ali:item minecraft:dandelion x1-4
+            | Chance: 0.25%
+            | Count: max(0; U[1; 4])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1 to 4
+            |   -> Add: False
+          ali:item minecraft:feather x1-3
+            | Chance: 0.25%
+            | Count: max(0; U[1; 3])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1 to 3
+            |   -> Add: False
+          ali:item minecraft:wheat_seeds x1-2
+            | Chance: 0.25%
+            | Count: max(0; U[1; 2])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1 to 2
+            |   -> Add: False
+          ali:item minecraft:flint x1-2
+            | Chance: 0.25%
+            | Count: max(0; U[1; 2])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1 to 2
+            |   -> Add: False
+          ali:item minecraft:cactus x1-2
+            | Chance: 0.25%
+            | Count: max(0; U[1; 2])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1 to 2
+            |   -> Add: False
+          ali:item minecraft:sugar_cane x1-4
+            | Chance: 0.25%
+            | Count: max(0; U[1; 4])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1 to 4
+            |   -> Add: False
+          ali:item minecraft:sand x1-4
+            | Chance: 0.25%
+            | Count: max(0; U[1; 4])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1 to 4
+            |   -> Add: False
+          ali:item minecraft:flower_pot x1
+            | Chance: 0.25%
+            | Count: 1
+          ali:item minecraft:bone_meal x1
+            | Chance: 0.25%
+            | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item minecraft:bread x1-8
+      | Chance: 14.29%
+      | Count: max(0; U[1; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 8
+      |   -> Add: False
+    ali:item twilightforest:shika_senbei x1-4
+      | Chance: 14.29%
+      | Count: max(0; U[1; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False
+    ali:item minecraft:cooked_beef x1-6
+      | Chance: 14.29%
+      | Count: max(0; U[1; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 6
+      |   -> Add: False
+    ali:item minecraft:cooked_porkchop x1-8
+      | Chance: 14.29%
+      | Count: max(0; U[1; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 8
+      |   -> Add: False
+    ali:item minecraft:baked_potato x1-8
+      | Chance: 14.29%
+      | Count: max(0; U[1; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 8
+      |   -> Add: False
+    ali:item minecraft:cooked_chicken x1-10
+      | Chance: 14.29%
+      | Count: max(0; U[1; 10])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 10
+      |   -> Add: False
+    ali:item minecraft:cooked_cod x1-8
+      | Chance: 14.29%
+      | Count: max(0; U[1; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 8
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:glistering_melon_slice x1-12
+      | Chance: 16.48%
+      | Count: max(0; U[1; 12])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 12
+      |   -> Add: False
+    ali:item minecraft:apple x1-12
+      | Chance: 16.48%
+      | Count: max(0; U[1; 12])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 12
+      |   -> Add: False
+    ali:item minecraft:map x1
+      | Chance: 16.48%
+      | Count: 1
+    ali:item twilightforest:charm_of_keeping_1 x1
+      | Chance: 16.48%
+      | Count: 1
+    ali:item minecraft:golden_apple x1-2
+      | Chance: 5.49%
+      | Count: max(0; U[1; 2])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
+    ali:item minecraft:golden_carrot x1-2
+      | Chance: 5.49%
+      | Count: max(0; U[1; 2])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
+    ali:item minecraft:cake x1
+      | Chance: 5.49%
+      | Count: 1
+    ali:item minecraft:oak_boat x1
+      | Chance: 5.49%
+      | Count: 1
+    ali:item twilightforest:hollow_oak_sapling x1
+      | Chance: 5.49%
+      | Count: 1
+    ali:item twilightforest:music_disc_home x1
+      | Chance: 3.3%
+      | Count: 1
+    ali:item twilightforest:music_disc_radiance x1
+      | Chance: 3.3%
+      | Count: 1

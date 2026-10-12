@@ -101,13 +101,14 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1 to 2
       |   -> Add: False
-    ali:item minecraft:diamond_sword x1 {Damage:0}
+    ali:item minecraft:diamond_sword x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 0.45%
       | Count: 1
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 20 to 50
-      |   -> Treasure: False
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
     ali:item deeperdarker:soul_crystal x1-2
       | Chance: 0.45%
       | Count: max(0; U[1; 2])

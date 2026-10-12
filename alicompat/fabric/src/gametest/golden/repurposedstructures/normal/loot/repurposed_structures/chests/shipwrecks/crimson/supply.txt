@@ -10,20 +10,20 @@ ali:loot_table
       | Set Stew Effect:
       |   -> Blindness
       |     -> Duration: 10 to 25
+      |   -> Wither
+      |     -> Duration: 10 to 20
+      |   -> Weakness
+      |     -> Duration: 30 to 50
+      |   -> Poison
+      |     -> Duration: 15 to 30
+      |   -> Bad Luck
+      |     -> Duration: 200 to 400
       |   -> Fire Resistance
       |     -> Duration: 360 to 600
       |   -> Night Vision
       |     -> Duration: 60 to 120
-      |   -> Poison
-      |     -> Duration: 15 to 30
       |   -> Saturation
       |     -> Duration: 10 to 12
-      |   -> Bad Luck
-      |     -> Duration: 200 to 400
-      |   -> Weakness
-      |     -> Duration: 30 to 50
-      |   -> Wither
-      |     -> Duration: 10 to 20
     ali:item minecraft:paper x1-12
       | Chance: 10.81%
       | Count: 1 to 12
@@ -39,44 +39,62 @@ ali:loot_table
     ali:item minecraft:ghast_tear x2-5
       | Chance: 8.11%
       | Count: 2 to 5
-    ali:item minecraft:firework_star x1-3 {Explosion:{Colors:[I;0],FadeColors:[I;12201518],Flicker:1b,Trail:1b,Type:4b}}
+    ali:item minecraft:firework_star x1-3 {"minecraft:firework_explosion":{fade_colors:[I;12201518],has_trail:1b,has_twinkle:1b,shape:"creeper"}}
       | Chance: 5.41%
       | Count: 1 to 3
       | ----- Modifiers -----
-      | Set Nbt:
-      |   -> Tag: {Explosion:{Colors:[I;0],FadeColors:[I;12201518],Flicker:1b,Trail:1b,Type:4b}}
-    ali:item minecraft:firework_star x1-3 {Explosion:{Colors:[I;12201518],FadeColors:[I;0],Flicker:1b,Trail:1b,Type:4b}}
+      | Set Firework Explosion:
+      |   -> Shape: Creeper
+      |   -> Fade Colors: [12201518]
+      |   -> Trail: True
+      |   -> Twinkle: True
+    ali:item minecraft:firework_star x1-3 {"minecraft:firework_explosion":{fade_colors:[I;0],has_trail:1b,has_twinkle:1b,shape:"creeper"}}
       | Chance: 5.41%
       | Count: 1 to 3
       | ----- Modifiers -----
-      | Set Nbt:
-      |   -> Tag: {Explosion:{Colors:[I;12201518],FadeColors:[I;0],Flicker:1b,Trail:1b,Type:4b}}
-    ali:item minecraft:warped_fungus_on_a_stick x1 {Damage:0}
+      | Set Firework Explosion:
+      |   -> Shape: Creeper
+      |   -> Fade Colors: [0]
+      |   -> Trail: True
+      |   -> Twinkle: True
+    ali:item minecraft:warped_fungus_on_a_stick x1
       | Chance: 5.41%
       | Count: 1
     ali:item minecraft:gunpowder x10-15
       | Chance: 4.05%
       | Count: 10 to 15
-    ali:item minecraft:iron_helmet x1 {Damage:0}
+    ali:item minecraft:iron_helmet x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 4.05%
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
-    ali:item minecraft:iron_chestplate x1 {Damage:0}
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:iron_chestplate x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 4.05%
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
-    ali:item minecraft:iron_leggings x1 {Damage:0}
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:iron_leggings x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 4.05%
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
-    ali:item minecraft:iron_boots x1 {Damage:0}
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:iron_boots x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 4.05%
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
     ali:item minecraft:red_stained_glass_pane x1-3
       | Chance: 2.7%
       | Count: 1 to 3
@@ -98,20 +116,20 @@ ali:loot_table
       | Set Stew Effect:
       |   -> Blindness
       |     -> Duration: 10 to 25
+      |   -> Wither
+      |     -> Duration: 10 to 20
+      |   -> Weakness
+      |     -> Duration: 30 to 50
+      |   -> Poison
+      |     -> Duration: 15 to 30
+      |   -> Bad Luck
+      |     -> Duration: 200 to 400
       |   -> Fire Resistance
       |     -> Duration: 360 to 600
       |   -> Night Vision
       |     -> Duration: 60 to 120
-      |   -> Poison
-      |     -> Duration: 15 to 30
       |   -> Saturation
       |     -> Duration: 10 to 12
-      |   -> Bad Luck
-      |     -> Duration: 200 to 400
-      |   -> Weakness
-      |     -> Duration: 30 to 50
-      |   -> Wither
-      |     -> Duration: 10 to 20
     ali:empty
       | Drops nothing
       | Chance: 25%

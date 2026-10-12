@@ -1,0 +1,37 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:enchanted_book x1
+      | Chance: 71.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 1 to 10
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:enchanted_book x1
+      | Chance: 17.78%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 11 to 20
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:enchanted_book x1
+      | Chance: 8.89%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 21 to 30
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:enchanted_book x1
+      | Chance: 2.22%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 31 to 40
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot

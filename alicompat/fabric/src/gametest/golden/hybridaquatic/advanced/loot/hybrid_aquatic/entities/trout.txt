@@ -6,7 +6,8 @@ ali:entity_loot_table
     ali:item hybrid_aquatic:trout x1
       | Count: 1
       | ----- Modifiers -----
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: U[1; 2)
       | Set Count:
       |   -> Count: 1

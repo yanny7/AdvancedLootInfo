@@ -33,15 +33,15 @@ ali:loot_table
     ali:item ad_astra:gas_tank x1
       | Chance: 12.5%
       | Count: 1
-    ali:item ad_astra:space_helmet x1 {Damage:0}
+    ali:item ad_astra:space_helmet x1
       | Chance: 12.5%
       | Count: 1
-    ali:item ad_astra:space_suit x1 {Damage:0}
+    ali:item ad_astra:space_suit x1
       | Chance: 12.5%
       | Count: 1
-    ali:item ad_astra:space_pants x1 {Damage:0}
+    ali:item ad_astra:space_pants x1
       | Chance: 12.5%
       | Count: 1
-    ali:item ad_astra:space_boots x1 {Damage:0}
+    ali:item ad_astra:space_boots x1
       | Chance: 12.5%
       | Count: 1

@@ -74,6 +74,7 @@ ali:loot_table
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
+      |   -> Only Compatible: True
     ali:item ad_astra:space_painting x1
       | Chance: 1.88%
       | Count: 1

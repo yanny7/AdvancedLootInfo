@@ -10,22 +10,22 @@ ali:loot_table
       | Set Stew Effect:
       |   -> Blindness
       |     -> Duration: 10 to 25
-      |   -> Glowing
-      |     -> Duration: 30 to 120
-      |   -> Invisibility
-      |     -> Duration: 30 to 120
-      |   -> Jump Boost
-      |     -> Duration: 60 to 120
       |   -> Levitation
       |     -> Duration: 25 to 55
+      |   -> Weakness
+      |     -> Duration: 30 to 50
+      |   -> Jump Boost
+      |     -> Duration: 60 to 120
       |   -> Night Vision
       |     -> Duration: 60 to 120
       |   -> Saturation
       |     -> Duration: 10 to 12
+      |   -> Invisibility
+      |     -> Duration: 30 to 120
       |   -> Slow Falling
       |     -> Duration: 30 to 120
-      |   -> Weakness
-      |     -> Duration: 30 to 50
+      |   -> Glowing
+      |     -> Duration: 30 to 120
     ali:item minecraft:paper x1-12
       | Chance: 9.64%
       | Count: 1 to 12
@@ -35,12 +35,12 @@ ali:loot_table
     ali:item minecraft:beetroot_seeds x1-10
       | Chance: 8.43%
       | Count: 1 to 10
-    ali:item minecraft:magenta_banner x2-4 {BlockEntityTag:{Patterns:[{Color:15,Pattern:"tt"},{Color:15,Pattern:"bt"}]}}
+    ali:item minecraft:magenta_banner x2-4
       | Chance: 8.43%
       | Count: 2 to 4
       | ----- Modifiers -----
-      | Set Nbt:
-      |   -> Tag: {BlockEntityTag:{Patterns:[{Color:15,Pattern:"tt"},{Color:15,Pattern:"bt"}]}}
+      | Set Banner Pattern:
+      |   -> Append: True
     ali:item minecraft:popped_chorus_fruit x5-17
       | Chance: 8.43%
       | Count: 5 to 17
@@ -53,38 +53,56 @@ ali:loot_table
     ali:item minecraft:gunpowder x10-15
       | Chance: 3.61%
       | Count: 10 to 15
-    ali:item minecraft:firework_star x1-3 {Explosion:{Colors:[I;8073150],FadeColors:[I;12801229],Flicker:1b,Trail:1b,Type:2b}}
+    ali:item minecraft:firework_star x1-3 {"minecraft:firework_explosion":{fade_colors:[I;12801229],has_trail:1b,has_twinkle:1b,shape:"star"}}
       | Chance: 3.61%
       | Count: 1 to 3
       | ----- Modifiers -----
-      | Set Nbt:
-      |   -> Tag: {Explosion:{Colors:[I;8073150],FadeColors:[I;12801229],Flicker:1b,Trail:1b,Type:2b}}
-    ali:item minecraft:firework_star x1-3 {Explosion:{Colors:[I;12801229],FadeColors:[I;8073150],Flicker:1b,Trail:1b,Type:2b}}
+      | Set Firework Explosion:
+      |   -> Shape: Star
+      |   -> Fade Colors: [12801229]
+      |   -> Trail: True
+      |   -> Twinkle: True
+    ali:item minecraft:firework_star x1-3 {"minecraft:firework_explosion":{fade_colors:[I;8073150],has_trail:1b,has_twinkle:1b,shape:"star"}}
       | Chance: 3.61%
       | Count: 1 to 3
       | ----- Modifiers -----
-      | Set Nbt:
-      |   -> Tag: {Explosion:{Colors:[I;12801229],FadeColors:[I;8073150],Flicker:1b,Trail:1b,Type:2b}}
-    ali:item minecraft:iron_helmet x1 {Damage:0}
+      | Set Firework Explosion:
+      |   -> Shape: Star
+      |   -> Fade Colors: [8073150]
+      |   -> Trail: True
+      |   -> Twinkle: True
+    ali:item minecraft:iron_helmet x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.61%
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
-    ali:item minecraft:iron_chestplate x1 {Damage:0}
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:iron_chestplate x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.61%
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
-    ali:item minecraft:iron_leggings x1 {Damage:0}
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:iron_leggings x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.61%
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
-    ali:item minecraft:iron_boots x1 {Damage:0}
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:iron_boots x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.61%
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
     ali:item minecraft:end_rod x1-3
       | Chance: 2.41%
       | Count: 1 to 3
@@ -109,37 +127,43 @@ ali:loot_table
       | Set Stew Effect:
       |   -> Blindness
       |     -> Duration: 10 to 25
-      |   -> Glowing
-      |     -> Duration: 30 to 120
-      |   -> Invisibility
-      |     -> Duration: 30 to 120
-      |   -> Jump Boost
-      |     -> Duration: 60 to 120
       |   -> Levitation
       |     -> Duration: 25 to 55
+      |   -> Weakness
+      |     -> Duration: 30 to 50
+      |   -> Jump Boost
+      |     -> Duration: 60 to 120
       |   -> Night Vision
       |     -> Duration: 60 to 120
       |   -> Saturation
       |     -> Duration: 10 to 12
+      |   -> Invisibility
+      |     -> Duration: 30 to 120
       |   -> Slow Falling
       |     -> Duration: 30 to 120
-      |   -> Weakness
-      |     -> Duration: 30 to 50
+      |   -> Glowing
+      |     -> Duration: 30 to 120
     ali:empty
       | Drops nothing
       | Chance: 25%
-    ali:item minecraft:firework_star x3 {Explosion:{Colors:[I;8073150],FadeColors:[I;12801229],Flicker:1b,Trail:1b,Type:2b}}
+    ali:item minecraft:firework_star x3 {"minecraft:firework_explosion":{fade_colors:[I;12801229],has_trail:1b,has_twinkle:1b,shape:"star"}}
       | Chance: 14%
       | Count: 3
       | ----- Modifiers -----
-      | Set Nbt:
-      |   -> Tag: {Explosion:{Colors:[I;8073150],FadeColors:[I;12801229],Flicker:1b,Trail:1b,Type:2b}}
-    ali:item minecraft:firework_star x3 {Explosion:{Colors:[I;12801229],FadeColors:[I;8073150],Flicker:1b,Trail:1b,Type:2b}}
+      | Set Firework Explosion:
+      |   -> Shape: Star
+      |   -> Fade Colors: [12801229]
+      |   -> Trail: True
+      |   -> Twinkle: True
+    ali:item minecraft:firework_star x3 {"minecraft:firework_explosion":{fade_colors:[I;8073150],has_trail:1b,has_twinkle:1b,shape:"star"}}
       | Chance: 14%
       | Count: 3
       | ----- Modifiers -----
-      | Set Nbt:
-      |   -> Tag: {Explosion:{Colors:[I;12801229],FadeColors:[I;8073150],Flicker:1b,Trail:1b,Type:2b}}
+      | Set Firework Explosion:
+      |   -> Shape: Star
+      |   -> Fade Colors: [8073150]
+      |   -> Trail: True
+      |   -> Twinkle: True
   ali:loot_pool
     | Selects random entry
     | Rolls: 1

@@ -51,7 +51,7 @@ ali:loot_table
     ali:item minecraft:nautilus_shell x1
       | Chance: 2.8%
       | Count: 1
-    ali:item minecraft:scute x1
+    ali:item minecraft:turtle_scute x1
       | Chance: 2.8%
       | Count: 1
     ali:item hybrid_aquatic:hybrid_crate x1

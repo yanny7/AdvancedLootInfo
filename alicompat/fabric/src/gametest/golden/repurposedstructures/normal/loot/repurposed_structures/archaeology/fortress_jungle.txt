@@ -42,28 +42,28 @@ ali:loot_table
     ali:item minecraft:arrow x1
       | Chance: 2.94%
       | Count: 1
-    ali:item minecraft:bow x1 {Damage:0}
+    ali:item minecraft:bow x1
       | Chance: 2.94%
       | Count: 1
       | ----- Modifiers -----
       | Set Damage:
       |   -> Damage: 10% to 70%
       |   -> Add: False
-    ali:item minecraft:crossbow x1 {Damage:0}
+    ali:item minecraft:crossbow x1
       | Chance: 2.94%
       | Count: 1
       | ----- Modifiers -----
       | Set Damage:
       |   -> Damage: 10% to 70%
       |   -> Add: False
-    ali:item minecraft:stone_sword x1 {Damage:0}
+    ali:item minecraft:stone_sword x1
       | Chance: 2.94%
       | Count: 1
       | ----- Modifiers -----
       | Set Damage:
       |   -> Damage: 10% to 70%
       |   -> Add: False
-    ali:item minecraft:stone_sword x1 {Damage:0}
+    ali:item minecraft:stone_sword x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 2.94%
       | Count: 1
       | ----- Modifiers -----
@@ -71,51 +71,38 @@ ali:loot_table
       |   -> Damage: 10% to 70%
       |   -> Add: False
       | Enchant Randomly:
-    ali:item minecraft:chainmail_boots x1 {Damage:0}
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:chainmail_boots x1
       | Chance: 0.74%
       | Count: 1
       | ----- Modifiers -----
       | Set Damage:
       |   -> Damage: 10% to 70%
       |   -> Add: False
-    ali:item minecraft:chainmail_leggings x1 {Damage:0}
+    ali:item minecraft:chainmail_leggings x1
       | Chance: 0.74%
       | Count: 1
       | ----- Modifiers -----
       | Set Damage:
       |   -> Damage: 10% to 70%
       |   -> Add: False
-    ali:item minecraft:chainmail_chestplate x1 {Damage:0}
+    ali:item minecraft:chainmail_chestplate x1
       | Chance: 0.74%
       | Count: 1
       | ----- Modifiers -----
       | Set Damage:
       |   -> Damage: 10% to 70%
       |   -> Add: False
-    ali:item minecraft:chainmail_helmet x1 {Damage:0}
+    ali:item minecraft:chainmail_helmet x1
       | Chance: 0.74%
       | Count: 1
       | ----- Modifiers -----
       | Set Damage:
       |   -> Damage: 10% to 70%
       |   -> Add: False
-    ali:item minecraft:chainmail_boots x1 {Damage:0}
-      | Chance: 0.74%
-      | Count: 1
-      | ----- Modifiers -----
-      | Set Damage:
-      |   -> Damage: 10% to 70%
-      |   -> Add: False
-      | Enchant Randomly:
-    ali:item minecraft:chainmail_leggings x1 {Damage:0}
-      | Chance: 0.74%
-      | Count: 1
-      | ----- Modifiers -----
-      | Set Damage:
-      |   -> Damage: 10% to 70%
-      |   -> Add: False
-      | Enchant Randomly:
-    ali:item minecraft:chainmail_chestplate x1 {Damage:0}
+    ali:item minecraft:chainmail_boots x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 0.74%
       | Count: 1
       | ----- Modifiers -----
@@ -123,7 +110,10 @@ ali:loot_table
       |   -> Damage: 10% to 70%
       |   -> Add: False
       | Enchant Randomly:
-    ali:item minecraft:chainmail_helmet x1 {Damage:0}
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:chainmail_leggings x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 0.74%
       | Count: 1
       | ----- Modifiers -----
@@ -131,3 +121,28 @@ ali:loot_table
       |   -> Damage: 10% to 70%
       |   -> Add: False
       | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:chainmail_chestplate x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 0.74%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 10% to 70%
+      |   -> Add: False
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:chainmail_helmet x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 0.74%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 10% to 70%
+      |   -> Add: False
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True

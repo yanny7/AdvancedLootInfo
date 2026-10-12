@@ -29,6 +29,9 @@ ali:loot_table
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
     ali:item minecraft:diamond_horse_armor x1
       | Chance: 3.88%
       | Count: 1
@@ -126,11 +129,5 @@ ali:loot_table
           | Selects random entry
           | Rolls: 1
           ali:item supplementaries:bomb_blue x1
-            | Quality: 1
             | Chance: 1%
-            |   -> Bad Luck: ?
-            |   -> Luck 1: 1%
-            |   -> Luck 2: 1%
-            |   -> Luck 3: 1%
-            |   -> Luck 4: 1%
             | Count: 1

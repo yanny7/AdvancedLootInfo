@@ -6,19 +6,7 @@ ali:loot_table
     ali:item the_bumblezone:crystalline_flower x1
       | Count: 1
       | ----- Modifiers -----
-      | Copy Nbt:
-      |   -> Nbt Provider: minecraft:context
-      |   -> Operations:
-      |     -> Entry:
-      |       -> Source: tier
-      |       -> Target: BlockEntityTag.tier
-      |       -> Merge Strategy: Replace
-      |     -> Entry:
-      |       -> Source: xp
-      |       -> Target: BlockEntityTag.xp
-      |       -> Merge Strategy: Replace
-      |     -> Entry:
-      |       -> Source: guid
-      |       -> Target: BlockEntityTag.guid
-      |       -> Merge Strategy: Replace
-      | Drop Container Items
+      | Copy Components:
+      |   -> Source: Block Entity
+      |   -> Include: the_bumblezone:crystalline_flower_data
+      | Drop Container Items:

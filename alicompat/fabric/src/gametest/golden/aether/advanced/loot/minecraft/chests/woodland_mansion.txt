@@ -5,7 +5,7 @@ ali:loot_table
     | Rolls: 1 to 3
     ali:modified
       | Selects only first successful entry
-      ali:item aether:chainmail_gloves x1 {Damage:0}
+      ali:item aether:chainmail_gloves x1
         | Chance: 1.97%
         | Count: 1
         | ----- Predicates -----
@@ -13,8 +13,8 @@ ali:loot_table
         |   -> Loot Table Id:
         |     -> aether:chests/dungeon/gold/gold_dungeon_reward
         | Random Chance:
-        |   -> Probability: 0.25
-      ali:item minecraft:chainmail_chestplate x1 {Damage:0}
+        |   -> Chance: 0.25
+      ali:item minecraft:chainmail_chestplate x1
         | Chance: 7.87%
         | Count: 1
     ali:item minecraft:lead x1
@@ -32,7 +32,7 @@ ali:loot_table
     ali:item minecraft:music_disc_cat x1
       | Chance: 11.81%
       | Count: 1
-    ali:item minecraft:diamond_hoe x1 {Damage:0}
+    ali:item minecraft:diamond_hoe x1
       | Chance: 11.81%
       | Count: 1
     ali:item minecraft:enchanted_book x1
@@ -40,7 +40,10 @@ ali:loot_table
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
-    ali:item minecraft:diamond_chestplate x1 {Damage:0}
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:diamond_chestplate x1
       | Chance: 3.94%
       | Count: 1
     ali:item minecraft:enchanted_golden_apple x1

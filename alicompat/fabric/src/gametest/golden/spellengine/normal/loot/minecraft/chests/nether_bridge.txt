@@ -18,13 +18,13 @@ ali:loot_table
     ali:item minecraft:iron_ingot x1-5
       | Chance: 6.85%
       | Count: 1 to 5
-    ali:item minecraft:golden_sword x1 {Damage:0}
+    ali:item minecraft:golden_sword x1
       | Chance: 6.85%
       | Count: 1
-    ali:item minecraft:golden_chestplate x1 {Damage:0}
+    ali:item minecraft:golden_chestplate x1
       | Chance: 6.85%
       | Count: 1
-    ali:item minecraft:flint_and_steel x1 {Damage:0}
+    ali:item minecraft:flint_and_steel x1
       | Chance: 6.85%
       | Count: 1
     ali:item minecraft:nether_wart x3-7

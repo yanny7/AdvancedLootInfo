@@ -9,9 +9,10 @@ ali:loot_table
         | Count: 1
         | ----- Predicates -----
         | Match Tool:
-        |   -> Enchantments:
-        |     -> Enchantment: Silk Touch
-        |     -> Level: ≥ 1
+        |   -> Item Predicates:
+        |     -> Enchantments:
+        |       -> Enchantment: Silk Touch
+        |       -> Level: ≥ 1
       ali:reference
         | Selects all entries
         ali:loot_table
@@ -33,16 +34,16 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Random Chance:
-              |   -> Probability: 0.5
+              |   -> Chance: 0.5
             ali:item minecraft:raw_iron x1
               | Chance: 16.67%
               | Count: 1
               | ----- Predicates -----
               | Random Chance:
-              |   -> Probability: 0.5
+              |   -> Chance: 0.5
             ali:item minecraft:raw_gold x1
               | Chance: 5.56%
               | Count: 1
               | ----- Predicates -----
               | Random Chance:
-              |   -> Probability: 0.5
+              |   -> Chance: 0.5

@@ -37,87 +37,94 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:map x1 {display:{Name:'{"translate":"Unknown Ocean Structure Map"}'}}
+    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"Unknown Ocean Structure Map"}'}
       | Chance: 14.29%
       | Count: 1
       | ----- Modifiers -----
       | Exploration Map:
       |   -> Destination: repurposed_structures:explorer_maps/unknown_ocean_structure_1
-      |   -> Map Decoration: Cyan Banner
+      |   -> Map Decoration: minecraft:banner_cyan
       |   -> Zoom: 2
       |   -> Search Radius: 50
       |   -> Skip Known Structures: False
       | Set Name:
       |   -> Name: Unknown Ocean Structure Map
-    ali:item minecraft:map x1 {display:{Name:'{"translate":"Unknown Ocean Structure Map"}'}}
+      |   -> Target: Custom Name
+    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"Unknown Ocean Structure Map"}'}
       | Chance: 14.29%
       | Count: 1
       | ----- Modifiers -----
       | Exploration Map:
       |   -> Destination: repurposed_structures:explorer_maps/unknown_ocean_structure_2
-      |   -> Map Decoration: Cyan Banner
+      |   -> Map Decoration: minecraft:banner_cyan
       |   -> Zoom: 2
       |   -> Search Radius: 50
       |   -> Skip Known Structures: False
       | Set Name:
       |   -> Name: Unknown Ocean Structure Map
-    ali:item minecraft:map x1 {display:{Name:'{"translate":"Unknown Ocean Structure Map"}'}}
+      |   -> Target: Custom Name
+    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"Unknown Ocean Structure Map"}'}
       | Chance: 14.29%
       | Count: 1
       | ----- Modifiers -----
       | Exploration Map:
       |   -> Destination: repurposed_structures:explorer_maps/unknown_ocean_structure_3
-      |   -> Map Decoration: Cyan Banner
+      |   -> Map Decoration: minecraft:banner_cyan
       |   -> Zoom: 2
       |   -> Search Radius: 50
       |   -> Skip Known Structures: False
       | Set Name:
       |   -> Name: Unknown Ocean Structure Map
-    ali:item minecraft:map x1 {display:{Name:'{"translate":"Unknown Ocean Structure Map"}'}}
+      |   -> Target: Custom Name
+    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"Unknown Ocean Structure Map"}'}
       | Chance: 14.29%
       | Count: 1
       | ----- Modifiers -----
       | Exploration Map:
       |   -> Destination: repurposed_structures:explorer_maps/unknown_ocean_structure_4
-      |   -> Map Decoration: Cyan Banner
+      |   -> Map Decoration: minecraft:banner_cyan
       |   -> Zoom: 2
       |   -> Search Radius: 50
       |   -> Skip Known Structures: False
       | Set Name:
       |   -> Name: Unknown Ocean Structure Map
-    ali:item minecraft:map x1 {display:{Name:'{"translate":"Unknown Ocean Structure Map"}'}}
+      |   -> Target: Custom Name
+    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"Unknown Ocean Structure Map"}'}
       | Chance: 14.29%
       | Count: 1
       | ----- Modifiers -----
       | Exploration Map:
       |   -> Destination: repurposed_structures:explorer_maps/unknown_ocean_structure_5
-      |   -> Map Decoration: Cyan Banner
+      |   -> Map Decoration: minecraft:banner_cyan
       |   -> Zoom: 2
       |   -> Search Radius: 50
       |   -> Skip Known Structures: False
       | Set Name:
       |   -> Name: Unknown Ocean Structure Map
-    ali:item minecraft:map x1 {display:{Name:'{"translate":"Unknown Ocean Structure Map"}'}}
+      |   -> Target: Custom Name
+    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"Unknown Ocean Structure Map"}'}
       | Chance: 14.29%
       | Count: 1
       | ----- Modifiers -----
       | Exploration Map:
       |   -> Destination: repurposed_structures:explorer_maps/unknown_ocean_structure_6
-      |   -> Map Decoration: Cyan Banner
+      |   -> Map Decoration: minecraft:banner_cyan
       |   -> Zoom: 2
       |   -> Search Radius: 50
       |   -> Skip Known Structures: False
       | Set Name:
       |   -> Name: Unknown Ocean Structure Map
-    ali:item minecraft:map x1 {display:{Name:'{"translate":"Unknown Ocean Structure Map"}'}}
+      |   -> Target: Custom Name
+    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"Unknown Ocean Structure Map"}'}
       | Chance: 14.29%
       | Count: 1
       | ----- Modifiers -----
       | Exploration Map:
       |   -> Destination: repurposed_structures:explorer_maps/unknown_ocean_structure_7
-      |   -> Map Decoration: Cyan Banner
+      |   -> Map Decoration: minecraft:banner_cyan
       |   -> Zoom: 2
       |   -> Search Radius: 50
       |   -> Skip Known Structures: False
       | Set Name:
       |   -> Name: Unknown Ocean Structure Map
+      |   -> Target: Custom Name

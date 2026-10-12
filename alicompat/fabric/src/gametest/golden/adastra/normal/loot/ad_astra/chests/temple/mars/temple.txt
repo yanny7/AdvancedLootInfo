@@ -17,6 +17,7 @@ ali:loot_table
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
+      |   -> Only Compatible: True
     ali:item ad_astra:ice_shard x6-12
       | Chance: 4.63%
       | Count: 6 to 12

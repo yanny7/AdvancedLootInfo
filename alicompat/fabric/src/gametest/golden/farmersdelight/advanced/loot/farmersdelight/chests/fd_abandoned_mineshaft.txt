@@ -9,7 +9,7 @@ ali:loot_table
     ali:item farmersdelight:cooking_pot x1
       | Chance: 12.5%
       | Count: 1
-    ali:item farmersdelight:skillet x1 {Damage:0}
+    ali:item farmersdelight:skillet x1
       | Chance: 12.5%
       | Count: 1
       | ----- Modifiers -----

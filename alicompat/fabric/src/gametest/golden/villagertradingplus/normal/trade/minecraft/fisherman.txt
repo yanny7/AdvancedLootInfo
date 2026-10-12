@@ -100,7 +100,7 @@ ali:trade
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x8-22
       ali:item minecraft:air x0
-      ali:item minecraft:fishing_rod x1 {Damage:0}
+      ali:item minecraft:fishing_rod x1
         | Enchant With Levels:
         |   -> Levels: 5 to 19
         |   -> Treasure: False

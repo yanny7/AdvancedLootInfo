@@ -118,7 +118,7 @@ ali:loot_table
             |   -> Luck 3: 5.63%
             |   -> Luck 4: 5.42%
             | Count: 1
-          ali:item minecraft:leather_boots x1 {Damage:0}
+          ali:item minecraft:leather_boots x1
             | Chance: 6.2%
             |   -> luck: max(0%; 7500% + floor(−400% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 6.61%
             |   -> Bad Luck: 6.37%
@@ -140,7 +140,7 @@ ali:loot_table
             |   -> Luck 3: 5.63%
             |   -> Luck 4: 5.42%
             | Count: 1
-          ali:item minecraft:fishing_rod x1 {Damage:0}
+          ali:item minecraft:fishing_rod x1
             | Chance: 1.55%
             |   -> luck: max(0%; 7500% + floor(−400% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 1.65%
             |   -> Bad Luck: 1.59%
@@ -182,7 +182,8 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
           ali:item minecraft:enchanted_book x1
             | Chance: 0.87%
             |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 1200% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
@@ -197,12 +198,12 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
             | ----- Modifiers -----
             | Enchant With Levels:
             |   -> Levels: 30
-            |   -> Treasure: True
-          ali:item minecraft:fishing_rod x1 {Damage:0}
+          ali:item minecraft:fishing_rod x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 0.73%
             |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 1000% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
             |   -> Bad Luck: 0.44%
@@ -216,14 +217,14 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
             | ----- Modifiers -----
             | Set Damage:
             |   -> Damage: U[25%; 75%)
             |   -> Add: False
             | Enchant With Levels:
             |   -> Levels: 30
-            |   -> Treasure: True
           ali:item minecraft:saddle x1
             | Chance: 0.73%
             |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 1000% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
@@ -238,7 +239,8 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
           ali:item the_bumblezone:buzzing_briefcase x1
             | Chance: 0.73%
             |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 1000% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
@@ -253,8 +255,9 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
-          ali:item the_bumblezone:bee_cannon x1 {Damage:0}
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
+          ali:item the_bumblezone:bee_cannon x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 0.73%
             |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 1000% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
             |   -> Bad Luck: 0.44%
@@ -268,15 +271,15 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
             | ----- Modifiers -----
             | Set Damage:
             |   -> Damage: U[2%; 25%)
             |   -> Add: False
             | Enchant With Levels:
             |   -> Levels: 30
-            |   -> Treasure: True
-          ali:item the_bumblezone:crystal_cannon x1 {Damage:0}
+          ali:item the_bumblezone:crystal_cannon x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 0.44%
             |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 600% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
             |   -> Bad Luck: 0.26%
@@ -290,14 +293,14 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
             | ----- Modifiers -----
             | Set Damage:
             |   -> Damage: U[2%; 25%)
             |   -> Add: False
             | Enchant With Levels:
             |   -> Levels: 30
-            |   -> Treasure: True
           ali:item the_bumblezone:crystalline_flower x1
             | Chance: 0.44%
             |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 600% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
@@ -312,7 +315,8 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
             | Any Of:
             |   -> Location Check:
             |     -> Location:
@@ -331,8 +335,9 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
-          ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_mystery_structure_description",CustomName:"item.the_bumblezone.honey_compass_mystery_structure",Locked:1b}
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
+          ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_mystery_structure_description",customName:"item.the_bumblezone.honey_compass_mystery_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
             | Quality: 1
             | Chance: 0.15%
             |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × max(0%; 200% + floor(luck)) ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
@@ -347,19 +352,25 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
             | ----- Modifiers -----
-            | Set Nbt:
-            |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_mystery_structure"}
-            | Set Nbt:
-            |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_mystery_structure_description"}
-            | Set Nbt:
-            |   -> Tag: {Locked:1b}
+            | Set Components:
+            |   -> Components:
+            |     -> the_bumblezone:honey_compass_base_data
+            |       -> Type: 
+            |       -> Custom Name: item.the_bumblezone.honey_compass_mystery_structure
+            |       -> Description: item.the_bumblezone.honey_compass_mystery_structure_description
+            |     -> the_bumblezone:honey_compass_state_data
+            |       -> Locked: True
+            |       -> Is Loading: False
+            |       -> Is Failed: False
+            |       -> Located Special Structure: False
             | Honey Compass Locate Structure:
             |   -> Destination: the_bumblezone:honey_compass/misc_locating
             |   -> Search Radius: 50
             |   -> Skip Known Structures: False
-          ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_lesser_mystery_structure_description",CustomName:"item.the_bumblezone.honey_compass_lesser_mystery_structure",Locked:1b}
+          ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_lesser_mystery_structure_description",customName:"item.the_bumblezone.honey_compass_lesser_mystery_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
             | Quality: 1
             | Chance: 0.15%
             |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × max(0%; 200% + floor(luck)) ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
@@ -374,14 +385,20 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
             | ----- Modifiers -----
-            | Set Nbt:
-            |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_lesser_mystery_structure"}
-            | Set Nbt:
-            |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_lesser_mystery_structure_description"}
-            | Set Nbt:
-            |   -> Tag: {Locked:1b}
+            | Set Components:
+            |   -> Components:
+            |     -> the_bumblezone:honey_compass_base_data
+            |       -> Type: 
+            |       -> Custom Name: item.the_bumblezone.honey_compass_lesser_mystery_structure
+            |       -> Description: item.the_bumblezone.honey_compass_lesser_mystery_structure_description
+            |     -> the_bumblezone:honey_compass_state_data
+            |       -> Locked: True
+            |       -> Is Loading: False
+            |       -> Is Failed: False
+            |       -> Located Special Structure: False
             | Honey Compass Locate Structure:
             |   -> Destination: the_bumblezone:honey_compass/lesser_misc_locating
             |   -> Search Radius: 50
@@ -400,7 +417,8 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
           ali:item the_bumblezone:sentry_watcher_spawn_egg x1
             | Chance: 0.07%
             |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 100% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
@@ -415,8 +433,9 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
-          ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_throne_description",CustomName:"item.the_bumblezone.honey_compass_throne_structure",Locked:1b}
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
+          ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_throne_description",customName:"item.the_bumblezone.honey_compass_throne_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
             | Quality: 1
             | Chance: 0.07%
             |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × max(0%; 100% + floor(luck)) ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
@@ -431,14 +450,20 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
             | ----- Modifiers -----
-            | Set Nbt:
-            |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_throne_structure"}
-            | Set Nbt:
-            |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_throne_description"}
-            | Set Nbt:
-            |   -> Tag: {Locked:1b}
+            | Set Components:
+            |   -> Components:
+            |     -> the_bumblezone:honey_compass_base_data
+            |       -> Type: 
+            |       -> Custom Name: item.the_bumblezone.honey_compass_throne_structure
+            |       -> Description: item.the_bumblezone.honey_compass_throne_description
+            |     -> the_bumblezone:honey_compass_state_data
+            |       -> Locked: True
+            |       -> Is Loading: False
+            |       -> Is Failed: False
+            |       -> Located Special Structure: False
             | Honey Compass Locate Structure:
             |   -> Destination: the_bumblezone:honey_compass/throne_locating
             |   -> Search Radius: 40
@@ -471,9 +496,10 @@ ali:loot_table
                   |   -> Target: This Entity
                   |   -> Predicate:
                   |     -> Entity Sub Predicate:
-                  |       -> Is In Open Water: True
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
                   | Player carries an Essence of the Bees
-                ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_red_sanctum_structure_description",CustomName:"item.the_bumblezone.honey_compass_sanctum_structure",Locked:1b}
+                ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_red_sanctum_structure_description",customName:"item.the_bumblezone.honey_compass_sanctum_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
                   | Quality: 1
                   | Chance: 0%
                   |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 100% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck))) × max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + 7400%)
@@ -488,20 +514,26 @@ ali:loot_table
                   |   -> Target: This Entity
                   |   -> Predicate:
                   |     -> Entity Sub Predicate:
-                  |       -> Is In Open Water: True
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
                   | Player carries an Essence of the Bees
                   | ----- Modifiers -----
-                  | Set Nbt:
-                  |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_sanctum_structure"}
-                  | Set Nbt:
-                  |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_red_sanctum_structure_description"}
-                  | Set Nbt:
-                  |   -> Tag: {Locked:1b}
+                  | Set Components:
+                  |   -> Components:
+                  |     -> the_bumblezone:honey_compass_base_data
+                  |       -> Type: 
+                  |       -> Custom Name: item.the_bumblezone.honey_compass_sanctum_structure
+                  |       -> Description: item.the_bumblezone.honey_compass_red_sanctum_structure_description
+                  |     -> the_bumblezone:honey_compass_state_data
+                  |       -> Locked: True
+                  |       -> Is Loading: False
+                  |       -> Is Failed: False
+                  |       -> Located Special Structure: False
                   | Honey Compass Locate Structure:
                   |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/red
                   |   -> Search Radius: 50
                   |   -> Skip Known Structures: False
-                ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_purple_sanctum_structure_description",CustomName:"item.the_bumblezone.honey_compass_sanctum_structure",Locked:1b}
+                ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_purple_sanctum_structure_description",customName:"item.the_bumblezone.honey_compass_sanctum_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
                   | Quality: 1
                   | Chance: 0%
                   |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 100% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck))) × max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + 7400%)
@@ -516,20 +548,26 @@ ali:loot_table
                   |   -> Target: This Entity
                   |   -> Predicate:
                   |     -> Entity Sub Predicate:
-                  |       -> Is In Open Water: True
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
                   | Player carries an Essence of the Bees
                   | ----- Modifiers -----
-                  | Set Nbt:
-                  |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_sanctum_structure"}
-                  | Set Nbt:
-                  |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_purple_sanctum_structure_description"}
-                  | Set Nbt:
-                  |   -> Tag: {Locked:1b}
+                  | Set Components:
+                  |   -> Components:
+                  |     -> the_bumblezone:honey_compass_base_data
+                  |       -> Type: 
+                  |       -> Custom Name: item.the_bumblezone.honey_compass_sanctum_structure
+                  |       -> Description: item.the_bumblezone.honey_compass_purple_sanctum_structure_description
+                  |     -> the_bumblezone:honey_compass_state_data
+                  |       -> Locked: True
+                  |       -> Is Loading: False
+                  |       -> Is Failed: False
+                  |       -> Located Special Structure: False
                   | Honey Compass Locate Structure:
                   |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/purple
                   |   -> Search Radius: 50
                   |   -> Skip Known Structures: False
-                ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_blue_sanctum_structure_description",CustomName:"item.the_bumblezone.honey_compass_sanctum_structure",Locked:1b}
+                ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_blue_sanctum_structure_description",customName:"item.the_bumblezone.honey_compass_sanctum_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
                   | Quality: 1
                   | Chance: 0%
                   |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 100% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck))) × max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + 7400%)
@@ -544,20 +582,26 @@ ali:loot_table
                   |   -> Target: This Entity
                   |   -> Predicate:
                   |     -> Entity Sub Predicate:
-                  |       -> Is In Open Water: True
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
                   | Player carries an Essence of the Bees
                   | ----- Modifiers -----
-                  | Set Nbt:
-                  |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_sanctum_structure"}
-                  | Set Nbt:
-                  |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_blue_sanctum_structure_description"}
-                  | Set Nbt:
-                  |   -> Tag: {Locked:1b}
+                  | Set Components:
+                  |   -> Components:
+                  |     -> the_bumblezone:honey_compass_base_data
+                  |       -> Type: 
+                  |       -> Custom Name: item.the_bumblezone.honey_compass_sanctum_structure
+                  |       -> Description: item.the_bumblezone.honey_compass_blue_sanctum_structure_description
+                  |     -> the_bumblezone:honey_compass_state_data
+                  |       -> Locked: True
+                  |       -> Is Loading: False
+                  |       -> Is Failed: False
+                  |       -> Located Special Structure: False
                   | Honey Compass Locate Structure:
                   |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/blue
                   |   -> Search Radius: 50
                   |   -> Skip Known Structures: False
-                ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_green_sanctum_structure_description",CustomName:"item.the_bumblezone.honey_compass_sanctum_structure",Locked:1b}
+                ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_green_sanctum_structure_description",customName:"item.the_bumblezone.honey_compass_sanctum_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
                   | Quality: 1
                   | Chance: 0%
                   |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 100% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck))) × max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + 7400%)
@@ -572,20 +616,26 @@ ali:loot_table
                   |   -> Target: This Entity
                   |   -> Predicate:
                   |     -> Entity Sub Predicate:
-                  |       -> Is In Open Water: True
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
                   | Player carries an Essence of the Bees
                   | ----- Modifiers -----
-                  | Set Nbt:
-                  |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_sanctum_structure"}
-                  | Set Nbt:
-                  |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_green_sanctum_structure_description"}
-                  | Set Nbt:
-                  |   -> Tag: {Locked:1b}
+                  | Set Components:
+                  |   -> Components:
+                  |     -> the_bumblezone:honey_compass_base_data
+                  |       -> Type: 
+                  |       -> Custom Name: item.the_bumblezone.honey_compass_sanctum_structure
+                  |       -> Description: item.the_bumblezone.honey_compass_green_sanctum_structure_description
+                  |     -> the_bumblezone:honey_compass_state_data
+                  |       -> Locked: True
+                  |       -> Is Loading: False
+                  |       -> Is Failed: False
+                  |       -> Located Special Structure: False
                   | Honey Compass Locate Structure:
                   |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/green
                   |   -> Search Radius: 50
                   |   -> Skip Known Structures: False
-                ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_yellow_sanctum_structure_description",CustomName:"item.the_bumblezone.honey_compass_sanctum_structure",Locked:1b}
+                ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_yellow_sanctum_structure_description",customName:"item.the_bumblezone.honey_compass_sanctum_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
                   | Quality: 1
                   | Chance: 0%
                   |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 100% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck))) × max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + 7400%)
@@ -600,20 +650,26 @@ ali:loot_table
                   |   -> Target: This Entity
                   |   -> Predicate:
                   |     -> Entity Sub Predicate:
-                  |       -> Is In Open Water: True
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
                   | Player carries an Essence of the Bees
                   | ----- Modifiers -----
-                  | Set Nbt:
-                  |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_sanctum_structure"}
-                  | Set Nbt:
-                  |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_yellow_sanctum_structure_description"}
-                  | Set Nbt:
-                  |   -> Tag: {Locked:1b}
+                  | Set Components:
+                  |   -> Components:
+                  |     -> the_bumblezone:honey_compass_base_data
+                  |       -> Type: 
+                  |       -> Custom Name: item.the_bumblezone.honey_compass_sanctum_structure
+                  |       -> Description: item.the_bumblezone.honey_compass_yellow_sanctum_structure_description
+                  |     -> the_bumblezone:honey_compass_state_data
+                  |       -> Locked: True
+                  |       -> Is Loading: False
+                  |       -> Is Failed: False
+                  |       -> Located Special Structure: False
                   | Honey Compass Locate Structure:
                   |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/yellow
                   |   -> Search Radius: 50
                   |   -> Skip Known Structures: False
-                ali:item the_bumblezone:honey_compass x1 {CustomDescription:"item.the_bumblezone.honey_compass_white_sanctum_structure_description",CustomName:"item.the_bumblezone.honey_compass_sanctum_structure",Locked:1b}
+                ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_white_sanctum_structure_description",customName:"item.the_bumblezone.honey_compass_sanctum_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
                   | Quality: 1
                   | Chance: 0%
                   |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 100% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck))) × max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + 7400%)
@@ -628,15 +684,21 @@ ali:loot_table
                   |   -> Target: This Entity
                   |   -> Predicate:
                   |     -> Entity Sub Predicate:
-                  |       -> Is In Open Water: True
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
                   | Player carries an Essence of the Bees
                   | ----- Modifiers -----
-                  | Set Nbt:
-                  |   -> Tag: {CustomName:"item.the_bumblezone.honey_compass_sanctum_structure"}
-                  | Set Nbt:
-                  |   -> Tag: {CustomDescription:"item.the_bumblezone.honey_compass_white_sanctum_structure_description"}
-                  | Set Nbt:
-                  |   -> Tag: {Locked:1b}
+                  | Set Components:
+                  |   -> Components:
+                  |     -> the_bumblezone:honey_compass_base_data
+                  |       -> Type: 
+                  |       -> Custom Name: item.the_bumblezone.honey_compass_sanctum_structure
+                  |       -> Description: item.the_bumblezone.honey_compass_white_sanctum_structure_description
+                  |     -> the_bumblezone:honey_compass_state_data
+                  |       -> Locked: True
+                  |       -> Is Loading: False
+                  |       -> Is Failed: False
+                  |       -> Located Special Structure: False
                   | Honey Compass Locate Structure:
                   |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/white
                   |   -> Search Radius: 50

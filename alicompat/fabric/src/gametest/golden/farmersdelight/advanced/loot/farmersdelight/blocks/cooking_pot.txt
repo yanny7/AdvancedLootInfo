@@ -8,6 +8,9 @@ ali:loot_table
       | ----- Predicates -----
       | Survives Explosion
       | ----- Modifiers -----
-      | Copy Name:
+      | Copy Components:
       |   -> Source: Block Entity
-      | Copy Meal
+      |   -> Include:
+      |     -> minecraft:custom_name
+      |     -> farmersdelight:meal
+      |     -> farmersdelight:container

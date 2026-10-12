@@ -21,7 +21,7 @@ ali:loot_table
       |   -> Predicates:
       |     -> Config Value Chance:
       |       -> Config: archaeology
-    ali:item minecraft:wooden_hoe x1 {Damage:0}
+    ali:item minecraft:wooden_hoe x1
       | Chance: 13.33%
       | Count: 1
       | ----- Modifiers -----
@@ -84,7 +84,7 @@ ali:loot_table
       |   -> Predicates:
       |     -> Config Value Chance:
       |       -> Config: archaeology
-    ali:item minecraft:iron_axe x1 {Damage:0}
+    ali:item minecraft:iron_axe x1
       | Chance: 6.67%
       | Count: 1
       | ----- Modifiers -----

@@ -126,7 +126,8 @@ ali:loot_table
                   |   -> Target: This Entity
                   |   -> Predicate:
                   |     -> Entity Sub Predicate:
-                  |       -> Is In Open Water: True
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
                 ali:item hybrid_aquatic:hybrid_crate x1
                   | Chance: 0.61%
                   |   -> Bad Luck: 0.54%
@@ -140,7 +141,8 @@ ali:loot_table
                   |   -> Target: This Entity
                   |   -> Predicate:
                   |     -> Entity Sub Predicate:
-                  |       -> Is In Open Water: True
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
                 ali:item hybrid_aquatic:oak_crate x1
                   | Chance: 0.61%
                   |   -> Bad Luck: 0.54%
@@ -154,7 +156,8 @@ ali:loot_table
                   |   -> Target: This Entity
                   |   -> Predicate:
                   |     -> Entity Sub Predicate:
-                  |       -> Is In Open Water: True
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
                 ali:item hybrid_aquatic:spruce_crate x1
                   | Chance: 0.61%
                   |   -> Bad Luck: 0.54%
@@ -168,7 +171,8 @@ ali:loot_table
                   |   -> Target: This Entity
                   |   -> Predicate:
                   |     -> Entity Sub Predicate:
-                  |       -> Is In Open Water: True
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
                 ali:item hybrid_aquatic:birch_crate x1
                   | Chance: 0.61%
                   |   -> Bad Luck: 0.54%
@@ -182,7 +186,8 @@ ali:loot_table
                   |   -> Target: This Entity
                   |   -> Predicate:
                   |     -> Entity Sub Predicate:
-                  |       -> Is In Open Water: True
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
                 ali:item hybrid_aquatic:dark_oak_crate x1
                   | Chance: 0.61%
                   |   -> Bad Luck: 0.54%
@@ -196,7 +201,8 @@ ali:loot_table
                   |   -> Target: This Entity
                   |   -> Predicate:
                   |     -> Entity Sub Predicate:
-                  |       -> Is In Open Water: True
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
                 ali:item hybrid_aquatic:acacia_crate x1
                   | Chance: 0.61%
                   |   -> Bad Luck: 0.54%
@@ -210,7 +216,8 @@ ali:loot_table
                   |   -> Target: This Entity
                   |   -> Predicate:
                   |     -> Entity Sub Predicate:
-                  |       -> Is In Open Water: True
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
                 ali:item hybrid_aquatic:jungle_crate x1
                   | Chance: 0.61%
                   |   -> Bad Luck: 0.54%
@@ -224,7 +231,8 @@ ali:loot_table
                   |   -> Target: This Entity
                   |   -> Predicate:
                   |     -> Entity Sub Predicate:
-                  |       -> Is In Open Water: True
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
                 ali:item hybrid_aquatic:bamboo_crate x1
                   | Chance: 0.61%
                   |   -> Bad Luck: 0.54%
@@ -238,7 +246,8 @@ ali:loot_table
                   |   -> Target: This Entity
                   |   -> Predicate:
                   |     -> Entity Sub Predicate:
-                  |       -> Is In Open Water: True
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
                 ali:item hybrid_aquatic:mangrove_crate x1
                   | Chance: 0.61%
                   |   -> Bad Luck: 0.54%
@@ -252,7 +261,8 @@ ali:loot_table
                   |   -> Target: This Entity
                   |   -> Predicate:
                   |     -> Entity Sub Predicate:
-                  |       -> Is In Open Water: True
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
                 ali:item hybrid_aquatic:cherry_crate x1
                   | Chance: 0.61%
                   |   -> Bad Luck: 0.54%
@@ -266,7 +276,8 @@ ali:loot_table
                   |   -> Target: This Entity
                   |   -> Predicate:
                   |     -> Entity Sub Predicate:
-                  |       -> Is In Open Water: True
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
           ali:item minecraft:pufferfish x1
             | Chance: 5.82%
             |   -> Bad Luck: 5.98%
@@ -305,7 +316,7 @@ ali:loot_table
             |   -> Luck 3: 0.64%
             |   -> Luck 4: 0.32%
             | Count: 1
-          ali:item minecraft:leather_boots x1 {Damage:0}
+          ali:item minecraft:leather_boots x1
             | Chance: 0.91%
             |   -> Bad Luck: 1.08%
             |   -> Luck 1: 0.73%
@@ -333,7 +344,7 @@ ali:loot_table
             |   -> Luck 3: 0.37%
             |   -> Luck 4: 0.19%
             | Count: 1
-          ali:item minecraft:potion x1 {Potion:"minecraft:water"}
+          ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:water"}}
             | Chance: 0.91%
             |   -> Bad Luck: 1.08%
             |   -> Luck 1: 0.73%
@@ -377,16 +388,12 @@ ali:loot_table
             |   -> Luck 4: 0.19%
             | Count: 1
             | ----- Predicates -----
-            | Any Of:
-            |   -> Location Check:
-            |     -> Location:
-            |       -> Biome: Jungle
-            |   -> Location Check:
-            |     -> Location:
-            |       -> Biome: Sparse Jungle
-            |   -> Location Check:
-            |     -> Location:
-            |       -> Biome: Bamboo Jungle
+            | Location Check:
+            |   -> Location:
+            |     -> Biomes:
+            |       -> Jungle
+            |       -> Sparse Jungle
+            |       -> Bamboo Jungle
           ali:item minecraft:string x1
             | Chance: 0.45%
             |   -> Bad Luck: 0.54%
@@ -403,7 +410,7 @@ ali:loot_table
             |   -> Luck 3: 0.19%
             |   -> Luck 4: 0.09%
             | Count: 1
-          ali:item minecraft:fishing_rod x1 {Damage:0}
+          ali:item minecraft:fishing_rod x1
             | Chance: 0.18%
             |   -> Bad Luck: 0.22%
             |   -> Luck 1: 0.15%
@@ -450,7 +457,8 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
           ali:item minecraft:saddle x1
             | Chance: 0.83%
             |   -> Bad Luck: 0.5%
@@ -464,8 +472,9 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
-          ali:item minecraft:bow x1 {Damage:0}
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
+          ali:item minecraft:bow x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 0.83%
             |   -> Bad Luck: 0.5%
             |   -> Luck 1: 1.18%
@@ -478,15 +487,17 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
             | ----- Modifiers -----
             | Set Damage:
             |   -> Damage: 0% to 25%
             |   -> Add: False
             | Enchant With Levels:
             |   -> Levels: 30
-            |   -> Treasure: True
-          ali:item minecraft:fishing_rod x1 {Damage:0}
+            |   -> Options:
+            |     -> Tag: minecraft:on_random_loot
+          ali:item minecraft:fishing_rod x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 0.83%
             |   -> Bad Luck: 0.5%
             |   -> Luck 1: 1.18%
@@ -499,14 +510,16 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
             | ----- Modifiers -----
             | Set Damage:
             |   -> Damage: 0% to 25%
             |   -> Add: False
             | Enchant With Levels:
             |   -> Levels: 30
-            |   -> Treasure: True
+            |   -> Options:
+            |     -> Tag: minecraft:on_random_loot
           ali:item minecraft:enchanted_book x1
             | Chance: 0.83%
             |   -> Bad Luck: 0.5%
@@ -520,11 +533,13 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
             | ----- Modifiers -----
             | Enchant With Levels:
             |   -> Levels: 30
-            |   -> Treasure: True
+            |   -> Options:
+            |     -> Tag: minecraft:on_random_loot
           ali:item minecraft:nautilus_shell x1
             | Chance: 0.83%
             |   -> Bad Luck: 0.5%
@@ -538,4 +553,5 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True

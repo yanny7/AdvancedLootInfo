@@ -36,6 +36,6 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1 to 3
       |   -> Add: False
-    ali:item aether:skyroot_pickaxe x1 {Damage:0}
+    ali:item aether:skyroot_pickaxe x1
       | Chance: 4.35%
       | Count: 1

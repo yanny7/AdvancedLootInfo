@@ -15,7 +15,8 @@ ali:entity_loot_table
       | Set Count:
       |   -> Count: 1
       |   -> Add: False
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: U[0; 1)
     ali:item aether:sentry_stone x1-4
       | Chance: 20%
@@ -29,5 +30,6 @@ ali:entity_loot_table
       | Set Count:
       |   -> Count: 1
       |   -> Add: False
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: U[0; 1)

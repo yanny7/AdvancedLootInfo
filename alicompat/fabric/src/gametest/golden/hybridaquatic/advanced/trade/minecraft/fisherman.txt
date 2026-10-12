@@ -107,6 +107,83 @@ ali:trade
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item hybrid_aquatic:raw_fish_steak x2
+    ali:items_to_items
+      | Uses: 4
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item hybrid_aquatic:coconut_crab_claw x1
+    ali:items_to_items
+      | Uses: 4
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item hybrid_aquatic:dungeness_crab_claw x1
+    ali:items_to_items
+      | Uses: 4
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item hybrid_aquatic:flower_crab_claw x1
+    ali:items_to_items
+      | Uses: 4
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item hybrid_aquatic:fiddler_crab_claw x1
+    ali:items_to_items
+      | Uses: 4
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item hybrid_aquatic:ghost_crab_claw x1
+    ali:items_to_items
+      | Uses: 4
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item hybrid_aquatic:lightfoot_crab_claw x1
+    ali:items_to_items
+      | Uses: 4
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item hybrid_aquatic:yeti_crab_claw x1
+    ali:items_to_items
+      | Uses: 4
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item hybrid_aquatic:vampire_crab_claw x1
+    ali:items_to_items
+      | Uses: 4
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item hybrid_aquatic:spider_crab_claw x1
+    ali:items_to_items
+      | Uses: 4
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item hybrid_aquatic:raw_fish_meat x4
+    ali:items_to_items
+      | Uses: 4
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item hybrid_aquatic:raw_fish_steak x2
   ali:trade_level
     | Level: 2
     | Randomly Selects 2 Of These Trades
@@ -137,21 +214,42 @@ ali:trade
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x3
       ali:item minecraft:air x0
-      ali:item hybrid_aquatic:barbed_hook x1 {Damage:0}
+      ali:item hybrid_aquatic:barbed_hook x1
     ali:items_to_items
       | Uses: 1
       | XP: 10
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x3
       ali:item minecraft:air x0
-      ali:item hybrid_aquatic:glowing_hook x1 {Damage:0}
+      ali:item hybrid_aquatic:glowing_hook x1
     ali:items_to_items
       | Uses: 1
       | XP: 10
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x3
       ali:item minecraft:air x0
-      ali:item hybrid_aquatic:magnetic_hook x1 {Damage:0}
+      ali:item hybrid_aquatic:magnetic_hook x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 10
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item hybrid_aquatic:barbed_hook x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 10
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item hybrid_aquatic:glowing_hook x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 10
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item hybrid_aquatic:magnetic_hook x1
   ali:trade_level
     | Level: 3
     | Randomly Selects 2 Of These Trades
@@ -168,10 +266,24 @@ ali:trade
       | Price Multiplier: 0.2
       ali:item minecraft:emerald x8-22
       ali:item minecraft:air x0
-      ali:item minecraft:fishing_rod x1 {Damage:0}
+      ali:item minecraft:fishing_rod x1
         | Enchant With Levels:
         |   -> Levels: 5 to 19
         |   -> Treasure: False
+    ali:items_to_items
+      | Uses: 6
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item hybrid_aquatic:pearl x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x2
+    ali:items_to_items
+      | Uses: 3
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item hybrid_aquatic:black_pearl x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x5
     ali:items_to_items
       | Uses: 6
       | XP: 15

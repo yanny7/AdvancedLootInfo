@@ -18,12 +18,13 @@ ali:loot_table
     ali:item minecraft:raw_copper x1
       | Chance: 4.95%
       | Count: 1
-    ali:item minecraft:book x1 {Enchantments:[{id:"the_bumblezone:hive_lifeline",lvl:1s}]}
+    ali:item minecraft:book x1 {"minecraft:enchantments":{levels:{"the_bumblezone:hive_lifeline":1}}}
       | Chance: 4.95%
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
-      |   -> Hive Lifeline
+      |   -> Enchantment: Hive Lifeline
+      |   -> Only Compatible: True
     ali:item minecraft:diamond x1
       | Chance: 3.96%
       | Count: 1
@@ -74,42 +75,43 @@ ali:loot_table
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
+      |   -> Only Compatible: True
     ali:item minecraft:disc_fragment_5 x1
       | Chance: 1.98%
       | Count: 1
-    ali:item minecraft:brush x1 {Damage:0}
+    ali:item minecraft:brush x1
       | Chance: 1.98%
       | Count: 1
-    ali:item minecraft:shears x1 {Damage:0}
+    ali:item minecraft:shears x1
       | Chance: 1.98%
       | Count: 1
     ali:item minecraft:name_tag x1
       | Chance: 1.98%
       | Count: 1
-    ali:item minecraft:potion x1 {Potion:"minecraft:strong_strength"}
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:strong_strength"}}
       | Chance: 1.98%
       | Count: 1
       | ----- Modifiers -----
-      | Set Nbt:
-      |   -> Tag: {Potion:"minecraft:strong_strength"}
-    ali:item minecraft:potion x1 {Potion:"minecraft:long_poison"}
+      | Set Potion:
+      |   -> Potion: Potion of Strength
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:long_poison"}}
       | Chance: 1.98%
       | Count: 1
       | ----- Modifiers -----
-      | Set Nbt:
-      |   -> Tag: {Potion:"minecraft:long_poison"}
-    ali:item minecraft:potion x1 {Potion:"minecraft:regeneration"}
+      | Set Potion:
+      |   -> Potion: Potion of Poison
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:regeneration"}}
       | Chance: 1.98%
       | Count: 1
       | ----- Modifiers -----
-      | Set Nbt:
-      |   -> Tag: {Potion:"minecraft:regeneration"}
-    ali:item minecraft:potion x1 {Potion:"minecraft:awkward"}
+      | Set Potion:
+      |   -> Potion: Potion of Regeneration
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:awkward"}}
       | Chance: 1.98%
       | Count: 1
       | ----- Modifiers -----
-      | Set Nbt:
-      |   -> Tag: {Potion:"minecraft:awkward"}
+      | Set Potion:
+      |   -> Potion: Awkward Potion
     ali:item minecraft:brown_candle x1
       | Chance: 0.99%
       | Count: 1

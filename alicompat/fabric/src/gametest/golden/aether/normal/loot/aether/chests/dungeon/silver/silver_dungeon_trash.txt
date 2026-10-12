@@ -33,7 +33,7 @@ ali:loot_table
     ali:item aether:light_angelic_stone x1
       | Chance: 3.85%
       | Count: 1
-    ali:item aether:holystone_sword x1 {Damage:0}
+    ali:item aether:holystone_sword x1
       | Chance: 3.85%
       | Count: 1
     ali:item minecraft:name_tag x1

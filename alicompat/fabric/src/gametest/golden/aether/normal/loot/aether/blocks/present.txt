@@ -9,42 +9,46 @@ ali:loot_table
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
       | ----- Modifiers -----
-      | Spawn TNT
+      | Spawn TNT:
     ali:empty
       | Chance: 25%
       | Count: 1
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
       | ----- Modifiers -----
-      | Spawn XP
+      | Spawn XP:
     ali:item aether:gingerbread_man x5-6
       | Chance: 22.22%
       | Count: 5 to 6
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
       | ----- Modifiers -----
       | Explosion Decay
-    ali:item aether:candy_cane_sword x1 {Damage:0}
+    ali:item aether:candy_cane_sword x1
       | Chance: 2.78%
       | Count: 1
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
       | ----- Modifiers -----
       | Explosion Decay
   ali:loot_pool
@@ -54,6 +58,7 @@ ali:loot_table
       | Count: 1
       | ----- Predicates -----
       | Match Tool:
-      |   -> Enchantments:
-      |     -> Enchantment: Silk Touch
-      |     -> Level: ≥ 1
+      |   -> Item Predicates:
+      |     -> Enchantments:
+      |       -> Enchantment: Silk Touch
+      |       -> Level: ≥ 1

@@ -112,7 +112,8 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
           ali:item hybrid_aquatic:hybrid_crate x1
             | Chance: 0.72%
             |   -> Bad Luck: 0.64%
@@ -126,7 +127,8 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
           ali:item hybrid_aquatic:oak_crate x1
             | Chance: 0.72%
             |   -> Bad Luck: 0.64%
@@ -140,7 +142,8 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
           ali:item hybrid_aquatic:spruce_crate x1
             | Chance: 0.72%
             |   -> Bad Luck: 0.64%
@@ -154,7 +157,8 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
           ali:item hybrid_aquatic:birch_crate x1
             | Chance: 0.72%
             |   -> Bad Luck: 0.64%
@@ -168,7 +172,8 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
           ali:item hybrid_aquatic:dark_oak_crate x1
             | Chance: 0.72%
             |   -> Bad Luck: 0.64%
@@ -182,7 +187,8 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
           ali:item hybrid_aquatic:acacia_crate x1
             | Chance: 0.72%
             |   -> Bad Luck: 0.64%
@@ -196,7 +202,8 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
           ali:item hybrid_aquatic:jungle_crate x1
             | Chance: 0.72%
             |   -> Bad Luck: 0.64%
@@ -210,7 +217,8 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
           ali:item hybrid_aquatic:bamboo_crate x1
             | Chance: 0.72%
             |   -> Bad Luck: 0.64%
@@ -224,7 +232,8 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
           ali:item hybrid_aquatic:mangrove_crate x1
             | Chance: 0.72%
             |   -> Bad Luck: 0.64%
@@ -238,7 +247,8 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
           ali:item hybrid_aquatic:cherry_crate x1
             | Chance: 0.72%
             |   -> Bad Luck: 0.64%
@@ -252,7 +262,8 @@ ali:loot_table
             |   -> Target: This Entity
             |   -> Predicate:
             |     -> Entity Sub Predicate:
-            |       -> Is In Open Water: True
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
     ali:item minecraft:pufferfish x1
       | Chance: 6.84%
       |   -> Bad Luck: 7.03%

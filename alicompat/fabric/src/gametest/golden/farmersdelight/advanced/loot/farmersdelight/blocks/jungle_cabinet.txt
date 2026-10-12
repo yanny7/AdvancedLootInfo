@@ -8,5 +8,6 @@ ali:loot_table
       | ----- Predicates -----
       | Survives Explosion
       | ----- Modifiers -----
-      | Copy Name:
+      | Copy Components:
       |   -> Source: Block Entity
+      |   -> Include: minecraft:custom_name

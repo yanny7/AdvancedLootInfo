@@ -36,8 +36,8 @@ ali:loot_table
         | Count: 5
         | ----- Predicates -----
         | Inverted:
-        |   -> Match Tool:
-        |     -> Tag: Shears
+        |   -> Can Item Perform Ability:
+        |     -> Shears Harvest
         | Block State Property:
         |   -> Block: Brown Mushroom Colony
         |   -> Properties:
@@ -47,8 +47,8 @@ ali:loot_table
       ali:item farmersdelight:brown_mushroom_colony x1
         | Count: 1
         | ----- Predicates -----
-        | Match Tool:
-        |   -> Tag: Shears
+        | Can Item Perform Ability:
+        |   -> Shears Harvest
         | Block State Property:
         |   -> Block: Brown Mushroom Colony
         |   -> Properties:

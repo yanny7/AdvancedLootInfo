@@ -3,28 +3,28 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item aether:gravitite_helmet x1 {Damage:0}
+    ali:item aether:gravitite_helmet x1
       | Chance: 13.33%
       | Count: 1
-    ali:item aether:gravitite_chestplate x1 {Damage:0}
+    ali:item aether:gravitite_chestplate x1
       | Chance: 13.33%
       | Count: 1
-    ali:item aether:gravitite_leggings x1 {Damage:0}
+    ali:item aether:gravitite_leggings x1
       | Chance: 13.33%
       | Count: 1
-    ali:item aether:gravitite_boots x1 {Damage:0}
+    ali:item aether:gravitite_boots x1
       | Chance: 13.33%
       | Count: 1
-    ali:item aether:gravitite_gloves x1 {Damage:0}
+    ali:item aether:gravitite_gloves x1
       | Chance: 13.33%
       | Count: 1
-    ali:item aether:gravitite_sword x1 {Damage:0}
+    ali:item aether:gravitite_sword x1
       | Chance: 10%
       | Count: 1
-    ali:item aether:gravitite_axe x1 {Damage:0}
+    ali:item aether:gravitite_axe x1
       | Chance: 10%
       | Count: 1
-    ali:item aether:gravitite_pickaxe x1 {Damage:0}
+    ali:item aether:gravitite_pickaxe x1
       | Chance: 10%
       | Count: 1
     ali:item aether:gravitite_ore x1

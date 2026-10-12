@@ -24,7 +24,8 @@ ali:trade
         | Count: 1
         | ----- Modifiers -----
         | Enchant Randomly:
-        |   -> Trade Enchantments: True
+        |   -> Min Level: 0
+        |   -> Max Level: 2147483647
   ali:trade_level
     | Level: 2
     | Randomly Selects 1 Of These Trades
@@ -35,7 +36,7 @@ ali:trade
       ali:item minecraft:emerald x3
         | Count: 3
       ali:item minecraft:air x0
-      ali:item minecraft:leather_chestplate x1 {Damage:0}
+      ali:item minecraft:leather_chestplate x1
         | Count: 1
         | ----- Modifiers -----
         | Set Dye:
@@ -50,11 +51,12 @@ ali:trade
       ali:item minecraft:emerald x1
         | Count: 1
       ali:item minecraft:air x0
-      ali:item minecraft:iron_sword x1 {Damage:0}
+      ali:item minecraft:iron_sword x1
         | Count: 1
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Include:
         |     -> Sharpness
         |     -> Smite
-        |   -> Trade Enchantments: False
+        |   -> Min Level: 0
+        |   -> Max Level: 2147483647

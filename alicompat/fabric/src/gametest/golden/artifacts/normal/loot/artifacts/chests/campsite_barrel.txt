@@ -197,12 +197,12 @@ ali:loot_table
           ali:item minecraft:cookie x2-12
             | Chance: 0.58%
             | Count: 2 to 12
-          ali:item minecraft:mushroom_stew x1
+          ali:item minecraft:mushroom_stew x1-4
             | Chance: 0.58%
-            | Count: 1
-          ali:item minecraft:rabbit_stew x1
+            | Count: 1 to 4
+          ali:item minecraft:rabbit_stew x1-4
             | Chance: 0.58%
-            | Count: 1
+            | Count: 1 to 4
     ali:reference
       | Selects all entries
       | Chance: 5%

@@ -21,7 +21,7 @@ ali:loot_table
     ali:item minecraft:plenty_pottery_sherd x1
       | Chance: 6.67%
       | Count: 1
-    ali:item minecraft:iron_axe x1 {Damage:0}
+    ali:item minecraft:iron_axe x1
       | Chance: 6.67%
       | Count: 1
       | ----- Modifiers -----
@@ -34,7 +34,7 @@ ali:loot_table
     ali:item minecraft:rabbit_foot x1
       | Chance: 6.67%
       | Count: 1
-    ali:item minecraft:stone_sword x1 {Damage:0}
+    ali:item minecraft:stone_sword x1
       | Chance: 6.67%
       | Count: 1
       | ----- Modifiers -----

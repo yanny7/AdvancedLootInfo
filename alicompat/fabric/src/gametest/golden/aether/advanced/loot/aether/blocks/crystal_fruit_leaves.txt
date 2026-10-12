@@ -10,17 +10,19 @@ ali:loot_table
         | ----- Predicates -----
         | Any Of:
         |   -> Match Tool:
-        |     -> Tag: Shears
+        |     -> Items:
+        |       -> Tag: Shears
         |   -> Match Tool:
-        |     -> Enchantments:
-        |       -> Enchantment: Silk Touch
-        |       -> Level: ≥ 1
+        |     -> Item Predicates:
+        |       -> Enchantments:
+        |         -> Enchantment: Silk Touch
+        |         -> Level: ≥ 1
         | ----- Modifiers -----
-        | Double Drops
+        | Double Drops:
       ali:item aether:white_apple x1
         | Count: 1
         | ----- Modifiers -----
-        | Double Drops
+        | Double Drops:
         | Explosion Decay
   ali:loot_pool
     | Selects random entry
@@ -38,9 +40,10 @@ ali:loot_table
       |     -> Match Tool:
       |       -> Item: Shears
       |     -> Match Tool:
-      |       -> Enchantments:
-      |         -> Enchantment: Silk Touch
-      |         -> Level: ≥ 1
+      |       -> Item Predicates:
+      |         -> Enchantments:
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
       | Table Bonus:
       |   -> Enchantment: Fortune
       |   -> Values: 2%
@@ -49,7 +52,7 @@ ali:loot_table
       |     -> Fortune II: 2.5%
       |     -> Fortune III: 3.33%
       | ----- Modifiers -----
-      | Double Drops
+      | Double Drops:
       | Set Count:
       |   -> Count: 1 to 2
       |   -> Add: False

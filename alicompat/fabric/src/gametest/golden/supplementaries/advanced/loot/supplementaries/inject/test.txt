@@ -8,7 +8,7 @@ ali:loot_table
       | ----- Modifiers -----
       | Exploration Map:
       |   -> Destination: minecraft:village
-      |   -> Map Decoration: Woodland Mansion
+      |   -> Map Decoration: minecraft:red_x
       |   -> Zoom: 2
       |   -> Search Radius: 50
       |   -> Skip Known Structures: True
