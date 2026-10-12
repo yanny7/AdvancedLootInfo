@@ -17,10 +17,10 @@ ali:entity_loot_table
       | Count: 1
       | ----- Predicates -----
       | Random Chance:
-      |   -> Probability: 0.05
+      |   -> Chance: 0.05
   ali:item minecraft:diamond x1
     | Chance: 1%
     | Count: 1
     | ----- Predicates -----
     | Random Chance:
-    |   -> Probability: 0.01
+    |   -> Chance: 0.01

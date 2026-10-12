@@ -42,7 +42,7 @@ ali:loot_table
         |   -> Offset: [X: 0, Y: 1, Z: 0]
         | Survives Explosion
         | Random Chance:
-        |   -> Probability: 0.125
+        |   -> Chance: 0.13
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -85,10 +85,10 @@ ali:loot_table
         |   -> Offset: [X: 0, Y: -1, Z: 0]
         | Survives Explosion
         | Random Chance:
-        |   -> Probability: 0.125
+        |   -> Chance: 0.13
   ali:item minecraft:diamond x1
     | Chance: 1%
     | Count: 1
     | ----- Predicates -----
     | Random Chance:
-    |   -> Probability: 0.01
+    |   -> Chance: 0.01

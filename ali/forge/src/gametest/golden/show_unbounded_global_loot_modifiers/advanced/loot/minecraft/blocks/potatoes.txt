@@ -41,7 +41,7 @@ ali:loot_table
       |   -> Properties:
       |     -> age: 7
       | Random Chance:
-      |   -> Probability: 0.02
+      |   -> Chance: 0.02
       | ----- Modifiers -----
       | Explosion Decay
   ali:item minecraft:diamond x1
@@ -49,4 +49,4 @@ ali:loot_table
     | Count: 1
     | ----- Predicates -----
     | Random Chance:
-    |   -> Probability: 0.01
+    |   -> Chance: 0.01

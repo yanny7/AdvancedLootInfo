@@ -10,7 +10,8 @@ ali:entity_loot_table
       |   -> Looting III: 0 to 4  ~2 (33%)
       |   [chart 0..1 0-1 base=true modes=[true, false, false, false, false] heights=1.0000,0.5000,0.0000,0.0000,0.0000 | 0..2 0-2 base=false modes=[false, true, false, false, false] heights=0.5000,0.7500,0.2500,0.0000,0.0000 | 0..3 0-3 base=false modes=[false, true, false, false, false] heights=0.2500,0.6250,0.5000,0.1250,0.0000 | 0..4 0-4 base=false modes=[false, false, true, false, false] heights=0.1667,0.4167,0.5000,0.3333,0.0833]
       | ----- Modifiers -----
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: 0 to 1
   ali:loot_pool
     | Selects random entry
@@ -22,7 +23,8 @@ ali:entity_loot_table
       |   -> Looting III: 0 to 5  ~2 to 3 (28%)
       |   [chart 0..2 0-2 base=true modes=[false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,0.0000,0.0000,0.0000 | 0..3 0-3 base=false modes=[false, true, true, false, false, false] heights=0.5000,1.0000,1.0000,0.5000,0.0000,0.0000 | 0..4 0-4 base=false modes=[false, false, true, false, false, false] heights=0.2500,0.7500,1.0000,0.7500,0.2500,0.0000 | 0..5 0-5 base=false modes=[false, false, true, true, false, false] heights=0.1667,0.5000,0.8333,0.8333,0.5000,0.1667]
       | ----- Modifiers -----
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: 0 to 1
   ali:loot_pool
     | Selects random entry
@@ -41,7 +43,7 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:stone_sword x1 {Damage:0}
+    ali:item minecraft:stone_sword x1
       | Chance: 8.5%
       |   -> Looting I: 9.5%
       |   -> Looting II: 10.5%
@@ -55,6 +57,8 @@ ali:entity_loot_table
       |       -> Main Hand:
       |         -> Item: Stone Sword
       | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Only Compatible: True
       | Set Damage:
       |   -> Damage: 0% to 100%
       |   -> Add: False

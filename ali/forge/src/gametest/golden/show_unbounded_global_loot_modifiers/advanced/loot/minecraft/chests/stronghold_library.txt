@@ -23,7 +23,8 @@ ali:loot_table
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 30
-      |   -> Treasure: True
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
     ali:item minecraft:map x1
       | Chance: 1.92%
       | Count: 1
@@ -40,4 +41,4 @@ ali:loot_table
     | Count: 1
     | ----- Predicates -----
     | Random Chance:
-    |   -> Probability: 0.01
+    |   -> Chance: 0.01

@@ -12,7 +12,7 @@ ali:loot_table
     ali:item minecraft:acacia_sapling x1-2
       | Chance: 21.74%
       | Count: 1 to 2
-    ali:item minecraft:grass x1
+    ali:item minecraft:short_grass x1
       | Chance: 10.87%
       | Count: 1
     ali:item minecraft:tall_grass x1

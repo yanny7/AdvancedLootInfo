@@ -24,7 +24,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1 to 2
       |   -> Add: False
-    ali:item minecraft:grass x1
+    ali:item minecraft:short_grass x1
       | Chance: 10.87%
       | Count: 1
     ali:item minecraft:tall_grass x1
@@ -62,4 +62,4 @@ ali:loot_table
     | Count: 1
     | ----- Predicates -----
     | Random Chance:
-    |   -> Probability: 0.01
+    |   -> Chance: 0.01

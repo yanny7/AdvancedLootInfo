@@ -14,7 +14,8 @@ ali:entity_loot_table
       | Set Count:
       |   -> Count: 0 to 1
       |   -> Add: False
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: U[0; 1)
   ali:loot_pool
     | Selects random entry
@@ -32,31 +33,45 @@ ali:entity_loot_table
       |   -> Add: False
       | Furnace Smelt
       |   -> Predicates:
-      |     -> Entity Properties:
-      |       -> Target: This Entity
-      |       -> Predicate:
-      |         -> Entity Flags:
-      |           -> Is On Fire: True
-      | Looting Enchant:
+      |     -> Any Of:
+      |       -> Entity Properties:
+      |         -> Target: This Entity
+      |         -> Predicate:
+      |           -> Entity Flags:
+      |             -> Is On Fire: True
+      |       -> Entity Properties:
+      |         -> Target: Direct Attacker
+      |         -> Predicate:
+      |           -> Entity Equipment:
+      |             -> Main Hand:
+      |               -> Item Predicates:
+      |                 -> Enchantments:
+      |                   -> Enchantments:
+      |                     -> Tag: minecraft:smelts_loot
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: U[0; 1)
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
     ali:item minecraft:rabbit_foot x1
       | Chance: 10%
-      |   -> Looting LVL: 10% + LVL × 3%
+      |   -> Looting LVL: [10%][LVL] | 13% + 3% × (LVL − 100%)
       |   -> Looting I: 13%
       |   -> Looting II: 16%
       |   -> Looting III: 19%
       | Count: 1
       | ----- Predicates -----
       | Killed by player
-      | Random Chance With Looting:
-      |   -> Percent: 0.1
-      |   -> Multiplier: 0.03
+      | Random Chance With Enchanted Bonus:
+      |   -> Chance: 0.1
+      |     -> Looting LVL: [0.1][LVL] | 0.13 + 0.03 × (LVL − 1)
+      |     -> Looting I: 0.13
+      |     -> Looting II: 0.16
+      |     -> Looting III: 0.19
   ali:item minecraft:diamond x1
     | Chance: 1%
     | Count: 1
     | ----- Predicates -----
     | Random Chance:
-    |   -> Probability: 0.01
+    |   -> Chance: 0.01

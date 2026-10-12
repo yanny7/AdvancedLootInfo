@@ -12,11 +12,11 @@ ali:entity_loot_table
         | Count: 1
         | ----- Predicates -----
         | Entity Properties:
-        |   -> Target: Killer
+        |   -> Target: Attacker
         |   -> Predicate:
         |     -> Entity Type: Creeper
         |     -> Nbt: {powered:1b}
-      ali:item minecraft:golden_sword x1 {Damage:0}
+      ali:item minecraft:golden_sword x1
         | Chance: 8.5%
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
@@ -30,10 +30,12 @@ ali:entity_loot_table
         |       -> Main Hand:
         |         -> Item: Golden Sword
         | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
-      ali:item minecraft:crossbow x1 {Damage:0}
+      ali:item minecraft:crossbow x1
         | Chance: 8.5%
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
@@ -47,10 +49,12 @@ ali:entity_loot_table
         |       -> Main Hand:
         |         -> Item: Crossbow
         | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
-      ali:item minecraft:golden_helmet x1 {Damage:0}
+      ali:item minecraft:golden_helmet x1
         | Chance: 8.5%
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
@@ -64,10 +68,12 @@ ali:entity_loot_table
         |       -> Head:
         |         -> Item: Golden Helmet
         | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
-      ali:item minecraft:golden_chestplate x1 {Damage:0}
+      ali:item minecraft:golden_chestplate x1
         | Chance: 8.5%
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
@@ -81,10 +87,12 @@ ali:entity_loot_table
         |       -> Chest:
         |         -> Item: Golden Chestplate
         | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
-      ali:item minecraft:golden_leggings x1 {Damage:0}
+      ali:item minecraft:golden_leggings x1
         | Chance: 8.5%
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
@@ -98,10 +106,12 @@ ali:entity_loot_table
         |       -> Legs:
         |         -> Item: Golden Leggings
         | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
-      ali:item minecraft:golden_boots x1 {Damage:0}
+      ali:item minecraft:golden_boots x1
         | Chance: 8.5%
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
@@ -115,6 +125,8 @@ ali:entity_loot_table
         |       -> Feet:
         |         -> Item: Golden Boots
         | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False

@@ -9,7 +9,7 @@ ali:loot_table
     ali:item minecraft:wheat x1
       | Chance: 4.44%
       | Count: 1
-    ali:item minecraft:wooden_hoe x1 {Damage:0}
+    ali:item minecraft:wooden_hoe x1
       | Chance: 4.44%
       | Count: 1
     ali:item minecraft:clay x1

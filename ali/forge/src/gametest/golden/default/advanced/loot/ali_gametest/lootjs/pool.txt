@@ -5,14 +5,3 @@ ali:loot_table
     | Rolls: 1
     ali:item minecraft:cod x1
       | Count: 1
-  lootjs:grouped_loot
-    | Selects random entry
-    | Rolls: 1 to 3
-    lootjs:add_loot
-      | Selects all entries
-      lootjs:item_stack minecraft:diamond x1
-        | Chance: 30%
-        | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
-        |   -> Probability: 0.3

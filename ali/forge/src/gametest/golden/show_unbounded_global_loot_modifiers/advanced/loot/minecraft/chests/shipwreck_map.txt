@@ -3,17 +3,18 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:map x1 {display:{Name:'{"translate":"filled_map.buried_treasure"}'}}
+    ali:item minecraft:map x1 {"minecraft:item_name":'{"translate":"filled_map.buried_treasure"}'}
       | Count: 1
       | ----- Modifiers -----
       | Exploration Map:
       |   -> Destination: minecraft:on_treasure_maps
-      |   -> Map Decoration: Red X
+      |   -> Map Decoration: minecraft:red_x
       |   -> Zoom: 1
       |   -> Search Radius: 50
       |   -> Skip Known Structures: False
       | Set Name:
       |   -> Name: Buried Treasure Map
+      |   -> Target: Item Name
   ali:loot_pool
     | Selects random entry
     | Rolls: 3
@@ -65,4 +66,4 @@ ali:loot_table
     | Count: 1
     | ----- Predicates -----
     | Random Chance:
-    |   -> Probability: 0.01
+    |   -> Chance: 0.01

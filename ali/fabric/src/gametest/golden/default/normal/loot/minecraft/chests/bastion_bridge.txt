@@ -8,7 +8,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 2
-    ali:item minecraft:crossbow x1 {Damage:0}
+    ali:item minecraft:crossbow x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 7.69%
       | Count: 1
       | ----- Modifiers -----
@@ -16,6 +16,9 @@ ali:loot_table
       |   -> Damage: 10% to 50%
       |   -> Add: False
       | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
     ali:item minecraft:spectral_arrow x10-28
       | Chance: 7.69%
       | Count: 10 to 28
@@ -34,34 +37,49 @@ ali:loot_table
     ali:item minecraft:iron_ingot x4-9
       | Chance: 7.69%
       | Count: 4 to 9
-    ali:item minecraft:golden_sword x1 {Damage:0}
+    ali:item minecraft:golden_sword x1
       | Chance: 7.69%
       | Count: 1
-    ali:item minecraft:golden_chestplate x1 {Damage:0}
-      | Chance: 7.69%
-      | Count: 1
-      | ----- Modifiers -----
-      | Enchant Randomly:
-    ali:item minecraft:golden_helmet x1 {Damage:0}
+    ali:item minecraft:golden_chestplate x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 7.69%
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
-    ali:item minecraft:golden_leggings x1 {Damage:0}
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:golden_helmet x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 7.69%
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
-    ali:item minecraft:golden_boots x1 {Damage:0}
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:golden_leggings x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 7.69%
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
-    ali:item minecraft:golden_axe x1 {Damage:0}
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:golden_boots x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 7.69%
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:golden_axe x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 7.69%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
   ali:loot_pool
     | Selects random entry
     | Rolls: 2 to 4

@@ -14,7 +14,9 @@ import com.yanny.ali.network.LootDataChunkMessage;
 import com.yanny.ali.network.LootDataReader;
 import com.yanny.ali.plugin.client.TooltipUtils;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -54,8 +56,8 @@ public class LootDataCapture {
         Map<String, String> files = new TreeMap<>();
 
         pages.forEach((key, node) -> {
-            files.put("normal/" + key, renderer(false, config).render(node));
-            files.put("advanced/" + key, renderer(true, config).render(node));
+            files.put("normal/" + key, renderer(false, config, registryAccess).render(node));
+            files.put("advanced/" + key, renderer(true, config, registryAccess).render(node));
         });
 
         return files;
@@ -77,26 +79,27 @@ public class LootDataCapture {
     }
 
     @NotNull
-    private static GoldenRenderer renderer(boolean isAdvanced, AliConfig config) {
+    private static GoldenRenderer renderer(boolean isAdvanced, AliConfig config, RegistryAccess registryAccess) {
         return new GoldenRenderer(isAdvanced, new NumberOptions(isAdvanced, config.showCharts, Locale.ROOT)) {
             @Override
             protected String describe(ICoreDataNode<?> node) {
-                return node instanceof IItemNode itemNode ? itemToString(itemNode) : null;
+                return node instanceof IItemNode itemNode ? itemToString(itemNode, registryAccess) : null;
             }
         };
     }
 
     @NotNull
-    private static String itemToString(IItemNode node) {
+    private static String itemToString(IItemNode node, RegistryAccess registryAccess) {
         String count = " x" + NumberFormatter.slot(TooltipUtils.getSlotCount(node));
 
-        return node.getItem().map((stack) -> stackToString(stack, count), (tag) -> "#" + tag.location() + count);
+        return node.getItem().map((stack) -> stackToString(stack, count, registryAccess), (tag) -> "#" + tag.location() + count);
     }
 
     @NotNull
-    private static String stackToString(ItemStack stack, String count) {
+    private static String stackToString(ItemStack stack, String count, RegistryAccess registryAccess) {
         String text = BuiltInRegistries.ITEM.getKey(stack.getItem()) + (stack.isEmpty() ? " x0" : count);
+        DataComponentPatch patch = stack.getComponentsPatch();
 
-        return stack.hasTag() ? text + " " + stack.getTag() : text;
+        return patch.isEmpty() ? text : text + " " + DataComponentPatch.CODEC.encodeStart(registryAccess.createSerializationContext(NbtOps.INSTANCE), patch).getOrThrow();
     }
 }

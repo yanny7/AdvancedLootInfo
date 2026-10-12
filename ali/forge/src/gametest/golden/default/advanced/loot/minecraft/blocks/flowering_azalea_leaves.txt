@@ -12,9 +12,10 @@ ali:loot_table
         |   -> Can Tool Perform Action:
         |     -> shears_dig
         |   -> Match Tool:
-        |     -> Enchantments:
-        |       -> Enchantment: Silk Touch
-        |       -> Level: ≥ 1
+        |     -> Item Predicates:
+        |       -> Enchantments:
+        |         -> Enchantment: Silk Touch
+        |         -> Level: ≥ 1
       ali:item minecraft:flowering_azalea x1
         | Chance: 5%
         |   -> Fortune LVL: [5%; 6.25%; 8.33%; 10%][min(LVL; 3)]
@@ -47,9 +48,10 @@ ali:loot_table
       |     -> Can Tool Perform Action:
       |       -> shears_dig
       |     -> Match Tool:
-      |       -> Enchantments:
-      |         -> Enchantment: Silk Touch
-      |         -> Level: ≥ 1
+      |       -> Item Predicates:
+      |         -> Enchantments:
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
       | Table Bonus:
       |   -> Enchantment: Fortune
       |   -> Values: 2%

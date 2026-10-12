@@ -20,13 +20,14 @@ ali:loot_table
       |   -> Add: True
       |   -> Predicates:
       |     -> Random Chance:
-      |       -> Probability: 0.5
+      |       -> Chance: 0.5
       | Set Count:
       |   -> Count: 5
       |   -> Add: True
       |   -> Predicates:
       |     -> Killed by player
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: U[0; 1)
       |   -> Limit: 5
       | Limit Count:
@@ -43,7 +44,8 @@ ali:loot_table
       | Set Count:
       |   -> Count: −1
       |   -> Add: True
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: U[0; 2)
     ali:item minecraft:raw_iron x1-4
       | Chance: 20%

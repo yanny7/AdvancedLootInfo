@@ -72,7 +72,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 5 to 12
       |   -> Add: False
-    ali:item minecraft:potion x1 {Potion:"minecraft:water"}
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:water"}}
       | Chance: 2.18%
       | Count: 1
       | ----- Modifiers -----
@@ -92,19 +92,20 @@ ali:loot_table
       | Set Count:
       |   -> Count: 2 to 4
       |   -> Add: False
-    ali:item minecraft:iron_boots x1 {Damage:0}
+    ali:item minecraft:iron_boots x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 1.74%
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
-      |   -> Soul Speed
-    ali:item minecraft:potion x1 {Potion:"minecraft:fire_resistance"}
+      |   -> Enchantment: Soul Speed
+      |   -> Only Compatible: True
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:fire_resistance"}}
       | Chance: 1.74%
       | Count: 1
       | ----- Modifiers -----
       | Set Potion:
       |   -> Potion: Potion of Fire Resistance
-    ali:item minecraft:splash_potion x1 {Potion:"minecraft:fire_resistance"}
+    ali:item minecraft:splash_potion x1 {"minecraft:potion_contents":{potion:"minecraft:fire_resistance"}}
       | Chance: 1.74%
       | Count: 1
       | ----- Modifiers -----
@@ -115,10 +116,11 @@ ali:loot_table
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
-      |   -> Soul Speed
+      |   -> Enchantment: Soul Speed
+      |   -> Only Compatible: True
   ali:item minecraft:diamond x1
     | Chance: 1%
     | Count: 1
     | ----- Predicates -----
     | Random Chance:
-    |   -> Probability: 0.01
+    |   -> Chance: 0.01

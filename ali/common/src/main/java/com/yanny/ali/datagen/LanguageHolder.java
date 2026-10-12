@@ -124,6 +124,7 @@ public class LanguageHolder {
         put(Explosion.BlockInteraction.KEEP, "Keep Blocks");
         put(Explosion.BlockInteraction.DESTROY, "Destroy Blocks");
         put(Explosion.BlockInteraction.DESTROY_WITH_DECAY, "Destroy Blocks With Decay");
+        put(Explosion.BlockInteraction.TRIGGER_BLOCK, "Trigger Blocks");
 
         verifyEnumTranslations();
 

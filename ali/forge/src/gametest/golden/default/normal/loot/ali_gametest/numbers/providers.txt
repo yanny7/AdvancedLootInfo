@@ -11,5 +11,5 @@ ali:loot_table
     | Selects random entry
     | Rolls: 0 to 4  ~2 to 4 (26%)
     |   [chart 0..4 0-4 base=true modes=[false, false, true, true, true] heights=0.1935,0.6774,1.0000,1.0000,1.0000]
-    ali:item minecraft:snowball x0-16
-      | Count: 0 to 16 (score "level" (this))
+    ali:item minecraft:snowball x?
+      | Count: ≥ 0 (score "level" (this))

@@ -24,6 +24,6 @@ ali:loot_table
     ali:item minecraft:emerald x1
       | Chance: 4.35%
       | Count: 1
-    ali:item minecraft:shears x1 {Damage:0}
+    ali:item minecraft:shears x1
       | Chance: 4.35%
       | Count: 1

@@ -8,19 +8,13 @@ ali:loot_table
       ali:dynamic
         | Dynamic block-specific drops
         | ----- Predicates -----
-        | Match Tool:
-        |   -> Tag: minecraft:breaks_decorated_pots
-        | Inverted:
-        |   -> Match Tool:
-        |     -> Enchantments:
-        |       -> Enchantment: Silk Touch
-        |       -> Level: ≥ 1
+        | Block State Property:
+        |   -> Block: Decorated Pot
+        |   -> Properties:
+        |     -> cracked: true
       ali:item minecraft:decorated_pot x1
         | Count: 1
         | ----- Modifiers -----
-        | Copy Nbt:
-        |   -> Nbt Provider: minecraft:context
-        |   -> Operations:
-        |     -> Source: sherds
-        |     -> Target: BlockEntityTag.sherds
-        |     -> Merge Strategy: Replace
+        | Copy Components:
+        |   -> Source: Block Entity
+        |   -> Include: minecraft:pot_decorations

@@ -16,7 +16,7 @@ ali:loot_table
     | Selects random entry
     | Rolls: U[binom(2; 50%); 4]  ~2 to 4 (26%)
     |   [chart 0..4 0-4 base=true modes=[false, false, true, true, true] heights=0.1935,0.6774,1.0000,1.0000,1.0000]
-    ali:item minecraft:snowball x0-16
+    ali:item minecraft:snowball x?
       | Count: max(0; round(score(this; level) × 0.5))
       | ----- Modifiers -----
       | Set Count:
@@ -27,4 +27,4 @@ ali:loot_table
     | Count: 1
     | ----- Predicates -----
     | Random Chance:
-    |   -> Probability: 0.01
+    |   -> Chance: 0.01

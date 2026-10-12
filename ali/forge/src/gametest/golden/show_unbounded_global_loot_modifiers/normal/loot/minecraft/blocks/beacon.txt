@@ -6,8 +6,9 @@ ali:loot_table
     ali:item minecraft:beacon x1
       | Count: 1
       | ----- Modifiers -----
-      | Copy Name:
+      | Copy Components:
       |   -> Source: Block Entity
+      |   -> Include: minecraft:custom_name
   ali:item minecraft:diamond x1
     | Chance: 1%
     | Count: 1

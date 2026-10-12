@@ -1,0 +1,701 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item minecraft:coal x15
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item minecraft:iron_ingot x5
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+  ali:trade_level
+    | Level: 2
+    | Randomly Selects 2 Of These Trades
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:desert
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x4
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_boots x1
+      ali:items_to_items
+        | Villager Type: minecraft:plains
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x4
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_boots x1
+      ali:items_to_items
+        | Villager Type: minecraft:savanna
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x4
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_boots x1
+      ali:items_to_items
+        | Villager Type: minecraft:snow
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x4
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_boots x1
+      ali:items_to_items
+        | Villager Type: minecraft:taiga
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x4
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_boots x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:jungle
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x4
+        ali:item minecraft:air x0
+        ali:item minecraft:chainmail_boots x1
+      ali:items_to_items
+        | Villager Type: minecraft:swamp
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x4
+        ali:item minecraft:air x0
+        ali:item minecraft:chainmail_boots x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:desert
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x5
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_helmet x1
+      ali:items_to_items
+        | Villager Type: minecraft:plains
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x5
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_helmet x1
+      ali:items_to_items
+        | Villager Type: minecraft:savanna
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x5
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_helmet x1
+      ali:items_to_items
+        | Villager Type: minecraft:snow
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x5
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_helmet x1
+      ali:items_to_items
+        | Villager Type: minecraft:taiga
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x5
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_helmet x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:jungle
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x5
+        ali:item minecraft:air x0
+        ali:item minecraft:chainmail_helmet x1
+      ali:items_to_items
+        | Villager Type: minecraft:swamp
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x5
+        ali:item minecraft:air x0
+        ali:item minecraft:chainmail_helmet x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:desert
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x7
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_leggings x1
+      ali:items_to_items
+        | Villager Type: minecraft:plains
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x7
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_leggings x1
+      ali:items_to_items
+        | Villager Type: minecraft:savanna
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x7
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_leggings x1
+      ali:items_to_items
+        | Villager Type: minecraft:snow
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x7
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_leggings x1
+      ali:items_to_items
+        | Villager Type: minecraft:taiga
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x7
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_leggings x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:jungle
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x7
+        ali:item minecraft:air x0
+        ali:item minecraft:chainmail_leggings x1
+      ali:items_to_items
+        | Villager Type: minecraft:swamp
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x7
+        ali:item minecraft:air x0
+        ali:item minecraft:chainmail_leggings x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:desert
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x9
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_chestplate x1
+      ali:items_to_items
+        | Villager Type: minecraft:plains
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x9
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_chestplate x1
+      ali:items_to_items
+        | Villager Type: minecraft:savanna
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x9
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_chestplate x1
+      ali:items_to_items
+        | Villager Type: minecraft:snow
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x9
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_chestplate x1
+      ali:items_to_items
+        | Villager Type: minecraft:taiga
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x9
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_chestplate x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:jungle
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x9
+        ali:item minecraft:air x0
+        ali:item minecraft:chainmail_chestplate x1
+      ali:items_to_items
+        | Villager Type: minecraft:swamp
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x9
+        ali:item minecraft:air x0
+        ali:item minecraft:chainmail_chestplate x1
+  ali:trade_level
+    | Level: 3
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 20
+      | Price Multiplier: 0.05
+      ali:item minecraft:lava_bucket x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 10
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:shield x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 10
+      | Price Multiplier: 0.2
+      ali:item minecraft:emerald x36
+      ali:item minecraft:air x0
+      ali:item minecraft:bell x1
+  ali:trade_level
+    | Level: 4
+    | Randomly Selects 2 Of These Trades
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:desert
+        | Uses: 3
+        | XP: 15
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x8
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_boots x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:desert
+        | Uses: 3
+        | XP: 15
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x9
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_helmet x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:desert
+        | Uses: 3
+        | XP: 15
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x11
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_leggings x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:desert
+        | Uses: 3
+        | XP: 15
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x13
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_chestplate x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:plains
+        | Uses: 3
+        | XP: 15
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x8
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_boots x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:plains
+        | Uses: 3
+        | XP: 15
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x9
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_helmet x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:plains
+        | Uses: 3
+        | XP: 15
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x11
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_leggings x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:plains
+        | Uses: 3
+        | XP: 15
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x13
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_chestplate x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:savanna
+        | Uses: 3
+        | XP: 15
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x2
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_boots x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:savanna
+        | Uses: 3
+        | XP: 15
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x3
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_helmet x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:savanna
+        | Uses: 3
+        | XP: 15
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x5
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_leggings x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:savanna
+        | Uses: 3
+        | XP: 15
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x7
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_chestplate x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:snow
+        | Uses: 3
+        | XP: 15
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x8
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_boots x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:snow
+        | Uses: 3
+        | XP: 15
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x9
+        ali:item minecraft:air x0
+        ali:item minecraft:iron_helmet x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:jungle
+        | Uses: 3
+        | XP: 15
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x8
+        ali:item minecraft:air x0
+        ali:item minecraft:chainmail_boots x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:jungle
+        | Uses: 3
+        | XP: 15
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x9
+        ali:item minecraft:air x0
+        ali:item minecraft:chainmail_helmet x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:jungle
+        | Uses: 3
+        | XP: 15
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x11
+        ali:item minecraft:air x0
+        ali:item minecraft:chainmail_leggings x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:jungle
+        | Uses: 3
+        | XP: 15
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x13
+        ali:item minecraft:air x0
+        ali:item minecraft:chainmail_chestplate x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:swamp
+        | Uses: 3
+        | XP: 15
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x8
+        ali:item minecraft:air x0
+        ali:item minecraft:chainmail_boots x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:swamp
+        | Uses: 3
+        | XP: 15
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x9
+        ali:item minecraft:air x0
+        ali:item minecraft:chainmail_helmet x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:swamp
+        | Uses: 3
+        | XP: 15
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x11
+        ali:item minecraft:air x0
+        ali:item minecraft:chainmail_leggings x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:swamp
+        | Uses: 3
+        | XP: 15
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x13
+        ali:item minecraft:air x0
+        ali:item minecraft:chainmail_chestplate x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:taiga
+        | Uses: 3
+        | XP: 15
+        | Price Multiplier: 0.05
+        ali:item minecraft:diamond_boots x1
+        ali:item minecraft:emerald x4
+        ali:item minecraft:diamond_leggings x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:taiga
+        | Uses: 3
+        | XP: 15
+        | Price Multiplier: 0.05
+        ali:item minecraft:diamond_leggings x1
+        ali:item minecraft:emerald x4
+        ali:item minecraft:diamond_chestplate x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:taiga
+        | Uses: 3
+        | XP: 15
+        | Price Multiplier: 0.05
+        ali:item minecraft:diamond_helmet x1
+        ali:item minecraft:emerald x4
+        ali:item minecraft:diamond_boots x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:taiga
+        | Uses: 3
+        | XP: 15
+        | Price Multiplier: 0.05
+        ali:item minecraft:diamond_chestplate x1
+        ali:item minecraft:emerald x2
+        ali:item minecraft:diamond_helmet x1
+  ali:trade_level
+    | Level: 5
+    | Randomly Selects 2 Of These Trades
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:desert
+        | Uses: 3
+        | XP: 30
+        | Price Multiplier: 0.05
+        ali:item minecraft:diamond x4
+        ali:item minecraft:emerald x16
+        ali:item minecraft:diamond_chestplate x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:desert
+        | Uses: 3
+        | XP: 30
+        | Price Multiplier: 0.05
+        ali:item minecraft:diamond x3
+        ali:item minecraft:emerald x16
+        ali:item minecraft:diamond_leggings x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:plains
+        | Uses: 3
+        | XP: 30
+        | Price Multiplier: 0.05
+        ali:item minecraft:diamond x3
+        ali:item minecraft:emerald x16
+        ali:item minecraft:diamond_leggings x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:plains
+        | Uses: 3
+        | XP: 30
+        | Price Multiplier: 0.05
+        ali:item minecraft:diamond x2
+        ali:item minecraft:emerald x12
+        ali:item minecraft:diamond_boots x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:savanna
+        | Uses: 3
+        | XP: 30
+        | Price Multiplier: 0.05
+        ali:item minecraft:diamond x2
+        ali:item minecraft:emerald x6
+        ali:item minecraft:diamond_helmet x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:savanna
+        | Uses: 3
+        | XP: 30
+        | Price Multiplier: 0.05
+        ali:item minecraft:diamond x3
+        ali:item minecraft:emerald x8
+        ali:item minecraft:diamond_chestplate x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:snow
+        | Uses: 3
+        | XP: 30
+        | Price Multiplier: 0.05
+        ali:item minecraft:diamond x2
+        ali:item minecraft:emerald x12
+        ali:item minecraft:diamond_boots x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:snow
+        | Uses: 3
+        | XP: 30
+        | Price Multiplier: 0.05
+        ali:item minecraft:diamond x3
+        ali:item minecraft:emerald x12
+        ali:item minecraft:diamond_helmet x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:jungle
+        | Uses: 3
+        | XP: 30
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x9
+        ali:item minecraft:air x0
+        ali:item minecraft:chainmail_helmet x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:jungle
+        | Uses: 3
+        | XP: 30
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x8
+        ali:item minecraft:air x0
+        ali:item minecraft:chainmail_boots x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:swamp
+        | Uses: 3
+        | XP: 30
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x9
+        ali:item minecraft:air x0
+        ali:item minecraft:chainmail_helmet x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:swamp
+        | Uses: 3
+        | XP: 30
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x8
+        ali:item minecraft:air x0
+        ali:item minecraft:chainmail_boots x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:taiga
+        | Uses: 3
+        | XP: 30
+        | Price Multiplier: 0.05
+        ali:item minecraft:diamond x4
+        ali:item minecraft:emerald x18
+        ali:item minecraft:diamond_chestplate x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:taiga
+        | Uses: 3
+        | XP: 30
+        | Price Multiplier: 0.05
+        ali:item minecraft:diamond x3
+        ali:item minecraft:emerald x18
+        ali:item minecraft:diamond_leggings x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:taiga
+        | Uses: 12
+        | XP: 30
+        | Price Multiplier: 0.05
+        ali:item minecraft:diamond_block x1
+        ali:item minecraft:air x0
+        ali:item minecraft:emerald x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:desert
+        | Uses: 12
+        | XP: 30
+        | Price Multiplier: 0.05
+        ali:item minecraft:iron_block x1
+        ali:item minecraft:air x0
+        ali:item minecraft:emerald x1
+      ali:items_to_items
+        | Villager Type: minecraft:jungle
+        | Uses: 12
+        | XP: 30
+        | Price Multiplier: 0.05
+        ali:item minecraft:iron_block x1
+        ali:item minecraft:air x0
+        ali:item minecraft:emerald x1
+      ali:items_to_items
+        | Villager Type: minecraft:plains
+        | Uses: 12
+        | XP: 30
+        | Price Multiplier: 0.05
+        ali:item minecraft:iron_block x1
+        ali:item minecraft:air x0
+        ali:item minecraft:emerald x1
+      ali:items_to_items
+        | Villager Type: minecraft:savanna
+        | Uses: 12
+        | XP: 30
+        | Price Multiplier: 0.05
+        ali:item minecraft:iron_block x1
+        ali:item minecraft:air x0
+        ali:item minecraft:emerald x1
+      ali:items_to_items
+        | Villager Type: minecraft:snow
+        | Uses: 12
+        | XP: 30
+        | Price Multiplier: 0.05
+        ali:item minecraft:iron_block x1
+        ali:item minecraft:air x0
+        ali:item minecraft:emerald x1
+      ali:items_to_items
+        | Villager Type: minecraft:swamp
+        | Uses: 12
+        | XP: 30
+        | Price Multiplier: 0.05
+        ali:item minecraft:iron_block x1
+        ali:item minecraft:air x0
+        ali:item minecraft:emerald x1

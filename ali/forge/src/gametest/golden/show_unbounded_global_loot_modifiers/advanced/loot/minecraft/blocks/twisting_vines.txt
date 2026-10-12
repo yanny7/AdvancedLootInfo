@@ -12,9 +12,10 @@ ali:loot_table
         |   -> Can Tool Perform Action:
         |     -> shears_dig
         |   -> Match Tool:
-        |     -> Enchantments:
-        |       -> Enchantment: Silk Touch
-        |       -> Level: ≥ 1
+        |     -> Item Predicates:
+        |       -> Enchantments:
+        |         -> Enchantment: Silk Touch
+        |         -> Level: ≥ 1
       ali:item minecraft:twisting_vines x1
         | Chance: 33%
         |   -> Fortune LVL: [33%; 55%; 77%; 100%][min(LVL; 3)]
@@ -35,4 +36,4 @@ ali:loot_table
     | Count: 1
     | ----- Predicates -----
     | Random Chance:
-    |   -> Probability: 0.01
+    |   -> Chance: 0.01

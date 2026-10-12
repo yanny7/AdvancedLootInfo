@@ -160,6 +160,7 @@ ALI's integration test is a GameTest run per loader: a headless server with the 
 ```
 ./gradlew :ali:fabric:runGametest -Precipe_viewer=none
 ./gradlew :ali:forge:runGametest -Precipe_viewer=none
+./gradlew :ali:neoforge:runGametest -Precipe_viewer=none
 ./gradlew :ali:forge:runGametest -Precipe_viewer=none -Pali_golden_regenerate=true
 ```
 

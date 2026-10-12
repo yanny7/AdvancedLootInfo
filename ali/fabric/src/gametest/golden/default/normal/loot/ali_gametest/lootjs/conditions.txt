@@ -5,18 +5,3 @@ ali:loot_table
     | Rolls: 1
     ali:item minecraft:cod x1
       | Count: 1
-  lootjs:add_loot
-    | Selects all entries
-    lootjs:item_stack minecraft:bone x1
-      | Chance: 50%
-      | Count: 1
-      | ----- Predicates -----
-      | Killed by player
-      | Match Mainhand:
-      |   -> Item Filter: Ingredient
-      |     -> Item: Diamond Sword
-      |     -> Count: 1
-      |     -> Tag: {Damage:0}
-      | Biome:
-      |   -> Biomes:
-      |     -> Desert

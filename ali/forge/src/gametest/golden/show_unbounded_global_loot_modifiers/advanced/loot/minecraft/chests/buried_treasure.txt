@@ -56,10 +56,10 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 0 to 1
-    ali:item minecraft:leather_chestplate x1 {Damage:0}
+    ali:item minecraft:leather_chestplate x1
       | Chance: 50%
       | Count: 1
-    ali:item minecraft:iron_sword x1 {Damage:0}
+    ali:item minecraft:iron_sword x1
       | Chance: 50%
       | Count: 1
   ali:loot_pool
@@ -82,7 +82,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 0 to 2
-    ali:item minecraft:potion x1 {Potion:"minecraft:water_breathing"}
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:water_breathing"}}
       | Count: 1
       | ----- Modifiers -----
       | Set Potion:
@@ -92,4 +92,4 @@ ali:loot_table
     | Count: 1
     | ----- Predicates -----
     | Random Chance:
-    |   -> Probability: 0.01
+    |   -> Chance: 0.01

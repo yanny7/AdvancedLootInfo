@@ -14,7 +14,8 @@ ali:entity_loot_table
       | Set Count:
       |   -> Count: 0 to 2
       |   -> Add: False
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: U[0; 1)
   ali:loot_pool
     | Selects random entry
@@ -23,14 +24,10 @@ ali:entity_loot_table
       | Count: 1
       | ----- Predicates -----
       | Entity Properties:
-      |   -> Target: Killer
+      |   -> Target: Attacker
       |   -> Predicate:
       |     -> Entity Types:
       |       -> Tag: minecraft:skeletons
-  lootjs:add_loot
-    | Selects all entries
-    lootjs:item_stack minecraft:tnt x1
-      | Count: 1
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -38,7 +35,7 @@ ali:entity_loot_table
       | Count: 1
       | ----- Predicates -----
       | Entity Properties:
-      |   -> Target: Killer
+      |   -> Target: Attacker
       |   -> Predicate:
       |     -> Entity Type: Creeper
       |     -> Nbt: {powered:1b}

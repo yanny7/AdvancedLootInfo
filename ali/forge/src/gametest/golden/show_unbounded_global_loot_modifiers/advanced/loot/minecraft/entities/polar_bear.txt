@@ -14,15 +14,26 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Furnace Smelt
       |   -> Predicates:
-      |     -> Entity Properties:
-      |       -> Target: This Entity
-      |       -> Predicate:
-      |         -> Entity Flags:
-      |           -> Is On Fire: True
+      |     -> Any Of:
+      |       -> Entity Properties:
+      |         -> Target: This Entity
+      |         -> Predicate:
+      |           -> Entity Flags:
+      |             -> Is On Fire: True
+      |       -> Entity Properties:
+      |         -> Target: Direct Attacker
+      |         -> Predicate:
+      |           -> Entity Equipment:
+      |             -> Main Hand:
+      |               -> Item Predicates:
+      |                 -> Enchantments:
+      |                   -> Enchantments:
+      |                     -> Tag: minecraft:smelts_loot
       | Set Count:
       |   -> Count: 0 to 2
       |   -> Add: False
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: U[0; 1)
     ali:item minecraft:salmon x0-5
       | Chance: 25%
@@ -35,19 +46,30 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Furnace Smelt
       |   -> Predicates:
-      |     -> Entity Properties:
-      |       -> Target: This Entity
-      |       -> Predicate:
-      |         -> Entity Flags:
-      |           -> Is On Fire: True
+      |     -> Any Of:
+      |       -> Entity Properties:
+      |         -> Target: This Entity
+      |         -> Predicate:
+      |           -> Entity Flags:
+      |             -> Is On Fire: True
+      |       -> Entity Properties:
+      |         -> Target: Direct Attacker
+      |         -> Predicate:
+      |           -> Entity Equipment:
+      |             -> Main Hand:
+      |               -> Item Predicates:
+      |                 -> Enchantments:
+      |                   -> Enchantments:
+      |                     -> Tag: minecraft:smelts_loot
       | Set Count:
       |   -> Count: 0 to 2
       |   -> Add: False
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: U[0; 1)
   ali:item minecraft:diamond x1
     | Chance: 1%
     | Count: 1
     | ----- Predicates -----
     | Random Chance:
-    |   -> Probability: 0.01
+    |   -> Chance: 0.01

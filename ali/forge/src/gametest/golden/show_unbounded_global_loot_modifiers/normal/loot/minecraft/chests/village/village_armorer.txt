@@ -9,7 +9,7 @@ ali:loot_table
     ali:item minecraft:iron_ingot x1-3
       | Chance: 25%
       | Count: 1 to 3
-    ali:item minecraft:iron_helmet x1 {Damage:0}
+    ali:item minecraft:iron_helmet x1
       | Chance: 12.5%
       | Count: 1
     ali:item minecraft:emerald x1

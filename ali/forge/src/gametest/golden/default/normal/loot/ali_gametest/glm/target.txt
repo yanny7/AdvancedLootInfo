@@ -8,9 +8,9 @@ ali:loot_table
   ali:glm
     | Auto-detected: ali_gametest:unadapted
     |   -> conditions:
-    |     -> loot_table_id:
-    |       -> forge:loot_table_id
+    |     -> condition:
     |       -> ali_gametest:glm/target
+    |       -> forge:loot_table_id
     |   -> item: minecraft:stick
   ali:item minecraft:gold_nugget x1
     | Chance: 50%

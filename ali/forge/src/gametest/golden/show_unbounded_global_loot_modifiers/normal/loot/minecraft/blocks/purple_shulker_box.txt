@@ -6,28 +6,13 @@ ali:loot_table
     ali:item minecraft:purple_shulker_box x1
       | Count: 1
       | ----- Modifiers -----
-      | Copy Name:
+      | Copy Components:
       |   -> Source: Block Entity
-      | Copy Nbt:
-      |   -> Nbt Provider: minecraft:context
-      |   -> Operations:
-      |     -> Entry:
-      |       -> Source: Lock
-      |       -> Target: BlockEntityTag.Lock
-      |       -> Merge Strategy: Replace
-      |     -> Entry:
-      |       -> Source: LootTable
-      |       -> Target: BlockEntityTag.LootTable
-      |       -> Merge Strategy: Replace
-      |     -> Entry:
-      |       -> Source: LootTableSeed
-      |       -> Target: BlockEntityTag.LootTableSeed
-      |       -> Merge Strategy: Replace
-      | Set Contents:
-      |   -> Block Entity Type: minecraft:shulker_box
-      |   -> Entries:
-      |     -> Dynamic:
-      |       -> Name: minecraft:contents
+      |   -> Include:
+      |     -> minecraft:custom_name
+      |     -> minecraft:container
+      |     -> minecraft:lock
+      |     -> minecraft:container_loot
   ali:item minecraft:diamond x1
     | Chance: 1%
     | Count: 1

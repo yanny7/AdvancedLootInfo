@@ -1,0 +1,56 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:cod x1
+      | Count: 1
+  ali:item minecraft:bone x1
+    | Chance: 50%
+    | Count: 1
+    | ----- Predicates -----
+    | Random Chance:
+    |   -> Chance: 0.5
+    | Killed by player
+    | Match Mainhand:
+    |   -> Item Filter: Ingredient
+    |     -> Item: Diamond Sword
+    |     -> Count: 1
+    |     -> Components:
+    |       -> minecraft:attribute_modifiers
+    |         -> Modifiers:
+    |           -> Entry:
+    |             -> Attribute: Attack Damage
+    |             -> Modifier:
+    |               -> Id: minecraft:base_attack_damage
+    |               -> Amount: 6.0
+    |               -> Operation: Add Value
+    |             -> Slot: Main Hand
+    |           -> Entry:
+    |             -> Attribute: Attack Speed
+    |             -> Modifier:
+    |               -> Id: minecraft:base_attack_speed
+    |               -> Amount: -2.4
+    |               -> Operation: Add Value
+    |             -> Slot: Main Hand
+    |         -> Show In Tooltip: True
+    |       -> minecraft:damage
+    |         -> Value: 0
+    |       -> minecraft:max_damage
+    |         -> Value: 1561
+    |       -> minecraft:max_stack_size
+    |         -> Value: 1
+    |       -> minecraft:tool
+    |         -> Rules:
+    |           -> Entry:
+    |             -> Block: Cobweb
+    |             -> Correct For Drops: True
+    |             -> Speed: 15.0
+    |           -> Entry:
+    |             -> Blocks:
+    |               -> Tag: minecraft:sword_efficient
+    |             -> Speed: 1.5
+    |         -> Default Mining Speed: 1.0
+    |         -> Damage Per Block: 2
+    | Match Biome:
+    |   -> Biome: Desert

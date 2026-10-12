@@ -9,9 +9,10 @@ ali:loot_table
         | Count: 1
         | ----- Predicates -----
         | Match Tool:
-        |   -> Enchantments:
-        |     -> Enchantment: Silk Touch
-        |     -> Level: ≥ 1
+        |   -> Item Predicates:
+        |     -> Enchantments:
+        |       -> Enchantment: Silk Touch
+        |       -> Level: ≥ 1
       ali:alternatives
         | Selects only first successful entry
         ali:item minecraft:amethyst_shard x4-16
@@ -22,7 +23,8 @@ ali:loot_table
           |   [chart 0..4 4-8 base=false modes=[true, false, false, false, false, false, false, false, false, false, false, false, false] heights=1.0000,0.0000,0.0000,0.0000,0.5000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000 | 0..8 4-12 base=false modes=[true, false, false, false, false, false, false, false, false, false, false, false, false] heights=0.7500,0.0000,0.0000,0.0000,0.3750,0.0000,0.0000,0.0000,0.3750,0.0000,0.0000,0.0000,0.0000 | 0..12 4-16 base=false modes=[true, false, false, false, false, false, false, false, false, false, false, false, false] heights=0.6000,0.0000,0.0000,0.0000,0.3000,0.0000,0.0000,0.0000,0.3000,0.0000,0.0000,0.0000,0.3000]
           | ----- Predicates -----
           | Match Tool:
-          |   -> Tag: minecraft:cluster_max_harvestables
+          |   -> Items:
+          |     -> Tag: minecraft:cluster_max_harvestables
         ali:item minecraft:amethyst_shard x2
           | Count: 2
           | ----- Modifiers -----

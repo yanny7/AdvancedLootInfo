@@ -34,104 +34,118 @@ ali:loot_table
     ali:item minecraft:saddle x1
       | Chance: 3.53%
       | Count: 1
-    ali:item minecraft:diamond_sword x1 {Damage:0}
+    ali:item minecraft:diamond_sword x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.53%
       | Count: 1
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 20 to 39
-      |   -> Treasure: True
-    ali:item minecraft:diamond_boots x1 {Damage:0}
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:diamond_boots x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.53%
       | Count: 1
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 20 to 39
-      |   -> Treasure: True
-    ali:item minecraft:diamond_chestplate x1 {Damage:0}
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.53%
       | Count: 1
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 20 to 39
-      |   -> Treasure: True
-    ali:item minecraft:diamond_leggings x1 {Damage:0}
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:diamond_leggings x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.53%
       | Count: 1
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 20 to 39
-      |   -> Treasure: True
-    ali:item minecraft:diamond_helmet x1 {Damage:0}
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:diamond_helmet x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.53%
       | Count: 1
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 20 to 39
-      |   -> Treasure: True
-    ali:item minecraft:diamond_pickaxe x1 {Damage:0}
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:diamond_pickaxe x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.53%
       | Count: 1
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 20 to 39
-      |   -> Treasure: True
-    ali:item minecraft:diamond_shovel x1 {Damage:0}
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:diamond_shovel x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.53%
       | Count: 1
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 20 to 39
-      |   -> Treasure: True
-    ali:item minecraft:iron_sword x1 {Damage:0}
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:iron_sword x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.53%
       | Count: 1
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 20 to 39
-      |   -> Treasure: True
-    ali:item minecraft:iron_boots x1 {Damage:0}
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:iron_boots x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.53%
       | Count: 1
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 20 to 39
-      |   -> Treasure: True
-    ali:item minecraft:iron_chestplate x1 {Damage:0}
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:iron_chestplate x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.53%
       | Count: 1
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 20 to 39
-      |   -> Treasure: True
-    ali:item minecraft:iron_leggings x1 {Damage:0}
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:iron_leggings x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.53%
       | Count: 1
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 20 to 39
-      |   -> Treasure: True
-    ali:item minecraft:iron_helmet x1 {Damage:0}
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:iron_helmet x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.53%
       | Count: 1
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 20 to 39
-      |   -> Treasure: True
-    ali:item minecraft:iron_pickaxe x1 {Damage:0}
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:iron_pickaxe x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.53%
       | Count: 1
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 20 to 39
-      |   -> Treasure: True
-    ali:item minecraft:iron_shovel x1 {Damage:0}
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:iron_shovel x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.53%
       | Count: 1
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 20 to 39
-      |   -> Treasure: True
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
     ali:item minecraft:emerald x2-6
       | Chance: 2.35%
       | Count: max(0; U[2; 6])
@@ -162,4 +176,4 @@ ali:loot_table
     | Count: 1
     | ----- Predicates -----
     | Random Chance:
-    |   -> Probability: 0.01
+    |   -> Chance: 0.01

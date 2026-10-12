@@ -18,7 +18,7 @@ ali:entity_loot_table
         |     -> Entity Equipment:
         |       -> Main Hand:
         |         -> Item: Milk Bucket
-      ali:item minecraft:potion x1 {Potion:"minecraft:invisibility"}
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:invisibility"}}
         | Chance: 8.5%
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%

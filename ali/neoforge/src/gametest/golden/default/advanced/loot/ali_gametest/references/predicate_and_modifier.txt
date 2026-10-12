@@ -1,0 +1,25 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:feather x1 {"minecraft:custom_name":'"Named by reference"'}
+      | Chance: 50%
+      | Count: 1
+      | ----- Predicates -----
+      | Reference:
+      |   -> Name: ali_gametest:is_raining
+      | ----- Modifiers -----
+      | Reference:
+      |   -> Name: ali_gametest:named
+    ali:item minecraft:string x4-6
+      | Chance: 12.5%
+      | Count: 4 to 6
+      |   -> 6 (50%)
+      |   -> 4 (50%)
+      | ----- Predicates -----
+      | Reference:
+      |   -> Name: ali_gametest:array
+      | ----- Modifiers -----
+      | Reference:
+      |   -> Name: ali_gametest:array

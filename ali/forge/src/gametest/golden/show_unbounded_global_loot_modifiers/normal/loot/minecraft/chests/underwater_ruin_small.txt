@@ -12,7 +12,7 @@ ali:loot_table
     ali:item minecraft:rotten_flesh x1
       | Chance: 17.86%
       | Count: 1
-    ali:item minecraft:stone_axe x1 {Damage:0}
+    ali:item minecraft:stone_axe x1
       | Chance: 7.14%
       | Count: 1
     ali:item minecraft:emerald x1
@@ -21,27 +21,31 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:fishing_rod x1 {Damage:0}
+    ali:item minecraft:fishing_rod x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 41.67%
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
-    ali:item minecraft:map x1 {display:{Name:'{"translate":"filled_map.buried_treasure"}'}}
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:map x1 {"minecraft:item_name":'{"translate":"filled_map.buried_treasure"}'}
       | Chance: 41.67%
       | Count: 1
       | ----- Modifiers -----
       | Exploration Map:
       |   -> Destination: minecraft:on_treasure_maps
-      |   -> Map Decoration: Red X
+      |   -> Map Decoration: minecraft:red_x
       |   -> Zoom: 1
       |   -> Search Radius: 50
       |   -> Skip Known Structures: False
       | Set Name:
       |   -> Name: Buried Treasure Map
-    ali:item minecraft:leather_chestplate x1 {Damage:0}
+      |   -> Target: Item Name
+    ali:item minecraft:leather_chestplate x1
       | Chance: 8.33%
       | Count: 1
-    ali:item minecraft:golden_helmet x1 {Damage:0}
+    ali:item minecraft:golden_helmet x1
       | Chance: 8.33%
       | Count: 1
   ali:item minecraft:diamond x1

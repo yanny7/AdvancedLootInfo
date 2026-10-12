@@ -1,23 +1,23 @@
 package com.yanny.ali.gametest;
 
 import com.yanny.aci.gametest.GoldenFiles;
+import com.yanny.aci.gametest.GoldenLanguage;
 import com.yanny.ali.Utils;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.network.AbstractServer;
-import dev.latvian.mods.kubejs.script.ScriptType;
 import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.gametest.framework.GameTestSequence;
 import net.minecraft.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class LootDataGolden {
@@ -39,10 +39,12 @@ public class LootDataGolden {
 
     public static final int TIMEOUT_TICKS = 6000;
 
-    public static void run(GameTestHelper helper, AbstractServer aliServer, List<Variant> loaderVariants) {
+    public static void run(GameTestHelper helper, AbstractServer aliServer, List<Variant> loaderVariants, Supplier<List<String>> scriptErrors) {
         if (PluginManager.getInstance().clientRegistry == null) {
             PluginManager.getInstance().registerClientEvent();
         }
+
+        GoldenLanguage.inject(List.of("minecraft", "aci", Utils.MOD_ID));
 
         MinecraftServer server = helper.getLevel().getServer();
         AliConfig config = PluginManager.getInstance().commonRegistry.getConfiguration();
@@ -73,19 +75,13 @@ public class LootDataGolden {
                 differences.add("output after a datapack reload differs from the output of the startup scan");
             }
 
-            differences.addAll(scriptErrors());
+            differences.addAll(scriptErrors.get());
 
             if (!differences.isEmpty()) {
                 throw new GameTestAssertException(differences.size() + " golden difference(s): " + differences.subList(0, Math.min(10, differences.size())));
             }
         });
         sequence.thenSucceed();
-    }
-
-    @Unmodifiable
-    @NotNull
-    private static List<String> scriptErrors() {
-        return ScriptType.SERVER.console.errors.stream().map((line) -> "KubeJS: " + line.getText()).toList();
     }
 
     private static void reload(GameTestSequence sequence, MinecraftServer server, Runnable before) {

@@ -44,7 +44,8 @@ ali:loot_table
       | ----- Predicates -----
       | Location Check:
       |   -> Location:
-      |     -> Y: 60 to 80
+      |     -> Position:
+      |       -> Y: 60 to 80
       |     -> Biome: Desert
       |   -> Offset: [X: 0, Y: 1, Z: 0]
     ali:item minecraft:cyan_dye x1
@@ -88,7 +89,7 @@ ali:loot_table
       | Count: 1
       | ----- Predicates -----
       | Entity Scores:
-      |   -> Target: Killer
+      |   -> Target: Attacker
       |   -> Scores:
       |     -> kills
       |       -> Limit: ≥ 3

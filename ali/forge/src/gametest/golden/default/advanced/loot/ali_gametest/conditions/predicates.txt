@@ -14,18 +14,21 @@ ali:loot_table
       |     -> Killed by player
       |     -> Inverted:
       |       -> Random Chance:
-      |         -> Probability: 0.3
+      |         -> Chance: 0.3
     ali:item minecraft:orange_dye x1
       | Chance: 0.83%
-      |   -> Looting LVL: 8.33% × (10% + LVL × 2%)
+      |   -> Looting LVL: 8.33% × [10%][LVL] | 12% + 2% × (LVL − 100%)
       |   -> Looting I: 1%
       |   -> Looting II: 1.17%
       |   -> Looting III: 1.33%
       | Count: 1
       | ----- Predicates -----
-      | Random Chance With Looting:
-      |   -> Percent: 0.1
-      |   -> Multiplier: 0.02
+      | Random Chance With Enchanted Bonus:
+      |   -> Chance: 0.1
+      |     -> Looting LVL: [0.1][LVL] | 0.12 + 0.02 × (LVL − 1)
+      |     -> Looting I: 0.12
+      |     -> Looting II: 0.14
+      |     -> Looting III: 0.16
     ali:item minecraft:yellow_dye x1
       | Chance: 0.83%
       |   -> Fortune LVL: 8.33% × [10%; 20%; 40%][min(LVL; 2)]
@@ -61,7 +64,8 @@ ali:loot_table
       | ----- Predicates -----
       | Location Check:
       |   -> Location:
-      |     -> Y: 60 to 80
+      |     -> Position:
+      |       -> Y: 60 to 80
       |     -> Biome: Desert
       |   -> Offset: [X: 0, Y: 1, Z: 0]
     ali:item minecraft:cyan_dye x1
@@ -105,7 +109,7 @@ ali:loot_table
       | Count: 1
       | ----- Predicates -----
       | Entity Scores:
-      |   -> Target: Killer
+      |   -> Target: Attacker
       |   -> Scores:
       |     -> kills
       |       -> Limit: ≥ 3

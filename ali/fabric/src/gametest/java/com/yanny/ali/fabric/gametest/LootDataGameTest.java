@@ -11,6 +11,6 @@ import java.util.List;
 public class LootDataGameTest implements FabricGameTest {
     @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = LootDataGolden.TIMEOUT_TICKS)
     public void lootData(GameTestHelper helper) {
-        LootDataGolden.run(helper, CommonAliMod.SERVER, List.of());
+        LootDataGolden.run(helper, CommonAliMod.SERVER, List.of(), List::of);
     }
 }

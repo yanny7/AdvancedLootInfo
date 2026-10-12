@@ -1,0 +1,75 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 6
+    ali:item minecraft:iron_ingot x1-5
+      | Chance: 60%
+      | Count: max(0; U[1; 5])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 5
+      |   -> Add: False
+    ali:item minecraft:emerald x1-5
+      | Chance: 26.67%
+      | Count: max(0; U[1; 5])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 5
+      |   -> Add: False
+    ali:item minecraft:gold_ingot x1-5
+      | Chance: 6.67%
+      | Count: max(0; U[1; 5])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 5
+      |   -> Add: False
+    ali:item minecraft:diamond x1
+      | Chance: 3.33%
+      | Count: 1
+    ali:item minecraft:experience_bottle x1
+      | Chance: 3.33%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 5
+    ali:item minecraft:iron_nugget x1-10
+      | Chance: 62.5%
+      | Count: max(0; U[1; 10])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 10
+      |   -> Add: False
+    ali:item minecraft:lapis_lazuli x1-10
+      | Chance: 25%
+      | Count: max(0; U[1; 10])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 10
+      |   -> Add: False
+    ali:item minecraft:gold_nugget x1-10
+      | Chance: 12.5%
+      | Count: max(0; U[1; 10])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 10
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 83.33%
+    ali:item minecraft:coast_armor_trim_smithing_template x2
+      | Chance: 16.67%
+      | Count: 2
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2
+      |   -> Add: False
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1
+    | ----- Predicates -----
+    | Random Chance:
+    |   -> Chance: 0.01

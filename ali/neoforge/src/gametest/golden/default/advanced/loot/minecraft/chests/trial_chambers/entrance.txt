@@ -1,0 +1,40 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 3
+    ali:item minecraft:wooden_axe x1
+      | Chance: 27.78%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:honeycomb x2-8
+      | Chance: 27.78%
+      | Count: max(0; U[2; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 8
+      |   -> Add: False
+    ali:item minecraft:arrow x5-10
+      | Chance: 27.78%
+      | Count: max(0; U[5; 10])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 10
+      |   -> Add: False
+    ali:item minecraft:stick x2-5
+      | Chance: 13.89%
+      | Count: max(0; U[2; 5])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 5
+      |   -> Add: False
+    ali:item minecraft:trial_key x1
+      | Chance: 2.78%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False

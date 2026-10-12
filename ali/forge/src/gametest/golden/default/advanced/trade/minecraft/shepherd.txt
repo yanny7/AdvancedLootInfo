@@ -36,7 +36,7 @@ ali:trade
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x2
       ali:item minecraft:air x0
-      ali:item minecraft:shears x1 {Damage:0}
+      ali:item minecraft:shears x1
   ali:trade_level
     | Level: 2
     | Randomly Selects 2 Of These Trades

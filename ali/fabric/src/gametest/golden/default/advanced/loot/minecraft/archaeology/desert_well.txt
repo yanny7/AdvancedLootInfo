@@ -23,15 +23,15 @@ ali:loot_table
       | Count: 1
       | ----- Modifiers -----
       | Set Stew Effect:
-      |   -> Blindness
-      |     -> Duration: 5 to 7
-      |   -> Jump Boost
-      |     -> Duration: 7 to 10
       |   -> Night Vision
       |     -> Duration: 7 to 10
+      |   -> Jump Boost
+      |     -> Duration: 7 to 10
+      |   -> Weakness
+      |     -> Duration: 6 to 8
+      |   -> Blindness
+      |     -> Duration: 5 to 7
       |   -> Poison
       |     -> Duration: 10 to 20
       |   -> Saturation
       |     -> Duration: 7 to 10
-      |   -> Weakness
-      |     -> Duration: 6 to 8

@@ -9,15 +9,15 @@ ali:loot_table
     ali:item minecraft:packed_ice x2-6
       | Chance: 22.22%
       | Count: 2 to 6
-    ali:item minecraft:suspicious_stew x1
+    ali:item minecraft:suspicious_stew x2-6
       | Chance: 11.11%
-      | Count: 1
+      | Count: 2 to 6
       | ----- Modifiers -----
       | Set Stew Effect:
-      |   -> Blindness
-      |     -> Duration: 5 to 7
       |   -> Night Vision
       |     -> Duration: 7 to 10
+      |   -> Blindness
+      |     -> Duration: 5 to 7
     ali:item minecraft:golden_carrot x1-10
       | Chance: 11.11%
       | Count: 1 to 10

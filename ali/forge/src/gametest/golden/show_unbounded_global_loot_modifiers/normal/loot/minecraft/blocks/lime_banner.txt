@@ -8,14 +8,13 @@ ali:loot_table
       | ----- Predicates -----
       | Survives Explosion
       | ----- Modifiers -----
-      | Copy Name:
+      | Copy Components:
       |   -> Source: Block Entity
-      | Copy Nbt:
-      |   -> Nbt Provider: minecraft:context
-      |   -> Operations:
-      |     -> Source: Patterns
-      |     -> Target: BlockEntityTag.Patterns
-      |     -> Merge Strategy: Replace
+      |   -> Include:
+      |     -> minecraft:custom_name
+      |     -> minecraft:item_name
+      |     -> minecraft:hide_additional_tooltip
+      |     -> minecraft:banner_patterns
   ali:item minecraft:diamond x1
     | Chance: 1%
     | Count: 1

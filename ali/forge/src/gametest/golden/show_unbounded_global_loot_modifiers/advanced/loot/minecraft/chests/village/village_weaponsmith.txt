@@ -31,22 +31,22 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1 to 3
       |   -> Add: False
-    ali:item minecraft:iron_pickaxe x1 {Damage:0}
+    ali:item minecraft:iron_pickaxe x1
       | Chance: 5.32%
       | Count: 1
-    ali:item minecraft:iron_sword x1 {Damage:0}
+    ali:item minecraft:iron_sword x1
       | Chance: 5.32%
       | Count: 1
-    ali:item minecraft:iron_chestplate x1 {Damage:0}
+    ali:item minecraft:iron_chestplate x1
       | Chance: 5.32%
       | Count: 1
-    ali:item minecraft:iron_helmet x1 {Damage:0}
+    ali:item minecraft:iron_helmet x1
       | Chance: 5.32%
       | Count: 1
-    ali:item minecraft:iron_leggings x1 {Damage:0}
+    ali:item minecraft:iron_leggings x1
       | Chance: 5.32%
       | Count: 1
-    ali:item minecraft:iron_boots x1 {Damage:0}
+    ali:item minecraft:iron_boots x1
       | Chance: 5.32%
       | Count: 1
     ali:item minecraft:obsidian x3-7
@@ -87,4 +87,4 @@ ali:loot_table
     | Count: 1
     | ----- Predicates -----
     | Random Chance:
-    |   -> Probability: 0.01
+    |   -> Chance: 0.01

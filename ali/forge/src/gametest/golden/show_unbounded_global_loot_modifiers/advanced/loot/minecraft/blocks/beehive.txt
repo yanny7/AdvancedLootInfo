@@ -9,16 +9,14 @@ ali:loot_table
         | Count: 1
         | ----- Predicates -----
         | Match Tool:
-        |   -> Enchantments:
-        |     -> Enchantment: Silk Touch
-        |     -> Level: ≥ 1
+        |   -> Item Predicates:
+        |     -> Enchantments:
+        |       -> Enchantment: Silk Touch
+        |       -> Level: ≥ 1
         | ----- Modifiers -----
-        | Copy Nbt:
-        |   -> Nbt Provider: minecraft:context
-        |   -> Operations:
-        |     -> Source: Bees
-        |     -> Target: BlockEntityTag.Bees
-        |     -> Merge Strategy: Replace
+        | Copy Components:
+        |   -> Source: Block Entity
+        |   -> Include: minecraft:bees
         | Copy State:
         |   -> Block: Beehive
         |   -> Property: honey_level
@@ -29,4 +27,4 @@ ali:loot_table
     | Count: 1
     | ----- Predicates -----
     | Random Chance:
-    |   -> Probability: 0.01
+    |   -> Chance: 0.01

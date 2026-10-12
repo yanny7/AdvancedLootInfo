@@ -1,0 +1,72 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item minecraft:azalea_leaves x1
+        | Count: 1
+        | ----- Predicates -----
+        | Any Of:
+        |   -> Can Item Perform Ability:
+        |     -> shears_dig
+        |   -> Match Tool:
+        |     -> Item Predicates:
+        |       -> Enchantments:
+        |         -> Enchantment: Silk Touch
+        |         -> Level: ≥ 1
+      ali:item minecraft:azalea x1
+        | Chance: 5%
+        |   -> Fortune LVL: [5%; 6.25%; 8.33%; 10%][min(LVL; 3)]
+        |   -> Fortune I: 6.25%
+        |   -> Fortune II: 8.33%
+        |   -> Fortune III: 10%
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion
+        | Table Bonus:
+        |   -> Enchantment: Fortune
+        |   -> Values: 5%
+        |     -> Fortune LVL: [5%; 6.25%; 8.33%; 10%][min(LVL; 3)]
+        |     -> Fortune I: 6.25%
+        |     -> Fortune II: 8.33%
+        |     -> Fortune III: 10%
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:stick x1-2
+      | Chance: 2%
+      |   -> Fortune LVL: [2%; 2.22%; 2.5%; 3.33%; 10%][min(LVL; 4)]
+      |   -> Fortune I: 2.22%
+      |   -> Fortune II: 2.5%
+      |   -> Fortune III: 3.33%
+      | Count: max(0; U[1; 2])
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Any Of:
+      |     -> Can Item Perform Ability:
+      |       -> shears_dig
+      |     -> Match Tool:
+      |       -> Item Predicates:
+      |         -> Enchantments:
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
+      | Table Bonus:
+      |   -> Enchantment: Fortune
+      |   -> Values: 2%
+      |     -> Fortune LVL: [2%; 2.22%; 2.5%; 3.33%; 10%][min(LVL; 4)]
+      |     -> Fortune I: 2.22%
+      |     -> Fortune II: 2.5%
+      |     -> Fortune III: 3.33%
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
+      | Explosion Decay
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1
+    | ----- Predicates -----
+    | Random Chance:
+    |   -> Chance: 0.01

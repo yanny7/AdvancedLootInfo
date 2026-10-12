@@ -1,0 +1,40 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 3
+    ali:item minecraft:cake x1-4
+      | Chance: 23.26%
+      | Count: 1 to 4
+    ali:item minecraft:amethyst_shard x8-20
+      | Chance: 23.26%
+      | Count: 8 to 20
+    ali:item minecraft:iron_block x1-2
+      | Chance: 23.26%
+      | Count: 1 to 2
+    ali:item minecraft:diamond x1-2
+      | Chance: 11.63%
+      | Count: 1 to 2
+    ali:item minecraft:emerald_block x1-3
+      | Chance: 5.81%
+      | Count: 1 to 3
+    ali:item minecraft:diamond_axe x1
+      | Chance: 5.81%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 10% to 50%
+      |   -> Add: False
+    ali:item minecraft:diamond_pickaxe x1
+      | Chance: 5.81%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 10% to 50%
+      |   -> Add: False
+    ali:item minecraft:diamond_block x1
+      | Chance: 1.16%
+      | Count: 1
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1

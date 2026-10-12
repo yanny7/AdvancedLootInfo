@@ -20,12 +20,14 @@ ali:entity_loot_table
       |   -> Target: This Entity
       |   -> Predicate:
       |     -> Entity Sub Predicate:
-      |       -> Size: ≥ 2
+      |       -> Slime:
+      |         -> Size: ≥ 2
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: −2 to 1
       |   -> Add: False
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: U[0; 1)
     ali:item minecraft:pearlescent_froglight x1
       | Chance: 25%
@@ -35,7 +37,8 @@ ali:entity_loot_table
       |   -> Source Entity:
       |     -> Entity Type: Frog
       |     -> Entity Sub Predicate:
-      |       -> Variant: minecraft:warm
+      |       -> Type: minecraft:frog
+      |         -> Variant: minecraft:warm
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1
@@ -48,7 +51,8 @@ ali:entity_loot_table
       |   -> Source Entity:
       |     -> Entity Type: Frog
       |     -> Entity Sub Predicate:
-      |       -> Variant: minecraft:cold
+      |       -> Type: minecraft:frog
+      |         -> Variant: minecraft:cold
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1
@@ -61,7 +65,8 @@ ali:entity_loot_table
       |   -> Source Entity:
       |     -> Entity Type: Frog
       |     -> Entity Sub Predicate:
-      |       -> Variant: minecraft:temperate
+      |       -> Type: minecraft:frog
+      |         -> Variant: minecraft:temperate
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1
@@ -71,4 +76,4 @@ ali:entity_loot_table
     | Count: 1
     | ----- Predicates -----
     | Random Chance:
-    |   -> Probability: 0.01
+    |   -> Chance: 0.01

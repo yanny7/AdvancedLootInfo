@@ -2,6 +2,7 @@ package com.yanny.ali.forge.gametest;
 
 import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.yanny.ali.Utils;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -31,7 +32,7 @@ public class GameTestLootModifiers {
     }
 
     public static class AddItem extends LootModifier {
-        public static final Supplier<Codec<AddItem>> CODEC = Suppliers.memoize(() -> RecordCodecBuilder.create((inst) -> codecStart(inst)
+        public static final Supplier<MapCodec<AddItem>> CODEC = Suppliers.memoize(() -> RecordCodecBuilder.mapCodec((inst) -> codecStart(inst)
                 .and(ForgeRegistries.ITEMS.getCodec().fieldOf("item").forGetter((m) -> m.item))
                 .and(Codec.INT.optionalFieldOf("count", 1).forGetter((m) -> m.count))
                 .apply(inst, AddItem::new)));
@@ -57,13 +58,13 @@ public class GameTestLootModifiers {
         }
 
         @Override
-        public Codec<? extends IGlobalLootModifier> codec() {
+        public MapCodec<? extends IGlobalLootModifier> codec() {
             return CODEC.get();
         }
     }
 
     public static class RemoveItem extends LootModifier {
-        public static final Supplier<Codec<RemoveItem>> CODEC = Suppliers.memoize(() -> RecordCodecBuilder.create((inst) -> codecStart(inst)
+        public static final Supplier<MapCodec<RemoveItem>> CODEC = Suppliers.memoize(() -> RecordCodecBuilder.mapCodec((inst) -> codecStart(inst)
                 .and(ForgeRegistries.ITEMS.getCodec().fieldOf("item").forGetter((m) -> m.item))
                 .apply(inst, RemoveItem::new)));
 
@@ -86,13 +87,13 @@ public class GameTestLootModifiers {
         }
 
         @Override
-        public Codec<? extends IGlobalLootModifier> codec() {
+        public MapCodec<? extends IGlobalLootModifier> codec() {
             return CODEC.get();
         }
     }
 
     public static class Unadapted extends LootModifier {
-        public static final Supplier<Codec<Unadapted>> CODEC = Suppliers.memoize(() -> RecordCodecBuilder.create((inst) -> codecStart(inst)
+        public static final Supplier<MapCodec<Unadapted>> CODEC = Suppliers.memoize(() -> RecordCodecBuilder.mapCodec((inst) -> codecStart(inst)
                 .and(ForgeRegistries.ITEMS.getCodec().fieldOf("item").forGetter((m) -> m.item))
                 .apply(inst, Unadapted::new)));
 
@@ -111,7 +112,7 @@ public class GameTestLootModifiers {
         }
 
         @Override
-        public Codec<? extends IGlobalLootModifier> codec() {
+        public MapCodec<? extends IGlobalLootModifier> codec() {
             return CODEC.get();
         }
     }

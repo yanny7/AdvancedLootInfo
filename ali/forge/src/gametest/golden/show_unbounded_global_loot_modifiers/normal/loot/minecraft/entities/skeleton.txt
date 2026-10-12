@@ -10,7 +10,8 @@ ali:entity_loot_table
       |   -> Looting III: 0 to 5  ~2 to 3 (28%)
       |   [chart 0..2 0-2 base=true modes=[false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,0.0000,0.0000,0.0000 | 0..3 0-3 base=false modes=[false, true, true, false, false, false] heights=0.5000,1.0000,1.0000,0.5000,0.0000,0.0000 | 0..4 0-4 base=false modes=[false, false, true, false, false, false] heights=0.2500,0.7500,1.0000,0.7500,0.2500,0.0000 | 0..5 0-5 base=false modes=[false, false, true, true, false, false] heights=0.1667,0.5000,0.8333,0.8333,0.5000,0.1667]
       | ----- Modifiers -----
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: 0 to 1
   ali:loot_pool
     | Selects random entry
@@ -22,7 +23,8 @@ ali:entity_loot_table
       |   -> Looting III: 0 to 5  ~2 to 3 (28%)
       |   [chart 0..2 0-2 base=true modes=[false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,0.0000,0.0000,0.0000 | 0..3 0-3 base=false modes=[false, true, true, false, false, false] heights=0.5000,1.0000,1.0000,0.5000,0.0000,0.0000 | 0..4 0-4 base=false modes=[false, false, true, false, false, false] heights=0.2500,0.7500,1.0000,0.7500,0.2500,0.0000 | 0..5 0-5 base=false modes=[false, false, true, true, false, false] heights=0.1667,0.5000,0.8333,0.8333,0.5000,0.1667]
       | ----- Modifiers -----
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: 0 to 1
   ali:item minecraft:diamond x1
     | Chance: 1%
@@ -36,11 +38,11 @@ ali:entity_loot_table
         | Count: 1
         | ----- Predicates -----
         | Entity Properties:
-        |   -> Target: Killer
+        |   -> Target: Attacker
         |   -> Predicate:
         |     -> Entity Type: Creeper
         |     -> Nbt: {powered:1b}
-      ali:item minecraft:bow x1 {Damage:0}
+      ali:item minecraft:bow x1
         | Chance: 8.5%
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
@@ -54,10 +56,12 @@ ali:entity_loot_table
         |       -> Main Hand:
         |         -> Item: Bow
         | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
-      ali:item minecraft:leather_helmet x1 {Damage:0}
+      ali:item minecraft:leather_helmet x1
         | Chance: 8.5%
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
@@ -71,10 +75,12 @@ ali:entity_loot_table
         |       -> Head:
         |         -> Item: Leather Cap
         | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
-      ali:item minecraft:leather_chestplate x1 {Damage:0}
+      ali:item minecraft:leather_chestplate x1
         | Chance: 8.5%
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
@@ -88,10 +94,12 @@ ali:entity_loot_table
         |       -> Chest:
         |         -> Item: Leather Tunic
         | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
-      ali:item minecraft:leather_leggings x1 {Damage:0}
+      ali:item minecraft:leather_leggings x1
         | Chance: 8.5%
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
@@ -105,10 +113,12 @@ ali:entity_loot_table
         |       -> Legs:
         |         -> Item: Leather Pants
         | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
-      ali:item minecraft:leather_boots x1 {Damage:0}
+      ali:item minecraft:leather_boots x1
         | Chance: 8.5%
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
@@ -122,10 +132,12 @@ ali:entity_loot_table
         |       -> Feet:
         |         -> Item: Leather Boots
         | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
-      ali:item minecraft:golden_helmet x1 {Damage:0}
+      ali:item minecraft:golden_helmet x1
         | Chance: 8.5%
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
@@ -139,10 +151,12 @@ ali:entity_loot_table
         |       -> Head:
         |         -> Item: Golden Helmet
         | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
-      ali:item minecraft:golden_chestplate x1 {Damage:0}
+      ali:item minecraft:golden_chestplate x1
         | Chance: 8.5%
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
@@ -156,10 +170,12 @@ ali:entity_loot_table
         |       -> Chest:
         |         -> Item: Golden Chestplate
         | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
-      ali:item minecraft:golden_leggings x1 {Damage:0}
+      ali:item minecraft:golden_leggings x1
         | Chance: 8.5%
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
@@ -173,10 +189,12 @@ ali:entity_loot_table
         |       -> Legs:
         |         -> Item: Golden Leggings
         | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
-      ali:item minecraft:golden_boots x1 {Damage:0}
+      ali:item minecraft:golden_boots x1
         | Chance: 8.5%
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
@@ -190,10 +208,12 @@ ali:entity_loot_table
         |       -> Feet:
         |         -> Item: Golden Boots
         | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
-      ali:item minecraft:chainmail_helmet x1 {Damage:0}
+      ali:item minecraft:chainmail_helmet x1
         | Chance: 8.5%
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
@@ -207,10 +227,12 @@ ali:entity_loot_table
         |       -> Head:
         |         -> Item: Chainmail Helmet
         | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
-      ali:item minecraft:chainmail_chestplate x1 {Damage:0}
+      ali:item minecraft:chainmail_chestplate x1
         | Chance: 8.5%
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
@@ -224,10 +246,12 @@ ali:entity_loot_table
         |       -> Chest:
         |         -> Item: Chainmail Chestplate
         | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
-      ali:item minecraft:chainmail_leggings x1 {Damage:0}
+      ali:item minecraft:chainmail_leggings x1
         | Chance: 8.5%
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
@@ -241,10 +265,12 @@ ali:entity_loot_table
         |       -> Legs:
         |         -> Item: Chainmail Leggings
         | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
-      ali:item minecraft:chainmail_boots x1 {Damage:0}
+      ali:item minecraft:chainmail_boots x1
         | Chance: 8.5%
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
@@ -258,10 +284,12 @@ ali:entity_loot_table
         |       -> Feet:
         |         -> Item: Chainmail Boots
         | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
-      ali:item minecraft:iron_helmet x1 {Damage:0}
+      ali:item minecraft:iron_helmet x1
         | Chance: 8.5%
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
@@ -275,10 +303,12 @@ ali:entity_loot_table
         |       -> Head:
         |         -> Item: Iron Helmet
         | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
-      ali:item minecraft:iron_chestplate x1 {Damage:0}
+      ali:item minecraft:iron_chestplate x1
         | Chance: 8.5%
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
@@ -292,10 +322,12 @@ ali:entity_loot_table
         |       -> Chest:
         |         -> Item: Iron Chestplate
         | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
-      ali:item minecraft:iron_leggings x1 {Damage:0}
+      ali:item minecraft:iron_leggings x1
         | Chance: 8.5%
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
@@ -309,10 +341,12 @@ ali:entity_loot_table
         |       -> Legs:
         |         -> Item: Iron Leggings
         | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
-      ali:item minecraft:iron_boots x1 {Damage:0}
+      ali:item minecraft:iron_boots x1
         | Chance: 8.5%
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
@@ -326,10 +360,12 @@ ali:entity_loot_table
         |       -> Feet:
         |         -> Item: Iron Boots
         | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
-      ali:item minecraft:diamond_helmet x1 {Damage:0}
+      ali:item minecraft:diamond_helmet x1
         | Chance: 8.5%
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
@@ -343,10 +379,12 @@ ali:entity_loot_table
         |       -> Head:
         |         -> Item: Diamond Helmet
         | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
-      ali:item minecraft:diamond_chestplate x1 {Damage:0}
+      ali:item minecraft:diamond_chestplate x1
         | Chance: 8.5%
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
@@ -360,10 +398,12 @@ ali:entity_loot_table
         |       -> Chest:
         |         -> Item: Diamond Chestplate
         | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
-      ali:item minecraft:diamond_leggings x1 {Damage:0}
+      ali:item minecraft:diamond_leggings x1
         | Chance: 8.5%
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
@@ -377,10 +417,12 @@ ali:entity_loot_table
         |       -> Legs:
         |         -> Item: Diamond Leggings
         | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
-      ali:item minecraft:diamond_boots x1 {Damage:0}
+      ali:item minecraft:diamond_boots x1
         | Chance: 8.5%
         |   -> Looting I: 9.5%
         |   -> Looting II: 10.5%
@@ -394,6 +436,8 @@ ali:entity_loot_table
         |       -> Feet:
         |         -> Item: Diamond Boots
         | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False

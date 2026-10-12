@@ -8,16 +8,16 @@ ali:loot_table
   ali:glm
     | Auto-detected: ali_gametest:unadapted
     |   -> conditions:
-    |     -> loot_table_id:
-    |       -> forge:loot_table_id
+    |     -> condition:
     |       -> ali_gametest:glm/target
+    |       -> forge:loot_table_id
     |   -> item: minecraft:stick
   ali:item minecraft:gold_nugget x1
     | Chance: 50%
     | Count: 1
     | ----- Predicates -----
     | Random Chance:
-    |   -> Probability: 0.5
+    |   -> Chance: 0.5
   ali:item minecraft:emerald x2
     | Count: 2
   ali:item minecraft:diamond x1
@@ -25,4 +25,4 @@ ali:loot_table
     | Count: 1
     | ----- Predicates -----
     | Random Chance:
-    |   -> Probability: 0.01
+    |   -> Chance: 0.01

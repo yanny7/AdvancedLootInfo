@@ -34,7 +34,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1 to 3
       |   -> Add: False
-    ali:item minecraft:water_bucket x1
+    ali:item minecraft:water_bucket x1-3
       | Chance: 9.09%
       | Count: max(0; U[1; 3])
       | ----- Modifiers -----
@@ -53,4 +53,4 @@ ali:loot_table
     | Count: 1
     | ----- Predicates -----
     | Random Chance:
-    |   -> Probability: 0.01
+    |   -> Chance: 0.01

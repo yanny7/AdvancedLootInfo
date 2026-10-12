@@ -28,16 +28,27 @@ ali:entity_loot_table
             |   -> Add: False
             | Furnace Smelt
             |   -> Predicates:
-            |     -> Entity Properties:
-            |       -> Target: This Entity
-            |       -> Predicate:
-            |         -> Entity Flags:
-            |           -> Is On Fire: True
-            | Looting Enchant:
+            |     -> Any Of:
+            |       -> Entity Properties:
+            |         -> Target: This Entity
+            |         -> Predicate:
+            |           -> Entity Flags:
+            |             -> Is On Fire: True
+            |       -> Entity Properties:
+            |         -> Target: Direct Attacker
+            |         -> Predicate:
+            |           -> Entity Equipment:
+            |             -> Main Hand:
+            |               -> Item Predicates:
+            |                 -> Enchantments:
+            |                   -> Enchantments:
+            |                     -> Tag: minecraft:smelts_loot
+            | Enchanted Count Increase:
+            |   -> Enchantment: Looting
             |   -> Value: U[0; 1)
   ali:item minecraft:diamond x1
     | Chance: 1%
     | Count: 1
     | ----- Predicates -----
     | Random Chance:
-    |   -> Probability: 0.01
+    |   -> Chance: 0.01

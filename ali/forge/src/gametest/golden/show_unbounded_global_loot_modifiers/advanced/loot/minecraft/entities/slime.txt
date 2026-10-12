@@ -16,7 +16,8 @@ ali:entity_loot_table
       |   -> Target: This Entity
       |   -> Predicate:
       |     -> Entity Sub Predicate:
-      |       -> Size: 1
+      |       -> Slime:
+      |         -> Size: 1
       | Inverted:
       |   -> Damage Source Properties:
       |     -> Source Entity:
@@ -25,7 +26,8 @@ ali:entity_loot_table
       | Set Count:
       |   -> Count: 0 to 2
       |   -> Add: False
-      | Looting Enchant:
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
       |   -> Value: U[0; 1)
     ali:item minecraft:slime_ball x1
       | Chance: 50%
@@ -35,7 +37,8 @@ ali:entity_loot_table
       |   -> Target: This Entity
       |   -> Predicate:
       |     -> Entity Sub Predicate:
-      |       -> Size: 1
+      |       -> Slime:
+      |         -> Size: 1
       | Damage Source Properties:
       |   -> Source Entity:
       |     -> Entity Type: Frog
@@ -48,4 +51,4 @@ ali:entity_loot_table
     | Count: 1
     | ----- Predicates -----
     | Random Chance:
-    |   -> Probability: 0.01
+    |   -> Chance: 0.01

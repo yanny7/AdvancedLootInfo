@@ -19,7 +19,7 @@ ali:loot_table
         |   -> Fortune III: 1 to 7
         | ----- Predicates -----
         | Random Chance:
-        |   -> Probability: 0.125
+        |   -> Chance: 0.13
         | ----- Modifiers -----
         | Apply Bonus:
         |   -> Enchantment: Fortune

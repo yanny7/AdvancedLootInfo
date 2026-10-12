@@ -1,0 +1,65 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:snowball x4-8
+      | Chance: 20.69%
+      | Count: 4 to 8
+    ali:item minecraft:fire_charge x4-8
+      | Chance: 20.69%
+      | Count: 4 to 8
+    ali:item minecraft:water_bucket x1
+      | Chance: 13.79%
+      | Count: 1
+    ali:item minecraft:arrow x4-8
+      | Chance: 13.79%
+      | Count: 4 to 8
+    ali:item minecraft:egg x4-8
+      | Chance: 6.9%
+      | Count: 4 to 8
+    ali:item minecraft:splash_potion x2-5 {"minecraft:potion_contents":{potion:"minecraft:slowness"}}
+      | Chance: 3.45%
+      | Count: 2 to 5
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Slowness
+    ali:item minecraft:splash_potion x2-5 {"minecraft:potion_contents":{potion:"minecraft:poison"}}
+      | Chance: 3.45%
+      | Count: 2 to 5
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Poison
+    ali:item minecraft:splash_potion x2-5 {"minecraft:potion_contents":{potion:"minecraft:weakness"}}
+      | Chance: 3.45%
+      | Count: 2 to 5
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Weakness
+    ali:item minecraft:lingering_potion x2-5 {"minecraft:potion_contents":{potion:"minecraft:slowness"}}
+      | Chance: 3.45%
+      | Count: 2 to 5
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Slowness
+    ali:item minecraft:lingering_potion x2-5 {"minecraft:potion_contents":{potion:"minecraft:poison"}}
+      | Chance: 3.45%
+      | Count: 2 to 5
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Poison
+    ali:item minecraft:lingering_potion x2-5 {"minecraft:potion_contents":{potion:"minecraft:weakness"}}
+      | Chance: 3.45%
+      | Count: 2 to 5
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Weakness
+    ali:item minecraft:lingering_potion x2-5 {"minecraft:potion_contents":{potion:"minecraft:healing"}}
+      | Chance: 3.45%
+      | Count: 2 to 5
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Healing
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1
