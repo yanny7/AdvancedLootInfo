@@ -8,10 +8,6 @@
 - Plugins can replace a trader's trades, split a trade level into separately picked groups and use loot entries as trade items
 - Fixed loot tables referencing each other in a loop being nested hundreds of levels deep, the loop ends at a recursive reference
 - Fixed predicate references labelled as loot tables
-- LootJS experience drops, explosions and lightning strikes show on the loot they come with
-- Fixed conditions inside LootJS pools being ignored
-- Fixed loot replaced by LootJS losing the chance of the entry it replaces
-- Fixed LootJS loot functions shown on the loot added after them instead of the loot they change
 - Fixed block entity and tool sources of copied names and components shown untranslated
 
 ## [2.4.0]
