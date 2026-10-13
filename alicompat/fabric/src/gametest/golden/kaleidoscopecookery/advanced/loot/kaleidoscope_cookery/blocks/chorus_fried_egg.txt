@@ -1,0 +1,19 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item kaleidoscope_cookery:chorus_fried_egg x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion
+        | Block State Property:
+        |   -> Block: Chorus Fried Egg
+        |   -> Properties:
+        |     -> bites: 0
+      ali:item minecraft:bowl x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion

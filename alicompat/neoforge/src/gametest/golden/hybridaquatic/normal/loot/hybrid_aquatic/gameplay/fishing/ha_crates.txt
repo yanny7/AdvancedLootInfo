@@ -1,0 +1,38 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item hybrid_aquatic:crab_pot x1
+      | Chance: 9.09%
+      | Count: 1
+    ali:item hybrid_aquatic:hybrid_crate x1
+      | Chance: 9.09%
+      | Count: 1
+    ali:item hybrid_aquatic:oak_crate x1
+      | Chance: 9.09%
+      | Count: 1
+    ali:item hybrid_aquatic:spruce_crate x1
+      | Chance: 9.09%
+      | Count: 1
+    ali:item hybrid_aquatic:birch_crate x1
+      | Chance: 9.09%
+      | Count: 1
+    ali:item hybrid_aquatic:dark_oak_crate x1
+      | Chance: 9.09%
+      | Count: 1
+    ali:item hybrid_aquatic:acacia_crate x1
+      | Chance: 9.09%
+      | Count: 1
+    ali:item hybrid_aquatic:jungle_crate x1
+      | Chance: 9.09%
+      | Count: 1
+    ali:item hybrid_aquatic:bamboo_crate x1
+      | Chance: 9.09%
+      | Count: 1
+    ali:item hybrid_aquatic:mangrove_crate x1
+      | Chance: 9.09%
+      | Count: 1
+    ali:item hybrid_aquatic:cherry_crate x1
+      | Chance: 9.09%
+      | Count: 1

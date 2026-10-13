@@ -1,0 +1,54 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:blade_pottery_sherd x1
+      | Chance: 8%
+      | Count: 1
+    ali:item minecraft:explorer_pottery_sherd x1
+      | Chance: 8%
+      | Count: 1
+    ali:item minecraft:burn_pottery_sherd x1
+      | Chance: 8%
+      | Count: 1
+    ali:item minecraft:heartbreak_pottery_sherd x1
+      | Chance: 8%
+      | Count: 1
+    ali:item minecraft:diamond x1
+      | Chance: 8%
+      | Count: 1
+    ali:item minecraft:emerald x1
+      | Chance: 8%
+      | Count: 1
+    ali:item minecraft:spectral_arrow x1
+      | Chance: 8%
+      | Count: 1
+    ali:item minecraft:spider_eye x1
+      | Chance: 8%
+      | Count: 1
+    ali:item minecraft:bone x1
+      | Chance: 8%
+      | Count: 1
+    ali:item minecraft:skeleton_skull x1
+      | Chance: 8%
+      | Count: 1
+    ali:item minecraft:flower_banner_pattern x1
+      | Chance: 4%
+      | Count: 1
+    ali:item #the_bumblezone:banner_patterns x1
+      | Chance: 4%
+      | Count: 1
+    ali:item minecraft:wild_armor_trim_smithing_template x1
+      | Chance: 4%
+      | Count: 1
+    ali:item the_bumblezone:buzzing_briefcase x1
+      | Chance: 4%
+      | Count: 1
+    ali:item minecraft:book x1 {"minecraft:enchantments":{levels:{"the_bumblezone:hive_lifeline":1}}}
+      | Chance: 4%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantment: Hive Lifeline
+      |   -> Only Compatible: True

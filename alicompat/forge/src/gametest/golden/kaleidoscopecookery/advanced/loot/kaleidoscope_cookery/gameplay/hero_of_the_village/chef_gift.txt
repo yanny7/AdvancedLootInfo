@@ -1,0 +1,20 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item kaleidoscope_cookery:scramble_egg_with_tomatoes_rice_bowl x1
+      | Chance: 20%
+      | Count: 1
+    ali:item kaleidoscope_cookery:braised_beef_rice_bowl x1
+      | Chance: 20%
+      | Count: 1
+    ali:item kaleidoscope_cookery:stir_fried_pork_with_peppers_rice_bowl x1
+      | Chance: 20%
+      | Count: 1
+    ali:item kaleidoscope_cookery:sweet_and_sour_pork_rice_bowl x1
+      | Chance: 20%
+      | Count: 1
+    ali:item kaleidoscope_cookery:fish_flavored_shredded_pork_rice_bowl x1
+      | Chance: 20%
+      | Count: 1

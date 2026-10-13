@@ -1,0 +1,52 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:candle x1-4
+      | Count: 
+      |   -> 4
+      |     -> Block State Property:
+      |       -> Block: Candle
+      |       -> Properties:
+      |         -> candles: 4
+      |   -> otherwise 3
+      |     -> Block State Property:
+      |       -> Block: Candle
+      |       -> Properties:
+      |         -> candles: 3
+      |   -> otherwise 2
+      |     -> Block State Property:
+      |       -> Block: Candle
+      |       -> Properties:
+      |         -> candles: 2
+      |   -> otherwise 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2
+      |   -> Add: False
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Candle
+      |       -> Properties:
+      |         -> candles: 2
+      | Set Count:
+      |   -> Count: 3
+      |   -> Add: False
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Candle
+      |       -> Properties:
+      |         -> candles: 3
+      | Set Count:
+      |   -> Count: 4
+      |   -> Add: False
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Candle
+      |       -> Properties:
+      |         -> candles: 4
+      | Explosion Decay
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1

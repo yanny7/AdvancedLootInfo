@@ -1,0 +1,81 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:alternatives
+        | Selects only first successful entry
+        ali:item twilightforest:fallen_leaves x1
+          | Count: 1
+          | ----- Predicates -----
+          | Match Tool:
+          |   -> Tag: forge:shears
+          | Block State Property:
+          |   -> Block: Fallen Leaves
+          |   -> Properties:
+          |     -> layers: 1
+        ali:item twilightforest:fallen_leaves x2
+          | Count: 2
+          | ----- Predicates -----
+          | Match Tool:
+          |   -> Tag: forge:shears
+          | Block State Property:
+          |   -> Block: Fallen Leaves
+          |   -> Properties:
+          |     -> layers: 2
+        ali:item twilightforest:fallen_leaves x3
+          | Count: 3
+          | ----- Predicates -----
+          | Match Tool:
+          |   -> Tag: forge:shears
+          | Block State Property:
+          |   -> Block: Fallen Leaves
+          |   -> Properties:
+          |     -> layers: 3
+        ali:item twilightforest:fallen_leaves x4
+          | Count: 4
+          | ----- Predicates -----
+          | Match Tool:
+          |   -> Tag: forge:shears
+          | Block State Property:
+          |   -> Block: Fallen Leaves
+          |   -> Properties:
+          |     -> layers: 4
+        ali:item twilightforest:fallen_leaves x5
+          | Count: 5
+          | ----- Predicates -----
+          | Match Tool:
+          |   -> Tag: forge:shears
+          | Block State Property:
+          |   -> Block: Fallen Leaves
+          |   -> Properties:
+          |     -> layers: 5
+        ali:item twilightforest:fallen_leaves x6
+          | Count: 6
+          | ----- Predicates -----
+          | Match Tool:
+          |   -> Tag: forge:shears
+          | Block State Property:
+          |   -> Block: Fallen Leaves
+          |   -> Properties:
+          |     -> layers: 6
+        ali:item twilightforest:fallen_leaves x7
+          | Count: 7
+          | ----- Predicates -----
+          | Match Tool:
+          |   -> Tag: forge:shears
+          | Block State Property:
+          |   -> Block: Fallen Leaves
+          |   -> Properties:
+          |     -> layers: 7
+        ali:item twilightforest:fallen_leaves x8
+          | Count: 8
+          | ----- Predicates -----
+          | Match Tool:
+          |   -> Tag: forge:shears
+          | Block State Property:
+          |   -> Block: Fallen Leaves
+          |   -> Properties:
+          |     -> layers: 8

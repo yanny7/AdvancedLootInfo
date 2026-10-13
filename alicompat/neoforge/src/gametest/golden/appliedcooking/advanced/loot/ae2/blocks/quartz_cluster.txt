@@ -1,0 +1,30 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item ae2:quartz_cluster x1
+        | Count: 1
+        | ----- Predicates -----
+        | Match Tool:
+        |   -> Item Predicates:
+        |     -> Enchantments:
+        |       -> Enchantment: Silk Touch
+        |       -> Level: ≥ 1
+      ali:item ae2:certus_quartz_crystal x4-7
+        | Count: 4
+        |   -> Fortune LVL: 4 + U[0; LVL]
+        |   -> Fortune I: 4 to 5
+        |   -> Fortune II: 4 to 6
+        |   -> Fortune III: 4 to 7
+        | ----- Modifiers -----
+        | Set Count:
+        |   -> Count: 4
+        |   -> Add: False
+        | Apply Bonus:
+        |   -> Enchantment: Fortune
+        |   -> Formula: minecraft:uniform_bonus_count
+        |     -> Bonus Multiplier: 1
+        | Explosion Decay

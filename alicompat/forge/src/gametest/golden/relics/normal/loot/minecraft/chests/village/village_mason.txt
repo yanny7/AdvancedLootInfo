@@ -1,0 +1,47 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 5
+    ali:item minecraft:bread x1-4
+      | Chance: 30.77%
+      | Count: 1 to 4
+    ali:item minecraft:stone x1
+      | Chance: 15.38%
+      | Count: 1
+    ali:item minecraft:stone_bricks x1
+      | Chance: 15.38%
+      | Count: 1
+    ali:item minecraft:clay_ball x1-3
+      | Chance: 7.69%
+      | Count: 1 to 3
+    ali:item minecraft:flower_pot x1
+      | Chance: 7.69%
+      | Count: 1
+    ali:item minecraft:yellow_dye x1
+      | Chance: 7.69%
+      | Count: 1
+    ali:item minecraft:smooth_stone x1
+      | Chance: 7.69%
+      | Count: 1
+    ali:item minecraft:emerald x1
+      | Chance: 7.69%
+      | Count: 1
+  ali:item relics:arrow_quiver x1
+    | Chance: 2.5%
+    | Count: 1
+  ali:item relics:horse_flute x1
+    | Chance: 2.5%
+    | Count: 1
+  ali:item relics:hunter_belt x1
+    | Chance: 2.5%
+    | Count: 1
+  ali:item relics:infinity_ham x1
+    | Chance: 2.5%
+    | Count: 1
+  ali:item relics:leather_belt x1
+    | Chance: 2.5%
+    | Count: 1
+  ali:item relics:roller_skates x1
+    | Chance: 2.5%
+    | Count: 1

@@ -1,0 +1,101 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      | Chance: 25%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:steadfast_spikes x1
+              | Chance: 25%
+              | Count: 1
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.1
+              | Config Value:
+              |   -> Config: steadfast_spikes.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 25%
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.1
+    ali:reference
+      | Selects all entries
+      | Chance: 25%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:superstitious_hat x1
+              | Chance: 25%
+              | Count: 1
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.1
+              | Config Value:
+              |   -> Config: superstitious_hat.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 25%
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.1
+    ali:reference
+      | Selects all entries
+      | Chance: 25%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:running_shoes x1
+              | Chance: 25%
+              | Count: 1
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.1
+              | Config Value:
+              |   -> Config: running_shoes.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 25%
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.1
+    ali:reference
+      | Selects all entries
+      | Chance: 25%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:vampiric_glove x1
+              | Chance: 25%
+              | Count: 1
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.1
+              | Config Value:
+              |   -> Config: vampiric_glove.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 25%
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.1

@@ -1,0 +1,19 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item the_bumblezone:string_curtain_white x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion
+        | Block State Property:
+        |   -> Block: White String Curtain
+        |   -> Properties:
+        |     -> attached: true
+      ali:item minecraft:string x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion

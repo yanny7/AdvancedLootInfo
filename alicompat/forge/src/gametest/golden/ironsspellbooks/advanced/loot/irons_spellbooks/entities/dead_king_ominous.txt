@@ -1,0 +1,60 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:wicked_bone_ring x1
+      | Chance: 50%
+      |   -> Looting LVL: 50% + LVL × 5%
+      |   -> Looting I: 55%
+      |   -> Looting II: 60%
+      |   -> Looting III: 65%
+      | Count: 1
+      | ----- Predicates -----
+      | Killed by player
+      | Random Chance With Looting:
+      |   -> Percent: 0.5
+      |   -> Multiplier: 0.05
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:scroll x1
+      | Chance: 70%
+      |   -> Looting LVL: 70% + LVL × 5%
+      |   -> Looting I: 75%
+      |   -> Looting II: 80%
+      |   -> Looting III: 85%
+      | Count: 1
+      | ----- Predicates -----
+      | Killed by player
+      | Random Chance With Looting:
+      |   -> Percent: 0.7
+      |   -> Multiplier: 0.05
+      | ----- Modifiers -----
+      | Randomize Spell:
+      |   -> Quality: U[0; 0.5)
+      |   -> Applicable Spells:
+      |     -> Spells:
+      |       -> Spell: Fang Swirl
+      |     -> Force: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item irons_spellbooks:arcane_essence x28-54
+      | Count: max(0; U[28; 45])
+      |   -> Looting LVL: max(0; U[28; 45]) + round(LVL × U[1; 3))
+      |   -> Looting I: 29 to 48  ~31 to 46 (6%)
+      |   -> Looting II: 30 to 51  ~34 to 47 (6%)
+      |   -> Looting III: 31 to 54  ~37 to 48 (6%)
+      |   [chart 0..17 28-45 base=true modes=[false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000 | 1..20 29-48 base=false modes=[false, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false, false, false, false, false, false, false] heights=0.0000,0.2500,0.7500,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.7500,0.2500,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000 | 2..23 30-51 base=false modes=[false, false, false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false, false, false, false, false, false] heights=0.0000,0.0000,0.1250,0.3750,0.6250,0.8750,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.8750,0.6250,0.3750,0.1250,0.0000,0.0000,0.0000 | 3..26 31-54 base=false modes=[false, false, false, false, false, false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, true, false, false, false, false, false, false] heights=0.0000,0.0000,0.0000,0.0833,0.2500,0.4167,0.5833,0.7500,0.9167,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.9167,0.7500,0.5833,0.4167,0.2500,0.0833]
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 28 to 45
+      |   -> Add: False
+      | Looting Enchant:
+      |   -> Value: U[1; 3)
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 2
+    ali:item irons_spellbooks:blank_rune x1
+      | Count: 1

@@ -70,7 +70,7 @@ public class MantleLang implements ICompatTranslations {
     }
 
     public enum Functions implements ITooltipKey {
-        RETEXTURED("retextured", "Retextured:"),
+        RETEXTURED("retextured", "Retextured"),
         SET_FLUID("set_fluid", "Set Fluid:"),
         ;
 

@@ -1,0 +1,252 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      | Chance: 7.69%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:rooted_boots x1
+              | Chance: 7.69%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: rooted_boots.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 7.69%
+    ali:reference
+      | Selects all entries
+      | Chance: 7.69%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:pickaxe_heater x1
+              | Chance: 7.69%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: pickaxe_heater.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 7.69%
+    ali:reference
+      | Selects all entries
+      | Chance: 7.69%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:aqua_dashers x1
+              | Chance: 7.69%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: aqua_dashers.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 7.69%
+    ali:reference
+      | Selects all entries
+      | Chance: 7.69%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:snowshoes x1
+              | Chance: 7.69%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: snowshoes.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 7.69%
+    ali:reference
+      | Selects all entries
+      | Chance: 7.69%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:steadfast_spikes x1
+              | Chance: 7.69%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: steadfast_spikes.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 7.69%
+    ali:reference
+      | Selects all entries
+      | Chance: 7.69%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:villager_hat x1
+              | Chance: 7.69%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: villager_hat.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 7.69%
+    ali:reference
+      | Selects all entries
+      | Chance: 7.69%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:cloud_in_a_bottle x1
+              | Chance: 7.69%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: cloud_in_a_bottle.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 7.69%
+    ali:reference
+      | Selects all entries
+      | Chance: 7.69%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:feral_claws x1
+              | Chance: 7.69%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: feral_claws.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 7.69%
+    ali:reference
+      | Selects all entries
+      | Chance: 7.69%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:pocket_piston x1
+              | Chance: 7.69%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: pocket_piston.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 7.69%
+    ali:reference
+      | Selects all entries
+      | Chance: 7.69%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:whoopee_cushion x1
+              | Chance: 7.69%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: whoopee_cushion.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 7.69%
+    ali:reference
+      | Selects all entries
+      | Chance: 7.69%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:flame_pendant x1
+              | Chance: 7.69%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: flame_pendant.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 7.69%
+    ali:reference
+      | Selects all entries
+      | Chance: 7.69%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:thorn_pendant x1
+              | Chance: 7.69%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: thorn_pendant.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 7.69%
+    ali:reference
+      | Selects all entries
+      | Chance: 7.69%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:charm_of_shrinking x1
+              | Chance: 7.69%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: charm_of_shrinking.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 7.69%

@@ -1,0 +1,16 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:candle x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item farmersdelight:cake_slice x7
+      | Count: 7
+      | ----- Predicates -----
+      | Match Tool:
+      |   -> Items:
+      |     -> Tag: Knives

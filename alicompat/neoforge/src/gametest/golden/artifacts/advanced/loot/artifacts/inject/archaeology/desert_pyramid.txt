@@ -1,0 +1,138 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      | Chance: 14.29%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:cowboy_hat x1
+              | Chance: 14.29%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: cowboy_hat.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 14.29%
+    ali:reference
+      | Selects all entries
+      | Chance: 14.29%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:obsidian_skull x1
+              | Chance: 14.29%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: obsidian_skull.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 14.29%
+    ali:reference
+      | Selects all entries
+      | Chance: 14.29%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:snorkel x1
+              | Chance: 14.29%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: snorkel.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 14.29%
+    ali:reference
+      | Selects all entries
+      | Chance: 14.29%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:power_glove x1
+              | Chance: 14.29%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: power_glove.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 14.29%
+    ali:reference
+      | Selects all entries
+      | Chance: 14.29%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:kitty_slippers x1
+              | Chance: 14.29%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: kitty_slippers.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 14.29%
+    ali:reference
+      | Selects all entries
+      | Chance: 14.29%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:night_vision_goggles x1
+              | Chance: 14.29%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: night_vision_goggles.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 14.29%
+    ali:reference
+      | Selects all entries
+      | Chance: 14.29%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:shock_pendant x1
+              | Chance: 14.29%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: shock_pendant.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 14.29%

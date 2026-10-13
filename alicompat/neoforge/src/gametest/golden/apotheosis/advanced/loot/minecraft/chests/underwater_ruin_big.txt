@@ -1,0 +1,105 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 8
+    ali:item minecraft:coal x1-4
+      | Chance: 32.26%
+      | Count: max(0; U[1; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False
+    ali:item minecraft:gold_nugget x1-3
+      | Chance: 32.26%
+      | Count: max(0; U[1; 3])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 3
+      |   -> Add: False
+    ali:item minecraft:wheat x2-3
+      | Chance: 32.26%
+      | Count: max(0; U[2; 3])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 3
+      |   -> Add: False
+    ali:item minecraft:emerald x1
+      | Chance: 3.23%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:modified
+      | Selects only first successful entry
+      ali:item minecraft:leather_chestplate x1
+        | Chance: 1.52%
+        | Count: 1
+        | ----- Predicates -----
+        | Random Chance:
+        |   -> Chance: 0.35
+      ali:item minecraft:leather_chestplate x1
+        | Chance: 4.35%
+        | Count: 1
+    ali:modified
+      | Selects only first successful entry
+      ali:item minecraft:golden_helmet x1
+        | Chance: 1.52%
+        | Count: 1
+        | ----- Predicates -----
+        | Random Chance:
+        |   -> Chance: 0.35
+      ali:item minecraft:golden_helmet x1
+        | Chance: 4.35%
+        | Count: 1
+    ali:item minecraft:map x1 {"minecraft:item_name":'{"translate":"filled_map.buried_treasure"}'}
+      | Chance: 43.48%
+      | Count: 1
+      | ----- Modifiers -----
+      | Exploration Map:
+      |   -> Destination: minecraft:on_treasure_maps
+      |   -> Map Decoration: minecraft:red_x
+      |   -> Zoom: 1
+      |   -> Search Radius: 50
+      |   -> Skip Known Structures: False
+      | Set Name:
+      |   -> Name: Buried Treasure Map
+      |   -> Target: Item Name
+    ali:item minecraft:enchanted_book x1
+      | Chance: 21.74%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:fishing_rod x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 21.74%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:golden_apple x1
+      | Chance: 4.35%
+      | Count: 1
+  ali:empty
+    | Chance: 35%
+    | Count: 1
+    | Requires a player
+  ali:item apotheosis:gem x1
+    | Chance: 25%
+    | Count: 1
+    | Requires a player
+  ali:item apotheosis:gem x1
+    | Chance: 4%
+    | Count: 1
+    | ----- Predicates -----
+    | Entity Properties:
+    |   -> Target: This Entity
+    |   -> Predicate:
+    |     -> Entity Sub Predicate:
+    |       -> Is Monster
+    | Killed by real player
+    | Requires a player

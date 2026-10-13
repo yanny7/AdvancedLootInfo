@@ -1,0 +1,68 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:divine_soulshard x1
+      | Count: 1
+      | ----- Predicates -----
+      | Killed by player
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:decrepit_scythe x1
+      | Chance: 25%
+      |   -> Looting LVL: 50% × [50%][LVL] | 55% + 5% × (LVL − 100%)
+      |   -> Looting I: 27.5%
+      |   -> Looting II: 30%
+      |   -> Looting III: 32.5%
+      | Count: 1
+      | ----- Predicates -----
+      | Killed by player
+      | Random Chance With Enchanted Bonus:
+      |   -> Chance: 0.5
+      |     -> Looting LVL: [0.5][LVL] | 0.55 + 0.05 × (LVL − 1)
+      |     -> Looting I: 0.55
+      |     -> Looting II: 0.6
+      |     -> Looting III: 0.65
+    ali:item irons_spellbooks:betrayer_signet x1
+      | Chance: 25%
+      |   -> Looting LVL: 50% × [50%][LVL] | 55% + 5% × (LVL − 100%)
+      |   -> Looting I: 27.5%
+      |   -> Looting II: 30%
+      |   -> Looting III: 32.5%
+      | Count: 1
+      | ----- Predicates -----
+      | Killed by player
+      | Random Chance With Enchanted Bonus:
+      |   -> Chance: 0.5
+      |     -> Looting LVL: [0.5][LVL] | 0.55 + 0.05 × (LVL − 1)
+      |     -> Looting I: 0.55
+      |     -> Looting II: 0.6
+      |     -> Looting III: 0.65
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item irons_spellbooks:arcane_essence x28-63
+      | Count: max(0; U[28; 45])
+      |   -> Looting LVL: max(0; U[28; 45]) + round(LVL × U[2; 6))
+      |   -> Looting I: 30 to 51  ~34 to 47 (6%)
+      |   -> Looting II: 32 to 57  ~40 to 49 (6%)
+      |   -> Looting III: 34 to 63  ~46 to 51 (6%)
+      |   [chart 0..17 28-45 base=true modes=[false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000 | 2..23 30-51 base=false modes=[false, false, false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false] heights=0.0000,0.0000,0.1250,0.3750,0.6250,0.8750,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.8750,0.6250,0.3750,0.1250,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000 | 4..29 32-57 base=false modes=[false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false] heights=0.0000,0.0000,0.0000,0.0000,0.0625,0.1875,0.3125,0.4375,0.5625,0.6875,0.8125,0.9375,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.9375,0.8125,0.6875,0.5625,0.4375,0.3125,0.1875,0.0625,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000 | 6..35 34-63 base=false modes=[false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false] heights=0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0417,0.1250,0.2083,0.2917,0.3750,0.4583,0.5417,0.6250,0.7083,0.7917,0.8750,0.9583,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.9583,0.8750,0.7917,0.7083,0.6250,0.5417,0.4583,0.3750,0.2917,0.2083,0.1250,0.0417]
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 28 to 45
+      |   -> Add: False
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
+      |   -> Value: U[2; 6)
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:cinder_essence x8-16
+      | Count: max(0; U[8; 16])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 8 to 16
+      |   -> Add: False

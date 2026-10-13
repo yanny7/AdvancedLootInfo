@@ -1,0 +1,24 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item minecraft:weeping_vines x1
+        | Count: 1
+        | ----- Predicates -----
+        | Any Of:
+        |   -> Match Tool:
+        |     -> Item: Shears
+        |   -> Match Tool:
+        |     -> Item Predicates:
+        |       -> Enchantments:
+        |         -> Enchantment: Silk Touch
+        |         -> Level: ≥ 1
+      ali:item minecraft:weeping_vines x1
+        | Chance: 33%
+        |   -> Fortune I: 55%
+        |   -> Fortune II: 77%
+        |   -> Fortune III: 100%
+        | Count: 1

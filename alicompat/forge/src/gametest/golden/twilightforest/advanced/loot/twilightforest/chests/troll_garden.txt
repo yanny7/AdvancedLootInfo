@@ -1,0 +1,68 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4
+    ali:item minecraft:red_mushroom x1-4
+      | Chance: 14.29%
+      | Count: max(0; U[1; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False
+    ali:item minecraft:brown_mushroom x1-4
+      | Chance: 14.29%
+      | Count: max(0; U[1; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False
+    ali:item minecraft:wheat_seeds x1-6
+      | Chance: 14.29%
+      | Count: max(0; U[1; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 6
+      |   -> Add: False
+    ali:item minecraft:carrot x1-6
+      | Chance: 14.29%
+      | Count: max(0; U[1; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 6
+      |   -> Add: False
+    ali:item minecraft:potato x1-6
+      | Chance: 14.29%
+      | Count: max(0; U[1; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 6
+      |   -> Add: False
+    ali:item minecraft:melon_seeds x1-6
+      | Chance: 14.29%
+      | Count: max(0; U[1; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 6
+      |   -> Add: False
+    ali:item minecraft:bone_meal x1-12
+      | Chance: 14.29%
+      | Count: max(0; U[1; 12])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 12
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item twilightforest:uberous_soil x1-6
+      | Count: max(0; U[1; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 6
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item twilightforest:magic_beans x1
+      | Count: 1

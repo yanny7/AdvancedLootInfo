@@ -1,0 +1,131 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item occultism:otherworld_leaves_natural x1
+      | Count: 1
+      | ----- Predicates -----
+      | All Of:
+      |   -> Block State Property:
+      |     -> Block: Oak Leaves
+      |     -> Properties:
+      |       -> uncovered: true
+      |   -> Any Of:
+      |     -> Match Tool:
+      |       -> Item: Shears
+      |     -> Match Tool:
+      |       -> Item Predicates:
+      |         -> Enchantments:
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:oak_leaves x1
+      | Count: 1
+      | ----- Predicates -----
+      | All Of:
+      |   -> Block State Property:
+      |     -> Block: Oak Leaves
+      |     -> Properties:
+      |       -> uncovered: false
+      |   -> Any Of:
+      |     -> Match Tool:
+      |       -> Item: Shears
+      |     -> Match Tool:
+      |       -> Item Predicates:
+      |         -> Enchantments:
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item occultism:otherworld_sapling_natural x1
+        | Chance: 10%
+        |   -> Fortune LVL: [10%; 20%; 30%; 40%][min(LVL; 3)]
+        |   -> Fortune I: 20%
+        |   -> Fortune II: 30%
+        |   -> Fortune III: 40%
+        | Count: 1
+        | ----- Predicates -----
+        | Inverted:
+        |   -> Any Of:
+        |     -> Match Tool:
+        |       -> Item: Shears
+        |     -> Match Tool:
+        |       -> Item Predicates:
+        |         -> Enchantments:
+        |           -> Enchantment: Silk Touch
+        |           -> Level: ≥ 1
+        | Survives Explosion
+        | Table Bonus:
+        |   -> Enchantment: Fortune
+        |   -> Values: 10%
+        |     -> Fortune LVL: [10%; 20%; 30%; 40%][min(LVL; 3)]
+        |     -> Fortune I: 20%
+        |     -> Fortune II: 30%
+        |     -> Fortune III: 40%
+        | Block State Property:
+        |   -> Block: Oak Leaves
+        |   -> Properties:
+        |     -> uncovered: true
+      ali:item minecraft:oak_sapling x1
+        | Chance: 10%
+        |   -> Fortune LVL: [10%; 20%; 30%; 40%][min(LVL; 3)]
+        |   -> Fortune I: 20%
+        |   -> Fortune II: 30%
+        |   -> Fortune III: 40%
+        | Count: 1
+        | ----- Predicates -----
+        | Inverted:
+        |   -> Any Of:
+        |     -> Match Tool:
+        |       -> Item: Shears
+        |     -> Match Tool:
+        |       -> Item Predicates:
+        |         -> Enchantments:
+        |           -> Enchantment: Silk Touch
+        |           -> Level: ≥ 1
+        | Survives Explosion
+        | Table Bonus:
+        |   -> Enchantment: Fortune
+        |   -> Values: 10%
+        |     -> Fortune LVL: [10%; 20%; 30%; 40%][min(LVL; 3)]
+        |     -> Fortune I: 20%
+        |     -> Fortune II: 30%
+        |     -> Fortune III: 40%
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:stick x1-2
+      | Chance: 2%
+      |   -> Fortune LVL: [2%; 2.22%; 2.5%; 3.33%; 10%][min(LVL; 4)]
+      |   -> Fortune I: 2.22%
+      |   -> Fortune II: 2.5%
+      |   -> Fortune III: 3.33%
+      | Count: max(0; U[1; 2])
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Any Of:
+      |     -> Match Tool:
+      |       -> Item: Shears
+      |     -> Match Tool:
+      |       -> Item Predicates:
+      |         -> Enchantments:
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
+      | Table Bonus:
+      |   -> Enchantment: Fortune
+      |   -> Values: 2%
+      |     -> Fortune LVL: [2%; 2.22%; 2.5%; 3.33%; 10%][min(LVL; 4)]
+      |     -> Fortune I: 2.22%
+      |     -> Fortune II: 2.5%
+      |     -> Fortune III: 3.33%
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
+      | Explosion Decay

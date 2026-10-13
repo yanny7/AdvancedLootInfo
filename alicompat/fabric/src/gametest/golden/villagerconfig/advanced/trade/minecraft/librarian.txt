@@ -1,0 +1,75 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 16
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item minecraft:paper x20-28
+        | Count: max(0; U[20; 28])
+        | ----- Modifiers -----
+        | Set Count:
+        |   -> Count: 20 to 28
+        |   -> Add: False
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+        | Count: 1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.2
+      ali:item minecraft:emerald x8-20
+        | Count: max(0; round(U[1; 5) × 3 + 5))  ~9 to 19 (8%)
+        |   [chart 0..12 8-20 base=true modes=[false, true, true, true, true, true, true, true, true, true, true, true, false] heights=0.5000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.5000]
+        | ----- Modifiers -----
+        | Set Count:
+        |   -> Count: round(U[1; 5) × 3 + 5)  ~9 to 19 (8%)
+        |     [chart 0..12 8-20 base=true modes=[false, true, true, true, true, true, true, true, true, true, true, true, false] heights=0.5000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.5000]
+        |   -> Add: False
+      ali:item minecraft:book x1
+        | Count: 1
+      ali:item minecraft:enchanted_book x1
+        | Count: 1
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Min Level: 0
+        |   -> Max Level: 2147483647
+  ali:trade_level
+    | Level: 2
+    | Randomly Selects 1 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 5
+      | Price Multiplier: 0.2
+      ali:item minecraft:emerald x3
+        | Count: 3
+        | ----- Modifiers -----
+        | Set Count:
+        |   -> Count: 3
+        |   -> Add: False
+      ali:item minecraft:air x0
+      ali:item minecraft:leather_chestplate x1
+        | Count: 1
+        | ----- Modifiers -----
+        | Set Dye:
+        |   -> Dye Colors:
+        |     -> Red
+        |     -> Blue
+        |   -> Add: False
+    ali:items_to_items
+      | Uses: 3
+      | XP: 10
+      | Price Multiplier: 0.2
+      ali:item minecraft:emerald x1
+        | Count: 1
+      ali:item minecraft:air x0
+      ali:item minecraft:iron_sword x1
+        | Count: 1
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Include:
+        |     -> Sharpness
+        |     -> Smite
+        |   -> Min Level: 0
+        |   -> Max Level: 2147483647

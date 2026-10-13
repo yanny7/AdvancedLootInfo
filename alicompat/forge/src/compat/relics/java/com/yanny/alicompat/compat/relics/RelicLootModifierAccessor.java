@@ -15,13 +15,16 @@ import com.yanny.alicompat.accessor.IPageResolverAccessor;
 import it.hurts.sskirillss.relics.items.relics.base.IRelicItem;
 import it.hurts.sskirillss.relics.items.relics.base.data.RelicStorage;
 import it.hurts.sskirillss.relics.level.RelicLootModifier;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,8 +65,11 @@ public class RelicLootModifierAccessor extends BaseAccessor<RelicLootModifier> i
             Float chance = getChance(patterns, page.tableId());
 
             if (chance != null) {
+                ItemStack stack = new ItemStack(relic.getItem());
+
+                stack.setTag(null);
                 operations.add(new IOperation.AddOperation((itemStack) -> true,
-                        GlmNodeUtils.addedNode(utils, conditions, relic.getItem().getDefaultInstance(), chance, NumberExpr.constant(1))));
+                        GlmNodeUtils.addedNode(utils, conditions, stack, chance, NumberExpr.constant(1))));
             }
         });
 
@@ -74,7 +80,7 @@ public class RelicLootModifierAccessor extends BaseAccessor<RelicLootModifier> i
     private static Map<IRelicItem, Map<Pattern, Float>> collectRelics() {
         Map<IRelicItem, Map<Pattern, Float>> relics = new LinkedHashMap<>();
 
-        RelicStorage.RELICS.keySet().forEach((relic) -> {
+        RelicStorage.RELICS.keySet().stream().sorted(Comparator.comparing((relic) -> BuiltInRegistries.ITEM.getKey(relic.getItem()))).forEach((relic) -> {
             Map<Pattern, Float> patterns = new LinkedHashMap<>();
 
             relic.getLootData().getCollection().getEntries().forEach((pattern, chance) -> patterns.put(compile(pattern), chance));

@@ -1,0 +1,63 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:tnt x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:iron_ore x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:gold_ore x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:copper_ore x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:lantern x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item minecraft:gray_candle x1 {"minecraft:block_state":{candles:"1",lit:"true"}}
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:block_state
+      |       -> Properties:
+      |         -> candles: 1
+      |         -> lit: true
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item minecraft:gray_candle x1 {"minecraft:block_state":{candles:"2",lit:"true"}}
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:block_state
+      |       -> Properties:
+      |         -> candles: 2
+      |         -> lit: true
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item minecraft:gray_candle x1 {"minecraft:block_state":{candles:"3",lit:"true"}}
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:block_state
+      |       -> Properties:
+      |         -> candles: 3
+      |         -> lit: true

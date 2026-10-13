@@ -1,0 +1,54 @@
+import java.util.regex.Pattern
+
+class GametestWatchdogStream extends OutputStream {
+    private static final Pattern FATAL = Pattern.compile(/Crash report saved|---- Minecraft Crash Report|Exception in thread "main"|Failed to start the minecraft server|ModLoadingException|Missing or unsupported mandatory dependencies|^java\.(lang|util\.concurrent)\.[A-Za-z.$]*Error/)
+
+    private final OutputStream out
+    private final Closure onFatal
+    private final ByteArrayOutputStream line = new ByteArrayOutputStream()
+
+    GametestWatchdogStream(OutputStream out, Closure onFatal) {
+        this.out = out
+        this.onFatal = onFatal
+    }
+
+    @Override
+    void write(int b) {
+        out.write(b)
+
+        if (b == '\n' as char) {
+            def text = line.toString("UTF-8").replaceAll(/\u001B\[[0-9;]*m/, "")
+
+            line.reset()
+
+            if (FATAL.matcher(text).find()) {
+                onFatal(text)
+            }
+        } else {
+            line.write(b)
+        }
+    }
+
+    @Override
+    void flush() {
+        out.flush()
+    }
+}
+
+ext.gametestWatchdog = { JavaExec task, String mod ->
+    def killed = false
+    def onFatal = { String text ->
+        if (killed) {
+            return
+        }
+
+        killed = true
+        task.logger.error("GameTest ${mod}: killing the server after a fatal line: ${text}")
+        ProcessHandle.current().descendants()
+                .filter { it.info().commandLine().map { it.contains("-Dalicompat.gametest.mod=${mod} ") }.orElse(false) }
+                .forEach { it.destroyForcibly() }
+    }
+
+    task.standardOutput = new GametestWatchdogStream(task.standardOutput ?: System.out, onFatal)
+    task.errorOutput = new GametestWatchdogStream(task.errorOutput ?: System.err, onFatal)
+}

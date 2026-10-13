@@ -1,0 +1,30 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item mekanism:digital_miner x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Copy Name:
+      |   -> Source: Block Entity
+      | Copy Components:
+      |   -> Source: Block Entity
+      |   -> Include:
+      |     -> mekanism:eject
+      |     -> mekanism:filters
+      |     -> mekanism:inverse
+      |     -> mekanism:inverse_replace
+      |     -> mekanism:max_y
+      |     -> mekanism:min_y
+      |     -> mekanism:overflow
+      |     -> mekanism:owner
+      |     -> mekanism:pull
+      |     -> mekanism:radius
+      |     -> mekanism:redstone_control
+      |     -> mekanism:replace_stack
+      |     -> mekanism:security
+      |     -> mekanism:silk_touch
+      |     -> mekanism:upgrades
+      |     -> mekanism:energy
+      |     -> mekanism:items

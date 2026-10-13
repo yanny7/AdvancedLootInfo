@@ -1,0 +1,91 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item minecraft:bone x15
+            | Chance: 24.88%
+            | Count: 15
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 15
+            |   -> Add: False
+          ali:item minecraft:bone x16
+            | Chance: 24.88%
+            | Count: 16
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 16
+            |   -> Add: False
+          ali:item minecraft:bone x12-13
+            | Chance: 24.88%
+            | Count: max(0; U[12; 13])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 12 to 13
+            |   -> Add: False
+          ali:item minecraft:bone x13
+            | Chance: 24.88%
+            | Count: 13
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 13
+            |   -> Add: False
+          ali:reference
+            | Selects all entries
+            | Chance: 0.5%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:item minecraft:bone x49-50
+                  | Chance: 0.5%
+                  | Count: max(0; U[49; 50])
+                  | ----- Modifiers -----
+                  | Set Count:
+                  |   -> Count: 49 to 50
+                  |   -> Add: False
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:item minecraft:bone x39
+                  | Chance: 0.5%
+                  | Count: 39
+                  | ----- Modifiers -----
+                  | Set Count:
+                  |   -> Count: 39
+                  |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:skeleton_skull x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:iron_chestplate x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: U[10%; 20%)
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:diamond x1
+      | Chance: 33.33%
+      | Count: 1
+    ali:item minecraft:golden_apple x1
+      | Chance: 33.33%
+      | Count: 1
+    ali:item twilightforest:charm_of_keeping_1 x1
+      | Chance: 33.33%
+      | Count: 1

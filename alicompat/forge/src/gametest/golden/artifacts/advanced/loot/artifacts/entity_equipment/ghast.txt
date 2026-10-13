@@ -1,0 +1,71 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item artifacts:plastic_drinking_hat x1
+      | Chance: 16.67%
+      | Count: 1
+      | ----- Predicates -----
+      | Is April Fools
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Curse of Vanishing
+      |       -> Levels: 1
+      |   -> Add: False
+    ali:item artifacts:anglers_hat x1
+      | Chance: 16.67%
+      | Count: 1
+      | ----- Predicates -----
+      | Is April Fools
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Curse of Vanishing
+      |       -> Levels: 1
+      |   -> Add: False
+    ali:item artifacts:cowboy_hat x1
+      | Chance: 16.67%
+      | Count: 1
+      | ----- Predicates -----
+      | Is April Fools
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Curse of Vanishing
+      |       -> Levels: 1
+      |   -> Add: False
+    ali:item artifacts:villager_hat x1
+      | Chance: 16.67%
+      | Count: 1
+      | ----- Predicates -----
+      | Is April Fools
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Curse of Vanishing
+      |       -> Levels: 1
+      |   -> Add: False
+    ali:item artifacts:night_vision_goggles x1
+      | Chance: 16.67%
+      | Count: 1
+      | ----- Predicates -----
+      | Is April Fools
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Curse of Vanishing
+      |       -> Levels: 1
+      |   -> Add: False
+    ali:item artifacts:snorkel x1
+      | Chance: 16.67%
+      | Count: 1
+      | ----- Predicates -----
+      | Is April Fools
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Curse of Vanishing
+      |       -> Levels: 1
+      |   -> Add: False

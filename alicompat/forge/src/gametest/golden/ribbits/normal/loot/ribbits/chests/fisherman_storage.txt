@@ -1,0 +1,29 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 4
+    ali:item minecraft:cod x2-4
+      | Chance: 12.5%
+      | Count: 2 to 4
+    ali:item minecraft:salmon x2-4
+      | Chance: 12.5%
+      | Count: 2 to 4
+    ali:item minecraft:tropical_fish x2-4
+      | Chance: 12.5%
+      | Count: 2 to 4
+    ali:item minecraft:kelp x2-4
+      | Chance: 12.5%
+      | Count: 2 to 4
+    ali:item minecraft:dried_kelp x2-4
+      | Chance: 12.5%
+      | Count: 2 to 4
+    ali:item ribbits:giant_lilypad x2-4
+      | Chance: 12.5%
+      | Count: 2 to 4
+    ali:item minecraft:nautilus_shell x1
+      | Chance: 12.5%
+      | Count: 1
+    ali:item minecraft:amethyst_shard x1-3
+      | Chance: 12.5%
+      | Count: 1 to 3

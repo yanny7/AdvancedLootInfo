@@ -1,0 +1,38 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item enderio:painted_slab x1
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Block State Property:
+      |     -> Block: Painted Slab
+      |     -> Properties:
+      |       -> type: top
+      | ----- Modifiers -----
+      | Copy Nbt:
+      |   -> Nbt Provider: minecraft:context
+      |   -> Operations:
+      |     -> Source: Paint
+      |     -> Target: BlockEntityTag.Paint
+      |     -> Merge Strategy: Replace
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item enderio:painted_slab x1
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Block State Property:
+      |     -> Block: Painted Slab
+      |     -> Properties:
+      |       -> type: bottom
+      | ----- Modifiers -----
+      | Copy Nbt:
+      |   -> Nbt Provider: minecraft:context
+      |   -> Operations:
+      |     -> Source: Paint2
+      |     -> Target: BlockEntityTag.Paint2
+      |     -> Merge Strategy: Replace

@@ -1,0 +1,17 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:modified
+      | Selects only first successful entry
+      ali:item twilightforest:giant_obsidian x1
+        | Count: 1
+        | ----- Predicates -----
+        | Giant Pick Used:
+        |   -> This Entity
+        | Survives Explosion
+      ali:item minecraft:obsidian x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion

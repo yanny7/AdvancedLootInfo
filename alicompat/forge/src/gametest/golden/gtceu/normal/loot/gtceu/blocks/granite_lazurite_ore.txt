@@ -1,0 +1,31 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item gtceu:granite_lazurite_ore x1
+        | Count: 1
+        | ----- Predicates -----
+        | Match Tool:
+        |   -> Enchantments:
+        |     -> Enchantment: Silk Touch
+        |     -> Level: ≥ 1
+      ali:item gtceu:raw_lazurite x1
+        | Count: 1
+        | ----- Modifiers -----
+        | Explosion Decay
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item gtceu:granite_dust x0-1
+      | Count: 0 to 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Enchantments:
+      |       -> Enchantment: Silk Touch
+      |       -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Explosion Decay

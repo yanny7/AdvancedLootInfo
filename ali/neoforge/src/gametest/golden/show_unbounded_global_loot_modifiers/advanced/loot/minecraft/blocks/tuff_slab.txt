@@ -1,0 +1,29 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:tuff_slab x1-2
+      | Count: 
+      |   -> 2
+      |     -> Block State Property:
+      |       -> Block: Tuff Slab
+      |       -> Properties:
+      |         -> type: double
+      |   -> otherwise 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2
+      |   -> Add: False
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Tuff Slab
+      |       -> Properties:
+      |         -> type: double
+      | Explosion Decay
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1
+    | ----- Predicates -----
+    | Random Chance:
+    |   -> Chance: 0.01

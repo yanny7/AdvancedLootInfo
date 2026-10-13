@@ -1,0 +1,124 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:water"}}
+      | Chance: 15.79%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Water Bottle
+    ali:item minecraft:rotten_flesh x1-6
+      | Chance: 15.79%
+      | Count: 1 to 6
+    ali:item minecraft:poisonous_potato x1-2
+      | Chance: 15.79%
+      | Count: 1 to 2
+    ali:item minecraft:water_bucket x1
+      | Chance: 15.79%
+      | Count: 1
+    ali:item minecraft:torch x1-12
+      | Chance: 15.79%
+      | Count: 1 to 12
+    ali:item minecraft:milk_bucket x1
+      | Chance: 15.79%
+      | Count: 1
+    ali:reference
+      | Selects all entries
+      | Chance: 5.26%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item minecraft:poppy x1-4
+            | Chance: 0.53%
+            | Count: 1 to 4
+          ali:item minecraft:dandelion x1-4
+            | Chance: 0.53%
+            | Count: 1 to 4
+          ali:item minecraft:feather x1-3
+            | Chance: 0.53%
+            | Count: 1 to 3
+          ali:item minecraft:wheat_seeds x1-2
+            | Chance: 0.53%
+            | Count: 1 to 2
+          ali:item minecraft:flint x1-2
+            | Chance: 0.53%
+            | Count: 1 to 2
+          ali:item minecraft:cactus x1-2
+            | Chance: 0.53%
+            | Count: 1 to 2
+          ali:item minecraft:sugar_cane x1-4
+            | Chance: 0.53%
+            | Count: 1 to 4
+          ali:item minecraft:sand x1-4
+            | Chance: 0.53%
+            | Count: 1 to 4
+          ali:item minecraft:flower_pot x1
+            | Chance: 0.53%
+            | Count: 1
+          ali:item minecraft:bone_meal x1
+            | Chance: 0.53%
+            | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item minecraft:wheat x1-6
+      | Chance: 14.29%
+      | Count: 1 to 6
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:awkward"}}
+      | Chance: 14.29%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Awkward Potion
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:mundane"}}
+      | Chance: 14.29%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Mundane Potion
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:thick"}}
+      | Chance: 14.29%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Thick Potion
+    ali:item minecraft:rotten_flesh x1-6
+      | Chance: 14.29%
+      | Count: 1 to 6
+    ali:item minecraft:melon_seeds x1-5
+      | Chance: 14.29%
+      | Count: 1 to 5
+    ali:item minecraft:pumpkin_seeds x1-5
+      | Chance: 14.29%
+      | Count: 1 to 5
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:glistering_melon_slice x1-12
+      | Chance: 20%
+      | Count: 1 to 12
+    ali:item minecraft:map x1
+      | Chance: 20%
+      | Count: 1
+    ali:item twilightforest:charm_of_keeping_1 x1
+      | Chance: 20%
+      | Count: 1
+    ali:item twilightforest:music_disc_thread x1
+      | Chance: 13.33%
+      | Count: 1
+    ali:item minecraft:golden_apple x1-2
+      | Chance: 6.67%
+      | Count: 1 to 2
+    ali:item minecraft:golden_carrot x1-2
+      | Chance: 6.67%
+      | Count: 1 to 2
+    ali:item minecraft:oak_boat x1
+      | Chance: 6.67%
+      | Count: 1
+    ali:item twilightforest:hollow_oak_sapling x1
+      | Chance: 6.67%
+      | Count: 1

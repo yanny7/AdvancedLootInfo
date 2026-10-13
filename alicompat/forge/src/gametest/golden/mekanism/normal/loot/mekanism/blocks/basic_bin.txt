@@ -1,0 +1,14 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item mekanism:basic_bin x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Copy Nbt:
+      |   -> Nbt Provider: minecraft:context
+      |   -> Operations:
+      |     -> Source: Items
+      |     -> Target: mekData.Items
+      |     -> Merge Strategy: Replace

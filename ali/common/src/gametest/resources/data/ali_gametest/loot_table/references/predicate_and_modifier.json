@@ -1,0 +1,42 @@
+{
+  "pools": [
+    {
+      "rolls": 1,
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:feather",
+          "conditions": [
+            {
+              "condition": "minecraft:reference",
+              "name": "ali_gametest:is_raining"
+            }
+          ],
+          "functions": [
+            {
+              "function": "minecraft:reference",
+              "name": "ali_gametest:named"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:string",
+          "conditions": [
+            {
+              "condition": "minecraft:reference",
+              "name": "ali_gametest:array"
+            }
+          ],
+          "functions": [
+            {
+              "function": "minecraft:reference",
+              "name": "ali_gametest:array"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

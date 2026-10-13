@@ -1,0 +1,37 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:spyglass x1
+      | Chance: 0.25%
+      |   -> Looting LVL: [0.25%][LVL] | 0.5% + 0.25% × (LVL − 100%)
+      |   -> Looting I: 0.5%
+      |   -> Looting II: 0.75%
+      |   -> Looting III: 1%
+      | Count: 1
+      | ----- Predicates -----
+      | Killed by player
+      | Random Chance With Enchanted Bonus:
+      |   -> Chance: 0
+      |     -> Looting LVL: [0][LVL] | 0 + 0 × (LVL − 1)
+      |     -> Looting I: 0
+      |     -> Looting II: 0.01
+      |     -> Looting III: 0.01
+  ali:item supplementaries:ash x1
+    | Chance: 15%
+    | Count: 1
+    | ----- Predicates -----
+    | Random Chance:
+    |   -> Chance: 0.15
+    | Inverted:
+    |   -> Entity Properties:
+    |     -> Target: This Entity
+    |     -> Predicate:
+    |       -> Entity Types:
+    |         -> Tag: Can't Turn To Ash
+    | Entity Properties:
+    |   -> Target: This Entity
+    |   -> Predicate:
+    |     -> Entity Flags:
+    |       -> Is On Fire: True

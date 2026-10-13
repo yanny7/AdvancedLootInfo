@@ -1,0 +1,133 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:bone x1
+      | Chance: 19.12%
+      | Count: 1
+    ali:item minecraft:gunpowder x1
+      | Chance: 14.71%
+      | Count: 1
+    ali:item minecraft:skeleton_skull x1
+      | Chance: 11.76%
+      | Count: 1
+    ali:item minecraft:emerald x1
+      | Chance: 7.35%
+      | Count: 1
+    ali:item minecraft:raw_iron x1
+      | Chance: 4.41%
+      | Count: 1
+    ali:item minecraft:iron_nugget x1
+      | Chance: 4.41%
+      | Count: 1
+    ali:item minecraft:rib_armor_trim_smithing_template x1
+      | Chance: 2.94%
+      | Count: 1
+    ali:item minecraft:archer_pottery_sherd x1
+      | Chance: 2.94%
+      | Count: 1
+    ali:item minecraft:arms_up_pottery_sherd x1
+      | Chance: 2.94%
+      | Count: 1
+    ali:item minecraft:blade_pottery_sherd x1
+      | Chance: 2.94%
+      | Count: 1
+    ali:item minecraft:danger_pottery_sherd x1
+      | Chance: 2.94%
+      | Count: 1
+    ali:item minecraft:diamond x1
+      | Chance: 2.94%
+      | Count: 1
+    ali:item minecraft:arrow x1
+      | Chance: 2.94%
+      | Count: 1
+    ali:item minecraft:bow x1 {Damage:0}
+      | Chance: 2.94%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 10% to 70%
+      |   -> Add: False
+    ali:item minecraft:crossbow x1 {Damage:0}
+      | Chance: 2.94%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 10% to 70%
+      |   -> Add: False
+    ali:item minecraft:stone_sword x1 {Damage:0}
+      | Chance: 2.94%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 10% to 70%
+      |   -> Add: False
+    ali:item minecraft:stone_sword x1 {Damage:0}
+      | Chance: 2.94%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 10% to 70%
+      |   -> Add: False
+      | Enchant Randomly:
+    ali:item minecraft:chainmail_boots x1 {Damage:0}
+      | Chance: 0.74%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 10% to 70%
+      |   -> Add: False
+    ali:item minecraft:chainmail_leggings x1 {Damage:0}
+      | Chance: 0.74%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 10% to 70%
+      |   -> Add: False
+    ali:item minecraft:chainmail_chestplate x1 {Damage:0}
+      | Chance: 0.74%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 10% to 70%
+      |   -> Add: False
+    ali:item minecraft:chainmail_helmet x1 {Damage:0}
+      | Chance: 0.74%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 10% to 70%
+      |   -> Add: False
+    ali:item minecraft:chainmail_boots x1 {Damage:0}
+      | Chance: 0.74%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 10% to 70%
+      |   -> Add: False
+      | Enchant Randomly:
+    ali:item minecraft:chainmail_leggings x1 {Damage:0}
+      | Chance: 0.74%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 10% to 70%
+      |   -> Add: False
+      | Enchant Randomly:
+    ali:item minecraft:chainmail_chestplate x1 {Damage:0}
+      | Chance: 0.74%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 10% to 70%
+      |   -> Add: False
+      | Enchant Randomly:
+    ali:item minecraft:chainmail_helmet x1 {Damage:0}
+      | Chance: 0.74%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 10% to 70%
+      |   -> Add: False
+      | Enchant Randomly:

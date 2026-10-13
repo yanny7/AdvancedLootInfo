@@ -1,0 +1,64 @@
+{
+  "profession": "minecraft:librarian",
+  "trades": {
+    "novice": [
+      {
+        "type": "villagertradingplus:sell_enchanted_book",
+        "currency": { "item": "minecraft:emerald", "count": 1 },
+        "max_uses": 12,
+        "villager_experience": 1
+      },
+      {
+        "type": "villagertradingplus:sell_specific_enchanted_book",
+        "basePriceIn": { "item": "minecraft:emerald", "count": 10 },
+        "enchantment": "minecraft:mending",
+        "level": 1,
+        "max_uses": 4,
+        "villager_experience": 5
+      },
+      {
+        "type": "villagertradingplus:sell_enchanted_book_from_list",
+        "currency": { "item": "minecraft:emerald", "count": 1 },
+        "enchantments": [
+          { "id": "minecraft:sharpness", "min_level": 1, "max_level": 3, "weight": 3, "base_cost": 5, "cost_per_level": 3, "treasure_multiplier": 2 },
+          { "id": "minecraft:frost_walker", "min_level": 1, "max_level": 2, "weight": 1, "base_cost": 8, "cost_per_level": 4, "treasure_multiplier": 2 }
+        ],
+        "max_uses": 12,
+        "villager_experience": 2
+      },
+      {
+        "type": "villagertradingplus:sell_enchanted_tool",
+        "sell": { "item": "minecraft:diamond_sword", "count": 1 },
+        "basePriceIn": { "item": "minecraft:emerald", "count": 8 },
+        "max_uses": 3,
+        "villager_experience": 10
+      },
+      {
+        "type": "villagertradingplus:sell_specific_enchanted_tool",
+        "sell": { "item": "minecraft:iron_pickaxe", "count": 1 },
+        "basePriceIn": { "item": "minecraft:emerald", "count": 6 },
+        "enchantment": "minecraft:fortune",
+        "level": 2,
+        "max_uses": 3,
+        "villager_experience": 10
+      },
+      {
+        "type": "villagertradingplus:sell_potion",
+        "sell": { "item": "minecraft:potion", "count": 1 },
+        "convertible": { "item": "minecraft:potion", "count": 1 },
+        "priceIn": { "item": "minecraft:emerald", "count": 3 },
+        "max_uses": 12,
+        "villager_experience": 5
+      },
+      {
+        "type": "villagertradingplus:sell_map",
+        "structure_id": "minecraft:on_ocean_explorer_maps",
+        "name": "Ocean Explorer Map",
+        "priceIn": { "item": "minecraft:emerald", "count": 13 },
+        "buy": { "item": "minecraft:compass", "count": 1 },
+        "max_uses": 12,
+        "villager_experience": 5
+      }
+    ]
+  }
+}

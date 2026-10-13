@@ -1,0 +1,113 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 16
+      | XP: 2
+      ali:item minecraft:wheat x20
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 16
+      | XP: 2
+      ali:item minecraft:potato x26
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 16
+      | XP: 2
+      ali:item minecraft:carrot x22
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 16
+      | XP: 2
+      ali:item minecraft:beetroot x15
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 16
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:bread x6
+  ali:trade_level
+    | Level: 2
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 10
+      ali:item minecraft:pumpkin x6
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 5
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:pumpkin_pie x4
+    ali:items_to_items
+      | Uses: 16
+      | XP: 5
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:apple x4
+  ali:trade_level
+    | Level: 3
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 10
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:cookie x18
+    ali:items_to_items
+      | Uses: 12
+      | XP: 20
+      ali:item minecraft:melon x4
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+  ali:trade_level
+    | Level: 4
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:cake x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:suspicious_stew x1
+        | Set Stew Effect:
+        |   -> Night Vision
+        |     -> Duration: 5
+        |   -> Jump Boost
+        |     -> Duration: 8
+        |   -> Weakness
+        |     -> Duration: 7
+        |   -> Blindness
+        |     -> Duration: 6
+        |   -> Poison
+        |     -> Duration: 14
+        |   -> Saturation
+        |     -> Duration: 7
+  ali:trade_level
+    | Level: 5
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 30
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:golden_carrot x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 30
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item minecraft:glistering_melon_slice x3

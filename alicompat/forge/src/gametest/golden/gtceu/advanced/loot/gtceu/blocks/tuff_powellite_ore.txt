@@ -1,0 +1,39 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item gtceu:tuff_powellite_ore x1
+        | Count: 1
+        | ----- Predicates -----
+        | Match Tool:
+        |   -> Enchantments:
+        |     -> Enchantment: Silk Touch
+        |     -> Level: ≥ 1
+      ali:item gtceu:raw_powellite x1
+        | Count: 1
+        | ----- Modifiers -----
+        | Set Count:
+        |   -> Count: 1
+        |   -> Add: False
+        | Explosion Decay
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item gtceu:tuff_dust x0-1
+      | Count: clamp(max(0; U[0; 1]); 0; 2)
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Enchantments:
+      |       -> Enchantment: Silk Touch
+      |       -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 0 to 1
+      |   -> Add: False
+      | Limit Count:
+      |   -> Limit: 0 to 2
+      | Explosion Decay

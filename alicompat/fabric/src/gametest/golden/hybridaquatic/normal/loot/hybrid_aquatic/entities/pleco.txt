@@ -1,0 +1,14 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item hybrid_aquatic:pleco x1-4
+      | Count: 1
+      |   -> Looting I: 2
+      |   -> Looting II: 3
+      |   -> Looting III: 4
+      | ----- Modifiers -----
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
+      |   -> Value: 1

@@ -1,0 +1,10 @@
+{
+  "type": "ali:gametest_remove_item",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "ali_gametest:glm/remove"
+    }
+  ],
+  "item": "minecraft:stone"
+}

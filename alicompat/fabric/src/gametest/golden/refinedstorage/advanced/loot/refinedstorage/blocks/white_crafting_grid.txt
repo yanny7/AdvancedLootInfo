@@ -1,0 +1,13 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item refinedstorage:white_crafting_grid x1
+      | Count: 1
+      | ----- Predicates -----
+      | Survives Explosion
+      | ----- Modifiers -----
+      | Copy Components:
+      |   -> Source: Block Entity
+      |   -> Include: minecraft:custom_name

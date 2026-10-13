@@ -1,0 +1,50 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item aether:skyroot_leaves x1
+        | Count: 1
+        | ----- Predicates -----
+        | Any Of:
+        |   -> Match Tool:
+        |     -> Tag: forge:shears
+        |   -> Match Tool:
+        |     -> Enchantments:
+        |       -> Enchantment: Silk Touch
+        |       -> Level: ≥ 1
+        | ----- Modifiers -----
+        | Double Drops
+      ali:item aether:skyroot_sapling x1
+        | Chance: 5%
+        |   -> Fortune I: 6.25%
+        |   -> Fortune II: 8.33%
+        |   -> Fortune III: 10%
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion
+        | ----- Modifiers -----
+        | Double Drops
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item aether:skyroot_stick x1-2
+      | Chance: 2%
+      |   -> Fortune I: 2.22%
+      |   -> Fortune II: 2.5%
+      |   -> Fortune III: 3.33%
+      | Count: 1 to 2
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Any Of:
+      |     -> Match Tool:
+      |       -> Item: Shears
+      |     -> Match Tool:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Double Drops
+      | Explosion Decay

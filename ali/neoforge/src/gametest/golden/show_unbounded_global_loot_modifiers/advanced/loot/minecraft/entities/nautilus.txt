@@ -1,0 +1,26 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:nautilus_shell x1
+      | Chance: 5%
+      |   -> Looting LVL: [5%][LVL] | 6% + 1% × (LVL − 100%)
+      |   -> Looting I: 6%
+      |   -> Looting II: 7%
+      |   -> Looting III: 8%
+      | Count: 1
+      | ----- Predicates -----
+      | Killed by player
+      | Random Chance With Enchanted Bonus:
+      |   -> Chance: 0.05
+      |     -> Looting LVL: [0.05][LVL] | 0.06 + 0.01 × (LVL − 1)
+      |     -> Looting I: 0.06
+      |     -> Looting II: 0.07
+      |     -> Looting III: 0.08
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1
+    | ----- Predicates -----
+    | Random Chance:
+    |   -> Chance: 0.01

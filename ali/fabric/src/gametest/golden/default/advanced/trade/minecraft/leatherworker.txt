@@ -1,0 +1,179 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 16
+      | XP: 2
+      ali:item minecraft:leather x6
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:leather_leggings x1
+        | Set Random Dyes:
+        |   -> Number Of Dyes: 1 + binom(2; 75%)  ~3 (56%)
+        |     [chart 0..2 1-3 base=true modes=[false, false, true] heights=0.1111,0.6667,1.0000]
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Leather Pants
+        |     -> Components:
+        |       -> Partial Matchers:
+        |         -> null
+        |           -> Predicate:
+        |             -> Type: minecraft:dyed_color
+        |   -> On Fail:
+        |     -> Discard Item:
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x7
+      ali:item minecraft:air x0
+      ali:item minecraft:leather_chestplate x1
+        | Set Random Dyes:
+        |   -> Number Of Dyes: 1 + binom(2; 75%)  ~3 (56%)
+        |     [chart 0..2 1-3 base=true modes=[false, false, true] heights=0.1111,0.6667,1.0000]
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Leather Tunic
+        |     -> Components:
+        |       -> Partial Matchers:
+        |         -> null
+        |           -> Predicate:
+        |             -> Type: minecraft:dyed_color
+        |   -> On Fail:
+        |     -> Discard Item:
+  ali:trade_level
+    | Level: 2
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 10
+      ali:item minecraft:flint x26
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 5
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:leather_helmet x1
+        | Set Random Dyes:
+        |   -> Number Of Dyes: 1 + binom(2; 75%)  ~3 (56%)
+        |     [chart 0..2 1-3 base=true modes=[false, false, true] heights=0.1111,0.6667,1.0000]
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Leather Cap
+        |     -> Components:
+        |       -> Partial Matchers:
+        |         -> null
+        |           -> Predicate:
+        |             -> Type: minecraft:dyed_color
+        |   -> On Fail:
+        |     -> Discard Item:
+    ali:items_to_items
+      | Uses: 12
+      | XP: 5
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item minecraft:leather_boots x1
+        | Set Random Dyes:
+        |   -> Number Of Dyes: 1 + binom(2; 75%)  ~3 (56%)
+        |     [chart 0..2 1-3 base=true modes=[false, false, true] heights=0.1111,0.6667,1.0000]
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Leather Boots
+        |     -> Components:
+        |       -> Partial Matchers:
+        |         -> null
+        |           -> Predicate:
+        |             -> Type: minecraft:dyed_color
+        |   -> On Fail:
+        |     -> Discard Item:
+  ali:trade_level
+    | Level: 3
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 20
+      ali:item minecraft:rabbit_hide x9
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x7
+      ali:item minecraft:air x0
+      ali:item minecraft:leather_chestplate x1
+        | Set Random Dyes:
+        |   -> Number Of Dyes: 1 + binom(2; 75%)  ~3 (56%)
+        |     [chart 0..2 1-3 base=true modes=[false, false, true] heights=0.1111,0.6667,1.0000]
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Leather Tunic
+        |     -> Components:
+        |       -> Partial Matchers:
+        |         -> null
+        |           -> Predicate:
+        |             -> Type: minecraft:dyed_color
+        |   -> On Fail:
+        |     -> Discard Item:
+  ali:trade_level
+    | Level: 4
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 30
+      ali:item minecraft:turtle_scute x4
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x6
+      ali:item minecraft:air x0
+      ali:item minecraft:leather_horse_armor x1
+        | Set Random Dyes:
+        |   -> Number Of Dyes: 1 + binom(2; 75%)  ~3 (56%)
+        |     [chart 0..2 1-3 base=true modes=[false, false, true] heights=0.1111,0.6667,1.0000]
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Leather Horse Armor
+        |     -> Components:
+        |       -> Partial Matchers:
+        |         -> null
+        |           -> Predicate:
+        |             -> Type: minecraft:dyed_color
+        |   -> On Fail:
+        |     -> Discard Item:
+  ali:trade_level
+    | Level: 5
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 30
+      ali:item minecraft:emerald x6
+      ali:item minecraft:air x0
+      ali:item minecraft:saddle x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 5
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:leather_helmet x1
+        | Set Random Dyes:
+        |   -> Number Of Dyes: 1 + binom(2; 75%)  ~3 (56%)
+        |     [chart 0..2 1-3 base=true modes=[false, false, true] heights=0.1111,0.6667,1.0000]
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Leather Cap
+        |     -> Components:
+        |       -> Partial Matchers:
+        |         -> null
+        |           -> Predicate:
+        |             -> Type: minecraft:dyed_color
+        |   -> On Fail:
+        |     -> Discard Item:

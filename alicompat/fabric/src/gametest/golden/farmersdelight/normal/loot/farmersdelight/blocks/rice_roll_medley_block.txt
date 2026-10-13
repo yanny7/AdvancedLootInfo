@@ -1,0 +1,23 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item farmersdelight:rice_roll_medley_block x1
+      | Count: 1
+      | ----- Predicates -----
+      | Block State Property:
+      |   -> Block: Rice Roll Medley
+      |   -> Properties:
+      |     -> servings: 8
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:bowl x1
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Block State Property:
+      |     -> Block: Rice Roll Medley
+      |     -> Properties:
+      |       -> servings: 8

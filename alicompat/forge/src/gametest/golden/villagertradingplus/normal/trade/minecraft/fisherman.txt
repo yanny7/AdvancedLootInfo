@@ -1,0 +1,199 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 16
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item minecraft:string x20
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 16
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item minecraft:coal x10
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 16
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:cod x6
+      ali:item minecraft:emerald x1
+      ali:item minecraft:cooked_cod x6
+    ali:items_to_items
+      | Uses: 16
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:cod_bucket x1
+    ali:items_to_items
+      | All Of:
+      |   -> Biome tagged: is_ocean
+      |   -> Dimension: overworld
+      | Uses: 1
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x30
+      ali:item minecraft:air x0
+      ali:item minecraft:heart_of_the_sea x1
+    ali:items_to_items
+      | Any Of:
+      |   -> Weather: raining
+      |   -> Weather: thundering
+      | Uses: 12
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item minecraft:prismarine_crystals x4
+  ali:trade_level
+    | Level: 2
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 16
+      | XP: 10
+      | Price Multiplier: 0.05
+      ali:item minecraft:cod x15
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 16
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item minecraft:salmon x6
+      ali:item minecraft:emerald x1
+      ali:item minecraft:cooked_salmon x6
+    ali:items_to_items
+      | Uses: 12
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item minecraft:campfire x1
+    ali:items_to_items
+      | All Of:
+      |   -> Moon phase at night: 0
+      |   -> Gamerule doInsomnia = true
+      | Uses: 6
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:tropical_fish x1
+  ali:trade_level
+    | Level: 3
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 16
+      | XP: 20
+      | Price Multiplier: 0.05
+      ali:item minecraft:salmon x13
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 3
+      | XP: 10
+      | Price Multiplier: 0.2
+      ali:item minecraft:emerald x8-22
+      ali:item minecraft:air x0
+      ali:item minecraft:fishing_rod x1 {Damage:0}
+        | Enchant With Levels:
+        |   -> Levels: 5 to 19
+        |   -> Treasure: False
+    ali:items_to_items
+      | Uses: 12
+      | XP: 10
+      | Price Multiplier: 0.1
+      ali:item minecraft:emerald x12
+      ali:item minecraft:air x0
+      ali:item minecraft:nautilus_shell x1
+    ali:items_to_items
+      | All Of:
+      |   -> Job site: villagertradingplus:oceanographer_table
+      | Uses: 4
+      | XP: 10
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x8
+      ali:item minecraft:air x0
+      ali:item minecraft:sponge x1
+  ali:trade_level
+    | Level: 4
+    | Randomly Selects 1 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 30
+      | Price Multiplier: 0.05
+      ali:item minecraft:tropical_fish x6
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+  ali:trade_level
+    | Level: 5
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 30
+      | Price Multiplier: 0.05
+      ali:item minecraft:pufferfish x4
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:sub_trades
+      ali:items_to_items
+        | Villager Type: minecraft:plains
+        | Uses: 12
+        | XP: 30
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x1
+        ali:item minecraft:air x0
+        ali:item minecraft:oak_boat x1
+      ali:items_to_items
+        | Villager Type: minecraft:taiga
+        | Uses: 12
+        | XP: 30
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x1
+        ali:item minecraft:air x0
+        ali:item minecraft:spruce_boat x1
+      ali:items_to_items
+        | Villager Type: minecraft:snow
+        | Uses: 12
+        | XP: 30
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x1
+        ali:item minecraft:air x0
+        ali:item minecraft:spruce_boat x1
+      ali:items_to_items
+        | Villager Type: minecraft:desert
+        | Uses: 12
+        | XP: 30
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x1
+        ali:item minecraft:air x0
+        ali:item minecraft:jungle_boat x1
+      ali:items_to_items
+        | Villager Type: minecraft:jungle
+        | Uses: 12
+        | XP: 30
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x1
+        ali:item minecraft:air x0
+        ali:item minecraft:jungle_boat x1
+      ali:items_to_items
+        | Villager Type: minecraft:savanna
+        | Uses: 12
+        | XP: 30
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x1
+        ali:item minecraft:air x0
+        ali:item minecraft:acacia_boat x1
+      ali:items_to_items
+        | Villager Type: minecraft:swamp
+        | Uses: 12
+        | XP: 30
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x1
+        ali:item minecraft:air x0
+        ali:item minecraft:dark_oak_boat x1

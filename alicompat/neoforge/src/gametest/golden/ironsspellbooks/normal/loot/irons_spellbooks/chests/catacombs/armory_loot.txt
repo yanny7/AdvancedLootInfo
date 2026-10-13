@@ -1,0 +1,40 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 4
+    ali:item minecraft:stone_sword x1
+      | Chance: 50%
+      | Count: 1
+    ali:item minecraft:iron_sword x1
+      | Chance: 16.67%
+      | Count: 1
+    ali:item minecraft:bow x1
+      | Chance: 16.67%
+      | Count: 1
+    ali:item minecraft:crossbow x1
+      | Chance: 16.67%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 2
+    ali:item minecraft:chainmail_chestplate x1
+      | Chance: 20%
+      | Count: 1
+    ali:item minecraft:leather_helmet x1
+      | Chance: 20%
+      | Count: 1
+    ali:item minecraft:leather_boots x1
+      | Chance: 20%
+      | Count: 1
+    ali:item minecraft:iron_helmet x1
+      | Chance: 20%
+      | Count: 1
+    ali:item minecraft:leather_chestplate x1
+      | Chance: 20%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:arrow x0-32
+      | Count: 0 to 32

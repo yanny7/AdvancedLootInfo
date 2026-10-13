@@ -1,0 +1,14 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:player_head x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Copy Components:
+      |   -> Source: Block Entity
+      |   -> Include:
+      |     -> minecraft:profile
+      |     -> minecraft:note_block_sound
+      |     -> minecraft:custom_name

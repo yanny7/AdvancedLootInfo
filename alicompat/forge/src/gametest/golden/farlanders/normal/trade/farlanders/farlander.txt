@@ -1,0 +1,219 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item minecraft:bone x16
+      ali:item minecraft:air x0
+      ali:item farlanders:endumium_crystal x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x2
+      ali:item minecraft:air x0
+      ali:item minecraft:clay_ball x24
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x6
+      ali:item minecraft:air x0
+      ali:item minecraft:pumpkin_seeds x4
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x6
+      ali:item minecraft:air x0
+      ali:item minecraft:potato x4
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x2
+      ali:item minecraft:air x0
+      ali:item minecraft:fire_charge x4
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x6
+      ali:item minecraft:air x0
+      ali:item minecraft:carrot x4
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x2
+      ali:item minecraft:air x0
+      ali:item minecraft:gunpowder x7
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x1
+      ali:item minecraft:air x0
+      ali:item minecraft:flint x8
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x3
+      ali:item minecraft:air x0
+      ali:item minecraft:arrow x16
+  ali:trade_level
+    | Level: 2
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x6
+      ali:item minecraft:air x0
+      ali:item minecraft:spider_eye x4
+    ali:items_to_items
+      | Uses: 12
+      | XP: 8
+      | Price Multiplier: 0.05
+      ali:item minecraft:gold_ingot x6
+      ali:item minecraft:air x0
+      ali:item farlanders:endumium_crystal x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 7
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x3
+      ali:item minecraft:air x0
+      ali:item minecraft:lapis_lazuli x8
+    ali:items_to_items
+      | Uses: 12
+      | XP: 10
+      | Price Multiplier: 0.05
+      ali:item minecraft:apple x20
+      ali:item minecraft:air x0
+      ali:item farlanders:endumium_crystal x2
+    ali:items_to_items
+      | Uses: 12
+      | XP: 7
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x6
+      ali:item minecraft:air x0
+      ali:item minecraft:redstone x4
+    ali:items_to_items
+      | Uses: 12
+      | XP: 6
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x6
+      ali:item minecraft:air x0
+      ali:item minecraft:slime_ball x4
+  ali:trade_level
+    | Level: 3
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 10
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x4
+      ali:item minecraft:air x0
+      ali:item minecraft:milk_bucket x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x2
+      ali:item minecraft:air x0
+      ali:item minecraft:clock x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 10
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x3
+      ali:item minecraft:air x0
+      ali:item minecraft:shears x1 {Damage:0}
+    ali:items_to_items
+      | Uses: 12
+      | XP: 13
+      | Price Multiplier: 0.05
+      ali:item minecraft:iron_ingot x6
+      ali:item minecraft:air x0
+      ali:item farlanders:endumium_crystal x4
+    ali:items_to_items
+      | Uses: 12
+      | XP: 8
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x2
+      ali:item minecraft:air x0
+      ali:item minecraft:fermented_spider_eye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 7
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x2
+      ali:item minecraft:air x0
+      ali:item minecraft:glistering_melon_slice x4
+    ali:items_to_items
+      | Uses: 12
+      | XP: 9
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x5
+      ali:item minecraft:air x0
+      ali:item minecraft:prismarine_shard x12
+    ali:items_to_items
+      | Uses: 12
+      | XP: 7
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x1
+      ali:item minecraft:air x0
+      ali:item minecraft:pumpkin x3
+  ali:trade_level
+    | Level: 4
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x8
+      ali:item minecraft:air x0
+      ali:item minecraft:ender_pearl x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 10
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x6
+      ali:item minecraft:air x0
+      ali:item minecraft:magma_cream x4
+    ali:items_to_items
+      | Uses: 12
+      | XP: 13
+      | Price Multiplier: 0.05
+      ali:item minecraft:blaze_rod x8
+      ali:item minecraft:air x0
+      ali:item farlanders:endumium_crystal x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 14
+      | Price Multiplier: 0.05
+      ali:item minecraft:glowstone_dust x13
+      ali:item minecraft:air x0
+      ali:item farlanders:endumium_crystal x1
+  ali:trade_level
+    | Level: 5
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x6
+      ali:item minecraft:air x0
+      ali:item minecraft:nether_wart x4
+    ali:items_to_items
+      | Uses: 12
+      | XP: 18
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x10
+      ali:item minecraft:air x0
+      ali:item minecraft:ghast_tear x1

@@ -20,6 +20,7 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.SwingAnimationType;
 import net.minecraft.world.item.component.FireworkExplosion;
 import net.minecraft.world.item.component.MapPostProcessing;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.CopyCustomDataFunction;
@@ -57,6 +58,7 @@ public class EnumTypes {
         TRANSLATED_ENUMS.put(Variant.class, "horse_variant");
         TRANSLATED_ENUMS.put(Llama.Variant.class, "llama_variant");
         TRANSLATED_ENUMS.put(Axolotl.Variant.class, "axolotl_variant");
+        TRANSLATED_ENUMS.put(Explosion.BlockInteraction.class, "block_interaction");
     }
 
     @NotNull

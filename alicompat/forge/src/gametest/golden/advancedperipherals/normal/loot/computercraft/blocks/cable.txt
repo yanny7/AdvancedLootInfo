@@ -1,0 +1,25 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item computercraft:cable x1
+      | Count: 1
+      | ----- Predicates -----
+      | Survives Explosion
+      | Block State Property:
+      |   -> Block: Networking Cable
+      |   -> Properties:
+      |     -> cable: true
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item computercraft:wired_modem x1
+      | Count: 1
+      | ----- Predicates -----
+      | Survives Explosion
+      | Inverted:
+      |   -> Block State Property:
+      |     -> Block: Networking Cable
+      |     -> Properties:
+      |       -> modem: none

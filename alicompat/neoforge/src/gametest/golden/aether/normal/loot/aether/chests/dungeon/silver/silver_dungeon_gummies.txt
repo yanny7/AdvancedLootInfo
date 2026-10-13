@@ -1,0 +1,11 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item aether:golden_gummy_swet x1-4
+      | Chance: 75%
+      | Count: 1 to 4
+    ali:item aether:blue_gummy_swet x1-4
+      | Chance: 25%
+      | Count: 1 to 4

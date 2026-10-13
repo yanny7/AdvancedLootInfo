@@ -1,0 +1,23 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item grimoireofgaia:headgear_book x1
+      | Chance: 16.67%
+      | Count: 1
+    ali:item grimoireofgaia:headgear_mob x1
+      | Chance: 16.67%
+      | Count: 1
+    ali:item grimoireofgaia:headgear_bolt x1
+      | Chance: 16.67%
+      | Count: 1
+    ali:item grimoireofgaia:headgear_arrow x1
+      | Chance: 16.67%
+      | Count: 1
+    ali:item grimoireofgaia:headgear_doll x1
+      | Chance: 16.67%
+      | Count: 1
+    ali:item grimoireofgaia:headgear_ears_elf x1
+      | Chance: 16.67%
+      | Count: 1

@@ -1,0 +1,68 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:emerald x10-64
+      | Chance: 16.67%
+      | Count: max(0; U[10; 64])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 10 to 64
+      |   -> Add: False
+    ali:item minecraft:diamond x5-8
+      | Chance: 16.67%
+      | Count: max(0; U[5; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 8
+      |   -> Add: False
+    ali:item supplementaries:bomb_blue x1
+      | Chance: 16.67%
+      | Count: 1
+      | ----- Predicates -----
+      | Data Conditions
+    ali:item minecraft:ender_pearl x1-4
+      | Chance: 16.67%
+      | Count: max(0; U[1; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False
+    ali:item minecraft:slime_ball x4-12
+      | Chance: 16.67%
+      | Count: max(0; U[4; 12])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4 to 12
+      |   -> Add: False
+    ali:item minecraft:diamond_helmet x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 34 to 91
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+      | Set Damage:
+      |   -> Damage: U[30%; 80%)
+      |   -> Add: False
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:curse
+      |   -> Only Compatible: True
+    ali:item minecraft:diamond_boots x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 34 to 91
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+      | Set Damage:
+      |   -> Damage: U[30%; 80%)
+      |   -> Add: False
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:curse
+      |   -> Only Compatible: True

@@ -1,0 +1,287 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:paper x8-16
+      | Count: max(0; U[8; 16])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 8 to 16
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:ancient_knowledge_fragment x0-5
+      | Count: max(0; binom(5; 5%))  ~0 (77%)
+      |   [chart 0..5 0-5 base=true modes=[true, false, false, false, false, false] heights=1.0000,0.2632,0.0277,0.0015,0.0000,0.0000]
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: binom(5; 5%)  ~0 (77%)
+      |     [chart 0..5 0-5 base=true modes=[true, false, false, false, false, false] heights=1.0000,0.2632,0.0277,0.0015,0.0000,0.0000]
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:chained_book x0-2
+      | Count: max(0; binom(2; 15%))  ~0 (72%)
+      |   [chart 0..2 0-2 base=true modes=[true, false, false] heights=1.0000,0.3529,0.0311]
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: binom(2; 15%)  ~0 (72%)
+      |     [chart 0..2 0-2 base=true modes=[true, false, false] heights=1.0000,0.3529,0.0311]
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:ruined_book x1
+      | Chance: 1%
+      | Count: 1
+      | ----- Predicates -----
+      | Random Chance:
+      |   -> Chance: 0.01
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:disc_fragment_flame_still_burns x1
+      | Chance: 20%
+      | Count: 1
+      | ----- Predicates -----
+      | Random Chance:
+      |   -> Chance: 0.2
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:furled_map x1
+      | Chance: 5%
+      | Count: 1
+      | ----- Predicates -----
+      | Random Chance:
+      |   -> Chance: 0.05
+      | ----- Modifiers -----
+      | Set Furled Map:
+      |   -> Destination: irons_spellbooks:ancient_battleground
+      |   -> Name: Legion Outpost
+      |   -> Dimension: minecraft:the_nether
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: binom(3; 25%)  ~0 to 1 (42%)
+    |   [chart 0..3 0-3 base=true modes=[true, true, false, false] heights=1.0000,1.0000,0.3333,0.0370]
+    ali:item irons_spellbooks:scroll x1
+      | Chance: 50%
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Spell:
+      |   -> Quality: U[0; 1)
+      |   -> Applicable Spells:
+      |     -> Force: False
+    ali:item irons_spellbooks:scroll x1
+      | Chance: 50%
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Spell:
+      |   -> Quality: U[0; 1)
+      |   -> Applicable Spells:
+      |     -> School: Fire
+      |     -> Force: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:book x0-8
+      | Count: max(0; binom(8; 25%))  ~2 (31%)
+      |   [chart 0..8 0-8 base=true modes=[false, false, true, false, false, false, false, false, false] heights=0.3214,0.8571,1.0000,0.6667,0.2778,0.0741,0.0123,0.0012,0.0000]
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: binom(8; 25%)  ~2 (31%)
+      |     [chart 0..8 0-8 base=true modes=[false, false, true, false, false, false, false, false, false] heights=0.3214,0.8571,1.0000,0.6667,0.2778,0.0741,0.0123,0.0012,0.0000]
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item minecraft:written_book x1 {"minecraft:custom_name":'{"italic":false,"translate":"lore.citadel_book.title"}',"minecraft:written_book_content":{author:"",pages:[{raw:'{"color":"dark_gray","italic":true,"translate":"lore.citadel_book.construction_ledger"}'}],title:{raw:""}}}
+            | Chance: 4.17%
+            | Count: 1
+            | ----- Predicates -----
+            | Random Chance:
+            |   -> Chance: 0.5
+            | ----- Modifiers -----
+            | Set Name:
+            |   -> Name: Citadel Tome
+            |   -> Target: Custom Name
+            | Set Written Book Pages:
+            |   -> Pages:
+            |     -> Raw: A ledger that seems to log transactions of construction materials, containing hundreds of shipments of various building materials...
+            |   -> List Operation: Insert
+            |     -> Offset: 0
+          ali:item minecraft:written_book x1 {"minecraft:custom_name":'{"italic":false,"translate":"lore.citadel_book.title"}',"minecraft:written_book_content":{author:"",pages:[{raw:'{"color":"dark_gray","italic":true,"translate":"lore.citadel_book.soul_research"}'}],title:{raw:""}}}
+            | Chance: 4.17%
+            | Count: 1
+            | ----- Predicates -----
+            | Random Chance:
+            |   -> Chance: 0.5
+            | ----- Modifiers -----
+            | Set Name:
+            |   -> Name: Citadel Tome
+            |   -> Target: Custom Name
+            | Set Written Book Pages:
+            |   -> Pages:
+            |     -> Raw: A research book detailing the process of collecting "loose souls" and experimenting on their use as a kind of fuel...
+            |   -> List Operation: Insert
+            |     -> Offset: 0
+          ali:item minecraft:written_book x1 {"minecraft:custom_name":'{"italic":false,"translate":"lore.citadel_book.title"}',"minecraft:written_book_content":{author:"",pages:[{raw:'{"color":"dark_gray","italic":true,"translate":"lore.citadel_book.planar_travel"}'}],title:{raw:""}}}
+            | Chance: 4.17%
+            | Count: 1
+            | ----- Predicates -----
+            | Random Chance:
+            |   -> Chance: 0.5
+            | ----- Modifiers -----
+            | Set Name:
+            |   -> Name: Citadel Tome
+            |   -> Target: Custom Name
+            | Set Written Book Pages:
+            |   -> Pages:
+            |     -> Raw: A draft of a dissertation recounting the results of inter-planar travel experiments, with margin notes about "angering" the void...
+            |   -> List Operation: Insert
+            |     -> Offset: 0
+          ali:item minecraft:written_book x1 {"minecraft:custom_name":'{"italic":false,"translate":"lore.citadel_book.title"}',"minecraft:written_book_content":{author:"",pages:[{raw:'{"color":"dark_gray","italic":true,"translate":"lore.citadel_book.legion_war_journal"}'}],title:{raw:""}}}
+            | Chance: 4.17%
+            | Count: 1
+            | ----- Predicates -----
+            | Random Chance:
+            |   -> Chance: 0.5
+            | ----- Modifiers -----
+            | Set Name:
+            |   -> Name: Citadel Tome
+            |   -> Target: Custom Name
+            | Set Written Book Pages:
+            |   -> Pages:
+            |     -> Raw: A journal recounting campaigns of "The Legion". The oldest battles are hundreds of years before the latest entries, which seem to be written with more and more discordance...
+            |   -> List Operation: Insert
+            |     -> Offset: 0
+          ali:item minecraft:written_book x1 {"minecraft:custom_name":'{"italic":false,"translate":"lore.citadel_book.title"}',"minecraft:written_book_content":{author:"",pages:[{raw:'{"color":"dark_gray","italic":true,"translate":"lore.citadel_book.armory_ledger"}'}],title:{raw:""}}}
+            | Chance: 4.17%
+            | Count: 1
+            | ----- Predicates -----
+            | Random Chance:
+            |   -> Chance: 0.5
+            | ----- Modifiers -----
+            | Set Name:
+            |   -> Name: Citadel Tome
+            |   -> Target: Custom Name
+            | Set Written Book Pages:
+            |   -> Pages:
+            |     -> Raw: A quartermaster's journal detailing the contents of an armory...
+            |   -> List Operation: Insert
+            |     -> Offset: 0
+          ali:item minecraft:written_book x1 {"minecraft:custom_name":'{"italic":false,"translate":"lore.citadel_book.title"}',"minecraft:written_book_content":{author:"",pages:[{raw:'{"color":"dark_gray","italic":true,"translate":"lore.citadel_book.training_manual"}'}],title:{raw:""}}}
+            | Chance: 4.17%
+            | Count: 1
+            | ----- Predicates -----
+            | Random Chance:
+            |   -> Chance: 0.5
+            | ----- Modifiers -----
+            | Set Name:
+            |   -> Name: Citadel Tome
+            |   -> Target: Custom Name
+            | Set Written Book Pages:
+            |   -> Pages:
+            |     -> Raw: A worn instructional guide for "new recruits" of the legion; although the techniques shown seem to be of extreme prowess...
+            |   -> List Operation: Insert
+            |     -> Offset: 0
+          ali:item minecraft:written_book x1 {"minecraft:custom_name":'{"italic":false,"translate":"lore.citadel_book.title"}',"minecraft:written_book_content":{author:"",pages:[{raw:'{"color":"dark_gray","italic":true,"translate":"lore.citadel_book.cinderous_rituals"}'}],title:{raw:""}}}
+            | Chance: 4.17%
+            | Count: 1
+            | ----- Predicates -----
+            | Random Chance:
+            |   -> Chance: 0.5
+            | ----- Modifiers -----
+            | Set Name:
+            |   -> Name: Citadel Tome
+            |   -> Target: Custom Name
+            | Set Written Book Pages:
+            |   -> Pages:
+            |     -> Raw: A fragment of a ritual text, partially burned. It details undergoing some intense process, with symbology of souls and fire...
+            |   -> List Operation: Insert
+            |     -> Offset: 0
+          ali:item minecraft:written_book x1 {"minecraft:custom_name":'{"italic":false,"translate":"lore.citadel_book.title"}',"minecraft:written_book_content":{author:"",pages:[{raw:'{"color":"dark_gray","italic":true,"translate":"lore.citadel_book.architectural_diagrams"}'}],title:{raw:""}}}
+            | Chance: 4.17%
+            | Count: 1
+            | ----- Predicates -----
+            | Random Chance:
+            |   -> Chance: 0.5
+            | ----- Modifiers -----
+            | Set Name:
+            |   -> Name: Citadel Tome
+            |   -> Target: Custom Name
+            | Set Written Book Pages:
+            |   -> Pages:
+            |     -> Raw: A notebook of architectural diagrams, picturing a great domed repository and a surrounding network of walls...
+            |   -> List Operation: Insert
+            |     -> Offset: 0
+          ali:item minecraft:written_book x1 {"minecraft:custom_name":'{"italic":false,"translate":"lore.citadel_book.title"}',"minecraft:written_book_content":{author:"",pages:[{raw:'{"color":"dark_gray","italic":true,"translate":"lore.citadel_book.fire_notes"}'}],title:{raw:""}}}
+            | Chance: 4.17%
+            | Count: 1
+            | ----- Predicates -----
+            | Random Chance:
+            |   -> Chance: 0.5
+            | ----- Modifiers -----
+            | Set Name:
+            |   -> Name: Citadel Tome
+            |   -> Target: Custom Name
+            | Set Written Book Pages:
+            |   -> Pages:
+            |     -> Raw: A tome with various spell descriptions, primarily those involving flame...
+            |   -> List Operation: Insert
+            |     -> Offset: 0
+          ali:item minecraft:written_book x1 {"minecraft:custom_name":'{"italic":false,"translate":"lore.citadel_book.title"}',"minecraft:written_book_content":{author:"",pages:[{raw:'{"color":"dark_gray","italic":true,"translate":"lore.citadel_book.quarry"}'}],title:{raw:""}}}
+            | Chance: 4.17%
+            | Count: 1
+            | ----- Predicates -----
+            | Random Chance:
+            |   -> Chance: 0.5
+            | ----- Modifiers -----
+            | Set Name:
+            |   -> Name: Citadel Tome
+            |   -> Target: Custom Name
+            | Set Written Book Pages:
+            |   -> Pages:
+            |     -> Raw: A ledger detailing trade with a blackstone quarry...
+            |   -> List Operation: Insert
+            |     -> Offset: 0
+          ali:item minecraft:written_book x1 {"minecraft:custom_name":'{"italic":false,"translate":"lore.citadel_book.title"}',"minecraft:written_book_content":{author:"",pages:[{raw:'{"color":"dark_gray","italic":true,"translate":"lore.citadel_book.complaint"}'}],title:{raw:""}}}
+            | Chance: 4.17%
+            | Count: 1
+            | ----- Predicates -----
+            | Random Chance:
+            |   -> Chance: 0.5
+            | ----- Modifiers -----
+            | Set Name:
+            |   -> Name: Citadel Tome
+            |   -> Target: Custom Name
+            | Set Written Book Pages:
+            |   -> Pages:
+            |     -> Raw: A handwritten complaint about an interaction with a bookkeeper...
+            |   -> List Operation: Insert
+            |     -> Offset: 0
+          ali:item minecraft:written_book x1 {"minecraft:custom_name":'{"italic":false,"translate":"lore.citadel_book.title"}',"minecraft:written_book_content":{author:"",pages:[{raw:'{"color":"dark_gray","italic":true,"translate":"lore.citadel_book.soul_warning"}'}],title:{raw:""}}}
+            | Chance: 4.17%
+            | Count: 1
+            | ----- Predicates -----
+            | Random Chance:
+            |   -> Chance: 0.5
+            | ----- Modifiers -----
+            | Set Name:
+            |   -> Name: Citadel Tome
+            |   -> Target: Custom Name
+            | Set Written Book Pages:
+            |   -> Pages:
+            |     -> Raw: A letter warning of the ramifications of connecting souls, if the "prime soul" were to be killed...
+            |   -> List Operation: Insert
+            |     -> Offset: 0

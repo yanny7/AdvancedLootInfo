@@ -1,0 +1,38 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 8
+    ali:item minecraft:potato x1-7
+      | Chance: 23.26%
+      | Count: 1 to 7
+    ali:item minecraft:bread x1-4
+      | Chance: 23.26%
+      | Count: 1 to 4
+    ali:item minecraft:apple x1-5
+      | Chance: 23.26%
+      | Count: 1 to 5
+    ali:item minecraft:oak_sapling x1-2
+      | Chance: 11.63%
+      | Count: 1 to 2
+    ali:item minecraft:dandelion x1
+      | Chance: 4.65%
+      | Count: 1
+    ali:item minecraft:emerald x1-4
+      | Chance: 4.65%
+      | Count: 1 to 4
+    ali:item minecraft:gold_nugget x1-3
+      | Chance: 2.33%
+      | Count: 1 to 3
+    ali:item minecraft:poppy x1
+      | Chance: 2.33%
+      | Count: 1
+    ali:item minecraft:book x1
+      | Chance: 2.33%
+      | Count: 1
+    ali:item minecraft:feather x1
+      | Chance: 2.33%
+      | Count: 1
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1

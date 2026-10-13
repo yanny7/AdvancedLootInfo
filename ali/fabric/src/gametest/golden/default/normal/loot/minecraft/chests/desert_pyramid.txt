@@ -1,0 +1,94 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 4
+    ali:item minecraft:bone x4-6
+      | Chance: 10.55%
+      | Count: 4 to 6
+    ali:item minecraft:spider_eye x1-3
+      | Chance: 10.55%
+      | Count: 1 to 3
+    ali:item minecraft:rotten_flesh x3-7
+      | Chance: 10.55%
+      | Count: 3 to 7
+    ali:item minecraft:saddle x1
+      | Chance: 8.44%
+      | Count: 1
+    ali:item minecraft:golden_apple x1
+      | Chance: 8.44%
+      | Count: 1
+    ali:item minecraft:iron_ingot x1-5
+      | Chance: 6.33%
+      | Count: 1 to 5
+    ali:item minecraft:gold_ingot x2-7
+      | Chance: 6.33%
+      | Count: 2 to 7
+    ali:item minecraft:emerald x1-3
+      | Chance: 6.33%
+      | Count: 1 to 3
+    ali:item minecraft:copper_horse_armor x1
+      | Chance: 6.33%
+      | Count: 1
+    ali:item minecraft:iron_horse_armor x1
+      | Chance: 6.33%
+      | Count: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 6.33%
+    ali:item minecraft:golden_horse_armor x1
+      | Chance: 4.22%
+      | Count: 1
+    ali:item minecraft:enchanted_book x1
+      | Chance: 4.22%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
+    ali:item minecraft:diamond x1-3
+      | Chance: 2.11%
+      | Count: 1 to 3
+    ali:item minecraft:diamond_horse_armor x1
+      | Chance: 2.11%
+      | Count: 1
+    ali:item minecraft:enchanted_golden_apple x1
+      | Chance: 0.84%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4
+    ali:item minecraft:bone x1-8
+      | Chance: 20%
+      | Count: 1 to 8
+    ali:item minecraft:gunpowder x1-8
+      | Chance: 20%
+      | Count: 1 to 8
+    ali:item minecraft:rotten_flesh x1-8
+      | Chance: 20%
+      | Count: 1 to 8
+    ali:item minecraft:string x1-8
+      | Chance: 20%
+      | Count: 1 to 8
+    ali:item minecraft:sand x1-8
+      | Chance: 20%
+      | Count: 1 to 8
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 57.14%
+    ali:item minecraft:enchanted_book x1
+      | Chance: 28.57%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantment: Unbreaking
+      |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
+    ali:item minecraft:dune_armor_trim_smithing_template x2
+      | Chance: 14.29%
+      | Count: 2

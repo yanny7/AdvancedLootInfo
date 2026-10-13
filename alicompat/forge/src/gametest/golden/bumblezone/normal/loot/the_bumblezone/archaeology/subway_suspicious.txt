@@ -1,0 +1,56 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:miner_pottery_sherd x1
+      | Chance: 9.3%
+      | Count: 1
+    ali:item minecraft:explorer_pottery_sherd x1
+      | Chance: 9.3%
+      | Count: 1
+    ali:item minecraft:howl_pottery_sherd x1
+      | Chance: 9.3%
+      | Count: 1
+    ali:item minecraft:mourner_pottery_sherd x1
+      | Chance: 9.3%
+      | Count: 1
+    ali:item minecraft:echo_shard x1
+      | Chance: 9.3%
+      | Count: 1
+    ali:item minecraft:minecart x1
+      | Chance: 9.3%
+      | Count: 1
+    ali:item minecraft:lantern x1
+      | Chance: 9.3%
+      | Count: 1
+    ali:item minecraft:rail x1
+      | Chance: 4.65%
+      | Count: 1
+    ali:item minecraft:powered_rail x1
+      | Chance: 4.65%
+      | Count: 1
+    ali:item minecraft:activator_rail x1
+      | Chance: 4.65%
+      | Count: 1
+    ali:item minecraft:detector_rail x1
+      | Chance: 4.65%
+      | Count: 1
+    ali:item minecraft:raiser_armor_trim_smithing_template x1
+      | Chance: 4.65%
+      | Count: 1
+    ali:item the_bumblezone:buzzing_briefcase x1
+      | Chance: 4.65%
+      | Count: 1
+    ali:item minecraft:flower_banner_pattern x1
+      | Chance: 2.33%
+      | Count: 1
+    ali:item #the_bumblezone:banner_patterns x1
+      | Chance: 2.33%
+      | Count: 1
+    ali:item minecraft:book x1 {Enchantments:[{id:"the_bumblezone:hive_lifeline",lvl:1s}]}
+      | Chance: 2.33%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Hive Lifeline

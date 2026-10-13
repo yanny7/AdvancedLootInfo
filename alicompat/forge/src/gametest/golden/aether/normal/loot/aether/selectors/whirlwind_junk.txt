@@ -1,0 +1,38 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:sand x1
+      | Chance: 20%
+      | Count: 1
+    ali:item minecraft:oak_log x1
+      | Chance: 17%
+      | Count: 1
+    ali:item minecraft:flint x1
+      | Chance: 14%
+      | Count: 1
+    ali:item minecraft:stick x1
+      | Chance: 12%
+      | Count: 1
+    ali:item minecraft:clay x1
+      | Chance: 11%
+      | Count: 1
+    ali:item minecraft:coal x1
+      | Chance: 9%
+      | Count: 1
+    ali:item minecraft:gold_ingot x1
+      | Chance: 5%
+      | Count: 1
+    ali:item minecraft:gravel x1
+      | Chance: 5%
+      | Count: 1
+    ali:item minecraft:iron_ingot x1
+      | Chance: 4%
+      | Count: 1
+    ali:item minecraft:pumpkin x1
+      | Chance: 2%
+      | Count: 1
+    ali:item minecraft:diamond x1
+      | Chance: 1%
+      | Count: 1

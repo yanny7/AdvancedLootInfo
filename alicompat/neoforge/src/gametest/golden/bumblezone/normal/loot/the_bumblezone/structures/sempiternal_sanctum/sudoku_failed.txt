@@ -1,0 +1,17 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:splash_potion x1 {"minecraft:potion_contents":{potion:"minecraft:strong_harming"}}
+      | Chance: 50%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Harming
+    ali:item minecraft:splash_potion x1 {"minecraft:potion_contents":{potion:"minecraft:strong_poison"}}
+      | Chance: 50%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Poison

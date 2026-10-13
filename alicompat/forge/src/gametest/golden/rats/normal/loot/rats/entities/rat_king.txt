@@ -1,0 +1,31 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item rats:token_piece x1
+      | Chance: 50%
+      |   -> Looting I: 75%
+      |   -> Looting II: 100%
+      |   -> Looting III: 125%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item rats:filth x1-3
+      | Count: 1 to 3
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item rats:rat_king_crown x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item rats:tangled_rat_tails x1
+      | Count: 1
+  ali:item rats:tiny_coin x1
+    | Count: 1
+    | ----- Predicates -----
+    | Killer Rat Has Upgrade:
+    |   -> Item: Rat Upgrade: Aristoc-RAT

@@ -1,0 +1,36 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item kaleidoscope_cookery:braised_pork_ribs x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion
+        | Block State Property:
+        |   -> Block: Braised Pork Ribs
+        |   -> Properties:
+        |     -> bites: 0
+      ali:item minecraft:bowl x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:empty
+        | Drops nothing
+        | ----- Predicates -----
+        | Survives Explosion
+        | Block State Property:
+        |   -> Block: Braised Pork Ribs
+        |   -> Properties:
+        |     -> bites: 0
+      ali:item minecraft:bone x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion

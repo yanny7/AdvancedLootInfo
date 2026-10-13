@@ -1,0 +1,162 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 5 to 11
+    ali:item minecraft:suspicious_stew x1
+      | Chance: 10.81%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Stew Effect:
+      |   -> Blindness
+      |     -> Duration: 10 to 25
+      |   -> Wither
+      |     -> Duration: 10 to 20
+      |   -> Weakness
+      |     -> Duration: 30 to 50
+      |   -> Poison
+      |     -> Duration: 15 to 30
+      |   -> Bad Luck
+      |     -> Duration: 200 to 400
+      |   -> Fire Resistance
+      |     -> Duration: 360 to 600
+      |   -> Night Vision
+      |     -> Duration: 60 to 120
+      |   -> Saturation
+      |     -> Duration: 10 to 12
+    ali:item minecraft:paper x1-12
+      | Chance: 10.81%
+      | Count: 1 to 12
+    ali:item minecraft:crimson_fungus x2-12
+      | Chance: 9.46%
+      | Count: 2 to 12
+    ali:item minecraft:nether_wart_block x1-10
+      | Chance: 9.46%
+      | Count: 1 to 10
+    ali:item minecraft:shroomlight x5-10
+      | Chance: 9.46%
+      | Count: 5 to 10
+    ali:item minecraft:ghast_tear x2-5
+      | Chance: 8.11%
+      | Count: 2 to 5
+    ali:item minecraft:firework_star x1-3 {"minecraft:firework_explosion":{fade_colors:[12201518],has_trail:1b,has_twinkle:1b,shape:"creeper"}}
+      | Chance: 5.41%
+      | Count: 1 to 3
+      | ----- Modifiers -----
+      | Set Firework Explosion:
+      |   -> Shape: Creeper
+      |   -> Fade Colors: [12201518]
+      |   -> Trail: True
+      |   -> Twinkle: True
+    ali:item minecraft:firework_star x1-3 {"minecraft:firework_explosion":{fade_colors:[0],has_trail:1b,has_twinkle:1b,shape:"creeper"}}
+      | Chance: 5.41%
+      | Count: 1 to 3
+      | ----- Modifiers -----
+      | Set Firework Explosion:
+      |   -> Shape: Creeper
+      |   -> Fade Colors: [0]
+      |   -> Trail: True
+      |   -> Twinkle: True
+    ali:item minecraft:warped_fungus_on_a_stick x1
+      | Chance: 5.41%
+      | Count: 1
+    ali:item minecraft:gunpowder x10-15
+      | Chance: 4.05%
+      | Count: 10 to 15
+    ali:item minecraft:iron_helmet x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 4.05%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:iron_chestplate x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 4.05%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:iron_leggings x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 4.05%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:iron_boots x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 4.05%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:red_stained_glass_pane x1-3
+      | Chance: 2.7%
+      | Count: 1 to 3
+    ali:item minecraft:black_stained_glass_pane x1-3
+      | Chance: 2.7%
+      | Count: 1 to 3
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 0
+    |   -> Bad Luck: 0
+    |   -> Luck 1: 1
+    |   -> Luck 2: 2
+    |   -> Luck 3: 3
+    |   -> Luck 4: 4
+    ali:item minecraft:suspicious_stew x1
+      | Chance: 75%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Stew Effect:
+      |   -> Blindness
+      |     -> Duration: 10 to 25
+      |   -> Wither
+      |     -> Duration: 10 to 20
+      |   -> Weakness
+      |     -> Duration: 30 to 50
+      |   -> Poison
+      |     -> Duration: 15 to 30
+      |   -> Bad Luck
+      |     -> Duration: 200 to 400
+      |   -> Fire Resistance
+      |     -> Duration: 360 to 600
+      |   -> Night Vision
+      |     -> Duration: 60 to 120
+      |   -> Saturation
+      |     -> Duration: 10 to 12
+    ali:empty
+      | Drops nothing
+      | Chance: 25%
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 83.33%
+    ali:item minecraft:coast_armor_trim_smithing_template x2
+      | Chance: 16.67%
+      | Count: 2
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 90%
+    ali:item minecraft:black_harness x1
+      | Chance: 2.5%
+      | Count: 1
+    ali:item minecraft:red_harness x1
+      | Chance: 2.5%
+      | Count: 1
+    ali:item minecraft:orange_harness x1
+      | Chance: 2.5%
+      | Count: 1
+    ali:item minecraft:white_harness x1
+      | Chance: 2.5%
+      | Count: 1

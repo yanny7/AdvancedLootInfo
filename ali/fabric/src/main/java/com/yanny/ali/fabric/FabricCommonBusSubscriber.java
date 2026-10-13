@@ -3,6 +3,7 @@ package com.yanny.ali.fabric;
 import com.yanny.ali.Utils;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.network.AbstractServer;
+import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLevelEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
@@ -11,6 +12,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.CloseableResourceManager;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,10 +20,13 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
 public class FabricCommonBusSubscriber {
+    private static final Identifier AFTER_MODS = Utils.modLoc("after_mods");
+
     private static boolean serverLoaded = false;
 
     public static void registerEvents(AbstractServer server) {
-        ServerLevelEvents.LOAD.register(FabricCommonBusSubscriber::onServerStarting);
+        ServerLevelEvents.LOAD.addPhaseOrdering(Event.DEFAULT_PHASE, AFTER_MODS);
+        ServerLevelEvents.LOAD.register(AFTER_MODS, FabricCommonBusSubscriber::onServerStarting);
         ServerLifecycleEvents.SERVER_STOPPING.register(FabricCommonBusSubscriber::onServerStopping);
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register(FabricCommonBusSubscriber::onReload);
         ResourceLoader.get(PackType.SERVER_DATA).registerReloadListener(Utils.modLoc("fake_loot_loader"), getReloadListener(server));

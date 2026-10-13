@@ -1,0 +1,37 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:arms_up_pottery_sherd x1
+      | Chance: 25%
+      | Count: 1
+    ali:item minecraft:brewer_pottery_sherd x1
+      | Chance: 25%
+      | Count: 1
+    ali:item minecraft:brick x1
+      | Chance: 12.5%
+      | Count: 1
+    ali:item minecraft:emerald x1
+      | Chance: 12.5%
+      | Count: 1
+    ali:item minecraft:stick x1
+      | Chance: 12.5%
+      | Count: 1
+    ali:item minecraft:suspicious_stew x1
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Stew Effect:
+      |   -> Night Vision
+      |     -> Duration: 7 to 10
+      |   -> Jump Boost
+      |     -> Duration: 7 to 10
+      |   -> Weakness
+      |     -> Duration: 6 to 8
+      |   -> Blindness
+      |     -> Duration: 5 to 7
+      |   -> Poison
+      |     -> Duration: 10 to 20
+      |   -> Saturation
+      |     -> Duration: 7 to 10

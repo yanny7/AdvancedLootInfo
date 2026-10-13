@@ -1,0 +1,121 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:archer_pottery_sherd x1
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> All Of:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+    ali:item minecraft:miner_pottery_sherd x1
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> All Of:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+    ali:item minecraft:prize_pottery_sherd x1
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> All Of:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+    ali:item minecraft:skull_pottery_sherd x1
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> All Of:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+    ali:item minecraft:diamond x1
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> All Of:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+    ali:item minecraft:tnt x1
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> All Of:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+    ali:item minecraft:gunpowder x1
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> All Of:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+    ali:item minecraft:emerald x1
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> All Of:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+  ali:reference
+    | Selects all entries
+    | ----- Predicates -----
+    | Config Value Chance:
+    |   -> Config: archaeology
+    ali:loot_table
+      | Selects all entries
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1
+        ali:item artifacts:cowboy_hat x1
+          | Chance: 0.89%
+          | Count: 1
+          | ----- Predicates -----
+          | Config Value Chance:
+          |   -> Config: archaeology
+        ali:item artifacts:obsidian_skull x1
+          | Chance: 0.89%
+          | Count: 1
+          | ----- Predicates -----
+          | Config Value Chance:
+          |   -> Config: archaeology
+        ali:item artifacts:snorkel x1
+          | Chance: 0.89%
+          | Count: 1
+          | ----- Predicates -----
+          | Config Value Chance:
+          |   -> Config: archaeology
+        ali:item artifacts:power_glove x1
+          | Chance: 0.89%
+          | Count: 1
+          | ----- Predicates -----
+          | Config Value Chance:
+          |   -> Config: archaeology
+        ali:item artifacts:kitty_slippers x1
+          | Chance: 0.89%
+          | Count: 1
+          | ----- Predicates -----
+          | Config Value Chance:
+          |   -> Config: archaeology
+        ali:item artifacts:night_vision_goggles x1
+          | Chance: 0.89%
+          | Count: 1
+          | ----- Predicates -----
+          | Config Value Chance:
+          |   -> Config: archaeology
+        ali:item artifacts:shock_pendant x1
+          | Chance: 0.89%
+          | Count: 1
+          | ----- Predicates -----
+          | Config Value Chance:
+          |   -> Config: archaeology

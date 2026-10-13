@@ -1,0 +1,93 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects 7 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:firework_star x1
+        | Random Firework Star
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:lantern x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item supplementaries:rope x4
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item supplementaries:bomb x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x2
+      ali:item minecraft:paper x1
+      ali:item minecraft:firework_rocket x3 {Fireworks:{Flight:1b}}
+        | Random Firework:
+        |   -> Flight Duration: 1 to 3
+        |   -> Firework Stars: 1 to 7  ~1 (58%)
+        |     -> 1 (58%)
+        |     -> 2 (24.36%)
+        |     -> 3 (10.23%)
+        |     -> 4 (4.3%)
+        |     -> 5 (1.8%)
+        |     -> 6 (0.76%)
+        |     -> 7 (0.55%)
+        |     [chart 0..6 1-7 base=true modes=[true, false, false, false, false, false, false] heights=1.0000,0.4200,0.1764,0.0741,0.0311,0.0131,0.0095]
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item supplementaries:cannonball x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item supplementaries:cannon x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item supplementaries:rope_arrow x1 {Damage:16}
+    ali:items_to_items
+      | Uses: 3
+      | XP: 1
+      | Price Multiplier: 0.2
+      ali:item minecraft:emerald x40
+      ali:item supplementaries:bomb x1
+      ali:item supplementaries:bomb_blue x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:gunpowder x2
+    ali:items_to_items
+      | Uses: 8
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item minecraft:tnt x1

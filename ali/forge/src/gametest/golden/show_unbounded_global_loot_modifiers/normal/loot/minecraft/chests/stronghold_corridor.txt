@@ -1,0 +1,82 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 3
+    ali:item minecraft:bread x1-3
+      | Chance: 15%
+      | Count: 1 to 3
+    ali:item minecraft:apple x1-3
+      | Chance: 15%
+      | Count: 1 to 3
+    ali:item minecraft:ender_pearl x1
+      | Chance: 10%
+      | Count: 1
+    ali:item minecraft:iron_ingot x1-5
+      | Chance: 10%
+      | Count: 1 to 5
+    ali:item minecraft:gold_ingot x1-3
+      | Chance: 5%
+      | Count: 1 to 3
+    ali:item minecraft:redstone x4-9
+      | Chance: 5%
+      | Count: 4 to 9
+    ali:item minecraft:iron_pickaxe x1
+      | Chance: 5%
+      | Count: 1
+    ali:item minecraft:iron_sword x1
+      | Chance: 5%
+      | Count: 1
+    ali:item minecraft:iron_chestplate x1
+      | Chance: 5%
+      | Count: 1
+    ali:item minecraft:iron_helmet x1
+      | Chance: 5%
+      | Count: 1
+    ali:item minecraft:iron_leggings x1
+      | Chance: 5%
+      | Count: 1
+    ali:item minecraft:iron_boots x1
+      | Chance: 5%
+      | Count: 1
+    ali:item minecraft:diamond x1-3
+      | Chance: 3%
+      | Count: 1 to 3
+    ali:item minecraft:golden_apple x1
+      | Chance: 1%
+      | Count: 1
+    ali:item minecraft:saddle x1
+      | Chance: 1%
+      | Count: 1
+    ali:item minecraft:iron_horse_armor x1
+      | Chance: 1%
+      | Count: 1
+    ali:item minecraft:golden_horse_armor x1
+      | Chance: 1%
+      | Count: 1
+    ali:item minecraft:diamond_horse_armor x1
+      | Chance: 1%
+      | Count: 1
+    ali:item minecraft:music_disc_otherside x1
+      | Chance: 1%
+      | Count: 1
+    ali:item minecraft:enchanted_book x1
+      | Chance: 1%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 90%
+    ali:item minecraft:eye_armor_trim_smithing_template x1
+      | Chance: 10%
+      | Count: 1
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1

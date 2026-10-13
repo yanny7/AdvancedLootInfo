@@ -1,0 +1,13 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:lime_stained_glass_pane x1
+      | Count: 1
+      | ----- Predicates -----
+      | Match Tool:
+      |   -> Item Predicates:
+      |     -> Enchantments:
+      |       -> Enchantment: Silk Touch
+      |       -> Level: ≥ 1

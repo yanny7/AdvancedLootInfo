@@ -1,0 +1,19 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item mekanism:block_salt x1
+        | Count: 1
+        | ----- Predicates -----
+        | Match Tool:
+        |   -> Item Predicates:
+        |     -> Enchantments:
+        |       -> Enchantment: Silk Touch
+        |       -> Level: ≥ 1
+      ali:item mekanism:salt x4
+        | Count: 4
+        | ----- Modifiers -----
+        | Explosion Decay

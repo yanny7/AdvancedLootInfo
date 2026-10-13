@@ -1,0 +1,52 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item twilightforest:tannin x2-4
+      | Count: 2 to 4
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item twilightforest:venison_jerky x2-4
+      | Chance: 33.33%
+      | Count: 2 to 4
+    ali:item twilightforest:mutton_jerky x2-4
+      | Chance: 33.33%
+      | Count: 2 to 4
+    ali:item twilightforest:pork_jerky x2-4
+      | Chance: 33.33%
+      | Count: 2 to 4
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 2
+    ali:item minecraft:leather x1-2
+      | Chance: 25%
+      | Count: 1 to 2
+    ali:item twilightforest:birch_drying_rack x1
+      | Chance: 25%
+      | Count: 1
+    ali:item minecraft:stick x1-2
+      | Chance: 25%
+      | Count: 1 to 2
+    ali:item minecraft:apple x1-2
+      | Chance: 25%
+      | Count: 1 to 2
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:leather_helmet x1
+      | Chance: 20%
+      | Count: 1
+    ali:item minecraft:leather_chestplate x1
+      | Chance: 20%
+      | Count: 1
+    ali:item minecraft:leather_leggings x1
+      | Chance: 20%
+      | Count: 1
+    ali:item minecraft:leather_boots x1
+      | Chance: 20%
+      | Count: 1
+    ali:item minecraft:shears x1
+      | Chance: 20%
+      | Count: 1

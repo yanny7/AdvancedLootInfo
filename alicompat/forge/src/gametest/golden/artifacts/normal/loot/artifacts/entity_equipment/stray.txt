@@ -1,0 +1,17 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item artifacts:snowshoes x1
+      | Chance: 0.05%
+      | Count: 1
+      | ----- Predicates -----
+      | Config Value Chance:
+      |   -> Config: entity_equipment
+    ali:item artifacts:steadfast_spikes x1
+      | Chance: 0.05%
+      | Count: 1
+      | ----- Predicates -----
+      | Config Value Chance:
+      |   -> Config: entity_equipment

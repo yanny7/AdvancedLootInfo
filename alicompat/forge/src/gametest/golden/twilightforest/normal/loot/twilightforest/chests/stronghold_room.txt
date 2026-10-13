@@ -1,0 +1,138 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4
+    ali:item minecraft:iron_ingot x1-4
+      | Chance: 15.79%
+      | Count: 1 to 4
+    ali:item minecraft:gunpowder x1-4
+      | Chance: 15.79%
+      | Count: 1 to 4
+    ali:item minecraft:milk_bucket x1
+      | Chance: 15.79%
+      | Count: 1
+    ali:item twilightforest:maze_wafer x1-12
+      | Chance: 15.79%
+      | Count: 1 to 12
+    ali:item twilightforest:ironwood_ingot x1-4
+      | Chance: 15.79%
+      | Count: 1 to 4
+    ali:item twilightforest:firefly x1-5
+      | Chance: 15.79%
+      | Count: 1 to 5
+    ali:reference
+      | Selects all entries
+      | Chance: 5.26%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item minecraft:poppy x1-4
+            | Chance: 0.53%
+            | Count: 1 to 4
+          ali:item minecraft:dandelion x1-4
+            | Chance: 0.53%
+            | Count: 1 to 4
+          ali:item minecraft:feather x1-3
+            | Chance: 0.53%
+            | Count: 1 to 3
+          ali:item minecraft:wheat_seeds x1-2
+            | Chance: 0.53%
+            | Count: 1 to 2
+          ali:item minecraft:flint x1-2
+            | Chance: 0.53%
+            | Count: 1 to 2
+          ali:item minecraft:cactus x1-2
+            | Chance: 0.53%
+            | Count: 1 to 2
+          ali:item minecraft:sugar_cane x1-4
+            | Chance: 0.53%
+            | Count: 1 to 4
+          ali:item minecraft:sand x1-4
+            | Chance: 0.53%
+            | Count: 1 to 4
+          ali:item minecraft:flower_pot x1
+            | Chance: 0.53%
+            | Count: 1
+          ali:item minecraft:bone_meal x1
+            | Chance: 0.53%
+            | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item twilightforest:steeleaf_ingot x1-6
+      | Chance: 11.11%
+      | Count: 1 to 6
+    ali:item twilightforest:charm_of_life_1 x1
+      | Chance: 11.11%
+      | Count: 1
+    ali:item twilightforest:steeleaf_helmet x1 {Damage:0}
+      | Chance: 11.11%
+      | Count: 1
+    ali:item twilightforest:steeleaf_chestplate x1 {Damage:0}
+      | Chance: 11.11%
+      | Count: 1
+    ali:item twilightforest:steeleaf_leggings x1 {Damage:0}
+      | Chance: 11.11%
+      | Count: 1
+    ali:item twilightforest:steeleaf_boots x1 {Damage:0}
+      | Chance: 11.11%
+      | Count: 1
+    ali:item twilightforest:steeleaf_pickaxe x1 {Damage:0}
+      | Chance: 11.11%
+      | Count: 1
+    ali:item twilightforest:ironwood_chestplate x1 {Damage:0}
+      | Chance: 11.11%
+      | Count: 1
+    ali:item twilightforest:ironwood_sword x1 {Damage:0}
+      | Chance: 11.11%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item twilightforest:ironwood_sword x1 {Damage:0}
+      | Chance: 14.29%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 25
+      |   -> Treasure: False
+    ali:item twilightforest:steeleaf_sword x1 {Damage:0}
+      | Chance: 14.29%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20
+      |   -> Treasure: False
+    ali:item minecraft:iron_sword x1 {Damage:0}
+      | Chance: 14.29%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Treasure: False
+    ali:item minecraft:bow x1 {Damage:0}
+      | Chance: 14.29%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Treasure: False
+    ali:item minecraft:diamond_sword x1 {Damage:0}
+      | Chance: 14.29%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 15
+      |   -> Treasure: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 14.29%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Destruction
+    ali:item twilightforest:maze_map_focus x1
+      | Chance: 14.29%
+      | Count: 1

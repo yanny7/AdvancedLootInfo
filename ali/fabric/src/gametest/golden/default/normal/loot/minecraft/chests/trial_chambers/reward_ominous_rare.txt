@@ -1,0 +1,76 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:emerald_block x1
+      | Chance: 17.24%
+      | Count: 1
+    ali:item minecraft:iron_block x1
+      | Chance: 13.79%
+      | Count: 1
+    ali:item minecraft:crossbow x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 13.79%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 5 to 20
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
+    ali:item minecraft:golden_apple x1
+      | Chance: 10.34%
+      | Count: 1
+    ali:item minecraft:diamond_axe x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 10.34%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 10 to 20
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
+    ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 10.34%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 10 to 20
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 6.9%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Knockback
+      |     -> Punch
+      |     -> Smite
+      |     -> Looting
+      |     -> Multishot
+      |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 6.9%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Breach
+      |     -> Density
+      |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 6.9%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Wind Burst
+      |       -> Levels: 1
+      |   -> Add: False
+    ali:item minecraft:diamond_block x1
+      | Chance: 3.45%
+      | Count: 1

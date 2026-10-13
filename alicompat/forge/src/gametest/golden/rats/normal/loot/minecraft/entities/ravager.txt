@@ -1,0 +1,12 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:saddle x1
+      | Count: 1
+  ali:item rats:tiny_coin x1
+    | Count: 1
+    | ----- Predicates -----
+    | Killer Rat Has Upgrade:
+    |   -> Item: Rat Upgrade: Aristoc-RAT

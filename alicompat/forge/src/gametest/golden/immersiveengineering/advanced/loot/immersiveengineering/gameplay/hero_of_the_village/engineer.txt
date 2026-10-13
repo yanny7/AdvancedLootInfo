@@ -1,0 +1,14 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item immersiveengineering:stick_treated x1
+      | Chance: 33.33%
+      | Count: 1
+    ali:item immersiveengineering:stick_iron x1
+      | Chance: 33.33%
+      | Count: 1
+    ali:item immersiveengineering:stick_steel x1
+      | Chance: 33.33%
+      | Count: 1

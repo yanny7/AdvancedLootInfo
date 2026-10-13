@@ -10,6 +10,7 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.manager.AliClientRegistry;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.network.AbstractClient;
+import com.yanny.ali.network.LootDataReader;
 import com.yanny.ali.network.RequestLootDataMessage;
 import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.client.TooltipUtils;
@@ -175,9 +176,7 @@ public class GenericUtils {
         RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(decompressedBuf, registryAccess);
 
         try {
-            utils.getTooltipCache().decode(utils, buf);
-            readLootData(utils, buf, lootData);
-            readTradeData(utils, buf, tradeData);
+            LootDataReader.decode(utils, buf, lootData, tradeData);
         } catch (Throwable e) {
             LOGGER.warn("Failed to decode loot data!", e);
         } finally {
@@ -580,26 +579,5 @@ public class GenericUtils {
                 .filter(s -> !s.isEmpty())
                 .map(word -> Character.toUpperCase(word.charAt(0)) + word.substring(1))
                 .collect(Collectors.joining(" "));
-    }
-
-    private static void readLootData(IClientUtils utils, RegistryFriendlyByteBuf readerBuf, Map<Identifier, IDataNode> lootData) {
-        int lootDataCount = readerBuf.readInt();
-
-        for (int i = 0; i < lootDataCount; i++) {
-            Identifier location = readerBuf.readIdentifier();
-            Identifier id = readerBuf.readIdentifier();
-
-            lootData.put(location, utils.getDataNodeFactory(id).apply(utils, readerBuf));
-        }
-    }
-
-    private static void readTradeData(IClientUtils utils, RegistryFriendlyByteBuf buf, Map<Identifier, IDataNode> tradeData) {
-        int tradeDataCount = buf.readInt();
-
-        for (int i = 0; i < tradeDataCount; i++) {
-            Identifier location = buf.readIdentifier();
-
-            tradeData.put(location, utils.getDataNodeFactory(TradeNode.ID).apply(utils, buf));
-        }
     }
 }

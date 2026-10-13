@@ -1,0 +1,79 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: binom(round(4 + ≥ 0 × 1.5); 17%)
+    |   -> Looting LVL: binom(round(4 + ≥ 0 × 1.5 + LVL); 17%)
+    |   -> Looting I: ≥ 0
+    |   -> Looting II: ≥ 0
+    |   -> Looting III: ≥ 0
+    ali:item twilightforest:knightmetal_sword x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 33.33%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item twilightforest:knightmetal_pickaxe x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 33.33%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item twilightforest:knightmetal_axe x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 33.33%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: binom(round(2 + ≥ 0); 17%)
+    |   -> Looting LVL: binom(round(2 + ≥ 0 + LVL); 17%)
+    |   -> Looting I: ≥ 0
+    |   -> Looting II: ≥ 0
+    |   -> Looting III: ≥ 0
+    ali:item twilightforest:phantom_helmet x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 50%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item twilightforest:phantom_chestplate x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 50%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: binom(round(1 + ≥ 0 × 0.5); 17%)
+    |   -> Looting LVL: binom(round(1 + ≥ 0 × 0.5 + LVL); 17%)
+    |   -> Looting I: ≥ 0
+    |   -> Looting II: ≥ 0
+    |   -> Looting III: ≥ 0
+    ali:item twilightforest:phantom_helmet x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 50%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item twilightforest:phantom_chestplate x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 50%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot

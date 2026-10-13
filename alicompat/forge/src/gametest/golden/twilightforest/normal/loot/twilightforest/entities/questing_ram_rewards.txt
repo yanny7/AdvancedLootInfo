@@ -1,0 +1,15 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item twilightforest:crumble_horn x1 {Damage:0}
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:bundle x1 {Items:[{Count:1b,id:"twilightforest:quest_ram_trophy"},{Count:1b,id:"minecraft:coal_block"},{Count:1b,id:"minecraft:iron_block"},{Count:1b,id:"minecraft:copper_block"},{Count:1b,id:"minecraft:lapis_block"},{Count:1b,id:"minecraft:gold_block"},{Count:1b,id:"minecraft:diamond_block"},{Count:1b,id:"minecraft:emerald_block"}]}
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {Items:[{Count:1b,id:"twilightforest:quest_ram_trophy"},{Count:1b,id:"minecraft:coal_block"},{Count:1b,id:"minecraft:iron_block"},{Count:1b,id:"minecraft:copper_block"},{Count:1b,id:"minecraft:lapis_block"},{Count:1b,id:"minecraft:gold_block"},{Count:1b,id:"minecraft:diamond_block"},{Count:1b,id:"minecraft:emerald_block"}]}

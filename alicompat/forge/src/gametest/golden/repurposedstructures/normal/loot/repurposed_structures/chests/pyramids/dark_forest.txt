@@ -1,0 +1,433 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 6
+    ali:item minecraft:emerald x2-4
+      | Chance: 13.64%
+      | Count: 2 to 4
+    ali:item minecraft:enchanted_book x1
+      | Chance: 13.64%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item minecraft:saddle x1
+      | Chance: 9.09%
+      | Count: 1
+    ali:item minecraft:golden_apple x1
+      | Chance: 9.09%
+      | Count: 1
+    ali:item minecraft:iron_ingot x2-6
+      | Chance: 6.82%
+      | Count: 2 to 6
+    ali:item minecraft:spider_eye x2-4
+      | Chance: 6.82%
+      | Count: 2 to 4
+    ali:item minecraft:rotten_flesh x3-7
+      | Chance: 6.82%
+      | Count: 3 to 7
+    ali:item minecraft:iron_horse_armor x1
+      | Chance: 6.82%
+      | Count: 1
+    ali:item minecraft:gold_ingot x2-7
+      | Chance: 4.55%
+      | Count: 2 to 7
+    ali:item minecraft:bone x4-6
+      | Chance: 4.55%
+      | Count: 4 to 6
+    ali:item minecraft:golden_horse_armor x1
+      | Chance: 4.55%
+      | Count: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 4.55%
+    ali:item minecraft:diamond x2-3
+      | Chance: 3.64%
+      | Count: 2 to 3
+    ali:item minecraft:fermented_spider_eye x1-3
+      | Chance: 2.27%
+      | Count: 1 to 3
+    ali:item minecraft:diamond_horse_armor x1
+      | Chance: 2.27%
+      | Count: 1
+    ali:item minecraft:enchanted_golden_apple x1
+      | Chance: 0.91%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4
+    ali:item minecraft:gunpowder x2-8
+      | Chance: 27.27%
+      | Count: 2 to 8
+    ali:item minecraft:bone x1-8
+      | Chance: 18.18%
+      | Count: 1 to 8
+    ali:item minecraft:rotten_flesh x1-8
+      | Chance: 18.18%
+      | Count: 1 to 8
+    ali:item minecraft:string x1-8
+      | Chance: 18.18%
+      | Count: 1 to 8
+    ali:item minecraft:dark_oak_log x1-8
+      | Chance: 18.18%
+      | Count: 1 to 8
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 85.71%
+    ali:item minecraft:dune_armor_trim_smithing_template x2
+      | Chance: 14.29%
+      | Count: 2
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 0
+          |   -> Bad Luck: 0
+          |   -> Luck 1: 1
+          |   -> Luck 2: 2
+          |   -> Luck 3: 3
+          |   -> Luck 4: 4
+          ali:empty
+            | Drops nothing
+            | Chance: 81.74%
+          ali:item minecraft:experience_bottle x1
+            | Chance: 8.17%
+            | Count: 1
+          ali:item minecraft:black_banner x1 {BlockEntityTag:{Patterns:[{Color:5,Pattern:"ts"},{Color:15,Pattern:"mr"},{Color:15,Pattern:"mr"},{Color:5,Pattern:"dls"},{Color:15,Pattern:"bs"},{Color:15,Pattern:"bs"},{Color:15,Pattern:"bs"},{Color:5,Pattern:"bts"},{Color:15,Pattern:"cbo"},{Color:15,Pattern:"cbo"},{Color:15,Pattern:"cbo"},{Color:15,Pattern:"cbo"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:5,Pattern:"ts"},{Color:15,Pattern:"mr"},{Color:15,Pattern:"mr"},{Color:5,Pattern:"dls"},{Color:15,Pattern:"bs"},{Color:15,Pattern:"bs"},{Color:15,Pattern:"bs"},{Color:5,Pattern:"bts"},{Color:15,Pattern:"cbo"},{Color:15,Pattern:"cbo"},{Color:15,Pattern:"cbo"},{Color:15,Pattern:"cbo"}]}}
+          ali:item minecraft:white_banner x1 {BlockEntityTag:{Patterns:[{Color:0,Pattern:"hh"},{Color:0,Pattern:"hhb"},{Color:3,Pattern:"dls"},{Color:3,Pattern:"dls"},{Color:3,Pattern:"dls"},{Color:3,Pattern:"dls"},{Color:0,Pattern:"ls"},{Color:0,Pattern:"rs"},{Color:0,Pattern:"ls"},{Color:0,Pattern:"rs"},{Color:0,Pattern:"ls"},{Color:0,Pattern:"rs"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:0,Pattern:"hh"},{Color:0,Pattern:"hhb"},{Color:3,Pattern:"dls"},{Color:3,Pattern:"dls"},{Color:3,Pattern:"dls"},{Color:3,Pattern:"dls"},{Color:0,Pattern:"ls"},{Color:0,Pattern:"rs"},{Color:0,Pattern:"ls"},{Color:0,Pattern:"rs"},{Color:0,Pattern:"ls"},{Color:0,Pattern:"rs"}]}}
+          ali:item minecraft:orange_banner x1 {BlockEntityTag:{Patterns:[{Color:1,Pattern:"hh"},{Color:0,Pattern:"ss"},{Color:0,Pattern:"ss"},{Color:0,Pattern:"ss"},{Color:0,Pattern:"rs"},{Color:1,Pattern:"cbo"},{Color:1,Pattern:"ts"},{Color:1,Pattern:"hhb"},{Color:1,Pattern:"cbo"},{Color:1,Pattern:"cbo"},{Color:1,Pattern:"ts"},{Color:1,Pattern:"ts"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:1,Pattern:"hh"},{Color:0,Pattern:"ss"},{Color:0,Pattern:"ss"},{Color:0,Pattern:"ss"},{Color:0,Pattern:"rs"},{Color:1,Pattern:"cbo"},{Color:1,Pattern:"ts"},{Color:1,Pattern:"hhb"},{Color:1,Pattern:"cbo"},{Color:1,Pattern:"cbo"},{Color:1,Pattern:"ts"},{Color:1,Pattern:"ts"}]}}
+          ali:item minecraft:red_banner x1 {BlockEntityTag:{Patterns:[{Color:14,Pattern:"hhb"},{Color:14,Pattern:"hh"},{Color:0,Pattern:"mr"},{Color:0,Pattern:"mr"},{Color:0,Pattern:"mr"},{Color:14,Pattern:"vh"},{Color:14,Pattern:"vh"},{Color:14,Pattern:"vh"},{Color:14,Pattern:"vh"},{Color:14,Pattern:"vh"},{Color:14,Pattern:"vh"},{Color:14,Pattern:"vh"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:14,Pattern:"hhb"},{Color:14,Pattern:"hh"},{Color:0,Pattern:"mr"},{Color:0,Pattern:"mr"},{Color:0,Pattern:"mr"},{Color:14,Pattern:"vh"},{Color:14,Pattern:"vh"},{Color:14,Pattern:"vh"},{Color:14,Pattern:"vh"},{Color:14,Pattern:"vh"},{Color:14,Pattern:"vh"},{Color:14,Pattern:"vh"}]}}
+          ali:item minecraft:white_banner x1 {BlockEntityTag:{Patterns:[{Color:10,Pattern:"bs"},{Color:0,Pattern:"mr"},{Color:0,Pattern:"mr"},{Color:10,Pattern:"bl"},{Color:10,Pattern:"bo"},{Color:10,Pattern:"ts"},{Color:10,Pattern:"pig"},{Color:10,Pattern:"ts"},{Color:10,Pattern:"bo"},{Color:10,Pattern:"bo"},{Color:10,Pattern:"bl"},{Color:10,Pattern:"bl"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:10,Pattern:"bs"},{Color:0,Pattern:"mr"},{Color:0,Pattern:"mr"},{Color:10,Pattern:"bl"},{Color:10,Pattern:"bo"},{Color:10,Pattern:"ts"},{Color:10,Pattern:"pig"},{Color:10,Pattern:"ts"},{Color:10,Pattern:"bo"},{Color:10,Pattern:"bo"},{Color:10,Pattern:"bl"},{Color:10,Pattern:"bl"}]}}
+          ali:item minecraft:black_banner x1 {BlockEntityTag:{Patterns:[{Color:15,Pattern:"hhb"},{Color:15,Pattern:"hh"},{Color:14,Pattern:"ls"},{Color:14,Pattern:"ls"},{Color:14,Pattern:"rs"},{Color:14,Pattern:"rs"},{Color:15,Pattern:"gra"},{Color:14,Pattern:"drs"},{Color:15,Pattern:"bo"},{Color:15,Pattern:"bo"},{Color:15,Pattern:"bo"},{Color:15,Pattern:"bo"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:15,Pattern:"hhb"},{Color:15,Pattern:"hh"},{Color:14,Pattern:"ls"},{Color:14,Pattern:"ls"},{Color:14,Pattern:"rs"},{Color:14,Pattern:"rs"},{Color:15,Pattern:"gra"},{Color:14,Pattern:"drs"},{Color:15,Pattern:"bo"},{Color:15,Pattern:"bo"},{Color:15,Pattern:"bo"},{Color:15,Pattern:"bo"}]}}
+          ali:item minecraft:lime_banner x1 {BlockEntityTag:{Patterns:[{Color:4,Pattern:"rs"},{Color:4,Pattern:"br"},{Color:4,Pattern:"br"},{Color:4,Pattern:"br"},{Color:14,Pattern:"tt"},{Color:14,Pattern:"tt"},{Color:14,Pattern:"tt"},{Color:14,Pattern:"tl"},{Color:14,Pattern:"tl"},{Color:0,Pattern:"mc"},{Color:0,Pattern:"mc"},{Color:11,Pattern:"mc"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:4,Pattern:"rs"},{Color:4,Pattern:"br"},{Color:4,Pattern:"br"},{Color:4,Pattern:"br"},{Color:14,Pattern:"tt"},{Color:14,Pattern:"tt"},{Color:14,Pattern:"tt"},{Color:14,Pattern:"tl"},{Color:14,Pattern:"tl"},{Color:0,Pattern:"mc"},{Color:0,Pattern:"mc"},{Color:11,Pattern:"mc"}]}}
+          ali:item minecraft:green_banner x1 {BlockEntityTag:{Patterns:[{Color:5,Pattern:"bt"},{Color:15,Pattern:"bri"},{Color:5,Pattern:"gru"},{Color:15,Pattern:"mr"},{Color:5,Pattern:"cre"},{Color:13,Pattern:"rud"},{Color:13,Pattern:"ld"},{Color:13,Pattern:"rud"},{Color:13,Pattern:"ld"},{Color:5,Pattern:"tt"},{Color:1,Pattern:"gra"},{Color:13,Pattern:"gra"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:5,Pattern:"bt"},{Color:15,Pattern:"bri"},{Color:5,Pattern:"gru"},{Color:15,Pattern:"mr"},{Color:5,Pattern:"cre"},{Color:13,Pattern:"rud"},{Color:13,Pattern:"ld"},{Color:13,Pattern:"rud"},{Color:13,Pattern:"ld"},{Color:5,Pattern:"tt"},{Color:1,Pattern:"gra"},{Color:13,Pattern:"gra"}]}}
+          ali:item minecraft:yellow_banner x1 {BlockEntityTag:{Patterns:[{Color:15,Pattern:"flo"},{Color:4,Pattern:"mc"},{Color:15,Pattern:"ss"},{Color:4,Pattern:"bo"},{Color:4,Pattern:"flo"},{Color:15,Pattern:"gru"},{Color:15,Pattern:"ts"},{Color:15,Pattern:"ts"},{Color:15,Pattern:"cbo"},{Color:5,Pattern:"gru"},{Color:15,Pattern:"bt"},{Color:15,Pattern:"bt"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:15,Pattern:"flo"},{Color:4,Pattern:"mc"},{Color:15,Pattern:"ss"},{Color:4,Pattern:"bo"},{Color:4,Pattern:"flo"},{Color:15,Pattern:"gru"},{Color:15,Pattern:"ts"},{Color:15,Pattern:"ts"},{Color:15,Pattern:"cbo"},{Color:5,Pattern:"gru"},{Color:15,Pattern:"bt"},{Color:15,Pattern:"bt"}]}}
+          ali:item minecraft:white_banner x1 {BlockEntityTag:{Patterns:[{Color:0,Pattern:"hh"},{Color:0,Pattern:"hhb"},{Color:14,Pattern:"tl"},{Color:14,Pattern:"tl"},{Color:5,Pattern:"tr"},{Color:5,Pattern:"tr"},{Color:3,Pattern:"bl"},{Color:4,Pattern:"br"},{Color:3,Pattern:"bl"},{Color:0,Pattern:"sc"},{Color:0,Pattern:"sc"},{Color:0,Pattern:"sc"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:0,Pattern:"hh"},{Color:0,Pattern:"hhb"},{Color:14,Pattern:"tl"},{Color:14,Pattern:"tl"},{Color:5,Pattern:"tr"},{Color:5,Pattern:"tr"},{Color:3,Pattern:"bl"},{Color:4,Pattern:"br"},{Color:3,Pattern:"bl"},{Color:0,Pattern:"sc"},{Color:0,Pattern:"sc"},{Color:0,Pattern:"sc"}]}}
+          ali:item minecraft:black_banner x1 {BlockEntityTag:{Patterns:[{Color:0,Pattern:"vhr"},{Color:14,Pattern:"sc"},{Color:14,Pattern:"sc"},{Color:14,Pattern:"sc"},{Color:15,Pattern:"bl"},{Color:0,Pattern:"br"},{Color:0,Pattern:"tr"},{Color:15,Pattern:"tl"},{Color:15,Pattern:"tl"},{Color:0,Pattern:"tr"},{Color:0,Pattern:"br"},{Color:15,Pattern:"bl"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:0,Pattern:"vhr"},{Color:14,Pattern:"sc"},{Color:14,Pattern:"sc"},{Color:14,Pattern:"sc"},{Color:15,Pattern:"bl"},{Color:0,Pattern:"br"},{Color:0,Pattern:"tr"},{Color:15,Pattern:"tl"},{Color:15,Pattern:"tl"},{Color:0,Pattern:"tr"},{Color:0,Pattern:"br"},{Color:15,Pattern:"bl"}]}}
+          ali:item minecraft:white_banner x1 {BlockEntityTag:{Patterns:[{Color:0,Pattern:"hh"},{Color:0,Pattern:"hhb"},{Color:4,Pattern:"rs"},{Color:4,Pattern:"rs"},{Color:4,Pattern:"rs"},{Color:4,Pattern:"rs"},{Color:4,Pattern:"rs"},{Color:10,Pattern:"ls"},{Color:10,Pattern:"ls"},{Color:10,Pattern:"ls"},{Color:10,Pattern:"ls"},{Color:10,Pattern:"ls"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:0,Pattern:"hh"},{Color:0,Pattern:"hhb"},{Color:4,Pattern:"rs"},{Color:4,Pattern:"rs"},{Color:4,Pattern:"rs"},{Color:4,Pattern:"rs"},{Color:4,Pattern:"rs"},{Color:10,Pattern:"ls"},{Color:10,Pattern:"ls"},{Color:10,Pattern:"ls"},{Color:10,Pattern:"ls"},{Color:10,Pattern:"ls"}]}}
+          ali:item minecraft:blue_banner x1 {BlockEntityTag:{Patterns:[{Color:4,Pattern:"hh"},{Color:4,Pattern:"hhb"},{Color:11,Pattern:"ms"},{Color:11,Pattern:"ts"},{Color:11,Pattern:"bs"},{Color:11,Pattern:"bo"},{Color:11,Pattern:"bo"},{Color:11,Pattern:"bo"},{Color:11,Pattern:"ts"},{Color:11,Pattern:"bs"},{Color:11,Pattern:"ms"},{Color:11,Pattern:"ms"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:4,Pattern:"hh"},{Color:4,Pattern:"hhb"},{Color:11,Pattern:"ms"},{Color:11,Pattern:"ts"},{Color:11,Pattern:"bs"},{Color:11,Pattern:"bo"},{Color:11,Pattern:"bo"},{Color:11,Pattern:"bo"},{Color:11,Pattern:"ts"},{Color:11,Pattern:"bs"},{Color:11,Pattern:"ms"},{Color:11,Pattern:"ms"}]}}
+          ali:item minecraft:blue_banner x1 {BlockEntityTag:{Patterns:[{Color:11,Pattern:"hhb"},{Color:11,Pattern:"hh"},{Color:4,Pattern:"flo"},{Color:4,Pattern:"flo"},{Color:4,Pattern:"flo"},{Color:11,Pattern:"ss"},{Color:11,Pattern:"ss"},{Color:11,Pattern:"pig"},{Color:11,Pattern:"mc"},{Color:11,Pattern:"mc"},{Color:11,Pattern:"mc"},{Color:11,Pattern:"bo"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:11,Pattern:"hhb"},{Color:11,Pattern:"hh"},{Color:4,Pattern:"flo"},{Color:4,Pattern:"flo"},{Color:4,Pattern:"flo"},{Color:11,Pattern:"ss"},{Color:11,Pattern:"ss"},{Color:11,Pattern:"pig"},{Color:11,Pattern:"mc"},{Color:11,Pattern:"mc"},{Color:11,Pattern:"mc"},{Color:11,Pattern:"bo"}]}}
+          ali:item minecraft:light_blue_banner x1 {BlockEntityTag:{Patterns:[{Color:3,Pattern:"hhb"},{Color:3,Pattern:"hh"},{Color:0,Pattern:"bts"},{Color:0,Pattern:"cbo"},{Color:0,Pattern:"bts"},{Color:0,Pattern:"cbo"},{Color:3,Pattern:"bo"},{Color:3,Pattern:"ts"},{Color:0,Pattern:"glb"},{Color:0,Pattern:"glb"},{Color:0,Pattern:"glb"},{Color:0,Pattern:"glb"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:3,Pattern:"hhb"},{Color:3,Pattern:"hh"},{Color:0,Pattern:"bts"},{Color:0,Pattern:"cbo"},{Color:0,Pattern:"bts"},{Color:0,Pattern:"cbo"},{Color:3,Pattern:"bo"},{Color:3,Pattern:"ts"},{Color:0,Pattern:"glb"},{Color:0,Pattern:"glb"},{Color:0,Pattern:"glb"},{Color:0,Pattern:"glb"}]}}
+          ali:item minecraft:white_banner x1 {BlockEntityTag:{Patterns:[{Color:0,Pattern:"hh"},{Color:0,Pattern:"hhb"},{Color:14,Pattern:"sc"},{Color:14,Pattern:"sc"},{Color:14,Pattern:"sc"},{Color:0,Pattern:"bo"},{Color:0,Pattern:"bo"},{Color:0,Pattern:"bo"},{Color:0,Pattern:"ts"},{Color:0,Pattern:"ts"},{Color:0,Pattern:"bs"},{Color:0,Pattern:"bs"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:0,Pattern:"hh"},{Color:0,Pattern:"hhb"},{Color:14,Pattern:"sc"},{Color:14,Pattern:"sc"},{Color:14,Pattern:"sc"},{Color:0,Pattern:"bo"},{Color:0,Pattern:"bo"},{Color:0,Pattern:"bo"},{Color:0,Pattern:"ts"},{Color:0,Pattern:"ts"},{Color:0,Pattern:"bs"},{Color:0,Pattern:"bs"}]}}
+          ali:item minecraft:black_banner x1 {BlockEntityTag:{Patterns:[{Color:0,Pattern:"bri"},{Color:0,Pattern:"bri"},{Color:15,Pattern:"ss"},{Color:15,Pattern:"ss"},{Color:15,Pattern:"ss"},{Color:15,Pattern:"ss"},{Color:0,Pattern:"cs"},{Color:0,Pattern:"cs"},{Color:0,Pattern:"cs"},{Color:15,Pattern:"bo"},{Color:15,Pattern:"bo"},{Color:15,Pattern:"bo"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:0,Pattern:"bri"},{Color:0,Pattern:"bri"},{Color:15,Pattern:"ss"},{Color:15,Pattern:"ss"},{Color:15,Pattern:"ss"},{Color:15,Pattern:"ss"},{Color:0,Pattern:"cs"},{Color:0,Pattern:"cs"},{Color:0,Pattern:"cs"},{Color:15,Pattern:"bo"},{Color:15,Pattern:"bo"},{Color:15,Pattern:"bo"}]}}
+          ali:item minecraft:black_banner x1 {BlockEntityTag:{Patterns:[{Color:15,Pattern:"cs"},{Color:14,Pattern:"ls"},{Color:14,Pattern:"ls"},{Color:14,Pattern:"ls"},{Color:13,Pattern:"rs"},{Color:13,Pattern:"rs"},{Color:13,Pattern:"rs"},{Color:13,Pattern:"rs"},{Color:13,Pattern:"rs"},{Color:14,Pattern:"ls"},{Color:14,Pattern:"ls"},{Color:15,Pattern:"cs"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:15,Pattern:"cs"},{Color:14,Pattern:"ls"},{Color:14,Pattern:"ls"},{Color:14,Pattern:"ls"},{Color:13,Pattern:"rs"},{Color:13,Pattern:"rs"},{Color:13,Pattern:"rs"},{Color:13,Pattern:"rs"},{Color:13,Pattern:"rs"},{Color:14,Pattern:"ls"},{Color:14,Pattern:"ls"},{Color:15,Pattern:"cs"}]}}
+          ali:item minecraft:white_banner x1 {BlockEntityTag:{Patterns:[{Color:15,Pattern:"hhb"},{Color:0,Pattern:"hh"},{Color:11,Pattern:"bs"},{Color:11,Pattern:"bs"},{Color:11,Pattern:"bs"},{Color:2,Pattern:"ts"},{Color:2,Pattern:"ts"},{Color:2,Pattern:"ts"},{Color:10,Pattern:"ms"},{Color:10,Pattern:"ms"},{Color:10,Pattern:"ms"},{Color:10,Pattern:"ms"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:15,Pattern:"hhb"},{Color:0,Pattern:"hh"},{Color:11,Pattern:"bs"},{Color:11,Pattern:"bs"},{Color:11,Pattern:"bs"},{Color:2,Pattern:"ts"},{Color:2,Pattern:"ts"},{Color:2,Pattern:"ts"},{Color:10,Pattern:"ms"},{Color:10,Pattern:"ms"},{Color:10,Pattern:"ms"},{Color:10,Pattern:"ms"}]}}
+          ali:item minecraft:white_banner x1 {BlockEntityTag:{Patterns:[{Color:7,Pattern:"hhb"},{Color:7,Pattern:"hhb"},{Color:15,Pattern:"bs"},{Color:15,Pattern:"bs"},{Color:15,Pattern:"bs"},{Color:5,Pattern:"hh"},{Color:13,Pattern:"ts"},{Color:13,Pattern:"ts"},{Color:0,Pattern:"ms"},{Color:0,Pattern:"ms"},{Color:0,Pattern:"ms"},{Color:13,Pattern:"ts"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:7,Pattern:"hhb"},{Color:7,Pattern:"hhb"},{Color:15,Pattern:"bs"},{Color:15,Pattern:"bs"},{Color:15,Pattern:"bs"},{Color:5,Pattern:"hh"},{Color:13,Pattern:"ts"},{Color:13,Pattern:"ts"},{Color:0,Pattern:"ms"},{Color:0,Pattern:"ms"},{Color:0,Pattern:"ms"},{Color:13,Pattern:"ts"}]}}
+          ali:item minecraft:purple_banner x1 {BlockEntityTag:{Patterns:[{Color:10,Pattern:"cs"},{Color:2,Pattern:"ls"},{Color:2,Pattern:"ls"},{Color:2,Pattern:"ls"},{Color:11,Pattern:"rs"},{Color:11,Pattern:"rs"},{Color:11,Pattern:"rs"},{Color:11,Pattern:"rs"},{Color:11,Pattern:"rs"},{Color:2,Pattern:"ls"},{Color:2,Pattern:"ls"},{Color:10,Pattern:"cs"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:10,Pattern:"cs"},{Color:2,Pattern:"ls"},{Color:2,Pattern:"ls"},{Color:2,Pattern:"ls"},{Color:11,Pattern:"rs"},{Color:11,Pattern:"rs"},{Color:11,Pattern:"rs"},{Color:11,Pattern:"rs"},{Color:11,Pattern:"rs"},{Color:2,Pattern:"ls"},{Color:2,Pattern:"ls"},{Color:10,Pattern:"cs"}]}}
+          ali:item minecraft:yellow_banner x1 {BlockEntityTag:{Patterns:[{Color:4,Pattern:"hh"},{Color:14,Pattern:"gra"},{Color:14,Pattern:"gru"},{Color:4,Pattern:"gra"},{Color:4,Pattern:"gra"},{Color:2,Pattern:"gru"},{Color:10,Pattern:"gru"},{Color:4,Pattern:"gra"},{Color:14,Pattern:"gra"},{Color:0,Pattern:"ms"},{Color:0,Pattern:"ms"},{Color:0,Pattern:"ms"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:4,Pattern:"hh"},{Color:14,Pattern:"gra"},{Color:14,Pattern:"gru"},{Color:4,Pattern:"gra"},{Color:4,Pattern:"gra"},{Color:2,Pattern:"gru"},{Color:10,Pattern:"gru"},{Color:4,Pattern:"gra"},{Color:14,Pattern:"gra"},{Color:0,Pattern:"ms"},{Color:0,Pattern:"ms"},{Color:0,Pattern:"ms"}]}}
+          ali:item minecraft:yellow_banner x1 {BlockEntityTag:{Patterns:[{Color:4,Pattern:"hhb"},{Color:4,Pattern:"hh"},{Color:6,Pattern:"ts"},{Color:6,Pattern:"ts"},{Color:6,Pattern:"ts"},{Color:6,Pattern:"ts"},{Color:6,Pattern:"ts"},{Color:3,Pattern:"bs"},{Color:3,Pattern:"bs"},{Color:3,Pattern:"bs"},{Color:3,Pattern:"bs"},{Color:3,Pattern:"bs"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:4,Pattern:"hhb"},{Color:4,Pattern:"hh"},{Color:6,Pattern:"ts"},{Color:6,Pattern:"ts"},{Color:6,Pattern:"ts"},{Color:6,Pattern:"ts"},{Color:6,Pattern:"ts"},{Color:3,Pattern:"bs"},{Color:3,Pattern:"bs"},{Color:3,Pattern:"bs"},{Color:3,Pattern:"bs"},{Color:3,Pattern:"bs"}]}}
+          ali:item minecraft:white_banner x1 {BlockEntityTag:{Patterns:[{Color:0,Pattern:"hh"},{Color:4,Pattern:"ts"},{Color:4,Pattern:"ts"},{Color:10,Pattern:"hhb"},{Color:10,Pattern:"hhb"},{Color:10,Pattern:"hhb"},{Color:10,Pattern:"hhb"},{Color:10,Pattern:"hhb"},{Color:10,Pattern:"hhb"},{Color:15,Pattern:"bs"},{Color:15,Pattern:"bs"},{Color:15,Pattern:"bs"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:0,Pattern:"hh"},{Color:4,Pattern:"ts"},{Color:4,Pattern:"ts"},{Color:10,Pattern:"hhb"},{Color:10,Pattern:"hhb"},{Color:10,Pattern:"hhb"},{Color:10,Pattern:"hhb"},{Color:10,Pattern:"hhb"},{Color:10,Pattern:"hhb"},{Color:15,Pattern:"bs"},{Color:15,Pattern:"bs"},{Color:15,Pattern:"bs"}]}}
+          ali:item minecraft:light_gray_banner x1 {BlockEntityTag:{Patterns:[{Color:8,Pattern:"hh"},{Color:15,Pattern:"ts"},{Color:0,Pattern:"hhb"},{Color:0,Pattern:"hhb"},{Color:0,Pattern:"hhb"},{Color:0,Pattern:"hhb"},{Color:0,Pattern:"hhb"},{Color:0,Pattern:"hhb"},{Color:10,Pattern:"bs"},{Color:10,Pattern:"bs"},{Color:10,Pattern:"bs"},{Color:15,Pattern:"ts"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:8,Pattern:"hh"},{Color:15,Pattern:"ts"},{Color:0,Pattern:"hhb"},{Color:0,Pattern:"hhb"},{Color:0,Pattern:"hhb"},{Color:0,Pattern:"hhb"},{Color:0,Pattern:"hhb"},{Color:0,Pattern:"hhb"},{Color:10,Pattern:"bs"},{Color:10,Pattern:"bs"},{Color:10,Pattern:"bs"},{Color:15,Pattern:"ts"}]}}
+          ali:item minecraft:red_banner x1 {BlockEntityTag:{Patterns:[{Color:13,Pattern:"hhb"},{Color:11,Pattern:"bs"},{Color:11,Pattern:"bs"},{Color:10,Pattern:"bts"},{Color:4,Pattern:"hh"},{Color:1,Pattern:"ts"},{Color:1,Pattern:"ts"},{Color:14,Pattern:"tts"},{Color:14,Pattern:"tts"},{Color:10,Pattern:"bts"},{Color:10,Pattern:"bts"},{Color:14,Pattern:"tts"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:13,Pattern:"hhb"},{Color:11,Pattern:"bs"},{Color:11,Pattern:"bs"},{Color:10,Pattern:"bts"},{Color:4,Pattern:"hh"},{Color:1,Pattern:"ts"},{Color:1,Pattern:"ts"},{Color:14,Pattern:"tts"},{Color:14,Pattern:"tts"},{Color:10,Pattern:"bts"},{Color:10,Pattern:"bts"},{Color:14,Pattern:"tts"}]}}
+          ali:item minecraft:yellow_banner x1 {BlockEntityTag:{Patterns:[{Color:4,Pattern:"hhb"},{Color:11,Pattern:"hh"},{Color:11,Pattern:"hh"},{Color:11,Pattern:"hh"},{Color:11,Pattern:"hh"},{Color:11,Pattern:"hh"},{Color:11,Pattern:"hh"},{Color:11,Pattern:"hh"},{Color:11,Pattern:"hh"},{Color:11,Pattern:"hh"},{Color:11,Pattern:"hh"},{Color:11,Pattern:"hh"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:4,Pattern:"hhb"},{Color:11,Pattern:"hh"},{Color:11,Pattern:"hh"},{Color:11,Pattern:"hh"},{Color:11,Pattern:"hh"},{Color:11,Pattern:"hh"},{Color:11,Pattern:"hh"},{Color:11,Pattern:"hh"},{Color:11,Pattern:"hh"},{Color:11,Pattern:"hh"},{Color:11,Pattern:"hh"},{Color:11,Pattern:"hh"}]}}
+          ali:item minecraft:pink_banner x1 {BlockEntityTag:{Patterns:[{Color:0,Pattern:"cs"},{Color:0,Pattern:"cs"},{Color:0,Pattern:"cs"},{Color:3,Pattern:"bo"},{Color:3,Pattern:"bo"},{Color:3,Pattern:"bo"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:0,Pattern:"cs"},{Color:0,Pattern:"cs"},{Color:0,Pattern:"cs"},{Color:3,Pattern:"bo"},{Color:3,Pattern:"bo"},{Color:3,Pattern:"bo"}]}}
+          ali:item minecraft:green_banner x1 {BlockEntityTag:{Patterns:[{Color:9,Pattern:"flo"},{Color:9,Pattern:"mr"},{Color:3,Pattern:"mc"},{Color:15,Pattern:"glb"},{Color:13,Pattern:"glb"},{Color:15,Pattern:"bo"},{Color:15,Pattern:"ts"},{Color:15,Pattern:"bs"},{Color:15,Pattern:"bo"},{Color:15,Pattern:"bo"},{Color:15,Pattern:"ts"},{Color:15,Pattern:"bs"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:9,Pattern:"flo"},{Color:9,Pattern:"mr"},{Color:3,Pattern:"mc"},{Color:15,Pattern:"glb"},{Color:13,Pattern:"glb"},{Color:15,Pattern:"bo"},{Color:15,Pattern:"ts"},{Color:15,Pattern:"bs"},{Color:15,Pattern:"bo"},{Color:15,Pattern:"bo"},{Color:15,Pattern:"ts"},{Color:15,Pattern:"bs"}]}}
+          ali:item minecraft:red_banner x1 {BlockEntityTag:{Patterns:[{Color:14,Pattern:"gru"},{Color:4,Pattern:"tt"},{Color:4,Pattern:"tt"},{Color:4,Pattern:"tt"},{Color:4,Pattern:"rs"},{Color:4,Pattern:"ls"},{Color:14,Pattern:"bo"},{Color:14,Pattern:"bo"},{Color:14,Pattern:"bo"},{Color:14,Pattern:"tts"},{Color:14,Pattern:"tts"},{Color:14,Pattern:"tts"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:14,Pattern:"gru"},{Color:4,Pattern:"tt"},{Color:4,Pattern:"tt"},{Color:4,Pattern:"tt"},{Color:4,Pattern:"rs"},{Color:4,Pattern:"ls"},{Color:14,Pattern:"bo"},{Color:14,Pattern:"bo"},{Color:14,Pattern:"bo"},{Color:14,Pattern:"tts"},{Color:14,Pattern:"tts"},{Color:14,Pattern:"tts"}]}}
+          ali:item minecraft:white_banner x1 {BlockEntityTag:{Patterns:[{Color:7,Pattern:"gru"},{Color:0,Pattern:"gra"},{Color:15,Pattern:"cr"},{Color:15,Pattern:"cr"},{Color:5,Pattern:"cr"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:7,Pattern:"gru"},{Color:0,Pattern:"gra"},{Color:15,Pattern:"cr"},{Color:15,Pattern:"cr"},{Color:5,Pattern:"cr"}]}}
+          ali:item minecraft:red_banner x1 {BlockEntityTag:{Patterns:[{Color:0,Pattern:"mc"},{Color:14,Pattern:"flo"},{Color:0,Pattern:"bs"},{Color:0,Pattern:"ts"},{Color:0,Pattern:"bo"},{Color:0,Pattern:"cbo"},{Color:0,Pattern:"cbo"},{Color:0,Pattern:"ts"},{Color:0,Pattern:"bs"},{Color:0,Pattern:"ts"},{Color:0,Pattern:"bs"},{Color:0,Pattern:"bo"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:0,Pattern:"mc"},{Color:14,Pattern:"flo"},{Color:0,Pattern:"bs"},{Color:0,Pattern:"ts"},{Color:0,Pattern:"bo"},{Color:0,Pattern:"cbo"},{Color:0,Pattern:"cbo"},{Color:0,Pattern:"ts"},{Color:0,Pattern:"bs"},{Color:0,Pattern:"ts"},{Color:0,Pattern:"bs"},{Color:0,Pattern:"bo"}]}}
+          ali:item minecraft:white_banner x1 {BlockEntityTag:{Patterns:[{Color:0,Pattern:"gru"},{Color:0,Pattern:"gra"},{Color:15,Pattern:"mc"},{Color:15,Pattern:"mc"},{Color:9,Pattern:"mc"},{Color:0,Pattern:"mc"},{Color:15,Pattern:"bs"},{Color:15,Pattern:"bs"},{Color:5,Pattern:"bs"},{Color:0,Pattern:"bo"},{Color:0,Pattern:"bo"},{Color:0,Pattern:"bs"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:0,Pattern:"gru"},{Color:0,Pattern:"gra"},{Color:15,Pattern:"mc"},{Color:15,Pattern:"mc"},{Color:9,Pattern:"mc"},{Color:0,Pattern:"mc"},{Color:15,Pattern:"bs"},{Color:15,Pattern:"bs"},{Color:5,Pattern:"bs"},{Color:0,Pattern:"bo"},{Color:0,Pattern:"bo"},{Color:0,Pattern:"bs"}]}}
+          ali:item minecraft:white_banner x1 {BlockEntityTag:{Patterns:[{Color:13,Pattern:"cs"},{Color:1,Pattern:"hh"},{Color:0,Pattern:"ss"},{Color:0,Pattern:"ss"},{Color:0,Pattern:"ss"},{Color:1,Pattern:"ts"},{Color:0,Pattern:"ls"},{Color:0,Pattern:"rs"},{Color:0,Pattern:"ls"},{Color:0,Pattern:"rs"},{Color:0,Pattern:"cbo"},{Color:0,Pattern:"cbo"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:13,Pattern:"cs"},{Color:1,Pattern:"hh"},{Color:0,Pattern:"ss"},{Color:0,Pattern:"ss"},{Color:0,Pattern:"ss"},{Color:1,Pattern:"ts"},{Color:0,Pattern:"ls"},{Color:0,Pattern:"rs"},{Color:0,Pattern:"ls"},{Color:0,Pattern:"rs"},{Color:0,Pattern:"cbo"},{Color:0,Pattern:"cbo"}]}}
+          ali:item minecraft:white_banner x1 {BlockEntityTag:{Patterns:[{Color:0,Pattern:"hhb"},{Color:0,Pattern:"hh"},{Color:3,Pattern:"bs"},{Color:3,Pattern:"ts"},{Color:0,Pattern:"cbo"},{Color:0,Pattern:"mr"},{Color:3,Pattern:"cr"},{Color:0,Pattern:"bt"},{Color:3,Pattern:"cbo"},{Color:3,Pattern:"bo"},{Color:0,Pattern:"bo"},{Color:0,Pattern:"cbo"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:0,Pattern:"hhb"},{Color:0,Pattern:"hh"},{Color:3,Pattern:"bs"},{Color:3,Pattern:"ts"},{Color:0,Pattern:"cbo"},{Color:0,Pattern:"mr"},{Color:3,Pattern:"cr"},{Color:0,Pattern:"bt"},{Color:3,Pattern:"cbo"},{Color:3,Pattern:"bo"},{Color:0,Pattern:"bo"},{Color:0,Pattern:"cbo"}]}}
+          ali:item minecraft:yellow_banner x1 {BlockEntityTag:{Patterns:[{Color:4,Pattern:"rd"},{Color:15,Pattern:"drs"},{Color:15,Pattern:"drs"},{Color:15,Pattern:"drs"},{Color:15,Pattern:"ls"},{Color:15,Pattern:"ls"},{Color:15,Pattern:"ls"},{Color:15,Pattern:"ts"},{Color:15,Pattern:"ts"},{Color:4,Pattern:"bo"},{Color:4,Pattern:"bo"},{Color:4,Pattern:"bo"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:4,Pattern:"rd"},{Color:15,Pattern:"drs"},{Color:15,Pattern:"drs"},{Color:15,Pattern:"drs"},{Color:15,Pattern:"ls"},{Color:15,Pattern:"ls"},{Color:15,Pattern:"ls"},{Color:15,Pattern:"ts"},{Color:15,Pattern:"ts"},{Color:4,Pattern:"bo"},{Color:4,Pattern:"bo"},{Color:4,Pattern:"bo"}]}}
+          ali:item minecraft:lime_banner x1 {BlockEntityTag:{Patterns:[{Color:5,Pattern:"hhb"},{Color:5,Pattern:"hh"},{Color:0,Pattern:"bs"},{Color:0,Pattern:"ts"},{Color:5,Pattern:"cbo"},{Color:5,Pattern:"bs"},{Color:5,Pattern:"mr"},{Color:0,Pattern:"cr"},{Color:5,Pattern:"bo"},{Color:5,Pattern:"cbo"},{Color:5,Pattern:"bo"},{Color:5,Pattern:"cbo"}]}}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Nbt:
+            |   -> Tag: {BlockEntityTag:{Patterns:[{Color:5,Pattern:"hhb"},{Color:5,Pattern:"hh"},{Color:0,Pattern:"bs"},{Color:0,Pattern:"ts"},{Color:5,Pattern:"cbo"},{Color:5,Pattern:"bs"},{Color:5,Pattern:"mr"},{Color:0,Pattern:"cr"},{Color:5,Pattern:"bo"},{Color:5,Pattern:"cbo"},{Color:5,Pattern:"bo"},{Color:5,Pattern:"cbo"}]}}
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 0
+    |   -> Bad Luck: 0
+    |   -> Luck 1: 1
+    |   -> Luck 2: 2
+    |   -> Luck 3: 3
+    |   -> Luck 4: 4
+    ali:empty
+      | Drops nothing
+      | Chance: 76.47%
+    ali:item minecraft:red_banner x1 {BlockEntityTag:{Patterns:[{Color:14,Pattern:"cbo"},{Color:15,Pattern:"cbo"},{Color:14,Pattern:"sku"},{Color:14,Pattern:"sku"},{Color:14,Pattern:"sku"},{Color:15,Pattern:"sku"},{Color:14,Pattern:"gru"},{Color:14,Pattern:"bt"},{Color:15,Pattern:"bt"},{Color:14,Pattern:"bts"},{Color:15,Pattern:"bts"},{Color:15,Pattern:"gra"}]}}
+      | Chance: 17.65%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {BlockEntityTag:{Patterns:[{Color:14,Pattern:"cbo"},{Color:15,Pattern:"cbo"},{Color:14,Pattern:"sku"},{Color:14,Pattern:"sku"},{Color:14,Pattern:"sku"},{Color:15,Pattern:"sku"},{Color:14,Pattern:"gru"},{Color:14,Pattern:"bt"},{Color:15,Pattern:"bt"},{Color:14,Pattern:"bts"},{Color:15,Pattern:"bts"},{Color:15,Pattern:"gra"}]}}
+    ali:item minecraft:diamond_horse_armor x1
+      | Chance: 2.94%
+      | Count: 1
+    ali:item minecraft:potion x1 {Potion:"minecraft:regeneration"}
+      | Chance: 2.94%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {Potion:"minecraft:regeneration"}
+  ali:reference
+    | Selects all entries
+    | Only items added by other mods
+    ali:loot_table
+      | Selects all entries
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 2 to 4
+        ali:item minecraft:bone x4-6
+          | Chance: 10.78%
+          | Count: 4 to 6
+        ali:item minecraft:spider_eye x1-3
+          | Chance: 10.78%
+          | Count: 1 to 3
+        ali:item minecraft:rotten_flesh x3-7
+          | Chance: 10.78%
+          | Count: 3 to 7
+        ali:item minecraft:saddle x1
+          | Chance: 8.62%
+          | Count: 1
+        ali:item minecraft:enchanted_book x1
+          | Chance: 8.62%
+          | Count: 1
+          | ----- Modifiers -----
+          | Enchant Randomly:
+        ali:item minecraft:golden_apple x1
+          | Chance: 8.62%
+          | Count: 1
+        ali:item minecraft:iron_ingot x1-5
+          | Chance: 6.47%
+          | Count: 1 to 5
+        ali:item minecraft:gold_ingot x2-7
+          | Chance: 6.47%
+          | Count: 2 to 7
+        ali:item minecraft:emerald x1-3
+          | Chance: 6.47%
+          | Count: 1 to 3
+        ali:item minecraft:iron_horse_armor x1
+          | Chance: 6.47%
+          | Count: 1
+        ali:empty
+          | Drops nothing
+          | Chance: 6.47%
+        ali:item minecraft:golden_horse_armor x1
+          | Chance: 4.31%
+          | Count: 1
+        ali:item minecraft:diamond x1-3
+          | Chance: 2.16%
+          | Count: 1 to 3
+        ali:item minecraft:diamond_horse_armor x1
+          | Chance: 2.16%
+          | Count: 1
+        ali:item minecraft:enchanted_golden_apple x1
+          | Chance: 0.86%
+          | Count: 1
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 4
+        ali:item minecraft:bone x1-8
+          | Chance: 20%
+          | Count: 1 to 8
+        ali:item minecraft:gunpowder x1-8
+          | Chance: 20%
+          | Count: 1 to 8
+        ali:item minecraft:rotten_flesh x1-8
+          | Chance: 20%
+          | Count: 1 to 8
+        ali:item minecraft:string x1-8
+          | Chance: 20%
+          | Count: 1 to 8
+        ali:item minecraft:sand x1-8
+          | Chance: 20%
+          | Count: 1 to 8
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1
+        ali:empty
+          | Drops nothing
+          | Chance: 85.71%
+        ali:item minecraft:dune_armor_trim_smithing_template x2
+          | Chance: 14.29%
+          | Count: 2

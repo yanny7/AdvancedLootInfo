@@ -1,0 +1,13 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item undergarden:forgotten_nugget x4-16
+      | Count: max(0; U[4; 16])
+      | ----- Predicates -----
+      | Killed by player
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4 to 16
+      |   -> Add: False

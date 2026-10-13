@@ -1,0 +1,100 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 16
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item minecraft:rotten_flesh x32
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:redstone x2
+  ali:trade_level
+    | Level: 2
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 8
+      | XP: 10
+      | Price Multiplier: 0.05
+      ali:item ad_astra:desh_ingot x3
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:lapis_lazuli x1
+  ali:trade_level
+    | Level: 3
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 20
+      | Price Multiplier: 0.05
+      ali:item minecraft:rabbit_foot x2
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 10
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item minecraft:glowstone x1
+  ali:trade_level
+    | Level: 4
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 30
+      | Price Multiplier: 0.05
+      ali:item minecraft:turtle_scute x4
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 30
+      | Price Multiplier: 0.05
+      ali:item minecraft:glass_bottle x9
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:ender_pearl x1
+  ali:trade_level
+    | Level: 5
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 30
+      | Price Multiplier: 0.05
+      ali:item minecraft:nether_wart x22
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 30
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item minecraft:experience_bottle x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 60
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x32
+      ali:item minecraft:air x0
+      ali:item ad_astra:oxygen_bucket x1

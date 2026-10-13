@@ -1,0 +1,112 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4
+    ali:item minecraft:oak_planks x1-4
+      | Chance: 15.79%
+      | Count: 1 to 4
+    ali:item minecraft:brown_mushroom x1-4
+      | Chance: 15.79%
+      | Count: 1 to 4
+    ali:item minecraft:red_mushroom x1-4
+      | Chance: 15.79%
+      | Count: 1 to 4
+    ali:item minecraft:wheat x1-4
+      | Chance: 15.79%
+      | Count: 1 to 4
+    ali:item minecraft:string x1-4
+      | Chance: 15.79%
+      | Count: 1 to 4
+    ali:item minecraft:stick x1-6
+      | Chance: 15.79%
+      | Count: 1 to 6
+    ali:reference
+      | Selects all entries
+      | Chance: 5.26%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item minecraft:poppy x1-4
+            | Chance: 0.53%
+            | Count: 1 to 4
+          ali:item minecraft:dandelion x1-4
+            | Chance: 0.53%
+            | Count: 1 to 4
+          ali:item minecraft:feather x1-3
+            | Chance: 0.53%
+            | Count: 1 to 3
+          ali:item minecraft:wheat_seeds x1-2
+            | Chance: 0.53%
+            | Count: 1 to 2
+          ali:item minecraft:flint x1-2
+            | Chance: 0.53%
+            | Count: 1 to 2
+          ali:item minecraft:cactus x1-2
+            | Chance: 0.53%
+            | Count: 1 to 2
+          ali:item minecraft:sugar_cane x1-4
+            | Chance: 0.53%
+            | Count: 1 to 4
+          ali:item minecraft:sand x1-4
+            | Chance: 0.53%
+            | Count: 1 to 4
+          ali:item minecraft:flower_pot x1
+            | Chance: 0.53%
+            | Count: 1
+          ali:item minecraft:bone_meal x1
+            | Chance: 0.53%
+            | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item minecraft:melon_slice x1-4
+      | Chance: 20%
+      | Count: 1 to 4
+    ali:item minecraft:melon_seeds x1-4
+      | Chance: 20%
+      | Count: 1 to 4
+    ali:item minecraft:pumpkin_seeds x1-4
+      | Chance: 20%
+      | Count: 1 to 4
+    ali:item minecraft:arrow x1-12
+      | Chance: 20%
+      | Count: 1 to 12
+    ali:item twilightforest:firefly x1-4
+      | Chance: 20%
+      | Count: 1 to 4
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:cobweb x1-4
+      | Chance: 15.31%
+      | Count: 1 to 4
+    ali:item minecraft:apple x1-2
+      | Chance: 15.31%
+      | Count: 1 to 2
+    ali:item minecraft:shears x1 {Damage:0}
+      | Chance: 15.31%
+      | Count: 1
+    ali:item minecraft:saddle x1
+      | Chance: 15.31%
+      | Count: 1
+    ali:item minecraft:bow x1 {Damage:0}
+      | Chance: 15.31%
+      | Count: 1
+    ali:item minecraft:golden_apple x1
+      | Chance: 5.1%
+      | Count: 1
+    ali:item minecraft:mushroom_stew x1
+      | Chance: 5.1%
+      | Count: 1
+    ali:item minecraft:diamond x1
+      | Chance: 5.1%
+      | Count: 1
+    ali:item minecraft:diamond_hoe x1 {Damage:0}
+      | Chance: 5.1%
+      | Count: 1
+    ali:item twilightforest:music_disc_motion x1
+      | Chance: 3.06%
+      | Count: 1

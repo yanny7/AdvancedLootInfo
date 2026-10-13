@@ -20,6 +20,7 @@ public class ArsNouveauCompat implements IGlmModCompat {
     @Override
     public void registerServer(IServerRegistry registry) {
         registry.registerEntitySubPredicateTooltip(EntitySubPredicatesRegistry.PercentHealthEqualOrLowerPredicate.CODEC, ArsNouveauCompat::getPercentHealthEqualOrLowerTooltip);
+        registry.registerTradeOverride(ShardsTraderTrades::getTradeLevels);
     }
 
     @Override

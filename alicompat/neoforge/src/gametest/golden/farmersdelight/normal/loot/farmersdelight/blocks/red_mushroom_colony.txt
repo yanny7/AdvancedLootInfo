@@ -1,0 +1,57 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item minecraft:red_mushroom x2
+        | Count: 2
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Red Mushroom Colony
+        |   -> Properties:
+        |     -> age: 0
+        | ----- Modifiers -----
+        | Explosion Decay
+      ali:item minecraft:red_mushroom x3
+        | Count: 3
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Red Mushroom Colony
+        |   -> Properties:
+        |     -> age: 1
+        | ----- Modifiers -----
+        | Explosion Decay
+      ali:item minecraft:red_mushroom x4
+        | Count: 4
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Red Mushroom Colony
+        |   -> Properties:
+        |     -> age: 2
+        | ----- Modifiers -----
+        | Explosion Decay
+      ali:item minecraft:red_mushroom x5
+        | Count: 5
+        | ----- Predicates -----
+        | Inverted:
+        |   -> Can Item Perform Ability:
+        |     -> shears_harvest
+        | Block State Property:
+        |   -> Block: Red Mushroom Colony
+        |   -> Properties:
+        |     -> age: 3
+        | ----- Modifiers -----
+        | Explosion Decay
+      ali:item farmersdelight:red_mushroom_colony x1
+        | Count: 1
+        | ----- Predicates -----
+        | Can Item Perform Ability:
+        |   -> shears_harvest
+        | Block State Property:
+        |   -> Block: Red Mushroom Colony
+        |   -> Properties:
+        |     -> age: 3
+        | ----- Modifiers -----
+        | Explosion Decay
