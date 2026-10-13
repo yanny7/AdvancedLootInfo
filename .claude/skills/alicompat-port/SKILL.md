@@ -252,8 +252,29 @@ the merged change would have rewritten had the code existed below gets the same 
 alone in its own equivalent code stays as it is. A `Lang` enum the merge brings in for code that differs here is
 reshaped to this branch's constants, not copied from below.
 
-**Stop here.** Report what merged, what was restored, and how many slugs are dormant. The user
-commits. Phase 2 does not begin until that commit exists.
+### Changelog entries the merge never touched
+
+Before reporting, read the lower branch's `alicompat/CHANGELOG.md` `## []` section one entry at a time and
+check whether the merge's own diff actually touched the file(s) behind it:
+
+```bash
+git diff --name-only $(git merge-base HEAD origin/<lower>) origin/<lower> -- alicompat
+```
+
+A fix or small feature on an **active** shim (never a dormant one — that is phase 2's concern, re-derived
+from scratch) whose files are absent from that list never collided with anything here, so nothing in this
+merge forced a look at it — it is neither ported nor reported by construction. This happens whenever the
+two branches' copies of a shim were independently rewritten against different target-mod API shapes (one
+Forge-only, this branch NeoForge-only; or the mod itself changed enough that git never sees the lines as
+"the same code"), so `git merge-file`'s 3-way patching (above) finds no shared base to apply against either.
+
+List every such entry in the report and recommend the `alicompat-backport` skill for each — one entry can
+mean several active loader copies, a bytecode check against the mod version pinned *here*, or a discovery
+that the fix's precondition no longer holds on this branch at all. That work is real engineering per mod,
+not a merge-conflict resolution, and does not belong inside this skill's own pass.
+
+**Stop here.** Report what merged, what was restored, how many slugs are dormant, and which changelog
+entries look unported (see above). The user commits. Phase 2 does not begin until that commit exists.
 
 ## Phase 2 — activating the dormant shims
 
@@ -358,4 +379,7 @@ This is a full port, not a merge. It runs `alicompat-shim` from its Step 0:
 
 Which step of the chain this was and whether another follows; what was restored and what was
 deliberately left out; how many slugs are still dormant; which port is least certain; and what the
-gametests showed. Nothing here is played in a client.
+gametests showed. After a phase 1 report, also name every lower-branch changelog entry that the merge's
+diff never touched and recommend running `alicompat-backport` for it (see "Changelog entries the merge
+never touched" above) — do not let those sit unmentioned just because nothing failed to compile. Nothing
+here is played in a client.
