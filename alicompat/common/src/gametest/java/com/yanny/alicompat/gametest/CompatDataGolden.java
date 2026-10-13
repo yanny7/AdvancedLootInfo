@@ -33,12 +33,12 @@ public class CompatDataGolden {
         }
 
         String mod = System.getProperty("alicompat.gametest.mod", BASE);
-        List<String> notLoaded = Arrays.stream(System.getProperty("alicompat.gametest.modids", "").split(","))
-                .filter((modId) -> !modId.isBlank() && !Services.getPlatform().isModLoaded(modId))
+        List<String> modIds = Arrays.stream(System.getProperty("alicompat.gametest.modids", "").split(","))
+                .filter((modId) -> !modId.isBlank())
                 .toList();
 
-        if (!notLoaded.isEmpty()) {
-            throw new GameTestAssertException(mod + ": target mod(s) not loaded: " + notLoaded);
+        if (!modIds.isEmpty() && modIds.stream().noneMatch(Services.getPlatform()::isModLoaded)) {
+            throw new GameTestAssertException(mod + ": none of the target mods loaded: " + modIds);
         }
 
         GoldenLanguage.inject(namespaces());

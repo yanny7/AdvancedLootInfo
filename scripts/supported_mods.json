@@ -57,7 +57,7 @@
   {
     "key": "cognition",
     "name": "Cognition",
-    "mod_ids": ["experienceobelisk"],
+    "mod_ids": ["experienceobelisk", "cognition"],
     "curseforge": ["cognition-mod-579484"]
   },
   {
@@ -201,7 +201,7 @@
   {
     "key": "portinglib",
     "name": "Porting Lib",
-    "mod_ids": ["porting_lib_loot", "porting_lib_tool_actions"],
+    "mod_ids": ["porting_lib_loot", "porting_lib_tool_actions", "porting_lib_item_abilities"],
     "curseforge": ["porting-lib-696251"],
     "maven": [
       {
