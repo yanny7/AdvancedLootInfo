@@ -9,13 +9,14 @@ ali:loot_table
         | Count: 1
         | ----- Predicates -----
         | Match Tool:
-        |   -> Item Predicates:
-        |     -> Enchantments:
-        |       -> Enchantment: Silk Touch
-        |       -> Level: ≥ 1
+        |   -> Components:
+        |     -> Partial Matchers:
+        |       -> minecraft:enchantments
+        |         -> Enchantment: Silk Touch
+        |         -> Level: ≥ 1
         | ----- Modifiers -----
         | Copy Components:
-        |   -> Source: Block Entity
+        |   -> Source: minecraft:block_entity
         |   -> Include: minecraft:bees
         | Copy State:
         |   -> Block: Beehive

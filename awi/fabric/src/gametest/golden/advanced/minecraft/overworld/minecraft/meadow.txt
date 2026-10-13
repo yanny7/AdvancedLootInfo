@@ -1364,6 +1364,7 @@ awi:biome minecraft:meadow
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1384,7 +1385,7 @@ awi:biome minecraft:meadow
       |   -> Heightmap Placement:
       |     -> Heightmap: Ground or Water Surface
       awi:block minecraft:tall_grass
-    awi:placed_feature minecraft:patch_grass_plain
+    awi:placed_feature minecraft:patch_grass_meadow
       | Attempts Per Chunk: ? (minecraft:noise_threshold_count)
       |   -> Noise Threshold Count Placement:
       |     -> Noise Level: -0.8
@@ -1394,7 +1395,7 @@ awi:biome minecraft:meadow
       | Configured Feature:
       |   -> Feature: minecraft:random_patch
       |   -> Random Patch:
-      |     -> Tries: 32
+      |     -> Tries: 16
       |     -> XZ Spread: 7
       |     -> Y Spread: 3
       |     -> Feature:
@@ -1402,6 +1403,7 @@ awi:biome minecraft:meadow
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1431,6 +1433,7 @@ awi:biome minecraft:meadow
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Dual Noise Provider:
       |                 -> States:
@@ -1583,6 +1586,154 @@ awi:biome minecraft:meadow
       awi:block minecraft:oak_leaves
       awi:block minecraft:birch_log
       awi:block minecraft:birch_leaves
+    awi:placed_feature minecraft:wildflowers_meadow
+      | Attempts Per Chunk: ? (minecraft:noise_threshold_count)
+      |   -> Noise Threshold Count Placement:
+      |     -> Noise Level: -0.8
+      |     -> Below Noise: 5
+      |     -> Above Noise: 10
+      | Height: Ground or Water Surface
+      | Configured Feature:
+      |   -> Feature: minecraft:flower
+      |   -> Random Patch:
+      |     -> Tries: 8
+      |     -> XZ Spread: 6
+      |     -> Y Spread: 2
+      |     -> Feature:
+      |       -> Feature:
+      |         -> Feature: minecraft:simple_block
+      |         -> Config:
+      |           -> Simple Block:
+      |             -> Schedule Tick: False
+      |             -> To Place:
+      |               -> Weighted:
+      |                 -> Weighted List:
+      |                   -> Total Weight: 16
+      |                   -> Items:
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: north
+      |                           -> flower_amount: 1
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: east
+      |                           -> flower_amount: 1
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: south
+      |                           -> flower_amount: 1
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: west
+      |                           -> flower_amount: 1
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: north
+      |                           -> flower_amount: 2
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: east
+      |                           -> flower_amount: 2
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: south
+      |                           -> flower_amount: 2
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: west
+      |                           -> flower_amount: 2
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: north
+      |                           -> flower_amount: 3
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: east
+      |                           -> flower_amount: 3
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: south
+      |                           -> flower_amount: 3
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: west
+      |                           -> flower_amount: 3
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: north
+      |                           -> flower_amount: 4
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: east
+      |                           -> flower_amount: 4
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: south
+      |                           -> flower_amount: 4
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: west
+      |                           -> flower_amount: 4
+      |       -> Placement:
+      |         -> Block Predicate Filter:
+      |           -> Matching Blocks:
+      |             -> Block: Air
+      | Placement:
+      |   -> Noise Threshold Count Placement:
+      |     -> Noise Level: -0.8
+      |     -> Below Noise: 5
+      |     -> Above Noise: 10
+      |   -> Heightmap Placement:
+      |     -> Heightmap: Ground or Water Surface
+      awi:block minecraft:wildflowers
   awi:generation_step 10
     | Generation Step: Top Layer Modifications
     awi:placed_feature minecraft:freeze_top_layer

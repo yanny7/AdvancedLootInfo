@@ -9,7 +9,7 @@ ali:loot_table
       | ----- Modifiers -----
       | Set Custom Data:
       |   -> Tag: {CustomModelData:7}
-    ali:item minecraft:iron_sword x1 {"minecraft:attribute_modifiers":{modifiers:[]},"minecraft:enchantment_glint_override":1b}
+    ali:item minecraft:iron_sword x1 {"minecraft:attribute_modifiers":[],"minecraft:enchantment_glint_override":1b}
       | Chance: 11.11%
       | Count: 1
       | ----- Modifiers -----
@@ -61,7 +61,7 @@ ali:loot_table
       | Set Stew Effect:
       |   -> Speed
       |     -> Duration: 3 to 7
-    ali:item minecraft:paper x1 {"minecraft:custom_name":'{"color":"gold","text":"Gametest"}'}
+    ali:item minecraft:paper x1 {"minecraft:custom_name":{color:"gold",text:"Gametest"}}
       | Chance: 11.11%
       | Count: 1
       | ----- Modifiers -----

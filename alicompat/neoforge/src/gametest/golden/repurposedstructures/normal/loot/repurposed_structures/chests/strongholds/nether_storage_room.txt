@@ -48,7 +48,7 @@ ali:loot_table
     ali:item minecraft:obsidian x2-8
       | Chance: 3.51%
       | Count: 2 to 8
-    ali:item minecraft:chain x2-8
+    ali:item minecraft:iron_chain x2-8
       | Chance: 3.51%
       | Count: 2 to 8
     ali:item minecraft:netherite_scrap x1

@@ -65,14 +65,10 @@ tasks.matching { it.name == "runGametest" }.configureEach {
     timeout = java.time.Duration.ofMinutes(10)
 
     doFirst {
-        delete "build/gametest/run/config", "build/gametest/run/kubejs", "build/gametest/run/mods"
+        delete "build/gametest/run/config", "build/gametest/run/kubejs"
         copy {
             from project(":ali:common").file("src/gametest/kubejs")
             into "build/gametest/run/kubejs"
-        }
-        copy {
-            from { extractKubeJsNestedLibs() }
-            into "build/gametest/run/mods"
         }
     }
 }
@@ -99,46 +95,6 @@ dependencies {
     modCompileOnly "curse.maven:kubejs-238086:7103315"
     modCompileOnly "curse.maven:rhino-416294:7104526"
     modCompileOnly "curse.maven:lootjs-570630:8009262"
-
-    modGametestRuntimeOnly "curse.maven:kubejs-238086:7103315"
-    modGametestRuntimeOnly "curse.maven:rhino-416294:7104526"
-    modGametestRuntimeOnly "curse.maven:lootjs-570630:8009262"
-}
-
-// a NeoForge dev launch does not unpack jar-in-jar; a nested library needs FMLModType: GAMELIBRARY to load from mods/
-def extractKubeJsNestedLibs() {
-    def kubejs = configurations.detachedConfiguration(dependencies.create("curse.maven:kubejs-238086:7103315")).tap { transitive = false }.files.first()
-    def nestedDir = file("build/gametest/nested/kubejs")
-    def outer = new java.util.zip.ZipFile(kubejs)
-
-    nestedDir.deleteDir()
-    nestedDir.mkdirs()
-
-    outer.entries().findAll { it.name ==~ /META-INF\/jarjar\/[^\/]+\.jar/ }.each { nested ->
-        def name = nested.name.substring(nested.name.lastIndexOf("/") + 1)
-        def input = new java.util.jar.JarInputStream(new ByteArrayInputStream(outer.getInputStream(nested).readAllBytes()))
-        def entries = [:]
-
-        for (def entry = input.nextJarEntry; entry != null; entry = input.nextJarEntry) {
-            entries[entry.name] = input.readAllBytes()
-        }
-        input.close()
-
-        def manifest = input.manifest ?: new java.util.jar.Manifest()
-        manifest.mainAttributes.putValue("Manifest-Version", "1.0")
-        manifest.mainAttributes.putValue("FMLModType", "GAMELIBRARY")
-
-        def output = new java.util.jar.JarOutputStream(new FileOutputStream(new File(nestedDir, name)), manifest)
-        entries.each { entryName, data ->
-            output.putNextEntry(new java.util.jar.JarEntry(entryName))
-            output.write(data)
-            output.closeEntry()
-        }
-        output.close()
-    }
-
-    outer.close()
-    return fileTree(nestedDir).files
 }
 
 shadowJar {
@@ -165,4 +121,4 @@ components.java {
     withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
         skip()
     }
-}
+}

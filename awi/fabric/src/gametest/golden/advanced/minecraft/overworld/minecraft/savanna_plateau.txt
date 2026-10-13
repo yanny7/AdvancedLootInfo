@@ -70,8 +70,12 @@ awi:biome minecraft:savanna_plateau
     | Group size: 4 to 8
   spawn minecraft:zombie
     | Category: Monster
-    | Weight: 95
+    | Weight: 90
     | Group size: 4
+  spawn minecraft:zombie_horse
+    | Category: Monster
+    | Weight: 5
+    | Group size: 1
   spawn minecraft:zombie_villager
     | Category: Monster
     | Weight: 5
@@ -1306,6 +1310,7 @@ awi:biome minecraft:savanna_plateau
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1332,54 +1337,96 @@ awi:biome minecraft:savanna_plateau
       |   -> Feature: minecraft:random_selector
       |   -> Random Feature:
       |     -> Features:
-      |       -> Feature:
+      |       -> Entry:
       |         -> Feature:
-      |           -> Feature: minecraft:tree
-      |           -> Config:
-      |             -> Tree:
-      |               -> Trunk Provider:
-      |                 -> Simple:
-      |                   -> State:
-      |                     -> Block: Acacia Log
-      |                     -> Properties:
-      |                       -> axis: y
-      |               -> Dirt Provider:
-      |                 -> Simple:
-      |                   -> State:
-      |                     -> Block: Dirt
-      |               -> Trunk Placer:
-      |                 -> Forking Trunk:
-      |                   -> Base Height: 5
-      |                   -> Height Rand A: 2
-      |                   -> Height Rand B: 2
-      |               -> Foliage Provider:
-      |                 -> Simple:
-      |                   -> State:
-      |                     -> Block: Acacia Leaves
-      |                     -> Properties:
-      |                       -> distance: 7
-      |                       -> persistent: false
-      |                       -> waterlogged: false
-      |               -> Foliage Placer:
-      |                 -> Acacia:
-      |                   -> Radius: 2
-      |                   -> Offset:
-      |                     -> 0
-      |               -> Minimum Size:
-      |                 -> Two Layers:
-      |                   -> Limit: 1
-      |                   -> Lower Size: 0
-      |                   -> Upper Size: 2
-      |               -> Ignore Vines: True
-      |               -> Force Dirt: False
-      |         -> Placement:
-      |           -> Block Predicate Filter:
-      |             -> Would Survive:
-      |               -> State:
-      |                 -> Block: Acacia Sapling
-      |                 -> Properties:
-      |                   -> stage: 0
-      |       -> Chance: 0.8
+      |           -> Feature:
+      |             -> Feature: minecraft:tree
+      |             -> Config:
+      |               -> Tree:
+      |                 -> Trunk Provider:
+      |                   -> Simple:
+      |                     -> State:
+      |                       -> Block: Acacia Log
+      |                       -> Properties:
+      |                         -> axis: y
+      |                 -> Dirt Provider:
+      |                   -> Simple:
+      |                     -> State:
+      |                       -> Block: Dirt
+      |                 -> Trunk Placer:
+      |                   -> Forking Trunk:
+      |                     -> Base Height: 5
+      |                     -> Height Rand A: 2
+      |                     -> Height Rand B: 2
+      |                 -> Foliage Provider:
+      |                   -> Simple:
+      |                     -> State:
+      |                       -> Block: Acacia Leaves
+      |                       -> Properties:
+      |                         -> distance: 7
+      |                         -> persistent: false
+      |                         -> waterlogged: false
+      |                 -> Foliage Placer:
+      |                   -> Acacia:
+      |                     -> Radius: 2
+      |                     -> Offset:
+      |                       -> 0
+      |                 -> Minimum Size:
+      |                   -> Two Layers:
+      |                     -> Limit: 1
+      |                     -> Lower Size: 0
+      |                     -> Upper Size: 2
+      |                 -> Ignore Vines: True
+      |                 -> Force Dirt: False
+      |           -> Placement:
+      |             -> Block Predicate Filter:
+      |               -> Would Survive:
+      |                 -> State:
+      |                   -> Block: Acacia Sapling
+      |                   -> Properties:
+      |                     -> stage: 0
+      |         -> Chance: 0.8
+      |       -> Entry:
+      |         -> Feature:
+      |           -> Feature:
+      |             -> Feature: minecraft:fallen_tree
+      |             -> Config:
+      |               -> Fallen Tree:
+      |                 -> Trunk Provider:
+      |                   -> Simple:
+      |                     -> State:
+      |                       -> Block: Oak Log
+      |                       -> Properties:
+      |                         -> axis: y
+      |                 -> Log Length:
+      |                   -> 4 to 7
+      |                 -> Stump Decorators:
+      |                   -> Trunk Vine
+      |                 -> Log Decorators:
+      |                   -> Attached To Logs:
+      |                     -> Probability: 0.1
+      |                     -> Block Provider:
+      |                       -> Weighted:
+      |                         -> Weighted List:
+      |                           -> Total Weight: 3
+      |                           -> Items:
+      |                             -> Entry:
+      |                               -> Weight: 2
+      |                               -> Value:
+      |                                 -> Block: Red Mushroom
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Brown Mushroom
+      |                     -> Direction: Up
+      |           -> Placement:
+      |             -> Block Predicate Filter:
+      |               -> Would Survive:
+      |                 -> State:
+      |                   -> Block: Oak Sapling
+      |                   -> Properties:
+      |                     -> stage: 0
+      |         -> Chance: 0.0125
       |     -> Default Feature:
       |       -> Feature:
       |         -> Feature: minecraft:tree
@@ -1458,6 +1505,7 @@ awi:biome minecraft:savanna_plateau
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Weighted:
       |                 -> Weighted List:
@@ -1465,11 +1513,11 @@ awi:biome minecraft:savanna_plateau
       |                   -> Items:
       |                     -> Entry:
       |                       -> Weight: 2
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Poppy
       |                     -> Entry:
       |                       -> Weight: 1
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Dandelion
       |       -> Placement:
       |         -> Block Predicate Filter:
@@ -1496,6 +1544,7 @@ awi:biome minecraft:savanna_plateau
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1525,6 +1574,7 @@ awi:biome minecraft:savanna_plateau
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1553,6 +1603,7 @@ awi:biome minecraft:savanna_plateau
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1567,6 +1618,40 @@ awi:biome minecraft:savanna_plateau
       |   -> Heightmap Placement:
       |     -> Heightmap: Ground or Water Surface
       awi:block minecraft:red_mushroom
+    awi:placed_feature minecraft:patch_pumpkin
+      | Chance: 0.33%
+      | Height: Ground or Water Surface
+      | Configured Feature:
+      |   -> Feature: minecraft:random_patch
+      |   -> Random Patch:
+      |     -> Tries: 96
+      |     -> XZ Spread: 7
+      |     -> Y Spread: 3
+      |     -> Feature:
+      |       -> Feature:
+      |         -> Feature: minecraft:simple_block
+      |         -> Config:
+      |           -> Simple Block:
+      |             -> Schedule Tick: False
+      |             -> To Place:
+      |               -> Simple:
+      |                 -> State:
+      |                   -> Block: Pumpkin
+      |       -> Placement:
+      |         -> Block Predicate Filter:
+      |           -> All Of:
+      |             -> Predicates:
+      |               -> Matching Blocks:
+      |                 -> Block: Air
+      |               -> Matching Blocks:
+      |                 -> Block: Grass Block
+      |                 -> Offset: [0,-1,0]
+      | Placement:
+      |   -> Rarity Filter:
+      |     -> Chance: 300
+      |   -> Heightmap Placement:
+      |     -> Heightmap: Ground or Water Surface
+      awi:block minecraft:pumpkin
     awi:placed_feature minecraft:patch_sugar_cane
       | Chance: 16.67%
       | Height: Ground or Water Surface
@@ -1634,39 +1719,66 @@ awi:biome minecraft:savanna_plateau
       |   -> Heightmap Placement:
       |     -> Heightmap: Ground or Water Surface
       awi:block minecraft:sugar_cane
-    awi:placed_feature minecraft:patch_pumpkin
-      | Chance: 0.33%
-      | Height: Ground or Water Surface
+    awi:placed_feature minecraft:patch_firefly_bush_near_water
+      | Attempts Per Chunk: 2
+      | Height: Ground or Water Surface, Below Leaves
       | Configured Feature:
       |   -> Feature: minecraft:random_patch
       |   -> Random Patch:
-      |     -> Tries: 96
-      |     -> XZ Spread: 7
+      |     -> Tries: 20
+      |     -> XZ Spread: 4
       |     -> Y Spread: 3
       |     -> Feature:
       |       -> Feature:
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
-      |                   -> Block: Pumpkin
+      |                   -> Block: Firefly Bush
       |       -> Placement:
       |         -> Block Predicate Filter:
-      |           -> All Of:
-      |             -> Predicates:
-      |               -> Matching Blocks:
-      |                 -> Block: Air
-      |               -> Matching Blocks:
-      |                 -> Block: Grass Block
-      |                 -> Offset: [0,-1,0]
+      |           -> Matching Blocks:
+      |             -> Block: Air
       | Placement:
-      |   -> Rarity Filter:
-      |     -> Chance: 300
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 2
       |   -> Heightmap Placement:
-      |     -> Heightmap: Ground or Water Surface
-      awi:block minecraft:pumpkin
+      |     -> Heightmap: Ground or Water Surface, Below Leaves
+      |   -> Block Predicate Filter:
+      |     -> All Of:
+      |       -> Predicates:
+      |         -> Matching Blocks:
+      |           -> Block: Air
+      |         -> Would Survive:
+      |           -> State:
+      |             -> Block: Firefly Bush
+      |         -> Any Of:
+      |           -> Predicates:
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [1,-1,0]
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [-1,-1,0]
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [0,-1,1]
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [0,-1,-1]
+      awi:block minecraft:firefly_bush
   awi:generation_step 10
     | Generation Step: Top Layer Modifications
     awi:placed_feature minecraft:freeze_top_layer

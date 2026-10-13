@@ -11,6 +11,7 @@ import com.yanny.alicompat.platform.Services;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class CompatDataGolden {
                 .toList();
 
         if (!modIds.isEmpty() && modIds.stream().noneMatch(Services.getPlatform()::isModLoaded)) {
-            throw new GameTestAssertException(mod + ": none of the target mods loaded: " + modIds);
+            throw new GameTestAssertException(Component.literal(mod + ": none of the target mods loaded: " + modIds), 0);
         }
 
         GoldenLanguage.inject(namespaces());
@@ -57,7 +58,7 @@ public class CompatDataGolden {
         List<String> differences = golden.resolve(mod).compare(files);
 
         if (!differences.isEmpty()) {
-            throw new GameTestAssertException(mod + ": " + differences.size() + " golden difference(s): " + differences.subList(0, Math.min(10, differences.size())));
+            throw new GameTestAssertException(Component.literal(mod + ": " + differences.size() + " golden difference(s): " + differences.subList(0, Math.min(10, differences.size()))), 0);
         }
 
         helper.succeed();

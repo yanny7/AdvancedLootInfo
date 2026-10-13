@@ -12,10 +12,11 @@ ali:loot_table
         |   -> Can Item Perform Ability:
         |     -> shears_dig
         |   -> Match Tool:
-        |     -> Item Predicates:
-        |       -> Enchantments:
-        |         -> Enchantment: Silk Touch
-        |         -> Level: ≥ 1
+        |     -> Components:
+        |       -> Partial Matchers:
+        |         -> minecraft:enchantments
+        |           -> Enchantment: Silk Touch
+        |           -> Level: ≥ 1
       ali:item minecraft:birch_sapling x1
         | Chance: 5%
         |   -> Fortune I: 6.25%
@@ -39,10 +40,11 @@ ali:loot_table
       |     -> Can Item Perform Ability:
       |       -> shears_dig
       |     -> Match Tool:
-      |       -> Item Predicates:
-      |         -> Enchantments:
-      |           -> Enchantment: Silk Touch
-      |           -> Level: ≥ 1
+      |       -> Components:
+      |         -> Partial Matchers:
+      |           -> minecraft:enchantments
+      |             -> Enchantment: Silk Touch
+      |             -> Level: ≥ 1
       | ----- Modifiers -----
       | Explosion Decay
   ali:item minecraft:diamond x1

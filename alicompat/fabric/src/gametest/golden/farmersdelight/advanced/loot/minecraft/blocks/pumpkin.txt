@@ -7,16 +7,16 @@ ali:loot_table
       | Count: 1
       | ----- Predicates -----
       | Survives Explosion
-      | Inverted:
-      |   -> All Of:
+      | Any Of:
+      |   -> Inverted:
       |     -> Match Tool:
       |       -> Items:
       |         -> Tag: Knives
-      |     -> Inverted:
-      |       -> Match Tool:
-      |         -> Item Predicates:
-      |           -> Enchantments:
-      |             -> Enchantment: Silk Touch
+      |   -> Match Tool:
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> minecraft:enchantments
+      |           -> Enchantment: Silk Touch
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -29,9 +29,10 @@ ali:loot_table
       |       -> Tag: Knives
       |   -> Inverted:
       |     -> Match Tool:
-      |       -> Item Predicates:
-      |         -> Enchantments:
-      |           -> Enchantment: Silk Touch
+      |       -> Components:
+      |         -> Partial Matchers:
+      |           -> minecraft:enchantments
+      |             -> Enchantment: Silk Touch
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 4

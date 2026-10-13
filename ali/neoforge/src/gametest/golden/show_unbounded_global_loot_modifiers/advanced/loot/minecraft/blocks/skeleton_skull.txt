@@ -5,6 +5,10 @@ ali:loot_table
     | Rolls: 1
     ali:item minecraft:skeleton_skull x1
       | Count: 1
+      | ----- Modifiers -----
+      | Copy Components:
+      |   -> Source: minecraft:block_entity
+      |   -> Include: minecraft:custom_name
   ali:item minecraft:diamond x1
     | Chance: 1%
     | Count: 1

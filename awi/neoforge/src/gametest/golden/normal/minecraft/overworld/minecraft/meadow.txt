@@ -296,7 +296,7 @@ awi:biome minecraft:meadow
       | Chance: 3.13%
       | Height: Ground or Water Surface
       awi:block minecraft:tall_grass
-    awi:placed_feature minecraft:patch_grass_plain
+    awi:placed_feature minecraft:patch_grass_meadow
       | Attempts Per Chunk: ? (minecraft:noise_threshold_count)
       |   -> Noise Threshold Count Placement:
       |     -> Noise Level: -0.8
@@ -322,6 +322,14 @@ awi:biome minecraft:meadow
       awi:block minecraft:oak_leaves
       awi:block minecraft:birch_log
       awi:block minecraft:birch_leaves
+    awi:placed_feature minecraft:wildflowers_meadow
+      | Attempts Per Chunk: ? (minecraft:noise_threshold_count)
+      |   -> Noise Threshold Count Placement:
+      |     -> Noise Level: -0.8
+      |     -> Below Noise: 5
+      |     -> Above Noise: 10
+      | Height: Ground or Water Surface
+      awi:block minecraft:wildflowers
   awi:generation_step 10
     | Generation Step: Top Layer Modifications
     awi:placed_feature minecraft:freeze_top_layer

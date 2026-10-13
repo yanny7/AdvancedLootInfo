@@ -134,7 +134,7 @@ ali:loot_table
     ali:item minecraft:flint_and_steel x1
       | Chance: 2.36%
       | Count: 1
-    ali:item minecraft:firework_star x3-7 {"minecraft:firework_explosion":{fade_colors:[I;12801229],has_trail:1b,has_twinkle:1b,shape:"star"}}
+    ali:item minecraft:firework_star x3-7 {"minecraft:firework_explosion":{fade_colors:[12801229],has_trail:1b,has_twinkle:1b,shape:"star"}}
       | Chance: 2.36%
       | Count: max(0; U[3; 7])
       | ----- Modifiers -----
@@ -180,7 +180,7 @@ ali:loot_table
     ali:item minecraft:clock x1
       | Chance: 1.47%
       | Count: 1
-    ali:item minecraft:firework_star x3-7 {"minecraft:firework_explosion":{fade_colors:[I;8073150],has_trail:1b,has_twinkle:1b,shape:"star"}}
+    ali:item minecraft:firework_star x3-7 {"minecraft:firework_explosion":{fade_colors:[8073150],has_trail:1b,has_twinkle:1b,shape:"star"}}
       | Chance: 1.47%
       | Count: max(0; U[3; 7])
       | ----- Modifiers -----
@@ -218,7 +218,7 @@ ali:loot_table
     ali:empty
       | Drops nothing
       | Chance: 66.67%
-    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"End Ancient City Map"}'}
+    ali:item minecraft:map x1 {"minecraft:custom_name":{translate:"End Ancient City Map"}}
       | Chance: 16.67%
       | Count: 1
       | ----- Modifiers -----
@@ -231,7 +231,7 @@ ali:loot_table
       | Set Name:
       |   -> Name: End Ancient City Map
       |   -> Target: Custom Name
-    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"End City Map"}'}
+    ali:item minecraft:map x1 {"minecraft:custom_name":{translate:"End City Map"}}
       | Chance: 16.67%
       | Count: 1
       | ----- Modifiers -----
@@ -1426,7 +1426,7 @@ ali:loot_table
       |       -> Color: Black
       |     -> minecraft:border
       |       -> Color: Black
-    ali:item minecraft:firework_star x2 {"minecraft:firework_explosion":{fade_colors:[I;8073150],has_trail:1b,has_twinkle:1b,shape:"star"}}
+    ali:item minecraft:firework_star x2 {"minecraft:firework_explosion":{fade_colors:[8073150],has_trail:1b,has_twinkle:1b,shape:"star"}}
       | Chance: 11.11%
       | Count: 2
       | ----- Modifiers -----

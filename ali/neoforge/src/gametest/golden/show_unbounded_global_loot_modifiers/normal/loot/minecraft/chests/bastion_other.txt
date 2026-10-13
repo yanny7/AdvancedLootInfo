@@ -127,7 +127,7 @@ ali:loot_table
     ali:item minecraft:arrow x5-17
       | Chance: 15.38%
       | Count: 5 to 17
-    ali:item minecraft:chain x2-10
+    ali:item minecraft:iron_chain x2-10
       | Chance: 7.69%
       | Count: 2 to 10
     ali:item minecraft:bone_block x3-6

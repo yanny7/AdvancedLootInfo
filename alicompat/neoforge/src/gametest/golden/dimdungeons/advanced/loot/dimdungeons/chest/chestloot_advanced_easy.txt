@@ -1322,7 +1322,7 @@ ali:loot_table
               ali:loot_pool
                 | Selects random entry
                 | Rolls: 1
-                ali:item dimdungeons:item_trophy_1 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_1"}'}
+                ali:item dimdungeons:item_trophy_1 x1 {"minecraft:item_name":{bold:1b,color:"yellow",translate:"item.dimdungeons.item_trophy_1"}}
                   | Chance: 0.1%
                   | Count: 1
                   | ----- Modifiers -----
@@ -1336,7 +1336,7 @@ ali:loot_table
                   |     -> A rare mushroom. It will not grow on mycelium.
                   |     -> Found by: @s
                   |   -> Resolution Context: This Entity
-                ali:item dimdungeons:item_trophy_2 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_2"}'}
+                ali:item dimdungeons:item_trophy_2 x1 {"minecraft:item_name":{bold:1b,color:"yellow",translate:"item.dimdungeons.item_trophy_2"}}
                   | Chance: 0.1%
                   | Count: 1
                   | ----- Modifiers -----
@@ -1350,7 +1350,7 @@ ali:loot_table
                   |     -> This blessed sword sleeps, waiting for a specific hero.
                   |     -> Found by: @s
                   |   -> Resolution Context: This Entity
-                ali:item dimdungeons:item_trophy_3 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_3"}'}
+                ali:item dimdungeons:item_trophy_3 x1 {"minecraft:item_name":{bold:1b,color:"yellow",translate:"item.dimdungeons.item_trophy_3"}}
                   | Chance: 0.1%
                   | Count: 1
                   | ----- Modifiers -----
@@ -1364,7 +1364,7 @@ ali:loot_table
                   |     -> A coveted symbol of greed. But aren't diamonds worth more than stone?
                   |     -> Found by: @s
                   |   -> Resolution Context: This Entity
-                ali:item dimdungeons:item_trophy_4 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_4"}'}
+                ali:item dimdungeons:item_trophy_4 x1 {"minecraft:item_name":{bold:1b,color:"yellow",translate:"item.dimdungeons.item_trophy_4"}}
                   | Chance: 0.1%
                   | Count: 1
                   | ----- Modifiers -----
@@ -1378,7 +1378,7 @@ ali:loot_table
                   |     -> A most legendary yoyo from another world's moon.
                   |     -> Found by: @s
                   |   -> Resolution Context: This Entity
-                ali:item dimdungeons:item_trophy_5 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_5"}'}
+                ali:item dimdungeons:item_trophy_5 x1 {"minecraft:item_name":{bold:1b,color:"yellow",translate:"item.dimdungeons.item_trophy_5"}}
                   | Chance: 0.1%
                   | Count: 1
                   | ----- Modifiers -----
@@ -1392,7 +1392,7 @@ ali:loot_table
                   |     -> A powerful mining tool from a far away galaxy.
                   |     -> Found by: @s
                   |   -> Resolution Context: This Entity
-                ali:item dimdungeons:item_trophy_6 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_6"}'}
+                ali:item dimdungeons:item_trophy_6 x1 {"minecraft:item_name":{bold:1b,color:"yellow",translate:"item.dimdungeons.item_trophy_6"}}
                   | Chance: 0.1%
                   | Count: 1
                   | ----- Modifiers -----
@@ -1406,7 +1406,7 @@ ali:loot_table
                   |     -> Give this to a friend in the name of jolly cooperation!
                   |     -> Found by: @s
                   |   -> Resolution Context: This Entity
-                ali:item dimdungeons:item_trophy_7 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_7"}'}
+                ali:item dimdungeons:item_trophy_7 x1 {"minecraft:item_name":{bold:1b,color:"yellow",translate:"item.dimdungeons.item_trophy_7"}}
                   | Chance: 0.1%
                   | Count: 1
                   | ----- Modifiers -----
@@ -1420,7 +1420,7 @@ ali:loot_table
                   |     -> What purpose does this magenta terracotta pressure plate serve?
                   |     -> Found by: @s
                   |   -> Resolution Context: This Entity
-                ali:item dimdungeons:item_trophy_8 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_8"}'}
+                ali:item dimdungeons:item_trophy_8 x1 {"minecraft:item_name":{bold:1b,color:"yellow",translate:"item.dimdungeons.item_trophy_8"}}
                   | Chance: 0.1%
                   | Count: 1
                   | ----- Modifiers -----
@@ -1762,7 +1762,7 @@ ali:loot_table
               ali:loot_pool
                 | Selects random entry
                 | Rolls: 1
-                ali:item dimdungeons:item_trophy_1 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_1"}'}
+                ali:item dimdungeons:item_trophy_1 x1 {"minecraft:item_name":{bold:1b,color:"yellow",translate:"item.dimdungeons.item_trophy_1"}}
                   | Chance: 0.03%
                   | Count: 1
                   | ----- Modifiers -----
@@ -1776,7 +1776,7 @@ ali:loot_table
                   |     -> A rare mushroom. It will not grow on mycelium.
                   |     -> Found by: @s
                   |   -> Resolution Context: This Entity
-                ali:item dimdungeons:item_trophy_2 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_2"}'}
+                ali:item dimdungeons:item_trophy_2 x1 {"minecraft:item_name":{bold:1b,color:"yellow",translate:"item.dimdungeons.item_trophy_2"}}
                   | Chance: 0.03%
                   | Count: 1
                   | ----- Modifiers -----
@@ -1790,7 +1790,7 @@ ali:loot_table
                   |     -> This blessed sword sleeps, waiting for a specific hero.
                   |     -> Found by: @s
                   |   -> Resolution Context: This Entity
-                ali:item dimdungeons:item_trophy_3 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_3"}'}
+                ali:item dimdungeons:item_trophy_3 x1 {"minecraft:item_name":{bold:1b,color:"yellow",translate:"item.dimdungeons.item_trophy_3"}}
                   | Chance: 0.03%
                   | Count: 1
                   | ----- Modifiers -----
@@ -1804,7 +1804,7 @@ ali:loot_table
                   |     -> A coveted symbol of greed. But aren't diamonds worth more than stone?
                   |     -> Found by: @s
                   |   -> Resolution Context: This Entity
-                ali:item dimdungeons:item_trophy_4 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_4"}'}
+                ali:item dimdungeons:item_trophy_4 x1 {"minecraft:item_name":{bold:1b,color:"yellow",translate:"item.dimdungeons.item_trophy_4"}}
                   | Chance: 0.03%
                   | Count: 1
                   | ----- Modifiers -----
@@ -1818,7 +1818,7 @@ ali:loot_table
                   |     -> A most legendary yoyo from another world's moon.
                   |     -> Found by: @s
                   |   -> Resolution Context: This Entity
-                ali:item dimdungeons:item_trophy_5 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_5"}'}
+                ali:item dimdungeons:item_trophy_5 x1 {"minecraft:item_name":{bold:1b,color:"yellow",translate:"item.dimdungeons.item_trophy_5"}}
                   | Chance: 0.03%
                   | Count: 1
                   | ----- Modifiers -----
@@ -1832,7 +1832,7 @@ ali:loot_table
                   |     -> A powerful mining tool from a far away galaxy.
                   |     -> Found by: @s
                   |   -> Resolution Context: This Entity
-                ali:item dimdungeons:item_trophy_6 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_6"}'}
+                ali:item dimdungeons:item_trophy_6 x1 {"minecraft:item_name":{bold:1b,color:"yellow",translate:"item.dimdungeons.item_trophy_6"}}
                   | Chance: 0.03%
                   | Count: 1
                   | ----- Modifiers -----
@@ -1846,7 +1846,7 @@ ali:loot_table
                   |     -> Give this to a friend in the name of jolly cooperation!
                   |     -> Found by: @s
                   |   -> Resolution Context: This Entity
-                ali:item dimdungeons:item_trophy_7 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_7"}'}
+                ali:item dimdungeons:item_trophy_7 x1 {"minecraft:item_name":{bold:1b,color:"yellow",translate:"item.dimdungeons.item_trophy_7"}}
                   | Chance: 0.03%
                   | Count: 1
                   | ----- Modifiers -----
@@ -1860,7 +1860,7 @@ ali:loot_table
                   |     -> What purpose does this magenta terracotta pressure plate serve?
                   |     -> Found by: @s
                   |   -> Resolution Context: This Entity
-                ali:item dimdungeons:item_trophy_8 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_8"}'}
+                ali:item dimdungeons:item_trophy_8 x1 {"minecraft:item_name":{bold:1b,color:"yellow",translate:"item.dimdungeons.item_trophy_8"}}
                   | Chance: 0.03%
                   | Count: 1
                   | ----- Modifiers -----

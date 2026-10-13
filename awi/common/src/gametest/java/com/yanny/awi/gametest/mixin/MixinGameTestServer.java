@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(value = GameTestServer.class, remap = false)
 public class MixinGameTestServer {
-    @Redirect(method = "method_40377", at = @At(value = "FIELD", target = "Lnet/minecraft/world/level/levelgen/presets/WorldPresets;FLAT:Lnet/minecraft/resources/ResourceKey;", opcode = Opcodes.GETSTATIC))
+    @Redirect(method = {"method_40377", "lambda$create$1"}, at = @At(value = "FIELD", target = "Lnet/minecraft/world/level/levelgen/presets/WorldPresets;FLAT:Lnet/minecraft/resources/ResourceKey;", opcode = Opcodes.GETSTATIC), require = 1)
     private static ResourceKey<WorldPreset> awi$normalPreset() {
         return WorldPresets.NORMAL;
     }

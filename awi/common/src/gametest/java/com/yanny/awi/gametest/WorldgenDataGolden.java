@@ -23,7 +23,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
@@ -40,7 +41,7 @@ public class WorldgenDataGolden {
         List<String> differences = GoldenFiles.fromProperties(Utils.MOD_ID).compare(capture(awiServer, PluginManager.getInstance().commonRegistry.getConfiguration(), helper.getLevel().getServer().registryAccess()));
 
         if (!differences.isEmpty()) {
-            throw new GameTestAssertException(differences.size() + " golden difference(s): " + differences.subList(0, Math.min(10, differences.size())));
+            throw new GameTestAssertException(Component.literal(differences.size() + " golden difference(s): " + differences.subList(0, Math.min(10, differences.size()))), 0);
         }
 
         helper.succeed();
@@ -50,13 +51,13 @@ public class WorldgenDataGolden {
     private static Map<String, String> capture(AbstractServer awiServer, AwiConfig config, RegistryAccess registryAccess) {
         IClientUtils utils = PluginManager.getInstance().clientRegistry;
         RegistryFriendlyByteBuf buf = WorldgenDataReader.decompress(readChunks(awiServer), registryAccess);
-        Map<ResourceLocation, LevelStemNode> worldgenData = new HashMap<>();
+        Map<Identifier, LevelStemNode> worldgenData = new HashMap<>();
 
         try {
             WorldgenDataReader.decode(utils, buf, worldgenData);
 
             if (buf.isReadable()) {
-                throw new GameTestAssertException(buf.readableBytes() + " byte(s) left unread after decoding");
+                throw new GameTestAssertException(Component.literal(buf.readableBytes() + " byte(s) left unread after decoding"), 0);
             }
         } finally {
             buf.release();
@@ -67,10 +68,10 @@ public class WorldgenDataGolden {
         worldgenData.forEach((dimension, levelStem) -> {
             for (IDataNode node : levelStem.nodes()) {
                 if (!(node instanceof BiomeNode biomeNode)) {
-                    throw new GameTestAssertException("Dimension " + dimension + " holds a " + node.getId() + " node instead of a biome");
+                    throw new GameTestAssertException(Component.literal("Dimension " + dimension + " holds a " + node.getId() + " node instead of a biome"), 0);
                 }
 
-                ResourceLocation biome = biomeNode.getBiomeId();
+                Identifier biome = biomeNode.getBiomeId();
 
                 pages.put(dimension.getNamespace() + "/" + dimension.getPath() + "/" + biome.getNamespace() + "/" + biome.getPath() + ".txt", biomeNode);
             }
@@ -91,7 +92,7 @@ public class WorldgenDataGolden {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
         if (chunks.isEmpty()) {
-            throw new GameTestAssertException("Server produced no worldgen data");
+            throw new GameTestAssertException(Component.literal("Server produced no worldgen data"), 0);
         }
 
         for (WorldgenDataChunkMessage chunk : chunks) {

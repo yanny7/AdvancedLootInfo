@@ -36,6 +36,15 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 66.67%
+    ali:item minecraft:bundle x1
+      | Chance: 33.33%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
     ali:reference
       | Selects all entries
       ali:loot_table

@@ -232,7 +232,7 @@ ali:loot_table
     ali:empty
       | Drops nothing
       | Chance: 60%
-    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"End Ancient City Map"}'}
+    ali:item minecraft:map x1 {"minecraft:custom_name":{translate:"End Ancient City Map"}}
       | Chance: 20%
       | Count: 1
       | ----- Modifiers -----

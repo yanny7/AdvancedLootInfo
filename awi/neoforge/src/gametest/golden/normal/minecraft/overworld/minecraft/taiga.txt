@@ -320,14 +320,18 @@ awi:biome minecraft:taiga
       | Chance: 0.39%
       | Height: Ground or Water Surface
       awi:block minecraft:red_mushroom
-    awi:placed_feature minecraft:patch_sugar_cane
-      | Chance: 16.67%
-      | Height: Ground or Water Surface
-      awi:block minecraft:sugar_cane
     awi:placed_feature minecraft:patch_pumpkin
       | Chance: 0.33%
       | Height: Ground or Water Surface
       awi:block minecraft:pumpkin
+    awi:placed_feature minecraft:patch_sugar_cane
+      | Chance: 16.67%
+      | Height: Ground or Water Surface
+      awi:block minecraft:sugar_cane
+    awi:placed_feature minecraft:patch_firefly_bush_near_water
+      | Attempts Per Chunk: 2
+      | Height: Ground or Water Surface, Below Leaves
+      awi:block minecraft:firefly_bush
     awi:placed_feature minecraft:patch_berry_common
       | Chance: 3.13%
       | Height: Highest Block, Plants Included

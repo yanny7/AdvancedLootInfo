@@ -1317,6 +1317,7 @@ awi:biome minecraft:old_growth_pine_taiga
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1511,6 +1512,45 @@ awi:biome minecraft:old_growth_pine_taiga
       |                   -> Properties:
       |                     -> stage: 0
       |         -> Chance: 0.33333334
+      |       -> Entry:
+      |         -> Feature:
+      |           -> Feature:
+      |             -> Feature: minecraft:fallen_tree
+      |             -> Config:
+      |               -> Fallen Tree:
+      |                 -> Trunk Provider:
+      |                   -> Simple:
+      |                     -> State:
+      |                       -> Block: Spruce Log
+      |                       -> Properties:
+      |                         -> axis: y
+      |                 -> Log Length:
+      |                   -> 6 to 10
+      |                 -> Log Decorators:
+      |                   -> Attached To Logs:
+      |                     -> Probability: 0.1
+      |                     -> Block Provider:
+      |                       -> Weighted:
+      |                         -> Weighted List:
+      |                           -> Total Weight: 3
+      |                           -> Items:
+      |                             -> Entry:
+      |                               -> Weight: 2
+      |                               -> Value:
+      |                                 -> Block: Red Mushroom
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Brown Mushroom
+      |                     -> Direction: Up
+      |           -> Placement:
+      |             -> Block Predicate Filter:
+      |               -> Would Survive:
+      |                 -> State:
+      |                   -> Block: Spruce Sapling
+      |                   -> Properties:
+      |                     -> stage: 0
+      |         -> Chance: 0.0125
       |     -> Default Feature:
       |       -> Feature:
       |         -> Feature: minecraft:tree
@@ -1589,6 +1629,7 @@ awi:biome minecraft:old_growth_pine_taiga
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Weighted:
       |                 -> Weighted List:
@@ -1596,11 +1637,11 @@ awi:biome minecraft:old_growth_pine_taiga
       |                   -> Items:
       |                     -> Entry:
       |                       -> Weight: 2
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Poppy
       |                     -> Entry:
       |                       -> Weight: 1
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Dandelion
       |       -> Placement:
       |         -> Block Predicate Filter:
@@ -1627,6 +1668,7 @@ awi:biome minecraft:old_growth_pine_taiga
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Weighted:
       |                 -> Weighted List:
@@ -1634,11 +1676,11 @@ awi:biome minecraft:old_growth_pine_taiga
       |                   -> Items:
       |                     -> Entry:
       |                       -> Weight: 1
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Short Grass
       |                     -> Entry:
       |                       -> Weight: 4
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Fern
       |       -> Placement:
       |         -> Block Predicate Filter:
@@ -1665,6 +1707,7 @@ awi:biome minecraft:old_growth_pine_taiga
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1692,6 +1735,7 @@ awi:biome minecraft:old_growth_pine_taiga
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1723,6 +1767,7 @@ awi:biome minecraft:old_growth_pine_taiga
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1751,6 +1796,7 @@ awi:biome minecraft:old_growth_pine_taiga
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1779,6 +1825,7 @@ awi:biome minecraft:old_growth_pine_taiga
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1793,6 +1840,40 @@ awi:biome minecraft:old_growth_pine_taiga
       |   -> Heightmap Placement:
       |     -> Heightmap: Ground or Water Surface
       awi:block minecraft:red_mushroom
+    awi:placed_feature minecraft:patch_pumpkin
+      | Chance: 0.33%
+      | Height: Ground or Water Surface
+      | Configured Feature:
+      |   -> Feature: minecraft:random_patch
+      |   -> Random Patch:
+      |     -> Tries: 96
+      |     -> XZ Spread: 7
+      |     -> Y Spread: 3
+      |     -> Feature:
+      |       -> Feature:
+      |         -> Feature: minecraft:simple_block
+      |         -> Config:
+      |           -> Simple Block:
+      |             -> Schedule Tick: False
+      |             -> To Place:
+      |               -> Simple:
+      |                 -> State:
+      |                   -> Block: Pumpkin
+      |       -> Placement:
+      |         -> Block Predicate Filter:
+      |           -> All Of:
+      |             -> Predicates:
+      |               -> Matching Blocks:
+      |                 -> Block: Air
+      |               -> Matching Blocks:
+      |                 -> Block: Grass Block
+      |                 -> Offset: [0,-1,0]
+      | Placement:
+      |   -> Rarity Filter:
+      |     -> Chance: 300
+      |   -> Heightmap Placement:
+      |     -> Heightmap: Ground or Water Surface
+      awi:block minecraft:pumpkin
     awi:placed_feature minecraft:patch_sugar_cane
       | Chance: 16.67%
       | Height: Ground or Water Surface
@@ -1860,39 +1941,66 @@ awi:biome minecraft:old_growth_pine_taiga
       |   -> Heightmap Placement:
       |     -> Heightmap: Ground or Water Surface
       awi:block minecraft:sugar_cane
-    awi:placed_feature minecraft:patch_pumpkin
-      | Chance: 0.33%
-      | Height: Ground or Water Surface
+    awi:placed_feature minecraft:patch_firefly_bush_near_water
+      | Attempts Per Chunk: 2
+      | Height: Ground or Water Surface, Below Leaves
       | Configured Feature:
       |   -> Feature: minecraft:random_patch
       |   -> Random Patch:
-      |     -> Tries: 96
-      |     -> XZ Spread: 7
+      |     -> Tries: 20
+      |     -> XZ Spread: 4
       |     -> Y Spread: 3
       |     -> Feature:
       |       -> Feature:
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
-      |                   -> Block: Pumpkin
+      |                   -> Block: Firefly Bush
       |       -> Placement:
       |         -> Block Predicate Filter:
-      |           -> All Of:
-      |             -> Predicates:
-      |               -> Matching Blocks:
-      |                 -> Block: Air
-      |               -> Matching Blocks:
-      |                 -> Block: Grass Block
-      |                 -> Offset: [0,-1,0]
+      |           -> Matching Blocks:
+      |             -> Block: Air
       | Placement:
-      |   -> Rarity Filter:
-      |     -> Chance: 300
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 2
       |   -> Heightmap Placement:
-      |     -> Heightmap: Ground or Water Surface
-      awi:block minecraft:pumpkin
+      |     -> Heightmap: Ground or Water Surface, Below Leaves
+      |   -> Block Predicate Filter:
+      |     -> All Of:
+      |       -> Predicates:
+      |         -> Matching Blocks:
+      |           -> Block: Air
+      |         -> Would Survive:
+      |           -> State:
+      |             -> Block: Firefly Bush
+      |         -> Any Of:
+      |           -> Predicates:
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [1,-1,0]
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [-1,-1,0]
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [0,-1,1]
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [0,-1,-1]
+      awi:block minecraft:firefly_bush
     awi:placed_feature minecraft:patch_berry_common
       | Chance: 3.13%
       | Height: Highest Block, Plants Included
@@ -1907,6 +2015,7 @@ awi:biome minecraft:old_growth_pine_taiga
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:

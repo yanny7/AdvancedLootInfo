@@ -41,7 +41,7 @@ ali:loot_table
     ali:empty
       | Drops nothing
       | Chance: 95.74%
-    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"End Pyramid Map"}'}
+    ali:item minecraft:map x1 {"minecraft:custom_name":{translate:"End Pyramid Map"}}
       | Chance: 2.13%
       | Count: 1
       | ----- Modifiers -----
@@ -54,7 +54,7 @@ ali:loot_table
       | Set Name:
       |   -> Name: End Pyramid Map
       |   -> Target: Custom Name
-    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"End City Map"}'}
+    ali:item minecraft:map x1 {"minecraft:custom_name":{translate:"End City Map"}}
       | Chance: 2.13%
       | Count: 1
       | ----- Modifiers -----

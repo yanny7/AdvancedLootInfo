@@ -303,10 +303,6 @@ awi:biome minecraft:grove
       awi:block minecraft:spruce_log
       awi:block minecraft:dirt
       awi:block minecraft:spruce_leaves
-    awi:placed_feature minecraft:patch_sugar_cane
-      | Chance: 16.67%
-      | Height: Ground or Water Surface
-      awi:block minecraft:sugar_cane
     awi:placed_feature minecraft:patch_pumpkin
       | Chance: 0.33%
       | Height: Ground or Water Surface

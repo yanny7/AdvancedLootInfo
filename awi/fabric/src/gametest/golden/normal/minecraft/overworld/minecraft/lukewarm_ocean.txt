@@ -28,6 +28,10 @@ awi:biome minecraft:lukewarm_ocean
     | Category: Underground Water Creature
     | Weight: 10
     | Group size: 4 to 6
+  spawn minecraft:nautilus
+    | Category: Water Creature
+    | Weight: 5
+    | Group size: 1
   spawn minecraft:pufferfish
     | Category: Water Ambient
     | Weight: 5
@@ -308,14 +312,18 @@ awi:biome minecraft:lukewarm_ocean
       | Chance: 0.2%
       | Height: Ground or Water Surface
       awi:block minecraft:red_mushroom
-    awi:placed_feature minecraft:patch_sugar_cane
-      | Chance: 16.67%
-      | Height: Ground or Water Surface
-      awi:block minecraft:sugar_cane
     awi:placed_feature minecraft:patch_pumpkin
       | Chance: 0.33%
       | Height: Ground or Water Surface
       awi:block minecraft:pumpkin
+    awi:placed_feature minecraft:patch_sugar_cane
+      | Chance: 16.67%
+      | Height: Ground or Water Surface
+      awi:block minecraft:sugar_cane
+    awi:placed_feature minecraft:patch_firefly_bush_near_water
+      | Attempts Per Chunk: 2
+      | Height: Ground or Water Surface, Below Leaves
+      awi:block minecraft:firefly_bush
     awi:placed_feature minecraft:seagrass_warm
       | Attempts Per Chunk: 80
       | Height: Solid Ground, Ignores Water

@@ -3,7 +3,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"Nether Fortress Map"}'}
+    ali:item minecraft:map x1 {"minecraft:custom_name":{translate:"Nether Fortress Map"}}
       | Chance: 50%
       | Count: 1
       | ----- Modifiers -----
@@ -16,7 +16,7 @@ ali:loot_table
       | Set Name:
       |   -> Name: Nether Fortress Map
       |   -> Target: Custom Name
-    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"Bastion Remnant Map"}'}
+    ali:item minecraft:map x1 {"minecraft:custom_name":{translate:"Bastion Remnant Map"}}
       | Chance: 25%
       | Count: 1
       | ----- Modifiers -----
@@ -1269,6 +1269,24 @@ ali:loot_table
     ali:item minecraft:writable_book x1
       | Chance: 2.33%
       | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 90%
+    ali:item minecraft:black_harness x1
+      | Chance: 2.5%
+      | Count: 1
+    ali:item minecraft:red_harness x1
+      | Chance: 2.5%
+      | Count: 1
+    ali:item minecraft:orange_harness x1
+      | Chance: 2.5%
+      | Count: 1
+    ali:item minecraft:white_harness x1
+      | Chance: 2.5%
+      | Count: 1
   ali:reference
     | Selects all entries
     | Only items added by other mods
@@ -1277,7 +1295,7 @@ ali:loot_table
       ali:loot_pool
         | Selects random entry
         | Rolls: 1
-        ali:item minecraft:map x1 {"minecraft:item_name":'{"translate":"filled_map.buried_treasure"}'}
+        ali:item minecraft:map x1 {"minecraft:item_name":{translate:"filled_map.buried_treasure"}}
           | Count: 1
           | ----- Modifiers -----
           | Exploration Map:
@@ -1319,3 +1337,21 @@ ali:loot_table
         ali:item minecraft:coast_armor_trim_smithing_template x2
           | Chance: 16.67%
           | Count: 2
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1
+        ali:empty
+          | Drops nothing
+          | Chance: 80%
+        ali:item minecraft:copper_nautilus_armor x1
+          | Chance: 10.81%
+          | Count: 1
+        ali:item minecraft:iron_nautilus_armor x1
+          | Chance: 5.41%
+          | Count: 1
+        ali:item minecraft:golden_nautilus_armor x1
+          | Chance: 2.7%
+          | Count: 1
+        ali:item minecraft:diamond_nautilus_armor x1
+          | Chance: 1.08%
+          | Count: 1

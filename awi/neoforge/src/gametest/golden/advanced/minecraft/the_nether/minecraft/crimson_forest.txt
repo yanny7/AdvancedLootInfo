@@ -95,6 +95,7 @@ awi:biome minecraft:crimson_forest
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -407,6 +408,7 @@ awi:biome minecraft:crimson_forest
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -435,6 +437,7 @@ awi:biome minecraft:crimson_forest
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -496,6 +499,7 @@ awi:biome minecraft:crimson_forest
       |           -> Acacia Sapling
       |           -> Cherry Sapling
       |           -> Dark Oak Sapling
+      |           -> Pale Oak Sapling
       |           -> Mangrove Propagule
       |           -> Dandelion
       |           -> Torchflower
@@ -543,6 +547,7 @@ awi:biome minecraft:crimson_forest
       |           -> Flowering Azalea
       |           -> Moss Carpet
       |           -> Pink Petals
+      |           -> Wildflowers
       |           -> Big Dripleaf
       |           -> Big Dripleaf Stem
       |           -> Small Dripleaf
@@ -571,15 +576,15 @@ awi:biome minecraft:crimson_forest
       |           -> Items:
       |             -> Entry:
       |               -> Weight: 87
-      |               -> Data:
+      |               -> Value:
       |                 -> Block: Crimson Roots
       |             -> Entry:
       |               -> Weight: 11
-      |               -> Data:
+      |               -> Value:
       |                 -> Block: Crimson Fungus
       |             -> Entry:
       |               -> Weight: 1
-      |               -> Data:
+      |               -> Value:
       |                 -> Block: Warped Fungus
       |     -> Spread Width: 8
       |     -> Spread Height: 4

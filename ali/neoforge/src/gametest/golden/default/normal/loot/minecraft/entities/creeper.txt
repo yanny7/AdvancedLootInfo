@@ -24,8 +24,6 @@ ali:entity_loot_table
       |   -> Predicate:
       |     -> Entity Types:
       |       -> Tag: minecraft:skeletons
-  ali:item minecraft:tnt x1
-    | Count: 1
   ali:loot_pool
     | Selects random entry
     | Rolls: 1

@@ -35,7 +35,7 @@ ali:loot_table
     ali:empty
       | Drops nothing
       | Chance: 89.29%
-    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"Nether Ruins Map"}'}
+    ali:item minecraft:map x1 {"minecraft:custom_name":{translate:"Nether Ruins Map"}}
       | Chance: 10.71%
       | Count: 1
       | ----- Modifiers -----
@@ -54,7 +54,7 @@ ali:loot_table
     ali:empty
       | Drops nothing
       | Chance: 89.29%
-    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"Bastion Remnant Map"}'}
+    ali:item minecraft:map x1 {"minecraft:custom_name":{translate:"Bastion Remnant Map"}}
       | Chance: 10.71%
       | Count: 1
       | ----- Modifiers -----
@@ -73,7 +73,7 @@ ali:loot_table
     ali:empty
       | Drops nothing
       | Chance: 96.3%
-    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"Nether City Map"}'}
+    ali:item minecraft:map x1 {"minecraft:custom_name":{translate:"Nether City Map"}}
       | Chance: 3.7%
       | Count: 1
       | ----- Modifiers -----

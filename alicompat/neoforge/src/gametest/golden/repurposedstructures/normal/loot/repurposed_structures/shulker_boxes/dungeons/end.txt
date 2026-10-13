@@ -1440,29 +1440,32 @@ ali:loot_table
       ali:loot_pool
         | Selects random entry
         | Rolls: 1 to 3
-        ali:item minecraft:saddle x1
-          | Chance: 15.5%
-          | Count: 1
+        ali:item minecraft:leather x1-5
+          | Chance: 13.89%
+          | Count: 1 to 5
         ali:item minecraft:name_tag x1
-          | Chance: 15.5%
+          | Chance: 13.89%
           | Count: 1
         ali:item minecraft:golden_apple x1
-          | Chance: 11.63%
+          | Chance: 10.42%
           | Count: 1
         ali:item minecraft:music_disc_13 x1
-          | Chance: 11.63%
+          | Chance: 10.42%
           | Count: 1
         ali:item minecraft:music_disc_cat x1
-          | Chance: 11.63%
+          | Chance: 10.42%
+          | Count: 1
+        ali:item minecraft:copper_horse_armor x1
+          | Chance: 10.42%
           | Count: 1
         ali:item minecraft:iron_horse_armor x1
-          | Chance: 11.63%
+          | Chance: 10.42%
           | Count: 1
         ali:item minecraft:golden_horse_armor x1
-          | Chance: 7.75%
+          | Chance: 6.94%
           | Count: 1
         ali:item minecraft:enchanted_book x1
-          | Chance: 7.75%
+          | Chance: 6.94%
           | Count: 1
           | ----- Modifiers -----
           | Enchant Randomly:
@@ -1470,13 +1473,13 @@ ali:loot_table
           |     -> Tag: minecraft:on_random_loot
           |   -> Only Compatible: True
         ali:item minecraft:diamond_horse_armor x1
-          | Chance: 3.88%
+          | Chance: 3.47%
           | Count: 1
         ali:item minecraft:enchanted_golden_apple x1
-          | Chance: 1.55%
+          | Chance: 1.39%
           | Count: 1
         ali:item minecraft:music_disc_otherside x1
-          | Chance: 1.55%
+          | Chance: 1.39%
           | Count: 1
       ali:loot_pool
         | Selects random entry

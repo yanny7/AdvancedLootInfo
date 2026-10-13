@@ -24,6 +24,10 @@ awi:biome minecraft:warm_ocean
     | Category: Underground Water Creature
     | Weight: 10
     | Group size: 4 to 6
+  spawn minecraft:nautilus
+    | Category: Water Creature
+    | Weight: 5
+    | Group size: 1
   spawn minecraft:pufferfish
     | Category: Water Ambient
     | Weight: 15
@@ -1412,6 +1416,7 @@ awi:biome minecraft:warm_ocean
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Weighted:
       |                 -> Weighted List:
@@ -1419,11 +1424,11 @@ awi:biome minecraft:warm_ocean
       |                   -> Items:
       |                     -> Entry:
       |                       -> Weight: 2
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Poppy
       |                     -> Entry:
       |                       -> Weight: 1
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Dandelion
       |       -> Placement:
       |         -> Block Predicate Filter:
@@ -1449,6 +1454,7 @@ awi:biome minecraft:warm_ocean
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1475,6 +1481,7 @@ awi:biome minecraft:warm_ocean
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1503,6 +1510,7 @@ awi:biome minecraft:warm_ocean
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1517,6 +1525,40 @@ awi:biome minecraft:warm_ocean
       |   -> Heightmap Placement:
       |     -> Heightmap: Ground or Water Surface
       awi:block minecraft:red_mushroom
+    awi:placed_feature minecraft:patch_pumpkin
+      | Chance: 0.33%
+      | Height: Ground or Water Surface
+      | Configured Feature:
+      |   -> Feature: minecraft:random_patch
+      |   -> Random Patch:
+      |     -> Tries: 96
+      |     -> XZ Spread: 7
+      |     -> Y Spread: 3
+      |     -> Feature:
+      |       -> Feature:
+      |         -> Feature: minecraft:simple_block
+      |         -> Config:
+      |           -> Simple Block:
+      |             -> Schedule Tick: False
+      |             -> To Place:
+      |               -> Simple:
+      |                 -> State:
+      |                   -> Block: Pumpkin
+      |       -> Placement:
+      |         -> Block Predicate Filter:
+      |           -> All Of:
+      |             -> Predicates:
+      |               -> Matching Blocks:
+      |                 -> Block: Air
+      |               -> Matching Blocks:
+      |                 -> Block: Grass Block
+      |                 -> Offset: [0,-1,0]
+      | Placement:
+      |   -> Rarity Filter:
+      |     -> Chance: 300
+      |   -> Heightmap Placement:
+      |     -> Heightmap: Ground or Water Surface
+      awi:block minecraft:pumpkin
     awi:placed_feature minecraft:patch_sugar_cane
       | Chance: 16.67%
       | Height: Ground or Water Surface
@@ -1584,39 +1626,66 @@ awi:biome minecraft:warm_ocean
       |   -> Heightmap Placement:
       |     -> Heightmap: Ground or Water Surface
       awi:block minecraft:sugar_cane
-    awi:placed_feature minecraft:patch_pumpkin
-      | Chance: 0.33%
-      | Height: Ground or Water Surface
+    awi:placed_feature minecraft:patch_firefly_bush_near_water
+      | Attempts Per Chunk: 2
+      | Height: Ground or Water Surface, Below Leaves
       | Configured Feature:
       |   -> Feature: minecraft:random_patch
       |   -> Random Patch:
-      |     -> Tries: 96
-      |     -> XZ Spread: 7
+      |     -> Tries: 20
+      |     -> XZ Spread: 4
       |     -> Y Spread: 3
       |     -> Feature:
       |       -> Feature:
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
-      |                   -> Block: Pumpkin
+      |                   -> Block: Firefly Bush
       |       -> Placement:
       |         -> Block Predicate Filter:
-      |           -> All Of:
-      |             -> Predicates:
-      |               -> Matching Blocks:
-      |                 -> Block: Air
-      |               -> Matching Blocks:
-      |                 -> Block: Grass Block
-      |                 -> Offset: [0,-1,0]
+      |           -> Matching Blocks:
+      |             -> Block: Air
       | Placement:
-      |   -> Rarity Filter:
-      |     -> Chance: 300
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 2
       |   -> Heightmap Placement:
-      |     -> Heightmap: Ground or Water Surface
-      awi:block minecraft:pumpkin
+      |     -> Heightmap: Ground or Water Surface, Below Leaves
+      |   -> Block Predicate Filter:
+      |     -> All Of:
+      |       -> Predicates:
+      |         -> Matching Blocks:
+      |           -> Block: Air
+      |         -> Would Survive:
+      |           -> State:
+      |             -> Block: Firefly Bush
+      |         -> Any Of:
+      |           -> Predicates:
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [1,-1,0]
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [-1,-1,0]
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [0,-1,1]
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [0,-1,-1]
+      awi:block minecraft:firefly_bush
     awi:placed_feature minecraft:warm_ocean_vegetation
       | Attempts Per Chunk: ? (minecraft:noise_based_count)
       |   -> Noise Based Count Placement:

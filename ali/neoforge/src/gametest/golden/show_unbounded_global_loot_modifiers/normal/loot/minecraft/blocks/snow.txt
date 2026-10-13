@@ -14,10 +14,11 @@ ali:loot_table
           |   -> Target: This Entity
           | Inverted:
           |   -> Match Tool:
-          |     -> Item Predicates:
-          |       -> Enchantments:
-          |         -> Enchantment: Silk Touch
-          |         -> Level: ≥ 1
+          |     -> Components:
+          |       -> Partial Matchers:
+          |         -> minecraft:enchantments
+          |           -> Enchantment: Silk Touch
+          |           -> Level: ≥ 1
           | Block State Property:
           |   -> Block: Snow
           |   -> Properties:
@@ -29,10 +30,11 @@ ali:loot_table
           |   -> Target: This Entity
           | Inverted:
           |   -> Match Tool:
-          |     -> Item Predicates:
-          |       -> Enchantments:
-          |         -> Enchantment: Silk Touch
-          |         -> Level: ≥ 1
+          |     -> Components:
+          |       -> Partial Matchers:
+          |         -> minecraft:enchantments
+          |           -> Enchantment: Silk Touch
+          |           -> Level: ≥ 1
           | Block State Property:
           |   -> Block: Snow
           |   -> Properties:
@@ -44,10 +46,11 @@ ali:loot_table
           |   -> Target: This Entity
           | Inverted:
           |   -> Match Tool:
-          |     -> Item Predicates:
-          |       -> Enchantments:
-          |         -> Enchantment: Silk Touch
-          |         -> Level: ≥ 1
+          |     -> Components:
+          |       -> Partial Matchers:
+          |         -> minecraft:enchantments
+          |           -> Enchantment: Silk Touch
+          |           -> Level: ≥ 1
           | Block State Property:
           |   -> Block: Snow
           |   -> Properties:
@@ -59,10 +62,11 @@ ali:loot_table
           |   -> Target: This Entity
           | Inverted:
           |   -> Match Tool:
-          |     -> Item Predicates:
-          |       -> Enchantments:
-          |         -> Enchantment: Silk Touch
-          |         -> Level: ≥ 1
+          |     -> Components:
+          |       -> Partial Matchers:
+          |         -> minecraft:enchantments
+          |           -> Enchantment: Silk Touch
+          |           -> Level: ≥ 1
           | Block State Property:
           |   -> Block: Snow
           |   -> Properties:
@@ -74,10 +78,11 @@ ali:loot_table
           |   -> Target: This Entity
           | Inverted:
           |   -> Match Tool:
-          |     -> Item Predicates:
-          |       -> Enchantments:
-          |         -> Enchantment: Silk Touch
-          |         -> Level: ≥ 1
+          |     -> Components:
+          |       -> Partial Matchers:
+          |         -> minecraft:enchantments
+          |           -> Enchantment: Silk Touch
+          |           -> Level: ≥ 1
           | Block State Property:
           |   -> Block: Snow
           |   -> Properties:
@@ -89,10 +94,11 @@ ali:loot_table
           |   -> Target: This Entity
           | Inverted:
           |   -> Match Tool:
-          |     -> Item Predicates:
-          |       -> Enchantments:
-          |         -> Enchantment: Silk Touch
-          |         -> Level: ≥ 1
+          |     -> Components:
+          |       -> Partial Matchers:
+          |         -> minecraft:enchantments
+          |           -> Enchantment: Silk Touch
+          |           -> Level: ≥ 1
           | Block State Property:
           |   -> Block: Snow
           |   -> Properties:
@@ -104,10 +110,11 @@ ali:loot_table
           |   -> Target: This Entity
           | Inverted:
           |   -> Match Tool:
-          |     -> Item Predicates:
-          |       -> Enchantments:
-          |         -> Enchantment: Silk Touch
-          |         -> Level: ≥ 1
+          |     -> Components:
+          |       -> Partial Matchers:
+          |         -> minecraft:enchantments
+          |           -> Enchantment: Silk Touch
+          |           -> Level: ≥ 1
           | Block State Property:
           |   -> Block: Snow
           |   -> Properties:
@@ -119,10 +126,11 @@ ali:loot_table
           |   -> Target: This Entity
           | Inverted:
           |   -> Match Tool:
-          |     -> Item Predicates:
-          |       -> Enchantments:
-          |         -> Enchantment: Silk Touch
-          |         -> Level: ≥ 1
+          |     -> Components:
+          |       -> Partial Matchers:
+          |         -> minecraft:enchantments
+          |           -> Enchantment: Silk Touch
+          |           -> Level: ≥ 1
           | Block State Property:
           |   -> Block: Snow
           |   -> Properties:

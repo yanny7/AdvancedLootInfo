@@ -53,7 +53,7 @@ ali:loot_table
     ali:item minecraft:gunpowder x10-15
       | Chance: 3.61%
       | Count: 10 to 15
-    ali:item minecraft:firework_star x1-3 {"minecraft:firework_explosion":{fade_colors:[I;12801229],has_trail:1b,has_twinkle:1b,shape:"star"}}
+    ali:item minecraft:firework_star x1-3 {"minecraft:firework_explosion":{fade_colors:[12801229],has_trail:1b,has_twinkle:1b,shape:"star"}}
       | Chance: 3.61%
       | Count: 1 to 3
       | ----- Modifiers -----
@@ -62,7 +62,7 @@ ali:loot_table
       |   -> Fade Colors: [12801229]
       |   -> Trail: True
       |   -> Twinkle: True
-    ali:item minecraft:firework_star x1-3 {"minecraft:firework_explosion":{fade_colors:[I;8073150],has_trail:1b,has_twinkle:1b,shape:"star"}}
+    ali:item minecraft:firework_star x1-3 {"minecraft:firework_explosion":{fade_colors:[8073150],has_trail:1b,has_twinkle:1b,shape:"star"}}
       | Chance: 3.61%
       | Count: 1 to 3
       | ----- Modifiers -----
@@ -146,7 +146,7 @@ ali:loot_table
     ali:empty
       | Drops nothing
       | Chance: 25%
-    ali:item minecraft:firework_star x3 {"minecraft:firework_explosion":{fade_colors:[I;12801229],has_trail:1b,has_twinkle:1b,shape:"star"}}
+    ali:item minecraft:firework_star x3 {"minecraft:firework_explosion":{fade_colors:[12801229],has_trail:1b,has_twinkle:1b,shape:"star"}}
       | Chance: 14%
       | Count: 3
       | ----- Modifiers -----
@@ -155,7 +155,7 @@ ali:loot_table
       |   -> Fade Colors: [12801229]
       |   -> Trail: True
       |   -> Twinkle: True
-    ali:item minecraft:firework_star x3 {"minecraft:firework_explosion":{fade_colors:[I;8073150],has_trail:1b,has_twinkle:1b,shape:"star"}}
+    ali:item minecraft:firework_star x3 {"minecraft:firework_explosion":{fade_colors:[8073150],has_trail:1b,has_twinkle:1b,shape:"star"}}
       | Chance: 14%
       | Count: 3
       | ----- Modifiers -----

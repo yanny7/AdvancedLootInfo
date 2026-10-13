@@ -123,3 +123,12 @@ ali:loot_table
     ali:item minecraft:gold_block x1-2
       | Chance: 0.25%
       | Count: 1 to 2
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:lodestone x1-2
+      | Chance: 66.67%
+      | Count: 1 to 2
+    ali:empty
+      | Drops nothing
+      | Chance: 33.33%

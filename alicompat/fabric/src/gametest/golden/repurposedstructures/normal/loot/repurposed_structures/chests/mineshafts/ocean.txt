@@ -17,7 +17,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
-    ali:item minecraft:leather_helmet x1 {"minecraft:enchantments":{levels:{"minecraft:aqua_affinity":1}}}
+    ali:item minecraft:leather_helmet x1 {"minecraft:enchantments":{"minecraft:aqua_affinity":1}}
       | Chance: 11.36%
       | Count: 1
       | ----- Modifiers -----

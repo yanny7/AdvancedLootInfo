@@ -304,6 +304,10 @@ awi:biome minecraft:mangrove_swamp
       | Height: Solid Ground, Ignores Water
       awi:block minecraft:seagrass
       awi:block minecraft:tall_seagrass
+    awi:placed_feature minecraft:patch_firefly_bush_near_water
+      | Attempts Per Chunk: 2
+      | Height: Ground or Water Surface, Below Leaves
+      awi:block minecraft:firefly_bush
   awi:generation_step 10
     | Generation Step: Top Layer Modifications
     awi:placed_feature minecraft:freeze_top_layer

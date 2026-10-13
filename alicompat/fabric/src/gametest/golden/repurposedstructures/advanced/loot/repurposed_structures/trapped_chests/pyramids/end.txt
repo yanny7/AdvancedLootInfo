@@ -119,7 +119,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 1 to 3
       |   -> Add: False
-    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"End Stronghold Map"}'}
+    ali:item minecraft:map x1 {"minecraft:custom_name":{translate:"End Stronghold Map"}}
       | Chance: 2.44%
       | Count: 1
       | ----- Modifiers -----

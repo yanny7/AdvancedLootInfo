@@ -40,4 +40,4 @@ LootJS is **not** wired here on this branch: `lootjs_enabled=false` excludes `al
 
 ## Gametest
 
-The `gametest` source set (see `ali/CLAUDE.md`'s gametest section) is its own small mod, `ali_gametest`, whose `fabric.mod.json` registers the test class under the `fabric-gametest` entrypoint. The `gametest` loom run is a `server()` run with `-Dfabric-api.gametest`, which makes Fabric API start the GameTest server instead of the dedicated one and write a JUnit report to `build/gametest/report.xml`; the test uses Fabric API's empty structure (`FabricGameTest.EMPTY_STRUCTURE`).
+The `gametest` source set (see `ali/CLAUDE.md`'s gametest section) is its own small mod, `ali_gametest`, whose `fabric.mod.json` registers the test class under the `fabric-gametest` entrypoint. The `gametest` loom run is a `server()` run with `-Dfabric-api.gametest`, which makes Fabric API start the GameTest server instead of the dedicated one and write a JUnit report to `build/gametest/report.xml`; the test uses Fabric API's `@GameTest`, whose default structure is Fabric API's empty one.

@@ -172,7 +172,7 @@ ali:loot_table
       | ----- Modifiers -----
       | Set Potion:
       |   -> Potion: Potion of Harming
-    ali:item minecraft:chain x2-10
+    ali:item minecraft:iron_chain x2-10
       | Chance: 9.52%
       | Count: 2 to 10
     ali:item minecraft:bone_block x3-6

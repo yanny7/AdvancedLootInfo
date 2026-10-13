@@ -20,7 +20,7 @@ public class MixinGameTestServer {
     @Shadow
     private MultipleTestTracker testTracker;
 
-    @Redirect(method = "create", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/flag/FeatureFlagRegistry;allFlags()Lnet/minecraft/world/flag/FeatureFlagSet;"))
+    @Redirect(method = "<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/flag/FeatureFlagRegistry;allFlags()Lnet/minecraft/world/flag/FeatureFlagSet;"))
     private static FeatureFlagSet aci$withoutTradeRebalance(FeatureFlagRegistry registry) {
         return registry.allFlags().subtract(FeatureFlagSet.of(FeatureFlags.TRADE_REBALANCE));
     }

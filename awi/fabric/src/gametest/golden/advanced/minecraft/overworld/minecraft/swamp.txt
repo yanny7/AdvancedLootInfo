@@ -1417,6 +1417,7 @@ awi:biome minecraft:swamp
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1445,6 +1446,7 @@ awi:biome minecraft:swamp
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1473,6 +1475,7 @@ awi:biome minecraft:swamp
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1499,6 +1502,7 @@ awi:biome minecraft:swamp
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1528,6 +1532,7 @@ awi:biome minecraft:swamp
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1557,6 +1562,7 @@ awi:biome minecraft:swamp
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1585,6 +1591,7 @@ awi:biome minecraft:swamp
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1613,6 +1620,7 @@ awi:biome minecraft:swamp
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1708,6 +1716,7 @@ awi:biome minecraft:swamp
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1727,6 +1736,95 @@ awi:biome minecraft:swamp
       |   -> Heightmap Placement:
       |     -> Heightmap: Ground or Water Surface
       awi:block minecraft:pumpkin
+    awi:placed_feature minecraft:patch_firefly_bush_swamp
+      | Chance: 12.5%
+      | Height: Ground or Water Surface
+      | Configured Feature:
+      |   -> Feature: minecraft:random_patch
+      |   -> Random Patch:
+      |     -> Tries: 20
+      |     -> XZ Spread: 4
+      |     -> Y Spread: 3
+      |     -> Feature:
+      |       -> Feature:
+      |         -> Feature: minecraft:simple_block
+      |         -> Config:
+      |           -> Simple Block:
+      |             -> Schedule Tick: False
+      |             -> To Place:
+      |               -> Simple:
+      |                 -> State:
+      |                   -> Block: Firefly Bush
+      |       -> Placement:
+      |         -> Block Predicate Filter:
+      |           -> Matching Blocks:
+      |             -> Block: Air
+      | Placement:
+      |   -> Rarity Filter:
+      |     -> Chance: 8
+      |   -> Heightmap Placement:
+      |     -> Heightmap: Ground or Water Surface
+      awi:block minecraft:firefly_bush
+    awi:placed_feature minecraft:patch_firefly_bush_near_water_swamp
+      | Attempts Per Chunk: 3
+      | Height: Ground or Water Surface
+      | Configured Feature:
+      |   -> Feature: minecraft:random_patch
+      |   -> Random Patch:
+      |     -> Tries: 20
+      |     -> XZ Spread: 4
+      |     -> Y Spread: 3
+      |     -> Feature:
+      |       -> Feature:
+      |         -> Feature: minecraft:simple_block
+      |         -> Config:
+      |           -> Simple Block:
+      |             -> Schedule Tick: False
+      |             -> To Place:
+      |               -> Simple:
+      |                 -> State:
+      |                   -> Block: Firefly Bush
+      |       -> Placement:
+      |         -> Block Predicate Filter:
+      |           -> Matching Blocks:
+      |             -> Block: Air
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 3
+      |   -> Heightmap Placement:
+      |     -> Heightmap: Ground or Water Surface
+      |   -> Block Predicate Filter:
+      |     -> All Of:
+      |       -> Predicates:
+      |         -> Matching Blocks:
+      |           -> Block: Air
+      |         -> Would Survive:
+      |           -> State:
+      |             -> Block: Firefly Bush
+      |         -> Any Of:
+      |           -> Predicates:
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [1,-1,0]
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [-1,-1,0]
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [0,-1,1]
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [0,-1,-1]
+      awi:block minecraft:firefly_bush
     awi:placed_feature minecraft:seagrass_swamp
       | Attempts Per Chunk: 64
       | Height: Solid Ground, Ignores Water

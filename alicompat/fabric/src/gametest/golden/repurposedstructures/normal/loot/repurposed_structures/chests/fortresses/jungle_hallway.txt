@@ -170,7 +170,7 @@ ali:loot_table
     ali:item minecraft:saddle x1
       | Chance: 1.26%
       | Count: 1
-    ali:item minecraft:chain x1-6
+    ali:item minecraft:iron_chain x1-6
       | Chance: 1.26%
       | Count: 1 to 6
     ali:item minecraft:diamond x1-3

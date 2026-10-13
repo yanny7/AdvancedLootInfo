@@ -69,7 +69,7 @@ ali:loot_table
     ali:item minecraft:crying_obsidian x4-12
       | Chance: 5.13%
       | Count: 4 to 12
-    ali:item minecraft:chain x5-12
+    ali:item minecraft:iron_chain x5-12
       | Chance: 5.13%
       | Count: 5 to 12
     ali:item minecraft:enchanted_golden_apple x1

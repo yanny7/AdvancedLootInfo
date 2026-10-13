@@ -6,6 +6,7 @@ ali:loot_table
     ali:item sophisticatedstorage:netherite_chest x1
       | Count: 1
       | ----- Modifiers -----
-      | Copy Name:
-      |   -> Source: Block Entity
+      | Copy Components:
+      |   -> Source: minecraft:block_entity
+      |   -> Include: minecraft:custom_name
       | Copy Storage Data:

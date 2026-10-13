@@ -57,7 +57,7 @@ ali:loot_table
     ali:item minecraft:golden_horse_armor x1
       | Chance: 4.35%
       | Count: 1
-    ali:item minecraft:chain x2-6
+    ali:item minecraft:iron_chain x2-6
       | Chance: 3.48%
       | Count: max(0; U[2; 6])
       | ----- Modifiers -----

@@ -15,7 +15,7 @@ ali:loot_table
     ali:item minecraft:nether_wart x2-4
       | Chance: 6.78%
       | Count: 2 to 4
-    ali:item minecraft:chain x2-6
+    ali:item minecraft:iron_chain x2-6
       | Chance: 6.78%
       | Count: 2 to 6
     ali:item minecraft:ender_pearl x1-2

@@ -1380,6 +1380,221 @@ awi:biome minecraft:dark_forest
       |                     -> Lower Size: 0
       |                     -> Middle Size: 1
       |                     -> Upper Size: 2
+      |                 -> Decorators:
+      |                   -> Place On Ground:
+      |                     -> Tries: 96
+      |                     -> Radius: 4
+      |                     -> Height: 2
+      |                     -> Block Provider:
+      |                       -> Weighted:
+      |                         -> Weighted List:
+      |                           -> Total Weight: 12
+      |                           -> Items:
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: north
+      |                                   -> segment_amount: 1
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: east
+      |                                   -> segment_amount: 1
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: south
+      |                                   -> segment_amount: 1
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: west
+      |                                   -> segment_amount: 1
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: north
+      |                                   -> segment_amount: 2
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: east
+      |                                   -> segment_amount: 2
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: south
+      |                                   -> segment_amount: 2
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: west
+      |                                   -> segment_amount: 2
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: north
+      |                                   -> segment_amount: 3
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: east
+      |                                   -> segment_amount: 3
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: south
+      |                                   -> segment_amount: 3
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: west
+      |                                   -> segment_amount: 3
+      |                   -> Place On Ground:
+      |                     -> Tries: 150
+      |                     -> Radius: 2
+      |                     -> Height: 2
+      |                     -> Block Provider:
+      |                       -> Weighted:
+      |                         -> Weighted List:
+      |                           -> Total Weight: 16
+      |                           -> Items:
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: north
+      |                                   -> segment_amount: 1
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: east
+      |                                   -> segment_amount: 1
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: south
+      |                                   -> segment_amount: 1
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: west
+      |                                   -> segment_amount: 1
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: north
+      |                                   -> segment_amount: 2
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: east
+      |                                   -> segment_amount: 2
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: south
+      |                                   -> segment_amount: 2
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: west
+      |                                   -> segment_amount: 2
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: north
+      |                                   -> segment_amount: 3
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: east
+      |                                   -> segment_amount: 3
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: south
+      |                                   -> segment_amount: 3
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: west
+      |                                   -> segment_amount: 3
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: north
+      |                                   -> segment_amount: 4
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: east
+      |                                   -> segment_amount: 4
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: south
+      |                                   -> segment_amount: 4
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: west
+      |                                   -> segment_amount: 4
       |                 -> Ignore Vines: True
       |                 -> Force Dirt: False
       |           -> Placement:
@@ -1390,6 +1605,45 @@ awi:biome minecraft:dark_forest
       |                   -> Properties:
       |                     -> stage: 0
       |         -> Chance: 0.6666667
+      |       -> Entry:
+      |         -> Feature:
+      |           -> Feature:
+      |             -> Feature: minecraft:fallen_tree
+      |             -> Config:
+      |               -> Fallen Tree:
+      |                 -> Trunk Provider:
+      |                   -> Simple:
+      |                     -> State:
+      |                       -> Block: Birch Log
+      |                       -> Properties:
+      |                         -> axis: y
+      |                 -> Log Length:
+      |                   -> 5 to 8
+      |                 -> Log Decorators:
+      |                   -> Attached To Logs:
+      |                     -> Probability: 0.1
+      |                     -> Block Provider:
+      |                       -> Weighted:
+      |                         -> Weighted List:
+      |                           -> Total Weight: 3
+      |                           -> Items:
+      |                             -> Entry:
+      |                               -> Weight: 2
+      |                               -> Value:
+      |                                 -> Block: Red Mushroom
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Brown Mushroom
+      |                     -> Direction: Up
+      |           -> Placement:
+      |             -> Block Predicate Filter:
+      |               -> Would Survive:
+      |                 -> State:
+      |                   -> Block: Birch Sapling
+      |                   -> Properties:
+      |                     -> stage: 0
+      |         -> Chance: 0.0025
       |       -> Entry:
       |         -> Feature:
       |           -> Feature:
@@ -1430,6 +1684,221 @@ awi:biome minecraft:dark_forest
       |                     -> Limit: 1
       |                     -> Lower Size: 0
       |                     -> Upper Size: 1
+      |                 -> Decorators:
+      |                   -> Place On Ground:
+      |                     -> Tries: 96
+      |                     -> Radius: 4
+      |                     -> Height: 2
+      |                     -> Block Provider:
+      |                       -> Weighted:
+      |                         -> Weighted List:
+      |                           -> Total Weight: 12
+      |                           -> Items:
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: north
+      |                                   -> segment_amount: 1
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: east
+      |                                   -> segment_amount: 1
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: south
+      |                                   -> segment_amount: 1
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: west
+      |                                   -> segment_amount: 1
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: north
+      |                                   -> segment_amount: 2
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: east
+      |                                   -> segment_amount: 2
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: south
+      |                                   -> segment_amount: 2
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: west
+      |                                   -> segment_amount: 2
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: north
+      |                                   -> segment_amount: 3
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: east
+      |                                   -> segment_amount: 3
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: south
+      |                                   -> segment_amount: 3
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: west
+      |                                   -> segment_amount: 3
+      |                   -> Place On Ground:
+      |                     -> Tries: 150
+      |                     -> Radius: 2
+      |                     -> Height: 2
+      |                     -> Block Provider:
+      |                       -> Weighted:
+      |                         -> Weighted List:
+      |                           -> Total Weight: 16
+      |                           -> Items:
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: north
+      |                                   -> segment_amount: 1
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: east
+      |                                   -> segment_amount: 1
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: south
+      |                                   -> segment_amount: 1
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: west
+      |                                   -> segment_amount: 1
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: north
+      |                                   -> segment_amount: 2
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: east
+      |                                   -> segment_amount: 2
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: south
+      |                                   -> segment_amount: 2
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: west
+      |                                   -> segment_amount: 2
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: north
+      |                                   -> segment_amount: 3
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: east
+      |                                   -> segment_amount: 3
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: south
+      |                                   -> segment_amount: 3
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: west
+      |                                   -> segment_amount: 3
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: north
+      |                                   -> segment_amount: 4
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: east
+      |                                   -> segment_amount: 4
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: south
+      |                                   -> segment_amount: 4
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: west
+      |                                   -> segment_amount: 4
       |                 -> Ignore Vines: True
       |                 -> Force Dirt: False
       |           -> Placement:
@@ -1440,6 +1909,47 @@ awi:biome minecraft:dark_forest
       |                   -> Properties:
       |                     -> stage: 0
       |         -> Chance: 0.2
+      |       -> Entry:
+      |         -> Feature:
+      |           -> Feature:
+      |             -> Feature: minecraft:fallen_tree
+      |             -> Config:
+      |               -> Fallen Tree:
+      |                 -> Trunk Provider:
+      |                   -> Simple:
+      |                     -> State:
+      |                       -> Block: Oak Log
+      |                       -> Properties:
+      |                         -> axis: y
+      |                 -> Log Length:
+      |                   -> 4 to 7
+      |                 -> Stump Decorators:
+      |                   -> Trunk Vine
+      |                 -> Log Decorators:
+      |                   -> Attached To Logs:
+      |                     -> Probability: 0.1
+      |                     -> Block Provider:
+      |                       -> Weighted:
+      |                         -> Weighted List:
+      |                           -> Total Weight: 3
+      |                           -> Items:
+      |                             -> Entry:
+      |                               -> Weight: 2
+      |                               -> Value:
+      |                                 -> Block: Red Mushroom
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Brown Mushroom
+      |                     -> Direction: Up
+      |           -> Placement:
+      |             -> Block Predicate Filter:
+      |               -> Would Survive:
+      |                 -> State:
+      |                   -> Block: Oak Sapling
+      |                   -> Properties:
+      |                     -> stage: 0
+      |         -> Chance: 0.0125
       |       -> Entry:
       |         -> Feature:
       |           -> Feature:
@@ -1481,6 +1991,221 @@ awi:biome minecraft:dark_forest
       |                     -> Limit: 0
       |                     -> Lower Size: 0
       |                     -> Upper Size: 0
+      |                 -> Decorators:
+      |                   -> Place On Ground:
+      |                     -> Tries: 96
+      |                     -> Radius: 4
+      |                     -> Height: 2
+      |                     -> Block Provider:
+      |                       -> Weighted:
+      |                         -> Weighted List:
+      |                           -> Total Weight: 12
+      |                           -> Items:
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: north
+      |                                   -> segment_amount: 1
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: east
+      |                                   -> segment_amount: 1
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: south
+      |                                   -> segment_amount: 1
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: west
+      |                                   -> segment_amount: 1
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: north
+      |                                   -> segment_amount: 2
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: east
+      |                                   -> segment_amount: 2
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: south
+      |                                   -> segment_amount: 2
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: west
+      |                                   -> segment_amount: 2
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: north
+      |                                   -> segment_amount: 3
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: east
+      |                                   -> segment_amount: 3
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: south
+      |                                   -> segment_amount: 3
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: west
+      |                                   -> segment_amount: 3
+      |                   -> Place On Ground:
+      |                     -> Tries: 150
+      |                     -> Radius: 2
+      |                     -> Height: 2
+      |                     -> Block Provider:
+      |                       -> Weighted:
+      |                         -> Weighted List:
+      |                           -> Total Weight: 16
+      |                           -> Items:
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: north
+      |                                   -> segment_amount: 1
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: east
+      |                                   -> segment_amount: 1
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: south
+      |                                   -> segment_amount: 1
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: west
+      |                                   -> segment_amount: 1
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: north
+      |                                   -> segment_amount: 2
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: east
+      |                                   -> segment_amount: 2
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: south
+      |                                   -> segment_amount: 2
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: west
+      |                                   -> segment_amount: 2
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: north
+      |                                   -> segment_amount: 3
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: east
+      |                                   -> segment_amount: 3
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: south
+      |                                   -> segment_amount: 3
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: west
+      |                                   -> segment_amount: 3
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: north
+      |                                   -> segment_amount: 4
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: east
+      |                                   -> segment_amount: 4
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: south
+      |                                   -> segment_amount: 4
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Leaf Litter
+      |                                 -> Properties:
+      |                                   -> facing: west
+      |                                   -> segment_amount: 4
       |                 -> Ignore Vines: True
       |                 -> Force Dirt: False
       |           -> Placement:
@@ -1530,6 +2255,221 @@ awi:biome minecraft:dark_forest
       |                 -> Limit: 1
       |                 -> Lower Size: 0
       |                 -> Upper Size: 1
+      |             -> Decorators:
+      |               -> Place On Ground:
+      |                 -> Tries: 96
+      |                 -> Radius: 4
+      |                 -> Height: 2
+      |                 -> Block Provider:
+      |                   -> Weighted:
+      |                     -> Weighted List:
+      |                       -> Total Weight: 12
+      |                       -> Items:
+      |                         -> Entry:
+      |                           -> Weight: 1
+      |                           -> Value:
+      |                             -> Block: Leaf Litter
+      |                             -> Properties:
+      |                               -> facing: north
+      |                               -> segment_amount: 1
+      |                         -> Entry:
+      |                           -> Weight: 1
+      |                           -> Value:
+      |                             -> Block: Leaf Litter
+      |                             -> Properties:
+      |                               -> facing: east
+      |                               -> segment_amount: 1
+      |                         -> Entry:
+      |                           -> Weight: 1
+      |                           -> Value:
+      |                             -> Block: Leaf Litter
+      |                             -> Properties:
+      |                               -> facing: south
+      |                               -> segment_amount: 1
+      |                         -> Entry:
+      |                           -> Weight: 1
+      |                           -> Value:
+      |                             -> Block: Leaf Litter
+      |                             -> Properties:
+      |                               -> facing: west
+      |                               -> segment_amount: 1
+      |                         -> Entry:
+      |                           -> Weight: 1
+      |                           -> Value:
+      |                             -> Block: Leaf Litter
+      |                             -> Properties:
+      |                               -> facing: north
+      |                               -> segment_amount: 2
+      |                         -> Entry:
+      |                           -> Weight: 1
+      |                           -> Value:
+      |                             -> Block: Leaf Litter
+      |                             -> Properties:
+      |                               -> facing: east
+      |                               -> segment_amount: 2
+      |                         -> Entry:
+      |                           -> Weight: 1
+      |                           -> Value:
+      |                             -> Block: Leaf Litter
+      |                             -> Properties:
+      |                               -> facing: south
+      |                               -> segment_amount: 2
+      |                         -> Entry:
+      |                           -> Weight: 1
+      |                           -> Value:
+      |                             -> Block: Leaf Litter
+      |                             -> Properties:
+      |                               -> facing: west
+      |                               -> segment_amount: 2
+      |                         -> Entry:
+      |                           -> Weight: 1
+      |                           -> Value:
+      |                             -> Block: Leaf Litter
+      |                             -> Properties:
+      |                               -> facing: north
+      |                               -> segment_amount: 3
+      |                         -> Entry:
+      |                           -> Weight: 1
+      |                           -> Value:
+      |                             -> Block: Leaf Litter
+      |                             -> Properties:
+      |                               -> facing: east
+      |                               -> segment_amount: 3
+      |                         -> Entry:
+      |                           -> Weight: 1
+      |                           -> Value:
+      |                             -> Block: Leaf Litter
+      |                             -> Properties:
+      |                               -> facing: south
+      |                               -> segment_amount: 3
+      |                         -> Entry:
+      |                           -> Weight: 1
+      |                           -> Value:
+      |                             -> Block: Leaf Litter
+      |                             -> Properties:
+      |                               -> facing: west
+      |                               -> segment_amount: 3
+      |               -> Place On Ground:
+      |                 -> Tries: 150
+      |                 -> Radius: 2
+      |                 -> Height: 2
+      |                 -> Block Provider:
+      |                   -> Weighted:
+      |                     -> Weighted List:
+      |                       -> Total Weight: 16
+      |                       -> Items:
+      |                         -> Entry:
+      |                           -> Weight: 1
+      |                           -> Value:
+      |                             -> Block: Leaf Litter
+      |                             -> Properties:
+      |                               -> facing: north
+      |                               -> segment_amount: 1
+      |                         -> Entry:
+      |                           -> Weight: 1
+      |                           -> Value:
+      |                             -> Block: Leaf Litter
+      |                             -> Properties:
+      |                               -> facing: east
+      |                               -> segment_amount: 1
+      |                         -> Entry:
+      |                           -> Weight: 1
+      |                           -> Value:
+      |                             -> Block: Leaf Litter
+      |                             -> Properties:
+      |                               -> facing: south
+      |                               -> segment_amount: 1
+      |                         -> Entry:
+      |                           -> Weight: 1
+      |                           -> Value:
+      |                             -> Block: Leaf Litter
+      |                             -> Properties:
+      |                               -> facing: west
+      |                               -> segment_amount: 1
+      |                         -> Entry:
+      |                           -> Weight: 1
+      |                           -> Value:
+      |                             -> Block: Leaf Litter
+      |                             -> Properties:
+      |                               -> facing: north
+      |                               -> segment_amount: 2
+      |                         -> Entry:
+      |                           -> Weight: 1
+      |                           -> Value:
+      |                             -> Block: Leaf Litter
+      |                             -> Properties:
+      |                               -> facing: east
+      |                               -> segment_amount: 2
+      |                         -> Entry:
+      |                           -> Weight: 1
+      |                           -> Value:
+      |                             -> Block: Leaf Litter
+      |                             -> Properties:
+      |                               -> facing: south
+      |                               -> segment_amount: 2
+      |                         -> Entry:
+      |                           -> Weight: 1
+      |                           -> Value:
+      |                             -> Block: Leaf Litter
+      |                             -> Properties:
+      |                               -> facing: west
+      |                               -> segment_amount: 2
+      |                         -> Entry:
+      |                           -> Weight: 1
+      |                           -> Value:
+      |                             -> Block: Leaf Litter
+      |                             -> Properties:
+      |                               -> facing: north
+      |                               -> segment_amount: 3
+      |                         -> Entry:
+      |                           -> Weight: 1
+      |                           -> Value:
+      |                             -> Block: Leaf Litter
+      |                             -> Properties:
+      |                               -> facing: east
+      |                               -> segment_amount: 3
+      |                         -> Entry:
+      |                           -> Weight: 1
+      |                           -> Value:
+      |                             -> Block: Leaf Litter
+      |                             -> Properties:
+      |                               -> facing: south
+      |                               -> segment_amount: 3
+      |                         -> Entry:
+      |                           -> Weight: 1
+      |                           -> Value:
+      |                             -> Block: Leaf Litter
+      |                             -> Properties:
+      |                               -> facing: west
+      |                               -> segment_amount: 3
+      |                         -> Entry:
+      |                           -> Weight: 1
+      |                           -> Value:
+      |                             -> Block: Leaf Litter
+      |                             -> Properties:
+      |                               -> facing: north
+      |                               -> segment_amount: 4
+      |                         -> Entry:
+      |                           -> Weight: 1
+      |                           -> Value:
+      |                             -> Block: Leaf Litter
+      |                             -> Properties:
+      |                               -> facing: east
+      |                               -> segment_amount: 4
+      |                         -> Entry:
+      |                           -> Weight: 1
+      |                           -> Value:
+      |                             -> Block: Leaf Litter
+      |                             -> Properties:
+      |                               -> facing: south
+      |                               -> segment_amount: 4
+      |                         -> Entry:
+      |                           -> Weight: 1
+      |                           -> Value:
+      |                             -> Block: Leaf Litter
+      |                             -> Properties:
+      |                               -> facing: west
+      |                               -> segment_amount: 4
       |             -> Ignore Vines: True
       |             -> Force Dirt: False
       |       -> Placement:
@@ -1553,6 +2493,7 @@ awi:biome minecraft:dark_forest
       awi:block minecraft:dark_oak_log
       awi:block minecraft:dirt
       awi:block minecraft:dark_oak_leaves
+      awi:block minecraft:leaf_litter
       awi:block minecraft:birch_log
       awi:block minecraft:birch_leaves
       awi:block minecraft:oak_log
@@ -1578,6 +2519,7 @@ awi:biome minecraft:dark_forest
       |                 -> Feature: minecraft:simple_block
       |                 -> Config:
       |                   -> Simple Block:
+      |                     -> Schedule Tick: False
       |                     -> To Place:
       |                       -> Simple:
       |                         -> State:
@@ -1600,6 +2542,7 @@ awi:biome minecraft:dark_forest
       |                 -> Feature: minecraft:simple_block
       |                 -> Config:
       |                   -> Simple Block:
+      |                     -> Schedule Tick: False
       |                     -> To Place:
       |                       -> Simple:
       |                         -> State:
@@ -1622,6 +2565,7 @@ awi:biome minecraft:dark_forest
       |                 -> Feature: minecraft:simple_block
       |                 -> Config:
       |                   -> Simple Block:
+      |                     -> Schedule Tick: False
       |                     -> To Place:
       |                       -> Simple:
       |                         -> State:
@@ -1644,6 +2588,7 @@ awi:biome minecraft:dark_forest
       |                 -> Feature: minecraft:simple_block
       |                 -> Config:
       |                   -> Simple Block:
+      |                     -> Schedule Tick: False
       |                     -> To Place:
       |                       -> Simple:
       |                         -> State:
@@ -1679,6 +2624,7 @@ awi:biome minecraft:dark_forest
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Weighted:
       |                 -> Weighted List:
@@ -1686,11 +2632,11 @@ awi:biome minecraft:dark_forest
       |                   -> Items:
       |                     -> Entry:
       |                       -> Weight: 2
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Poppy
       |                     -> Entry:
       |                       -> Weight: 1
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Dandelion
       |       -> Placement:
       |         -> Block Predicate Filter:
@@ -1717,6 +2663,7 @@ awi:biome minecraft:dark_forest
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1746,6 +2693,7 @@ awi:biome minecraft:dark_forest
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1774,6 +2722,7 @@ awi:biome minecraft:dark_forest
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1788,6 +2737,160 @@ awi:biome minecraft:dark_forest
       |   -> Heightmap Placement:
       |     -> Heightmap: Ground or Water Surface
       awi:block minecraft:red_mushroom
+    awi:placed_feature minecraft:patch_leaf_litter
+      | Attempts Per Chunk: 2
+      | Height: Highest Block, Plants Included
+      | Configured Feature:
+      |   -> Feature: minecraft:random_patch
+      |   -> Random Patch:
+      |     -> Tries: 32
+      |     -> XZ Spread: 7
+      |     -> Y Spread: 3
+      |     -> Feature:
+      |       -> Feature:
+      |         -> Feature: minecraft:simple_block
+      |         -> Config:
+      |           -> Simple Block:
+      |             -> Schedule Tick: False
+      |             -> To Place:
+      |               -> Weighted:
+      |                 -> Weighted List:
+      |                   -> Total Weight: 12
+      |                   -> Items:
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Leaf Litter
+      |                         -> Properties:
+      |                           -> facing: north
+      |                           -> segment_amount: 1
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Leaf Litter
+      |                         -> Properties:
+      |                           -> facing: east
+      |                           -> segment_amount: 1
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Leaf Litter
+      |                         -> Properties:
+      |                           -> facing: south
+      |                           -> segment_amount: 1
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Leaf Litter
+      |                         -> Properties:
+      |                           -> facing: west
+      |                           -> segment_amount: 1
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Leaf Litter
+      |                         -> Properties:
+      |                           -> facing: north
+      |                           -> segment_amount: 2
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Leaf Litter
+      |                         -> Properties:
+      |                           -> facing: east
+      |                           -> segment_amount: 2
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Leaf Litter
+      |                         -> Properties:
+      |                           -> facing: south
+      |                           -> segment_amount: 2
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Leaf Litter
+      |                         -> Properties:
+      |                           -> facing: west
+      |                           -> segment_amount: 2
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Leaf Litter
+      |                         -> Properties:
+      |                           -> facing: north
+      |                           -> segment_amount: 3
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Leaf Litter
+      |                         -> Properties:
+      |                           -> facing: east
+      |                           -> segment_amount: 3
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Leaf Litter
+      |                         -> Properties:
+      |                           -> facing: south
+      |                           -> segment_amount: 3
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Leaf Litter
+      |                         -> Properties:
+      |                           -> facing: west
+      |                           -> segment_amount: 3
+      |       -> Placement:
+      |         -> Block Predicate Filter:
+      |           -> All Of:
+      |             -> Predicates:
+      |               -> Matching Blocks:
+      |                 -> Block: Air
+      |               -> Matching Blocks:
+      |                 -> Block: Grass Block
+      |                 -> Offset: [0,-1,0]
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 2
+      |   -> Heightmap Placement:
+      |     -> Heightmap: Highest Block, Plants Included
+      awi:block minecraft:leaf_litter
+    awi:placed_feature minecraft:patch_pumpkin
+      | Chance: 0.33%
+      | Height: Ground or Water Surface
+      | Configured Feature:
+      |   -> Feature: minecraft:random_patch
+      |   -> Random Patch:
+      |     -> Tries: 96
+      |     -> XZ Spread: 7
+      |     -> Y Spread: 3
+      |     -> Feature:
+      |       -> Feature:
+      |         -> Feature: minecraft:simple_block
+      |         -> Config:
+      |           -> Simple Block:
+      |             -> Schedule Tick: False
+      |             -> To Place:
+      |               -> Simple:
+      |                 -> State:
+      |                   -> Block: Pumpkin
+      |       -> Placement:
+      |         -> Block Predicate Filter:
+      |           -> All Of:
+      |             -> Predicates:
+      |               -> Matching Blocks:
+      |                 -> Block: Air
+      |               -> Matching Blocks:
+      |                 -> Block: Grass Block
+      |                 -> Offset: [0,-1,0]
+      | Placement:
+      |   -> Rarity Filter:
+      |     -> Chance: 300
+      |   -> Heightmap Placement:
+      |     -> Heightmap: Ground or Water Surface
+      awi:block minecraft:pumpkin
     awi:placed_feature minecraft:patch_sugar_cane
       | Chance: 16.67%
       | Height: Ground or Water Surface
@@ -1855,39 +2958,66 @@ awi:biome minecraft:dark_forest
       |   -> Heightmap Placement:
       |     -> Heightmap: Ground or Water Surface
       awi:block minecraft:sugar_cane
-    awi:placed_feature minecraft:patch_pumpkin
-      | Chance: 0.33%
-      | Height: Ground or Water Surface
+    awi:placed_feature minecraft:patch_firefly_bush_near_water
+      | Attempts Per Chunk: 2
+      | Height: Ground or Water Surface, Below Leaves
       | Configured Feature:
       |   -> Feature: minecraft:random_patch
       |   -> Random Patch:
-      |     -> Tries: 96
-      |     -> XZ Spread: 7
+      |     -> Tries: 20
+      |     -> XZ Spread: 4
       |     -> Y Spread: 3
       |     -> Feature:
       |       -> Feature:
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
-      |                   -> Block: Pumpkin
+      |                   -> Block: Firefly Bush
       |       -> Placement:
       |         -> Block Predicate Filter:
-      |           -> All Of:
-      |             -> Predicates:
-      |               -> Matching Blocks:
-      |                 -> Block: Air
-      |               -> Matching Blocks:
-      |                 -> Block: Grass Block
-      |                 -> Offset: [0,-1,0]
+      |           -> Matching Blocks:
+      |             -> Block: Air
       | Placement:
-      |   -> Rarity Filter:
-      |     -> Chance: 300
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 2
       |   -> Heightmap Placement:
-      |     -> Heightmap: Ground or Water Surface
-      awi:block minecraft:pumpkin
+      |     -> Heightmap: Ground or Water Surface, Below Leaves
+      |   -> Block Predicate Filter:
+      |     -> All Of:
+      |       -> Predicates:
+      |         -> Matching Blocks:
+      |           -> Block: Air
+      |         -> Would Survive:
+      |           -> State:
+      |             -> Block: Firefly Bush
+      |         -> Any Of:
+      |           -> Predicates:
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [1,-1,0]
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [-1,-1,0]
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [0,-1,1]
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [0,-1,-1]
+      awi:block minecraft:firefly_bush
   awi:generation_step 10
     | Generation Step: Top Layer Modifications
     awi:placed_feature minecraft:freeze_top_layer

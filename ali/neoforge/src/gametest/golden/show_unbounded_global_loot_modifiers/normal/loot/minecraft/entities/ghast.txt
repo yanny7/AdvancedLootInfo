@@ -26,6 +26,18 @@ ali:entity_loot_table
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
       |   -> Value: 0 to 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:music_disc_tears x1
+      | Count: 1
+      | ----- Predicates -----
+      | Damage Source Properties:
+      |   -> Tags:
+      |     -> Is: minecraft:is_projectile
+      |   -> Direct Entity:
+      |     -> Entity Type: Fireball
+      | Killed by player
   ali:item minecraft:diamond x1
     | Chance: 1%
     | Count: 1

@@ -17,7 +17,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
-    ali:item minecraft:leather_helmet x1 {"minecraft:enchantments":{levels:{"minecraft:aqua_affinity":1}}}
+    ali:item minecraft:leather_helmet x1 {"minecraft:enchantments":{"minecraft:aqua_affinity":1}}
       | Chance: 11.36%
       | Count: 1
       | ----- Modifiers -----
@@ -1376,3 +1376,16 @@ ali:loot_table
         ali:item minecraft:activator_rail x1-4
           | Chance: 10%
           | Count: 1 to 4
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1
+        ali:empty
+          | Drops nothing
+          | Chance: 80%
+        ali:item minecraft:enchanted_book x1
+          | Chance: 20%
+          | Count: 1
+          | ----- Modifiers -----
+          | Enchant Randomly:
+          |   -> Enchantment: Efficiency
+          |   -> Only Compatible: True

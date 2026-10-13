@@ -31,7 +31,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 5 to 13
       |   -> Add: False
-    ali:item minecraft:chain x4-8
+    ali:item minecraft:iron_chain x4-8
       | Chance: 6.52%
       | Count: max(0; U[4; 8])
       | ----- Modifiers -----
@@ -1360,38 +1360,46 @@ ali:loot_table
         | Selects random entry
         | Rolls: 2 to 6
         ali:item minecraft:gold_ingot x2-7
-          | Chance: 17.65%
+          | Chance: 16.85%
           | Count: max(0; U[2; 7])
           | ----- Modifiers -----
           | Set Count:
           |   -> Count: 2 to 7
           |   -> Add: False
         ali:item minecraft:iron_ingot x4-8
-          | Chance: 11.76%
+          | Chance: 11.24%
           | Count: max(0; U[4; 8])
           | ----- Modifiers -----
           | Set Count:
           |   -> Count: 4 to 8
           |   -> Add: False
         ali:item minecraft:diamond x2-7
-          | Chance: 5.88%
+          | Chance: 5.62%
           | Count: max(0; U[2; 7])
           | ----- Modifiers -----
           | Set Count:
           |   -> Count: 2 to 7
           |   -> Add: False
         ali:item minecraft:beetroot_seeds x1-10
-          | Chance: 5.88%
+          | Chance: 5.62%
           | Count: max(0; U[1; 10])
           | ----- Modifiers -----
           | Set Count:
           |   -> Count: 1 to 10
           |   -> Add: False
         ali:item minecraft:saddle x1
-          | Chance: 3.53%
+          | Chance: 3.37%
           | Count: 1
         ali:item minecraft:diamond_sword x1 {"minecraft:enchantment_glint_override":1b}
-          | Chance: 3.53%
+          | Chance: 3.37%
+          | Count: 1
+          | ----- Modifiers -----
+          | Enchant With Levels:
+          |   -> Levels: 20 to 39
+          |   -> Options:
+          |     -> Tag: minecraft:on_random_loot
+        ali:item minecraft:diamond_spear x1 {"minecraft:enchantment_glint_override":1b}
+          | Chance: 3.37%
           | Count: 1
           | ----- Modifiers -----
           | Enchant With Levels:
@@ -1399,7 +1407,7 @@ ali:loot_table
           |   -> Options:
           |     -> Tag: minecraft:on_random_loot
         ali:item minecraft:diamond_boots x1 {"minecraft:enchantment_glint_override":1b}
-          | Chance: 3.53%
+          | Chance: 3.37%
           | Count: 1
           | ----- Modifiers -----
           | Enchant With Levels:
@@ -1407,7 +1415,7 @@ ali:loot_table
           |   -> Options:
           |     -> Tag: minecraft:on_random_loot
         ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b}
-          | Chance: 3.53%
+          | Chance: 3.37%
           | Count: 1
           | ----- Modifiers -----
           | Enchant With Levels:
@@ -1415,7 +1423,7 @@ ali:loot_table
           |   -> Options:
           |     -> Tag: minecraft:on_random_loot
         ali:item minecraft:diamond_leggings x1 {"minecraft:enchantment_glint_override":1b}
-          | Chance: 3.53%
+          | Chance: 3.37%
           | Count: 1
           | ----- Modifiers -----
           | Enchant With Levels:
@@ -1423,7 +1431,7 @@ ali:loot_table
           |   -> Options:
           |     -> Tag: minecraft:on_random_loot
         ali:item minecraft:diamond_helmet x1 {"minecraft:enchantment_glint_override":1b}
-          | Chance: 3.53%
+          | Chance: 3.37%
           | Count: 1
           | ----- Modifiers -----
           | Enchant With Levels:
@@ -1431,7 +1439,7 @@ ali:loot_table
           |   -> Options:
           |     -> Tag: minecraft:on_random_loot
         ali:item minecraft:diamond_pickaxe x1 {"minecraft:enchantment_glint_override":1b}
-          | Chance: 3.53%
+          | Chance: 3.37%
           | Count: 1
           | ----- Modifiers -----
           | Enchant With Levels:
@@ -1439,7 +1447,7 @@ ali:loot_table
           |   -> Options:
           |     -> Tag: minecraft:on_random_loot
         ali:item minecraft:diamond_shovel x1 {"minecraft:enchantment_glint_override":1b}
-          | Chance: 3.53%
+          | Chance: 3.37%
           | Count: 1
           | ----- Modifiers -----
           | Enchant With Levels:
@@ -1447,7 +1455,7 @@ ali:loot_table
           |   -> Options:
           |     -> Tag: minecraft:on_random_loot
         ali:item minecraft:iron_sword x1 {"minecraft:enchantment_glint_override":1b}
-          | Chance: 3.53%
+          | Chance: 3.37%
           | Count: 1
           | ----- Modifiers -----
           | Enchant With Levels:
@@ -1455,7 +1463,7 @@ ali:loot_table
           |   -> Options:
           |     -> Tag: minecraft:on_random_loot
         ali:item minecraft:iron_boots x1 {"minecraft:enchantment_glint_override":1b}
-          | Chance: 3.53%
+          | Chance: 3.37%
           | Count: 1
           | ----- Modifiers -----
           | Enchant With Levels:
@@ -1463,7 +1471,7 @@ ali:loot_table
           |   -> Options:
           |     -> Tag: minecraft:on_random_loot
         ali:item minecraft:iron_chestplate x1 {"minecraft:enchantment_glint_override":1b}
-          | Chance: 3.53%
+          | Chance: 3.37%
           | Count: 1
           | ----- Modifiers -----
           | Enchant With Levels:
@@ -1471,7 +1479,7 @@ ali:loot_table
           |   -> Options:
           |     -> Tag: minecraft:on_random_loot
         ali:item minecraft:iron_leggings x1 {"minecraft:enchantment_glint_override":1b}
-          | Chance: 3.53%
+          | Chance: 3.37%
           | Count: 1
           | ----- Modifiers -----
           | Enchant With Levels:
@@ -1479,7 +1487,7 @@ ali:loot_table
           |   -> Options:
           |     -> Tag: minecraft:on_random_loot
         ali:item minecraft:iron_helmet x1 {"minecraft:enchantment_glint_override":1b}
-          | Chance: 3.53%
+          | Chance: 3.37%
           | Count: 1
           | ----- Modifiers -----
           | Enchant With Levels:
@@ -1487,7 +1495,7 @@ ali:loot_table
           |   -> Options:
           |     -> Tag: minecraft:on_random_loot
         ali:item minecraft:iron_pickaxe x1 {"minecraft:enchantment_glint_override":1b}
-          | Chance: 3.53%
+          | Chance: 3.37%
           | Count: 1
           | ----- Modifiers -----
           | Enchant With Levels:
@@ -1495,7 +1503,7 @@ ali:loot_table
           |   -> Options:
           |     -> Tag: minecraft:on_random_loot
         ali:item minecraft:iron_shovel x1 {"minecraft:enchantment_glint_override":1b}
-          | Chance: 3.53%
+          | Chance: 3.37%
           | Count: 1
           | ----- Modifiers -----
           | Enchant With Levels:
@@ -1503,20 +1511,23 @@ ali:loot_table
           |   -> Options:
           |     -> Tag: minecraft:on_random_loot
         ali:item minecraft:emerald x2-6
-          | Chance: 2.35%
+          | Chance: 2.25%
           | Count: max(0; U[2; 6])
           | ----- Modifiers -----
           | Set Count:
           |   -> Count: 2 to 6
           |   -> Add: False
+        ali:item minecraft:copper_horse_armor x1
+          | Chance: 1.12%
+          | Count: 1
         ali:item minecraft:iron_horse_armor x1
-          | Chance: 1.18%
+          | Chance: 1.12%
           | Count: 1
         ali:item minecraft:golden_horse_armor x1
-          | Chance: 1.18%
+          | Chance: 1.12%
           | Count: 1
         ali:item minecraft:diamond_horse_armor x1
-          | Chance: 1.18%
+          | Chance: 1.12%
           | Count: 1
       ali:loot_pool
         | Selects random entry

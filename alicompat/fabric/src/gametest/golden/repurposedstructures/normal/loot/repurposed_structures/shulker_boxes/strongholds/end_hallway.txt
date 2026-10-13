@@ -15,7 +15,7 @@ ali:loot_table
     ali:item minecraft:iron_ingot x5-13
       | Chance: 10.87%
       | Count: 5 to 13
-    ali:item minecraft:chain x4-8
+    ali:item minecraft:iron_chain x4-8
       | Chance: 6.52%
       | Count: 4 to 8
     ali:item minecraft:ender_eye x1

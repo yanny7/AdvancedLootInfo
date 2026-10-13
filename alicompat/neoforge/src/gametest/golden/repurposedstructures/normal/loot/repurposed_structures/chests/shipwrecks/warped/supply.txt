@@ -39,7 +39,7 @@ ali:loot_table
     ali:item minecraft:ghast_tear x2-5
       | Chance: 8.11%
       | Count: 2 to 5
-    ali:item minecraft:firework_star x1-3 {"minecraft:firework_explosion":{fade_colors:[I;2988471],has_trail:1b,has_twinkle:1b,shape:"creeper"}}
+    ali:item minecraft:firework_star x1-3 {"minecraft:firework_explosion":{fade_colors:[2988471],has_trail:1b,has_twinkle:1b,shape:"creeper"}}
       | Chance: 5.41%
       | Count: 1 to 3
       | ----- Modifiers -----
@@ -48,7 +48,7 @@ ali:loot_table
       |   -> Fade Colors: [2988471]
       |   -> Trail: True
       |   -> Twinkle: True
-    ali:item minecraft:firework_star x1-3 {"minecraft:firework_explosion":{fade_colors:[I;0],has_trail:1b,has_twinkle:1b,shape:"creeper"}}
+    ali:item minecraft:firework_star x1-3 {"minecraft:firework_explosion":{fade_colors:[0],has_trail:1b,has_twinkle:1b,shape:"creeper"}}
       | Chance: 5.41%
       | Count: 1 to 3
       | ----- Modifiers -----
@@ -142,6 +142,24 @@ ali:loot_table
     ali:item minecraft:coast_armor_trim_smithing_template x2
       | Chance: 16.67%
       | Count: 2
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 90%
+    ali:item minecraft:black_harness x1
+      | Chance: 2.5%
+      | Count: 1
+    ali:item minecraft:red_harness x1
+      | Chance: 2.5%
+      | Count: 1
+    ali:item minecraft:orange_harness x1
+      | Chance: 2.5%
+      | Count: 1
+    ali:item minecraft:white_harness x1
+      | Chance: 2.5%
+      | Count: 1
   ali:reference
     | Selects all entries
     | Only items added by other mods
@@ -244,3 +262,21 @@ ali:loot_table
         ali:item minecraft:coast_armor_trim_smithing_template x2
           | Chance: 16.67%
           | Count: 2
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1
+        ali:empty
+          | Drops nothing
+          | Chance: 80%
+        ali:item minecraft:copper_nautilus_armor x1
+          | Chance: 10.81%
+          | Count: 1
+        ali:item minecraft:iron_nautilus_armor x1
+          | Chance: 5.41%
+          | Count: 1
+        ali:item minecraft:golden_nautilus_armor x1
+          | Chance: 2.7%
+          | Count: 1
+        ali:item minecraft:diamond_nautilus_armor x1
+          | Chance: 1.08%
+          | Count: 1

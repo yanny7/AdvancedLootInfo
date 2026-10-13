@@ -77,76 +77,79 @@ ali:loot_table
     | Selects random entry
     | Rolls: 1 to 4
     ali:item minecraft:map x1-2
-      | Chance: 8.7%
+      | Chance: 8.33%
       | Count: max(0; U[1; 2])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 2
       |   -> Add: False
     ali:item minecraft:arrow x2-7
-      | Chance: 8.7%
+      | Chance: 8.33%
       | Count: max(0; U[2; 7])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 2 to 7
       |   -> Add: False
     ali:item minecraft:compass x1
-      | Chance: 8.7%
+      | Chance: 8.33%
       | Count: 1
     ali:item minecraft:water_bucket x1-3
-      | Chance: 4.35%
+      | Chance: 4.17%
       | Count: max(0; U[1; 3])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 3
       |   -> Add: False
     ali:item minecraft:iron_helmet x1
-      | Chance: 4.35%
+      | Chance: 4.17%
       | Count: 1
     ali:item minecraft:iron_chestplate x1
-      | Chance: 4.35%
+      | Chance: 4.17%
       | Count: 1
     ali:item minecraft:iron_leggings x1
-      | Chance: 4.35%
+      | Chance: 4.17%
       | Count: 1
     ali:item minecraft:iron_boots x1
-      | Chance: 4.35%
+      | Chance: 4.17%
       | Count: 1
     ali:item minecraft:iron_pickaxe x1
-      | Chance: 4.35%
+      | Chance: 4.17%
       | Count: 1
     ali:item minecraft:iron_sword x1
-      | Chance: 4.35%
+      | Chance: 4.17%
+      | Count: 1
+    ali:item minecraft:iron_spear x1
+      | Chance: 4.17%
       | Count: 1
     ali:item minecraft:iron_shovel x1
-      | Chance: 4.35%
+      | Chance: 4.17%
       | Count: 1
     ali:item minecraft:shears x1
-      | Chance: 4.35%
+      | Chance: 4.17%
       | Count: 1
     ali:item minecraft:leather_chestplate x1
-      | Chance: 4.35%
+      | Chance: 4.17%
       | Count: 1
     ali:item minecraft:leather_boots x1
-      | Chance: 4.35%
+      | Chance: 4.17%
       | Count: 1
     ali:item minecraft:leather_helmet x1
-      | Chance: 4.35%
+      | Chance: 4.17%
       | Count: 1
     ali:item minecraft:leather_leggings x1
-      | Chance: 4.35%
+      | Chance: 4.17%
       | Count: 1
     ali:item minecraft:saddle x1
-      | Chance: 4.35%
+      | Chance: 4.17%
       | Count: 1
     ali:item minecraft:iron_horse_armor x1
-      | Chance: 4.35%
+      | Chance: 4.17%
       | Count: 1
     ali:item minecraft:golden_horse_armor x1
-      | Chance: 4.35%
+      | Chance: 4.17%
       | Count: 1
     ali:item minecraft:diamond_horse_armor x1
-      | Chance: 4.35%
+      | Chance: 4.17%
       | Count: 1
   ali:loot_pool
     | Selects random entry
@@ -1566,7 +1569,7 @@ ali:loot_table
       |       -> Color: Black
       |     -> minecraft:triangles_top
       |       -> Color: Black
-    ali:item minecraft:firework_star x1 {"minecraft:firework_explosion":{fade_colors:[I;8073150,12801229],has_trail:1b,has_twinkle:1b,shape:"star"}}
+    ali:item minecraft:firework_star x1 {"minecraft:firework_explosion":{fade_colors:[8073150,12801229],has_trail:1b,has_twinkle:1b,shape:"star"}}
       | Chance: 11.11%
       | Count: 1
       | ----- Modifiers -----
@@ -1637,3 +1640,16 @@ ali:loot_table
         ali:item minecraft:feather x1
           | Chance: 2.33%
           | Count: 1
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1
+        ali:empty
+          | Drops nothing
+          | Chance: 66.67%
+        ali:item minecraft:bundle x1
+          | Chance: 33.33%
+          | Count: 1
+          | ----- Modifiers -----
+          | Set Count:
+          |   -> Count: 1
+          |   -> Add: False

@@ -1611,15 +1611,6 @@ awi:biome minecraft:mangrove_swamp
       |     -> Max Water Depth: 5
       |   -> Heightmap Placement:
       |     -> Heightmap: Solid Ground, Ignores Water
-      |   -> Block Predicate Filter:
-      |     -> Would Survive:
-      |       -> State:
-      |         -> Block: Mangrove Propagule
-      |         -> Properties:
-      |           -> age: 0
-      |           -> hanging: false
-      |           -> stage: 0
-      |           -> waterlogged: false
       awi:block minecraft:mangrove_log
       awi:block minecraft:dirt
       awi:block minecraft:mangrove_leaves
@@ -1640,6 +1631,7 @@ awi:biome minecraft:mangrove_swamp
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1668,6 +1660,7 @@ awi:biome minecraft:mangrove_swamp
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1694,6 +1687,7 @@ awi:biome minecraft:mangrove_swamp
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1724,6 +1718,66 @@ awi:biome minecraft:mangrove_swamp
       |       -> 64
       awi:block minecraft:seagrass
       awi:block minecraft:tall_seagrass
+    awi:placed_feature minecraft:patch_firefly_bush_near_water
+      | Attempts Per Chunk: 2
+      | Height: Ground or Water Surface, Below Leaves
+      | Configured Feature:
+      |   -> Feature: minecraft:random_patch
+      |   -> Random Patch:
+      |     -> Tries: 20
+      |     -> XZ Spread: 4
+      |     -> Y Spread: 3
+      |     -> Feature:
+      |       -> Feature:
+      |         -> Feature: minecraft:simple_block
+      |         -> Config:
+      |           -> Simple Block:
+      |             -> Schedule Tick: False
+      |             -> To Place:
+      |               -> Simple:
+      |                 -> State:
+      |                   -> Block: Firefly Bush
+      |       -> Placement:
+      |         -> Block Predicate Filter:
+      |           -> Matching Blocks:
+      |             -> Block: Air
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 2
+      |   -> Heightmap Placement:
+      |     -> Heightmap: Ground or Water Surface, Below Leaves
+      |   -> Block Predicate Filter:
+      |     -> All Of:
+      |       -> Predicates:
+      |         -> Matching Blocks:
+      |           -> Block: Air
+      |         -> Would Survive:
+      |           -> State:
+      |             -> Block: Firefly Bush
+      |         -> Any Of:
+      |           -> Predicates:
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [1,-1,0]
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [-1,-1,0]
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [0,-1,1]
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [0,-1,-1]
+      awi:block minecraft:firefly_bush
   awi:generation_step 10
     | Generation Step: Top Layer Modifications
     awi:placed_feature minecraft:freeze_top_layer

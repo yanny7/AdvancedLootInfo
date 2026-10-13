@@ -1364,6 +1364,7 @@ awi:biome minecraft:cherry_grove
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1402,6 +1403,7 @@ awi:biome minecraft:cherry_grove
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1436,6 +1438,7 @@ awi:biome minecraft:cherry_grove
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Weighted:
       |                 -> Weighted List:
@@ -1443,112 +1446,112 @@ awi:biome minecraft:cherry_grove
       |                   -> Items:
       |                     -> Entry:
       |                       -> Weight: 1
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Pink Petals
       |                         -> Properties:
       |                           -> facing: north
       |                           -> flower_amount: 1
       |                     -> Entry:
       |                       -> Weight: 1
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Pink Petals
       |                         -> Properties:
       |                           -> facing: east
       |                           -> flower_amount: 1
       |                     -> Entry:
       |                       -> Weight: 1
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Pink Petals
       |                         -> Properties:
       |                           -> facing: south
       |                           -> flower_amount: 1
       |                     -> Entry:
       |                       -> Weight: 1
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Pink Petals
       |                         -> Properties:
       |                           -> facing: west
       |                           -> flower_amount: 1
       |                     -> Entry:
       |                       -> Weight: 1
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Pink Petals
       |                         -> Properties:
       |                           -> facing: north
       |                           -> flower_amount: 2
       |                     -> Entry:
       |                       -> Weight: 1
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Pink Petals
       |                         -> Properties:
       |                           -> facing: east
       |                           -> flower_amount: 2
       |                     -> Entry:
       |                       -> Weight: 1
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Pink Petals
       |                         -> Properties:
       |                           -> facing: south
       |                           -> flower_amount: 2
       |                     -> Entry:
       |                       -> Weight: 1
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Pink Petals
       |                         -> Properties:
       |                           -> facing: west
       |                           -> flower_amount: 2
       |                     -> Entry:
       |                       -> Weight: 1
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Pink Petals
       |                         -> Properties:
       |                           -> facing: north
       |                           -> flower_amount: 3
       |                     -> Entry:
       |                       -> Weight: 1
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Pink Petals
       |                         -> Properties:
       |                           -> facing: east
       |                           -> flower_amount: 3
       |                     -> Entry:
       |                       -> Weight: 1
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Pink Petals
       |                         -> Properties:
       |                           -> facing: south
       |                           -> flower_amount: 3
       |                     -> Entry:
       |                       -> Weight: 1
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Pink Petals
       |                         -> Properties:
       |                           -> facing: west
       |                           -> flower_amount: 3
       |                     -> Entry:
       |                       -> Weight: 1
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Pink Petals
       |                         -> Properties:
       |                           -> facing: north
       |                           -> flower_amount: 4
       |                     -> Entry:
       |                       -> Weight: 1
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Pink Petals
       |                         -> Properties:
       |                           -> facing: east
       |                           -> flower_amount: 4
       |                     -> Entry:
       |                       -> Weight: 1
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Pink Petals
       |                         -> Properties:
       |                           -> facing: south
       |                           -> flower_amount: 4
       |                     -> Entry:
       |                       -> Weight: 1
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Pink Petals
       |                         -> Properties:
       |                           -> facing: west

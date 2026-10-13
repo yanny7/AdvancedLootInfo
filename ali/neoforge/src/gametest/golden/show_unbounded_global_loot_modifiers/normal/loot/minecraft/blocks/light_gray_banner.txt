@@ -9,12 +9,13 @@ ali:loot_table
       | Survives Explosion
       | ----- Modifiers -----
       | Copy Components:
-      |   -> Source: Block Entity
+      |   -> Source: minecraft:block_entity
       |   -> Include:
       |     -> minecraft:custom_name
       |     -> minecraft:item_name
-      |     -> minecraft:hide_additional_tooltip
+      |     -> minecraft:tooltip_display
       |     -> minecraft:banner_patterns
+      |     -> minecraft:rarity
   ali:item minecraft:diamond x1
     | Chance: 1%
     | Count: 1

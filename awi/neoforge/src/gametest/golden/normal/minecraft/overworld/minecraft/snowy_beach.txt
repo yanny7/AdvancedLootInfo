@@ -275,14 +275,18 @@ awi:biome minecraft:snowy_beach
       | Chance: 0.2%
       | Height: Ground or Water Surface
       awi:block minecraft:red_mushroom
-    awi:placed_feature minecraft:patch_sugar_cane
-      | Chance: 16.67%
-      | Height: Ground or Water Surface
-      awi:block minecraft:sugar_cane
     awi:placed_feature minecraft:patch_pumpkin
       | Chance: 0.33%
       | Height: Ground or Water Surface
       awi:block minecraft:pumpkin
+    awi:placed_feature minecraft:patch_sugar_cane
+      | Chance: 16.67%
+      | Height: Ground or Water Surface
+      awi:block minecraft:sugar_cane
+    awi:placed_feature minecraft:patch_firefly_bush_near_water
+      | Attempts Per Chunk: 2
+      | Height: Ground or Water Surface, Below Leaves
+      awi:block minecraft:firefly_bush
   awi:generation_step 10
     | Generation Step: Top Layer Modifications
     awi:placed_feature minecraft:freeze_top_layer

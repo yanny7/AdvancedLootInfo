@@ -12,10 +12,11 @@ ali:loot_table
         |   -> Match Tool:
         |     -> Item: Shears
         |   -> Match Tool:
-        |     -> Item Predicates:
-        |       -> Enchantments:
-        |         -> Enchantment: Silk Touch
-        |         -> Level: ≥ 1
+        |     -> Components:
+        |       -> Partial Matchers:
+        |         -> minecraft:enchantments
+        |           -> Enchantment: Silk Touch
+        |           -> Level: ≥ 1
       ali:item minecraft:string x1
         | Count: 1
         | ----- Predicates -----

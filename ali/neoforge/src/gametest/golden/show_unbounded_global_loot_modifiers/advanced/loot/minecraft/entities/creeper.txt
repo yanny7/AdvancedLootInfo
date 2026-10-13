@@ -28,8 +28,6 @@ ali:entity_loot_table
       |   -> Predicate:
       |     -> Entity Types:
       |       -> Tag: minecraft:skeletons
-  ali:item minecraft:tnt x1
-    | Count: 1
   ali:item minecraft:diamond x1
     | Chance: 1%
     | Count: 1

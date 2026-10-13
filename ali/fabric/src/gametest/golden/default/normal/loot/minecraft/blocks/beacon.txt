@@ -7,5 +7,5 @@ ali:loot_table
       | Count: 1
       | ----- Modifiers -----
       | Copy Components:
-      |   -> Source: Block Entity
+      |   -> Source: minecraft:block_entity
       |   -> Include: minecraft:custom_name

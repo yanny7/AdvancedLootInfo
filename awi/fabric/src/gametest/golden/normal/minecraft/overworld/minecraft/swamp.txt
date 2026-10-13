@@ -345,6 +345,14 @@ awi:biome minecraft:swamp
       | Chance: 0.33%
       | Height: Ground or Water Surface
       awi:block minecraft:pumpkin
+    awi:placed_feature minecraft:patch_firefly_bush_swamp
+      | Chance: 12.5%
+      | Height: Ground or Water Surface
+      awi:block minecraft:firefly_bush
+    awi:placed_feature minecraft:patch_firefly_bush_near_water_swamp
+      | Attempts Per Chunk: 3
+      | Height: Ground or Water Surface
+      awi:block minecraft:firefly_bush
     awi:placed_feature minecraft:seagrass_swamp
       | Attempts Per Chunk: 64
       | Height: Solid Ground, Ignores Water

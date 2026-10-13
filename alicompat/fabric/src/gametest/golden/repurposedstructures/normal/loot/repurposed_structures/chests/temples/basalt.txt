@@ -40,7 +40,7 @@ ali:loot_table
     ali:item minecraft:quartz_block x1-3
       | Chance: 6.2%
       | Count: 1 to 3
-    ali:item minecraft:chain x1-3
+    ali:item minecraft:iron_chain x1-3
       | Chance: 3.88%
       | Count: 1 to 3
     ali:item minecraft:magma_block x1-3

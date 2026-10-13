@@ -8,6 +8,14 @@ awi:biome minecraft:eroded_badlands
     | Category: Ambient
     | Weight: 10
     | Group size: 8
+  spawn minecraft:chicken
+    | Category: Creature
+    | Weight: 10
+    | Group size: 4
+  spawn minecraft:cow
+    | Category: Creature
+    | Weight: 8
+    | Group size: 4
   spawn minecraft:creeper
     | Category: Monster
     | Weight: 100
@@ -20,6 +28,14 @@ awi:biome minecraft:eroded_badlands
     | Category: Underground Water Creature
     | Weight: 10
     | Group size: 4 to 6
+  spawn minecraft:pig
+    | Category: Creature
+    | Weight: 10
+    | Group size: 4
+  spawn minecraft:sheep
+    | Category: Creature
+    | Weight: 12
+    | Group size: 4
   spawn minecraft:skeleton
     | Category: Monster
     | Weight: 100
@@ -1356,6 +1372,7 @@ awi:biome minecraft:eroded_badlands
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1368,6 +1385,45 @@ awi:biome minecraft:eroded_badlands
       |   -> Heightmap Placement:
       |     -> Heightmap: Highest Block, Plants Included
       awi:block minecraft:short_grass
+    awi:placed_feature minecraft:patch_dry_grass_badlands
+      | Chance: 16.67%
+      | Height: Ground or Water Surface
+      | Configured Feature:
+      |   -> Feature: minecraft:random_patch
+      |   -> Random Patch:
+      |     -> Tries: 64
+      |     -> XZ Spread: 7
+      |     -> Y Spread: 3
+      |     -> Feature:
+      |       -> Feature:
+      |         -> Feature: minecraft:simple_block
+      |         -> Config:
+      |           -> Simple Block:
+      |             -> Schedule Tick: False
+      |             -> To Place:
+      |               -> Weighted:
+      |                 -> Weighted List:
+      |                   -> Total Weight: 2
+      |                   -> Items:
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Short Dry Grass
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Tall Dry Grass
+      |       -> Placement:
+      |         -> Block Predicate Filter:
+      |           -> Matching Blocks:
+      |             -> Block: Air
+      | Placement:
+      |   -> Rarity Filter:
+      |     -> Chance: 6
+      |   -> Heightmap Placement:
+      |     -> Heightmap: Ground or Water Surface
+      awi:block minecraft:short_dry_grass
+      awi:block minecraft:tall_dry_grass
     awi:placed_feature minecraft:patch_dead_bush_badlands
       | Attempts Per Chunk: 20
       | Height: Highest Block, Plants Included
@@ -1382,6 +1438,7 @@ awi:biome minecraft:eroded_badlands
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1411,6 +1468,7 @@ awi:biome minecraft:eroded_badlands
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1439,6 +1497,7 @@ awi:biome minecraft:eroded_badlands
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1534,6 +1593,7 @@ awi:biome minecraft:eroded_badlands
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1568,14 +1628,24 @@ awi:biome minecraft:eroded_badlands
       |         -> Config:
       |           -> Block Column:
       |             -> Layers:
-      |               -> Height: biased(1; 3)  ~1 (61%)
-      |                 [chart 0..2 1-3 base=true modes=[true, false, false] heights=1.0000,0.4545,0.1818]
-      |               -> State:
-      |                 -> Simple:
-      |                   -> State:
-      |                     -> Block: Cactus
-      |                     -> Properties:
-      |                       -> age: 0
+      |               -> Entry:
+      |                 -> Height: biased(1; 3)  ~1 (61%)
+      |                   [chart 0..2 1-3 base=true modes=[true, false, false] heights=1.0000,0.4545,0.1818]
+      |                 -> State:
+      |                   -> Simple:
+      |                     -> State:
+      |                       -> Block: Cactus
+      |                       -> Properties:
+      |                         -> age: 0
+      |               -> Entry:
+      |                 -> Height: 0 to 1  ~0 (75%)
+      |                   -> 0 (75%)
+      |                   -> 1 (25%)
+      |                   [chart 0..1 0-1 base=true modes=[true, false] heights=1.0000,0.3333]
+      |                 -> State:
+      |                   -> Simple:
+      |                     -> State:
+      |                       -> Block: Cactus Flower
       |             -> Direction: Up
       |             -> Allowed Placement:
       |               -> Matching Blocks:
@@ -1598,6 +1668,67 @@ awi:biome minecraft:eroded_badlands
       |   -> Heightmap Placement:
       |     -> Heightmap: Ground or Water Surface
       awi:block minecraft:cactus
+      awi:block minecraft:cactus_flower
+    awi:placed_feature minecraft:patch_firefly_bush_near_water
+      | Attempts Per Chunk: 2
+      | Height: Ground or Water Surface, Below Leaves
+      | Configured Feature:
+      |   -> Feature: minecraft:random_patch
+      |   -> Random Patch:
+      |     -> Tries: 20
+      |     -> XZ Spread: 4
+      |     -> Y Spread: 3
+      |     -> Feature:
+      |       -> Feature:
+      |         -> Feature: minecraft:simple_block
+      |         -> Config:
+      |           -> Simple Block:
+      |             -> Schedule Tick: False
+      |             -> To Place:
+      |               -> Simple:
+      |                 -> State:
+      |                   -> Block: Firefly Bush
+      |       -> Placement:
+      |         -> Block Predicate Filter:
+      |           -> Matching Blocks:
+      |             -> Block: Air
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 2
+      |   -> Heightmap Placement:
+      |     -> Heightmap: Ground or Water Surface, Below Leaves
+      |   -> Block Predicate Filter:
+      |     -> All Of:
+      |       -> Predicates:
+      |         -> Matching Blocks:
+      |           -> Block: Air
+      |         -> Would Survive:
+      |           -> State:
+      |             -> Block: Firefly Bush
+      |         -> Any Of:
+      |           -> Predicates:
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [1,-1,0]
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [-1,-1,0]
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [0,-1,1]
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [0,-1,-1]
+      awi:block minecraft:firefly_bush
   awi:generation_step 10
     | Generation Step: Top Layer Modifications
     awi:placed_feature minecraft:freeze_top_layer

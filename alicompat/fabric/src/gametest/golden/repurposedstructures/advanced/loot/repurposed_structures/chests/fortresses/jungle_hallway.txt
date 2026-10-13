@@ -210,7 +210,7 @@ ali:loot_table
     ali:item minecraft:saddle x1
       | Chance: 1.26%
       | Count: 1
-    ali:item minecraft:chain x1-6
+    ali:item minecraft:iron_chain x1-6
       | Chance: 1.26%
       | Count: max(0; U[1; 6])
       | ----- Modifiers -----

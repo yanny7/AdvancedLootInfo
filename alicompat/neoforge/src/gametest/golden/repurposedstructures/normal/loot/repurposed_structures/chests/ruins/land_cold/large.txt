@@ -4,29 +4,32 @@ ali:loot_table
     | Selects random entry
     | Rolls: 2 to 8
     ali:item minecraft:coal x1-4
-      | Chance: 24%
+      | Chance: 23.08%
       | Count: 1 to 4
     ali:item minecraft:iron_nugget x1-2
-      | Chance: 24%
+      | Chance: 23.08%
       | Count: 1 to 2
     ali:item minecraft:bread x2-3
-      | Chance: 20%
+      | Chance: 19.23%
       | Count: 2 to 3
     ali:item minecraft:stone_hoe x1
-      | Chance: 10%
+      | Chance: 9.62%
       | Count: 1
       | ----- Modifiers -----
       | Set Damage:
       |   -> Damage: 10% to 90%
       |   -> Add: False
     ali:item minecraft:potato x2-7
-      | Chance: 10%
+      | Chance: 9.62%
       | Count: 2 to 7
     ali:item minecraft:carrot x1-3
-      | Chance: 10%
+      | Chance: 9.62%
       | Count: 1 to 3
+    ali:item minecraft:stone_spear x1
+      | Chance: 3.85%
+      | Count: 1
     ali:item minecraft:emerald x1
-      | Chance: 2%
+      | Chance: 1.92%
       | Count: 1
   ali:loot_pool
     | Selects random entry
@@ -46,7 +49,7 @@ ali:loot_table
     ali:item minecraft:arrow x2-6
       | Chance: 6.9%
       | Count: 2 to 6
-    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"Bastion Remnant Map"}'}
+    ali:item minecraft:map x1 {"minecraft:custom_name":{translate:"Bastion Remnant Map"}}
       | Chance: 6.9%
       | Count: 1
       | ----- Modifiers -----
@@ -98,6 +101,24 @@ ali:loot_table
       | Count: 1
     ali:item minecraft:golden_apple x1
       | Chance: 3.45%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 80%
+    ali:item minecraft:copper_horse_armor x1
+      | Chance: 10.81%
+      | Count: 1
+    ali:item minecraft:iron_horse_armor x1
+      | Chance: 5.41%
+      | Count: 1
+    ali:item minecraft:golden_horse_armor x1
+      | Chance: 2.7%
+      | Count: 1
+    ali:item minecraft:diamond_horse_armor x1
+      | Chance: 1.08%
       | Count: 1
   ali:loot_pool
     | Selects random entry
@@ -1337,4 +1358,13 @@ ali:loot_table
           | Count: 1
         ali:item minecraft:spruce_sign x1
           | Chance: 1.85%
+          | Count: 1
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1
+        ali:empty
+          | Drops nothing
+          | Chance: 66.67%
+        ali:item minecraft:bundle x1
+          | Chance: 33.33%
           | Count: 1

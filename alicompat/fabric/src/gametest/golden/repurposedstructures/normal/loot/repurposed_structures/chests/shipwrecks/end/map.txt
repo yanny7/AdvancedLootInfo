@@ -3,7 +3,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"End City Map"}'}
+    ali:item minecraft:map x1 {"minecraft:custom_name":{translate:"End City Map"}}
       | Count: 1
       | ----- Modifiers -----
       | Exploration Map:
@@ -59,7 +59,7 @@ ali:loot_table
     ali:empty
       | Drops nothing
       | Chance: 37.88%
-    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"End Stronghold Map"}'}
+    ali:item minecraft:map x1 {"minecraft:custom_name":{translate:"End Stronghold Map"}}
       | Chance: 1.52%
       | Count: 1
       | ----- Modifiers -----

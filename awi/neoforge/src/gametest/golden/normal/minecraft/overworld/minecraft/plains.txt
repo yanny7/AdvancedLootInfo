@@ -63,8 +63,12 @@ awi:biome minecraft:plains
     | Group size: 1
   spawn minecraft:zombie
     | Category: Monster
-    | Weight: 95
+    | Weight: 90
     | Group size: 4
+  spawn minecraft:zombie_horse
+    | Category: Monster
+    | Weight: 5
+    | Group size: 1
   spawn minecraft:zombie_villager
     | Category: Monster
     | Weight: 5
@@ -295,6 +299,10 @@ awi:biome minecraft:plains
       | Chance: 3.13%
       | Height: Ground or Water Surface
       awi:block minecraft:tall_grass
+    awi:placed_feature minecraft:patch_bush
+      | Chance: 25%
+      | Height: Ground or Water Surface
+      awi:block minecraft:bush
     awi:placed_feature minecraft:trees_plains
       | Attempts Per Chunk: 0 to 1  ~0 (95%)
       |   -> 0 (95%)
@@ -337,14 +345,18 @@ awi:biome minecraft:plains
       | Chance: 0.2%
       | Height: Ground or Water Surface
       awi:block minecraft:red_mushroom
-    awi:placed_feature minecraft:patch_sugar_cane
-      | Chance: 16.67%
-      | Height: Ground or Water Surface
-      awi:block minecraft:sugar_cane
     awi:placed_feature minecraft:patch_pumpkin
       | Chance: 0.33%
       | Height: Ground or Water Surface
       awi:block minecraft:pumpkin
+    awi:placed_feature minecraft:patch_sugar_cane
+      | Chance: 16.67%
+      | Height: Ground or Water Surface
+      awi:block minecraft:sugar_cane
+    awi:placed_feature minecraft:patch_firefly_bush_near_water
+      | Attempts Per Chunk: 2
+      | Height: Ground or Water Surface, Below Leaves
+      awi:block minecraft:firefly_bush
   awi:generation_step 10
     | Generation Step: Top Layer Modifications
     awi:placed_feature minecraft:freeze_top_layer

@@ -36,9 +36,10 @@ ali:entity_loot_table
       | Damage Source Properties:
       |   -> Source Entity:
       |     -> Entity Type: Frog
-      |     -> Entity Sub Predicate:
-      |       -> Type: minecraft:frog
-      |         -> Variant: minecraft:warm
+      |     -> Components:
+      |       -> Expected Components:
+      |         -> minecraft:frog/variant
+      |           -> Value: minecraft:warm
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1
@@ -50,9 +51,10 @@ ali:entity_loot_table
       | Damage Source Properties:
       |   -> Source Entity:
       |     -> Entity Type: Frog
-      |     -> Entity Sub Predicate:
-      |       -> Type: minecraft:frog
-      |         -> Variant: minecraft:cold
+      |     -> Components:
+      |       -> Expected Components:
+      |         -> minecraft:frog/variant
+      |           -> Value: minecraft:cold
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1
@@ -64,9 +66,10 @@ ali:entity_loot_table
       | Damage Source Properties:
       |   -> Source Entity:
       |     -> Entity Type: Frog
-      |     -> Entity Sub Predicate:
-      |       -> Type: minecraft:frog
-      |         -> Variant: minecraft:temperate
+      |     -> Components:
+      |       -> Expected Components:
+      |         -> minecraft:frog/variant
+      |           -> Value: minecraft:temperate
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1

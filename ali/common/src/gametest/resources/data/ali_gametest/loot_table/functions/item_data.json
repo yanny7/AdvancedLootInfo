@@ -37,7 +37,7 @@
               "modifiers": [
                 {
                   "id": "ali_gametest:gametest",
-                  "attribute": "minecraft:generic.attack_damage",
+                  "attribute": "minecraft:attack_damage",
                   "operation": "add_value",
                   "amount": {
                     "min": 1,

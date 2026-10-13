@@ -80,7 +80,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 2 to 8
       |   -> Add: False
-    ali:item minecraft:chain x2-8
+    ali:item minecraft:iron_chain x2-8
       | Chance: 3.51%
       | Count: max(0; U[2; 8])
       | ----- Modifiers -----

@@ -31,7 +31,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 2 to 4
       |   -> Add: False
-    ali:item minecraft:chain x2-6
+    ali:item minecraft:iron_chain x2-6
       | Chance: 6.78%
       | Count: max(0; U[2; 6])
       | ----- Modifiers -----

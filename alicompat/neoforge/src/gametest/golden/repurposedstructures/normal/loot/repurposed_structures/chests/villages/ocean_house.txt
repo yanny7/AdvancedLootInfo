@@ -79,7 +79,7 @@ ali:loot_table
       |     -> Aqua Affinity
       |     -> Respiration
       |   -> Only Compatible: True
-    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"Unknown Ocean Structure Map"}'}
+    ali:item minecraft:map x1 {"minecraft:custom_name":{translate:"Unknown Ocean Structure Map"}}
       | Chance: 2.7%
       | Count: 1
       | ----- Modifiers -----
@@ -92,7 +92,7 @@ ali:loot_table
       | Set Name:
       |   -> Name: Unknown Ocean Structure Map
       |   -> Target: Custom Name
-    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"Unknown Ocean Structure Map"}'}
+    ali:item minecraft:map x1 {"minecraft:custom_name":{translate:"Unknown Ocean Structure Map"}}
       | Chance: 2.7%
       | Count: 1
       | ----- Modifiers -----
@@ -105,7 +105,7 @@ ali:loot_table
       | Set Name:
       |   -> Name: Unknown Ocean Structure Map
       |   -> Target: Custom Name
-    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"Unknown Ocean Structure Map"}'}
+    ali:item minecraft:map x1 {"minecraft:custom_name":{translate:"Unknown Ocean Structure Map"}}
       | Chance: 2.7%
       | Count: 1
       | ----- Modifiers -----
@@ -118,7 +118,7 @@ ali:loot_table
       | Set Name:
       |   -> Name: Unknown Ocean Structure Map
       |   -> Target: Custom Name
-    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"Unknown Ocean Structure Map"}'}
+    ali:item minecraft:map x1 {"minecraft:custom_name":{translate:"Unknown Ocean Structure Map"}}
       | Chance: 2.7%
       | Count: 1
       | ----- Modifiers -----
@@ -131,7 +131,7 @@ ali:loot_table
       | Set Name:
       |   -> Name: Unknown Ocean Structure Map
       |   -> Target: Custom Name
-    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"Unknown Ocean Structure Map"}'}
+    ali:item minecraft:map x1 {"minecraft:custom_name":{translate:"Unknown Ocean Structure Map"}}
       | Chance: 2.7%
       | Count: 1
       | ----- Modifiers -----
@@ -144,7 +144,7 @@ ali:loot_table
       | Set Name:
       |   -> Name: Unknown Ocean Structure Map
       |   -> Target: Custom Name
-    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"Unknown Ocean Structure Map"}'}
+    ali:item minecraft:map x1 {"minecraft:custom_name":{translate:"Unknown Ocean Structure Map"}}
       | Chance: 2.7%
       | Count: 1
       | ----- Modifiers -----
@@ -157,7 +157,7 @@ ali:loot_table
       | Set Name:
       |   -> Name: Unknown Ocean Structure Map
       |   -> Target: Custom Name
-    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"Unknown Ocean Structure Map"}'}
+    ali:item minecraft:map x1 {"minecraft:custom_name":{translate:"Unknown Ocean Structure Map"}}
       | Chance: 2.7%
       | Count: 1
       | ----- Modifiers -----
@@ -1405,4 +1405,13 @@ ali:loot_table
           | Count: 1
         ali:item minecraft:feather x1
           | Chance: 2.33%
+          | Count: 1
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1
+        ali:empty
+          | Drops nothing
+          | Chance: 66.67%
+        ali:item minecraft:bundle x1
+          | Chance: 33.33%
           | Count: 1

@@ -27,10 +27,336 @@ ali:entity_loot_table
       |         -> Predicate:
       |           -> Entity Equipment:
       |             -> Main Hand:
-      |               -> Item Predicates:
-      |                 -> Enchantments:
-      |                   -> Enchantments:
-      |                     -> Tag: minecraft:smelts_loot
+      |               -> Components:
+      |                 -> Partial Matchers:
+      |                   -> minecraft:enchantments
+      |                     -> Enchantments:
+      |                       -> Tag: minecraft:smelts_loot
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
       |   -> Value: U[0; 1)
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:reference
+        | Selects all entries
+        ali:loot_table
+          | Selects all entries
+          ali:loot_pool
+            | Selects random entry
+            | Rolls: 1
+            ali:item minecraft:white_wool x1
+              | Count: 1
+              | ----- Predicates -----
+              | Entity Properties:
+              |   -> Target: This Entity
+              |   -> Predicate:
+              |     -> Entity Sub Predicate:
+              |       -> Sheep:
+              |         -> Sheared: False
+              |     -> Components:
+              |       -> Expected Components:
+              |         -> minecraft:sheep/color
+              |           -> Color: White
+      ali:reference
+        | Selects all entries
+        ali:loot_table
+          | Selects all entries
+          ali:loot_pool
+            | Selects random entry
+            | Rolls: 1
+            ali:item minecraft:orange_wool x1
+              | Count: 1
+              | ----- Predicates -----
+              | Entity Properties:
+              |   -> Target: This Entity
+              |   -> Predicate:
+              |     -> Entity Sub Predicate:
+              |       -> Sheep:
+              |         -> Sheared: False
+              |     -> Components:
+              |       -> Expected Components:
+              |         -> minecraft:sheep/color
+              |           -> Color: Orange
+      ali:reference
+        | Selects all entries
+        ali:loot_table
+          | Selects all entries
+          ali:loot_pool
+            | Selects random entry
+            | Rolls: 1
+            ali:item minecraft:magenta_wool x1
+              | Count: 1
+              | ----- Predicates -----
+              | Entity Properties:
+              |   -> Target: This Entity
+              |   -> Predicate:
+              |     -> Entity Sub Predicate:
+              |       -> Sheep:
+              |         -> Sheared: False
+              |     -> Components:
+              |       -> Expected Components:
+              |         -> minecraft:sheep/color
+              |           -> Color: Magenta
+      ali:reference
+        | Selects all entries
+        ali:loot_table
+          | Selects all entries
+          ali:loot_pool
+            | Selects random entry
+            | Rolls: 1
+            ali:item minecraft:light_blue_wool x1
+              | Count: 1
+              | ----- Predicates -----
+              | Entity Properties:
+              |   -> Target: This Entity
+              |   -> Predicate:
+              |     -> Entity Sub Predicate:
+              |       -> Sheep:
+              |         -> Sheared: False
+              |     -> Components:
+              |       -> Expected Components:
+              |         -> minecraft:sheep/color
+              |           -> Color: Light Blue
+      ali:reference
+        | Selects all entries
+        ali:loot_table
+          | Selects all entries
+          ali:loot_pool
+            | Selects random entry
+            | Rolls: 1
+            ali:item minecraft:yellow_wool x1
+              | Count: 1
+              | ----- Predicates -----
+              | Entity Properties:
+              |   -> Target: This Entity
+              |   -> Predicate:
+              |     -> Entity Sub Predicate:
+              |       -> Sheep:
+              |         -> Sheared: False
+              |     -> Components:
+              |       -> Expected Components:
+              |         -> minecraft:sheep/color
+              |           -> Color: Yellow
+      ali:reference
+        | Selects all entries
+        ali:loot_table
+          | Selects all entries
+          ali:loot_pool
+            | Selects random entry
+            | Rolls: 1
+            ali:item minecraft:lime_wool x1
+              | Count: 1
+              | ----- Predicates -----
+              | Entity Properties:
+              |   -> Target: This Entity
+              |   -> Predicate:
+              |     -> Entity Sub Predicate:
+              |       -> Sheep:
+              |         -> Sheared: False
+              |     -> Components:
+              |       -> Expected Components:
+              |         -> minecraft:sheep/color
+              |           -> Color: Lime
+      ali:reference
+        | Selects all entries
+        ali:loot_table
+          | Selects all entries
+          ali:loot_pool
+            | Selects random entry
+            | Rolls: 1
+            ali:item minecraft:pink_wool x1
+              | Count: 1
+              | ----- Predicates -----
+              | Entity Properties:
+              |   -> Target: This Entity
+              |   -> Predicate:
+              |     -> Entity Sub Predicate:
+              |       -> Sheep:
+              |         -> Sheared: False
+              |     -> Components:
+              |       -> Expected Components:
+              |         -> minecraft:sheep/color
+              |           -> Color: Pink
+      ali:reference
+        | Selects all entries
+        ali:loot_table
+          | Selects all entries
+          ali:loot_pool
+            | Selects random entry
+            | Rolls: 1
+            ali:item minecraft:gray_wool x1
+              | Count: 1
+              | ----- Predicates -----
+              | Entity Properties:
+              |   -> Target: This Entity
+              |   -> Predicate:
+              |     -> Entity Sub Predicate:
+              |       -> Sheep:
+              |         -> Sheared: False
+              |     -> Components:
+              |       -> Expected Components:
+              |         -> minecraft:sheep/color
+              |           -> Color: Gray
+      ali:reference
+        | Selects all entries
+        ali:loot_table
+          | Selects all entries
+          ali:loot_pool
+            | Selects random entry
+            | Rolls: 1
+            ali:item minecraft:light_gray_wool x1
+              | Count: 1
+              | ----- Predicates -----
+              | Entity Properties:
+              |   -> Target: This Entity
+              |   -> Predicate:
+              |     -> Entity Sub Predicate:
+              |       -> Sheep:
+              |         -> Sheared: False
+              |     -> Components:
+              |       -> Expected Components:
+              |         -> minecraft:sheep/color
+              |           -> Color: Light Gray
+      ali:reference
+        | Selects all entries
+        ali:loot_table
+          | Selects all entries
+          ali:loot_pool
+            | Selects random entry
+            | Rolls: 1
+            ali:item minecraft:cyan_wool x1
+              | Count: 1
+              | ----- Predicates -----
+              | Entity Properties:
+              |   -> Target: This Entity
+              |   -> Predicate:
+              |     -> Entity Sub Predicate:
+              |       -> Sheep:
+              |         -> Sheared: False
+              |     -> Components:
+              |       -> Expected Components:
+              |         -> minecraft:sheep/color
+              |           -> Color: Cyan
+      ali:reference
+        | Selects all entries
+        ali:loot_table
+          | Selects all entries
+          ali:loot_pool
+            | Selects random entry
+            | Rolls: 1
+            ali:item minecraft:purple_wool x1
+              | Count: 1
+              | ----- Predicates -----
+              | Entity Properties:
+              |   -> Target: This Entity
+              |   -> Predicate:
+              |     -> Entity Sub Predicate:
+              |       -> Sheep:
+              |         -> Sheared: False
+              |     -> Components:
+              |       -> Expected Components:
+              |         -> minecraft:sheep/color
+              |           -> Color: Purple
+      ali:reference
+        | Selects all entries
+        ali:loot_table
+          | Selects all entries
+          ali:loot_pool
+            | Selects random entry
+            | Rolls: 1
+            ali:item minecraft:blue_wool x1
+              | Count: 1
+              | ----- Predicates -----
+              | Entity Properties:
+              |   -> Target: This Entity
+              |   -> Predicate:
+              |     -> Entity Sub Predicate:
+              |       -> Sheep:
+              |         -> Sheared: False
+              |     -> Components:
+              |       -> Expected Components:
+              |         -> minecraft:sheep/color
+              |           -> Color: Blue
+      ali:reference
+        | Selects all entries
+        ali:loot_table
+          | Selects all entries
+          ali:loot_pool
+            | Selects random entry
+            | Rolls: 1
+            ali:item minecraft:brown_wool x1
+              | Count: 1
+              | ----- Predicates -----
+              | Entity Properties:
+              |   -> Target: This Entity
+              |   -> Predicate:
+              |     -> Entity Sub Predicate:
+              |       -> Sheep:
+              |         -> Sheared: False
+              |     -> Components:
+              |       -> Expected Components:
+              |         -> minecraft:sheep/color
+              |           -> Color: Brown
+      ali:reference
+        | Selects all entries
+        ali:loot_table
+          | Selects all entries
+          ali:loot_pool
+            | Selects random entry
+            | Rolls: 1
+            ali:item minecraft:green_wool x1
+              | Count: 1
+              | ----- Predicates -----
+              | Entity Properties:
+              |   -> Target: This Entity
+              |   -> Predicate:
+              |     -> Entity Sub Predicate:
+              |       -> Sheep:
+              |         -> Sheared: False
+              |     -> Components:
+              |       -> Expected Components:
+              |         -> minecraft:sheep/color
+              |           -> Color: Green
+      ali:reference
+        | Selects all entries
+        ali:loot_table
+          | Selects all entries
+          ali:loot_pool
+            | Selects random entry
+            | Rolls: 1
+            ali:item minecraft:red_wool x1
+              | Count: 1
+              | ----- Predicates -----
+              | Entity Properties:
+              |   -> Target: This Entity
+              |   -> Predicate:
+              |     -> Entity Sub Predicate:
+              |       -> Sheep:
+              |         -> Sheared: False
+              |     -> Components:
+              |       -> Expected Components:
+              |         -> minecraft:sheep/color
+              |           -> Color: Red
+      ali:reference
+        | Selects all entries
+        ali:loot_table
+          | Selects all entries
+          ali:loot_pool
+            | Selects random entry
+            | Rolls: 1
+            ali:item minecraft:black_wool x1
+              | Count: 1
+              | ----- Predicates -----
+              | Entity Properties:
+              |   -> Target: This Entity
+              |   -> Predicate:
+              |     -> Entity Sub Predicate:
+              |       -> Sheep:
+              |         -> Sheared: False
+              |     -> Components:
+              |       -> Expected Components:
+              |         -> minecraft:sheep/color
+              |           -> Color: Black

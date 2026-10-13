@@ -32,9 +32,10 @@ ali:entity_loot_table
       | Damage Source Properties:
       |   -> Source Entity:
       |     -> Entity Type: Frog
-      |     -> Entity Sub Predicate:
-      |       -> Type: minecraft:frog
-      |         -> Variant: minecraft:warm
+      |     -> Components:
+      |       -> Expected Components:
+      |         -> minecraft:frog/variant
+      |           -> Value: minecraft:warm
     ali:item minecraft:verdant_froglight x1
       | Chance: 25%
       | Count: 1
@@ -42,9 +43,10 @@ ali:entity_loot_table
       | Damage Source Properties:
       |   -> Source Entity:
       |     -> Entity Type: Frog
-      |     -> Entity Sub Predicate:
-      |       -> Type: minecraft:frog
-      |         -> Variant: minecraft:cold
+      |     -> Components:
+      |       -> Expected Components:
+      |         -> minecraft:frog/variant
+      |           -> Value: minecraft:cold
     ali:item minecraft:ochre_froglight x1
       | Chance: 25%
       | Count: 1
@@ -52,6 +54,7 @@ ali:entity_loot_table
       | Damage Source Properties:
       |   -> Source Entity:
       |     -> Entity Type: Frog
-      |     -> Entity Sub Predicate:
-      |       -> Type: minecraft:frog
-      |         -> Variant: minecraft:temperate
+      |     -> Components:
+      |       -> Expected Components:
+      |         -> minecraft:frog/variant
+      |           -> Value: minecraft:temperate

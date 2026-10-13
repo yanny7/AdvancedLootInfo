@@ -23,7 +23,6 @@ ali:loot_table
             |     -> minecraft:trim
             |       -> Material: Copper Material
             |       -> Pattern: Bolt Armor Trim
-            |       -> Show In Tooltip: True
             | Set Enchantments:
             |   -> Enchantments:
             |     -> Fire Protection
@@ -48,7 +47,6 @@ ali:loot_table
             |     -> minecraft:trim
             |       -> Material: Copper Material
             |       -> Pattern: Bolt Armor Trim
-            |       -> Show In Tooltip: True
             | Set Enchantments:
             |   -> Enchantments:
             |     -> Fire Protection
@@ -78,7 +76,6 @@ ali:loot_table
             |     -> minecraft:trim
             |       -> Material: Copper Material
             |       -> Pattern: Flow Armor Trim
-            |       -> Show In Tooltip: True
             | Set Enchantments:
             |   -> Enchantments:
             |     -> Fire Protection
@@ -103,7 +100,6 @@ ali:loot_table
             |     -> minecraft:trim
             |       -> Material: Copper Material
             |       -> Pattern: Flow Armor Trim
-            |       -> Show In Tooltip: True
             | Set Enchantments:
             |   -> Enchantments:
             |     -> Fire Protection
@@ -133,7 +129,6 @@ ali:loot_table
             |     -> minecraft:trim
             |       -> Material: Copper Material
             |       -> Pattern: Flow Armor Trim
-            |       -> Show In Tooltip: True
             | Set Enchantments:
             |   -> Enchantments:
             |     -> Fire Protection
@@ -158,7 +153,6 @@ ali:loot_table
             |     -> minecraft:trim
             |       -> Material: Copper Material
             |       -> Pattern: Flow Armor Trim
-            |       -> Show In Tooltip: True
             | Set Enchantments:
             |   -> Enchantments:
             |     -> Fire Protection

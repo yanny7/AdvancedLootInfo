@@ -340,5 +340,3 @@ ali:loot_table
             |     -> Entity Sub Predicate:
             |       -> Fishing Hook:
             |         -> Is In Open Water: True
-  ali:item minecraft:nautilus_shell x1
-    | Count: 1

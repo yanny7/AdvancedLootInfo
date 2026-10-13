@@ -10,7 +10,7 @@ ali:loot_table
       | Set Count:
       |   -> Count: 2 to 20
       |   -> Add: False
-    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"Nether Fortress Map"}'}
+    ali:item minecraft:map x1 {"minecraft:custom_name":{translate:"Nether Fortress Map"}}
       | Chance: 33.33%
       | Count: 1
       | ----- Modifiers -----
@@ -23,7 +23,7 @@ ali:loot_table
       | Set Name:
       |   -> Name: Nether Fortress Map
       |   -> Target: Custom Name
-    ali:item minecraft:map x1 {"minecraft:custom_name":'{"translate":"Bastion Remnant Map"}'}
+    ali:item minecraft:map x1 {"minecraft:custom_name":{translate:"Bastion Remnant Map"}}
       | Chance: 16.67%
       | Count: 1
       | ----- Modifiers -----
@@ -146,6 +146,40 @@ ali:loot_table
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 2
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 90%
+    ali:item minecraft:black_harness x1
+      | Chance: 2.5%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:red_harness x1
+      | Chance: 2.5%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:orange_harness x1
+      | Chance: 2.5%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:white_harness x1
+      | Chance: 2.5%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
       |   -> Add: False
   ali:loot_pool
     | Selects random entry

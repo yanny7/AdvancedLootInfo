@@ -19,7 +19,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,14 +36,14 @@ public class LootDataCapture {
     public static Map<String, String> capture(AbstractServer aliServer, AliConfig config, RegistryAccess registryAccess) {
         IClientUtils utils = PluginManager.getInstance().clientRegistry;
         RegistryFriendlyByteBuf buf = LootDataReader.decompress(readChunks(aliServer), registryAccess);
-        Map<ResourceLocation, IDataNode> lootData = new HashMap<>();
-        Map<ResourceLocation, IDataNode> tradeData = new HashMap<>();
+        Map<Identifier, IDataNode> lootData = new HashMap<>();
+        Map<Identifier, IDataNode> tradeData = new HashMap<>();
 
         try {
             LootDataReader.decode(utils, buf, lootData, tradeData);
 
             if (buf.isReadable()) {
-                throw new GameTestAssertException(buf.readableBytes() + " byte(s) left unread after decoding");
+                throw new GameTestAssertException(Component.literal(buf.readableBytes() + " byte(s) left unread after decoding"), 0);
             }
         } finally {
             buf.release();
@@ -68,7 +69,7 @@ public class LootDataCapture {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
         if (chunks.isEmpty()) {
-            throw new GameTestAssertException("Server produced no loot data");
+            throw new GameTestAssertException(Component.literal("Server produced no loot data"), 0);
         }
 
         for (LootDataChunkMessage chunk : chunks) {

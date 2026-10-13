@@ -9,6 +9,7 @@ import com.yanny.ali.network.AbstractServer;
 import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.gametest.framework.GameTestSequence;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
 
@@ -78,7 +79,7 @@ public class LootDataGolden {
             differences.addAll(scriptErrors.get());
 
             if (!differences.isEmpty()) {
-                throw new GameTestAssertException(differences.size() + " golden difference(s): " + differences.subList(0, Math.min(10, differences.size())));
+                throw new GameTestAssertException(Component.literal(differences.size() + " golden difference(s): " + differences.subList(0, Math.min(10, differences.size()))), 0);
             }
         });
         sequence.thenSucceed();
@@ -93,7 +94,7 @@ public class LootDataGolden {
         });
         sequence.thenWaitUntil(() -> {
             if (!future.get(0).isDone()) {
-                throw new GameTestAssertException("Waiting for datapack reload");
+                throw new GameTestAssertException(Component.literal("Waiting for datapack reload"), 0);
             }
 
             future.get(0).join();

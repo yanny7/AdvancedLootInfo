@@ -30,16 +30,3 @@ ali:entity_loot_table
       |       -> Main Hand:
       |         -> Items:
       |           -> Tag: Knives
-  ali:loot_pool
-    | Selects random entry
-    | Rolls: 1
-    ali:item minecraft:shulker_shell x1
-      | Count: 1
-      | ----- Predicates -----
-      | Entity Properties:
-      |   -> Target: Attacker
-      |   -> Predicate:
-      |     -> Entity Equipment:
-      |       -> Main Hand:
-      |         -> Items:
-      |           -> Tag: Knives

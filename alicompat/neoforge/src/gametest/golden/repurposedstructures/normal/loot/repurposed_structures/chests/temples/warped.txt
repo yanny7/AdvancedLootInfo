@@ -37,7 +37,7 @@ ali:loot_table
     ali:item minecraft:golden_horse_armor x1
       | Chance: 4.35%
       | Count: 1
-    ali:item minecraft:chain x2-6
+    ali:item minecraft:iron_chain x2-6
       | Chance: 3.48%
       | Count: 2 to 6
     ali:item minecraft:soul_lantern x1-3
@@ -1269,40 +1269,43 @@ ali:loot_table
         | Selects random entry
         | Rolls: 2 to 4
         ali:item minecraft:gold_ingot x1-3
-          | Chance: 20.55%
+          | Chance: 19.23%
           | Count: 1 to 3
         ali:item minecraft:saddle x1
-          | Chance: 13.7%
+          | Chance: 12.82%
           | Count: 1
         ali:item minecraft:golden_horse_armor x1
-          | Chance: 10.96%
+          | Chance: 10.26%
           | Count: 1
         ali:item minecraft:diamond x1-3
-          | Chance: 6.85%
+          | Chance: 6.41%
           | Count: 1 to 3
         ali:item minecraft:iron_ingot x1-5
-          | Chance: 6.85%
+          | Chance: 6.41%
           | Count: 1 to 5
         ali:item minecraft:golden_sword x1
-          | Chance: 6.85%
+          | Chance: 6.41%
           | Count: 1
         ali:item minecraft:golden_chestplate x1
-          | Chance: 6.85%
+          | Chance: 6.41%
           | Count: 1
         ali:item minecraft:flint_and_steel x1
-          | Chance: 6.85%
+          | Chance: 6.41%
           | Count: 1
         ali:item minecraft:nether_wart x3-7
-          | Chance: 6.85%
+          | Chance: 6.41%
           | Count: 3 to 7
+        ali:item minecraft:copper_horse_armor x1
+          | Chance: 6.41%
+          | Count: 1
         ali:item minecraft:iron_horse_armor x1
-          | Chance: 6.85%
+          | Chance: 6.41%
           | Count: 1
         ali:item minecraft:diamond_horse_armor x1
-          | Chance: 4.11%
+          | Chance: 3.85%
           | Count: 1
         ali:item minecraft:obsidian x2-4
-          | Chance: 2.74%
+          | Chance: 2.56%
           | Count: 2 to 4
       ali:loot_pool
         | Selects random entry

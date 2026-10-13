@@ -41,63 +41,70 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1 to 4
+    ali:item minecraft:resin_clump x2-4
+      | Chance: 28.57%
+      | Count: max(0; U[2; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 4
+      |   -> Add: False
     ali:item minecraft:bread x1
-      | Chance: 16%
+      | Chance: 11.43%
       | Count: 1
     ali:item minecraft:wheat x1-4
-      | Chance: 16%
+      | Chance: 11.43%
       | Count: max(0; U[1; 4])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 4
       |   -> Add: False
     ali:item minecraft:redstone x1-4
-      | Chance: 12%
+      | Chance: 8.57%
       | Count: max(0; U[1; 4])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 4
       |   -> Add: False
     ali:item minecraft:coal x1-4
-      | Chance: 12%
+      | Chance: 8.57%
       | Count: max(0; U[1; 4])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 4
       |   -> Add: False
     ali:item minecraft:iron_ingot x1-4
-      | Chance: 8%
+      | Chance: 5.71%
       | Count: max(0; U[1; 4])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 4
       |   -> Add: False
     ali:item minecraft:bucket x1
-      | Chance: 8%
+      | Chance: 5.71%
       | Count: 1
     ali:item minecraft:melon_seeds x2-4
-      | Chance: 8%
+      | Chance: 5.71%
       | Count: max(0; U[2; 4])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 2 to 4
       |   -> Add: False
     ali:item minecraft:pumpkin_seeds x2-4
-      | Chance: 8%
+      | Chance: 5.71%
       | Count: max(0; U[2; 4])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 2 to 4
       |   -> Add: False
     ali:item minecraft:beetroot_seeds x2-4
-      | Chance: 8%
+      | Chance: 5.71%
       | Count: max(0; U[2; 4])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 2 to 4
       |   -> Add: False
     ali:item minecraft:gold_ingot x1-4
-      | Chance: 4%
+      | Chance: 2.86%
       | Count: max(0; U[1; 4])
       | ----- Modifiers -----
       | Set Count:

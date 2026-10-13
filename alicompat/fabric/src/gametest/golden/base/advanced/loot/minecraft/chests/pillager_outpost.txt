@@ -101,3 +101,16 @@ ali:loot_table
       | Set Count:
       |   -> Count: 2
       |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:enchanted_book x1
+      | Chance: 66.67%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantment: Quick Charge
+      |   -> Only Compatible: True
+    ali:empty
+      | Drops nothing
+      | Chance: 33.33%

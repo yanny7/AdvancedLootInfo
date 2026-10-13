@@ -21,7 +21,7 @@ ali:loot_table
     ali:item minecraft:stone_bricks x1-4
       | Chance: 4.67%
       | Count: 1 to 4
-    ali:item minecraft:chain x1-4
+    ali:item minecraft:iron_chain x1-4
       | Chance: 4.67%
       | Count: 1 to 4
     ali:item minecraft:emerald x1-4

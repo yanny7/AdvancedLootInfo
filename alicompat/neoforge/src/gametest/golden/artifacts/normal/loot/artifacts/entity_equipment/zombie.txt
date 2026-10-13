@@ -61,7 +61,7 @@ ali:loot_table
           | Rolls: 1
           ali:alternatives
             | Selects only first successful entry
-            ali:item artifacts:scarf_of_invisibility x1
+            ali:item artifacts:scarf_of_invisibility x1 {"artifacts:hide_when_invisible":{enabled:0b}}
               | Chance: 0.05%
               | Count: 1
               | ----- Predicates -----
@@ -69,9 +69,21 @@ ali:loot_table
               |   -> Config: entity_equipment
               | Config Value:
               |   -> Config: scarf_of_invisibility.generateAsLoot
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> artifacts:hide_when_invisible
+              |       -> Auto-detected: artifacts:hide_when_invisible
+              |         -> enabled: False
             ali:empty
               | Drops nothing
               | Chance: 0.05%
               | ----- Predicates -----
               | Config Value Chance:
               |   -> Config: entity_equipment
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> artifacts:hide_when_invisible
+              |       -> Auto-detected: artifacts:hide_when_invisible
+              |         -> enabled: False

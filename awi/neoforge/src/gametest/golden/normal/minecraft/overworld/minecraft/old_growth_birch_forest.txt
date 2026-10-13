@@ -282,6 +282,11 @@ awi:biome minecraft:old_growth_birch_forest
       awi:block minecraft:rose_bush
       awi:block minecraft:peony
       awi:block minecraft:lily_of_the_valley
+    awi:placed_feature minecraft:wildflowers_birch_forest
+      | Attempts Per Chunk: 3
+      | Chance: 50%
+      | Height: Ground or Water Surface
+      awi:block minecraft:wildflowers
     awi:placed_feature minecraft:birch_tall
       | Attempts Per Chunk: 10 to 11  ~10 (90%)
       |   -> 10 (90%)
@@ -291,6 +296,10 @@ awi:biome minecraft:old_growth_birch_forest
       awi:block minecraft:birch_log
       awi:block minecraft:dirt
       awi:block minecraft:birch_leaves
+    awi:placed_feature minecraft:patch_bush
+      | Chance: 25%
+      | Height: Ground or Water Surface
+      awi:block minecraft:bush
     awi:placed_feature minecraft:flower_default
       | Chance: 3.13%
       | Height: Ground or Water Surface
@@ -308,14 +317,18 @@ awi:biome minecraft:old_growth_birch_forest
       | Chance: 0.2%
       | Height: Ground or Water Surface
       awi:block minecraft:red_mushroom
-    awi:placed_feature minecraft:patch_sugar_cane
-      | Chance: 16.67%
-      | Height: Ground or Water Surface
-      awi:block minecraft:sugar_cane
     awi:placed_feature minecraft:patch_pumpkin
       | Chance: 0.33%
       | Height: Ground or Water Surface
       awi:block minecraft:pumpkin
+    awi:placed_feature minecraft:patch_sugar_cane
+      | Chance: 16.67%
+      | Height: Ground or Water Surface
+      awi:block minecraft:sugar_cane
+    awi:placed_feature minecraft:patch_firefly_bush_near_water
+      | Attempts Per Chunk: 2
+      | Height: Ground or Water Surface, Below Leaves
+      awi:block minecraft:firefly_bush
   awi:generation_step 10
     | Generation Step: Top Layer Modifications
     awi:placed_feature minecraft:freeze_top_layer

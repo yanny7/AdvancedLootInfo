@@ -1308,6 +1308,7 @@ awi:biome minecraft:lush_caves
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1357,13 +1358,13 @@ awi:biome minecraft:lush_caves
       |                       -> Items:
       |                         -> Entry:
       |                           -> Weight: 4
-      |                           -> Data:
+      |                           -> Value:
       |                             -> Block: Cave Vines Plant
       |                             -> Properties:
       |                               -> berries: false
       |                         -> Entry:
       |                           -> Weight: 1
-      |                           -> Data:
+      |                           -> Value:
       |                             -> Block: Cave Vines Plant
       |                             -> Properties:
       |                               -> berries: true
@@ -1378,14 +1379,14 @@ awi:biome minecraft:lush_caves
       |                           -> Items:
       |                             -> Entry:
       |                               -> Weight: 4
-      |                               -> Data:
+      |                               -> Value:
       |                                 -> Block: Cave Vines
       |                                 -> Properties:
       |                                   -> age: 0
       |                                   -> berries: false
       |                             -> Entry:
       |                               -> Weight: 1
-      |                               -> Data:
+      |                               -> Value:
       |                                 -> Block: Cave Vines
       |                                 -> Properties:
       |                                   -> age: 0
@@ -1453,13 +1454,13 @@ awi:biome minecraft:lush_caves
       |               -> Items:
       |                 -> Entry:
       |                   -> Weight: 4
-      |                   -> Data:
+      |                   -> Value:
       |                     -> Block: Cave Vines Plant
       |                     -> Properties:
       |                       -> berries: false
       |                 -> Entry:
       |                   -> Weight: 1
-      |                   -> Data:
+      |                   -> Value:
       |                     -> Block: Cave Vines Plant
       |                     -> Properties:
       |                       -> berries: true
@@ -1474,14 +1475,14 @@ awi:biome minecraft:lush_caves
       |                   -> Items:
       |                     -> Entry:
       |                       -> Weight: 4
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Cave Vines
       |                         -> Properties:
       |                           -> age: 0
       |                           -> berries: false
       |                     -> Entry:
       |                       -> Weight: 1
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Cave Vines
       |                         -> Properties:
       |                           -> age: 0
@@ -1546,6 +1547,7 @@ awi:biome minecraft:lush_caves
       |                         -> Feature: minecraft:simple_block
       |                         -> Config:
       |                           -> Simple Block:
+      |                             -> Schedule Tick: False
       |                             -> To Place:
       |                               -> Weighted:
       |                                 -> Weighted List:
@@ -1553,7 +1555,7 @@ awi:biome minecraft:lush_caves
       |                                   -> Items:
       |                                     -> Entry:
       |                                       -> Weight: 1
-      |                                       -> Data:
+      |                                       -> Value:
       |                                         -> Block: Small Dripleaf
       |                                         -> Properties:
       |                                           -> facing: east
@@ -1561,7 +1563,7 @@ awi:biome minecraft:lush_caves
       |                                           -> waterlogged: false
       |                                     -> Entry:
       |                                       -> Weight: 1
-      |                                       -> Data:
+      |                                       -> Value:
       |                                         -> Block: Small Dripleaf
       |                                         -> Properties:
       |                                           -> facing: west
@@ -1569,7 +1571,7 @@ awi:biome minecraft:lush_caves
       |                                           -> waterlogged: false
       |                                     -> Entry:
       |                                       -> Weight: 1
-      |                                       -> Data:
+      |                                       -> Value:
       |                                         -> Block: Small Dripleaf
       |                                         -> Properties:
       |                                           -> facing: north
@@ -1577,7 +1579,7 @@ awi:biome minecraft:lush_caves
       |                                           -> waterlogged: false
       |                                     -> Entry:
       |                                       -> Weight: 1
-      |                                       -> Data:
+      |                                       -> Value:
       |                                         -> Block: Small Dripleaf
       |                                         -> Properties:
       |                                           -> facing: south
@@ -1748,6 +1750,7 @@ awi:biome minecraft:lush_caves
       |                         -> Feature: minecraft:simple_block
       |                         -> Config:
       |                           -> Simple Block:
+      |                             -> Schedule Tick: False
       |                             -> To Place:
       |                               -> Weighted:
       |                                 -> Weighted List:
@@ -1755,7 +1758,7 @@ awi:biome minecraft:lush_caves
       |                                   -> Items:
       |                                     -> Entry:
       |                                       -> Weight: 1
-      |                                       -> Data:
+      |                                       -> Value:
       |                                         -> Block: Small Dripleaf
       |                                         -> Properties:
       |                                           -> facing: east
@@ -1763,7 +1766,7 @@ awi:biome minecraft:lush_caves
       |                                           -> waterlogged: false
       |                                     -> Entry:
       |                                       -> Weight: 1
-      |                                       -> Data:
+      |                                       -> Value:
       |                                         -> Block: Small Dripleaf
       |                                         -> Properties:
       |                                           -> facing: west
@@ -1771,7 +1774,7 @@ awi:biome minecraft:lush_caves
       |                                           -> waterlogged: false
       |                                     -> Entry:
       |                                       -> Weight: 1
-      |                                       -> Data:
+      |                                       -> Value:
       |                                         -> Block: Small Dripleaf
       |                                         -> Properties:
       |                                           -> facing: north
@@ -1779,7 +1782,7 @@ awi:biome minecraft:lush_caves
       |                                           -> waterlogged: false
       |                                     -> Entry:
       |                                       -> Weight: 1
-      |                                       -> Data:
+      |                                       -> Value:
       |                                         -> Block: Small Dripleaf
       |                                         -> Properties:
       |                                           -> facing: south
@@ -1973,6 +1976,7 @@ awi:biome minecraft:lush_caves
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Weighted:
       |                 -> Weighted List:
@@ -1980,23 +1984,23 @@ awi:biome minecraft:lush_caves
       |                   -> Items:
       |                     -> Entry:
       |                       -> Weight: 4
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Flowering Azalea
       |                     -> Entry:
       |                       -> Weight: 7
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Azalea
       |                     -> Entry:
       |                       -> Weight: 25
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Moss Carpet
       |                     -> Entry:
       |                       -> Weight: 50
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Short Grass
       |                     -> Entry:
       |                       -> Weight: 10
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Tall Grass
       |                         -> Properties:
       |                           -> half: lower
@@ -2074,7 +2078,7 @@ awi:biome minecraft:lush_caves
       |                   -> Items:
       |                     -> Entry:
       |                       -> Weight: 3
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Azalea Leaves
       |                         -> Properties:
       |                           -> distance: 7
@@ -2082,7 +2086,7 @@ awi:biome minecraft:lush_caves
       |                           -> waterlogged: false
       |                     -> Entry:
       |                       -> Weight: 1
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Flowering Azalea Leaves
       |                         -> Properties:
       |                           -> distance: 7
@@ -2171,6 +2175,7 @@ awi:biome minecraft:lush_caves
       | Configured Feature:
       |   -> Feature: minecraft:simple_block
       |   -> Simple Block:
+      |     -> Schedule Tick: False
       |     -> To Place:
       |       -> Simple:
       |         -> State:

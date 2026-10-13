@@ -1293,6 +1293,7 @@ awi:biome minecraft:old_growth_birch_forest
       |                 -> Feature: minecraft:simple_block
       |                 -> Config:
       |                   -> Simple Block:
+      |                     -> Schedule Tick: False
       |                     -> To Place:
       |                       -> Simple:
       |                         -> State:
@@ -1315,6 +1316,7 @@ awi:biome minecraft:old_growth_birch_forest
       |                 -> Feature: minecraft:simple_block
       |                 -> Config:
       |                   -> Simple Block:
+      |                     -> Schedule Tick: False
       |                     -> To Place:
       |                       -> Simple:
       |                         -> State:
@@ -1337,6 +1339,7 @@ awi:biome minecraft:old_growth_birch_forest
       |                 -> Feature: minecraft:simple_block
       |                 -> Config:
       |                   -> Simple Block:
+      |                     -> Schedule Tick: False
       |                     -> To Place:
       |                       -> Simple:
       |                         -> State:
@@ -1359,6 +1362,7 @@ awi:biome minecraft:old_growth_birch_forest
       |                 -> Feature: minecraft:simple_block
       |                 -> Config:
       |                   -> Simple Block:
+      |                     -> Schedule Tick: False
       |                     -> To Place:
       |                       -> Simple:
       |                         -> State:
@@ -1380,6 +1384,152 @@ awi:biome minecraft:old_growth_birch_forest
       awi:block minecraft:rose_bush
       awi:block minecraft:peony
       awi:block minecraft:lily_of_the_valley
+    awi:placed_feature minecraft:wildflowers_birch_forest
+      | Attempts Per Chunk: 3
+      | Chance: 50%
+      | Height: Ground or Water Surface
+      | Configured Feature:
+      |   -> Feature: minecraft:flower
+      |   -> Random Patch:
+      |     -> Tries: 64
+      |     -> XZ Spread: 6
+      |     -> Y Spread: 2
+      |     -> Feature:
+      |       -> Feature:
+      |         -> Feature: minecraft:simple_block
+      |         -> Config:
+      |           -> Simple Block:
+      |             -> Schedule Tick: False
+      |             -> To Place:
+      |               -> Weighted:
+      |                 -> Weighted List:
+      |                   -> Total Weight: 16
+      |                   -> Items:
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: north
+      |                           -> flower_amount: 1
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: east
+      |                           -> flower_amount: 1
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: south
+      |                           -> flower_amount: 1
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: west
+      |                           -> flower_amount: 1
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: north
+      |                           -> flower_amount: 2
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: east
+      |                           -> flower_amount: 2
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: south
+      |                           -> flower_amount: 2
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: west
+      |                           -> flower_amount: 2
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: north
+      |                           -> flower_amount: 3
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: east
+      |                           -> flower_amount: 3
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: south
+      |                           -> flower_amount: 3
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: west
+      |                           -> flower_amount: 3
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: north
+      |                           -> flower_amount: 4
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: east
+      |                           -> flower_amount: 4
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: south
+      |                           -> flower_amount: 4
+      |                     -> Entry:
+      |                       -> Weight: 1
+      |                       -> Value:
+      |                         -> Block: Wildflowers
+      |                         -> Properties:
+      |                           -> facing: west
+      |                           -> flower_amount: 4
+      |       -> Placement:
+      |         -> Block Predicate Filter:
+      |           -> Matching Blocks:
+      |             -> Block: Air
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 3
+      |   -> Rarity Filter:
+      |     -> Chance: 2
+      |   -> Heightmap Placement:
+      |     -> Heightmap: Ground or Water Surface
+      awi:block minecraft:wildflowers
     awi:placed_feature minecraft:birch_tall
       | Attempts Per Chunk: 10 to 11  ~10 (90%)
       |   -> 10 (90%)
@@ -1390,58 +1540,137 @@ awi:biome minecraft:old_growth_birch_forest
       |   -> Feature: minecraft:random_selector
       |   -> Random Feature:
       |     -> Features:
-      |       -> Feature:
+      |       -> Entry:
       |         -> Feature:
-      |           -> Feature: minecraft:tree
-      |           -> Config:
-      |             -> Tree:
-      |               -> Trunk Provider:
-      |                 -> Simple:
-      |                   -> State:
-      |                     -> Block: Birch Log
-      |                     -> Properties:
-      |                       -> axis: y
-      |               -> Dirt Provider:
-      |                 -> Simple:
-      |                   -> State:
-      |                     -> Block: Dirt
-      |               -> Trunk Placer:
-      |                 -> Straight Trunk:
-      |                   -> Base Height: 5
-      |                   -> Height Rand A: 2
-      |                   -> Height Rand B: 6
-      |               -> Foliage Provider:
-      |                 -> Simple:
-      |                   -> State:
-      |                     -> Block: Birch Leaves
-      |                     -> Properties:
-      |                       -> distance: 7
-      |                       -> persistent: false
-      |                       -> waterlogged: false
-      |               -> Foliage Placer:
-      |                 -> Blob:
-      |                   -> Radius: 2
-      |                   -> Offset:
-      |                     -> 0
-      |                   -> Height: 3
-      |               -> Minimum Size:
-      |                 -> Two Layers:
-      |                   -> Limit: 1
-      |                   -> Lower Size: 0
-      |                   -> Upper Size: 1
-      |               -> Decorators:
-      |                 -> Beehive:
-      |                   -> Probability: 0.002
-      |               -> Ignore Vines: True
-      |               -> Force Dirt: False
-      |         -> Placement:
-      |           -> Block Predicate Filter:
-      |             -> Would Survive:
-      |               -> State:
-      |                 -> Block: Birch Sapling
-      |                 -> Properties:
-      |                   -> stage: 0
-      |       -> Chance: 0.5
+      |           -> Feature:
+      |             -> Feature: minecraft:fallen_tree
+      |             -> Config:
+      |               -> Fallen Tree:
+      |                 -> Trunk Provider:
+      |                   -> Simple:
+      |                     -> State:
+      |                       -> Block: Birch Log
+      |                       -> Properties:
+      |                         -> axis: y
+      |                 -> Log Length:
+      |                   -> 5 to 15
+      |                 -> Log Decorators:
+      |                   -> Attached To Logs:
+      |                     -> Probability: 0.1
+      |                     -> Block Provider:
+      |                       -> Weighted:
+      |                         -> Weighted List:
+      |                           -> Total Weight: 3
+      |                           -> Items:
+      |                             -> Entry:
+      |                               -> Weight: 2
+      |                               -> Value:
+      |                                 -> Block: Red Mushroom
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Brown Mushroom
+      |                     -> Direction: Up
+      |           -> Placement:
+      |             -> Block Predicate Filter:
+      |               -> Would Survive:
+      |                 -> State:
+      |                   -> Block: Birch Sapling
+      |                   -> Properties:
+      |                     -> stage: 0
+      |         -> Chance: 0.00625
+      |       -> Entry:
+      |         -> Feature:
+      |           -> Feature:
+      |             -> Feature: minecraft:tree
+      |             -> Config:
+      |               -> Tree:
+      |                 -> Trunk Provider:
+      |                   -> Simple:
+      |                     -> State:
+      |                       -> Block: Birch Log
+      |                       -> Properties:
+      |                         -> axis: y
+      |                 -> Dirt Provider:
+      |                   -> Simple:
+      |                     -> State:
+      |                       -> Block: Dirt
+      |                 -> Trunk Placer:
+      |                   -> Straight Trunk:
+      |                     -> Base Height: 5
+      |                     -> Height Rand A: 2
+      |                     -> Height Rand B: 6
+      |                 -> Foliage Provider:
+      |                   -> Simple:
+      |                     -> State:
+      |                       -> Block: Birch Leaves
+      |                       -> Properties:
+      |                         -> distance: 7
+      |                         -> persistent: false
+      |                         -> waterlogged: false
+      |                 -> Foliage Placer:
+      |                   -> Blob:
+      |                     -> Radius: 2
+      |                     -> Offset:
+      |                       -> 0
+      |                     -> Height: 3
+      |                 -> Minimum Size:
+      |                   -> Two Layers:
+      |                     -> Limit: 1
+      |                     -> Lower Size: 0
+      |                     -> Upper Size: 1
+      |                 -> Decorators:
+      |                   -> Beehive:
+      |                     -> Probability: 0.002
+      |                 -> Ignore Vines: True
+      |                 -> Force Dirt: False
+      |           -> Placement:
+      |             -> Block Predicate Filter:
+      |               -> Would Survive:
+      |                 -> State:
+      |                   -> Block: Birch Sapling
+      |                   -> Properties:
+      |                     -> stage: 0
+      |         -> Chance: 0.5
+      |       -> Entry:
+      |         -> Feature:
+      |           -> Feature:
+      |             -> Feature: minecraft:fallen_tree
+      |             -> Config:
+      |               -> Fallen Tree:
+      |                 -> Trunk Provider:
+      |                   -> Simple:
+      |                     -> State:
+      |                       -> Block: Birch Log
+      |                       -> Properties:
+      |                         -> axis: y
+      |                 -> Log Length:
+      |                   -> 5 to 8
+      |                 -> Log Decorators:
+      |                   -> Attached To Logs:
+      |                     -> Probability: 0.1
+      |                     -> Block Provider:
+      |                       -> Weighted:
+      |                         -> Weighted List:
+      |                           -> Total Weight: 3
+      |                           -> Items:
+      |                             -> Entry:
+      |                               -> Weight: 2
+      |                               -> Value:
+      |                                 -> Block: Red Mushroom
+      |                             -> Entry:
+      |                               -> Weight: 1
+      |                               -> Value:
+      |                                 -> Block: Brown Mushroom
+      |                     -> Direction: Up
+      |           -> Placement:
+      |             -> Block Predicate Filter:
+      |               -> Would Survive:
+      |                 -> State:
+      |                   -> Block: Birch Sapling
+      |                   -> Properties:
+      |                     -> stage: 0
+      |         -> Chance: 0.0125
       |     -> Default Feature:
       |       -> Feature:
       |         -> Feature: minecraft:tree
@@ -1507,6 +1736,35 @@ awi:biome minecraft:old_growth_birch_forest
       awi:block minecraft:birch_log
       awi:block minecraft:dirt
       awi:block minecraft:birch_leaves
+    awi:placed_feature minecraft:patch_bush
+      | Chance: 25%
+      | Height: Ground or Water Surface
+      | Configured Feature:
+      |   -> Feature: minecraft:random_patch
+      |   -> Random Patch:
+      |     -> Tries: 24
+      |     -> XZ Spread: 5
+      |     -> Y Spread: 3
+      |     -> Feature:
+      |       -> Feature:
+      |         -> Feature: minecraft:simple_block
+      |         -> Config:
+      |           -> Simple Block:
+      |             -> Schedule Tick: False
+      |             -> To Place:
+      |               -> Simple:
+      |                 -> State:
+      |                   -> Block: Bush
+      |       -> Placement:
+      |         -> Block Predicate Filter:
+      |           -> Matching Blocks:
+      |             -> Block: Air
+      | Placement:
+      |   -> Rarity Filter:
+      |     -> Chance: 4
+      |   -> Heightmap Placement:
+      |     -> Heightmap: Ground or Water Surface
+      awi:block minecraft:bush
     awi:placed_feature minecraft:flower_default
       | Chance: 3.13%
       | Height: Ground or Water Surface
@@ -1521,6 +1779,7 @@ awi:biome minecraft:old_growth_birch_forest
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Weighted:
       |                 -> Weighted List:
@@ -1528,11 +1787,11 @@ awi:biome minecraft:old_growth_birch_forest
       |                   -> Items:
       |                     -> Entry:
       |                       -> Weight: 2
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Poppy
       |                     -> Entry:
       |                       -> Weight: 1
-      |                       -> Data:
+      |                       -> Value:
       |                         -> Block: Dandelion
       |       -> Placement:
       |         -> Block Predicate Filter:
@@ -1559,6 +1818,7 @@ awi:biome minecraft:old_growth_birch_forest
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1588,6 +1848,7 @@ awi:biome minecraft:old_growth_birch_forest
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1616,6 +1877,7 @@ awi:biome minecraft:old_growth_birch_forest
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
@@ -1630,6 +1892,40 @@ awi:biome minecraft:old_growth_birch_forest
       |   -> Heightmap Placement:
       |     -> Heightmap: Ground or Water Surface
       awi:block minecraft:red_mushroom
+    awi:placed_feature minecraft:patch_pumpkin
+      | Chance: 0.33%
+      | Height: Ground or Water Surface
+      | Configured Feature:
+      |   -> Feature: minecraft:random_patch
+      |   -> Random Patch:
+      |     -> Tries: 96
+      |     -> XZ Spread: 7
+      |     -> Y Spread: 3
+      |     -> Feature:
+      |       -> Feature:
+      |         -> Feature: minecraft:simple_block
+      |         -> Config:
+      |           -> Simple Block:
+      |             -> Schedule Tick: False
+      |             -> To Place:
+      |               -> Simple:
+      |                 -> State:
+      |                   -> Block: Pumpkin
+      |       -> Placement:
+      |         -> Block Predicate Filter:
+      |           -> All Of:
+      |             -> Predicates:
+      |               -> Matching Blocks:
+      |                 -> Block: Air
+      |               -> Matching Blocks:
+      |                 -> Block: Grass Block
+      |                 -> Offset: [0,-1,0]
+      | Placement:
+      |   -> Rarity Filter:
+      |     -> Chance: 300
+      |   -> Heightmap Placement:
+      |     -> Heightmap: Ground or Water Surface
+      awi:block minecraft:pumpkin
     awi:placed_feature minecraft:patch_sugar_cane
       | Chance: 16.67%
       | Height: Ground or Water Surface
@@ -1697,39 +1993,66 @@ awi:biome minecraft:old_growth_birch_forest
       |   -> Heightmap Placement:
       |     -> Heightmap: Ground or Water Surface
       awi:block minecraft:sugar_cane
-    awi:placed_feature minecraft:patch_pumpkin
-      | Chance: 0.33%
-      | Height: Ground or Water Surface
+    awi:placed_feature minecraft:patch_firefly_bush_near_water
+      | Attempts Per Chunk: 2
+      | Height: Ground or Water Surface, Below Leaves
       | Configured Feature:
       |   -> Feature: minecraft:random_patch
       |   -> Random Patch:
-      |     -> Tries: 96
-      |     -> XZ Spread: 7
+      |     -> Tries: 20
+      |     -> XZ Spread: 4
       |     -> Y Spread: 3
       |     -> Feature:
       |       -> Feature:
       |         -> Feature: minecraft:simple_block
       |         -> Config:
       |           -> Simple Block:
+      |             -> Schedule Tick: False
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
-      |                   -> Block: Pumpkin
+      |                   -> Block: Firefly Bush
       |       -> Placement:
       |         -> Block Predicate Filter:
-      |           -> All Of:
-      |             -> Predicates:
-      |               -> Matching Blocks:
-      |                 -> Block: Air
-      |               -> Matching Blocks:
-      |                 -> Block: Grass Block
-      |                 -> Offset: [0,-1,0]
+      |           -> Matching Blocks:
+      |             -> Block: Air
       | Placement:
-      |   -> Rarity Filter:
-      |     -> Chance: 300
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 2
       |   -> Heightmap Placement:
-      |     -> Heightmap: Ground or Water Surface
-      awi:block minecraft:pumpkin
+      |     -> Heightmap: Ground or Water Surface, Below Leaves
+      |   -> Block Predicate Filter:
+      |     -> All Of:
+      |       -> Predicates:
+      |         -> Matching Blocks:
+      |           -> Block: Air
+      |         -> Would Survive:
+      |           -> State:
+      |             -> Block: Firefly Bush
+      |         -> Any Of:
+      |           -> Predicates:
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [1,-1,0]
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [-1,-1,0]
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [0,-1,1]
+      |             -> Matching Fluids:
+      |               -> Fluids:
+      |                 -> minecraft:water
+      |                 -> minecraft:flowing_water
+      |               -> Offset: [0,-1,-1]
+      awi:block minecraft:firefly_bush
   awi:generation_step 10
     | Generation Step: Top Layer Modifications
     awi:placed_feature minecraft:freeze_top_layer

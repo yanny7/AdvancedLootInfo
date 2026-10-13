@@ -12,10 +12,11 @@ ali:loot_table
         |   -> Can Item Perform Ability:
         |     -> shears_dig
         |   -> Match Tool:
-        |     -> Item Predicates:
-        |       -> Enchantments:
-        |         -> Enchantment: Silk Touch
-        |         -> Level: ≥ 1
+        |     -> Components:
+        |       -> Partial Matchers:
+        |         -> minecraft:enchantments
+        |           -> Enchantment: Silk Touch
+        |           -> Level: ≥ 1
       ali:item minecraft:stick x1-2
         | Chance: 2%
         |   -> Fortune LVL: [2%; 2.22%; 2.5%; 3.33%; 10%][min(LVL; 4)]
