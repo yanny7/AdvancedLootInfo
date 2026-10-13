@@ -16,7 +16,7 @@ public class SophisticatedStorageLang implements ICompatTranslations {
     public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 
     public enum Functions implements ITooltipKey {
-        COPY_STORAGE_DATA("copy_storage_data", "Copy Storage Data:"),
+        COPY_STORAGE_DATA("copy_storage_data", "Copy Storage Data"),
         ;
 
         private final Translation translation;

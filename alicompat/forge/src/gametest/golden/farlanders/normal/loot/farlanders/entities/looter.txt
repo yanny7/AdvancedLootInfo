@@ -1,0 +1,10 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item farlanders:looter_hood x1 {Damage:0}
+      | Chance: 10%
+      | Count: 1
+      | ----- Predicates -----
+      | Killed by player

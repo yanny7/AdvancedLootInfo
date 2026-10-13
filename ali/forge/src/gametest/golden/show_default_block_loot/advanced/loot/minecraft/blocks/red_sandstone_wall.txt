@@ -1,0 +1,9 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:red_sandstone_wall x1
+      | Count: 1
+      | ----- Predicates -----
+      | Survives Explosion

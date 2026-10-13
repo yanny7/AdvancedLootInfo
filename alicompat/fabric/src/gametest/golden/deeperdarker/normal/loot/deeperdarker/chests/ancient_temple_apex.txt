@@ -1,0 +1,152 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 5 to 6
+    ali:item minecraft:sculk x5-8
+      | Chance: 9.09%
+      | Count: 5 to 8
+    ali:item deeperdarker:sculk_bone x2-6
+      | Chance: 8.87%
+      | Count: 2 to 6
+    ali:item minecraft:echo_shard x5-9
+      | Chance: 8.87%
+      | Count: 5 to 9
+    ali:item deeperdarker:grime_brick x7-13
+      | Chance: 8.2%
+      | Count: 7 to 13
+    ali:item deeperdarker:grime_ball x8-18
+      | Chance: 7.54%
+      | Count: 8 to 18
+    ali:item minecraft:tnt x4-9
+      | Chance: 6.65%
+      | Count: 4 to 9
+    ali:item minecraft:flint x1-6
+      | Chance: 6.65%
+      | Count: 1 to 6
+    ali:item minecraft:iron_ingot x4-10
+      | Chance: 5.99%
+      | Count: 4 to 10
+    ali:item minecraft:quartz x5-13
+      | Chance: 4.88%
+      | Count: 5 to 13
+    ali:item minecraft:redstone x3-12
+      | Chance: 3.99%
+      | Count: 3 to 12
+    ali:item minecraft:disc_fragment_5 x1-3
+      | Chance: 3.77%
+      | Count: 1 to 3
+    ali:item minecraft:lapis_lazuli x7-19
+      | Chance: 3.77%
+      | Count: 7 to 19
+    ali:item minecraft:diamond x4-8
+      | Chance: 3.77%
+      | Count: 4 to 8
+    ali:item minecraft:emerald x3-9
+      | Chance: 3.33%
+      | Count: 3 to 9
+    ali:item deeperdarker:crystallized_amber x1-3
+      | Chance: 3.33%
+      | Count: 1 to 3
+    ali:item minecraft:sculk_sensor x1-3
+      | Chance: 2.66%
+      | Count: 1 to 3
+    ali:item minecraft:sculk_catalyst x1-2
+      | Chance: 2.66%
+      | Count: 1 to 2
+    ali:item minecraft:iron_helmet x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 1.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30 to 40
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+      | Set Damage:
+      |   -> Damage: 50% to 90%
+      |   -> Add: False
+    ali:item minecraft:iron_sword x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 1.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30 to 40
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+      | Set Damage:
+      |   -> Damage: 30% to 60%
+      |   -> Add: False
+    ali:item minecraft:diamond_boots x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 0.89%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30 to 50
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+      | Set Damage:
+      |   -> Damage: 40% to 70%
+      |   -> Add: False
+    ali:item minecraft:diamond_helmet x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 0.89%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30 to 50
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+      | Set Damage:
+      |   -> Damage: 80% to 100%
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1-2
+      | Chance: 0.67%
+      | Count: 1 to 2
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 0.44%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 40 to 50
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+      | Set Damage:
+      |   -> Damage: 60% to 90%
+      |   -> Add: False
+    ali:item minecraft:diamond_leggings x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 0.44%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 40 to 50
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+      | Set Damage:
+      |   -> Damage: 60% to 80%
+      |   -> Add: False
+    ali:item minecraft:enchanted_golden_apple x1
+      | Chance: 0.22%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30 to 50
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+      | Set Damage:
+      |   -> Damage: 50% to 90%
+      |   -> Add: False
+    ali:item deeperdarker:warden_carapace x1
+      | Chance: 0.22%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30 to 50
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+      | Set Damage:
+      |   -> Damage: 50% to 90%
+      |   -> Add: False

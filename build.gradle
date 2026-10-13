@@ -2,7 +2,6 @@ plugins {
     id "architectury-plugin" version "3.5.169"
     id "dev.architectury.loom" version "1.17.491" apply false
     id "com.gradleup.shadow" version "9.4.1" apply false
-    id "lol.bai.explosion" version "0.3.1" apply false
 }
 
 architectury {
@@ -131,11 +130,6 @@ subprojects {
         } else if (isAliCompat) {
             project.ext.commonProjects << ":alicompat:common"
 
-            // Fabric target mods bundle their libraries as jar-in-jar, which a dev launch does not unpack
-            if (project.name == "fabric") {
-                apply plugin: "lol.bai.explosion"
-            }
-
             // a slug enabled on another loader keeps its sources here, so without a dependency none of them can compile
             def compatMods = (project.findProperty("compat_mods") ?: "").split(",")*.trim().findAll { project.findProperty("${it}_${project.name}_dep") }
 
@@ -215,11 +209,16 @@ subprojects {
 
                 compatMods.each { mod ->
                     def deps = project.findProperty("${mod}_${project.name}_dep")
+                    def runtimeDeps = project.findProperty("${mod}_${project.name}_runtime_deps")
 
                     // compile-only on purpose: a target mod on the run classpath drags its own datagen entrypoint into ours
-                    if (deps) {
-                        deps.split(",")*.trim().each { dep ->
-                            compileOnly project.name == "fabric" ? project.explosion.fabric(dep) : dep
+                    [deps, runtimeDeps].findAll { it }.each { list ->
+                        list.split(",")*.trim().each { dep ->
+                            if (project.name == "fabric") {
+                                compileOnly(dep) { transitive = false }
+                            } else {
+                                compileOnly dep
+                            }
                         }
                     }
                 }
@@ -325,6 +324,32 @@ subprojects {
             filesMatching(["fabric.mod.json", "META-INF/mods.toml", "META-INF/neoforge.mods.toml", "pack.mcmeta"]) {
                 expand project.ext.expandProps
             }
+
+            // strip a disabled viewer's entrypoint: its class isn't shadowed in, so Fabric can't find it either
+            def entrypointKeys = ["emi": "emi", "jei": "jei_mod_plugin", "rei": "rei_client"]
+            def viewerAvailability = ["emi": emi_available, "jei": jei_available, "rei": rei_available]
+
+            inputs.property("viewerAvailability", viewerAvailability)
+
+            doLast {
+                def modJsonFile = new File(destinationDir, "fabric.mod.json")
+
+                if (modJsonFile.exists()) {
+                    def modJson = new groovy.json.JsonSlurper().parse(modJsonFile)
+                    def changed = false
+
+                    viewerAvailability.each { viewer, available ->
+                        if (!available) {
+                            if (modJson.entrypoints?.remove(entrypointKeys[viewer])) changed = true
+                            if (modJson.suggests?.remove(viewer)) changed = true
+                        }
+                    }
+
+                    if (changed) {
+                        modJsonFile.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(modJson))
+                    }
+                }
+            }
         }
 
         sourceSets {
@@ -397,12 +422,6 @@ allprojects {
                 includeGroup "curse.maven"
             }
         }
-        maven { // ALICompat's explosion plugin resolves its jar-in-jar helper as a normal dependency
-            url "https://maven2.bai.lol"
-            content {
-                includeGroup "lol.bai.explosion"
-            }
-        }
         maven { // KubeJS
             // Shedaniel's maven (Architectury API)
             url = "https://maven.architectury.dev"
@@ -429,6 +448,13 @@ allprojects {
             url = "https://mvn.devos.one/snapshots/"
             content {
                 includeGroup "io.github.fabricators_of_create.Porting-Lib"
+            }
+        }
+        maven {
+            name = "CC: Tweaked"
+            url = "https://maven.squiddev.cc/"
+            content {
+                includeGroup "cc.tweaked"
             }
         }
         maven { // CurseForge

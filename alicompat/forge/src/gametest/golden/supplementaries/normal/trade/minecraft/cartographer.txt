@@ -1,0 +1,206 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 16
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item minecraft:paper x24
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x7
+      ali:item minecraft:air x0
+      ali:item minecraft:map x1
+  ali:trade_level
+    | Level: 2
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 16
+      | XP: 10
+      | Price Multiplier: 0.05
+      ali:item minecraft:glass_pane x11
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 5
+      | Price Multiplier: 0.2
+      ali:item minecraft:emerald x13
+      ali:item minecraft:compass x1
+      ali:item minecraft:map x1 {display:{Name:'{"translate":"filled_map.monument"}'}}
+        | Destination: minecraft:on_ocean_explorer_maps
+        | Map Decoration: Ocean Monument
+    ali:items_to_items
+      | Uses: 2
+      | XP: 36
+      | Price Multiplier: 0.2
+      ali:item minecraft:emerald x11-16
+      ali:item minecraft:compass x1
+      ali:item minecraft:filled_map x1 {display:{Name:'{"translate":"filled_map.adventure"}'}}
+        | Destination: supplementaries:adventure_map_destinations
+        | Search Radius: 150
+        | Skip Known Structures: True
+        | Zoom: 2
+  ali:trade_level
+    | Level: 3
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 20
+      | Price Multiplier: 0.05
+      ali:item minecraft:compass x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 10
+      | Price Multiplier: 0.2
+      ali:item minecraft:emerald x14
+      ali:item minecraft:compass x1
+      ali:item minecraft:map x1 {display:{Name:'{"translate":"filled_map.mansion"}'}}
+        | Destination: minecraft:on_woodland_explorer_maps
+        | Map Decoration: Woodland Mansion
+  ali:trade_level
+    | Level: 4
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x7
+      ali:item minecraft:air x0
+      ali:item minecraft:item_frame x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:white_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:blue_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:light_blue_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:red_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:pink_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:green_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:lime_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:gray_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:black_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:purple_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:magenta_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:cyan_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:brown_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:yellow_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:orange_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:light_gray_banner x1
+  ali:trade_level
+    | Level: 5
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 30
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x8
+      ali:item minecraft:air x0
+      ali:item minecraft:globe_banner_pattern x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 20
+      | Price Multiplier: 0.2
+      ali:item minecraft:emerald x8
+      ali:item minecraft:air x0
+      ali:item supplementaries:antique_ink x1

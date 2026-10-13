@@ -1,0 +1,30 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item minecraft:warped_nylium x1
+        | Count: 1
+        | ----- Predicates -----
+        | Match Tool:
+        |   -> Components:
+        |     -> Partial Matchers:
+        |       -> minecraft:enchantments
+        |         -> Enchantment: Silk Touch
+        |         -> Level: ≥ 1
+      ali:modified
+        | Selects only first successful entry
+        ali:item minecraft:nether_brick x1
+          | Count: 1
+          | ----- Predicates -----
+          | Match Tool:
+          |   -> Components:
+          |     -> Expected Components:
+          |       -> xycraft_machines:auto_smelt
+          | Survives Explosion
+        ali:item minecraft:netherrack x1
+          | Count: 1
+          | ----- Predicates -----
+          | Survives Explosion

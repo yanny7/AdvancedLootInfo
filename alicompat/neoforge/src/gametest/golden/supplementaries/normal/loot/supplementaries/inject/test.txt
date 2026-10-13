@@ -1,0 +1,14 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:map x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Exploration Map:
+      |   -> Destination: minecraft:village
+      |   -> Map Decoration: minecraft:red_x
+      |   -> Zoom: 2
+      |   -> Search Radius: 50
+      |   -> Skip Known Structures: True

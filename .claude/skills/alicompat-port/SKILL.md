@@ -1,6 +1,6 @@
 ---
 name: alicompat-port
-description: Carry ALICompat work from one Minecraft version branch to the next — merge the branch below, keep the target-mod block as ours, get ACI/ALI/AWI compiling, and afterwards activate the shims that arrived dormant by repinning their jars and re-deriving their class lists. Use when the user asks to merge a branch upward, port shims to a newer Minecraft version, asks why a shim present on a lower branch does nothing here, or asks which shims on this branch are still dormant.
+description: Carry ALICompat work from one Minecraft version branch to the next — merge the branch below, keep the target-mod block as ours, get ACI/ALI/AWI compiling, and afterwards activate the shims that arrived dormant by repinning their jars, re-deriving their class lists and regenerating their gametest goldens. Use when the user asks to merge a branch upward, port shims to a newer Minecraft version, asks why a shim present on a lower branch does nothing here, or asks which shims on this branch are still dormant.
 ---
 
 # Porting ALICompat between version branches
@@ -45,7 +45,10 @@ removed is resolved by keeping it removed (`git rm`).
 `compat_mods` and every `<mod>_<loader>_dep` line: each `_dep` pins a CurseForge file id or maven artifact
 versions for one specific Minecraft version, so anything merged up from below names a file for the wrong version, and
 `compat_mods` states what this branch has actually ported. Do not try to reconcile them and do not
-ask about them. `scripts/supported_mods.json` is the opposite case — it holds no Minecraft-version-specific
+ask about them. Part of the block usually merges without a conflict (a slug appended to `compat_mods`), so resolving
+the markers is not enough: afterwards the block must equal `HEAD`'s byte for byte
+(`diff <(git show HEAD:gradle.properties | sed -n '/^compat_mods=/,/end of generated block/p') <(sed -n '/^compat_mods=/,/end of generated block/p' gradle.properties)`
+prints nothing). `scripts/supported_mods.json` is the opposite case — it holds no Minecraft-version-specific
 data, so it merges like any other file and a new entry arriving from below is kept. The rest of the file — loader versions, viewer versions, enabled platforms —
 conflicts like any other code and is resolved on its merits.
 
@@ -65,12 +68,16 @@ against this version's jar and the current ALI/ALICompat API anyway, so any work
 - A grep, sed or script that brings shims in line with a changed API — ALI's, ALICompat's or vanilla's (a
   constructor turned factory method) — runs over active source sets only, never over `alicompat` or
   `alicompat/*/src/compat/*` as a whole. Activity is per slug *and* loader: a source set is active when its
-  `<slug>_<loader>_dep` line exists. Build the list first (`$S` is your scratchpad) and feed every sweep from it:
+  `<slug>_<loader>_dep` line exists **in this branch's committed `gradle.properties`**. Read it from `HEAD`, never
+  from the working tree: during the merge that file holds the lower branch's `_dep` lines inside conflict markers or
+  already auto-merged, so every slug active below would count as active here. Build the list first (`$S` is your
+  scratchpad) and feed every sweep from it:
 
   ```bash
+  git show HEAD:gradle.properties > "$S/head.properties"
   for d in alicompat/*/src/compat/*/; do
     l=$(echo $d | cut -d/ -f2); s=$(basename $d)
-    grep -q "^${s}_${l}_dep=" gradle.properties && echo $d
+    grep -q "^${s}_${l}_dep=" "$S/head.properties" && echo $d
   done > "$S/active_dirs.txt"
   ```
 
@@ -134,6 +141,15 @@ properties, do not assume which exist:
 ./gradlew :aci:<loader>:build :ali:<loader>:build :awi:<loader>:build :alicompat:<loader>:build
 ```
 
+When the merge moved `aci_version`, clear the old ACI first, then build `:aci:<loader>:build` for every enabled loader
+on its own before anything else: the ALI/AWI/ALICompat loader modules resolve the ACI jar of the new version at
+configuration time, and a dev or datagen run keeps loading the remapped copy of the old one.
+
+```bash
+rm -rf .gradle/loom-cache/remapped_mods/*/com/yanny/aci
+rm -f aci/*/build/libs/*-<old aci_version>*
+```
+
 A failure in `alicompat/common` is a merge problem and belongs here. A failure in a shim means its
 slug should not have been in `compat_mods` on this branch yet — take it out and leave it for phase 2. Check
 first whether the merge touched the failing file (`git diff --cached HEAD --stat -- <path>`): if it did not, the
@@ -148,6 +164,13 @@ A conflict in a golden test file (`src/test/resources/*.json` guarded by a `-D<m
 merged by hand: take `ours`, run the owning `common` module's whole `test` task with the switch (a single `--tests`
 class skips the suite's bootstrap and fails), and check the resulting diff contains only what the merged change
 explains.
+
+GameTest golden files (`ali/<loader>/src/gametest/golden/`, `awi/…`, `alicompat/<loader>/src/gametest/golden/`)
+describe one Minecraft version's output, so the lower branch's copy is never right here. A conflict takes `ours`. A
+`golden/<slug>/` arriving for a slug that is dormant here stays as it came, unread, like its source set — phase 2
+replaces it. After the build, run ALI's and ALICompat's gametests in compare mode
+(`-Palicompat_gametest=all` covers the ALICompat base and every active slug) and regenerate only when every
+difference is one the merged change explains; anything else is reported, not regenerated.
 
 A merged change that alters rendered output (a number format, a tooltip shape) also breaks tests that exist only on
 this branch, because their expectations still hold the old output. Run the `common` modules' `test` tasks and take the
@@ -229,8 +252,29 @@ the merged change would have rewritten had the code existed below gets the same 
 alone in its own equivalent code stays as it is. A `Lang` enum the merge brings in for code that differs here is
 reshaped to this branch's constants, not copied from below.
 
-**Stop here.** Report what merged, what was restored, and how many slugs are dormant. The user
-commits. Phase 2 does not begin until that commit exists.
+### Changelog entries the merge never touched
+
+Before reporting, read the lower branch's `alicompat/CHANGELOG.md` `## []` section one entry at a time and
+check whether the merge's own diff actually touched the file(s) behind it:
+
+```bash
+git diff --name-only $(git merge-base HEAD origin/<lower>) origin/<lower> -- alicompat
+```
+
+A fix or small feature on an **active** shim (never a dormant one — that is phase 2's concern, re-derived
+from scratch) whose files are absent from that list never collided with anything here, so nothing in this
+merge forced a look at it — it is neither ported nor reported by construction. This happens whenever the
+two branches' copies of a shim were independently rewritten against different target-mod API shapes (one
+Forge-only, this branch NeoForge-only; or the mod itself changed enough that git never sees the lines as
+"the same code"), so `git merge-file`'s 3-way patching (above) finds no shared base to apply against either.
+
+List every such entry in the report and recommend the `alicompat-backport` skill for each — one entry can
+mean several active loader copies, a bytecode check against the mod version pinned *here*, or a discovery
+that the fix's precondition no longer holds on this branch at all. That work is real engineering per mod,
+not a merge-conflict resolution, and does not belong inside this skill's own pass.
+
+**Stop here.** Report what merged, what was restored, how many slugs are dormant, and which changelog
+entries look unported (see above). The user commits. Phase 2 does not begin until that commit exists.
 
 ## Phase 2 — activating the dormant shims
 
@@ -313,6 +357,9 @@ This is a full port, not a merge. It runs `alicompat-shim` from its Step 0:
   while it was dormant (key scheme, helper signatures, removed interfaces) lands here as a compile error
 - add the slug to `compat_mods`, then `python3 scripts/check_versions.py --update` to pin its `_dep` lines
   and rewrite the block (the slug's order in the list is the script's business, not yours)
+- run its gametest with `-Palicompat_golden_regenerate=true` on every loader it is now pinned for (`alicompat-shim`
+  Step 6b): the `golden/<slug>/` merged with it is the lower version's output, and a fixture under
+  `alicompat/common/src/gametest/` is re-checked against this version's datapack or script format
 - if the mod has no file for this version or loader, write no shim, delete no source set, and say why
 - if the mod has a file but nothing left to register — its loot and trade classes are gone, or ALI already renders
   what replaced them — reduce the source set to the `--scaffold` skeleton (an `IModCompat` returning only the mod id,
@@ -325,10 +372,14 @@ This is a full port, not a merge. It runs `alicompat-shim` from its Step 0:
 - the merge is a commit of the user's making, with ACI/ALI/AWI/ALICompat building
 - activated slugs are in `compat_mods` with file ids or artifact versions resolved for **this** version
 - `META-INF/services/com.yanny.alicompat.IModCompat` in the built jars lists the new shims
+- every activated slug has a golden regenerated on this version, and `-Palicompat_gametest=all` passes
 - no source set was deleted to express dormancy
 
 ## Tell the user
 
 Which step of the chain this was and whether another follows; what was restored and what was
-deliberately left out; how many slugs are still dormant; and which port is least certain. Nothing
-here is run in game.
+deliberately left out; how many slugs are still dormant; which port is least certain; and what the
+gametests showed. After a phase 1 report, also name every lower-branch changelog entry that the merge's
+diff never touched and recommend running `alicompat-backport` for it (see "Changelog entries the merge
+never touched" above) — do not let those sit unmentioned just because nothing failed to compile. Nothing
+here is played in a client.

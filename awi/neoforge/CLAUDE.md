@@ -27,3 +27,7 @@ NeoForge does not read access wideners, so the jar ships `META-INF/accesstransfo
 ## Viewer wiring
 
 JEI and REI are enabled for NeoForge on this branch (`neoforge_jei_enabled`/`neoforge_rei_enabled=true`) but EMI is not (`neoforge_emi_enabled=false`), so `runAwiNeoforgeJeiClient`/`runAwiNeoforgeReiClient` exist and there is no EMI run task. JEI (`@JeiPlugin`) is discovered by annotation from the shadowed common module; REI needs `compatibility.ReiCompatibilityWrapper`, a `@REIPluginClient`-annotated subclass of `awi/common-rei`'s `ReiCompatibility`, because that annotation is loader-specific and cannot live in `awi/common-rei` (mirrors `ali/neoforge`). EMI would be annotation-discovered (`@EmiEntrypoint`) if re-enabled.
+
+## Gametest
+
+The `gametest` source set (see `awi/CLAUDE.md`'s gametest section) is wired like `ali/neoforge`'s (see `ali/neoforge/CLAUDE.md`): `gameTestServer` template, the source set merged into the `awi` mod, `neoforge.enabledGameTestNamespaces=awi`, the test function `awi:worldgen_data` registered through `RegisterEvent` with its `data/awi/test_instance/worldgen_data.json` on the structure `awi:empty` (`data/awi/structure/empty.nbt`). NeoForge's `GameTestServer` posts `ServerStartingEvent`, so the production `NeoForgeCommonBusSubscriber` starts the scan and the source set needs no scan hook. The run registers `aci.gametest.mixins.json` and `awi.gametest.mixins.json` through `--mixin.config`.

@@ -1,0 +1,226 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:bone x12
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:rotten_flesh x11
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:cod x10
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:string x12
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:egg x16
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item rats:raw_rat x11
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item rats:cheese x5
+  ali:trade_level
+    | Level: 2
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item rats:cooked_rat x5
+    ali:items_to_items
+      | Uses: 12
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item rats:garbage_pile x10
+      ali:item minecraft:emerald x3
+      ali:item rats:plastic_waste x10
+    ali:items_to_items
+      | Uses: 12
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item rats:marbled_cheese_raw x8
+    ali:items_to_items
+      | Uses: 12
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item rats:garbage_pile x6
+    ali:items_to_items
+      | Uses: 12
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item rats:raw_plastic x5
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item rats:rat_flute x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+  ali:trade_level
+    | Level: 3
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 10
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x12
+      ali:item minecraft:air x0
+      ali:item rats:archeologist_hat x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x20
+      ali:item minecraft:air x0
+      ali:item rats:santa_hat x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x20
+      ali:item minecraft:air x0
+      ali:item rats:party_hat x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 10
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x8
+      ali:item minecraft:air x0
+      ali:item rats:halo_hat x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 10
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x14
+      ali:item minecraft:air x0
+      ali:item rats:exterminator_hat x1
+  ali:trade_level
+    | Level: 4
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 20
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item rats:rat_upgrade_basic x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 20
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x16
+      ali:item minecraft:air x0
+      ali:item rats:rat_upgrade_jury_rigged x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 20
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x8
+      ali:item minecraft:air x0
+      ali:item rats:rat_upgrade_blacklist x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 20
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x8
+      ali:item minecraft:air x0
+      ali:item rats:rat_upgrade_whitelist x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 20
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x10
+      ali:item minecraft:air x0
+      ali:item rats:rat_upgrade_speed x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 20
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x10
+      ali:item minecraft:air x0
+      ali:item rats:rat_upgrade_health x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 20
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x10
+      ali:item minecraft:air x0
+      ali:item rats:rat_upgrade_armor x1
+  ali:trade_level
+    | Level: 5
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 30
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x10
+      ali:item minecraft:air x0
+      ali:item rats:plague_doctorate x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 30
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x32
+      ali:item minecraft:air x0
+      ali:item rats:plague_tome x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 30
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item rats:rat_papers x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 30
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item rats:charged_creeper_chunk x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 30
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item rats:tiny_coin x8

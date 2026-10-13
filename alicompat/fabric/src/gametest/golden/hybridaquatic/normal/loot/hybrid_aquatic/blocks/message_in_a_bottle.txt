@@ -1,0 +1,437 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item hybrid_aquatic:message_in_a_bottle x1
+        | Count: 1
+        | ----- Predicates -----
+        | Match Tool:
+        |   -> Item Predicates:
+        |     -> Enchantments:
+        |       -> Enchantment: Silk Touch
+        |       -> Level: ≥ 1
+        | ----- Modifiers -----
+        | Copy Custom Data:
+        |   -> Source: minecraft:context
+        |   -> Copy Operations:
+        |     -> Source Path: variant
+        |     -> Target Path: variant
+        |     -> Merge Strategy: Replace
+      ali:reference
+        | Selects all entries
+        ali:loot_table
+          | Selects all entries
+          ali:loot_pool
+            | Selects random entry
+            | Rolls: 1
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:abyssal"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:abyssal"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:admiral_skellington"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:admiral_skellington"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:admiral_steve"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:admiral_steve"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:asexual_pride_flag"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:asexual_pride_flag"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:below"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:below"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:big_lure"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:big_lure"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:bigeye"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:bigeye"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:bisexual_pride_flag"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:bisexual_pride_flag"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:bold_and_brash"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:bold_and_brash"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:calm_waters"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:calm_waters"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:chasm"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:chasm"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:conch_street"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:conch_street"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:creatures_of_the_deep"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:creatures_of_the_deep"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:diorama"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:diorama"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:gay_pride_flag"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:gay_pride_flag"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:gone_fishing"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:gone_fishing"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:great_lake"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:great_lake"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:jam"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:jam"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:jaws"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:jaws"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:jolly_roger"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:jolly_roger"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:jona_saxisa"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:jona_saxisa"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:king_of_herring"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:king_of_herring"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:lesbian_pride_flag"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:lesbian_pride_flag"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:lighthouse"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:lighthouse"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:lighthouse_after_dusk"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:lighthouse_after_dusk"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:majestic_behemoth"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:majestic_behemoth"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:melon"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:melon"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:mooncatcher"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:mooncatcher"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:neven_naiven"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:neven_naiven"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:nonbinary_pride_flag"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:nonbinary_pride_flag"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:organon"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:organon"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:palestine_flag"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:palestine_flag"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:pansexual_pride_flag"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:pansexual_pride_flag"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:poulpe_colossal"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:poulpe_colossal"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:praya_dubia"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:praya_dubia"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:preserver"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:preserver"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:pressed_bull_kelp"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:pressed_bull_kelp"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:pressed_kelp"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:pressed_kelp"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:pride_flag"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:pride_flag"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:red_devil"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:red_devil"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:riverfish"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:riverfish"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:seashell_seashelf"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:seashell_seashelf"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:selgio"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:selgio"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:shallows"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:shallows"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:steve_and_the_sea"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:steve_and_the_sea"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:sunset"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:sunset"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:suntide"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:suntide"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:swirling"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:swirling"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:the_fast_regiment"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:the_fast_regiment"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:the_watchful"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:the_watchful"}
+            ali:item minecraft:painting x1 {"minecraft:entity_data":{id:"minecraft:painting",variant:"hybrid_aquatic:trans_pride_flag"}}
+              | Chance: 1.96%
+              | Count: 1
+              | ----- Modifiers -----
+              | Set Components:
+              |   -> Components:
+              |     -> minecraft:entity_data
+              |       -> Tag: {id:"minecraft:painting",variant:"hybrid_aquatic:trans_pride_flag"}

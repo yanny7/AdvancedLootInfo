@@ -1,0 +1,22 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:bamboo x1
+      | Count: 1
+  ali:item supplementaries:ash x1
+    | Chance: 15%
+    | Count: 1
+    | ----- Predicates -----
+    | Inverted:
+    |   -> Entity Properties:
+    |     -> Target: This Entity
+    |     -> Predicate:
+    |       -> Entity Types:
+    |         -> Tag: Can't Turn To Ash
+    | Entity Properties:
+    |   -> Target: This Entity
+    |   -> Predicate:
+    |     -> Entity Flags:
+    |       -> Is On Fire: True

@@ -1,0 +1,22 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item mekanism:quantum_entangloporter x1
+      | Count: 1
+      | ----- Predicates -----
+      | Survives Explosion
+      | ----- Modifiers -----
+      | Copy Name:
+      |   -> Source: Block Entity
+      | Copy Components:
+      |   -> Source: Block Entity
+      |   -> Include:
+      |     -> mekanism:ejector
+      |     -> mekanism:inventory_frequency
+      |     -> mekanism:owner
+      |     -> mekanism:redstone_control
+      |     -> mekanism:security
+      |     -> mekanism:side_config
+      |     -> mekanism:upgrades

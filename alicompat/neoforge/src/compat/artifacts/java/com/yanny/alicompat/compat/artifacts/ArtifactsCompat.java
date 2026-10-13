@@ -8,6 +8,7 @@ import artifacts.loot.ArtifactRarityAdjustedChance;
 import artifacts.loot.ConfigValueChance;
 import artifacts.loot.ConfigValueCondition;
 import artifacts.loot.ReplaceWithLootTableFunction;
+import artifacts.registry.ModDataComponents;
 import artifacts.neoforge.loot.ReplaceWithTableLootModifier;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerRegistry;
@@ -41,6 +42,8 @@ public class ArtifactsCompat implements IGlmModCompat {
 
         registry.registerValueTooltip(ConfigValue.class, ArtifactsCompat::getConfigValueTooltip);
         registry.registerValueTooltip(Value.Constant.class, ArtifactsCompat::getConstantValueTooltip);
+
+        registry.registerDataComponentTypeTooltip(ModDataComponents.HIDE_WHEN_INVISIBLE.get(), ArtifactsCompat::getHideWhenInvisibleTooltip);
     }
 
     @Override
@@ -56,6 +59,11 @@ public class ArtifactsCompat implements IGlmModCompat {
     @NotNull
     private static TooltipBuilder getConstantValueTooltip(IServerUtils utils, Value.Constant<?> value) {
         return utils.getValueTooltip(utils, value.get());
+    }
+
+    @NotNull
+    private static TooltipBuilder getHideWhenInvisibleTooltip(IServerUtils utils, Value<Boolean> value) {
+        return utils.getValueTooltip(utils, value).key(Lang.Value.VALUE);
     }
 
     @NotNull

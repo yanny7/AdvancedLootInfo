@@ -9,6 +9,9 @@ import com.yanny.aci.CommonLogUtils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.lootjs.mixin.MixinLootModificationsAPI;
 import com.yanny.ali.lootjs.modifier.CustomPlayerFunction;
+import com.yanny.ali.lootjs.modifier.DropExperienceFunction;
+import com.yanny.ali.lootjs.modifier.ExplodeFunction;
+import com.yanny.ali.lootjs.modifier.LightningStrikeFunction;
 import com.yanny.ali.lootjs.modifier.ModifiedItemFunction;
 import com.yanny.ali.lootjs.modifier.PreserveComponentsFunction;
 import com.yanny.ali.lootjs.node.ItemStackNode;
@@ -91,6 +94,9 @@ public class LootJsPlugin implements IPlugin {
         registry.registerConditionTooltip(MatchAnyInventorySlot.class, LootJsConditionTooltipUtils::matchAnyInventorySlot);
 
         registry.registerFunctionTooltip(CustomPlayerFunction.class, LootJsFunctionTooltipUtils::customPlayerTooltip);
+        registry.registerFunctionTooltip(DropExperienceFunction.class, LootJsFunctionTooltipUtils::dropExperienceTooltip);
+        registry.registerFunctionTooltip(ExplodeFunction.class, LootJsFunctionTooltipUtils::explodeTooltip);
+        registry.registerFunctionTooltip(LightningStrikeFunction.class, LootJsFunctionTooltipUtils::lightningStrikeTooltip);
         registry.registerFunctionTooltip(ModifiedItemFunction.class, LootJsFunctionTooltipUtils::modifiedItemTooltip);
         registry.registerFunctionTooltip(PreserveComponentsFunction.class, LootJsFunctionTooltipUtils::preserveComponentsTooltip);
 

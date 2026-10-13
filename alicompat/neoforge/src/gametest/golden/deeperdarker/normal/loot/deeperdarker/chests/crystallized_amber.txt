@@ -1,0 +1,55 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:amethyst_shard x1
+      | Chance: 11.36%
+      | Count: 1
+    ali:item minecraft:gold_ingot x1
+      | Chance: 11.36%
+      | Count: 1
+    ali:item minecraft:iron_ingot x1
+      | Chance: 11.36%
+      | Count: 1
+    ali:item minecraft:quartz x1
+      | Chance: 11.36%
+      | Count: 1
+    ali:item deeperdarker:sculk_bone x1
+      | Chance: 11.36%
+      | Count: 1
+    ali:item deeperdarker:soul_dust x1
+      | Chance: 11.36%
+      | Count: 1
+    ali:item minecraft:diamond x1
+      | Chance: 6.82%
+      | Count: 1
+    ali:item minecraft:emerald x1
+      | Chance: 4.55%
+      | Count: 1
+    ali:item minecraft:iron_boots x1
+      | Chance: 4.55%
+      | Count: 1
+    ali:item minecraft:iron_boots x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 4.55%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20 to 30
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:diamond_axe x1
+      | Chance: 2.27%
+      | Count: 1
+    ali:item deeperdarker:brittle_gloomsherd x1
+      | Chance: 2.27%
+      | Count: 1
+    ali:item deeperdarker:temple_gloomsherd x1
+      | Chance: 2.27%
+      | Count: 1
+    ali:item deeperdarker:ward_gloomsherd x1
+      | Chance: 2.27%
+      | Count: 1
+    ali:item deeperdarker:wayfinder_gloomsherd x1
+      | Chance: 2.27%
+      | Count: 1

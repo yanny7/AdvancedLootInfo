@@ -1,0 +1,103 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4
+    ali:item minecraft:glistering_melon_slice x3-6
+      | Chance: 11.11%
+      | Count: 3 to 6
+    ali:item minecraft:ghast_tear x1-3
+      | Chance: 11.11%
+      | Count: 1 to 3
+    ali:item minecraft:fermented_spider_eye x1-4
+      | Chance: 11.11%
+      | Count: 1 to 4
+    ali:item minecraft:blaze_powder x4-9
+      | Chance: 11.11%
+      | Count: 4 to 9
+    ali:item minecraft:glass_bottle x1-4
+      | Chance: 11.11%
+      | Count: 1 to 4
+    ali:item minecraft:magma_cream x1-3
+      | Chance: 11.11%
+      | Count: 1 to 3
+    ali:item minecraft:sugar x2-7
+      | Chance: 11.11%
+      | Count: 2 to 7
+    ali:item minecraft:gunpowder x8-20
+      | Chance: 11.11%
+      | Count: 8 to 20
+    ali:item minecraft:nether_wart x6-13
+      | Chance: 11.11%
+      | Count: 6 to 13
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item minecraft:golden_carrot x1-3
+      | Chance: 16.67%
+      | Count: 1 to 3
+    ali:item minecraft:redstone x4-7
+      | Chance: 16.67%
+      | Count: 4 to 7
+    ali:item minecraft:glowstone_dust x2-6
+      | Chance: 16.67%
+      | Count: 2 to 6
+    ali:item minecraft:splash_potion x1 {"minecraft:potion_contents":{potion:"minecraft:healing"}}
+      | Chance: 16.67%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Healing
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:strength"}}
+      | Chance: 16.67%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Strength
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:fire_resistance"}}
+      | Chance: 16.67%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Fire Resistance
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:golden_apple x1-2
+      | Chance: 15%
+      | Count: 1 to 2
+    ali:item minecraft:blaze_rod x1-4
+      | Chance: 15%
+      | Count: 1 to 4
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:strong_healing"}}
+      | Chance: 15%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Healing
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:swiftness"}}
+      | Chance: 15%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Swiftness
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:regeneration"}}
+      | Chance: 15%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Regeneration
+    ali:item twilightforest:crown_splinter x1
+      | Chance: 15%
+      | Count: 1
+    ali:item minecraft:brewing_stand x1
+      | Chance: 5%
+      | Count: 1
+    ali:item twilightforest:greater_potion_flask x1
+      | Chance: 5%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item twilightforest:brittle_potion_flask x3-5
+      | Count: 3 to 5

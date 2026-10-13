@@ -1,0 +1,17 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4
+    ali:item twilightforest:carminite x1-3
+      | Count: 1 to 3
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item twilightforest:fiery_tears x1-5
+      | Count: 1 to 5
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item twilightforest:ur_ghast_trophy x1
+      | Count: 1

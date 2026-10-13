@@ -1,0 +1,423 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:burn_pottery_sherd x1
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> All Of:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+    ali:item minecraft:danger_pottery_sherd x1
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> All Of:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+    ali:item minecraft:friend_pottery_sherd x1
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> All Of:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+    ali:item minecraft:heart_pottery_sherd x1
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> All Of:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+    ali:item minecraft:heartbreak_pottery_sherd x1
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> All Of:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+    ali:item minecraft:howl_pottery_sherd x1
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> All Of:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+    ali:item minecraft:sheaf_pottery_sherd x1
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> All Of:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+    ali:item minecraft:wayfinder_armor_trim_smithing_template x1
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> All Of:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+    ali:item minecraft:raiser_armor_trim_smithing_template x1
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> All Of:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+    ali:item minecraft:shaper_armor_trim_smithing_template x1
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> All Of:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+    ali:item minecraft:host_armor_trim_smithing_template x1
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> All Of:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+    ali:item minecraft:music_disc_relic x1
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> All Of:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+  ali:reference
+    | Selects all entries
+    | ----- Predicates -----
+    | Config Value Chance:
+    |   -> Config: archaeology
+    ali:loot_table
+      | Selects all entries
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1
+        ali:reference
+          | Selects all entries
+          | Chance: 7.69%
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:alternatives
+                | Selects only first successful entry
+                ali:item artifacts:rooted_boots x1
+                  | Chance: 0.48%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+                  | Config Value:
+                  |   -> Config: items.rooted_boots.generateAsLoot
+                ali:empty
+                  | Drops nothing
+                  | Chance: 0.48%
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+        ali:reference
+          | Selects all entries
+          | Chance: 7.69%
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:alternatives
+                | Selects only first successful entry
+                ali:item artifacts:pickaxe_heater x1
+                  | Chance: 0.48%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+                  | Config Value:
+                  |   -> Config: items.pickaxe_heater.generateAsLoot
+                ali:empty
+                  | Drops nothing
+                  | Chance: 0.48%
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+        ali:reference
+          | Selects all entries
+          | Chance: 7.69%
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:alternatives
+                | Selects only first successful entry
+                ali:item artifacts:aqua_dashers x1
+                  | Chance: 0.48%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+                  | Config Value:
+                  |   -> Config: items.aqua_dashers.generateAsLoot
+                ali:empty
+                  | Drops nothing
+                  | Chance: 0.48%
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+        ali:reference
+          | Selects all entries
+          | Chance: 7.69%
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:alternatives
+                | Selects only first successful entry
+                ali:item artifacts:snowshoes x1
+                  | Chance: 0.48%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+                  | Config Value:
+                  |   -> Config: items.snowshoes.generateAsLoot
+                ali:empty
+                  | Drops nothing
+                  | Chance: 0.48%
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+        ali:reference
+          | Selects all entries
+          | Chance: 7.69%
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:alternatives
+                | Selects only first successful entry
+                ali:item artifacts:steadfast_spikes x1
+                  | Chance: 0.48%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+                  | Config Value:
+                  |   -> Config: items.steadfast_spikes.generateAsLoot
+                ali:empty
+                  | Drops nothing
+                  | Chance: 0.48%
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+        ali:reference
+          | Selects all entries
+          | Chance: 7.69%
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:alternatives
+                | Selects only first successful entry
+                ali:item artifacts:villager_hat x1
+                  | Chance: 0.48%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+                  | Config Value:
+                  |   -> Config: items.villager_hat.generateAsLoot
+                ali:empty
+                  | Drops nothing
+                  | Chance: 0.48%
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+        ali:reference
+          | Selects all entries
+          | Chance: 7.69%
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:alternatives
+                | Selects only first successful entry
+                ali:item artifacts:cloud_in_a_bottle x1
+                  | Chance: 0.48%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+                  | Config Value:
+                  |   -> Config: items.cloud_in_a_bottle.generateAsLoot
+                ali:empty
+                  | Drops nothing
+                  | Chance: 0.48%
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+        ali:reference
+          | Selects all entries
+          | Chance: 7.69%
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:alternatives
+                | Selects only first successful entry
+                ali:item artifacts:feral_claws x1
+                  | Chance: 0.48%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+                  | Config Value:
+                  |   -> Config: items.feral_claws.generateAsLoot
+                ali:empty
+                  | Drops nothing
+                  | Chance: 0.48%
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+        ali:reference
+          | Selects all entries
+          | Chance: 7.69%
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:alternatives
+                | Selects only first successful entry
+                ali:item artifacts:pocket_piston x1
+                  | Chance: 0.48%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+                  | Config Value:
+                  |   -> Config: items.pocket_piston.generateAsLoot
+                ali:empty
+                  | Drops nothing
+                  | Chance: 0.48%
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+        ali:reference
+          | Selects all entries
+          | Chance: 7.69%
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:alternatives
+                | Selects only first successful entry
+                ali:item artifacts:whoopee_cushion x1
+                  | Chance: 0.48%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+                  | Config Value:
+                  |   -> Config: items.whoopee_cushion.generateAsLoot
+                ali:empty
+                  | Drops nothing
+                  | Chance: 0.48%
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+        ali:reference
+          | Selects all entries
+          | Chance: 7.69%
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:alternatives
+                | Selects only first successful entry
+                ali:item artifacts:flame_pendant x1
+                  | Chance: 0.48%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+                  | Config Value:
+                  |   -> Config: items.flame_pendant.generateAsLoot
+                ali:empty
+                  | Drops nothing
+                  | Chance: 0.48%
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+        ali:reference
+          | Selects all entries
+          | Chance: 7.69%
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:alternatives
+                | Selects only first successful entry
+                ali:item artifacts:thorn_pendant x1
+                  | Chance: 0.48%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+                  | Config Value:
+                  |   -> Config: items.thorn_pendant.generateAsLoot
+                ali:empty
+                  | Drops nothing
+                  | Chance: 0.48%
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+        ali:reference
+          | Selects all entries
+          | Chance: 7.69%
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:alternatives
+                | Selects only first successful entry
+                ali:item artifacts:charm_of_shrinking x1
+                  | Chance: 0.48%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+                  | Config Value:
+                  |   -> Config: items.charm_of_shrinking.generateAsLoot
+                ali:empty
+                  | Drops nothing
+                  | Chance: 0.48%
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology

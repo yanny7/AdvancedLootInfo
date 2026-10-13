@@ -1,0 +1,77 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:unbreaking",lvl:4}]}
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {StoredEnchantments:[{id:"minecraft:unbreaking",lvl:4}]}
+    ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:fortune",lvl:4}]}
+      | Chance: 9.38%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {StoredEnchantments:[{id:"minecraft:fortune",lvl:4}]}
+    ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:sharpness",lvl:7}]}
+      | Chance: 9.38%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {StoredEnchantments:[{id:"minecraft:sharpness",lvl:7}]}
+    ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:power",lvl:6}]}
+      | Chance: 9.38%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {StoredEnchantments:[{id:"minecraft:power",lvl:6}]}
+    ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:bane_of_arthropods",lvl:9}]}
+      | Chance: 9.38%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {StoredEnchantments:[{id:"minecraft:bane_of_arthropods",lvl:9}]}
+    ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:smite",lvl:9}]}
+      | Chance: 9.38%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {StoredEnchantments:[{id:"minecraft:smite",lvl:9}]}
+    ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:impaling",lvl:9}]}
+      | Chance: 9.38%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {StoredEnchantments:[{id:"minecraft:impaling",lvl:9}]}
+    ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:efficiency",lvl:6}]}
+      | Chance: 6.25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {StoredEnchantments:[{id:"minecraft:efficiency",lvl:6}]}
+    ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:sweeping",lvl:4}]}
+      | Chance: 6.25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {StoredEnchantments:[{id:"minecraft:sweeping",lvl:4}]}
+    ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:fire_aspect",lvl:3}]}
+      | Chance: 6.25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {StoredEnchantments:[{id:"minecraft:fire_aspect",lvl:3}]}
+    ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:looting",lvl:4}]}
+      | Chance: 6.25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {StoredEnchantments:[{id:"minecraft:looting",lvl:4}]}
+    ali:item minecraft:enchanted_book x1 {StoredEnchantments:[{id:"minecraft:riptide",lvl:5}]}
+      | Chance: 6.25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {StoredEnchantments:[{id:"minecraft:riptide",lvl:5}]}

@@ -1,0 +1,39 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item irons_spellbooks:scroll x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Spell:
+      |   -> Quality: 0 to 0.75
+      |   -> Applicable Spells:
+      |     -> School: Ice
+      |     -> Force: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:affinity_ring x1
+      | Chance: 57.14%
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Ring Enhancement:
+      |   -> Spell Filter:
+      |     -> School: Ice
+      |     -> Force: False
+    ali:empty
+      | Drops nothing
+      | Chance: 28.57%
+    ali:item irons_spellbooks:frostward_ring x1
+      | Chance: 14.29%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 6 to 12
+    ali:item minecraft:snowball x1-2
+      | Chance: 50%
+      | Count: 1 to 2
+    ali:item minecraft:ice x2-4
+      | Chance: 50%
+      | Count: 2 to 4

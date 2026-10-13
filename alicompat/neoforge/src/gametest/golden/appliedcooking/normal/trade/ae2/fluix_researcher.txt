@@ -1,0 +1,94 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 4
+      | XP: 10
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item ae2:certus_quartz_crystal x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 5
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item ae2:meteorite_compass x1
+  ali:trade_level
+    | Level: 2
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 10
+      | XP: 15
+      ali:item ae2:charged_certus_quartz_crystal x3
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 13
+      ali:item ae2:silicon x5
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 20
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item ae2:sky_stone_block x1
+  ali:trade_level
+    | Level: 3
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 10
+      | XP: 10
+      ali:item ae2:quartz_glass x2
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 4
+      | XP: 14
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item ae2:fluix_crystal x1
+  ali:trade_level
+    | Level: 4
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 8
+      | XP: 12
+      ali:item ae2:matter_ball x5
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 20
+      ali:item minecraft:emerald x10
+      ali:item minecraft:air x0
+      ali:item ae2:calculation_processor_press x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 20
+      ali:item minecraft:emerald x10
+      ali:item minecraft:air x0
+      ali:item ae2:engineering_processor_press x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 20
+      ali:item minecraft:emerald x10
+      ali:item minecraft:air x0
+      ali:item ae2:logic_processor_press x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 20
+      ali:item minecraft:emerald x10
+      ali:item minecraft:air x0
+      ali:item ae2:silicon_press x1
+  ali:trade_level
+    | Level: 5
+    | Randomly Selects 1 Of These Trades
+    ali:items_to_items
+      | Uses: 5
+      | XP: 12
+      ali:item minecraft:emerald x8
+      ali:item minecraft:air x0
+      ali:item minecraft:slime_ball x1

@@ -1,0 +1,102 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:stick x1 {"minecraft:custom_data":{CustomModelData:7}}
+      | Chance: 11.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Custom Data:
+      |   -> Tag: {CustomModelData:7}
+    ali:item minecraft:iron_sword x1 {"minecraft:attribute_modifiers":[],"minecraft:enchantment_glint_override":1b}
+      | Chance: 11.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 10% to 50%
+      |   -> Add: False
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Sharpness
+      |     -> Smite
+      |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
+      | Set Attributes:
+      |   -> Modifiers:
+      |     -> Attribute: Attack Damage
+      |     -> Operation: Add Value
+      |     -> Amount: 1 to 5
+      |     -> Id: ali_gametest:gametest
+      |     -> Equipment Slot: Main Hand
+      |   -> Replace: True
+    ali:item minecraft:enchanted_book x1
+      | Chance: 11.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 5 to 30
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
+    ali:item minecraft:diamond_pickaxe x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 11.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Efficiency
+      |       -> Levels: 5
+      |     -> Unbreaking
+      |       -> Levels: 1 to 3
+      |   -> Add: True
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:healing"}}
+      | Chance: 11.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Healing
+    ali:item minecraft:suspicious_stew x1
+      | Chance: 11.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Stew Effect:
+      |   -> Speed
+      |     -> Duration: 3 to 7
+    ali:item minecraft:paper x1 {"minecraft:custom_name":{color:"gold",text:"Gametest"}}
+      | Chance: 11.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Name:
+      |   -> Name: Gametest
+      |   -> Target: Custom Name
+      | Set Lore:
+      |   -> List Operation: Replace All
+      |   -> Lore:
+      |     -> line 1
+      |     -> line 2
+    ali:item minecraft:map x1
+      | Chance: 11.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Exploration Map:
+      |   -> Destination: minecraft:on_treasure_maps
+      |   -> Map Decoration: minecraft:red_x
+      |   -> Zoom: 1
+      |   -> Search Radius: 50
+      |   -> Skip Known Structures: False
+    ali:item minecraft:beef x1
+      | Chance: 11.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Furnace Smelt
+      |   -> Use Input Count: True
+      |   -> Predicates:
+      |     -> Entity Properties:
+      |       -> Target: This Entity
+      |       -> Predicate:
+      |         -> Entity Flags:
+      |           -> Is On Fire: True
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1

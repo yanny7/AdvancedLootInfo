@@ -1,0 +1,62 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item minecraft:stone x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item minecraft:gravel x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item minecraft:cobblestone x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item minecraft:dirt x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item minecraft:coarse_dirt x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item minecraft:rooted_dirt x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:iron_ore x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:copper_ore x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:gold_ore x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:lapis_ore x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:redstone_ore x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:coal_ore x1
+      | Count: 1

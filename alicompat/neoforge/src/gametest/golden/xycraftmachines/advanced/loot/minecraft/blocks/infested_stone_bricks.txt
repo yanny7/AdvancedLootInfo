@@ -1,0 +1,29 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:modified
+      | Selects only first successful entry
+      ali:item minecraft:cracked_stone_bricks x1
+        | Count: 1
+        | ----- Predicates -----
+        | Match Tool:
+        |   -> Components:
+        |     -> Expected Components:
+        |       -> xycraft_machines:auto_smelt
+        | Match Tool:
+        |   -> Components:
+        |     -> Partial Matchers:
+        |       -> minecraft:enchantments
+        |         -> Enchantment: Silk Touch
+        |         -> Level: ≥ 1
+      ali:item minecraft:stone_bricks x1
+        | Count: 1
+        | ----- Predicates -----
+        | Match Tool:
+        |   -> Components:
+        |     -> Partial Matchers:
+        |       -> minecraft:enchantments
+        |         -> Enchantment: Silk Touch
+        |         -> Level: ≥ 1

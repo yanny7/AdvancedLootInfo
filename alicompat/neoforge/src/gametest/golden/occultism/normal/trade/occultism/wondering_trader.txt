@@ -1,0 +1,1616 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects 1 Of These Trades
+    ali:items_to_items
+      | Uses: 1
+      | XP: 1
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:wheat_seeds x1
+      ali:item minecraft:air x0
+      ali:item occultism:datura x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 1
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:apple x1
+      ali:item minecraft:air x0
+      ali:item occultism:pitaya x1
+  ali:trade_level
+    | Level: 2
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 2
+      | XP: 1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:water"}}
+        | Expected Components:
+        |   -> minecraft:potion_contents
+        |     -> Potion: Water Bottle
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 2
+      | XP: 1
+      ali:item minecraft:water_bucket x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x2
+    ali:items_to_items
+      | Uses: 2
+      | XP: 1
+      ali:item minecraft:milk_bucket x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x2
+    ali:items_to_items
+      | Uses: 2
+      | XP: 1
+      ali:item minecraft:fermented_spider_eye x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x3
+    ali:items_to_items
+      | Uses: 2
+      | XP: 1
+      ali:item minecraft:baked_potato x4
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 2
+      | XP: 1
+      ali:item minecraft:hay_block x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+  ali:trade_level
+    | Level: 3
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 6
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:packed_ice x1
+    ali:items_to_items
+      | Uses: 6
+      | XP: 1
+      ali:item minecraft:emerald x6
+      ali:item minecraft:air x0
+      ali:item minecraft:blue_ice x1
+    ali:items_to_items
+      | Uses: 2
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:gunpowder x4
+    ali:items_to_items
+      | Uses: 6
+      | XP: 1
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:podzol x3
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:acacia_log x8
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:birch_log x8
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:dark_oak_log x8
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:jungle_log x8
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:oak_log x8
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:spruce_log x8
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:cherry_log x8
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:mangrove_log x8
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:pale_oak_log x8
+    ali:items_to_items
+      | Uses: 1
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:iron_pickaxe x1
+        | Enchant With Levels:
+        |   -> Levels: 5 to 19
+        |   -> Options:
+        |     -> Tag: minecraft:on_traded_equipment
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Iron Pickaxe
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
+    ali:items_to_items
+      | Uses: 1
+      | XP: 1
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:potion x1
+        | Set Potion:
+        |   -> Potion: Potion of Invisibility
+  ali:trade_level
+    | Level: 4
+    | Randomly Selects 5 Of These Trades
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:tropical_fish_bucket x1
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:pufferfish_bucket x1
+    ali:items_to_items
+      | Uses: 5
+      | XP: 1
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item minecraft:sea_pickle x1
+    ali:items_to_items
+      | Uses: 5
+      | XP: 1
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item minecraft:slime_ball x1
+    ali:items_to_items
+      | Uses: 5
+      | XP: 1
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item minecraft:glowstone x1
+    ali:items_to_items
+      | Uses: 5
+      | XP: 1
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:nautilus_shell x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:fern x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:sugar_cane x1
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:pumpkin x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:kelp x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 1
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:cactus x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:dandelion x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:poppy x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:blue_orchid x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:allium x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:azure_bluet x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:red_tulip x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:orange_tulip x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:white_tulip x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:pink_tulip x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:oxeye_daisy x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:cornflower x1
+    ali:items_to_items
+      | Uses: 7
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:lily_of_the_valley x1
+    ali:items_to_items
+      | Uses: 7
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:open_eyeblossom x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:wheat_seeds x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:beetroot_seeds x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:pumpkin_seeds x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:melon_seeds x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 1
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:acacia_sapling x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 1
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:birch_sapling x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 1
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:dark_oak_sapling x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 1
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:jungle_sapling x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 1
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:oak_sapling x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 1
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:spruce_sapling x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 1
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:cherry_sapling x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 1
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:pale_oak_sapling x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 1
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:mangrove_propagule x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:red_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:white_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:blue_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:pink_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:black_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:green_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:light_gray_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:magenta_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:yellow_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:gray_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:purple_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:light_blue_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:lime_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:orange_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:brown_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:cyan_dye x3
+    ali:items_to_items
+      | Uses: 8
+      | XP: 1
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:brain_coral_block x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 1
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:bubble_coral_block x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 1
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:fire_coral_block x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 1
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:horn_coral_block x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 1
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:tube_coral_block x1
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:vine x3
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:pale_hanging_moss x3
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:brown_mushroom x3
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:red_mushroom x3
+    ali:items_to_items
+      | Uses: 2
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:lily_pad x5
+    ali:items_to_items
+      | Uses: 5
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:small_dripleaf x2
+    ali:items_to_items
+      | Uses: 8
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:sand x8
+    ali:items_to_items
+      | Uses: 6
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:red_sand x4
+    ali:items_to_items
+      | Uses: 5
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:pointed_dripstone x2
+    ali:items_to_items
+      | Uses: 5
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:rooted_dirt x2
+    ali:items_to_items
+      | Uses: 5
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:moss_block x2
+    ali:items_to_items
+      | Uses: 5
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:pale_moss_block x2
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:wildflowers x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:tall_dry_grass x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:firefly_bush x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item minecraft:golden_dandelion x1
+    ali:items_to_items
+      | Uses: 5
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:name_tag x1
+  ali:trade_level
+    | Level: 5
+    | Randomly Selects 1 Of These Trades
+    ali:items_to_items
+      | Uses: 1
+      | XP: 1
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:otherworld_essence x1
+      ali:item minecraft:air x0
+      ali:item minecraft:book x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 2
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:otherworld_essence x1
+      ali:item minecraft:air x0
+      ali:item occultism:taboo_book x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 3
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:otherworld_essence x2
+      ali:item minecraft:air x0
+      ali:item minecraft:writable_book x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 4
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:otherworld_essence x2
+      ali:item minecraft:air x0
+      ali:item occultism:book_of_binding_empty x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 1
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:otherworld_essence x1
+      ali:item minecraft:air x0
+      ali:item occultism:book_of_binding_bound_foliot x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 2
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:otherworld_essence x2
+      ali:item minecraft:air x0
+      ali:item occultism:book_of_binding_bound_djinni x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 3
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:otherworld_essence x3
+      ali:item minecraft:air x0
+      ali:item occultism:book_of_binding_bound_afrit x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 4
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:otherworld_essence x4
+      ali:item minecraft:air x0
+      ali:item occultism:book_of_binding_bound_marid x1
+  ali:trade_level
+    | Level: 6
+    | Randomly Selects 1 to 3 Of These Trades
+    ali:items_to_items
+      | Uses: 8
+      | XP: 4
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 4
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_white x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 4
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_light_gray x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 4
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_gray x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 4
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_black x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 4
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_brown x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 4
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_red x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 4
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_orange x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 4
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_yellow x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 4
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_lime x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 4
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_green x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 4
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_cyan x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 4
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_light_blue x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 4
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_blue x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 4
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_purple x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 4
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_magenta x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 4
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_pink x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 8
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:iron_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spirit_attuned_crystal x1
+    ali:items_to_items
+      | Uses: 4
+      | XP: 8
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:bone_block x4
+      ali:item minecraft:air x0
+      ali:item minecraft:skeleton_skull x1
+    ali:items_to_items
+      | Uses: 2
+      | XP: 16
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:coal x64
+      ali:item minecraft:air x0
+      ali:item minecraft:wither_skeleton_skull x1
+    ali:items_to_items
+      | Uses: 6
+      | XP: 16
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:poisonous_potato x15
+      ali:item minecraft:air x0
+      ali:item minecraft:zombie_head x1
+    ali:items_to_items
+      | Uses: 6
+      | XP: 16
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:tnt x15
+      ali:item minecraft:air x0
+      ali:item minecraft:creeper_head x1
+    ali:items_to_items
+      | Uses: 6
+      | XP: 16
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:gold_ingot x15
+      ali:item minecraft:air x0
+      ali:item minecraft:piglin_head x1
+  ali:trade_level
+    | Level: 7
+    | Randomly Selects 1 to 2 Of These Trades
+    ali:items_to_items
+      | Uses: 15
+      | XP: 15
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:rose_bush x1
+      ali:item minecraft:air x0
+      ali:item occultism:otherflower x15
+    ali:items_to_items
+      | Uses: 7
+      | XP: 7
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:nether_wart x7
+      ali:item minecraft:air x0
+      ali:item minecraft:torchflower x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 8
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:dried_ghast x1
+      ali:item minecraft:air x0
+      ali:item minecraft:globe_banner_pattern x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 24
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:datura x12
+      ali:item minecraft:air x0
+      ali:item occultism:nature_paste x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 24
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:tuff x4
+      ali:item minecraft:air x0
+      ali:item occultism:gray_paste x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 24
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:magma_block x18
+      ali:item minecraft:air x0
+      ali:item occultism:flaming_paste x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:emerald_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:research_fragment_dust x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:nether_star x1
+      ali:item minecraft:air x0
+      ali:item occultism:witherite_dust x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:dragon_head x1
+      ali:item minecraft:air x0
+      ali:item occultism:dragonyst_dust x1
+    ali:items_to_items
+      | Uses: 3
+      | XP: 66
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:demonic_meat x2
+      ali:item minecraft:air x0
+      ali:item occultism:iesnium_ingot x1
+    ali:items_to_items
+      | Uses: 4
+      | XP: 16
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:glow_ink_sac x4
+      ali:item minecraft:air x0
+      ali:item minecraft:echo_shard x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 99
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:sea_lantern x16
+      ali:item minecraft:air x0
+      ali:item minecraft:heart_of_the_sea x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 33
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:spore_blossom x1
+      ali:item minecraft:air x0
+      ali:item minecraft:dragon_breath x1
+    ali:items_to_items
+      | Uses: 2
+      | XP: 8
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:dark_prismarine x1
+      ali:item minecraft:air x0
+      ali:item minecraft:turtle_scute x1
+    ali:items_to_items
+      | Uses: 2
+      | XP: 8
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:brown_glazed_terracotta x1
+      ali:item minecraft:air x0
+      ali:item minecraft:armadillo_scute x1
+    ali:items_to_items
+      | Uses: 2
+      | XP: 8
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:purpur_pillar x1
+      ali:item minecraft:air x0
+      ali:item minecraft:shulker_shell x1
+    ali:items_to_items
+      | Uses: 2
+      | XP: 8
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:chiseled_sandstone x1
+      ali:item minecraft:air x0
+      ali:item minecraft:nautilus_shell x1
+    ali:items_to_items
+      | Uses: 4
+      | XP: 20
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:amethyst_shard x5
+      ali:item minecraft:air x0
+      ali:item minecraft:rabbit_foot x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 20
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:lava_bucket x1
+      ali:item minecraft:air x0
+      ali:item minecraft:blaze_rod x10
+    ali:items_to_items
+      | Uses: 1
+      | XP: 20
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:powder_snow_bucket x1
+      ali:item minecraft:air x0
+      ali:item minecraft:breeze_rod x10
+  ali:trade_level
+    | Level: 8
+    | Randomly Selects 1 Of These Trades
+    ali:items_to_items
+      | Uses: 1
+      | XP: 27
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:chest_minecart x1
+      ali:item minecraft:air x0
+      ali:item occultism:satchel x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 27
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:end_rod x4
+      ali:item minecraft:air x0
+      ali:item occultism:ender_satchel x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 27
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:glowstone x2
+      ali:item minecraft:air x0
+      ali:item occultism:ritual_satchel_t1 x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 27
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:afrit_essence x2
+      ali:item minecraft:air x0
+      ali:item occultism:ritual_satchel_t2 x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 27
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:soul_lantern x1
+      ali:item minecraft:air x0
+      ali:item occultism:fragile_soul_gem x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 27
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:soul_lantern x32
+      ali:item minecraft:air x0
+      ali:item occultism:soul_gem x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 27
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:wither_skeleton_skull x1
+      ali:item minecraft:air x0
+      ali:item occultism:familiar_ring x1 {"occultism:spirit_name":""}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 27
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:demonic_meat x2
+      ali:item minecraft:air x0
+      ali:item occultism:storage_remote x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 27
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:sculk_catalyst x1
+      ali:item minecraft:air x0
+      ali:item occultism:knowledge_tablet x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 27
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:ender_chest x9
+      ali:item minecraft:air x0
+      ali:item occultism:wormhole_tablet x1
+  ali:trade_level
+    | Level: 9
+    | Randomly Selects 1 to 3 Of These Trades
+    ali:items_to_items
+      | Uses: 1
+      | XP: 27
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:quartz x27
+      ali:item minecraft:air x0
+      ali:item occultism:dimensional_matrix x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 27
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:gold_ingot x3
+      ali:item minecraft:air x0
+      ali:item occultism:storage_controller_base x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 27
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:gold_ingot x3
+      ali:item minecraft:air x0
+      ali:item occultism:storage_controller_base_dark x1
+    ali:items_to_items
+      | Uses: 3
+      | XP: 27
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:ender_eye x2
+      ali:item minecraft:air x0
+      ali:item occultism:stable_wormhole x1
+    ali:items_to_items
+      | Uses: 3
+      | XP: 27
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:ender_eye x2
+      ali:item minecraft:air x0
+      ali:item occultism:stable_wormhole_dark x1
+    ali:items_to_items
+      | Uses: 3
+      | XP: 27
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:copper_block x4
+      ali:item minecraft:air x0
+      ali:item occultism:storage_stabilizer_tier1 x1
+    ali:items_to_items
+      | Uses: 3
+      | XP: 27
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:copper_block x4
+      ali:item minecraft:air x0
+      ali:item occultism:storage_stabilizer_tier1_dark x1
+    ali:items_to_items
+      | Uses: 3
+      | XP: 27
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:spirit_attuned_gem x8
+      ali:item minecraft:air x0
+      ali:item occultism:storage_stabilizer_tier2 x1
+    ali:items_to_items
+      | Uses: 3
+      | XP: 27
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:spirit_attuned_gem x8
+      ali:item minecraft:air x0
+      ali:item occultism:storage_stabilizer_tier2_dark x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 27
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:afrit_essence x4
+      ali:item minecraft:air x0
+      ali:item occultism:storage_stabilizer_tier3 x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 27
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:afrit_essence x4
+      ali:item minecraft:air x0
+      ali:item occultism:storage_stabilizer_tier3_dark x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 27
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:marid_essence x5
+      ali:item minecraft:air x0
+      ali:item occultism:storage_stabilizer_tier4 x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 27
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:marid_essence x5
+      ali:item minecraft:air x0
+      ali:item occultism:storage_stabilizer_tier4_dark x1
+    ali:items_to_items
+      | Uses: 2
+      | XP: 27
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:echo_shard x3
+      ali:item minecraft:air x0
+      ali:item occultism:entity_wormhole x1
+    ali:items_to_items
+      | Uses: 2
+      | XP: 27
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:echo_shard x3
+      ali:item minecraft:air x0
+      ali:item occultism:entity_wormhole_dark x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 27
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:afrit_essence x8
+      ali:item minecraft:air x0
+      ali:item occultism:iesnium_sacrificial_bowl x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 27
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:afrit_essence x8
+      ali:item minecraft:air x0
+      ali:item occultism:dark_iesnium_sacrificial_bowl x1
+  ali:trade_level
+    | Level: 10
+    | Randomly Selects 1 Of These Trades
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:spyglass x1
+      ali:item minecraft:air x0
+      ali:item occultism:otherworld_goggles x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:end_crystal x1
+      ali:item minecraft:air x0
+      ali:item occultism:vitality_compass x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:marid_essence x2
+      ali:item minecraft:air x0
+      ali:item occultism:iesnium_pickaxe x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:cruelty_essence x8
+      ali:item minecraft:air x0
+      ali:item occultism:iesnium_butcher_knife x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:beacon x3
+      ali:item minecraft:air x0
+      ali:item occultism:true_sight_staff x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:demonic_meat x8
+      ali:item minecraft:air x0
+      ali:item occultism:dimensional_mineshaft x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:cruelty_essence x2
+      ali:item minecraft:air x0
+      ali:item occultism:dimensional_battlefield x1
+    ali:items_to_items
+      | Uses: 6
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:hopper x4
+      ali:item minecraft:air x0
+      ali:item occultism:dimensional_extractor x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:heavy_core x7
+      ali:item minecraft:air x0
+      ali:item occultism:iesnium_anvil x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:cursed_honey x8
+      ali:item minecraft:air x0
+      ali:item occultism:miner_foliot_unspecialized x1 {"occultism:max_mining_time":400,"occultism:miner_output_multiplier":1,"occultism:rolls_per_operation":1}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:demonic_meat x9
+      ali:item minecraft:air x0
+      ali:item occultism:miner_djinni_ores x1 {"occultism:max_mining_time":300,"occultism:miner_output_multiplier":1,"occultism:rolls_per_operation":1}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:demonic_meat x64
+      ali:item minecraft:air x0
+      ali:item occultism:miner_afrit_deeps x1 {"occultism:max_mining_time":200,"occultism:miner_output_multiplier":1,"occultism:rolls_per_operation":1}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:marid_essence x11
+      ali:item minecraft:air x0
+      ali:item occultism:miner_marid_master x1 {"occultism:max_mining_time":100,"occultism:miner_output_multiplier":1,"occultism:rolls_per_operation":1}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:dragonyst_dust x1
+      ali:item minecraft:air x0
+      ali:item minecraft:elytra x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:enchanted_golden_apple x1
+      ali:item minecraft:air x0
+      ali:item minecraft:totem_of_undying x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:enchanted_golden_pitaya x1
+      ali:item minecraft:air x0
+      ali:item minecraft:totem_of_undying x1
+  ali:trade_level
+    | Level: 11
+    | Randomly Selects 1 to 2 Of These Trades
+    | Chance: 80%
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:diamond_block x5
+      ali:item minecraft:air x0
+      ali:item occultism:infused_helmet x1 {"occultism:spirit_name":""}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:diamond_block x8
+      ali:item minecraft:air x0
+      ali:item occultism:infused_chestplate x1 {"occultism:spirit_name":""}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:diamond_block x7
+      ali:item minecraft:air x0
+      ali:item occultism:infused_leggings x1 {"occultism:spirit_name":""}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:diamond_block x4
+      ali:item minecraft:air x0
+      ali:item occultism:infused_boots x1 {"occultism:spirit_name":""}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:diamond_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:infused_spear x1 {"occultism:spirit_name":""}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:diamond_block x2
+      ali:item minecraft:air x0
+      ali:item occultism:infused_sword x1 {"occultism:spirit_name":""}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:diamond_block x3
+      ali:item minecraft:air x0
+      ali:item occultism:infused_axe x1 {"occultism:spirit_name":""}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:diamond_block x3
+      ali:item minecraft:air x0
+      ali:item occultism:infused_pickaxe x1 {"occultism:spirit_name":""}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:diamond_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:infused_shovel x1 {"occultism:spirit_name":""}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:diamond_block x2
+      ali:item minecraft:air x0
+      ali:item occultism:infused_hoe x1 {"occultism:spirit_name":""}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:diamond_block x6
+      ali:item minecraft:air x0
+      ali:item occultism:infused_horse_armor x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 32
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:diamond_block x6
+      ali:item minecraft:air x0
+      ali:item occultism:infused_nautilus_armor x1
+  ali:trade_level
+    | Level: 12
+    | Randomly Selects 1 Of These Trades
+    | Chance: 50%
+    ali:items_to_items
+      | Uses: 1
+      | XP: 24
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:iesnium_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spawn_egg/familiar_bat x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 24
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:iesnium_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spawn_egg/familiar_beaver x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 24
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:iesnium_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spawn_egg/familiar_beholder x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 24
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:iesnium_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spawn_egg/familiar_blacksmith x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 24
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:iesnium_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spawn_egg/familiar_chimera x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 24
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:iesnium_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spawn_egg/familiar_cthulhu x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 24
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:iesnium_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spawn_egg/familiar_deer x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 24
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:iesnium_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spawn_egg/familiar_devil x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 24
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:iesnium_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spawn_egg/familiar_dragon x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 24
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:iesnium_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spawn_egg/familiar_fairy x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 24
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:iesnium_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spawn_egg/familiar_greedy x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 24
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:iesnium_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spawn_egg/familiar_headless x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 24
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:iesnium_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spawn_egg/familiar_mummy x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 24
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:iesnium_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spawn_egg/familiar_wingnis x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 24
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item occultism:iesnium_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spawn_egg/familiar_drikwing x1
+  ali:trade_level
+    | Level: 13
+    | Randomly Selects 1 Of These Trades
+    | Chance: 25%
+    ali:items_to_items
+      | Uses: 1
+      | XP: 1
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:white_dye x64
+      ali:item minecraft:air x0
+      ali:item occultism:spirit_grindstone x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 1
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:light_gray_dye x64
+      ali:item minecraft:air x0
+      ali:item minecraft:heavy_core x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 1
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:gray_dye x64
+      ali:item minecraft:air x0
+      ali:item minecraft:reinforced_deepslate x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 1
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:black_dye x64
+      ali:item minecraft:air x0
+      ali:item minecraft:netherite_block x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 1
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:brown_dye x64
+      ali:item minecraft:air x0
+      ali:item minecraft:enchanted_golden_apple x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 1
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:brown_dye x64
+      ali:item minecraft:air x0
+      ali:item occultism:enchanted_golden_pitaya x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 1
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:red_dye x64
+      ali:item minecraft:air x0
+      ali:item minecraft:bell x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 1
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:orange_dye x64
+      ali:item minecraft:air x0
+      ali:item minecraft:end_stone_bricks x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 1
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:yellow_dye x64
+      ali:item minecraft:air x0
+      ali:item minecraft:sponge x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 1
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:lime_dye x64
+      ali:item minecraft:air x0
+      ali:item minecraft:turtle_helmet x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 1
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:green_dye x64
+      ali:item minecraft:air x0
+      ali:item minecraft:sculk_shrieker x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 1
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:cyan_dye x64
+      ali:item minecraft:air x0
+      ali:item minecraft:sculk_catalyst x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 1
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:light_blue_dye x64
+      ali:item minecraft:air x0
+      ali:item occultism:iesnium_block x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 1
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:blue_dye x64
+      ali:item minecraft:air x0
+      ali:item minecraft:soul_lantern x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 1
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:purple_dye x64
+      ali:item minecraft:air x0
+      ali:item minecraft:respawn_anchor x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 1
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:magenta_dye x64
+      ali:item minecraft:air x0
+      ali:item minecraft:budding_amethyst x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 1
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      ali:item minecraft:pink_dye x64
+      ali:item minecraft:air x0
+      ali:item minecraft:chorus_flower x1

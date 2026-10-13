@@ -1,0 +1,324 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:reference
+            | Selects all entries
+            | Chance: 57.14%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:modified
+                  | Selects only first successful entry
+                  ali:item minecraft:chainmail_helmet x1 {"minecraft:enchantment_glint_override":1b,"minecraft:trim":{material:"minecraft:copper",pattern:"minecraft:bolt"}}
+                    | Chance: 10%
+                    | Count: 1
+                    | ----- Modifiers -----
+                    | Set Components:
+                    |   -> Components:
+                    |     -> minecraft:trim
+                    |       -> Material: Copper Material
+                    |       -> Pattern: Bolt Armor Trim
+                    | Set Enchantments:
+                    |   -> Enchantments:
+                    |     -> Fire Protection
+                    |       -> Levels: 4
+                    |     -> Projectile Protection
+                    |       -> Levels: 4
+                    |     -> Protection
+                    |       -> Levels: 4
+                    |   -> Add: False
+                  ali:item minecraft:chainmail_helmet x1 {"minecraft:enchantment_glint_override":1b,"minecraft:trim":{material:"minecraft:copper",pattern:"minecraft:bolt"}}
+                    | Chance: 28.57%
+                    | Count: 1
+                    | ----- Modifiers -----
+                    | Set Components:
+                    |   -> Components:
+                    |     -> minecraft:trim
+                    |       -> Material: Copper Material
+                    |       -> Pattern: Bolt Armor Trim
+                    | Set Enchantments:
+                    |   -> Enchantments:
+                    |     -> Fire Protection
+                    |       -> Levels: 4
+                    |     -> Projectile Protection
+                    |       -> Levels: 4
+                    |     -> Protection
+                    |       -> Levels: 4
+                    |   -> Add: False
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:modified
+                  | Selects only first successful entry
+                  ali:item minecraft:chainmail_chestplate x1 {"minecraft:enchantment_glint_override":1b,"minecraft:trim":{material:"minecraft:copper",pattern:"minecraft:bolt"}}
+                    | Chance: 10%
+                    | Count: 1
+                    | ----- Modifiers -----
+                    | Set Components:
+                    |   -> Components:
+                    |     -> minecraft:trim
+                    |       -> Material: Copper Material
+                    |       -> Pattern: Bolt Armor Trim
+                    | Set Enchantments:
+                    |   -> Enchantments:
+                    |     -> Fire Protection
+                    |       -> Levels: 4
+                    |     -> Projectile Protection
+                    |       -> Levels: 4
+                    |     -> Protection
+                    |       -> Levels: 4
+                    |   -> Add: False
+                  ali:item minecraft:chainmail_chestplate x1 {"minecraft:enchantment_glint_override":1b,"minecraft:trim":{material:"minecraft:copper",pattern:"minecraft:bolt"}}
+                    | Chance: 28.57%
+                    | Count: 1
+                    | ----- Modifiers -----
+                    | Set Components:
+                    |   -> Components:
+                    |     -> minecraft:trim
+                    |       -> Material: Copper Material
+                    |       -> Pattern: Bolt Armor Trim
+                    | Set Enchantments:
+                    |   -> Enchantments:
+                    |     -> Fire Protection
+                    |       -> Levels: 4
+                    |     -> Projectile Protection
+                    |       -> Levels: 4
+                    |     -> Protection
+                    |       -> Levels: 4
+                    |   -> Add: False
+          ali:reference
+            | Selects all entries
+            | Chance: 28.57%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:modified
+                  | Selects only first successful entry
+                  ali:item minecraft:iron_helmet x1 {"minecraft:enchantment_glint_override":1b,"minecraft:trim":{material:"minecraft:copper",pattern:"minecraft:flow"}}
+                    | Chance: 5%
+                    | Count: 1
+                    | ----- Modifiers -----
+                    | Set Components:
+                    |   -> Components:
+                    |     -> minecraft:trim
+                    |       -> Material: Copper Material
+                    |       -> Pattern: Flow Armor Trim
+                    | Set Enchantments:
+                    |   -> Enchantments:
+                    |     -> Fire Protection
+                    |       -> Levels: 4
+                    |     -> Projectile Protection
+                    |       -> Levels: 4
+                    |     -> Protection
+                    |       -> Levels: 4
+                    |   -> Add: False
+                  ali:item minecraft:iron_helmet x1 {"minecraft:enchantment_glint_override":1b,"minecraft:trim":{material:"minecraft:copper",pattern:"minecraft:flow"}}
+                    | Chance: 14.29%
+                    | Count: 1
+                    | ----- Modifiers -----
+                    | Set Components:
+                    |   -> Components:
+                    |     -> minecraft:trim
+                    |       -> Material: Copper Material
+                    |       -> Pattern: Flow Armor Trim
+                    | Set Enchantments:
+                    |   -> Enchantments:
+                    |     -> Fire Protection
+                    |       -> Levels: 4
+                    |     -> Projectile Protection
+                    |       -> Levels: 4
+                    |     -> Protection
+                    |       -> Levels: 4
+                    |   -> Add: False
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:modified
+                  | Selects only first successful entry
+                  ali:item minecraft:iron_chestplate x1 {"minecraft:enchantment_glint_override":1b,"minecraft:trim":{material:"minecraft:copper",pattern:"minecraft:flow"}}
+                    | Chance: 5%
+                    | Count: 1
+                    | ----- Modifiers -----
+                    | Set Components:
+                    |   -> Components:
+                    |     -> minecraft:trim
+                    |       -> Material: Copper Material
+                    |       -> Pattern: Flow Armor Trim
+                    | Set Enchantments:
+                    |   -> Enchantments:
+                    |     -> Fire Protection
+                    |       -> Levels: 4
+                    |     -> Projectile Protection
+                    |       -> Levels: 4
+                    |     -> Protection
+                    |       -> Levels: 4
+                    |   -> Add: False
+                  ali:item minecraft:iron_chestplate x1 {"minecraft:enchantment_glint_override":1b,"minecraft:trim":{material:"minecraft:copper",pattern:"minecraft:flow"}}
+                    | Chance: 14.29%
+                    | Count: 1
+                    | ----- Modifiers -----
+                    | Set Components:
+                    |   -> Components:
+                    |     -> minecraft:trim
+                    |       -> Material: Copper Material
+                    |       -> Pattern: Flow Armor Trim
+                    | Set Enchantments:
+                    |   -> Enchantments:
+                    |     -> Fire Protection
+                    |       -> Levels: 4
+                    |     -> Projectile Protection
+                    |       -> Levels: 4
+                    |     -> Protection
+                    |       -> Levels: 4
+                    |   -> Add: False
+          ali:reference
+            | Selects all entries
+            | Chance: 14.29%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:modified
+                  | Selects only first successful entry
+                  ali:item minecraft:diamond_helmet x1 {"minecraft:enchantment_glint_override":1b,"minecraft:trim":{material:"minecraft:copper",pattern:"minecraft:flow"}}
+                    | Chance: 2.5%
+                    | Count: 1
+                    | ----- Modifiers -----
+                    | Set Components:
+                    |   -> Components:
+                    |     -> minecraft:trim
+                    |       -> Material: Copper Material
+                    |       -> Pattern: Flow Armor Trim
+                    | Set Enchantments:
+                    |   -> Enchantments:
+                    |     -> Fire Protection
+                    |       -> Levels: 4
+                    |     -> Projectile Protection
+                    |       -> Levels: 4
+                    |     -> Protection
+                    |       -> Levels: 4
+                    |   -> Add: False
+                  ali:item minecraft:diamond_helmet x1 {"minecraft:enchantment_glint_override":1b,"minecraft:trim":{material:"minecraft:copper",pattern:"minecraft:flow"}}
+                    | Chance: 7.14%
+                    | Count: 1
+                    | ----- Modifiers -----
+                    | Set Components:
+                    |   -> Components:
+                    |     -> minecraft:trim
+                    |       -> Material: Copper Material
+                    |       -> Pattern: Flow Armor Trim
+                    | Set Enchantments:
+                    |   -> Enchantments:
+                    |     -> Fire Protection
+                    |       -> Levels: 4
+                    |     -> Projectile Protection
+                    |       -> Levels: 4
+                    |     -> Protection
+                    |       -> Levels: 4
+                    |   -> Add: False
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:modified
+                  | Selects only first successful entry
+                  ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b,"minecraft:trim":{material:"minecraft:copper",pattern:"minecraft:flow"}}
+                    | Chance: 2.5%
+                    | Count: 1
+                    | ----- Modifiers -----
+                    | Set Components:
+                    |   -> Components:
+                    |     -> minecraft:trim
+                    |       -> Material: Copper Material
+                    |       -> Pattern: Flow Armor Trim
+                    | Set Enchantments:
+                    |   -> Enchantments:
+                    |     -> Fire Protection
+                    |       -> Levels: 4
+                    |     -> Projectile Protection
+                    |       -> Levels: 4
+                    |     -> Protection
+                    |       -> Levels: 4
+                    |   -> Add: False
+                  ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b,"minecraft:trim":{material:"minecraft:copper",pattern:"minecraft:flow"}}
+                    | Chance: 7.14%
+                    | Count: 1
+                    | ----- Modifiers -----
+                    | Set Components:
+                    |   -> Components:
+                    |     -> minecraft:trim
+                    |       -> Material: Copper Material
+                    |       -> Pattern: Flow Armor Trim
+                    | Set Enchantments:
+                    |   -> Enchantments:
+                    |     -> Fire Protection
+                    |       -> Levels: 4
+                    |     -> Projectile Protection
+                    |       -> Levels: 4
+                    |     -> Protection
+                    |       -> Levels: 4
+                    |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:modified
+      | Selects only first successful entry
+      ali:item minecraft:bow x1
+        | Chance: 17.5%
+        | Count: 1
+      ali:item minecraft:bow x1
+        | Chance: 50%
+        | Count: 1
+    ali:modified
+      | Selects only first successful entry
+      ali:item minecraft:bow x1 {"minecraft:enchantment_glint_override":1b}
+        | Chance: 8.75%
+        | Count: 1
+        | ----- Modifiers -----
+        | Set Enchantments:
+        |   -> Enchantments:
+        |     -> Power
+        |       -> Levels: 1
+        |   -> Add: False
+      ali:item minecraft:bow x1 {"minecraft:enchantment_glint_override":1b}
+        | Chance: 25%
+        | Count: 1
+        | ----- Modifiers -----
+        | Set Enchantments:
+        |   -> Enchantments:
+        |     -> Power
+        |       -> Levels: 1
+        |   -> Add: False
+    ali:modified
+      | Selects only first successful entry
+      ali:item minecraft:bow x1 {"minecraft:enchantment_glint_override":1b}
+        | Chance: 8.75%
+        | Count: 1
+        | ----- Modifiers -----
+        | Set Enchantments:
+        |   -> Enchantments:
+        |     -> Punch
+        |       -> Levels: 1
+        |   -> Add: False
+      ali:item minecraft:bow x1 {"minecraft:enchantment_glint_override":1b}
+        | Chance: 25%
+        | Count: 1
+        | ----- Modifiers -----
+        | Set Enchantments:
+        |   -> Enchantments:
+        |     -> Punch
+        |       -> Levels: 1
+        |   -> Add: False

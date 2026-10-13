@@ -1,0 +1,131 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:arrow x1
+      | Chance: 66.67%
+      | Count: 1
+    ali:item minecraft:tipped_arrow x0-1 {"minecraft:potion_contents":{potion:"minecraft:swiftness"}}
+      | Chance: 2.56%
+      | Count: max(0; U[0; 1])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 0 to 1
+      |   -> Add: False
+      | Set Potion:
+      |   -> Potion: Potion of Swiftness
+    ali:item minecraft:tipped_arrow x0-1 {"minecraft:potion_contents":{potion:"minecraft:slowness"}}
+      | Chance: 2.56%
+      | Count: max(0; U[0; 1])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 0 to 1
+      |   -> Add: False
+      | Set Potion:
+      |   -> Potion: Potion of Slowness
+    ali:item minecraft:tipped_arrow x0-1 {"minecraft:potion_contents":{potion:"minecraft:strength"}}
+      | Chance: 2.56%
+      | Count: max(0; U[0; 1])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 0 to 1
+      |   -> Add: False
+      | Set Potion:
+      |   -> Potion: Potion of Strength
+    ali:item minecraft:tipped_arrow x0-1 {"minecraft:potion_contents":{potion:"minecraft:healing"}}
+      | Chance: 2.56%
+      | Count: max(0; U[0; 1])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 0 to 1
+      |   -> Add: False
+      | Set Potion:
+      |   -> Potion: Potion of Healing
+    ali:item minecraft:tipped_arrow x0-1 {"minecraft:potion_contents":{potion:"minecraft:harming"}}
+      | Chance: 2.56%
+      | Count: max(0; U[0; 1])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 0 to 1
+      |   -> Add: False
+      | Set Potion:
+      |   -> Potion: Potion of Harming
+    ali:item minecraft:tipped_arrow x0-1 {"minecraft:potion_contents":{potion:"minecraft:leaping"}}
+      | Chance: 2.56%
+      | Count: max(0; U[0; 1])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 0 to 1
+      |   -> Add: False
+      | Set Potion:
+      |   -> Potion: Potion of Leaping
+    ali:item minecraft:tipped_arrow x0-1 {"minecraft:potion_contents":{potion:"minecraft:regeneration"}}
+      | Chance: 2.56%
+      | Count: max(0; U[0; 1])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 0 to 1
+      |   -> Add: False
+      | Set Potion:
+      |   -> Potion: Potion of Regeneration
+    ali:item minecraft:tipped_arrow x0-1 {"minecraft:potion_contents":{potion:"minecraft:fire_resistance"}}
+      | Chance: 2.56%
+      | Count: max(0; U[0; 1])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 0 to 1
+      |   -> Add: False
+      | Set Potion:
+      |   -> Potion: Potion of Fire Resistance
+    ali:item minecraft:tipped_arrow x0-1 {"minecraft:potion_contents":{potion:"minecraft:water_breathing"}}
+      | Chance: 2.56%
+      | Count: max(0; U[0; 1])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 0 to 1
+      |   -> Add: False
+      | Set Potion:
+      |   -> Potion: Potion of Water Breathing
+    ali:item minecraft:tipped_arrow x0-1 {"minecraft:potion_contents":{potion:"minecraft:invisibility"}}
+      | Chance: 2.56%
+      | Count: max(0; U[0; 1])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 0 to 1
+      |   -> Add: False
+      | Set Potion:
+      |   -> Potion: Potion of Invisibility
+    ali:item minecraft:tipped_arrow x0-1 {"minecraft:potion_contents":{potion:"minecraft:night_vision"}}
+      | Chance: 2.56%
+      | Count: max(0; U[0; 1])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 0 to 1
+      |   -> Add: False
+      | Set Potion:
+      |   -> Potion: Potion of Night Vision
+    ali:item minecraft:tipped_arrow x0-1 {"minecraft:potion_contents":{potion:"minecraft:weakness"}}
+      | Chance: 2.56%
+      | Count: max(0; U[0; 1])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 0 to 1
+      |   -> Add: False
+      | Set Potion:
+      |   -> Potion: Potion of Weakness
+    ali:item minecraft:tipped_arrow x0-1 {"minecraft:potion_contents":{potion:"minecraft:poison"}}
+      | Chance: 2.56%
+      | Count: max(0; U[0; 1])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 0 to 1
+      |   -> Add: False
+      | Set Potion:
+      |   -> Potion: Potion of Poison
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1
+    | ----- Predicates -----
+    | Random Chance:
+    |   -> Chance: 0.01

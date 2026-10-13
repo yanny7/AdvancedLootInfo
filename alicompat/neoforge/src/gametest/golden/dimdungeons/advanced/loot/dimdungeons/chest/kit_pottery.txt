@@ -1,0 +1,124 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 27
+    ali:item minecraft:brick x5-9
+      | Chance: 25%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:clay_ball x5-9
+      | Chance: 16.67%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:clay x2-4
+      | Chance: 16.67%
+      | Count: max(0; U[2; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 4
+      |   -> Add: False
+    ali:item minecraft:flower_pot x5-9
+      | Chance: 16.67%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:decorated_pot x2-4
+      | Chance: 8.33%
+      | Count: max(0; U[2; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 4
+      |   -> Add: False
+    ali:item minecraft:furnace x1
+      | Chance: 8.33%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:reference
+      | Selects all entries
+      | Chance: 8.33%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item minecraft:angler_pottery_sherd x1
+            | Chance: 0.36%
+            | Count: 1
+          ali:item minecraft:archer_pottery_sherd x1
+            | Chance: 0.36%
+            | Count: 1
+          ali:item minecraft:arms_up_pottery_sherd x1
+            | Chance: 0.36%
+            | Count: 1
+          ali:item minecraft:blade_pottery_sherd x1
+            | Chance: 0.36%
+            | Count: 1
+          ali:item minecraft:brewer_pottery_sherd x1
+            | Chance: 0.36%
+            | Count: 1
+          ali:item minecraft:burn_pottery_sherd x1
+            | Chance: 0.36%
+            | Count: 1
+          ali:item minecraft:danger_pottery_sherd x1
+            | Chance: 0.36%
+            | Count: 1
+          ali:item minecraft:explorer_pottery_sherd x1
+            | Chance: 0.36%
+            | Count: 1
+          ali:item minecraft:flow_pottery_sherd x1
+            | Chance: 0.36%
+            | Count: 1
+          ali:item minecraft:friend_pottery_sherd x1
+            | Chance: 0.36%
+            | Count: 1
+          ali:item minecraft:guster_pottery_sherd x1
+            | Chance: 0.36%
+            | Count: 1
+          ali:item minecraft:heart_pottery_sherd x1
+            | Chance: 0.36%
+            | Count: 1
+          ali:item minecraft:heartbreak_pottery_sherd x1
+            | Chance: 0.36%
+            | Count: 1
+          ali:item minecraft:howl_pottery_sherd x1
+            | Chance: 0.36%
+            | Count: 1
+          ali:item minecraft:miner_pottery_sherd x1
+            | Chance: 0.36%
+            | Count: 1
+          ali:item minecraft:mourner_pottery_sherd x1
+            | Chance: 0.36%
+            | Count: 1
+          ali:item minecraft:prize_pottery_sherd x1
+            | Chance: 0.36%
+            | Count: 1
+          ali:item minecraft:plenty_pottery_sherd x1
+            | Chance: 0.36%
+            | Count: 1
+          ali:item minecraft:scrape_pottery_sherd x1
+            | Chance: 0.36%
+            | Count: 1
+          ali:item minecraft:sheaf_pottery_sherd x1
+            | Chance: 0.36%
+            | Count: 1
+          ali:item minecraft:shelter_pottery_sherd x1
+            | Chance: 0.36%
+            | Count: 1
+          ali:item minecraft:skull_pottery_sherd x1
+            | Chance: 0.36%
+            | Count: 1
+          ali:item minecraft:snort_pottery_sherd x1
+            | Chance: 0.36%
+            | Count: 1

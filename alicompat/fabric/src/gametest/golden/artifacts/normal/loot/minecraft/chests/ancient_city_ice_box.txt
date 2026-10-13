@@ -1,0 +1,57 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4 to 10
+    ali:item minecraft:snowball x2-6
+      | Chance: 44.44%
+      | Count: 2 to 6
+    ali:item minecraft:packed_ice x2-6
+      | Chance: 22.22%
+      | Count: 2 to 6
+    ali:item minecraft:suspicious_stew x2-6
+      | Chance: 11.11%
+      | Count: 2 to 6
+      | ----- Modifiers -----
+      | Set Stew Effect:
+      |   -> Night Vision
+      |     -> Duration: 7 to 10
+      |   -> Blindness
+      |     -> Duration: 5 to 7
+    ali:item minecraft:golden_carrot x1-10
+      | Chance: 11.11%
+      | Count: 1 to 10
+    ali:item minecraft:baked_potato x1-10
+      | Chance: 11.11%
+      | Count: 1 to 10
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:reference
+            | Selects all entries
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:alternatives
+                  | Selects only first successful entry
+                  ali:item artifacts:snowshoes x1
+                    | Count: 1
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.2
+                    | Config Value:
+                    |   -> Config: items.snowshoes.generateAsLoot
+                  ali:empty
+                    | Drops nothing
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.2

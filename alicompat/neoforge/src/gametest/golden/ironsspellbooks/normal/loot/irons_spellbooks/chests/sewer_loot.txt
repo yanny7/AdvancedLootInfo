@@ -1,0 +1,34 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 62.5%
+    ali:item minecraft:emerald x1-3
+      | Chance: 12.5%
+      | Count: 1 to 3
+    ali:item minecraft:diamond x1
+      | Chance: 12.5%
+      | Count: 1
+    ali:item minecraft:turtle_egg x1
+      | Chance: 12.5%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:arcane_essence x1-12
+      | Count: 1 to 12
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3
+    ali:item minecraft:rotten_flesh x2-3
+      | Chance: 33.33%
+      | Count: 2 to 3
+    ali:item minecraft:slime_ball x2-6
+      | Chance: 33.33%
+      | Count: 2 to 6
+    ali:item minecraft:bone x1-4
+      | Chance: 33.33%
+      | Count: 1 to 4

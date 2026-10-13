@@ -20,6 +20,7 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.SwingAnimationType;
 import net.minecraft.world.item.component.FireworkExplosion;
 import net.minecraft.world.item.component.MapPostProcessing;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.CopyCustomDataFunction;
@@ -44,6 +45,8 @@ public class EnumTypes {
         TRANSLATED_ENUMS.put(CopyCustomDataFunction.MergeStrategy.class, "merge_strategy");
         TRANSLATED_ENUMS.put(AttributeModifier.Operation.class, "attribute_operation");
         TRANSLATED_ENUMS.put(LootContext.EntityTarget.class, "entity_target");
+        TRANSLATED_ENUMS.put(LootContext.BlockEntityTarget.class, "block_entity_target");
+        TRANSLATED_ENUMS.put(LootContext.ItemStackTarget.class, "item_stack_target");
         TRANSLATED_ENUMS.put(SetNameFunction.Target.class, "name_target");
         TRANSLATED_ENUMS.put(ListOperation.Type.class, "list_operation");
         TRANSLATED_ENUMS.put(ItemUseAnimation.class, "item_use_animation");
@@ -57,6 +60,7 @@ public class EnumTypes {
         TRANSLATED_ENUMS.put(Variant.class, "horse_variant");
         TRANSLATED_ENUMS.put(Llama.Variant.class, "llama_variant");
         TRANSLATED_ENUMS.put(Axolotl.Variant.class, "axolotl_variant");
+        TRANSLATED_ENUMS.put(Explosion.BlockInteraction.class, "block_interaction");
     }
 
     @NotNull

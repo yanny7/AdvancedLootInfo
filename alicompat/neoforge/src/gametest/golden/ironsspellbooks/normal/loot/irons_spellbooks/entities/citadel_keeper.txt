@@ -1,0 +1,20 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:cinder_essence x1
+      | Count: 1
+      | ----- Predicates -----
+      | Killed by player
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:netherite_scrap x1
+      | Chance: 12.5%
+      |   -> Looting I: 15%
+      |   -> Looting II: 20%
+      |   -> Looting III: 25%
+      | Count: 1
+      | ----- Predicates -----
+      | Killed by player

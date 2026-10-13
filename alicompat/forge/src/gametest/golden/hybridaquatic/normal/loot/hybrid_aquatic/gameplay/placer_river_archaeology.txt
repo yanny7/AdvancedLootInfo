@@ -1,0 +1,41 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:gold_nugget x1
+      | Chance: 24.39%
+      | Count: 1
+    ali:item minecraft:raw_gold x1
+      | Chance: 19.51%
+      | Count: 1
+    ali:item minecraft:flint x1
+      | Chance: 14.63%
+      | Count: 1
+    ali:item minecraft:stick x1
+      | Chance: 14.63%
+      | Count: 1
+    ali:item minecraft:bone x1
+      | Chance: 9.76%
+      | Count: 1
+    ali:item minecraft:burn_pottery_sherd x1
+      | Chance: 2.44%
+      | Count: 1
+    ali:item minecraft:danger_pottery_sherd x1
+      | Chance: 2.44%
+      | Count: 1
+    ali:item minecraft:friend_pottery_sherd x1
+      | Chance: 2.44%
+      | Count: 1
+    ali:item minecraft:heart_pottery_sherd x1
+      | Chance: 2.44%
+      | Count: 1
+    ali:item minecraft:heartbreak_pottery_sherd x1
+      | Chance: 2.44%
+      | Count: 1
+    ali:item minecraft:howl_pottery_sherd x1
+      | Chance: 2.44%
+      | Count: 1
+    ali:item minecraft:sheaf_pottery_sherd x1
+      | Chance: 2.44%
+      | Count: 1

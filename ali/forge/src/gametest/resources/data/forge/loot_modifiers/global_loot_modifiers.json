@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "entries": [
+    "ali_gametest:add_explained",
+    "ali_gametest:add_unexplained",
+    "ali_gametest:unadapted",
+    "ali_gametest:remove_stone",
+    "ali_gametest:add_to_block",
+    "ali_gametest:add_to_entity",
+    "ali_gametest:add_unbounded"
+  ]
+}

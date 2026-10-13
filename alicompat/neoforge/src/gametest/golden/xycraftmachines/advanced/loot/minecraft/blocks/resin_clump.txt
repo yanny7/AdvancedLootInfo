@@ -1,0 +1,146 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:modified
+      | Selects only first successful entry
+      ali:item minecraft:resin_brick x0-6
+        | Count: max(0; (max(0; (max(0; (max(0; (max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (max(0; (max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) − 1)
+        | ----- Predicates -----
+        | Match Tool:
+        |   -> Components:
+        |     -> Expected Components:
+        |       -> xycraft_machines:auto_smelt
+        | ----- Modifiers -----
+        | Set Count:
+        |   -> Count: 1
+        |   -> Add: True
+        |   -> Predicates:
+        |     -> Block State Property:
+        |       -> Block: Resin Clump
+        |       -> Properties:
+        |         -> down: true
+        | Set Count:
+        |   -> Count: 1
+        |   -> Add: True
+        |   -> Predicates:
+        |     -> Block State Property:
+        |       -> Block: Resin Clump
+        |       -> Properties:
+        |         -> up: true
+        | Set Count:
+        |   -> Count: 1
+        |   -> Add: True
+        |   -> Predicates:
+        |     -> Block State Property:
+        |       -> Block: Resin Clump
+        |       -> Properties:
+        |         -> north: true
+        | Set Count:
+        |   -> Count: 1
+        |   -> Add: True
+        |   -> Predicates:
+        |     -> Block State Property:
+        |       -> Block: Resin Clump
+        |       -> Properties:
+        |         -> south: true
+        | Set Count:
+        |   -> Count: 1
+        |   -> Add: True
+        |   -> Predicates:
+        |     -> Block State Property:
+        |       -> Block: Resin Clump
+        |       -> Properties:
+        |         -> west: true
+        | Set Count:
+        |   -> Count: 1
+        |   -> Add: True
+        |   -> Predicates:
+        |     -> Block State Property:
+        |       -> Block: Resin Clump
+        |       -> Properties:
+        |         -> east: true
+        | Set Count:
+        |   -> Count: −1
+        |   -> Add: True
+        | Explosion Decay
+      ali:item minecraft:resin_clump x0-6
+        | Count: max(0; (max(0; (max(0; (max(0; (max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (max(0; (max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) − 1)
+        |   -> Block State Property:
+        |     -> Block: Resin Clump
+        |     -> Properties:
+        |       -> down: true
+        |   -> Block State Property:
+        |     -> Block: Resin Clump
+        |     -> Properties:
+        |       -> up: true
+        |   -> Block State Property:
+        |     -> Block: Resin Clump
+        |     -> Properties:
+        |       -> north: true
+        |   -> Block State Property:
+        |     -> Block: Resin Clump
+        |     -> Properties:
+        |       -> south: true
+        |   -> Block State Property:
+        |     -> Block: Resin Clump
+        |     -> Properties:
+        |       -> west: true
+        |   -> Block State Property:
+        |     -> Block: Resin Clump
+        |     -> Properties:
+        |       -> east: true
+        | ----- Modifiers -----
+        | Set Count:
+        |   -> Count: 1
+        |   -> Add: True
+        |   -> Predicates:
+        |     -> Block State Property:
+        |       -> Block: Resin Clump
+        |       -> Properties:
+        |         -> down: true
+        | Set Count:
+        |   -> Count: 1
+        |   -> Add: True
+        |   -> Predicates:
+        |     -> Block State Property:
+        |       -> Block: Resin Clump
+        |       -> Properties:
+        |         -> up: true
+        | Set Count:
+        |   -> Count: 1
+        |   -> Add: True
+        |   -> Predicates:
+        |     -> Block State Property:
+        |       -> Block: Resin Clump
+        |       -> Properties:
+        |         -> north: true
+        | Set Count:
+        |   -> Count: 1
+        |   -> Add: True
+        |   -> Predicates:
+        |     -> Block State Property:
+        |       -> Block: Resin Clump
+        |       -> Properties:
+        |         -> south: true
+        | Set Count:
+        |   -> Count: 1
+        |   -> Add: True
+        |   -> Predicates:
+        |     -> Block State Property:
+        |       -> Block: Resin Clump
+        |       -> Properties:
+        |         -> west: true
+        | Set Count:
+        |   -> Count: 1
+        |   -> Add: True
+        |   -> Predicates:
+        |     -> Block State Property:
+        |       -> Block: Resin Clump
+        |       -> Properties:
+        |         -> east: true
+        | Set Count:
+        |   -> Count: −1
+        |   -> Add: True
+        | Explosion Decay

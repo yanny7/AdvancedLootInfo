@@ -1,0 +1,52 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:leather x0-5
+      | Count: 0 to 2
+      |   -> Looting I: 0 to 3  ~1 to 2 (33%)
+      |   -> Looting II: 0 to 4  ~2 (33%)
+      |   -> Looting III: 0 to 5  ~2 to 3 (28%)
+      |   [chart 0..2 0-2 base=true modes=[false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,0.0000,0.0000,0.0000 | 0..3 0-3 base=false modes=[false, true, true, false, false, false] heights=0.5000,1.0000,1.0000,0.5000,0.0000,0.0000 | 0..4 0-4 base=false modes=[false, false, true, false, false, false] heights=0.2500,0.7500,1.0000,0.7500,0.2500,0.0000 | 0..5 0-5 base=false modes=[false, false, true, true, false, false] heights=0.1667,0.5000,0.8333,0.8333,0.5000,0.1667]
+      | ----- Modifiers -----
+      | Looting Enchant:
+      |   -> Value: 0 to 1
+  ali:item minecraft:leather x1
+    | Count: 1
+    | ----- Predicates -----
+    | Entity Properties:
+    |   -> Target: Killer
+    |   -> Predicate:
+    |     -> Entity Equipment:
+    |       -> Main Hand:
+    |         -> Tag: Knives
+    | Any Of:
+    |   -> Entity Properties:
+    |     -> Target: This Entity
+    |     -> Predicate:
+    |       -> Entity Type: Cow
+    |   -> Entity Properties:
+    |     -> Target: This Entity
+    |     -> Predicate:
+    |       -> Entity Type: Mooshroom
+    |   -> Entity Properties:
+    |     -> Target: This Entity
+    |     -> Predicate:
+    |       -> Entity Type: Horse
+    |   -> Entity Properties:
+    |     -> Target: This Entity
+    |     -> Predicate:
+    |       -> Entity Type: Donkey
+    |   -> Entity Properties:
+    |     -> Target: This Entity
+    |     -> Predicate:
+    |       -> Entity Type: Mule
+    |   -> Entity Properties:
+    |     -> Target: This Entity
+    |     -> Predicate:
+    |       -> Entity Type: Llama
+    |   -> Entity Properties:
+    |     -> Target: This Entity
+    |     -> Predicate:
+    |       -> Entity Type: Trader Llama

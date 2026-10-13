@@ -1,0 +1,9 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item refinedstorage:creative_portable_grid x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Copy Portable Grid Data

@@ -1,0 +1,69 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:gold_ingot x1-9
+      | Count: 1 to 9
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:golden_axe x1 {Damage:0}
+      | Chance: 11.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20 to 39
+      |   -> Treasure: True
+    ali:item minecraft:golden_pickaxe x1 {Damage:0}
+      | Chance: 11.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20 to 39
+      |   -> Treasure: True
+    ali:item minecraft:golden_shovel x1 {Damage:0}
+      | Chance: 11.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20 to 39
+      |   -> Treasure: True
+    ali:item minecraft:golden_shovel x1 {Damage:0}
+      | Chance: 11.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20 to 39
+      |   -> Treasure: True
+    ali:item minecraft:golden_helmet x1 {Damage:0}
+      | Chance: 11.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20 to 39
+      |   -> Treasure: True
+    ali:item minecraft:golden_chestplate x1 {Damage:0}
+      | Chance: 11.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20 to 39
+      |   -> Treasure: True
+    ali:item minecraft:golden_leggings x1 {Damage:0}
+      | Chance: 11.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20 to 39
+      |   -> Treasure: True
+    ali:item minecraft:golden_boots x1 {Damage:0}
+      | Chance: 11.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20 to 39
+      |   -> Treasure: True
+    ali:item minecraft:golden_horse_armor x1
+      | Chance: 11.11%
+      | Count: 1

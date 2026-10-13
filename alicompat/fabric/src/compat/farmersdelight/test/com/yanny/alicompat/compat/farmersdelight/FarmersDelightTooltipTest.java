@@ -23,7 +23,7 @@ public class FarmersDelightTooltipTest {
     @Test
     public void testSmokerCookFunction() {
         assertTooltip(UTILS.getFunctionTooltip(UTILS, smokerCook()).build(), List.of(
-                "Smoker Cook:"
+                "Smoker Cook"
         ));
     }
 
@@ -32,7 +32,7 @@ public class FarmersDelightTooltipTest {
         LootItemFunction function = smokerCook(ExplosionCondition.survivesExplosion().build());
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Smoker Cook:",
+                "Smoker Cook",
                 "  -> Predicates:",
                 "    -> Survives Explosion"
         ));
@@ -41,7 +41,7 @@ public class FarmersDelightTooltipTest {
     @Test
     public void testCopySkilletFunction() {
         assertTooltip(UTILS.getFunctionTooltip(UTILS, CopySkilletFunction.builder().build()).build(), List.of(
-                "Copy Skillet:"
+                "Copy Skillet"
         ));
     }
 
@@ -50,7 +50,7 @@ public class FarmersDelightTooltipTest {
         LootItemFunction function = CopySkilletFunction.builder().when(ExplosionCondition.survivesExplosion()).build();
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Copy Skillet:",
+                "Copy Skillet",
                 "  -> Predicates:",
                 "    -> Survives Explosion"
         ));

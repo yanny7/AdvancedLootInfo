@@ -1,0 +1,62 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item the_bumblezone:bee_stinger x1
+      | Chance: 14.05%
+      | Count: 1
+    ali:item the_bumblezone:dirt_pellet x1
+      | Chance: 8.26%
+      | Count: 1
+    ali:item the_bumblezone:honey_crystal_shards x1
+      | Chance: 8.26%
+      | Count: 1
+    ali:item minecraft:string x1
+      | Chance: 8.26%
+      | Count: 1
+    ali:item the_bumblezone:sugar_water_bottle x1
+      | Chance: 8.26%
+      | Count: 1
+    ali:item minecraft:bowl x1
+      | Chance: 8.26%
+      | Count: 1
+    ali:item the_bumblezone:dirt_pellet x1
+      | Chance: 8.26%
+      | Count: 1
+      | ----- Predicates -----
+      | Any Of:
+      |   -> Location Check:
+      |     -> Location:
+      |       -> Biome: Floral Meadows
+    ali:item the_bumblezone:honey_crystal_shards x1
+      | Chance: 8.26%
+      | Count: 1
+      | ----- Predicates -----
+      | Any Of:
+      |   -> Location Check:
+      |     -> Location:
+      |       -> Biome: Crystal Canyon
+    ali:item minecraft:tripwire_hook x1
+      | Chance: 6.61%
+      | Count: 1
+    ali:item minecraft:stick x1
+      | Chance: 6.61%
+      | Count: 1
+    ali:item minecraft:leather_boots x1
+      | Chance: 6.61%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 2% to 90%
+      |   -> Add: False
+    ali:item minecraft:honeycomb x1
+      | Chance: 6.61%
+      | Count: 1
+    ali:item minecraft:fishing_rod x1
+      | Chance: 1.65%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 0% to 90%
+      |   -> Add: False

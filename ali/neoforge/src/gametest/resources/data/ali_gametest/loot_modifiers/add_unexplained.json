@@ -1,0 +1,14 @@
+{
+  "type": "ali:gametest_add_item",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "ali_gametest:glm/target"
+    },
+    {
+      "condition": "minecraft:random_chance",
+      "chance": 0.5
+    }
+  ],
+  "item": "minecraft:gold_nugget"
+}

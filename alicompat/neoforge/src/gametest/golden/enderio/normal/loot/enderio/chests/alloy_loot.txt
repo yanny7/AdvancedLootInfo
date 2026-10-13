@@ -1,0 +1,26 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 0 to 2
+    ali:item enderio:conductive_alloy_ingot x1-2
+      | Chance: 2.86%
+      | Count: 1 to 2
+    ali:item enderio:redstone_alloy_ingot x1-3
+      | Chance: 5%
+      | Count: 1 to 3
+    ali:item enderio:pulsating_alloy_ingot x1
+      | Chance: 4.29%
+      | Count: 1
+    ali:item enderio:vibrant_alloy_ingot x1
+      | Chance: 2.86%
+      | Count: 1
+    ali:item enderio:iron_gear x1
+      | Chance: 3.57%
+      | Count: 1
+    ali:item enderio:energized_gear x1
+      | Chance: 1.79%
+      | Count: 1
+    ali:item enderio:vibrant_gear x1
+      | Chance: 0.89%
+      | Count: 1

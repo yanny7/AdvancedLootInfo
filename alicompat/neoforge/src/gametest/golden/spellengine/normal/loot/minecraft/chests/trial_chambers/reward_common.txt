@@ -1,0 +1,54 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:arrow x2-8
+      | Chance: 16%
+      | Count: 2 to 8
+    ali:item minecraft:tipped_arrow x2-8 {"minecraft:potion_contents":{potion:"minecraft:poison"}}
+      | Chance: 16%
+      | Count: 2 to 8
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Poison
+    ali:item minecraft:emerald x2-4
+      | Chance: 16%
+      | Count: 2 to 4
+    ali:item minecraft:wind_charge x1-3
+      | Chance: 12%
+      | Count: 1 to 3
+    ali:item minecraft:iron_ingot x1-4
+      | Chance: 12%
+      | Count: 1 to 4
+    ali:item minecraft:honey_bottle x1-2
+      | Chance: 12%
+      | Count: 1 to 2
+    ali:item minecraft:ominous_bottle x1
+      | Chance: 8%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Ominous Bottle Amplifier:
+      |   -> Amplifier: 0 to 1
+    ali:item minecraft:wind_charge x4-12
+      | Chance: 4%
+      | Count: 4 to 12
+    ali:item minecraft:diamond x1-2
+      | Chance: 4%
+      | Count: 1 to 2
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 0 to 1  ~0 (75%)
+    |   -> Bad Luck: 0
+    |   -> Luck 1: 0 to 1  ~0 (75%)
+    |   -> Luck 2: 0 to 1  ~0 (75%)
+    |   -> Luck 3: 0 to 1  ~0 (75%)
+    |   -> Luck 4: 0 to 1  ~0 (75%)
+    |   [chart 0..1 0-1 base=true modes=[true, false] heights=1.0000,0.3333 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.3333 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.3333 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.3333 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.3333]
+    ali:item spell_engine:spell_scroll x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Spell Bind Randomly:
+      |   -> Tier: 2 to 3
+      |   -> Spell Pool: spell_engine:treasure
+      |   -> Count: 1

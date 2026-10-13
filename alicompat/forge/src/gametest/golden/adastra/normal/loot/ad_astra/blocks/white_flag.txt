@@ -1,0 +1,13 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item ad_astra:white_flag x1
+      | Count: 1
+      | ----- Predicates -----
+      | Survives Explosion
+      | Block State Property:
+      |   -> Block: White Flag
+      |   -> Properties:
+      |     -> half: lower

@@ -1,0 +1,146 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 0 to 1
+    ali:modified
+      | Selects only first successful entry
+      ali:item minecraft:crossbow x1
+        | Chance: 35%
+        | Count: 1
+        | ----- Predicates -----
+        | Random Chance:
+        |   -> Chance: 0.35
+      ali:item minecraft:crossbow x1
+        | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 3
+    ali:item minecraft:wheat x3-5
+      | Chance: 41.18%
+      | Count: max(0; U[3; 5])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 3 to 5
+      |   -> Add: False
+    ali:item minecraft:potato x2-5
+      | Chance: 29.41%
+      | Count: max(0; U[2; 5])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 5
+      |   -> Add: False
+    ali:item minecraft:carrot x3-5
+      | Chance: 29.41%
+      | Count: max(0; U[3; 5])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 3 to 5
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 3
+    ali:item minecraft:dark_oak_log x2-3
+      | Count: max(0; U[2; 3])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 3
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 3
+    ali:item minecraft:experience_bottle x1
+      | Chance: 31.82%
+      | Count: 1
+    ali:item minecraft:string x1-6
+      | Chance: 18.18%
+      | Count: max(0; U[1; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 6
+      |   -> Add: False
+    ali:item minecraft:arrow x2-7
+      | Chance: 18.18%
+      | Count: max(0; U[2; 7])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 7
+      |   -> Add: False
+    ali:item minecraft:tripwire_hook x1-3
+      | Chance: 13.64%
+      | Count: max(0; U[1; 3])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 3
+      |   -> Add: False
+    ali:item minecraft:iron_ingot x1-3
+      | Chance: 13.64%
+      | Count: max(0; U[1; 3])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 3
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 4.55%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 0 to 1
+    ali:item minecraft:goat_horn x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Instrument:
+      |   -> Options:
+      |     -> Tag: minecraft:regular_goat_horns
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 75%
+    ali:item minecraft:sentry_armor_trim_smithing_template x2
+      | Chance: 25%
+      | Count: 2
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:enchanted_book x1
+      | Chance: 66.67%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantment: Quick Charge
+      |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
+    ali:empty
+      | Drops nothing
+      | Chance: 33.33%
+  ali:empty
+    | Chance: 35%
+    | Count: 1
+    | Requires a player
+  ali:item apotheosis:gem x1
+    | Chance: 25%
+    | Count: 1
+    | Requires a player
+  ali:item apotheosis:gem x1
+    | Chance: 4%
+    | Count: 1
+    | ----- Predicates -----
+    | Entity Properties:
+    |   -> Target: This Entity
+    |   -> Predicate:
+    |     -> Entity Sub Predicate:
+    |       -> Is Monster
+    | Killed by real player
+    | Requires a player

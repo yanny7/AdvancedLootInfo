@@ -1,0 +1,17 @@
+[
+  {
+    "function": "minecraft:set_count",
+    "count": 4
+  },
+  {
+    "function": "minecraft:set_count",
+    "count": 2,
+    "add": true,
+    "conditions": [
+      {
+        "condition": "minecraft:random_chance",
+        "chance": 0.5
+      }
+    ]
+  }
+]

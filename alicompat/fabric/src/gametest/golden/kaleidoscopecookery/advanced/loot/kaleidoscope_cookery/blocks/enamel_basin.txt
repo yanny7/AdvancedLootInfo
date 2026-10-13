@@ -1,0 +1,155 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item kaleidoscope_cookery:oil x1
+      | Chance: 9.09%
+      | Count: 1
+      | ----- Predicates -----
+      | Survives Explosion
+      | Block State Property:
+      |   -> Block: Enamel Basin
+      |   -> Properties:
+      |     -> oil_count: 2
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item kaleidoscope_cookery:oil x1
+      | Chance: 9.09%
+      | Count: 1
+      | ----- Predicates -----
+      | Survives Explosion
+      | Block State Property:
+      |   -> Block: Enamel Basin
+      |   -> Properties:
+      |     -> oil_count: 3
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item kaleidoscope_cookery:oil x2
+      | Chance: 9.09%
+      | Count: 2
+      | ----- Predicates -----
+      | Survives Explosion
+      | Block State Property:
+      |   -> Block: Enamel Basin
+      |   -> Properties:
+      |     -> oil_count: 4
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2
+      |   -> Add: False
+    ali:item kaleidoscope_cookery:oil x2
+      | Chance: 9.09%
+      | Count: 2
+      | ----- Predicates -----
+      | Survives Explosion
+      | Block State Property:
+      |   -> Block: Enamel Basin
+      |   -> Properties:
+      |     -> oil_count: 5
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2
+      |   -> Add: False
+    ali:item kaleidoscope_cookery:oil x3
+      | Chance: 9.09%
+      | Count: 3
+      | ----- Predicates -----
+      | Survives Explosion
+      | Block State Property:
+      |   -> Block: Enamel Basin
+      |   -> Properties:
+      |     -> oil_count: 6
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 3
+      |   -> Add: False
+    ali:item kaleidoscope_cookery:oil x3
+      | Chance: 9.09%
+      | Count: 3
+      | ----- Predicates -----
+      | Survives Explosion
+      | Block State Property:
+      |   -> Block: Enamel Basin
+      |   -> Properties:
+      |     -> oil_count: 7
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 3
+      |   -> Add: False
+    ali:item kaleidoscope_cookery:oil x4
+      | Chance: 9.09%
+      | Count: 4
+      | ----- Predicates -----
+      | Survives Explosion
+      | Block State Property:
+      |   -> Block: Enamel Basin
+      |   -> Properties:
+      |     -> oil_count: 8
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4
+      |   -> Add: False
+    ali:item kaleidoscope_cookery:oil x4
+      | Chance: 9.09%
+      | Count: 4
+      | ----- Predicates -----
+      | Survives Explosion
+      | Block State Property:
+      |   -> Block: Enamel Basin
+      |   -> Properties:
+      |     -> oil_count: 9
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4
+      |   -> Add: False
+    ali:item kaleidoscope_cookery:oil x5
+      | Chance: 9.09%
+      | Count: 5
+      | ----- Predicates -----
+      | Survives Explosion
+      | Block State Property:
+      |   -> Block: Enamel Basin
+      |   -> Properties:
+      |     -> oil_count: 10
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5
+      |   -> Add: False
+    ali:item kaleidoscope_cookery:oil x5
+      | Chance: 9.09%
+      | Count: 5
+      | ----- Predicates -----
+      | Survives Explosion
+      | Block State Property:
+      |   -> Block: Enamel Basin
+      |   -> Properties:
+      |     -> oil_count: 11
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5
+      |   -> Add: False
+    ali:item kaleidoscope_cookery:oil x6
+      | Chance: 9.09%
+      | Count: 6
+      | ----- Predicates -----
+      | Survives Explosion
+      | Block State Property:
+      |   -> Block: Enamel Basin
+      |   -> Properties:
+      |     -> oil_count: 12
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 6
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:bucket x1
+      | Count: 1
+      | ----- Predicates -----
+      | Survives Explosion

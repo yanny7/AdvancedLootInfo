@@ -1,0 +1,309 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 3
+    |   -> Bad Luck: 1 to 3
+    |   -> Luck 1: 2 to 3
+    |   -> Luck 2: 2 to 3
+    |   -> Luck 3: 2 to 3
+    |   -> Luck 4: 2 to 3
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:strong_regeneration"}}
+      | Chance: 11.05%
+      |   -> Bad Luck: 11.24%
+      |   -> Luck 1: 10.64%
+      |   -> Luck 2: 10.26%
+      |   -> Luck 3: 9.9%
+      |   -> Luck 4: 9.57%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Regeneration
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:strong_swiftness"}}
+      | Chance: 11.05%
+      |   -> Bad Luck: 11.24%
+      |   -> Luck 1: 10.64%
+      |   -> Luck 2: 10.26%
+      |   -> Luck 3: 9.9%
+      |   -> Luck 4: 9.57%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Swiftness
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:long_fire_resistance"}}
+      | Chance: 11.05%
+      |   -> Bad Luck: 11.24%
+      |   -> Luck 1: 10.64%
+      |   -> Luck 2: 10.26%
+      |   -> Luck 3: 9.9%
+      |   -> Luck 4: 9.57%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Fire Resistance
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:strong_healing"}}
+      | Chance: 11.05%
+      |   -> Bad Luck: 11.24%
+      |   -> Luck 1: 10.64%
+      |   -> Luck 2: 10.26%
+      |   -> Luck 3: 9.9%
+      |   -> Luck 4: 9.57%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Healing
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:long_night_vision"}}
+      | Chance: 11.05%
+      |   -> Bad Luck: 11.24%
+      |   -> Luck 1: 10.64%
+      |   -> Luck 2: 10.26%
+      |   -> Luck 3: 9.9%
+      |   -> Luck 4: 9.57%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Night Vision
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:long_strength"}}
+      | Chance: 11.05%
+      |   -> Bad Luck: 11.24%
+      |   -> Luck 1: 10.64%
+      |   -> Luck 2: 10.26%
+      |   -> Luck 3: 9.9%
+      |   -> Luck 4: 9.57%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Strength
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:long_invisibility"}}
+      | Chance: 11.05%
+      |   -> Bad Luck: 11.24%
+      |   -> Luck 1: 10.64%
+      |   -> Luck 2: 10.26%
+      |   -> Luck 3: 9.9%
+      |   -> Luck 4: 9.57%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Invisibility
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:long_water_breathing"}}
+      | Chance: 11.05%
+      |   -> Bad Luck: 11.24%
+      |   -> Luck 1: 10.64%
+      |   -> Luck 2: 10.26%
+      |   -> Luck 3: 9.9%
+      |   -> Luck 4: 9.57%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Water Breathing
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"apothic_attributes:long_knowledge"}}
+      | Quality: 1
+      | Chance: 5.52%
+      |   -> Bad Luck: 5.06%
+      |   -> Luck 1: 5.85%
+      |   -> Luck 2: 6.15%
+      |   -> Luck 3: 6.44%
+      |   -> Luck 4: 6.7%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Ancient Knowledge
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"apothic_attributes:strong_resistance"}}
+      | Quality: 1
+      | Chance: 5.52%
+      |   -> Bad Luck: 5.06%
+      |   -> Luck 1: 5.85%
+      |   -> Luck 2: 6.15%
+      |   -> Luck 3: 6.44%
+      |   -> Luck 4: 6.7%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Resistance
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"apothic_attributes:extra_long_flying"}}
+      | Quality: 5
+      | Chance: 0.55%
+      |   -> Bad Luck: 0%
+      |   -> Luck 1: 3.19%
+      |   -> Luck 2: 5.64%
+      |   -> Luck 3: 7.92%
+      |   -> Luck 4: 10.05%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Flying
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4 to 7
+    |   -> Bad Luck: 3 to 7
+    |   -> Luck 1: 4 to 7
+    |   -> Luck 2: 4 to 7
+    |   -> Luck 3: 4 to 7
+    |   -> Luck 4: 4 to 7
+    ali:item minecraft:iron_ingot x2-5
+      | Chance: 11.75%
+      |   -> Bad Luck: 12.25%
+      |   -> Luck 1: 11.11%
+      |   -> Luck 2: 10.54%
+      |   -> Luck 3: 10.02%
+      |   -> Luck 4: 9.55%
+      | Count: 2 to 5
+    ali:item minecraft:gold_ingot x2-5
+      | Chance: 11.75%
+      |   -> Bad Luck: 12.25%
+      |   -> Luck 1: 11.11%
+      |   -> Luck 2: 10.54%
+      |   -> Luck 3: 10.02%
+      |   -> Luck 4: 9.55%
+      | Count: 2 to 5
+    ali:empty
+      | Quality: 2
+      | Chance: 11.75%
+      |   -> Bad Luck: 12.01%
+      |   -> Luck 1: 11.33%
+      |   -> Luck 2: 10.96%
+      |   -> Luck 3: 10.62%
+      |   -> Luck 4: 10.32%
+      | Count: 1
+    ali:item apotheosis:gem x1
+      | Quality: 3
+      | Chance: 9.4%
+      |   -> Bad Luck: 9.44%
+      |   -> Luck 1: 9.22%
+      |   -> Luck 2: 9.06%
+      |   -> Luck 3: 8.92%
+      |   -> Luck 4: 8.79%
+      | Count: 1
+    ali:item apotheosis:gem x1
+      | Quality: 3
+      | Chance: 9.4%
+      |   -> Bad Luck: 9.44%
+      |   -> Luck 1: 9.22%
+      |   -> Luck 2: 9.06%
+      |   -> Luck 3: 8.92%
+      |   -> Luck 4: 8.79%
+      | Count: 1
+    ali:empty
+      | Quality: 2
+      | Chance: 7.05%
+      |   -> Bad Luck: 7.11%
+      |   -> Luck 1: 6.89%
+      |   -> Luck 2: 6.74%
+      |   -> Luck 3: 6.61%
+      |   -> Luck 4: 6.49%
+      | Count: 1
+    ali:item minecraft:name_tag x1-2
+      | Chance: 5.88%
+      |   -> Bad Luck: 6.13%
+      |   -> Luck 1: 5.56%
+      |   -> Luck 2: 5.27%
+      |   -> Luck 3: 5.01%
+      |   -> Luck 4: 4.78%
+      | Count: 1 to 2
+    ali:item minecraft:lead x1-2
+      | Chance: 5.88%
+      |   -> Bad Luck: 6.13%
+      |   -> Luck 1: 5.56%
+      |   -> Luck 2: 5.27%
+      |   -> Luck 3: 5.01%
+      |   -> Luck 4: 4.78%
+      | Count: 1 to 2
+    ali:item minecraft:saddle x1-2
+      | Chance: 4.7%
+      |   -> Bad Luck: 4.9%
+      |   -> Luck 1: 4.44%
+      |   -> Luck 2: 4.21%
+      |   -> Luck 3: 4.01%
+      |   -> Luck 4: 3.82%
+      | Count: 1 to 2
+    ali:item minecraft:diamond_horse_armor x1
+      | Quality: 3
+      | Chance: 4.7%
+      |   -> Bad Luck: 4.53%
+      |   -> Luck 1: 4.78%
+      |   -> Luck 2: 4.85%
+      |   -> Luck 3: 4.91%
+      |   -> Luck 4: 4.97%
+      | Count: 1
+    ali:item minecraft:enchanted_book x1
+      | Quality: 5
+      | Chance: 4.7%
+      |   -> Bad Luck: 4.29%
+      |   -> Luck 1: 5%
+      |   -> Luck 2: 5.27%
+      |   -> Luck 3: 5.51%
+      |   -> Luck 4: 5.73%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
+    ali:empty
+      | Quality: 3
+      | Chance: 4.7%
+      |   -> Bad Luck: 4.53%
+      |   -> Luck 1: 4.78%
+      |   -> Luck 2: 4.85%
+      |   -> Luck 3: 4.91%
+      |   -> Luck 4: 4.97%
+      | Count: 1
+    ali:item minecraft:diamond x1-3
+      | Quality: 4
+      | Chance: 3.53%
+      |   -> Bad Luck: 3.19%
+      |   -> Luck 1: 3.78%
+      |   -> Luck 2: 4%
+      |   -> Luck 3: 4.21%
+      |   -> Luck 4: 4.39%
+      | Count: 1 to 3
+    ali:item minecraft:emerald x1-3
+      | Quality: 4
+      | Chance: 3.53%
+      |   -> Bad Luck: 3.19%
+      |   -> Luck 1: 3.78%
+      |   -> Luck 2: 4%
+      |   -> Luck 3: 4.21%
+      |   -> Luck 4: 4.39%
+      | Count: 1 to 3
+    ali:empty
+      | Quality: 5
+      | Chance: 1.18%
+      |   -> Bad Luck: 0.61%
+      |   -> Luck 1: 1.67%
+      |   -> Luck 2: 2.11%
+      |   -> Luck 3: 2.51%
+      |   -> Luck 4: 2.87%
+      | Count: 1
+    ali:item minecraft:enchanted_golden_apple x1
+      | Quality: 15
+      | Chance: 0.12%
+      |   -> Bad Luck: 0%
+      |   -> Luck 1: 1.78%
+      |   -> Luck 2: 3.27%
+      |   -> Luck 3: 4.61%
+      |   -> Luck 4: 5.83%
+      | Count: 1
+  ali:item apotheosis:gem x1
+    | Chance: 4%
+    | Count: 1
+    | ----- Predicates -----
+    | Entity Properties:
+    |   -> Target: This Entity
+    |   -> Predicate:
+    |     -> Entity Sub Predicate:
+    |       -> Is Monster
+    | Killed by real player
+    | Requires a player
+  ali:item apotheosis:gem x1
+    | Chance: 0.5%
+    | Count: 1
+    | ----- Predicates -----
+    | Entity Properties:
+    |   -> Target: This Entity
+    |   -> Predicate:
+    |     -> Entity Sub Predicate:
+    |       -> Is Monster
+    | Killed by player
+    | Requires a player

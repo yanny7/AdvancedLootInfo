@@ -1,0 +1,29 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item twilightforest:chicken_jerky x2-4
+      | Chance: 17.78%
+      | Count: 2 to 4
+    ali:item twilightforest:mutton_jerky x2-4
+      | Chance: 17.78%
+      | Count: 2 to 4
+    ali:item twilightforest:pork_jerky x2-4
+      | Chance: 17.78%
+      | Count: 2 to 4
+    ali:item twilightforest:venison_jerky x2-4
+      | Chance: 17.78%
+      | Count: 2 to 4
+    ali:item twilightforest:beef_jerky x2-3
+      | Chance: 8.89%
+      | Count: 2 to 3
+    ali:item twilightforest:tanned_leather x2-3
+      | Chance: 8.89%
+      | Count: 2 to 3
+    ali:item twilightforest:rabbit_jerky x2-3
+      | Chance: 8.89%
+      | Count: 2 to 3
+    ali:item twilightforest:gelatinous_slime_drop x1-2
+      | Chance: 2.22%
+      | Count: 1 to 2

@@ -1,0 +1,33 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item farmersdelight:golden_knife x1 {Damage:0}
+      | Chance: 40%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:empty
+      | Drops nothing
+      | Chance: 40%
+    ali:item farmersdelight:diamond_knife x1 {Damage:0}
+      | Chance: 20%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 15% to 80%
+      |   -> Add: False
+      | Enchant Randomly:
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 2
+    ali:item farmersdelight:ham x2-5
+      | Chance: 50%
+      | Count: 2 to 5
+    ali:item farmersdelight:smoked_ham x2-5
+      | Chance: 25%
+      | Count: 2 to 5
+    ali:empty
+      | Drops nothing
+      | Chance: 25%

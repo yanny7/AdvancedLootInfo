@@ -1,0 +1,23 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:emerald x1
+      | Chance: 27.27%
+      | Count: 1
+    ali:item minecraft:diamond x1
+      | Chance: 18.18%
+      | Count: 1
+    ali:item minecraft:amethyst_shard x1
+      | Chance: 18.18%
+      | Count: 1
+    ali:item the_bumblezone:honey_crystal_shards x2-8
+      | Chance: 18.18%
+      | Count: 2 to 8
+    ali:item minecraft:echo_shard x1
+      | Chance: 9.09%
+      | Count: 1
+    ali:item minecraft:prismarine_crystals x1
+      | Chance: 9.09%
+      | Count: 1

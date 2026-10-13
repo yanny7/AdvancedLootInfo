@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "awi:worldgen_data",
+  "max_ticks": 100,
+  "required": true,
+  "setup_ticks": 0,
+  "structure": "awi:empty"
+}

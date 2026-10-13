@@ -1,0 +1,130 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      | Chance: 16.67%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:charm_of_sinking x1
+              | Chance: 16.67%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: items.charm_of_sinking.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 16.67%
+    ali:reference
+      | Selects all entries
+      | Chance: 16.67%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:universal_attractor x1
+              | Chance: 16.67%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: items.universal_attractor.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 16.67%
+    ali:reference
+      | Selects all entries
+      | Chance: 16.67%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:superstitious_hat x1
+              | Chance: 16.67%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: items.superstitious_hat.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 16.67%
+    ali:reference
+      | Selects all entries
+      | Chance: 16.67%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:umbrella x1
+              | Chance: 16.67%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: items.umbrella.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 16.67%
+    ali:reference
+      | Selects all entries
+      | Chance: 16.67%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:warp_drive x1
+              | Chance: 16.67%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: items.warp_drive.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 16.67%
+    ali:reference
+      | Selects all entries
+      | Chance: 16.67%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:plastic_drinking_hat x1
+              | Chance: 12.5%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: items.plastic_drinking_hat.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 12.5%
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:novelty_drinking_hat x1
+              | Chance: 4.17%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: items.novelty_drinking_hat.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 4.17%

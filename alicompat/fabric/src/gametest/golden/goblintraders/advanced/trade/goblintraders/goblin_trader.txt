@@ -1,0 +1,1160 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects min(U[5; 8); 7)  ~7 (33%) Of These Trades
+    |   [chart 0..63 5-7 base=true modes=[false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true] heights=0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,0.0303,1.0000]
+    ali:items_to_items
+      | Uses: 24
+      | XP: 4
+      ali:item minecraft:apple x8
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 30
+      | XP: 6
+      ali:item minecraft:raw_iron x1
+      ali:item minecraft:air x0
+      ali:item minecraft:iron_ingot x2
+    ali:items_to_items
+      | Uses: 30
+      | XP: 6
+      ali:item minecraft:raw_gold x2
+      ali:item minecraft:air x0
+      ali:item minecraft:gold_ingot x3
+    ali:items_to_items
+      | Uses: 30
+      | XP: 6
+      ali:item minecraft:raw_copper x1
+      ali:item minecraft:air x0
+      ali:item minecraft:copper_ingot x2
+    ali:items_to_items
+      | Uses: 24
+      | XP: 4
+      ali:item minecraft:rotten_flesh x4
+      ali:item minecraft:air x0
+      ali:item minecraft:coal x1
+    ali:items_to_items
+      | Uses: 32
+      | XP: 4
+      ali:item minecraft:gravel x1
+      ali:item minecraft:air x0
+      ali:item minecraft:flint x2
+    ali:items_to_items
+      | Uses: 32
+      | XP: 4
+      ali:item minecraft:cobblestone x22-31
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x2
+  ali:trade_level
+    | Level: 2
+    | Randomly Selects min(U[3; 5); 9) Of These Trades
+    ali:items_to_items
+      | Uses: 32
+      | XP: 4
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:gunpowder x2
+    ali:items_to_items
+      | Uses: 12
+      | XP: 10
+      ali:item minecraft:turtle_egg x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x6
+    ali:items_to_items
+      | Uses: 4
+      | XP: 10
+      ali:item minecraft:pufferfish_bucket x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x8
+    ali:items_to_items
+      | Uses: 12
+      | XP: 10
+      ali:item minecraft:emerald x8
+      ali:item minecraft:air x0
+      ali:item minecraft:sponge x1
+    ali:items_to_items
+      | Uses: 2
+      | XP: 10
+      ali:item minecraft:damaged_anvil x1
+      ali:item minecraft:iron_ingot x2
+      ali:item minecraft:anvil x1
+    ali:items_to_items
+      | Uses: 2
+      | XP: 10
+      ali:item minecraft:chipped_anvil x1
+      ali:item minecraft:iron_ingot x1
+      ali:item minecraft:anvil x1
+    ali:items_to_items
+      | Uses: 64
+      | XP: 4
+      ali:item minecraft:clay x1
+      ali:item minecraft:air x0
+      ali:item minecraft:terracotta x2
+    ali:items_to_items
+      | Uses: 32
+      | XP: 4
+      ali:item minecraft:leather x1
+      ali:item minecraft:paper x2
+      ali:item minecraft:book x2
+    ali:items_to_items
+      | Uses: 20
+      | XP: 4
+      ali:item minecraft:amethyst_shard x2
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+  ali:trade_level
+    | Level: 3
+    | Randomly Selects min(U[2; 3); 51) Of These Trades
+    ali:items_to_items
+      | Uses: 64
+      | XP: 10
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item minecraft:experience_bottle x1
+    ali:items_to_items
+      | Uses: 2
+      | XP: 10
+      ali:item minecraft:emerald x16
+      ali:item minecraft:air x0
+      ali:item minecraft:name_tag x1
+    ali:items_to_items
+      | Uses: 64
+      | XP: 10
+      ali:item minecraft:packed_ice x4
+      ali:item minecraft:air x0
+      ali:item minecraft:blue_ice x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x16
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_11 x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x16
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_13 x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x16
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_cat x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x16
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_blocks x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x16
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_far x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x16
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_mall x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x16
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_mellohi x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x16
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_stal x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x16
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_strad x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x16
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_ward x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x16
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_wait x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x16
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_otherside x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x16
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_relic x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x16
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_precipice x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x16
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_creator x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x16
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_creator_music_box x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x16-27
+      ali:item minecraft:air x0
+      ali:item minecraft:wayfinder_armor_trim_smithing_template x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x16-27
+      ali:item minecraft:air x0
+      ali:item minecraft:raiser_armor_trim_smithing_template x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x16-27
+      ali:item minecraft:air x0
+      ali:item minecraft:shaper_armor_trim_smithing_template x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x16-27
+      ali:item minecraft:air x0
+      ali:item minecraft:host_armor_trim_smithing_template x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x16-27
+      ali:item minecraft:air x0
+      ali:item minecraft:ward_armor_trim_smithing_template x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x16-27
+      ali:item minecraft:air x0
+      ali:item minecraft:silence_armor_trim_smithing_template x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x16-27
+      ali:item minecraft:air x0
+      ali:item minecraft:eye_armor_trim_smithing_template x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x16-27
+      ali:item minecraft:air x0
+      ali:item minecraft:bolt_armor_trim_smithing_template x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x16-27
+      ali:item minecraft:air x0
+      ali:item minecraft:flow_armor_trim_smithing_template x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x2
+      ali:item minecraft:brick x1
+      ali:item minecraft:angler_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x2
+      ali:item minecraft:brick x1
+      ali:item minecraft:archer_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x2
+      ali:item minecraft:brick x1
+      ali:item minecraft:arms_up_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x2
+      ali:item minecraft:brick x1
+      ali:item minecraft:blade_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x2
+      ali:item minecraft:brick x1
+      ali:item minecraft:brewer_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x2
+      ali:item minecraft:brick x1
+      ali:item minecraft:burn_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x2
+      ali:item minecraft:brick x1
+      ali:item minecraft:danger_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x2
+      ali:item minecraft:brick x1
+      ali:item minecraft:explorer_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x2
+      ali:item minecraft:brick x1
+      ali:item minecraft:flow_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x2
+      ali:item minecraft:brick x1
+      ali:item minecraft:friend_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x2
+      ali:item minecraft:brick x1
+      ali:item minecraft:guster_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x2
+      ali:item minecraft:brick x1
+      ali:item minecraft:heart_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x2
+      ali:item minecraft:brick x1
+      ali:item minecraft:heartbreak_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x2
+      ali:item minecraft:brick x1
+      ali:item minecraft:howl_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x2
+      ali:item minecraft:brick x1
+      ali:item minecraft:miner_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x2
+      ali:item minecraft:brick x1
+      ali:item minecraft:mourner_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x2
+      ali:item minecraft:brick x1
+      ali:item minecraft:plenty_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x2
+      ali:item minecraft:brick x1
+      ali:item minecraft:prize_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x2
+      ali:item minecraft:brick x1
+      ali:item minecraft:scrape_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x2
+      ali:item minecraft:brick x1
+      ali:item minecraft:sheaf_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x2
+      ali:item minecraft:brick x1
+      ali:item minecraft:shelter_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x2
+      ali:item minecraft:brick x1
+      ali:item minecraft:skull_pottery_sherd x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x2
+      ali:item minecraft:brick x1
+      ali:item minecraft:snort_pottery_sherd x1
+  ali:trade_level
+    | Level: 4
+    | Randomly Selects min(U[1; 2); 24) Of These Trades
+    ali:items_to_items
+      | Uses: 1
+      | XP: 150
+      ali:item minecraft:emerald x6-13
+      ali:item minecraft:iron_ingot x1-2
+      ali:item minecraft:chainmail_helmet x1
+        | Increase Durability:
+        |   -> Durability Scale: 10.0
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:rarity
+        |       -> Rarity: Epic
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:enchantment_glint_override
+        |       -> Value: True
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> Goblin Tuned
+        |     -> A special item reengineered by the goblin with enhanced attributes
+        |     -> + Increased Durability
+        | Set Attributes:
+        |   -> Modifiers:
+        |     -> Entry:
+        |       -> Attribute: Armor
+        |       -> Operation: Add Value
+        |       -> Amount: 1
+        |       -> Id: goblintraders:goblins_armour
+        |       -> Equipment Slot: Head
+        |     -> Entry:
+        |       -> Attribute: Knockback Resistance
+        |       -> Operation: Add Value
+        |       -> Amount: 0.05
+        |       -> Id: goblintraders:goblins_knockback_resistance
+        |       -> Equipment Slot: Head
+        |   -> Replace: False
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> + More Armour
+        |     -> + Knockback Reduction
+    ali:items_to_items
+      | Uses: 1
+      | XP: 150
+      ali:item minecraft:emerald x6-13
+      ali:item minecraft:iron_ingot x1-2
+      ali:item minecraft:chainmail_chestplate x1
+        | Increase Durability:
+        |   -> Durability Scale: 10.0
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:rarity
+        |       -> Rarity: Epic
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:enchantment_glint_override
+        |       -> Value: True
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> Goblin Tuned
+        |     -> A special item reengineered by the goblin with enhanced attributes
+        |     -> + Increased Durability
+        | Set Attributes:
+        |   -> Modifiers:
+        |     -> Entry:
+        |       -> Attribute: Armor
+        |       -> Operation: Add Value
+        |       -> Amount: 1
+        |       -> Id: goblintraders:goblins_armour
+        |       -> Equipment Slot: Chest
+        |     -> Entry:
+        |       -> Attribute: Knockback Resistance
+        |       -> Operation: Add Value
+        |       -> Amount: 0.05
+        |       -> Id: goblintraders:goblins_knockback_resistance
+        |       -> Equipment Slot: Chest
+        |   -> Replace: False
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> + More Armour
+        |     -> + Knockback Reduction
+    ali:items_to_items
+      | Uses: 1
+      | XP: 150
+      ali:item minecraft:emerald x6-13
+      ali:item minecraft:iron_ingot x1-2
+      ali:item minecraft:chainmail_leggings x1
+        | Increase Durability:
+        |   -> Durability Scale: 10.0
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:rarity
+        |       -> Rarity: Epic
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:enchantment_glint_override
+        |       -> Value: True
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> Goblin Tuned
+        |     -> A special item reengineered by the goblin with enhanced attributes
+        |     -> + Increased Durability
+        | Set Attributes:
+        |   -> Modifiers:
+        |     -> Entry:
+        |       -> Attribute: Armor
+        |       -> Operation: Add Value
+        |       -> Amount: 1
+        |       -> Id: goblintraders:goblins_armour
+        |       -> Equipment Slot: Legs
+        |     -> Entry:
+        |       -> Attribute: Knockback Resistance
+        |       -> Operation: Add Value
+        |       -> Amount: 0.05
+        |       -> Id: goblintraders:goblins_knockback_resistance
+        |       -> Equipment Slot: Legs
+        |   -> Replace: False
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> + More Armour
+        |     -> + Knockback Reduction
+    ali:items_to_items
+      | Uses: 1
+      | XP: 150
+      ali:item minecraft:emerald x6-13
+      ali:item minecraft:iron_ingot x1-2
+      ali:item minecraft:chainmail_boots x1
+        | Increase Durability:
+        |   -> Durability Scale: 10.0
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:rarity
+        |       -> Rarity: Epic
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:enchantment_glint_override
+        |       -> Value: True
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> Goblin Tuned
+        |     -> A special item reengineered by the goblin with enhanced attributes
+        |     -> + Increased Durability
+        | Set Attributes:
+        |   -> Modifiers:
+        |     -> Entry:
+        |       -> Attribute: Armor
+        |       -> Operation: Add Value
+        |       -> Amount: 1
+        |       -> Id: goblintraders:goblins_armour
+        |       -> Equipment Slot: Feet
+        |     -> Entry:
+        |       -> Attribute: Knockback Resistance
+        |       -> Operation: Add Value
+        |       -> Amount: 0.05
+        |       -> Id: goblintraders:goblins_knockback_resistance
+        |       -> Equipment Slot: Feet
+        |   -> Replace: False
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> + More Armour
+        |     -> + Knockback Reduction
+    ali:items_to_items
+      | Uses: 1
+      | XP: 150
+      ali:item minecraft:nether_star x1
+      ali:item minecraft:dragon_head x1
+      ali:item minecraft:copper_helmet x1
+        | Increase Durability:
+        |   -> Durability Scale: 10.0
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:rarity
+        |       -> Rarity: Epic
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:enchantment_glint_override
+        |       -> Value: True
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> Goblin Tuned
+        |     -> A special item reengineered by the goblin with enhanced attributes
+        |     -> + Increased Durability
+        | Set Attributes:
+        |   -> Modifiers:
+        |     -> Entry:
+        |       -> Attribute: Armor
+        |       -> Operation: Add Value
+        |       -> Amount: 1
+        |       -> Id: goblintraders:goblins_armour
+        |       -> Equipment Slot: Head
+        |     -> Entry:
+        |       -> Attribute: Knockback Resistance
+        |       -> Operation: Add Value
+        |       -> Amount: 0.05
+        |       -> Id: goblintraders:goblins_knockback_resistance
+        |       -> Equipment Slot: Head
+        |   -> Replace: False
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> + More Armour
+        |     -> + Knockback Reduction
+    ali:items_to_items
+      | Uses: 1
+      | XP: 150
+      ali:item minecraft:nether_star x1
+      ali:item minecraft:dragon_head x1
+      ali:item minecraft:copper_chestplate x1
+        | Increase Durability:
+        |   -> Durability Scale: 10.0
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:rarity
+        |       -> Rarity: Epic
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:enchantment_glint_override
+        |       -> Value: True
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> Goblin Tuned
+        |     -> A special item reengineered by the goblin with enhanced attributes
+        |     -> + Increased Durability
+        | Set Attributes:
+        |   -> Modifiers:
+        |     -> Entry:
+        |       -> Attribute: Armor
+        |       -> Operation: Add Value
+        |       -> Amount: 1
+        |       -> Id: goblintraders:goblins_armour
+        |       -> Equipment Slot: Chest
+        |     -> Entry:
+        |       -> Attribute: Knockback Resistance
+        |       -> Operation: Add Value
+        |       -> Amount: 0.05
+        |       -> Id: goblintraders:goblins_knockback_resistance
+        |       -> Equipment Slot: Chest
+        |   -> Replace: False
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> + More Armour
+        |     -> + Knockback Reduction
+    ali:items_to_items
+      | Uses: 1
+      | XP: 150
+      ali:item minecraft:nether_star x1
+      ali:item minecraft:dragon_head x1
+      ali:item minecraft:copper_leggings x1
+        | Increase Durability:
+        |   -> Durability Scale: 10.0
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:rarity
+        |       -> Rarity: Epic
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:enchantment_glint_override
+        |       -> Value: True
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> Goblin Tuned
+        |     -> A special item reengineered by the goblin with enhanced attributes
+        |     -> + Increased Durability
+        | Set Attributes:
+        |   -> Modifiers:
+        |     -> Entry:
+        |       -> Attribute: Armor
+        |       -> Operation: Add Value
+        |       -> Amount: 1
+        |       -> Id: goblintraders:goblins_armour
+        |       -> Equipment Slot: Legs
+        |     -> Entry:
+        |       -> Attribute: Knockback Resistance
+        |       -> Operation: Add Value
+        |       -> Amount: 0.05
+        |       -> Id: goblintraders:goblins_knockback_resistance
+        |       -> Equipment Slot: Legs
+        |   -> Replace: False
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> + More Armour
+        |     -> + Knockback Reduction
+    ali:items_to_items
+      | Uses: 1
+      | XP: 150
+      ali:item minecraft:nether_star x1
+      ali:item minecraft:dragon_head x1
+      ali:item minecraft:copper_boots x1
+        | Increase Durability:
+        |   -> Durability Scale: 10.0
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:rarity
+        |       -> Rarity: Epic
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:enchantment_glint_override
+        |       -> Value: True
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> Goblin Tuned
+        |     -> A special item reengineered by the goblin with enhanced attributes
+        |     -> + Increased Durability
+        | Set Attributes:
+        |   -> Modifiers:
+        |     -> Entry:
+        |       -> Attribute: Armor
+        |       -> Operation: Add Value
+        |       -> Amount: 1
+        |       -> Id: goblintraders:goblins_armour
+        |       -> Equipment Slot: Feet
+        |     -> Entry:
+        |       -> Attribute: Knockback Resistance
+        |       -> Operation: Add Value
+        |       -> Amount: 0.05
+        |       -> Id: goblintraders:goblins_knockback_resistance
+        |       -> Equipment Slot: Feet
+        |   -> Replace: False
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> + More Armour
+        |     -> + Knockback Reduction
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:night_vision"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:invisibility"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:leaping"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:strong_leaping"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:fire_resistance"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:swiftness"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:strong_swiftness"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:water_breathing"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:healing"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:strong_healing"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:regeneration"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:long_regeneration"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:strong_regeneration"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:strength"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:strong_strength"}}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 50
+      ali:item minecraft:emerald x2
+      ali:item minecraft:glass_bottle x1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:slow_falling"}}
+  ali:trade_level
+    | Level: 5
+    | Randomly Selects 1 Of These Trades
+    ali:items_to_items
+      | Uses: 1
+      | XP: 150
+      ali:item minecraft:apple x8
+      ali:item minecraft:emerald x8-31
+      ali:item minecraft:leather_boots x1
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:item_name
+        |       -> Item Name: Moon Boots
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:enchantment_glint_override
+        |       -> Value: True
+        | Set Attributes:
+        |   -> Modifiers:
+        |     -> Entry:
+        |       -> Attribute: Gravity
+        |       -> Operation: Add Value
+        |       -> Amount: −0.07
+        |       -> Id: goblintraders:goblins_gravity
+        |       -> Equipment Slot: Feet
+        |     -> Entry:
+        |       -> Attribute: Fall Damage Multiplier
+        |       -> Operation: Add Value
+        |       -> Amount: −0.83
+        |       -> Id: goblintraders:goblins_fall_damage
+        |       -> Equipment Slot: Feet
+        |     -> Entry:
+        |       -> Attribute: Safe Fall Distance
+        |       -> Operation: Add Value
+        |       -> Amount: 15
+        |       -> Id: goblintraders:goblins_safe_fall
+        |       -> Equipment Slot: Feet
+        |   -> Replace: False
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:rarity
+        |       -> Rarity: Epic
+    ali:items_to_items
+      | Uses: 2
+      | XP: 100
+      ali:item minecraft:emerald x8-13
+      ali:item minecraft:air x0
+      ali:item minecraft:map x1
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:item_name
+        |       -> Item Name: Mystery Map
+        | Exploration Map:
+        |   -> Destination: goblintraders:on_mystery_maps
+        |   -> Map Decoration: minecraft:target_x
+        |   -> Zoom: 2
+        |   -> Search Radius: 50
+        |   -> Skip Known Structures: True
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore: "I wonder what structure this will lead to..."
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:enchantment_glint_override
+        |       -> Value: True
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:rarity
+        |       -> Rarity: Epic
+    ali:items_to_items
+      | Uses: 1
+      | XP: 300
+      ali:item minecraft:nether_star x1
+      ali:item minecraft:dragon_head x1
+      ali:item minecraft:diamond_pickaxe x1
+        | Increase Durability:
+        |   -> Durability Scale: 10.0
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:rarity
+        |       -> Rarity: Epic
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:enchantment_glint_override
+        |       -> Value: True
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> Goblin Tuned
+        |     -> A special item reengineered by the goblin with enhanced attributes
+        |     -> + Increased Durability
+        | Set Attributes:
+        |   -> Modifiers:
+        |     -> Entry:
+        |       -> Attribute: Block Interaction Range
+        |       -> Operation: Add Value
+        |       -> Amount: 2
+        |       -> Id: goblintraders:goblins_block_range
+        |       -> Equipment Slot: Hand
+        |     -> Entry:
+        |       -> Attribute: Block Break Speed
+        |       -> Operation: Add Value
+        |       -> Amount: 1
+        |       -> Id: goblintraders:goblins_break_speed
+        |       -> Equipment Slot: Hand
+        |   -> Replace: False
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> + Extended Reach
+        |     -> + Increased Break Speed
+    ali:items_to_items
+      | Uses: 1
+      | XP: 300
+      ali:item minecraft:nether_star x1
+      ali:item minecraft:dragon_head x1
+      ali:item minecraft:diamond_axe x1
+        | Increase Durability:
+        |   -> Durability Scale: 10.0
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:rarity
+        |       -> Rarity: Epic
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:enchantment_glint_override
+        |       -> Value: True
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> Goblin Tuned
+        |     -> A special item reengineered by the goblin with enhanced attributes
+        |     -> + Increased Durability
+        | Set Attributes:
+        |   -> Modifiers:
+        |     -> Entry:
+        |       -> Attribute: Block Interaction Range
+        |       -> Operation: Add Value
+        |       -> Amount: 2
+        |       -> Id: goblintraders:goblins_block_range
+        |       -> Equipment Slot: Hand
+        |     -> Entry:
+        |       -> Attribute: Block Break Speed
+        |       -> Operation: Add Value
+        |       -> Amount: 1
+        |       -> Id: goblintraders:goblins_break_speed
+        |       -> Equipment Slot: Hand
+        |   -> Replace: False
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> + Extended Reach
+        |     -> + Increased Break Speed
+    ali:items_to_items
+      | Uses: 1
+      | XP: 300
+      ali:item minecraft:nether_star x1
+      ali:item minecraft:dragon_head x1
+      ali:item minecraft:diamond_shovel x1
+        | Increase Durability:
+        |   -> Durability Scale: 10.0
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:rarity
+        |       -> Rarity: Epic
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:enchantment_glint_override
+        |       -> Value: True
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> Goblin Tuned
+        |     -> A special item reengineered by the goblin with enhanced attributes
+        |     -> + Increased Durability
+        | Set Attributes:
+        |   -> Modifiers:
+        |     -> Entry:
+        |       -> Attribute: Block Interaction Range
+        |       -> Operation: Add Value
+        |       -> Amount: 2
+        |       -> Id: goblintraders:goblins_block_range
+        |       -> Equipment Slot: Hand
+        |     -> Entry:
+        |       -> Attribute: Block Break Speed
+        |       -> Operation: Add Value
+        |       -> Amount: 1
+        |       -> Id: goblintraders:goblins_break_speed
+        |       -> Equipment Slot: Hand
+        |   -> Replace: False
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> + Extended Reach
+        |     -> + Increased Break Speed
+    ali:items_to_items
+      | Uses: 1
+      | XP: 300
+      ali:item minecraft:nether_star x1
+      ali:item minecraft:dragon_head x1
+      ali:item minecraft:diamond_hoe x1
+        | Increase Durability:
+        |   -> Durability Scale: 10.0
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:rarity
+        |       -> Rarity: Epic
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:enchantment_glint_override
+        |       -> Value: True
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> Goblin Tuned
+        |     -> A special item reengineered by the goblin with enhanced attributes
+        |     -> + Increased Durability
+        | Set Attributes:
+        |   -> Modifiers:
+        |     -> Entry:
+        |       -> Attribute: Block Interaction Range
+        |       -> Operation: Add Value
+        |       -> Amount: 2
+        |       -> Id: goblintraders:goblins_block_range
+        |       -> Equipment Slot: Hand
+        |     -> Entry:
+        |       -> Attribute: Block Break Speed
+        |       -> Operation: Add Value
+        |       -> Amount: 1
+        |       -> Id: goblintraders:goblins_break_speed
+        |       -> Equipment Slot: Hand
+        |   -> Replace: False
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> + Extended Reach
+        |     -> + Increased Break Speed
+    ali:items_to_items
+      | Uses: 1
+      | XP: 1000
+      ali:item minecraft:nether_star x1
+      ali:item minecraft:dragon_head x3
+      ali:item minecraft:diamond_sword x1
+        | Increase Durability:
+        |   -> Durability Scale: 10.0
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:rarity
+        |       -> Rarity: Epic
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:enchantment_glint_override
+        |       -> Value: True
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> Goblin Tuned
+        |     -> A special item reengineered by the goblin with enhanced attributes
+        |     -> + Increased Durability
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:swing_animation
+        |       -> Type: Stab
+        |       -> Duration: 10
+        | Set Attributes:
+        |   -> Modifiers:
+        |     -> Entry:
+        |       -> Attribute: Attack Damage
+        |       -> Operation: Add Value
+        |       -> Amount: 2
+        |       -> Id: goblintraders:goblins_attack_damage
+        |       -> Equipment Slot: Hand
+        |     -> Entry:
+        |       -> Attribute: Entity Interaction Range
+        |       -> Operation: Add Value
+        |       -> Amount: 1.5
+        |       -> Id: goblintraders:goblins_range
+        |       -> Equipment Slot: Hand
+        |     -> Entry:
+        |       -> Attribute: Attack Speed
+        |       -> Operation: Add Value
+        |       -> Amount: 10
+        |       -> Id: goblintraders:goblins_attack_speed
+        |       -> Equipment Slot: Hand
+        |   -> Replace: False
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> + Greater Damage
+        |     -> + Extended Reach
+    ali:items_to_items
+      | Uses: 1
+      | XP: 500
+      ali:item minecraft:elytra x1
+      ali:item minecraft:emerald x24-35
+      ali:item minecraft:elytra x1
+        | Increase Durability:
+        |   -> Durability Scale: 10.0
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:rarity
+        |       -> Rarity: Epic
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:enchantment_glint_override
+        |       -> Value: True
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> Goblin Tuned
+        |     -> A special item reengineered by the goblin with enhanced attributes
+        |     -> + Increased Durability

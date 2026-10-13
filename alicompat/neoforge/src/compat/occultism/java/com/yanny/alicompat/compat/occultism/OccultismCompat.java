@@ -86,7 +86,7 @@ public class OccultismCompat implements IGlmModCompat {
         if (listings != null) {
             for (WonderingTrades.ItemListing listing : listings) {
                 if (listing instanceof WonderingTrades.ItemTrade trade) {
-                    trades.add(ReflectionUtils.copyClassData(ItemTradeAccessor.class, trade).getNode(utils, conditionNode));
+                    trades.add(ReflectionUtils.copyClassData(ItemTradeAccessor.class, trade, WonderingTrades.ItemTrade.class).getNode(utils, conditionNode));
                 } else {
                     LOGGER.warn("Unsupported Occultism wondering trader listing {}", listing.getClass().getName());
                 }

@@ -1,0 +1,56 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item aether:golden_oak_log x1
+      | Count: 1
+      | ----- Predicates -----
+      | Match Tool:
+      |   -> Enchantments:
+      |     -> Enchantment: Silk Touch
+      |     -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Double Drops
+      | Explosion Decay
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item aether:skyroot_log x1
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Enchantments:
+      |       -> Enchantment: Silk Touch
+      |       -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Double Drops
+      | Explosion Decay
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item aether:golden_amber x1-8
+      | Count: max(0; U[1; 2]) × max(1; U[0; 1])
+      |   -> Fortune LVL: max(0; U[1; 2]) × max(1; U[0; LVL + 1])
+      |   -> Fortune I: 1 to 4  ~2 (50%)
+      |   -> Fortune II: 1 to 6  ~2 (38%)
+      |   -> Fortune III: 1 to 8  ~2 (30%)
+      |   [chart 0..1 1-2 base=true modes=[false, false, false, false, false, false, false, false] heights=1.0000,1.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000 | 0..3 1-4 base=false modes=[false, true, false, false, false, false, false, false] heights=0.6667,1.0000,0.0000,0.3333,0.0000,0.0000,0.0000,0.0000 | 0..5 1-6 base=false modes=[false, true, false, false, false, false, false, false] heights=0.5000,0.7500,0.2500,0.2500,0.0000,0.2500,0.0000,0.0000 | 0..7 1-8 base=false modes=[false, true, false, false, false, false, false, false] heights=0.4000,0.6000,0.2000,0.4000,0.0000,0.2000,0.0000,0.2000]
+      | ----- Predicates -----
+      | Match Tool:
+      |   -> Tag: aether:golden_amber_harvesters
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Enchantments:
+      |       -> Enchantment: Silk Touch
+      |       -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Double Drops
+      | Explosion Decay
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
+      | Apply Bonus:
+      |   -> Enchantment: Fortune
+      |   -> Formula: minecraft:ore_drops

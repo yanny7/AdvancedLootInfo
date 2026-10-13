@@ -1,0 +1,93 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:emerald_block x1
+      | Chance: 17.24%
+      | Count: 1
+    ali:item minecraft:iron_block x1
+      | Chance: 13.79%
+      | Count: 1
+    ali:item minecraft:crossbow x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 13.79%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 5 to 20
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
+    ali:item minecraft:golden_apple x1
+      | Chance: 10.34%
+      | Count: 1
+    ali:item minecraft:diamond_axe x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 10.34%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 10 to 20
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
+    ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 10.34%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 10 to 20
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 6.9%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Knockback
+      |     -> Punch
+      |     -> Smite
+      |     -> Looting
+      |     -> Multishot
+      |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 6.9%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Breach
+      |     -> Density
+      |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 6.9%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Wind Burst
+      |       -> Levels: 1
+      |   -> Add: False
+    ali:item minecraft:diamond_block x1
+      | Chance: 3.45%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: max(0; binom(1; 25%))  ~0 (75%)
+    |   -> luck: max(0; binom(1; 25%) + floor(0.2 × luck))
+    |   -> Bad Luck: 0
+    |   -> Luck 1: 0 to 1  ~0 (75%)
+    |   -> Luck 2: 0 to 1  ~0 (75%)
+    |   -> Luck 3: 0 to 1  ~0 (75%)
+    |   -> Luck 4: 0 to 1  ~0 (75%)
+    |   [chart 0..1 0-1 base=true modes=[true, false] heights=1.0000,0.3333 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.3333 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.3333 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.3333 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.3333]
+    ali:item spell_engine:spell_scroll x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Spell Bind Randomly:
+      |   -> Tier: U[3; 4)
+      |   -> Spell Pool: spell_engine:treasure
+      |   -> Count: 1

@@ -1,0 +1,402 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 3
+    ali:item minecraft:iron_pickaxe x1 {Damage:0}
+      | Chance: 16.67%
+      | Count: 1
+    ali:item minecraft:golden_pickaxe x1 {Damage:0}
+      | Chance: 11.11%
+      | Count: 1
+    ali:item minecraft:iron_axe x1 {Damage:0}
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:iron_shovel x1 {Damage:0}
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:diamond_pickaxe x1 {Damage:0}
+      | Chance: 5.56%
+      | Count: 1
+    ali:item minecraft:golden_axe x1 {Damage:0}
+      | Chance: 5.56%
+      | Count: 1
+    ali:item minecraft:golden_shovel x1 {Damage:0}
+      | Chance: 5.56%
+      | Count: 1
+    ali:item minecraft:iron_helmet x1 {Damage:0}
+      | Chance: 5.56%
+      | Count: 1
+    ali:item minecraft:iron_chestplate x1 {Damage:0}
+      | Chance: 5.56%
+      | Count: 1
+    ali:item minecraft:iron_leggings x1 {Damage:0}
+      | Chance: 5.56%
+      | Count: 1
+    ali:item minecraft:iron_boots x1 {Damage:0}
+      | Chance: 5.56%
+      | Count: 1
+    ali:item minecraft:diamond_axe x1 {Damage:0}
+      | Chance: 2.78%
+      | Count: 1
+    ali:item minecraft:diamond_shovel x1 {Damage:0}
+      | Chance: 2.78%
+      | Count: 1
+    ali:item minecraft:chainmail_helmet x1 {Damage:0}
+      | Chance: 2.78%
+      | Count: 1
+    ali:item minecraft:chainmail_chestplate x1 {Damage:0}
+      | Chance: 2.78%
+      | Count: 1
+    ali:item minecraft:chainmail_leggings x1 {Damage:0}
+      | Chance: 2.78%
+      | Count: 1
+    ali:item minecraft:chainmail_boots x1 {Damage:0}
+      | Chance: 2.78%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 4
+    ali:item minecraft:gunpowder x2-8
+      | Chance: 11.11%
+      | Count: 2 to 8
+    ali:item minecraft:rotten_flesh x2-8
+      | Chance: 11.11%
+      | Count: 2 to 8
+    ali:item minecraft:spider_eye x2-8
+      | Chance: 11.11%
+      | Count: 2 to 8
+    ali:item minecraft:string x2-8
+      | Chance: 11.11%
+      | Count: 2 to 8
+    ali:item minecraft:paper x2-8
+      | Chance: 11.11%
+      | Count: 2 to 8
+    ali:item minecraft:bone x2-8
+      | Chance: 11.11%
+      | Count: 2 to 8
+    ali:item minecraft:stick x2-8
+      | Chance: 6.67%
+      | Count: 2 to 8
+    ali:item minecraft:glass_bottle x2-8
+      | Chance: 6.67%
+      | Count: 2 to 8
+    ali:item minecraft:leather x2-8
+      | Chance: 6.67%
+      | Count: 2 to 8
+    ali:item minecraft:flint x2-8
+      | Chance: 6.67%
+      | Count: 2 to 8
+    ali:item minecraft:feather x2-8
+      | Chance: 6.67%
+      | Count: 2 to 8
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 4
+    ali:item minecraft:coal x4-8
+      | Chance: 37.5%
+      | Count: 4 to 8
+    ali:item minecraft:raw_copper x2-8
+      | Chance: 18.75%
+      | Count: 2 to 8
+    ali:item minecraft:raw_iron x2-8
+      | Chance: 18.75%
+      | Count: 2 to 8
+    ali:item minecraft:raw_gold x2-8
+      | Chance: 18.75%
+      | Count: 2 to 8
+    ali:item minecraft:diamond x1-4
+      | Chance: 6.25%
+      | Count: 1 to 4
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:enchanted_book x1
+      | Chance: 18.46%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 15 to 30
+      |   -> Treasure: True
+    ali:item minecraft:golden_apple x1
+      | Chance: 9.23%
+      | Count: 1
+    ali:item minecraft:enchanted_golden_apple x1
+      | Chance: 2.31%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item artifacts:anglers_hat x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:antidote_vessel x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:aqua_dashers x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:bunny_hoppers x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:charm_of_sinking x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:chorus_totem x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:cloud_in_a_bottle x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:cowboy_hat x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:cross_necklace x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:crystal_heart x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:digging_claws x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:feral_claws x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:fire_gauntlet x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:flame_pendant x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:flippers x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:golden_hook x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:kitty_slippers x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:lucky_scarf x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:night_vision_goggles x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:obsidian_skull x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:onion_ring x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:panic_necklace x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:pickaxe_heater x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:pocket_piston x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:power_glove x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:rooted_boots x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:running_shoes x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:scarf_of_invisibility x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:shock_pendant x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:snorkel x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:snowshoes x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:steadfast_spikes x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:superstitious_hat x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:thorn_pendant x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:universal_attractor x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:vampiric_glove x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:villager_hat x1
+            | Chance: 2.5%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:reference
+            | Selects all entries
+            | Chance: 2.5%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:item artifacts:plastic_drinking_hat x1
+                  | Chance: 1.88%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Artifact Rarity Adjusted Chance:
+                  |   -> Default Probability: 0.15
+                ali:item artifacts:novelty_drinking_hat x1
+                  | Chance: 0.63%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Artifact Rarity Adjusted Chance:
+                  |   -> Default Probability: 0.15
+          ali:item artifacts:umbrella x1
+            | Chance: 1.56%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:whoopee_cushion x1
+            | Chance: 1.56%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:helium_flamingo x1
+            | Chance: 1.25%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15
+          ali:item artifacts:everlasting_beef x1
+            | Chance: 0.63%
+            | Count: 1
+            | ----- Predicates -----
+            | Artifact Rarity Adjusted Chance:
+            |   -> Default Probability: 0.15

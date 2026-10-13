@@ -1,0 +1,77 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:reference
+        | Selects all entries
+        ali:loot_table
+          | Selects all entries
+          ali:loot_pool
+            | Selects random entry
+            | Rolls: 1
+            ali:item minecraft:piglin_head x1
+              | Count: 1
+              | ----- Predicates -----
+              | Entity Properties:
+              |   -> Target: This Entity
+              |   -> Predicate:
+              |     -> Entity Type: Piglin
+      ali:reference
+        | Selects all entries
+        ali:loot_table
+          | Selects all entries
+          ali:loot_pool
+            | Selects random entry
+            | Rolls: 1
+            ali:item minecraft:creeper_head x1
+              | Count: 1
+              | ----- Predicates -----
+              | Entity Properties:
+              |   -> Target: This Entity
+              |   -> Predicate:
+              |     -> Entity Type: Creeper
+      ali:reference
+        | Selects all entries
+        ali:loot_table
+          | Selects all entries
+          ali:loot_pool
+            | Selects random entry
+            | Rolls: 1
+            ali:item minecraft:skeleton_skull x1
+              | Count: 1
+              | ----- Predicates -----
+              | Entity Properties:
+              |   -> Target: This Entity
+              |   -> Predicate:
+              |     -> Entity Type: Skeleton
+      ali:reference
+        | Selects all entries
+        ali:loot_table
+          | Selects all entries
+          ali:loot_pool
+            | Selects random entry
+            | Rolls: 1
+            ali:item minecraft:wither_skeleton_skull x1
+              | Count: 1
+              | ----- Predicates -----
+              | Entity Properties:
+              |   -> Target: This Entity
+              |   -> Predicate:
+              |     -> Entity Type: Wither Skeleton
+      ali:reference
+        | Selects all entries
+        ali:loot_table
+          | Selects all entries
+          ali:loot_pool
+            | Selects random entry
+            | Rolls: 1
+            ali:item minecraft:zombie_head x1
+              | Count: 1
+              | ----- Predicates -----
+              | Entity Properties:
+              |   -> Target: This Entity
+              |   -> Predicate:
+              |     -> Entity Type: Zombie

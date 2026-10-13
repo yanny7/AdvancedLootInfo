@@ -1,0 +1,236 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 27
+    ali:item minecraft:tinted_glass x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:white_stained_glass x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:orange_stained_glass x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:magenta_stained_glass x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:light_blue_stained_glass x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:yellow_stained_glass x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:lime_stained_glass x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:pink_stained_glass x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:gray_stained_glass x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:light_gray_stained_glass x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:cyan_stained_glass x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:purple_stained_glass x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:blue_stained_glass x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:brown_stained_glass x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:green_stained_glass x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:red_stained_glass x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:black_stained_glass x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:white_stained_glass_pane x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:orange_stained_glass_pane x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:magenta_stained_glass_pane x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:light_blue_stained_glass_pane x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:yellow_stained_glass_pane x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:lime_stained_glass_pane x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:pink_stained_glass_pane x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:gray_stained_glass_pane x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:light_gray_stained_glass_pane x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:cyan_stained_glass_pane x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:purple_stained_glass_pane x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:blue_stained_glass_pane x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:brown_stained_glass_pane x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:green_stained_glass_pane x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:red_stained_glass_pane x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:black_stained_glass_pane x5-9
+      | Chance: 3.03%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False

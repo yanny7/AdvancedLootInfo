@@ -1,0 +1,33 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4 to 6
+    ali:item minecraft:red_mushroom x1-5
+      | Chance: 27.78%
+      | Count: max(0; U[1; 5])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 5
+      |   -> Add: False
+    ali:item minecraft:brown_mushroom x1-5
+      | Chance: 27.78%
+      | Count: max(0; U[1; 5])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 5
+      |   -> Add: False
+    ali:item ribbits:giant_lilypad x1-2
+      | Chance: 27.78%
+      | Count: max(0; U[1; 2])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
+    ali:item minecraft:amethyst_shard x1-2
+      | Chance: 16.67%
+      | Count: max(0; U[1; 2])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False

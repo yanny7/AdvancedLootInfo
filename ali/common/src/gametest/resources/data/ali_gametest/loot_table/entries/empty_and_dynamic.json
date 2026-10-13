@@ -1,0 +1,22 @@
+{
+  "pools": [
+    {
+      "rolls": 1,
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:empty",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:dynamic",
+          "name": "minecraft:contents"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond"
+        }
+      ]
+    }
+  ]
+}

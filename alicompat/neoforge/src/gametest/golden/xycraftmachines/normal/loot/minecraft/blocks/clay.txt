@@ -1,0 +1,46 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:modified
+        | Selects only first successful entry
+        ali:item minecraft:terracotta x1
+          | Count: 1
+          | ----- Predicates -----
+          | Match Tool:
+          |   -> Components:
+          |     -> Expected Components:
+          |       -> xycraft_machines:auto_smelt
+          | Match Tool:
+          |   -> Components:
+          |     -> Partial Matchers:
+          |       -> minecraft:enchantments
+          |         -> Enchantment: Silk Touch
+          |         -> Level: ≥ 1
+        ali:item minecraft:clay x1
+          | Count: 1
+          | ----- Predicates -----
+          | Match Tool:
+          |   -> Components:
+          |     -> Partial Matchers:
+          |       -> minecraft:enchantments
+          |         -> Enchantment: Silk Touch
+          |         -> Level: ≥ 1
+      ali:modified
+        | Selects only first successful entry
+        ali:item minecraft:brick x4
+          | Count: 4
+          | ----- Predicates -----
+          | Match Tool:
+          |   -> Components:
+          |     -> Expected Components:
+          |       -> xycraft_machines:auto_smelt
+          | ----- Modifiers -----
+          | Explosion Decay
+        ali:item minecraft:clay_ball x4
+          | Count: 4
+          | ----- Modifiers -----
+          | Explosion Decay

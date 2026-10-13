@@ -22,6 +22,7 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.SwingAnimationType;
 import net.minecraft.world.item.component.FireworkExplosion;
 import net.minecraft.world.item.component.MapPostProcessing;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.CopyCustomDataFunction;
@@ -54,6 +55,7 @@ public class LanguageHolder {
         CoreLang.register(TRANSLATION_MAP, Lang.Multi.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Error.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Numbers.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.Error.class);
 
         put(EquipmentSlotGroup.ANY, "Any");
         put(EquipmentSlotGroup.MAINHAND, "Main Hand");
@@ -117,6 +119,8 @@ public class LanguageHolder {
         put(LootContext.EntityTarget.ATTACKING_PLAYER, "Attacking Player");
         put(LootContext.EntityTarget.TARGET_ENTITY, "Target Entity");
         put(LootContext.EntityTarget.INTERACTING_ENTITY, "Interacting Entity");
+        put(LootContext.BlockEntityTarget.BLOCK_ENTITY, "Block Entity");
+        put(LootContext.ItemStackTarget.TOOL, "Tool");
 
         put(SetNameFunction.Target.CUSTOM_NAME, "Custom Name");
         put(SetNameFunction.Target.ITEM_NAME, "Item Name");
@@ -198,6 +202,11 @@ public class LanguageHolder {
         put(Axolotl.Variant.GOLD, "Gold");
         put(Axolotl.Variant.CYAN, "Cyan");
         put(Axolotl.Variant.BLUE, "Blue");
+
+        put(Explosion.BlockInteraction.KEEP, "Keep Blocks");
+        put(Explosion.BlockInteraction.DESTROY, "Destroy Blocks");
+        put(Explosion.BlockInteraction.DESTROY_WITH_DECAY, "Destroy Blocks With Decay");
+        put(Explosion.BlockInteraction.TRIGGER_BLOCK, "Trigger Blocks");
 
         verifyEnumTranslations();
 

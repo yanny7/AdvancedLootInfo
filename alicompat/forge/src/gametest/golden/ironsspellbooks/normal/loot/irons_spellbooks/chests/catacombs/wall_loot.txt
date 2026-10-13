@@ -1,0 +1,173 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:arcane_essence x0-4
+      | Chance: 25%
+      | Count: 0 to 4
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:ancient_knowledge_fragment x1
+      | Chance: 5%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:blank_rune x1
+      | Chance: 17.5%
+      | Count: 1
+    ali:item irons_spellbooks:scroll x1
+      | Chance: 8.75%
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Spell:
+      |   -> Quality: 0.15 to 0.65
+      |   -> Applicable Spells:
+      |     -> Force: False
+    ali:reference
+      | Selects all entries
+      | Chance: 25%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item irons_spellbooks:silver_ring x1
+            | Chance: 0.67%
+            | Count: 1
+          ali:item irons_spellbooks:cooldown_ring x1
+            | Chance: 0.67%
+            | Count: 1
+          ali:item irons_spellbooks:heavy_chain_necklace x1
+            | Chance: 0.67%
+            | Count: 1
+          ali:item irons_spellbooks:emerald_stoneplate_ring x1
+            | Chance: 0.67%
+            | Count: 1
+          ali:item irons_spellbooks:fireward_ring x1
+            | Chance: 0.67%
+            | Count: 1
+          ali:item irons_spellbooks:frostward_ring x1
+            | Chance: 0.67%
+            | Count: 1
+          ali:item irons_spellbooks:cast_time_ring x1
+            | Chance: 0.67%
+            | Count: 1
+          ali:item irons_spellbooks:conjurers_talisman x1
+            | Chance: 0.67%
+            | Count: 1
+          ali:item irons_spellbooks:poisonward_ring x1
+            | Chance: 0.67%
+            | Count: 1
+          ali:item irons_spellbooks:concentration_amulet x1
+            | Chance: 0.67%
+            | Count: 1
+          ali:item irons_spellbooks:invisibility_ring x1
+            | Chance: 0.67%
+            | Count: 1
+          ali:item irons_spellbooks:teleportation_amulet x1
+            | Chance: 0.67%
+            | Count: 1
+          ali:item irons_spellbooks:affinity_ring x1
+            | Chance: 0.67%
+            | Count: 1
+            | ----- Modifiers -----
+            | Randomize Ring Enhancement:
+            |   -> Spell Filter:
+            |     -> Force: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item minecraft:rotten_flesh x1-8
+      | Chance: 20%
+      | Count: 1 to 8
+    ali:item minecraft:cobweb x1-4
+      | Chance: 20%
+      | Count: 1 to 4
+    ali:item minecraft:bone x2-5
+      | Chance: 20%
+      | Count: 2 to 5
+    ali:item minecraft:emerald x1-3
+      | Chance: 10%
+      | Count: 1 to 3
+    ali:item minecraft:diamond x1
+      | Chance: 10%
+      | Count: 1
+    ali:item minecraft:iron_ingot x1-4
+      | Chance: 10%
+      | Count: 1 to 4
+    ali:item minecraft:chain x1-5
+      | Chance: 10%
+      | Count: 1 to 5
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:skeleton_skull x1
+      | Chance: 35%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:iron_sword x1 {Damage:0}
+      | Chance: 7%
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Spell:
+      |   -> Quality: 0.2 to 0.75
+      |   -> Applicable Spells:
+      |     -> Force: False
+      | Enchant With Levels:
+      |   -> Levels: 1 to 10
+      |   -> Treasure: False
+    ali:item minecraft:iron_sword x1 {Damage:0}
+      | Chance: 7%
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Spell:
+      |   -> Quality: 0.2 to 0.75
+      |   -> Applicable Spells:
+      |     -> Force: False
+    ali:item irons_spellbooks:rotten_spell_book x1 {"irons_spellbooks:spell_container":{data:[],maxSpells:8,mustEquip:1b,spellWheel:1b}}
+      | Chance: 3.5%
+      | Count: 1
+    ali:item minecraft:diamond_sword x1 {Damage:0}
+      | Chance: 3.5%
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Spell:
+      |   -> Quality: 0.2 to 0.75
+      |   -> Applicable Spells:
+      |     -> Force: False
+      | Enchant With Levels:
+      |   -> Levels: 1 to 10
+      |   -> Treasure: False
+    ali:item minecraft:chainmail_helmet x1 {Damage:0}
+      | Chance: 3.5%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 10 to 20
+      |   -> Treasure: False
+    ali:item minecraft:chainmail_chestplate x1 {Damage:0}
+      | Chance: 3.5%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 10 to 20
+      |   -> Treasure: False
+    ali:item minecraft:iron_leggings x1 {Damage:0}
+      | Chance: 3.5%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 10 to 20
+      |   -> Treasure: False
+    ali:item minecraft:iron_boots x1 {Damage:0}
+      | Chance: 3.5%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 10 to 20
+      |   -> Treasure: False

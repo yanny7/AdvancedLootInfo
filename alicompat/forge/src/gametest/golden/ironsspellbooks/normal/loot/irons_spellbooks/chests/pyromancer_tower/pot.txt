@@ -1,0 +1,29 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:fire_ale x1
+      | Chance: 25%
+      | Count: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 21.43%
+    ali:item minecraft:emerald x1-5
+      | Chance: 14.29%
+      | Count: 1 to 5
+    ali:item minecraft:charcoal x1-3
+      | Chance: 14.29%
+      | Count: 1 to 3
+    ali:item irons_spellbooks:arcane_essence x2-7
+      | Chance: 10.71%
+      | Count: 2 to 7
+    ali:item minecraft:cobweb x1-2
+      | Chance: 7.14%
+      | Count: 1 to 2
+    ali:item minecraft:gold_ingot x1
+      | Chance: 3.57%
+      | Count: 1
+    ali:item minecraft:copper_ingot x1
+      | Chance: 3.57%
+      | Count: 1

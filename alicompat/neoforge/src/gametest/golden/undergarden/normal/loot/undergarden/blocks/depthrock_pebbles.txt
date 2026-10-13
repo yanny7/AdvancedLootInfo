@@ -1,0 +1,37 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item undergarden:depthrock_pebble x1-2
+      | Count: 
+      |   -> 2
+      |     -> Block State Property:
+      |       -> Block: Depthrock Pebbles
+      |       -> Properties:
+      |         -> pebbles: 2
+      |   -> otherwise 1
+      |     -> Block State Property:
+      |       -> Block: Depthrock Pebbles
+      |       -> Properties:
+      |         -> pebbles: 1
+      |   -> otherwise 1
+      | ----- Modifiers -----
+      | Explosion Decay
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Depthrock Pebbles
+      |       -> Properties:
+      |         -> pebbles: 1
+      | Set Count:
+      |   -> Count: 2
+      |   -> Add: False
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Depthrock Pebbles
+      |       -> Properties:
+      |         -> pebbles: 2
+      | Explosion Decay

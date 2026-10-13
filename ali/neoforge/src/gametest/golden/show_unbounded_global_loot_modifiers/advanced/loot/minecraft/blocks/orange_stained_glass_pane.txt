@@ -1,0 +1,20 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:orange_stained_glass_pane x1
+      | Count: 1
+      | ----- Predicates -----
+      | Match Tool:
+      |   -> Components:
+      |     -> Partial Matchers:
+      |       -> minecraft:enchantments
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1
+    | ----- Predicates -----
+    | Random Chance:
+    |   -> Chance: 0.01

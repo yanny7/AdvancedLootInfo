@@ -1,0 +1,62 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:echo_shard x6-9
+      | Count: 6 to 9
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 80%
+    ali:item minecraft:silence_armor_trim_smithing_template x1
+      | Chance: 10%
+      | Count: 1
+    ali:item minecraft:ward_armor_trim_smithing_template x1
+      | Chance: 10%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 50%
+    ali:item minecraft:disc_fragment_5 x1
+      | Chance: 45%
+      | Count: 1
+    ali:item minecraft:music_disc_otherside x1
+      | Chance: 5%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:sculk_vein x1
+      | Chance: 32.61%
+      | Count: 1
+    ali:item minecraft:sculk_sensor x1
+      | Chance: 26.09%
+      | Count: 1
+    ali:item minecraft:sculk x1
+      | Chance: 19.57%
+      | Count: 1
+    ali:item minecraft:sculk_shrieker x1
+      | Chance: 13.04%
+      | Count: 1
+    ali:item minecraft:sculk_catalyst x1
+      | Chance: 6.52%
+      | Count: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 2.17%
+  ali:item occultism:echo_dust x1
+    | Count: 1
+    | ----- Predicates -----
+    | Entity Properties:
+    |   -> Target: Attacker
+    |   -> Predicate:
+    |     -> Entity Equipment:
+    |       -> Main Hand:
+    |         -> Items:
+    |           -> Tag: Iesnium Knives

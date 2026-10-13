@@ -1,0 +1,219 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      | Chance: 80%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item minecraft:emerald_block x1
+            | Chance: 13.79%
+            | Count: 1
+          ali:item minecraft:iron_block x1
+            | Chance: 11.03%
+            | Count: 1
+          ali:item minecraft:crossbow x1 {"minecraft:enchantment_glint_override":1b}
+            | Chance: 11.03%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant With Levels:
+            |   -> Levels: 5 to 20
+            |   -> Options:
+            |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
+          ali:item minecraft:golden_apple x1
+            | Chance: 8.28%
+            | Count: 1
+          ali:item minecraft:diamond_axe x1 {"minecraft:enchantment_glint_override":1b}
+            | Chance: 8.28%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant With Levels:
+            |   -> Levels: 10 to 20
+            |   -> Options:
+            |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
+          ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b}
+            | Chance: 8.28%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant With Levels:
+            |   -> Levels: 10 to 20
+            |   -> Options:
+            |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
+          ali:item minecraft:enchanted_book x1
+            | Chance: 5.52%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant Randomly:
+            |   -> Enchantments:
+            |     -> Knockback
+            |     -> Punch
+            |     -> Smite
+            |     -> Looting
+            |     -> Multishot
+            |   -> Only Compatible: True
+            |   -> Include Additional Cost Component: False
+          ali:item minecraft:enchanted_book x1
+            | Chance: 5.52%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant Randomly:
+            |   -> Enchantments:
+            |     -> Breach
+            |     -> Density
+            |   -> Only Compatible: True
+            |   -> Include Additional Cost Component: False
+          ali:item minecraft:enchanted_book x1
+            | Chance: 5.52%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Enchantments:
+            |   -> Enchantments:
+            |     -> Wind Burst
+            |       -> Levels: 1
+            |   -> Add: False
+          ali:item minecraft:diamond_block x1
+            | Chance: 2.76%
+            | Count: 1
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 0 to 1  ~0 (75%)
+          |   -> Bad Luck: 0
+          |   -> Luck 1: 0 to 1  ~0 (75%)
+          |   -> Luck 2: 0 to 1  ~0 (75%)
+          |   -> Luck 3: 0 to 1  ~0 (75%)
+          |   -> Luck 4: 0 to 1  ~0 (75%)
+          |   [chart 0..1 0-1 base=true modes=[true, false] heights=1.0000,0.3333 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.3333 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.3333 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.3333 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.3333]
+          ali:item spell_engine:spell_scroll x1
+            | Chance: 80%
+            | Count: 1
+            | ----- Modifiers -----
+            | Spell Bind Randomly:
+            |   -> Tier: 3 to 4
+            |   -> Spell Pool: spell_engine:treasure
+            |   -> Count: 1
+    ali:reference
+      | Selects all entries
+      | Chance: 20%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item minecraft:emerald x4-10
+            | Chance: 6.67%
+            | Count: 4 to 10
+          ali:item minecraft:wind_charge x8-12
+            | Chance: 5.33%
+            | Count: 8 to 12
+          ali:item minecraft:tipped_arrow x4-12 {"minecraft:potion_contents":{potion:"minecraft:strong_slowness"}}
+            | Chance: 4%
+            | Count: 4 to 12
+            | ----- Modifiers -----
+            | Set Potion:
+            |   -> Potion: Potion of Slowness
+          ali:item minecraft:diamond x2-3
+            | Chance: 2.67%
+            | Count: 2 to 3
+          ali:item minecraft:ominous_bottle x1
+            | Chance: 1.33%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Ominous Bottle Amplifier:
+            |   -> Amplifier: 2 to 4
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 0 to 1  ~0 (75%)
+          |   -> Bad Luck: 0
+          |   -> Luck 1: 0 to 1  ~0 (75%)
+          |   -> Luck 2: 0 to 1  ~0 (75%)
+          |   -> Luck 3: 0 to 1  ~0 (75%)
+          |   -> Luck 4: 0 to 1  ~0 (75%)
+          |   [chart 0..1 0-1 base=true modes=[true, false] heights=1.0000,0.3333 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.3333 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.3333 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.3333 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.3333]
+          ali:item spell_engine:spell_scroll x1
+            | Chance: 20%
+            | Count: 1
+            | ----- Modifiers -----
+            | Spell Bind Randomly:
+            |   -> Tier: 2 to 3
+            |   -> Spell Pool: spell_engine:treasure
+            |   -> Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 3
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item minecraft:emerald x4-10
+            | Chance: 33.33%
+            | Count: 4 to 10
+          ali:item minecraft:wind_charge x8-12
+            | Chance: 26.67%
+            | Count: 8 to 12
+          ali:item minecraft:tipped_arrow x4-12 {"minecraft:potion_contents":{potion:"minecraft:strong_slowness"}}
+            | Chance: 20%
+            | Count: 4 to 12
+            | ----- Modifiers -----
+            | Set Potion:
+            |   -> Potion: Potion of Slowness
+          ali:item minecraft:diamond x2-3
+            | Chance: 13.33%
+            | Count: 2 to 3
+          ali:item minecraft:ominous_bottle x1
+            | Chance: 6.67%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Ominous Bottle Amplifier:
+            |   -> Amplifier: 2 to 4
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 0 to 1  ~0 (75%)
+          |   -> Bad Luck: 0
+          |   -> Luck 1: 0 to 1  ~0 (75%)
+          |   -> Luck 2: 0 to 1  ~0 (75%)
+          |   -> Luck 3: 0 to 1  ~0 (75%)
+          |   -> Luck 4: 0 to 1  ~0 (75%)
+          |   [chart 0..1 0-1 base=true modes=[true, false] heights=1.0000,0.3333 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.3333 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.3333 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.3333 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.3333]
+          ali:item spell_engine:spell_scroll x1
+            | Count: 1
+            | ----- Modifiers -----
+            | Spell Bind Randomly:
+            |   -> Tier: 2 to 3
+            |   -> Spell Pool: spell_engine:treasure
+            |   -> Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item minecraft:enchanted_golden_apple x1
+            | Chance: 22.5%
+            | Count: 1
+          ali:item minecraft:flow_armor_trim_smithing_template x1
+            | Chance: 22.5%
+            | Count: 1
+          ali:item minecraft:flow_banner_pattern x1
+            | Chance: 15%
+            | Count: 1
+          ali:item minecraft:music_disc_creator x1
+            | Chance: 7.5%
+            | Count: 1
+          ali:item minecraft:heavy_core x1
+            | Chance: 7.5%
+            | Count: 1

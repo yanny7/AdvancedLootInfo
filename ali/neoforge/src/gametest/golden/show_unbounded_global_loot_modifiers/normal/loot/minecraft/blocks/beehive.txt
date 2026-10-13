@@ -1,0 +1,28 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item minecraft:beehive x1
+        | Count: 1
+        | ----- Predicates -----
+        | Match Tool:
+        |   -> Components:
+        |     -> Partial Matchers:
+        |       -> minecraft:enchantments
+        |         -> Enchantment: Silk Touch
+        |         -> Level: ≥ 1
+        | ----- Modifiers -----
+        | Copy Components:
+        |   -> Source: minecraft:block_entity
+        |   -> Include: minecraft:bees
+        | Copy State:
+        |   -> Block: Beehive
+        |   -> Property: honey_level
+      ali:item minecraft:beehive x1
+        | Count: 1
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1

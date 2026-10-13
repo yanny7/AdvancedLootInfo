@@ -1,0 +1,56 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects 4 Of These Trades
+    ali:items_to_items
+      | Uses: 16
+      | XP: 0
+      | Price Multiplier: 0.05
+      ali:item minecraft:amethyst_shard x4-8
+      ali:item minecraft:air x0
+      ali:item minecraft:axolotl_bucket x1
+    ali:items_to_items
+      | Uses: 16
+      | XP: 0
+      | Price Multiplier: 0.05
+      ali:item minecraft:amethyst_shard x4-8
+      ali:item minecraft:air x0
+      ali:item minecraft:tropical_fish_bucket x1
+    ali:items_to_items
+      | Uses: 16
+      | XP: 0
+      | Price Multiplier: 0.05
+      ali:item minecraft:amethyst_shard x4-8
+      ali:item minecraft:air x0
+      ali:item minecraft:cooked_cod x8-24
+    ali:items_to_items
+      | Uses: 16
+      | XP: 0
+      | Price Multiplier: 0.05
+      ali:item minecraft:amethyst_shard x4-8
+      ali:item minecraft:air x0
+      ali:item minecraft:cooked_salmon x8-24
+    ali:items_to_items
+      | Uses: 4
+      | XP: 0
+      | Price Multiplier: 0.05
+      ali:item minecraft:amethyst_shard x12-16
+      ali:item minecraft:air x0
+      ali:item minecraft:fishing_rod x1 {Damage:0}
+        | Enchant With Levels:
+        |   -> Levels: 5 to 19
+        |   -> Treasure: False
+    ali:items_to_items
+      | Uses: 16
+      | XP: 0
+      | Price Multiplier: 0.05
+      ali:item minecraft:cod x16-32
+      ali:item minecraft:air x0
+      ali:item minecraft:amethyst_shard x4-8
+    ali:items_to_items
+      | Uses: 16
+      | XP: 0
+      | Price Multiplier: 0.05
+      ali:item minecraft:salmon x16-32
+      ali:item minecraft:air x0
+      ali:item minecraft:amethyst_shard x4-8

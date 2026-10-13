@@ -1,0 +1,123 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:emerald x1
+      | Chance: 5.32%
+      | Count: 1
+    ali:item minecraft:amethyst_shard x1
+      | Chance: 5.32%
+      | Count: 1
+    ali:item minecraft:raw_gold x1
+      | Chance: 5.32%
+      | Count: 1
+    ali:item minecraft:raw_iron x1
+      | Chance: 5.32%
+      | Count: 1
+    ali:item minecraft:raw_copper x1
+      | Chance: 5.32%
+      | Count: 1
+    ali:item the_bumblezone:banner_pattern_arrows x1
+      | Chance: 5.32%
+      | Count: 1
+    ali:item minecraft:book x1 {"minecraft:enchantments":{levels:{"the_bumblezone:hive_lifeline":1}}}
+      | Chance: 5.32%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantment: Hive Lifeline
+      |   -> Only Compatible: True
+    ali:item minecraft:diamond x1
+      | Chance: 4.26%
+      | Count: 1
+    ali:item minecraft:glow_berries x1
+      | Chance: 4.26%
+      | Count: 1
+    ali:item minecraft:spectral_arrow x1
+      | Chance: 3.19%
+      | Count: 1
+    ali:item minecraft:torchflower_seeds x1
+      | Chance: 3.19%
+      | Count: 1
+    ali:item minecraft:pitcher_pod x1
+      | Chance: 3.19%
+      | Count: 1
+    ali:item minecraft:bone x1
+      | Chance: 3.19%
+      | Count: 1
+    ali:item the_bumblezone:super_candle_white x1
+      | Chance: 3.19%
+      | Count: 1
+    ali:item minecraft:white_candle x1
+      | Chance: 3.19%
+      | Count: 1
+    ali:item minecraft:flower_banner_pattern x1
+      | Chance: 2.13%
+      | Count: 1
+    ali:item minecraft:string x1
+      | Chance: 2.13%
+      | Count: 1
+    ali:item minecraft:painting x1
+      | Chance: 2.13%
+      | Count: 1
+    ali:item minecraft:chain x1
+      | Chance: 2.13%
+      | Count: 1
+    ali:item minecraft:flower_pot x1
+      | Chance: 2.13%
+      | Count: 1
+    ali:item minecraft:writable_book x1
+      | Chance: 2.13%
+      | Count: 1
+    ali:item minecraft:book x1
+      | Chance: 2.13%
+      | Count: 1
+    ali:item minecraft:enchanted_book x1
+      | Chance: 2.13%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Only Compatible: True
+    ali:item minecraft:brush x1
+      | Chance: 2.13%
+      | Count: 1
+    ali:item minecraft:shears x1
+      | Chance: 2.13%
+      | Count: 1
+    ali:item minecraft:name_tag x1
+      | Chance: 2.13%
+      | Count: 1
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:strong_strength"}}
+      | Chance: 2.13%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Strength
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:long_poison"}}
+      | Chance: 2.13%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Poison
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:regeneration"}}
+      | Chance: 2.13%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Regeneration
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:awkward"}}
+      | Chance: 2.13%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Awkward Potion
+    ali:item minecraft:experience_bottle x1
+      | Chance: 1.06%
+      | Count: 1
+    ali:item minecraft:sniffer_egg x1
+      | Chance: 1.06%
+      | Count: 1
+    ali:item #minecraft:decorated_pot_sherds x1
+      | Chance: 1.06%
+      | Count: 1

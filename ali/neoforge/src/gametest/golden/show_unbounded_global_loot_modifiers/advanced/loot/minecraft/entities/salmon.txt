@@ -1,0 +1,42 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:salmon x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Furnace Smelt
+      |   -> Use Input Count: True
+      |   -> Predicates:
+      |     -> Any Of:
+      |       -> Entity Properties:
+      |         -> Target: This Entity
+      |         -> Predicate:
+      |           -> Entity Flags:
+      |             -> Is On Fire: True
+      |       -> Entity Properties:
+      |         -> Target: Direct Attacker
+      |         -> Predicate:
+      |           -> Entity Equipment:
+      |             -> Main Hand:
+      |               -> Components:
+      |                 -> Partial Matchers:
+      |                   -> minecraft:enchantments
+      |                     -> Enchantments:
+      |                       -> Tag: minecraft:smelts_loot
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:bone_meal x1
+      | Chance: 5%
+      | Count: 1
+      | ----- Predicates -----
+      | Random Chance:
+      |   -> Chance: 0.05
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1
+    | ----- Predicates -----
+    | Random Chance:
+    |   -> Chance: 0.01

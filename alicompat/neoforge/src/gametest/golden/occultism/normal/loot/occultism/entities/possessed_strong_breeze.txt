@@ -1,0 +1,25 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:heavy_core x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 33.33%
+    ali:item minecraft:flow_pottery_sherd x1
+      | Chance: 26.67%
+      | Count: 1
+    ali:item minecraft:flow_armor_trim_smithing_template x1
+      | Chance: 20%
+      | Count: 1
+    ali:item minecraft:flow_banner_pattern x1
+      | Chance: 13.33%
+      | Count: 1
+    ali:item minecraft:music_disc_creator x1
+      | Chance: 6.67%
+      | Count: 1

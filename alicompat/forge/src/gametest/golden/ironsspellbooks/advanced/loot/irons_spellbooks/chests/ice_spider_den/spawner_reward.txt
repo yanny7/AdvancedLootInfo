@@ -1,0 +1,41 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:enchanted_book x1
+      | Chance: 33.33%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 15
+      |   -> Treasure: False
+    ali:reference
+      | Selects all entries
+      | Chance: 33.33%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item irons_spellbooks:uncommon_ink x1
+            | Chance: 18%
+            | Count: 1
+          ali:item irons_spellbooks:common_ink x1
+            | Chance: 13.33%
+            | Count: 1
+          ali:item irons_spellbooks:rare_ink x1
+            | Chance: 1.33%
+            | Count: 1
+          ali:item irons_spellbooks:epic_ink x1
+            | Chance: 0.67%
+            | Count: 1
+    ali:item irons_spellbooks:scroll x1
+      | Chance: 33.33%
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Spell:
+      |   -> Quality: U[0; 0.5)
+      |   -> Applicable Spells:
+      |     -> School: Ice
+      |     -> Force: False

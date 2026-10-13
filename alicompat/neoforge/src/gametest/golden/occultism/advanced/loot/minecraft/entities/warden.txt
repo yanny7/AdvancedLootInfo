@@ -1,0 +1,19 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:sculk_catalyst x1
+      | Count: 1
+  ali:item occultism:echo_dust x1
+    | Count: 1
+    | ----- Predicates -----
+    | Entity Properties:
+    |   -> Target: Attacker
+    |   -> Predicate:
+    |     -> Entity Equipment:
+    |       -> Main Hand:
+    |         -> Items:
+    |           -> Tag: Iesnium Knives
+    | Random Chance:
+    |   -> Chance: 1

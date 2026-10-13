@@ -1,0 +1,30 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:arcane_essence x0-7
+      | Count: 0 to 4
+      |   -> Looting I: 0 to 5  ~1 to 4 (20%)
+      |   -> Looting II: 0 to 6  ~2 to 4 (20%)
+      |   -> Looting III: 0 to 7  ~3 to 4 (20%)
+      |   [chart 0..4 0-4 base=true modes=[false, false, false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,1.0000,1.0000,0.0000,0.0000,0.0000 | 0..5 0-5 base=false modes=[false, true, true, true, true, false, false, false] heights=0.5000,1.0000,1.0000,1.0000,1.0000,0.5000,0.0000,0.0000 | 0..6 0-6 base=false modes=[false, false, true, true, true, false, false, false] heights=0.2500,0.7500,1.0000,1.0000,1.0000,0.7500,0.2500,0.0000 | 0..7 0-7 base=false modes=[false, false, false, true, true, false, false, false] heights=0.1667,0.5000,0.8333,1.0000,1.0000,0.8333,0.5000,0.1667]
+      | ----- Modifiers -----
+      | Looting Enchant:
+      |   -> Value: 0 to 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:scroll x1
+      | Chance: 25%
+      |   -> Looting I: 30%
+      |   -> Looting II: 35%
+      |   -> Looting III: 40%
+      | Count: 1
+      | ----- Predicates -----
+      | Killed by player
+      | ----- Modifiers -----
+      | Randomize Spell:
+      |   -> Quality: 0 to 0.3
+      |   -> Applicable Spells:
+      |     -> Force: False

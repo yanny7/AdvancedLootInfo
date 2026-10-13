@@ -1,0 +1,65 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:arcane_essence x0-4
+      | Chance: 35%
+      | Count: 0 to 4
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:scroll x1
+      | Chance: 1%
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Spell:
+      |   -> Quality: 0.3 to 1
+      |   -> Applicable Spells:
+      |     -> Force: False
+    ali:item irons_spellbooks:blank_rune x1
+      | Chance: 1%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item irons_spellbooks:common_ink x1
+            | Chance: 19.5%
+            | Count: 1
+          ali:item irons_spellbooks:uncommon_ink x1
+            | Chance: 5%
+            | Count: 1
+          ali:item irons_spellbooks:rare_ink x1
+            | Chance: 0.5%
+            | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4
+    ali:item minecraft:cobweb x1
+      | Chance: 29.63%
+      | Count: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 22.22%
+    ali:item minecraft:rotten_flesh x1
+      | Chance: 18.52%
+      | Count: 1
+    ali:item minecraft:charcoal x1
+      | Chance: 11.11%
+      | Count: 1
+    ali:item minecraft:book x1
+      | Chance: 7.41%
+      | Count: 1
+    ali:item minecraft:apple x1
+      | Chance: 7.41%
+      | Count: 1
+    ali:item minecraft:emerald x1
+      | Chance: 3.7%
+      | Count: 1

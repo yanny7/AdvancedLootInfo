@@ -33,7 +33,7 @@ public class SophisticatedBackpacksLang implements ICompatTranslations {
     }
 
     public enum Functions implements ITooltipKey {
-        COPY_BACKPACK_DATA("copy_backpack_data", "Copy Backpack Data:"),
+        COPY_BACKPACK_DATA("copy_backpack_data", "Copy Backpack Data"),
         ;
 
         private final Translation translation;

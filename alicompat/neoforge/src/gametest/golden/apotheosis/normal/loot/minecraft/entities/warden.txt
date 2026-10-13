@@ -1,0 +1,25 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:sculk_catalyst x1
+      | Count: 1
+  ali:item apothic_enchanting:warden_tendril x1-2
+    | Count: 1 to 2  ~1 (90%)
+    |   -> Looting I: 1 to 2  ~1 (80%)
+    |   -> Looting II: 1 to 2  ~1 (70%)
+    |   -> Looting III: 1 to 2  ~1 (60%)
+    |   [chart 0..1 1-2 base=true modes=[true, false] heights=1.0000,0.1111 | 0..1 1-2 base=false modes=[true, false] heights=0.8889,0.2222 | 0..1 1-2 base=false modes=[true, false] heights=0.7778,0.3333 | 0..1 1-2 base=false modes=[true, false] heights=0.6667,0.4444]
+  ali:item apotheosis:gem x1
+    | Chance: 4%
+    | Count: 1
+    | ----- Predicates -----
+    | Killed by real player
+    | Requires a player
+  ali:item apotheosis:gem x1
+    | Chance: 0.5%
+    | Count: 1
+    | ----- Predicates -----
+    | Killed by player
+    | Requires a player

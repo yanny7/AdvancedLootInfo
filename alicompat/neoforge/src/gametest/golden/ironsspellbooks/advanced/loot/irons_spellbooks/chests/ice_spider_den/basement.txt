@@ -1,0 +1,160 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item irons_spellbooks:silver_ring x1
+            | Chance: 1.92%
+            | Count: 1
+            | ----- Predicates -----
+            | Random Chance:
+            |   -> Chance: 0.25
+          ali:item irons_spellbooks:cooldown_ring x1
+            | Chance: 1.92%
+            | Count: 1
+            | ----- Predicates -----
+            | Random Chance:
+            |   -> Chance: 0.25
+          ali:item irons_spellbooks:heavy_chain_necklace x1
+            | Chance: 1.92%
+            | Count: 1
+            | ----- Predicates -----
+            | Random Chance:
+            |   -> Chance: 0.25
+          ali:item irons_spellbooks:emerald_stoneplate_ring x1
+            | Chance: 1.92%
+            | Count: 1
+            | ----- Predicates -----
+            | Random Chance:
+            |   -> Chance: 0.25
+          ali:item irons_spellbooks:fireward_ring x1
+            | Chance: 1.92%
+            | Count: 1
+            | ----- Predicates -----
+            | Random Chance:
+            |   -> Chance: 0.25
+          ali:item irons_spellbooks:frostward_ring x1
+            | Chance: 1.92%
+            | Count: 1
+            | ----- Predicates -----
+            | Random Chance:
+            |   -> Chance: 0.25
+          ali:item irons_spellbooks:cast_time_ring x1
+            | Chance: 1.92%
+            | Count: 1
+            | ----- Predicates -----
+            | Random Chance:
+            |   -> Chance: 0.25
+          ali:item irons_spellbooks:conjurers_talisman x1
+            | Chance: 1.92%
+            | Count: 1
+            | ----- Predicates -----
+            | Random Chance:
+            |   -> Chance: 0.25
+          ali:item irons_spellbooks:poisonward_ring x1
+            | Chance: 1.92%
+            | Count: 1
+            | ----- Predicates -----
+            | Random Chance:
+            |   -> Chance: 0.25
+          ali:item irons_spellbooks:concentration_amulet x1
+            | Chance: 1.92%
+            | Count: 1
+            | ----- Predicates -----
+            | Random Chance:
+            |   -> Chance: 0.25
+          ali:item irons_spellbooks:invisibility_ring x1
+            | Chance: 1.92%
+            | Count: 1
+            | ----- Predicates -----
+            | Random Chance:
+            |   -> Chance: 0.25
+          ali:item irons_spellbooks:teleportation_amulet x1
+            | Chance: 1.92%
+            | Count: 1
+            | ----- Predicates -----
+            | Random Chance:
+            |   -> Chance: 0.25
+          ali:item irons_spellbooks:affinity_ring x1
+            | Chance: 1.92%
+            | Count: 1
+            | ----- Predicates -----
+            | Random Chance:
+            |   -> Chance: 0.25
+            | ----- Modifiers -----
+            | Randomize Ring Enhancement:
+            |   -> Spell Filter:
+            |     -> Force: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 0 to 2
+    ali:item irons_spellbooks:ice_venom_vial x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:blank_rune x1
+      | Chance: 60%
+      | Count: 1
+      | ----- Predicates -----
+      | Random Chance:
+      |   -> Chance: 0.6
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 6 to 12
+    ali:item minecraft:snowball x1-2
+      | Chance: 25%
+      | Count: max(0; U[1; 2])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
+    ali:item minecraft:ice x2-4
+      | Chance: 25%
+      | Count: max(0; U[2; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 4
+      |   -> Add: False
+    ali:item minecraft:cobweb x2-4
+      | Chance: 25%
+      | Count: max(0; U[2; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 4
+      |   -> Add: False
+    ali:item irons_spellbooks:frozen_bone x1
+      | Chance: 25%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:arcane_essence x10-30
+      | Count: max(0; U[10; 30])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 10 to 30
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 5
+    ali:empty
+      | Drops nothing
+      | Chance: 61.54%
+    ali:item minecraft:emerald x2-3
+      | Chance: 30.77%
+      | Count: max(0; U[2; 3])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 3
+      |   -> Add: False
+    ali:item minecraft:diamond x1
+      | Chance: 7.69%
+      | Count: 1

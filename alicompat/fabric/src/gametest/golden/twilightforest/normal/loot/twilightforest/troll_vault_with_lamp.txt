@@ -1,0 +1,35 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 4
+          ali:item minecraft:coal x1-16
+            | Chance: 33.33%
+            | Count: 1 to 16
+          ali:item twilightforest:torchberries x1-16
+            | Chance: 33.33%
+            | Count: 1 to 16
+          ali:item minecraft:emerald x1-6
+            | Chance: 33.33%
+            | Count: 1 to 6
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 2
+          ali:item twilightforest:trollsteinn x1-6
+            | Chance: 50%
+            | Count: 1 to 6
+          ali:item minecraft:obsidian x1-6
+            | Chance: 50%
+            | Count: 1 to 6
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item twilightforest:lamp_of_cinders x1
+      | Count: 1

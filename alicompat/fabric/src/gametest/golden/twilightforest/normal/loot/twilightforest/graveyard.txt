@@ -1,0 +1,37 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4
+    ali:item minecraft:pumpkin_seeds x1-32
+      | Chance: 33.33%
+      | Count: 1 to 32
+    ali:item minecraft:pumpkin_pie x1-6
+      | Chance: 33.33%
+      | Count: 1 to 6
+    ali:item twilightforest:torchberries x1-16
+      | Chance: 33.33%
+      | Count: 1 to 16
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item minecraft:diamond x1-6
+      | Chance: 50%
+      | Count: 1 to 6
+    ali:item twilightforest:moon_dial x1
+      | Chance: 50%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item twilightforest:transformation_powder x1-12
+      | Chance: 33.33%
+      | Count: 1 to 12
+    ali:item twilightforest:uncrafting_table x1
+      | Chance: 33.33%
+      | Count: 1
+      | ----- Predicates -----
+      | Uncrafting Table Enabled
+    ali:item minecraft:golden_apple x1
+      | Chance: 33.33%
+      | Count: 1

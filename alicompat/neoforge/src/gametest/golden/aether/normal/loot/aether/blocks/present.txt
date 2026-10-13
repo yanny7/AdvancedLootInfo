@@ -1,0 +1,64 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Chance: 50%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Spawn TNT:
+    ali:empty
+      | Chance: 25%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Spawn XP:
+    ali:item aether:gingerbread_man x5-6
+      | Chance: 22.22%
+      | Count: 5 to 6
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Explosion Decay
+    ali:item aether:candy_cane_sword x1
+      | Chance: 2.78%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Explosion Decay
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item aether:present x1
+      | Count: 1
+      | ----- Predicates -----
+      | Match Tool:
+      |   -> Item Predicates:
+      |     -> Enchantments:
+      |       -> Enchantment: Silk Touch
+      |       -> Level: ≥ 1
