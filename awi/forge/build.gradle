@@ -54,6 +54,7 @@ loom {
             property "awi.golden.actual", project.file("build/gametest/golden").absolutePath
             property "awi.golden.regenerate", (project.findProperty("awi_golden_regenerate") ?: "false").toString()
             programArgs "--mixin.config", "aci.gametest.mixins.json"
+            programArgs "--mixin.config", "awi.gametest.mixins.json"
 
             runDir "build/gametest/run"
 
@@ -71,9 +72,7 @@ tasks.matching { it.name == "runGametest" }.configureEach {
     timeout = java.time.Duration.ofMinutes(10)
 
     doFirst {
-        delete "build/gametest/run/config", "build/gametest/run/world"
-        file("build/gametest/run").mkdirs()
-        file("build/gametest/run/server.properties").text = "level-seed=0\n"
+        delete "build/gametest/run/config"
     }
 }
 

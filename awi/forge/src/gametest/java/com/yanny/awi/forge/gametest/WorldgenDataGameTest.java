@@ -6,12 +6,10 @@ import com.yanny.awi.gametest.WorldgenDataGolden;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraftforge.gametest.GameTestHolder;
-import net.minecraftforge.gametest.PrefixGameTestTemplate;
 
 @GameTestHolder(Utils.MOD_ID)
-@PrefixGameTestTemplate(false)
 public class WorldgenDataGameTest {
-    @GameTest(template = "empty")
+    @GameTest(template = Utils.MOD_ID + ":empty")
     public void worldgenData(GameTestHelper helper) {
         WorldgenDataGolden.run(helper, AwiMod.SERVER);
     }

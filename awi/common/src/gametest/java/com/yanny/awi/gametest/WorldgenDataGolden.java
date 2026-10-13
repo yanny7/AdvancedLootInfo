@@ -2,6 +2,7 @@ package com.yanny.awi.gametest;
 
 import com.yanny.aci.api.ICoreDataNode;
 import com.yanny.aci.gametest.GoldenFiles;
+import com.yanny.aci.gametest.GoldenLanguage;
 import com.yanny.aci.gametest.GoldenRenderer;
 import com.yanny.aci.tooltip.NumberOptions;
 import com.yanny.awi.Utils;
@@ -33,6 +34,8 @@ public class WorldgenDataGolden {
         if (PluginManager.getInstance().clientRegistry == null) {
             PluginManager.getInstance().registerClientEvent();
         }
+
+        GoldenLanguage.inject(List.of("minecraft", "aci", Utils.MOD_ID));
 
         List<String> differences = GoldenFiles.fromProperties(Utils.MOD_ID).compare(capture(awiServer, PluginManager.getInstance().commonRegistry.getConfiguration(), helper.getLevel().getServer().registryAccess()));
 

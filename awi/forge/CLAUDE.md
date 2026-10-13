@@ -25,4 +25,4 @@ Mixin-config registration on Forge happens twice over, which is worth knowing wh
 
 ## Gametest
 
-The `gametest` source set (see `awi/CLAUDE.md`'s gametest section) is wired into the `gametest` loom run like ALI's (see `ali/forge/CLAUDE.md`): `gameTestServer` template, the source set merged into the `awi` mod, `forge.enabledGameTestNamespaces=awi`, the structure `awi:empty`. `awi.gametest.mixins.json` is not registered here — Forge's game-test server does not go through `GameTestServer.create`, so its world is pinned through `server.properties` instead.
+The `gametest` source set (see `awi/CLAUDE.md`'s gametest section) is wired into the `gametest` loom run like ALI's (see `ali/forge/CLAUDE.md`): `gameTestServer` template, the source set merged into the `awi` mod, `forge.enabledGameTestNamespaces=awi`, the test keeping its `awi.` prefix and naming its template by full id, `awi:empty` (`data/awi/structure/empty.nbt`), and `GameTestServerScan` starting the scan on `ServerStartedEvent`. The run registers `aci.gametest.mixins.json` and `awi.gametest.mixins.json` through `--mixin.config`.

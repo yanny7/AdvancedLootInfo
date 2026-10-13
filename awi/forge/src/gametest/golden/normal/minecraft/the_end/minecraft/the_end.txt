@@ -11,5 +11,14 @@ awi:biome minecraft:the_end
     | Generation Step: Surface Structures
     awi:placed_feature minecraft:end_spike
       awi:block minecraft:bedrock
+      awi:block minecraft:fire
       awi:block minecraft:iron_bars
+      awi:block minecraft:obsidian
+      awi:block minecraft:soul_fire
+  awi:generation_step 10
+    | Generation Step: Top Layer Modifications
+    awi:placed_feature minecraft:end_platform
+      | Attempts Per Chunk: ? (minecraft:fixed_placement)
+      |   -> Fixed Placement:
+      |     -> Position: [100,49,0]
       awi:block minecraft:obsidian
