@@ -1,0 +1,115 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4
+    ali:item minecraft:poisonous_potato x1-2
+      | Chance: 12%
+      | Count: 1 to 2
+    ali:item minecraft:wheat x1-6
+      | Chance: 12%
+      | Count: 1 to 6
+    ali:item minecraft:potato x1-6
+      | Chance: 12%
+      | Count: 1 to 6
+    ali:item minecraft:carrot x1-6
+      | Chance: 12%
+      | Count: 1 to 6
+    ali:item minecraft:melon_slice x1-6
+      | Chance: 12%
+      | Count: 1 to 6
+    ali:item minecraft:melon_seeds x1-5
+      | Chance: 12%
+      | Count: 1 to 5
+    ali:item minecraft:water_bucket x1
+      | Chance: 12%
+      | Count: 1
+    ali:item minecraft:milk_bucket x1
+      | Chance: 12%
+      | Count: 1
+    ali:reference
+      | Selects all entries
+      | Chance: 4%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item minecraft:poppy x1-4
+            | Chance: 0.4%
+            | Count: 1 to 4
+          ali:item minecraft:dandelion x1-4
+            | Chance: 0.4%
+            | Count: 1 to 4
+          ali:item minecraft:feather x1-3
+            | Chance: 0.4%
+            | Count: 1 to 3
+          ali:item minecraft:wheat_seeds x1-2
+            | Chance: 0.4%
+            | Count: 1 to 2
+          ali:item minecraft:flint x1-2
+            | Chance: 0.4%
+            | Count: 1 to 2
+          ali:item minecraft:cactus x1-2
+            | Chance: 0.4%
+            | Count: 1 to 2
+          ali:item minecraft:sugar_cane x1-4
+            | Chance: 0.4%
+            | Count: 1 to 4
+          ali:item minecraft:sand x1-4
+            | Chance: 0.4%
+            | Count: 1 to 4
+          ali:item minecraft:flower_pot x1
+            | Chance: 0.4%
+            | Count: 1
+          ali:item minecraft:bone_meal x1
+            | Chance: 0.4%
+            | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item twilightforest:twilight_oak_sapling x1-4
+      | Chance: 20%
+      | Count: 1 to 4
+    ali:item twilightforest:canopy_sapling x1-4
+      | Chance: 20%
+      | Count: 1 to 4
+    ali:item twilightforest:mangrove_sapling x1-4
+      | Chance: 20%
+      | Count: 1 to 4
+    ali:item twilightforest:darkwood_sapling x1-4
+      | Chance: 20%
+      | Count: 1 to 4
+    ali:item twilightforest:firefly x1-12
+      | Chance: 20%
+      | Count: 1 to 12
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:pumpkin_pie x1-12
+      | Chance: 17.65%
+      | Count: 1 to 12
+    ali:item minecraft:apple x1-12
+      | Chance: 17.65%
+      | Count: 1 to 12
+    ali:item twilightforest:charm_of_keeping_1 x1
+      | Chance: 17.65%
+      | Count: 1
+    ali:item twilightforest:charm_of_life_1 x1
+      | Chance: 17.65%
+      | Count: 1
+    ali:item twilightforest:hollow_oak_sapling x1
+      | Chance: 5.88%
+      | Count: 1
+    ali:item twilightforest:time_sapling x1
+      | Chance: 5.88%
+      | Count: 1
+    ali:item twilightforest:transformation_sapling x1
+      | Chance: 5.88%
+      | Count: 1
+    ali:item twilightforest:mining_sapling x1
+      | Chance: 5.88%
+      | Count: 1
+    ali:item twilightforest:sorting_sapling x1
+      | Chance: 5.88%
+      | Count: 1

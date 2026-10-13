@@ -1,0 +1,83 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item minecraft:grass x2
+        | Count: 2
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Tall Grass
+        |   -> Properties:
+        |     -> half: lower
+        | Location Check:
+        |   -> Location:
+        |     -> Block Predicate:
+        |       -> Block: Tall Grass
+        |       -> Properties:
+        |         -> half: upper
+        |   -> Offset: [X: 0, Y: 1, Z: 0]
+        | Can Tool Perform Action:
+        |   -> shears_dig
+      ali:item minecraft:wheat_seeds x1
+        | Chance: 12.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Tall Grass
+        |   -> Properties:
+        |     -> half: lower
+        | Location Check:
+        |   -> Location:
+        |     -> Block Predicate:
+        |       -> Block: Tall Grass
+        |       -> Properties:
+        |         -> half: upper
+        |   -> Offset: [X: 0, Y: 1, Z: 0]
+        | Survives Explosion
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item minecraft:grass x2
+        | Count: 2
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Tall Grass
+        |   -> Properties:
+        |     -> half: upper
+        | Location Check:
+        |   -> Location:
+        |     -> Block Predicate:
+        |       -> Block: Tall Grass
+        |       -> Properties:
+        |         -> half: lower
+        |   -> Offset: [X: 0, Y: -1, Z: 0]
+        | Can Tool Perform Action:
+        |   -> shears_dig
+      ali:item minecraft:wheat_seeds x1
+        | Chance: 12.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Tall Grass
+        |   -> Properties:
+        |     -> half: upper
+        | Location Check:
+        |   -> Location:
+        |     -> Block Predicate:
+        |       -> Block: Tall Grass
+        |       -> Properties:
+        |         -> half: lower
+        |   -> Offset: [X: 0, Y: -1, Z: 0]
+        | Survives Explosion
+  ali:item occultism:datura_seeds x1
+    | Chance: 2%
+    | Count: 1
+    | ----- Predicates -----
+    | Inverted:
+    |   -> Match Tool:
+    |     -> Tag: forge:shears

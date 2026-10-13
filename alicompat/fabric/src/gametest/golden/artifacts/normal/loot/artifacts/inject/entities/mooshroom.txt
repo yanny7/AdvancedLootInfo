@@ -1,0 +1,48 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:everlasting_beef x1
+              | Chance: 0.2%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value Chance:
+              |   -> Config: everlasting_beef
+              | Killed by player
+              | Config Value:
+              |   -> Config: items.everlasting_beef.generateAsLoot
+              | ----- Modifiers -----
+              | Furnace Smelt
+              |   -> Use Input Count: True
+              |   -> Predicates:
+              |     -> Entity Properties:
+              |       -> Target: This Entity
+              |       -> Predicate:
+              |         -> Entity Flags:
+              |           -> Is On Fire: True
+            ali:empty
+              | Drops nothing
+              | Chance: 0.2%
+              | ----- Predicates -----
+              | Config Value Chance:
+              |   -> Config: everlasting_beef
+              | Killed by player
+              | ----- Modifiers -----
+              | Furnace Smelt
+              |   -> Use Input Count: True
+              |   -> Predicates:
+              |     -> Entity Properties:
+              |       -> Target: This Entity
+              |       -> Predicate:
+              |         -> Entity Flags:
+              |           -> Is On Fire: True

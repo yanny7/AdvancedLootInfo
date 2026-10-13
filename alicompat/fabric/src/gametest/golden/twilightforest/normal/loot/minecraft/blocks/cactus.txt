@@ -1,0 +1,17 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:modified
+      | Selects only first successful entry
+      ali:item minecraft:green_dye x1
+        | Count: 1
+        | ----- Predicates -----
+        | Match Tool:
+        |   -> Item: Fiery Pickaxe
+        | Survives Explosion
+      ali:item minecraft:cactus x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion

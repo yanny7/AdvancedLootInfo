@@ -1,0 +1,16 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item rats:block_of_nether_cheese x1
+      | Count: 1
+      | ----- Predicates -----
+      | Survives Explosion
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:cauldron x1
+      | Count: 1
+      | ----- Predicates -----
+      | Survives Explosion

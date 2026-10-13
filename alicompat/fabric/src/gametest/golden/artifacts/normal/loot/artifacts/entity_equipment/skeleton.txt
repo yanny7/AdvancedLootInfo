@@ -1,0 +1,93 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      | Chance: 33.33%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:night_vision_goggles x1
+              | Chance: 0.05%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value Chance:
+              |   -> Config: entity_equipment
+              | Config Value:
+              |   -> Config: items.night_vision_goggles.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 0.05%
+              | ----- Predicates -----
+              | Config Value Chance:
+              |   -> Config: entity_equipment
+    ali:reference
+      | Selects all entries
+      | Chance: 33.33%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:plastic_drinking_hat x1
+              | Chance: 0.04%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value Chance:
+              |   -> Config: entity_equipment
+              | Config Value:
+              |   -> Config: items.plastic_drinking_hat.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 0.04%
+              | ----- Predicates -----
+              | Config Value Chance:
+              |   -> Config: entity_equipment
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:novelty_drinking_hat x1
+              | Chance: 0.01%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value Chance:
+              |   -> Config: entity_equipment
+              | Config Value:
+              |   -> Config: items.novelty_drinking_hat.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 0.01%
+              | ----- Predicates -----
+              | Config Value Chance:
+              |   -> Config: entity_equipment
+    ali:reference
+      | Selects all entries
+      | Chance: 33.33%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:flame_pendant x1
+              | Chance: 0.05%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value Chance:
+              |   -> Config: entity_equipment
+              | Config Value:
+              |   -> Config: items.flame_pendant.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 0.05%
+              | ----- Predicates -----
+              | Config Value Chance:
+              |   -> Config: entity_equipment

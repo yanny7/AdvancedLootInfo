@@ -1,0 +1,130 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects 5 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item farlanders:endumium_crystal x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item minecraft:gold_ingot x5
+      ali:item minecraft:air x0
+      ali:item farlanders:endumium_crystal x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x1
+      ali:item minecraft:air x0
+      ali:item minecraft:fire_charge x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x2
+      ali:item minecraft:air x0
+      ali:item minecraft:arrow x16
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x3
+      ali:item minecraft:air x0
+      ali:item minecraft:prismarine_shard x14
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x2
+      ali:item minecraft:air x0
+      ali:item minecraft:bamboo x4
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x2
+      ali:item minecraft:air x0
+      ali:item minecraft:cactus x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x2
+      ali:item minecraft:air x0
+      ali:item minecraft:ice x8
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x1
+      ali:item minecraft:air x0
+      ali:item minecraft:end_stone x8
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x5
+      ali:item minecraft:air x0
+      ali:item minecraft:azalea x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x4
+      ali:item minecraft:air x0
+      ali:item minecraft:cocoa_beans x5
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x1
+      ali:item minecraft:air x0
+      ali:item minecraft:glow_lichen x5
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x6
+      ali:item minecraft:air x0
+      ali:item minecraft:mycelium x2
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x8
+      ali:item minecraft:air x0
+      ali:item minecraft:pointed_dripstone x5
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x2
+      ali:item minecraft:air x0
+      ali:item minecraft:crying_obsidian x6
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x2
+      ali:item minecraft:air x0
+      ali:item minecraft:rooted_dirt x12
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x1
+      ali:item minecraft:air x0
+      ali:item minecraft:charcoal x8
+    ali:items_to_items
+      | Uses: 12
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item farlanders:endumium_crystal x3
+      ali:item minecraft:air x0
+      ali:item minecraft:slime_ball x5

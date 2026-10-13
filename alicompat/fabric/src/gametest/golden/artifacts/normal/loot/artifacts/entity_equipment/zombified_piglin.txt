@@ -1,0 +1,77 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      | Chance: 33.33%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:golden_hook x1
+              | Chance: 0.05%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value Chance:
+              |   -> Config: entity_equipment
+              | Config Value:
+              |   -> Config: items.golden_hook.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 0.05%
+              | ----- Predicates -----
+              | Config Value Chance:
+              |   -> Config: entity_equipment
+    ali:reference
+      | Selects all entries
+      | Chance: 33.33%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:universal_attractor x1
+              | Chance: 0.05%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value Chance:
+              |   -> Config: entity_equipment
+              | Config Value:
+              |   -> Config: items.universal_attractor.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 0.05%
+              | ----- Predicates -----
+              | Config Value Chance:
+              |   -> Config: entity_equipment
+    ali:reference
+      | Selects all entries
+      | Chance: 33.33%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:obsidian_skull x1
+              | Chance: 0.05%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value Chance:
+              |   -> Config: entity_equipment
+              | Config Value:
+              |   -> Config: items.obsidian_skull.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 0.05%
+              | ----- Predicates -----
+              | Config Value Chance:
+              |   -> Config: entity_equipment

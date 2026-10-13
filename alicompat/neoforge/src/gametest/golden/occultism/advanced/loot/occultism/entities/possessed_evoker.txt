@@ -1,0 +1,28 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:totem_of_undying x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 50%
+    ali:item minecraft:vex_armor_trim_smithing_template x1
+      | Chance: 25%
+      | Count: 1
+    ali:item minecraft:sentry_armor_trim_smithing_template x1
+      | Chance: 25%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:ominous_bottle x1-2
+      | Count: max(0; U[1; 2])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False

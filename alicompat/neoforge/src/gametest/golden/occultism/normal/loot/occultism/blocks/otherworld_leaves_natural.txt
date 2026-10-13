@@ -1,0 +1,154 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item occultism:otherworld_leaves_natural x1
+      | Count: 1
+      | ----- Predicates -----
+      | All Of:
+      |   -> Block State Property:
+      |     -> Block: Oak Leaves
+      |     -> Properties:
+      |       -> uncovered: true
+      |   -> Any Of:
+      |     -> Match Tool:
+      |       -> Item: Shears
+      |     -> Match Tool:
+      |       -> Components:
+      |         -> Partial Matchers:
+      |           -> minecraft:enchantments
+      |             -> Enchantment: Silk Touch
+      |             -> Level: ≥ 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:oak_leaves x1
+      | Count: 1
+      | ----- Predicates -----
+      | All Of:
+      |   -> Block State Property:
+      |     -> Block: Oak Leaves
+      |     -> Properties:
+      |       -> uncovered: false
+      |   -> Any Of:
+      |     -> Match Tool:
+      |       -> Item: Shears
+      |     -> Match Tool:
+      |       -> Components:
+      |         -> Partial Matchers:
+      |           -> minecraft:enchantments
+      |             -> Enchantment: Silk Touch
+      |             -> Level: ≥ 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item occultism:otherworld_sapling_natural x1
+        | Chance: 10%
+        |   -> Fortune I: 20%
+        |   -> Fortune II: 30%
+        |   -> Fortune III: 40%
+        | Count: 1
+        | ----- Predicates -----
+        | Inverted:
+        |   -> Any Of:
+        |     -> Match Tool:
+        |       -> Item: Shears
+        |     -> Match Tool:
+        |       -> Components:
+        |         -> Partial Matchers:
+        |           -> minecraft:enchantments
+        |             -> Enchantment: Silk Touch
+        |             -> Level: ≥ 1
+        | Survives Explosion
+        | Block State Property:
+        |   -> Block: Oak Leaves
+        |   -> Properties:
+        |     -> uncovered: true
+      ali:item minecraft:oak_sapling x1
+        | Chance: 10%
+        |   -> Fortune I: 20%
+        |   -> Fortune II: 30%
+        |   -> Fortune III: 40%
+        | Count: 1
+        | ----- Predicates -----
+        | Inverted:
+        |   -> Any Of:
+        |     -> Match Tool:
+        |       -> Item: Shears
+        |     -> Match Tool:
+        |       -> Components:
+        |         -> Partial Matchers:
+        |           -> minecraft:enchantments
+        |             -> Enchantment: Silk Touch
+        |             -> Level: ≥ 1
+        | Survives Explosion
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item occultism:pitaya x1
+        | Chance: 5%
+        |   -> Fortune I: 6.25%
+        |   -> Fortune II: 8.33%
+        |   -> Fortune III: 10%
+        | Count: 1
+        | ----- Predicates -----
+        | Inverted:
+        |   -> Any Of:
+        |     -> Match Tool:
+        |       -> Item: Shears
+        |     -> Match Tool:
+        |       -> Components:
+        |         -> Partial Matchers:
+        |           -> minecraft:enchantments
+        |             -> Enchantment: Silk Touch
+        |             -> Level: ≥ 1
+        | Survives Explosion
+        | Block State Property:
+        |   -> Block: Oak Leaves
+        |   -> Properties:
+        |     -> uncovered: true
+      ali:item minecraft:apple x1
+        | Chance: 5%
+        |   -> Fortune I: 6.25%
+        |   -> Fortune II: 8.33%
+        |   -> Fortune III: 10%
+        | Count: 1
+        | ----- Predicates -----
+        | Inverted:
+        |   -> Any Of:
+        |     -> Match Tool:
+        |       -> Item: Shears
+        |     -> Match Tool:
+        |       -> Components:
+        |         -> Partial Matchers:
+        |           -> minecraft:enchantments
+        |             -> Enchantment: Silk Touch
+        |             -> Level: ≥ 1
+        | Survives Explosion
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:stick x1-2
+      | Chance: 2%
+      |   -> Fortune I: 2.22%
+      |   -> Fortune II: 2.5%
+      |   -> Fortune III: 3.33%
+      | Count: 1 to 2
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Any Of:
+      |     -> Match Tool:
+      |       -> Item: Shears
+      |     -> Match Tool:
+      |       -> Components:
+      |         -> Partial Matchers:
+      |           -> minecraft:enchantments
+      |             -> Enchantment: Silk Touch
+      |             -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Explosion Decay

@@ -1,0 +1,19 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:composter x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Explosion Decay
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:bone_meal x1
+      | Count: 1
+      | ----- Predicates -----
+      | Match Block:
+      |   -> Block: Composter
+      |   -> Properties:
+      |     -> level: 8

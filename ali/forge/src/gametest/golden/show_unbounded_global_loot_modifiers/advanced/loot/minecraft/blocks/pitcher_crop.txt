@@ -1,0 +1,93 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item minecraft:pitcher_pod x1
+        | Count: 1
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Pitcher Crop
+        |   -> Properties:
+        |     -> age: 0
+        | Block State Property:
+        |   -> Block: Pitcher Crop
+        |   -> Properties:
+        |     -> half: lower
+        | ----- Modifiers -----
+        | Explosion Decay
+        | Set Count:
+        |   -> Count: 1
+        |   -> Add: False
+      ali:item minecraft:pitcher_pod x1
+        | Count: 1
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Pitcher Crop
+        |   -> Properties:
+        |     -> age: 1
+        | Block State Property:
+        |   -> Block: Pitcher Crop
+        |   -> Properties:
+        |     -> half: lower
+        | ----- Modifiers -----
+        | Explosion Decay
+        | Set Count:
+        |   -> Count: 1
+        |   -> Add: False
+      ali:item minecraft:pitcher_pod x1
+        | Count: 1
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Pitcher Crop
+        |   -> Properties:
+        |     -> age: 2
+        | Block State Property:
+        |   -> Block: Pitcher Crop
+        |   -> Properties:
+        |     -> half: lower
+        | ----- Modifiers -----
+        | Explosion Decay
+        | Set Count:
+        |   -> Count: 1
+        |   -> Add: False
+      ali:item minecraft:pitcher_pod x1
+        | Count: 1
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Pitcher Crop
+        |   -> Properties:
+        |     -> age: 3
+        | Block State Property:
+        |   -> Block: Pitcher Crop
+        |   -> Properties:
+        |     -> half: lower
+        | ----- Modifiers -----
+        | Explosion Decay
+        | Set Count:
+        |   -> Count: 1
+        |   -> Add: False
+      ali:item minecraft:pitcher_plant x1
+        | Count: 1
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Pitcher Crop
+        |   -> Properties:
+        |     -> age: 4
+        | Block State Property:
+        |   -> Block: Pitcher Crop
+        |   -> Properties:
+        |     -> half: lower
+        | ----- Modifiers -----
+        | Explosion Decay
+        | Set Count:
+        |   -> Count: 1
+        |   -> Add: False
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1
+    | ----- Predicates -----
+    | Random Chance:
+    |   -> Chance: 0.01

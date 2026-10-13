@@ -1,0 +1,12 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:item occultism:tallow x2
+    | Count: 2
+    | ----- Predicates -----
+    | Entity Properties:
+    |   -> Target: Attacker
+    |   -> Predicate:
+    |     -> Equipment:
+    |       -> Main Hand:
+    |         -> Items:
+    |           -> Tag: Knives

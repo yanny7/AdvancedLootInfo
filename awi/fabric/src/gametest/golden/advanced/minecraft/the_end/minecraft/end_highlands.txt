@@ -1,0 +1,47 @@
+awi:biome minecraft:end_highlands
+  spawn minecraft:enderman
+    | Category: Monster
+    | Weight: 10
+    | Group size: 4
+  awi:base_layout
+    | Generation Step: Base Terrain
+    awi:block minecraft:end_stone
+      | Default Block
+  awi:generation_step 4
+    | Generation Step: Surface Structures
+    awi:placed_feature minecraft:end_gateway_return
+      | Chance: 0.14%
+      | Height: Ground or Water Surface
+      | Feature:
+      |   -> End Gateway:
+      |     -> Exit: [100,50,0]
+      |     -> Exact: True
+      | Placement:
+      |   -> Rarity Filter:
+      |     -> Chance: 700
+      |   -> Heightmap Placement:
+      |     -> Heightmap: Ground or Water Surface
+      |   -> Offset:
+      |     -> X:
+      |       -> 0
+      |     -> Y:
+      |       -> 3 to 9
+      |     -> Z:
+      |       -> 0
+      awi:block minecraft:bedrock
+      awi:block minecraft:end_gateway
+  awi:generation_step 9
+    | Generation Step: Vegetation Decoration
+    awi:placed_feature minecraft:chorus_plant
+      | Attempts Per Chunk: 0 to 4
+      | Height: Ground or Water Surface
+      | Feature:
+      |   -> Chorus Plant:
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 0 to 4
+      |   -> Heightmap Placement:
+      |     -> Heightmap: Ground or Water Surface
+      awi:block minecraft:chorus_flower
+      awi:block minecraft:chorus_plant

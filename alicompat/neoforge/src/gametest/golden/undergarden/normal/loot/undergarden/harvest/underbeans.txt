@@ -1,0 +1,17 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item undergarden:underbeans x1
+      | Count: 1
+      | ----- Predicates -----
+      | Block State Property:
+      |   -> Block: Underbean Bush
+      |   -> Properties:
+      |     -> age: 3
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item undergarden:underbeans x1-2
+      | Count: 1 to 2

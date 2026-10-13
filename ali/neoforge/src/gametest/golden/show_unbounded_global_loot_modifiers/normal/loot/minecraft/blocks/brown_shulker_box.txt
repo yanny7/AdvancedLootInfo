@@ -1,0 +1,18 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:brown_shulker_box x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Copy Components:
+      |   -> Source: minecraft:block_entity
+      |   -> Include:
+      |     -> minecraft:custom_name
+      |     -> minecraft:container
+      |     -> minecraft:lock
+      |     -> minecraft:container_loot
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1

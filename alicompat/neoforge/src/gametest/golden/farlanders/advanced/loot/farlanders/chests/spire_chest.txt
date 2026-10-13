@@ -1,0 +1,60 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item #farlanders:mystic_wands x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 6 to 7
+    ali:item minecraft:iron_ingot x2-4
+      | Chance: 26.92%
+      | Count: max(0; U[2; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 4
+      |   -> Add: False
+    ali:item farlanders:endumium_crystal x2-3
+      | Chance: 23.08%
+      | Count: max(0; U[2; 3])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 3
+      |   -> Add: False
+    ali:item farlanders:ender_horn x2-3
+      | Chance: 19.23%
+      | Count: max(0; U[2; 3])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 3
+      |   -> Add: False
+    ali:item farlanders:titan_hide x1
+      | Chance: 11.54%
+      | Count: 1
+    ali:item minecraft:nether_wart x2-3
+      | Chance: 7.69%
+      | Count: max(0; U[2; 3])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 3
+      |   -> Add: False
+    ali:item minecraft:ender_pearl x3-4
+      | Chance: 7.69%
+      | Count: max(0; U[3; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 3 to 4
+      |   -> Add: False
+    ali:item minecraft:experience_bottle x1
+      | Chance: 3.85%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item #minecraft:creeper_drop_music_discs x1
+      | Chance: 30%
+      | Count: 1
+      | ----- Predicates -----
+      | Random Chance:
+      |   -> Chance: 0.3

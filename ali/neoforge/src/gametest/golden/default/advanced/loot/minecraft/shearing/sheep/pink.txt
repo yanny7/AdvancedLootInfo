@@ -1,0 +1,7 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 3
+    ali:item minecraft:pink_wool x1
+      | Count: 1

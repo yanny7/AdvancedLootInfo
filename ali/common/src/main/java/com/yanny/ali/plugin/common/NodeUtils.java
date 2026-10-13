@@ -6,6 +6,7 @@ import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.manager.ManagedRegistry;
 import com.yanny.aci.number.NumberEvaluator;
+import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
@@ -47,6 +48,7 @@ public class NodeUtils {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
     private static final Set<String> FAILED_OPERATIONS = new HashSet<>();
     private static final NumberInterval NON_NEGATIVE = new NumberInterval(0, Double.POSITIVE_INFINITY, true, false);
+    private static final ThreadLocal<Set<Identifier>> EXPANDING_TABLES = ThreadLocal.withInitial(HashSet::new);
 
     @NotNull
     public static IDataNode getItemNode(IServerUtils utils, LootItem entry, NumberExpr rawChance, NumberExpr sumWeight, List<TooltipNode> chanceConditions, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
@@ -154,31 +156,44 @@ public class NodeUtils {
         List<LootItemCondition> allConditions = getAllConditions(utils, entry, conditions);
         LootCount chance = getChance(utils, entry, rawChance, sumWeight, chanceConditions);
         TooltipNode tooltip = TooltipUtils.getReferenceTooltip(entry, chance).build();
-        List<IDataNode> children = entry.value.stream().map((holder) -> {
-            LootTable lootTable = utils.getLootTable(getLootTableReference(holder));
-
-            if (lootTable != null) {
-                return getLootTableNode(Collections.emptyList(), utils, lootTable, chance.value(), chance.conditions(), allFunctions, allConditions);
-            } else {
-                return new MissingNode(utils.getValueTooltip(utils, holder).build(Lang.Value.LOOT_TABLE));
-            }
-        }).toList();
+        List<IDataNode> children = entry.value.stream().flatMap((holder) -> getLootTableReference(holder).<List<IDataNode>>map(
+                (key) -> getReferencedTable(utils, key,
+                        (lootTable) -> getLootTableNode(Collections.emptyList(), utils, lootTable, chance.value(), chance.conditions(), allFunctions, allConditions)),
+                (lootTable) -> Collections.singletonList(getLootTableNode(Collections.emptyList(), utils, lootTable, chance.value(), chance.conditions(), allFunctions, allConditions))).stream()).toList();
 
         return new ReferenceNode(children, toFloat(chance.value()), tooltip);
     }
 
     @NotNull
     public static ReferenceNode getReferenceNode(IServerUtils utils, Identifier table, List<LootItemCondition> conditions, TooltipNode tooltip) {
-        LootTable lootTable = utils.getLootTable(Either.left(table));
-        List<IDataNode> children;
-
-        if (lootTable != null) {
-            children = Collections.singletonList(getLootTableNode(Collections.emptyList(), utils, lootTable, 1, Collections.emptyList(), conditions));
-        } else {
-            children = Collections.singletonList(new MissingNode(utils.getValueTooltip(utils, table).build(Lang.Value.LOOT_TABLE)));
-        }
+        List<IDataNode> children = getReferencedTable(utils, table,
+                (lootTable) -> getLootTableNode(Collections.emptyList(), utils, lootTable, 1, Collections.emptyList(), conditions));
 
         return new ReferenceNode(children, 1, tooltip);
+    }
+
+    @Unmodifiable
+    @NotNull
+    private static List<IDataNode> getReferencedTable(IServerUtils utils, Identifier table, Function<LootTable, IDataNode> factory) {
+        LootTable lootTable = utils.getLootTable(Either.left(table));
+
+        if (lootTable == null) {
+            return Collections.singletonList(new MissingNode(utils.getValueTooltip(utils, table).build(Lang.Value.LOOT_TABLE)));
+        }
+
+        Set<Identifier> expanding = EXPANDING_TABLES.get();
+
+        if (!expanding.add(table)) {
+            TooltipNode tooltip = TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, table).build(Lang.Value.LOOT_TABLE)), Lang.Error.RECURSIVE_REFERENCE).build();
+
+            return Collections.singletonList(new MissingNode(tooltip));
+        }
+
+        try {
+            return Collections.singletonList(factory.apply(lootTable));
+        } finally {
+            expanding.remove(table);
+        }
     }
 
     @NotNull

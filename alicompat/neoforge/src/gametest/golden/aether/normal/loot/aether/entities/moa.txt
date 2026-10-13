@@ -1,0 +1,15 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:feather x2-9
+      | Count: 2 to 3
+      |   -> Looting I: 2 to 5  ~3 to 4 (38%)
+      |   -> Looting II: 2 to 7  ~4 to 5 (25%)
+      |   -> Looting III: 2 to 9  ~4 to 7 (17%)
+      |   [chart 0..1 2-3 base=true modes=[false, false, false, false, false, false, false, false] heights=1.0000,1.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000 | 0..3 2-5 base=false modes=[false, true, true, false, false, false, false, false] heights=0.2500,0.7500,0.7500,0.2500,0.0000,0.0000,0.0000,0.0000 | 0..5 2-7 base=false modes=[false, false, true, true, false, false, false, false] heights=0.1250,0.3750,0.5000,0.5000,0.3750,0.1250,0.0000,0.0000 | 0..7 2-9 base=false modes=[false, false, true, true, true, true, false, false] heights=0.0833,0.2500,0.3333,0.3333,0.3333,0.3333,0.2500,0.0833]
+      | ----- Modifiers -----
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
+      |   -> Value: 0 to 2

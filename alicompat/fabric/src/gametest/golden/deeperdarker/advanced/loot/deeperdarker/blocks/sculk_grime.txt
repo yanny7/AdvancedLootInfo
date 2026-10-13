@@ -1,0 +1,22 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item deeperdarker:sculk_grime x1
+        | Count: 1
+        | ----- Predicates -----
+        | Match Tool:
+        |   -> Item Predicates:
+        |     -> Enchantments:
+        |       -> Enchantment: Silk Touch
+        |       -> Level: ≥ 1
+      ali:item deeperdarker:grime_ball x2-4
+        | Count: max(0; U[2; 4])
+        | ----- Modifiers -----
+        | Set Count:
+        |   -> Count: 2 to 4
+        |   -> Add: False
+        | Explosion Decay

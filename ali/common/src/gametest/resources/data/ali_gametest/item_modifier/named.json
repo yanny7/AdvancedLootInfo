@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:set_name",
+  "name": {
+    "text": "Named by reference"
+  }
+}

@@ -1,0 +1,25 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item minecraft:dead_bush x1
+        | Count: 1
+        | ----- Predicates -----
+        | Can Item Perform Ability:
+        |   -> shears_dig
+      ali:item minecraft:stick x0-2
+        | Count: max(0; U[0; 2])
+        | ----- Modifiers -----
+        | Set Count:
+        |   -> Count: 0 to 2
+        |   -> Add: False
+        | Explosion Decay
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1
+    | ----- Predicates -----
+    | Random Chance:
+    |   -> Chance: 0.01

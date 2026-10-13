@@ -1,0 +1,193 @@
+{
+  "pools": [
+    {
+      "rolls": 1,
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:red_dye",
+          "condition": {
+            "type": "minecraft:any_of",
+            "terms": [
+              {
+                "type": "minecraft:match_tool",
+                "predicate": {
+                  "items": [
+                    "minecraft:shears"
+                  ]
+                }
+              },
+              {
+                "type": "minecraft:all_of",
+                "terms": [
+                  {
+                    "type": "minecraft:killed_by_player"
+                  },
+                  {
+                    "type": "minecraft:inverted",
+                    "term": {
+                      "type": "minecraft:random_chance",
+                      "chance": 0.3
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:orange_dye",
+          "condition": {
+            "type": "minecraft:random_chance_with_enchanted_bonus",
+            "enchantment": "minecraft:looting",
+            "unenchanted_chance": 0.1,
+            "enchanted_chance": {
+              "type": "minecraft:linear",
+              "base": 0.12,
+              "per_level_above_first": 0.02
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:yellow_dye",
+          "condition": {
+            "type": "minecraft:table_bonus",
+            "enchantment": "minecraft:fortune",
+            "chances": [
+              0.1,
+              0.2,
+              0.4
+            ]
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:lime_dye",
+          "condition": {
+            "type": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "minecraft:entity_type": "#minecraft:skeletons",
+              "minecraft:flags": {
+                "is_baby": false
+              },
+              "minecraft:effects": {
+                "minecraft:poison": {
+                  "amplifier": {
+                    "min": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:green_dye",
+          "condition": {
+            "type": "minecraft:location_check",
+            "predicate": {
+              "position": {
+                "y": {
+                  "min": 60,
+                  "max": 80
+                }
+              },
+              "biomes": "minecraft:desert"
+            },
+            "offsetY": 1
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:cyan_dye",
+          "condition": {
+            "type": "minecraft:time_check",
+            "clock": "minecraft:overworld",
+            "value": {
+              "min": 0,
+              "max": 12000
+            },
+            "period": 24000
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:light_blue_dye",
+          "condition": {
+            "type": "minecraft:int_value_check",
+            "value": {
+              "type": "minecraft:score",
+              "target": {
+                "type": "minecraft:fixed",
+                "name": "gametest"
+              },
+              "score": "points"
+            },
+            "test": {
+              "min": 5
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:blue_dye",
+          "condition": {
+            "type": "minecraft:weather_check",
+            "raining": true,
+            "thundering": false
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:purple_dye",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "minecraft:wheat",
+            "state": {
+              "age": "7"
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:magenta_dye",
+          "condition": {
+            "type": "minecraft:damage_source_properties",
+            "predicate": {
+              "tags": [
+                {
+                  "id": "#minecraft:is_fire",
+                  "expected": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:pink_dye",
+          "condition": {
+            "type": "minecraft:entity_scores",
+            "entity": "attacker",
+            "scores": {
+              "kills": {
+                "min": 3
+              }
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:white_dye",
+          "condition": {
+            "type": "minecraft:survives_explosion"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:pink_petals x1-4
+      | Count: 
+      |   -> 4
+      |     -> Match Block:
+      |       -> Block: Pink Petals
+      |       -> Properties:
+      |         -> flower_amount: 4
+      |   -> otherwise 3
+      |     -> Match Block:
+      |       -> Block: Pink Petals
+      |       -> Properties:
+      |         -> flower_amount: 3
+      |   -> otherwise 2
+      |     -> Match Block:
+      |       -> Block: Pink Petals
+      |       -> Properties:
+      |         -> flower_amount: 2
+      |   -> otherwise 1
+      |     -> Match Block:
+      |       -> Block: Pink Petals
+      |       -> Properties:
+      |         -> flower_amount: 1
+      |   -> otherwise 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+      |   -> Predicates:
+      |     -> Match Block:
+      |       -> Block: Pink Petals
+      |       -> Properties:
+      |         -> flower_amount: 1
+      | Set Count:
+      |   -> Count: 2
+      |   -> Add: False
+      |   -> Predicates:
+      |     -> Match Block:
+      |       -> Block: Pink Petals
+      |       -> Properties:
+      |         -> flower_amount: 2
+      | Set Count:
+      |   -> Count: 3
+      |   -> Add: False
+      |   -> Predicates:
+      |     -> Match Block:
+      |       -> Block: Pink Petals
+      |       -> Properties:
+      |         -> flower_amount: 3
+      | Set Count:
+      |   -> Count: 4
+      |   -> Add: False
+      |   -> Predicates:
+      |     -> Match Block:
+      |       -> Block: Pink Petals
+      |       -> Properties:
+      |         -> flower_amount: 4
+      | Explosion Decay

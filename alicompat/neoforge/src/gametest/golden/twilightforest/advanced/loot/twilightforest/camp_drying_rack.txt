@@ -1,0 +1,55 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 28.99%
+    ali:item twilightforest:chicken_jerky x1
+      | Chance: 11.59%
+      | Count: 1
+    ali:item twilightforest:mutton_jerky x1
+      | Chance: 11.59%
+      | Count: 1
+    ali:item twilightforest:pork_jerky x1
+      | Chance: 11.59%
+      | Count: 1
+    ali:item twilightforest:venison_jerky x1
+      | Chance: 11.59%
+      | Count: 1
+    ali:item twilightforest:beef_jerky x1
+      | Chance: 5.8%
+      | Count: 1
+    ali:item twilightforest:tanned_leather x1
+      | Chance: 5.8%
+      | Count: 1
+    ali:item twilightforest:rabbit_jerky x1
+      | Chance: 5.8%
+      | Count: 1
+    ali:item minecraft:leather x1
+      | Chance: 2.9%
+      | Count: 1
+    ali:reference
+      | Selects all entries
+      | Chance: 2.9%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item minecraft:leather_helmet x1
+            | Chance: 0.72%
+            | Count: 1
+          ali:item minecraft:leather_chestplate x1
+            | Chance: 0.72%
+            | Count: 1
+          ali:item minecraft:leather_leggings x1
+            | Chance: 0.72%
+            | Count: 1
+          ali:item minecraft:leather_boots x1
+            | Chance: 0.72%
+            | Count: 1
+    ali:item twilightforest:gelatinous_slime_drop x1
+      | Chance: 1.45%
+      | Count: 1

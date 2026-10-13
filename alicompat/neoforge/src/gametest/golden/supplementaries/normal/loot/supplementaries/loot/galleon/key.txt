@@ -1,0 +1,18 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item supplementaries:key x1
+      | Count: 1
+      | ----- Predicates -----
+      | Data Conditions
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 4
+    ali:item minecraft:string x1-4
+      | Chance: 50%
+      | Count: 1 to 4
+    ali:item minecraft:cobweb x1-2
+      | Chance: 50%
+      | Count: 1 to 2

@@ -1,0 +1,61 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4 to 6
+    ali:item minecraft:cobweb x1-2
+      | Chance: 16.67%
+      | Count: max(0; U[1; 2])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
+    ali:item minecraft:candle x2-4
+      | Chance: 16.67%
+      | Count: max(0; U[2; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 4
+      |   -> Add: False
+    ali:item minecraft:glass_bottle x2-4
+      | Chance: 16.67%
+      | Count: max(0; U[2; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 4
+      |   -> Add: False
+    ali:item minecraft:fermented_spider_eye x1-2
+      | Chance: 16.67%
+      | Count: max(0; U[1; 2])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
+    ali:item minecraft:amethyst_shard x2-6
+      | Chance: 16.67%
+      | Count: max(0; U[2; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 6
+      |   -> Add: False
+    ali:item minecraft:slime_ball x2-5
+      | Chance: 16.67%
+      | Count: max(0; U[2; 5])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 5
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Chance: 50%
+      | Count: 1
+    ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:strong_leaping"}}
+      | Chance: 50%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:potion_contents
+      |       -> Potion: Potion of Leaping

@@ -74,6 +74,7 @@ nothing at all, since conditions ALI can run decide themselves. See `alicompat/C
 | Options with different counts | `ironsspellbooks` → `WizardTrades.inkBuy` — `TradeUtils.getSlotNode(List.of(getItemSlotNode(…), getItemSlotNode(…)))` |
 | Slot from a loot table or loot entry | `ironsspellbooks` → `WanderingTrades.lootTableNode` (`TradeUtils.getSlotNode(utils, NestedLootTable.lootTableReference(id).build())`); `villagerconfig` → `BehaviorTradeAccessor` (entries as `cost_a`/`cost_b`/`result`) |
 | Mod replaces a trader's trades | `villagerconfig` → `VillagerConfigCompat.getTradeLevels` via `registerTradeOverride`, `null` for traders without data |
+| Profession trades added as hidden lambdas (no class to register) | `arsnouveau` → `ShardsTraderTrades`: `registerTradeOverride` re-renders the profession's own `VillagerTrades.TRADES` levels through `getItemListing`, replacing only the lambda whose rolled result comes from a random pool (`RARE_LOOT`) with a cycling result slot |
 | Separately picked pools within one level | `villagerconfig` → `TradeTierAccessor` — `TradeLevel.OfTrades` of `TradeGroupNode`s, level pick count summed over the groups, one pool listed flat |
 
 ## Numbers (Step 2b)

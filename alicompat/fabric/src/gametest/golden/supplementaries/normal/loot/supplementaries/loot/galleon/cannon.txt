@@ -1,0 +1,30 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:gunpowder x5-45
+      | Chance: 87.5%
+      | Count: 5 to 45
+    ali:empty
+      | Drops nothing
+      | Chance: 12.5%
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item supplementaries:cannonball x7-16
+      | Chance: 44.44%
+      | Count: 7 to 16
+      | ----- Predicates -----
+      | Data Conditions
+    ali:item minecraft:arrow x10-40
+      | Chance: 22.22%
+      | Count: 10 to 40
+    ali:item supplementaries:bomb x8-30
+      | Chance: 22.22%
+      | Count: 8 to 30
+      | ----- Predicates -----
+      | Data Conditions
+    ali:empty
+      | Drops nothing
+      | Chance: 11.11%

@@ -1,0 +1,65 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4
+    ali:item immersiveengineering:stick_treated x2-7
+      | Chance: 13.89%
+      | Count: 2 to 7
+    ali:item immersiveengineering:stick_iron x1-4
+      | Chance: 6.94%
+      | Count: 1 to 4
+    ali:item immersiveengineering:stick_aluminum x1-4
+      | Chance: 6.94%
+      | Count: 1 to 4
+    ali:item immersiveengineering:hemp_fabric x1-3
+      | Chance: 6.94%
+      | Count: 1 to 3
+    ali:item immersiveengineering:coal_coke x1-3
+      | Chance: 6.94%
+      | Count: 1 to 3
+    ali:item minecraft:iron_ingot x1-4
+      | Chance: 6.94%
+      | Count: 1 to 4
+    ali:item minecraft:copper_ingot x1-4
+      | Chance: 6.94%
+      | Count: 1 to 4
+    ali:item immersiveengineering:ingot_aluminum x1-4
+      | Chance: 6.94%
+      | Count: 1 to 4
+    ali:item immersiveengineering:nugget_lead x1-4
+      | Chance: 6.25%
+      | Count: 1 to 4
+    ali:item immersiveengineering:component_iron x1-2
+      | Chance: 5.56%
+      | Count: 1 to 2
+    ali:item immersiveengineering:nugget_silver x1-2
+      | Chance: 4.86%
+      | Count: 1 to 2
+    ali:item immersiveengineering:nugget_nickel x1-2
+      | Chance: 4.86%
+      | Count: 1 to 2
+    ali:item immersiveengineering:stick_steel x1-4
+      | Chance: 4.17%
+      | Count: 1 to 4
+    ali:item immersiveengineering:component_steel x1
+      | Chance: 3.47%
+      | Count: 1
+    ali:item immersiveengineering:blueprint x1 {blueprint:"bullet"}
+      | Chance: 2.78%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {blueprint:"bullet"}
+    ali:item immersiveengineering:blueprint x1 {blueprint:"specialBullet"}
+      | Chance: 2.78%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {blueprint:"specialBullet"}
+    ali:item immersiveengineering:blueprint x1 {blueprint:"electrode"}
+      | Chance: 2.78%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {blueprint:"electrode"}

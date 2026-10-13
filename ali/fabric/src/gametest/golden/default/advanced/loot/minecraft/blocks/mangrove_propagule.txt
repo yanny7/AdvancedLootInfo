@@ -1,0 +1,14 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:mangrove_propagule x1
+      | Count: 1
+      | ----- Predicates -----
+      | Match Block:
+      |   -> Block: Mangrove Propagule
+      |   -> Properties:
+      |     -> age: 4
+      | ----- Modifiers -----
+      | Explosion Decay

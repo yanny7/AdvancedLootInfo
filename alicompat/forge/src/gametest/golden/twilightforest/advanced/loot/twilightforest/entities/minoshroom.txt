@@ -1,0 +1,24 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 5
+    ali:item twilightforest:meef_stroganoff x1
+      | Count: 1
+      |   -> Looting LVL: 1 + round(LVL × U[0; 1))
+      |   -> Looting I: 1
+      |   -> Looting II: 1
+      |   -> Looting III: 1
+      | ----- Modifiers -----
+      | Looting Enchant:
+      |   -> Value: U[0; 1)
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item twilightforest:minoshroom_trophy x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item twilightforest:diamond_minotaur_axe x1 {Damage:0}
+      | Count: 1

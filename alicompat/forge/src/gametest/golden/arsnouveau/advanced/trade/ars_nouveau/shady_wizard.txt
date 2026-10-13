@@ -1,0 +1,334 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 16
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item ars_nouveau:sourceberry_bush x16
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 16
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item ars_nouveau:magebloom_fiber x16
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 16
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item ars_nouveau:bombegranate_pod x6
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 16
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item ars_nouveau:bastion_pod x6
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 16
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item ars_nouveau:frostaya_pod x6
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 16
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item ars_nouveau:mendosteen_pod x6
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 16
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item minecraft:amethyst_shard x32
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:source_berry_roll x16
+  ali:trade_level
+    | Level: 2
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:ghostweave x8
+    ali:items_to_items
+      | Uses: 12
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:mirrorweave x8
+    ali:items_to_items
+      | Uses: 12
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:falseweave x8
+    ali:items_to_items
+      | Uses: 12
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:warp_scroll x8
+    ali:items_to_items
+      | Uses: 8
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item ars_nouveau:wilden_horn x4
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item ars_nouveau:wilden_spike x4
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item ars_nouveau:wilden_wing x4
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+  ali:trade_level
+    | Level: 3
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:ritual_burrowing x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:ritual_challenge x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:ritual_binding x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:ritual_awakening x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:ritual_disintegration x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:ritual_sunrise x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:ritual_cloudshaping x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:ritual_flight x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:ritual_conjure_island_plains x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:ritual_restoration x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:ritual_animal_summon x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:ritual_forestation x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:ritual_warping x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:ritual_moonfall x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:ritual_containment x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:ritual_scrying x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:ritual_gravity x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:ritual_flowering x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:ritual_sanctuary x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:ritual_fertility x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:ritual_overgrowth x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:ritual_conjure_island_desert x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:ritual_harvest x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 12
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:ritual_wilden_summon x1
+  ali:trade_level
+    | Level: 4
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 20
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x20
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:drygmy_shard x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 20
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x20
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:starbuncle_shards x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 20
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x20
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:wixie_shards x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 20
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x20
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:whirlisprig_shards x1
+  ali:trade_level
+    | Level: 5
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item ars_nouveau:source_berry_pie x8
+    ali:items_to_items
+      | Uses: 1
+      | XP: 20
+      | Price Multiplier: 0.2
+      ali:item minecraft:emerald x48
+      ali:item minecraft:air x0
+      ali:group
+        ali:item ars_nouveau:music_disc_aria_biblio x1
+        ali:item ars_nouveau:music_disc_thistle_the_sound_of_glass x1
+        ali:item ars_nouveau:music_disc_firel_the_wild_hunt x1

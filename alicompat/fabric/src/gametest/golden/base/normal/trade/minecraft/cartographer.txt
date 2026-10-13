@@ -1,0 +1,372 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 2
+      ali:item minecraft:paper x24
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x7
+      ali:item minecraft:air x0
+      ali:item minecraft:map x1
+  ali:trade_level
+    | Level: 2
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 10
+      ali:item minecraft:glass_pane x11
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 5
+      ali:item minecraft:emerald x8
+      ali:item minecraft:compass x1
+      ali:item minecraft:taiga_village_map x1
+        | Sequence:
+        |   -> Exploration Map:
+        |     -> Destination:
+        |       -> Tag: minecraft:on_taiga_village_maps
+        |     -> Map Decoration: minecraft:village_taiga
+        |     -> Zoom: 2
+        |     -> Search Radius: 100
+        |     -> Skip Known Structures: True
+        |   -> Filtered:
+        |     -> Filter:
+        |       -> Components:
+        |         -> Partial Matchers:
+        |           -> null
+        |             -> Predicate:
+        |               -> Type: minecraft:map_id
+        |     -> On Fail:
+        |       -> Discard Item:
+    ali:items_to_items
+      | Uses: 12
+      | XP: 5
+      ali:item minecraft:emerald x8
+      ali:item minecraft:compass x1
+      ali:item minecraft:swamp_hut_map x1
+        | Sequence:
+        |   -> Exploration Map:
+        |     -> Destination:
+        |       -> Tag: minecraft:on_swamp_hut_maps
+        |     -> Map Decoration: minecraft:swamp_hut
+        |     -> Zoom: 2
+        |     -> Search Radius: 100
+        |     -> Skip Known Structures: True
+        |   -> Filtered:
+        |     -> Filter:
+        |       -> Components:
+        |         -> Partial Matchers:
+        |           -> null
+        |             -> Predicate:
+        |               -> Type: minecraft:map_id
+        |     -> On Fail:
+        |       -> Discard Item:
+    ali:items_to_items
+      | Uses: 12
+      | XP: 5
+      ali:item minecraft:emerald x8
+      ali:item minecraft:compass x1
+      ali:item minecraft:snowy_village_map x1
+        | Sequence:
+        |   -> Exploration Map:
+        |     -> Destination:
+        |       -> Tag: minecraft:on_snowy_village_maps
+        |     -> Map Decoration: minecraft:village_snowy
+        |     -> Zoom: 2
+        |     -> Search Radius: 100
+        |     -> Skip Known Structures: True
+        |   -> Filtered:
+        |     -> Filter:
+        |       -> Components:
+        |         -> Partial Matchers:
+        |           -> null
+        |             -> Predicate:
+        |               -> Type: minecraft:map_id
+        |     -> On Fail:
+        |       -> Discard Item:
+    ali:items_to_items
+      | Uses: 12
+      | XP: 5
+      ali:item minecraft:emerald x8
+      ali:item minecraft:compass x1
+      ali:item minecraft:savanna_village_map x1
+        | Sequence:
+        |   -> Exploration Map:
+        |     -> Destination:
+        |       -> Tag: minecraft:on_savanna_village_maps
+        |     -> Map Decoration: minecraft:village_savanna
+        |     -> Zoom: 2
+        |     -> Search Radius: 100
+        |     -> Skip Known Structures: True
+        |   -> Filtered:
+        |     -> Filter:
+        |       -> Components:
+        |         -> Partial Matchers:
+        |           -> null
+        |             -> Predicate:
+        |               -> Type: minecraft:map_id
+        |     -> On Fail:
+        |       -> Discard Item:
+    ali:items_to_items
+      | Uses: 12
+      | XP: 5
+      ali:item minecraft:emerald x8
+      ali:item minecraft:compass x1
+      ali:item minecraft:plains_village_map x1
+        | Sequence:
+        |   -> Exploration Map:
+        |     -> Destination:
+        |       -> Tag: minecraft:on_plains_village_maps
+        |     -> Map Decoration: minecraft:village_plains
+        |     -> Zoom: 2
+        |     -> Search Radius: 100
+        |     -> Skip Known Structures: True
+        |   -> Filtered:
+        |     -> Filter:
+        |       -> Components:
+        |         -> Partial Matchers:
+        |           -> null
+        |             -> Predicate:
+        |               -> Type: minecraft:map_id
+        |     -> On Fail:
+        |       -> Discard Item:
+    ali:items_to_items
+      | Uses: 12
+      | XP: 5
+      ali:item minecraft:emerald x8
+      ali:item minecraft:compass x1
+      ali:item minecraft:jungle_pyramid_map x1
+        | Sequence:
+        |   -> Exploration Map:
+        |     -> Destination:
+        |       -> Tag: minecraft:on_jungle_pyramid_maps
+        |     -> Map Decoration: minecraft:jungle_temple
+        |     -> Zoom: 2
+        |     -> Search Radius: 100
+        |     -> Skip Known Structures: True
+        |   -> Filtered:
+        |     -> Filter:
+        |       -> Components:
+        |         -> Partial Matchers:
+        |           -> null
+        |             -> Predicate:
+        |               -> Type: minecraft:map_id
+        |     -> On Fail:
+        |       -> Discard Item:
+    ali:items_to_items
+      | Uses: 12
+      | XP: 5
+      ali:item minecraft:emerald x8
+      ali:item minecraft:compass x1
+      ali:item minecraft:desert_village_map x1
+        | Sequence:
+        |   -> Exploration Map:
+        |     -> Destination:
+        |       -> Tag: minecraft:on_desert_village_maps
+        |     -> Map Decoration: minecraft:village_desert
+        |     -> Zoom: 2
+        |     -> Search Radius: 100
+        |     -> Skip Known Structures: True
+        |   -> Filtered:
+        |     -> Filter:
+        |       -> Components:
+        |         -> Partial Matchers:
+        |           -> null
+        |             -> Predicate:
+        |               -> Type: minecraft:map_id
+        |     -> On Fail:
+        |       -> Discard Item:
+  ali:trade_level
+    | Level: 3
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 20
+      ali:item minecraft:compass x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 10
+      ali:item minecraft:emerald x13
+      ali:item minecraft:compass x1
+      ali:item minecraft:ocean_monument_map x1
+        | Sequence:
+        |   -> Exploration Map:
+        |     -> Destination:
+        |       -> Tag: minecraft:on_ocean_monument_maps
+        |     -> Map Decoration: minecraft:monument
+        |     -> Zoom: 2
+        |     -> Search Radius: 100
+        |     -> Skip Known Structures: True
+        |   -> Filtered:
+        |     -> Filter:
+        |       -> Components:
+        |         -> Partial Matchers:
+        |           -> null
+        |             -> Predicate:
+        |               -> Type: minecraft:map_id
+        |     -> On Fail:
+        |       -> Discard Item:
+    ali:items_to_items
+      | Uses: 12
+      | XP: 10
+      ali:item minecraft:emerald x12
+      ali:item minecraft:compass x1
+      ali:item minecraft:buried_trial_chambers_map x1
+        | Sequence:
+        |   -> Exploration Map:
+        |     -> Destination:
+        |       -> Tag: minecraft:on_buried_trial_chambers_maps
+        |     -> Map Decoration: minecraft:trial_chambers
+        |     -> Zoom: 2
+        |     -> Search Radius: 100
+        |     -> Skip Known Structures: True
+        |   -> Filtered:
+        |     -> Filter:
+        |       -> Components:
+        |         -> Partial Matchers:
+        |           -> null
+        |             -> Predicate:
+        |               -> Type: minecraft:map_id
+        |     -> On Fail:
+        |       -> Discard Item:
+  ali:trade_level
+    | Level: 4
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x7
+      ali:item minecraft:air x0
+      ali:item minecraft:item_frame x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item minecraft:white_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item minecraft:orange_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item minecraft:magenta_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item minecraft:blue_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item minecraft:light_blue_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item minecraft:yellow_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item minecraft:lime_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item minecraft:pink_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item minecraft:gray_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item minecraft:cyan_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item minecraft:purple_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item minecraft:brown_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item minecraft:green_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item minecraft:red_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item minecraft:black_banner x1
+  ali:trade_level
+    | Level: 5
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 30
+      ali:item minecraft:emerald x8
+      ali:item minecraft:air x0
+      ali:item minecraft:globe_banner_pattern x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 30
+      ali:item minecraft:emerald x14
+      ali:item minecraft:compass x1
+      ali:item minecraft:woodland_mansion_map x1
+        | Sequence:
+        |   -> Exploration Map:
+        |     -> Destination:
+        |       -> Tag: minecraft:on_woodland_mansion_maps
+        |     -> Map Decoration: minecraft:mansion
+        |     -> Zoom: 2
+        |     -> Search Radius: 100
+        |     -> Skip Known Structures: True
+        |   -> Filtered:
+        |     -> Filter:
+        |       -> Components:
+        |         -> Partial Matchers:
+        |           -> null
+        |             -> Predicate:
+        |               -> Type: minecraft:map_id
+        |     -> On Fail:
+        |       -> Discard Item:

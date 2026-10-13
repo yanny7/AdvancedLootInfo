@@ -1,6 +1,8 @@
 package com.yanny.alicompat.compat.supplementaries;
 
+import com.google.gson.JsonElement;
 import com.mojang.datafixers.util.Either;
+import com.mojang.serialization.JsonOps;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
@@ -40,6 +42,8 @@ import net.minecraft.world.item.trading.ItemCost;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,9 +93,20 @@ public class SupplementariesCompat implements IGlmModCompat {
     @NotNull
     private static Int2ObjectMap<VillagerTrades.ItemListing[]> getRedMerchantTrades(HolderLookup.Provider provider) {
         Int2ObjectMap<VillagerTrades.ItemListing[]> itemListings = new Int2ObjectArrayMap<>();
+        VillagerTrades.ItemListing[] listings = ModVillagerTrades.getRedMerchantTrades(provider);
 
-        itemListings.put(RED_MERCHANT_LEVEL, ModVillagerTrades.getRedMerchantTrades(provider));
+        Arrays.sort(listings, Comparator.comparing(SupplementariesCompat::getListingSortKey));
+        itemListings.put(RED_MERCHANT_LEVEL, listings);
         return itemListings;
+    }
+
+    @NotNull
+    private static String getListingSortKey(VillagerTrades.ItemListing listing) {
+        if (listing instanceof ModItemListing modListing) {
+            return ModItemListing.CODEC.encodeStart(JsonOps.INSTANCE, modListing).result().map(JsonElement::toString).orElse("");
+        }
+
+        return listing.getClass().getName();
     }
 
     @NotNull

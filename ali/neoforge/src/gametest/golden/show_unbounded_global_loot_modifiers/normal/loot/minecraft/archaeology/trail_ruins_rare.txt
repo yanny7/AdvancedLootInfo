@@ -1,0 +1,44 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:burn_pottery_sherd x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:danger_pottery_sherd x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:friend_pottery_sherd x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:heart_pottery_sherd x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:heartbreak_pottery_sherd x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:howl_pottery_sherd x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:sheaf_pottery_sherd x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:wayfinder_armor_trim_smithing_template x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:raiser_armor_trim_smithing_template x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:shaper_armor_trim_smithing_template x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:host_armor_trim_smithing_template x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:music_disc_relic x1
+      | Chance: 8.33%
+      | Count: 1
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1

@@ -1,0 +1,130 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 8
+    ali:item minecraft:potato x1-7
+      | Chance: 18.87%
+      | Count: max(0; U[1; 7])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 7
+      |   -> Add: False
+    ali:item minecraft:bread x1-4
+      | Chance: 18.87%
+      | Count: max(0; U[1; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False
+    ali:item minecraft:beetroot_seeds x1-5
+      | Chance: 18.87%
+      | Count: max(0; U[1; 5])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 5
+      |   -> Add: False
+    ali:item minecraft:snowball x1-7
+      | Chance: 18.87%
+      | Count: max(0; U[1; 7])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 7
+      |   -> Add: False
+    ali:item minecraft:coal x1-4
+      | Chance: 9.43%
+      | Count: max(0; U[1; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False
+    ali:item minecraft:snow_block x1
+      | Chance: 7.55%
+      | Count: 1
+    ali:item minecraft:blue_ice x1
+      | Chance: 1.89%
+      | Count: 1
+    ali:item minecraft:beetroot_soup x1
+      | Chance: 1.89%
+      | Count: 1
+    ali:item minecraft:furnace x1
+      | Chance: 1.89%
+      | Count: 1
+    ali:item minecraft:emerald x1-4
+      | Chance: 1.89%
+      | Count: max(0; U[1; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 66.67%
+    ali:item minecraft:bundle x1
+      | Chance: 33.33%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:reference
+            | Selects all entries
+            | Chance: 50%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:alternatives
+                  | Selects only first successful entry
+                  ali:item artifacts:villager_hat x1
+                    | Chance: 50%
+                    | Count: 1
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.08
+                    | Config Value:
+                    |   -> Config: items.villager_hat.generateAsLoot
+                  ali:empty
+                    | Drops nothing
+                    | Chance: 50%
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.08
+          ali:reference
+            | Selects all entries
+            | Chance: 50%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:alternatives
+                  | Selects only first successful entry
+                  ali:item artifacts:snowshoes x1
+                    | Chance: 50%
+                    | Count: 1
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.08
+                    | Config Value:
+                    |   -> Config: items.snowshoes.generateAsLoot
+                  ali:empty
+                    | Drops nothing
+                    | Chance: 50%
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.08

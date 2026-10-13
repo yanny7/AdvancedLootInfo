@@ -1,0 +1,18 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item hybrid_aquatic:fiddler_crab_claw x1-2
+      | Count: 1 to 2
+      | ----- Modifiers -----
+      | Furnace Smelt
+      |   -> Predicates:
+      |     -> Entity Properties:
+      |       -> Target: This Entity
+      |       -> Predicate:
+      |         -> Entity Flags:
+      |           -> Is On Fire: True
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
+      |   -> Value: 0 to 1

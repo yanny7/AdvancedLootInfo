@@ -1,0 +1,32 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item enderio:painted_slab x1
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Block State Property:
+      |     -> Block: Painted Slab
+      |     -> Properties:
+      |       -> type: top
+      | Survives Explosion
+      | ----- Modifiers -----
+      | Copy Paint:
+      |   -> Copy Primary: True
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item enderio:painted_slab x1
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Block State Property:
+      |     -> Block: Painted Slab
+      |     -> Properties:
+      |       -> type: bottom
+      | Survives Explosion
+      | ----- Modifiers -----
+      | Copy Paint:
+      |   -> Copy Primary: False

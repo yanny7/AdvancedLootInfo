@@ -1,0 +1,190 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 16
+      | XP: 2
+      ali:item minecraft:coal x15
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:stone_axe x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:stone_shovel x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:stone_pickaxe x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:stone_hoe x1
+  ali:trade_level
+    | Level: 2
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 10
+      ali:item minecraft:iron_ingot x4
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 5
+      ali:item minecraft:emerald x36
+      ali:item minecraft:air x0
+      ali:item minecraft:bell x1
+  ali:trade_level
+    | Level: 3
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 12
+      | XP: 20
+      ali:item minecraft:flint x30
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 3
+      | XP: 10
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:iron_axe x1
+        | Sequence:
+        |   -> Enchant With Levels:
+        |     -> Levels: 5 to 19
+        |     -> Options:
+        |       -> Tag: minecraft:on_traded_equipment
+        |     -> Include Additional Cost Component: True
+        |   -> Filtered:
+        |     -> Filter:
+        |       -> Item: Iron Axe
+        |       -> Components:
+        |         -> Partial Matchers: minecraft:enchantments
+        |     -> On Fail:
+        |       -> Discard Item:
+    ali:items_to_items
+      | Uses: 3
+      | XP: 10
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item minecraft:iron_shovel x1
+        | Sequence:
+        |   -> Enchant With Levels:
+        |     -> Levels: 5 to 19
+        |     -> Options:
+        |       -> Tag: minecraft:on_traded_equipment
+        |     -> Include Additional Cost Component: True
+        |   -> Filtered:
+        |     -> Filter:
+        |       -> Item: Iron Shovel
+        |       -> Components:
+        |         -> Partial Matchers: minecraft:enchantments
+        |     -> On Fail:
+        |       -> Discard Item:
+    ali:items_to_items
+      | Uses: 3
+      | XP: 10
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:iron_pickaxe x1
+        | Sequence:
+        |   -> Enchant With Levels:
+        |     -> Levels: 5 to 19
+        |     -> Options:
+        |       -> Tag: minecraft:on_traded_equipment
+        |     -> Include Additional Cost Component: True
+        |   -> Filtered:
+        |     -> Filter:
+        |       -> Item: Iron Pickaxe
+        |       -> Components:
+        |         -> Partial Matchers: minecraft:enchantments
+        |     -> On Fail:
+        |       -> Discard Item:
+    ali:items_to_items
+      | Uses: 3
+      | XP: 10
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item minecraft:diamond_hoe x1
+  ali:trade_level
+    | Level: 4
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 3
+      | XP: 15
+      ali:item minecraft:emerald x12
+      ali:item minecraft:air x0
+      ali:item minecraft:diamond_axe x1
+        | Sequence:
+        |   -> Enchant With Levels:
+        |     -> Levels: 5 to 19
+        |     -> Options:
+        |       -> Tag: minecraft:on_traded_equipment
+        |     -> Include Additional Cost Component: True
+        |   -> Filtered:
+        |     -> Filter:
+        |       -> Item: Diamond Axe
+        |       -> Components:
+        |         -> Partial Matchers: minecraft:enchantments
+        |     -> On Fail:
+        |       -> Discard Item:
+    ali:items_to_items
+      | Uses: 3
+      | XP: 15
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:diamond_shovel x1
+        | Sequence:
+        |   -> Enchant With Levels:
+        |     -> Levels: 5 to 19
+        |     -> Options:
+        |       -> Tag: minecraft:on_traded_equipment
+        |     -> Include Additional Cost Component: True
+        |   -> Filtered:
+        |     -> Filter:
+        |       -> Item: Diamond Shovel
+        |       -> Components:
+        |         -> Partial Matchers: minecraft:enchantments
+        |     -> On Fail:
+        |       -> Discard Item:
+    ali:items_to_items
+      | Uses: 12
+      | XP: 30
+      ali:item minecraft:diamond x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+  ali:trade_level
+    | Level: 5
+    | Randomly Selects 1 Of These Trades
+    ali:items_to_items
+      | Uses: 3
+      | XP: 30
+      ali:item minecraft:emerald x13
+      ali:item minecraft:air x0
+      ali:item minecraft:diamond_pickaxe x1
+        | Sequence:
+        |   -> Enchant With Levels:
+        |     -> Levels: 5 to 19
+        |     -> Options:
+        |       -> Tag: minecraft:on_traded_equipment
+        |     -> Include Additional Cost Component: True
+        |   -> Filtered:
+        |     -> Filter:
+        |       -> Item: Diamond Pickaxe
+        |       -> Components:
+        |         -> Partial Matchers: minecraft:enchantments
+        |     -> On Fail:
+        |       -> Discard Item:

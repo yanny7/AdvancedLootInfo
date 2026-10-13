@@ -1,0 +1,24 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item twilightforest:skyberry x1
+            | Count: 1
+            | ----- Predicates -----
+            | Block State Property:
+            |   -> Block: Skyberry Bush
+            |   -> Properties:
+            |     -> age: 3
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item twilightforest:skyberry_bush x1
+      | Count: 1

@@ -1,0 +1,152 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:rotten_spell_book x1 {"irons_spellbooks:spell_container":{data:[],maxSpells:8,mustEquip:1b,spellWheel:1b}}
+      | Chance: 15%
+      | Count: 1
+      | ----- Predicates -----
+      | Random Chance:
+      |   -> Probability: 0.15
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 5
+    ali:item minecraft:bone x3-5
+      | Chance: 33.33%
+      | Count: max(0; U[3; 5])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 3 to 5
+      |   -> Add: False
+    ali:item minecraft:cobweb x1
+      | Chance: 33.33%
+      | Count: 1
+    ali:item minecraft:gold_ingot x2-5
+      | Chance: 20%
+      | Count: max(0; U[2; 5])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 5
+      |   -> Add: False
+    ali:item minecraft:diamond x1
+      | Chance: 6.67%
+      | Count: 1
+    ali:item minecraft:emerald x1-3
+      | Chance: 6.67%
+      | Count: max(0; U[1; 3])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 3
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 2
+    ali:item irons_spellbooks:scroll x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Spell:
+      |   -> Quality: U[0; 0.5)
+      |   -> Applicable Spells:
+      |     -> Force: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:arcane_essence x5-16
+      | Count: max(0; U[5; 16])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 16
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:empty
+      | Drops nothing
+      | Chance: 36.84%
+    ali:item minecraft:iron_sword x1 {Damage:0}
+      | Chance: 10.53%
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Spell:
+      |   -> Quality: U[0.2; 0.75)
+      |   -> Applicable Spells:
+      |     -> Force: False
+      | Enchant With Levels:
+      |   -> Levels: 20 to 39
+      |   -> Treasure: False
+    ali:item minecraft:diamond_sword x1 {Damage:0}
+      | Chance: 5.26%
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Spell:
+      |   -> Quality: U[0.2; 0.75)
+      |   -> Applicable Spells:
+      |     -> Force: False
+      | Enchant With Levels:
+      |   -> Levels: 20 to 39
+      |   -> Treasure: False
+    ali:item minecraft:iron_sword x1 {Damage:0}
+      | Chance: 5.26%
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Spell:
+      |   -> Quality: U[0.2; 0.75)
+      |   -> Applicable Spells:
+      |     -> Force: False
+    ali:item minecraft:iron_helmet x1 {Damage:0}
+      | Chance: 5.26%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 10 to 20
+      |   -> Treasure: False
+    ali:item minecraft:iron_chestplate x1 {Damage:0}
+      | Chance: 5.26%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 10 to 20
+      |   -> Treasure: False
+    ali:item minecraft:iron_leggings x1 {Damage:0}
+      | Chance: 5.26%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 10 to 20
+      |   -> Treasure: False
+    ali:item minecraft:iron_boots x1 {Damage:0}
+      | Chance: 5.26%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 10 to 20
+      |   -> Treasure: False
+    ali:item minecraft:diamond_helmet x1 {Damage:0}
+      | Chance: 5.26%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 10 to 20
+      |   -> Treasure: False
+    ali:item minecraft:diamond_chestplate x1 {Damage:0}
+      | Chance: 5.26%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 10 to 20
+      |   -> Treasure: False
+    ali:item minecraft:diamond_leggings x1 {Damage:0}
+      | Chance: 5.26%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 10 to 20
+      |   -> Treasure: False
+    ali:item minecraft:diamond_boots x1 {Damage:0}
+      | Chance: 5.26%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 10 to 20
+      |   -> Treasure: False

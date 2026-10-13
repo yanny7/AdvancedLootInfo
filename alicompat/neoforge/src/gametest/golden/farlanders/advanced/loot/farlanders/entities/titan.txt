@@ -1,0 +1,16 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item farlanders:titan_hide x3-5
+      | Count: max(0; U[3; 5])
+      | ----- Predicates -----
+      | Killed by player
+      | ----- Modifiers -----
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
+      |   -> Count: U[0; 2)
+      | Set Count:
+      |   -> Count: 3 to 5
+      |   -> Add: False

@@ -55,7 +55,7 @@ public class MantleTooltipTest {
     @Test
     public void testRetexturedFunction() {
         assertTooltip(UTILS.getFunctionTooltip(UTILS, new RetexturedLootFunction()).build(), List.of(
-                "Retextured:"
+                "Retextured"
         ));
     }
 
@@ -65,7 +65,7 @@ public class MantleTooltipTest {
         LootItemFunction function = new RetexturedLootFunction(conditions);
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Retextured:",
+                "Retextured",
                 "  -> Predicates:",
                 "    -> Survives Explosion"
         ));

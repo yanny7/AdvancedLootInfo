@@ -1,0 +1,128 @@
+{
+  "tiers": [
+    {
+      "total_exp_required": 0,
+      "groups": [
+        {
+          "num_to_select": 2,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "name": "minecraft:paper",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": {
+                    "type": "minecraft:uniform",
+                    "min": 20,
+                    "max": 28
+                  }
+                }
+              },
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:emerald"
+              },
+              "max_uses": 16,
+              "trader_experience": 2,
+              "price_multiplier": 0.05
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "name": "minecraft:emerald",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": {
+                    "type": "minecraft:add",
+                    "inputs": [
+                      {
+                        "type": "minecraft:uniform",
+                        "min": 3,
+                        "max": 6
+                      },
+                      5
+                    ]
+                  }
+                }
+              },
+              "cost_b": {
+                "type": "minecraft:item",
+                "name": "minecraft:book"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:enchanted_book",
+                "modifier": {
+                  "type": "villagerconfig:enchant_randomly",
+                  "trade_enchantments": true
+                }
+              },
+              "reference_providers": {
+                "level": {
+                  "type": "minecraft:uniform",
+                  "min": 1,
+                  "max": 5
+                }
+              },
+              "max_uses": 12,
+              "trader_experience": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "total_exp_required": 10,
+      "groups": [
+        {
+          "num_to_select": 1,
+          "trades": [
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "name": "minecraft:emerald",
+                "modifier": {
+                  "type": "minecraft:set_count",
+                  "count": 3
+                }
+              },
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:leather_chestplate",
+                "modifier": {
+                  "type": "villagerconfig:set_dye",
+                  "dye_colors": [
+                    "red",
+                    "blue"
+                  ]
+                }
+              },
+              "max_uses": 12,
+              "trader_experience": 5
+            },
+            {
+              "cost_a": {
+                "type": "minecraft:item",
+                "name": "minecraft:emerald"
+              },
+              "result": {
+                "type": "minecraft:item",
+                "name": "minecraft:iron_sword",
+                "modifier": {
+                  "type": "villagerconfig:enchant_randomly",
+                  "include": [
+                    "minecraft:sharpness",
+                    "minecraft:smite"
+                  ]
+                }
+              },
+              "max_uses": 3,
+              "trader_experience": 10
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

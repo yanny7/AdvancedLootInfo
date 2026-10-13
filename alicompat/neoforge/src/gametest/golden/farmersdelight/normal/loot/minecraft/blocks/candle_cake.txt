@@ -1,0 +1,48 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:candle x1
+      | Count: 1
+  ali:item farmersdelight:cake_slice x7
+    | Count: 7
+    | ----- Predicates -----
+    | Match Tool:
+    |   -> Items:
+    |     -> Tag: Knives
+    | Any Of:
+    |   -> Block State Property:
+    |     -> Block: Cake with Candle
+    |   -> Block State Property:
+    |     -> Block: Cake with White Candle
+    |   -> Block State Property:
+    |     -> Block: Cake with Orange Candle
+    |   -> Block State Property:
+    |     -> Block: Cake with Magenta Candle
+    |   -> Block State Property:
+    |     -> Block: Cake with Light Blue Candle
+    |   -> Block State Property:
+    |     -> Block: Cake with Yellow Candle
+    |   -> Block State Property:
+    |     -> Block: Cake with Lime Candle
+    |   -> Block State Property:
+    |     -> Block: Cake with Pink Candle
+    |   -> Block State Property:
+    |     -> Block: Cake with Gray Candle
+    |   -> Block State Property:
+    |     -> Block: Cake with Light Gray Candle
+    |   -> Block State Property:
+    |     -> Block: Cake with Cyan Candle
+    |   -> Block State Property:
+    |     -> Block: Cake with Purple Candle
+    |   -> Block State Property:
+    |     -> Block: Cake with Blue Candle
+    |   -> Block State Property:
+    |     -> Block: Cake with Brown Candle
+    |   -> Block State Property:
+    |     -> Block: Cake with Green Candle
+    |   -> Block State Property:
+    |     -> Block: Cake with Red Candle
+    |   -> Block State Property:
+    |     -> Block: Cake with Black Candle

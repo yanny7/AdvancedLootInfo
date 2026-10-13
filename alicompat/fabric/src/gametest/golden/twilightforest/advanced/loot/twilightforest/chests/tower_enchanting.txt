@@ -1,0 +1,29 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:lapis_lazuli x4-12
+      | Count: max(0; U[4; 12])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4 to 12
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:experience_bottle x5-15
+      | Count: max(0; U[5; 15])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 15
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:book x16-32
+      | Count: max(0; U[16; 32])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 16 to 32
+      |   -> Add: False

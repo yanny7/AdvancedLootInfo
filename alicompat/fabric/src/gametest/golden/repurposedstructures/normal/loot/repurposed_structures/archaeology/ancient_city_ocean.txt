@@ -1,0 +1,119 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:sniffer_egg x1
+      | Chance: 6.96%
+      | Count: 1
+    ali:item minecraft:emerald x1
+      | Chance: 6.96%
+      | Count: 1
+    ali:item minecraft:diamond x1
+      | Chance: 6.96%
+      | Count: 1
+    ali:item minecraft:coal x1
+      | Chance: 6.96%
+      | Count: 1
+    ali:item minecraft:lapis_lazuli x1
+      | Chance: 6.96%
+      | Count: 1
+    ali:item minecraft:gold_ingot x1
+      | Chance: 5.22%
+      | Count: 1
+    ali:item minecraft:iron_ingot x1
+      | Chance: 5.22%
+      | Count: 1
+    ali:item minecraft:copper_ingot x1
+      | Chance: 5.22%
+      | Count: 1
+    ali:item minecraft:wheat x1
+      | Chance: 3.48%
+      | Count: 1
+    ali:item minecraft:sweet_berries x1
+      | Chance: 3.48%
+      | Count: 1
+    ali:item minecraft:gold_nugget x1
+      | Chance: 3.48%
+      | Count: 1
+    ali:item minecraft:iron_nugget x1
+      | Chance: 3.48%
+      | Count: 1
+    ali:item minecraft:blade_pottery_sherd x1
+      | Chance: 2.61%
+      | Count: 1
+    ali:item minecraft:explorer_pottery_sherd x1
+      | Chance: 2.61%
+      | Count: 1
+    ali:item minecraft:mourner_pottery_sherd x1
+      | Chance: 2.61%
+      | Count: 1
+    ali:item minecraft:plenty_pottery_sherd x1
+      | Chance: 2.61%
+      | Count: 1
+    ali:item minecraft:angler_pottery_sherd x1
+      | Chance: 2.61%
+      | Count: 1
+    ali:item minecraft:shelter_pottery_sherd x1
+      | Chance: 2.61%
+      | Count: 1
+    ali:item minecraft:snort_pottery_sherd x1
+      | Chance: 2.61%
+      | Count: 1
+    ali:item minecraft:rotten_flesh x1
+      | Chance: 1.74%
+      | Count: 1
+    ali:item minecraft:potato x1
+      | Chance: 1.74%
+      | Count: 1
+    ali:item minecraft:poisonous_potato x1
+      | Chance: 1.74%
+      | Count: 1
+    ali:item minecraft:iron_sword x1
+      | Chance: 1.74%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 10% to 70%
+      |   -> Add: False
+    ali:item minecraft:iron_axe x1
+      | Chance: 1.74%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 10% to 70%
+      |   -> Add: False
+    ali:item minecraft:chainmail_boots x1
+      | Chance: 1.74%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 10% to 70%
+      |   -> Add: False
+    ali:item minecraft:chainmail_leggings x1
+      | Chance: 1.74%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 10% to 70%
+      |   -> Add: False
+    ali:item minecraft:chainmail_chestplate x1
+      | Chance: 1.74%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 10% to 70%
+      |   -> Add: False
+    ali:item minecraft:chainmail_helmet x1
+      | Chance: 1.74%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 10% to 70%
+      |   -> Add: False
+    ali:item minecraft:heart_of_the_sea x1
+      | Chance: 0.87%
+      | Count: 1
+    ali:item minecraft:tide_armor_trim_smithing_template x1
+      | Chance: 0.87%
+      | Count: 1

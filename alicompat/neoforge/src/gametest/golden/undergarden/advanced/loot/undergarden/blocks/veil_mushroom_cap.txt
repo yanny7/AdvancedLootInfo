@@ -1,0 +1,26 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item undergarden:veil_mushroom_cap x1
+        | Count: 1
+        | ----- Predicates -----
+        | Match Tool:
+        |   -> Components:
+        |     -> Partial Matchers:
+        |       -> minecraft:enchantments
+        |         -> Enchantment: Silk Touch
+        |         -> Level: ≥ 1
+      ali:item undergarden:veil_mushroom x0-2
+        | Count: max(max(0; U[−6; 2]); 0)  ~0 (78%)
+        |   [chart 0..2 0-2 base=true modes=[true, false, false] heights=1.0000,0.1429,0.1429]
+        | ----- Modifiers -----
+        | Set Count:
+        |   -> Count: −6 to 2
+        |   -> Add: False
+        | Limit Count:
+        |   -> Limit: ≥ 0
+        | Explosion Decay

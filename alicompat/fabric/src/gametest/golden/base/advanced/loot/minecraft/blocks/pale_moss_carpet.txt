@@ -1,0 +1,14 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:pale_moss_carpet x1
+      | Count: 1
+      | ----- Predicates -----
+      | Match Block:
+      |   -> Block: Pale Moss Carpet
+      |   -> Properties:
+      |     -> bottom: true
+      | ----- Modifiers -----
+      | Explosion Decay

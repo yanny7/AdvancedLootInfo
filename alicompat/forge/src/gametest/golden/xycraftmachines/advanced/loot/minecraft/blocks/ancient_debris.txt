@@ -1,0 +1,17 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:modified
+      | Selects only first successful entry
+      ali:item minecraft:netherite_scrap x1
+        | Count: 1
+        | ----- Predicates -----
+        | Match Tool:
+        |   -> Nbt: {modules:[{id:"xycraft_machines:module_auto_smelt"}]}
+        | Survives Explosion
+      ali:item minecraft:ancient_debris x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion

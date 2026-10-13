@@ -1,0 +1,316 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4 to 6
+    ali:item minecraft:arrow x4
+      | Chance: 6.25%
+      | Count: 4
+    ali:item minecraft:map x1
+      | Chance: 6.25%
+      | Count: 1
+    ali:item minecraft:bone x2-4
+      | Chance: 6.25%
+      | Count: 2 to 4
+    ali:item minecraft:cobweb x1
+      | Chance: 6.25%
+      | Count: 1
+    ali:item minecraft:compass x1
+      | Chance: 6.25%
+      | Count: 1
+    ali:item minecraft:map x1-2
+      | Chance: 6.25%
+      | Count: 1 to 2
+    ali:item minecraft:gunpowder x2-4
+      | Chance: 6.25%
+      | Count: 2 to 4
+    ali:item minecraft:fishing_rod x1
+      | Chance: 6.25%
+      | Count: 1
+    ali:item minecraft:flint_and_steel x1
+      | Chance: 6.25%
+      | Count: 1
+    ali:item minecraft:glass_bottle x1-4
+      | Chance: 6.25%
+      | Count: 1 to 4
+    ali:item minecraft:lead x1-3
+      | Chance: 6.25%
+      | Count: 1 to 3
+    ali:item minecraft:leather x1-4
+      | Chance: 6.25%
+      | Count: 1 to 4
+    ali:item minecraft:bundle x1
+      | Chance: 6.25%
+      | Count: 1
+    ali:item minecraft:rabbit_hide x1-4
+      | Chance: 6.25%
+      | Count: 1 to 4
+    ali:item minecraft:saddle x1
+      | Chance: 6.25%
+      | Count: 1
+    ali:item minecraft:white_candle x1-3
+      | Chance: 6.25%
+      | Count: 1 to 3
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item minecraft:bow x1
+      | Chance: 10%
+      | Count: 1
+    ali:item minecraft:bucket x1
+      | Chance: 10%
+      | Count: 1
+    ali:item minecraft:copper_axe x1
+      | Chance: 10%
+      | Count: 1
+    ali:item minecraft:copper_boots x1
+      | Chance: 10%
+      | Count: 1
+    ali:item minecraft:copper_chestplate x1
+      | Chance: 10%
+      | Count: 1
+    ali:item minecraft:copper_leggings x1
+      | Chance: 10%
+      | Count: 1
+    ali:item minecraft:copper_spear x1
+      | Chance: 10%
+      | Count: 1
+    ali:item minecraft:copper_sword x1
+      | Chance: 10%
+      | Count: 1
+    ali:item minecraft:spyglass x1
+      | Chance: 10%
+      | Count: 1
+    ali:item minecraft:shears x1
+      | Chance: 10%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:abandoned_camp_map x1 {"minecraft:item_name":{translate:"filled_map.bamboo_camp_map"}}
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Location Check:
+      |     -> Location:
+      |       -> Biome: Bamboo Jungle
+      | ----- Modifiers -----
+      | Set Name:
+      |   -> Name: Bamboo Camp Map
+      |   -> Target: Item Name
+      | Exploration Map:
+      |   -> Destination:
+      |     -> Tag: minecraft:on_abandoned_camp_bamboo_jungle
+      |   -> Map Decoration: minecraft:abandoned_camp
+      |   -> Zoom: 2
+      |   -> Search Radius: 50
+      |   -> Skip Known Structures: True
+      | Filtered:
+      |   -> Filter:
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> null
+      |           -> Predicate:
+      |             -> Type: minecraft:map_id
+      |   -> On Fail:
+      |     -> Discard Item:
+    ali:item minecraft:abandoned_camp_map x1 {"minecraft:item_name":{translate:"filled_map.cherry_grove_camp_map"}}
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Location Check:
+      |     -> Location:
+      |       -> Biome: Cherry Grove
+      | ----- Modifiers -----
+      | Set Name:
+      |   -> Name: Cherry Grove Camp Map
+      |   -> Target: Item Name
+      | Exploration Map:
+      |   -> Destination:
+      |     -> Tag: minecraft:on_abandoned_camp_cherry_grove
+      |   -> Map Decoration: minecraft:abandoned_camp
+      |   -> Zoom: 2
+      |   -> Search Radius: 50
+      |   -> Skip Known Structures: True
+      | Filtered:
+      |   -> Filter:
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> null
+      |           -> Predicate:
+      |             -> Type: minecraft:map_id
+      |   -> On Fail:
+      |     -> Discard Item:
+    ali:item minecraft:abandoned_camp_map x1 {"minecraft:item_name":{translate:"filled_map.birch_forest_camp_map"}}
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Location Check:
+      |     -> Location:
+      |       -> Biome: Birch Forest
+      | ----- Modifiers -----
+      | Set Name:
+      |   -> Name: Birch Forest Camp Map
+      |   -> Target: Item Name
+      | Exploration Map:
+      |   -> Destination:
+      |     -> Tag: minecraft:on_abandoned_camp_birch_forest
+      |   -> Map Decoration: minecraft:abandoned_camp
+      |   -> Zoom: 2
+      |   -> Search Radius: 50
+      |   -> Skip Known Structures: True
+      | Filtered:
+      |   -> Filter:
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> null
+      |           -> Predicate:
+      |             -> Type: minecraft:map_id
+      |   -> On Fail:
+      |     -> Discard Item:
+    ali:item minecraft:abandoned_camp_map x1 {"minecraft:item_name":{translate:"filled_map.dappled_forest_camp_map"}}
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Location Check:
+      |     -> Location:
+      |       -> Biome: Dappled Forest
+      | ----- Modifiers -----
+      | Set Name:
+      |   -> Name: Dappled Forest Camp Map
+      |   -> Target: Item Name
+      | Exploration Map:
+      |   -> Destination:
+      |     -> Tag: minecraft:on_abandoned_camp_dappled_forest
+      |   -> Map Decoration: minecraft:abandoned_camp
+      |   -> Zoom: 2
+      |   -> Search Radius: 50
+      |   -> Skip Known Structures: True
+      | Filtered:
+      |   -> Filter:
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> null
+      |           -> Predicate:
+      |             -> Type: minecraft:map_id
+      |   -> On Fail:
+      |     -> Discard Item:
+    ali:item minecraft:abandoned_camp_map x1 {"minecraft:item_name":{translate:"filled_map.flower_forest_camp_map"}}
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Location Check:
+      |     -> Location:
+      |       -> Biome: Flower Forest
+      | ----- Modifiers -----
+      | Set Name:
+      |   -> Name: Flower Forest Camp Map
+      |   -> Target: Item Name
+      | Exploration Map:
+      |   -> Destination:
+      |     -> Tag: minecraft:on_abandoned_camp_flower_forest
+      |   -> Map Decoration: minecraft:abandoned_camp
+      |   -> Zoom: 2
+      |   -> Search Radius: 50
+      |   -> Skip Known Structures: True
+      | Filtered:
+      |   -> Filter:
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> null
+      |           -> Predicate:
+      |             -> Type: minecraft:map_id
+      |   -> On Fail:
+      |     -> Discard Item:
+    ali:item minecraft:abandoned_camp_map x1 {"minecraft:item_name":{translate:"filled_map.pale_garden_camp_map"}}
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Location Check:
+      |     -> Location:
+      |       -> Biome: Pale Garden
+      | ----- Modifiers -----
+      | Set Name:
+      |   -> Name: Pale Garden Camp Map
+      |   -> Target: Item Name
+      | Exploration Map:
+      |   -> Destination:
+      |     -> Tag: minecraft:on_abandoned_camp_pale_garden
+      |   -> Map Decoration: minecraft:abandoned_camp
+      |   -> Zoom: 2
+      |   -> Search Radius: 50
+      |   -> Skip Known Structures: True
+      | Filtered:
+      |   -> Filter:
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> null
+      |           -> Predicate:
+      |             -> Type: minecraft:map_id
+      |   -> On Fail:
+      |     -> Discard Item:
+    ali:item minecraft:abandoned_camp_map x1 {"minecraft:item_name":{translate:"filled_map.swamp_camp_map"}}
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Location Check:
+      |     -> Location:
+      |       -> Biome: Swamp
+      | ----- Modifiers -----
+      | Set Name:
+      |   -> Name: Swamp Camp Map
+      |   -> Target: Item Name
+      | Exploration Map:
+      |   -> Destination:
+      |     -> Tag: minecraft:on_abandoned_camp_swamp
+      |   -> Map Decoration: minecraft:abandoned_camp
+      |   -> Zoom: 2
+      |   -> Search Radius: 50
+      |   -> Skip Known Structures: True
+      | Filtered:
+      |   -> Filter:
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> null
+      |           -> Predicate:
+      |             -> Type: minecraft:map_id
+      |   -> On Fail:
+      |     -> Discard Item:
+    ali:item minecraft:abandoned_camp_map x1 {"minecraft:item_name":{translate:"filled_map.windswept_forest_camp_map"}}
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Location Check:
+      |     -> Location:
+      |       -> Biome: Windswept Forest
+      | ----- Modifiers -----
+      | Set Name:
+      |   -> Name: Windswept Forest Camp Map
+      |   -> Target: Item Name
+      | Exploration Map:
+      |   -> Destination:
+      |     -> Tag: minecraft:on_abandoned_camp_windswept_forest
+      |   -> Map Decoration: minecraft:abandoned_camp
+      |   -> Zoom: 2
+      |   -> Search Radius: 50
+      |   -> Skip Known Structures: True
+      | Filtered:
+      |   -> Filter:
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> null
+      |           -> Predicate:
+      |             -> Type: minecraft:map_id
+      |   -> On Fail:
+      |     -> Discard Item:
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1

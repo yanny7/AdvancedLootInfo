@@ -110,6 +110,9 @@ public final class Lang {
         // LootJS
         PLAYER_ACTION("player_action", "Player Action:"),
         PRESERVE_COMPONENTS("preserve_components", "Preserve Components:"),
+        DROP_EXPERIENCE("drop_experience", "Drop Experience:"),
+        EXPLODE("explode", "Explode:"),
+        LIGHTNING_STRIKE("lightning_strike", "Lightning Strike:"),
         ;
 
         private final Translation translation;
@@ -258,6 +261,7 @@ public final class Lang {
         BLOCKS_ON_FIRE("blocks_on_fire", "Blocks On Fire: %s"),
         BLOCK_DELAY_SECONDS("block_delay_seconds", "Block Delay Seconds: %s"),
         BLOCK_ENTITY_TYPE("block_entity_type", "Block Entity Type: %s"),
+        BLOCK_INTERACTION("block_interaction", "Block Interaction: %s"),
         BLOCK_SOUND("block_sound", "Block Sound: %s"),
         BONUS_MULTIPLIER("bonus_multiplier", "Bonus Multiplier: %s"),
         BURN_TIME("burn_time", "Burn Time: %s"),
@@ -281,6 +285,7 @@ public final class Lang {
         CUSTOM_COLOR("custom_color", "Custom Color: %s"),
         CUSTOM_NAME("custom_name", "Custom Name: %s"),
         DAMAGE("damage", "Damage: %s"),
+        DAMAGE_ENTITY("damage_entity", "Damage Entity: %s"),
         DAMAGE_MULTIPLIER("damage_multiplier", "Damage Multiplier: %s"),
         DAMAGE_ON_HURT("damage_on_hurt", "Damage On Hurt: %s"),
         DAMAGE_PER_BLOCK("damage_per_block", "Damage Per Block: %s"),
@@ -403,6 +408,7 @@ public final class Lang {
         PREDICATE("predicate", "Predicate: %s"),
         PROBABILITY("probability", "Probability: %s"),
         PROPERTY("property", "Property: %s"),
+        RADIUS("radius", "Radius: %s"),
         RANGE("range", "Range: %s"),
         RANGED_ANY("ranged_property_any", "%s: any"),
         RANGED_BOTH("ranged_property_both", "%s: %s-%s"),
@@ -737,6 +743,7 @@ public final class Lang {
     public enum Error implements ITooltipKey {
         DETAIL_NOT_AVAILABLE("detail_not_available", "Detail Not Available"),
         MODIFIED_ITEM("modified_item", "Modified dynamically!"),
+        RECURSIVE_REFERENCE("recursive_reference", "Recursive Reference:"),
         ;
 
         private final Translation translation;

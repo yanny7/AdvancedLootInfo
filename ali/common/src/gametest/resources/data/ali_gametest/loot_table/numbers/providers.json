@@ -1,0 +1,67 @@
+{
+  "pools": [
+    {
+      "rolls": {
+        "type": "minecraft:binomial",
+        "n": 3,
+        "p": 0.5
+      },
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:egg",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:binomial",
+              "n": 5,
+              "p": 0.3
+            }
+          }
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": {
+          "type": "minecraft:binomial",
+          "n": 2,
+          "p": 0.5
+        },
+        "max": 4
+      },
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:snowball",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:from_float",
+              "input": {
+                "type": "minecraft:round",
+                "input": {
+                  "type": "minecraft:mul",
+                  "inputs": [
+                    {
+                      "type": "minecraft:from_int",
+                      "input": {
+                        "type": "minecraft:score",
+                        "target": "this",
+                        "score": "level"
+                      }
+                    },
+                    0.5
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

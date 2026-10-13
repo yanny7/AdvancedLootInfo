@@ -1,0 +1,70 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item farmersdelight:sweet_berry_cheesecake_slice x4
+      | Count: 4
+      | ----- Predicates -----
+      | Match Tool:
+      |   -> Items:
+      |     -> Tag: Knives
+      | Match Block:
+      |   -> Block: Sweet Berry Cheesecake
+      |   -> Properties:
+      |     -> bites: 0
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item farmersdelight:sweet_berry_cheesecake_slice x3
+      | Count: 3
+      | ----- Predicates -----
+      | Match Tool:
+      |   -> Items:
+      |     -> Tag: Knives
+      | Match Block:
+      |   -> Block: Sweet Berry Cheesecake
+      |   -> Properties:
+      |     -> bites: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 3
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item farmersdelight:sweet_berry_cheesecake_slice x2
+      | Count: 2
+      | ----- Predicates -----
+      | Match Tool:
+      |   -> Items:
+      |     -> Tag: Knives
+      | Match Block:
+      |   -> Block: Sweet Berry Cheesecake
+      |   -> Properties:
+      |     -> bites: 2
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item farmersdelight:sweet_berry_cheesecake_slice x1
+      | Count: 1
+      | ----- Predicates -----
+      | Match Tool:
+      |   -> Items:
+      |     -> Tag: Knives
+      | Match Block:
+      |   -> Block: Sweet Berry Cheesecake
+      |   -> Properties:
+      |     -> bites: 3
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False

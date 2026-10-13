@@ -1,0 +1,113 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:enchanted_book x1
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Unbreaking
+      |       -> Levels: 4
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 9.38%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Fortune
+      |       -> Levels: 4
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 9.38%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Sharpness
+      |       -> Levels: 7
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 9.38%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Power
+      |       -> Levels: 6
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 9.38%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Bane of Arthropods
+      |       -> Levels: 9
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 9.38%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Smite
+      |       -> Levels: 9
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 9.38%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Impaling
+      |       -> Levels: 9
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 6.25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Efficiency
+      |       -> Levels: 6
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 6.25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Sweeping Edge
+      |       -> Levels: 4
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 6.25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Fire Aspect
+      |       -> Levels: 3
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 6.25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Looting
+      |       -> Levels: 4
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 6.25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Riptide
+      |       -> Levels: 5
+      |   -> Add: False

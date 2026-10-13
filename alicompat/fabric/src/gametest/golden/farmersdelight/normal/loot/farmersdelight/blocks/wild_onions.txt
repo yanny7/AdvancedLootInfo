@@ -1,0 +1,28 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item farmersdelight:wild_onions x1
+        | Count: 1
+        | ----- Predicates -----
+        | Can Item Perform Ability:
+        |   -> Shears Harvest
+      ali:item farmersdelight:onion x1-7
+        | Count: 1
+        |   -> Fortune I: 1 to 3
+        |   -> Fortune II: 1 to 5
+        |   -> Fortune III: 1 to 7
+        | ----- Modifiers -----
+        | Explosion Decay
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:allium x1-3
+      | Count: 1 to 3
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Can Item Perform Ability:
+      |     -> Shears Harvest

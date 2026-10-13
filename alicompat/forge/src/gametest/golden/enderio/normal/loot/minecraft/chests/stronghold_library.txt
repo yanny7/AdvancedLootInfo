@@ -1,0 +1,298 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 10
+    ali:item minecraft:book x1-3
+      | Chance: 38.46%
+      | Count: 1 to 3
+    ali:item minecraft:paper x2-7
+      | Chance: 38.46%
+      | Count: 2 to 7
+    ali:item minecraft:enchanted_book x1
+      | Chance: 19.23%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Treasure: True
+    ali:item minecraft:map x1
+      | Chance: 1.92%
+      | Count: 1
+    ali:item minecraft:compass x1
+      | Chance: 1.92%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:eye_armor_trim_smithing_template x1
+      | Count: 1
+  ali:reference
+    | Selects all entries
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/buried_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/igloo_chest
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple_dispenser
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/shipwreck_map
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/shipwreck_supply
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/shipwreck_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    ali:loot_table
+      | Selects all entries
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1 to 3
+        ali:item enderio:dark_steel_ingot x1-3
+          | Chance: 5%
+          | Count: 1 to 3
+          | ----- Predicates -----
+          | Any Of:
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/abandoned_mineshaft
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/buried_treasure
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/desert_pyramid
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/end_city_treasure
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/igloo_chest
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/jungle_temple
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/jungle_temple_dispenser
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/pillager_outpost
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/ruined_portal
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/shipwreck_map
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/shipwreck_supply
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/shipwreck_treasure
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/simple_dungeon
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/stronghold_corridor
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/stronghold_crossing
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/stronghold_library
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/underwater_ruin_big
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/underwater_ruin_small
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/woodland_mansion
+        ali:item minecraft:ender_pearl x1
+          | Chance: 6%
+          | Count: 1
+          | ----- Predicates -----
+          | Any Of:
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/abandoned_mineshaft
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/buried_treasure
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/desert_pyramid
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/end_city_treasure
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/igloo_chest
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/jungle_temple
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/jungle_temple_dispenser
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/pillager_outpost
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/ruined_portal
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/shipwreck_map
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/shipwreck_supply
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/shipwreck_treasure
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/simple_dungeon
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/stronghold_corridor
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/stronghold_crossing
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/stronghold_library
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/underwater_ruin_big
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/underwater_ruin_small
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/woodland_mansion
+        ali:item enderio:wood_gear x1
+          | Chance: 10%
+          | Count: 1
+          | ----- Predicates -----
+          | Any Of:
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/abandoned_mineshaft
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/buried_treasure
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/desert_pyramid
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/end_city_treasure
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/igloo_chest
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/jungle_temple
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/jungle_temple_dispenser
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/pillager_outpost
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/ruined_portal
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/shipwreck_map
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/shipwreck_supply
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/shipwreck_treasure
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/simple_dungeon
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/stronghold_corridor
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/stronghold_crossing
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/stronghold_library
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/underwater_ruin_big
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/underwater_ruin_small
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/woodland_mansion
+        ali:item enderio:loot_capacitor x1
+          | Chance: 3%
+          | Count: 1
+          | ----- Predicates -----
+          | Any Of:
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/abandoned_mineshaft
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/buried_treasure
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/desert_pyramid
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/end_city_treasure
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/igloo_chest
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/jungle_temple
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/jungle_temple_dispenser
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/pillager_outpost
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/ruined_portal
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/shipwreck_map
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/shipwreck_supply
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/shipwreck_treasure
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/simple_dungeon
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/stronghold_corridor
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/stronghold_crossing
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/stronghold_library
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/underwater_ruin_big
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/underwater_ruin_small
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/woodland_mansion
+          | ----- Modifiers -----
+          | Set Loot Capacitor:
+          |   -> Range: 1 to 4
+        ali:item enderio:dark_steel_sword x1 {Damage:0}
+          | Chance: 2%
+          | Count: 1
+          | ----- Predicates -----
+          | Any Of:
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/abandoned_mineshaft
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/buried_treasure
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/desert_pyramid
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/end_city_treasure
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/igloo_chest
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/jungle_temple
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/jungle_temple_dispenser
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/pillager_outpost
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/ruined_portal
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/shipwreck_map
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/shipwreck_supply
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/shipwreck_treasure
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/simple_dungeon
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/stronghold_corridor
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/stronghold_crossing
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/stronghold_library
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/underwater_ruin_big
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/underwater_ruin_small
+          |   -> Loot Table Id:
+          |     -> minecraft:chests/woodland_mansion
+          | ----- Modifiers -----
+          | Set Damage:
+          |   -> Damage: 100% to 200000%
+          |   -> Add: False

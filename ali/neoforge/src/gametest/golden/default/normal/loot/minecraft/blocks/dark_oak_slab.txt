@@ -1,0 +1,23 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:dark_oak_slab x1-2
+      | Count: 
+      |   -> 2
+      |     -> Match Block:
+      |       -> Block: Dark Oak Slab
+      |       -> Properties:
+      |         -> type: double
+      |   -> otherwise 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2
+      |   -> Add: False
+      |   -> Predicates:
+      |     -> Match Block:
+      |       -> Block: Dark Oak Slab
+      |       -> Properties:
+      |         -> type: double
+      | Explosion Decay

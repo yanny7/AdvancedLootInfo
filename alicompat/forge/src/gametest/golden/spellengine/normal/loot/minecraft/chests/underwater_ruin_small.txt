@@ -1,0 +1,61 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 8
+    ali:item minecraft:coal x1-4
+      | Chance: 35.71%
+      | Count: 1 to 4
+    ali:item minecraft:wheat x2-3
+      | Chance: 35.71%
+      | Count: 2 to 3
+    ali:item minecraft:rotten_flesh x1
+      | Chance: 17.86%
+      | Count: 1
+    ali:item minecraft:stone_axe x1 {Damage:0}
+      | Chance: 7.14%
+      | Count: 1
+    ali:item minecraft:emerald x1
+      | Chance: 3.57%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:fishing_rod x1 {Damage:0}
+      | Chance: 41.67%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item minecraft:map x1 {display:{Name:'{"translate":"filled_map.buried_treasure"}'}}
+      | Chance: 41.67%
+      | Count: 1
+      | ----- Modifiers -----
+      | Exploration Map:
+      |   -> Destination: minecraft:on_treasure_maps
+      |   -> Map Decoration: Red X
+      |   -> Zoom: 1
+      |   -> Search Radius: 50
+      |   -> Skip Known Structures: False
+      | Set Name:
+      |   -> Name: Buried Treasure Map
+    ali:item minecraft:leather_chestplate x1 {Damage:0}
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:golden_helmet x1 {Damage:0}
+      | Chance: 8.33%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 0 to 1
+    |   -> Bad Luck: 0
+    |   -> Luck 1: 0 to 1
+    |   -> Luck 2: 0 to 1
+    |   -> Luck 3: 0 to 1
+    |   -> Luck 4: 0 to 1
+    ali:item spell_engine:spell_scroll x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Spell Bind Randomly:
+      |   -> Tier: 1 to 2
+      |   -> Spell Pool: spell_engine:treasure
+      |   -> Count: 1

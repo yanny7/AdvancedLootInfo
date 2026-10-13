@@ -1,0 +1,23 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:cocoa_beans x1-3
+      | Count: 
+      |   -> 3
+      |     -> Match Block:
+      |       -> Block: Cocoa
+      |       -> Properties:
+      |         -> age: 2
+      |   -> otherwise 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 3
+      |   -> Add: False
+      |   -> Predicates:
+      |     -> Match Block:
+      |       -> Block: Cocoa
+      |       -> Properties:
+      |         -> age: 2
+      | Explosion Decay

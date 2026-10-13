@@ -1,0 +1,84 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:resin_clump x0-6
+      | Count: max(0; (max(0; (max(0; (max(0; (max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (max(0; (max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) − 1)
+      |   -> Match Block:
+      |     -> Block: Resin Clump
+      |     -> Properties:
+      |       -> down: true
+      |   -> Match Block:
+      |     -> Block: Resin Clump
+      |     -> Properties:
+      |       -> up: true
+      |   -> Match Block:
+      |     -> Block: Resin Clump
+      |     -> Properties:
+      |       -> north: true
+      |   -> Match Block:
+      |     -> Block: Resin Clump
+      |     -> Properties:
+      |       -> south: true
+      |   -> Match Block:
+      |     -> Block: Resin Clump
+      |     -> Properties:
+      |       -> west: true
+      |   -> Match Block:
+      |     -> Block: Resin Clump
+      |     -> Properties:
+      |       -> east: true
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: True
+      |   -> Predicates:
+      |     -> Match Block:
+      |       -> Block: Resin Clump
+      |       -> Properties:
+      |         -> down: true
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: True
+      |   -> Predicates:
+      |     -> Match Block:
+      |       -> Block: Resin Clump
+      |       -> Properties:
+      |         -> up: true
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: True
+      |   -> Predicates:
+      |     -> Match Block:
+      |       -> Block: Resin Clump
+      |       -> Properties:
+      |         -> north: true
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: True
+      |   -> Predicates:
+      |     -> Match Block:
+      |       -> Block: Resin Clump
+      |       -> Properties:
+      |         -> south: true
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: True
+      |   -> Predicates:
+      |     -> Match Block:
+      |       -> Block: Resin Clump
+      |       -> Properties:
+      |         -> west: true
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: True
+      |   -> Predicates:
+      |     -> Match Block:
+      |       -> Block: Resin Clump
+      |       -> Properties:
+      |         -> east: true
+      | Set Count:
+      |   -> Count: −1
+      |   -> Add: True
+      | Explosion Decay

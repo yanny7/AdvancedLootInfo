@@ -1,0 +1,29 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:tipped_arrow x1-16 {"minecraft:potion_contents":{potion:"minecraft:slowness"}}
+      | Chance: 25%
+      | Count: 1 to 16
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Slowness
+    ali:item minecraft:tipped_arrow x1-16 {"minecraft:potion_contents":{potion:"minecraft:harming"}}
+      | Chance: 25%
+      | Count: 1 to 16
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Harming
+    ali:item minecraft:tipped_arrow x1-16 {"minecraft:potion_contents":{potion:"minecraft:poison"}}
+      | Chance: 25%
+      | Count: 1 to 16
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Poison
+    ali:item minecraft:tipped_arrow x1-16 {"minecraft:potion_contents":{potion:"minecraft:weakness"}}
+      | Chance: 25%
+      | Count: 1 to 16
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Weakness

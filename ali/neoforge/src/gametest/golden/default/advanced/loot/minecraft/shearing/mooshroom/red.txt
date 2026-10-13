@@ -1,0 +1,7 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 5
+    ali:item minecraft:red_mushroom x1
+      | Count: 1

@@ -1,0 +1,21 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item twilightforest:mangrove_root x1
+        | Count: 1
+        | ----- Predicates -----
+        | Match Tool:
+        |   -> Enchantments:
+        |     -> Enchantment: Silk Touch
+        |     -> Level: ≥ 1
+      ali:item minecraft:stick x3-5
+        | Count: max(0; U[3; 5])
+        | ----- Modifiers -----
+        | Set Count:
+        |   -> Count: 3 to 5
+        |   -> Add: False
+        | Explosion Decay

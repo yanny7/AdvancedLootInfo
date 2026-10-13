@@ -1,0 +1,11 @@
+{
+  "type": "ali:gametest_add_item",
+  "condition": {
+    "type": "minecraft:entity_properties",
+    "entity": "this",
+    "predicate": {
+      "minecraft:entity_type": "minecraft:zombie"
+    }
+  },
+  "item": "minecraft:feather"
+}

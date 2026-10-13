@@ -1,0 +1,62 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 3
+    ali:item minecraft:potion x1 {Potion:"minecraft:strong_healing"}
+      | Chance: 50%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Healing
+    ali:item minecraft:potion x1 {Potion:"minecraft:healing"}
+      | Chance: 50%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Healing
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 0 to 4
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item irons_spellbooks:common_ink x1
+            | Chance: 78%
+            | Count: 1
+          ali:item irons_spellbooks:uncommon_ink x1
+            | Chance: 20%
+            | Count: 1
+          ali:item irons_spellbooks:rare_ink x1
+            | Chance: 2%
+            | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 0 to 2
+    ali:item irons_spellbooks:scroll x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Spell:
+      |   -> Quality: U[0.1; 0.65)
+      |   -> Applicable Spells:
+      |     -> School: Holy
+      |     -> Force: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 12
+    ali:item minecraft:emerald x1
+      | Chance: 25%
+      | Count: 1
+    ali:item irons_spellbooks:divine_pearl x1
+      | Chance: 25%
+      | Count: 1
+    ali:item irons_spellbooks:arcane_essence x1
+      | Chance: 25%
+      | Count: 1
+    ali:item minecraft:paper x1
+      | Chance: 25%
+      | Count: 1

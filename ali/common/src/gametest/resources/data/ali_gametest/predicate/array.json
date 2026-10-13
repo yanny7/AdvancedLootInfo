@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:all_of",
+  "terms": [
+    {
+      "type": "minecraft:killed_by_player"
+    },
+    {
+      "type": "minecraft:random_chance",
+      "chance": 0.25
+    }
+  ]
+}

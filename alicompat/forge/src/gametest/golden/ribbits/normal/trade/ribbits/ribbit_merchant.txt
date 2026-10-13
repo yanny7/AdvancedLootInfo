@@ -1,0 +1,46 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects 6 Of These Trades
+    ali:items_to_items
+      | Uses: 32
+      | XP: 0
+      | Price Multiplier: 0.05
+      ali:item minecraft:amethyst_shard x1
+      ali:item minecraft:air x0
+      ali:item ribbits:brown_toadstool x8-16
+    ali:items_to_items
+      | Uses: 32
+      | XP: 0
+      | Price Multiplier: 0.05
+      ali:item minecraft:amethyst_shard x1
+      ali:item minecraft:air x0
+      ali:item ribbits:red_toadstool x8-16
+    ali:items_to_items
+      | Uses: 32
+      | XP: 0
+      | Price Multiplier: 0.05
+      ali:item minecraft:amethyst_shard x1
+      ali:item minecraft:air x0
+      ali:item ribbits:toadstool_stem x8-16
+    ali:items_to_items
+      | Uses: 32
+      | XP: 0
+      | Price Multiplier: 0.05
+      ali:item minecraft:amethyst_shard x1-2
+      ali:item minecraft:air x0
+      ali:item ribbits:mossy_oak_planks x16-32
+    ali:items_to_items
+      | Uses: 32
+      | XP: 0
+      | Price Multiplier: 0.05
+      ali:item minecraft:amethyst_shard x2-3
+      ali:item minecraft:air x0
+      ali:item ribbits:swamp_lantern x4-8
+    ali:items_to_items
+      | Uses: 4
+      | XP: 0
+      | Price Multiplier: 0.05
+      ali:item minecraft:amethyst_shard x6-8
+      ali:item minecraft:air x0
+      ali:item ribbits:maraca x1

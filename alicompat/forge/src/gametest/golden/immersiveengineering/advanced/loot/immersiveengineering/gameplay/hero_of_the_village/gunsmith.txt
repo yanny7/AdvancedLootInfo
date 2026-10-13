@@ -1,0 +1,17 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item immersiveengineering:silver x1
+      | Chance: 25%
+      | Count: 1
+    ali:item immersiveengineering:dragons_breath x1
+      | Chance: 25%
+      | Count: 1
+    ali:item immersiveengineering:homing x1
+      | Chance: 25%
+      | Count: 1
+    ali:item immersiveengineering:toolupgrade_revolver_magazine x1
+      | Chance: 25%
+      | Count: 1

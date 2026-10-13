@@ -1,0 +1,723 @@
+awi:biome minecraft:basalt_deltas
+  | Sea Level: 32
+  spawn minecraft:blaze
+    | Structure: minecraft:fortress
+    |   -> Category: Monster
+    |   -> Weight: 10
+    |   -> Group size: 2 to 3
+  spawn minecraft:ghast
+    | Category: Monster
+    | Weight: 40
+    | Group size: 1
+  spawn minecraft:magma_cube
+    | Category: Monster
+    | Weight: 100
+    | Group size: 2 to 5
+    | Structure: minecraft:fortress
+    |   -> Category: Monster
+    |   -> Weight: 3
+    |   -> Group size: 4
+  spawn minecraft:skeleton
+    | Structure: minecraft:fortress
+    |   -> Category: Monster
+    |   -> Weight: 2
+    |   -> Group size: 5
+  spawn minecraft:strider
+    | Category: Creature
+    | Weight: 60
+    | Group size: 1 to 2
+  spawn minecraft:wither_skeleton
+    | Structure: minecraft:fortress
+    |   -> Category: Monster
+    |   -> Weight: 8
+    |   -> Group size: 5
+  spawn minecraft:zombified_piglin
+    | Structure: minecraft:fortress
+    |   -> Category: Monster
+    |   -> Weight: 5
+    |   -> Group size: 4
+  awi:base_layout
+    | Generation Step: Base Terrain
+    awi:block minecraft:netherrack
+      | Default Block
+    awi:block minecraft:lava
+      | Default Fluid
+    awi:block minecraft:basalt
+      | Absolute Y: 1 to 121
+    awi:block minecraft:bedrock
+      | Absolute Y: 0 to 4, 123 to 127
+    awi:block minecraft:blackstone
+      | Depth Below Surface: 0 to 4
+    awi:block minecraft:gravel
+      | Depth Below Surface: 0 to 4
+      | At Y: 26 to 33
+  awi:generation_step 4
+    | Generation Step: Surface Structures
+    awi:placed_feature minecraft:delta
+      | Attempts Per Chunk: ? (minecraft:count_on_every_layer)
+      |   -> Count On Every Layer:
+      |     -> Count:
+      |       -> 40
+      | Feature:
+      |   -> Delta Feature:
+      |     -> Contents:
+      |       -> Block: Lava
+      |       -> Properties:
+      |         -> level: 0
+      |     -> Rim:
+      |       -> Block: Magma Block
+      |     -> Size: 3 to 7
+      |     -> Rim Size:
+      |       -> 0 to 2
+      | Placement:
+      |   -> Count On Every Layer:
+      |     -> Count:
+      |       -> 40
+      awi:block minecraft:lava
+      awi:block minecraft:magma_block
+    awi:placed_feature minecraft:small_basalt_columns
+      | Attempts Per Chunk: ? (minecraft:count_on_every_layer)
+      |   -> Count On Every Layer:
+      |     -> Count:
+      |       -> 4
+      | Feature:
+      |   -> Weighted Random Selector:
+      |     -> Features:
+      |       -> Total Weight: 10
+      |       -> Items:
+      |         -> Entry:
+      |           -> Weight: 9
+      |           -> Value:
+      |             -> Feature:
+      |               -> Stepped Column Cluster:
+      |                 -> Block:
+      |                   -> Simple:
+      |                     -> State:
+      |                       -> Block: Basalt
+      |                       -> Properties:
+      |                         -> axis: y
+      |                 -> Continue Through:
+      |                   -> Matching Blocks:
+      |                     -> Block: Basalt
+      |                 -> Can Replace:
+      |                   -> Any Of:
+      |                     -> Predicates:
+      |                       -> Matching Block Tag:
+      |                         -> Tag: minecraft:air
+      |                       -> All Of:
+      |                         -> Predicates:
+      |                           -> Matching Blocks:
+      |                             -> Block: Lava
+      |                           -> Height Range:
+      |                             -> Min:
+      |                               -> Above Bottom: 0
+      |                             -> Max:
+      |                               -> 0 relative to sea level
+      |                 -> Cannot Place On:
+      |                   -> Tag: minecraft:cannot_place_basalt_pillar_on
+      |                 -> Cluster Reach:
+      |                   -> 5
+      |                 -> Column Count:
+      |                   -> 50
+      |                 -> Column Reach:
+      |                   -> 1
+      |                 -> Height: 1 to 4
+      |         -> Entry:
+      |           -> Weight: 1
+      |           -> Value:
+      |             -> Feature:
+      |               -> Stepped Column Cluster:
+      |                 -> Block:
+      |                   -> Simple:
+      |                     -> State:
+      |                       -> Block: Basalt
+      |                       -> Properties:
+      |                         -> axis: y
+      |                 -> Continue Through:
+      |                   -> Matching Blocks:
+      |                     -> Block: Basalt
+      |                 -> Can Replace:
+      |                   -> Any Of:
+      |                     -> Predicates:
+      |                       -> Matching Block Tag:
+      |                         -> Tag: minecraft:air
+      |                       -> All Of:
+      |                         -> Predicates:
+      |                           -> Matching Blocks:
+      |                             -> Block: Lava
+      |                           -> Height Range:
+      |                             -> Min:
+      |                               -> Above Bottom: 0
+      |                             -> Max:
+      |                               -> 0 relative to sea level
+      |                 -> Cannot Place On:
+      |                   -> Tag: minecraft:cannot_place_basalt_pillar_on
+      |                 -> Cluster Reach:
+      |                   -> 8
+      |                 -> Column Count:
+      |                   -> 15
+      |                 -> Column Reach:
+      |                   -> 1
+      |                 -> Height: 1 to 4
+      | Placement:
+      |   -> Count On Every Layer:
+      |     -> Count:
+      |       -> 4
+      awi:block minecraft:basalt
+    awi:placed_feature minecraft:large_basalt_columns
+      | Attempts Per Chunk: ? (minecraft:count_on_every_layer)
+      |   -> Count On Every Layer:
+      |     -> Count:
+      |       -> 2
+      | Feature:
+      |   -> Weighted Random Selector:
+      |     -> Features:
+      |       -> Total Weight: 10
+      |       -> Items:
+      |         -> Entry:
+      |           -> Weight: 9
+      |           -> Value:
+      |             -> Feature:
+      |               -> Stepped Column Cluster:
+      |                 -> Block:
+      |                   -> Simple:
+      |                     -> State:
+      |                       -> Block: Basalt
+      |                       -> Properties:
+      |                         -> axis: y
+      |                 -> Continue Through:
+      |                   -> Matching Blocks:
+      |                     -> Block: Basalt
+      |                 -> Can Replace:
+      |                   -> Any Of:
+      |                     -> Predicates:
+      |                       -> Matching Block Tag:
+      |                         -> Tag: minecraft:air
+      |                       -> All Of:
+      |                         -> Predicates:
+      |                           -> Matching Blocks:
+      |                             -> Block: Lava
+      |                           -> Height Range:
+      |                             -> Min:
+      |                               -> Above Bottom: 0
+      |                             -> Max:
+      |                               -> 0 relative to sea level
+      |                 -> Cannot Place On:
+      |                   -> Tag: minecraft:cannot_place_basalt_pillar_on
+      |                 -> Cluster Reach:
+      |                   -> 5
+      |                 -> Column Count:
+      |                   -> 50
+      |                 -> Column Reach:
+      |                   -> 2 to 3
+      |                 -> Height: 5 to 10
+      |         -> Entry:
+      |           -> Weight: 1
+      |           -> Value:
+      |             -> Feature:
+      |               -> Stepped Column Cluster:
+      |                 -> Block:
+      |                   -> Simple:
+      |                     -> State:
+      |                       -> Block: Basalt
+      |                       -> Properties:
+      |                         -> axis: y
+      |                 -> Continue Through:
+      |                   -> Matching Blocks:
+      |                     -> Block: Basalt
+      |                 -> Can Replace:
+      |                   -> Any Of:
+      |                     -> Predicates:
+      |                       -> Matching Block Tag:
+      |                         -> Tag: minecraft:air
+      |                       -> All Of:
+      |                         -> Predicates:
+      |                           -> Matching Blocks:
+      |                             -> Block: Lava
+      |                           -> Height Range:
+      |                             -> Min:
+      |                               -> Above Bottom: 0
+      |                             -> Max:
+      |                               -> 0 relative to sea level
+      |                 -> Cannot Place On:
+      |                   -> Tag: minecraft:cannot_place_basalt_pillar_on
+      |                 -> Cluster Reach:
+      |                   -> 8
+      |                 -> Column Count:
+      |                   -> 15
+      |                 -> Column Reach:
+      |                   -> 2 to 3
+      |                 -> Height: 5 to 10
+      | Placement:
+      |   -> Count On Every Layer:
+      |     -> Count:
+      |       -> 2
+      awi:block minecraft:basalt
+  awi:generation_step 7
+    | Generation Step: Underground Decoration
+    awi:placed_feature minecraft:basalt_blobs
+      | Attempts Per Chunk: 75
+      | Height: 0 to 127
+      | Feature:
+      |   -> Netherrack Replace Blobs:
+      |     -> Target State:
+      |       -> Block: Netherrack
+      |     -> Replace State:
+      |       -> Block: Basalt
+      |       -> Properties:
+      |         -> axis: y
+      |     -> Radius: 3 to 7
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 75
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Above Bottom: 0
+      |       -> Max:
+      |         -> Below Top: 0
+      awi:block minecraft:netherrack
+      awi:block minecraft:basalt
+    awi:placed_feature minecraft:blackstone_blobs
+      | Attempts Per Chunk: 25
+      | Height: 0 to 127
+      | Feature:
+      |   -> Netherrack Replace Blobs:
+      |     -> Target State:
+      |       -> Block: Netherrack
+      |     -> Replace State:
+      |       -> Block: Blackstone
+      |     -> Radius: 3 to 7
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 25
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Above Bottom: 0
+      |       -> Max:
+      |         -> Below Top: 0
+      awi:block minecraft:netherrack
+      awi:block minecraft:blackstone
+    awi:placed_feature minecraft:spring_delta
+      | Attempts Per Chunk: 16
+      | Height: 4 to 123
+      | Feature:
+      |   -> Spring Feature:
+      |     -> State:
+      |       -> Fluid: minecraft:lava
+      |       -> Properties:
+      |         -> falling: true
+      |     -> Requires Block Below: True
+      |     -> Rock Count: 4
+      |     -> Hole Count: 1
+      |     -> Valid Blocks:
+      |       -> Netherrack
+      |       -> Soul Sand
+      |       -> Gravel
+      |       -> Magma Block
+      |       -> Blackstone
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 16
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Above Bottom: 4
+      |       -> Max:
+      |         -> Below Top: 4
+      awi:block minecraft:lava
+    awi:placed_feature minecraft:patch_fire
+      | Attempts Per Chunk: 0 to 5
+      | Height: 4 to 123
+      | Feature:
+      |   -> Simple Block:
+      |     -> To Place:
+      |       -> Simple:
+      |         -> State:
+      |           -> Block: Fire
+      |           -> Properties:
+      |             -> age: 0
+      |             -> east: false
+      |             -> north: false
+      |             -> south: false
+      |             -> up: false
+      |             -> west: false
+      |     -> Schedule Tick: False
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 0 to 5
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Above Bottom: 4
+      |       -> Max:
+      |         -> Below Top: 4
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 96
+      |   -> Offset:
+      |     -> X:
+      |       -> trapezoid(−7; 7; 0)  ~0 (13%)
+      |         [chart 0..14 −7-7 base=true modes=[false, false, false, false, false, false, false, true, false, false, false, false, false, false, false] heights=0.1250,0.2500,0.3750,0.5000,0.6250,0.7500,0.8750,1.0000,0.8750,0.7500,0.6250,0.5000,0.3750,0.2500,0.1250]
+      |     -> Y:
+      |       -> trapezoid(−3; 3; 0)  ~0 (25%)
+      |         [chart 0..6 −3-3 base=true modes=[false, false, false, true, false, false, false] heights=0.2500,0.5000,0.7500,1.0000,0.7500,0.5000,0.2500]
+      |     -> Z:
+      |       -> trapezoid(−7; 7; 0)  ~0 (13%)
+      |         [chart 0..14 −7-7 base=true modes=[false, false, false, false, false, false, false, true, false, false, false, false, false, false, false] heights=0.1250,0.2500,0.3750,0.5000,0.6250,0.7500,0.8750,1.0000,0.8750,0.7500,0.6250,0.5000,0.3750,0.2500,0.1250]
+      |   -> Block Predicate Filter:
+      |     -> All Of:
+      |       -> Predicates:
+      |         -> Matching Block Tag:
+      |           -> Tag: minecraft:air
+      |         -> Matching Blocks:
+      |           -> Block: Netherrack
+      |           -> Offset: [0,-1,0]
+      awi:block minecraft:fire
+    awi:placed_feature minecraft:patch_soul_fire
+      | Attempts Per Chunk: 0 to 5
+      | Height: 4 to 123
+      | Feature:
+      |   -> Simple Block:
+      |     -> To Place:
+      |       -> Simple:
+      |         -> State:
+      |           -> Block: Soul Fire
+      |     -> Schedule Tick: False
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 0 to 5
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Above Bottom: 4
+      |       -> Max:
+      |         -> Below Top: 4
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 96
+      |   -> Offset:
+      |     -> X:
+      |       -> trapezoid(−7; 7; 0)  ~0 (13%)
+      |         [chart 0..14 −7-7 base=true modes=[false, false, false, false, false, false, false, true, false, false, false, false, false, false, false] heights=0.1250,0.2500,0.3750,0.5000,0.6250,0.7500,0.8750,1.0000,0.8750,0.7500,0.6250,0.5000,0.3750,0.2500,0.1250]
+      |     -> Y:
+      |       -> trapezoid(−3; 3; 0)  ~0 (25%)
+      |         [chart 0..6 −3-3 base=true modes=[false, false, false, true, false, false, false] heights=0.2500,0.5000,0.7500,1.0000,0.7500,0.5000,0.2500]
+      |     -> Z:
+      |       -> trapezoid(−7; 7; 0)  ~0 (13%)
+      |         [chart 0..14 −7-7 base=true modes=[false, false, false, false, false, false, false, true, false, false, false, false, false, false, false] heights=0.1250,0.2500,0.3750,0.5000,0.6250,0.7500,0.8750,1.0000,0.8750,0.7500,0.6250,0.5000,0.3750,0.2500,0.1250]
+      |   -> Block Predicate Filter:
+      |     -> All Of:
+      |       -> Predicates:
+      |         -> Matching Block Tag:
+      |           -> Tag: minecraft:air
+      |         -> Matching Blocks:
+      |           -> Block: Soul Soil
+      |           -> Offset: [0,-1,0]
+      awi:block minecraft:soul_fire
+    awi:placed_feature minecraft:glowstone_extra
+      | Attempts Per Chunk: biased(0; 9)  ~0 (29%)
+      |   [chart 0..9 0-9 base=true modes=[true, false, false, false, false, false, false, false, false, false] heights=1.0000,0.6586,0.4879,0.3741,0.2887,0.2204,0.1635,0.1148,0.0721,0.0341]
+      | Height: 4 to 123
+      | Feature:
+      |   -> Random Neighbor Spread:
+      |     -> Block:
+      |       -> Simple:
+      |         -> State:
+      |           -> Block: Glowstone
+      |     -> Accepted Neighbors:
+      |       -> Glowstone
+      |     -> Can Replace:
+      |       -> Matching Block Tag:
+      |         -> Tag: minecraft:air
+      |     -> Attempts:
+      |       -> 1500
+      |     -> XZ Offset:
+      |       -> trapezoid(−7; 7; 0)  ~0 (13%)
+      |         [chart 0..14 −7-7 base=true modes=[false, false, false, false, false, false, false, true, false, false, false, false, false, false, false] heights=0.1250,0.2500,0.3750,0.5000,0.6250,0.7500,0.8750,1.0000,0.8750,0.7500,0.6250,0.5000,0.3750,0.2500,0.1250]
+      |     -> Y Offset:
+      |       -> −11 to 0
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> biased(0; 9)  ~0 (29%)
+      |         [chart 0..9 0-9 base=true modes=[true, false, false, false, false, false, false, false, false, false] heights=1.0000,0.6586,0.4879,0.3741,0.2887,0.2204,0.1635,0.1148,0.0721,0.0341]
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Above Bottom: 4
+      |       -> Max:
+      |         -> Below Top: 4
+      |   -> Block Predicate Filter:
+      |     -> All Of:
+      |       -> Predicates:
+      |         -> Matching Block Tag:
+      |           -> Tag: minecraft:air
+      |         -> Matching Blocks:
+      |           -> Blocks:
+      |             -> Netherrack
+      |             -> Basalt
+      |             -> Blackstone
+      |           -> Offset: [0,1,0]
+      awi:block minecraft:glowstone
+    awi:placed_feature minecraft:glowstone
+      | Attempts Per Chunk: 10
+      | Height: 0 to 127
+      | Feature:
+      |   -> Random Neighbor Spread:
+      |     -> Block:
+      |       -> Simple:
+      |         -> State:
+      |           -> Block: Glowstone
+      |     -> Accepted Neighbors:
+      |       -> Glowstone
+      |     -> Can Replace:
+      |       -> Matching Block Tag:
+      |         -> Tag: minecraft:air
+      |     -> Attempts:
+      |       -> 1500
+      |     -> XZ Offset:
+      |       -> trapezoid(−7; 7; 0)  ~0 (13%)
+      |         [chart 0..14 −7-7 base=true modes=[false, false, false, false, false, false, false, true, false, false, false, false, false, false, false] heights=0.1250,0.2500,0.3750,0.5000,0.6250,0.7500,0.8750,1.0000,0.8750,0.7500,0.6250,0.5000,0.3750,0.2500,0.1250]
+      |     -> Y Offset:
+      |       -> −11 to 0
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 10
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Above Bottom: 0
+      |       -> Max:
+      |         -> Below Top: 0
+      |   -> Block Predicate Filter:
+      |     -> All Of:
+      |       -> Predicates:
+      |         -> Matching Block Tag:
+      |           -> Tag: minecraft:air
+      |         -> Matching Blocks:
+      |           -> Blocks:
+      |             -> Netherrack
+      |             -> Basalt
+      |             -> Blackstone
+      |           -> Offset: [0,1,0]
+      awi:block minecraft:glowstone
+    awi:placed_feature minecraft:brown_mushroom_nether
+      | Attempts Per Chunk: 96
+      | Chance: 50%
+      | Height: 0 to 127
+      | Feature:
+      |   -> Simple Block:
+      |     -> To Place:
+      |       -> Simple:
+      |         -> State:
+      |           -> Block: Brown Mushroom
+      |     -> Schedule Tick: False
+      | Placement:
+      |   -> Rarity Filter:
+      |     -> Chance: 2
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Above Bottom: 0
+      |       -> Max:
+      |         -> Below Top: 0
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 96
+      |   -> Offset:
+      |     -> X:
+      |       -> trapezoid(−7; 7; 0)  ~0 (13%)
+      |         [chart 0..14 −7-7 base=true modes=[false, false, false, false, false, false, false, true, false, false, false, false, false, false, false] heights=0.1250,0.2500,0.3750,0.5000,0.6250,0.7500,0.8750,1.0000,0.8750,0.7500,0.6250,0.5000,0.3750,0.2500,0.1250]
+      |     -> Y:
+      |       -> trapezoid(−3; 3; 0)  ~0 (25%)
+      |         [chart 0..6 −3-3 base=true modes=[false, false, false, true, false, false, false] heights=0.2500,0.5000,0.7500,1.0000,0.7500,0.5000,0.2500]
+      |     -> Z:
+      |       -> trapezoid(−7; 7; 0)  ~0 (13%)
+      |         [chart 0..14 −7-7 base=true modes=[false, false, false, false, false, false, false, true, false, false, false, false, false, false, false] heights=0.1250,0.2500,0.3750,0.5000,0.6250,0.7500,0.8750,1.0000,0.8750,0.7500,0.6250,0.5000,0.3750,0.2500,0.1250]
+      |   -> Block Predicate Filter:
+      |     -> Matching Block Tag:
+      |       -> Tag: minecraft:air
+      awi:block minecraft:brown_mushroom
+    awi:placed_feature minecraft:red_mushroom_nether
+      | Attempts Per Chunk: 96
+      | Chance: 50%
+      | Height: 0 to 127
+      | Feature:
+      |   -> Simple Block:
+      |     -> To Place:
+      |       -> Simple:
+      |         -> State:
+      |           -> Block: Red Mushroom
+      |     -> Schedule Tick: False
+      | Placement:
+      |   -> Rarity Filter:
+      |     -> Chance: 2
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Above Bottom: 0
+      |       -> Max:
+      |         -> Below Top: 0
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 96
+      |   -> Offset:
+      |     -> X:
+      |       -> trapezoid(−7; 7; 0)  ~0 (13%)
+      |         [chart 0..14 −7-7 base=true modes=[false, false, false, false, false, false, false, true, false, false, false, false, false, false, false] heights=0.1250,0.2500,0.3750,0.5000,0.6250,0.7500,0.8750,1.0000,0.8750,0.7500,0.6250,0.5000,0.3750,0.2500,0.1250]
+      |     -> Y:
+      |       -> trapezoid(−3; 3; 0)  ~0 (25%)
+      |         [chart 0..6 −3-3 base=true modes=[false, false, false, true, false, false, false] heights=0.2500,0.5000,0.7500,1.0000,0.7500,0.5000,0.2500]
+      |     -> Z:
+      |       -> trapezoid(−7; 7; 0)  ~0 (13%)
+      |         [chart 0..14 −7-7 base=true modes=[false, false, false, false, false, false, false, true, false, false, false, false, false, false, false] heights=0.1250,0.2500,0.3750,0.5000,0.6250,0.7500,0.8750,1.0000,0.8750,0.7500,0.6250,0.5000,0.3750,0.2500,0.1250]
+      |   -> Block Predicate Filter:
+      |     -> Matching Block Tag:
+      |       -> Tag: minecraft:air
+      awi:block minecraft:red_mushroom
+    awi:placed_feature minecraft:ore_magma
+      | Attempts Per Chunk: 4
+      | Height: 27 to 36
+      | Feature:
+      |   -> Ore:
+      |     -> Target States:
+      |       -> State:
+      |         -> Block: Magma Block
+      |       -> Target:
+      |         -> Block Match:
+      |           -> Block: Netherrack
+      |     -> Size: 33
+      |     -> Discard Chance On Air Exposure: 0.0
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 4
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Absolute Y: 27
+      |       -> Max:
+      |         -> Absolute Y: 36
+      awi:block minecraft:magma_block
+    awi:placed_feature minecraft:spring_closed_double
+      | Attempts Per Chunk: 32
+      | Height: 10 to 117
+      | Feature:
+      |   -> Spring Feature:
+      |     -> State:
+      |       -> Fluid: minecraft:lava
+      |       -> Properties:
+      |         -> falling: true
+      |     -> Requires Block Below: False
+      |     -> Rock Count: 5
+      |     -> Hole Count: 0
+      |     -> Valid Block: Netherrack
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 32
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Above Bottom: 10
+      |       -> Max:
+      |         -> Below Top: 10
+      awi:block minecraft:lava
+    awi:placed_feature minecraft:ore_gold_deltas
+      | Attempts Per Chunk: 20
+      | Height: 10 to 117
+      | Feature:
+      |   -> Ore:
+      |     -> Target States:
+      |       -> State:
+      |         -> Block: Nether Gold Ore
+      |       -> Target:
+      |         -> Block Match:
+      |           -> Block: Netherrack
+      |     -> Size: 10
+      |     -> Discard Chance On Air Exposure: 0.0
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 20
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Above Bottom: 10
+      |       -> Max:
+      |         -> Below Top: 10
+      awi:block minecraft:nether_gold_ore
+    awi:placed_feature minecraft:ore_quartz_deltas
+      | Attempts Per Chunk: 32
+      | Height: 10 to 117
+      | Feature:
+      |   -> Ore:
+      |     -> Target States:
+      |       -> State:
+      |         -> Block: Nether Quartz Ore
+      |       -> Target:
+      |         -> Block Match:
+      |           -> Block: Netherrack
+      |     -> Size: 14
+      |     -> Discard Chance On Air Exposure: 0.0
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 32
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Above Bottom: 10
+      |       -> Max:
+      |         -> Below Top: 10
+      awi:block minecraft:nether_quartz_ore
+    awi:placed_feature minecraft:ore_ancient_debris_large
+      | Height: trapezoid(8; 24; 0)  ~16 (11%)
+      |   [chart 0..16 8-24 base=true modes=[false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false] heights=0.1111,0.2222,0.3333,0.4444,0.5556,0.6667,0.7778,0.8889,1.0000,0.8889,0.7778,0.6667,0.5556,0.4444,0.3333,0.2222,0.1111]
+      | Feature:
+      |   -> Scattered Ore:
+      |     -> Target States:
+      |       -> State:
+      |         -> Block: Ancient Debris
+      |       -> Target:
+      |         -> Tag Match:
+      |           -> Tag: minecraft:base_stone_nether
+      |     -> Size: 3
+      |     -> Discard Chance On Air Exposure: 1.0
+      | Placement:
+      |   -> Height Range Placement:
+      |     -> Trapezoid:
+      |       -> Min:
+      |         -> Absolute Y: 8
+      |       -> Max:
+      |         -> Absolute Y: 24
+      |       -> Plateau: 0
+      awi:block minecraft:ancient_debris
+    awi:placed_feature minecraft:ore_debris_small
+      | Height: 8 to 119
+      | Feature:
+      |   -> Scattered Ore:
+      |     -> Target States:
+      |       -> State:
+      |         -> Block: Ancient Debris
+      |       -> Target:
+      |         -> Tag Match:
+      |           -> Tag: minecraft:base_stone_nether
+      |     -> Size: 2
+      |     -> Discard Chance On Air Exposure: 1.0
+      | Placement:
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Above Bottom: 8
+      |       -> Max:
+      |         -> Below Top: 8
+      awi:block minecraft:ancient_debris

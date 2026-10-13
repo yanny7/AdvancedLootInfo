@@ -1,6 +1,8 @@
 ## []
 
 - Added VillagerConfig support
+- Fixed a stray colon after loot functions that carry no values (Farmer's Delight, Sophisticated Backpacks and Sophisticated Storage)
+- Fixed Occultism wondering trader showing no Occultism trades
 
 ## [1.2.0]
 

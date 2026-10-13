@@ -1,0 +1,98 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item supplementaries:ash x1
+        | Count: 1
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Ash
+        |   -> Properties:
+        |     -> layers: 1
+        | ----- Modifiers -----
+        | Set Count:
+        |   -> Count: 1
+        |   -> Add: False
+        | Explosion Decay
+      ali:item supplementaries:ash x2
+        | Count: 2
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Ash
+        |   -> Properties:
+        |     -> layers: 2
+        | ----- Modifiers -----
+        | Set Count:
+        |   -> Count: 2
+        |   -> Add: False
+        | Explosion Decay
+      ali:item supplementaries:ash x3
+        | Count: 3
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Ash
+        |   -> Properties:
+        |     -> layers: 3
+        | ----- Modifiers -----
+        | Set Count:
+        |   -> Count: 3
+        |   -> Add: False
+        | Explosion Decay
+      ali:item supplementaries:ash x4
+        | Count: 4
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Ash
+        |   -> Properties:
+        |     -> layers: 4
+        | ----- Modifiers -----
+        | Set Count:
+        |   -> Count: 4
+        |   -> Add: False
+        | Explosion Decay
+      ali:item supplementaries:ash x5
+        | Count: 5
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Ash
+        |   -> Properties:
+        |     -> layers: 5
+        | ----- Modifiers -----
+        | Set Count:
+        |   -> Count: 5
+        |   -> Add: False
+        | Explosion Decay
+      ali:item supplementaries:ash x6
+        | Count: 6
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Ash
+        |   -> Properties:
+        |     -> layers: 6
+        | ----- Modifiers -----
+        | Set Count:
+        |   -> Count: 6
+        |   -> Add: False
+        | Explosion Decay
+      ali:item supplementaries:ash x7
+        | Count: 7
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Ash
+        |   -> Properties:
+        |     -> layers: 7
+        | ----- Modifiers -----
+        | Set Count:
+        |   -> Count: 7
+        |   -> Add: False
+        | Explosion Decay
+      ali:item supplementaries:ash x8
+        | Count: 8
+        | ----- Modifiers -----
+        | Set Count:
+        |   -> Count: 8
+        |   -> Add: False
+        | Explosion Decay

@@ -1,0 +1,24 @@
+ali:loot_table
+  | Selects all entries
+  ali:item apotheosis:gem x1
+    | Chance: 4%
+    | Count: 1
+    | ----- Predicates -----
+    | Entity Properties:
+    |   -> Target: This Entity
+    |   -> Predicate:
+    |     -> Entity Sub Predicate:
+    |       -> Is Monster
+    | Killed by real player
+    | Requires a player
+  ali:item apotheosis:gem x1
+    | Chance: 0.5%
+    | Count: 1
+    | ----- Predicates -----
+    | Entity Properties:
+    |   -> Target: This Entity
+    |   -> Predicate:
+    |     -> Entity Sub Predicate:
+    |       -> Is Monster
+    | Killed by player
+    | Requires a player

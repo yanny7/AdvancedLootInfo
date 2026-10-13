@@ -1,0 +1,9 @@
+awi:biome minecraft:end_barrens
+  spawn minecraft:enderman
+    | Category: Monster
+    | Weight: 10
+    | Group size: 4
+  awi:base_layout
+    | Generation Step: Base Terrain
+    awi:block minecraft:end_stone
+      | Default Block

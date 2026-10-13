@@ -1,0 +1,35 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:poppy x1-4
+      | Chance: 10%
+      | Count: 1 to 4
+    ali:item minecraft:dandelion x1-4
+      | Chance: 10%
+      | Count: 1 to 4
+    ali:item minecraft:feather x1-3
+      | Chance: 10%
+      | Count: 1 to 3
+    ali:item minecraft:wheat_seeds x1-2
+      | Chance: 10%
+      | Count: 1 to 2
+    ali:item minecraft:flint x1-2
+      | Chance: 10%
+      | Count: 1 to 2
+    ali:item minecraft:cactus x1-2
+      | Chance: 10%
+      | Count: 1 to 2
+    ali:item minecraft:sugar_cane x1-4
+      | Chance: 10%
+      | Count: 1 to 4
+    ali:item minecraft:sand x1-4
+      | Chance: 10%
+      | Count: 1 to 4
+    ali:item minecraft:flower_pot x1
+      | Chance: 10%
+      | Count: 1
+    ali:item minecraft:bone_meal x1
+      | Chance: 10%
+      | Count: 1

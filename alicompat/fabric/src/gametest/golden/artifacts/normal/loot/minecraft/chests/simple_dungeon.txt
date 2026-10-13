@@ -1,0 +1,201 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 3
+    ali:item minecraft:leather x1-5
+      | Chance: 13.89%
+      | Count: 1 to 5
+    ali:item minecraft:name_tag x1
+      | Chance: 13.89%
+      | Count: 1
+    ali:item minecraft:golden_apple x1
+      | Chance: 10.42%
+      | Count: 1
+    ali:item minecraft:music_disc_13 x1
+      | Chance: 10.42%
+      | Count: 1
+    ali:item minecraft:music_disc_cat x1
+      | Chance: 10.42%
+      | Count: 1
+    ali:item minecraft:copper_horse_armor x1
+      | Chance: 10.42%
+      | Count: 1
+    ali:item minecraft:iron_horse_armor x1
+      | Chance: 10.42%
+      | Count: 1
+    ali:item minecraft:golden_horse_armor x1
+      | Chance: 6.94%
+      | Count: 1
+    ali:item minecraft:enchanted_book x1
+      | Chance: 6.94%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
+    ali:item minecraft:diamond_horse_armor x1
+      | Chance: 3.47%
+      | Count: 1
+    ali:item minecraft:enchanted_golden_apple x1
+      | Chance: 1.39%
+      | Count: 1
+    ali:item minecraft:music_disc_otherside x1
+      | Chance: 1.39%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 4
+    ali:item minecraft:bread x1
+      | Chance: 16%
+      | Count: 1
+    ali:item minecraft:wheat x1-4
+      | Chance: 16%
+      | Count: 1 to 4
+    ali:item minecraft:redstone x1-4
+      | Chance: 12%
+      | Count: 1 to 4
+    ali:item minecraft:coal x1-4
+      | Chance: 12%
+      | Count: 1 to 4
+    ali:item minecraft:iron_ingot x1-4
+      | Chance: 8%
+      | Count: 1 to 4
+    ali:item minecraft:bucket x1
+      | Chance: 8%
+      | Count: 1
+    ali:item minecraft:melon_seeds x2-4
+      | Chance: 8%
+      | Count: 2 to 4
+    ali:item minecraft:pumpkin_seeds x2-4
+      | Chance: 8%
+      | Count: 2 to 4
+    ali:item minecraft:beetroot_seeds x2-4
+      | Chance: 8%
+      | Count: 2 to 4
+    ali:item minecraft:gold_ingot x1-4
+      | Chance: 4%
+      | Count: 1 to 4
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3
+    ali:item minecraft:bone x1-8
+      | Chance: 25%
+      | Count: 1 to 8
+    ali:item minecraft:gunpowder x1-8
+      | Chance: 25%
+      | Count: 1 to 8
+    ali:item minecraft:rotten_flesh x1-8
+      | Chance: 25%
+      | Count: 1 to 8
+    ali:item minecraft:string x1-8
+      | Chance: 25%
+      | Count: 1 to 8
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:reference
+            | Selects all entries
+            | Chance: 25%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:alternatives
+                  | Selects only first successful entry
+                  ali:item artifacts:charm_of_shrinking x1
+                    | Chance: 25%
+                    | Count: 1
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.15
+                    | Config Value:
+                    |   -> Config: items.charm_of_shrinking.generateAsLoot
+                  ali:empty
+                    | Drops nothing
+                    | Chance: 25%
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.15
+          ali:reference
+            | Selects all entries
+            | Chance: 25%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:alternatives
+                  | Selects only first successful entry
+                  ali:item artifacts:warp_drive x1
+                    | Chance: 25%
+                    | Count: 1
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.15
+                    | Config Value:
+                    |   -> Config: items.warp_drive.generateAsLoot
+                  ali:empty
+                    | Drops nothing
+                    | Chance: 25%
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.15
+          ali:reference
+            | Selects all entries
+            | Chance: 25%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:alternatives
+                  | Selects only first successful entry
+                  ali:item artifacts:withered_bracelet x1
+                    | Chance: 25%
+                    | Count: 1
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.15
+                    | Config Value:
+                    |   -> Config: items.withered_bracelet.generateAsLoot
+                  ali:empty
+                    | Drops nothing
+                    | Chance: 25%
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.15
+          ali:reference
+            | Selects all entries
+            | Chance: 25%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:alternatives
+                  | Selects only first successful entry
+                  ali:item artifacts:strider_shoes x1
+                    | Chance: 25%
+                    | Count: 1
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.15
+                    | Config Value:
+                    |   -> Config: items.strider_shoes.generateAsLoot
+                  ali:empty
+                    | Drops nothing
+                    | Chance: 25%
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.15

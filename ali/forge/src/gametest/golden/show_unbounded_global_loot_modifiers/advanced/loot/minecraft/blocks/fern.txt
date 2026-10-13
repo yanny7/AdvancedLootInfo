@@ -1,0 +1,34 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item minecraft:fern x1
+        | Count: 1
+        | ----- Predicates -----
+        | Can Tool Perform Action:
+        |   -> shears_dig
+      ali:item minecraft:wheat_seeds x1-7
+        | Chance: 12.5%
+        | Count: 1
+        |   -> Fortune LVL: 1 + U[0; 2 × LVL]
+        |   -> Fortune I: 1 to 3
+        |   -> Fortune II: 1 to 5
+        |   -> Fortune III: 1 to 7
+        | ----- Predicates -----
+        | Random Chance:
+        |   -> Chance: 0.13
+        | ----- Modifiers -----
+        | Apply Bonus:
+        |   -> Enchantment: Fortune
+        |   -> Formula: minecraft:uniform_bonus_count
+        |     -> Bonus Multiplier: 2
+        | Explosion Decay
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1
+    | ----- Predicates -----
+    | Random Chance:
+    |   -> Chance: 0.01

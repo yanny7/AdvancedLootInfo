@@ -1,0 +1,11 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:iron_nugget x5-13
+      | Chance: 75%
+      | Count: 5 to 13
+    ali:item minecraft:gold_nugget x5-13
+      | Chance: 25%
+      | Count: 5 to 13

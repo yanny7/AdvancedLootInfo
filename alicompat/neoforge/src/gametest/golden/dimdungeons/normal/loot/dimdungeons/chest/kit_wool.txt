@@ -1,0 +1,101 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 27
+    ali:item minecraft:white_wool x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:orange_wool x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:magenta_wool x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:light_blue_wool x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:yellow_wool x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:lime_wool x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:pink_wool x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:gray_wool x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:light_gray_wool x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:cyan_wool x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:purple_wool x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:blue_wool x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:brown_wool x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:green_wool x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:red_wool x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:black_wool x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:white_banner x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:orange_banner x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:magenta_banner x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:light_blue_banner x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:yellow_banner x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:lime_banner x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:pink_banner x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:gray_banner x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:light_gray_banner x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:cyan_banner x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:purple_banner x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:blue_banner x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:brown_banner x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:green_banner x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:red_banner x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9
+    ali:item minecraft:black_banner x5-9
+      | Chance: 3.13%
+      | Count: 5 to 9

@@ -11,10 +11,16 @@ import java.util.Collection;
 
 public class ApotheosisUtils {
     private static final Identifier GEM = Identifier.fromNamespaceAndPath(ApotheosisLang.MOD_ID, "gem");
+    private static final Identifier WARDEN_TENDRIL = Identifier.fromNamespaceAndPath("apothic_enchanting", "warden_tendril");
 
     @NotNull
     public static ItemStack gemStack() {
         return new ItemStack(BuiltInRegistries.ITEM.getValue(GEM));
+    }
+
+    @NotNull
+    public static ItemStack wardenTendrilStack() {
+        return new ItemStack(BuiltInRegistries.ITEM.getValue(WARDEN_TENDRIL));
     }
 
     @NotNull

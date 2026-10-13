@@ -1,0 +1,30 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item farmersdelight:sandy_shrub x1
+        | Count: 1
+        | ----- Predicates -----
+        | Can Item Perform Ability:
+        |   -> Shears Harvest
+      ali:item minecraft:beetroot_seeds x1-7
+        | Chance: 12.5%
+        | Count: 1
+        |   -> Fortune I: 1 to 3
+        |   -> Fortune II: 1 to 5
+        |   -> Fortune III: 1 to 7
+        | ----- Modifiers -----
+        | Explosion Decay
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item farmersdelight:straw x1
+      | Chance: 30%
+      | Count: 1
+      | ----- Predicates -----
+      | Match Tool:
+      |   -> Items:
+      |     -> Tag: Straw Harvesters

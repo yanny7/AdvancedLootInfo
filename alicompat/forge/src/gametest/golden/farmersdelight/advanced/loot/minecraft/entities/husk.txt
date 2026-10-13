@@ -1,0 +1,645 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:rotten_flesh x0-5
+      | Count: max(0; U[0; 2])
+      |   -> Looting LVL: max(0; U[0; 2]) + round(LVL × U[0; 1))
+      |   -> Looting I: 0 to 3  ~1 to 2 (33%)
+      |   -> Looting II: 0 to 4  ~2 (33%)
+      |   -> Looting III: 0 to 5  ~2 to 3 (28%)
+      |   [chart 0..2 0-2 base=true modes=[false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,0.0000,0.0000,0.0000 | 0..3 0-3 base=false modes=[false, true, true, false, false, false] heights=0.5000,1.0000,1.0000,0.5000,0.0000,0.0000 | 0..4 0-4 base=false modes=[false, false, true, false, false, false] heights=0.2500,0.7500,1.0000,0.7500,0.2500,0.0000 | 0..5 0-5 base=false modes=[false, false, true, true, false, false] heights=0.1667,0.5000,0.8333,0.8333,0.5000,0.1667]
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 0 to 2
+      |   -> Add: False
+      | Looting Enchant:
+      |   -> Value: U[0; 1)
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:iron_ingot x1
+      | Chance: 0.83%
+      |   -> Looting LVL: 33.33% × (2.5% + LVL × 1%)
+      |   -> Looting I: 1.17%
+      |   -> Looting II: 1.5%
+      |   -> Looting III: 1.83%
+      | Count: 1
+      | ----- Predicates -----
+      | Killed by player
+      | Random Chance With Looting:
+      |   -> Percent: 0.025
+      |   -> Multiplier: 0.01
+    ali:item minecraft:carrot x1
+      | Chance: 0.83%
+      |   -> Looting LVL: 33.33% × (2.5% + LVL × 1%)
+      |   -> Looting I: 1.17%
+      |   -> Looting II: 1.5%
+      |   -> Looting III: 1.83%
+      | Count: 1
+      | ----- Predicates -----
+      | Killed by player
+      | Random Chance With Looting:
+      |   -> Percent: 0.025
+      |   -> Multiplier: 0.01
+    ali:item minecraft:potato x1
+      | Chance: 0.83%
+      |   -> Looting LVL: 33.33% × (2.5% + LVL × 1%)
+      |   -> Looting I: 1.17%
+      |   -> Looting II: 1.5%
+      |   -> Looting III: 1.83%
+      | Count: 1
+      | ----- Predicates -----
+      | Killed by player
+      | Random Chance With Looting:
+      |   -> Percent: 0.025
+      |   -> Multiplier: 0.01
+      | ----- Modifiers -----
+      | Furnace Smelt
+      |   -> Predicates:
+      |     -> Entity Properties:
+      |       -> Target: This Entity
+      |       -> Predicate:
+      |         -> Entity Flags:
+      |           -> Is On Fire: True
+  ali:item farmersdelight:onion x1
+    | Chance: 2%
+    |   -> Looting LVL: 2% + LVL × 1%
+    |   -> Looting I: 3%
+    |   -> Looting II: 4%
+    |   -> Looting III: 5%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Entity Properties:
+    |     -> Target: This Entity
+    |     -> Predicate:
+    |       -> Entity Type: Zombie
+    |   -> Entity Properties:
+    |     -> Target: This Entity
+    |     -> Predicate:
+    |       -> Entity Type: Husk
+    |   -> Entity Properties:
+    |     -> Target: This Entity
+    |     -> Predicate:
+    |       -> Entity Type: Zombie Villager
+    | Killed by player
+    | Random Chance With Looting:
+    |   -> Percent: 0.02
+    |   -> Multiplier: 0.01
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item minecraft:iron_shovel x1 {Damage:0}
+        | Chance: 8.5%
+        |   -> Looting LVL: 8.5% + LVL × 1%
+        |   -> Looting I: 9.5%
+        |   -> Looting II: 10.5%
+        |   -> Looting III: 11.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Random Chance With Looting:
+        |   -> Percent: 0.085
+        |   -> Multiplier: 0.01
+        | Entity Properties:
+        |   -> Target: This Entity
+        |   -> Predicate:
+        |     -> Entity Equipment:
+        |       -> Main Hand:
+        |         -> Item: Iron Shovel
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Predicates:
+        |     -> Random Chance:
+        |       -> Probability: 0.25
+        | Set Damage:
+        |   -> Damage: U[0%; 100%)
+        |   -> Add: False
+      ali:item minecraft:iron_sword x1 {Damage:0}
+        | Chance: 8.5%
+        |   -> Looting LVL: 8.5% + LVL × 1%
+        |   -> Looting I: 9.5%
+        |   -> Looting II: 10.5%
+        |   -> Looting III: 11.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Random Chance With Looting:
+        |   -> Percent: 0.085
+        |   -> Multiplier: 0.01
+        | Entity Properties:
+        |   -> Target: This Entity
+        |   -> Predicate:
+        |     -> Entity Equipment:
+        |       -> Main Hand:
+        |         -> Item: Iron Sword
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Predicates:
+        |     -> Random Chance:
+        |       -> Probability: 0.25
+        | Set Damage:
+        |   -> Damage: U[0%; 100%)
+        |   -> Add: False
+      ali:item minecraft:leather_helmet x1 {Damage:0}
+        | Chance: 8.5%
+        |   -> Looting LVL: 8.5% + LVL × 1%
+        |   -> Looting I: 9.5%
+        |   -> Looting II: 10.5%
+        |   -> Looting III: 11.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Random Chance With Looting:
+        |   -> Percent: 0.085
+        |   -> Multiplier: 0.01
+        | Entity Properties:
+        |   -> Target: This Entity
+        |   -> Predicate:
+        |     -> Entity Equipment:
+        |       -> Head:
+        |         -> Item: Leather Cap
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Predicates:
+        |     -> Random Chance:
+        |       -> Probability: 0.5
+        | Set Damage:
+        |   -> Damage: U[0%; 100%)
+        |   -> Add: False
+      ali:item minecraft:leather_chestplate x1 {Damage:0}
+        | Chance: 8.5%
+        |   -> Looting LVL: 8.5% + LVL × 1%
+        |   -> Looting I: 9.5%
+        |   -> Looting II: 10.5%
+        |   -> Looting III: 11.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Random Chance With Looting:
+        |   -> Percent: 0.085
+        |   -> Multiplier: 0.01
+        | Entity Properties:
+        |   -> Target: This Entity
+        |   -> Predicate:
+        |     -> Entity Equipment:
+        |       -> Chest:
+        |         -> Item: Leather Tunic
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Predicates:
+        |     -> Random Chance:
+        |       -> Probability: 0.5
+        | Set Damage:
+        |   -> Damage: U[0%; 100%)
+        |   -> Add: False
+      ali:item minecraft:leather_leggings x1 {Damage:0}
+        | Chance: 8.5%
+        |   -> Looting LVL: 8.5% + LVL × 1%
+        |   -> Looting I: 9.5%
+        |   -> Looting II: 10.5%
+        |   -> Looting III: 11.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Random Chance With Looting:
+        |   -> Percent: 0.085
+        |   -> Multiplier: 0.01
+        | Entity Properties:
+        |   -> Target: This Entity
+        |   -> Predicate:
+        |     -> Entity Equipment:
+        |       -> Legs:
+        |         -> Item: Leather Pants
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Predicates:
+        |     -> Random Chance:
+        |       -> Probability: 0.5
+        | Set Damage:
+        |   -> Damage: U[0%; 100%)
+        |   -> Add: False
+      ali:item minecraft:leather_boots x1 {Damage:0}
+        | Chance: 8.5%
+        |   -> Looting LVL: 8.5% + LVL × 1%
+        |   -> Looting I: 9.5%
+        |   -> Looting II: 10.5%
+        |   -> Looting III: 11.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Random Chance With Looting:
+        |   -> Percent: 0.085
+        |   -> Multiplier: 0.01
+        | Entity Properties:
+        |   -> Target: This Entity
+        |   -> Predicate:
+        |     -> Entity Equipment:
+        |       -> Feet:
+        |         -> Item: Leather Boots
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Predicates:
+        |     -> Random Chance:
+        |       -> Probability: 0.5
+        | Set Damage:
+        |   -> Damage: U[0%; 100%)
+        |   -> Add: False
+      ali:item minecraft:golden_helmet x1 {Damage:0}
+        | Chance: 8.5%
+        |   -> Looting LVL: 8.5% + LVL × 1%
+        |   -> Looting I: 9.5%
+        |   -> Looting II: 10.5%
+        |   -> Looting III: 11.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Random Chance With Looting:
+        |   -> Percent: 0.085
+        |   -> Multiplier: 0.01
+        | Entity Properties:
+        |   -> Target: This Entity
+        |   -> Predicate:
+        |     -> Entity Equipment:
+        |       -> Head:
+        |         -> Item: Golden Helmet
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Predicates:
+        |     -> Random Chance:
+        |       -> Probability: 0.5
+        | Set Damage:
+        |   -> Damage: U[0%; 100%)
+        |   -> Add: False
+      ali:item minecraft:golden_chestplate x1 {Damage:0}
+        | Chance: 8.5%
+        |   -> Looting LVL: 8.5% + LVL × 1%
+        |   -> Looting I: 9.5%
+        |   -> Looting II: 10.5%
+        |   -> Looting III: 11.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Random Chance With Looting:
+        |   -> Percent: 0.085
+        |   -> Multiplier: 0.01
+        | Entity Properties:
+        |   -> Target: This Entity
+        |   -> Predicate:
+        |     -> Entity Equipment:
+        |       -> Chest:
+        |         -> Item: Golden Chestplate
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Predicates:
+        |     -> Random Chance:
+        |       -> Probability: 0.5
+        | Set Damage:
+        |   -> Damage: U[0%; 100%)
+        |   -> Add: False
+      ali:item minecraft:golden_leggings x1 {Damage:0}
+        | Chance: 8.5%
+        |   -> Looting LVL: 8.5% + LVL × 1%
+        |   -> Looting I: 9.5%
+        |   -> Looting II: 10.5%
+        |   -> Looting III: 11.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Random Chance With Looting:
+        |   -> Percent: 0.085
+        |   -> Multiplier: 0.01
+        | Entity Properties:
+        |   -> Target: This Entity
+        |   -> Predicate:
+        |     -> Entity Equipment:
+        |       -> Legs:
+        |         -> Item: Golden Leggings
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Predicates:
+        |     -> Random Chance:
+        |       -> Probability: 0.5
+        | Set Damage:
+        |   -> Damage: U[0%; 100%)
+        |   -> Add: False
+      ali:item minecraft:golden_boots x1 {Damage:0}
+        | Chance: 8.5%
+        |   -> Looting LVL: 8.5% + LVL × 1%
+        |   -> Looting I: 9.5%
+        |   -> Looting II: 10.5%
+        |   -> Looting III: 11.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Random Chance With Looting:
+        |   -> Percent: 0.085
+        |   -> Multiplier: 0.01
+        | Entity Properties:
+        |   -> Target: This Entity
+        |   -> Predicate:
+        |     -> Entity Equipment:
+        |       -> Feet:
+        |         -> Item: Golden Boots
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Predicates:
+        |     -> Random Chance:
+        |       -> Probability: 0.5
+        | Set Damage:
+        |   -> Damage: U[0%; 100%)
+        |   -> Add: False
+      ali:item minecraft:chainmail_helmet x1 {Damage:0}
+        | Chance: 8.5%
+        |   -> Looting LVL: 8.5% + LVL × 1%
+        |   -> Looting I: 9.5%
+        |   -> Looting II: 10.5%
+        |   -> Looting III: 11.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Random Chance With Looting:
+        |   -> Percent: 0.085
+        |   -> Multiplier: 0.01
+        | Entity Properties:
+        |   -> Target: This Entity
+        |   -> Predicate:
+        |     -> Entity Equipment:
+        |       -> Head:
+        |         -> Item: Chainmail Helmet
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Predicates:
+        |     -> Random Chance:
+        |       -> Probability: 0.5
+        | Set Damage:
+        |   -> Damage: U[0%; 100%)
+        |   -> Add: False
+      ali:item minecraft:chainmail_chestplate x1 {Damage:0}
+        | Chance: 8.5%
+        |   -> Looting LVL: 8.5% + LVL × 1%
+        |   -> Looting I: 9.5%
+        |   -> Looting II: 10.5%
+        |   -> Looting III: 11.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Random Chance With Looting:
+        |   -> Percent: 0.085
+        |   -> Multiplier: 0.01
+        | Entity Properties:
+        |   -> Target: This Entity
+        |   -> Predicate:
+        |     -> Entity Equipment:
+        |       -> Chest:
+        |         -> Item: Chainmail Chestplate
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Predicates:
+        |     -> Random Chance:
+        |       -> Probability: 0.5
+        | Set Damage:
+        |   -> Damage: U[0%; 100%)
+        |   -> Add: False
+      ali:item minecraft:chainmail_leggings x1 {Damage:0}
+        | Chance: 8.5%
+        |   -> Looting LVL: 8.5% + LVL × 1%
+        |   -> Looting I: 9.5%
+        |   -> Looting II: 10.5%
+        |   -> Looting III: 11.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Random Chance With Looting:
+        |   -> Percent: 0.085
+        |   -> Multiplier: 0.01
+        | Entity Properties:
+        |   -> Target: This Entity
+        |   -> Predicate:
+        |     -> Entity Equipment:
+        |       -> Legs:
+        |         -> Item: Chainmail Leggings
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Predicates:
+        |     -> Random Chance:
+        |       -> Probability: 0.5
+        | Set Damage:
+        |   -> Damage: U[0%; 100%)
+        |   -> Add: False
+      ali:item minecraft:chainmail_boots x1 {Damage:0}
+        | Chance: 8.5%
+        |   -> Looting LVL: 8.5% + LVL × 1%
+        |   -> Looting I: 9.5%
+        |   -> Looting II: 10.5%
+        |   -> Looting III: 11.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Random Chance With Looting:
+        |   -> Percent: 0.085
+        |   -> Multiplier: 0.01
+        | Entity Properties:
+        |   -> Target: This Entity
+        |   -> Predicate:
+        |     -> Entity Equipment:
+        |       -> Feet:
+        |         -> Item: Chainmail Boots
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Predicates:
+        |     -> Random Chance:
+        |       -> Probability: 0.5
+        | Set Damage:
+        |   -> Damage: U[0%; 100%)
+        |   -> Add: False
+      ali:item minecraft:iron_helmet x1 {Damage:0}
+        | Chance: 8.5%
+        |   -> Looting LVL: 8.5% + LVL × 1%
+        |   -> Looting I: 9.5%
+        |   -> Looting II: 10.5%
+        |   -> Looting III: 11.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Random Chance With Looting:
+        |   -> Percent: 0.085
+        |   -> Multiplier: 0.01
+        | Entity Properties:
+        |   -> Target: This Entity
+        |   -> Predicate:
+        |     -> Entity Equipment:
+        |       -> Head:
+        |         -> Item: Iron Helmet
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Predicates:
+        |     -> Random Chance:
+        |       -> Probability: 0.5
+        | Set Damage:
+        |   -> Damage: U[0%; 100%)
+        |   -> Add: False
+      ali:item minecraft:iron_chestplate x1 {Damage:0}
+        | Chance: 8.5%
+        |   -> Looting LVL: 8.5% + LVL × 1%
+        |   -> Looting I: 9.5%
+        |   -> Looting II: 10.5%
+        |   -> Looting III: 11.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Random Chance With Looting:
+        |   -> Percent: 0.085
+        |   -> Multiplier: 0.01
+        | Entity Properties:
+        |   -> Target: This Entity
+        |   -> Predicate:
+        |     -> Entity Equipment:
+        |       -> Chest:
+        |         -> Item: Iron Chestplate
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Predicates:
+        |     -> Random Chance:
+        |       -> Probability: 0.5
+        | Set Damage:
+        |   -> Damage: U[0%; 100%)
+        |   -> Add: False
+      ali:item minecraft:iron_leggings x1 {Damage:0}
+        | Chance: 8.5%
+        |   -> Looting LVL: 8.5% + LVL × 1%
+        |   -> Looting I: 9.5%
+        |   -> Looting II: 10.5%
+        |   -> Looting III: 11.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Random Chance With Looting:
+        |   -> Percent: 0.085
+        |   -> Multiplier: 0.01
+        | Entity Properties:
+        |   -> Target: This Entity
+        |   -> Predicate:
+        |     -> Entity Equipment:
+        |       -> Legs:
+        |         -> Item: Iron Leggings
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Predicates:
+        |     -> Random Chance:
+        |       -> Probability: 0.5
+        | Set Damage:
+        |   -> Damage: U[0%; 100%)
+        |   -> Add: False
+      ali:item minecraft:iron_boots x1 {Damage:0}
+        | Chance: 8.5%
+        |   -> Looting LVL: 8.5% + LVL × 1%
+        |   -> Looting I: 9.5%
+        |   -> Looting II: 10.5%
+        |   -> Looting III: 11.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Random Chance With Looting:
+        |   -> Percent: 0.085
+        |   -> Multiplier: 0.01
+        | Entity Properties:
+        |   -> Target: This Entity
+        |   -> Predicate:
+        |     -> Entity Equipment:
+        |       -> Feet:
+        |         -> Item: Iron Boots
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Predicates:
+        |     -> Random Chance:
+        |       -> Probability: 0.5
+        | Set Damage:
+        |   -> Damage: U[0%; 100%)
+        |   -> Add: False
+      ali:item minecraft:diamond_helmet x1 {Damage:0}
+        | Chance: 8.5%
+        |   -> Looting LVL: 8.5% + LVL × 1%
+        |   -> Looting I: 9.5%
+        |   -> Looting II: 10.5%
+        |   -> Looting III: 11.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Random Chance With Looting:
+        |   -> Percent: 0.085
+        |   -> Multiplier: 0.01
+        | Entity Properties:
+        |   -> Target: This Entity
+        |   -> Predicate:
+        |     -> Entity Equipment:
+        |       -> Head:
+        |         -> Item: Diamond Helmet
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Predicates:
+        |     -> Random Chance:
+        |       -> Probability: 0.5
+        | Set Damage:
+        |   -> Damage: U[0%; 100%)
+        |   -> Add: False
+      ali:item minecraft:diamond_chestplate x1 {Damage:0}
+        | Chance: 8.5%
+        |   -> Looting LVL: 8.5% + LVL × 1%
+        |   -> Looting I: 9.5%
+        |   -> Looting II: 10.5%
+        |   -> Looting III: 11.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Random Chance With Looting:
+        |   -> Percent: 0.085
+        |   -> Multiplier: 0.01
+        | Entity Properties:
+        |   -> Target: This Entity
+        |   -> Predicate:
+        |     -> Entity Equipment:
+        |       -> Chest:
+        |         -> Item: Diamond Chestplate
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Predicates:
+        |     -> Random Chance:
+        |       -> Probability: 0.5
+        | Set Damage:
+        |   -> Damage: U[0%; 100%)
+        |   -> Add: False
+      ali:item minecraft:diamond_leggings x1 {Damage:0}
+        | Chance: 8.5%
+        |   -> Looting LVL: 8.5% + LVL × 1%
+        |   -> Looting I: 9.5%
+        |   -> Looting II: 10.5%
+        |   -> Looting III: 11.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Random Chance With Looting:
+        |   -> Percent: 0.085
+        |   -> Multiplier: 0.01
+        | Entity Properties:
+        |   -> Target: This Entity
+        |   -> Predicate:
+        |     -> Entity Equipment:
+        |       -> Legs:
+        |         -> Item: Diamond Leggings
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Predicates:
+        |     -> Random Chance:
+        |       -> Probability: 0.5
+        | Set Damage:
+        |   -> Damage: U[0%; 100%)
+        |   -> Add: False
+      ali:item minecraft:diamond_boots x1 {Damage:0}
+        | Chance: 8.5%
+        |   -> Looting LVL: 8.5% + LVL × 1%
+        |   -> Looting I: 9.5%
+        |   -> Looting II: 10.5%
+        |   -> Looting III: 11.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Random Chance With Looting:
+        |   -> Percent: 0.085
+        |   -> Multiplier: 0.01
+        | Entity Properties:
+        |   -> Target: This Entity
+        |   -> Predicate:
+        |     -> Entity Equipment:
+        |       -> Feet:
+        |         -> Item: Diamond Boots
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Predicates:
+        |     -> Random Chance:
+        |       -> Probability: 0.5
+        | Set Damage:
+        |   -> Damage: U[0%; 100%)
+        |   -> Add: False

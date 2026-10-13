@@ -10,7 +10,7 @@ aci/CLAUDE.md                  — shared core library mod: plugin-manager base,
 aci/fabric/CLAUDE.md           — ACI's Fabric loader wrapper (no mod logic; datagen + metadata only)
 aci/forge/CLAUDE.md            — ACI's Forge loader wrapper (no mod logic; datagen + metadata only)
 aci/neoforge/CLAUDE.md         — ACI's NeoForge loader wrapper (no mod logic; datagen + metadata only)
-ali/CLAUDE.md                  — ALI mod: loot/trade data-scan, plugin wiring, config schema, GLM, mod-compat shims, networking (canonical)
+ali/CLAUDE.md                  — ALI mod: loot/trade data-scan, plugin wiring, config schema, GLM, mod-compat shims, networking (canonical), gametests
 ali/common-emi/CLAUDE.md       — canonical EMI/JEI/REI viewer-integration pattern (shared by all 6 common-<viewer> modules) + EMI specifics
 ali/common-jei/CLAUDE.md       — JEI specifics (references ali/common-emi/CLAUDE.md for the shared pattern)
 ali/common-rei/CLAUDE.md       — REI specifics: Category/Display split, filler/predicate registration
@@ -50,7 +50,7 @@ A merge moves code, not decisions. It is finished when ACI, ALI and AWI compile 
 
 - In `gradle.properties`, the generated target-mod block — `compat_mods` and the `<mod>_<loader>_dep` lines — is resolved silently in favour of the target branch (`ours`), with no attempt to reconcile it. `scripts/supported_mods.json`, which lists the mods themselves, is Minecraft-version-agnostic and merges like any other file. Every `_dep` pins a CurseForge file id or maven artifact versions for one specific Minecraft version, so a value merged down from a lower branch is wrong here by construction, and `compat_mods` states what this branch has actually ported. The rest of the file (loader versions, viewer versions, enabled platforms) conflicts like any other code and is resolved on its merits.
 - An ALICompat shim whose source arrives this way is **dormant**: its files are present, its slug is absent from `compat_mods`, and nothing compiles it. That is the correct end state of a merge (see `alicompat/CLAUDE.md`).
-- Activating those shims is a separate pass, run after the merge commit exists. It starts by repinning the target mods (`check_versions.py --update`) and then re-deriving each shim's class list against the jar for *this* Minecraft version — target-mod classes move, get renamed and disappear between versions, so only the shape of a shim ports, never its contents.
+- Activating those shims is a separate pass, run after the merge commit exists. It starts by repinning the target mods (`check_versions.py --update`) and then re-deriving each shim's class list against the jar for *this* Minecraft version — target-mod classes move, get renamed and disappear between versions, so only the shape of a shim ports, never its contents. A shim is activated together with its ALICompat gametest golden files, regenerated on this version (see `alicompat/CLAUDE.md`).
 
 Doing both in one step hides which failure came from the merge and which from a target mod's API change, and leaves no commit to fall back to.
 
@@ -77,6 +77,8 @@ Each mod (`ali/`, `awi/`, `aci/`) follows the same subproject pattern:
 `alicompat` has `common` + the loader modules too, plus one extra source set per target mod (`<loader>/src/compat/<slug>/`) — see `alicompat/CLAUDE.md`.
 
 `aci` has only `common` + the loader modules — no viewer or compat subprojects, since it registers nothing with a recipe viewer. Its loader modules carry no mod logic at all (no mixins, no platform-service implementation); they exist to shadow `aci:common` into a loadable jar and to ship `aci.accesswidener` (see `aci/CLAUDE.md`). `ali:common`/`awi:common` compile against `aci:common` directly (`implementation project(":aci:common")`). The ALI/AWI/ALICompat loader modules take it through architectury's `common` configuration (compile and dev classpath, never `shadowCommon`) plus `runtimeOnly project(":aci:<loader>")` for the runtime — `aci:common` is deliberately **not** in their `commonProjects` list, so `com.yanny.aci.*` is not duplicated inside their jars.
+
+No module ships a mixin refmap: this Minecraft version is unobfuscated, so mixin targets are already the names every environment runs with, and `useLegacyMixinAp` fails to configure under `loom-no-remap`.
 
 Which optional subprojects get included is controlled entirely by `settings.gradle` reading flags from `gradle.properties` (e.g. `emi_enabled`, `jei_enabled`, `rei_enabled`, `lootjs_enabled`, `fabric_enabled`, `forge_enabled`, `neoforge_enabled`). A loader is enabled only when it is listed in `enabled_platforms` **and** its `<loader>_enabled` is `true` — `enabled_platforms` may keep naming a loader a branch no longer builds, and the python scripts and generated run configurations below follow the same rule. The root `build.gradle` further gates per-project availability with `<platform>_<viewer>_enabled` properties and wires in the correct `commonProjects` dependency list for each loader module.
 
@@ -160,9 +162,32 @@ Tests are organized behind JUnit Platform `@Suite`/`@SelectClasses` runners (`To
 
 An expected multi-line text result — a tooltip passed to `assertTooltip`, or any other list of rendered lines — is written one line per source line, each string on its own line inside `List.of(...)`, so the expectation reads like the tooltip itself.
 
+ALI's integration test is a GameTest run per loader: a headless server with the real loader, vanilla data and a test datapack, whose scan output is compared against golden files (see `ali/CLAUDE.md`'s gametest section). It exits on its own with the number of failed tests as exit code, and `-Pali_golden_regenerate=true` rewrites the golden files instead of comparing:
+```
+./gradlew :ali:fabric:runGametest -Precipe_viewer=none
+./gradlew :ali:neoforge:runGametest -Precipe_viewer=none
+./gradlew :ali:neoforge:runGametest -Precipe_viewer=none -Pali_golden_regenerate=true
+```
+
+ALICompat's GameTest runs once per target mod and stores what that mod changes against a base run without target mods (see `alicompat/CLAUDE.md`'s gametest section); the base has to be regenerated before the mods whenever ALI's output changes, which `all` does in one Gradle invocation, base first:
+```
+./gradlew :alicompat:neoforge:runGametest -Precipe_viewer=none
+./gradlew :alicompat:neoforge:runGametest -Precipe_viewer=none -Palicompat_gametest=occultism
+./gradlew :alicompat:neoforge:runGametest -Precipe_viewer=none -Palicompat_gametest=all -Palicompat_golden_regenerate=true
+./gradlew :alicompat:fabric:runGametest -Precipe_viewer=none -Palicompat_gametest=farmersdelight -Palicompat_golden_regenerate=true
+```
+
+AWI has the same per-loader GameTest over a vanilla world with seed 0 (see `awi/CLAUDE.md`'s gametest section), regenerated with `-Pawi_golden_regenerate=true`:
+```
+./gradlew :awi:fabric:runGametest -Precipe_viewer=none
+./gradlew :awi:neoforge:runGametest -Precipe_viewer=none -Pawi_golden_regenerate=true
+```
+
 Generate data (recipes/loot/lang, per loader) via the IDE run configurations in `.idea/runConfigurations/Minecraft_Data_*.xml`, or the equivalent `run<Platform><Loader>Datagen`-style Gradle tasks wired by the `architectury-loom` plugin. All four mods have datagen; ACI's generates only its own `aci.*` language keys, ALICompat's only the tooltip keys of the compat shims that are built into it. Fabric datagen initialises the `fabric-datagen` entrypoint of every loaded mod, so a broken ACI datagen class breaks ALI's and AWI's datagen runs too.
 
-The mods ALICompat supports are listed in `scripts/supported_mods.json` (schema: `scripts/supported_mods.schema.json`): one entry per mod with its repo-wide slug, display name, runtime mod ids and its CurseForge projects as `<slug>-<project id>` — usually one, a second only for mods published as a separate project per loader. Which project serves which loader is not written down: `scripts/check_versions.py` asks CurseForge per Minecraft version, so a branch that adds a loader needs no edit here. A mod that CurseForge does not carry for some Minecraft version additionally lists `maven` sources — a repository, the loaders it builds for and `<group>:<artifact>` names — which are consulted, in order, only for a loader on which no CurseForge project has a file; the first source whose artifacts all share a version naming this Minecraft version wins, with its newest such version. Artifacts renamed between Minecraft versions get a source of their own. Each repository has to be declared in the root `build.gradle` `repositories` by hand as well. The file holds no Minecraft-version-specific data at all. It is the source of truth both python scripts below read; `gradle.properties` carries only what this branch resolves from it, in a block generated by `scripts/check_versions.py`. See `alicompat/CLAUDE.md` for how an entry turns into a shim.
+Language files other than `en_us.json` belong to the translators: a change adds and edits English text only, and a key missing from another locale shows its English text.
+
+The mods ALICompat supports are listed in `scripts/supported_mods.json` (schema: `scripts/supported_mods.schema.json`): one entry per mod with its repo-wide slug, display name, runtime mod ids and its CurseForge projects as `<slug>-<project id>` — usually one, a second only for mods published as a separate project per loader. Which project serves which loader is not written down: `scripts/check_versions.py` asks CurseForge per Minecraft version, so a branch that adds a loader needs no edit here. A mod that CurseForge does not carry for some Minecraft version, or carries only in older versions than its own repository, additionally lists `maven` sources — a repository, the loaders it builds for and `<group>:<artifact>` names. They are consulted in order, and the first source whose artifacts all share a version naming this Minecraft version — in the version or in the artifact name — gives its newest such version; it is pinned when no CurseForge project has a file for the loader, or when it is newer than the version in the CurseForge file name. Artifacts renamed between Minecraft versions get a source of their own. Each repository has to be declared in the root `build.gradle` `repositories` by hand as well. The file holds no Minecraft-version-specific data at all. It is the source of truth both python scripts below read; `gradle.properties` carries only what this branch resolves from it, in a block generated by `scripts/check_versions.py`. See `alicompat/CLAUDE.md` for how an entry turns into a shim.
 
 Manual testing against the real target mods runs out of a generated modpack rather than a dev run. `scripts/modpack.py` takes the mods that `scripts/supported_mods.json` lists for the chosen loader and `compat_mods` enables on this branch, keeps only the CurseForge project id (the pinned file id is the compile target, not what the pack uses), resolves the newest release-or-beta file for `minecraft_version` plus that loader, pulls in required dependencies recursively, adds the recipe viewer and — on Fabric — Fabric API, pins the loader to the newest version Prism's meta (`meta.prismlauncher.org`) lists for `minecraft_version` rather than the compile-time one in `gradle.properties`, since the newest mod files routinely require a newer loader, and writes a CurseForge-format zip to `build/modpack/` with the locally built ACI/ALI/ALICompat jars in `overrides/mods/`. A mod pinned from maven cannot be a manifest entry: its newest artifacts, plus the compile-scope dependencies their POMs declare from the same repository, recursively, go into `overrides/mods/` too. Prism Launcher imports that zip directly. It needs the mods built (`./gradlew build`) and `CURSEFORGE_API_KEY` in the environment, the same key `scripts/upload.py` uses:
 ```
@@ -177,8 +202,9 @@ python3 scripts/check_versions.py --loader forge
 python3 scripts/check_versions.py --update
 python3 scripts/check_versions.py --init
 python3 scripts/check_versions.py --scaffold twilightforest
+python3 scripts/check_versions.py --runtime-deps
 ```
-`--init` is the from-scratch variant: it ignores `compat_mods` entirely, pins and enables every registry mod that has a file here, and writes the block even when the file has none — for setting a branch up, never on a fresh merge, where it would switch on every dormant shim at once. `--scaffold <mod>` is the same thing narrowed to one registry entry: it creates that mod's missing source sets, pins it, enables it, and leaves every other line of the block untouched — the way a new shim is started. Repinning only swaps the file id or artifact version, so a build belongs after every `--update`. It is also the first step after merging into a branch, where the pinned ids arrived from a lower branch and name files for the wrong Minecraft version.
+Each pinned mod also gets `<slug>_<loader>_runtime_deps`, the required dependencies its file declares (for a maven pin, what its POMs require from the same repository), resolved recursively for the ALICompat gametest; `--runtime-deps` re-resolves only those, for the current pins. `--init` is the from-scratch variant: it ignores `compat_mods` entirely, pins and enables every registry mod that has a file here, and writes the block even when the file has none — for setting a branch up, never on a fresh merge, where it would switch on every dormant shim at once. `--scaffold <mod>` is the same thing narrowed to one registry entry: it creates that mod's missing source sets, pins it, enables it, and leaves every other line of the block untouched — the way a new shim is started. Repinning only swaps the file id or artifact version, so a build belongs after every `--update`. It is also the first step after merging into a branch, where the pinned ids arrived from a lower branch and name files for the wrong Minecraft version.
 
 Every run then diffs each built shim against the jar it is measured against — the one it is pinned to, or, under `--update`, the one it has just been repinned to — and prints one line per shim and loader plus a report in `build/compat_scan.txt`. `--no-scan` skips it. Findings come in four kinds; `+` and `~` are judgement calls, `-` and `!` are always defects:
 
@@ -193,7 +219,7 @@ A `~` exists only while a newer file than the pin is out: it compares those two 
 
 ## Versioning
 
-ALI, AWI, ACI and ALICompat version independently (`ali_version` / `awi_version` / `aci_version` / `alicompat_version` in `gradle.properties`), each with its own `CHANGELOG.md` (`ali/CHANGELOG.md`, `awi/CHANGELOG.md`, `aci/CHANGELOG.md`, `alicompat/CHANGELOG.md`). Every change to a mod gets a changelog entry there. Because the same fix/feature is typically ported across the active version branches, the same entry and version property commonly land on several branches — check whether a change belongs on other branches too, not just the one you're on.
+ALI, AWI, ACI and ALICompat version independently (`ali_version` / `awi_version` / `aci_version` / `alicompat_version` in `gradle.properties`), each with its own `CHANGELOG.md` (`ali/CHANGELOG.md`, `awi/CHANGELOG.md`, `aci/CHANGELOG.md`, `alicompat/CHANGELOG.md`). Every change to a mod gets a changelog entry there, measured against the last released version: an entry describes a difference from what that release does. A fix of a bug introduced after the last release, or a change to something not released yet, gets no entry of its own. Whether a bug shipped is checked against the code of the release commit — the one that numbered the topmost `## [X.Y.Z]`. Because the same fix/feature is typically ported across the active version branches, the same entry and version property commonly land on several branches — check whether a change belongs on other branches too, not just the one you're on.
 
 A changelog section header states the release status of what is under it:
 

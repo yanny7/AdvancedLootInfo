@@ -1,0 +1,54 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item farmersdelight:apple_pie_slice x4
+      | Count: 4
+      | ----- Predicates -----
+      | Match Tool:
+      |   -> Items:
+      |     -> Tag: Knives
+      | Match Block:
+      |   -> Block: Apple Pie
+      |   -> Properties:
+      |     -> bites: 0
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item farmersdelight:apple_pie_slice x3
+      | Count: 3
+      | ----- Predicates -----
+      | Match Tool:
+      |   -> Items:
+      |     -> Tag: Knives
+      | Match Block:
+      |   -> Block: Apple Pie
+      |   -> Properties:
+      |     -> bites: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item farmersdelight:apple_pie_slice x2
+      | Count: 2
+      | ----- Predicates -----
+      | Match Tool:
+      |   -> Items:
+      |     -> Tag: Knives
+      | Match Block:
+      |   -> Block: Apple Pie
+      |   -> Properties:
+      |     -> bites: 2
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item farmersdelight:apple_pie_slice x1
+      | Count: 1
+      | ----- Predicates -----
+      | Match Tool:
+      |   -> Items:
+      |     -> Tag: Knives
+      | Match Block:
+      |   -> Block: Apple Pie
+      |   -> Properties:
+      |     -> bites: 3

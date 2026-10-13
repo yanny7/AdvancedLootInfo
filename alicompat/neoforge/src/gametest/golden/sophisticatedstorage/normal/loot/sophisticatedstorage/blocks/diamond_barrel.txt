@@ -1,0 +1,12 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item sophisticatedstorage:diamond_barrel x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Copy Components:
+      |   -> Source: minecraft:block_entity
+      |   -> Include: minecraft:custom_name
+      | Copy Storage Data

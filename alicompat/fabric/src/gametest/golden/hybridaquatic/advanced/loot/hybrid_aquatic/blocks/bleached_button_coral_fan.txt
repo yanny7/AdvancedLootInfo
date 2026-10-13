@@ -1,0 +1,13 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item hybrid_aquatic:bleached_button_coral_fan x1
+      | Count: 1
+      | ----- Predicates -----
+      | Match Tool:
+      |   -> Item Predicates:
+      |     -> Enchantments:
+      |       -> Enchantment: Silk Touch
+      |       -> Level: ≥ 1

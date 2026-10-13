@@ -1,0 +1,146 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:item minecraft:piglin_head x1
+    | Chance: 25%
+    | Count: 1
+    | ----- Predicates -----
+    | Entity Properties:
+    |   -> Target: Attacker
+    |   -> Predicate:
+    |     -> Equipment:
+    |       -> Main Hand:
+    |         -> Items:
+    |           -> Tag: Iesnium Knives
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item minecraft:piglin_head x1
+        | Count: 1
+        | ----- Predicates -----
+        | Entity Properties:
+        |   -> Target: Attacker
+        |   -> Predicate:
+        |     -> Entity Type: Creeper
+        |     -> Nbt: {powered:1b}
+      ali:item minecraft:golden_sword x1
+        | Chance: 8.5%
+        |   -> Looting I: 9.5%
+        |   -> Looting II: 10.5%
+        |   -> Looting III: 11.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Entity Properties:
+        |   -> Target: This Entity
+        |   -> Predicate:
+        |     -> Equipment:
+        |       -> Main Hand:
+        |         -> Item: Golden Sword
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
+        | Set Damage:
+        |   -> Damage: 0% to 100%
+        |   -> Add: False
+      ali:item minecraft:crossbow x1
+        | Chance: 8.5%
+        |   -> Looting I: 9.5%
+        |   -> Looting II: 10.5%
+        |   -> Looting III: 11.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Entity Properties:
+        |   -> Target: This Entity
+        |   -> Predicate:
+        |     -> Equipment:
+        |       -> Main Hand:
+        |         -> Item: Crossbow
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
+        | Set Damage:
+        |   -> Damage: 0% to 100%
+        |   -> Add: False
+      ali:item minecraft:golden_helmet x1
+        | Chance: 8.5%
+        |   -> Looting I: 9.5%
+        |   -> Looting II: 10.5%
+        |   -> Looting III: 11.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Entity Properties:
+        |   -> Target: This Entity
+        |   -> Predicate:
+        |     -> Equipment:
+        |       -> Head:
+        |         -> Item: Golden Helmet
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
+        | Set Damage:
+        |   -> Damage: 0% to 100%
+        |   -> Add: False
+      ali:item minecraft:golden_chestplate x1
+        | Chance: 8.5%
+        |   -> Looting I: 9.5%
+        |   -> Looting II: 10.5%
+        |   -> Looting III: 11.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Entity Properties:
+        |   -> Target: This Entity
+        |   -> Predicate:
+        |     -> Equipment:
+        |       -> Chest:
+        |         -> Item: Golden Chestplate
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
+        | Set Damage:
+        |   -> Damage: 0% to 100%
+        |   -> Add: False
+      ali:item minecraft:golden_leggings x1
+        | Chance: 8.5%
+        |   -> Looting I: 9.5%
+        |   -> Looting II: 10.5%
+        |   -> Looting III: 11.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Entity Properties:
+        |   -> Target: This Entity
+        |   -> Predicate:
+        |     -> Equipment:
+        |       -> Legs:
+        |         -> Item: Golden Leggings
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
+        | Set Damage:
+        |   -> Damage: 0% to 100%
+        |   -> Add: False
+      ali:item minecraft:golden_boots x1
+        | Chance: 8.5%
+        |   -> Looting I: 9.5%
+        |   -> Looting II: 10.5%
+        |   -> Looting III: 11.5%
+        | Count: 1
+        | ----- Predicates -----
+        | Entity Properties:
+        |   -> Target: This Entity
+        |   -> Predicate:
+        |     -> Equipment:
+        |       -> Feet:
+        |         -> Item: Golden Boots
+        | ----- Modifiers -----
+        | Enchant Randomly:
+        |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
+        | Set Damage:
+        |   -> Damage: 0% to 100%
+        |   -> Add: False

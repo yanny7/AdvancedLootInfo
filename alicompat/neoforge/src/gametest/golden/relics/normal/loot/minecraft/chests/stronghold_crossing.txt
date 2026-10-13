@@ -1,0 +1,103 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 4
+    ali:item minecraft:bread x1-3
+      | Chance: 24.19%
+      | Count: 1 to 3
+    ali:item minecraft:apple x1-3
+      | Chance: 24.19%
+      | Count: 1 to 3
+    ali:item minecraft:iron_ingot x1-5
+      | Chance: 16.13%
+      | Count: 1 to 5
+    ali:item minecraft:coal x3-8
+      | Chance: 16.13%
+      | Count: 3 to 8
+    ali:item minecraft:gold_ingot x1-3
+      | Chance: 8.06%
+      | Count: 1 to 3
+    ali:item minecraft:redstone x4-9
+      | Chance: 8.06%
+      | Count: 4 to 9
+    ali:item minecraft:iron_pickaxe x1
+      | Chance: 1.61%
+      | Count: 1
+    ali:item minecraft:enchanted_book x1
+      | Chance: 1.61%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+  ali:item relics:kinetic_belt x1 {"relics:data":{abilities:{abilities:{gliding:{lock:{breaks:5},points:0,stats:{damage:{initialQuality:10},efficiency:{initialQuality:9},resistance:{initialQuality:3}}},slots:{lock:{breaks:5},points:0,stats:{amount:{initialQuality:9}}}},synergies:{}},leveling:{},statistic:{}}}
+    | Chance: 1.82%
+    | Count: 1
+  ali:item relics:midnight_mantle x1 {"relics:data":{abilities:{abilities:{constellation:{lock:{breaks:0},points:0,stats:{constellation_radius:{initialQuality:4},explosion_damage:{initialQuality:10},explosion_radius:{initialQuality:5},star_chance:{initialQuality:10},star_lifetime:{initialQuality:3},stun_duration:{initialQuality:9},tremor_duration:{initialQuality:3}}},invisibility:{lock:{breaks:0},points:0,stats:{brightness:{initialQuality:1},cooldown:{initialQuality:6},damage:{initialQuality:4}}},phase:{lock:{breaks:5},points:0,stats:{attack_damage:{initialQuality:10},attack_speed:{initialQuality:1},duration:{initialQuality:9},health_regeneration:{initialQuality:3},max_health:{initialQuality:7},modifier:{initialQuality:8}}},starfall:{lock:{breaks:0},points:0,stats:{bounce_chance:{initialQuality:4},chance:{initialQuality:8},damage:{initialQuality:9},radius:{initialQuality:8},stun:{initialQuality:9}}}},synergies:{}},leveling:{},statistic:{}}}
+    | Chance: 1.82%
+    | Count: 1
+  ali:item relics:chorus_staff x1 {"relics:data":{abilities:{abilities:{blink:{lock:{breaks:5},points:0,stats:{cooldown:{initialQuality:10},distance:{initialQuality:2},max_charge:{initialQuality:3}}}},synergies:{}},leveling:{},statistic:{}}}
+    | Chance: 1.82%
+    | Count: 1
+  ali:item relics:clot_of_time x1 {"relics:data":{abilities:{abilities:{rewind:{lock:{breaks:5},points:0,stats:{time:{initialQuality:9}}}},synergies:{}},leveling:{},statistic:{}}}
+    | Chance: 1.82%
+    | Count: 1
+  ali:item relics:glitchy_mantle x1 {"relics:data":{abilities:{abilities:{distortion:{lock:{breaks:5},points:0,stats:{miss_chance:{initialQuality:5}}},glitch:{lock:{breaks:0},points:0,stats:{fall_damage:{initialQuality:5},phase_time:{initialQuality:3},stability_time:{initialQuality:1}}},illusion:{lock:{breaks:0},points:0,stats:{duration:{initialQuality:7},echo_radius:{initialQuality:5},interval:{initialQuality:5},stun:{initialQuality:7},stun_radius:{initialQuality:1}}}},synergies:{}},leveling:{},statistic:{}}}
+    | Chance: 1.82%
+    | Count: 1
+  ali:item relics:leafy_mantle x1 {"relics:data":{abilities:{abilities:{camouflage:{lock:{breaks:5},points:0,stats:{absorption:{initialQuality:10},cooldown:{initialQuality:5},heal:{initialQuality:8}}},revival:{lock:{breaks:0},points:0,stats:{damage:{initialQuality:4},heal:{initialQuality:4},paralysis:{},radius:{initialQuality:4}}}},synergies:{}},leveling:{},statistic:{}}}
+    | Chance: 1.09%
+    | Count: 1
+  ali:item relics:leafy_mantle x1 {"relics:data":{abilities:{abilities:{camouflage:{lock:{breaks:5},points:0,stats:{absorption:{initialQuality:10},cooldown:{initialQuality:6},heal:{initialQuality:1}}},revival:{lock:{breaks:0},points:0,stats:{damage:{initialQuality:6},heal:{initialQuality:2},paralysis:{initialQuality:6},radius:{initialQuality:3}}}},synergies:{}},leveling:{},statistic:{}}}
+    | Chance: 1.09%
+    | Count: 1
+  ali:item relics:springy_boot x1 {"relics:data":{abilities:{abilities:{bounce:{lock:{breaks:5},points:0,stats:{damage:{initialQuality:3},damage_modifier:{initialQuality:6},power:{initialQuality:10},radius:{initialQuality:9},stun:{initialQuality:6}}}},synergies:{}},leveling:{},statistic:{}}}
+    | Chance: 1.09%
+    | Count: 1
+  ali:item relics:jellyfish_necklace x1 {"relics:data":{abilities:{abilities:{regeneration:{lock:{breaks:5},points:0,stats:{max_health:{initialQuality:6},regeneration:{}}},shock:{lock:{breaks:5},points:0,stats:{bounces:{initialQuality:10},cooldown:{initialQuality:9},damage:{initialQuality:3},damage_modifier:{initialQuality:1},distance:{initialQuality:1},duration:{initialQuality:6},knockback:{initialQuality:5},paralysis:{initialQuality:9},radius:{initialQuality:9},rings:{}}}},synergies:{}},leveling:{},statistic:{}}}
+    | Chance: 1.09%
+    | Count: 1
+  ali:item relics:cut_glass_boot x1 {"relics:data":{abilities:{abilities:{glass:{lock:{breaks:5},points:0,stats:{capacity:{initialQuality:1},max_fluids:{initialQuality:10},speed:{}}}},synergies:{}},leveling:{},statistic:{}}}
+    | Chance: 1.09%
+    | Count: 1
+  ali:item relics:rider_flute x1 {"relics:data":{abilities:{abilities:{stable:{lock:{breaks:5},points:0,stats:{heal:{initialQuality:9},max_slots:{initialQuality:7},resistance:{initialQuality:9}}}},synergies:{}},leveling:{},statistic:{}}}
+    | Chance: 1.09%
+    | Count: 1
+  ali:item relics:kinetic_belt x1 {"relics:data":{abilities:{abilities:{gliding:{lock:{breaks:5},points:0,stats:{damage:{initialQuality:8},efficiency:{initialQuality:5},resistance:{initialQuality:3}}},slots:{lock:{breaks:5},points:0,stats:{amount:{initialQuality:7}}}},synergies:{}},leveling:{},statistic:{}}}
+    | Chance: 0.36%
+    | Count: 1
+  ali:item relics:reflective_necklace x1 {"relics:data":{abilities:{abilities:{reflection:{lock:{breaks:5},points:0,stats:{bounces:{initialQuality:3},chance:{initialQuality:8},damage:{initialQuality:6},lifetime:{initialQuality:7},piercings:{initialQuality:10},stun:{initialQuality:6}}}},synergies:{}},leveling:{},statistic:{}}}
+    | Chance: 0.36%
+    | Count: 1
+  ali:item relics:midnight_mantle x1 {"relics:data":{abilities:{abilities:{constellation:{lock:{breaks:0},points:0,stats:{constellation_radius:{initialQuality:1},explosion_damage:{initialQuality:8},explosion_radius:{initialQuality:8},star_chance:{initialQuality:3},star_lifetime:{initialQuality:5},stun_duration:{initialQuality:6},tremor_duration:{initialQuality:3}}},invisibility:{lock:{breaks:0},points:0,stats:{brightness:{initialQuality:5},cooldown:{initialQuality:8},damage:{initialQuality:8}}},phase:{lock:{breaks:5},points:0,stats:{attack_damage:{initialQuality:5},attack_speed:{initialQuality:9},duration:{initialQuality:10},health_regeneration:{initialQuality:4},max_health:{initialQuality:8},modifier:{initialQuality:10}}},starfall:{lock:{breaks:0},points:0,stats:{bounce_chance:{initialQuality:8},chance:{initialQuality:5},damage:{initialQuality:2},radius:{initialQuality:2},stun:{initialQuality:1}}}},synergies:{}},leveling:{},statistic:{}}}
+    | Chance: 0.36%
+    | Count: 1
+  ali:item relics:roller_skate x1 {"relics:data":{abilities:{abilities:{skating:{lock:{breaks:5},points:0,stats:{damage:{initialQuality:10},ignite:{initialQuality:4},resistance:{initialQuality:7},speed:{initialQuality:5},step_height:{initialQuality:2}}}},synergies:{}},leveling:{},statistic:{}}}
+    | Chance: 0.36%
+    | Count: 1
+  ali:item relics:chorus_staff x1 {"relics:data":{abilities:{abilities:{blink:{lock:{breaks:5},points:0,stats:{cooldown:{initialQuality:1},distance:{initialQuality:5},max_charge:{initialQuality:6}}}},synergies:{}},leveling:{},statistic:{}}}
+    | Chance: 0.36%
+    | Count: 1
+  ali:item relics:clot_of_time x1 {"relics:data":{abilities:{abilities:{rewind:{lock:{breaks:5},points:0,stats:{time:{initialQuality:8}}}},synergies:{}},leveling:{},statistic:{}}}
+    | Chance: 0.36%
+    | Count: 1
+  ali:item relics:ring_of_the_seven_deadly_sins x1 {"relics:data":{abilities:{abilities:{envy:{lock:{breaks:5},points:0,stats:{incoming_damage_multiplier:{initialQuality:10},outgoing_damage_multiplier:{initialQuality:9}}},gluttony:{lock:{breaks:5},points:0,stats:{early_multiplier:{initialQuality:3},late_multiplier:{initialQuality:4}}},greed:{lock:{breaks:5},points:0,stats:{chance:{initialQuality:6},looting:{initialQuality:5},luck:{initialQuality:9}}},lust:{lock:{breaks:5},points:0,stats:{amount:{initialQuality:3},time:{initialQuality:4}}},pride:{lock:{breaks:5},points:0,stats:{multiplier:{initialQuality:1}}},sloth:{lock:{breaks:5},points:0,stats:{speed:{initialQuality:1},time:{initialQuality:10}}},wrath:{lock:{breaks:5},points:0,stats:{early_multiplier:{initialQuality:2},late_multiplier:{initialQuality:1},window:{initialQuality:1}}}},synergies:{}},leveling:{},statistic:{}}}
+    | Chance: 0.36%
+    | Count: 1
+  ali:item relics:sphere_of_self_sacrifice x1 {"relics:data":{abilities:{abilities:{sacrifice:{lock:{breaks:5},points:0,stats:{resistance:{initialQuality:8},stacks:{initialQuality:10}}}},synergies:{}},leveling:{},statistic:{}}}
+    | Chance: 0.36%
+    | Count: 1
+  ali:item relics:experience_disperser x1 {"relics:data":{abilities:{abilities:{dispersion:{lock:{breaks:5},points:0,stats:{distribution_ratio:{initialQuality:2},player_xp_ratio:{initialQuality:9},same_item_bonus:{initialQuality:8}}}},synergies:{}},leveling:{},statistic:{}}}
+    | Chance: 0.36%
+    | Count: 1
+  ali:item relics:glitchy_mantle x1 {"relics:data":{abilities:{abilities:{distortion:{lock:{breaks:5},points:0,stats:{miss_chance:{initialQuality:3}}},glitch:{lock:{breaks:0},points:0,stats:{fall_damage:{initialQuality:3},phase_time:{initialQuality:8},stability_time:{initialQuality:7}}},illusion:{lock:{breaks:0},points:0,stats:{duration:{initialQuality:6},echo_radius:{initialQuality:6},interval:{initialQuality:2},stun:{initialQuality:10},stun_radius:{initialQuality:7}}}},synergies:{}},leveling:{},statistic:{}}}
+    | Chance: 0.36%
+    | Count: 1
+  ali:item relics:ghostly_mantle x1 {"relics:data":{abilities:{abilities:{fog:{lock:{breaks:5},points:0,stats:{air_loss:{initialQuality:3},duration:{initialQuality:8},radius:{initialQuality:4},suffocation_damage:{initialQuality:1},tremor:{initialQuality:7}}},gaze:{lock:{breaks:0},points:0,stats:{charges:{initialQuality:10},damage:{initialQuality:7},range:{},weakness:{}}},spectral_escape:{lock:{breaks:0},points:0,stats:{cooldown:{initialQuality:9},damage:{initialQuality:2},duration:{initialQuality:1}}}},synergies:{}},leveling:{},statistic:{}}}
+    | Chance: 0.36%
+    | Count: 1
+  ali:item relics:shield_of_retaliation x1 {"relics:data":{abilities:{abilities:{retaliation:{lock:{breaks:5},points:0,stats:{cooldown:{initialQuality:10},extension:{initialQuality:1},miss_damage:{initialQuality:10},miss_duration:{initialQuality:7},projectile_damage:{initialQuality:4},stun:{initialQuality:3},stun_radius:{initialQuality:5},window:{initialQuality:4}}}},synergies:{}},leveling:{},statistic:{}}}
+    | Chance: 0.36%
+    | Count: 1

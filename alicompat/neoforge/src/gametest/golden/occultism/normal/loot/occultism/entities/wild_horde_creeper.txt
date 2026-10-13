@@ -1,0 +1,41 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 3
+    ali:item minecraft:music_disc_13 x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:music_disc_cat x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:music_disc_blocks x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:music_disc_chirp x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:music_disc_far x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:music_disc_mall x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:music_disc_mellohi x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:music_disc_stal x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:music_disc_strad x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:music_disc_ward x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:music_disc_11 x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:music_disc_wait x1
+      | Chance: 8.33%
+      | Count: 1

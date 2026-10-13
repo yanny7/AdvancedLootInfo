@@ -7,6 +7,17 @@ architectury {
     neoForge()
 }
 
+sourceSets {
+    gametest {
+        java.srcDir project(":aci:common").file("src/gametest/java")
+        resources.srcDir project(":aci:common").file("src/gametest/resources")
+        java.srcDir project(":ali:common").file("src/gametest/java")
+        resources.srcDir project(":ali:common").file("src/gametest/resources")
+        compileClasspath += sourceSets.main.compileClasspath + sourceSets.main.output
+        runtimeClasspath += sourceSets.main.runtimeClasspath + sourceSets.main.output
+    }
+}
+
 loom {
     accessWidenerPath = project(":ali:common").loom.accessWidenerPath
 
@@ -24,6 +35,38 @@ loom {
             programArgs "--all", "--mod", "${ali_mod_id}"
             programArgs "--output", "${file('src/main/generated/')}"
             programArgs "--existing", "${file("src/main/resources").absolutePath}"
+        }
+        gametest {
+            environment "gametestserver"
+            forgeTemplate "gameTestServer"
+            name "Minecraft GameTest"
+            source sourceSets.gametest
+            property "neoforge.enabledGameTestNamespaces", ali_mod_id
+            property "ali.golden.dir", project.file("src/gametest/golden").absolutePath
+            property "ali.golden.actual", project.file("build/gametest/golden").absolutePath
+            property "ali.golden.regenerate", (project.findProperty("ali_golden_regenerate") ?: "false").toString()
+            programArgs "--mixin.config", "aci.gametest.mixins.json"
+
+            runDir "build/gametest/run"
+
+            mods {
+                main {
+                    sourceSet sourceSets.main
+                    sourceSet sourceSets.gametest
+                }
+            }
+        }
+    }
+}
+
+tasks.matching { it.name == "runGametest" }.configureEach {
+    timeout = java.time.Duration.ofMinutes(10)
+
+    doFirst {
+        delete "build/gametest/run/config", "build/gametest/run/kubejs"
+        copy {
+            from project(":ali:common").file("src/gametest/kubejs")
+            into "build/gametest/run/kubejs"
         }
     }
 }

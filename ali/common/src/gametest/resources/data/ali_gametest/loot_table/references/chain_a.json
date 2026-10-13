@@ -1,0 +1,18 @@
+{
+  "pools": [
+    {
+      "rolls": 1,
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:red_wool"
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "ali_gametest:references/chain_b"
+        }
+      ]
+    }
+  ]
+}

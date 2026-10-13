@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "ali:loot_data",
+  "max_ticks": 6000,
+  "required": true,
+  "setup_ticks": 0,
+  "structure": "ali:empty"
+}

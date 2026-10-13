@@ -1,0 +1,19 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:waxed_exposed_copper_door x1
+      | Count: 1
+      | ----- Predicates -----
+      | Survives Explosion
+      | Match Block:
+      |   -> Block: Waxed Exposed Copper Door
+      |   -> Properties:
+      |     -> half: lower
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1
+    | ----- Predicates -----
+    | Random Chance:
+    |   -> Chance: 0.01

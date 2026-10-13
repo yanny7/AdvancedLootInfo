@@ -1,0 +1,31 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:dandelion x1
+      | Chance: 5%
+      |   -> Looting I: 5.5%
+      |   -> Looting II: 6%
+      |   -> Looting III: 6.5%
+      | Count: 1
+    ali:item minecraft:poppy x1
+      | Chance: 50%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item grimoireofgaia:mandrake x1
+      | Chance: 6.25%
+      |   -> Looting I: 7.25%
+      |   -> Looting II: 8.25%
+      |   -> Looting III: 9.25%
+      | Count: 1
+      | ----- Predicates -----
+      | Entity Properties:
+      |   -> Target: Attacker
+      |   -> Predicate:
+      |     -> Equipment:
+      |       -> Main Hand:
+      |         -> Items:
+      |           -> Tag: minecraft:shovels

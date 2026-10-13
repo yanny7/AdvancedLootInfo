@@ -1,0 +1,34 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 8
+    ali:item minecraft:cactus x1-4
+      | Chance: 27.78%
+      | Count: 1 to 4
+    ali:item minecraft:wheat x1-7
+      | Chance: 27.78%
+      | Count: 1 to 7
+    ali:item minecraft:bread x1-4
+      | Chance: 27.78%
+      | Count: 1 to 4
+    ali:item minecraft:dead_bush x1-3
+      | Chance: 5.56%
+      | Count: 1 to 3
+    ali:item minecraft:clay_ball x1
+      | Chance: 2.78%
+      | Count: 1
+    ali:item minecraft:green_dye x1
+      | Chance: 2.78%
+      | Count: 1
+    ali:item minecraft:book x1
+      | Chance: 2.78%
+      | Count: 1
+    ali:item minecraft:emerald x1-3
+      | Chance: 2.78%
+      | Count: 1 to 3
+  ali:item rats:tiny_coin x1
+    | Count: 1
+    | ----- Predicates -----
+    | Killer Rat Has Upgrade:
+    |   -> Item: Rat Upgrade: Aristoc-RAT

@@ -1,0 +1,26 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 3
+    ali:item kaleidoscope_cookery:seafood_miso_soup x1
+      | Chance: 14.29%
+      | Count: 1
+    ali:item kaleidoscope_cookery:chicken_and_mushroom_stew x1
+      | Chance: 14.29%
+      | Count: 1
+    ali:item kaleidoscope_cookery:pork_bone_soup x1
+      | Chance: 14.29%
+      | Count: 1
+    ali:item kaleidoscope_cookery:braised_beef_with_potatoes x1
+      | Chance: 14.29%
+      | Count: 1
+    ali:item kaleidoscope_cookery:beef_meatball_soup x1
+      | Chance: 14.29%
+      | Count: 1
+    ali:item kaleidoscope_cookery:egg_fried_rice x1
+      | Chance: 14.29%
+      | Count: 1
+    ali:item kaleidoscope_cookery:slime_ball_meal x1
+      | Chance: 14.29%
+      | Count: 1

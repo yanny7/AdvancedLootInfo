@@ -1,0 +1,46 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 4
+    ali:item minecraft:mushroom_stew x1
+      | Chance: 25%
+      | Count: 1
+    ali:item minecraft:beetroot_soup x1
+      | Chance: 25%
+      | Count: 1
+    ali:item minecraft:rabbit_stew x1
+      | Chance: 25%
+      | Count: 1
+    ali:item minecraft:suspicious_stew x1
+      | Chance: 25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Stew Effect:
+      |   -> Chilled
+      |     -> Duration: 30
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:fishing_rod x1 {Damage:0}
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:bucket x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:pufferfish x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:bread x5-9
+      | Count: 5 to 9
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:cod x3-6
+      | Count: 3 to 6

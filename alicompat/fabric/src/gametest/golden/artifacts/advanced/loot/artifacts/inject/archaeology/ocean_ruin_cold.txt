@@ -1,0 +1,119 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      | Chance: 16.67%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:lucky_scarf x1
+              | Chance: 16.67%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: items.lucky_scarf.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 16.67%
+    ali:reference
+      | Selects all entries
+      | Chance: 16.67%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:fire_gauntlet x1
+              | Chance: 16.67%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: items.fire_gauntlet.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 16.67%
+    ali:reference
+      | Selects all entries
+      | Chance: 16.67%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:anglers_hat x1
+              | Chance: 16.67%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: items.anglers_hat.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 16.67%
+    ali:reference
+      | Selects all entries
+      | Chance: 16.67%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:digging_claws x1
+              | Chance: 16.67%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: items.digging_claws.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 16.67%
+    ali:reference
+      | Selects all entries
+      | Chance: 16.67%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:antidote_vessel x1
+              | Chance: 16.67%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: items.antidote_vessel.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 16.67%
+    ali:reference
+      | Selects all entries
+      | Chance: 16.67%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:withered_bracelet x1
+              | Chance: 16.67%
+              | Count: 1
+              | ----- Predicates -----
+              | Config Value:
+              |   -> Config: items.withered_bracelet.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 16.67%

@@ -1,0 +1,24 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:pumpkin x1
+      | Chance: 25%
+      | Count: 1
+      | ----- Predicates -----
+      | Random Chance:
+      |   -> Chance: 0.25
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 12
+    ali:item minecraft:wheat x1-4
+      | Chance: 83.33%
+      | Count: max(0; U[1; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False
+    ali:item minecraft:hay_block x1
+      | Chance: 16.67%
+      | Count: 1

@@ -1,0 +1,34 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 5
+    ali:item minecraft:torch x4-12
+      | Chance: 31.25%
+      | Count: 4 to 12
+    ali:item minecraft:emerald x1
+      | Chance: 31.25%
+      | Count: 1
+    ali:item minecraft:cactus x3-6
+      | Chance: 6.25%
+      | Count: 3 to 6
+    ali:item minecraft:stripped_jungle_wood x4-6
+      | Chance: 6.25%
+      | Count: 4 to 6
+    ali:item minecraft:jungle_planks x2-4
+      | Chance: 6.25%
+      | Count: 2 to 4
+    ali:item minecraft:stick x2-9
+      | Chance: 6.25%
+      | Count: 2 to 9
+    ali:item minecraft:jungle_chest_boat x1
+      | Chance: 6.25%
+      | Count: 1
+    ali:item minecraft:dead_bush x1-3
+      | Chance: 6.25%
+      | Count: 1 to 3
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 0 to 1
+    ali:item minecraft:iron_axe x1
+      | Count: 1

@@ -1,0 +1,26 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:stone_slab x1-2
+      | Count: 
+      |   -> 2
+      |     -> Match Block:
+      |       -> Block: Stone Slab
+      |       -> Properties:
+      |         -> type: double
+      |   -> otherwise 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2
+      |   -> Add: False
+      |   -> Predicates:
+      |     -> Match Block:
+      |       -> Block: Stone Slab
+      |       -> Properties:
+      |         -> type: double
+      | Explosion Decay
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1

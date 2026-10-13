@@ -1,0 +1,141 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:enchanted_book x1
+      | Chance: 25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Treasure: False
+    ali:reference
+      | Selects all entries
+      | Chance: 33.33%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item irons_spellbooks:uncommon_ink x1
+            | Chance: 13.5%
+            | Count: 1
+          ali:item irons_spellbooks:common_ink x1
+            | Chance: 10%
+            | Count: 1
+          ali:item irons_spellbooks:rare_ink x1
+            | Chance: 1%
+            | Count: 1
+          ali:item irons_spellbooks:epic_ink x1
+            | Chance: 0.5%
+            | Count: 1
+    ali:item irons_spellbooks:scroll x1
+      | Chance: 25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Spell:
+      |   -> Quality: 0.2 to 0.5
+      |   -> Applicable Spells:
+      |     -> School: Ice
+      |     -> Force: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item irons_spellbooks:silver_ring x1
+            | Chance: 0.77%
+            | Count: 1
+          ali:item irons_spellbooks:cooldown_ring x1
+            | Chance: 0.77%
+            | Count: 1
+          ali:item irons_spellbooks:heavy_chain_necklace x1
+            | Chance: 0.77%
+            | Count: 1
+          ali:item irons_spellbooks:emerald_stoneplate_ring x1
+            | Chance: 0.77%
+            | Count: 1
+          ali:item irons_spellbooks:fireward_ring x1
+            | Chance: 0.77%
+            | Count: 1
+          ali:item irons_spellbooks:frostward_ring x1
+            | Chance: 0.77%
+            | Count: 1
+          ali:item irons_spellbooks:cast_time_ring x1
+            | Chance: 0.77%
+            | Count: 1
+          ali:item irons_spellbooks:conjurers_talisman x1
+            | Chance: 0.77%
+            | Count: 1
+          ali:item irons_spellbooks:poisonward_ring x1
+            | Chance: 0.77%
+            | Count: 1
+          ali:item irons_spellbooks:concentration_amulet x1
+            | Chance: 0.77%
+            | Count: 1
+          ali:item irons_spellbooks:invisibility_ring x1
+            | Chance: 0.77%
+            | Count: 1
+          ali:item irons_spellbooks:teleportation_amulet x1
+            | Chance: 0.77%
+            | Count: 1
+          ali:item irons_spellbooks:affinity_ring x1
+            | Chance: 0.77%
+            | Count: 1
+            | ----- Modifiers -----
+            | Randomize Ring Enhancement:
+            |   -> Spell Filter:
+            |     -> Force: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:blank_rune x1
+      | Chance: 25%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:invisibility_elixir x1
+      | Chance: 15%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 6 to 12
+    ali:item minecraft:snowball x1-2
+      | Chance: 25%
+      | Count: 1 to 2
+    ali:item minecraft:ice x2-4
+      | Chance: 25%
+      | Count: 2 to 4
+    ali:item minecraft:cobweb x2-4
+      | Chance: 25%
+      | Count: 2 to 4
+    ali:item irons_spellbooks:frozen_bone x1
+      | Chance: 25%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:arcane_essence x3-12
+      | Count: 3 to 12
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3
+    ali:empty
+      | Drops nothing
+      | Chance: 40%
+    ali:item minecraft:emerald x2-3
+      | Chance: 30%
+      | Count: 2 to 3
+    ali:item minecraft:iron_ingot x1-2
+      | Chance: 20%
+      | Count: 1 to 2
+    ali:item minecraft:diamond x1
+      | Chance: 10%
+      | Count: 1

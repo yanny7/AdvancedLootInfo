@@ -1,0 +1,24 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item twilightforest:blackberry x1
+            | Count: 1
+            | ----- Predicates -----
+            | Block State Property:
+            |   -> Block: Blackberry Bush
+            |   -> Properties:
+            |     -> age: 3
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item twilightforest:blackberry_bush x1
+      | Count: 1

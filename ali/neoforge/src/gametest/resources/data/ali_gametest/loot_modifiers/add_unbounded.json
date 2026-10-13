@@ -1,0 +1,8 @@
+{
+  "type": "ali:gametest_add_item",
+  "condition": {
+    "type": "minecraft:random_chance",
+    "chance": 0.01
+  },
+  "item": "minecraft:diamond"
+}

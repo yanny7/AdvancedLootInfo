@@ -1,0 +1,16 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item gtceu:tiny_diatomite_dust x3-5
+      | Count: max(0; U[3; 5])
+      | ----- Modifiers -----
+      | Apply Bonus:
+      |   -> Enchantment: Fortune
+      |   -> Formula: minecraft:uniform_bonus_count
+      |     -> Bonus Multiplier: 1
+      | Set Count:
+      |   -> Count: 3 to 5
+      |   -> Add: False
+      | Explosion Decay

@@ -1,0 +1,64 @@
+{
+  "pools": [
+    {
+      "rolls": 1,
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:shears",
+              "condition": {
+                "type": "minecraft:match_tool",
+                "predicate": {
+                  "items": [
+                    "minecraft:shears"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:emerald",
+              "condition": {
+                "type": "minecraft:killed_by_player"
+              }
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:dirt"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:group",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:apple"
+            },
+            {
+              "type": "minecraft:sequence",
+              "children": [
+                {
+                  "type": "minecraft:item",
+                  "name": "minecraft:bread",
+                  "condition": {
+                    "type": "minecraft:random_chance",
+                    "chance": 0.5
+                  }
+                },
+                {
+                  "type": "minecraft:item",
+                  "name": "minecraft:cake"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

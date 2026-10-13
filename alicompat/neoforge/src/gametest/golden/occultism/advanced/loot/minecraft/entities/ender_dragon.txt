@@ -1,0 +1,15 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:item minecraft:dragon_head x1
+    | Chance: 90%
+    | Count: 1
+    | ----- Predicates -----
+    | Entity Properties:
+    |   -> Target: Attacker
+    |   -> Predicate:
+    |     -> Equipment:
+    |       -> Main Hand:
+    |         -> Items:
+    |           -> Tag: Iesnium Knives
+    | Random Chance:
+    |   -> Chance: 0.9

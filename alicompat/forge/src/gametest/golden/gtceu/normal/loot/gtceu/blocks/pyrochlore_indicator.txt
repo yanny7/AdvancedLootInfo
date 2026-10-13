@@ -1,0 +1,9 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item gtceu:tiny_pyrochlore_dust x3-5
+      | Count: 3 to 5
+      | ----- Modifiers -----
+      | Explosion Decay

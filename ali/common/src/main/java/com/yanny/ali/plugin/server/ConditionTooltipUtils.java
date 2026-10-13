@@ -68,7 +68,7 @@ public class ConditionTooltipUtils {
             b.add(utils.getValueTooltip(utils, cond.predicate()).build(Lang.Branch.LOCATION));
 
             if (!cond.offset().equals(BlockPos.ZERO)) {
-                b.add(utils.getValueTooltip(utils, cond.offset()).build(Lang.Multi.OFFSET));
+                b.add(utils.getValueTooltip(utils, new BlockPos(cond.offset().getX(), cond.offset().getY(), cond.offset().getZ())).build(Lang.Multi.OFFSET));
             }
         }, Lang.Conditions.LOCATION_CHECK);
     }

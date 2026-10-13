@@ -1,0 +1,26 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 3
+    ali:item undergarden:cloggrum_nugget x1-9
+      | Chance: 30.67%
+      | Count: 1 to 9
+    ali:item undergarden:froststeel_nugget x1-9
+      | Chance: 30.67%
+      | Count: 1 to 9
+    ali:item undergarden:regalium_crystal x1-3
+      | Chance: 15.34%
+      | Count: 1 to 3
+    ali:item undergarden:utheric_shard x1-3
+      | Chance: 15.34%
+      | Count: 1 to 3
+    ali:item minecraft:diamond x1
+      | Chance: 3.07%
+      | Count: 1
+    ali:item undergarden:music_disc_mammoth x1
+      | Chance: 2.45%
+      | Count: 1
+    ali:item undergarden:music_disc_relict x1
+      | Chance: 2.45%
+      | Count: 1

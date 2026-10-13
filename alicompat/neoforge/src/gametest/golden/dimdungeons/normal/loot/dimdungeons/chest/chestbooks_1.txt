@@ -1,0 +1,158 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:enchanted_book x1
+      | Chance: 5.88%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Silk Touch
+      |       -> Levels: 1
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 5.88%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Blast Protection
+      |       -> Levels: 4
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 5.88%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Fire Protection
+      |       -> Levels: 4
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 5.88%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Projectile Protection
+      |       -> Levels: 4
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 5.88%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Feather Falling
+      |       -> Levels: 4
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 5.88%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Aqua Affinity
+      |       -> Levels: 1
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 5.88%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Frost Walker
+      |       -> Levels: 2
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 5.88%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Smite
+      |       -> Levels: 5
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 5.88%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Bane of Arthropods
+      |       -> Levels: 5
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 5.88%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Knockback
+      |       -> Levels: 2
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 5.88%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Punch
+      |       -> Levels: 2
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 5.88%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Flame
+      |       -> Levels: 1
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 5.88%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Infinity
+      |       -> Levels: 1
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 5.88%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Multishot
+      |       -> Levels: 1
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 5.88%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Lure
+      |       -> Levels: 3
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 5.88%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Luck of the Sea
+      |       -> Levels: 3
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 5.88%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Riptide
+      |       -> Levels: 3
+      |   -> Add: False

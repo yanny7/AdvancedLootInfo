@@ -1,0 +1,13 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:pink_bed x1
+      | Count: 1
+      | ----- Predicates -----
+      | Survives Explosion
+      | Match Block:
+      |   -> Block: Pink Bed
+      |   -> Properties:
+      |     -> part: head

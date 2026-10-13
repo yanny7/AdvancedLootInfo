@@ -1,0 +1,16 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:green_bed x1
+      | Count: 1
+      | ----- Predicates -----
+      | Survives Explosion
+      | Match Block:
+      |   -> Block: Green Bed
+      |   -> Properties:
+      |     -> part: head
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1

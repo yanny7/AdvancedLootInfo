@@ -1,0 +1,47 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 5
+    ali:item minecraft:white_wool x1-8
+      | Chance: 26.09%
+      | Count: 1 to 8
+    ali:item minecraft:wheat x1-6
+      | Chance: 26.09%
+      | Count: 1 to 6
+    ali:item minecraft:black_wool x1-3
+      | Chance: 13.04%
+      | Count: 1 to 3
+    ali:item minecraft:gray_wool x1-3
+      | Chance: 8.7%
+      | Count: 1 to 3
+    ali:item minecraft:brown_wool x1-3
+      | Chance: 8.7%
+      | Count: 1 to 3
+    ali:item minecraft:light_gray_wool x1-3
+      | Chance: 8.7%
+      | Count: 1 to 3
+    ali:item minecraft:emerald x1
+      | Chance: 4.35%
+      | Count: 1
+    ali:item minecraft:shears x1 {Damage:0}
+      | Chance: 4.35%
+      | Count: 1
+  ali:item relics:arrow_quiver x1
+    | Chance: 2.5%
+    | Count: 1
+  ali:item relics:horse_flute x1
+    | Chance: 2.5%
+    | Count: 1
+  ali:item relics:hunter_belt x1
+    | Chance: 2.5%
+    | Count: 1
+  ali:item relics:infinity_ham x1
+    | Chance: 2.5%
+    | Count: 1
+  ali:item relics:leather_belt x1
+    | Chance: 2.5%
+    | Count: 1
+  ali:item relics:roller_skates x1
+    | Chance: 2.5%
+    | Count: 1

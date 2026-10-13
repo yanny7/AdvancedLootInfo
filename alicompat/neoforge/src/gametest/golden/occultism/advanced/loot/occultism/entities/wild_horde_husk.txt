@@ -1,0 +1,32 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 75%
+    ali:item minecraft:dune_armor_trim_smithing_template x1
+      | Chance: 25%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:archer_pottery_sherd x1
+      | Chance: 16.67%
+      | Count: 1
+    ali:item minecraft:miner_pottery_sherd x1
+      | Chance: 16.67%
+      | Count: 1
+    ali:item minecraft:prize_pottery_sherd x1
+      | Chance: 16.67%
+      | Count: 1
+    ali:item minecraft:skull_pottery_sherd x1
+      | Chance: 16.67%
+      | Count: 1
+    ali:item minecraft:arms_up_pottery_sherd x1
+      | Chance: 16.67%
+      | Count: 1
+    ali:item minecraft:brewer_pottery_sherd x1
+      | Chance: 16.67%
+      | Count: 1

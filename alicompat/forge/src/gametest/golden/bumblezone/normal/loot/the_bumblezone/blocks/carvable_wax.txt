@@ -1,0 +1,75 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item the_bumblezone:carvable_wax_wavy x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion
+        | Block State Property:
+        |   -> Block: Carvable Wax
+        |   -> Properties:
+        |     -> carving: wavy
+      ali:item the_bumblezone:carvable_wax_flower x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion
+        | Block State Property:
+        |   -> Block: Carvable Wax
+        |   -> Properties:
+        |     -> carving: flower
+      ali:item the_bumblezone:carvable_wax_chiseled x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion
+        | Block State Property:
+        |   -> Block: Carvable Wax
+        |   -> Properties:
+        |     -> carving: chiseled
+      ali:item the_bumblezone:carvable_wax_diamond x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion
+        | Block State Property:
+        |   -> Block: Carvable Wax
+        |   -> Properties:
+        |     -> carving: diamond
+      ali:item the_bumblezone:carvable_wax_bricks x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion
+        | Block State Property:
+        |   -> Block: Carvable Wax
+        |   -> Properties:
+        |     -> carving: bricks
+      ali:item the_bumblezone:carvable_wax_chains x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion
+        | Block State Property:
+        |   -> Block: Carvable Wax
+        |   -> Properties:
+        |     -> carving: chains
+      ali:item the_bumblezone:carvable_wax_music x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion
+        | Block State Property:
+        |   -> Block: Carvable Wax
+        |   -> Properties:
+        |     -> carving: music
+      ali:item the_bumblezone:carvable_wax_grate x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion
+        | Block State Property:
+        |   -> Block: Carvable Wax
+        |   -> Properties:
+        |     -> carving: grate
+      ali:item the_bumblezone:carvable_wax x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion

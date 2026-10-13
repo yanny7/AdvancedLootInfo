@@ -1,0 +1,140 @@
+awi:biome minecraft:basalt_deltas
+  | Sea Level: 32
+  spawn minecraft:blaze
+    | Structure: minecraft:fortress
+    |   -> Category: Monster
+    |   -> Weight: 10
+    |   -> Group size: 2 to 3
+  spawn minecraft:ghast
+    | Category: Monster
+    | Weight: 40
+    | Group size: 1
+  spawn minecraft:magma_cube
+    | Category: Monster
+    | Weight: 100
+    | Group size: 2 to 5
+    | Structure: minecraft:fortress
+    |   -> Category: Monster
+    |   -> Weight: 3
+    |   -> Group size: 4
+  spawn minecraft:skeleton
+    | Structure: minecraft:fortress
+    |   -> Category: Monster
+    |   -> Weight: 2
+    |   -> Group size: 5
+  spawn minecraft:strider
+    | Category: Creature
+    | Weight: 60
+    | Group size: 1 to 2
+  spawn minecraft:wither_skeleton
+    | Structure: minecraft:fortress
+    |   -> Category: Monster
+    |   -> Weight: 8
+    |   -> Group size: 5
+  spawn minecraft:zombified_piglin
+    | Structure: minecraft:fortress
+    |   -> Category: Monster
+    |   -> Weight: 5
+    |   -> Group size: 4
+  awi:base_layout
+    | Generation Step: Base Terrain
+    awi:block minecraft:netherrack
+      | Default Block
+    awi:block minecraft:lava
+      | Default Fluid
+    awi:block minecraft:basalt
+      | Absolute Y: 1 to 121
+    awi:block minecraft:bedrock
+      | Absolute Y: 0 to 4, 123 to 127
+    awi:block minecraft:blackstone
+      | Depth Below Surface: 0 to 4
+    awi:block minecraft:gravel
+      | Depth Below Surface: 0 to 4
+      | At Y: 26 to 33
+  awi:generation_step 4
+    | Generation Step: Surface Structures
+    awi:placed_feature minecraft:delta
+      | Attempts Per Chunk: ? (minecraft:count_on_every_layer)
+      |   -> Count On Every Layer:
+      |     -> Count:
+      |       -> 40
+      awi:block minecraft:lava
+      awi:block minecraft:magma_block
+    awi:placed_feature minecraft:small_basalt_columns
+      | Attempts Per Chunk: ? (minecraft:count_on_every_layer)
+      |   -> Count On Every Layer:
+      |     -> Count:
+      |       -> 4
+      awi:block minecraft:basalt
+    awi:placed_feature minecraft:large_basalt_columns
+      | Attempts Per Chunk: ? (minecraft:count_on_every_layer)
+      |   -> Count On Every Layer:
+      |     -> Count:
+      |       -> 2
+      awi:block minecraft:basalt
+  awi:generation_step 7
+    | Generation Step: Underground Decoration
+    awi:placed_feature minecraft:basalt_blobs
+      | Attempts Per Chunk: 75
+      | Height: 0 to 127
+      awi:block minecraft:netherrack
+      awi:block minecraft:basalt
+    awi:placed_feature minecraft:blackstone_blobs
+      | Attempts Per Chunk: 25
+      | Height: 0 to 127
+      awi:block minecraft:netherrack
+      awi:block minecraft:blackstone
+    awi:placed_feature minecraft:spring_delta
+      | Attempts Per Chunk: 16
+      | Height: 4 to 123
+      awi:block minecraft:lava
+    awi:placed_feature minecraft:patch_fire
+      | Attempts Per Chunk: 0 to 5
+      | Height: 4 to 123
+      awi:block minecraft:fire
+    awi:placed_feature minecraft:patch_soul_fire
+      | Attempts Per Chunk: 0 to 5
+      | Height: 4 to 123
+      awi:block minecraft:soul_fire
+    awi:placed_feature minecraft:glowstone_extra
+      | Attempts Per Chunk: 0 to 9  ~0 (29%)
+      |   [chart 0..9 0-9 base=true modes=[true, false, false, false, false, false, false, false, false, false] heights=1.0000,0.6586,0.4879,0.3741,0.2887,0.2204,0.1635,0.1148,0.0721,0.0341]
+      | Height: 4 to 123
+      awi:block minecraft:glowstone
+    awi:placed_feature minecraft:glowstone
+      | Attempts Per Chunk: 10
+      | Height: 0 to 127
+      awi:block minecraft:glowstone
+    awi:placed_feature minecraft:brown_mushroom_nether
+      | Attempts Per Chunk: 96
+      | Chance: 50%
+      | Height: 0 to 127
+      awi:block minecraft:brown_mushroom
+    awi:placed_feature minecraft:red_mushroom_nether
+      | Attempts Per Chunk: 96
+      | Chance: 50%
+      | Height: 0 to 127
+      awi:block minecraft:red_mushroom
+    awi:placed_feature minecraft:ore_magma
+      | Attempts Per Chunk: 4
+      | Height: 27 to 36
+      awi:block minecraft:magma_block
+    awi:placed_feature minecraft:spring_closed_double
+      | Attempts Per Chunk: 32
+      | Height: 10 to 117
+      awi:block minecraft:lava
+    awi:placed_feature minecraft:ore_gold_deltas
+      | Attempts Per Chunk: 20
+      | Height: 10 to 117
+      awi:block minecraft:nether_gold_ore
+    awi:placed_feature minecraft:ore_quartz_deltas
+      | Attempts Per Chunk: 32
+      | Height: 10 to 117
+      awi:block minecraft:nether_quartz_ore
+    awi:placed_feature minecraft:ore_ancient_debris_large
+      | Height: 8 to 24  ~16 (11%)
+      |   [chart 0..16 8-24 base=true modes=[false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false] heights=0.1111,0.2222,0.3333,0.4444,0.5556,0.6667,0.7778,0.8889,1.0000,0.8889,0.7778,0.6667,0.5556,0.4444,0.3333,0.2222,0.1111]
+      awi:block minecraft:ancient_debris
+    awi:placed_feature minecraft:ore_debris_small
+      | Height: 8 to 119
+      awi:block minecraft:ancient_debris

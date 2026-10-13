@@ -1,0 +1,33 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:netherite_scrap x1
+      | Chance: 33.33%
+      | Count: 1
+    ali:item minecraft:netherite_upgrade_smithing_template x1
+      | Chance: 22.22%
+      | Count: 1
+    ali:item minecraft:snout_armor_trim_smithing_template x1
+      | Chance: 11.11%
+      | Count: 1
+    ali:item minecraft:nether_brick x1
+      | Chance: 11.11%
+      | Count: 1
+    ali:item minecraft:piglin_banner_pattern x1
+      | Chance: 11.11%
+      | Count: 1
+    ali:item minecraft:music_disc_pigstep x1
+      | Chance: 11.11%
+      | Count: 1
+  ali:item occultism:tallow x4
+    | Count: 4
+    | ----- Predicates -----
+    | Entity Properties:
+    |   -> Target: Attacker
+    |   -> Predicate:
+    |     -> Equipment:
+    |       -> Main Hand:
+    |         -> Items:
+    |           -> Tag: Knives

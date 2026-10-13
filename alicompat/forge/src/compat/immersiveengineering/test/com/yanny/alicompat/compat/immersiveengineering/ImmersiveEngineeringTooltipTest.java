@@ -52,7 +52,7 @@ public class ImmersiveEngineeringTooltipTest {
     @Test
     public void testConveyorCoverFunction() {
         assertTooltip(UTILS.getFunctionTooltip(UTILS, ConveyorCoverLootFunction.builder().build()).build(), List.of(
-                "Conveyor Cover:"
+                "Conveyor Cover"
         ));
     }
 
@@ -61,7 +61,7 @@ public class ImmersiveEngineeringTooltipTest {
         LootItemFunction function = create(ConveyorCoverLootFunction.class, ExplosionCondition.survivesExplosion().build());
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Conveyor Cover:",
+                "Conveyor Cover",
                 "  -> Predicates:",
                 "    -> Survives Explosion"
         ));
@@ -70,7 +70,7 @@ public class ImmersiveEngineeringTooltipTest {
     @Test
     public void testRevolverperkFunction() {
         assertTooltip(UTILS.getFunctionTooltip(UTILS, RevolverperkLootFunction.builder().build()).build(), List.of(
-                "Revolver Perks:"
+                "Revolver Perks"
         ));
     }
 
@@ -79,7 +79,7 @@ public class ImmersiveEngineeringTooltipTest {
         LootItemFunction function = RevolverperkLootFunction.builder().when(ExplosionCondition.survivesExplosion()).build();
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Revolver Perks:",
+                "Revolver Perks",
                 "  -> Predicates:",
                 "    -> Survives Explosion"
         ));
@@ -88,7 +88,7 @@ public class ImmersiveEngineeringTooltipTest {
     @Test
     public void testWindmillFunction() {
         assertTooltip(UTILS.getFunctionTooltip(UTILS, WindmillLootFunction.builder().build()).build(), List.of(
-                "Windmill Sails:"
+                "Windmill Sails"
         ));
     }
 
@@ -97,7 +97,7 @@ public class ImmersiveEngineeringTooltipTest {
         LootItemFunction function = create(WindmillLootFunction.class, ExplosionCondition.survivesExplosion().build());
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Windmill Sails:",
+                "Windmill Sails",
                 "  -> Predicates:",
                 "    -> Survives Explosion"
         ));
@@ -108,7 +108,7 @@ public class ImmersiveEngineeringTooltipTest {
         LootItemFunction function = BluprintzLootFunction.builder().build();
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Secret Bluprintz:"
+                "Secret Bluprintz"
         ));
     }
 
@@ -117,7 +117,7 @@ public class ImmersiveEngineeringTooltipTest {
         LootItemFunction function = BluprintzLootFunction.builder().when(ExplosionCondition.survivesExplosion()).build();
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Secret Bluprintz:",
+                "Secret Bluprintz",
                 "  -> Predicates:",
                 "    -> Survives Explosion"
         ));

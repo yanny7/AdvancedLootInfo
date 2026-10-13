@@ -1,0 +1,141 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    |   -> Bad Luck: 0 to 1
+    |   -> Luck 1: 1
+    |   -> Luck 2: 1
+    |   -> Luck 3: 1
+    |   -> Luck 4: 1
+    ali:item minecraft:quartz x3-8
+      | Chance: 48.23%
+      | Count: 3 to 5
+      |   -> Fortune I: 3 to 6  ~4 to 5 (33%)
+      |   -> Fortune II: 3 to 7  ~5 (33%)
+      |   -> Fortune III: 3 to 8  ~5 (33%)
+      |   [chart 0..2 3-5 base=true modes=[false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,0.0000,0.0000,0.0000 | 0..3 3-6 base=false modes=[false, true, true, false, false, false] heights=0.8500,1.0000,1.0000,0.1500,0.0000,0.0000 | 0..4 3-7 base=false modes=[false, false, true, false, false, false] heights=0.7225,0.9775,1.0000,0.2775,0.0225,0.0000 | 0..5 3-8 base=false modes=[false, false, true, false, false, false] heights=0.6141,0.9392,0.9966,0.3859,0.0608,0.0034]
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> minecraft:enchantments
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
+    ali:item minecraft:raw_gold x1-8
+      | Chance: 32.15%
+      | Count: 1 to 5
+      |   -> Fortune I: 1 to 6  ~2 to 5 (20%)
+      |   -> Fortune II: 1 to 7  ~3 to 5 (20%)
+      |   -> Fortune III: 1 to 8  ~4 to 5 (20%)
+      |   [chart 0..4 1-5 base=true modes=[false, false, false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,1.0000,1.0000,0.0000,0.0000,0.0000 | 0..5 1-6 base=false modes=[false, true, true, true, true, false, false, false] heights=0.9000,1.0000,1.0000,1.0000,1.0000,0.1000,0.0000,0.0000 | 0..6 1-7 base=false modes=[false, false, true, true, true, false, false, false] heights=0.8100,0.9900,1.0000,1.0000,1.0000,0.1900,0.0100,0.0000 | 0..7 1-8 base=false modes=[false, false, false, true, true, false, false, false] heights=0.7290,0.9720,0.9990,1.0000,1.0000,0.2710,0.0280,0.0010]
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> minecraft:enchantments
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
+    ali:item minecraft:glowstone_dust x2-13
+      | Chance: 19.29%
+      | Count: 2 to 10
+      |   -> Fortune I: 2 to 11  ~3 to 10 (11%)
+      |   -> Fortune II: 2 to 12  ~4 to 10 (11%)
+      |   -> Fortune III: 2 to 13  ~5 to 10 (11%)
+      |   [chart 0..8 2-10 base=true modes=[false, false, false, false, false, false, false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.0000,0.0000,0.0000 | 0..9 2-11 base=false modes=[false, true, true, true, true, true, true, true, true, false, false, false] heights=0.8500,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.1500,0.0000,0.0000 | 0..10 2-12 base=false modes=[false, false, true, true, true, true, true, true, true, false, false, false] heights=0.7225,0.9775,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.2775,0.0225,0.0000 | 0..11 2-13 base=false modes=[false, false, false, true, true, true, true, true, true, false, false, false] heights=0.6141,0.9392,0.9966,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.3859,0.0608,0.0034]
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> minecraft:enchantments
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
+    ali:item minecraft:ancient_debris x0-4
+      | Chance: 0.32%
+      | Count: 0 to 1
+      |   -> Fortune I: 0 to 2  ~1 (50%)
+      |   -> Fortune II: 0 to 3  ~1 (50%)
+      |   -> Fortune III: 0 to 4  ~1 (50%)
+      |   [chart 0..1 0-1 base=true modes=[false, false, false, false, false] heights=1.0000,1.0000,0.0000,0.0000,0.0000 | 0..2 0-2 base=false modes=[false, true, false, false, false] heights=0.9700,1.0000,0.0300,0.0000,0.0000 | 0..3 0-3 base=false modes=[false, true, false, false, false] heights=0.9409,0.9991,0.0591,0.0009,0.0000 | 0..4 0-4 base=false modes=[false, true, false, false, false] heights=0.9127,0.9974,0.0873,0.0026,0.0000]
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> minecraft:enchantments
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    |   -> Bad Luck: 0 to 1
+    |   -> Luck 1: 1
+    |   -> Luck 2: 1
+    |   -> Luck 3: 1
+    |   -> Luck 4: 1
+    ali:item minecraft:nether_quartz_ore x2-4
+      | Chance: 48.23%
+      | Count: 2 to 4
+      | ----- Predicates -----
+      | Match Tool:
+      |   -> Components:
+      |     -> Partial Matchers:
+      |       -> minecraft:enchantments
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+    ali:item minecraft:nether_gold_ore x1-3
+      | Chance: 32.15%
+      | Count: 1 to 3
+      | ----- Predicates -----
+      | Match Tool:
+      |   -> Components:
+      |     -> Partial Matchers:
+      |       -> minecraft:enchantments
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+    ali:item minecraft:glowstone x1-3
+      | Chance: 19.29%
+      | Count: 1 to 3
+      | ----- Predicates -----
+      | Match Tool:
+      |   -> Components:
+      |     -> Partial Matchers:
+      |       -> minecraft:enchantments
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+    ali:item minecraft:ancient_debris x0-1
+      | Chance: 0.32%
+      | Count: 0 to 1
+      | ----- Predicates -----
+      | Match Tool:
+      |   -> Components:
+      |     -> Partial Matchers:
+      |       -> minecraft:enchantments
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 97%
+      | ----- Predicates -----
+      | Location Check:
+      |   -> Location:
+      |     -> Position:
+      |       -> Y: 12 to 18
+    ali:item minecraft:ancient_debris x1-4
+      | Chance: 3%
+      | Count: 1
+      |   -> Fortune I: 1 to 2  ~1 (97%)
+      |   -> Fortune II: 1 to 3  ~1 (94%)
+      |   -> Fortune III: 1 to 4  ~1 (91%)
+      |   [chart 0..1 1-2 base=false modes=[true, false, false, false] heights=1.0000,0.0309,0.0000,0.0000 | 0..2 1-3 base=false modes=[true, false, false, false] heights=0.9700,0.0600,0.0009,0.0000 | 0..3 1-4 base=false modes=[true, false, false, false] heights=0.9409,0.0873,0.0027,0.0000]
+      | ----- Predicates -----
+      | Location Check:
+      |   -> Location:
+      |     -> Position:
+      |       -> Y: 12 to 18

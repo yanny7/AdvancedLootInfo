@@ -1,0 +1,920 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:prismarine_shard x0-5
+      | Count: max(0; U[0; 2])
+      |   -> Looting LVL: max(0; U[0; 2]) + round(LVL × U[0; 1))
+      |   -> Looting I: 0 to 3  ~1 to 2 (33%)
+      |   -> Looting II: 0 to 4  ~2 (33%)
+      |   -> Looting III: 0 to 5  ~2 to 3 (28%)
+      |   [chart 0..2 0-2 base=true modes=[false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,0.0000,0.0000,0.0000 | 0..3 0-3 base=false modes=[false, true, true, false, false, false] heights=0.5000,1.0000,1.0000,0.5000,0.0000,0.0000 | 0..4 0-4 base=false modes=[false, false, true, false, false, false] heights=0.2500,0.7500,1.0000,0.7500,0.2500,0.0000 | 0..5 0-5 base=false modes=[false, false, true, true, false, false] heights=0.1667,0.5000,0.8333,0.8333,0.5000,0.1667]
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 0 to 2
+      |   -> Add: False
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
+      |   -> Value: U[0; 1)
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:cod x1-4
+      | Chance: 50%
+      | Count: 1
+      |   -> Looting LVL: 1 + round(LVL × U[0; 1))
+      |   -> Looting I: 1 to 2
+      |   -> Looting II: 1 to 3  ~2 (50%)
+      |   -> Looting III: 1 to 4  ~2 to 3 (33%)
+      |   [chart 0..1 1-2 base=false modes=[false, false, false, false] heights=1.0000,1.0000,0.0000,0.0000 | 0..2 1-3 base=false modes=[false, true, false, false] heights=0.5000,1.0000,0.5000,0.0000 | 0..3 1-4 base=false modes=[false, true, true, false] heights=0.3333,0.6667,0.6667,0.3333]
+      | ----- Modifiers -----
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
+      |   -> Value: U[0; 1)
+      | Furnace Smelt
+      |   -> Predicates:
+      |     -> Any Of:
+      |       -> Entity Properties:
+      |         -> Target: This Entity
+      |         -> Predicate:
+      |           -> Entity Flags:
+      |             -> Is On Fire: True
+      |       -> Entity Properties:
+      |         -> Target: Direct Attacker
+      |         -> Predicate:
+      |           -> Entity Equipment:
+      |             -> Main Hand:
+      |               -> Item Predicates:
+      |                 -> Enchantments:
+      |                   -> Enchantments:
+      |                     -> Tag: minecraft:smelts_loot
+    ali:item minecraft:prismarine_crystals x1-4
+      | Chance: 33.33%
+      | Count: 1
+      |   -> Looting LVL: 1 + round(LVL × U[0; 1))
+      |   -> Looting I: 1 to 2
+      |   -> Looting II: 1 to 3  ~2 (50%)
+      |   -> Looting III: 1 to 4  ~2 to 3 (33%)
+      |   [chart 0..1 1-2 base=false modes=[false, false, false, false] heights=1.0000,1.0000,0.0000,0.0000 | 0..2 1-3 base=false modes=[false, true, false, false] heights=0.5000,1.0000,0.5000,0.0000 | 0..3 1-4 base=false modes=[false, true, true, false] heights=0.3333,0.6667,0.6667,0.3333]
+      | ----- Modifiers -----
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
+      |   -> Value: U[0; 1)
+    ali:empty
+      | Drops nothing
+      | Chance: 16.67%
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:wet_sponge x1
+      | Count: 1
+      | ----- Predicates -----
+      | Killed by player
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item minecraft:cod x1
+            | Chance: 0.79%
+            |   -> luck: 6000% ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 2.5%
+            |   -> Bad Luck: 0.81%
+            |   -> Luck 1: 0.77%
+            |   -> Luck 2: 0.75%
+            |   -> Luck 3: 0.73%
+            |   -> Luck 4: 0.71%
+            |   -> Looting LVL: 31.58% × [2.5%][LVL] | 3.5% + 1% × (LVL − 100%)
+            |   -> Looting I: 1.11%
+            |   -> Looting II: 1.42%
+            |   -> Looting III: 1.74%
+            | Count: 1
+            | ----- Predicates -----
+            | Killed by player
+            | Random Chance With Enchanted Bonus:
+            |   -> Chance: 0.03
+            |     -> Looting LVL: [0.03][LVL] | 0.04 + 0.01 × (LVL − 1)
+            |     -> Looting I: 0.04
+            |     -> Looting II: 0.04
+            |     -> Looting III: 0.05
+            | ----- Modifiers -----
+            | Furnace Smelt
+            |   -> Predicates:
+            |     -> Any Of:
+            |       -> Entity Properties:
+            |         -> Target: This Entity
+            |         -> Predicate:
+            |           -> Entity Flags:
+            |             -> Is On Fire: True
+            |       -> Entity Properties:
+            |         -> Target: Direct Attacker
+            |         -> Predicate:
+            |           -> Entity Equipment:
+            |             -> Main Hand:
+            |               -> Item Predicates:
+            |                 -> Enchantments:
+            |                   -> Enchantments:
+            |                     -> Tag: minecraft:smelts_loot
+          ali:reference
+            | Selects all entries
+            | Quality: 1
+            | Chance: 15.79%
+            |   -> luck: max(0%; 3000% + floor(luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck)))
+            |   -> Bad Luck: 15.68%
+            |   -> Luck 1: 15.9%
+            |   -> Luck 2: 16%
+            |   -> Luck 3: 16.1%
+            |   -> Luck 4: 16.19%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:item #hybrid_aquatic:small_fish x1
+                  | Chance: 0.39%
+                  |   -> luck: max(0%; 3000% + floor(luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 2.5%
+                  |   -> Bad Luck: 0.39%
+                  |   -> Luck 1: 0.4%
+                  |   -> Luck 2: 0.4%
+                  |   -> Luck 3: 0.4%
+                  |   -> Luck 4: 0.4%
+                  |   -> Looting LVL: 15.79% × [2.5%][LVL] | 3.5% + 1% × (LVL − 100%)
+                  |   -> Looting I: 0.55%
+                  |   -> Looting II: 0.71%
+                  |   -> Looting III: 0.87%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Killed by player
+                  | Random Chance With Enchanted Bonus:
+                  |   -> Chance: 0.03
+                  |     -> Looting LVL: [0.03][LVL] | 0.04 + 0.01 × (LVL − 1)
+                  |     -> Looting I: 0.04
+                  |     -> Looting II: 0.04
+                  |     -> Looting III: 0.05
+                  | ----- Modifiers -----
+                  | Furnace Smelt
+                  |   -> Predicates:
+                  |     -> Any Of:
+                  |       -> Entity Properties:
+                  |         -> Target: This Entity
+                  |         -> Predicate:
+                  |           -> Entity Flags:
+                  |             -> Is On Fire: True
+                  |       -> Entity Properties:
+                  |         -> Target: Direct Attacker
+                  |         -> Predicate:
+                  |           -> Entity Equipment:
+                  |             -> Main Hand:
+                  |               -> Item Predicates:
+                  |                 -> Enchantments:
+                  |                   -> Enchantments:
+                  |                     -> Tag: minecraft:smelts_loot
+          ali:item minecraft:salmon x1
+            | Chance: 0.33%
+            |   -> luck: 2500% ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 2.5%
+            |   -> Bad Luck: 0.34%
+            |   -> Luck 1: 0.32%
+            |   -> Luck 2: 0.31%
+            |   -> Luck 3: 0.3%
+            |   -> Luck 4: 0.3%
+            |   -> Looting LVL: 13.16% × [2.5%][LVL] | 3.5% + 1% × (LVL − 100%)
+            |   -> Looting I: 0.46%
+            |   -> Looting II: 0.59%
+            |   -> Looting III: 0.72%
+            | Count: 1
+            | ----- Predicates -----
+            | Killed by player
+            | Random Chance With Enchanted Bonus:
+            |   -> Chance: 0.03
+            |     -> Looting LVL: [0.03][LVL] | 0.04 + 0.01 × (LVL − 1)
+            |     -> Looting I: 0.04
+            |     -> Looting II: 0.04
+            |     -> Looting III: 0.05
+            | ----- Modifiers -----
+            | Furnace Smelt
+            |   -> Predicates:
+            |     -> Any Of:
+            |       -> Entity Properties:
+            |         -> Target: This Entity
+            |         -> Predicate:
+            |           -> Entity Flags:
+            |             -> Is On Fire: True
+            |       -> Entity Properties:
+            |         -> Target: Direct Attacker
+            |         -> Predicate:
+            |           -> Entity Equipment:
+            |             -> Main Hand:
+            |               -> Item Predicates:
+            |                 -> Enchantments:
+            |                   -> Enchantments:
+            |                     -> Tag: minecraft:smelts_loot
+          ali:reference
+            | Selects all entries
+            | Quality: 1
+            | Chance: 13.16%
+            |   -> luck: max(0%; 2500% + floor(luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck)))
+            |   -> Bad Luck: 12.97%
+            |   -> Luck 1: 13.33%
+            |   -> Luck 2: 13.5%
+            |   -> Luck 3: 13.66%
+            |   -> Luck 4: 13.81%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:item #hybrid_aquatic:medium_fish x1
+                  | Chance: 0.33%
+                  |   -> luck: max(0%; 2500% + floor(luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 2.5%
+                  |   -> Bad Luck: 0.32%
+                  |   -> Luck 1: 0.33%
+                  |   -> Luck 2: 0.34%
+                  |   -> Luck 3: 0.34%
+                  |   -> Luck 4: 0.35%
+                  |   -> Looting LVL: 13.16% × [2.5%][LVL] | 3.5% + 1% × (LVL − 100%)
+                  |   -> Looting I: 0.46%
+                  |   -> Looting II: 0.59%
+                  |   -> Looting III: 0.72%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Killed by player
+                  | Random Chance With Enchanted Bonus:
+                  |   -> Chance: 0.03
+                  |     -> Looting LVL: [0.03][LVL] | 0.04 + 0.01 × (LVL − 1)
+                  |     -> Looting I: 0.04
+                  |     -> Looting II: 0.04
+                  |     -> Looting III: 0.05
+                  | ----- Modifiers -----
+                  | Furnace Smelt
+                  |   -> Predicates:
+                  |     -> Any Of:
+                  |       -> Entity Properties:
+                  |         -> Target: This Entity
+                  |         -> Predicate:
+                  |           -> Entity Flags:
+                  |             -> Is On Fire: True
+                  |       -> Entity Properties:
+                  |         -> Target: Direct Attacker
+                  |         -> Predicate:
+                  |           -> Entity Equipment:
+                  |             -> Main Hand:
+                  |               -> Item Predicates:
+                  |                 -> Enchantments:
+                  |                   -> Enchantments:
+                  |                     -> Tag: minecraft:smelts_loot
+          ali:reference
+            | Selects all entries
+            | Quality: 1
+            | Chance: 10.53%
+            |   -> luck: max(0%; 2000% + floor(luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck)))
+            |   -> Bad Luck: 10.27%
+            |   -> Luck 1: 10.77%
+            |   -> Luck 2: 11%
+            |   -> Luck 3: 11.22%
+            |   -> Luck 4: 11.43%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:item #hybrid_aquatic:large_fish x1
+                  | Chance: 0.26%
+                  |   -> luck: max(0%; 2000% + floor(luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 2.5%
+                  |   -> Bad Luck: 0.26%
+                  |   -> Luck 1: 0.27%
+                  |   -> Luck 2: 0.28%
+                  |   -> Luck 3: 0.28%
+                  |   -> Luck 4: 0.29%
+                  |   -> Looting LVL: 10.53% × [2.5%][LVL] | 3.5% + 1% × (LVL − 100%)
+                  |   -> Looting I: 0.37%
+                  |   -> Looting II: 0.47%
+                  |   -> Looting III: 0.58%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Killed by player
+                  | Random Chance With Enchanted Bonus:
+                  |   -> Chance: 0.03
+                  |     -> Looting LVL: [0.03][LVL] | 0.04 + 0.01 × (LVL − 1)
+                  |     -> Looting I: 0.04
+                  |     -> Looting II: 0.04
+                  |     -> Looting III: 0.05
+                  | ----- Modifiers -----
+                  | Furnace Smelt
+                  |   -> Predicates:
+                  |     -> Any Of:
+                  |       -> Entity Properties:
+                  |         -> Target: This Entity
+                  |         -> Predicate:
+                  |           -> Entity Flags:
+                  |             -> Is On Fire: True
+                  |       -> Entity Properties:
+                  |         -> Target: Direct Attacker
+                  |         -> Predicate:
+                  |           -> Entity Equipment:
+                  |             -> Main Hand:
+                  |               -> Item Predicates:
+                  |                 -> Enchantments:
+                  |                   -> Enchantments:
+                  |                     -> Tag: minecraft:smelts_loot
+          ali:reference
+            | Selects all entries
+            | Quality: 2
+            | Chance: 7.89%
+            |   -> luck: max(0%; 1500% + floor(200% × luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck)))
+            |   -> Bad Luck: 7.03%
+            |   -> Luck 1: 8.72%
+            |   -> Luck 2: 9.5%
+            |   -> Luck 3: 10.24%
+            |   -> Luck 4: 10.95%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:item hybrid_aquatic:crab_pot x1
+                  | Chance: 0.02%
+                  |   -> luck: max(0%; 1500% + floor(200% × luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 0.23%
+                  |   -> Bad Luck: 0.02%
+                  |   -> Luck 1: 0.02%
+                  |   -> Luck 2: 0.02%
+                  |   -> Luck 3: 0.02%
+                  |   -> Luck 4: 0.02%
+                  |   -> Looting LVL: 0.72% × [2.5%][LVL] | 3.5% + 1% × (LVL − 100%)
+                  |   -> Looting I: 0.03%
+                  |   -> Looting II: 0.03%
+                  |   -> Looting III: 0.04%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Killed by player
+                  | Random Chance With Enchanted Bonus:
+                  |   -> Chance: 0.03
+                  |     -> Looting LVL: [0.03][LVL] | 0.04 + 0.01 × (LVL − 1)
+                  |     -> Looting I: 0.04
+                  |     -> Looting II: 0.04
+                  |     -> Looting III: 0.05
+                  | Entity Properties:
+                  |   -> Target: This Entity
+                  |   -> Predicate:
+                  |     -> Entity Sub Predicate:
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
+                  | ----- Modifiers -----
+                  | Furnace Smelt
+                  |   -> Predicates:
+                  |     -> Any Of:
+                  |       -> Entity Properties:
+                  |         -> Target: This Entity
+                  |         -> Predicate:
+                  |           -> Entity Flags:
+                  |             -> Is On Fire: True
+                  |       -> Entity Properties:
+                  |         -> Target: Direct Attacker
+                  |         -> Predicate:
+                  |           -> Entity Equipment:
+                  |             -> Main Hand:
+                  |               -> Item Predicates:
+                  |                 -> Enchantments:
+                  |                   -> Enchantments:
+                  |                     -> Tag: minecraft:smelts_loot
+                ali:item hybrid_aquatic:hybrid_crate x1
+                  | Chance: 0.02%
+                  |   -> luck: max(0%; 1500% + floor(200% × luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 0.23%
+                  |   -> Bad Luck: 0.02%
+                  |   -> Luck 1: 0.02%
+                  |   -> Luck 2: 0.02%
+                  |   -> Luck 3: 0.02%
+                  |   -> Luck 4: 0.02%
+                  |   -> Looting LVL: 0.72% × [2.5%][LVL] | 3.5% + 1% × (LVL − 100%)
+                  |   -> Looting I: 0.03%
+                  |   -> Looting II: 0.03%
+                  |   -> Looting III: 0.04%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Killed by player
+                  | Random Chance With Enchanted Bonus:
+                  |   -> Chance: 0.03
+                  |     -> Looting LVL: [0.03][LVL] | 0.04 + 0.01 × (LVL − 1)
+                  |     -> Looting I: 0.04
+                  |     -> Looting II: 0.04
+                  |     -> Looting III: 0.05
+                  | Entity Properties:
+                  |   -> Target: This Entity
+                  |   -> Predicate:
+                  |     -> Entity Sub Predicate:
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
+                  | ----- Modifiers -----
+                  | Furnace Smelt
+                  |   -> Predicates:
+                  |     -> Any Of:
+                  |       -> Entity Properties:
+                  |         -> Target: This Entity
+                  |         -> Predicate:
+                  |           -> Entity Flags:
+                  |             -> Is On Fire: True
+                  |       -> Entity Properties:
+                  |         -> Target: Direct Attacker
+                  |         -> Predicate:
+                  |           -> Entity Equipment:
+                  |             -> Main Hand:
+                  |               -> Item Predicates:
+                  |                 -> Enchantments:
+                  |                   -> Enchantments:
+                  |                     -> Tag: minecraft:smelts_loot
+                ali:item hybrid_aquatic:oak_crate x1
+                  | Chance: 0.02%
+                  |   -> luck: max(0%; 1500% + floor(200% × luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 0.23%
+                  |   -> Bad Luck: 0.02%
+                  |   -> Luck 1: 0.02%
+                  |   -> Luck 2: 0.02%
+                  |   -> Luck 3: 0.02%
+                  |   -> Luck 4: 0.02%
+                  |   -> Looting LVL: 0.72% × [2.5%][LVL] | 3.5% + 1% × (LVL − 100%)
+                  |   -> Looting I: 0.03%
+                  |   -> Looting II: 0.03%
+                  |   -> Looting III: 0.04%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Killed by player
+                  | Random Chance With Enchanted Bonus:
+                  |   -> Chance: 0.03
+                  |     -> Looting LVL: [0.03][LVL] | 0.04 + 0.01 × (LVL − 1)
+                  |     -> Looting I: 0.04
+                  |     -> Looting II: 0.04
+                  |     -> Looting III: 0.05
+                  | Entity Properties:
+                  |   -> Target: This Entity
+                  |   -> Predicate:
+                  |     -> Entity Sub Predicate:
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
+                  | ----- Modifiers -----
+                  | Furnace Smelt
+                  |   -> Predicates:
+                  |     -> Any Of:
+                  |       -> Entity Properties:
+                  |         -> Target: This Entity
+                  |         -> Predicate:
+                  |           -> Entity Flags:
+                  |             -> Is On Fire: True
+                  |       -> Entity Properties:
+                  |         -> Target: Direct Attacker
+                  |         -> Predicate:
+                  |           -> Entity Equipment:
+                  |             -> Main Hand:
+                  |               -> Item Predicates:
+                  |                 -> Enchantments:
+                  |                   -> Enchantments:
+                  |                     -> Tag: minecraft:smelts_loot
+                ali:item hybrid_aquatic:spruce_crate x1
+                  | Chance: 0.02%
+                  |   -> luck: max(0%; 1500% + floor(200% × luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 0.23%
+                  |   -> Bad Luck: 0.02%
+                  |   -> Luck 1: 0.02%
+                  |   -> Luck 2: 0.02%
+                  |   -> Luck 3: 0.02%
+                  |   -> Luck 4: 0.02%
+                  |   -> Looting LVL: 0.72% × [2.5%][LVL] | 3.5% + 1% × (LVL − 100%)
+                  |   -> Looting I: 0.03%
+                  |   -> Looting II: 0.03%
+                  |   -> Looting III: 0.04%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Killed by player
+                  | Random Chance With Enchanted Bonus:
+                  |   -> Chance: 0.03
+                  |     -> Looting LVL: [0.03][LVL] | 0.04 + 0.01 × (LVL − 1)
+                  |     -> Looting I: 0.04
+                  |     -> Looting II: 0.04
+                  |     -> Looting III: 0.05
+                  | Entity Properties:
+                  |   -> Target: This Entity
+                  |   -> Predicate:
+                  |     -> Entity Sub Predicate:
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
+                  | ----- Modifiers -----
+                  | Furnace Smelt
+                  |   -> Predicates:
+                  |     -> Any Of:
+                  |       -> Entity Properties:
+                  |         -> Target: This Entity
+                  |         -> Predicate:
+                  |           -> Entity Flags:
+                  |             -> Is On Fire: True
+                  |       -> Entity Properties:
+                  |         -> Target: Direct Attacker
+                  |         -> Predicate:
+                  |           -> Entity Equipment:
+                  |             -> Main Hand:
+                  |               -> Item Predicates:
+                  |                 -> Enchantments:
+                  |                   -> Enchantments:
+                  |                     -> Tag: minecraft:smelts_loot
+                ali:item hybrid_aquatic:birch_crate x1
+                  | Chance: 0.02%
+                  |   -> luck: max(0%; 1500% + floor(200% × luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 0.23%
+                  |   -> Bad Luck: 0.02%
+                  |   -> Luck 1: 0.02%
+                  |   -> Luck 2: 0.02%
+                  |   -> Luck 3: 0.02%
+                  |   -> Luck 4: 0.02%
+                  |   -> Looting LVL: 0.72% × [2.5%][LVL] | 3.5% + 1% × (LVL − 100%)
+                  |   -> Looting I: 0.03%
+                  |   -> Looting II: 0.03%
+                  |   -> Looting III: 0.04%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Killed by player
+                  | Random Chance With Enchanted Bonus:
+                  |   -> Chance: 0.03
+                  |     -> Looting LVL: [0.03][LVL] | 0.04 + 0.01 × (LVL − 1)
+                  |     -> Looting I: 0.04
+                  |     -> Looting II: 0.04
+                  |     -> Looting III: 0.05
+                  | Entity Properties:
+                  |   -> Target: This Entity
+                  |   -> Predicate:
+                  |     -> Entity Sub Predicate:
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
+                  | ----- Modifiers -----
+                  | Furnace Smelt
+                  |   -> Predicates:
+                  |     -> Any Of:
+                  |       -> Entity Properties:
+                  |         -> Target: This Entity
+                  |         -> Predicate:
+                  |           -> Entity Flags:
+                  |             -> Is On Fire: True
+                  |       -> Entity Properties:
+                  |         -> Target: Direct Attacker
+                  |         -> Predicate:
+                  |           -> Entity Equipment:
+                  |             -> Main Hand:
+                  |               -> Item Predicates:
+                  |                 -> Enchantments:
+                  |                   -> Enchantments:
+                  |                     -> Tag: minecraft:smelts_loot
+                ali:item hybrid_aquatic:dark_oak_crate x1
+                  | Chance: 0.02%
+                  |   -> luck: max(0%; 1500% + floor(200% × luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 0.23%
+                  |   -> Bad Luck: 0.02%
+                  |   -> Luck 1: 0.02%
+                  |   -> Luck 2: 0.02%
+                  |   -> Luck 3: 0.02%
+                  |   -> Luck 4: 0.02%
+                  |   -> Looting LVL: 0.72% × [2.5%][LVL] | 3.5% + 1% × (LVL − 100%)
+                  |   -> Looting I: 0.03%
+                  |   -> Looting II: 0.03%
+                  |   -> Looting III: 0.04%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Killed by player
+                  | Random Chance With Enchanted Bonus:
+                  |   -> Chance: 0.03
+                  |     -> Looting LVL: [0.03][LVL] | 0.04 + 0.01 × (LVL − 1)
+                  |     -> Looting I: 0.04
+                  |     -> Looting II: 0.04
+                  |     -> Looting III: 0.05
+                  | Entity Properties:
+                  |   -> Target: This Entity
+                  |   -> Predicate:
+                  |     -> Entity Sub Predicate:
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
+                  | ----- Modifiers -----
+                  | Furnace Smelt
+                  |   -> Predicates:
+                  |     -> Any Of:
+                  |       -> Entity Properties:
+                  |         -> Target: This Entity
+                  |         -> Predicate:
+                  |           -> Entity Flags:
+                  |             -> Is On Fire: True
+                  |       -> Entity Properties:
+                  |         -> Target: Direct Attacker
+                  |         -> Predicate:
+                  |           -> Entity Equipment:
+                  |             -> Main Hand:
+                  |               -> Item Predicates:
+                  |                 -> Enchantments:
+                  |                   -> Enchantments:
+                  |                     -> Tag: minecraft:smelts_loot
+                ali:item hybrid_aquatic:acacia_crate x1
+                  | Chance: 0.02%
+                  |   -> luck: max(0%; 1500% + floor(200% × luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 0.23%
+                  |   -> Bad Luck: 0.02%
+                  |   -> Luck 1: 0.02%
+                  |   -> Luck 2: 0.02%
+                  |   -> Luck 3: 0.02%
+                  |   -> Luck 4: 0.02%
+                  |   -> Looting LVL: 0.72% × [2.5%][LVL] | 3.5% + 1% × (LVL − 100%)
+                  |   -> Looting I: 0.03%
+                  |   -> Looting II: 0.03%
+                  |   -> Looting III: 0.04%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Killed by player
+                  | Random Chance With Enchanted Bonus:
+                  |   -> Chance: 0.03
+                  |     -> Looting LVL: [0.03][LVL] | 0.04 + 0.01 × (LVL − 1)
+                  |     -> Looting I: 0.04
+                  |     -> Looting II: 0.04
+                  |     -> Looting III: 0.05
+                  | Entity Properties:
+                  |   -> Target: This Entity
+                  |   -> Predicate:
+                  |     -> Entity Sub Predicate:
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
+                  | ----- Modifiers -----
+                  | Furnace Smelt
+                  |   -> Predicates:
+                  |     -> Any Of:
+                  |       -> Entity Properties:
+                  |         -> Target: This Entity
+                  |         -> Predicate:
+                  |           -> Entity Flags:
+                  |             -> Is On Fire: True
+                  |       -> Entity Properties:
+                  |         -> Target: Direct Attacker
+                  |         -> Predicate:
+                  |           -> Entity Equipment:
+                  |             -> Main Hand:
+                  |               -> Item Predicates:
+                  |                 -> Enchantments:
+                  |                   -> Enchantments:
+                  |                     -> Tag: minecraft:smelts_loot
+                ali:item hybrid_aquatic:jungle_crate x1
+                  | Chance: 0.02%
+                  |   -> luck: max(0%; 1500% + floor(200% × luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 0.23%
+                  |   -> Bad Luck: 0.02%
+                  |   -> Luck 1: 0.02%
+                  |   -> Luck 2: 0.02%
+                  |   -> Luck 3: 0.02%
+                  |   -> Luck 4: 0.02%
+                  |   -> Looting LVL: 0.72% × [2.5%][LVL] | 3.5% + 1% × (LVL − 100%)
+                  |   -> Looting I: 0.03%
+                  |   -> Looting II: 0.03%
+                  |   -> Looting III: 0.04%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Killed by player
+                  | Random Chance With Enchanted Bonus:
+                  |   -> Chance: 0.03
+                  |     -> Looting LVL: [0.03][LVL] | 0.04 + 0.01 × (LVL − 1)
+                  |     -> Looting I: 0.04
+                  |     -> Looting II: 0.04
+                  |     -> Looting III: 0.05
+                  | Entity Properties:
+                  |   -> Target: This Entity
+                  |   -> Predicate:
+                  |     -> Entity Sub Predicate:
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
+                  | ----- Modifiers -----
+                  | Furnace Smelt
+                  |   -> Predicates:
+                  |     -> Any Of:
+                  |       -> Entity Properties:
+                  |         -> Target: This Entity
+                  |         -> Predicate:
+                  |           -> Entity Flags:
+                  |             -> Is On Fire: True
+                  |       -> Entity Properties:
+                  |         -> Target: Direct Attacker
+                  |         -> Predicate:
+                  |           -> Entity Equipment:
+                  |             -> Main Hand:
+                  |               -> Item Predicates:
+                  |                 -> Enchantments:
+                  |                   -> Enchantments:
+                  |                     -> Tag: minecraft:smelts_loot
+                ali:item hybrid_aquatic:bamboo_crate x1
+                  | Chance: 0.02%
+                  |   -> luck: max(0%; 1500% + floor(200% × luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 0.23%
+                  |   -> Bad Luck: 0.02%
+                  |   -> Luck 1: 0.02%
+                  |   -> Luck 2: 0.02%
+                  |   -> Luck 3: 0.02%
+                  |   -> Luck 4: 0.02%
+                  |   -> Looting LVL: 0.72% × [2.5%][LVL] | 3.5% + 1% × (LVL − 100%)
+                  |   -> Looting I: 0.03%
+                  |   -> Looting II: 0.03%
+                  |   -> Looting III: 0.04%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Killed by player
+                  | Random Chance With Enchanted Bonus:
+                  |   -> Chance: 0.03
+                  |     -> Looting LVL: [0.03][LVL] | 0.04 + 0.01 × (LVL − 1)
+                  |     -> Looting I: 0.04
+                  |     -> Looting II: 0.04
+                  |     -> Looting III: 0.05
+                  | Entity Properties:
+                  |   -> Target: This Entity
+                  |   -> Predicate:
+                  |     -> Entity Sub Predicate:
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
+                  | ----- Modifiers -----
+                  | Furnace Smelt
+                  |   -> Predicates:
+                  |     -> Any Of:
+                  |       -> Entity Properties:
+                  |         -> Target: This Entity
+                  |         -> Predicate:
+                  |           -> Entity Flags:
+                  |             -> Is On Fire: True
+                  |       -> Entity Properties:
+                  |         -> Target: Direct Attacker
+                  |         -> Predicate:
+                  |           -> Entity Equipment:
+                  |             -> Main Hand:
+                  |               -> Item Predicates:
+                  |                 -> Enchantments:
+                  |                   -> Enchantments:
+                  |                     -> Tag: minecraft:smelts_loot
+                ali:item hybrid_aquatic:mangrove_crate x1
+                  | Chance: 0.02%
+                  |   -> luck: max(0%; 1500% + floor(200% × luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 0.23%
+                  |   -> Bad Luck: 0.02%
+                  |   -> Luck 1: 0.02%
+                  |   -> Luck 2: 0.02%
+                  |   -> Luck 3: 0.02%
+                  |   -> Luck 4: 0.02%
+                  |   -> Looting LVL: 0.72% × [2.5%][LVL] | 3.5% + 1% × (LVL − 100%)
+                  |   -> Looting I: 0.03%
+                  |   -> Looting II: 0.03%
+                  |   -> Looting III: 0.04%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Killed by player
+                  | Random Chance With Enchanted Bonus:
+                  |   -> Chance: 0.03
+                  |     -> Looting LVL: [0.03][LVL] | 0.04 + 0.01 × (LVL − 1)
+                  |     -> Looting I: 0.04
+                  |     -> Looting II: 0.04
+                  |     -> Looting III: 0.05
+                  | Entity Properties:
+                  |   -> Target: This Entity
+                  |   -> Predicate:
+                  |     -> Entity Sub Predicate:
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
+                  | ----- Modifiers -----
+                  | Furnace Smelt
+                  |   -> Predicates:
+                  |     -> Any Of:
+                  |       -> Entity Properties:
+                  |         -> Target: This Entity
+                  |         -> Predicate:
+                  |           -> Entity Flags:
+                  |             -> Is On Fire: True
+                  |       -> Entity Properties:
+                  |         -> Target: Direct Attacker
+                  |         -> Predicate:
+                  |           -> Entity Equipment:
+                  |             -> Main Hand:
+                  |               -> Item Predicates:
+                  |                 -> Enchantments:
+                  |                   -> Enchantments:
+                  |                     -> Tag: minecraft:smelts_loot
+                ali:item hybrid_aquatic:cherry_crate x1
+                  | Chance: 0.02%
+                  |   -> luck: max(0%; 1500% + floor(200% × luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 0.23%
+                  |   -> Bad Luck: 0.02%
+                  |   -> Luck 1: 0.02%
+                  |   -> Luck 2: 0.02%
+                  |   -> Luck 3: 0.02%
+                  |   -> Luck 4: 0.02%
+                  |   -> Looting LVL: 0.72% × [2.5%][LVL] | 3.5% + 1% × (LVL − 100%)
+                  |   -> Looting I: 0.03%
+                  |   -> Looting II: 0.03%
+                  |   -> Looting III: 0.04%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Killed by player
+                  | Random Chance With Enchanted Bonus:
+                  |   -> Chance: 0.03
+                  |     -> Looting LVL: [0.03][LVL] | 0.04 + 0.01 × (LVL − 1)
+                  |     -> Looting I: 0.04
+                  |     -> Looting II: 0.04
+                  |     -> Looting III: 0.05
+                  | Entity Properties:
+                  |   -> Target: This Entity
+                  |   -> Predicate:
+                  |     -> Entity Sub Predicate:
+                  |       -> Fishing Hook:
+                  |         -> Is In Open Water: True
+                  | ----- Modifiers -----
+                  | Furnace Smelt
+                  |   -> Predicates:
+                  |     -> Any Of:
+                  |       -> Entity Properties:
+                  |         -> Target: This Entity
+                  |         -> Predicate:
+                  |           -> Entity Flags:
+                  |             -> Is On Fire: True
+                  |       -> Entity Properties:
+                  |         -> Target: Direct Attacker
+                  |         -> Predicate:
+                  |           -> Entity Equipment:
+                  |             -> Main Hand:
+                  |               -> Item Predicates:
+                  |                 -> Enchantments:
+                  |                   -> Enchantments:
+                  |                     -> Tag: minecraft:smelts_loot
+          ali:item minecraft:pufferfish x1
+            | Chance: 0.17%
+            |   -> luck: 1300% ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 2.5%
+            |   -> Bad Luck: 0.18%
+            |   -> Luck 1: 0.17%
+            |   -> Luck 2: 0.16%
+            |   -> Luck 3: 0.16%
+            |   -> Luck 4: 0.15%
+            |   -> Looting LVL: 6.84% × [2.5%][LVL] | 3.5% + 1% × (LVL − 100%)
+            |   -> Looting I: 0.24%
+            |   -> Looting II: 0.31%
+            |   -> Looting III: 0.38%
+            | Count: 1
+            | ----- Predicates -----
+            | Killed by player
+            | Random Chance With Enchanted Bonus:
+            |   -> Chance: 0.03
+            |     -> Looting LVL: [0.03][LVL] | 0.04 + 0.01 × (LVL − 1)
+            |     -> Looting I: 0.04
+            |     -> Looting II: 0.04
+            |     -> Looting III: 0.05
+            | ----- Modifiers -----
+            | Furnace Smelt
+            |   -> Predicates:
+            |     -> Any Of:
+            |       -> Entity Properties:
+            |         -> Target: This Entity
+            |         -> Predicate:
+            |           -> Entity Flags:
+            |             -> Is On Fire: True
+            |       -> Entity Properties:
+            |         -> Target: Direct Attacker
+            |         -> Predicate:
+            |           -> Entity Equipment:
+            |             -> Main Hand:
+            |               -> Item Predicates:
+            |                 -> Enchantments:
+            |                   -> Enchantments:
+            |                     -> Tag: minecraft:smelts_loot
+          ali:item minecraft:tropical_fish x1
+            | Chance: 0.03%
+            |   -> luck: 200% ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 2.5%
+            |   -> Bad Luck: 0.03%
+            |   -> Luck 1: 0.03%
+            |   -> Luck 2: 0.03%
+            |   -> Luck 3: 0.02%
+            |   -> Luck 4: 0.02%
+            |   -> Looting LVL: 1.05% × [2.5%][LVL] | 3.5% + 1% × (LVL − 100%)
+            |   -> Looting I: 0.04%
+            |   -> Looting II: 0.05%
+            |   -> Looting III: 0.06%
+            | Count: 1
+            | ----- Predicates -----
+            | Killed by player
+            | Random Chance With Enchanted Bonus:
+            |   -> Chance: 0.03
+            |     -> Looting LVL: [0.03][LVL] | 0.04 + 0.01 × (LVL − 1)
+            |     -> Looting I: 0.04
+            |     -> Looting II: 0.04
+            |     -> Looting III: 0.05
+            | ----- Modifiers -----
+            | Furnace Smelt
+            |   -> Predicates:
+            |     -> Any Of:
+            |       -> Entity Properties:
+            |         -> Target: This Entity
+            |         -> Predicate:
+            |           -> Entity Flags:
+            |             -> Is On Fire: True
+            |       -> Entity Properties:
+            |         -> Target: Direct Attacker
+            |         -> Predicate:
+            |           -> Entity Equipment:
+            |             -> Main Hand:
+            |               -> Item Predicates:
+            |                 -> Enchantments:
+            |                   -> Enchantments:
+            |                     -> Tag: minecraft:smelts_loot
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 80%
+    ali:item minecraft:tide_armor_trim_smithing_template x1
+      | Chance: 20%
+      | Count: 1
