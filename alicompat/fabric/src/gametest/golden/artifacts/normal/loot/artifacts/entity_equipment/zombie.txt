@@ -73,8 +73,7 @@ ali:loot_table
               | Set Components:
               |   -> Components:
               |     -> artifacts:hide_when_invisible
-              |       -> Auto-detected: artifacts:hide_when_invisible
-              |         -> enabled: False
+              |       -> Value: False
             ali:empty
               | Drops nothing
               | Chance: 0.05%
@@ -85,5 +84,4 @@ ali:loot_table
               | Set Components:
               |   -> Components:
               |     -> artifacts:hide_when_invisible
-              |       -> Auto-detected: artifacts:hide_when_invisible
-              |         -> enabled: False
+              |       -> Value: False
