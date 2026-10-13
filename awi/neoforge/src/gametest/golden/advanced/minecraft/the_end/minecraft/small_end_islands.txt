@@ -1,0 +1,37 @@
+awi:biome minecraft:small_end_islands
+  spawn minecraft:enderman
+    | Category: Monster
+    | Weight: 10
+    | Group size: 4
+  awi:base_layout
+    | Generation Step: Base Terrain
+    awi:block minecraft:end_stone
+      | Default Block
+  awi:generation_step 0
+    | Generation Step: Raw Generation
+    awi:placed_feature minecraft:end_island_decorated
+      | Attempts Per Chunk: 1 to 2  ~1 (75%)
+      |   -> 1 (75%)
+      |   -> 2 (25%)
+      |   [chart 0..1 1-2 base=true modes=[true, false] heights=1.0000,0.3333]
+      | Chance: 7.14%
+      | Height: 55 to 70
+      | Configured Feature:
+      |   -> Feature: minecraft:end_island
+      |   -> None Feature:
+      | Placement:
+      |   -> Rarity Filter:
+      |     -> Chance: 14
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 1 to 2  ~1 (75%)
+      |         -> 1 (75%)
+      |         -> 2 (25%)
+      |         [chart 0..1 1-2 base=true modes=[true, false] heights=1.0000,0.3333]
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Absolute Y: 55
+      |       -> Max:
+      |         -> Absolute Y: 70
+      awi:block minecraft:end_stone

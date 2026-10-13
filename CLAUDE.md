@@ -177,6 +177,7 @@ AWI has the same per-loader GameTest over a vanilla world with seed 0 (see `awi/
 ```
 ./gradlew :awi:fabric:runGametest -Precipe_viewer=none
 ./gradlew :awi:forge:runGametest -Precipe_viewer=none -Pawi_golden_regenerate=true
+./gradlew :awi:neoforge:runGametest -Precipe_viewer=none
 ```
 
 Generate data (recipes/loot/lang, per loader) via the IDE run configurations in `.idea/runConfigurations/Minecraft_Data_*.xml`, or the equivalent `run<Platform><Loader>Datagen`-style Gradle tasks wired by the `architectury-loom` plugin. All four mods have datagen; ACI's generates only its own `aci.*` language keys, ALICompat's only the tooltip keys of the compat shims that are built into it. Fabric datagen initialises the `fabric-datagen` entrypoint of every loaded mod, so a broken ACI datagen class breaks ALI's and AWI's datagen runs too.
