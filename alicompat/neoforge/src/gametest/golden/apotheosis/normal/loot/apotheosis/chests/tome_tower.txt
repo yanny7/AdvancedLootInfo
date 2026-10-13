@@ -21,6 +21,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item apotheosis:gem x1
       | Quality: 5
       | Chance: 9.95%

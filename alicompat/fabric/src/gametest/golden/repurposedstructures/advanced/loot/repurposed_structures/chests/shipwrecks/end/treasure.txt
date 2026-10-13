@@ -39,6 +39,7 @@ ali:loot_table
       |   -> Levels: 28 to 40
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:gold_ingot x3-10
       | Chance: 5.88%
       | Count: max(0; U[3; 10])

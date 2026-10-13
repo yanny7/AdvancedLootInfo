@@ -35,18 +35,26 @@ ali:loot_table
     ali:modified
       | Selects only first successful entry
       ali:item minecraft:leather_chestplate x1
-        | Chance: 17.5%
+        | Chance: 11.67%
         | Count: 1
       ali:item minecraft:leather_chestplate x1
-        | Chance: 50%
+        | Chance: 33.33%
         | Count: 1
     ali:modified
       | Selects only first successful entry
       ali:item minecraft:iron_sword x1
-        | Chance: 17.5%
+        | Chance: 11.67%
         | Count: 1
       ali:item minecraft:iron_sword x1
-        | Chance: 50%
+        | Chance: 33.33%
+        | Count: 1
+    ali:modified
+      | Selects only first successful entry
+      ali:item minecraft:iron_spear x1
+        | Chance: 11.67%
+        | Count: 1
+      ali:item minecraft:iron_spear x1
+        | Chance: 33.33%
         | Count: 1
   ali:loot_pool
     | Selects random entry
@@ -65,6 +73,24 @@ ali:loot_table
       | ----- Modifiers -----
       | Set Potion:
       |   -> Potion: Potion of Water Breathing
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 80%
+    ali:item minecraft:copper_nautilus_armor x1
+      | Chance: 10.81%
+      | Count: 1
+    ali:item minecraft:iron_nautilus_armor x1
+      | Chance: 5.41%
+      | Count: 1
+    ali:item minecraft:golden_nautilus_armor x1
+      | Chance: 2.7%
+      | Count: 1
+    ali:item minecraft:diamond_nautilus_armor x1
+      | Chance: 1.08%
+      | Count: 1
   ali:empty
     | Chance: 35%
     | Count: 1

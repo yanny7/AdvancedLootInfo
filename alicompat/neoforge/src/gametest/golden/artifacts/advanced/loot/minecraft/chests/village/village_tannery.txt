@@ -76,7 +76,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.2
                   | Config Value:
-                  |   -> Config: umbrella.generateAsLoot
+                  |   -> Config: items.umbrella.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 33.33%
@@ -100,7 +100,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.2
                   | Config Value:
-                  |   -> Config: whoopee_cushion.generateAsLoot
+                  |   -> Config: items.whoopee_cushion.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 22.22%
@@ -124,7 +124,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.2
                   | Config Value:
-                  |   -> Config: kitty_slippers.generateAsLoot
+                  |   -> Config: items.kitty_slippers.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 11.11%
@@ -148,7 +148,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.2
                   | Config Value:
-                  |   -> Config: bunny_hoppers.generateAsLoot
+                  |   -> Config: items.bunny_hoppers.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 11.11%
@@ -172,7 +172,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.2
                   | Config Value:
-                  |   -> Config: scarf_of_invisibility.generateAsLoot
+                  |   -> Config: items.scarf_of_invisibility.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 11.11%
@@ -196,7 +196,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.2
                   | Config Value:
-                  |   -> Config: anglers_hat.generateAsLoot
+                  |   -> Config: items.anglers_hat.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 11.11%

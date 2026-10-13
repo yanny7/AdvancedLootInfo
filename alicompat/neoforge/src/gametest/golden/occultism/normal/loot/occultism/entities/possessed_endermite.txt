@@ -13,7 +13,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: 0 to 1
+      |   -> Count: 0 to 1
     ali:item minecraft:end_stone_bricks x1-5
       | Chance: 1%
       | Count: 1 to 2
@@ -24,7 +24,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: 0 to 1
+      |   -> Count: 0 to 1
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -38,7 +38,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: 0 to 1
+      |   -> Count: 0 to 1
     ali:item minecraft:spider_eye x1-4
       | Chance: 10%
       | Count: 1
@@ -49,7 +49,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: 0 to 1
+      |   -> Count: 0 to 1
     ali:item minecraft:ender_eye x1-4
       | Chance: 5%
       | Count: 1
@@ -60,4 +60,4 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: 0 to 1
+      |   -> Count: 0 to 1

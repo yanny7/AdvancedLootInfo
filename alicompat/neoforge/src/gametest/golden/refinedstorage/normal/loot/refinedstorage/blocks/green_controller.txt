@@ -10,5 +10,5 @@ ali:loot_table
       | ----- Modifiers -----
       | Copy Stored Energy:
       | Copy Components:
-      |   -> Source: Block Entity
+      |   -> Source: minecraft:block_entity
       |   -> Include: minecraft:custom_name

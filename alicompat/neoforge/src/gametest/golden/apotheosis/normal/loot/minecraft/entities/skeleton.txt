@@ -12,7 +12,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: 0 to 1
+      |   -> Count: 0 to 1
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -25,7 +25,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: 0 to 1
+      |   -> Count: 0 to 1
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -55,6 +55,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
@@ -74,6 +75,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
@@ -93,6 +95,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
@@ -112,6 +115,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
@@ -131,6 +135,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
@@ -150,6 +155,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
@@ -169,6 +175,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
@@ -188,6 +195,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
@@ -207,6 +215,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
@@ -226,6 +235,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
@@ -245,6 +255,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
@@ -264,6 +275,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
@@ -283,6 +295,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
@@ -302,6 +315,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
@@ -321,6 +335,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
@@ -340,6 +355,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
@@ -359,6 +375,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
@@ -378,6 +395,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
@@ -397,6 +415,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
@@ -416,6 +435,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False
@@ -435,6 +455,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         | Set Damage:
         |   -> Damage: 0% to 100%
         |   -> Add: False

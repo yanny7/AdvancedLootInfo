@@ -55,6 +55,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_apple x1
       | Chance: 12.5%
       | Count: 1
@@ -101,6 +102,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:leather_helmet x1
       | Chance: 10.64%
       | Count: 1
@@ -173,6 +175,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:map x1 {"minecraft:item_name":{translate:"filled_map.buried_treasure"}}
       | Chance: 41.67%
       | Count: 1
@@ -1409,3 +1412,4 @@ ali:loot_table
       |   -> Levels: 5 to 25
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False

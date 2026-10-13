@@ -11,6 +11,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:gold_ingot x2-9
       | Chance: 9.66%
       | Count: max(0; U[2; 9])
@@ -1403,6 +1404,7 @@ ali:loot_table
           |   -> Enchantments:
           |     -> Tag: minecraft:on_random_loot
           |   -> Only Compatible: True
+          |   -> Include Additional Cost Component: False
         ali:item minecraft:diamond x1-3
           | Chance: 2.11%
           | Count: max(0; U[1; 3])
@@ -1467,6 +1469,7 @@ ali:loot_table
           | Enchant Randomly:
           |   -> Enchantment: Unbreaking
           |   -> Only Compatible: True
+          |   -> Include Additional Cost Component: False
         ali:item minecraft:dune_armor_trim_smithing_template x2
           | Chance: 14.29%
           | Count: 2

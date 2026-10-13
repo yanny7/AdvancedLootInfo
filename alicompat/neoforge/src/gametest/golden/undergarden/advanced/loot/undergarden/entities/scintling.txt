@@ -16,4 +16,4 @@ ali:entity_loot_table
       |   -> Add: False
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: U[0; 2)
+      |   -> Count: U[0; 2)

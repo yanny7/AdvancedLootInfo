@@ -11,6 +11,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:bone x4-6
       | Chance: 10.5%
       | Count: max(0; U[4; 6])

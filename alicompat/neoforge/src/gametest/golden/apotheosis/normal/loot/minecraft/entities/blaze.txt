@@ -14,7 +14,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: 0 to 1
+      |   -> Count: 0 to 1
   ali:item apotheosis:gem x1
     | Chance: 4%
     | Count: 1

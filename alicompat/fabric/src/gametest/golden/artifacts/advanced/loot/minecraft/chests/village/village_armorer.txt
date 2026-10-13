@@ -50,7 +50,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.1
                     | Config Value:
-                    |   -> Config: steadfast_spikes.generateAsLoot
+                    |   -> Config: items.steadfast_spikes.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 25%
@@ -74,7 +74,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.1
                     | Config Value:
-                    |   -> Config: superstitious_hat.generateAsLoot
+                    |   -> Config: items.superstitious_hat.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 25%
@@ -98,7 +98,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.1
                     | Config Value:
-                    |   -> Config: running_shoes.generateAsLoot
+                    |   -> Config: items.running_shoes.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 25%
@@ -122,7 +122,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.1
                     | Config Value:
-                    |   -> Config: vampiric_glove.generateAsLoot
+                    |   -> Config: items.vampiric_glove.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 25%

@@ -110,7 +110,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: aqua_dashers.generateAsLoot
+                  |   -> Config: items.aqua_dashers.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 1.04%
@@ -134,7 +134,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: onion_ring.generateAsLoot
+                  |   -> Config: items.onion_ring.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 1.04%
@@ -158,7 +158,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: running_shoes.generateAsLoot
+                  |   -> Config: items.running_shoes.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 1.04%
@@ -182,7 +182,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: bunny_hoppers.generateAsLoot
+                  |   -> Config: items.bunny_hoppers.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 1.04%
@@ -206,7 +206,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: vampiric_glove.generateAsLoot
+                  |   -> Config: items.vampiric_glove.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 1.04%
@@ -230,7 +230,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: strider_shoes.generateAsLoot
+                  |   -> Config: items.strider_shoes.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 1.04%

@@ -9,7 +9,7 @@ ali:loot_table
     |   -> Luck 2: 1
     |   -> Luck 3: 1
     |   -> Luck 4: 1
-    ali:item minecraft:raw_copper x3-11
+    ali:item minecraft:raw_copper x3-8
       | Chance: 28.99%
       |   -> luck: 10000% ÷ (20000% + max(0%; 10000% + floor(luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 500% + floor(300% × luck)))
       |   -> Bad Luck: 29.67%
@@ -17,31 +17,35 @@ ali:loot_table
       |   -> Luck 2: 27.7%
       |   -> Luck 3: 27.1%
       |   -> Luck 4: 26.53%
-      | Count: U[3; 5] + binom(0; 8%) + binom(0; 15%)
-      |   -> Fortune LVL: U[3; 5] + binom(LVL; 8%) + binom(LVL; 15%)
-      |   -> Fortune I: 3 to 7  ~5 (33%)
-      |   -> Fortune II: 3 to 9  ~5 (33%)
-      |   -> Fortune III: 3 to 11  ~5 (33%)
-      |   [chart 0..2 3-5 base=true modes=[false, false, false, false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000 | 0..4 3-7 base=false modes=[false, false, true, false, false, false, false, false, false] heights=0.7820,0.9880,1.0000,0.2180,0.0120,0.0000,0.0000,0.0000,0.0000 | 0..6 3-9 base=false modes=[false, false, true, false, false, false, false, false, false] heights=0.6115,0.9337,0.9949,0.3883,0.0663,0.0051,0.0001,0.0000,0.0000 | 0..8 3-11 base=false modes=[false, false, true, false, false, false, false, false, false] heights=0.4782,0.8561,0.9777,0.5198,0.1438,0.0223,0.0020,0.0001,0.0000]
+      | Count: max(0; U[3; 5]) + binom(0; 15%)
+      |   -> Fortune LVL: max(0; U[3; 5]) + binom(LVL; 15%)
+      |   -> Fortune I: 3 to 6  ~4 to 5 (33%)
+      |   -> Fortune II: 3 to 7  ~5 (33%)
+      |   -> Fortune III: 3 to 8  ~5 (33%)
+      |   [chart 0..2 3-5 base=true modes=[false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,0.0000,0.0000,0.0000 | 0..3 3-6 base=false modes=[false, true, true, false, false, false] heights=0.8500,1.0000,1.0000,0.1500,0.0000,0.0000 | 0..4 3-7 base=false modes=[false, false, true, false, false, false] heights=0.7225,0.9775,1.0000,0.2775,0.0225,0.0000 | 0..5 3-8 base=false modes=[false, false, true, false, false, false] heights=0.6141,0.9392,0.9966,0.3859,0.0608,0.0034]
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Item Predicates:
-      |       -> Enchantments:
-      |         -> Enchantment: Silk Touch
-      |         -> Level: ≥ 1
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> minecraft:enchantments
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
       | ----- Modifiers -----
       | Apply Bonus:
       |   -> Enchantment: Fortune
       |   -> Formula: minecraft:binomial_with_bonus_count
       |     -> Extra Rounds: 0
       |     -> Probability: 0.08
+      | Set Count:
+      |   -> Count: 3 to 5
+      |   -> Add: False
       | Apply Bonus:
       |   -> Enchantment: Fortune
       |   -> Formula: minecraft:binomial_with_bonus_count
       |     -> Extra Rounds: 0
       |     -> Probability: 0.15
-    ali:item minecraft:raw_iron x3-11
+    ali:item minecraft:raw_iron x3-8
       | Quality: 1
       | Chance: 28.99%
       |   -> luck: max(0%; 10000% + floor(luck)) ÷ (20000% + max(0%; 10000% + floor(luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 500% + floor(300% × luck)))
@@ -50,31 +54,35 @@ ali:loot_table
       |   -> Luck 2: 28.25%
       |   -> Luck 3: 27.91%
       |   -> Luck 4: 27.59%
-      | Count: U[3; 5] + binom(0; 8%) + binom(0; 15%)
-      |   -> Fortune LVL: U[3; 5] + binom(LVL; 8%) + binom(LVL; 15%)
-      |   -> Fortune I: 3 to 7  ~5 (33%)
-      |   -> Fortune II: 3 to 9  ~5 (33%)
-      |   -> Fortune III: 3 to 11  ~5 (33%)
-      |   [chart 0..2 3-5 base=true modes=[false, false, false, false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000 | 0..4 3-7 base=false modes=[false, false, true, false, false, false, false, false, false] heights=0.7820,0.9880,1.0000,0.2180,0.0120,0.0000,0.0000,0.0000,0.0000 | 0..6 3-9 base=false modes=[false, false, true, false, false, false, false, false, false] heights=0.6115,0.9337,0.9949,0.3883,0.0663,0.0051,0.0001,0.0000,0.0000 | 0..8 3-11 base=false modes=[false, false, true, false, false, false, false, false, false] heights=0.4782,0.8561,0.9777,0.5198,0.1438,0.0223,0.0020,0.0001,0.0000]
+      | Count: max(0; U[3; 5]) + binom(0; 15%)
+      |   -> Fortune LVL: max(0; U[3; 5]) + binom(LVL; 15%)
+      |   -> Fortune I: 3 to 6  ~4 to 5 (33%)
+      |   -> Fortune II: 3 to 7  ~5 (33%)
+      |   -> Fortune III: 3 to 8  ~5 (33%)
+      |   [chart 0..2 3-5 base=true modes=[false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,0.0000,0.0000,0.0000 | 0..3 3-6 base=false modes=[false, true, true, false, false, false] heights=0.8500,1.0000,1.0000,0.1500,0.0000,0.0000 | 0..4 3-7 base=false modes=[false, false, true, false, false, false] heights=0.7225,0.9775,1.0000,0.2775,0.0225,0.0000 | 0..5 3-8 base=false modes=[false, false, true, false, false, false] heights=0.6141,0.9392,0.9966,0.3859,0.0608,0.0034]
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Item Predicates:
-      |       -> Enchantments:
-      |         -> Enchantment: Silk Touch
-      |         -> Level: ≥ 1
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> minecraft:enchantments
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
       | ----- Modifiers -----
       | Apply Bonus:
       |   -> Enchantment: Fortune
       |   -> Formula: minecraft:binomial_with_bonus_count
       |     -> Extra Rounds: 0
       |     -> Probability: 0.08
+      | Set Count:
+      |   -> Count: 3 to 5
+      |   -> Add: False
       | Apply Bonus:
       |   -> Enchantment: Fortune
       |   -> Formula: minecraft:binomial_with_bonus_count
       |     -> Extra Rounds: 0
       |     -> Probability: 0.15
-    ali:item minecraft:coal x2-16
+    ali:item minecraft:coal x2-13
       | Chance: 28.99%
       |   -> luck: 10000% ÷ (20000% + max(0%; 10000% + floor(luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 500% + floor(300% × luck)))
       |   -> Bad Luck: 29.67%
@@ -82,31 +90,35 @@ ali:loot_table
       |   -> Luck 2: 27.7%
       |   -> Luck 3: 27.1%
       |   -> Luck 4: 26.53%
-      | Count: U[2; 10] + binom(0; 8%) + binom(0; 20%)
-      |   -> Fortune LVL: U[2; 10] + binom(LVL; 8%) + binom(LVL; 20%)
-      |   -> Fortune I: 2 to 12  ~4 to 10 (11%)
-      |   -> Fortune II: 2 to 14  ~6 to 10 (11%)
-      |   -> Fortune III: 2 to 16  ~8 to 10 (11%)
-      |   [chart 0..8 2-10 base=true modes=[false, false, false, false, false, false, false, false, false, false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000 | 0..10 2-12 base=false modes=[false, false, true, true, true, true, true, true, true, false, false, false, false, false, false] heights=0.7360,0.9840,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.2640,0.0160,0.0000,0.0000,0.0000,0.0000 | 0..12 2-14 base=false modes=[false, false, false, false, true, true, true, true, true, false, false, false, false, false, false] heights=0.5417,0.9068,0.9918,0.9997,1.0000,1.0000,1.0000,1.0000,1.0000,0.4583,0.0932,0.0082,0.0003,0.0000,0.0000 | 0..14 2-16 base=false modes=[false, false, false, false, false, false, true, true, true, false, false, false, false, false, false] heights=0.3987,0.8017,0.9635,0.9963,0.9998,1.0000,1.0000,1.0000,1.0000,0.6013,0.1983,0.0365,0.0037,0.0002,0.0000]
+      | Count: max(0; U[2; 10]) + binom(0; 20%)
+      |   -> Fortune LVL: max(0; U[2; 10]) + binom(LVL; 20%)
+      |   -> Fortune I: 2 to 11  ~3 to 10 (11%)
+      |   -> Fortune II: 2 to 12  ~4 to 10 (11%)
+      |   -> Fortune III: 2 to 13  ~5 to 10 (11%)
+      |   [chart 0..8 2-10 base=true modes=[false, false, false, false, false, false, false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.0000,0.0000,0.0000 | 0..9 2-11 base=false modes=[false, true, true, true, true, true, true, true, true, false, false, false] heights=0.8000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.2000,0.0000,0.0000 | 0..10 2-12 base=false modes=[false, false, true, true, true, true, true, true, true, false, false, false] heights=0.6400,0.9600,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.3600,0.0400,0.0000 | 0..11 2-13 base=false modes=[false, false, false, true, true, true, true, true, true, false, false, false] heights=0.5120,0.8960,0.9920,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.4880,0.1040,0.0080]
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Item Predicates:
-      |       -> Enchantments:
-      |         -> Enchantment: Silk Touch
-      |         -> Level: ≥ 1
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> minecraft:enchantments
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
       | ----- Modifiers -----
       | Apply Bonus:
       |   -> Enchantment: Fortune
       |   -> Formula: minecraft:binomial_with_bonus_count
       |     -> Extra Rounds: 0
       |     -> Probability: 0.08
+      | Set Count:
+      |   -> Count: 2 to 10
+      |   -> Add: False
       | Apply Bonus:
       |   -> Enchantment: Fortune
       |   -> Formula: minecraft:binomial_with_bonus_count
       |     -> Extra Rounds: 0
       |     -> Probability: 0.2
-    ali:item minecraft:raw_gold x2-11
+    ali:item minecraft:raw_gold x2-8
       | Quality: 2
       | Chance: 5.8%
       |   -> luck: max(0%; 2000% + floor(200% × luck)) ÷ (20000% + max(0%; 10000% + floor(luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 500% + floor(300% × luck)))
@@ -115,31 +127,35 @@ ali:loot_table
       |   -> Luck 2: 6.65%
       |   -> Luck 3: 7.05%
       |   -> Luck 4: 7.43%
-      | Count: U[2; 5] + binom(0; 8%) + binom(0; 15%)
-      |   -> Fortune LVL: U[2; 5] + binom(LVL; 8%) + binom(LVL; 15%)
-      |   -> Fortune I: 2 to 7  ~4 to 5 (25%)
-      |   -> Fortune II: 2 to 9  ~5 (25%)
-      |   -> Fortune III: 2 to 11  ~5 (25%)
-      |   [chart 0..3 2-5 base=true modes=[false, false, false, false, false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,1.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000 | 0..5 2-7 base=false modes=[false, false, true, true, false, false, false, false, false, false] heights=0.7820,0.9880,1.0000,1.0000,0.2180,0.0120,0.0000,0.0000,0.0000,0.0000 | 0..7 2-9 base=false modes=[false, false, false, true, false, false, false, false, false, false] heights=0.6115,0.9337,0.9949,0.9999,0.3885,0.0663,0.0051,0.0001,0.0000,0.0000 | 0..9 2-11 base=false modes=[false, false, false, true, false, false, false, false, false, false] heights=0.4782,0.8561,0.9777,0.9980,0.5217,0.1439,0.0223,0.0020,0.0001,0.0000]
+      | Count: max(0; U[2; 5]) + binom(0; 15%)
+      |   -> Fortune LVL: max(0; U[2; 5]) + binom(LVL; 15%)
+      |   -> Fortune I: 2 to 6  ~3 to 5 (25%)
+      |   -> Fortune II: 2 to 7  ~4 to 5 (25%)
+      |   -> Fortune III: 2 to 8  ~5 (25%)
+      |   [chart 0..3 2-5 base=true modes=[false, false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,1.0000,0.0000,0.0000,0.0000 | 0..4 2-6 base=false modes=[false, true, true, true, false, false, false] heights=0.8500,1.0000,1.0000,1.0000,0.1500,0.0000,0.0000 | 0..5 2-7 base=false modes=[false, false, true, true, false, false, false] heights=0.7225,0.9775,1.0000,1.0000,0.2775,0.0225,0.0000 | 0..6 2-8 base=false modes=[false, false, false, true, false, false, false] heights=0.6141,0.9392,0.9966,1.0000,0.3859,0.0608,0.0034]
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Item Predicates:
-      |       -> Enchantments:
-      |         -> Enchantment: Silk Touch
-      |         -> Level: ≥ 1
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> minecraft:enchantments
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
       | ----- Modifiers -----
       | Apply Bonus:
       |   -> Enchantment: Fortune
       |   -> Formula: minecraft:binomial_with_bonus_count
       |     -> Extra Rounds: 0
       |     -> Probability: 0.08
+      | Set Count:
+      |   -> Count: 2 to 5
+      |   -> Add: False
       | Apply Bonus:
       |   -> Enchantment: Fortune
       |   -> Formula: minecraft:binomial_with_bonus_count
       |     -> Extra Rounds: 0
       |     -> Probability: 0.15
-    ali:item minecraft:lapis_lazuli x2-13
+    ali:item minecraft:lapis_lazuli x2-10
       | Quality: 2
       | Chance: 5.8%
       |   -> luck: max(0%; 2000% + floor(200% × luck)) ÷ (20000% + max(0%; 10000% + floor(luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 500% + floor(300% × luck)))
@@ -148,31 +164,35 @@ ali:loot_table
       |   -> Luck 2: 6.65%
       |   -> Luck 3: 7.05%
       |   -> Luck 4: 7.43%
-      | Count: U[2; 7] + binom(0; 8%) + binom(0; 15%)
-      |   -> Fortune LVL: U[2; 7] + binom(LVL; 8%) + binom(LVL; 15%)
-      |   -> Fortune I: 2 to 9  ~4 to 7 (17%)
-      |   -> Fortune II: 2 to 11  ~6 to 7 (17%)
-      |   -> Fortune III: 2 to 13  ~7 (17%)
-      |   [chart 0..5 2-7 base=true modes=[false, false, false, false, false, false, false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000 | 0..7 2-9 base=false modes=[false, false, true, true, true, true, false, false, false, false, false, false] heights=0.7820,0.9880,1.0000,1.0000,1.0000,1.0000,0.2180,0.0120,0.0000,0.0000,0.0000,0.0000 | 0..9 2-11 base=false modes=[false, false, false, false, true, true, false, false, false, false, false, false] heights=0.6115,0.9337,0.9949,0.9999,1.0000,1.0000,0.3885,0.0663,0.0051,0.0001,0.0000,0.0000 | 0..11 2-13 base=false modes=[false, false, false, false, false, true, false, false, false, false, false, false] heights=0.4782,0.8561,0.9777,0.9980,0.9999,1.0000,0.5218,0.1439,0.0223,0.0020,0.0001,0.0000]
+      | Count: max(0; U[2; 7]) + binom(0; 15%)
+      |   -> Fortune LVL: max(0; U[2; 7]) + binom(LVL; 15%)
+      |   -> Fortune I: 2 to 8  ~3 to 7 (17%)
+      |   -> Fortune II: 2 to 9  ~4 to 7 (17%)
+      |   -> Fortune III: 2 to 10  ~5 to 7 (17%)
+      |   [chart 0..5 2-7 base=true modes=[false, false, false, false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.0000,0.0000,0.0000 | 0..6 2-8 base=false modes=[false, true, true, true, true, true, false, false, false] heights=0.8500,1.0000,1.0000,1.0000,1.0000,1.0000,0.1500,0.0000,0.0000 | 0..7 2-9 base=false modes=[false, false, true, true, true, true, false, false, false] heights=0.7225,0.9775,1.0000,1.0000,1.0000,1.0000,0.2775,0.0225,0.0000 | 0..8 2-10 base=false modes=[false, false, false, true, true, true, false, false, false] heights=0.6141,0.9392,0.9966,1.0000,1.0000,1.0000,0.3859,0.0608,0.0034]
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Item Predicates:
-      |       -> Enchantments:
-      |         -> Enchantment: Silk Touch
-      |         -> Level: ≥ 1
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> minecraft:enchantments
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
       | ----- Modifiers -----
       | Apply Bonus:
       |   -> Enchantment: Fortune
       |   -> Formula: minecraft:binomial_with_bonus_count
       |     -> Extra Rounds: 0
       |     -> Probability: 0.08
+      | Set Count:
+      |   -> Count: 2 to 7
+      |   -> Add: False
       | Apply Bonus:
       |   -> Enchantment: Fortune
       |   -> Formula: minecraft:binomial_with_bonus_count
       |     -> Extra Rounds: 0
       |     -> Probability: 0.15
-    ali:item minecraft:diamond x1-5
+    ali:item minecraft:diamond x1-2
       | Quality: 3
       | Chance: 1.45%
       |   -> luck: max(0%; 500% + floor(300% × luck)) ÷ (20000% + max(0%; 10000% + floor(luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 500% + floor(300% × luck)))
@@ -181,25 +201,24 @@ ali:loot_table
       |   -> Luck 2: 3.05%
       |   -> Luck 3: 3.79%
       |   -> Luck 4: 4.51%
-      | Count: U[1; 2] + binom(0; 8%)
-      |   -> Fortune LVL: U[1; 2] + binom(LVL; 8%)
-      |   -> Fortune I: 1 to 3  ~2 (50%)
-      |   -> Fortune II: 1 to 4  ~2 (50%)
-      |   -> Fortune III: 1 to 5  ~2 (49%)
-      |   [chart 0..1 1-2 base=true modes=[false, false, false, false, false] heights=1.0000,1.0000,0.0000,0.0000,0.0000 | 0..2 1-3 base=false modes=[false, true, false, false, false] heights=0.9200,1.0000,0.0800,0.0000,0.0000 | 0..3 1-4 base=false modes=[false, true, false, false, false] heights=0.8464,0.9936,0.1536,0.0064,0.0000 | 0..4 1-5 base=false modes=[false, true, false, false, false] heights=0.7787,0.9818,0.2208,0.0182,0.0005]
+      | Count: max(0; U[1; 2])
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Item Predicates:
-      |       -> Enchantments:
-      |         -> Enchantment: Silk Touch
-      |         -> Level: ≥ 1
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> minecraft:enchantments
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
       | ----- Modifiers -----
       | Apply Bonus:
       |   -> Enchantment: Fortune
       |   -> Formula: minecraft:binomial_with_bonus_count
       |     -> Extra Rounds: 0
       |     -> Probability: 0.08
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -217,13 +236,18 @@ ali:loot_table
       |   -> Luck 2: 27.7%
       |   -> Luck 3: 27.1%
       |   -> Luck 4: 26.53%
-      | Count: 1 to 3
+      | Count: max(0; U[1; 3])
       | ----- Predicates -----
       | Match Tool:
-      |   -> Item Predicates:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |   -> Components:
+      |     -> Partial Matchers:
+      |       -> minecraft:enchantments
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 3
+      |   -> Add: False
     ali:item minecraft:iron_ore x1-3
       | Quality: 1
       | Chance: 28.99%
@@ -233,13 +257,18 @@ ali:loot_table
       |   -> Luck 2: 28.25%
       |   -> Luck 3: 27.91%
       |   -> Luck 4: 27.59%
-      | Count: 1 to 3
+      | Count: max(0; U[1; 3])
       | ----- Predicates -----
       | Match Tool:
-      |   -> Item Predicates:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |   -> Components:
+      |     -> Partial Matchers:
+      |       -> minecraft:enchantments
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 3
+      |   -> Add: False
     ali:item minecraft:coal_ore x2-5
       | Chance: 28.99%
       |   -> luck: 10000% ÷ (20000% + max(0%; 10000% + floor(luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 2000% + floor(200% × luck)) + max(0%; 500% + floor(300% × luck)))
@@ -248,13 +277,18 @@ ali:loot_table
       |   -> Luck 2: 27.7%
       |   -> Luck 3: 27.1%
       |   -> Luck 4: 26.53%
-      | Count: 2 to 5
+      | Count: max(0; U[2; 5])
       | ----- Predicates -----
       | Match Tool:
-      |   -> Item Predicates:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |   -> Components:
+      |     -> Partial Matchers:
+      |       -> minecraft:enchantments
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 5
+      |   -> Add: False
     ali:item minecraft:gold_ore x1-3
       | Quality: 2
       | Chance: 5.8%
@@ -264,13 +298,18 @@ ali:loot_table
       |   -> Luck 2: 6.65%
       |   -> Luck 3: 7.05%
       |   -> Luck 4: 7.43%
-      | Count: 1 to 3
+      | Count: max(0; U[1; 3])
       | ----- Predicates -----
       | Match Tool:
-      |   -> Item Predicates:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |   -> Components:
+      |     -> Partial Matchers:
+      |       -> minecraft:enchantments
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 3
+      |   -> Add: False
     ali:item minecraft:lapis_ore x2-5
       | Quality: 2
       | Chance: 5.8%
@@ -280,13 +319,18 @@ ali:loot_table
       |   -> Luck 2: 6.65%
       |   -> Luck 3: 7.05%
       |   -> Luck 4: 7.43%
-      | Count: 2 to 5
+      | Count: max(0; U[2; 5])
       | ----- Predicates -----
       | Match Tool:
-      |   -> Item Predicates:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |   -> Components:
+      |     -> Partial Matchers:
+      |       -> minecraft:enchantments
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 5
+      |   -> Add: False
     ali:item minecraft:diamond_ore x1
       | Quality: 3
       | Chance: 1.45%
@@ -299,10 +343,15 @@ ali:loot_table
       | Count: 1
       | ----- Predicates -----
       | Match Tool:
-      |   -> Item Predicates:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |   -> Components:
+      |     -> Partial Matchers:
+      |       -> minecraft:enchantments
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -319,14 +368,15 @@ ali:loot_table
       |         -> Tag: minecraft:is_mountain
       |   -> Inverted:
       |     -> Match Tool:
-      |       -> Item Predicates:
-      |         -> Enchantments:
-      |           -> Enchantment: Silk Touch
-      |           -> Level: ≥ 1
+      |       -> Components:
+      |         -> Partial Matchers:
+      |           -> minecraft:enchantments
+      |             -> Enchantment: Silk Touch
+      |             -> Level: ≥ 1
     ali:item minecraft:emerald x1-5
       | Chance: 15%
-      | Count: U[1; 2] + binom(0; 8%)
-      |   -> Fortune LVL: U[1; 2] + binom(LVL; 8%)
+      | Count: max(0; U[1; 2]) + binom(0; 8%)
+      |   -> Fortune LVL: max(0; U[1; 2]) + binom(LVL; 8%)
       |   -> Fortune I: 1 to 3  ~2 (50%)
       |   -> Fortune II: 1 to 4  ~2 (50%)
       |   -> Fortune III: 1 to 5  ~2 (49%)
@@ -341,11 +391,15 @@ ali:loot_table
       |         -> Tag: minecraft:is_mountain
       |   -> Inverted:
       |     -> Match Tool:
-      |       -> Item Predicates:
-      |         -> Enchantments:
-      |           -> Enchantment: Silk Touch
-      |           -> Level: ≥ 1
+      |       -> Components:
+      |         -> Partial Matchers:
+      |           -> minecraft:enchantments
+      |             -> Enchantment: Silk Touch
+      |             -> Level: ≥ 1
       | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
       | Apply Bonus:
       |   -> Enchantment: Fortune
       |   -> Formula: minecraft:binomial_with_bonus_count
@@ -366,10 +420,11 @@ ali:loot_table
       |       -> Biomes:
       |         -> Tag: minecraft:is_mountain
       |   -> Match Tool:
-      |     -> Item Predicates:
-      |       -> Enchantments:
-      |         -> Enchantment: Silk Touch
-      |         -> Level: ≥ 1
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> minecraft:enchantments
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
     ali:item minecraft:emerald_ore x1
       | Chance: 15%
       | Count: 1
@@ -382,7 +437,12 @@ ali:loot_table
       |       -> Biomes:
       |         -> Tag: minecraft:is_mountain
       |   -> Match Tool:
-      |     -> Item Predicates:
-      |       -> Enchantments:
-      |         -> Enchantment: Silk Touch
-      |         -> Level: ≥ 1
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> minecraft:enchantments
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False

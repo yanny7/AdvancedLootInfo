@@ -17,7 +17,7 @@ ali:entity_loot_table
       |   -> Add: False
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: U[0; 1)
+      |   -> Count: U[0; 1)
     ali:item minecraft:glowstone_dust x0-5
       | Chance: 14.29%
       | Count: max(0; U[0; 2])
@@ -32,7 +32,7 @@ ali:entity_loot_table
       |   -> Add: False
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: U[0; 1)
+      |   -> Count: U[0; 1)
     ali:item minecraft:sugar x0-5
       | Chance: 14.29%
       | Count: max(0; U[0; 2])
@@ -47,7 +47,7 @@ ali:entity_loot_table
       |   -> Add: False
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: U[0; 1)
+      |   -> Count: U[0; 1)
     ali:item minecraft:spider_eye x0-5
       | Chance: 14.29%
       | Count: max(0; U[0; 2])
@@ -62,7 +62,7 @@ ali:entity_loot_table
       |   -> Add: False
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: U[0; 1)
+      |   -> Count: U[0; 1)
     ali:item minecraft:glass_bottle x0-5
       | Chance: 14.29%
       | Count: max(0; U[0; 2])
@@ -77,7 +77,7 @@ ali:entity_loot_table
       |   -> Add: False
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: U[0; 1)
+      |   -> Count: U[0; 1)
     ali:item minecraft:gunpowder x0-5
       | Chance: 14.29%
       | Count: max(0; U[0; 2])
@@ -92,7 +92,7 @@ ali:entity_loot_table
       |   -> Add: False
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: U[0; 1)
+      |   -> Count: U[0; 1)
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -109,7 +109,7 @@ ali:entity_loot_table
       |   -> Add: False
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: U[0; 1)
+      |   -> Count: U[0; 1)
   ali:loot_pool
     | Selects random entry
     | Rolls: 1

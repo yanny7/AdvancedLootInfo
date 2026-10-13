@@ -50,6 +50,7 @@ ali:loot_table
       |   -> Levels: 25 to 35
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
   ali:loot_pool
     | Selects random entry
     | Rolls: 1

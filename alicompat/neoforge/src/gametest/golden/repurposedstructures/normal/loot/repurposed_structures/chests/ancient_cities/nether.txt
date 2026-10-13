@@ -4,36 +4,37 @@ ali:loot_table
     | Selects random entry
     | Rolls: 5 to 10
     ali:item minecraft:enchanted_book x1
-      | Chance: 8.57%
+      | Chance: 8.77%
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:gold_ingot x6-15
-      | Chance: 8%
+      | Chance: 8.19%
       | Count: 6 to 15
     ali:item minecraft:potion x1-3 {"minecraft:potion_contents":{potion:"minecraft:strong_regeneration"}}
-      | Chance: 5.71%
+      | Chance: 5.85%
       | Count: 1 to 3
       | ----- Modifiers -----
       | Set Potion:
       |   -> Potion: Potion of Regeneration
     ali:item minecraft:book x3-10
-      | Chance: 5.71%
+      | Chance: 5.85%
       | Count: 3 to 10
     ali:item minecraft:bone x1-15
-      | Chance: 5.71%
+      | Chance: 5.85%
       | Count: 1 to 15
     ali:item minecraft:glowstone x1-3
-      | Chance: 5.71%
+      | Chance: 5.85%
       | Count: 1 to 3
     ali:item minecraft:blaze_powder x1-3
-      | Chance: 4.57%
+      | Chance: 4.68%
       | Count: 1 to 3
     ali:item minecraft:enchanted_book x1
-      | Chance: 4%
+      | Chance: 4.09%
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
@@ -45,43 +46,42 @@ ali:loot_table
       |     -> Unbreaking
       |     -> Curse of Vanishing
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:black_candle x1-4
-      | Chance: 3.43%
+      | Chance: 3.51%
       | Count: 1 to 4
     ali:item minecraft:red_candle x1-4
-      | Chance: 3.43%
+      | Chance: 3.51%
       | Count: 1 to 4
     ali:item minecraft:ghast_tear x1-15
-      | Chance: 3.43%
+      | Chance: 3.51%
       | Count: 1 to 15
     ali:item minecraft:experience_bottle x1-3
-      | Chance: 3.43%
+      | Chance: 3.51%
       | Count: 1 to 3
     ali:item minecraft:quartz x1-15
-      | Chance: 3.43%
+      | Chance: 3.51%
       | Count: 1 to 15
     ali:item minecraft:iron_leggings x1 {"minecraft:enchantment_glint_override":1b}
-      | Chance: 3.43%
+      | Chance: 3.51%
       | Count: 1
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 20 to 39
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:disc_fragment_5 x1-3
-      | Chance: 2.29%
+      | Chance: 2.34%
       | Count: 1 to 3
     ali:item minecraft:compass x1
-      | Chance: 2.29%
+      | Chance: 2.34%
       | Count: 1
     ali:item minecraft:coal_block x2-4
-      | Chance: 2.29%
+      | Chance: 2.34%
       | Count: 2 to 4
-    ali:item minecraft:name_tag x1
-      | Chance: 2.29%
-      | Count: 1
     ali:item minecraft:netherite_hoe x1 {"minecraft:enchantment_glint_override":1b}
-      | Chance: 2.29%
+      | Chance: 2.34%
       | Count: 1
       | ----- Modifiers -----
       | Set Damage:
@@ -91,49 +91,51 @@ ali:loot_table
       |   -> Levels: 30 to 50
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:lead x1
-      | Chance: 2.29%
+      | Chance: 2.34%
       | Count: 1
     ali:item minecraft:golden_horse_armor x1
-      | Chance: 2.29%
+      | Chance: 2.34%
       | Count: 1
     ali:item minecraft:saddle x1
-      | Chance: 2.29%
+      | Chance: 2.34%
       | Count: 1
     ali:item minecraft:music_disc_blocks x1
-      | Chance: 2.29%
+      | Chance: 2.34%
       | Count: 1
     ali:item minecraft:music_disc_pigstep x1
-      | Chance: 2.29%
+      | Chance: 2.34%
       | Count: 1
     ali:item minecraft:golden_leggings x1 {"minecraft:enchantment_glint_override":1b}
-      | Chance: 2.29%
+      | Chance: 2.34%
       | Count: 1
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 40 to 60
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:fire_resistance"}}
-      | Chance: 1.71%
+      | Chance: 1.75%
       | Count: 1
       | ----- Modifiers -----
       | Set Potion:
       |   -> Potion: Potion of Fire Resistance
     ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:strong_leaping"}}
-      | Chance: 1.71%
+      | Chance: 1.75%
       | Count: 1
       | ----- Modifiers -----
       | Set Potion:
       |   -> Potion: Potion of Leaping
     ali:item minecraft:enchanted_golden_apple x1-2
-      | Chance: 1.14%
+      | Chance: 1.17%
       | Count: 1 to 2
     ali:item minecraft:music_disc_otherside x1
-      | Chance: 1.14%
+      | Chance: 1.17%
       | Count: 1
     ali:item minecraft:ancient_debris x1
-      | Chance: 0.57%
+      | Chance: 0.58%
       | Count: 1
   ali:loot_pool
     | Selects random entry
@@ -1343,81 +1345,81 @@ ali:loot_table
         | Selects random entry
         | Rolls: 5 to 10
         ali:item minecraft:coal x6-15
-          | Chance: 8.14%
+          | Chance: 8.33%
           | Count: 6 to 15
         ali:item minecraft:potion x1-3 {"minecraft:potion_contents":{potion:"minecraft:strong_regeneration"}}
-          | Chance: 5.81%
+          | Chance: 5.95%
           | Count: 1 to 3
           | ----- Modifiers -----
           | Set Potion:
           |   -> Potion: Potion of Regeneration
         ali:item minecraft:enchanted_book x1
-          | Chance: 5.81%
+          | Chance: 5.95%
           | Count: 1
           | ----- Modifiers -----
           | Enchant Randomly:
           |   -> Enchantments:
           |     -> Tag: minecraft:on_random_loot
           |   -> Only Compatible: True
+          |   -> Include Additional Cost Component: False
         ali:item minecraft:book x3-10
-          | Chance: 5.81%
+          | Chance: 5.95%
           | Count: 3 to 10
         ali:item minecraft:bone x1-15
-          | Chance: 5.81%
+          | Chance: 5.95%
           | Count: 1 to 15
         ali:item minecraft:soul_torch x1-15
-          | Chance: 5.81%
+          | Chance: 5.95%
           | Count: 1 to 15
         ali:item minecraft:echo_shard x1-3
-          | Chance: 4.65%
+          | Chance: 4.76%
           | Count: 1 to 3
         ali:item minecraft:disc_fragment_5 x1-3
-          | Chance: 4.65%
+          | Chance: 4.76%
           | Count: 1 to 3
         ali:item minecraft:enchanted_book x1
-          | Chance: 3.49%
+          | Chance: 3.57%
           | Count: 1
           | ----- Modifiers -----
           | Enchant Randomly:
           |   -> Enchantment: Swift Sneak
           |   -> Only Compatible: True
+          |   -> Include Additional Cost Component: False
         ali:item minecraft:sculk x4-10
-          | Chance: 3.49%
+          | Chance: 3.57%
           | Count: 4 to 10
         ali:item minecraft:sculk_sensor x1-3
-          | Chance: 3.49%
+          | Chance: 3.57%
           | Count: 1 to 3
         ali:item minecraft:candle x1-4
-          | Chance: 3.49%
+          | Chance: 3.57%
           | Count: 1 to 4
         ali:item minecraft:amethyst_shard x1-15
-          | Chance: 3.49%
+          | Chance: 3.57%
           | Count: 1 to 15
         ali:item minecraft:experience_bottle x1-3
-          | Chance: 3.49%
+          | Chance: 3.57%
           | Count: 1 to 3
         ali:item minecraft:glow_berries x1-15
-          | Chance: 3.49%
+          | Chance: 3.57%
           | Count: 1 to 15
         ali:item minecraft:iron_leggings x1 {"minecraft:enchantment_glint_override":1b}
-          | Chance: 3.49%
+          | Chance: 3.57%
           | Count: 1
           | ----- Modifiers -----
           | Enchant With Levels:
           |   -> Levels: 20 to 39
           |   -> Options:
           |     -> Tag: minecraft:on_random_loot
+          |   -> Include Additional Cost Component: False
         ali:item minecraft:compass x1
-          | Chance: 2.33%
+          | Chance: 2.38%
           | Count: 1
         ali:item minecraft:sculk_catalyst x1-2
-          | Chance: 2.33%
+          | Chance: 2.38%
           | Count: 1 to 2
-        ali:item minecraft:name_tag x1
-          | Chance: 2.33%
-          | Count: 1
         ali:item minecraft:diamond_hoe x1 {"minecraft:enchantment_glint_override":1b}
-          | Chance: 2.33%
+          | Chance: 2.38%
           | Count: 1
           | ----- Modifiers -----
           | Set Damage:
@@ -1427,34 +1429,36 @@ ali:loot_table
           |   -> Levels: 30 to 50
           |   -> Options:
           |     -> Tag: minecraft:on_random_loot
+          |   -> Include Additional Cost Component: False
         ali:item minecraft:lead x1
-          | Chance: 2.33%
+          | Chance: 2.38%
           | Count: 1
         ali:item minecraft:diamond_horse_armor x1
-          | Chance: 2.33%
+          | Chance: 2.38%
           | Count: 1
         ali:item minecraft:saddle x1
-          | Chance: 2.33%
+          | Chance: 2.38%
           | Count: 1
         ali:item minecraft:music_disc_13 x1
-          | Chance: 2.33%
+          | Chance: 2.38%
           | Count: 1
         ali:item minecraft:music_disc_cat x1
-          | Chance: 2.33%
+          | Chance: 2.38%
           | Count: 1
         ali:item minecraft:diamond_leggings x1 {"minecraft:enchantment_glint_override":1b}
-          | Chance: 2.33%
+          | Chance: 2.38%
           | Count: 1
           | ----- Modifiers -----
           | Enchant With Levels:
           |   -> Levels: 30 to 50
           |   -> Options:
           |     -> Tag: minecraft:on_random_loot
+          |   -> Include Additional Cost Component: False
         ali:item minecraft:enchanted_golden_apple x1-2
-          | Chance: 1.16%
+          | Chance: 1.19%
           | Count: 1 to 2
         ali:item minecraft:music_disc_otherside x1
-          | Chance: 1.16%
+          | Chance: 1.19%
           | Count: 1
       ali:loot_pool
         | Selects random entry
@@ -1469,6 +1473,7 @@ ali:loot_table
           | Enchant Randomly:
           |   -> Enchantment: Mending
           |   -> Only Compatible: True
+          |   -> Include Additional Cost Component: False
         ali:item minecraft:ward_armor_trim_smithing_template x1
           | Chance: 5%
           | Count: 1

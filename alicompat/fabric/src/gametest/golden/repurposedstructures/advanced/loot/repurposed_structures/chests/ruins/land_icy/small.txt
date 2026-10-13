@@ -96,6 +96,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:map x1 {"minecraft:custom_name":{translate:"Underground Bastion Map"}}
       | Chance: 5.71%
       | Count: 1
@@ -117,6 +118,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:leather_boots x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 2.86%
       | Count: 1
@@ -125,6 +127,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -1356,3 +1359,4 @@ ali:loot_table
       |   -> Levels: 5 to 25
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False

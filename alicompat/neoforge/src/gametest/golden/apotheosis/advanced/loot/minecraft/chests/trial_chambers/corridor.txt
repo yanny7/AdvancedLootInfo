@@ -22,6 +22,7 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Tag: minecraft:on_random_loot
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
       ali:item minecraft:iron_axe x1 {"minecraft:enchantment_glint_override":1b}
         | Chance: 5.26%
         | Count: 1
@@ -36,6 +37,7 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Tag: minecraft:on_random_loot
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
     ali:modified
       | Selects only first successful entry
       ali:item minecraft:stone_axe x1

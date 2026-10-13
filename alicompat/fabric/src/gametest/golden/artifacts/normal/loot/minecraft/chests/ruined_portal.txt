@@ -32,6 +32,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_axe x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.77%
       | Count: 1
@@ -40,6 +41,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_hoe x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.77%
       | Count: 1
@@ -48,6 +50,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_shovel x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.77%
       | Count: 1
@@ -56,6 +59,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_pickaxe x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.77%
       | Count: 1
@@ -64,6 +68,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_boots x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.77%
       | Count: 1
@@ -72,6 +77,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_chestplate x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.77%
       | Count: 1
@@ -80,6 +86,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_helmet x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.77%
       | Count: 1
@@ -88,6 +95,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_leggings x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.77%
       | Count: 1
@@ -96,6 +104,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:glistering_melon_slice x4-12
       | Chance: 1.26%
       | Count: 4 to 12
@@ -159,7 +168,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: night_vision_goggles.generateAsLoot
+                    |   -> Config: items.night_vision_goggles.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 10%
@@ -183,7 +192,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: thorn_pendant.generateAsLoot
+                    |   -> Config: items.thorn_pendant.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 10%
@@ -207,7 +216,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: fire_gauntlet.generateAsLoot
+                    |   -> Config: items.fire_gauntlet.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 10%
@@ -231,7 +240,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: power_glove.generateAsLoot
+                    |   -> Config: items.power_glove.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 10%
@@ -255,7 +264,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: universal_attractor.generateAsLoot
+                    |   -> Config: items.universal_attractor.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 10%
@@ -279,7 +288,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: obsidian_skull.generateAsLoot
+                    |   -> Config: items.obsidian_skull.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 10%
@@ -303,7 +312,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: lucky_scarf.generateAsLoot
+                    |   -> Config: items.lucky_scarf.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 10%
@@ -327,7 +336,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: cowboy_hat.generateAsLoot
+                    |   -> Config: items.cowboy_hat.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 10%
@@ -351,7 +360,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: charm_of_shrinking.generateAsLoot
+                    |   -> Config: items.charm_of_shrinking.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 10%
@@ -375,7 +384,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: strider_shoes.generateAsLoot
+                    |   -> Config: items.strider_shoes.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 10%

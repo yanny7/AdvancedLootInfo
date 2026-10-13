@@ -98,6 +98,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:enchanted_book x1
       | Chance: 3.45%
       | Count: 1
@@ -106,6 +107,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:leather_helmet x1
       | Chance: 3.45%
       | Count: 1
@@ -1361,6 +1363,7 @@ ali:loot_table
       |   -> Levels: 5 to 25
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
   ali:reference
     | Selects all entries
     | Only items added by other mods

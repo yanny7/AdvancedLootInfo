@@ -14,4 +14,4 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: 0 to 1
+      |   -> Count: 0 to 1

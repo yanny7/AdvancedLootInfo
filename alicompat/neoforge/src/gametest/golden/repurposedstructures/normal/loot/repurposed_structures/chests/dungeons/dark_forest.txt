@@ -29,6 +29,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_horse_armor x1
       | Chance: 7.25%
       | Count: 1
@@ -129,6 +130,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:leather_chestplate x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 4.84%
       | Count: 1
@@ -137,6 +139,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:leather_leggings x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 4.84%
       | Count: 1
@@ -145,6 +148,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:leather_boots x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 4.84%
       | Count: 1
@@ -153,6 +157,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
   ali:loot_pool
     | Selects random entry
     | Rolls: 0
@@ -1097,6 +1102,7 @@ ali:loot_table
           |   -> Enchantments:
           |     -> Tag: minecraft:on_random_loot
           |   -> Only Compatible: True
+          |   -> Include Additional Cost Component: False
         ali:item minecraft:diamond_horse_armor x1
           | Chance: 3.47%
           | Count: 1

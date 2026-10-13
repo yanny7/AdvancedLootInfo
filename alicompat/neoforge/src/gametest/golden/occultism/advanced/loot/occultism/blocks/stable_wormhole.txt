@@ -9,7 +9,7 @@ ali:loot_table
       | Survives Explosion
       | ----- Modifiers -----
       | Copy Components:
-      |   -> Source: Block Entity
+      |   -> Source: minecraft:block_entity
       |   -> Include:
       |     -> occultism:linked_storage_controller
       |     -> occultism:sort_direction

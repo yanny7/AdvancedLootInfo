@@ -71,7 +71,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: U[0; 1)
+      |   -> Count: U[0; 1)
     ali:item minecraft:brain_coral x1-4
       | Chance: 20%
       | Count: 1
@@ -83,7 +83,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: U[0; 1)
+      |   -> Count: U[0; 1)
     ali:item minecraft:bubble_coral x1-4
       | Chance: 20%
       | Count: 1
@@ -95,7 +95,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: U[0; 1)
+      |   -> Count: U[0; 1)
     ali:item minecraft:fire_coral x1-4
       | Chance: 20%
       | Count: 1
@@ -107,7 +107,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: U[0; 1)
+      |   -> Count: U[0; 1)
     ali:item minecraft:horn_coral x1-4
       | Chance: 20%
       | Count: 1
@@ -119,7 +119,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: U[0; 1)
+      |   -> Count: U[0; 1)
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -133,7 +133,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: 1
+      |   -> Count: 1
     ali:item minecraft:brain_coral_fan x1-4
       | Chance: 20%
       | Count: 1
@@ -144,7 +144,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: 1
+      |   -> Count: 1
     ali:item minecraft:bubble_coral_fan x1-4
       | Chance: 20%
       | Count: 1
@@ -155,7 +155,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: 1
+      |   -> Count: 1
     ali:item minecraft:fire_coral_fan x1-4
       | Chance: 20%
       | Count: 1
@@ -166,7 +166,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: 1
+      |   -> Count: 1
     ali:item minecraft:horn_coral_fan x1-4
       | Chance: 20%
       | Count: 1
@@ -177,7 +177,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: 1
+      |   -> Count: 1
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -198,7 +198,7 @@ ali:entity_loot_table
       |   -> Add: False
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: U[0; 1)
+      |   -> Count: U[0; 1)
     ali:item minecraft:prismarine_crystals x1-4
       | Chance: 16.67%
       | Count: 1
@@ -210,4 +210,4 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: U[0; 1)
+      |   -> Count: U[0; 1)

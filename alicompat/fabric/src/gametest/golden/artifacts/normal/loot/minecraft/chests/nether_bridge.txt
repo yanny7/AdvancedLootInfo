@@ -78,7 +78,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: cross_necklace.generateAsLoot
+                    |   -> Config: items.cross_necklace.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 11.11%
@@ -102,7 +102,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: night_vision_goggles.generateAsLoot
+                    |   -> Config: items.night_vision_goggles.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 11.11%
@@ -126,7 +126,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: pocket_piston.generateAsLoot
+                    |   -> Config: items.pocket_piston.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 11.11%
@@ -150,7 +150,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: running_shoes.generateAsLoot
+                    |   -> Config: items.running_shoes.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 11.11%
@@ -174,7 +174,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: cowboy_hat.generateAsLoot
+                    |   -> Config: items.cowboy_hat.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 11.11%
@@ -198,7 +198,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: charm_of_shrinking.generateAsLoot
+                    |   -> Config: items.charm_of_shrinking.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 11.11%
@@ -222,7 +222,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: strider_shoes.generateAsLoot
+                    |   -> Config: items.strider_shoes.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 11.11%
@@ -246,7 +246,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: withered_bracelet.generateAsLoot
+                    |   -> Config: items.withered_bracelet.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 11.11%
@@ -270,7 +270,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: plastic_drinking_hat.generateAsLoot
+                    |   -> Config: items.plastic_drinking_hat.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 8.33%
@@ -286,7 +286,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: novelty_drinking_hat.generateAsLoot
+                    |   -> Config: items.novelty_drinking_hat.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 2.78%

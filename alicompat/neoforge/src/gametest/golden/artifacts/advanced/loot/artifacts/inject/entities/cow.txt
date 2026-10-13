@@ -20,9 +20,10 @@ ali:loot_table
               |   -> Config: everlasting_beef
               | Killed by player
               | Config Value:
-              |   -> Config: everlasting_beef.generateAsLoot
+              |   -> Config: items.everlasting_beef.generateAsLoot
               | ----- Modifiers -----
               | Furnace Smelt
+              |   -> Use Input Count: True
               |   -> Predicates:
               |     -> Entity Properties:
               |       -> Target: This Entity
@@ -38,6 +39,7 @@ ali:loot_table
               | Killed by player
               | ----- Modifiers -----
               | Furnace Smelt
+              |   -> Use Input Count: True
               |   -> Predicates:
               |     -> Entity Properties:
               |       -> Target: This Entity

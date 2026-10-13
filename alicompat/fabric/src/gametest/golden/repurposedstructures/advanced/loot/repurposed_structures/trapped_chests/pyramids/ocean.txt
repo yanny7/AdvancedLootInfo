@@ -11,6 +11,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:gold_ingot x8-13
       | Chance: 11.74%
       | Count: max(0; U[8; 13])

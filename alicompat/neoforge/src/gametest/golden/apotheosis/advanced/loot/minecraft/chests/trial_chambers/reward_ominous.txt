@@ -24,6 +24,7 @@ ali:loot_table
               |   -> Levels: 5 to 20
               |   -> Options:
               |     -> Tag: minecraft:on_random_loot
+              |   -> Include Additional Cost Component: False
             ali:item minecraft:crossbow x1 {"minecraft:enchantment_glint_override":1b}
               | Chance: 11.03%
               | Count: 1
@@ -32,6 +33,7 @@ ali:loot_table
               |   -> Levels: 5 to 20
               |   -> Options:
               |     -> Tag: minecraft:on_random_loot
+              |   -> Include Additional Cost Component: False
           ali:modified
             | Selects only first successful entry
             ali:item minecraft:diamond_axe x1 {"minecraft:enchantment_glint_override":1b}
@@ -45,6 +47,7 @@ ali:loot_table
               |   -> Levels: 10 to 20
               |   -> Options:
               |     -> Tag: minecraft:on_random_loot
+              |   -> Include Additional Cost Component: False
             ali:item minecraft:diamond_axe x1 {"minecraft:enchantment_glint_override":1b}
               | Chance: 8.28%
               | Count: 1
@@ -53,6 +56,7 @@ ali:loot_table
               |   -> Levels: 10 to 20
               |   -> Options:
               |     -> Tag: minecraft:on_random_loot
+              |   -> Include Additional Cost Component: False
           ali:modified
             | Selects only first successful entry
             ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b}
@@ -66,6 +70,7 @@ ali:loot_table
               |   -> Levels: 10 to 20
               |   -> Options:
               |     -> Tag: minecraft:on_random_loot
+              |   -> Include Additional Cost Component: False
             ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b}
               | Chance: 8.28%
               | Count: 1
@@ -74,6 +79,7 @@ ali:loot_table
               |   -> Levels: 10 to 20
               |   -> Options:
               |     -> Tag: minecraft:on_random_loot
+              |   -> Include Additional Cost Component: False
           ali:item minecraft:emerald_block x1
             | Chance: 13.79%
             | Count: 1
@@ -95,6 +101,7 @@ ali:loot_table
             |     -> Looting
             |     -> Multishot
             |   -> Only Compatible: True
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:enchanted_book x1
             | Chance: 5.52%
             | Count: 1
@@ -104,6 +111,7 @@ ali:loot_table
             |     -> Breach
             |     -> Density
             |   -> Only Compatible: True
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:enchanted_book x1
             | Chance: 5.52%
             | Count: 1

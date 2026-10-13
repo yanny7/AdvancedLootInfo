@@ -9,10 +9,11 @@ ali:loot_table
         | Count: 1
         | ----- Predicates -----
         | Match Tool:
-        |   -> Item Predicates:
-        |     -> Enchantments:
-        |       -> Enchantment: Silk Touch
-        |       -> Level: ≥ 1
+        |   -> Components:
+        |     -> Partial Matchers:
+        |       -> minecraft:enchantments
+        |         -> Enchantment: Silk Touch
+        |         -> Level: ≥ 1
       ali:item minecraft:gold_nugget x2-24
         | Count: max(0; U[2; 6]) × max(1; U[0; 1])
         |   -> Fortune LVL: max(0; U[2; 6]) × max(1; U[0; LVL + 1])

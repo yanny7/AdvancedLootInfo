@@ -12,10 +12,11 @@ ali:loot_table
           | Count: 1
           | ----- Predicates -----
           | Match Tool:
-          |   -> Item Predicates:
-          |     -> Enchantments:
-          |       -> Enchantment: Silk Touch
-          |       -> Level: ≥ 1
+          |   -> Components:
+          |     -> Partial Matchers:
+          |       -> minecraft:enchantments
+          |         -> Enchantment: Silk Touch
+          |         -> Level: ≥ 1
           | ----- Modifiers -----
           | Explosion Decay
         ali:item undergarden:blood_globule x2-6

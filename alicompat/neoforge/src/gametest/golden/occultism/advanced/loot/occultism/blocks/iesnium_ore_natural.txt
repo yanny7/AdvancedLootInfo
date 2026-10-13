@@ -22,10 +22,11 @@ ali:loot_table
       |     -> Properties:
       |       -> uncovered: true
       |   -> Match Tool:
-      |     -> Item Predicates:
-      |       -> Enchantments:
-      |         -> Enchantment: Silk Touch
-      |         -> Level: ≥ 1
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> minecraft:enchantments
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -44,10 +45,11 @@ ali:loot_table
       |       -> uncovered: true
       |   -> Inverted:
       |     -> Match Tool:
-      |       -> Item Predicates:
-      |         -> Enchantments:
-      |           -> Enchantment: Silk Touch
-      |           -> Level: ≥ 1
+      |       -> Components:
+      |         -> Partial Matchers:
+      |           -> minecraft:enchantments
+      |             -> Enchantment: Silk Touch
+      |             -> Level: ≥ 1
       | ----- Modifiers -----
       | Apply Bonus:
       |   -> Enchantment: Fortune

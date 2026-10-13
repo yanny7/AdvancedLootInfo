@@ -17,6 +17,7 @@ ali:loot_table
       |   -> Levels: 30
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:map x1
       | Chance: 1.92%
       | Count: 1

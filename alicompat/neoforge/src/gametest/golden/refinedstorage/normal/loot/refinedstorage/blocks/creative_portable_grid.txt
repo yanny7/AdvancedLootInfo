@@ -5,8 +5,10 @@ ali:loot_table
     | Rolls: 1
     ali:item refinedstorage:creative_portable_grid x1
       | Count: 1
+      | ----- Predicates -----
+      | Survives Explosion
       | ----- Modifiers -----
-      | Copy Portable Grid Data:
       | Copy Components:
-      |   -> Source: Block Entity
+      |   -> Source: minecraft:block_entity
       |   -> Include: minecraft:custom_name
+      | Copy Portable Grid Data:

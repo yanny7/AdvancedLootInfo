@@ -33,6 +33,15 @@ ali:loot_table
     ali:item minecraft:emerald x1-4
       | Chance: 1.89%
       | Count: 1 to 4
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 66.67%
+    ali:item minecraft:bundle x1
+      | Chance: 33.33%
+      | Count: 1
   ali:empty
     | Chance: 35%
     | Count: 1

@@ -79,6 +79,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:iron_chestplate x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.61%
       | Count: 1
@@ -87,6 +88,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:iron_leggings x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.61%
       | Count: 1
@@ -95,6 +97,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:iron_boots x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.61%
       | Count: 1
@@ -103,6 +106,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:end_rod x1-3
       | Chance: 2.41%
       | Count: 1 to 3
@@ -233,6 +237,7 @@ ali:loot_table
           |   -> Enchantments:
           |     -> Tag: minecraft:on_random_loot
           |   -> Only Compatible: True
+          |   -> Include Additional Cost Component: False
         ali:item minecraft:leather_chestplate x1 {"minecraft:enchantment_glint_override":1b}
           | Chance: 3.57%
           | Count: 1
@@ -241,6 +246,7 @@ ali:loot_table
           |   -> Enchantments:
           |     -> Tag: minecraft:on_random_loot
           |   -> Only Compatible: True
+          |   -> Include Additional Cost Component: False
         ali:item minecraft:leather_leggings x1 {"minecraft:enchantment_glint_override":1b}
           | Chance: 3.57%
           | Count: 1
@@ -249,6 +255,7 @@ ali:loot_table
           |   -> Enchantments:
           |     -> Tag: minecraft:on_random_loot
           |   -> Only Compatible: True
+          |   -> Include Additional Cost Component: False
         ali:item minecraft:leather_boots x1 {"minecraft:enchantment_glint_override":1b}
           | Chance: 3.57%
           | Count: 1
@@ -257,6 +264,7 @@ ali:loot_table
           |   -> Enchantments:
           |     -> Tag: minecraft:on_random_loot
           |   -> Only Compatible: True
+          |   -> Include Additional Cost Component: False
         ali:item minecraft:pumpkin x1-3
           | Chance: 2.38%
           | Count: 1 to 3

@@ -9,7 +9,9 @@ ali:loot_table
         | Count: 1
         | ----- Predicates -----
         | Match Tool:
-        |   -> Component: xycraft_machines:auto_smelt
+        |   -> Components:
+        |     -> Expected Components:
+        |       -> xycraft_machines:auto_smelt
         | Survives Explosion
       ali:item minecraft:mangrove_wood x1
         | Count: 1

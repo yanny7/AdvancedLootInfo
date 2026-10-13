@@ -128,7 +128,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: golden_hook.generateAsLoot
+                    |   -> Config: items.golden_hook.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 23.08%
@@ -152,7 +152,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: snorkel.generateAsLoot
+                    |   -> Config: items.snorkel.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 7.69%
@@ -176,7 +176,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: flippers.generateAsLoot
+                    |   -> Config: items.flippers.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 7.69%
@@ -200,7 +200,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: scarf_of_invisibility.generateAsLoot
+                    |   -> Config: items.scarf_of_invisibility.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 7.69%
@@ -224,7 +224,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: steadfast_spikes.generateAsLoot
+                    |   -> Config: items.steadfast_spikes.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 7.69%
@@ -248,7 +248,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: universal_attractor.generateAsLoot
+                    |   -> Config: items.universal_attractor.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 7.69%
@@ -272,7 +272,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: feral_claws.generateAsLoot
+                    |   -> Config: items.feral_claws.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 7.69%
@@ -296,7 +296,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: night_vision_goggles.generateAsLoot
+                    |   -> Config: items.night_vision_goggles.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 7.69%
@@ -320,7 +320,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: obsidian_skull.generateAsLoot
+                    |   -> Config: items.obsidian_skull.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 7.69%
@@ -344,7 +344,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: running_shoes.generateAsLoot
+                    |   -> Config: items.running_shoes.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 7.69%
@@ -368,7 +368,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.15
                     | Config Value:
-                    |   -> Config: charm_of_sinking.generateAsLoot
+                    |   -> Config: items.charm_of_sinking.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 7.69%

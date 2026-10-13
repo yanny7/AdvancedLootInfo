@@ -13,7 +13,9 @@ ali:loot_table
         |   -> otherwise 1
         | ----- Predicates -----
         | Match Tool:
-        |   -> Component: xycraft_machines:auto_smelt
+        |   -> Components:
+        |     -> Expected Components:
+        |       -> xycraft_machines:auto_smelt
         | ----- Modifiers -----
         | Set Count:
         |   -> Count: 2

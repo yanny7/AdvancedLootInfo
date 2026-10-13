@@ -20,7 +20,7 @@ ali:loot_table
               | Artifact Rarity Adjusted Chance:
               |   -> Default Probability: 0.15
               | Config Value:
-              |   -> Config: night_vision_goggles.generateAsLoot
+              |   -> Config: items.night_vision_goggles.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 10%
@@ -44,7 +44,7 @@ ali:loot_table
               | Artifact Rarity Adjusted Chance:
               |   -> Default Probability: 0.15
               | Config Value:
-              |   -> Config: thorn_pendant.generateAsLoot
+              |   -> Config: items.thorn_pendant.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 10%
@@ -68,7 +68,7 @@ ali:loot_table
               | Artifact Rarity Adjusted Chance:
               |   -> Default Probability: 0.15
               | Config Value:
-              |   -> Config: fire_gauntlet.generateAsLoot
+              |   -> Config: items.fire_gauntlet.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 10%
@@ -92,7 +92,7 @@ ali:loot_table
               | Artifact Rarity Adjusted Chance:
               |   -> Default Probability: 0.15
               | Config Value:
-              |   -> Config: power_glove.generateAsLoot
+              |   -> Config: items.power_glove.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 10%
@@ -116,7 +116,7 @@ ali:loot_table
               | Artifact Rarity Adjusted Chance:
               |   -> Default Probability: 0.15
               | Config Value:
-              |   -> Config: universal_attractor.generateAsLoot
+              |   -> Config: items.universal_attractor.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 10%
@@ -140,7 +140,7 @@ ali:loot_table
               | Artifact Rarity Adjusted Chance:
               |   -> Default Probability: 0.15
               | Config Value:
-              |   -> Config: obsidian_skull.generateAsLoot
+              |   -> Config: items.obsidian_skull.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 10%
@@ -164,7 +164,7 @@ ali:loot_table
               | Artifact Rarity Adjusted Chance:
               |   -> Default Probability: 0.15
               | Config Value:
-              |   -> Config: lucky_scarf.generateAsLoot
+              |   -> Config: items.lucky_scarf.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 10%
@@ -188,7 +188,7 @@ ali:loot_table
               | Artifact Rarity Adjusted Chance:
               |   -> Default Probability: 0.15
               | Config Value:
-              |   -> Config: cowboy_hat.generateAsLoot
+              |   -> Config: items.cowboy_hat.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 10%
@@ -212,7 +212,7 @@ ali:loot_table
               | Artifact Rarity Adjusted Chance:
               |   -> Default Probability: 0.15
               | Config Value:
-              |   -> Config: charm_of_shrinking.generateAsLoot
+              |   -> Config: items.charm_of_shrinking.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 10%
@@ -236,7 +236,7 @@ ali:loot_table
               | Artifact Rarity Adjusted Chance:
               |   -> Default Probability: 0.15
               | Config Value:
-              |   -> Config: strider_shoes.generateAsLoot
+              |   -> Config: items.strider_shoes.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 10%

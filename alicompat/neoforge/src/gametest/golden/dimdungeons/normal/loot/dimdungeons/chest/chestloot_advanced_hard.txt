@@ -216,6 +216,7 @@ ali:loot_table
             |   -> Levels: 30 to 40
             |   -> Options:
             |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:diamond_helmet x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 3%
             | Count: 1
@@ -224,6 +225,7 @@ ali:loot_table
             |   -> Levels: 30 to 40
             |   -> Options:
             |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:diamond_leggings x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 3%
             | Count: 1
@@ -232,6 +234,7 @@ ali:loot_table
             |   -> Levels: 30 to 40
             |   -> Options:
             |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:diamond_boots x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 3%
             | Count: 1
@@ -240,6 +243,7 @@ ali:loot_table
             |   -> Levels: 30 to 40
             |   -> Options:
             |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:diamond_pickaxe x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 3%
             | Count: 1
@@ -248,6 +252,7 @@ ali:loot_table
             |   -> Levels: 30 to 40
             |   -> Options:
             |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:diamond_sword x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 3%
             | Count: 1
@@ -256,6 +261,7 @@ ali:loot_table
             |   -> Levels: 30 to 40
             |   -> Options:
             |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:crossbow x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 3%
             | Count: 1
@@ -264,6 +270,7 @@ ali:loot_table
             |   -> Levels: 30 to 40
             |   -> Options:
             |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:bow x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 3%
             | Count: 1
@@ -272,6 +279,7 @@ ali:loot_table
             |   -> Levels: 30 to 40
             |   -> Options:
             |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:heavy_core x1
             | Chance: 2%
             | Count: 1

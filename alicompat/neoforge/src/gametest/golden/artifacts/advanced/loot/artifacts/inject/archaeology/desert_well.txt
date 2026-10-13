@@ -18,7 +18,7 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Config Value:
-              |   -> Config: charm_of_sinking.generateAsLoot
+              |   -> Config: items.charm_of_sinking.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 16.67%
@@ -37,7 +37,7 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Config Value:
-              |   -> Config: universal_attractor.generateAsLoot
+              |   -> Config: items.universal_attractor.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 16.67%
@@ -56,7 +56,7 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Config Value:
-              |   -> Config: superstitious_hat.generateAsLoot
+              |   -> Config: items.superstitious_hat.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 16.67%
@@ -75,7 +75,7 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Config Value:
-              |   -> Config: umbrella.generateAsLoot
+              |   -> Config: items.umbrella.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 16.67%
@@ -94,7 +94,7 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Config Value:
-              |   -> Config: warp_drive.generateAsLoot
+              |   -> Config: items.warp_drive.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 16.67%
@@ -113,7 +113,7 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Config Value:
-              |   -> Config: plastic_drinking_hat.generateAsLoot
+              |   -> Config: items.plastic_drinking_hat.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 12.5%
@@ -124,7 +124,7 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Config Value:
-              |   -> Config: novelty_drinking_hat.generateAsLoot
+              |   -> Config: items.novelty_drinking_hat.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 4.17%

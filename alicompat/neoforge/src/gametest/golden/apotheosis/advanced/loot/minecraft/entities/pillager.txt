@@ -45,6 +45,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchant Randomly:
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
       |   -> Predicates:
       |     -> Random Chance:
       |       -> Chance: 0.25

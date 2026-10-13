@@ -64,6 +64,7 @@ ali:loot_table
       |   -> Levels: 30
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
   ali:empty
     | Chance: 35%
     | Count: 1

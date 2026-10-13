@@ -72,7 +72,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.3
                     | Config Value:
-                    |   -> Config: snowshoes.generateAsLoot
+                    |   -> Config: items.snowshoes.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 50%
@@ -96,7 +96,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.3
                     | Config Value:
-                    |   -> Config: villager_hat.generateAsLoot
+                    |   -> Config: items.villager_hat.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 25%
@@ -120,7 +120,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.3
                     | Config Value:
-                    |   -> Config: lucky_scarf.generateAsLoot
+                    |   -> Config: items.lucky_scarf.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 25%

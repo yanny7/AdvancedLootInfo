@@ -11,20 +11,24 @@ ali:loot_table
           | Count: 1
           | ----- Predicates -----
           | Match Tool:
-          |   -> Component: xycraft_machines:auto_smelt
+          |   -> Components:
+          |     -> Expected Components:
+          |       -> xycraft_machines:auto_smelt
           | Match Tool:
-          |   -> Item Predicates:
-          |     -> Enchantments:
-          |       -> Enchantment: Silk Touch
-          |       -> Level: ≥ 1
+          |   -> Components:
+          |     -> Partial Matchers:
+          |       -> minecraft:enchantments
+          |         -> Enchantment: Silk Touch
+          |         -> Level: ≥ 1
         ali:item minecraft:nether_gold_ore x1
           | Count: 1
           | ----- Predicates -----
           | Match Tool:
-          |   -> Item Predicates:
-          |     -> Enchantments:
-          |       -> Enchantment: Silk Touch
-          |       -> Level: ≥ 1
+          |   -> Components:
+          |     -> Partial Matchers:
+          |       -> minecraft:enchantments
+          |         -> Enchantment: Silk Touch
+          |         -> Level: ≥ 1
       ali:item minecraft:gold_nugget x2-24
         | Count: 2 to 6
         |   -> Fortune I: 2 to 12

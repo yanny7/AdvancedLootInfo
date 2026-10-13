@@ -94,7 +94,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: cowboy_hat.generateAsLoot
+                  |   -> Config: items.cowboy_hat.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 0.89%
@@ -118,7 +118,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: obsidian_skull.generateAsLoot
+                  |   -> Config: items.obsidian_skull.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 0.89%
@@ -142,7 +142,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: snorkel.generateAsLoot
+                  |   -> Config: items.snorkel.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 0.89%
@@ -166,7 +166,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: power_glove.generateAsLoot
+                  |   -> Config: items.power_glove.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 0.89%
@@ -190,7 +190,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: kitty_slippers.generateAsLoot
+                  |   -> Config: items.kitty_slippers.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 0.89%
@@ -214,7 +214,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: night_vision_goggles.generateAsLoot
+                  |   -> Config: items.night_vision_goggles.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 0.89%
@@ -238,7 +238,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: shock_pendant.generateAsLoot
+                  |   -> Config: items.shock_pendant.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 0.89%

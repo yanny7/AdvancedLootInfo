@@ -17,6 +17,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:iron_pickaxe x1
       | Chance: 6.58%
       | Count: 1
@@ -28,6 +29,7 @@ ali:loot_table
       |   -> Levels: 1 to 15
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:empty
       | Drops nothing
       | Chance: 6.58%

@@ -12,7 +12,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: 0 to 1
+      |   -> Count: 0 to 1
   ali:item occultism:tallow x3
     | Count: 3
     | ----- Predicates -----

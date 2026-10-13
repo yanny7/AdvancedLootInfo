@@ -21,6 +21,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:diamond_pickaxe x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 12%
       | Count: 1
@@ -35,6 +36,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:ancient_debris x1
       | Chance: 12%
       | Count: 1
@@ -91,6 +93,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:crying_obsidian x1-5
       | Chance: 7.14%
       | Count: max(0; U[1; 5])
@@ -218,6 +221,7 @@ ali:loot_table
             |   -> Enchantments:
             |     -> Tag: minecraft:on_random_loot
             |   -> Only Compatible: True
+            |   -> Include Additional Cost Component: False
           ali:empty
             | Drops nothing
             | Chance: 40%
@@ -232,6 +236,7 @@ ali:loot_table
             |   -> Enchantments:
             |     -> Tag: minecraft:on_random_loot
             |   -> Only Compatible: True
+            |   -> Include Additional Cost Component: False
         ali:loot_pool
           | Selects random entry
           | Rolls: 1 to 2

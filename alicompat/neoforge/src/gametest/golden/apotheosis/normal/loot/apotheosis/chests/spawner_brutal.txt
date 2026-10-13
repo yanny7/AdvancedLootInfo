@@ -111,6 +111,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:skeleton_skull x1
       | Quality: 2
       | Chance: 1.82%

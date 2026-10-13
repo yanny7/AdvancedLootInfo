@@ -12,7 +12,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: 0 to 1
+      |   -> Count: 0 to 1
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -26,8 +26,9 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: 0 to 1
+      |   -> Count: 0 to 1
       | Furnace Smelt
+      |   -> Use Input Count: True
       |   -> Predicates:
       |     -> Any Of:
       |       -> Entity Properties:
@@ -40,10 +41,11 @@ ali:entity_loot_table
       |         -> Predicate:
       |           -> Entity Equipment:
       |             -> Main Hand:
-      |               -> Item Predicates:
-      |                 -> Enchantments:
-      |                   -> Enchantments:
-      |                     -> Tag: minecraft:smelts_loot
+      |               -> Components:
+      |                 -> Partial Matchers:
+      |                   -> minecraft:enchantments
+      |                     -> Enchantments:
+      |                       -> Tag: minecraft:smelts_loot
     ali:item minecraft:prismarine_crystals x1-4
       | Chance: 33.33%
       | Count: 1
@@ -54,7 +56,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: 0 to 1
+      |   -> Count: 0 to 1
     ali:empty
       | Drops nothing
       | Chance: 16.67%
@@ -85,6 +87,7 @@ ali:entity_loot_table
             | Killed by player
             | ----- Modifiers -----
             | Furnace Smelt
+            |   -> Use Input Count: True
             |   -> Predicates:
             |     -> Any Of:
             |       -> Entity Properties:
@@ -97,10 +100,11 @@ ali:entity_loot_table
             |         -> Predicate:
             |           -> Entity Equipment:
             |             -> Main Hand:
-            |               -> Item Predicates:
-            |                 -> Enchantments:
-            |                   -> Enchantments:
-            |                     -> Tag: minecraft:smelts_loot
+            |               -> Components:
+            |                 -> Partial Matchers:
+            |                   -> minecraft:enchantments
+            |                     -> Enchantments:
+            |                       -> Tag: minecraft:smelts_loot
           ali:item minecraft:salmon x1
             | Chance: 0.63%
             |   -> Looting I: 0.88%
@@ -111,6 +115,7 @@ ali:entity_loot_table
             | Killed by player
             | ----- Modifiers -----
             | Furnace Smelt
+            |   -> Use Input Count: True
             |   -> Predicates:
             |     -> Any Of:
             |       -> Entity Properties:
@@ -123,10 +128,11 @@ ali:entity_loot_table
             |         -> Predicate:
             |           -> Entity Equipment:
             |             -> Main Hand:
-            |               -> Item Predicates:
-            |                 -> Enchantments:
-            |                   -> Enchantments:
-            |                     -> Tag: minecraft:smelts_loot
+            |               -> Components:
+            |                 -> Partial Matchers:
+            |                   -> minecraft:enchantments
+            |                     -> Enchantments:
+            |                       -> Tag: minecraft:smelts_loot
           ali:item minecraft:pufferfish x1
             | Chance: 0.33%
             |   -> Looting I: 0.46%
@@ -137,6 +143,7 @@ ali:entity_loot_table
             | Killed by player
             | ----- Modifiers -----
             | Furnace Smelt
+            |   -> Use Input Count: True
             |   -> Predicates:
             |     -> Any Of:
             |       -> Entity Properties:
@@ -149,10 +156,11 @@ ali:entity_loot_table
             |         -> Predicate:
             |           -> Entity Equipment:
             |             -> Main Hand:
-            |               -> Item Predicates:
-            |                 -> Enchantments:
-            |                   -> Enchantments:
-            |                     -> Tag: minecraft:smelts_loot
+            |               -> Components:
+            |                 -> Partial Matchers:
+            |                   -> minecraft:enchantments
+            |                     -> Enchantments:
+            |                       -> Tag: minecraft:smelts_loot
           ali:item minecraft:tropical_fish x1
             | Chance: 0.05%
             |   -> Looting I: 0.07%
@@ -163,6 +171,7 @@ ali:entity_loot_table
             | Killed by player
             | ----- Modifiers -----
             | Furnace Smelt
+            |   -> Use Input Count: True
             |   -> Predicates:
             |     -> Any Of:
             |       -> Entity Properties:
@@ -175,10 +184,11 @@ ali:entity_loot_table
             |         -> Predicate:
             |           -> Entity Equipment:
             |             -> Main Hand:
-            |               -> Item Predicates:
-            |                 -> Enchantments:
-            |                   -> Enchantments:
-            |                     -> Tag: minecraft:smelts_loot
+            |               -> Components:
+            |                 -> Partial Matchers:
+            |                   -> minecraft:enchantments
+            |                     -> Enchantments:
+            |                       -> Tag: minecraft:smelts_loot
   ali:loot_pool
     | Selects random entry
     | Rolls: 1

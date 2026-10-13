@@ -6,6 +6,7 @@ ali:trade
       | Uses: 16
       | XP: 2
       | Price Multiplier: 0.05
+      | Reward Experience: True
       ali:item minecraft:paper x20-28
         | Count: 20 to 28
       ali:item minecraft:air x0
@@ -15,9 +16,9 @@ ali:trade
       | Uses: 12
       | XP: 1
       | Price Multiplier: 0.2
-      ali:item minecraft:emerald x8-20
-        | Count: 8 to 20  ~9 to 19 (8%)
-        |   [chart 0..12 8-20 base=true modes=[false, true, true, true, true, true, true, true, true, true, true, true, false] heights=0.5000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.5000]
+      | Reward Experience: True
+      ali:item minecraft:emerald x8-10
+        | Count: 8 to 10
       ali:item minecraft:book x1
         | Count: 1
       ali:item minecraft:enchanted_book x1
@@ -33,6 +34,7 @@ ali:trade
       | Uses: 12
       | XP: 5
       | Price Multiplier: 0.2
+      | Reward Experience: True
       ali:item minecraft:emerald x3
         | Count: 3
       ali:item minecraft:air x0
@@ -48,6 +50,7 @@ ali:trade
       | Uses: 3
       | XP: 10
       | Price Multiplier: 0.2
+      | Reward Experience: True
       ali:item minecraft:emerald x1
         | Count: 1
       ali:item minecraft:air x0

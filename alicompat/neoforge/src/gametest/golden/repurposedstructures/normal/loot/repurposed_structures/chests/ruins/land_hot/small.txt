@@ -1299,6 +1299,7 @@ ali:loot_table
       |   -> Levels: 5 to 25
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
   ali:reference
     | Selects all entries
     | Only items added by other mods

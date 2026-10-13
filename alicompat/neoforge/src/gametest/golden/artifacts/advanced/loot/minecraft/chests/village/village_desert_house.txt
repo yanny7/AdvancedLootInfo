@@ -82,7 +82,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.05
                   | Config Value:
-                  |   -> Config: villager_hat.generateAsLoot
+                  |   -> Config: items.villager_hat.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | ----- Predicates -----

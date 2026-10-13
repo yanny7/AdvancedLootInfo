@@ -11,20 +11,24 @@ ali:loot_table
           | Count: 1
           | ----- Predicates -----
           | Match Tool:
-          |   -> Component: xycraft_machines:auto_smelt
+          |   -> Components:
+          |     -> Expected Components:
+          |       -> xycraft_machines:auto_smelt
           | Match Tool:
-          |   -> Item Predicates:
-          |     -> Enchantments:
-          |       -> Enchantment: Silk Touch
-          |       -> Level: ≥ 1
+          |   -> Components:
+          |     -> Partial Matchers:
+          |       -> minecraft:enchantments
+          |         -> Enchantment: Silk Touch
+          |         -> Level: ≥ 1
         ali:item minecraft:nether_quartz_ore x1
           | Count: 1
           | ----- Predicates -----
           | Match Tool:
-          |   -> Item Predicates:
-          |     -> Enchantments:
-          |       -> Enchantment: Silk Touch
-          |       -> Level: ≥ 1
+          |   -> Components:
+          |     -> Partial Matchers:
+          |       -> minecraft:enchantments
+          |         -> Enchantment: Silk Touch
+          |         -> Level: ≥ 1
       ali:item minecraft:quartz x1-4
         | Count: max(1; U[0; 1])
         |   -> Fortune LVL: max(1; U[0; LVL + 1])

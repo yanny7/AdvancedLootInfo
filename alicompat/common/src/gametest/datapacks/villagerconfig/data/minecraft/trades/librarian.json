@@ -27,9 +27,9 @@
                   {
                     "function": "minecraft:set_count",
                     "count": {
-                      "type": "villagerconfig:add",
-                      "addends": [
-                        { "type": "villagerconfig:multiply", "factors": [ { "type": "villagerconfig:reference", "id": "level" }, 3 ] },
+                      "type": "minecraft:sum",
+                      "summands": [
+                        { "type": "minecraft:uniform", "min": 3, "max": 6 },
                         5
                       ]
                     }

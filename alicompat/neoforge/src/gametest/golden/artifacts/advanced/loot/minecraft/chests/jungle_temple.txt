@@ -75,6 +75,7 @@ ali:loot_table
       |   -> Levels: 30
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -101,6 +102,7 @@ ali:loot_table
       | Enchant Randomly:
       |   -> Enchantment: Unbreaking
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
   ali:reference
     | Selects all entries
     ali:loot_table
@@ -125,7 +127,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.35
                   | Config Value:
-                  |   -> Config: kitty_slippers.generateAsLoot
+                  |   -> Config: items.kitty_slippers.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 33.33%
@@ -149,7 +151,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.35
                   | Config Value:
-                  |   -> Config: rooted_boots.generateAsLoot
+                  |   -> Config: items.rooted_boots.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 33.33%
@@ -173,7 +175,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.35
                   | Config Value:
-                  |   -> Config: bunny_hoppers.generateAsLoot
+                  |   -> Config: items.bunny_hoppers.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 16.67%
@@ -197,7 +199,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.35
                   | Config Value:
-                  |   -> Config: anglers_hat.generateAsLoot
+                  |   -> Config: items.anglers_hat.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 16.67%

@@ -60,6 +60,7 @@ ali:loot_table
       |   -> Levels: 15 to 35
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_axe x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 4.42%
       | Count: 1
@@ -68,6 +69,7 @@ ali:loot_table
       |   -> Levels: 15 to 35
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_hoe x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 4.42%
       | Count: 1
@@ -76,6 +78,7 @@ ali:loot_table
       |   -> Levels: 15 to 35
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_shovel x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 4.42%
       | Count: 1
@@ -84,6 +87,7 @@ ali:loot_table
       |   -> Levels: 15 to 35
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_pickaxe x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 4.42%
       | Count: 1
@@ -92,6 +96,7 @@ ali:loot_table
       |   -> Levels: 15 to 35
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_boots x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 4.42%
       | Count: 1
@@ -100,6 +105,7 @@ ali:loot_table
       |   -> Levels: 15 to 35
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_chestplate x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 4.42%
       | Count: 1
@@ -108,6 +114,7 @@ ali:loot_table
       |   -> Levels: 15 to 35
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_helmet x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 4.42%
       | Count: 1
@@ -116,6 +123,7 @@ ali:loot_table
       |   -> Levels: 15 to 35
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_leggings x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 4.42%
       | Count: 1
@@ -124,6 +132,7 @@ ali:loot_table
       |   -> Levels: 15 to 35
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:iron_block x3-7
       | Chance: 3.54%
       | Count: max(0; U[3; 7])

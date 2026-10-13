@@ -126,7 +126,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: rooted_boots.generateAsLoot
+                  |   -> Config: items.rooted_boots.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 0.48%
@@ -150,7 +150,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: pickaxe_heater.generateAsLoot
+                  |   -> Config: items.pickaxe_heater.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 0.48%
@@ -174,7 +174,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: aqua_dashers.generateAsLoot
+                  |   -> Config: items.aqua_dashers.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 0.48%
@@ -198,7 +198,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: snowshoes.generateAsLoot
+                  |   -> Config: items.snowshoes.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 0.48%
@@ -222,7 +222,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: steadfast_spikes.generateAsLoot
+                  |   -> Config: items.steadfast_spikes.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 0.48%
@@ -246,7 +246,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: villager_hat.generateAsLoot
+                  |   -> Config: items.villager_hat.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 0.48%
@@ -270,7 +270,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: cloud_in_a_bottle.generateAsLoot
+                  |   -> Config: items.cloud_in_a_bottle.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 0.48%
@@ -294,7 +294,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: feral_claws.generateAsLoot
+                  |   -> Config: items.feral_claws.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 0.48%
@@ -318,7 +318,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: pocket_piston.generateAsLoot
+                  |   -> Config: items.pocket_piston.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 0.48%
@@ -342,7 +342,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: whoopee_cushion.generateAsLoot
+                  |   -> Config: items.whoopee_cushion.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 0.48%
@@ -366,7 +366,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: flame_pendant.generateAsLoot
+                  |   -> Config: items.flame_pendant.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 0.48%
@@ -390,7 +390,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: thorn_pendant.generateAsLoot
+                  |   -> Config: items.thorn_pendant.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 0.48%
@@ -414,7 +414,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: charm_of_shrinking.generateAsLoot
+                  |   -> Config: items.charm_of_shrinking.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 0.48%

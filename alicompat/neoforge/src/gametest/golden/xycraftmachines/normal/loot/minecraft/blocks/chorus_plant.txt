@@ -9,7 +9,9 @@ ali:loot_table
         | Count: 0 to 1
         | ----- Predicates -----
         | Match Tool:
-        |   -> Component: xycraft_machines:auto_smelt
+        |   -> Components:
+        |     -> Expected Components:
+        |       -> xycraft_machines:auto_smelt
         | ----- Modifiers -----
         | Explosion Decay
       ali:item minecraft:chorus_fruit x0-1

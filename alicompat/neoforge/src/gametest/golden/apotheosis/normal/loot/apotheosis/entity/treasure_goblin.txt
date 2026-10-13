@@ -16,6 +16,9 @@ ali:loot_table
       |   -> Luck 3: 9.9%
       |   -> Luck 4: 9.57%
       | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Regeneration
     ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:strong_swiftness"}}
       | Chance: 11.05%
       |   -> Bad Luck: 11.24%
@@ -24,6 +27,9 @@ ali:loot_table
       |   -> Luck 3: 9.9%
       |   -> Luck 4: 9.57%
       | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Swiftness
     ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:long_fire_resistance"}}
       | Chance: 11.05%
       |   -> Bad Luck: 11.24%
@@ -32,6 +38,9 @@ ali:loot_table
       |   -> Luck 3: 9.9%
       |   -> Luck 4: 9.57%
       | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Fire Resistance
     ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:strong_healing"}}
       | Chance: 11.05%
       |   -> Bad Luck: 11.24%
@@ -40,6 +49,9 @@ ali:loot_table
       |   -> Luck 3: 9.9%
       |   -> Luck 4: 9.57%
       | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Healing
     ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:long_night_vision"}}
       | Chance: 11.05%
       |   -> Bad Luck: 11.24%
@@ -48,6 +60,9 @@ ali:loot_table
       |   -> Luck 3: 9.9%
       |   -> Luck 4: 9.57%
       | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Night Vision
     ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:long_strength"}}
       | Chance: 11.05%
       |   -> Bad Luck: 11.24%
@@ -56,6 +71,9 @@ ali:loot_table
       |   -> Luck 3: 9.9%
       |   -> Luck 4: 9.57%
       | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Strength
     ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:long_invisibility"}}
       | Chance: 11.05%
       |   -> Bad Luck: 11.24%
@@ -64,6 +82,9 @@ ali:loot_table
       |   -> Luck 3: 9.9%
       |   -> Luck 4: 9.57%
       | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Invisibility
     ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:long_water_breathing"}}
       | Chance: 11.05%
       |   -> Bad Luck: 11.24%
@@ -72,6 +93,9 @@ ali:loot_table
       |   -> Luck 3: 9.9%
       |   -> Luck 4: 9.57%
       | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Water Breathing
     ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"apothic_attributes:long_knowledge"}}
       | Quality: 1
       | Chance: 5.52%
@@ -81,6 +105,9 @@ ali:loot_table
       |   -> Luck 3: 6.44%
       |   -> Luck 4: 6.7%
       | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Ancient Knowledge
     ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"apothic_attributes:strong_resistance"}}
       | Quality: 1
       | Chance: 5.52%
@@ -90,6 +117,9 @@ ali:loot_table
       |   -> Luck 3: 6.44%
       |   -> Luck 4: 6.7%
       | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Resistance
     ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"apothic_attributes:extra_long_flying"}}
       | Quality: 5
       | Chance: 0.55%
@@ -99,6 +129,9 @@ ali:loot_table
       |   -> Luck 3: 7.92%
       |   -> Luck 4: 10.05%
       | Count: 1
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Flying
   ali:loot_pool
     | Selects random entry
     | Rolls: 4 to 7
@@ -206,6 +239,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:empty
       | Quality: 3
       | Chance: 4.7%

@@ -14,6 +14,7 @@ ali:loot_table
       |   -> Levels: 30 to 39
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:gold_ingot x2-9
       | Chance: 10.56%
       | Count: 2 to 9
@@ -31,6 +32,7 @@ ali:loot_table
       |   -> Levels: 10 to 30
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:fire_charge x2-9
       | Chance: 7.04%
       | Count: 2 to 9
@@ -43,6 +45,7 @@ ali:loot_table
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 30
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:gold_block x1-3
       | Chance: 3.52%
       | Count: 1 to 3

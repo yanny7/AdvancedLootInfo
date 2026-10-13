@@ -45,7 +45,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.2
                   | Config Value:
-                  |   -> Config: cross_necklace.generateAsLoot
+                  |   -> Config: items.cross_necklace.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 25%
@@ -69,7 +69,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.2
                   | Config Value:
-                  |   -> Config: antidote_vessel.generateAsLoot
+                  |   -> Config: items.antidote_vessel.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 25%
@@ -93,7 +93,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.2
                   | Config Value:
-                  |   -> Config: charm_of_sinking.generateAsLoot
+                  |   -> Config: items.charm_of_sinking.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 25%
@@ -117,7 +117,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.2
                   | Config Value:
-                  |   -> Config: warp_drive.generateAsLoot
+                  |   -> Config: items.warp_drive.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 25%

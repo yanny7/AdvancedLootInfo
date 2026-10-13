@@ -18,6 +18,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:emerald_block x1
       | Chance: 15.79%
       | Count: 1

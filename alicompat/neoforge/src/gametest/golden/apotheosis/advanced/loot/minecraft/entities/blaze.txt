@@ -18,7 +18,7 @@ ali:entity_loot_table
       |   -> Add: False
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: U[0; 1)
+      |   -> Count: U[0; 1)
   ali:item apotheosis:gem x1
     | Chance: 4%
     | Count: 1

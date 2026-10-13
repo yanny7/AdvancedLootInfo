@@ -16,7 +16,7 @@ ali:entity_loot_table
       |   -> Add: False
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: U[0; 1)
+      |   -> Count: U[0; 1)
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -31,8 +31,9 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: U[0; 1)
+      |   -> Count: U[0; 1)
       | Furnace Smelt
+      |   -> Use Input Count: True
       |   -> Predicates:
       |     -> Any Of:
       |       -> Entity Properties:
@@ -45,10 +46,11 @@ ali:entity_loot_table
       |         -> Predicate:
       |           -> Entity Equipment:
       |             -> Main Hand:
-      |               -> Item Predicates:
-      |                 -> Enchantments:
-      |                   -> Enchantments:
-      |                     -> Tag: minecraft:smelts_loot
+      |               -> Components:
+      |                 -> Partial Matchers:
+      |                   -> minecraft:enchantments
+      |                     -> Enchantments:
+      |                       -> Tag: minecraft:smelts_loot
     ali:item minecraft:prismarine_crystals x1-4
       | Chance: 40%
       | Count: 1
@@ -60,7 +62,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: U[0; 1)
+      |   -> Count: U[0; 1)
     ali:empty
       | Drops nothing
       | Chance: 20%
@@ -91,6 +93,7 @@ ali:entity_loot_table
             |     -> Looting III: 0.05
             | ----- Modifiers -----
             | Furnace Smelt
+            |   -> Use Input Count: True
             |   -> Predicates:
             |     -> Any Of:
             |       -> Entity Properties:
@@ -103,10 +106,11 @@ ali:entity_loot_table
             |         -> Predicate:
             |           -> Entity Equipment:
             |             -> Main Hand:
-            |               -> Item Predicates:
-            |                 -> Enchantments:
-            |                   -> Enchantments:
-            |                     -> Tag: minecraft:smelts_loot
+            |               -> Components:
+            |                 -> Partial Matchers:
+            |                   -> minecraft:enchantments
+            |                     -> Enchantments:
+            |                       -> Tag: minecraft:smelts_loot
           ali:item minecraft:salmon x1
             | Chance: 0.63%
             |   -> Looting LVL: 25% × [2.5%][LVL] | 3.5% + 1% × (LVL − 100%)
@@ -124,6 +128,7 @@ ali:entity_loot_table
             |     -> Looting III: 0.05
             | ----- Modifiers -----
             | Furnace Smelt
+            |   -> Use Input Count: True
             |   -> Predicates:
             |     -> Any Of:
             |       -> Entity Properties:
@@ -136,10 +141,11 @@ ali:entity_loot_table
             |         -> Predicate:
             |           -> Entity Equipment:
             |             -> Main Hand:
-            |               -> Item Predicates:
-            |                 -> Enchantments:
-            |                   -> Enchantments:
-            |                     -> Tag: minecraft:smelts_loot
+            |               -> Components:
+            |                 -> Partial Matchers:
+            |                   -> minecraft:enchantments
+            |                     -> Enchantments:
+            |                       -> Tag: minecraft:smelts_loot
           ali:item minecraft:pufferfish x1
             | Chance: 0.33%
             |   -> Looting LVL: 13% × [2.5%][LVL] | 3.5% + 1% × (LVL − 100%)
@@ -157,6 +163,7 @@ ali:entity_loot_table
             |     -> Looting III: 0.05
             | ----- Modifiers -----
             | Furnace Smelt
+            |   -> Use Input Count: True
             |   -> Predicates:
             |     -> Any Of:
             |       -> Entity Properties:
@@ -169,10 +176,11 @@ ali:entity_loot_table
             |         -> Predicate:
             |           -> Entity Equipment:
             |             -> Main Hand:
-            |               -> Item Predicates:
-            |                 -> Enchantments:
-            |                   -> Enchantments:
-            |                     -> Tag: minecraft:smelts_loot
+            |               -> Components:
+            |                 -> Partial Matchers:
+            |                   -> minecraft:enchantments
+            |                     -> Enchantments:
+            |                       -> Tag: minecraft:smelts_loot
           ali:item minecraft:tropical_fish x1
             | Chance: 0.05%
             |   -> Looting LVL: 2% × [2.5%][LVL] | 3.5% + 1% × (LVL − 100%)
@@ -190,6 +198,7 @@ ali:entity_loot_table
             |     -> Looting III: 0.05
             | ----- Modifiers -----
             | Furnace Smelt
+            |   -> Use Input Count: True
             |   -> Predicates:
             |     -> Any Of:
             |       -> Entity Properties:
@@ -202,10 +211,11 @@ ali:entity_loot_table
             |         -> Predicate:
             |           -> Entity Equipment:
             |             -> Main Hand:
-            |               -> Item Predicates:
-            |                 -> Enchantments:
-            |                   -> Enchantments:
-            |                     -> Tag: minecraft:smelts_loot
+            |               -> Components:
+            |                 -> Partial Matchers:
+            |                   -> minecraft:enchantments
+            |                     -> Enchantments:
+            |                       -> Tag: minecraft:smelts_loot
   ali:item apotheosis:gem x1
     | Chance: 4%
     | Count: 1

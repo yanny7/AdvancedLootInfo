@@ -17,6 +17,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:iron_pickaxe x1
       | Chance: 7.04%
       | Count: 1
@@ -1396,6 +1397,7 @@ ali:loot_table
           |   -> Enchantments:
           |     -> Tag: minecraft:on_random_loot
           |   -> Only Compatible: True
+          |   -> Include Additional Cost Component: False
         ali:item minecraft:iron_pickaxe x1
           | Chance: 7.04%
           | Count: 1
@@ -1536,3 +1538,4 @@ ali:loot_table
           | Enchant Randomly:
           |   -> Enchantment: Efficiency
           |   -> Only Compatible: True
+          |   -> Include Additional Cost Component: False

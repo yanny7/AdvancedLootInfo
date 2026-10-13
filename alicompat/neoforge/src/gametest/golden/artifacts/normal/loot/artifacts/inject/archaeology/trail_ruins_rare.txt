@@ -18,7 +18,7 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Config Value:
-              |   -> Config: rooted_boots.generateAsLoot
+              |   -> Config: items.rooted_boots.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 7.69%
@@ -37,7 +37,7 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Config Value:
-              |   -> Config: pickaxe_heater.generateAsLoot
+              |   -> Config: items.pickaxe_heater.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 7.69%
@@ -56,7 +56,7 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Config Value:
-              |   -> Config: aqua_dashers.generateAsLoot
+              |   -> Config: items.aqua_dashers.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 7.69%
@@ -75,7 +75,7 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Config Value:
-              |   -> Config: snowshoes.generateAsLoot
+              |   -> Config: items.snowshoes.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 7.69%
@@ -94,7 +94,7 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Config Value:
-              |   -> Config: steadfast_spikes.generateAsLoot
+              |   -> Config: items.steadfast_spikes.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 7.69%
@@ -113,7 +113,7 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Config Value:
-              |   -> Config: villager_hat.generateAsLoot
+              |   -> Config: items.villager_hat.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 7.69%
@@ -132,7 +132,7 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Config Value:
-              |   -> Config: cloud_in_a_bottle.generateAsLoot
+              |   -> Config: items.cloud_in_a_bottle.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 7.69%
@@ -151,7 +151,7 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Config Value:
-              |   -> Config: feral_claws.generateAsLoot
+              |   -> Config: items.feral_claws.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 7.69%
@@ -170,7 +170,7 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Config Value:
-              |   -> Config: pocket_piston.generateAsLoot
+              |   -> Config: items.pocket_piston.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 7.69%
@@ -189,7 +189,7 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Config Value:
-              |   -> Config: whoopee_cushion.generateAsLoot
+              |   -> Config: items.whoopee_cushion.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 7.69%
@@ -208,7 +208,7 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Config Value:
-              |   -> Config: flame_pendant.generateAsLoot
+              |   -> Config: items.flame_pendant.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 7.69%
@@ -227,7 +227,7 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Config Value:
-              |   -> Config: thorn_pendant.generateAsLoot
+              |   -> Config: items.thorn_pendant.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 7.69%
@@ -246,7 +246,7 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Config Value:
-              |   -> Config: charm_of_shrinking.generateAsLoot
+              |   -> Config: items.charm_of_shrinking.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 7.69%

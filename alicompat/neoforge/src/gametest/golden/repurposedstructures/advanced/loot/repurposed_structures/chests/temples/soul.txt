@@ -18,6 +18,7 @@ ali:loot_table
       |   -> Levels: 30 to 39
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:gold_ingot x2-9
       | Chance: 11.28%
       | Count: max(0; U[2; 9])
@@ -47,6 +48,7 @@ ali:loot_table
       |   -> Levels: 10 to 30
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:soul_torch x5-12
       | Chance: 7.52%
       | Count: max(0; U[5; 12])
@@ -98,6 +100,7 @@ ali:loot_table
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 30
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:netherite_scrap x1
       | Chance: 0.75%
       | Count: 1

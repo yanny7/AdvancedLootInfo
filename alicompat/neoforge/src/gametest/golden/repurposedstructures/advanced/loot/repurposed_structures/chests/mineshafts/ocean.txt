@@ -21,6 +21,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:leather_helmet x1 {"minecraft:enchantments":{"minecraft:aqua_affinity":1}}
       | Chance: 11.36%
       | Count: 1
@@ -28,6 +29,7 @@ ali:loot_table
       | Enchant Randomly:
       |   -> Enchantment: Aqua Affinity
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:leather_boots x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 11.36%
       | Count: 1
@@ -35,6 +37,7 @@ ali:loot_table
       | Enchant Randomly:
       |   -> Enchantment: Depth Strider
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:iron_pickaxe x1
       | Chance: 7.58%
       | Count: 1
@@ -45,6 +48,7 @@ ali:loot_table
       | Enchant Randomly:
       |   -> Enchantment: Riptide
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:enchanted_golden_apple x1
       | Chance: 0.76%
       | Count: 1
@@ -1387,6 +1391,7 @@ ali:loot_table
           |   -> Enchantments:
           |     -> Tag: minecraft:on_random_loot
           |   -> Only Compatible: True
+          |   -> Include Additional Cost Component: False
         ali:item minecraft:iron_pickaxe x1
           | Chance: 7.04%
           | Count: 1
@@ -1527,3 +1532,4 @@ ali:loot_table
           | Enchant Randomly:
           |   -> Enchantment: Efficiency
           |   -> Only Compatible: True
+          |   -> Include Additional Cost Component: False

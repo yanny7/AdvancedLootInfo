@@ -16,7 +16,7 @@ ali:entity_loot_table
       |   -> Add: False
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: U[0; 1)
+      |   -> Count: U[0; 1)
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -33,7 +33,7 @@ ali:entity_loot_table
       |   -> Add: False
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: U[0; 1)
+      |   -> Count: U[0; 1)
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -52,7 +52,7 @@ ali:entity_loot_table
       |   -> Add: False
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: U[0; 1)
+      |   -> Count: U[0; 1)
       |   -> Limit: 1
       | Set Potion:
       |   -> Potion: Potion of Poison
@@ -84,6 +84,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         |   -> Predicates:
         |     -> Random Chance:
         |       -> Chance: 0.25
@@ -113,6 +114,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         |   -> Predicates:
         |     -> Random Chance:
         |       -> Chance: 0.5
@@ -142,6 +144,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         |   -> Predicates:
         |     -> Random Chance:
         |       -> Chance: 0.5
@@ -171,6 +174,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         |   -> Predicates:
         |     -> Random Chance:
         |       -> Chance: 0.5
@@ -200,6 +204,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         |   -> Predicates:
         |     -> Random Chance:
         |       -> Chance: 0.5
@@ -229,6 +234,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         |   -> Predicates:
         |     -> Random Chance:
         |       -> Chance: 0.5
@@ -258,6 +264,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         |   -> Predicates:
         |     -> Random Chance:
         |       -> Chance: 0.5
@@ -287,6 +294,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         |   -> Predicates:
         |     -> Random Chance:
         |       -> Chance: 0.5
@@ -316,6 +324,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         |   -> Predicates:
         |     -> Random Chance:
         |       -> Chance: 0.5
@@ -345,6 +354,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         |   -> Predicates:
         |     -> Random Chance:
         |       -> Chance: 0.5
@@ -374,6 +384,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         |   -> Predicates:
         |     -> Random Chance:
         |       -> Chance: 0.5
@@ -403,6 +414,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         |   -> Predicates:
         |     -> Random Chance:
         |       -> Chance: 0.5
@@ -432,6 +444,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         |   -> Predicates:
         |     -> Random Chance:
         |       -> Chance: 0.5
@@ -461,6 +474,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         |   -> Predicates:
         |     -> Random Chance:
         |       -> Chance: 0.5
@@ -490,6 +504,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         |   -> Predicates:
         |     -> Random Chance:
         |       -> Chance: 0.5
@@ -519,6 +534,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         |   -> Predicates:
         |     -> Random Chance:
         |       -> Chance: 0.5
@@ -548,6 +564,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         |   -> Predicates:
         |     -> Random Chance:
         |       -> Chance: 0.5
@@ -577,6 +594,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         |   -> Predicates:
         |     -> Random Chance:
         |       -> Chance: 0.5
@@ -606,6 +624,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         |   -> Predicates:
         |     -> Random Chance:
         |       -> Chance: 0.5
@@ -635,6 +654,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         |   -> Predicates:
         |     -> Random Chance:
         |       -> Chance: 0.5
@@ -664,6 +684,7 @@ ali:entity_loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
         |   -> Predicates:
         |     -> Random Chance:
         |       -> Chance: 0.5

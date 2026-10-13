@@ -25,6 +25,7 @@ ali:loot_table
       | Enchant Randomly:
       |   -> Enchantment: Smite
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:skull_banner_pattern x1
       | Chance: 8.82%
       | Count: 1
@@ -39,6 +40,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:iron_shovel x1
       | Chance: 5.88%
       | Count: 1
@@ -53,6 +55,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:music_disc_strad x1
       | Chance: 4.9%
       | Count: 1
@@ -73,6 +76,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:amethyst_shard x1-4
       | Chance: 1.96%
       | Count: 1 to 4
@@ -113,6 +117,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:iron_sword x1
       | Chance: 4.35%
       | Count: 1
@@ -127,6 +132,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_boots x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 4.35%
       | Count: 1
@@ -134,6 +140,7 @@ ali:loot_table
       | Enchant Randomly:
       |   -> Enchantment: Projectile Protection
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:iron_axe x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 4.35%
       | Count: 1
@@ -142,6 +149,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:bow x1
       | Chance: 4.35%
       | Count: 1

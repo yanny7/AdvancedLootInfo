@@ -29,6 +29,7 @@ ali:loot_table
       |   -> Levels: 1 to 15
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:enchanted_book x1
       | Chance: 7.19%
       | Count: 1
@@ -37,6 +38,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:music_disc_wait x1
       | Chance: 3.6%
       | Count: 1
@@ -1399,6 +1401,7 @@ ali:loot_table
           |   -> Enchantments:
           |     -> Tag: minecraft:on_random_loot
           |   -> Only Compatible: True
+          |   -> Include Additional Cost Component: False
         ali:item minecraft:diamond_horse_armor x1
           | Chance: 3.47%
           | Count: 1

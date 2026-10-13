@@ -152,6 +152,7 @@ loom {
                 property "alicompat.gametest.mod", mod
                 property "alicompat.gametest.modids", gametestModIds(mod)
                 programArgs "--mixin.config", "aci.gametest.mixins.json"
+                programArgs "--packs", project.file("build/gametest/run/${mod}/gametestpacks").absolutePath
 
                 runDir "build/gametest/run/${mod}"
 
@@ -190,14 +191,14 @@ gametestMods.eachWithIndex { mod, index ->
                 throw new GradleException("alicompat_gametest=${mod} is not a mod enabled in compat_mods with a ${project.name} dependency")
             }
 
-            delete "${runDir}/config", "${runDir}/world", "${runDir}/mods", "${runDir}/kubejs"
+            delete "${runDir}/config", "${runDir}/gametestpacks", "${runDir}/mods", "${runDir}/kubejs"
             copy {
                 from project(":alicompat:common").file("src/gametest/kubejs/${mod}")
                 into "${runDir}/kubejs"
             }
             copy {
                 from project(":alicompat:common").file("src/gametest/datapacks/${mod}")
-                into "${runDir}/world/datapacks/${mod}"
+                into "${runDir}/gametestpacks/${mod}"
             }
             if (gametestCoordinates(mod)) {
                 extractGametestNested(mod)

@@ -35,6 +35,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchant Randomly:
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
       | Set Damage:
       |   -> Damage: 0% to 100%
       |   -> Add: False

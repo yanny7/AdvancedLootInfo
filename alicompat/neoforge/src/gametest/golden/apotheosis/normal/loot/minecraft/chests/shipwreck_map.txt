@@ -3,7 +3,7 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:map x1 {"minecraft:item_name":'{"translate":"filled_map.buried_treasure"}'}
+    ali:item minecraft:map x1 {"minecraft:item_name":{translate:"filled_map.buried_treasure"}}
       | Count: 1
       | ----- Modifiers -----
       | Exploration Map:
@@ -45,6 +45,24 @@ ali:loot_table
     ali:item minecraft:coast_armor_trim_smithing_template x2
       | Chance: 16.67%
       | Count: 2
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 80%
+    ali:item minecraft:copper_nautilus_armor x1
+      | Chance: 10.81%
+      | Count: 1
+    ali:item minecraft:iron_nautilus_armor x1
+      | Chance: 5.41%
+      | Count: 1
+    ali:item minecraft:golden_nautilus_armor x1
+      | Chance: 2.7%
+      | Count: 1
+    ali:item minecraft:diamond_nautilus_armor x1
+      | Chance: 1.08%
+      | Count: 1
   ali:empty
     | Chance: 35%
     | Count: 1

@@ -63,7 +63,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.05
                   | Config Value:
-                  |   -> Config: everlasting_beef.generateAsLoot
+                  |   -> Config: items.everlasting_beef.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | ----- Predicates -----

@@ -14,6 +14,7 @@ ali:loot_table
       |   -> Levels: 20 to 39
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item farmersdelight:iron_knife x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 12.5%
       | Count: 1
@@ -22,3 +23,4 @@ ali:loot_table
       |   -> Levels: 20 to 39
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False

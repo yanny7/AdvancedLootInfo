@@ -17,6 +17,7 @@ ali:loot_table
       |   -> Levels: 30
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:map x1
       | Chance: 4.17%
       | Count: 1
@@ -1284,6 +1285,7 @@ ali:loot_table
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 30
+      |   -> Include Additional Cost Component: False
   ali:reference
     | Selects all entries
     | Only items added by other mods
@@ -1306,6 +1308,7 @@ ali:loot_table
           |   -> Levels: 30
           |   -> Options:
           |     -> Tag: minecraft:on_random_loot
+          |   -> Include Additional Cost Component: False
         ali:item minecraft:map x1
           | Chance: 1.92%
           | Count: 1

@@ -9,10 +9,11 @@ ali:loot_table
         | Count: 1
         | ----- Predicates -----
         | Match Tool:
-        |   -> Item Predicates:
-        |     -> Enchantments:
-        |       -> Enchantment: Silk Touch
-        |       -> Level: ≥ 1
+        |   -> Components:
+        |     -> Partial Matchers:
+        |       -> minecraft:enchantments
+        |         -> Enchantment: Silk Touch
+        |         -> Level: ≥ 1
       ali:item xycraft_world:xychorium_gem_green x1-12
         | Count: 1 to 3
         |   -> Fortune I: 1 to 6  ~2 (33%)

@@ -92,7 +92,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: charm_of_sinking.generateAsLoot
+                  |   -> Config: items.charm_of_sinking.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 1.04%
@@ -116,7 +116,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: universal_attractor.generateAsLoot
+                  |   -> Config: items.universal_attractor.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 1.04%
@@ -140,7 +140,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: superstitious_hat.generateAsLoot
+                  |   -> Config: items.superstitious_hat.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 1.04%
@@ -164,7 +164,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: umbrella.generateAsLoot
+                  |   -> Config: items.umbrella.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 1.04%
@@ -188,7 +188,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: warp_drive.generateAsLoot
+                  |   -> Config: items.warp_drive.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 1.04%
@@ -212,7 +212,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: plastic_drinking_hat.generateAsLoot
+                  |   -> Config: items.plastic_drinking_hat.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 0.78%
@@ -228,7 +228,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: novelty_drinking_hat.generateAsLoot
+                  |   -> Config: items.novelty_drinking_hat.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 0.26%

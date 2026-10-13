@@ -99,6 +99,7 @@ ali:loot_table
       |   -> Levels: 30
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -132,7 +133,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.3
                   | Config Value:
-                  |   -> Config: power_glove.generateAsLoot
+                  |   -> Config: items.power_glove.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 12.5%
@@ -156,7 +157,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.3
                   | Config Value:
-                  |   -> Config: antidote_vessel.generateAsLoot
+                  |   -> Config: items.antidote_vessel.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 12.5%
@@ -180,7 +181,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.3
                   | Config Value:
-                  |   -> Config: superstitious_hat.generateAsLoot
+                  |   -> Config: items.superstitious_hat.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 12.5%
@@ -204,7 +205,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.3
                   | Config Value:
-                  |   -> Config: lucky_scarf.generateAsLoot
+                  |   -> Config: items.lucky_scarf.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 12.5%
@@ -228,7 +229,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.3
                   | Config Value:
-                  |   -> Config: aqua_dashers.generateAsLoot
+                  |   -> Config: items.aqua_dashers.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 12.5%
@@ -252,7 +253,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.3
                   | Config Value:
-                  |   -> Config: helium_flamingo.generateAsLoot
+                  |   -> Config: items.helium_flamingo.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 12.5%
@@ -276,7 +277,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.3
                   | Config Value:
-                  |   -> Config: rooted_boots.generateAsLoot
+                  |   -> Config: items.rooted_boots.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 12.5%
@@ -300,7 +301,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.3
                   | Config Value:
-                  |   -> Config: pickaxe_heater.generateAsLoot
+                  |   -> Config: items.pickaxe_heater.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 12.5%

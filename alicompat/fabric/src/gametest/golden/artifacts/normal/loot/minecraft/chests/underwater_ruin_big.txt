@@ -42,6 +42,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:fishing_rod x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 21.74%
       | Count: 1
@@ -50,6 +51,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_apple x1
       | Chance: 4.35%
       | Count: 1
@@ -104,7 +106,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.45
                     | Config Value:
-                    |   -> Config: snorkel.generateAsLoot
+                    |   -> Config: items.snorkel.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 23.08%
@@ -128,7 +130,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.45
                     | Config Value:
-                    |   -> Config: flippers.generateAsLoot
+                    |   -> Config: items.flippers.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 23.08%
@@ -152,7 +154,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.45
                     | Config Value:
-                    |   -> Config: superstitious_hat.generateAsLoot
+                    |   -> Config: items.superstitious_hat.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 7.69%
@@ -176,7 +178,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.45
                     | Config Value:
-                    |   -> Config: lucky_scarf.generateAsLoot
+                    |   -> Config: items.lucky_scarf.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 7.69%
@@ -200,7 +202,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.45
                     | Config Value:
-                    |   -> Config: fire_gauntlet.generateAsLoot
+                    |   -> Config: items.fire_gauntlet.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 7.69%
@@ -224,7 +226,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.45
                     | Config Value:
-                    |   -> Config: cross_necklace.generateAsLoot
+                    |   -> Config: items.cross_necklace.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 7.69%
@@ -248,7 +250,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.45
                     | Config Value:
-                    |   -> Config: power_glove.generateAsLoot
+                    |   -> Config: items.power_glove.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 7.69%
@@ -272,7 +274,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.45
                     | Config Value:
-                    |   -> Config: cloud_in_a_bottle.generateAsLoot
+                    |   -> Config: items.cloud_in_a_bottle.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 7.69%
@@ -296,7 +298,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.45
                     | Config Value:
-                    |   -> Config: anglers_hat.generateAsLoot
+                    |   -> Config: items.anglers_hat.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 7.69%

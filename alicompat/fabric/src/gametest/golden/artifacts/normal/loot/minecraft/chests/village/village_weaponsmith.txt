@@ -99,7 +99,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.1
                     | Config Value:
-                    |   -> Config: feral_claws.generateAsLoot
+                    |   -> Config: items.feral_claws.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 66.67%
@@ -123,7 +123,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.1
                     | Config Value:
-                    |   -> Config: charm_of_shrinking.generateAsLoot
+                    |   -> Config: items.charm_of_shrinking.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 33.33%

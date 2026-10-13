@@ -55,6 +55,7 @@ ali:loot_table
       |   -> Levels: 30 to 45
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:magma_cream x7-15
       | Chance: 7.73%
       | Count: 7 to 15

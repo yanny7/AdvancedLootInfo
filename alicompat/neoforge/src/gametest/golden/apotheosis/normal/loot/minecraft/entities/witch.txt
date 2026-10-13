@@ -13,7 +13,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: 0 to 1
+      |   -> Count: 0 to 1
     ali:item minecraft:glowstone_dust x0-5
       | Chance: 14.29%
       | Count: 0 to 2
@@ -24,7 +24,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: 0 to 1
+      |   -> Count: 0 to 1
     ali:item minecraft:sugar x0-5
       | Chance: 14.29%
       | Count: 0 to 2
@@ -35,7 +35,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: 0 to 1
+      |   -> Count: 0 to 1
     ali:item minecraft:spider_eye x0-5
       | Chance: 14.29%
       | Count: 0 to 2
@@ -46,7 +46,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: 0 to 1
+      |   -> Count: 0 to 1
     ali:item minecraft:glass_bottle x0-5
       | Chance: 14.29%
       | Count: 0 to 2
@@ -57,7 +57,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: 0 to 1
+      |   -> Count: 0 to 1
     ali:item minecraft:gunpowder x0-5
       | Chance: 14.29%
       | Count: 0 to 2
@@ -68,7 +68,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: 0 to 1
+      |   -> Count: 0 to 1
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -81,7 +81,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: 0 to 1
+      |   -> Count: 0 to 1
   ali:loot_pool
     | Selects random entry
     | Rolls: 1

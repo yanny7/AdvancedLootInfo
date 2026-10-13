@@ -11,6 +11,7 @@ ali:loot_table
       |   -> Levels: 30
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:lodestone x1
       | Chance: 10.81%
       | Count: 1
@@ -1283,3 +1284,4 @@ ali:loot_table
       | ----- Modifiers -----
       | Enchant With Levels:
       |   -> Levels: 30
+      |   -> Include Additional Cost Component: False

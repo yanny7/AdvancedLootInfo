@@ -18,3 +18,34 @@ ali:entity_loot_table
       | Set Count:
       |   -> Count: 1 to 4
       |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:music_disc_tears x1
+      | Chance: 10%
+      |   -> Looting LVL: 50% × [20%][LVL] | 25% + 5% × (LVL − 100%)
+      |   -> Looting I: 12.5%
+      |   -> Looting II: 15%
+      |   -> Looting III: 17.5%
+      | Count: 1
+      | ----- Predicates -----
+      | Random Chance With Enchanted Bonus:
+      |   -> Chance: 0.2
+      |     -> Looting LVL: [0.2][LVL] | 0.25 + 0.05 × (LVL − 1)
+      |     -> Looting I: 0.25
+      |     -> Looting II: 0.3
+      |     -> Looting III: 0.35
+    ali:item minecraft:dried_ghast x1
+      | Chance: 10%
+      |   -> Looting LVL: 50% × [20%][LVL] | 25% + 5% × (LVL − 100%)
+      |   -> Looting I: 12.5%
+      |   -> Looting II: 15%
+      |   -> Looting III: 17.5%
+      | Count: 1
+      | ----- Predicates -----
+      | Random Chance With Enchanted Bonus:
+      |   -> Chance: 0.2
+      |     -> Looting LVL: [0.2][LVL] | 0.25 + 0.05 × (LVL − 1)
+      |     -> Looting I: 0.25
+      |     -> Looting II: 0.3
+      |     -> Looting III: 0.35

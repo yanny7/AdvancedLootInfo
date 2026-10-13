@@ -110,7 +110,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: lucky_scarf.generateAsLoot
+                  |   -> Config: items.lucky_scarf.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 1.04%
@@ -134,7 +134,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: fire_gauntlet.generateAsLoot
+                  |   -> Config: items.fire_gauntlet.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 1.04%
@@ -158,7 +158,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: anglers_hat.generateAsLoot
+                  |   -> Config: items.anglers_hat.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 1.04%
@@ -182,7 +182,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: digging_claws.generateAsLoot
+                  |   -> Config: items.digging_claws.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 1.04%
@@ -206,7 +206,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: antidote_vessel.generateAsLoot
+                  |   -> Config: items.antidote_vessel.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 1.04%
@@ -230,7 +230,7 @@ ali:loot_table
                   | Config Value Chance:
                   |   -> Config: archaeology
                   | Config Value:
-                  |   -> Config: withered_bracelet.generateAsLoot
+                  |   -> Config: items.withered_bracelet.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 1.04%

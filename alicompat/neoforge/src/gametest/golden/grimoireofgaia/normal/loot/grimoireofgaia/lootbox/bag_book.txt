@@ -10,3 +10,4 @@ ali:loot_table
       |   -> Levels: 5 to 20
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False

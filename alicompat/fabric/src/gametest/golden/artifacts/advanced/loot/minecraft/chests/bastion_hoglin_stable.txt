@@ -21,6 +21,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:diamond_pickaxe x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 12%
       | Count: 1
@@ -35,6 +36,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:ancient_debris x1
       | Chance: 12%
       | Count: 1
@@ -91,6 +93,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:crying_obsidian x1-5
       | Chance: 7.14%
       | Count: max(0; U[1; 5])
@@ -235,9 +238,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: anglers_hat.generateAsLoot
+                          |   -> Config: items.anglers_hat.generateAsLoot
                           | Config Value:
-                          |   -> Config: anglers_hat.generateAsLoot
+                          |   -> Config: items.anglers_hat.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -245,7 +248,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: anglers_hat.generateAsLoot
+                          |   -> Config: items.anglers_hat.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -263,9 +266,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: antidote_vessel.generateAsLoot
+                          |   -> Config: items.antidote_vessel.generateAsLoot
                           | Config Value:
-                          |   -> Config: antidote_vessel.generateAsLoot
+                          |   -> Config: items.antidote_vessel.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -273,7 +276,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: antidote_vessel.generateAsLoot
+                          |   -> Config: items.antidote_vessel.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -291,9 +294,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: aqua_dashers.generateAsLoot
+                          |   -> Config: items.aqua_dashers.generateAsLoot
                           | Config Value:
-                          |   -> Config: aqua_dashers.generateAsLoot
+                          |   -> Config: items.aqua_dashers.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -301,7 +304,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: aqua_dashers.generateAsLoot
+                          |   -> Config: items.aqua_dashers.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -319,9 +322,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: bunny_hoppers.generateAsLoot
+                          |   -> Config: items.bunny_hoppers.generateAsLoot
                           | Config Value:
-                          |   -> Config: bunny_hoppers.generateAsLoot
+                          |   -> Config: items.bunny_hoppers.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -329,7 +332,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: bunny_hoppers.generateAsLoot
+                          |   -> Config: items.bunny_hoppers.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -347,9 +350,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: charm_of_shrinking.generateAsLoot
+                          |   -> Config: items.charm_of_shrinking.generateAsLoot
                           | Config Value:
-                          |   -> Config: charm_of_shrinking.generateAsLoot
+                          |   -> Config: items.charm_of_shrinking.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -357,7 +360,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: charm_of_shrinking.generateAsLoot
+                          |   -> Config: items.charm_of_shrinking.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -375,9 +378,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: charm_of_sinking.generateAsLoot
+                          |   -> Config: items.charm_of_sinking.generateAsLoot
                           | Config Value:
-                          |   -> Config: charm_of_sinking.generateAsLoot
+                          |   -> Config: items.charm_of_sinking.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -385,7 +388,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: charm_of_sinking.generateAsLoot
+                          |   -> Config: items.charm_of_sinking.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -403,9 +406,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: chorus_totem.generateAsLoot
+                          |   -> Config: items.chorus_totem.generateAsLoot
                           | Config Value:
-                          |   -> Config: chorus_totem.generateAsLoot
+                          |   -> Config: items.chorus_totem.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -413,7 +416,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: chorus_totem.generateAsLoot
+                          |   -> Config: items.chorus_totem.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -431,9 +434,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: cloud_in_a_bottle.generateAsLoot
+                          |   -> Config: items.cloud_in_a_bottle.generateAsLoot
                           | Config Value:
-                          |   -> Config: cloud_in_a_bottle.generateAsLoot
+                          |   -> Config: items.cloud_in_a_bottle.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -441,7 +444,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: cloud_in_a_bottle.generateAsLoot
+                          |   -> Config: items.cloud_in_a_bottle.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -459,9 +462,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: cowboy_hat.generateAsLoot
+                          |   -> Config: items.cowboy_hat.generateAsLoot
                           | Config Value:
-                          |   -> Config: cowboy_hat.generateAsLoot
+                          |   -> Config: items.cowboy_hat.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -469,7 +472,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: cowboy_hat.generateAsLoot
+                          |   -> Config: items.cowboy_hat.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -487,9 +490,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: cross_necklace.generateAsLoot
+                          |   -> Config: items.cross_necklace.generateAsLoot
                           | Config Value:
-                          |   -> Config: cross_necklace.generateAsLoot
+                          |   -> Config: items.cross_necklace.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -497,7 +500,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: cross_necklace.generateAsLoot
+                          |   -> Config: items.cross_necklace.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -515,9 +518,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: crystal_heart.generateAsLoot
+                          |   -> Config: items.crystal_heart.generateAsLoot
                           | Config Value:
-                          |   -> Config: crystal_heart.generateAsLoot
+                          |   -> Config: items.crystal_heart.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -525,7 +528,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: crystal_heart.generateAsLoot
+                          |   -> Config: items.crystal_heart.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -543,9 +546,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: digging_claws.generateAsLoot
+                          |   -> Config: items.digging_claws.generateAsLoot
                           | Config Value:
-                          |   -> Config: digging_claws.generateAsLoot
+                          |   -> Config: items.digging_claws.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -553,7 +556,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: digging_claws.generateAsLoot
+                          |   -> Config: items.digging_claws.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -571,9 +574,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: feral_claws.generateAsLoot
+                          |   -> Config: items.feral_claws.generateAsLoot
                           | Config Value:
-                          |   -> Config: feral_claws.generateAsLoot
+                          |   -> Config: items.feral_claws.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -581,7 +584,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: feral_claws.generateAsLoot
+                          |   -> Config: items.feral_claws.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -599,9 +602,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: fire_gauntlet.generateAsLoot
+                          |   -> Config: items.fire_gauntlet.generateAsLoot
                           | Config Value:
-                          |   -> Config: fire_gauntlet.generateAsLoot
+                          |   -> Config: items.fire_gauntlet.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -609,7 +612,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: fire_gauntlet.generateAsLoot
+                          |   -> Config: items.fire_gauntlet.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -627,9 +630,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: flame_pendant.generateAsLoot
+                          |   -> Config: items.flame_pendant.generateAsLoot
                           | Config Value:
-                          |   -> Config: flame_pendant.generateAsLoot
+                          |   -> Config: items.flame_pendant.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -637,7 +640,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: flame_pendant.generateAsLoot
+                          |   -> Config: items.flame_pendant.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -655,9 +658,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: flippers.generateAsLoot
+                          |   -> Config: items.flippers.generateAsLoot
                           | Config Value:
-                          |   -> Config: flippers.generateAsLoot
+                          |   -> Config: items.flippers.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -665,7 +668,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: flippers.generateAsLoot
+                          |   -> Config: items.flippers.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -683,9 +686,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: golden_hook.generateAsLoot
+                          |   -> Config: items.golden_hook.generateAsLoot
                           | Config Value:
-                          |   -> Config: golden_hook.generateAsLoot
+                          |   -> Config: items.golden_hook.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -693,7 +696,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: golden_hook.generateAsLoot
+                          |   -> Config: items.golden_hook.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -711,9 +714,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: kitty_slippers.generateAsLoot
+                          |   -> Config: items.kitty_slippers.generateAsLoot
                           | Config Value:
-                          |   -> Config: kitty_slippers.generateAsLoot
+                          |   -> Config: items.kitty_slippers.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -721,7 +724,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: kitty_slippers.generateAsLoot
+                          |   -> Config: items.kitty_slippers.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -739,9 +742,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: lucky_scarf.generateAsLoot
+                          |   -> Config: items.lucky_scarf.generateAsLoot
                           | Config Value:
-                          |   -> Config: lucky_scarf.generateAsLoot
+                          |   -> Config: items.lucky_scarf.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -749,7 +752,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: lucky_scarf.generateAsLoot
+                          |   -> Config: items.lucky_scarf.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -767,9 +770,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: night_vision_goggles.generateAsLoot
+                          |   -> Config: items.night_vision_goggles.generateAsLoot
                           | Config Value:
-                          |   -> Config: night_vision_goggles.generateAsLoot
+                          |   -> Config: items.night_vision_goggles.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -777,7 +780,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: night_vision_goggles.generateAsLoot
+                          |   -> Config: items.night_vision_goggles.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -795,9 +798,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: obsidian_skull.generateAsLoot
+                          |   -> Config: items.obsidian_skull.generateAsLoot
                           | Config Value:
-                          |   -> Config: obsidian_skull.generateAsLoot
+                          |   -> Config: items.obsidian_skull.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -805,7 +808,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: obsidian_skull.generateAsLoot
+                          |   -> Config: items.obsidian_skull.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -823,9 +826,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: onion_ring.generateAsLoot
+                          |   -> Config: items.onion_ring.generateAsLoot
                           | Config Value:
-                          |   -> Config: onion_ring.generateAsLoot
+                          |   -> Config: items.onion_ring.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -833,7 +836,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: onion_ring.generateAsLoot
+                          |   -> Config: items.onion_ring.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -851,9 +854,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: panic_necklace.generateAsLoot
+                          |   -> Config: items.panic_necklace.generateAsLoot
                           | Config Value:
-                          |   -> Config: panic_necklace.generateAsLoot
+                          |   -> Config: items.panic_necklace.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -861,7 +864,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: panic_necklace.generateAsLoot
+                          |   -> Config: items.panic_necklace.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -879,9 +882,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: pickaxe_heater.generateAsLoot
+                          |   -> Config: items.pickaxe_heater.generateAsLoot
                           | Config Value:
-                          |   -> Config: pickaxe_heater.generateAsLoot
+                          |   -> Config: items.pickaxe_heater.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -889,7 +892,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: pickaxe_heater.generateAsLoot
+                          |   -> Config: items.pickaxe_heater.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -907,9 +910,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: pocket_piston.generateAsLoot
+                          |   -> Config: items.pocket_piston.generateAsLoot
                           | Config Value:
-                          |   -> Config: pocket_piston.generateAsLoot
+                          |   -> Config: items.pocket_piston.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -917,7 +920,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: pocket_piston.generateAsLoot
+                          |   -> Config: items.pocket_piston.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -935,9 +938,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: power_glove.generateAsLoot
+                          |   -> Config: items.power_glove.generateAsLoot
                           | Config Value:
-                          |   -> Config: power_glove.generateAsLoot
+                          |   -> Config: items.power_glove.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -945,7 +948,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: power_glove.generateAsLoot
+                          |   -> Config: items.power_glove.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -963,9 +966,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: rooted_boots.generateAsLoot
+                          |   -> Config: items.rooted_boots.generateAsLoot
                           | Config Value:
-                          |   -> Config: rooted_boots.generateAsLoot
+                          |   -> Config: items.rooted_boots.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -973,7 +976,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: rooted_boots.generateAsLoot
+                          |   -> Config: items.rooted_boots.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -991,9 +994,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: running_shoes.generateAsLoot
+                          |   -> Config: items.running_shoes.generateAsLoot
                           | Config Value:
-                          |   -> Config: running_shoes.generateAsLoot
+                          |   -> Config: items.running_shoes.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -1001,7 +1004,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: running_shoes.generateAsLoot
+                          |   -> Config: items.running_shoes.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -1019,9 +1022,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: scarf_of_invisibility.generateAsLoot
+                          |   -> Config: items.scarf_of_invisibility.generateAsLoot
                           | Config Value:
-                          |   -> Config: scarf_of_invisibility.generateAsLoot
+                          |   -> Config: items.scarf_of_invisibility.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -1029,7 +1032,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: scarf_of_invisibility.generateAsLoot
+                          |   -> Config: items.scarf_of_invisibility.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -1047,9 +1050,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: shock_pendant.generateAsLoot
+                          |   -> Config: items.shock_pendant.generateAsLoot
                           | Config Value:
-                          |   -> Config: shock_pendant.generateAsLoot
+                          |   -> Config: items.shock_pendant.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -1057,7 +1060,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: shock_pendant.generateAsLoot
+                          |   -> Config: items.shock_pendant.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -1075,9 +1078,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: snorkel.generateAsLoot
+                          |   -> Config: items.snorkel.generateAsLoot
                           | Config Value:
-                          |   -> Config: snorkel.generateAsLoot
+                          |   -> Config: items.snorkel.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -1085,7 +1088,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: snorkel.generateAsLoot
+                          |   -> Config: items.snorkel.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -1103,9 +1106,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: snowshoes.generateAsLoot
+                          |   -> Config: items.snowshoes.generateAsLoot
                           | Config Value:
-                          |   -> Config: snowshoes.generateAsLoot
+                          |   -> Config: items.snowshoes.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -1113,7 +1116,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: snowshoes.generateAsLoot
+                          |   -> Config: items.snowshoes.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -1131,9 +1134,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: steadfast_spikes.generateAsLoot
+                          |   -> Config: items.steadfast_spikes.generateAsLoot
                           | Config Value:
-                          |   -> Config: steadfast_spikes.generateAsLoot
+                          |   -> Config: items.steadfast_spikes.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -1141,7 +1144,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: steadfast_spikes.generateAsLoot
+                          |   -> Config: items.steadfast_spikes.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -1159,9 +1162,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: strider_shoes.generateAsLoot
+                          |   -> Config: items.strider_shoes.generateAsLoot
                           | Config Value:
-                          |   -> Config: strider_shoes.generateAsLoot
+                          |   -> Config: items.strider_shoes.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -1169,7 +1172,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: strider_shoes.generateAsLoot
+                          |   -> Config: items.strider_shoes.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -1187,9 +1190,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: superstitious_hat.generateAsLoot
+                          |   -> Config: items.superstitious_hat.generateAsLoot
                           | Config Value:
-                          |   -> Config: superstitious_hat.generateAsLoot
+                          |   -> Config: items.superstitious_hat.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -1197,7 +1200,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: superstitious_hat.generateAsLoot
+                          |   -> Config: items.superstitious_hat.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -1215,9 +1218,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: thorn_pendant.generateAsLoot
+                          |   -> Config: items.thorn_pendant.generateAsLoot
                           | Config Value:
-                          |   -> Config: thorn_pendant.generateAsLoot
+                          |   -> Config: items.thorn_pendant.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -1225,7 +1228,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: thorn_pendant.generateAsLoot
+                          |   -> Config: items.thorn_pendant.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -1243,9 +1246,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: universal_attractor.generateAsLoot
+                          |   -> Config: items.universal_attractor.generateAsLoot
                           | Config Value:
-                          |   -> Config: universal_attractor.generateAsLoot
+                          |   -> Config: items.universal_attractor.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -1253,7 +1256,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: universal_attractor.generateAsLoot
+                          |   -> Config: items.universal_attractor.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -1271,9 +1274,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: vampiric_glove.generateAsLoot
+                          |   -> Config: items.vampiric_glove.generateAsLoot
                           | Config Value:
-                          |   -> Config: vampiric_glove.generateAsLoot
+                          |   -> Config: items.vampiric_glove.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -1281,7 +1284,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: vampiric_glove.generateAsLoot
+                          |   -> Config: items.vampiric_glove.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -1299,9 +1302,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: villager_hat.generateAsLoot
+                          |   -> Config: items.villager_hat.generateAsLoot
                           | Config Value:
-                          |   -> Config: villager_hat.generateAsLoot
+                          |   -> Config: items.villager_hat.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -1309,7 +1312,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: villager_hat.generateAsLoot
+                          |   -> Config: items.villager_hat.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -1327,9 +1330,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: warp_drive.generateAsLoot
+                          |   -> Config: items.warp_drive.generateAsLoot
                           | Config Value:
-                          |   -> Config: warp_drive.generateAsLoot
+                          |   -> Config: items.warp_drive.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -1337,7 +1340,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: warp_drive.generateAsLoot
+                          |   -> Config: items.warp_drive.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -1355,9 +1358,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: withered_bracelet.generateAsLoot
+                          |   -> Config: items.withered_bracelet.generateAsLoot
                           | Config Value:
-                          |   -> Config: withered_bracelet.generateAsLoot
+                          |   -> Config: items.withered_bracelet.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.54%
@@ -1365,7 +1368,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: withered_bracelet.generateAsLoot
+                          |   -> Config: items.withered_bracelet.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.54%
@@ -1384,11 +1387,11 @@ ali:loot_table
                           |   -> Default Probability: 0.25
                           | Any Of:
                           |   -> Config Value:
-                          |     -> Config: plastic_drinking_hat.generateAsLoot
+                          |     -> Config: items.plastic_drinking_hat.generateAsLoot
                           |   -> Config Value:
-                          |     -> Config: novelty_drinking_hat.generateAsLoot
+                          |     -> Config: items.novelty_drinking_hat.generateAsLoot
                           | Config Value:
-                          |   -> Config: plastic_drinking_hat.generateAsLoot
+                          |   -> Config: items.plastic_drinking_hat.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.41%
@@ -1397,9 +1400,9 @@ ali:loot_table
                           |   -> Default Probability: 0.25
                           | Any Of:
                           |   -> Config Value:
-                          |     -> Config: plastic_drinking_hat.generateAsLoot
+                          |     -> Config: items.plastic_drinking_hat.generateAsLoot
                           |   -> Config Value:
-                          |     -> Config: novelty_drinking_hat.generateAsLoot
+                          |     -> Config: items.novelty_drinking_hat.generateAsLoot
                       ali:alternatives
                         | Selects only first successful entry
                         ali:item artifacts:novelty_drinking_hat x1
@@ -1410,11 +1413,11 @@ ali:loot_table
                           |   -> Default Probability: 0.25
                           | Any Of:
                           |   -> Config Value:
-                          |     -> Config: plastic_drinking_hat.generateAsLoot
+                          |     -> Config: items.plastic_drinking_hat.generateAsLoot
                           |   -> Config Value:
-                          |     -> Config: novelty_drinking_hat.generateAsLoot
+                          |     -> Config: items.novelty_drinking_hat.generateAsLoot
                           | Config Value:
-                          |   -> Config: novelty_drinking_hat.generateAsLoot
+                          |   -> Config: items.novelty_drinking_hat.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.14%
@@ -1423,9 +1426,9 @@ ali:loot_table
                           |   -> Default Probability: 0.25
                           | Any Of:
                           |   -> Config Value:
-                          |     -> Config: plastic_drinking_hat.generateAsLoot
+                          |     -> Config: items.plastic_drinking_hat.generateAsLoot
                           |   -> Config Value:
-                          |     -> Config: novelty_drinking_hat.generateAsLoot
+                          |     -> Config: items.novelty_drinking_hat.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.34%
@@ -1443,9 +1446,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: umbrella.generateAsLoot
+                          |   -> Config: items.umbrella.generateAsLoot
                           | Config Value:
-                          |   -> Config: umbrella.generateAsLoot
+                          |   -> Config: items.umbrella.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.34%
@@ -1453,7 +1456,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: umbrella.generateAsLoot
+                          |   -> Config: items.umbrella.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.34%
@@ -1471,9 +1474,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: whoopee_cushion.generateAsLoot
+                          |   -> Config: items.whoopee_cushion.generateAsLoot
                           | Config Value:
-                          |   -> Config: whoopee_cushion.generateAsLoot
+                          |   -> Config: items.whoopee_cushion.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.34%
@@ -1481,7 +1484,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: whoopee_cushion.generateAsLoot
+                          |   -> Config: items.whoopee_cushion.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.27%
@@ -1499,9 +1502,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: helium_flamingo.generateAsLoot
+                          |   -> Config: items.helium_flamingo.generateAsLoot
                           | Config Value:
-                          |   -> Config: helium_flamingo.generateAsLoot
+                          |   -> Config: items.helium_flamingo.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.27%
@@ -1509,7 +1512,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: helium_flamingo.generateAsLoot
+                          |   -> Config: items.helium_flamingo.generateAsLoot
                 ali:reference
                   | Selects all entries
                   | Chance: 0.14%
@@ -1527,9 +1530,9 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: everlasting_beef.generateAsLoot
+                          |   -> Config: items.everlasting_beef.generateAsLoot
                           | Config Value:
-                          |   -> Config: everlasting_beef.generateAsLoot
+                          |   -> Config: items.everlasting_beef.generateAsLoot
                         ali:empty
                           | Drops nothing
                           | Chance: 0.14%
@@ -1537,7 +1540,7 @@ ali:loot_table
                           | Artifact Rarity Adjusted Chance:
                           |   -> Default Probability: 0.25
                           | Config Value:
-                          |   -> Config: everlasting_beef.generateAsLoot
+                          |   -> Config: items.everlasting_beef.generateAsLoot
           ali:reference
             | Selects all entries
             | Chance: 14.29%
@@ -1555,7 +1558,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.25
                     | Config Value:
-                    |   -> Config: bunny_hoppers.generateAsLoot
+                    |   -> Config: items.bunny_hoppers.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 14.29%
@@ -1579,7 +1582,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.25
                     | Config Value:
-                    |   -> Config: flame_pendant.generateAsLoot
+                    |   -> Config: items.flame_pendant.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 14.29%
@@ -1603,7 +1606,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.25
                     | Config Value:
-                    |   -> Config: cowboy_hat.generateAsLoot
+                    |   -> Config: items.cowboy_hat.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 14.29%
@@ -1627,7 +1630,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.25
                     | Config Value:
-                    |   -> Config: pickaxe_heater.generateAsLoot
+                    |   -> Config: items.pickaxe_heater.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 14.29%
@@ -1651,7 +1654,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.25
                     | Config Value:
-                    |   -> Config: withered_bracelet.generateAsLoot
+                    |   -> Config: items.withered_bracelet.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 14.29%
@@ -1675,7 +1678,7 @@ ali:loot_table
                     | Artifact Rarity Adjusted Chance:
                     |   -> Default Probability: 0.25
                     | Config Value:
-                    |   -> Config: everlasting_beef.generateAsLoot
+                    |   -> Config: items.everlasting_beef.generateAsLoot
                   ali:empty
                     | Drops nothing
                     | Chance: 4.76%

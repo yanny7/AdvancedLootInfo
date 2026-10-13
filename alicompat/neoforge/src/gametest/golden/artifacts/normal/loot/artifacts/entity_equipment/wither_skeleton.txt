@@ -20,7 +20,7 @@ ali:loot_table
               | Config Value Chance:
               |   -> Config: entity_equipment
               | Config Value:
-              |   -> Config: fire_gauntlet.generateAsLoot
+              |   -> Config: items.fire_gauntlet.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 0.08%
@@ -44,7 +44,7 @@ ali:loot_table
               | Config Value Chance:
               |   -> Config: entity_equipment
               | Config Value:
-              |   -> Config: antidote_vessel.generateAsLoot
+              |   -> Config: items.antidote_vessel.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 0.08%

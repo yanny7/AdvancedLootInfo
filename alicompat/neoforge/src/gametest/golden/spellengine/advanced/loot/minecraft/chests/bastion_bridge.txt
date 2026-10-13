@@ -23,6 +23,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:spectral_arrow x10-28
       | Chance: 7.69%
       | Count: max(0; U[10; 28])
@@ -83,6 +84,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_helmet x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 7.69%
       | Count: 1
@@ -94,6 +96,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_leggings x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 7.69%
       | Count: 1
@@ -105,6 +108,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_boots x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 7.69%
       | Count: 1
@@ -116,6 +120,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_axe x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 7.69%
       | Count: 1
@@ -127,6 +132,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
   ali:loot_pool
     | Selects random entry
     | Rolls: 2 to 4

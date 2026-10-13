@@ -15,6 +15,7 @@ ali:entity_loot_table
       |   -> Count: 1 to 3
       |   -> Add: False
       | Furnace Smelt
+      |   -> Use Input Count: True
       |   -> Predicates:
       |     -> Any Of:
       |       -> Entity Properties:
@@ -27,13 +28,14 @@ ali:entity_loot_table
       |         -> Predicate:
       |           -> Entity Equipment:
       |             -> Main Hand:
-      |               -> Item Predicates:
-      |                 -> Enchantments:
-      |                   -> Enchantments:
-      |                     -> Tag: minecraft:smelts_loot
+      |               -> Components:
+      |                 -> Partial Matchers:
+      |                   -> minecraft:enchantments
+      |                     -> Enchantments:
+      |                       -> Tag: minecraft:smelts_loot
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: U[0; 1)
+      |   -> Count: U[0; 1)
   ali:item occultism:tallow x2
     | Count: 2
     | ----- Predicates -----

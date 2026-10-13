@@ -20,7 +20,7 @@ ali:loot_table
               | Config Value Chance:
               |   -> Config: entity_equipment
               | Config Value:
-              |   -> Config: onion_ring.generateAsLoot
+              |   -> Config: items.onion_ring.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 0.08%
@@ -44,7 +44,7 @@ ali:loot_table
               | Config Value Chance:
               |   -> Config: entity_equipment
               | Config Value:
-              |   -> Config: strider_shoes.generateAsLoot
+              |   -> Config: items.strider_shoes.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 0.08%

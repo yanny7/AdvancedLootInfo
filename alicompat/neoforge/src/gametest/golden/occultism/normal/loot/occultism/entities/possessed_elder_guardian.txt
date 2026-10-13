@@ -12,7 +12,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: 0 to 1
+      |   -> Count: 0 to 1
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -26,8 +26,9 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: 0 to 1
+      |   -> Count: 0 to 1
       | Furnace Smelt
+      |   -> Use Input Count: True
       |   -> Predicates:
       |     -> Any Of:
       |       -> Entity Properties:
@@ -40,10 +41,11 @@ ali:entity_loot_table
       |         -> Predicate:
       |           -> Entity Equipment:
       |             -> Main Hand:
-      |               -> Item Predicates:
-      |                 -> Enchantments:
-      |                   -> Enchantments:
-      |                     -> Tag: minecraft:smelts_loot
+      |               -> Components:
+      |                 -> Partial Matchers:
+      |                   -> minecraft:enchantments
+      |                     -> Enchantments:
+      |                       -> Tag: minecraft:smelts_loot
     ali:item minecraft:prismarine_crystals x1-4
       | Chance: 33.33%
       | Count: 1
@@ -54,7 +56,7 @@ ali:entity_loot_table
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: 0 to 1
+      |   -> Count: 0 to 1
     ali:empty
       | Drops nothing
       | Chance: 16.67%
@@ -68,117 +70,78 @@ ali:entity_loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:reference
-      | Selects all entries
-      ali:loot_table
-        | Selects all entries
-        ali:loot_pool
-          | Selects random entry
-          | Rolls: 1
-          ali:item minecraft:cod x1
-            | Chance: 1.5%
-            |   -> Looting I: 2.1%
-            |   -> Looting II: 2.7%
-            |   -> Looting III: 3.3%
-            | Count: 1
-            | ----- Predicates -----
-            | Killed by player
-            | ----- Modifiers -----
-            | Furnace Smelt
-            |   -> Predicates:
-            |     -> Any Of:
-            |       -> Entity Properties:
-            |         -> Target: This Entity
-            |         -> Predicate:
-            |           -> Entity Flags:
-            |             -> Is On Fire: True
-            |       -> Entity Properties:
-            |         -> Target: Direct Attacker
-            |         -> Predicate:
-            |           -> Entity Equipment:
-            |             -> Main Hand:
-            |               -> Item Predicates:
-            |                 -> Enchantments:
-            |                   -> Enchantments:
-            |                     -> Tag: minecraft:smelts_loot
-          ali:item minecraft:salmon x1
-            | Chance: 0.63%
-            |   -> Looting I: 0.88%
-            |   -> Looting II: 1.12%
-            |   -> Looting III: 1.37%
-            | Count: 1
-            | ----- Predicates -----
-            | Killed by player
-            | ----- Modifiers -----
-            | Furnace Smelt
-            |   -> Predicates:
-            |     -> Any Of:
-            |       -> Entity Properties:
-            |         -> Target: This Entity
-            |         -> Predicate:
-            |           -> Entity Flags:
-            |             -> Is On Fire: True
-            |       -> Entity Properties:
-            |         -> Target: Direct Attacker
-            |         -> Predicate:
-            |           -> Entity Equipment:
-            |             -> Main Hand:
-            |               -> Item Predicates:
-            |                 -> Enchantments:
-            |                   -> Enchantments:
-            |                     -> Tag: minecraft:smelts_loot
-          ali:item minecraft:pufferfish x1
-            | Chance: 0.33%
-            |   -> Looting I: 0.46%
-            |   -> Looting II: 0.58%
-            |   -> Looting III: 0.71%
-            | Count: 1
-            | ----- Predicates -----
-            | Killed by player
-            | ----- Modifiers -----
-            | Furnace Smelt
-            |   -> Predicates:
-            |     -> Any Of:
-            |       -> Entity Properties:
-            |         -> Target: This Entity
-            |         -> Predicate:
-            |           -> Entity Flags:
-            |             -> Is On Fire: True
-            |       -> Entity Properties:
-            |         -> Target: Direct Attacker
-            |         -> Predicate:
-            |           -> Entity Equipment:
-            |             -> Main Hand:
-            |               -> Item Predicates:
-            |                 -> Enchantments:
-            |                   -> Enchantments:
-            |                     -> Tag: minecraft:smelts_loot
-          ali:item minecraft:tropical_fish x1
-            | Chance: 0.05%
-            |   -> Looting I: 0.07%
-            |   -> Looting II: 0.09%
-            |   -> Looting III: 0.11%
-            | Count: 1
-            | ----- Predicates -----
-            | Killed by player
-            | ----- Modifiers -----
-            | Furnace Smelt
-            |   -> Predicates:
-            |     -> Any Of:
-            |       -> Entity Properties:
-            |         -> Target: This Entity
-            |         -> Predicate:
-            |           -> Entity Flags:
-            |             -> Is On Fire: True
-            |       -> Entity Properties:
-            |         -> Target: Direct Attacker
-            |         -> Predicate:
-            |           -> Entity Equipment:
-            |             -> Main Hand:
-            |               -> Item Predicates:
-            |                 -> Enchantments:
-            |                   -> Enchantments:
-            |                     -> Tag: minecraft:smelts_loot
+    ali:item minecraft:cod x1
+      | Chance: 0.83%
+      |   -> Looting I: 1.17%
+      |   -> Looting II: 1.5%
+      |   -> Looting III: 1.83%
+      | Count: 1
+      | ----- Predicates -----
+      | Killed by player
+      | ----- Modifiers -----
+      | Furnace Smelt
+      |   -> Use Input Count: True
+      |   -> Predicates:
+      |     -> Any Of:
+      |       -> Entity Properties:
+      |         -> Target: This Entity
+      |         -> Predicate:
+      |           -> Entity Flags:
+      |             -> Is On Fire: True
+      |       -> Entity Properties:
+      |         -> Target: Direct Attacker
+      |         -> Predicate:
+      |           -> Entity Equipment:
+      |             -> Main Hand:
+      |               -> Components:
+      |                 -> Partial Matchers:
+      |                   -> minecraft:enchantments
+      |                     -> Enchantments:
+      |                       -> Tag: minecraft:smelts_loot
+    ali:item minecraft:salmon x1
+      | Chance: 0.83%
+      |   -> Looting I: 1.17%
+      |   -> Looting II: 1.5%
+      |   -> Looting III: 1.83%
+      | Count: 1
+      | ----- Predicates -----
+      | Killed by player
+      | ----- Modifiers -----
+      | Furnace Smelt
+      |   -> Use Input Count: True
+      |   -> Predicates:
+      |     -> Any Of:
+      |       -> Entity Properties:
+      |         -> Target: This Entity
+      |         -> Predicate:
+      |           -> Entity Flags:
+      |             -> Is On Fire: True
+      |       -> Entity Properties:
+      |         -> Target: Direct Attacker
+      |         -> Predicate:
+      |           -> Entity Equipment:
+      |             -> Main Hand:
+      |               -> Components:
+      |                 -> Partial Matchers:
+      |                   -> minecraft:enchantments
+      |                     -> Enchantments:
+      |                       -> Tag: minecraft:smelts_loot
+    ali:item minecraft:tropical_fish x1
+      | Chance: 0.42%
+      |   -> Looting I: 0.58%
+      |   -> Looting II: 0.75%
+      |   -> Looting III: 0.92%
+      | Count: 1
+      | ----- Predicates -----
+      | Killed by player
+    ali:item minecraft:pufferfish x1
+      | Chance: 0.42%
+      |   -> Looting I: 0.58%
+      |   -> Looting II: 0.75%
+      |   -> Looting III: 0.92%
+      | Count: 1
+      | ----- Predicates -----
+      | Killed by player
   ali:loot_pool
     | Selects random entry
     | Rolls: 1

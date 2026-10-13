@@ -18,6 +18,7 @@ ali:loot_table
       |   -> Levels: 30 to 45
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:experience_bottle x2-5
       | Chance: 9.87%
       | Count: max(0; U[2; 5])
@@ -33,6 +34,7 @@ ali:loot_table
       |   -> Levels: 30 to 40
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:netherite_ingot x1
       | Chance: 8.55%
       | Count: 1

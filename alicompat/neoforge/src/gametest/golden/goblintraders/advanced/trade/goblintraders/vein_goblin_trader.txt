@@ -1,220 +1,352 @@
 ali:trade
   ali:trade_level
     | Level: 1
-    | Randomly Selects min(U[5; 8]; 4) Of These Trades
+    | Randomly Selects min(U[5; 8); 4) Of These Trades
     ali:items_to_items
       | Uses: 16
       | XP: 4
-      | Price Multiplier: 0.0
       ali:item minecraft:carrot x8
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 32
       | XP: 4
-      | Price Multiplier: 0.0
       ali:item minecraft:glowstone x1
       ali:item minecraft:air x0
       ali:item minecraft:glowstone_dust x4
     ali:items_to_items
       | Uses: 64
       | XP: 4
-      | Price Multiplier: 0.0
-      ali:item minecraft:netherrack x48-64
+      ali:item minecraft:netherrack x36-47
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 12
       | XP: 4
-      | Price Multiplier: 0.0
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:nether_wart x2
   ali:trade_level
     | Level: 2
-    | Randomly Selects min(U[3; 5]; 5) Of These Trades
+    | Randomly Selects min(U[3; 5); 5) Of These Trades
     ali:items_to_items
-      | Uses: 12
+      | Uses: 2
       | XP: 10
-      | Price Multiplier: 0.0
       ali:item minecraft:netherite_ingot x2
       ali:item minecraft:air x0
       ali:item minecraft:totem_of_undying x1
     ali:items_to_items
-      | Uses: 20
+      | Uses: 12
       | XP: 50
-      | Price Multiplier: 0.0
       ali:item minecraft:ancient_debris x4
       ali:item minecraft:air x0
       ali:item minecraft:netherite_scrap x5
     ali:items_to_items
       | Uses: 128
       | XP: 4
-      | Price Multiplier: 0.0
       ali:item minecraft:nether_wart x1
       ali:item minecraft:nether_brick x1
-      ali:item minecraft:red_nether_bricks x1
+      ali:item minecraft:red_nether_bricks x2
     ali:items_to_items
       | Uses: 8
-      | XP: 4
-      | Price Multiplier: 0.0
+      | XP: 10
       ali:item minecraft:golden_carrot x1
       ali:item minecraft:air x0
       ali:item minecraft:emerald x2
     ali:items_to_items
       | Uses: 32
-      | XP: 3
-      | Price Multiplier: 0.0
+      | XP: 5
       ali:item minecraft:nether_quartz_ore x1
       ali:item minecraft:air x0
       ali:item minecraft:experience_bottle x1
   ali:trade_level
     | Level: 3
-    | Randomly Selects min(U[2; 3]; 4) Of These Trades
+    | Randomly Selects min(U[2; 3); 7) Of These Trades
     ali:items_to_items
       | Uses: 12
       | XP: 200
-      | Price Multiplier: 0.0
-      ali:item minecraft:golden_carrot x8-24
+      ali:item minecraft:golden_carrot x8-23
       ali:item minecraft:air x0
       ali:item minecraft:wither_skeleton_skull x1
     ali:items_to_items
-      | Uses: 1
+      | Uses: 2
       | XP: 100
-      | Price Multiplier: 0.0
-      ali:item minecraft:diamond x3-9
+      ali:item minecraft:diamond x3-8
       ali:item minecraft:air x0
       ali:item minecraft:netherite_upgrade_smithing_template x1
     ali:items_to_items
       | Uses: 1
       | XP: 100
-      | Price Multiplier: 0.0
-      ali:item minecraft:emerald x24-32
+      ali:item minecraft:emerald x16-23
       ali:item minecraft:air x0
       ali:item minecraft:rib_armor_trim_smithing_template x1
     ali:items_to_items
       | Uses: 1
       | XP: 100
-      | Price Multiplier: 0.0
-      ali:item minecraft:emerald x24-32
+      ali:item minecraft:emerald x24-31
       ali:item minecraft:air x0
       ali:item minecraft:music_disc_pigstep x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x24-31
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_lava_chicken x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x24-31
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_5 x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x24-31
+      ali:item minecraft:air x0
+      ali:item minecraft:music_disc_tears x1
   ali:trade_level
     | Level: 4
-    | Randomly Selects min(U[1; 2]; 12) Of These Trades
+    | Randomly Selects min(U[1; 2); 12) Of These Trades
     ali:items_to_items
       | Uses: 4
       | XP: 50
-      | Price Multiplier: 0.0
       ali:item minecraft:emerald x2
       ali:item minecraft:glass_bottle x1
       ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:slowness"}}
     ali:items_to_items
       | Uses: 4
       | XP: 50
-      | Price Multiplier: 0.0
       ali:item minecraft:emerald x2
       ali:item minecraft:glass_bottle x1
       ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:strong_slowness"}}
     ali:items_to_items
       | Uses: 4
       | XP: 50
-      | Price Multiplier: 0.0
       ali:item minecraft:emerald x2
       ali:item minecraft:glass_bottle x1
       ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:harming"}}
     ali:items_to_items
       | Uses: 4
       | XP: 50
-      | Price Multiplier: 0.0
       ali:item minecraft:emerald x2
       ali:item minecraft:glass_bottle x1
       ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:strong_harming"}}
     ali:items_to_items
       | Uses: 4
       | XP: 50
-      | Price Multiplier: 0.0
       ali:item minecraft:emerald x2
       ali:item minecraft:glass_bottle x1
       ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:poison"}}
     ali:items_to_items
       | Uses: 4
       | XP: 50
-      | Price Multiplier: 0.0
       ali:item minecraft:emerald x2
       ali:item minecraft:glass_bottle x1
       ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:long_poison"}}
     ali:items_to_items
       | Uses: 4
       | XP: 50
-      | Price Multiplier: 0.0
       ali:item minecraft:emerald x2
       ali:item minecraft:glass_bottle x1
       ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:strong_poison"}}
     ali:items_to_items
       | Uses: 4
       | XP: 50
-      | Price Multiplier: 0.0
       ali:item minecraft:emerald x2
       ali:item minecraft:glass_bottle x1
       ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:weakness"}}
     ali:items_to_items
       | Uses: 4
       | XP: 50
-      | Price Multiplier: 0.0
       ali:item minecraft:emerald x2
       ali:item minecraft:glass_bottle x1
       ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:wind_charged"}}
     ali:items_to_items
       | Uses: 4
       | XP: 50
-      | Price Multiplier: 0.0
       ali:item minecraft:emerald x2
       ali:item minecraft:glass_bottle x1
       ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:weaving"}}
     ali:items_to_items
       | Uses: 4
       | XP: 50
-      | Price Multiplier: 0.0
       ali:item minecraft:emerald x2
       ali:item minecraft:glass_bottle x1
       ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:oozing"}}
     ali:items_to_items
       | Uses: 4
       | XP: 50
-      | Price Multiplier: 0.0
       ali:item minecraft:emerald x2
       ali:item minecraft:glass_bottle x1
       ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:infested"}}
   ali:trade_level
     | Level: 5
     | Randomly Selects 1 Of These Trades
-    | Chance: 75%
     ali:items_to_items
       | Uses: 1
       | XP: 300
-      | Price Multiplier: 0.0
-      ali:item minecraft:nether_star x2
+      ali:item minecraft:nether_star x1
       ali:item minecraft:dragon_head x1
-      ali:item minecraft:netherite_helmet x1 {"minecraft:attribute_modifiers":[{amount:3.0d,id:"minecraft:armor.helmet",operation:"add_value",slot:"head",type:"minecraft:armor"},{amount:3.0d,id:"minecraft:armor.helmet",operation:"add_value",slot:"head",type:"minecraft:armor_toughness"},{amount:0.10000000149011612d,id:"minecraft:armor.helmet",operation:"add_value",slot:"head",type:"minecraft:knockback_resistance"},{amount:0.5d,id:"goblintraders:goblins_armour",operation:"add_multiplied_base",slot:"head",type:"minecraft:armor"},{amount:5.0d,id:"goblintraders:goblins_oxygen_boost",operation:"add_value",slot:"head",type:"minecraft:oxygen_bonus"}],"minecraft:lore":[{color:"green",translate:"custom.goblintraders.tuned"},{color:"gray",translate:"custom.goblintraders.lore"}],"minecraft:max_damage":4070,"minecraft:rarity":"epic"}
+      ali:item minecraft:netherite_helmet x1
+        | Increase Durability:
+        |   -> Durability Scale: 10.0
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:rarity
+        |       -> Rarity: Epic
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:enchantment_glint_override
+        |       -> Value: True
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> Goblin Tuned
+        |     -> A special item reengineered by the goblin with enhanced attributes
+        |     -> + Increased Durability
+        | Set Attributes:
+        |   -> Modifiers:
+        |     -> Entry:
+        |       -> Attribute: Armor
+        |       -> Operation: Add Value
+        |       -> Amount: 2
+        |       -> Id: goblintraders:goblins_armour
+        |       -> Equipment Slot: Head
+        |     -> Entry:
+        |       -> Attribute: Knockback Resistance
+        |       -> Operation: Add Value
+        |       -> Amount: 0.1
+        |       -> Id: goblintraders:goblins_knockback_resistance
+        |       -> Equipment Slot: Head
+        |   -> Replace: False
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> + More Armour
+        |     -> + Knockback Reduction
     ali:items_to_items
       | Uses: 1
       | XP: 300
-      | Price Multiplier: 0.0
-      ali:item minecraft:nether_star x2
+      ali:item minecraft:nether_star x1
       ali:item minecraft:dragon_head x1
-      ali:item minecraft:netherite_chestplate x1 {"minecraft:attribute_modifiers":[{amount:8.0d,id:"minecraft:armor.chestplate",operation:"add_value",slot:"chest",type:"minecraft:armor"},{amount:3.0d,id:"minecraft:armor.chestplate",operation:"add_value",slot:"chest",type:"minecraft:armor_toughness"},{amount:0.10000000149011612d,id:"minecraft:armor.chestplate",operation:"add_value",slot:"chest",type:"minecraft:knockback_resistance"},{amount:0.5d,id:"goblintraders:goblins_armour",operation:"add_multiplied_base",slot:"chest",type:"minecraft:armor"}],"minecraft:lore":[{color:"green",translate:"custom.goblintraders.tuned"},{color:"gray",translate:"custom.goblintraders.lore"}],"minecraft:max_damage":5920,"minecraft:rarity":"epic"}
+      ali:item minecraft:netherite_chestplate x1
+        | Increase Durability:
+        |   -> Durability Scale: 10.0
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:rarity
+        |       -> Rarity: Epic
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:enchantment_glint_override
+        |       -> Value: True
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> Goblin Tuned
+        |     -> A special item reengineered by the goblin with enhanced attributes
+        |     -> + Increased Durability
+        | Set Attributes:
+        |   -> Modifiers:
+        |     -> Entry:
+        |       -> Attribute: Armor
+        |       -> Operation: Add Value
+        |       -> Amount: 2
+        |       -> Id: goblintraders:goblins_armour
+        |       -> Equipment Slot: Chest
+        |     -> Entry:
+        |       -> Attribute: Knockback Resistance
+        |       -> Operation: Add Value
+        |       -> Amount: 0.1
+        |       -> Id: goblintraders:goblins_knockback_resistance
+        |       -> Equipment Slot: Chest
+        |   -> Replace: False
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> + More Armour
+        |     -> + Knockback Reduction
     ali:items_to_items
       | Uses: 1
       | XP: 300
-      | Price Multiplier: 0.0
-      ali:item minecraft:nether_star x2
+      ali:item minecraft:nether_star x1
       ali:item minecraft:dragon_head x1
-      ali:item minecraft:netherite_leggings x1 {"minecraft:attribute_modifiers":[{amount:6.0d,id:"minecraft:armor.leggings",operation:"add_value",slot:"legs",type:"minecraft:armor"},{amount:3.0d,id:"minecraft:armor.leggings",operation:"add_value",slot:"legs",type:"minecraft:armor_toughness"},{amount:0.10000000149011612d,id:"minecraft:armor.leggings",operation:"add_value",slot:"legs",type:"minecraft:knockback_resistance"},{amount:0.5d,id:"goblintraders:goblins_armour",operation:"add_multiplied_base",slot:"legs",type:"minecraft:armor"}],"minecraft:lore":[{color:"green",translate:"custom.goblintraders.tuned"},{color:"gray",translate:"custom.goblintraders.lore"}],"minecraft:max_damage":5550,"minecraft:rarity":"epic"}
+      ali:item minecraft:netherite_leggings x1
+        | Increase Durability:
+        |   -> Durability Scale: 10.0
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:rarity
+        |       -> Rarity: Epic
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:enchantment_glint_override
+        |       -> Value: True
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> Goblin Tuned
+        |     -> A special item reengineered by the goblin with enhanced attributes
+        |     -> + Increased Durability
+        | Set Attributes:
+        |   -> Modifiers:
+        |     -> Entry:
+        |       -> Attribute: Armor
+        |       -> Operation: Add Value
+        |       -> Amount: 2
+        |       -> Id: goblintraders:goblins_armour
+        |       -> Equipment Slot: Legs
+        |     -> Entry:
+        |       -> Attribute: Knockback Resistance
+        |       -> Operation: Add Value
+        |       -> Amount: 0.1
+        |       -> Id: goblintraders:goblins_knockback_resistance
+        |       -> Equipment Slot: Legs
+        |   -> Replace: False
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> + More Armour
+        |     -> + Knockback Reduction
     ali:items_to_items
       | Uses: 1
       | XP: 300
-      | Price Multiplier: 0.0
-      ali:item minecraft:nether_star x2
+      ali:item minecraft:nether_star x1
       ali:item minecraft:dragon_head x1
-      ali:item minecraft:netherite_boots x1 {"minecraft:attribute_modifiers":[{amount:3.0d,id:"minecraft:armor.boots",operation:"add_value",slot:"feet",type:"minecraft:armor"},{amount:3.0d,id:"minecraft:armor.boots",operation:"add_value",slot:"feet",type:"minecraft:armor_toughness"},{amount:0.10000000149011612d,id:"minecraft:armor.boots",operation:"add_value",slot:"feet",type:"minecraft:knockback_resistance"},{amount:0.5d,id:"goblintraders:goblins_big_step",operation:"add_value",slot:"feet",type:"minecraft:step_height"},{amount:1.0d,id:"goblintraders:goblins_fall_distance",operation:"add_multiplied_base",slot:"feet",type:"minecraft:safe_fall_distance"},{amount:0.5d,id:"goblintraders:goblins_armour",operation:"add_multiplied_base",slot:"feet",type:"minecraft:armor"},{amount:0.02d,id:"goblintraders:goblins_movement",operation:"add_value",slot:"feet",type:"minecraft:movement_speed"}],"minecraft:lore":[{color:"green",translate:"custom.goblintraders.tuned"},{color:"gray",translate:"custom.goblintraders.lore"}],"minecraft:max_damage":4810,"minecraft:rarity":"epic"}
+      ali:item minecraft:netherite_boots x1
+        | Increase Durability:
+        |   -> Durability Scale: 10.0
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:rarity
+        |       -> Rarity: Epic
+        | Set Components:
+        |   -> Components:
+        |     -> minecraft:enchantment_glint_override
+        |       -> Value: True
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> Goblin Tuned
+        |     -> A special item reengineered by the goblin with enhanced attributes
+        |     -> + Increased Durability
+        | Set Attributes:
+        |   -> Modifiers:
+        |     -> Entry:
+        |       -> Attribute: Armor
+        |       -> Operation: Add Value
+        |       -> Amount: 2
+        |       -> Id: goblintraders:goblins_armour
+        |       -> Equipment Slot: Feet
+        |     -> Entry:
+        |       -> Attribute: Knockback Resistance
+        |       -> Operation: Add Value
+        |       -> Amount: 0.1
+        |       -> Id: goblintraders:goblins_knockback_resistance
+        |       -> Equipment Slot: Feet
+        |   -> Replace: False
+        | Set Lore:
+        |   -> List Operation: Append
+        |   -> Lore:
+        |     -> + More Armour
+        |     -> + Knockback Reduction

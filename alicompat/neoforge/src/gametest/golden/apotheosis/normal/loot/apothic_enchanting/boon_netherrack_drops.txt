@@ -18,10 +18,11 @@ ali:loot_table
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Item Predicates:
-      |       -> Enchantments:
-      |         -> Enchantment: Silk Touch
-      |         -> Level: ≥ 1
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> minecraft:enchantments
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
     ali:item minecraft:raw_gold x1-8
       | Chance: 32.15%
       | Count: 1 to 5
@@ -32,10 +33,11 @@ ali:loot_table
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Item Predicates:
-      |       -> Enchantments:
-      |         -> Enchantment: Silk Touch
-      |         -> Level: ≥ 1
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> minecraft:enchantments
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
     ali:item minecraft:glowstone_dust x2-13
       | Chance: 19.29%
       | Count: 2 to 10
@@ -46,10 +48,11 @@ ali:loot_table
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Item Predicates:
-      |       -> Enchantments:
-      |         -> Enchantment: Silk Touch
-      |         -> Level: ≥ 1
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> minecraft:enchantments
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
     ali:item minecraft:ancient_debris x0-4
       | Chance: 0.32%
       | Count: 0 to 1
@@ -60,10 +63,11 @@ ali:loot_table
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Item Predicates:
-      |       -> Enchantments:
-      |         -> Enchantment: Silk Touch
-      |         -> Level: ≥ 1
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> minecraft:enchantments
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -77,37 +81,41 @@ ali:loot_table
       | Count: 2 to 4
       | ----- Predicates -----
       | Match Tool:
-      |   -> Item Predicates:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |   -> Components:
+      |     -> Partial Matchers:
+      |       -> minecraft:enchantments
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
     ali:item minecraft:nether_gold_ore x1-3
       | Chance: 32.15%
       | Count: 1 to 3
       | ----- Predicates -----
       | Match Tool:
-      |   -> Item Predicates:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |   -> Components:
+      |     -> Partial Matchers:
+      |       -> minecraft:enchantments
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
     ali:item minecraft:glowstone x1-3
       | Chance: 19.29%
       | Count: 1 to 3
       | ----- Predicates -----
       | Match Tool:
-      |   -> Item Predicates:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |   -> Components:
+      |     -> Partial Matchers:
+      |       -> minecraft:enchantments
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
     ali:item minecraft:ancient_debris x0-1
       | Chance: 0.32%
       | Count: 0 to 1
       | ----- Predicates -----
       | Match Tool:
-      |   -> Item Predicates:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |   -> Components:
+      |     -> Partial Matchers:
+      |       -> minecraft:enchantments
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
   ali:loot_pool
     | Selects random entry
     | Rolls: 1

@@ -156,6 +156,7 @@ ali:loot_table
             |   -> Levels: 20 to 39
             |   -> Options:
             |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:diamond_spear x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 0.56%
             | Count: 1
@@ -164,6 +165,7 @@ ali:loot_table
             |   -> Levels: 20 to 39
             |   -> Options:
             |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:diamond_boots x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 0.56%
             | Count: 1
@@ -172,6 +174,7 @@ ali:loot_table
             |   -> Levels: 20 to 39
             |   -> Options:
             |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 0.56%
             | Count: 1
@@ -180,6 +183,7 @@ ali:loot_table
             |   -> Levels: 20 to 39
             |   -> Options:
             |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:diamond_leggings x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 0.56%
             | Count: 1
@@ -188,6 +192,7 @@ ali:loot_table
             |   -> Levels: 20 to 39
             |   -> Options:
             |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:diamond_helmet x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 0.56%
             | Count: 1
@@ -196,6 +201,7 @@ ali:loot_table
             |   -> Levels: 20 to 39
             |   -> Options:
             |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:diamond_pickaxe x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 0.56%
             | Count: 1
@@ -204,6 +210,7 @@ ali:loot_table
             |   -> Levels: 20 to 39
             |   -> Options:
             |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:diamond_shovel x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 0.56%
             | Count: 1
@@ -212,6 +219,7 @@ ali:loot_table
             |   -> Levels: 20 to 39
             |   -> Options:
             |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:iron_sword x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 0.56%
             | Count: 1
@@ -220,6 +228,7 @@ ali:loot_table
             |   -> Levels: 20 to 39
             |   -> Options:
             |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:iron_boots x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 0.56%
             | Count: 1
@@ -228,6 +237,7 @@ ali:loot_table
             |   -> Levels: 20 to 39
             |   -> Options:
             |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:iron_chestplate x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 0.56%
             | Count: 1
@@ -236,6 +246,7 @@ ali:loot_table
             |   -> Levels: 20 to 39
             |   -> Options:
             |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:iron_leggings x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 0.56%
             | Count: 1
@@ -244,6 +255,7 @@ ali:loot_table
             |   -> Levels: 20 to 39
             |   -> Options:
             |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:iron_helmet x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 0.56%
             | Count: 1
@@ -252,6 +264,7 @@ ali:loot_table
             |   -> Levels: 20 to 39
             |   -> Options:
             |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:iron_pickaxe x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 0.56%
             | Count: 1
@@ -260,6 +273,7 @@ ali:loot_table
             |   -> Levels: 20 to 39
             |   -> Options:
             |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:iron_shovel x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 0.56%
             | Count: 1
@@ -268,6 +282,7 @@ ali:loot_table
             |   -> Levels: 20 to 39
             |   -> Options:
             |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:emerald x2-6
             | Chance: 0.37%
             | Count: max(0; U[2; 6])
@@ -408,6 +423,7 @@ ali:loot_table
             | Enchant Randomly:
             |   -> Enchantment: Soul Speed
             |   -> Only Compatible: True
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:piglin_banner_pattern x1
             | Chance: 1.69%
             | Count: 1
@@ -433,6 +449,7 @@ ali:loot_table
             |   -> Enchantments:
             |     -> Tag: minecraft:on_random_loot
             |   -> Only Compatible: True
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:diamond_shovel x1
             | Chance: 1.12%
             | Count: 1
@@ -451,6 +468,7 @@ ali:loot_table
             |   -> Enchantments:
             |     -> Tag: minecraft:on_random_loot
             |   -> Only Compatible: True
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:music_disc_pigstep x1
             | Chance: 0.94%
             | Count: 1
@@ -482,6 +500,7 @@ ali:loot_table
             |   -> Enchantments:
             |     -> Tag: minecraft:on_random_loot
             |   -> Only Compatible: True
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:iron_block x1
             | Chance: 1.67%
             | Count: 1
@@ -527,6 +546,7 @@ ali:loot_table
             | Enchant Randomly:
             |   -> Enchantment: Soul Speed
             |   -> Only Compatible: True
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:golden_axe x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 0.83%
             | Count: 1
@@ -538,6 +558,7 @@ ali:loot_table
             |   -> Enchantments:
             |     -> Tag: minecraft:on_random_loot
             |   -> Only Compatible: True
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:crossbow x1
             | Chance: 0.83%
             | Count: 1
@@ -680,14 +701,14 @@ ali:loot_table
           | Selects random entry
           | Rolls: 5 to 10
           ali:item minecraft:coal x6-15
-            | Chance: 1.36%
+            | Chance: 1.39%
             | Count: max(0; U[6; 15])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 6 to 15
             |   -> Add: False
           ali:item minecraft:potion x1-3 {"minecraft:potion_contents":{potion:"minecraft:strong_regeneration"}}
-            | Chance: 0.97%
+            | Chance: 0.99%
             | Count: max(0; U[1; 3])
             | ----- Modifiers -----
             | Set Count:
@@ -696,124 +717,124 @@ ali:loot_table
             | Set Potion:
             |   -> Potion: Potion of Regeneration
           ali:item minecraft:enchanted_book x1
-            | Chance: 0.97%
+            | Chance: 0.99%
             | Count: 1
             | ----- Modifiers -----
             | Enchant Randomly:
             |   -> Enchantments:
             |     -> Tag: minecraft:on_random_loot
             |   -> Only Compatible: True
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:book x3-10
-            | Chance: 0.97%
+            | Chance: 0.99%
             | Count: max(0; U[3; 10])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 3 to 10
             |   -> Add: False
           ali:item minecraft:bone x1-15
-            | Chance: 0.97%
+            | Chance: 0.99%
             | Count: max(0; U[1; 15])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 15
             |   -> Add: False
           ali:item minecraft:soul_torch x1-15
-            | Chance: 0.97%
+            | Chance: 0.99%
             | Count: max(0; U[1; 15])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 15
             |   -> Add: False
           ali:item minecraft:echo_shard x1-3
-            | Chance: 0.78%
+            | Chance: 0.79%
             | Count: max(0; U[1; 3])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 3
             |   -> Add: False
           ali:item minecraft:disc_fragment_5 x1-3
-            | Chance: 0.78%
+            | Chance: 0.79%
             | Count: max(0; U[1; 3])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 3
             |   -> Add: False
           ali:item minecraft:enchanted_book x1
-            | Chance: 0.58%
+            | Chance: 0.6%
             | Count: 1
             | ----- Modifiers -----
             | Enchant Randomly:
             |   -> Enchantment: Swift Sneak
             |   -> Only Compatible: True
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:sculk x4-10
-            | Chance: 0.58%
+            | Chance: 0.6%
             | Count: max(0; U[4; 10])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 4 to 10
             |   -> Add: False
           ali:item minecraft:sculk_sensor x1-3
-            | Chance: 0.58%
+            | Chance: 0.6%
             | Count: max(0; U[1; 3])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 3
             |   -> Add: False
           ali:item minecraft:candle x1-4
-            | Chance: 0.58%
+            | Chance: 0.6%
             | Count: max(0; U[1; 4])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 4
             |   -> Add: False
           ali:item minecraft:amethyst_shard x1-15
-            | Chance: 0.58%
+            | Chance: 0.6%
             | Count: max(0; U[1; 15])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 15
             |   -> Add: False
           ali:item minecraft:experience_bottle x1-3
-            | Chance: 0.58%
+            | Chance: 0.6%
             | Count: max(0; U[1; 3])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 3
             |   -> Add: False
           ali:item minecraft:glow_berries x1-15
-            | Chance: 0.58%
+            | Chance: 0.6%
             | Count: max(0; U[1; 15])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 15
             |   -> Add: False
           ali:item minecraft:iron_leggings x1 {"minecraft:enchantment_glint_override":1b}
-            | Chance: 0.58%
+            | Chance: 0.6%
             | Count: 1
             | ----- Modifiers -----
             | Enchant With Levels:
             |   -> Levels: 20 to 39
             |   -> Options:
             |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:compass x1
-            | Chance: 0.39%
+            | Chance: 0.4%
             | Count: 1
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1
             |   -> Add: False
           ali:item minecraft:sculk_catalyst x1-2
-            | Chance: 0.39%
+            | Chance: 0.4%
             | Count: max(0; U[1; 2])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 2
             |   -> Add: False
-          ali:item minecraft:name_tag x1
-            | Chance: 0.39%
-            | Count: 1
           ali:item minecraft:diamond_hoe x1 {"minecraft:enchantment_glint_override":1b}
-            | Chance: 0.39%
+            | Chance: 0.4%
             | Count: 1
             | ----- Modifiers -----
             | Set Count:
@@ -826,50 +847,52 @@ ali:loot_table
             |   -> Levels: 30 to 50
             |   -> Options:
             |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:lead x1
-            | Chance: 0.39%
+            | Chance: 0.4%
             | Count: 1
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1
             |   -> Add: False
           ali:item minecraft:diamond_horse_armor x1
-            | Chance: 0.39%
+            | Chance: 0.4%
             | Count: 1
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1
             |   -> Add: False
           ali:item minecraft:saddle x1
-            | Chance: 0.39%
+            | Chance: 0.4%
             | Count: 1
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1
             |   -> Add: False
           ali:item minecraft:music_disc_13 x1
-            | Chance: 0.39%
+            | Chance: 0.4%
             | Count: 1
           ali:item minecraft:music_disc_cat x1
-            | Chance: 0.39%
+            | Chance: 0.4%
             | Count: 1
           ali:item minecraft:diamond_leggings x1 {"minecraft:enchantment_glint_override":1b}
-            | Chance: 0.39%
+            | Chance: 0.4%
             | Count: 1
             | ----- Modifiers -----
             | Enchant With Levels:
             |   -> Levels: 30 to 50
             |   -> Options:
             |     -> Tag: minecraft:on_random_loot
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:enchanted_golden_apple x1-2
-            | Chance: 0.19%
+            | Chance: 0.2%
             | Count: max(0; U[1; 2])
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1 to 2
             |   -> Add: False
           ali:item minecraft:music_disc_otherside x1
-            | Chance: 0.19%
+            | Chance: 0.2%
             | Count: 1
         ali:loot_pool
           | Selects random entry
@@ -884,6 +907,7 @@ ali:loot_table
             | Enchant Randomly:
             |   -> Enchantment: Mending
             |   -> Only Compatible: True
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:ward_armor_trim_smithing_template x1
             | Chance: 0.83%
             | Count: 1
@@ -930,6 +954,7 @@ ali:loot_table
             |   -> Enchantments:
             |     -> Tag: minecraft:on_random_loot
             |   -> Only Compatible: True
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:diamond_spear x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 0.45%
             | Count: 1
@@ -941,6 +966,7 @@ ali:loot_table
             |   -> Enchantments:
             |     -> Tag: minecraft:on_random_loot
             |   -> Only Compatible: True
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 0.45%
             | Count: 1
@@ -952,6 +978,7 @@ ali:loot_table
             |   -> Enchantments:
             |     -> Tag: minecraft:on_random_loot
             |   -> Only Compatible: True
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:diamond_helmet x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 0.45%
             | Count: 1
@@ -963,6 +990,7 @@ ali:loot_table
             |   -> Enchantments:
             |     -> Tag: minecraft:on_random_loot
             |   -> Only Compatible: True
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:diamond_leggings x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 0.45%
             | Count: 1
@@ -974,6 +1002,7 @@ ali:loot_table
             |   -> Enchantments:
             |     -> Tag: minecraft:on_random_loot
             |   -> Only Compatible: True
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:diamond_boots x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 0.45%
             | Count: 1
@@ -985,6 +1014,7 @@ ali:loot_table
             |   -> Enchantments:
             |     -> Tag: minecraft:on_random_loot
             |   -> Only Compatible: True
+            |   -> Include Additional Cost Component: False
           ali:item minecraft:diamond_sword x1
             | Chance: 0.45%
             | Count: 1
@@ -1135,6 +1165,7 @@ ali:loot_table
                   |   -> Levels: 5 to 20
                   |   -> Options:
                   |     -> Tag: minecraft:on_random_loot
+                  |   -> Include Additional Cost Component: False
                 ali:item minecraft:golden_apple x1
                   | Chance: 0.69%
                   | Count: 1
@@ -1146,6 +1177,7 @@ ali:loot_table
                   |   -> Levels: 10 to 20
                   |   -> Options:
                   |     -> Tag: minecraft:on_random_loot
+                  |   -> Include Additional Cost Component: False
                 ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b}
                   | Chance: 0.69%
                   | Count: 1
@@ -1154,6 +1186,7 @@ ali:loot_table
                   |   -> Levels: 10 to 20
                   |   -> Options:
                   |     -> Tag: minecraft:on_random_loot
+                  |   -> Include Additional Cost Component: False
                 ali:item minecraft:enchanted_book x1
                   | Chance: 0.46%
                   | Count: 1
@@ -1166,6 +1199,7 @@ ali:loot_table
                   |     -> Looting
                   |     -> Multishot
                   |   -> Only Compatible: True
+                  |   -> Include Additional Cost Component: False
                 ali:item minecraft:enchanted_book x1
                   | Chance: 0.46%
                   | Count: 1
@@ -1175,6 +1209,7 @@ ali:loot_table
                   |     -> Breach
                   |     -> Density
                   |   -> Only Compatible: True
+                  |   -> Include Additional Cost Component: False
                 ali:item minecraft:enchanted_book x1
                   | Chance: 0.46%
                   | Count: 1

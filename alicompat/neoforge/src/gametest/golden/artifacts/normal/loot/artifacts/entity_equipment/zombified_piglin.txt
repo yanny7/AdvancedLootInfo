@@ -20,7 +20,7 @@ ali:loot_table
               | Config Value Chance:
               |   -> Config: entity_equipment
               | Config Value:
-              |   -> Config: golden_hook.generateAsLoot
+              |   -> Config: items.golden_hook.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 0.05%
@@ -44,7 +44,7 @@ ali:loot_table
               | Config Value Chance:
               |   -> Config: entity_equipment
               | Config Value:
-              |   -> Config: universal_attractor.generateAsLoot
+              |   -> Config: items.universal_attractor.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 0.05%
@@ -68,7 +68,7 @@ ali:loot_table
               | Config Value Chance:
               |   -> Config: entity_equipment
               | Config Value:
-              |   -> Config: obsidian_skull.generateAsLoot
+              |   -> Config: items.obsidian_skull.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 0.05%

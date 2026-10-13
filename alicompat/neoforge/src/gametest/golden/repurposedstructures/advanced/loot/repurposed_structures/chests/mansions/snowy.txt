@@ -4,39 +4,37 @@ ali:loot_table
     | Selects random entry
     | Rolls: 1 to 5
     ali:item minecraft:lead x1
-      | Chance: 15.75%
-      | Count: 1
-    ali:item minecraft:name_tag x1
-      | Chance: 15.75%
+      | Chance: 18.69%
       | Count: 1
     ali:item minecraft:golden_apple x1
-      | Chance: 11.81%
+      | Chance: 14.02%
       | Count: 1
     ali:item minecraft:music_disc_13 x1
-      | Chance: 11.81%
+      | Chance: 14.02%
       | Count: 1
     ali:item minecraft:music_disc_cat x1
-      | Chance: 11.81%
+      | Chance: 14.02%
       | Count: 1
     ali:item minecraft:diamond_hoe x1
-      | Chance: 11.81%
+      | Chance: 14.02%
       | Count: 1
     ali:item minecraft:chainmail_chestplate x1
-      | Chance: 7.87%
+      | Chance: 9.35%
       | Count: 1
     ali:item minecraft:enchanted_book x1
-      | Chance: 7.87%
+      | Chance: 9.35%
       | Count: 1
       | ----- Modifiers -----
       | Enchant Randomly:
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:diamond_chestplate x1
-      | Chance: 3.94%
+      | Chance: 4.67%
       | Count: 1
     ali:item minecraft:enchanted_golden_apple x1
-      | Chance: 1.57%
+      | Chance: 1.87%
       | Count: 1
   ali:loot_pool
     | Selects random entry
@@ -1373,39 +1371,37 @@ ali:loot_table
         | Selects random entry
         | Rolls: 1 to 3
         ali:item minecraft:lead x1
-          | Chance: 15.75%
-          | Count: 1
-        ali:item minecraft:name_tag x1
-          | Chance: 15.75%
+          | Chance: 18.69%
           | Count: 1
         ali:item minecraft:golden_apple x1
-          | Chance: 11.81%
+          | Chance: 14.02%
           | Count: 1
         ali:item minecraft:music_disc_13 x1
-          | Chance: 11.81%
+          | Chance: 14.02%
           | Count: 1
         ali:item minecraft:music_disc_cat x1
-          | Chance: 11.81%
+          | Chance: 14.02%
           | Count: 1
         ali:item minecraft:diamond_hoe x1
-          | Chance: 11.81%
+          | Chance: 14.02%
           | Count: 1
         ali:item minecraft:chainmail_chestplate x1
-          | Chance: 7.87%
+          | Chance: 9.35%
           | Count: 1
         ali:item minecraft:enchanted_book x1
-          | Chance: 7.87%
+          | Chance: 9.35%
           | Count: 1
           | ----- Modifiers -----
           | Enchant Randomly:
           |   -> Enchantments:
           |     -> Tag: minecraft:on_random_loot
           |   -> Only Compatible: True
+          |   -> Include Additional Cost Component: False
         ali:item minecraft:diamond_chestplate x1
-          | Chance: 3.94%
+          | Chance: 4.67%
           | Count: 1
         ali:item minecraft:enchanted_golden_apple x1
-          | Chance: 1.57%
+          | Chance: 1.87%
           | Count: 1
       ali:loot_pool
         | Selects random entry

@@ -17,6 +17,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item farmersdelight:diamond_knife x1
       | Chance: 12.5%
       | Count: 1

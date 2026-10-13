@@ -20,7 +20,7 @@ ali:loot_table
               | Artifact Rarity Adjusted Chance:
               |   -> Default Probability: 0.2
               | Config Value:
-              |   -> Config: flame_pendant.generateAsLoot
+              |   -> Config: items.flame_pendant.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 14.29%
@@ -44,7 +44,7 @@ ali:loot_table
               | Artifact Rarity Adjusted Chance:
               |   -> Default Probability: 0.2
               | Config Value:
-              |   -> Config: thorn_pendant.generateAsLoot
+              |   -> Config: items.thorn_pendant.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 14.29%
@@ -68,7 +68,7 @@ ali:loot_table
               | Artifact Rarity Adjusted Chance:
               |   -> Default Probability: 0.2
               | Config Value:
-              |   -> Config: whoopee_cushion.generateAsLoot
+              |   -> Config: items.whoopee_cushion.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 14.29%
@@ -92,7 +92,7 @@ ali:loot_table
               | Artifact Rarity Adjusted Chance:
               |   -> Default Probability: 0.2
               | Config Value:
-              |   -> Config: charm_of_sinking.generateAsLoot
+              |   -> Config: items.charm_of_sinking.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 14.29%
@@ -116,7 +116,7 @@ ali:loot_table
               | Artifact Rarity Adjusted Chance:
               |   -> Default Probability: 0.2
               | Config Value:
-              |   -> Config: shock_pendant.generateAsLoot
+              |   -> Config: items.shock_pendant.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 7.14%
@@ -140,7 +140,7 @@ ali:loot_table
               | Artifact Rarity Adjusted Chance:
               |   -> Default Probability: 0.2
               | Config Value:
-              |   -> Config: umbrella.generateAsLoot
+              |   -> Config: items.umbrella.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 7.14%
@@ -164,7 +164,7 @@ ali:loot_table
               | Artifact Rarity Adjusted Chance:
               |   -> Default Probability: 0.2
               | Config Value:
-              |   -> Config: scarf_of_invisibility.generateAsLoot
+              |   -> Config: items.scarf_of_invisibility.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 7.14%
@@ -188,7 +188,7 @@ ali:loot_table
               | Artifact Rarity Adjusted Chance:
               |   -> Default Probability: 0.2
               | Config Value:
-              |   -> Config: universal_attractor.generateAsLoot
+              |   -> Config: items.universal_attractor.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 7.14%
@@ -212,7 +212,7 @@ ali:loot_table
               | Artifact Rarity Adjusted Chance:
               |   -> Default Probability: 0.2
               | Config Value:
-              |   -> Config: vampiric_glove.generateAsLoot
+              |   -> Config: items.vampiric_glove.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 7.14%
@@ -236,7 +236,7 @@ ali:loot_table
               | Artifact Rarity Adjusted Chance:
               |   -> Default Probability: 0.2
               | Config Value:
-              |   -> Config: onion_ring.generateAsLoot
+              |   -> Config: items.onion_ring.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 7.14%

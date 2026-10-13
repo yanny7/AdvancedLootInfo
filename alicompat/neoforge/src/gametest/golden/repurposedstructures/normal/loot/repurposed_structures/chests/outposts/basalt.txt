@@ -14,6 +14,7 @@ ali:loot_table
       |   -> Levels: 10 to 35
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_sword x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 9.49%
       | Count: 1
@@ -25,6 +26,7 @@ ali:loot_table
       |   -> Levels: 5 to 25
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:crossbow x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 6.33%
       | Count: 1
@@ -36,6 +38,7 @@ ali:loot_table
       |   -> Levels: 5 to 25
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:bow x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 6.33%
       | Count: 1
@@ -47,6 +50,7 @@ ali:loot_table
       |   -> Levels: 5 to 25
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:cooked_porkchop x2-12
       | Chance: 6.33%
       | Count: 2 to 12
@@ -79,6 +83,7 @@ ali:loot_table
       |   -> Levels: 5 to 25
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_chestplate x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.16%
       | Count: 1
@@ -90,6 +95,7 @@ ali:loot_table
       |   -> Levels: 5 to 25
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_leggings x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.16%
       | Count: 1
@@ -101,6 +107,7 @@ ali:loot_table
       |   -> Levels: 5 to 25
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_boots x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 3.16%
       | Count: 1
@@ -112,6 +119,7 @@ ali:loot_table
       |   -> Levels: 5 to 25
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:netherite_scrap x1
       | Chance: 3.16%
       | Count: 1
@@ -1425,6 +1433,7 @@ ali:loot_table
           |   -> Enchantments:
           |     -> Tag: minecraft:on_random_loot
           |   -> Only Compatible: True
+          |   -> Include Additional Cost Component: False
       ali:loot_pool
         | Selects random entry
         | Rolls: 0 to 1
@@ -1432,7 +1441,8 @@ ali:loot_table
           | Count: 1
           | ----- Modifiers -----
           | Set Instrument:
-          |   -> Options: minecraft:regular_goat_horns
+          |   -> Options:
+          |     -> Tag: minecraft:regular_goat_horns
       ali:loot_pool
         | Selects random entry
         | Rolls: 1
@@ -1452,6 +1462,7 @@ ali:loot_table
           | Enchant Randomly:
           |   -> Enchantment: Quick Charge
           |   -> Only Compatible: True
+          |   -> Include Additional Cost Component: False
         ali:empty
           | Drops nothing
           | Chance: 33.33%

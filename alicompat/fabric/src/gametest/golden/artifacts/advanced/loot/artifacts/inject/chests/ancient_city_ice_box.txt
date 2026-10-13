@@ -18,7 +18,7 @@ ali:loot_table
               | Artifact Rarity Adjusted Chance:
               |   -> Default Probability: 0.2
               | Config Value:
-              |   -> Config: snowshoes.generateAsLoot
+              |   -> Config: items.snowshoes.generateAsLoot
             ali:empty
               | Drops nothing
               | ----- Predicates -----

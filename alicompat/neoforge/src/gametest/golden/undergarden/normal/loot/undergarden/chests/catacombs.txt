@@ -29,6 +29,7 @@ ali:loot_table
       |   -> Levels: 15 to 20
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
       | Set Damage:
       |   -> Damage: 60% to 90%
       |   -> Add: False
@@ -40,6 +41,7 @@ ali:loot_table
       |   -> Levels: 15 to 20
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
       | Set Damage:
       |   -> Damage: 60% to 90%
       |   -> Add: False
@@ -51,6 +53,7 @@ ali:loot_table
       |   -> Levels: 25 to 30
       |   -> Options:
       |     -> Tag: minecraft:treasure
+      |   -> Include Additional Cost Component: False
       | Set Damage:
       |   -> Damage: 20% to 50%
       |   -> Add: False
@@ -62,6 +65,7 @@ ali:loot_table
       |   -> Levels: 25 to 30
       |   -> Options:
       |     -> Tag: minecraft:treasure
+      |   -> Include Additional Cost Component: False
       | Set Damage:
       |   -> Damage: 20% to 50%
       |   -> Add: False

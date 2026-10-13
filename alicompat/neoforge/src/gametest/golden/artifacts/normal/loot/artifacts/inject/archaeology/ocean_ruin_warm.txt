@@ -18,7 +18,7 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Config Value:
-              |   -> Config: aqua_dashers.generateAsLoot
+              |   -> Config: items.aqua_dashers.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 16.67%
@@ -37,7 +37,7 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Config Value:
-              |   -> Config: onion_ring.generateAsLoot
+              |   -> Config: items.onion_ring.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 16.67%
@@ -56,7 +56,7 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Config Value:
-              |   -> Config: running_shoes.generateAsLoot
+              |   -> Config: items.running_shoes.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 16.67%
@@ -75,7 +75,7 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Config Value:
-              |   -> Config: bunny_hoppers.generateAsLoot
+              |   -> Config: items.bunny_hoppers.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 16.67%
@@ -94,7 +94,7 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Config Value:
-              |   -> Config: vampiric_glove.generateAsLoot
+              |   -> Config: items.vampiric_glove.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 16.67%
@@ -113,7 +113,7 @@ ali:loot_table
               | Count: 1
               | ----- Predicates -----
               | Config Value:
-              |   -> Config: strider_shoes.generateAsLoot
+              |   -> Config: items.strider_shoes.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 16.67%

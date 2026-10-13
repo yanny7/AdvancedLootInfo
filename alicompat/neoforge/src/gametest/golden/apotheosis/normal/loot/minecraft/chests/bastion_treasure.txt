@@ -6,7 +6,7 @@ ali:loot_table
     ali:modified
       | Selects only first successful entry
       ali:item minecraft:diamond_sword x1 {"minecraft:enchantment_glint_override":1b}
-        | Chance: 2.1%
+        | Chance: 1.87%
         | Count: 1
         | ----- Modifiers -----
         | Set Damage:
@@ -16,8 +16,9 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Tag: minecraft:on_random_loot
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
       ali:item minecraft:diamond_sword x1 {"minecraft:enchantment_glint_override":1b}
-        | Chance: 6%
+        | Chance: 5.36%
         | Count: 1
         | ----- Modifiers -----
         | Set Damage:
@@ -27,10 +28,37 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Tag: minecraft:on_random_loot
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
+    ali:modified
+      | Selects only first successful entry
+      ali:item minecraft:diamond_spear x1 {"minecraft:enchantment_glint_override":1b}
+        | Chance: 1.87%
+        | Count: 1
+        | ----- Modifiers -----
+        | Set Damage:
+        |   -> Damage: 80% to 100%
+        |   -> Add: False
+        | Enchant Randomly:
+        |   -> Enchantments:
+        |     -> Tag: minecraft:on_random_loot
+        |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
+      ali:item minecraft:diamond_spear x1 {"minecraft:enchantment_glint_override":1b}
+        | Chance: 5.36%
+        | Count: 1
+        | ----- Modifiers -----
+        | Set Damage:
+        |   -> Damage: 80% to 100%
+        |   -> Add: False
+        | Enchant Randomly:
+        |   -> Enchantments:
+        |     -> Tag: minecraft:on_random_loot
+        |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
     ali:modified
       | Selects only first successful entry
       ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b}
-        | Chance: 2.1%
+        | Chance: 1.87%
         | Count: 1
         | ----- Modifiers -----
         | Set Damage:
@@ -40,8 +68,9 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Tag: minecraft:on_random_loot
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
       ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b}
-        | Chance: 6%
+        | Chance: 5.36%
         | Count: 1
         | ----- Modifiers -----
         | Set Damage:
@@ -51,10 +80,11 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Tag: minecraft:on_random_loot
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
     ali:modified
       | Selects only first successful entry
       ali:item minecraft:diamond_helmet x1 {"minecraft:enchantment_glint_override":1b}
-        | Chance: 2.1%
+        | Chance: 1.87%
         | Count: 1
         | ----- Modifiers -----
         | Set Damage:
@@ -64,8 +94,9 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Tag: minecraft:on_random_loot
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
       ali:item minecraft:diamond_helmet x1 {"minecraft:enchantment_glint_override":1b}
-        | Chance: 6%
+        | Chance: 5.36%
         | Count: 1
         | ----- Modifiers -----
         | Set Damage:
@@ -75,10 +106,11 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Tag: minecraft:on_random_loot
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
     ali:modified
       | Selects only first successful entry
       ali:item minecraft:diamond_leggings x1 {"minecraft:enchantment_glint_override":1b}
-        | Chance: 2.1%
+        | Chance: 1.87%
         | Count: 1
         | ----- Modifiers -----
         | Set Damage:
@@ -88,8 +120,9 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Tag: minecraft:on_random_loot
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
       ali:item minecraft:diamond_leggings x1 {"minecraft:enchantment_glint_override":1b}
-        | Chance: 6%
+        | Chance: 5.36%
         | Count: 1
         | ----- Modifiers -----
         | Set Damage:
@@ -99,10 +132,11 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Tag: minecraft:on_random_loot
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
     ali:modified
       | Selects only first successful entry
       ali:item minecraft:diamond_boots x1 {"minecraft:enchantment_glint_override":1b}
-        | Chance: 2.1%
+        | Chance: 1.87%
         | Count: 1
         | ----- Modifiers -----
         | Set Damage:
@@ -112,8 +146,9 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Tag: minecraft:on_random_loot
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
       ali:item minecraft:diamond_boots x1 {"minecraft:enchantment_glint_override":1b}
-        | Chance: 6%
+        | Chance: 5.36%
         | Count: 1
         | ----- Modifiers -----
         | Set Damage:
@@ -123,63 +158,72 @@ ali:loot_table
         |   -> Enchantments:
         |     -> Tag: minecraft:on_random_loot
         |   -> Only Compatible: True
+        |   -> Include Additional Cost Component: False
     ali:modified
       | Selects only first successful entry
       ali:item minecraft:diamond_sword x1
-        | Chance: 2.1%
+        | Chance: 1.87%
         | Count: 1
       ali:item minecraft:diamond_sword x1
-        | Chance: 6%
+        | Chance: 5.36%
+        | Count: 1
+    ali:modified
+      | Selects only first successful entry
+      ali:item minecraft:diamond_spear x1
+        | Chance: 1.87%
+        | Count: 1
+      ali:item minecraft:diamond_spear x1
+        | Chance: 5.36%
         | Count: 1
     ali:modified
       | Selects only first successful entry
       ali:item minecraft:diamond_chestplate x1
-        | Chance: 1.75%
+        | Chance: 1.56%
         | Count: 1
       ali:item minecraft:diamond_chestplate x1
-        | Chance: 5%
+        | Chance: 4.46%
         | Count: 1
     ali:modified
       | Selects only first successful entry
       ali:item minecraft:diamond_helmet x1
-        | Chance: 1.75%
+        | Chance: 1.56%
         | Count: 1
       ali:item minecraft:diamond_helmet x1
-        | Chance: 5%
+        | Chance: 4.46%
         | Count: 1
     ali:modified
       | Selects only first successful entry
       ali:item minecraft:diamond_boots x1
-        | Chance: 1.75%
+        | Chance: 1.56%
         | Count: 1
       ali:item minecraft:diamond_boots x1
-        | Chance: 5%
+        | Chance: 4.46%
         | Count: 1
     ali:modified
       | Selects only first successful entry
       ali:item minecraft:diamond_leggings x1
-        | Chance: 1.75%
+        | Chance: 1.56%
         | Count: 1
       ali:item minecraft:diamond_leggings x1
-        | Chance: 5%
+        | Chance: 4.46%
         | Count: 1
     ali:item minecraft:netherite_ingot x1
-      | Chance: 15%
+      | Chance: 13.39%
       | Count: 1
     ali:item minecraft:ancient_debris x1
-      | Chance: 10%
+      | Chance: 8.93%
       | Count: 1
     ali:item minecraft:netherite_scrap x1
-      | Chance: 8%
+      | Chance: 7.14%
       | Count: 1
     ali:item minecraft:diamond x2-6
-      | Chance: 5%
+      | Chance: 4.46%
       | Count: 2 to 6
     ali:item minecraft:ancient_debris x2
-      | Chance: 4%
+      | Chance: 3.57%
       | Count: 2
     ali:item minecraft:enchanted_golden_apple x1
-      | Chance: 2%
+      | Chance: 1.79%
       | Count: 1
   ali:loot_pool
     | Selects random entry

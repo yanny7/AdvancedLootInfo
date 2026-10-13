@@ -10,3 +10,18 @@ ali:entity_loot_table
     | Rolls: 1
     ali:item minecraft:gunpowder x1-4
       | Count: 1 to 4
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:music_disc_tears x1
+      | Chance: 10%
+      |   -> Looting I: 12.5%
+      |   -> Looting II: 15%
+      |   -> Looting III: 17.5%
+      | Count: 1
+    ali:item minecraft:dried_ghast x1
+      | Chance: 10%
+      |   -> Looting I: 12.5%
+      |   -> Looting II: 15%
+      |   -> Looting III: 17.5%
+      | Count: 1

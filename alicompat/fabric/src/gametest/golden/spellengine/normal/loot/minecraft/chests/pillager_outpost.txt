@@ -48,6 +48,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
   ali:loot_pool
     | Selects random entry
     | Rolls: 0 to 1
@@ -55,7 +56,8 @@ ali:loot_table
       | Count: 1
       | ----- Modifiers -----
       | Set Instrument:
-      |   -> Options: minecraft:regular_goat_horns
+      |   -> Options:
+      |     -> Tag: minecraft:regular_goat_horns
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -65,6 +67,20 @@ ali:loot_table
     ali:item minecraft:sentry_armor_trim_smithing_template x2
       | Chance: 25%
       | Count: 2
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:enchanted_book x1
+      | Chance: 66.67%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantment: Quick Charge
+      |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
+    ali:empty
+      | Drops nothing
+      | Chance: 33.33%
   ali:loot_pool
     | Selects random entry
     | Rolls: 0 to 1

@@ -5,77 +5,66 @@ ali:trade
     ali:items_to_items
       | Uses: 1
       | XP: 0
-      | Price Multiplier: 0.0
       ali:item undergarden:regalium_crystal x32
       ali:item minecraft:air x0
       ali:item undergarden:music_disc_limax_maximus x1
     ali:items_to_items
       | Uses: 1
       | XP: 0
-      | Price Multiplier: 0.0
       ali:item undergarden:regalium_crystal x32
       ali:item minecraft:air x0
       ali:item undergarden:music_disc_gloomper_anthem x1
     ali:items_to_items
       | Uses: 1
       | XP: 0
-      | Price Multiplier: 0.0
       ali:item undergarden:music_disc_mammoth x1
       ali:item minecraft:air x0
       ali:item undergarden:regalium_crystal x32
     ali:items_to_items
       | Uses: 1
       | XP: 0
-      | Price Multiplier: 0.0
       ali:item undergarden:music_disc_relict x1
       ali:item minecraft:air x0
       ali:item undergarden:regalium_crystal x32
     ali:items_to_items
       | Uses: 24
       | XP: 0
-      | Price Multiplier: 0.0
       ali:item undergarden:regalium_crystal x16
       ali:item minecraft:air x0
       ali:item undergarden:blisterbomb x8
     ali:items_to_items
       | Uses: 10
       | XP: 0
-      | Price Multiplier: 0.0
       ali:item undergarden:regalium_crystal x1
       ali:item minecraft:air x0
       ali:item undergarden:shard_torch x4
     ali:items_to_items
       | Uses: 6
       | XP: 0
-      | Price Multiplier: 0.0
       ali:item undergarden:regalium_crystal x1
       ali:item minecraft:air x0
       ali:item undergarden:gloomgourd_seeds x6
     ali:items_to_items
       | Uses: 5
       | XP: 0
-      | Price Multiplier: 0.0
       ali:item minecraft:diamond x1
       ali:item minecraft:air x0
       ali:item undergarden:regalium_crystal x12
     ali:items_to_items
       | Uses: 5
       | XP: 0
-      | Price Multiplier: 0.0
       ali:item minecraft:iron_ingot x1
       ali:item minecraft:air x0
       ali:item undergarden:regalium_crystal x4
     ali:items_to_items
       | Uses: 5
       | XP: 0
-      | Price Multiplier: 0.0
       ali:item minecraft:gold_ingot x1
       ali:item minecraft:air x0
       ali:item undergarden:regalium_crystal x2
     ali:items_to_items
-      | Uses: 2
+      | Uses: 1
       | XP: 0
-      | Price Multiplier: 0.0
       ali:item undergarden:utherium_block x1
       ali:item minecraft:air x0
       ali:item undergarden:regalium_crystal x48

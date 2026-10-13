@@ -1,0 +1,41 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:stone_sword x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:stone_axe x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:stone_spear x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:copper_sword x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:copper_axe x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:copper_spear x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:iron_sword x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:iron_axe x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:iron_spear x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:golden_sword x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:golden_axe x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item minecraft:golden_spear x1
+      | Chance: 8.33%
+      | Count: 1

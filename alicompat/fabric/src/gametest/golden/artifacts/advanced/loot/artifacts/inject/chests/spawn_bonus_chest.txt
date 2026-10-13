@@ -18,7 +18,7 @@ ali:loot_table
               | Artifact Rarity Adjusted Chance:
               |   -> Default Probability: 1.0
               | Config Value:
-              |   -> Config: whoopee_cushion.generateAsLoot
+              |   -> Config: items.whoopee_cushion.generateAsLoot
             ali:empty
               | Drops nothing
               | ----- Predicates -----

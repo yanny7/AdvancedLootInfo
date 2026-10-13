@@ -17,6 +17,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:iron_pickaxe x1
       | Chance: 7.04%
       | Count: 1
@@ -157,6 +158,7 @@ ali:loot_table
       | Enchant Randomly:
       |   -> Enchantment: Efficiency
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
   ali:reference
     | Selects all entries
     ali:loot_table
@@ -181,7 +183,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.3
                   | Config Value:
-                  |   -> Config: onion_ring.generateAsLoot
+                  |   -> Config: items.onion_ring.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 16.67%
@@ -205,7 +207,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.3
                   | Config Value:
-                  |   -> Config: night_vision_goggles.generateAsLoot
+                  |   -> Config: items.night_vision_goggles.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 8.33%
@@ -229,7 +231,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.3
                   | Config Value:
-                  |   -> Config: panic_necklace.generateAsLoot
+                  |   -> Config: items.panic_necklace.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 8.33%
@@ -253,7 +255,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.3
                   | Config Value:
-                  |   -> Config: obsidian_skull.generateAsLoot
+                  |   -> Config: items.obsidian_skull.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 8.33%
@@ -277,7 +279,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.3
                   | Config Value:
-                  |   -> Config: superstitious_hat.generateAsLoot
+                  |   -> Config: items.superstitious_hat.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 8.33%
@@ -301,7 +303,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.3
                   | Config Value:
-                  |   -> Config: digging_claws.generateAsLoot
+                  |   -> Config: items.digging_claws.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 8.33%
@@ -325,7 +327,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.3
                   | Config Value:
-                  |   -> Config: cloud_in_a_bottle.generateAsLoot
+                  |   -> Config: items.cloud_in_a_bottle.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 8.33%
@@ -349,7 +351,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.3
                   | Config Value:
-                  |   -> Config: vampiric_glove.generateAsLoot
+                  |   -> Config: items.vampiric_glove.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 8.33%
@@ -373,7 +375,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.3
                   | Config Value:
-                  |   -> Config: aqua_dashers.generateAsLoot
+                  |   -> Config: items.aqua_dashers.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 8.33%
@@ -397,7 +399,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.3
                   | Config Value:
-                  |   -> Config: pickaxe_heater.generateAsLoot
+                  |   -> Config: items.pickaxe_heater.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 8.33%
@@ -421,7 +423,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.3
                   | Config Value:
-                  |   -> Config: plastic_drinking_hat.generateAsLoot
+                  |   -> Config: items.plastic_drinking_hat.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 6.25%
@@ -437,7 +439,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.3
                   | Config Value:
-                  |   -> Config: novelty_drinking_hat.generateAsLoot
+                  |   -> Config: items.novelty_drinking_hat.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 2.08%

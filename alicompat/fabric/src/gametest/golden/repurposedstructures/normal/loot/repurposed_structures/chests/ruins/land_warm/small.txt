@@ -72,6 +72,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:map x1 {"minecraft:custom_name":{translate:"Underground Bastion Map"}}
       | Chance: 5.56%
       | Count: 1
@@ -96,6 +97,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:map x1 {"minecraft:item_name":{translate:"filled_map.buried_treasure"}}
       | Chance: 41.67%
       | Count: 1
@@ -1328,3 +1330,4 @@ ali:loot_table
       |   -> Levels: 5 to 25
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False

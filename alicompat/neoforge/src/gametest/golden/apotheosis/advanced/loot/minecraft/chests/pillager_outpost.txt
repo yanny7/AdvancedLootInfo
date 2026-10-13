@@ -88,6 +88,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
   ali:loot_pool
     | Selects random entry
     | Rolls: 0 to 1
@@ -95,7 +96,8 @@ ali:loot_table
       | Count: 1
       | ----- Modifiers -----
       | Set Instrument:
-      |   -> Options: minecraft:regular_goat_horns
+      |   -> Options:
+      |     -> Tag: minecraft:regular_goat_horns
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -109,6 +111,20 @@ ali:loot_table
       | Set Count:
       |   -> Count: 2
       |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:enchanted_book x1
+      | Chance: 66.67%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantment: Quick Charge
+      |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
+    ali:empty
+      | Drops nothing
+      | Chance: 33.33%
   ali:empty
     | Chance: 35%
     | Count: 1

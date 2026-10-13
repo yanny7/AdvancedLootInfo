@@ -20,7 +20,7 @@ ali:loot_table
               | Config Value Chance:
               |   -> Config: entity_equipment
               | Config Value:
-              |   -> Config: snorkel.generateAsLoot
+              |   -> Config: items.snorkel.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 0.08%
@@ -44,7 +44,7 @@ ali:loot_table
               | Config Value Chance:
               |   -> Config: entity_equipment
               | Config Value:
-              |   -> Config: flippers.generateAsLoot
+              |   -> Config: items.flippers.generateAsLoot
             ali:empty
               | Drops nothing
               | Chance: 0.08%

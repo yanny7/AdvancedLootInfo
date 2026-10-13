@@ -48,6 +48,7 @@ ali:loot_table
       |   -> Enchantments:
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
   ali:loot_pool
     | Selects random entry
     | Rolls: 0 to 1
@@ -55,7 +56,8 @@ ali:loot_table
       | Count: 1
       | ----- Modifiers -----
       | Set Instrument:
-      |   -> Options: minecraft:regular_goat_horns
+      |   -> Options:
+      |     -> Tag: minecraft:regular_goat_horns
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -75,6 +77,7 @@ ali:loot_table
       | Enchant Randomly:
       |   -> Enchantment: Quick Charge
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:empty
       | Drops nothing
       | Chance: 33.33%
@@ -102,7 +105,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.25
                   | Config Value:
-                  |   -> Config: panic_necklace.generateAsLoot
+                  |   -> Config: items.panic_necklace.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 10%
@@ -126,7 +129,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.25
                   | Config Value:
-                  |   -> Config: pocket_piston.generateAsLoot
+                  |   -> Config: items.pocket_piston.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 10%
@@ -150,7 +153,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.25
                   | Config Value:
-                  |   -> Config: steadfast_spikes.generateAsLoot
+                  |   -> Config: items.steadfast_spikes.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 10%
@@ -174,7 +177,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.25
                   | Config Value:
-                  |   -> Config: power_glove.generateAsLoot
+                  |   -> Config: items.power_glove.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 10%
@@ -198,7 +201,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.25
                   | Config Value:
-                  |   -> Config: cross_necklace.generateAsLoot
+                  |   -> Config: items.cross_necklace.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 10%
@@ -222,7 +225,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.25
                   | Config Value:
-                  |   -> Config: scarf_of_invisibility.generateAsLoot
+                  |   -> Config: items.scarf_of_invisibility.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 10%
@@ -246,7 +249,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.25
                   | Config Value:
-                  |   -> Config: crystal_heart.generateAsLoot
+                  |   -> Config: items.crystal_heart.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 10%
@@ -270,7 +273,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.25
                   | Config Value:
-                  |   -> Config: cloud_in_a_bottle.generateAsLoot
+                  |   -> Config: items.cloud_in_a_bottle.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 10%
@@ -294,7 +297,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.25
                   | Config Value:
-                  |   -> Config: superstitious_hat.generateAsLoot
+                  |   -> Config: items.superstitious_hat.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 10%
@@ -318,7 +321,7 @@ ali:loot_table
                   | Artifact Rarity Adjusted Chance:
                   |   -> Default Probability: 0.25
                   | Config Value:
-                  |   -> Config: rooted_boots.generateAsLoot
+                  |   -> Config: items.rooted_boots.generateAsLoot
                 ali:empty
                   | Drops nothing
                   | Chance: 10%

@@ -1,849 +1,839 @@
 ali:trade
   ali:trade_level
     | Level: 1
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 2
+      | XP: 1
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:water"}}
+        | Expected Components:
+        |   -> minecraft:potion_contents
+        |     -> Potion: Water Bottle
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 2
+      | XP: 1
+      ali:item minecraft:water_bucket x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x2
+    ali:items_to_items
+      | Uses: 2
+      | XP: 1
+      ali:item minecraft:milk_bucket x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x2
+    ali:items_to_items
+      | Uses: 2
+      | XP: 1
+      ali:item minecraft:fermented_spider_eye x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x3
+    ali:items_to_items
+      | Uses: 2
+      | XP: 1
+      ali:item minecraft:baked_potato x4
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 2
+      | XP: 1
+      ali:item minecraft:hay_block x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+  ali:trade_level
+    | Level: 2
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 6
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:packed_ice x1
+    ali:items_to_items
+      | Uses: 6
+      | XP: 1
+      ali:item minecraft:emerald x6
+      ali:item minecraft:air x0
+      ali:item minecraft:blue_ice x1
+    ali:items_to_items
+      | Uses: 2
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:gunpowder x4
+    ali:items_to_items
+      | Uses: 6
+      | XP: 1
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:podzol x3
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:acacia_log x8
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:birch_log x8
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:dark_oak_log x8
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:jungle_log x8
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:oak_log x8
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:spruce_log x8
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:cherry_log x8
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:mangrove_log x8
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:pale_oak_log x8
+    ali:items_to_items
+      | Uses: 1
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:iron_pickaxe x1
+        | Enchant With Levels:
+        |   -> Levels: 5 to 19
+        |   -> Options:
+        |     -> Tag: minecraft:on_traded_equipment
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Iron Pickaxe
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
+    ali:items_to_items
+      | Uses: 1
+      | XP: 1
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:potion x1
+        | Set Potion:
+        |   -> Potion: Potion of Invisibility
+    ali:items_to_items
+      | Uses: 1
+      | XP: 50
+      ali:item minecraft:emerald x25
+      ali:item minecraft:air x0
+      ali:item minecraft:beacon x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 15
+      ali:item minecraft:emerald x15
+      ali:item minecraft:air x0
+      ali:item minecraft:enchanted_golden_apple x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 50
+      ali:item minecraft:emerald x10
+      ali:item minecraft:air x0
+      ali:item minecraft:totem_of_undying x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 500
+      ali:item minecraft:diamond_sword x1
+      ali:item minecraft:emerald x45
+      ali:item minecraft:diamond_sword x1 {"minecraft:custom_name":{color:"#C11101",italic:0b,translate:"name.apotheosis.arachnids_fear"},"minecraft:enchantments":{"minecraft:bane_of_arthropods":10,"minecraft:fire_aspect":5,"minecraft:looting":5,"minecraft:mending":1,"minecraft:unbreaking":5}}
+        | Tier Gated Trade:
+        |   -> Min World Tier: summit
+    ali:items_to_items
+      | Uses: 1
+      | XP: 500
+      ali:item minecraft:diamond_axe x1
+      ali:item minecraft:emerald x64
+      ali:item minecraft:diamond_axe x1 {"minecraft:custom_name":{color:"#9AB091",italic:0b,translate:"name.apotheosis.bonesplitter"},"minecraft:enchantments":{"apothic_enchanting:scavenger":2,"apothic_spawners:capturing":2,"minecraft:looting":5,"minecraft:mending":1,"minecraft:sharpness":10,"minecraft:unbreaking":3}}
+        | Tier Gated Trade:
+        |   -> Min World Tier: summit
+    ali:items_to_items
+      | Uses: 1
+      | XP: 500
+      ali:item minecraft:diamond_sword x1
+      ali:item minecraft:emerald x45
+      ali:item minecraft:diamond_sword x1 {"minecraft:custom_name":{color:"#ADD8E6",italic:0b,translate:"name.apotheosis.captive_dreams"},"minecraft:enchantments":{"apothic_spawners:capturing":5,"minecraft:looting":4,"minecraft:mending":1,"minecraft:sharpness":5,"minecraft:unbreaking":5}}
+        | Tier Gated Trade:
+        |   -> Min World Tier: summit
+    ali:items_to_items
+      | Uses: 1
+      | XP: 1000
+      ali:item minecraft:diamond x64
+      ali:item minecraft:phantom_membrane x32
+      ali:item minecraft:diamond_sword x1 {"minecraft:custom_name":{color:"#1ABBE0",italic:0b,translate:"name.apotheosis.eternal_vigilance"},"minecraft:enchantments":{"apothic_enchanting:life_mending":5,"apothic_enchanting:scavenger":5,"minecraft:looting":5,"minecraft:sharpness":10,"minecraft:unbreaking":5}}
+        | Tier Gated Trade:
+        |   -> Min World Tier: summit
+    ali:items_to_items
+      | Uses: 1
+      | XP: 500
+      ali:item minecraft:diamond_chestplate x1
+      ali:item minecraft:emerald x55
+      ali:item minecraft:diamond_chestplate x1 {"minecraft:custom_name":{color:"#1ABBE0",italic:0b,translate:"name.apotheosis.greatplate_of_eternity"},"minecraft:enchantments":{"apothic_enchanting:berserkers_fury":2,"minecraft:mending":1,"minecraft:projectile_protection":5,"minecraft:protection":5,"minecraft:unbreaking":5}}
+        | Tier Gated Trade:
+        |   -> Min World Tier: summit
+    ali:items_to_items
+      | Uses: 1
+      | XP: 500
+      ali:item minecraft:diamond_boots x1
+      ali:item minecraft:emerald x45
+      ali:item minecraft:diamond_boots x1 {"minecraft:custom_name":{color:"#1ABBE0",italic:0b,translate:"name.apotheosis.rune_forged_greaves"},"minecraft:enchantments":{"apothic_enchanting:stable_footing":1,"minecraft:feather_falling":5,"minecraft:mending":1,"minecraft:protection":5,"minecraft:unbreaking":5}}
+        | Tier Gated Trade:
+        |   -> Min World Tier: summit
+    ali:items_to_items
+      | Uses: 1
+      | XP: 500
+      ali:item minecraft:diamond_pickaxe x1
+      ali:item minecraft:emerald x45
+      ali:item minecraft:diamond_pickaxe x1 {"minecraft:custom_name":{color:"#1ABBE0",italic:0b,translate:"name.apotheosis.stonebreaker"},"minecraft:enchantments":{"apothic_enchanting:boon_of_the_earth":4,"minecraft:efficiency":5,"minecraft:fortune":4,"minecraft:mending":1,"minecraft:unbreaking":5}}
+        | Tier Gated Trade:
+        |   -> Min World Tier: summit
+    ali:items_to_items
+      | Uses: 1
+      | XP: 500
+      ali:item minecraft:diamond_leggings x1
+      ali:item minecraft:emerald x55
+      ali:item minecraft:diamond_leggings x1 {"minecraft:custom_name":{color:"#1ABBE0",italic:0b,translate:"name.apotheosis.thunder_forged_legguards"},"minecraft:enchantments":{"apothic_enchanting:rebounding":10,"minecraft:mending":1,"minecraft:protection":5,"minecraft:unbreaking":5}}
+        | Tier Gated Trade:
+        |   -> Min World Tier: summit
+    ali:items_to_items
+      | Uses: 1
+      | XP: 500
+      ali:item minecraft:diamond_helmet x1
+      ali:item minecraft:emerald x45
+      ali:item minecraft:diamond_helmet x1 {"minecraft:custom_name":{color:"#1ABBE0",italic:0b,translate:"name.apotheosis.timeworn_visage"},"minecraft:enchantments":{"minecraft:aqua_affinity":1,"minecraft:mending":1,"minecraft:protection":5,"minecraft:respiration":5,"minecraft:unbreaking":5}}
+        | Tier Gated Trade:
+        |   -> Min World Tier: summit
+    ali:items_to_items
+      | Uses: 1
+      | XP: 500
+      ali:item minecraft:diamond_axe x1
+      ali:item minecraft:emerald x45
+      ali:item minecraft:diamond_axe x1 {"minecraft:custom_name":{color:"#608F07",italic:0b,translate:"name.apotheosis.treecapitator"},"minecraft:enchantments":{"apothic_enchanting:chainsaw":1,"minecraft:efficiency":10,"minecraft:mending":1,"minecraft:silk_touch":1,"minecraft:unbreaking":5}}
+        | Tier Gated Trade:
+        |   -> Min World Tier: summit
+  ali:trade_level
+    | Level: 3
     | Randomly Selects 5 Of These Trades
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:tropical_fish_bucket x1
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:pufferfish_bucket x1
     ali:items_to_items
       | Uses: 5
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x2
       ali:item minecraft:air x0
       ali:item minecraft:sea_pickle x1
     ali:items_to_items
       | Uses: 5
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x4
       ali:item minecraft:air x0
       ali:item minecraft:slime_ball x1
     ali:items_to_items
       | Uses: 5
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x2
       ali:item minecraft:air x0
       ali:item minecraft:glowstone x1
     ali:items_to_items
       | Uses: 5
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x5
       ali:item minecraft:air x0
       ali:item minecraft:nautilus_shell x1
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:fern x1
     ali:items_to_items
       | Uses: 8
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:sugar_cane x1
     ali:items_to_items
       | Uses: 4
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:pumpkin x1
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item minecraft:kelp x1
     ali:items_to_items
       | Uses: 8
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item minecraft:cactus x1
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:dandelion x1
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:poppy x1
     ali:items_to_items
       | Uses: 8
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:blue_orchid x1
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:allium x1
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:azure_bluet x1
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:red_tulip x1
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:orange_tulip x1
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:white_tulip x1
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:pink_tulip x1
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:oxeye_daisy x1
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:cornflower x1
     ali:items_to_items
       | Uses: 7
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:lily_of_the_valley x1
     ali:items_to_items
+      | Uses: 7
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:open_eyeblossom x1
+    ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:wheat_seeds x1
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:beetroot_seeds x1
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:pumpkin_seeds x1
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:melon_seeds x1
     ali:items_to_items
       | Uses: 8
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x5
       ali:item minecraft:air x0
       ali:item minecraft:acacia_sapling x1
     ali:items_to_items
       | Uses: 8
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x5
       ali:item minecraft:air x0
       ali:item minecraft:birch_sapling x1
     ali:items_to_items
       | Uses: 8
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x5
       ali:item minecraft:air x0
       ali:item minecraft:dark_oak_sapling x1
     ali:items_to_items
       | Uses: 8
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x5
       ali:item minecraft:air x0
       ali:item minecraft:jungle_sapling x1
     ali:items_to_items
       | Uses: 8
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x5
       ali:item minecraft:air x0
       ali:item minecraft:oak_sapling x1
     ali:items_to_items
       | Uses: 8
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x5
       ali:item minecraft:air x0
       ali:item minecraft:spruce_sapling x1
     ali:items_to_items
       | Uses: 8
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x5
       ali:item minecraft:air x0
       ali:item minecraft:cherry_sapling x1
     ali:items_to_items
       | Uses: 8
       | XP: 1
-      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:pale_oak_sapling x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 1
       ali:item minecraft:emerald x5
       ali:item minecraft:air x0
       ali:item minecraft:mangrove_propagule x1
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:red_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:white_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:blue_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:pink_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:black_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:green_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:light_gray_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:magenta_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:yellow_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:gray_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:purple_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:light_blue_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:lime_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:orange_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:brown_dye x3
     ali:items_to_items
       | Uses: 12
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:cyan_dye x3
     ali:items_to_items
       | Uses: 8
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item minecraft:brain_coral_block x1
     ali:items_to_items
       | Uses: 8
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item minecraft:bubble_coral_block x1
     ali:items_to_items
       | Uses: 8
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item minecraft:fire_coral_block x1
     ali:items_to_items
       | Uses: 8
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item minecraft:horn_coral_block x1
     ali:items_to_items
       | Uses: 8
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item minecraft:tube_coral_block x1
     ali:items_to_items
-      | Uses: 12
+      | Uses: 4
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:vine x1
+      ali:item minecraft:vine x3
     ali:items_to_items
-      | Uses: 12
+      | Uses: 4
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:brown_mushroom x1
+      ali:item minecraft:pale_hanging_moss x3
     ali:items_to_items
-      | Uses: 12
+      | Uses: 4
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:red_mushroom x1
+      ali:item minecraft:brown_mushroom x3
+    ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:red_mushroom x3
+    ali:items_to_items
+      | Uses: 2
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:lily_pad x5
     ali:items_to_items
       | Uses: 5
       | XP: 1
-      | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item minecraft:lily_pad x2
-    ali:items_to_items
-      | Uses: 5
-      | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:small_dripleaf x2
     ali:items_to_items
       | Uses: 8
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:sand x8
     ali:items_to_items
       | Uses: 6
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:red_sand x4
     ali:items_to_items
       | Uses: 5
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:pointed_dripstone x2
     ali:items_to_items
       | Uses: 5
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:rooted_dirt x2
     ali:items_to_items
       | Uses: 5
       | XP: 1
-      | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:moss_block x2
     ali:items_to_items
       | Uses: 5
-      | XP: 15
-      | Price Multiplier: 1.0
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:pale_moss_block x2
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:wildflowers x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:tall_dry_grass x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
       ali:item minecraft:emerald x3
       ali:item minecraft:air x0
-      ali:item minecraft:diamond x1
+      ali:item minecraft:firefly_bush x1
     ali:items_to_items
-      | Uses: 1
-      | XP: 50
-      | Price Multiplier: 1.0
-      ali:item minecraft:emerald x6
-      ali:item minecraft:air x0
-      ali:item minecraft:diamond_horse_armor x1
-    ali:items_to_items
-      | Uses: 1
-      | XP: 100
-      | Price Multiplier: 1.0
-      ali:item minecraft:air x0
-      ali:item minecraft:emerald x1-29
-      ali:item minecraft:air x0
-    ali:items_to_items
-      | Uses: 8
-      | XP: 5
-      | Price Multiplier: 1.0
+      | Uses: 12
+      | XP: 1
       ali:item minecraft:emerald x2
       ali:item minecraft:air x0
-      ali:item minecraft:gold_ingot x1
-    ali:items_to_items
-      | Uses: 1
-      | XP: 100
-      | Price Multiplier: 1.0
-      ali:item minecraft:air x0
-      ali:item minecraft:emerald x1-29
-      ali:item minecraft:air x0
+      ali:item minecraft:golden_dandelion x1
     ali:items_to_items
       | Uses: 5
-      | XP: 15
-      | Price Multiplier: 1.0
-      ali:item minecraft:emerald x5
+      | XP: 1
+      ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:wither_skeleton_skull x1
-    ali:items_to_items
-      | Uses: 2
-      | XP: 30
-      | Price Multiplier: 1.0
-      ali:item minecraft:emerald x4
-      ali:item minecraft:air x0
-      ali:item minecraft:golden_horse_armor x1
-    ali:items_to_items
-      | Uses: 5
-      | XP: 15
-      | Price Multiplier: 1.0
-      ali:item minecraft:emerald x2
-      ali:item minecraft:air x0
-      ali:item minecraft:zombie_head x1
+      ali:item minecraft:name_tag x1
     ali:items_to_items
       | Uses: 5
       | XP: 5
-      | Price Multiplier: 1.0
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:blaze_powder x3
     ali:items_to_items
+      | Uses: 5
+      | XP: 15
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:diamond x1
+    ali:items_to_items
       | Uses: 3
       | XP: 15
-      | Price Multiplier: 1.0
       ali:item minecraft:emerald x2
       ali:item minecraft:air x0
       ali:item minecraft:ender_eye x1
     ali:items_to_items
-      | Uses: 3
-      | XP: 15
-      | Price Multiplier: 1.0
+      | Uses: 8
+      | XP: 5
       ali:item minecraft:emerald x2
       ali:item minecraft:air x0
-      ali:item minecraft:iron_horse_armor x1
-    ali:items_to_items
-      | Uses: 5
-      | XP: 15
-      | Price Multiplier: 1.0
-      ali:item minecraft:emerald x4
-      ali:item minecraft:air x0
-      ali:item minecraft:prismarine_shard x5
+      ali:item minecraft:gold_ingot x1
     ali:items_to_items
       | Uses: 15
       | XP: 5
-      | Price Multiplier: 1.0
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:iron_ingot x3
     ali:items_to_items
-      | Uses: 1
-      | XP: 100
-      | Price Multiplier: 1.0
+      | Uses: 5
+      | XP: 15
+      ali:item minecraft:emerald x4
       ali:item minecraft:air x0
-      ali:item minecraft:emerald x1-29
+      ali:item minecraft:prismarine_shard x5
+    ali:items_to_items
+      | Uses: 2
+      | XP: 15
+      ali:item minecraft:emerald x2
       ali:item minecraft:air x0
+      ali:item minecraft:saddle x1
+    ali:items_to_items
+      | Uses: 3
+      | XP: 15
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item minecraft:iron_horse_armor x1
+    ali:items_to_items
+      | Uses: 2
+      | XP: 30
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item minecraft:golden_horse_armor x1
     ali:items_to_items
       | Uses: 1
-      | XP: 100
-      | Price Multiplier: 1.0
+      | XP: 50
+      ali:item minecraft:emerald x6
       ali:item minecraft:air x0
-      ali:item minecraft:emerald x1-29
-      ali:item minecraft:air x0
-    ali:items_to_items
-      | Uses: 1
-      | XP: 100
-      | Price Multiplier: 1.0
-      ali:item minecraft:air x0
-      ali:item minecraft:emerald x1-29
-      ali:item minecraft:air x0
-    ali:items_to_items
-      | Uses: 1
-      | XP: 100
-      | Price Multiplier: 1.0
-      ali:item minecraft:air x0
-      ali:item minecraft:emerald x1-29
-      ali:item minecraft:air x0
-    ali:items_to_items
-      | Uses: 1
-      | XP: 100
-      | Price Multiplier: 1.0
-      ali:item minecraft:air x0
-      ali:item minecraft:emerald x1-29
-      ali:item minecraft:air x0
-    ali:items_to_items
-      | Uses: 1
-      | XP: 100
-      | Price Multiplier: 1.0
-      ali:item minecraft:air x0
-      ali:item minecraft:emerald x1-29
-      ali:item minecraft:air x0
-    ali:items_to_items
-      | Uses: 1
-      | XP: 100
-      | Price Multiplier: 1.0
-      ali:item minecraft:air x0
-      ali:item minecraft:emerald x1-29
-      ali:item minecraft:air x0
-    ali:items_to_items
-      | Uses: 1
-      | XP: 100
-      | Price Multiplier: 1.0
-      ali:item minecraft:air x0
-      ali:item minecraft:emerald x1-29
-      ali:item minecraft:air x0
+      ali:item minecraft:diamond_horse_armor x1
     ali:items_to_items
       | Uses: 5
       | XP: 15
-      | Price Multiplier: 1.0
       ali:item minecraft:emerald x4
       ali:item minecraft:air x0
       ali:item minecraft:skeleton_skull x1
     ali:items_to_items
-      | Uses: 2
-      | XP: 30
-      | Price Multiplier: 1.0
+      | Uses: 5
+      | XP: 15
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:wither_skeleton_skull x1
+    ali:items_to_items
+      | Uses: 5
+      | XP: 15
       ali:item minecraft:emerald x2
       ali:item minecraft:air x0
-      ali:item minecraft:saddle x1
-  ali:trade_level
-    | Level: 2
-    | Randomly Selects 1 Of These Trades
+      ali:item minecraft:zombie_head x1
     ali:items_to_items
-      | Uses: 4
-      | XP: 1
-      | Price Multiplier: 0.05
-      ali:item minecraft:emerald x5
-      ali:item minecraft:air x0
-      ali:item minecraft:tropical_fish_bucket x1
-    ali:items_to_items
-      | Uses: 4
-      | XP: 1
-      | Price Multiplier: 0.05
-      ali:item minecraft:emerald x5
-      ali:item minecraft:air x0
-      ali:item minecraft:pufferfish_bucket x1
-    ali:items_to_items
-      | Uses: 6
-      | XP: 1
-      | Price Multiplier: 0.05
-      ali:item minecraft:emerald x3
-      ali:item minecraft:air x0
-      ali:item minecraft:packed_ice x1
-    ali:items_to_items
-      | Uses: 6
-      | XP: 1
-      | Price Multiplier: 0.05
-      ali:item minecraft:emerald x6
-      ali:item minecraft:air x0
-      ali:item minecraft:blue_ice x1
-    ali:items_to_items
-      | Uses: 8
-      | XP: 1
-      | Price Multiplier: 0.05
+      | Uses: 1
+      | XP: 100
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:gunpowder x1
-    ali:items_to_items
-      | Uses: 6
-      | XP: 1
-      | Price Multiplier: 0.05
-      ali:item minecraft:emerald x3
-      ali:item minecraft:air x0
-      ali:item minecraft:podzol x3
-    ali:sub_trades
-      ali:items_to_items
-        | World Tier: summit
-        | Uses: 1
-        | XP: 500
-        | Price Multiplier: 1.0
-        ali:item minecraft:diamond_leggings x1
-        ali:item minecraft:emerald x55
-        ali:item minecraft:diamond_leggings x1 {"minecraft:custom_name":'{"color":"#1ABBE0","italic":false,"translate":"name.apotheosis.thunder_forged_legguards"}',"minecraft:enchantments":{levels:{"apothic_enchanting:rebounding":10,"minecraft:mending":1,"minecraft:protection":5,"minecraft:unbreaking":5}}}
-      ali:items_to_items
-        | World Tier: pinnacle
-        | Uses: 1
-        | XP: 500
-        | Price Multiplier: 1.0
-        ali:item minecraft:diamond_leggings x1
-        ali:item minecraft:emerald x55
-        ali:item minecraft:diamond_leggings x1 {"minecraft:custom_name":'{"color":"#1ABBE0","italic":false,"translate":"name.apotheosis.thunder_forged_legguards"}',"minecraft:enchantments":{levels:{"apothic_enchanting:rebounding":10,"minecraft:mending":1,"minecraft:protection":5,"minecraft:unbreaking":5}}}
-    ali:sub_trades
-      ali:items_to_items
-        | World Tier: summit
-        | Uses: 1
-        | XP: 500
-        | Price Multiplier: 1.0
-        ali:item minecraft:diamond_axe x1
-        ali:item minecraft:emerald x45
-        ali:item minecraft:diamond_axe x1 {"minecraft:custom_name":'{"color":"#608F07","italic":false,"translate":"name.apotheosis.treecapitator"}',"minecraft:enchantments":{levels:{"apothic_enchanting:chainsaw":1,"minecraft:efficiency":10,"minecraft:mending":1,"minecraft:silk_touch":1,"minecraft:unbreaking":5}}}
-      ali:items_to_items
-        | World Tier: pinnacle
-        | Uses: 1
-        | XP: 500
-        | Price Multiplier: 1.0
-        ali:item minecraft:diamond_axe x1
-        ali:item minecraft:emerald x45
-        ali:item minecraft:diamond_axe x1 {"minecraft:custom_name":'{"color":"#608F07","italic":false,"translate":"name.apotheosis.treecapitator"}',"minecraft:enchantments":{levels:{"apothic_enchanting:chainsaw":1,"minecraft:efficiency":10,"minecraft:mending":1,"minecraft:silk_touch":1,"minecraft:unbreaking":5}}}
-    ali:sub_trades
-      ali:items_to_items
-        | World Tier: summit
-        | Uses: 1
-        | XP: 500
-        | Price Multiplier: 1.0
-        ali:item minecraft:diamond_boots x1
-        ali:item minecraft:emerald x45
-        ali:item minecraft:diamond_boots x1 {"minecraft:custom_name":'{"color":"#1ABBE0","italic":false,"translate":"name.apotheosis.rune_forged_greaves"}',"minecraft:enchantments":{levels:{"apothic_enchanting:stable_footing":1,"minecraft:feather_falling":5,"minecraft:mending":1,"minecraft:protection":5,"minecraft:unbreaking":5}}}
-      ali:items_to_items
-        | World Tier: pinnacle
-        | Uses: 1
-        | XP: 500
-        | Price Multiplier: 1.0
-        ali:item minecraft:diamond_boots x1
-        ali:item minecraft:emerald x45
-        ali:item minecraft:diamond_boots x1 {"minecraft:custom_name":'{"color":"#1ABBE0","italic":false,"translate":"name.apotheosis.rune_forged_greaves"}',"minecraft:enchantments":{levels:{"apothic_enchanting:stable_footing":1,"minecraft:feather_falling":5,"minecraft:mending":1,"minecraft:protection":5,"minecraft:unbreaking":5}}}
-    ali:sub_trades
-      ali:items_to_items
-        | World Tier: summit
-        | Uses: 1
-        | XP: 500
-        | Price Multiplier: 1.0
-        ali:item minecraft:diamond_helmet x1
-        ali:item minecraft:emerald x45
-        ali:item minecraft:diamond_helmet x1 {"minecraft:custom_name":'{"color":"#1ABBE0","italic":false,"translate":"name.apotheosis.timeworn_visage"}',"minecraft:enchantments":{levels:{"minecraft:aqua_affinity":1,"minecraft:mending":1,"minecraft:protection":5,"minecraft:respiration":5,"minecraft:unbreaking":5}}}
-      ali:items_to_items
-        | World Tier: pinnacle
-        | Uses: 1
-        | XP: 500
-        | Price Multiplier: 1.0
-        ali:item minecraft:diamond_helmet x1
-        ali:item minecraft:emerald x45
-        ali:item minecraft:diamond_helmet x1 {"minecraft:custom_name":'{"color":"#1ABBE0","italic":false,"translate":"name.apotheosis.timeworn_visage"}',"minecraft:enchantments":{levels:{"minecraft:aqua_affinity":1,"minecraft:mending":1,"minecraft:protection":5,"minecraft:respiration":5,"minecraft:unbreaking":5}}}
-    ali:sub_trades
-      ali:items_to_items
-        | World Tier: summit
-        | Uses: 1
-        | XP: 1000
-        | Price Multiplier: 1.0
-        ali:item minecraft:diamond x64
-        ali:item minecraft:phantom_membrane x32
-        ali:item minecraft:diamond_sword x1 {"minecraft:custom_name":'{"color":"#1ABBE0","italic":false,"translate":"name.apotheosis.eternal_vigilance"}',"minecraft:enchantments":{levels:{"apothic_enchanting:life_mending":5,"apothic_enchanting:scavenger":5,"minecraft:looting":5,"minecraft:sharpness":10,"minecraft:unbreaking":5}}}
-      ali:items_to_items
-        | World Tier: pinnacle
-        | Uses: 1
-        | XP: 1000
-        | Price Multiplier: 1.0
-        ali:item minecraft:diamond x64
-        ali:item minecraft:phantom_membrane x32
-        ali:item minecraft:diamond_sword x1 {"minecraft:custom_name":'{"color":"#1ABBE0","italic":false,"translate":"name.apotheosis.eternal_vigilance"}',"minecraft:enchantments":{levels:{"apothic_enchanting:life_mending":5,"apothic_enchanting:scavenger":5,"minecraft:looting":5,"minecraft:sharpness":10,"minecraft:unbreaking":5}}}
+      ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 1
-      | XP: 50
-      | Price Multiplier: 1.0
-      ali:item minecraft:emerald x25
+      | XP: 100
+      ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:beacon x1
-    ali:sub_trades
-      ali:items_to_items
-        | World Tier: summit
-        | Uses: 1
-        | XP: 500
-        | Price Multiplier: 1.0
-        ali:item minecraft:diamond_pickaxe x1
-        ali:item minecraft:emerald x45
-        ali:item minecraft:diamond_pickaxe x1 {"minecraft:custom_name":'{"color":"#1ABBE0","italic":false,"translate":"name.apotheosis.stonebreaker"}',"minecraft:enchantments":{levels:{"apothic_enchanting:boon_of_the_earth":4,"minecraft:efficiency":5,"minecraft:fortune":4,"minecraft:mending":1,"minecraft:unbreaking":5}}}
-      ali:items_to_items
-        | World Tier: pinnacle
-        | Uses: 1
-        | XP: 500
-        | Price Multiplier: 1.0
-        ali:item minecraft:diamond_pickaxe x1
-        ali:item minecraft:emerald x45
-        ali:item minecraft:diamond_pickaxe x1 {"minecraft:custom_name":'{"color":"#1ABBE0","italic":false,"translate":"name.apotheosis.stonebreaker"}',"minecraft:enchantments":{levels:{"apothic_enchanting:boon_of_the_earth":4,"minecraft:efficiency":5,"minecraft:fortune":4,"minecraft:mending":1,"minecraft:unbreaking":5}}}
-    ali:sub_trades
-      ali:items_to_items
-        | World Tier: summit
-        | Uses: 1
-        | XP: 500
-        | Price Multiplier: 1.0
-        ali:item minecraft:diamond_axe x1
-        ali:item minecraft:emerald x64
-        ali:item minecraft:diamond_axe x1 {"minecraft:custom_name":'{"color":"#9AB091","italic":false,"translate":"name.apotheosis.bonesplitter"}',"minecraft:enchantments":{levels:{"apothic_enchanting:scavenger":2,"apothic_spawners:capturing":2,"minecraft:looting":5,"minecraft:mending":1,"minecraft:sharpness":10,"minecraft:unbreaking":3}}}
-      ali:items_to_items
-        | World Tier: pinnacle
-        | Uses: 1
-        | XP: 500
-        | Price Multiplier: 1.0
-        ali:item minecraft:diamond_axe x1
-        ali:item minecraft:emerald x64
-        ali:item minecraft:diamond_axe x1 {"minecraft:custom_name":'{"color":"#9AB091","italic":false,"translate":"name.apotheosis.bonesplitter"}',"minecraft:enchantments":{levels:{"apothic_enchanting:scavenger":2,"apothic_spawners:capturing":2,"minecraft:looting":5,"minecraft:mending":1,"minecraft:sharpness":10,"minecraft:unbreaking":3}}}
+      ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 1
-      | XP: 50
-      | Price Multiplier: 1.0
-      ali:item minecraft:emerald x10
+      | XP: 100
+      ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:totem_of_undying x1
-    ali:sub_trades
-      ali:items_to_items
-        | World Tier: summit
-        | Uses: 1
-        | XP: 500
-        | Price Multiplier: 1.0
-        ali:item minecraft:diamond_chestplate x1
-        ali:item minecraft:emerald x55
-        ali:item minecraft:diamond_chestplate x1 {"minecraft:custom_name":'{"color":"#1ABBE0","italic":false,"translate":"name.apotheosis.greatplate_of_eternity"}',"minecraft:enchantments":{levels:{"apothic_enchanting:berserkers_fury":2,"minecraft:mending":1,"minecraft:projectile_protection":5,"minecraft:protection":5,"minecraft:unbreaking":5}}}
-      ali:items_to_items
-        | World Tier: pinnacle
-        | Uses: 1
-        | XP: 500
-        | Price Multiplier: 1.0
-        ali:item minecraft:diamond_chestplate x1
-        ali:item minecraft:emerald x55
-        ali:item minecraft:diamond_chestplate x1 {"minecraft:custom_name":'{"color":"#1ABBE0","italic":false,"translate":"name.apotheosis.greatplate_of_eternity"}',"minecraft:enchantments":{levels:{"apothic_enchanting:berserkers_fury":2,"minecraft:mending":1,"minecraft:projectile_protection":5,"minecraft:protection":5,"minecraft:unbreaking":5}}}
-    ali:sub_trades
-      ali:items_to_items
-        | World Tier: summit
-        | Uses: 1
-        | XP: 500
-        | Price Multiplier: 1.0
-        ali:item minecraft:diamond_sword x1
-        ali:item minecraft:emerald x45
-        ali:item minecraft:diamond_sword x1 {"minecraft:custom_name":'{"color":"#ADD8E6","italic":false,"translate":"name.apotheosis.captive_dreams"}',"minecraft:enchantments":{levels:{"apothic_spawners:capturing":5,"minecraft:looting":4,"minecraft:mending":1,"minecraft:sharpness":5,"minecraft:unbreaking":5}}}
-      ali:items_to_items
-        | World Tier: pinnacle
-        | Uses: 1
-        | XP: 500
-        | Price Multiplier: 1.0
-        ali:item minecraft:diamond_sword x1
-        ali:item minecraft:emerald x45
-        ali:item minecraft:diamond_sword x1 {"minecraft:custom_name":'{"color":"#ADD8E6","italic":false,"translate":"name.apotheosis.captive_dreams"}',"minecraft:enchantments":{levels:{"apothic_spawners:capturing":5,"minecraft:looting":4,"minecraft:mending":1,"minecraft:sharpness":5,"minecraft:unbreaking":5}}}
+      ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 1
-      | XP: 15
-      | Price Multiplier: 1.0
-      ali:item minecraft:emerald x15
+      | XP: 100
+      ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:enchanted_golden_apple x1
-    ali:sub_trades
-      ali:items_to_items
-        | World Tier: summit
-        | Uses: 1
-        | XP: 500
-        | Price Multiplier: 1.0
-        ali:item minecraft:diamond_sword x1
-        ali:item minecraft:emerald x45
-        ali:item minecraft:diamond_sword x1 {"minecraft:custom_name":'{"color":"#C11101","italic":false,"translate":"name.apotheosis.arachnids_fear"}',"minecraft:enchantments":{levels:{"minecraft:bane_of_arthropods":10,"minecraft:fire_aspect":5,"minecraft:looting":5,"minecraft:mending":1,"minecraft:unbreaking":5}}}
-      ali:items_to_items
-        | World Tier: pinnacle
-        | Uses: 1
-        | XP: 500
-        | Price Multiplier: 1.0
-        ali:item minecraft:diamond_sword x1
-        ali:item minecraft:emerald x45
-        ali:item minecraft:diamond_sword x1 {"minecraft:custom_name":'{"color":"#C11101","italic":false,"translate":"name.apotheosis.arachnids_fear"}',"minecraft:enchantments":{levels:{"minecraft:bane_of_arthropods":10,"minecraft:fire_aspect":5,"minecraft:looting":5,"minecraft:mending":1,"minecraft:unbreaking":5}}}
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+    ali:items_to_items
+      | Uses: 1
+      | XP: 100
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1

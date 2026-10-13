@@ -11,8 +11,8 @@ ali:loot_table
     |   -> Luck 4: 1
     ali:item minecraft:quartz x3-8
       | Chance: 48.23%
-      | Count: U[3; 5] + binom(0; 15%)
-      |   -> Fortune LVL: U[3; 5] + binom(LVL; 15%)
+      | Count: max(0; U[3; 5]) + binom(0; 15%)
+      |   -> Fortune LVL: max(0; U[3; 5]) + binom(LVL; 15%)
       |   -> Fortune I: 3 to 6  ~4 to 5 (33%)
       |   -> Fortune II: 3 to 7  ~5 (33%)
       |   -> Fortune III: 3 to 8  ~5 (33%)
@@ -20,11 +20,15 @@ ali:loot_table
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Item Predicates:
-      |       -> Enchantments:
-      |         -> Enchantment: Silk Touch
-      |         -> Level: ≥ 1
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> minecraft:enchantments
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
       | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 3 to 5
+      |   -> Add: False
       | Apply Bonus:
       |   -> Enchantment: Fortune
       |   -> Formula: minecraft:binomial_with_bonus_count
@@ -32,8 +36,8 @@ ali:loot_table
       |     -> Probability: 0.15
     ali:item minecraft:raw_gold x1-8
       | Chance: 32.15%
-      | Count: U[1; 5] + binom(0; 10%)
-      |   -> Fortune LVL: U[1; 5] + binom(LVL; 10%)
+      | Count: max(0; U[1; 5]) + binom(0; 10%)
+      |   -> Fortune LVL: max(0; U[1; 5]) + binom(LVL; 10%)
       |   -> Fortune I: 1 to 6  ~2 to 5 (20%)
       |   -> Fortune II: 1 to 7  ~3 to 5 (20%)
       |   -> Fortune III: 1 to 8  ~4 to 5 (20%)
@@ -41,11 +45,15 @@ ali:loot_table
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Item Predicates:
-      |       -> Enchantments:
-      |         -> Enchantment: Silk Touch
-      |         -> Level: ≥ 1
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> minecraft:enchantments
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
       | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 5
+      |   -> Add: False
       | Apply Bonus:
       |   -> Enchantment: Fortune
       |   -> Formula: minecraft:binomial_with_bonus_count
@@ -53,8 +61,8 @@ ali:loot_table
       |     -> Probability: 0.1
     ali:item minecraft:glowstone_dust x2-13
       | Chance: 19.29%
-      | Count: U[2; 10] + binom(0; 15%)
-      |   -> Fortune LVL: U[2; 10] + binom(LVL; 15%)
+      | Count: max(0; U[2; 10]) + binom(0; 15%)
+      |   -> Fortune LVL: max(0; U[2; 10]) + binom(LVL; 15%)
       |   -> Fortune I: 2 to 11  ~3 to 10 (11%)
       |   -> Fortune II: 2 to 12  ~4 to 10 (11%)
       |   -> Fortune III: 2 to 13  ~5 to 10 (11%)
@@ -62,11 +70,15 @@ ali:loot_table
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Item Predicates:
-      |       -> Enchantments:
-      |         -> Enchantment: Silk Touch
-      |         -> Level: ≥ 1
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> minecraft:enchantments
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
       | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 10
+      |   -> Add: False
       | Apply Bonus:
       |   -> Enchantment: Fortune
       |   -> Formula: minecraft:binomial_with_bonus_count
@@ -74,8 +86,8 @@ ali:loot_table
       |     -> Probability: 0.15
     ali:item minecraft:ancient_debris x0-4
       | Chance: 0.32%
-      | Count: U[0; 1] + binom(0; 3%)
-      |   -> Fortune LVL: U[0; 1] + binom(LVL; 3%)
+      | Count: max(0; U[0; 1]) + binom(0; 3%)
+      |   -> Fortune LVL: max(0; U[0; 1]) + binom(LVL; 3%)
       |   -> Fortune I: 0 to 2  ~1 (50%)
       |   -> Fortune II: 0 to 3  ~1 (50%)
       |   -> Fortune III: 0 to 4  ~1 (50%)
@@ -83,11 +95,15 @@ ali:loot_table
       | ----- Predicates -----
       | Inverted:
       |   -> Match Tool:
-      |     -> Item Predicates:
-      |       -> Enchantments:
-      |         -> Enchantment: Silk Touch
-      |         -> Level: ≥ 1
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> minecraft:enchantments
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
       | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 0 to 1
+      |   -> Add: False
       | Apply Bonus:
       |   -> Enchantment: Fortune
       |   -> Formula: minecraft:binomial_with_bonus_count
@@ -104,40 +120,60 @@ ali:loot_table
     |   -> Luck 4: 1
     ali:item minecraft:nether_quartz_ore x2-4
       | Chance: 48.23%
-      | Count: 2 to 4
+      | Count: max(0; U[2; 4])
       | ----- Predicates -----
       | Match Tool:
-      |   -> Item Predicates:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |   -> Components:
+      |     -> Partial Matchers:
+      |       -> minecraft:enchantments
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 4
+      |   -> Add: False
     ali:item minecraft:nether_gold_ore x1-3
       | Chance: 32.15%
-      | Count: 1 to 3
+      | Count: max(0; U[1; 3])
       | ----- Predicates -----
       | Match Tool:
-      |   -> Item Predicates:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |   -> Components:
+      |     -> Partial Matchers:
+      |       -> minecraft:enchantments
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 3
+      |   -> Add: False
     ali:item minecraft:glowstone x1-3
       | Chance: 19.29%
-      | Count: 1 to 3
+      | Count: max(0; U[1; 3])
       | ----- Predicates -----
       | Match Tool:
-      |   -> Item Predicates:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |   -> Components:
+      |     -> Partial Matchers:
+      |       -> minecraft:enchantments
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 3
+      |   -> Add: False
     ali:item minecraft:ancient_debris x0-1
       | Chance: 0.32%
-      | Count: 0 to 1
+      | Count: max(0; U[0; 1])
       | ----- Predicates -----
       | Match Tool:
-      |   -> Item Predicates:
-      |     -> Enchantments:
-      |       -> Enchantment: Silk Touch
-      |       -> Level: ≥ 1
+      |   -> Components:
+      |     -> Partial Matchers:
+      |       -> minecraft:enchantments
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 0 to 1
+      |   -> Add: False
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -163,6 +199,9 @@ ali:loot_table
       |     -> Position:
       |       -> Y: 12 to 18
       | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
       | Apply Bonus:
       |   -> Enchantment: Fortune
       |   -> Formula: minecraft:binomial_with_bonus_count

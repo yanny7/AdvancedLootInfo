@@ -12,10 +12,11 @@ ali:loot_table
         |   -> Match Tool:
         |     -> Item: Shears
         |   -> Match Tool:
-        |     -> Item Predicates:
-        |       -> Enchantments:
-        |         -> Enchantment: Silk Touch
-        |         -> Level: ≥ 1
+        |     -> Components:
+        |       -> Partial Matchers:
+        |         -> minecraft:enchantments
+        |           -> Enchantment: Silk Touch
+        |           -> Level: ≥ 1
       ali:item occultism:otherworld_sapling x1
         | Chance: 5%
         |   -> Fortune I: 6.25%
@@ -39,9 +40,31 @@ ali:loot_table
       |     -> Match Tool:
       |       -> Item: Shears
       |     -> Match Tool:
-      |       -> Item Predicates:
-      |         -> Enchantments:
-      |           -> Enchantment: Silk Touch
-      |           -> Level: ≥ 1
+      |       -> Components:
+      |         -> Partial Matchers:
+      |           -> minecraft:enchantments
+      |             -> Enchantment: Silk Touch
+      |             -> Level: ≥ 1
       | ----- Modifiers -----
       | Explosion Decay
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item occultism:pitaya x1
+      | Chance: 10%
+      |   -> Fortune I: 20%
+      |   -> Fortune II: 30%
+      |   -> Fortune III: 40%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Any Of:
+      |     -> Match Tool:
+      |       -> Item: Shears
+      |     -> Match Tool:
+      |       -> Components:
+      |         -> Partial Matchers:
+      |           -> minecraft:enchantments
+      |             -> Enchantment: Silk Touch
+      |             -> Level: ≥ 1
+      | Survives Explosion

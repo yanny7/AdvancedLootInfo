@@ -16,7 +16,7 @@ ali:entity_loot_table
       |   -> Add: False
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: U[0; 1)
+      |   -> Count: U[0; 1)
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -32,6 +32,7 @@ ali:entity_loot_table
       |   -> Count: 1 to 3
       |   -> Add: False
       | Furnace Smelt
+      |   -> Use Input Count: True
       |   -> Predicates:
       |     -> Any Of:
       |       -> Entity Properties:
@@ -51,7 +52,7 @@ ali:entity_loot_table
       |                       -> Tag: minecraft:smelts_loot
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Value: U[0; 1)
+      |   -> Count: U[0; 1)
   ali:reference
     | Selects all entries
     ali:loot_table
@@ -76,9 +77,10 @@ ali:entity_loot_table
                   |   -> Config: everlasting_beef
                   | Killed by player
                   | Config Value:
-                  |   -> Config: everlasting_beef.generateAsLoot
+                  |   -> Config: items.everlasting_beef.generateAsLoot
                   | ----- Modifiers -----
                   | Furnace Smelt
+                  |   -> Use Input Count: True
                   |   -> Predicates:
                   |     -> Entity Properties:
                   |       -> Target: This Entity
@@ -94,6 +96,7 @@ ali:entity_loot_table
                   | Killed by player
                   | ----- Modifiers -----
                   | Furnace Smelt
+                  |   -> Use Input Count: True
                   |   -> Predicates:
                   |     -> Entity Properties:
                   |       -> Target: This Entity

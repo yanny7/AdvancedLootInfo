@@ -21,6 +21,7 @@ ali:loot_table
       |   -> Levels: 5 to 15
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:crossbow x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 8.7%
       | Count: 1
@@ -29,6 +30,7 @@ ali:loot_table
       |   -> Levels: 5 to 20
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:iron_axe x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 8.7%
       | Count: 1
@@ -37,6 +39,7 @@ ali:loot_table
       |   -> Levels: 0 to 10
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:iron_chestplate x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 8.7%
       | Count: 1
@@ -45,6 +48,7 @@ ali:loot_table
       |   -> Levels: 0 to 10
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:golden_carrot x1-2
       | Chance: 8.7%
       | Count: 1 to 2
@@ -61,6 +65,7 @@ ali:loot_table
       |     -> Silk Touch
       |     -> Feather Falling
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:enchanted_book x1
       | Chance: 8.7%
       | Count: 1
@@ -73,6 +78,7 @@ ali:loot_table
       |     -> Impaling
       |     -> Mending
       |   -> Only Compatible: True
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 4.35%
       | Count: 1
@@ -81,6 +87,7 @@ ali:loot_table
       |   -> Levels: 5 to 15
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
     ali:item minecraft:diamond_axe x1 {"minecraft:enchantment_glint_override":1b}
       | Chance: 4.35%
       | Count: 1
@@ -89,6 +96,7 @@ ali:loot_table
       |   -> Levels: 5 to 15
       |   -> Options:
       |     -> Tag: minecraft:on_random_loot
+      |   -> Include Additional Cost Component: False
   ali:loot_pool
     | Selects random entry
     | Rolls: 0 to 1  ~0 (75%)
