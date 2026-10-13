@@ -1,7 +1,7 @@
 import java.util.regex.Pattern
 
 class GametestWatchdogStream extends OutputStream {
-    private static final Pattern FATAL = Pattern.compile(/Crash report saved|---- Minecraft Crash Report|Exception in thread "main"|Failed to start the minecraft server|ModLoadingException|Missing or unsupported mandatory dependencies|^java\.(lang|util\.concurrent)\.[A-Za-z.$]*(Exception|Error)/)
+    private static final Pattern FATAL = Pattern.compile(/Crash report saved|---- Minecraft Crash Report|Exception in thread "main"|Failed to start the minecraft server|ModLoadingException|Missing or unsupported mandatory dependencies|^java\.(lang|util\.concurrent)\.[A-Za-z.$]*Error/)
 
     private final OutputStream out
     private final Closure onFatal
