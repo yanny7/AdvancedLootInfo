@@ -1,0 +1,149 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:enchanted_book x1
+      | Chance: 6.25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Efficiency
+      |       -> Levels: 5
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 6.25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Unbreaking
+      |       -> Levels: 3
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 6.25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Fortune
+      |       -> Levels: 3
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 6.25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Protection
+      |       -> Levels: 4
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 6.25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Respiration
+      |       -> Levels: 3
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 6.25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Thorns
+      |       -> Levels: 3
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 6.25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Depth Strider
+      |       -> Levels: 1
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 6.25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Sharpness
+      |       -> Levels: 5
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 6.25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Fire Aspect
+      |       -> Levels: 2
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 6.25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Looting
+      |       -> Levels: 3
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 6.25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Sweeping Edge
+      |       -> Levels: 3
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 6.25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Power
+      |       -> Levels: 5
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 6.25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Loyalty
+      |       -> Levels: 3
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 6.25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Impaling
+      |       -> Levels: 5
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 6.25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Piercing
+      |       -> Levels: 4
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 6.25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Quick Charge
+      |       -> Levels: 3
+      |   -> Add: False

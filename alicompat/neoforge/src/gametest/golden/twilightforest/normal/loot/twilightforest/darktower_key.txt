@@ -1,0 +1,132 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4
+    ali:item minecraft:iron_ingot x1-4
+      | Chance: 13.64%
+      | Count: 1 to 4
+    ali:item minecraft:gunpowder x1-4
+      | Chance: 13.64%
+      | Count: 1 to 4
+    ali:item twilightforest:ironwood_ingot x1-4
+      | Chance: 13.64%
+      | Count: 1 to 4
+    ali:item twilightforest:firefly x1-5
+      | Chance: 13.64%
+      | Count: 1 to 5
+    ali:item twilightforest:experiment_115 x1-12
+      | Chance: 13.64%
+      | Count: 1 to 12
+    ali:item minecraft:glowstone_dust x1-12
+      | Chance: 13.64%
+      | Count: 1 to 12
+    ali:item minecraft:redstone x1-6
+      | Chance: 13.64%
+      | Count: 1 to 6
+    ali:reference
+      | Selects all entries
+      | Chance: 4.55%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item minecraft:poppy x1-4
+            | Chance: 0.45%
+            | Count: 1 to 4
+          ali:item minecraft:dandelion x1-4
+            | Chance: 0.45%
+            | Count: 1 to 4
+          ali:item minecraft:feather x1-3
+            | Chance: 0.45%
+            | Count: 1 to 3
+          ali:item minecraft:wheat_seeds x1-2
+            | Chance: 0.45%
+            | Count: 1 to 2
+          ali:item minecraft:flint x1-2
+            | Chance: 0.45%
+            | Count: 1 to 2
+          ali:item minecraft:cactus x1-2
+            | Chance: 0.45%
+            | Count: 1 to 2
+          ali:item minecraft:sugar_cane x1-4
+            | Chance: 0.45%
+            | Count: 1 to 4
+          ali:item minecraft:sand x1-4
+            | Chance: 0.45%
+            | Count: 1 to 4
+          ali:item minecraft:flower_pot x1
+            | Chance: 0.45%
+            | Count: 1
+          ali:item minecraft:bone_meal x1
+            | Chance: 0.45%
+            | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item twilightforest:steeleaf_ingot x1-6
+      | Chance: 11.11%
+      | Count: 1 to 6
+    ali:item twilightforest:charm_of_keeping_1 x1
+      | Chance: 11.11%
+      | Count: 1
+    ali:item twilightforest:steeleaf_helmet x1
+      | Chance: 11.11%
+      | Count: 1
+    ali:item twilightforest:steeleaf_chestplate x1
+      | Chance: 11.11%
+      | Count: 1
+    ali:item twilightforest:steeleaf_leggings x1
+      | Chance: 11.11%
+      | Count: 1
+    ali:item twilightforest:steeleaf_boots x1
+      | Chance: 11.11%
+      | Count: 1
+    ali:item twilightforest:steeleaf_pickaxe x1
+      | Chance: 11.11%
+      | Count: 1
+    ali:item twilightforest:ironwood_chestplate x1
+      | Chance: 11.11%
+      | Count: 1
+    ali:item twilightforest:ironwood_sword x1
+      | Chance: 11.11%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item twilightforest:charm_of_life_1 x1
+      | Chance: 25%
+      | Count: 1
+    ali:item minecraft:enchanted_book x1
+      | Chance: 25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Feather Falling
+      |       -> Levels: 3
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Knockback
+      |       -> Levels: 2
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 25%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Efficiency
+      |       -> Levels: 3
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item twilightforest:tower_key x1
+      | Count: 1

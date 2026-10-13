@@ -1,0 +1,25 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item mekanism:electrolytic_separator x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Copy Name:
+      |   -> Source: Block Entity
+      | Copy Components:
+      |   -> Source: Block Entity
+      |   -> Include:
+      |     -> mekanism:dump_mode
+      |     -> mekanism:ejector
+      |     -> mekanism:owner
+      |     -> mekanism:redstone_control
+      |     -> mekanism:secondary_dump_mode
+      |     -> mekanism:security
+      |     -> mekanism:side_config
+      |     -> mekanism:upgrades
+      |     -> mekanism:energy
+      |     -> mekanism:items
+      |     -> mekanism:fluids
+      |     -> mekanism:chemicals

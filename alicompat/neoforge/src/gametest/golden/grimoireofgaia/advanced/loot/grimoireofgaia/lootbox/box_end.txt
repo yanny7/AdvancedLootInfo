@@ -1,0 +1,19 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:obsidian x2-8
+      | Chance: 50%
+      | Count: max(0; U[2; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 8
+      |   -> Add: False
+    ali:item minecraft:end_stone x2-8
+      | Chance: 50%
+      | Count: max(0; U[2; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 8
+      |   -> Add: False

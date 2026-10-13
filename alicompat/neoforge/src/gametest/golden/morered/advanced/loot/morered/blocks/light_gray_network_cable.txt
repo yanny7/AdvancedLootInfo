@@ -1,0 +1,11 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item morered:light_gray_network_cable x1-6
+      | Count: 1 to 6
+      | ----- Predicates -----
+      | Survives Explosion
+      | ----- Modifiers -----
+      | Set Wire Count

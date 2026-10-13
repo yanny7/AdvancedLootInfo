@@ -1,0 +1,126 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 8
+    ali:item minecraft:bread x1-4
+      | Chance: 36.84%
+      | Count: 1 to 4
+    ali:item minecraft:rotten_flesh x1-4
+      | Chance: 36.84%
+      | Count: 1 to 4
+    ali:item minecraft:redstone x1-4
+      | Chance: 10.53%
+      | Count: 1 to 4
+    ali:item minecraft:lapis_lazuli x1-4
+      | Chance: 5.26%
+      | Count: 1 to 4
+    ali:item minecraft:gold_ingot x1-4
+      | Chance: 5.26%
+      | Count: 1 to 4
+    ali:item minecraft:emerald x1-4
+      | Chance: 5.26%
+      | Count: 1 to 4
+  ali:reference
+    | Selects all entries
+    ali:loot_table
+      | Selects all entries
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1
+        ali:reference
+          | Selects all entries
+          | Chance: 25%
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:alternatives
+                | Selects only first successful entry
+                ali:item artifacts:cross_necklace x1
+                  | Chance: 25%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Artifact Rarity Adjusted Chance:
+                  |   -> Default Probability: 0.2
+                  | Config Value:
+                  |   -> Config: cross_necklace.generateAsLoot
+                ali:empty
+                  | Drops nothing
+                  | Chance: 25%
+                  | ----- Predicates -----
+                  | Artifact Rarity Adjusted Chance:
+                  |   -> Default Probability: 0.2
+        ali:reference
+          | Selects all entries
+          | Chance: 25%
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:alternatives
+                | Selects only first successful entry
+                ali:item artifacts:antidote_vessel x1
+                  | Chance: 25%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Artifact Rarity Adjusted Chance:
+                  |   -> Default Probability: 0.2
+                  | Config Value:
+                  |   -> Config: antidote_vessel.generateAsLoot
+                ali:empty
+                  | Drops nothing
+                  | Chance: 25%
+                  | ----- Predicates -----
+                  | Artifact Rarity Adjusted Chance:
+                  |   -> Default Probability: 0.2
+        ali:reference
+          | Selects all entries
+          | Chance: 25%
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:alternatives
+                | Selects only first successful entry
+                ali:item artifacts:charm_of_sinking x1
+                  | Chance: 25%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Artifact Rarity Adjusted Chance:
+                  |   -> Default Probability: 0.2
+                  | Config Value:
+                  |   -> Config: charm_of_sinking.generateAsLoot
+                ali:empty
+                  | Drops nothing
+                  | Chance: 25%
+                  | ----- Predicates -----
+                  | Artifact Rarity Adjusted Chance:
+                  |   -> Default Probability: 0.2
+        ali:reference
+          | Selects all entries
+          | Chance: 25%
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:alternatives
+                | Selects only first successful entry
+                ali:item artifacts:warp_drive x1
+                  | Chance: 25%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Artifact Rarity Adjusted Chance:
+                  |   -> Default Probability: 0.2
+                  | Config Value:
+                  |   -> Config: warp_drive.generateAsLoot
+                ali:empty
+                  | Drops nothing
+                  | Chance: 25%
+                  | ----- Predicates -----
+                  | Artifact Rarity Adjusted Chance:
+                  |   -> Default Probability: 0.2

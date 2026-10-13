@@ -1,0 +1,32 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item deeperdarker:gloomsherd x1
+      | Chance: 11.11%
+      | Count: 1
+    ali:item deeperdarker:brittle_gloomsherd x1
+      | Chance: 11.11%
+      | Count: 1
+    ali:item deeperdarker:dark_heart_gloomsherd x1
+      | Chance: 11.11%
+      | Count: 1
+    ali:item deeperdarker:listener_gloomsherd x1
+      | Chance: 11.11%
+      | Count: 1
+    ali:item deeperdarker:snapper_gloomsherd x1
+      | Chance: 11.11%
+      | Count: 1
+    ali:item deeperdarker:temple_gloomsherd x1
+      | Chance: 11.11%
+      | Count: 1
+    ali:item deeperdarker:transmission_gloomsherd x1
+      | Chance: 11.11%
+      | Count: 1
+    ali:item deeperdarker:ward_gloomsherd x1
+      | Chance: 11.11%
+      | Count: 1
+    ali:item deeperdarker:wayfinder_gloomsherd x1
+      | Chance: 11.11%
+      | Count: 1

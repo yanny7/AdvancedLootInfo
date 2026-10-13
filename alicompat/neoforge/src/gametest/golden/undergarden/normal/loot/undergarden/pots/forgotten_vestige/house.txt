@@ -1,0 +1,41 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 3
+    ali:item undergarden:depthrock_pebble x2-9
+      | Chance: 14.18%
+      | Count: 2 to 9
+    ali:item undergarden:raw_dweller_meat x1-4
+      | Chance: 10.64%
+      | Count: 1 to 4
+    ali:item undergarden:raw_gloomper_leg x1-4
+      | Chance: 10.64%
+      | Count: 1 to 4
+    ali:item undergarden:raw_gwibling x1-4
+      | Chance: 10.64%
+      | Count: 1 to 4
+    ali:item undergarden:droopvine_item x1-8
+      | Chance: 10.64%
+      | Count: 1 to 8
+    ali:item undergarden:underbeans x1-8
+      | Chance: 10.64%
+      | Count: 1 to 8
+    ali:item undergarden:gloomgourd_seeds x1-8
+      | Chance: 10.64%
+      | Count: 1 to 8
+    ali:item undergarden:cloggrum_nugget x1-9
+      | Chance: 7.09%
+      | Count: 1 to 9
+    ali:item undergarden:froststeel_nugget x1-9
+      | Chance: 7.09%
+      | Count: 1 to 9
+    ali:item undergarden:regalium_crystal x1-3
+      | Chance: 3.55%
+      | Count: 1 to 3
+    ali:item undergarden:utheric_shard x1-3
+      | Chance: 3.55%
+      | Count: 1 to 3
+    ali:item minecraft:diamond x1
+      | Chance: 0.71%
+      | Count: 1

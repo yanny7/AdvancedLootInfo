@@ -1,0 +1,42 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:string x0-5
+      | Count: 0 to 2
+      |   -> Looting I: 0 to 3  ~1 to 2 (33%)
+      |   -> Looting II: 0 to 4  ~2 (33%)
+      |   -> Looting III: 0 to 5  ~2 to 3 (28%)
+      |   [chart 0..2 0-2 base=true modes=[false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,0.0000,0.0000,0.0000 | 0..3 0-3 base=false modes=[false, true, true, false, false, false] heights=0.5000,1.0000,1.0000,0.5000,0.0000,0.0000 | 0..4 0-4 base=false modes=[false, false, true, false, false, false] heights=0.2500,0.7500,1.0000,0.7500,0.2500,0.0000 | 0..5 0-5 base=false modes=[false, false, true, true, false, false] heights=0.1667,0.5000,0.8333,0.8333,0.5000,0.1667]
+      | ----- Modifiers -----
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
+      |   -> Value: 0 to 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:spider_eye x0-4
+      | Count: 0 to 1  ~0 (67%)
+      |   -> Looting I: 0 to 2  ~1 (50%)
+      |   -> Looting II: 0 to 3  ~1 (42%)
+      |   -> Looting III: 0 to 4  ~2 (33%)
+      |   [chart 0..1 0-1 base=true modes=[true, false, false, false, false] heights=1.0000,0.5000,0.0000,0.0000,0.0000 | 0..2 0-2 base=false modes=[false, true, false, false, false] heights=0.5000,0.7500,0.2500,0.0000,0.0000 | 0..3 0-3 base=false modes=[false, true, false, false, false] heights=0.2500,0.6250,0.5000,0.1250,0.0000 | 0..4 0-4 base=false modes=[false, false, true, false, false] heights=0.1667,0.4167,0.5000,0.3333,0.0833]
+      | ----- Predicates -----
+      | Killed by player
+      | ----- Modifiers -----
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
+      |   -> Value: 0 to 1
+  ali:item apotheosis:gem x1
+    | Chance: 4%
+    | Count: 1
+    | ----- Predicates -----
+    | Killed by real player
+    | Requires a player
+  ali:item apotheosis:gem x1
+    | Chance: 0.5%
+    | Count: 1
+    | ----- Predicates -----
+    | Killed by player
+    | Requires a player

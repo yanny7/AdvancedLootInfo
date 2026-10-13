@@ -1,0 +1,25 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:bone x1
+      | Chance: 50%
+      | Count: 1
+    ali:item minecraft:rotten_flesh x1
+      | Chance: 50%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item #c:nuggets/iron x0-3
+      | Count: 0 to 3
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item grimoireofgaia:box_iron x1
+      | Chance: 2.5%
+      |   -> Looting I: 3.5%
+      |   -> Looting II: 4.5%
+      |   -> Looting III: 5.5%
+      | Count: 1

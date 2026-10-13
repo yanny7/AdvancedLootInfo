@@ -1,0 +1,44 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 27
+    ali:item minecraft:cooked_beef x1
+      | Chance: 20.41%
+      | Count: 1
+    ali:item minecraft:apple x1
+      | Chance: 10.2%
+      | Count: 1
+    ali:item minecraft:carrot x1
+      | Chance: 8.16%
+      | Count: 1
+    ali:item minecraft:sweet_berries x1
+      | Chance: 8.16%
+      | Count: 1
+    ali:item minecraft:cooked_cod x1
+      | Chance: 8.16%
+      | Count: 1
+    ali:item minecraft:cooked_mutton x1
+      | Chance: 8.16%
+      | Count: 1
+    ali:item minecraft:bread x1
+      | Chance: 6.12%
+      | Count: 1
+    ali:item minecraft:glow_berries x1
+      | Chance: 6.12%
+      | Count: 1
+    ali:item minecraft:honey_bottle x1
+      | Chance: 6.12%
+      | Count: 1
+    ali:item minecraft:baked_potato x1
+      | Chance: 6.12%
+      | Count: 1
+    ali:item minecraft:cookie x1
+      | Chance: 4.08%
+      | Count: 1
+    ali:item minecraft:pumpkin_pie x1
+      | Chance: 4.08%
+      | Count: 1
+    ali:item minecraft:rabbit_stew x1
+      | Chance: 4.08%
+      | Count: 1

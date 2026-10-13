@@ -1,0 +1,13 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item twilightforest:firefly_jar x1 {"twilightforest:jar_lid":{lid:"twilightforest:twilight_oak_log"}}
+      | Count: 1
+      | ----- Predicates -----
+      | Survives Explosion
+      | ----- Modifiers -----
+      | Copy Components:
+      |   -> Source: Block Entity
+      |   -> Include: twilightforest:jar_lid

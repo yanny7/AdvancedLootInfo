@@ -1,0 +1,21 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item supplementaries:ash x2-8
+      | Chance: 48.39%
+      | Count: 2 to 8
+      | ----- Predicates -----
+      | Data Conditions
+    ali:item minecraft:bone x2-6
+      | Chance: 24.19%
+      | Count: 2 to 6
+    ali:item minecraft:torch x4-12
+      | Chance: 16.13%
+      | Count: 4 to 12
+    ali:item supplementaries:flax_seeds x1-2
+      | Chance: 11.29%
+      | Count: 1 to 2
+      | ----- Predicates -----
+      | Data Conditions

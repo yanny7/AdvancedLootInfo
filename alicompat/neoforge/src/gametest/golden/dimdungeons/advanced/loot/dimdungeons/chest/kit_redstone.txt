@@ -1,0 +1,96 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 27
+    ali:item minecraft:hopper x1
+      | Chance: 16%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:redstone x1
+      | Chance: 16%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:dropper x1
+      | Chance: 12%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:redstone_torch x1
+      | Chance: 8%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:repeater x1
+      | Chance: 8%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:observer x1
+      | Chance: 8%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:crafter x1
+      | Chance: 8%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:piston x1
+      | Chance: 4%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:sticky_piston x1
+      | Chance: 4%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:comparator x1
+      | Chance: 4%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:daylight_detector x1
+      | Chance: 4%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:redstone_lamp x1
+      | Chance: 4%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:note_block x1
+      | Chance: 4%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False

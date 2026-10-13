@@ -1,0 +1,11 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item sophisticatedstorage:limited_diamond_barrel_3 x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Copy Name:
+      |   -> Source: Block Entity
+      | Copy Storage Data:

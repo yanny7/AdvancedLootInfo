@@ -1,0 +1,266 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects 10 Of These Trades
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:giga_gear x1
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:trader_token x4
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:totem_of_undying_fragment x1
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:trader_token x4
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:ring_of_speed x1
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:trader_token x4
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:ring_of_haste x1
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:trader_token x4
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:ring_of_jump x1
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:trader_token x4
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:ring_of_night x1
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:trader_token x4
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:box_egg x1
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:trader_token x4
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:spawn_creeper_girl x1
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:trader_token x4
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:spawn_slime_girl x1
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:trader_token x2
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:spawn_ender_girl x1
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:trader_token x2
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:spawn_trader x1
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:trader_token x2
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:box_overworld x1
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:trader_token x1
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:box_nether x1
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:trader_token x1
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:box_end x1
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:trader_token x1
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:box_old x1
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:trader_token x4
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:fan_fire x1
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:trader_token x2
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:fan_ice x1
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:trader_token x2
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:weapon_book x1
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:trader_token x2
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:weapon_book_freezing x1
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:trader_token x2
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:weapon_book_nightmare x1
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:trader_token x2
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:weapon_book_metal x1
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:trader_token x2
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:weapon_book_ender x1
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:trader_token x2
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:weapon_book_hunger x1
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:trader_token x2
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:weapon_book_battle x1
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:trader_token x2
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:weapon_book_nature x1
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:trader_token x2
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:weapon_book_wither x1
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:trader_token x2
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:heavy_barbell x1
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:trader_token x2
+  ali:trade_level
+    | Level: 2
+    | Randomly Selects 5 Of These Trades
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:trader_token x1
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:box_iron x1
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:trader_token x2
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:box_gold x1
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:trader_token x4
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:box_diamond x1
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:trader_token x4
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:bag_book x1
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:trader_token x2
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:bag_record x1
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:trader_token x4
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:book_of_memory x1
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:trader_token x2
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:chest_dungeon x1
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:trader_token x2
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:chest_jungle x1
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:trader_token x2
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:chest_desert x1
+    ali:items_to_items
+      | Uses: 10
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item grimoireofgaia:trader_token x4
+      ali:item minecraft:air x0
+      ali:item grimoireofgaia:box_hat x1

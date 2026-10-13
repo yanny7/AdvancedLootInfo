@@ -1,0 +1,110 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 3
+    ali:item minecraft:saddle x1
+      | Chance: 15.5%
+      | Count: 1
+    ali:item minecraft:name_tag x1
+      | Chance: 15.5%
+      | Count: 1
+    ali:item minecraft:golden_apple x1
+      | Chance: 11.63%
+      | Count: 1
+    ali:item minecraft:music_disc_13 x1
+      | Chance: 11.63%
+      | Count: 1
+    ali:item minecraft:music_disc_cat x1
+      | Chance: 11.63%
+      | Count: 1
+    ali:item minecraft:iron_horse_armor x1
+      | Chance: 11.63%
+      | Count: 1
+    ali:item minecraft:golden_horse_armor x1
+      | Chance: 7.75%
+      | Count: 1
+    ali:item minecraft:enchanted_book x1
+      | Chance: 7.75%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:diamond_horse_armor x1
+      | Chance: 3.88%
+      | Count: 1
+    ali:item minecraft:enchanted_golden_apple x1
+      | Chance: 1.55%
+      | Count: 1
+    ali:item minecraft:music_disc_otherside x1
+      | Chance: 1.55%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 4
+    ali:item minecraft:bread x1
+      | Chance: 16%
+      | Count: 1
+    ali:item minecraft:wheat x1-4
+      | Chance: 16%
+      | Count: 1 to 4
+    ali:item minecraft:redstone x1-4
+      | Chance: 12%
+      | Count: 1 to 4
+    ali:item minecraft:coal x1-4
+      | Chance: 12%
+      | Count: 1 to 4
+    ali:item minecraft:iron_ingot x1-4
+      | Chance: 8%
+      | Count: 1 to 4
+    ali:item minecraft:bucket x1
+      | Chance: 8%
+      | Count: 1
+    ali:item minecraft:melon_seeds x2-4
+      | Chance: 8%
+      | Count: 2 to 4
+    ali:item minecraft:pumpkin_seeds x2-4
+      | Chance: 8%
+      | Count: 2 to 4
+    ali:item minecraft:beetroot_seeds x2-4
+      | Chance: 8%
+      | Count: 2 to 4
+    ali:item minecraft:gold_ingot x1-4
+      | Chance: 4%
+      | Count: 1 to 4
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3
+    ali:item minecraft:bone x1-8
+      | Chance: 25%
+      | Count: 1 to 8
+    ali:item minecraft:gunpowder x1-8
+      | Chance: 25%
+      | Count: 1 to 8
+    ali:item minecraft:rotten_flesh x1-8
+      | Chance: 25%
+      | Count: 1 to 8
+    ali:item minecraft:string x1-8
+      | Chance: 25%
+      | Count: 1 to 8
+  ali:empty
+    | Chance: 35%
+    | Count: 1
+    | Requires a player
+  ali:item apotheosis:gem x1
+    | Chance: 25%
+    | Count: 1
+    | Requires a player
+  ali:item apotheosis:gem x1
+    | Chance: 4%
+    | Count: 1
+    | ----- Predicates -----
+    | Entity Properties:
+    |   -> Target: This Entity
+    |   -> Predicate:
+    |     -> Entity Sub Predicate:
+    |       -> Is Monster
+    | Killed by real player
+    | Requires a player

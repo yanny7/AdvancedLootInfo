@@ -1,0 +1,166 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item aether:neptune_helmet x1
+            | Chance: 20%
+            | Count: 1
+          ali:item aether:neptune_chestplate x1
+            | Chance: 20%
+            | Count: 1
+          ali:item aether:neptune_leggings x1
+            | Chance: 20%
+            | Count: 1
+          ali:item aether:neptune_boots x1
+            | Chance: 20%
+            | Count: 1
+          ali:item aether:neptune_gloves x1
+            | Chance: 20%
+            | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item aether:music_disc_sliders_wrath x1
+            | Chance: 50%
+            | Count: 1
+          ali:item aether:valkyrie_lance x1
+            | Chance: 16.67%
+            | Count: 1
+          ali:item aether:hammer_of_kingbdogz x1
+            | Chance: 16.67%
+            | Count: 1
+          ali:item aether:sentry_boots x1
+            | Chance: 16.67%
+            | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 2
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 2 to 4
+          ali:item aether:blue_gummy_swet x1
+            | Chance: 66.67%
+            | Count: 1
+          ali:item aether:golden_gummy_swet x1
+            | Chance: 33.33%
+            | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 5
+    ali:reference
+      | Selects all entries
+      | Chance: 15.38%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item aether:neptune_helmet x1
+            | Chance: 3.08%
+            | Count: 1
+          ali:item aether:neptune_chestplate x1
+            | Chance: 3.08%
+            | Count: 1
+          ali:item aether:neptune_leggings x1
+            | Chance: 3.08%
+            | Count: 1
+          ali:item aether:neptune_boots x1
+            | Chance: 3.08%
+            | Count: 1
+          ali:item aether:neptune_gloves x1
+            | Chance: 3.08%
+            | Count: 1
+    ali:item aether:shield_of_repulsion x1
+      | Chance: 7.69%
+      | Count: 1
+    ali:item aether:cloud_staff x1
+      | Chance: 7.69%
+      | Count: 1
+    ali:item aether:phoenix_bow x1
+      | Chance: 7.69%
+      | Count: 1
+    ali:item aether:flaming_sword x1
+      | Chance: 7.69%
+      | Count: 1
+    ali:item aether:agility_cape x1
+      | Chance: 7.69%
+      | Count: 1
+    ali:item aether:zanite_gemstone x1-2
+      | Chance: 5.77%
+      | Count: 1 to 2
+    ali:item aether:golden_amber x1
+      | Chance: 5.77%
+      | Count: 1
+    ali:item aether:zanite_helmet x1
+      | Chance: 3.85%
+      | Count: 1
+    ali:item aether:zanite_chestplate x1
+      | Chance: 3.85%
+      | Count: 1
+    ali:item aether:zanite_leggings x1
+      | Chance: 3.85%
+      | Count: 1
+    ali:item aether:zanite_boots x1
+      | Chance: 3.85%
+      | Count: 1
+    ali:item aether:zanite_gloves x1
+      | Chance: 3.85%
+      | Count: 1
+    ali:item aether:zanite_ring x1
+      | Chance: 1.92%
+      | Count: 1
+    ali:item aether:zanite_pendant x1
+      | Chance: 1.92%
+      | Count: 1
+    ali:item minecraft:saddle x1
+      | Chance: 1.92%
+      | Count: 1
+    ali:item aether:valkyrie_lance x1
+      | Chance: 1.92%
+      | Count: 1
+    ali:item aether:hammer_of_kingbdogz x1
+      | Chance: 1.92%
+      | Count: 1
+    ali:item aether:sentry_boots x1
+      | Chance: 1.92%
+      | Count: 1
+    ali:item aether:sentry_stone x1
+      | Chance: 1.92%
+      | Count: 1
+    ali:item aether:carved_stone x1
+      | Chance: 1.92%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4 to 15
+    ali:item aether:lightning_knife x1
+      | Chance: 45.45%
+      | Count: 1
+    ali:item aether:golden_dart x1
+      | Chance: 27.27%
+      | Count: 1
+    ali:item minecraft:arrow x1
+      | Chance: 18.18%
+      | Count: 1
+    ali:item aether:sentry_stone x1
+      | Chance: 9.09%
+      | Count: 1

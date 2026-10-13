@@ -1,0 +1,247 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item the_bumblezone:bee_bread x1-4
+      | Count: max(0; U[1; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item the_bumblezone:honey_compass x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_mystery_structure_description",customName:"item.the_bumblezone.honey_compass_mystery_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Components:
+      |   -> Components:
+      |     -> the_bumblezone:honey_compass_base_data
+      |       -> Type: 
+      |       -> Custom Name: item.the_bumblezone.honey_compass_mystery_structure
+      |       -> Description: item.the_bumblezone.honey_compass_mystery_structure_description
+      |     -> the_bumblezone:honey_compass_state_data
+      |       -> Locked: True
+      |       -> Is Loading: False
+      |       -> Is Failed: False
+      |       -> Located Special Structure: False
+      | Honey Compass Locate Structure:
+      |   -> Destination: the_bumblezone:honey_compass/misc_locating
+      |   -> Search Radius: 50
+      |   -> Skip Known Structures: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_lesser_mystery_structure_description",customName:"item.the_bumblezone.honey_compass_lesser_mystery_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Components:
+      |   -> Components:
+      |     -> the_bumblezone:honey_compass_base_data
+      |       -> Type: 
+      |       -> Custom Name: item.the_bumblezone.honey_compass_lesser_mystery_structure
+      |       -> Description: item.the_bumblezone.honey_compass_lesser_mystery_structure_description
+      |     -> the_bumblezone:honey_compass_state_data
+      |       -> Locked: True
+      |       -> Is Loading: False
+      |       -> Is Failed: False
+      |       -> Located Special Structure: False
+      | Honey Compass Locate Structure:
+      |   -> Destination: the_bumblezone:honey_compass/lesser_misc_locating
+      |   -> Search Radius: 50
+      |   -> Skip Known Structures: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:empty
+            | Drops nothing
+            | Chance: 92.5%
+            |   -> luck: 7400% ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + 7400%)
+            |   -> Bad Luck: 100%
+            |   -> Luck 1: 86.05%
+            |   -> Luck 2: 80.43%
+            |   -> Luck 3: 75.51%
+            |   -> Luck 4: 71.15%
+            | ----- Predicates -----
+            | Player carries an Essence of the Bees
+          ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_red_sanctum_structure_description",customName:"item.the_bumblezone.honey_compass_sanctum_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
+            | Quality: 1
+            | Chance: 1.25%
+            |   -> luck: max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + 7400%)
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 2.33%
+            |   -> Luck 2: 3.26%
+            |   -> Luck 3: 4.08%
+            |   -> Luck 4: 4.81%
+            | Count: 1
+            | ----- Predicates -----
+            | Player carries an Essence of the Bees
+            | ----- Modifiers -----
+            | Set Components:
+            |   -> Components:
+            |     -> the_bumblezone:honey_compass_base_data
+            |       -> Type: 
+            |       -> Custom Name: item.the_bumblezone.honey_compass_sanctum_structure
+            |       -> Description: item.the_bumblezone.honey_compass_red_sanctum_structure_description
+            |     -> the_bumblezone:honey_compass_state_data
+            |       -> Locked: True
+            |       -> Is Loading: False
+            |       -> Is Failed: False
+            |       -> Located Special Structure: False
+            | Honey Compass Locate Structure:
+            |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/red
+            |   -> Search Radius: 50
+            |   -> Skip Known Structures: False
+          ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_purple_sanctum_structure_description",customName:"item.the_bumblezone.honey_compass_sanctum_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
+            | Quality: 1
+            | Chance: 1.25%
+            |   -> luck: max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + 7400%)
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 2.33%
+            |   -> Luck 2: 3.26%
+            |   -> Luck 3: 4.08%
+            |   -> Luck 4: 4.81%
+            | Count: 1
+            | ----- Predicates -----
+            | Player carries an Essence of the Bees
+            | ----- Modifiers -----
+            | Set Components:
+            |   -> Components:
+            |     -> the_bumblezone:honey_compass_base_data
+            |       -> Type: 
+            |       -> Custom Name: item.the_bumblezone.honey_compass_sanctum_structure
+            |       -> Description: item.the_bumblezone.honey_compass_purple_sanctum_structure_description
+            |     -> the_bumblezone:honey_compass_state_data
+            |       -> Locked: True
+            |       -> Is Loading: False
+            |       -> Is Failed: False
+            |       -> Located Special Structure: False
+            | Honey Compass Locate Structure:
+            |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/purple
+            |   -> Search Radius: 50
+            |   -> Skip Known Structures: False
+          ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_blue_sanctum_structure_description",customName:"item.the_bumblezone.honey_compass_sanctum_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
+            | Quality: 1
+            | Chance: 1.25%
+            |   -> luck: max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + 7400%)
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 2.33%
+            |   -> Luck 2: 3.26%
+            |   -> Luck 3: 4.08%
+            |   -> Luck 4: 4.81%
+            | Count: 1
+            | ----- Predicates -----
+            | Player carries an Essence of the Bees
+            | ----- Modifiers -----
+            | Set Components:
+            |   -> Components:
+            |     -> the_bumblezone:honey_compass_base_data
+            |       -> Type: 
+            |       -> Custom Name: item.the_bumblezone.honey_compass_sanctum_structure
+            |       -> Description: item.the_bumblezone.honey_compass_blue_sanctum_structure_description
+            |     -> the_bumblezone:honey_compass_state_data
+            |       -> Locked: True
+            |       -> Is Loading: False
+            |       -> Is Failed: False
+            |       -> Located Special Structure: False
+            | Honey Compass Locate Structure:
+            |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/blue
+            |   -> Search Radius: 50
+            |   -> Skip Known Structures: False
+          ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_green_sanctum_structure_description",customName:"item.the_bumblezone.honey_compass_sanctum_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
+            | Quality: 1
+            | Chance: 1.25%
+            |   -> luck: max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + 7400%)
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 2.33%
+            |   -> Luck 2: 3.26%
+            |   -> Luck 3: 4.08%
+            |   -> Luck 4: 4.81%
+            | Count: 1
+            | ----- Predicates -----
+            | Player carries an Essence of the Bees
+            | ----- Modifiers -----
+            | Set Components:
+            |   -> Components:
+            |     -> the_bumblezone:honey_compass_base_data
+            |       -> Type: 
+            |       -> Custom Name: item.the_bumblezone.honey_compass_sanctum_structure
+            |       -> Description: item.the_bumblezone.honey_compass_green_sanctum_structure_description
+            |     -> the_bumblezone:honey_compass_state_data
+            |       -> Locked: True
+            |       -> Is Loading: False
+            |       -> Is Failed: False
+            |       -> Located Special Structure: False
+            | Honey Compass Locate Structure:
+            |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/green
+            |   -> Search Radius: 50
+            |   -> Skip Known Structures: False
+          ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_yellow_sanctum_structure_description",customName:"item.the_bumblezone.honey_compass_sanctum_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
+            | Quality: 1
+            | Chance: 1.25%
+            |   -> luck: max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + 7400%)
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 2.33%
+            |   -> Luck 2: 3.26%
+            |   -> Luck 3: 4.08%
+            |   -> Luck 4: 4.81%
+            | Count: 1
+            | ----- Predicates -----
+            | Player carries an Essence of the Bees
+            | ----- Modifiers -----
+            | Set Components:
+            |   -> Components:
+            |     -> the_bumblezone:honey_compass_base_data
+            |       -> Type: 
+            |       -> Custom Name: item.the_bumblezone.honey_compass_sanctum_structure
+            |       -> Description: item.the_bumblezone.honey_compass_yellow_sanctum_structure_description
+            |     -> the_bumblezone:honey_compass_state_data
+            |       -> Locked: True
+            |       -> Is Loading: False
+            |       -> Is Failed: False
+            |       -> Located Special Structure: False
+            | Honey Compass Locate Structure:
+            |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/yellow
+            |   -> Search Radius: 50
+            |   -> Skip Known Structures: False
+          ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_white_sanctum_structure_description",customName:"item.the_bumblezone.honey_compass_sanctum_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
+            | Quality: 1
+            | Chance: 1.25%
+            |   -> luck: max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + 7400%)
+            |   -> Bad Luck: 0%
+            |   -> Luck 1: 2.33%
+            |   -> Luck 2: 3.26%
+            |   -> Luck 3: 4.08%
+            |   -> Luck 4: 4.81%
+            | Count: 1
+            | ----- Predicates -----
+            | Player carries an Essence of the Bees
+            | ----- Modifiers -----
+            | Set Components:
+            |   -> Components:
+            |     -> the_bumblezone:honey_compass_base_data
+            |       -> Type: 
+            |       -> Custom Name: item.the_bumblezone.honey_compass_sanctum_structure
+            |       -> Description: item.the_bumblezone.honey_compass_white_sanctum_structure_description
+            |     -> the_bumblezone:honey_compass_state_data
+            |       -> Locked: True
+            |       -> Is Loading: False
+            |       -> Is Failed: False
+            |       -> Located Special Structure: False
+            | Honey Compass Locate Structure:
+            |   -> Destination: the_bumblezone:honey_compass/sempiternal_sanctums/white
+            |   -> Search Radius: 50
+            |   -> Skip Known Structures: False

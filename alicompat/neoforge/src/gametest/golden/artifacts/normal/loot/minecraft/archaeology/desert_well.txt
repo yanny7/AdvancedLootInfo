@@ -1,0 +1,237 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:arms_up_pottery_sherd x1
+      | Chance: 25%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> All Of:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+    ali:item minecraft:brewer_pottery_sherd x1
+      | Chance: 25%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> All Of:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+    ali:item minecraft:brick x1
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> All Of:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+    ali:item minecraft:emerald x1
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> All Of:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+    ali:item minecraft:stick x1
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> All Of:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+    ali:item minecraft:suspicious_stew x1
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> All Of:
+      |     -> Config Value Chance:
+      |       -> Config: archaeology
+      | ----- Modifiers -----
+      | Set Stew Effect:
+      |   -> Night Vision
+      |     -> Duration: 7 to 10
+      |   -> Jump Boost
+      |     -> Duration: 7 to 10
+      |   -> Weakness
+      |     -> Duration: 6 to 8
+      |   -> Blindness
+      |     -> Duration: 5 to 7
+      |   -> Poison
+      |     -> Duration: 10 to 20
+      |   -> Saturation
+      |     -> Duration: 7 to 10
+  ali:reference
+    | Selects all entries
+    | ----- Predicates -----
+    | Config Value Chance:
+    |   -> Config: archaeology
+    ali:loot_table
+      | Selects all entries
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1
+        ali:reference
+          | Selects all entries
+          | Chance: 16.67%
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:alternatives
+                | Selects only first successful entry
+                ali:item artifacts:charm_of_sinking x1
+                  | Chance: 1.04%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+                  | Config Value:
+                  |   -> Config: charm_of_sinking.generateAsLoot
+                ali:empty
+                  | Drops nothing
+                  | Chance: 1.04%
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+        ali:reference
+          | Selects all entries
+          | Chance: 16.67%
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:alternatives
+                | Selects only first successful entry
+                ali:item artifacts:universal_attractor x1
+                  | Chance: 1.04%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+                  | Config Value:
+                  |   -> Config: universal_attractor.generateAsLoot
+                ali:empty
+                  | Drops nothing
+                  | Chance: 1.04%
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+        ali:reference
+          | Selects all entries
+          | Chance: 16.67%
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:alternatives
+                | Selects only first successful entry
+                ali:item artifacts:superstitious_hat x1
+                  | Chance: 1.04%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+                  | Config Value:
+                  |   -> Config: superstitious_hat.generateAsLoot
+                ali:empty
+                  | Drops nothing
+                  | Chance: 1.04%
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+        ali:reference
+          | Selects all entries
+          | Chance: 16.67%
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:alternatives
+                | Selects only first successful entry
+                ali:item artifacts:umbrella x1
+                  | Chance: 1.04%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+                  | Config Value:
+                  |   -> Config: umbrella.generateAsLoot
+                ali:empty
+                  | Drops nothing
+                  | Chance: 1.04%
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+        ali:reference
+          | Selects all entries
+          | Chance: 16.67%
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:alternatives
+                | Selects only first successful entry
+                ali:item artifacts:warp_drive x1
+                  | Chance: 1.04%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+                  | Config Value:
+                  |   -> Config: warp_drive.generateAsLoot
+                ali:empty
+                  | Drops nothing
+                  | Chance: 1.04%
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+        ali:reference
+          | Selects all entries
+          | Chance: 16.67%
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:alternatives
+                | Selects only first successful entry
+                ali:item artifacts:plastic_drinking_hat x1
+                  | Chance: 0.78%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+                  | Config Value:
+                  |   -> Config: plastic_drinking_hat.generateAsLoot
+                ali:empty
+                  | Drops nothing
+                  | Chance: 0.78%
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+              ali:alternatives
+                | Selects only first successful entry
+                ali:item artifacts:novelty_drinking_hat x1
+                  | Chance: 0.26%
+                  | Count: 1
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology
+                  | Config Value:
+                  |   -> Config: novelty_drinking_hat.generateAsLoot
+                ali:empty
+                  | Drops nothing
+                  | Chance: 0.26%
+                  | ----- Predicates -----
+                  | Config Value Chance:
+                  |   -> Config: archaeology

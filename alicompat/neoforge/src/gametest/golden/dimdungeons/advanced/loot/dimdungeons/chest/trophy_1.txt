@@ -1,0 +1,117 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item dimdungeons:item_trophy_1 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_1"}'}
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Name:
+      |   -> Name: 1UP Mushroom
+      |   -> Target: Item Name
+      | Set Lore:
+      |   -> List Operation: Append
+      |   -> Lore:
+      |     -> Trophy 1/8
+      |     -> A rare mushroom. It will not grow on mycelium.
+      |     -> Found by: @s
+      |   -> Resolution Context: This Entity
+    ali:item dimdungeons:item_trophy_2 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_2"}'}
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Name:
+      |   -> Name: Master Sword
+      |   -> Target: Item Name
+      | Set Lore:
+      |   -> List Operation: Append
+      |   -> Lore:
+      |     -> Trophy 2/8
+      |     -> This blessed sword sleeps, waiting for a specific hero.
+      |     -> Found by: @s
+      |   -> Resolution Context: This Entity
+    ali:item dimdungeons:item_trophy_3 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_3"}'}
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Name:
+      |   -> Name: Ist Rune
+      |   -> Target: Item Name
+      | Set Lore:
+      |   -> List Operation: Append
+      |   -> Lore:
+      |     -> Trophy 3/8
+      |     -> A coveted symbol of greed. But aren't diamonds worth more than stone?
+      |     -> Found by: @s
+      |   -> Resolution Context: This Entity
+    ali:item dimdungeons:item_trophy_4 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_4"}'}
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Name:
+      |   -> Name: The Terrarian
+      |   -> Target: Item Name
+      | Set Lore:
+      |   -> List Operation: Append
+      |   -> Lore:
+      |     -> Trophy 4/8
+      |     -> A most legendary yoyo from another world's moon.
+      |     -> Found by: @s
+      |   -> Resolution Context: This Entity
+    ali:item dimdungeons:item_trophy_5 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_5"}'}
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Name:
+      |   -> Name: Matter Manipulator
+      |   -> Target: Item Name
+      | Set Lore:
+      |   -> List Operation: Append
+      |   -> Lore:
+      |     -> Trophy 5/8
+      |     -> A powerful mining tool from a far away galaxy.
+      |     -> Found by: @s
+      |   -> Resolution Context: This Entity
+    ali:item dimdungeons:item_trophy_6 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_6"}'}
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Name:
+      |   -> Name: Sunlight Medal
+      |   -> Target: Item Name
+      | Set Lore:
+      |   -> List Operation: Append
+      |   -> Lore:
+      |     -> Trophy 6/8
+      |     -> Give this to a friend in the name of jolly cooperation!
+      |     -> Found by: @s
+      |   -> Resolution Context: This Entity
+    ali:item dimdungeons:item_trophy_7 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_7"}'}
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Name:
+      |   -> Name: Pink Arrow Panel
+      |   -> Target: Item Name
+      | Set Lore:
+      |   -> List Operation: Append
+      |   -> Lore:
+      |     -> Trophy 7/8
+      |     -> What purpose does this magenta terracotta pressure plate serve?
+      |     -> Found by: @s
+      |   -> Resolution Context: This Entity
+    ali:item dimdungeons:item_trophy_8 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_8"}'}
+      | Chance: 12.5%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Name:
+      |   -> Name: Ultros Painting
+      |   -> Target: Item Name
+      | Set Lore:
+      |   -> List Operation: Append
+      |   -> Lore:
+      |     -> Trophy 8/8
+      |     -> An image of a mischievous octopus from another world.
+      |     -> Found by: @s
+      |   -> Resolution Context: This Entity

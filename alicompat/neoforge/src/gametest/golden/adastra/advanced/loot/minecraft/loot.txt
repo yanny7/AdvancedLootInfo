@@ -1,0 +1,123 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 5 to 10
+    ali:item minecraft:emerald x1
+      | Chance: 20%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:quartz x1
+      | Chance: 20%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:iron_ingot x1
+      | Chance: 20%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:gold_nugget x1
+      | Chance: 20%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:cobweb x1
+      | Chance: 20%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 5 to 10
+    ali:item minecraft:iron_ingot x1
+      | Chance: 20%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:iron_nugget x1
+      | Chance: 20%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:gold_nugget x1
+      | Chance: 20%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:gold_ingot x1
+      | Chance: 20%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item ad_astra:moon_sand x1
+      | Chance: 20%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 5 to 10
+    ali:item minecraft:diamond x1
+      | Chance: 16.67%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:emerald x1
+      | Chance: 16.67%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:gold_nugget x1
+      | Chance: 16.67%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:redstone x1
+      | Chance: 16.67%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:cobweb x1
+      | Chance: 16.67%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:iron_ingot x1
+      | Chance: 16.67%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
