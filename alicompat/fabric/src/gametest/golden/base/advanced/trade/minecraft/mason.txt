@@ -88,25 +88,43 @@ ali:trade
       | XP: 15
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:orange_terracotta x1
-    ali:items_to_items
-      | Uses: 12
-      | XP: 15
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
       ali:item minecraft:white_terracotta x1
     ali:items_to_items
       | Uses: 12
       | XP: 15
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:blue_terracotta x1
+      ali:item minecraft:orange_terracotta x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:magenta_terracotta x1
     ali:items_to_items
       | Uses: 12
       | XP: 15
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:light_blue_terracotta x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:yellow_terracotta x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:lime_terracotta x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:pink_terracotta x1
     ali:items_to_items
       | Uses: 12
       | XP: 15
@@ -124,42 +142,6 @@ ali:trade
       | XP: 15
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:black_terracotta x1
-    ali:items_to_items
-      | Uses: 12
-      | XP: 15
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item minecraft:red_terracotta x1
-    ali:items_to_items
-      | Uses: 12
-      | XP: 15
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item minecraft:pink_terracotta x1
-    ali:items_to_items
-      | Uses: 12
-      | XP: 15
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item minecraft:magenta_terracotta x1
-    ali:items_to_items
-      | Uses: 12
-      | XP: 15
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item minecraft:lime_terracotta x1
-    ali:items_to_items
-      | Uses: 12
-      | XP: 15
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item minecraft:green_terracotta x1
-    ali:items_to_items
-      | Uses: 12
-      | XP: 15
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
       ali:item minecraft:cyan_terracotta x1
     ali:items_to_items
       | Uses: 12
@@ -172,7 +154,7 @@ ali:trade
       | XP: 15
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:yellow_terracotta x1
+      ali:item minecraft:blue_terracotta x1
     ali:items_to_items
       | Uses: 12
       | XP: 15
@@ -184,7 +166,19 @@ ali:trade
       | XP: 15
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:orange_glazed_terracotta x1
+      ali:item minecraft:green_terracotta x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:red_terracotta x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:black_terracotta x1
     ali:items_to_items
       | Uses: 12
       | XP: 15
@@ -196,13 +190,37 @@ ali:trade
       | XP: 15
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:blue_glazed_terracotta x1
+      ali:item minecraft:orange_glazed_terracotta x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:magenta_glazed_terracotta x1
     ali:items_to_items
       | Uses: 12
       | XP: 15
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:light_blue_glazed_terracotta x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:yellow_glazed_terracotta x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:lime_glazed_terracotta x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:pink_glazed_terracotta x1
     ali:items_to_items
       | Uses: 12
       | XP: 15
@@ -220,42 +238,6 @@ ali:trade
       | XP: 15
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:black_glazed_terracotta x1
-    ali:items_to_items
-      | Uses: 12
-      | XP: 15
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item minecraft:red_glazed_terracotta x1
-    ali:items_to_items
-      | Uses: 12
-      | XP: 15
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item minecraft:pink_glazed_terracotta x1
-    ali:items_to_items
-      | Uses: 12
-      | XP: 15
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item minecraft:magenta_glazed_terracotta x1
-    ali:items_to_items
-      | Uses: 12
-      | XP: 15
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item minecraft:lime_glazed_terracotta x1
-    ali:items_to_items
-      | Uses: 12
-      | XP: 15
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item minecraft:green_glazed_terracotta x1
-    ali:items_to_items
-      | Uses: 12
-      | XP: 15
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
       ali:item minecraft:cyan_glazed_terracotta x1
     ali:items_to_items
       | Uses: 12
@@ -268,13 +250,31 @@ ali:trade
       | XP: 15
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:yellow_glazed_terracotta x1
+      ali:item minecraft:blue_glazed_terracotta x1
     ali:items_to_items
       | Uses: 12
       | XP: 15
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:brown_glazed_terracotta x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:green_glazed_terracotta x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:red_glazed_terracotta x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:black_glazed_terracotta x1
   ali:trade_level
     | Level: 5
     | Randomly Selects 2 Of These Trades

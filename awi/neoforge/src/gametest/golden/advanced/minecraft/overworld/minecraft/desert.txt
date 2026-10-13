@@ -97,6 +97,18 @@ awi:biome minecraft:desert
       |       -> Simple:
       |         -> State:
       |           -> Block: Stone
+      |     -> Can Place Feature:
+      |       -> True Block
+      |     -> Can Replace With Air Or Fluid:
+      |       -> Not:
+      |         -> Predicate:
+      |           -> Matching Block Tag:
+      |             -> Tag: minecraft:features_cannot_replace
+      |     -> Can Replace With Barrier:
+      |       -> Not:
+      |         -> Predicate:
+      |           -> Matching Block Tag:
+      |             -> Tag: minecraft:lava_pool_stone_cannot_replace
       | Placement:
       |   -> Rarity Filter:
       |     -> Chance: 9
@@ -141,6 +153,18 @@ awi:biome minecraft:desert
       |       -> Simple:
       |         -> State:
       |           -> Block: Stone
+      |     -> Can Place Feature:
+      |       -> True Block
+      |     -> Can Replace With Air Or Fluid:
+      |       -> Not:
+      |         -> Predicate:
+      |           -> Matching Block Tag:
+      |             -> Tag: minecraft:features_cannot_replace
+      |     -> Can Replace With Barrier:
+      |       -> Not:
+      |         -> Predicate:
+      |           -> Matching Block Tag:
+      |             -> Tag: minecraft:lava_pool_stone_cannot_replace
       | Placement:
       |   -> Rarity Filter:
       |     -> Chance: 200
@@ -198,8 +222,10 @@ awi:biome minecraft:desert
       |           -> Properties:
       |             -> facing: up
       |             -> waterlogged: false
-      |       -> Cannot Replace: minecraft:features_cannot_replace
-      |       -> Invalid Blocks: minecraft:geode_invalid_blocks
+      |       -> Cannot Replace:
+      |         -> Tag: minecraft:features_cannot_replace
+      |       -> Invalid Blocks:
+      |         -> Tag: minecraft:geode_invalid_blocks
       |     -> Geode Layer Settings:
       |       -> Filling: 1.7
       |       -> Inner Layer: 2.2
@@ -269,12 +295,14 @@ awi:biome minecraft:desert
       |       -> Block Rot:
       |         -> Integrity: 0.9
       |       -> Protected Blocks:
-      |         -> Cannot Replace: minecraft:features_cannot_replace
+      |         -> Cannot Replace:
+      |           -> Tag: minecraft:features_cannot_replace
       |     -> Overlay Processors:
       |       -> Block Rot:
       |         -> Integrity: 0.1
       |       -> Protected Blocks:
-      |         -> Cannot Replace: minecraft:features_cannot_replace
+      |         -> Cannot Replace:
+      |           -> Tag: minecraft:features_cannot_replace
       |     -> Max Empty Corners Allowed: 4
       | Placement:
       |   -> Rarity Filter:
@@ -315,7 +343,8 @@ awi:biome minecraft:desert
       |       -> Block Rot:
       |         -> Integrity: 0.9
       |       -> Protected Blocks:
-      |         -> Cannot Replace: minecraft:features_cannot_replace
+      |         -> Cannot Replace:
+      |           -> Tag: minecraft:features_cannot_replace
       |     -> Overlay Processors:
       |       -> Block Rot:
       |         -> Integrity: 0.1
@@ -331,7 +360,8 @@ awi:biome minecraft:desert
       |             -> Block: Deepslate Diamond Ore
       |           -> Block Entity Modifier: minecraft:passthrough
       |       -> Protected Blocks:
-      |         -> Cannot Replace: minecraft:features_cannot_replace
+      |         -> Cannot Replace:
+      |           -> Tag: minecraft:features_cannot_replace
       |     -> Max Empty Corners Allowed: 4
       | Placement:
       |   -> Rarity Filter:
@@ -1384,6 +1414,8 @@ awi:biome minecraft:desert
       |       -> Calcite
       |       -> Tuff
       |       -> Deepslate
+      |       -> Sulfur
+      |       -> Cinnabar
       | Placement:
       |   -> Count Placement:
       |     -> Count:
@@ -1399,6 +1431,7 @@ awi:biome minecraft:desert
       |     -> Range: ≤ −13
       awi:block minecraft:glow_lichen
     awi:placed_feature minecraft:flower_default
+      | Attempts Per Chunk: 64
       | Chance: 3.13%
       | Height: Ground or Water Surface
       | Configured Feature:
@@ -1423,6 +1456,19 @@ awi:biome minecraft:desert
       |     -> Chance: 32
       |   -> Heightmap Placement:
       |     -> Heightmap: Ground or Water Surface
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 64
+      |   -> Random Offset:
+      |     -> XZ Spread:
+      |       -> trapezoid(−7; 7; 0)  ~0 (13%)
+      |         [chart 0..14 −7-7 base=true modes=[false, false, false, false, false, false, false, true, false, false, false, false, false, false, false] heights=0.1250,0.2500,0.3750,0.5000,0.6250,0.7500,0.8750,1.0000,0.8750,0.7500,0.6250,0.5000,0.3750,0.2500,0.1250]
+      |     -> Y Spread:
+      |       -> trapezoid(−3; 3; 0)  ~0 (25%)
+      |         [chart 0..6 −3-3 base=true modes=[false, false, false, true, false, false, false] heights=0.2500,0.5000,0.7500,1.0000,0.7500,0.5000,0.2500]
+      |   -> Block Predicate Filter:
+      |     -> Matching Block Tag:
+      |       -> Tag: minecraft:air
       awi:block minecraft:poppy
       awi:block minecraft:dandelion
     awi:placed_feature minecraft:patch_grass_badlands

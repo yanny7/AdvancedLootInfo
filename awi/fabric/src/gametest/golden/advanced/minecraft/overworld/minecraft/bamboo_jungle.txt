@@ -107,6 +107,18 @@ awi:biome minecraft:bamboo_jungle
       |       -> Simple:
       |         -> State:
       |           -> Block: Stone
+      |     -> Can Place Feature:
+      |       -> True Block
+      |     -> Can Replace With Air Or Fluid:
+      |       -> Not:
+      |         -> Predicate:
+      |           -> Matching Block Tag:
+      |             -> Tag: minecraft:features_cannot_replace
+      |     -> Can Replace With Barrier:
+      |       -> Not:
+      |         -> Predicate:
+      |           -> Matching Block Tag:
+      |             -> Tag: minecraft:lava_pool_stone_cannot_replace
       | Placement:
       |   -> Rarity Filter:
       |     -> Chance: 9
@@ -151,6 +163,18 @@ awi:biome minecraft:bamboo_jungle
       |       -> Simple:
       |         -> State:
       |           -> Block: Stone
+      |     -> Can Place Feature:
+      |       -> True Block
+      |     -> Can Replace With Air Or Fluid:
+      |       -> Not:
+      |         -> Predicate:
+      |           -> Matching Block Tag:
+      |             -> Tag: minecraft:features_cannot_replace
+      |     -> Can Replace With Barrier:
+      |       -> Not:
+      |         -> Predicate:
+      |           -> Matching Block Tag:
+      |             -> Tag: minecraft:lava_pool_stone_cannot_replace
       | Placement:
       |   -> Rarity Filter:
       |     -> Chance: 200
@@ -208,8 +232,10 @@ awi:biome minecraft:bamboo_jungle
       |           -> Properties:
       |             -> facing: up
       |             -> waterlogged: false
-      |       -> Cannot Replace: minecraft:features_cannot_replace
-      |       -> Invalid Blocks: minecraft:geode_invalid_blocks
+      |       -> Cannot Replace:
+      |         -> Tag: minecraft:features_cannot_replace
+      |       -> Invalid Blocks:
+      |         -> Tag: minecraft:geode_invalid_blocks
       |     -> Geode Layer Settings:
       |       -> Filling: 1.7
       |       -> Inner Layer: 2.2
@@ -1273,6 +1299,8 @@ awi:biome minecraft:bamboo_jungle
       |       -> Calcite
       |       -> Tuff
       |       -> Deepslate
+      |       -> Sulfur
+      |       -> Cinnabar
       | Placement:
       |   -> Count Placement:
       |     -> Count:
@@ -1551,6 +1579,7 @@ awi:biome minecraft:bamboo_jungle
       awi:block minecraft:short_grass
       awi:block minecraft:fern
     awi:placed_feature minecraft:flower_warm
+      | Attempts Per Chunk: 64
       | Chance: 6.25%
       | Height: Ground or Water Surface
       | Configured Feature:
@@ -1575,6 +1604,19 @@ awi:biome minecraft:bamboo_jungle
       |     -> Chance: 16
       |   -> Heightmap Placement:
       |     -> Heightmap: Ground or Water Surface
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 64
+      |   -> Random Offset:
+      |     -> XZ Spread:
+      |       -> trapezoid(−7; 7; 0)  ~0 (13%)
+      |         [chart 0..14 −7-7 base=true modes=[false, false, false, false, false, false, false, true, false, false, false, false, false, false, false] heights=0.1250,0.2500,0.3750,0.5000,0.6250,0.7500,0.8750,1.0000,0.8750,0.7500,0.6250,0.5000,0.3750,0.2500,0.1250]
+      |     -> Y Spread:
+      |       -> trapezoid(−3; 3; 0)  ~0 (25%)
+      |         [chart 0..6 −3-3 base=true modes=[false, false, false, true, false, false, false] heights=0.2500,0.5000,0.7500,1.0000,0.7500,0.5000,0.2500]
+      |   -> Block Predicate Filter:
+      |     -> Matching Block Tag:
+      |       -> Tag: minecraft:air
       awi:block minecraft:poppy
       awi:block minecraft:dandelion
     awi:placed_feature minecraft:patch_grass_jungle

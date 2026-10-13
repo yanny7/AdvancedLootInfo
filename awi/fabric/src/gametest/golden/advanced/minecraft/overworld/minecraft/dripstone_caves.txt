@@ -74,6 +74,18 @@ awi:biome minecraft:dripstone_caves
       |       -> Simple:
       |         -> State:
       |           -> Block: Stone
+      |     -> Can Place Feature:
+      |       -> True Block
+      |     -> Can Replace With Air Or Fluid:
+      |       -> Not:
+      |         -> Predicate:
+      |           -> Matching Block Tag:
+      |             -> Tag: minecraft:features_cannot_replace
+      |     -> Can Replace With Barrier:
+      |       -> Not:
+      |         -> Predicate:
+      |           -> Matching Block Tag:
+      |             -> Tag: minecraft:lava_pool_stone_cannot_replace
       | Placement:
       |   -> Rarity Filter:
       |     -> Chance: 9
@@ -118,6 +130,18 @@ awi:biome minecraft:dripstone_caves
       |       -> Simple:
       |         -> State:
       |           -> Block: Stone
+      |     -> Can Place Feature:
+      |       -> True Block
+      |     -> Can Replace With Air Or Fluid:
+      |       -> Not:
+      |         -> Predicate:
+      |           -> Matching Block Tag:
+      |             -> Tag: minecraft:features_cannot_replace
+      |     -> Can Replace With Barrier:
+      |       -> Not:
+      |         -> Predicate:
+      |           -> Matching Block Tag:
+      |             -> Tag: minecraft:lava_pool_stone_cannot_replace
       | Placement:
       |   -> Rarity Filter:
       |     -> Chance: 200
@@ -175,8 +199,10 @@ awi:biome minecraft:dripstone_caves
       |           -> Properties:
       |             -> facing: up
       |             -> waterlogged: false
-      |       -> Cannot Replace: minecraft:features_cannot_replace
-      |       -> Invalid Blocks: minecraft:geode_invalid_blocks
+      |       -> Cannot Replace:
+      |         -> Tag: minecraft:features_cannot_replace
+      |       -> Invalid Blocks:
+      |         -> Tag: minecraft:geode_invalid_blocks
       |     -> Geode Layer Settings:
       |       -> Filling: 1.7
       |       -> Inner Layer: 2.2
@@ -222,9 +248,12 @@ awi:biome minecraft:dripstone_caves
       | Configured Feature:
       |   -> Feature: minecraft:large_dripstone
       |   -> Large Dripstone:
+      |     -> Replaceable Blocks:
+      |       -> Tag: minecraft:dripstone_replaceable_blocks
       |     -> Search Range: 30
       |     -> Column Radius:
-      |       -> 3 to 19
+      |       -> clamp(U[3; 19]; 3; 16)  ~16 (24%)
+      |         [chart 0..13 3-16 base=true modes=[false, false, false, false, false, false, false, false, false, false, false, false, false, true] heights=0.2500,0.2500,0.2500,0.2500,0.2500,0.2500,0.2500,0.2500,0.2500,0.2500,0.2500,0.2500,0.2500,1.0000]
       |     -> Height Scale:
       |       -> U[0.4; 2)
       |     -> Radius To Height Ratio: 0.33
@@ -1181,23 +1210,33 @@ awi:biome minecraft:dripstone_caves
       | Attempts Per Chunk: 48 to 96
       | Height: −64 to 256
       | Configured Feature:
-      |   -> Feature: minecraft:dripstone_cluster
-      |   -> Dripstone Cluster:
-      |     -> Search Range: 12
+      |   -> Feature: minecraft:speleothem_cluster
+      |   -> Speleothem Cluster:
+      |     -> Base Block:
+      |       -> Block: Dripstone Block
+      |     -> Pointed Block:
+      |       -> Block: Pointed Dripstone
+      |       -> Properties:
+      |         -> thickness: tip
+      |         -> vertical_direction: up
+      |         -> waterlogged: false
+      |     -> Replaceable Blocks:
+      |       -> Tag: minecraft:dripstone_replaceable_blocks
+      |     -> Floor-Ceiling Search Range: 12
       |     -> Height: 3 to 6
       |     -> Radius: 2 to 8
-      |     -> Max Height Diff: 1
+      |     -> Max Stalagmite/Stalactite Diff: 1
       |     -> Height Deviation: 3
-      |     -> Layer Thickness:
+      |     -> Speleothem Layer Thickness:
       |       -> 2 to 4
       |     -> Density:
       |       -> U[0.3; 0.7)
       |     -> Wetness:
       |       -> clamp(normal(0.1; 0.3); 0.1; 0.9)  ~0.1
       |         [chart 0..63 0.1-0.9 base=true modes=[true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false] heights=1.0000,0.0321,0.0320,0.0318,0.0316,0.0313,0.0310,0.0306,0.0302,0.0297,0.0292,0.0287,0.0281,0.0275,0.0268,0.0261,0.0254,0.0247,0.0239,0.0231,0.0223,0.0215,0.0207,0.0199,0.0191,0.0183,0.0175,0.0167,0.0159,0.0151,0.0144,0.0136,0.0129,0.0121,0.0115,0.0108,0.0101,0.0095,0.0089,0.0083,0.0077,0.0072,0.0067,0.0062,0.0058,0.0053,0.0049,0.0045,0.0042,0.0038,0.0035,0.0032,0.0029,0.0027,0.0024,0.0022,0.0020,0.0018,0.0017,0.0015,0.0013,0.0012,0.0011,0.0010]
-      |     -> Edge Chance: 0.1
-      |     -> Chance Radius: 3
-      |     -> Height Bias Radius: 8
+      |     -> Chance At Max Center Distance: 0.1
+      |     -> Max Edge Distance For Chance: 3
+      |     -> Max Center Distance For Height Bias: 8
       | Placement:
       |   -> Count Placement:
       |     -> Count:
@@ -1216,14 +1255,24 @@ awi:biome minecraft:dripstone_caves
       | Height: −64 to 256
       | Configured Feature:
       |   -> Feature: minecraft:simple_random_selector
-      |   -> Simple Random Features:
+      |   -> Composite Feature:
       |     -> Features:
       |       -> Entry:
       |         -> Feature:
-      |           -> Feature: minecraft:pointed_dripstone
+      |           -> Feature: minecraft:speleothem
       |           -> Config:
-      |             -> Pointed Dripstone:
-      |               -> Chance Of Taller Dripstone: 0.2
+      |             -> Speleothem Cluster:
+      |               -> Base Block:
+      |                 -> Block: Dripstone Block
+      |               -> Pointed Block:
+      |                 -> Block: Pointed Dripstone
+      |                 -> Properties:
+      |                   -> thickness: tip
+      |                   -> vertical_direction: up
+      |                   -> waterlogged: false
+      |               -> Replaceable Blocks:
+      |                 -> Tag: minecraft:dripstone_replaceable_blocks
+      |               -> Chance Of Taller Generation: 0.2
       |               -> Chance Of Directional Spread: 0.7
       |               -> Chance Of Spread Radius 2: 0.5
       |               -> Chance Of Spread Radius 3: 0.5
@@ -1247,10 +1296,20 @@ awi:biome minecraft:dripstone_caves
       |               -> 1
       |       -> Entry:
       |         -> Feature:
-      |           -> Feature: minecraft:pointed_dripstone
+      |           -> Feature: minecraft:speleothem
       |           -> Config:
-      |             -> Pointed Dripstone:
-      |               -> Chance Of Taller Dripstone: 0.2
+      |             -> Speleothem Cluster:
+      |               -> Base Block:
+      |                 -> Block: Dripstone Block
+      |               -> Pointed Block:
+      |                 -> Block: Pointed Dripstone
+      |                 -> Properties:
+      |                   -> thickness: tip
+      |                   -> vertical_direction: up
+      |                   -> waterlogged: false
+      |               -> Replaceable Blocks:
+      |                 -> Tag: minecraft:dripstone_replaceable_blocks
+      |               -> Chance Of Taller Generation: 0.2
       |               -> Chance Of Directional Spread: 0.7
       |               -> Chance Of Spread Radius 2: 0.5
       |               -> Chance Of Spread Radius 3: 0.5
@@ -1390,6 +1449,8 @@ awi:biome minecraft:dripstone_caves
       |       -> Calcite
       |       -> Tuff
       |       -> Deepslate
+      |       -> Sulfur
+      |       -> Cinnabar
       | Placement:
       |   -> Count Placement:
       |     -> Count:

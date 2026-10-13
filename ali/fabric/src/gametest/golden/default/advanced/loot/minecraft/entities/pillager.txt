@@ -9,10 +9,9 @@ ali:entity_loot_table
       | Entity Properties:
       |   -> Target: This Entity
       |   -> Predicate:
-      |     -> Entity Sub Predicate:
-      |       -> Raider:
-      |         -> Has Raid: False
-      |         -> Is Captain: True
+      |     -> Raider:
+      |       -> Has Raid: False
+      |       -> Is Captain: True
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1
@@ -39,7 +38,7 @@ ali:entity_loot_table
       | Entity Properties:
       |   -> Target: This Entity
       |   -> Predicate:
-      |     -> Entity Equipment:
+      |     -> Equipment:
       |       -> Main Hand:
       |         -> Item: Crossbow
       | ----- Modifiers -----

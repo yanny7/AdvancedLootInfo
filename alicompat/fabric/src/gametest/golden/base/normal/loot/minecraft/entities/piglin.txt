@@ -23,7 +23,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Main Hand:
         |         -> Item: Golden Sword
         | ----- Modifiers -----
@@ -43,7 +43,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Main Hand:
         |         -> Item: Crossbow
         | ----- Modifiers -----
@@ -63,7 +63,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Head:
         |         -> Item: Golden Helmet
         | ----- Modifiers -----
@@ -83,7 +83,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Chest:
         |         -> Item: Golden Chestplate
         | ----- Modifiers -----
@@ -103,7 +103,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Legs:
         |         -> Item: Golden Leggings
         | ----- Modifiers -----
@@ -123,7 +123,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Feet:
         |         -> Item: Golden Boots
         | ----- Modifiers -----

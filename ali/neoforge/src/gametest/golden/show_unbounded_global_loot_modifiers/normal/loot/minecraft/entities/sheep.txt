@@ -17,12 +17,12 @@ ali:entity_loot_table
       |       -> Entity Properties:
       |         -> Target: This Entity
       |         -> Predicate:
-      |           -> Entity Flags:
+      |           -> Flags:
       |             -> Is On Fire: True
       |       -> Entity Properties:
       |         -> Target: Direct Attacker
       |         -> Predicate:
-      |           -> Entity Equipment:
+      |           -> Equipment:
       |             -> Main Hand:
       |               -> Components:
       |                 -> Partial Matchers:
@@ -50,13 +50,11 @@ ali:entity_loot_table
               | Entity Properties:
               |   -> Target: This Entity
               |   -> Predicate:
-              |     -> Entity Sub Predicate:
-              |       -> Sheep:
-              |         -> Sheared: False
               |     -> Components:
-              |       -> Expected Components:
-              |         -> minecraft:sheep/color
-              |           -> Color: White
+              |       -> minecraft:sheep/color
+              |         -> Color: White
+              |     -> Sheep:
+              |       -> Sheared: False
       ali:reference
         | Selects all entries
         ali:loot_table
@@ -70,13 +68,11 @@ ali:entity_loot_table
               | Entity Properties:
               |   -> Target: This Entity
               |   -> Predicate:
-              |     -> Entity Sub Predicate:
-              |       -> Sheep:
-              |         -> Sheared: False
               |     -> Components:
-              |       -> Expected Components:
-              |         -> minecraft:sheep/color
-              |           -> Color: Orange
+              |       -> minecraft:sheep/color
+              |         -> Color: Orange
+              |     -> Sheep:
+              |       -> Sheared: False
       ali:reference
         | Selects all entries
         ali:loot_table
@@ -90,13 +86,11 @@ ali:entity_loot_table
               | Entity Properties:
               |   -> Target: This Entity
               |   -> Predicate:
-              |     -> Entity Sub Predicate:
-              |       -> Sheep:
-              |         -> Sheared: False
               |     -> Components:
-              |       -> Expected Components:
-              |         -> minecraft:sheep/color
-              |           -> Color: Magenta
+              |       -> minecraft:sheep/color
+              |         -> Color: Magenta
+              |     -> Sheep:
+              |       -> Sheared: False
       ali:reference
         | Selects all entries
         ali:loot_table
@@ -110,13 +104,11 @@ ali:entity_loot_table
               | Entity Properties:
               |   -> Target: This Entity
               |   -> Predicate:
-              |     -> Entity Sub Predicate:
-              |       -> Sheep:
-              |         -> Sheared: False
               |     -> Components:
-              |       -> Expected Components:
-              |         -> minecraft:sheep/color
-              |           -> Color: Light Blue
+              |       -> minecraft:sheep/color
+              |         -> Color: Light Blue
+              |     -> Sheep:
+              |       -> Sheared: False
       ali:reference
         | Selects all entries
         ali:loot_table
@@ -130,13 +122,11 @@ ali:entity_loot_table
               | Entity Properties:
               |   -> Target: This Entity
               |   -> Predicate:
-              |     -> Entity Sub Predicate:
-              |       -> Sheep:
-              |         -> Sheared: False
               |     -> Components:
-              |       -> Expected Components:
-              |         -> minecraft:sheep/color
-              |           -> Color: Yellow
+              |       -> minecraft:sheep/color
+              |         -> Color: Yellow
+              |     -> Sheep:
+              |       -> Sheared: False
       ali:reference
         | Selects all entries
         ali:loot_table
@@ -150,13 +140,11 @@ ali:entity_loot_table
               | Entity Properties:
               |   -> Target: This Entity
               |   -> Predicate:
-              |     -> Entity Sub Predicate:
-              |       -> Sheep:
-              |         -> Sheared: False
               |     -> Components:
-              |       -> Expected Components:
-              |         -> minecraft:sheep/color
-              |           -> Color: Lime
+              |       -> minecraft:sheep/color
+              |         -> Color: Lime
+              |     -> Sheep:
+              |       -> Sheared: False
       ali:reference
         | Selects all entries
         ali:loot_table
@@ -170,13 +158,11 @@ ali:entity_loot_table
               | Entity Properties:
               |   -> Target: This Entity
               |   -> Predicate:
-              |     -> Entity Sub Predicate:
-              |       -> Sheep:
-              |         -> Sheared: False
               |     -> Components:
-              |       -> Expected Components:
-              |         -> minecraft:sheep/color
-              |           -> Color: Pink
+              |       -> minecraft:sheep/color
+              |         -> Color: Pink
+              |     -> Sheep:
+              |       -> Sheared: False
       ali:reference
         | Selects all entries
         ali:loot_table
@@ -190,13 +176,11 @@ ali:entity_loot_table
               | Entity Properties:
               |   -> Target: This Entity
               |   -> Predicate:
-              |     -> Entity Sub Predicate:
-              |       -> Sheep:
-              |         -> Sheared: False
               |     -> Components:
-              |       -> Expected Components:
-              |         -> minecraft:sheep/color
-              |           -> Color: Gray
+              |       -> minecraft:sheep/color
+              |         -> Color: Gray
+              |     -> Sheep:
+              |       -> Sheared: False
       ali:reference
         | Selects all entries
         ali:loot_table
@@ -210,13 +194,11 @@ ali:entity_loot_table
               | Entity Properties:
               |   -> Target: This Entity
               |   -> Predicate:
-              |     -> Entity Sub Predicate:
-              |       -> Sheep:
-              |         -> Sheared: False
               |     -> Components:
-              |       -> Expected Components:
-              |         -> minecraft:sheep/color
-              |           -> Color: Light Gray
+              |       -> minecraft:sheep/color
+              |         -> Color: Light Gray
+              |     -> Sheep:
+              |       -> Sheared: False
       ali:reference
         | Selects all entries
         ali:loot_table
@@ -230,13 +212,11 @@ ali:entity_loot_table
               | Entity Properties:
               |   -> Target: This Entity
               |   -> Predicate:
-              |     -> Entity Sub Predicate:
-              |       -> Sheep:
-              |         -> Sheared: False
               |     -> Components:
-              |       -> Expected Components:
-              |         -> minecraft:sheep/color
-              |           -> Color: Cyan
+              |       -> minecraft:sheep/color
+              |         -> Color: Cyan
+              |     -> Sheep:
+              |       -> Sheared: False
       ali:reference
         | Selects all entries
         ali:loot_table
@@ -250,13 +230,11 @@ ali:entity_loot_table
               | Entity Properties:
               |   -> Target: This Entity
               |   -> Predicate:
-              |     -> Entity Sub Predicate:
-              |       -> Sheep:
-              |         -> Sheared: False
               |     -> Components:
-              |       -> Expected Components:
-              |         -> minecraft:sheep/color
-              |           -> Color: Purple
+              |       -> minecraft:sheep/color
+              |         -> Color: Purple
+              |     -> Sheep:
+              |       -> Sheared: False
       ali:reference
         | Selects all entries
         ali:loot_table
@@ -270,13 +248,11 @@ ali:entity_loot_table
               | Entity Properties:
               |   -> Target: This Entity
               |   -> Predicate:
-              |     -> Entity Sub Predicate:
-              |       -> Sheep:
-              |         -> Sheared: False
               |     -> Components:
-              |       -> Expected Components:
-              |         -> minecraft:sheep/color
-              |           -> Color: Blue
+              |       -> minecraft:sheep/color
+              |         -> Color: Blue
+              |     -> Sheep:
+              |       -> Sheared: False
       ali:reference
         | Selects all entries
         ali:loot_table
@@ -290,13 +266,11 @@ ali:entity_loot_table
               | Entity Properties:
               |   -> Target: This Entity
               |   -> Predicate:
-              |     -> Entity Sub Predicate:
-              |       -> Sheep:
-              |         -> Sheared: False
               |     -> Components:
-              |       -> Expected Components:
-              |         -> minecraft:sheep/color
-              |           -> Color: Brown
+              |       -> minecraft:sheep/color
+              |         -> Color: Brown
+              |     -> Sheep:
+              |       -> Sheared: False
       ali:reference
         | Selects all entries
         ali:loot_table
@@ -310,13 +284,11 @@ ali:entity_loot_table
               | Entity Properties:
               |   -> Target: This Entity
               |   -> Predicate:
-              |     -> Entity Sub Predicate:
-              |       -> Sheep:
-              |         -> Sheared: False
               |     -> Components:
-              |       -> Expected Components:
-              |         -> minecraft:sheep/color
-              |           -> Color: Green
+              |       -> minecraft:sheep/color
+              |         -> Color: Green
+              |     -> Sheep:
+              |       -> Sheared: False
       ali:reference
         | Selects all entries
         ali:loot_table
@@ -330,13 +302,11 @@ ali:entity_loot_table
               | Entity Properties:
               |   -> Target: This Entity
               |   -> Predicate:
-              |     -> Entity Sub Predicate:
-              |       -> Sheep:
-              |         -> Sheared: False
               |     -> Components:
-              |       -> Expected Components:
-              |         -> minecraft:sheep/color
-              |           -> Color: Red
+              |       -> minecraft:sheep/color
+              |         -> Color: Red
+              |     -> Sheep:
+              |       -> Sheared: False
       ali:reference
         | Selects all entries
         ali:loot_table
@@ -350,13 +320,11 @@ ali:entity_loot_table
               | Entity Properties:
               |   -> Target: This Entity
               |   -> Predicate:
-              |     -> Entity Sub Predicate:
-              |       -> Sheep:
-              |         -> Sheared: False
               |     -> Components:
-              |       -> Expected Components:
-              |         -> minecraft:sheep/color
-              |           -> Color: Black
+              |       -> minecraft:sheep/color
+              |         -> Color: Black
+              |     -> Sheep:
+              |       -> Sheared: False
   ali:item minecraft:diamond x1
     | Chance: 1%
     | Count: 1

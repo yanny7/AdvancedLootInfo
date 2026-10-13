@@ -78,7 +78,7 @@ ali:entity_loot_table
       | Entity Properties:
       |   -> Target: This Entity
       |   -> Predicate:
-      |     -> Entity Equipment:
+      |     -> Equipment:
       |       -> Main Hand:
       |         -> Item: Stone Sword
       | ----- Modifiers -----

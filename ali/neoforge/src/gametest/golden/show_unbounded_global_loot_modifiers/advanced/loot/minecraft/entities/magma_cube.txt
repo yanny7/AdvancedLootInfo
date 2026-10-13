@@ -19,9 +19,8 @@ ali:entity_loot_table
       | Entity Properties:
       |   -> Target: This Entity
       |   -> Predicate:
-      |     -> Entity Sub Predicate:
-      |       -> Slime:
-      |         -> Size: ≥ 2
+      |     -> Cube Mob:
+      |       -> Size: ≥ 2
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: −2 to 1
@@ -35,11 +34,10 @@ ali:entity_loot_table
       | ----- Predicates -----
       | Damage Source Properties:
       |   -> Source Entity:
-      |     -> Entity Type: Frog
       |     -> Components:
-      |       -> Expected Components:
-      |         -> minecraft:frog/variant
-      |           -> Value: minecraft:warm
+      |       -> minecraft:frog/variant
+      |         -> Value: minecraft:warm
+      |     -> Entity Type: Frog
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1
@@ -50,11 +48,10 @@ ali:entity_loot_table
       | ----- Predicates -----
       | Damage Source Properties:
       |   -> Source Entity:
-      |     -> Entity Type: Frog
       |     -> Components:
-      |       -> Expected Components:
-      |         -> minecraft:frog/variant
-      |           -> Value: minecraft:cold
+      |       -> minecraft:frog/variant
+      |         -> Value: minecraft:cold
+      |     -> Entity Type: Frog
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1
@@ -65,11 +62,10 @@ ali:entity_loot_table
       | ----- Predicates -----
       | Damage Source Properties:
       |   -> Source Entity:
-      |     -> Entity Type: Frog
       |     -> Components:
-      |       -> Expected Components:
-      |         -> minecraft:frog/variant
-      |           -> Value: minecraft:temperate
+      |       -> minecraft:frog/variant
+      |         -> Value: minecraft:temperate
+      |     -> Entity Type: Frog
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1

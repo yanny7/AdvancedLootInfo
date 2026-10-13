@@ -66,8 +66,10 @@ awi:biome minecraft:deep_dark
       |           -> Properties:
       |             -> facing: up
       |             -> waterlogged: false
-      |       -> Cannot Replace: minecraft:features_cannot_replace
-      |       -> Invalid Blocks: minecraft:geode_invalid_blocks
+      |       -> Cannot Replace:
+      |         -> Tag: minecraft:features_cannot_replace
+      |       -> Invalid Blocks:
+      |         -> Tag: minecraft:geode_invalid_blocks
       |     -> Geode Layer Settings:
       |       -> Filling: 1.7
       |       -> Inner Layer: 2.2
@@ -1121,6 +1123,8 @@ awi:biome minecraft:deep_dark
       |       -> Calcite
       |       -> Tuff
       |       -> Deepslate
+      |       -> Sulfur
+      |       -> Cinnabar
       | Placement:
       |   -> Count Placement:
       |     -> Count:

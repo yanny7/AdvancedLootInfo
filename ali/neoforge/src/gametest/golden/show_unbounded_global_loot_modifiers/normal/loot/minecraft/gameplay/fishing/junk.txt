@@ -60,8 +60,6 @@ ali:loot_table
     ali:item minecraft:ink_sac x10
       | Chance: 0.91%
       | Count: 10
-  ali:item minecraft:nautilus_shell x1
-    | Count: 1
   ali:item minecraft:diamond x1
     | Chance: 1%
     | Count: 1

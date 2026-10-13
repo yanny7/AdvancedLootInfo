@@ -18,9 +18,8 @@ ali:entity_loot_table
       | Entity Properties:
       |   -> Target: This Entity
       |   -> Predicate:
-      |     -> Entity Sub Predicate:
-      |       -> Slime:
-      |         -> Size: ≥ 2
+      |     -> Cube Mob:
+      |       -> Size: ≥ 2
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
@@ -31,33 +30,30 @@ ali:entity_loot_table
       | ----- Predicates -----
       | Damage Source Properties:
       |   -> Source Entity:
-      |     -> Entity Type: Frog
       |     -> Components:
-      |       -> Expected Components:
-      |         -> minecraft:frog/variant
-      |           -> Value: minecraft:warm
+      |       -> minecraft:frog/variant
+      |         -> Value: minecraft:warm
+      |     -> Entity Type: Frog
     ali:item minecraft:verdant_froglight x1
       | Chance: 25%
       | Count: 1
       | ----- Predicates -----
       | Damage Source Properties:
       |   -> Source Entity:
-      |     -> Entity Type: Frog
       |     -> Components:
-      |       -> Expected Components:
-      |         -> minecraft:frog/variant
-      |           -> Value: minecraft:cold
+      |       -> minecraft:frog/variant
+      |         -> Value: minecraft:cold
+      |     -> Entity Type: Frog
     ali:item minecraft:ochre_froglight x1
       | Chance: 25%
       | Count: 1
       | ----- Predicates -----
       | Damage Source Properties:
       |   -> Source Entity:
-      |     -> Entity Type: Frog
       |     -> Components:
-      |       -> Expected Components:
-      |         -> minecraft:frog/variant
-      |           -> Value: minecraft:temperate
+      |       -> minecraft:frog/variant
+      |         -> Value: minecraft:temperate
+      |     -> Entity Type: Frog
   ali:item minecraft:diamond x1
     | Chance: 1%
     | Count: 1

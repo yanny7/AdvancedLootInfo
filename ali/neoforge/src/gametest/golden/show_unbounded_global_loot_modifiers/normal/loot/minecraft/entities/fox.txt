@@ -14,7 +14,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Main Hand:
         |         -> Item: Emerald
       ali:item minecraft:rabbit_foot x1
@@ -23,7 +23,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Main Hand:
         |         -> Item: Rabbit's Foot
       ali:item minecraft:rabbit_hide x1
@@ -32,7 +32,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Main Hand:
         |         -> Item: Rabbit Hide
       ali:item minecraft:egg x1
@@ -41,7 +41,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Main Hand:
         |         -> Item: Egg
       ali:item minecraft:wheat x1
@@ -50,7 +50,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Main Hand:
         |         -> Item: Wheat
       ali:item minecraft:leather x1
@@ -59,7 +59,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Main Hand:
         |         -> Item: Leather
       ali:item minecraft:feather x1
@@ -68,6 +68,6 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Main Hand:
         |         -> Item: Feather

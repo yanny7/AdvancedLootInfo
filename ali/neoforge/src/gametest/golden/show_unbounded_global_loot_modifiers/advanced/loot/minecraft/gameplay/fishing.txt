@@ -236,9 +236,8 @@ ali:loot_table
             | Entity Properties:
             |   -> Target: This Entity
             |   -> Predicate:
-            |     -> Entity Sub Predicate:
-            |       -> Fishing Hook:
-            |         -> Is In Open Water: True
+            |     -> Fishing Hook:
+            |       -> Is In Open Water: True
           ali:item minecraft:saddle x1
             | Chance: 0.83%
             |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 1000% + floor(−200% × luck)) + max(0%; 500% + floor(200% × luck)) + max(0%; 8500% + floor(−100% × luck))) × 16.67%
@@ -252,9 +251,8 @@ ali:loot_table
             | Entity Properties:
             |   -> Target: This Entity
             |   -> Predicate:
-            |     -> Entity Sub Predicate:
-            |       -> Fishing Hook:
-            |         -> Is In Open Water: True
+            |     -> Fishing Hook:
+            |       -> Is In Open Water: True
           ali:item minecraft:bow x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 0.83%
             |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 1000% + floor(−200% × luck)) + max(0%; 500% + floor(200% × luck)) + max(0%; 8500% + floor(−100% × luck))) × 16.67%
@@ -268,9 +266,8 @@ ali:loot_table
             | Entity Properties:
             |   -> Target: This Entity
             |   -> Predicate:
-            |     -> Entity Sub Predicate:
-            |       -> Fishing Hook:
-            |         -> Is In Open Water: True
+            |     -> Fishing Hook:
+            |       -> Is In Open Water: True
             | ----- Modifiers -----
             | Set Damage:
             |   -> Damage: U[0%; 25%)
@@ -293,9 +290,8 @@ ali:loot_table
             | Entity Properties:
             |   -> Target: This Entity
             |   -> Predicate:
-            |     -> Entity Sub Predicate:
-            |       -> Fishing Hook:
-            |         -> Is In Open Water: True
+            |     -> Fishing Hook:
+            |       -> Is In Open Water: True
             | ----- Modifiers -----
             | Set Damage:
             |   -> Damage: U[0%; 25%)
@@ -318,9 +314,8 @@ ali:loot_table
             | Entity Properties:
             |   -> Target: This Entity
             |   -> Predicate:
-            |     -> Entity Sub Predicate:
-            |       -> Fishing Hook:
-            |         -> Is In Open Water: True
+            |     -> Fishing Hook:
+            |       -> Is In Open Water: True
             | ----- Modifiers -----
             | Enchant With Levels:
             |   -> Levels: 30
@@ -340,11 +335,8 @@ ali:loot_table
             | Entity Properties:
             |   -> Target: This Entity
             |   -> Predicate:
-            |     -> Entity Sub Predicate:
-            |       -> Fishing Hook:
-            |         -> Is In Open Water: True
-  ali:item minecraft:nautilus_shell x1
-    | Count: 1
+            |     -> Fishing Hook:
+            |       -> Is In Open Water: True
   ali:item minecraft:diamond x1
     | Chance: 1%
     | Count: 1

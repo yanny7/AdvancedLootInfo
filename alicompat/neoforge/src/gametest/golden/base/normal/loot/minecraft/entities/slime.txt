@@ -14,9 +14,8 @@ ali:entity_loot_table
       | Entity Properties:
       |   -> Target: This Entity
       |   -> Predicate:
-      |     -> Entity Sub Predicate:
-      |       -> Slime:
-      |         -> Size: 1
+      |     -> Cube Mob:
+      |       -> Size: 1
       | Inverted:
       |   -> Damage Source Properties:
       |     -> Source Entity:
@@ -32,9 +31,8 @@ ali:entity_loot_table
       | Entity Properties:
       |   -> Target: This Entity
       |   -> Predicate:
-      |     -> Entity Sub Predicate:
-      |       -> Slime:
-      |         -> Size: 1
+      |     -> Cube Mob:
+      |       -> Size: 1
       | Damage Source Properties:
       |   -> Source Entity:
       |     -> Entity Type: Frog

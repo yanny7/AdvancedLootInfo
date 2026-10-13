@@ -15,7 +15,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Main Hand:
         |         -> Item: Milk Bucket
       ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:invisibility"}}
@@ -28,7 +28,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Main Hand:
         |         -> Item: Water Bottle
         | ----- Modifiers -----

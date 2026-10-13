@@ -97,35 +97,42 @@ ali:loot_table
     | Selects random entry
     | Rolls: 3
     ali:item minecraft:rail x4-8
-      | Chance: 40%
+      | Chance: 33.33%
       | Count: max(0; U[4; 8])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 4 to 8
       |   -> Add: False
     ali:item minecraft:torch x1-16
-      | Chance: 30%
+      | Chance: 25%
       | Count: max(0; U[1; 16])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 16
       |   -> Add: False
+    ali:item minecraft:music_disc_bounce x1
+      | Chance: 16.67%
+      | Count: 1
+      | ----- Predicates -----
+      | Location Check:
+      |   -> Location:
+      |     -> Biome: Sulfur Caves
     ali:item minecraft:powered_rail x1-4
-      | Chance: 10%
+      | Chance: 8.33%
       | Count: max(0; U[1; 4])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 4
       |   -> Add: False
     ali:item minecraft:detector_rail x1-4
-      | Chance: 10%
+      | Chance: 8.33%
       | Count: max(0; U[1; 4])
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1 to 4
       |   -> Add: False
     ali:item minecraft:activator_rail x1-4
-      | Chance: 10%
+      | Chance: 8.33%
       | Count: max(0; U[1; 4])
       | ----- Modifiers -----
       | Set Count:

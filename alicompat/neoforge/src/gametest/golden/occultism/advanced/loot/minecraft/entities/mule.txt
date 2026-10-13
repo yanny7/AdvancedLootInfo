@@ -23,7 +23,7 @@ ali:entity_loot_table
     | Entity Properties:
     |   -> Target: Attacker
     |   -> Predicate:
-    |     -> Entity Equipment:
+    |     -> Equipment:
     |       -> Main Hand:
     |         -> Items:
     |           -> Tag: Knives
@@ -33,7 +33,7 @@ ali:entity_loot_table
     | Entity Properties:
     |   -> Target: Attacker
     |   -> Predicate:
-    |     -> Entity Equipment:
+    |     -> Equipment:
     |       -> Main Hand:
     |         -> Items:
     |           -> Tag: Knives

@@ -3,11 +3,12 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    lootjs:item_stack minecraft:gold_ingot x1
-      | Count: 1
-    lootjs:item_stack minecraft:emerald x1
-      | Chance: 50%
+    ali:item minecraft:iron_ingot x1
+      | Chance: 33.33%
       | Count: 1
     ali:item minecraft:apple x1
       | Chance: 33.33%
+      | Count: 1
+    ali:item minecraft:copper_ingot x1
+      | Chance: 16.67%
       | Count: 1

@@ -107,8 +107,8 @@ ali:trade
     ali:items_to_items
       | Uses: 12
       | XP: 30
-      ali:item minecraft:arrow x5
       ali:item minecraft:emerald x2
+      ali:item minecraft:arrow x5
       ali:item minecraft:tipped_arrow x5
         | Set Random Potions:
         |   -> Potions:

@@ -90,14 +90,9 @@ dependencies {
     }
 
     // LootJS
-    [
-            "curse.maven:kubejs-238086:8495199",
-            "curse.maven:rhino-416294:8463898",
-            "curse.maven:lootjs-570630:8569378",
-    ].each { dep ->
-        compileOnly dep
-        gametestRuntimeOnly dep
-    }
+    compileOnly "curse.maven:kubejs-238086:8495199"
+    compileOnly "curse.maven:rhino-416294:8218748"
+    compileOnly "curse.maven:lootjs-570630:8569378"
 }
 
 jar {

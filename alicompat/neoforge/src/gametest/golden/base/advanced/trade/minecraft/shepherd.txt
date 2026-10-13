@@ -88,12 +88,6 @@ ali:trade
       | XP: 5
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item minecraft:blue_wool x1
-    ali:items_to_items
-      | Uses: 16
-      | XP: 5
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
       ali:item minecraft:light_blue_wool x1
     ali:items_to_items
       | Uses: 16
@@ -142,6 +136,12 @@ ali:trade
       | XP: 5
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
+      ali:item minecraft:blue_wool x1
+    ali:items_to_items
+      | Uses: 16
+      | XP: 5
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
       ali:item minecraft:brown_wool x1
     ali:items_to_items
       | Uses: 16
@@ -179,12 +179,6 @@ ali:trade
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:magenta_carpet x4
-    ali:items_to_items
-      | Uses: 16
-      | XP: 5
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item minecraft:blue_carpet x4
     ali:items_to_items
       | Uses: 16
       | XP: 5
@@ -233,6 +227,12 @@ ali:trade
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:purple_carpet x4
+    ali:items_to_items
+      | Uses: 16
+      | XP: 5
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:blue_carpet x4
     ali:items_to_items
       | Uses: 16
       | XP: 5
@@ -313,12 +313,6 @@ ali:trade
       | XP: 10
       ali:item minecraft:emerald x3
       ali:item minecraft:air x0
-      ali:item minecraft:blue_bed x1
-    ali:items_to_items
-      | Uses: 12
-      | XP: 10
-      ali:item minecraft:emerald x3
-      ali:item minecraft:air x0
       ali:item minecraft:light_blue_bed x1
     ali:items_to_items
       | Uses: 12
@@ -362,6 +356,12 @@ ali:trade
       ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item minecraft:purple_bed x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 10
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:blue_bed x1
     ali:items_to_items
       | Uses: 12
       | XP: 10
@@ -448,12 +448,6 @@ ali:trade
       | XP: 15
       ali:item minecraft:emerald x3
       ali:item minecraft:air x0
-      ali:item minecraft:blue_banner x1
-    ali:items_to_items
-      | Uses: 12
-      | XP: 15
-      ali:item minecraft:emerald x3
-      ali:item minecraft:air x0
       ali:item minecraft:light_blue_banner x1
     ali:items_to_items
       | Uses: 12
@@ -497,6 +491,12 @@ ali:trade
       ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item minecraft:purple_banner x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:blue_banner x1
     ali:items_to_items
       | Uses: 12
       | XP: 15

@@ -45,8 +45,6 @@ ali:loot_table
     ali:item minecraft:nautilus_shell x1
       | Chance: 16.67%
       | Count: 1
-  ali:item minecraft:nautilus_shell x1
-    | Count: 1
   ali:item minecraft:diamond x1
     | Chance: 1%
     | Count: 1

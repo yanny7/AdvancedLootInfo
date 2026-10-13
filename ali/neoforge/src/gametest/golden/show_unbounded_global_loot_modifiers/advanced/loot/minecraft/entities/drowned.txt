@@ -63,7 +63,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Main Hand:
         |         -> Item: Trident
         | ----- Modifiers -----
@@ -93,7 +93,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Main Hand:
         |         -> Item: Fishing Rod
         | ----- Modifiers -----
@@ -112,6 +112,6 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Main Hand:
         |         -> Item: Nautilus Shell

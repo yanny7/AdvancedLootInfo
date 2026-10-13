@@ -12,9 +12,8 @@ ali:loot_table
         |   -> Target: This Entity
         |   -> Predicate:
         |     -> Components:
-        |       -> Expected Components:
-        |         -> minecraft:chicken/variant
-        |           -> Value: minecraft:temperate
+        |       -> minecraft:chicken/variant
+        |         -> Value: minecraft:temperate
       ali:item minecraft:brown_egg x1
         | Count: 1
         | ----- Predicates -----
@@ -22,9 +21,8 @@ ali:loot_table
         |   -> Target: This Entity
         |   -> Predicate:
         |     -> Components:
-        |       -> Expected Components:
-        |         -> minecraft:chicken/variant
-        |           -> Value: minecraft:warm
+        |       -> minecraft:chicken/variant
+        |         -> Value: minecraft:warm
       ali:item minecraft:blue_egg x1
         | Count: 1
         | ----- Predicates -----
@@ -32,6 +30,5 @@ ali:loot_table
         |   -> Target: This Entity
         |   -> Predicate:
         |     -> Components:
-        |       -> Expected Components:
-        |         -> minecraft:chicken/variant
-        |           -> Value: minecraft:cold
+        |       -> minecraft:chicken/variant
+        |         -> Value: minecraft:cold

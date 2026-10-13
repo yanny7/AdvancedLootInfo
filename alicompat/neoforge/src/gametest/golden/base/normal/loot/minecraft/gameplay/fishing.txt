@@ -211,9 +211,8 @@ ali:loot_table
             | Entity Properties:
             |   -> Target: This Entity
             |   -> Predicate:
-            |     -> Entity Sub Predicate:
-            |       -> Fishing Hook:
-            |         -> Is In Open Water: True
+            |     -> Fishing Hook:
+            |       -> Is In Open Water: True
           ali:item minecraft:saddle x1
             | Chance: 0.83%
             |   -> Bad Luck: 0.5%
@@ -226,9 +225,8 @@ ali:loot_table
             | Entity Properties:
             |   -> Target: This Entity
             |   -> Predicate:
-            |     -> Entity Sub Predicate:
-            |       -> Fishing Hook:
-            |         -> Is In Open Water: True
+            |     -> Fishing Hook:
+            |       -> Is In Open Water: True
           ali:item minecraft:bow x1 {"minecraft:enchantment_glint_override":1b}
             | Chance: 0.83%
             |   -> Bad Luck: 0.5%
@@ -241,9 +239,8 @@ ali:loot_table
             | Entity Properties:
             |   -> Target: This Entity
             |   -> Predicate:
-            |     -> Entity Sub Predicate:
-            |       -> Fishing Hook:
-            |         -> Is In Open Water: True
+            |     -> Fishing Hook:
+            |       -> Is In Open Water: True
             | ----- Modifiers -----
             | Set Damage:
             |   -> Damage: 0% to 25%
@@ -265,9 +262,8 @@ ali:loot_table
             | Entity Properties:
             |   -> Target: This Entity
             |   -> Predicate:
-            |     -> Entity Sub Predicate:
-            |       -> Fishing Hook:
-            |         -> Is In Open Water: True
+            |     -> Fishing Hook:
+            |       -> Is In Open Water: True
             | ----- Modifiers -----
             | Set Damage:
             |   -> Damage: 0% to 25%
@@ -289,9 +285,8 @@ ali:loot_table
             | Entity Properties:
             |   -> Target: This Entity
             |   -> Predicate:
-            |     -> Entity Sub Predicate:
-            |       -> Fishing Hook:
-            |         -> Is In Open Water: True
+            |     -> Fishing Hook:
+            |       -> Is In Open Water: True
             | ----- Modifiers -----
             | Enchant With Levels:
             |   -> Levels: 30
@@ -310,6 +305,5 @@ ali:loot_table
             | Entity Properties:
             |   -> Target: This Entity
             |   -> Predicate:
-            |     -> Entity Sub Predicate:
-            |       -> Fishing Hook:
-            |         -> Is In Open Water: True
+            |     -> Fishing Hook:
+            |       -> Is In Open Water: True

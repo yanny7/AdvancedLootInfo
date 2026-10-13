@@ -13,9 +13,8 @@ ali:loot_table
       | Entity Properties:
       |   -> Target: This Entity
       |   -> Predicate:
-      |     -> Entity Sub Predicate:
-      |       -> Slime:
-      |         -> Size: ≥ 2
+      |     -> Cube Mob:
+      |       -> Size: ≥ 2
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting

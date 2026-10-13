@@ -77,11 +77,11 @@
               "condition": "minecraft:entity_properties",
               "entity": "this",
               "predicate": {
-                "type": "#minecraft:skeletons",
-                "flags": {
+                "minecraft:entity_type": "#minecraft:skeletons",
+                "minecraft:flags": {
                   "is_baby": false
                 },
-                "effects": {
+                "minecraft:effects": {
                   "minecraft:poison": {
                     "amplifier": {
                       "min": 1

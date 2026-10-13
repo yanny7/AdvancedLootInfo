@@ -95,7 +95,7 @@ ali:loot_table
       |     -> Entity Properties:
       |       -> Target: This Entity
       |       -> Predicate:
-      |         -> Entity Flags:
+      |         -> Flags:
       |           -> Is On Fire: True
   ali:item minecraft:diamond x1
     | Chance: 1%

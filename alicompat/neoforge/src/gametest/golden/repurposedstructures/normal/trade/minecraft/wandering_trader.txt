@@ -227,6 +227,102 @@ ali:trade
     | Level: 3
     | Randomly Selects 5 Of These Trades
     ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:white_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:orange_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:magenta_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:light_blue_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:yellow_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:lime_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:pink_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:gray_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:light_gray_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:cyan_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:purple_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:blue_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:brown_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:green_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:red_dye x3
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:black_dye x3
+    ali:items_to_items
       | Uses: 4
       | XP: 1
       ali:item minecraft:emerald x3
@@ -449,102 +545,6 @@ ali:trade
       ali:item minecraft:air x0
       ali:item minecraft:mangrove_propagule x1
     ali:items_to_items
-      | Uses: 12
-      | XP: 1
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item minecraft:red_dye x3
-    ali:items_to_items
-      | Uses: 12
-      | XP: 1
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item minecraft:white_dye x3
-    ali:items_to_items
-      | Uses: 12
-      | XP: 1
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item minecraft:blue_dye x3
-    ali:items_to_items
-      | Uses: 12
-      | XP: 1
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item minecraft:pink_dye x3
-    ali:items_to_items
-      | Uses: 12
-      | XP: 1
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item minecraft:black_dye x3
-    ali:items_to_items
-      | Uses: 12
-      | XP: 1
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item minecraft:green_dye x3
-    ali:items_to_items
-      | Uses: 12
-      | XP: 1
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item minecraft:light_gray_dye x3
-    ali:items_to_items
-      | Uses: 12
-      | XP: 1
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item minecraft:magenta_dye x3
-    ali:items_to_items
-      | Uses: 12
-      | XP: 1
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item minecraft:yellow_dye x3
-    ali:items_to_items
-      | Uses: 12
-      | XP: 1
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item minecraft:gray_dye x3
-    ali:items_to_items
-      | Uses: 12
-      | XP: 1
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item minecraft:purple_dye x3
-    ali:items_to_items
-      | Uses: 12
-      | XP: 1
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item minecraft:light_blue_dye x3
-    ali:items_to_items
-      | Uses: 12
-      | XP: 1
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item minecraft:lime_dye x3
-    ali:items_to_items
-      | Uses: 12
-      | XP: 1
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item minecraft:orange_dye x3
-    ali:items_to_items
-      | Uses: 12
-      | XP: 1
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item minecraft:brown_dye x3
-    ali:items_to_items
-      | Uses: 12
-      | XP: 1
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item minecraft:cyan_dye x3
-    ali:items_to_items
       | Uses: 8
       | XP: 1
       ali:item minecraft:emerald x3
@@ -628,6 +628,12 @@ ali:trade
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:pointed_dripstone x2
+    ali:items_to_items
+      | Uses: 5
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:sulfur_spike x2
     ali:items_to_items
       | Uses: 5
       | XP: 1

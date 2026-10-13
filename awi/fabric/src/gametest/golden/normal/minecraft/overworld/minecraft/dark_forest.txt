@@ -295,6 +295,7 @@ awi:biome minecraft:dark_forest
       awi:block minecraft:peony
       awi:block minecraft:lily_of_the_valley
     awi:placed_feature minecraft:flower_default
+      | Attempts Per Chunk: 64
       | Chance: 3.13%
       | Height: Ground or Water Surface
       awi:block minecraft:poppy

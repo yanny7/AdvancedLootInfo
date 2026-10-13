@@ -30,12 +30,12 @@ ali:entity_loot_table
       |       -> Entity Properties:
       |         -> Target: This Entity
       |         -> Predicate:
-      |           -> Entity Flags:
+      |           -> Flags:
       |             -> Is On Fire: True
       |       -> Entity Properties:
       |         -> Target: Direct Attacker
       |         -> Predicate:
-      |           -> Entity Equipment:
+      |           -> Equipment:
       |             -> Main Hand:
       |               -> Components:
       |                 -> Partial Matchers:
@@ -65,7 +65,7 @@ ali:entity_loot_table
       | Entity Properties:
       |   -> Target: Attacker
       |   -> Predicate:
-      |     -> Entity Equipment:
+      |     -> Equipment:
       |       -> Main Hand:
       |         -> Items:
       |           -> Tag: Knives

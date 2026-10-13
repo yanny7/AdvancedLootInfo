@@ -33,11 +33,11 @@ ali:loot_table
       |   -> Predicate:
       |     -> Entity Types:
       |       -> Tag: minecraft:skeletons
-      |     -> Mob Effects:
+      |     -> Flags:
+      |       -> Is Baby: False
+      |     -> Effects:
       |       -> Poison
       |         -> Amplifier: ≥ 1
-      |     -> Entity Flags:
-      |       -> Is Baby: False
     ali:item minecraft:green_dye x1
       | Chance: 8.33%
       | Count: 1

@@ -19,9 +19,8 @@ ali:loot_table
               |   -> Target: This Entity
               |   -> Predicate:
               |     -> Components:
-              |       -> Expected Components:
-              |         -> minecraft:mooshroom/variant
-              |           -> Type: Red
+              |       -> minecraft:mooshroom/variant
+              |         -> Type: Red
       ali:reference
         | Selects all entries
         ali:loot_table
@@ -36,9 +35,8 @@ ali:loot_table
               |   -> Target: This Entity
               |   -> Predicate:
               |     -> Components:
-              |       -> Expected Components:
-              |         -> minecraft:mooshroom/variant
-              |           -> Type: Brown
+              |       -> minecraft:mooshroom/variant
+              |         -> Type: Brown
   ali:item minecraft:diamond x1
     | Chance: 1%
     | Count: 1

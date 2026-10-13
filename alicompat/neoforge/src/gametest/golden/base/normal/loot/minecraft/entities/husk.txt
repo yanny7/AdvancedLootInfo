@@ -67,12 +67,12 @@ ali:entity_loot_table
       |       -> Entity Properties:
       |         -> Target: This Entity
       |         -> Predicate:
-      |           -> Entity Flags:
+      |           -> Flags:
       |             -> Is On Fire: True
       |       -> Entity Properties:
       |         -> Target: Direct Attacker
       |         -> Predicate:
-      |           -> Entity Equipment:
+      |           -> Equipment:
       |             -> Main Hand:
       |               -> Components:
       |                 -> Partial Matchers:
@@ -94,7 +94,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Main Hand:
         |         -> Item: Iron Shovel
         | ----- Modifiers -----
@@ -114,7 +114,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Main Hand:
         |         -> Item: Iron Sword
         | ----- Modifiers -----
@@ -134,7 +134,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Head:
         |         -> Item: Leather Cap
         | ----- Modifiers -----
@@ -154,7 +154,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Chest:
         |         -> Item: Leather Tunic
         | ----- Modifiers -----
@@ -174,7 +174,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Legs:
         |         -> Item: Leather Pants
         | ----- Modifiers -----
@@ -194,7 +194,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Feet:
         |         -> Item: Leather Boots
         | ----- Modifiers -----
@@ -214,7 +214,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Head:
         |         -> Item: Golden Helmet
         | ----- Modifiers -----
@@ -234,7 +234,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Chest:
         |         -> Item: Golden Chestplate
         | ----- Modifiers -----
@@ -254,7 +254,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Legs:
         |         -> Item: Golden Leggings
         | ----- Modifiers -----
@@ -274,7 +274,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Feet:
         |         -> Item: Golden Boots
         | ----- Modifiers -----
@@ -294,7 +294,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Head:
         |         -> Item: Chainmail Helmet
         | ----- Modifiers -----
@@ -314,7 +314,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Chest:
         |         -> Item: Chainmail Chestplate
         | ----- Modifiers -----
@@ -334,7 +334,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Legs:
         |         -> Item: Chainmail Leggings
         | ----- Modifiers -----
@@ -354,7 +354,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Feet:
         |         -> Item: Chainmail Boots
         | ----- Modifiers -----
@@ -374,7 +374,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Head:
         |         -> Item: Iron Helmet
         | ----- Modifiers -----
@@ -394,7 +394,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Chest:
         |         -> Item: Iron Chestplate
         | ----- Modifiers -----
@@ -414,7 +414,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Legs:
         |         -> Item: Iron Leggings
         | ----- Modifiers -----
@@ -434,7 +434,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Feet:
         |         -> Item: Iron Boots
         | ----- Modifiers -----
@@ -454,7 +454,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Head:
         |         -> Item: Diamond Helmet
         | ----- Modifiers -----
@@ -474,7 +474,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Chest:
         |         -> Item: Diamond Chestplate
         | ----- Modifiers -----
@@ -494,7 +494,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Legs:
         |         -> Item: Diamond Leggings
         | ----- Modifiers -----
@@ -514,7 +514,7 @@ ali:entity_loot_table
         | Entity Properties:
         |   -> Target: This Entity
         |   -> Predicate:
-        |     -> Entity Equipment:
+        |     -> Equipment:
         |       -> Feet:
         |         -> Item: Diamond Boots
         | ----- Modifiers -----

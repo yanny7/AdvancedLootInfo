@@ -64,5 +64,3 @@ ali:loot_table
       | Set Count:
       |   -> Count: 10
       |   -> Add: False
-  ali:item minecraft:nautilus_shell x1
-    | Count: 1

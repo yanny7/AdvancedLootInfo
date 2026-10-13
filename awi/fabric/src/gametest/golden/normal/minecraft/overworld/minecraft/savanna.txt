@@ -309,6 +309,7 @@ awi:biome minecraft:savanna
       awi:block minecraft:oak_log
       awi:block minecraft:oak_leaves
     awi:placed_feature minecraft:flower_warm
+      | Attempts Per Chunk: 64
       | Chance: 6.25%
       | Height: Ground or Water Surface
       awi:block minecraft:poppy

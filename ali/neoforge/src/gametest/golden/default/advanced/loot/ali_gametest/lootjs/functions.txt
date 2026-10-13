@@ -5,12 +5,3 @@ ali:loot_table
     | Rolls: 1
     ali:item minecraft:cod x1
       | Count: 1
-  ali:item minecraft:diamond_sword x1 {"minecraft:enchantment_glint_override":1b}
-    | Count: 1
-    | ----- Modifiers -----
-    | Enchant Randomly:
-    |   -> Only Compatible: True
-    |   -> Include Additional Cost Component: False
-    | Set Damage:
-    |   -> Damage: U[30%; 90%)
-    |   -> Add: False

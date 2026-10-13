@@ -282,6 +282,7 @@ awi:biome minecraft:frozen_river
       | Height: Ground or Water Surface
       awi:block minecraft:bush
     awi:placed_feature minecraft:flower_default
+      | Attempts Per Chunk: 64
       | Chance: 3.13%
       | Height: Ground or Water Surface
       awi:block minecraft:poppy

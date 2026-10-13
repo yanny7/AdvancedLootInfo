@@ -112,6 +112,18 @@ awi:biome minecraft:swamp
       |       -> Simple:
       |         -> State:
       |           -> Block: Stone
+      |     -> Can Place Feature:
+      |       -> True Block
+      |     -> Can Replace With Air Or Fluid:
+      |       -> Not:
+      |         -> Predicate:
+      |           -> Matching Block Tag:
+      |             -> Tag: minecraft:features_cannot_replace
+      |     -> Can Replace With Barrier:
+      |       -> Not:
+      |         -> Predicate:
+      |           -> Matching Block Tag:
+      |             -> Tag: minecraft:lava_pool_stone_cannot_replace
       | Placement:
       |   -> Rarity Filter:
       |     -> Chance: 9
@@ -156,6 +168,18 @@ awi:biome minecraft:swamp
       |       -> Simple:
       |         -> State:
       |           -> Block: Stone
+      |     -> Can Place Feature:
+      |       -> True Block
+      |     -> Can Replace With Air Or Fluid:
+      |       -> Not:
+      |         -> Predicate:
+      |           -> Matching Block Tag:
+      |             -> Tag: minecraft:features_cannot_replace
+      |     -> Can Replace With Barrier:
+      |       -> Not:
+      |         -> Predicate:
+      |           -> Matching Block Tag:
+      |             -> Tag: minecraft:lava_pool_stone_cannot_replace
       | Placement:
       |   -> Rarity Filter:
       |     -> Chance: 200
@@ -213,8 +237,10 @@ awi:biome minecraft:swamp
       |           -> Properties:
       |             -> facing: up
       |             -> waterlogged: false
-      |       -> Cannot Replace: minecraft:features_cannot_replace
-      |       -> Invalid Blocks: minecraft:geode_invalid_blocks
+      |       -> Cannot Replace:
+      |         -> Tag: minecraft:features_cannot_replace
+      |       -> Invalid Blocks:
+      |         -> Tag: minecraft:geode_invalid_blocks
       |     -> Geode Layer Settings:
       |       -> Filling: 1.7
       |       -> Inner Layer: 2.2
@@ -284,12 +310,14 @@ awi:biome minecraft:swamp
       |       -> Block Rot:
       |         -> Integrity: 0.9
       |       -> Protected Blocks:
-      |         -> Cannot Replace: minecraft:features_cannot_replace
+      |         -> Cannot Replace:
+      |           -> Tag: minecraft:features_cannot_replace
       |     -> Overlay Processors:
       |       -> Block Rot:
       |         -> Integrity: 0.1
       |       -> Protected Blocks:
-      |         -> Cannot Replace: minecraft:features_cannot_replace
+      |         -> Cannot Replace:
+      |           -> Tag: minecraft:features_cannot_replace
       |     -> Max Empty Corners Allowed: 4
       | Placement:
       |   -> Rarity Filter:
@@ -330,7 +358,8 @@ awi:biome minecraft:swamp
       |       -> Block Rot:
       |         -> Integrity: 0.9
       |       -> Protected Blocks:
-      |         -> Cannot Replace: minecraft:features_cannot_replace
+      |         -> Cannot Replace:
+      |           -> Tag: minecraft:features_cannot_replace
       |     -> Overlay Processors:
       |       -> Block Rot:
       |         -> Integrity: 0.1
@@ -346,7 +375,8 @@ awi:biome minecraft:swamp
       |             -> Block: Deepslate Diamond Ore
       |           -> Block Entity Modifier: minecraft:passthrough
       |       -> Protected Blocks:
-      |         -> Cannot Replace: minecraft:features_cannot_replace
+      |         -> Cannot Replace:
+      |           -> Tag: minecraft:features_cannot_replace
       |     -> Max Empty Corners Allowed: 4
       | Placement:
       |   -> Rarity Filter:
@@ -1320,6 +1350,8 @@ awi:biome minecraft:swamp
       |       -> Calcite
       |       -> Tuff
       |       -> Deepslate
+      |       -> Sulfur
+      |       -> Cinnabar
       | Placement:
       |   -> Count Placement:
       |     -> Count:

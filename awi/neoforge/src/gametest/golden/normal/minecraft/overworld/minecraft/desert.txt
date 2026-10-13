@@ -300,6 +300,7 @@ awi:biome minecraft:desert
       | Height: −64 to 256
       awi:block minecraft:glow_lichen
     awi:placed_feature minecraft:flower_default
+      | Attempts Per Chunk: 64
       | Chance: 3.13%
       | Height: Ground or Water Surface
       awi:block minecraft:poppy

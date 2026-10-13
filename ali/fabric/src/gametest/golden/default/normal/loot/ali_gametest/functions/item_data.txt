@@ -95,5 +95,5 @@ ali:loot_table
       |     -> Entity Properties:
       |       -> Target: This Entity
       |       -> Predicate:
-      |         -> Entity Flags:
+      |         -> Flags:
       |           -> Is On Fire: True

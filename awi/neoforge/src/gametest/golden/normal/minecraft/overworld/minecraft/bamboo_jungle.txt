@@ -311,6 +311,7 @@ awi:biome minecraft:bamboo_jungle
       awi:block minecraft:short_grass
       awi:block minecraft:fern
     awi:placed_feature minecraft:flower_warm
+      | Attempts Per Chunk: 64
       | Chance: 6.25%
       | Height: Ground or Water Surface
       awi:block minecraft:poppy

@@ -5,28 +5,6 @@ ali:loot_table
     | Rolls: 1
     ali:item minecraft:cod x1
       | Count: 1
-  ali:item minecraft:feather x1
-    | Count: 1
-    | ----- Modifiers -----
-    | Drop Experience:
-    |   -> Amount: 5
-  ali:item minecraft:blaze_rod x1
-    | Count: 1
-    | ----- Modifiers -----
-    | Lightning Strike:
-    |   -> Damage Entity: False
-  ali:item minecraft:ender_pearl x1
-    | Count: 1
-    | ----- Modifiers -----
-    | Player Action:
-    |   -> Detail Not Available
-  ali:item minecraft:gunpowder x1
-    | Count: 1
-    | ----- Modifiers -----
-    | Explode:
-    |   -> Radius: 1.0
-    |   -> Block Interaction: Keep Blocks
-    |   -> Blocks On Fire: False
   ali:item minecraft:diamond x1
     | Chance: 1%
     | Count: 1

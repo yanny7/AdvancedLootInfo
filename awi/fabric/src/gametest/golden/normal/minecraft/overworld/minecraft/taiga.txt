@@ -303,6 +303,7 @@ awi:biome minecraft:taiga
       awi:block minecraft:spruce_log
       awi:block minecraft:spruce_leaves
     awi:placed_feature minecraft:flower_default
+      | Attempts Per Chunk: 64
       | Chance: 3.13%
       | Height: Ground or Water Surface
       awi:block minecraft:poppy
