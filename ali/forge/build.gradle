@@ -39,6 +39,7 @@ loom {
     }
 
     mixin {
+        useLegacyMixinAp = true
         defaultRefmapName = "ali.forge.refmap.json"
     }
 

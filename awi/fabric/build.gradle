@@ -22,6 +22,11 @@ loom {
     accessWidenerPath = project(":awi:common").loom.accessWidenerPath
     createRemapConfigurations(sourceSets.gametest)
 
+    mixin {
+        useLegacyMixinAp = true
+        defaultRefmapName = "awi.fabric.refmap.json"
+    }
+
     runs {
         datagen {
             inherit client
