@@ -1,5 +1,9 @@
 awi:biome minecraft:badlands
   | Sea Level: 63
+  spawn minecraft:armadillo
+    | Category: Creature
+    | Weight: 6
+    | Group size: 1 to 2
   spawn minecraft:bat
     | Category: Ambient
     | Weight: 10
@@ -882,6 +886,39 @@ awi:biome minecraft:badlands
       |       -> Plateau: 0
       awi:block minecraft:diamond_ore
       awi:block minecraft:deepslate_diamond_ore
+    awi:placed_feature minecraft:ore_diamond_medium
+      | Attempts Per Chunk: 2
+      | Height: −64 to −4
+      | Configured Feature:
+      |   -> Feature: minecraft:ore
+      |   -> Ore:
+      |     -> Discard Chance On Air Exposure: 0.5
+      |     -> Size: 8
+      |     -> Target States:
+      |       -> Entry:
+      |         -> State:
+      |           -> Block: Diamond Ore
+      |         -> Target:
+      |           -> Tag Match:
+      |             -> Tag: minecraft:stone_ore_replaceables
+      |       -> Entry:
+      |         -> State:
+      |           -> Block: Deepslate Diamond Ore
+      |         -> Target:
+      |           -> Tag Match:
+      |             -> Tag: minecraft:deepslate_ore_replaceables
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 2
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Absolute Y: -64
+      |       -> Max:
+      |         -> Absolute Y: -4
+      awi:block minecraft:diamond_ore
+      awi:block minecraft:deepslate_diamond_ore
     awi:placed_feature minecraft:ore_diamond_large
       | Chance: 11.11%
       | Height: trapezoid(−144; 16; 0)  ~−64 (1%)
@@ -1322,7 +1359,7 @@ awi:biome minecraft:badlands
       |             -> To Place:
       |               -> Simple:
       |                 -> State:
-      |                   -> Block: Grass
+      |                   -> Block: Short Grass
       |       -> Placement:
       |         -> Block Predicate Filter:
       |           -> Matching Blocks:
@@ -1330,7 +1367,7 @@ awi:biome minecraft:badlands
       | Placement:
       |   -> Heightmap Placement:
       |     -> Heightmap: Highest Block, Plants Included
-      awi:block minecraft:grass
+      awi:block minecraft:short_grass
     awi:placed_feature minecraft:patch_dead_bush_badlands
       | Attempts Per Chunk: 20
       | Height: Highest Block, Plants Included

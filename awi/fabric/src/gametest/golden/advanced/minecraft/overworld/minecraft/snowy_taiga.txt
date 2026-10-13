@@ -860,6 +860,39 @@ awi:biome minecraft:snowy_taiga
       |       -> Plateau: 0
       awi:block minecraft:diamond_ore
       awi:block minecraft:deepslate_diamond_ore
+    awi:placed_feature minecraft:ore_diamond_medium
+      | Attempts Per Chunk: 2
+      | Height: −64 to −4
+      | Configured Feature:
+      |   -> Feature: minecraft:ore
+      |   -> Ore:
+      |     -> Discard Chance On Air Exposure: 0.5
+      |     -> Size: 8
+      |     -> Target States:
+      |       -> Entry:
+      |         -> State:
+      |           -> Block: Diamond Ore
+      |         -> Target:
+      |           -> Tag Match:
+      |             -> Tag: minecraft:stone_ore_replaceables
+      |       -> Entry:
+      |         -> State:
+      |           -> Block: Deepslate Diamond Ore
+      |         -> Target:
+      |           -> Tag Match:
+      |             -> Tag: minecraft:deepslate_ore_replaceables
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 2
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Absolute Y: -64
+      |       -> Max:
+      |         -> Absolute Y: -4
+      awi:block minecraft:diamond_ore
+      awi:block minecraft:deepslate_diamond_ore
     awi:placed_feature minecraft:ore_diamond_large
       | Chance: 11.11%
       | Height: trapezoid(−144; 16; 0)  ~−64 (1%)
@@ -1462,7 +1495,7 @@ awi:biome minecraft:snowy_taiga
       |                     -> Entry:
       |                       -> Weight: 1
       |                       -> Data:
-      |                         -> Block: Grass
+      |                         -> Block: Short Grass
       |                     -> Entry:
       |                       -> Weight: 4
       |                       -> Data:
@@ -1474,7 +1507,7 @@ awi:biome minecraft:snowy_taiga
       | Placement:
       |   -> Heightmap Placement:
       |     -> Heightmap: Highest Block, Plants Included
-      awi:block minecraft:grass
+      awi:block minecraft:short_grass
       awi:block minecraft:fern
     awi:placed_feature minecraft:brown_mushroom_taiga
       | Chance: 25%

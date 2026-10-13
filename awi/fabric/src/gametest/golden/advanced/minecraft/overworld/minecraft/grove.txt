@@ -4,14 +4,6 @@ awi:biome minecraft:grove
     | Category: Ambient
     | Weight: 10
     | Group size: 8
-  spawn minecraft:chicken
-    | Category: Creature
-    | Weight: 10
-    | Group size: 4
-  spawn minecraft:cow
-    | Category: Creature
-    | Weight: 8
-    | Group size: 4
   spawn minecraft:creeper
     | Category: Monster
     | Weight: 100
@@ -22,16 +14,12 @@ awi:biome minecraft:grove
     | Group size: 1 to 4
   spawn minecraft:fox
     | Category: Creature
-    | Weight: 8
+    | Weight: 4
     | Group size: 2 to 4
   spawn minecraft:glow_squid
     | Category: Underground Water Creature
     | Weight: 10
     | Group size: 4 to 6
-  spawn minecraft:pig
-    | Category: Creature
-    | Weight: 10
-    | Group size: 4
   spawn minecraft:pillager
     | Structure: minecraft:pillager_outpost
     |   -> Category: Monster
@@ -39,12 +27,8 @@ awi:biome minecraft:grove
     |   -> Group size: 1
   spawn minecraft:rabbit
     | Category: Creature
-    | Weight: 4
+    | Weight: 8
     | Group size: 2 to 3
-  spawn minecraft:sheep
-    | Category: Creature
-    | Weight: 12
-    | Group size: 4
   spawn minecraft:skeleton
     | Category: Monster
     | Weight: 100
@@ -63,8 +47,8 @@ awi:biome minecraft:grove
     | Group size: 1
   spawn minecraft:wolf
     | Category: Creature
-    | Weight: 8
-    | Group size: 4
+    | Weight: 1
+    | Group size: 1
   spawn minecraft:zombie
     | Category: Monster
     | Weight: 95
@@ -865,6 +849,39 @@ awi:biome minecraft:grove
       |       -> Max:
       |         -> Above Bottom: 80
       |       -> Plateau: 0
+      awi:block minecraft:diamond_ore
+      awi:block minecraft:deepslate_diamond_ore
+    awi:placed_feature minecraft:ore_diamond_medium
+      | Attempts Per Chunk: 2
+      | Height: −64 to −4
+      | Configured Feature:
+      |   -> Feature: minecraft:ore
+      |   -> Ore:
+      |     -> Discard Chance On Air Exposure: 0.5
+      |     -> Size: 8
+      |     -> Target States:
+      |       -> Entry:
+      |         -> State:
+      |           -> Block: Diamond Ore
+      |         -> Target:
+      |           -> Tag Match:
+      |             -> Tag: minecraft:stone_ore_replaceables
+      |       -> Entry:
+      |         -> State:
+      |           -> Block: Deepslate Diamond Ore
+      |         -> Target:
+      |           -> Tag Match:
+      |             -> Tag: minecraft:deepslate_ore_replaceables
+      | Placement:
+      |   -> Count Placement:
+      |     -> Count:
+      |       -> 2
+      |   -> Height Range Placement:
+      |     -> Uniform:
+      |       -> Min:
+      |         -> Absolute Y: -64
+      |       -> Max:
+      |         -> Absolute Y: -4
       awi:block minecraft:diamond_ore
       awi:block minecraft:deepslate_diamond_ore
     awi:placed_feature minecraft:ore_diamond_large
