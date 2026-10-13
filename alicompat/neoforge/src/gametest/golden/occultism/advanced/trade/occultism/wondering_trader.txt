@@ -655,28 +655,28 @@ ali:trade
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item occultism:otherworld_essence x1
       ali:item minecraft:air x0
-      ali:item occultism:book_of_binding_bound_foliot x1 {"occultism:spirit_name":"Ulfthorryne"}
+      ali:item occultism:book_of_binding_bound_foliot x1
     ali:items_to_items
       | Uses: 1
       | XP: 2
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item occultism:otherworld_essence x2
       ali:item minecraft:air x0
-      ali:item occultism:book_of_binding_bound_djinni x1 {"occultism:spirit_name":"Einvirborn"}
+      ali:item occultism:book_of_binding_bound_djinni x1
     ali:items_to_items
       | Uses: 1
       | XP: 3
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item occultism:otherworld_essence x3
       ali:item minecraft:air x0
-      ali:item occultism:book_of_binding_bound_afrit x1 {"occultism:spirit_name":"Nidthornzirne"}
+      ali:item occultism:book_of_binding_bound_afrit x1
     ali:items_to_items
       | Uses: 1
       | XP: 4
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item occultism:otherworld_essence x4
       ali:item minecraft:air x0
-      ali:item occultism:book_of_binding_bound_marid x1 {"occultism:spirit_name":"Yngrondmorn"}
+      ali:item occultism:book_of_binding_bound_marid x1
   ali:trade_level
     | Level: 6
     | Randomly Selects min(U[1; 3]; 23) Of These Trades
@@ -993,28 +993,28 @@ ali:trade
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item minecraft:chest_minecart x1
       ali:item minecraft:air x0
-      ali:item occultism:satchel x1 {"occultism:spirit_name":"Jagnornth"}
+      ali:item occultism:satchel x1
     ali:items_to_items
       | Uses: 1
       | XP: 27
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item minecraft:end_rod x4
       ali:item minecraft:air x0
-      ali:item occultism:ender_satchel x1 {"occultism:spirit_name":"Jagairdor"}
+      ali:item occultism:ender_satchel x1
     ali:items_to_items
       | Uses: 1
       | XP: 27
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item minecraft:glowstone x2
       ali:item minecraft:air x0
-      ali:item occultism:ritual_satchel_t1 x1 {"occultism:spirit_name":"Harcresder"}
+      ali:item occultism:ritual_satchel_t1 x1
     ali:items_to_items
       | Uses: 1
       | XP: 27
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item occultism:afrit_essence x2
       ali:item minecraft:air x0
-      ali:item occultism:ritual_satchel_t2 x1 {"occultism:spirit_name":"Azurairborn"}
+      ali:item occultism:ritual_satchel_t2 x1
     ali:items_to_items
       | Uses: 1
       | XP: 27
@@ -1035,28 +1035,28 @@ ali:trade
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item minecraft:wither_skeleton_skull x1
       ali:item minecraft:air x0
-      ali:item occultism:familiar_ring x1 {"occultism:spirit_name":"Brynzerkylle"}
+      ali:item occultism:familiar_ring x1 {"occultism:spirit_name":""}
     ali:items_to_items
       | Uses: 1
       | XP: 27
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item occultism:demonic_meat x2
       ali:item minecraft:air x0
-      ali:item occultism:storage_remote x1 {"occultism:spirit_name":"Valnornmon"}
+      ali:item occultism:storage_remote x1
     ali:items_to_items
       | Uses: 1
       | XP: 27
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item minecraft:sculk_catalyst x1
       ali:item minecraft:air x0
-      ali:item occultism:knowledge_tablet x1 {"occultism:spirit_name":"Krsirmon"}
+      ali:item occultism:knowledge_tablet x1
     ali:items_to_items
       | Uses: 1
       | XP: 27
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item minecraft:ender_chest x9
       ali:item minecraft:air x0
-      ali:item occultism:wormhole_tablet x1 {"occultism:spirit_name":"Barvondmur"}
+      ali:item occultism:wormhole_tablet x1
   ali:trade_level
     | Level: 9
     | Randomly Selects min(U[1; 3]; 17) Of These Trades
@@ -1066,7 +1066,7 @@ ali:trade
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item minecraft:quartz x27
       ali:item minecraft:air x0
-      ali:item occultism:dimensional_matrix x1 {"occultism:spirit_name":"Nidvirkyr"}
+      ali:item occultism:dimensional_matrix x1
     ali:items_to_items
       | Uses: 1
       | XP: 27
@@ -1195,7 +1195,7 @@ ali:trade
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item minecraft:end_crystal x1
       ali:item minecraft:air x0
-      ali:item occultism:vitality_compass x1 {"occultism:spirit_name":"Thrcrathyre"}
+      ali:item occultism:vitality_compass x1
     ali:items_to_items
       | Uses: 1
       | XP: 32
@@ -1209,7 +1209,7 @@ ali:trade
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item occultism:cruelty_essence x8
       ali:item minecraft:air x0
-      ali:item occultism:iesnium_butcher_knife x1 {"occultism:spirit_name":"Drakirsyrn"}
+      ali:item occultism:iesnium_butcher_knife x1
     ali:items_to_items
       | Uses: 1
       | XP: 32
@@ -1251,28 +1251,28 @@ ali:trade
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item occultism:cursed_honey x8
       ali:item minecraft:air x0
-      ali:item occultism:miner_foliot_unspecialized x1 {"occultism:max_mining_time":400,"occultism:miner_output_multiplier":1,"occultism:rolls_per_operation":1,"occultism:spirit_name":"Eirjormed"}
+      ali:item occultism:miner_foliot_unspecialized x1 {"occultism:max_mining_time":400,"occultism:miner_output_multiplier":1,"occultism:rolls_per_operation":1}
     ali:items_to_items
       | Uses: 1
       | XP: 32
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item occultism:demonic_meat x9
       ali:item minecraft:air x0
-      ali:item occultism:miner_djinni_ores x1 {"occultism:max_mining_time":300,"occultism:miner_output_multiplier":1,"occultism:rolls_per_operation":1,"occultism:spirit_name":"Zedmylzur"}
+      ali:item occultism:miner_djinni_ores x1 {"occultism:max_mining_time":300,"occultism:miner_output_multiplier":1,"occultism:rolls_per_operation":1}
     ali:items_to_items
       | Uses: 1
       | XP: 32
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item occultism:demonic_meat x64
       ali:item minecraft:air x0
-      ali:item occultism:miner_afrit_deeps x1 {"occultism:max_mining_time":200,"occultism:miner_output_multiplier":1,"occultism:rolls_per_operation":1,"occultism:spirit_name":"Geirarkzur"}
+      ali:item occultism:miner_afrit_deeps x1 {"occultism:max_mining_time":200,"occultism:miner_output_multiplier":1,"occultism:rolls_per_operation":1}
     ali:items_to_items
       | Uses: 1
       | XP: 32
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item occultism:marid_essence x11
       ali:item minecraft:air x0
-      ali:item occultism:miner_marid_master x1 {"occultism:max_mining_time":100,"occultism:miner_output_multiplier":1,"occultism:rolls_per_operation":1,"occultism:spirit_name":"Cabellmorne"}
+      ali:item occultism:miner_marid_master x1 {"occultism:max_mining_time":100,"occultism:miner_output_multiplier":1,"occultism:rolls_per_operation":1}
     ali:items_to_items
       | Uses: 1
       | XP: 32
@@ -1304,70 +1304,70 @@ ali:trade
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item minecraft:diamond_block x5
       ali:item minecraft:air x0
-      ali:item occultism:infused_helmet x1 {"occultism:spirit_name":"Draklonth"}
+      ali:item occultism:infused_helmet x1 {"occultism:spirit_name":""}
     ali:items_to_items
       | Uses: 1
       | XP: 32
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item minecraft:diamond_block x8
       ali:item minecraft:air x0
-      ali:item occultism:infused_chestplate x1 {"occultism:spirit_name":"Jagrinnmorne"}
+      ali:item occultism:infused_chestplate x1 {"occultism:spirit_name":""}
     ali:items_to_items
       | Uses: 1
       | XP: 32
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item minecraft:diamond_block x7
       ali:item minecraft:air x0
-      ali:item occultism:infused_leggings x1 {"occultism:spirit_name":"Fenrymth"}
+      ali:item occultism:infused_leggings x1 {"occultism:spirit_name":""}
     ali:items_to_items
       | Uses: 1
       | XP: 32
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item minecraft:diamond_block x4
       ali:item minecraft:air x0
-      ali:item occultism:infused_boots x1 {"occultism:spirit_name":"Ridanisaurus"}
+      ali:item occultism:infused_boots x1 {"occultism:spirit_name":""}
     ali:items_to_items
       | Uses: 1
       | XP: 32
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item minecraft:diamond_block x1
       ali:item minecraft:air x0
-      ali:item occultism:infused_spear x1 {"occultism:spirit_name":"Azurvonded"}
+      ali:item occultism:infused_spear x1 {"occultism:spirit_name":""}
     ali:items_to_items
       | Uses: 1
       | XP: 32
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item minecraft:diamond_block x2
       ali:item minecraft:air x0
-      ali:item occultism:infused_sword x1 {"occultism:spirit_name":"Krsirarc"}
+      ali:item occultism:infused_sword x1 {"occultism:spirit_name":""}
     ali:items_to_items
       | Uses: 1
       | XP: 32
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item minecraft:diamond_block x3
       ali:item minecraft:air x0
-      ali:item occultism:infused_axe x1 {"occultism:spirit_name":"Rakmeezirne"}
+      ali:item occultism:infused_axe x1 {"occultism:spirit_name":""}
     ali:items_to_items
       | Uses: 1
       | XP: 32
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item minecraft:diamond_block x3
       ali:item minecraft:air x0
-      ali:item occultism:infused_pickaxe x1 {"occultism:spirit_name":"Koltirkyr"}
+      ali:item occultism:infused_pickaxe x1 {"occultism:spirit_name":""}
     ali:items_to_items
       | Uses: 1
       | XP: 32
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item minecraft:diamond_block x1
       ali:item minecraft:air x0
-      ali:item occultism:infused_shovel x1 {"occultism:spirit_name":"Merredmorne"}
+      ali:item occultism:infused_shovel x1 {"occultism:spirit_name":""}
     ali:items_to_items
       | Uses: 1
       | XP: 32
       | Requires Third Eye, Otherworld Goggles or True Sight Staff
       ali:item minecraft:diamond_block x2
       ali:item minecraft:air x0
-      ali:item occultism:infused_hoe x1 {"occultism:spirit_name":"Crujorlynd"}
+      ali:item occultism:infused_hoe x1 {"occultism:spirit_name":""}
     ali:items_to_items
       | Uses: 1
       | XP: 32

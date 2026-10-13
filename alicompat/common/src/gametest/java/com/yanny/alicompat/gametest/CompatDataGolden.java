@@ -2,10 +2,14 @@ package com.yanny.alicompat.gametest;
 
 import com.yanny.aci.gametest.GoldenFiles;
 import com.yanny.aci.gametest.GoldenLanguage;
+import com.yanny.ali.api.IPlugin;
+import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.gametest.LootDataCapture;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.network.AbstractServer;
+import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
+import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.alicompat.Utils;
 import com.yanny.alicompat.platform.Services;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -16,19 +20,28 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 public class CompatDataGolden {
     private static final String BASE = "base";
     private static final String FINDINGS_FILE = "findings.txt";
     private static final List<String> FINDING_MARKERS = List.of("ali:missing", "Not implemented");
+    private static final String GLM_FINDINGS = "global loot modifiers";
 
     public static void run(GameTestHelper helper, AbstractServer aliServer) {
+        run(helper, aliServer, List.of());
+    }
+
+    public static void run(GameTestHelper helper, AbstractServer aliServer, Collection<Class<?>> globalLootModifiers) {
         if (PluginManager.getInstance().clientRegistry == null) {
             PluginManager.getInstance().registerClientEvent();
         }
@@ -48,7 +61,7 @@ public class CompatDataGolden {
         GoldenFiles golden = GoldenFiles.fromProperties(Utils.MOD_ID);
         Map<String, String> actual = LootDataCapture.capture(aliServer, config, helper.getLevel().getServer().registryAccess());
         Map<String, String> files = BASE.equals(mod) ? actual : GoldenFiles.diff(golden.resolve(BASE).expected(), actual);
-        String findings = findings(files);
+        String findings = findings(files) + missingGlobalLootModifiers(globalLootModifiers);
 
         if (!findings.isEmpty()) {
             files = new TreeMap<>(files);
@@ -72,6 +85,36 @@ public class CompatDataGolden {
                 .flatMap((registry) -> registry.keySet().stream())
                 .forEach((location) -> namespaces.add(location.getNamespace()));
         return namespaces;
+    }
+
+    @NotNull
+    private static String missingGlobalLootModifiers(Collection<Class<?>> globalLootModifiers) {
+        Set<Class<?>> adapted = new HashSet<>();
+        IGlobalLootModifierPlugin.IRegistry registry = new IGlobalLootModifierPlugin.IRegistry() {
+            @Override
+            public <T> void registerGlobalLootModifier(Class<T> type, BiFunction<IServerUtils, T, Optional<IPageLootModifier>> getter) {
+                adapted.add(type);
+            }
+        };
+
+        for (IPlugin plugin : com.yanny.ali.platform.Services.getPlatform().getPlugins()) {
+            if (plugin instanceof IGlobalLootModifierPlugin glmPlugin) {
+                glmPlugin.registerGlobalLootModifier(registry);
+            }
+        }
+
+        Set<String> missing = new TreeSet<>();
+
+        globalLootModifiers.stream().filter((type) -> !adapted.contains(type)).forEach((type) -> missing.add(type.getName()));
+
+        if (missing.isEmpty()) {
+            return "";
+        }
+
+        StringBuilder builder = new StringBuilder(GLM_FINDINGS).append('\n');
+
+        missing.forEach((type) -> builder.append("  Missing GLM for ").append(type).append('\n'));
+        return builder.toString();
     }
 
     @NotNull

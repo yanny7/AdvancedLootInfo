@@ -119,6 +119,8 @@ public class LanguageHolder {
         put(LootContext.EntityTarget.ATTACKING_PLAYER, "Attacking Player");
         put(LootContext.EntityTarget.TARGET_ENTITY, "Target Entity");
         put(LootContext.EntityTarget.INTERACTING_ENTITY, "Interacting Entity");
+        put(LootContext.BlockEntityTarget.BLOCK_ENTITY, "Block Entity");
+        put(LootContext.ItemStackTarget.TOOL, "Tool");
 
         put(SetNameFunction.Target.CUSTOM_NAME, "Custom Name");
         put(SetNameFunction.Target.ITEM_NAME, "Item Name");

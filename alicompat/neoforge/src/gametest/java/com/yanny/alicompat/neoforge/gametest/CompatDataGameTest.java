@@ -8,7 +8,12 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.loot.LootModifierManager;
 import net.neoforged.neoforge.registries.RegisterEvent;
+import net.neoforged.neoforge.resource.NeoForgeReloadListeners;
+
+import java.util.List;
+import java.util.stream.StreamSupport;
 
 @EventBusSubscriber(modid = Utils.MOD_ID)
 public class CompatDataGameTest {
@@ -18,6 +23,9 @@ public class CompatDataGameTest {
     }
 
     public static void compatData(GameTestHelper helper) {
-        CompatDataGolden.run(helper, AliMod.SERVER);
+        LootModifierManager manager = helper.getLevel().getServer().getServerResources().managers().getListener(NeoForgeReloadListeners.LOOT_MODIFIERS_KEY);
+        List<Class<?>> globalLootModifiers = StreamSupport.stream(manager.getSortedModifiers().spliterator(), false).<Class<?>>map(Object::getClass).distinct().toList();
+
+        CompatDataGolden.run(helper, AliMod.SERVER, globalLootModifiers);
     }
 }

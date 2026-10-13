@@ -29,6 +29,7 @@ import dev.shadowsoffire.apotheosis.util.AffixItemIngredient;
 import dev.shadowsoffire.apotheosis.util.GemIngredient;
 import dev.shadowsoffire.apotheosis.util.LootPatternMatcher;
 import dev.shadowsoffire.apotheosis.util.SpawnEggIngredient;
+import dev.shadowsoffire.apothic_enchanting.objects.WardenLootModifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Monster;
 import org.jetbrains.annotations.NotNull;
@@ -81,6 +82,7 @@ public class ApotheosisCompat implements IGlmModCompat {
         PluginUtils.registerPageResolver(registry, AffixLootModifier.class, AffixLootModifierAccessor.class);
         PluginUtils.registerPageResolver(registry, AffixConvertLootModifier.class, AffixConvertLootModifierAccessor.class);
         PluginUtils.registerPageResolver(registry, GemLootModifier.class, GemLootModifierAccessor.class);
+        PluginUtils.registerPageResolver(registry, WardenLootModifier.class, WardenLootModifierAccessor.class);
         registry.registerPageResolver(MatchesBlockCondition.class, ApotheosisCompat::testMatchesBlock);
 
         registry.registerEntitySubPredicateResolver(MonsterPredicate.CODEC, ApotheosisCompat::testMonsterPredicate);
@@ -91,6 +93,7 @@ public class ApotheosisCompat implements IGlmModCompat {
         GlmAccessorUtils.registerGlobalLootModifier(registry, AffixLootModifier.class, AffixLootModifierAccessor.class);
         GlmAccessorUtils.registerGlobalLootModifier(registry, AffixConvertLootModifier.class, AffixConvertLootModifierAccessor.class);
         GlmAccessorUtils.registerGlobalLootModifier(registry, GemLootModifier.class, GemLootModifierAccessor.class);
+        GlmAccessorUtils.registerGlobalLootModifier(registry, WardenLootModifier.class, WardenLootModifierAccessor.class);
 
         registry.registerGlobalLootModifier(AffixHookLootModifier.class, ApotheosisCompat::getAffixHookLootModifier);
     }

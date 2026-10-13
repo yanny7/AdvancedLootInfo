@@ -9,4 +9,4 @@ ali:loot_table
       | Survives Explosion
       | ----- Modifiers -----
       | Copy Name:
-      |   -> Source: BLOCK_ENTITY
+      |   -> Source: Block Entity
