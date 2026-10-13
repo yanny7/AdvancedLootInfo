@@ -1,0 +1,1516 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects 1 Of These Trades
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:wheat_seeds x1
+      ali:item minecraft:air x0
+      ali:item occultism:datura x1
+  ali:trade_level
+    | Level: 2
+    | Randomly Selects 5 Of These Trades
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 5
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item minecraft:sea_pickle x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 5
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item minecraft:slime_ball x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 5
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item minecraft:glowstone x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 5
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:nautilus_shell x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:fern x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:sugar_cane x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 4
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:pumpkin x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:kelp x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:cactus x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:dandelion x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:poppy x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:blue_orchid x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:allium x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:azure_bluet x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:red_tulip x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:orange_tulip x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:white_tulip x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:pink_tulip x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:oxeye_daisy x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:cornflower x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 7
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:lily_of_the_valley x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:wheat_seeds x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:beetroot_seeds x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:pumpkin_seeds x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:melon_seeds x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:acacia_sapling x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:birch_sapling x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:dark_oak_sapling x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:jungle_sapling x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:oak_sapling x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:spruce_sapling x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:cherry_sapling x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:mangrove_propagule x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:red_dye x3
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:white_dye x3
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:blue_dye x3
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:pink_dye x3
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:black_dye x3
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:green_dye x3
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:light_gray_dye x3
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:magenta_dye x3
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:yellow_dye x3
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:gray_dye x3
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:purple_dye x3
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:light_blue_dye x3
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:lime_dye x3
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:orange_dye x3
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:brown_dye x3
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:cyan_dye x3
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:brain_coral_block x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:bubble_coral_block x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:fire_coral_block x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:horn_coral_block x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:tube_coral_block x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:vine x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:brown_mushroom x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 12
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:red_mushroom x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 5
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:lily_pad x2
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 5
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:small_dripleaf x2
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:sand x8
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 6
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:red_sand x4
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 5
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:pointed_dripstone x2
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 5
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:rooted_dirt x2
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 5
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:moss_block x2
+  ali:trade_level
+    | Level: 3
+    | Randomly Selects 1 Of These Trades
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 4
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:tropical_fish_bucket x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 4
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:pufferfish_bucket x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 6
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:packed_ice x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 6
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x6
+      ali:item minecraft:air x0
+      ali:item minecraft:blue_ice x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:gunpowder x1
+    ali:items_to_items
+      | Without Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 6
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item minecraft:podzol x3
+  ali:trade_level
+    | Level: 4
+    | Randomly Selects 1 Of These Trades
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item occultism:otherworld_essence x1
+      ali:item minecraft:air x0
+      ali:item minecraft:book x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item occultism:otherworld_essence x1
+      ali:item minecraft:air x0
+      ali:item occultism:taboo_book x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item occultism:otherworld_essence x2
+      ali:item minecraft:air x0
+      ali:item minecraft:writable_book x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 4
+      | Price Multiplier: 0.05
+      ali:item occultism:otherworld_essence x2
+      ali:item minecraft:air x0
+      ali:item occultism:book_of_binding_empty x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item occultism:otherworld_essence x1
+      ali:item minecraft:air x0
+      ali:item occultism:book_of_binding_bound_foliot x1 {"occultism:spirit_name":"Aldvirmon"}
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 2
+      | Price Multiplier: 0.05
+      ali:item occultism:otherworld_essence x2
+      ali:item minecraft:air x0
+      ali:item occultism:book_of_binding_bound_djinni x1 {"occultism:spirit_name":"Lukbelldrin"}
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 3
+      | Price Multiplier: 0.05
+      ali:item occultism:otherworld_essence x3
+      ali:item minecraft:air x0
+      ali:item occultism:book_of_binding_bound_afrit x1 {"occultism:spirit_name":"Aldloriwyrm"}
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 4
+      | Price Multiplier: 0.05
+      ali:item occultism:otherworld_essence x4
+      ali:item minecraft:air x0
+      ali:item occultism:book_of_binding_bound_marid x1 {"occultism:spirit_name":"Azurarktron"}
+  ali:trade_level
+    | Level: 5
+    | Randomly Selects min(U[1; 3]; 20) Of These Trades
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 4
+      | Price Multiplier: 0.05
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 4
+      | Price Multiplier: 0.05
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_white x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 4
+      | Price Multiplier: 0.05
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_light_gray x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 4
+      | Price Multiplier: 0.05
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_gray x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 4
+      | Price Multiplier: 0.05
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_black x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 4
+      | Price Multiplier: 0.05
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_brown x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 4
+      | Price Multiplier: 0.05
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_red x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 4
+      | Price Multiplier: 0.05
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_orange x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 4
+      | Price Multiplier: 0.05
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_yellow x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 4
+      | Price Multiplier: 0.05
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_lime x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 4
+      | Price Multiplier: 0.05
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_green x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 4
+      | Price Multiplier: 0.05
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_cyan x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 4
+      | Price Multiplier: 0.05
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_light_blue x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 4
+      | Price Multiplier: 0.05
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_blue x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 4
+      | Price Multiplier: 0.05
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_purple x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 4
+      | Price Multiplier: 0.05
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_magenta x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 4
+      | Price Multiplier: 0.05
+      ali:item minecraft:rotten_flesh x10
+      ali:item minecraft:air x0
+      ali:item occultism:large_candle_pink x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 8
+      | XP: 8
+      | Price Multiplier: 0.05
+      ali:item minecraft:iron_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spirit_attuned_crystal x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 4
+      | XP: 8
+      | Price Multiplier: 0.05
+      ali:item minecraft:bone_block x4
+      ali:item minecraft:air x0
+      ali:item minecraft:skeleton_skull x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 2
+      | XP: 16
+      | Price Multiplier: 0.05
+      ali:item minecraft:coal x64
+      ali:item minecraft:air x0
+      ali:item minecraft:wither_skeleton_skull x1
+  ali:trade_level
+    | Level: 6
+    | Randomly Selects min(U[1; 2]; 18) Of These Trades
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 15
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item minecraft:rose_bush x1
+      ali:item minecraft:air x0
+      ali:item occultism:otherflower x15
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 7
+      | XP: 7
+      | Price Multiplier: 0.05
+      ali:item minecraft:nether_wart x7
+      ali:item minecraft:air x0
+      ali:item minecraft:torchflower x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 24
+      | Price Multiplier: 0.05
+      ali:item occultism:datura x12
+      ali:item minecraft:air x0
+      ali:item occultism:nature_paste x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 24
+      | Price Multiplier: 0.05
+      ali:item minecraft:tuff x4
+      ali:item minecraft:air x0
+      ali:item occultism:gray_paste x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 32
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:research_fragment_dust x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 32
+      | Price Multiplier: 0.05
+      ali:item minecraft:nether_star x1
+      ali:item minecraft:air x0
+      ali:item occultism:witherite_dust x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 32
+      | Price Multiplier: 0.05
+      ali:item minecraft:dragon_head x1
+      ali:item minecraft:air x0
+      ali:item occultism:dragonyst_dust x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 3
+      | XP: 66
+      | Price Multiplier: 0.05
+      ali:item occultism:demonic_meat x2
+      ali:item minecraft:air x0
+      ali:item occultism:iesnium_ingot x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 4
+      | XP: 16
+      | Price Multiplier: 0.05
+      ali:item minecraft:glow_ink_sac x4
+      ali:item minecraft:air x0
+      ali:item minecraft:echo_shard x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 99
+      | Price Multiplier: 0.05
+      ali:item minecraft:sea_lantern x16
+      ali:item minecraft:air x0
+      ali:item minecraft:heart_of_the_sea x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 33
+      | Price Multiplier: 0.05
+      ali:item minecraft:spore_blossom x1
+      ali:item minecraft:air x0
+      ali:item minecraft:dragon_breath x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 2
+      | XP: 8
+      | Price Multiplier: 0.05
+      ali:item minecraft:dark_prismarine x1
+      ali:item minecraft:air x0
+      ali:item minecraft:turtle_scute x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 2
+      | XP: 8
+      | Price Multiplier: 0.05
+      ali:item minecraft:brown_glazed_terracotta x1
+      ali:item minecraft:air x0
+      ali:item minecraft:armadillo_scute x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 2
+      | XP: 8
+      | Price Multiplier: 0.05
+      ali:item minecraft:purpur_pillar x1
+      ali:item minecraft:air x0
+      ali:item minecraft:shulker_shell x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 2
+      | XP: 8
+      | Price Multiplier: 0.05
+      ali:item minecraft:chiseled_sandstone x1
+      ali:item minecraft:air x0
+      ali:item minecraft:nautilus_shell x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 4
+      | XP: 20
+      | Price Multiplier: 0.05
+      ali:item minecraft:amethyst_shard x5
+      ali:item minecraft:air x0
+      ali:item minecraft:rabbit_foot x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 20
+      | Price Multiplier: 0.05
+      ali:item minecraft:lava_bucket x1
+      ali:item minecraft:air x0
+      ali:item minecraft:blaze_rod x10
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 20
+      | Price Multiplier: 0.05
+      ali:item minecraft:powder_snow_bucket x1
+      ali:item minecraft:air x0
+      ali:item minecraft:breeze_rod x10
+  ali:trade_level
+    | Level: 7
+    | Randomly Selects 1 Of These Trades
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 27
+      | Price Multiplier: 0.05
+      ali:item minecraft:chest_minecart x1
+      ali:item minecraft:air x0
+      ali:item occultism:satchel x1 {"occultism:spirit_name":"Zorkmaracrine"}
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 27
+      | Price Multiplier: 0.05
+      ali:item minecraft:end_rod x4
+      ali:item minecraft:air x0
+      ali:item occultism:ender_satchel x1 {"occultism:spirit_name":"Eirzerd"}
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 27
+      | Price Multiplier: 0.05
+      ali:item minecraft:glowstone x2
+      ali:item minecraft:air x0
+      ali:item occultism:ritual_satchel_t1 x1 {"occultism:spirit_name":"Vormylrinne"}
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 27
+      | Price Multiplier: 0.05
+      ali:item occultism:afrit_essence x2
+      ali:item minecraft:air x0
+      ali:item occultism:ritual_satchel_t2 x1 {"occultism:spirit_name":"Eirairrynne"}
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 27
+      | Price Multiplier: 0.05
+      ali:item minecraft:soul_lantern x1
+      ali:item minecraft:air x0
+      ali:item occultism:fragile_soul_gem x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 27
+      | Price Multiplier: 0.05
+      ali:item minecraft:soul_lantern x32
+      ali:item minecraft:air x0
+      ali:item occultism:soul_gem x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 27
+      | Price Multiplier: 0.05
+      ali:item minecraft:wither_skeleton_skull x1
+      ali:item minecraft:air x0
+      ali:item occultism:familiar_ring x1 {"occultism:spirit_name":"Barairzirn"}
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 27
+      | Price Multiplier: 0.05
+      ali:item occultism:demonic_meat x2
+      ali:item minecraft:air x0
+      ali:item occultism:storage_remote x1 {"occultism:spirit_name":"Azaktirvyrne"}
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 27
+      | Price Multiplier: 0.05
+      ali:item minecraft:sculk_catalyst x1
+      ali:item minecraft:air x0
+      ali:item occultism:knowledge_tablet x1 {"occultism:spirit_name":"Erlmirinne"}
+  ali:trade_level
+    | Level: 8
+    | Randomly Selects min(U[1; 3]; 17) Of These Trades
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 27
+      | Price Multiplier: 0.05
+      ali:item minecraft:quartz x27
+      ali:item minecraft:air x0
+      ali:item occultism:dimensional_matrix x1 {"occultism:spirit_name":"Sigmeekylle"}
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 27
+      | Price Multiplier: 0.05
+      ali:item minecraft:gold_ingot x3
+      ali:item minecraft:air x0
+      ali:item occultism:storage_controller_base x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 27
+      | Price Multiplier: 0.05
+      ali:item minecraft:gold_ingot x3
+      ali:item minecraft:air x0
+      ali:item occultism:storage_controller_base_dark x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 3
+      | XP: 27
+      | Price Multiplier: 0.05
+      ali:item minecraft:ender_eye x2
+      ali:item minecraft:air x0
+      ali:item occultism:stable_wormhole x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 3
+      | XP: 27
+      | Price Multiplier: 0.05
+      ali:item minecraft:ender_eye x2
+      ali:item minecraft:air x0
+      ali:item occultism:stable_wormhole_dark x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 3
+      | XP: 27
+      | Price Multiplier: 0.05
+      ali:item minecraft:copper_block x4
+      ali:item minecraft:air x0
+      ali:item occultism:storage_stabilizer_tier1 x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 3
+      | XP: 27
+      | Price Multiplier: 0.05
+      ali:item minecraft:copper_block x4
+      ali:item minecraft:air x0
+      ali:item occultism:storage_stabilizer_tier1_dark x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 3
+      | XP: 27
+      | Price Multiplier: 0.05
+      ali:item occultism:spirit_attuned_gem x8
+      ali:item minecraft:air x0
+      ali:item occultism:storage_stabilizer_tier2 x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 3
+      | XP: 27
+      | Price Multiplier: 0.05
+      ali:item occultism:spirit_attuned_gem x8
+      ali:item minecraft:air x0
+      ali:item occultism:storage_stabilizer_tier2_dark x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 27
+      | Price Multiplier: 0.05
+      ali:item occultism:afrit_essence x4
+      ali:item minecraft:air x0
+      ali:item occultism:storage_stabilizer_tier3 x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 27
+      | Price Multiplier: 0.05
+      ali:item occultism:afrit_essence x4
+      ali:item minecraft:air x0
+      ali:item occultism:storage_stabilizer_tier3_dark x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 27
+      | Price Multiplier: 0.05
+      ali:item occultism:marid_essence x5
+      ali:item minecraft:air x0
+      ali:item occultism:storage_stabilizer_tier4 x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 27
+      | Price Multiplier: 0.05
+      ali:item occultism:marid_essence x5
+      ali:item minecraft:air x0
+      ali:item occultism:storage_stabilizer_tier4_dark x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 2
+      | XP: 27
+      | Price Multiplier: 0.05
+      ali:item minecraft:echo_shard x3
+      ali:item minecraft:air x0
+      ali:item occultism:entity_wormhole x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 2
+      | XP: 27
+      | Price Multiplier: 0.05
+      ali:item minecraft:echo_shard x3
+      ali:item minecraft:air x0
+      ali:item occultism:entity_wormhole_dark x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 27
+      | Price Multiplier: 0.05
+      ali:item occultism:afrit_essence x8
+      ali:item minecraft:air x0
+      ali:item occultism:iesnium_sacrificial_bowl x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 27
+      | Price Multiplier: 0.05
+      ali:item occultism:afrit_essence x8
+      ali:item minecraft:air x0
+      ali:item occultism:dark_iesnium_sacrificial_bowl x1
+  ali:trade_level
+    | Level: 9
+    | Randomly Selects 1 Of These Trades
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 32
+      | Price Multiplier: 0.05
+      ali:item minecraft:spyglass x1
+      ali:item minecraft:air x0
+      ali:item occultism:otherworld_goggles x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 32
+      | Price Multiplier: 0.05
+      ali:item minecraft:end_crystal x1
+      ali:item minecraft:air x0
+      ali:item occultism:vitality_compass x1 {"occultism:spirit_name":"Ketlymkyl"}
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 32
+      | Price Multiplier: 0.05
+      ali:item minecraft:diamond_block x2
+      ali:item minecraft:air x0
+      ali:item occultism:infused_pickaxe x1 {"occultism:spirit_name":"Harmirdyr"}
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 32
+      | Price Multiplier: 0.05
+      ali:item occultism:demonic_meat x5
+      ali:item minecraft:air x0
+      ali:item occultism:iesnium_pickaxe x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 32
+      | Price Multiplier: 0.05
+      ali:item occultism:demonic_meat x8
+      ali:item minecraft:air x0
+      ali:item occultism:dimensional_mineshaft x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 32
+      | Price Multiplier: 0.05
+      ali:item occultism:demonic_meat x4
+      ali:item minecraft:air x0
+      ali:item occultism:dimensional_battlefield x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 32
+      | Price Multiplier: 0.05
+      ali:item occultism:cruelty_essence x2
+      ali:item minecraft:air x0
+      ali:item occultism:dimensional_extractor x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 32
+      | Price Multiplier: 0.05
+      ali:item occultism:cursed_honey x8
+      ali:item minecraft:air x0
+      ali:item occultism:miner_foliot_unspecialized x1 {"occultism:spirit_name":"Hrothredvine"}
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 32
+      | Price Multiplier: 0.05
+      ali:item occultism:demonic_meat x9
+      ali:item minecraft:air x0
+      ali:item occultism:miner_djinni_ores x1 {"occultism:spirit_name":"Vorsirlynd"}
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 32
+      | Price Multiplier: 0.05
+      ali:item occultism:demonic_meat x64
+      ali:item minecraft:air x0
+      ali:item occultism:miner_afrit_deeps x1 {"occultism:spirit_name":"Einfellzirn"}
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 32
+      | Price Multiplier: 0.05
+      ali:item occultism:dragonyst_dust x1
+      ali:item minecraft:air x0
+      ali:item minecraft:elytra x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 32
+      | Price Multiplier: 0.05
+      ali:item minecraft:enchanted_golden_apple x1
+      ali:item minecraft:air x0
+      ali:item minecraft:totem_of_undying x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 32
+      | Price Multiplier: 0.05
+      ali:item minecraft:ender_eye x1
+      ali:item minecraft:air x0
+      ali:item minecraft:turtle_helmet x1
+  ali:trade_level
+    | Level: 10
+    | Randomly Selects 1 Of These Trades
+    | Chance: 50%
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 24
+      | Price Multiplier: 0.05
+      ali:item occultism:iesnium_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spawn_egg/familiar_bat x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 24
+      | Price Multiplier: 0.05
+      ali:item occultism:iesnium_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spawn_egg/familiar_beaver x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 24
+      | Price Multiplier: 0.05
+      ali:item occultism:iesnium_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spawn_egg/familiar_beholder x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 24
+      | Price Multiplier: 0.05
+      ali:item occultism:iesnium_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spawn_egg/familiar_blacksmith x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 24
+      | Price Multiplier: 0.05
+      ali:item occultism:iesnium_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spawn_egg/familiar_chimera x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 24
+      | Price Multiplier: 0.05
+      ali:item occultism:iesnium_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spawn_egg/familiar_cthulhu x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 24
+      | Price Multiplier: 0.05
+      ali:item occultism:iesnium_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spawn_egg/familiar_deer x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 24
+      | Price Multiplier: 0.05
+      ali:item occultism:iesnium_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spawn_egg/familiar_devil x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 24
+      | Price Multiplier: 0.05
+      ali:item occultism:iesnium_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spawn_egg/familiar_dragon x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 24
+      | Price Multiplier: 0.05
+      ali:item occultism:iesnium_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spawn_egg/familiar_fairy x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 24
+      | Price Multiplier: 0.05
+      ali:item occultism:iesnium_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spawn_egg/familiar_greedy x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 24
+      | Price Multiplier: 0.05
+      ali:item occultism:iesnium_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spawn_egg/familiar_headless x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 24
+      | Price Multiplier: 0.05
+      ali:item occultism:iesnium_block x1
+      ali:item minecraft:air x0
+      ali:item occultism:spawn_egg/familiar_mummy x1
+  ali:trade_level
+    | Level: 11
+    | Randomly Selects 1 Of These Trades
+    | Chance: 25%
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:white_dye x64
+      ali:item minecraft:air x0
+      ali:item occultism:spirit_grindstone x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:light_gray_dye x64
+      ali:item minecraft:air x0
+      ali:item minecraft:heavy_core x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:gray_dye x64
+      ali:item minecraft:air x0
+      ali:item minecraft:reinforced_deepslate x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:black_dye x64
+      ali:item minecraft:air x0
+      ali:item minecraft:netherite_block x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:brown_dye x64
+      ali:item minecraft:air x0
+      ali:item minecraft:enchanted_golden_apple x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:red_dye x64
+      ali:item minecraft:air x0
+      ali:item minecraft:bell x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:orange_dye x64
+      ali:item minecraft:air x0
+      ali:item minecraft:end_stone_bricks x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:yellow_dye x64
+      ali:item minecraft:air x0
+      ali:item minecraft:sponge x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:lime_dye x64
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald_block x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:green_dye x64
+      ali:item minecraft:air x0
+      ali:item minecraft:sculk_shrieker x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:cyan_dye x64
+      ali:item minecraft:air x0
+      ali:item minecraft:sculk_catalyst x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:light_blue_dye x64
+      ali:item minecraft:air x0
+      ali:item occultism:iesnium_block x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:blue_dye x64
+      ali:item minecraft:air x0
+      ali:item minecraft:soul_lantern x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:purple_dye x64
+      ali:item minecraft:air x0
+      ali:item minecraft:respawn_anchor x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:magenta_dye x64
+      ali:item minecraft:air x0
+      ali:item minecraft:budding_amethyst x1
+    ali:items_to_items
+      | Requires Third Eye, Otherworld Goggles or True Sight Staff
+      | Uses: 1
+      | XP: 1
+      | Price Multiplier: 0.05
+      ali:item minecraft:pink_dye x64
+      ali:item minecraft:air x0
+      ali:item minecraft:chorus_flower x1

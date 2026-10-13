@@ -1,0 +1,329 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 6
+    ali:item minecraft:gold_ingot x2-7
+      | Chance: 17.65%
+      | Count: 2 to 7
+    ali:item minecraft:iron_ingot x4-8
+      | Chance: 11.76%
+      | Count: 4 to 8
+    ali:item minecraft:diamond x2-7
+      | Chance: 5.88%
+      | Count: 2 to 7
+    ali:item minecraft:beetroot_seeds x1-10
+      | Chance: 5.88%
+      | Count: 1 to 10
+    ali:item minecraft:saddle x1
+      | Chance: 3.53%
+      | Count: 1
+    ali:item minecraft:diamond_sword x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 3.53%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20 to 39
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:diamond_boots x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 3.53%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20 to 39
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 3.53%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20 to 39
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:diamond_leggings x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 3.53%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20 to 39
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:diamond_helmet x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 3.53%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20 to 39
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:diamond_pickaxe x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 3.53%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20 to 39
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:diamond_shovel x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 3.53%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20 to 39
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:iron_sword x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 3.53%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20 to 39
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:iron_boots x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 3.53%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20 to 39
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:iron_chestplate x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 3.53%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20 to 39
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:iron_leggings x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 3.53%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20 to 39
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:iron_helmet x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 3.53%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20 to 39
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:iron_pickaxe x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 3.53%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20 to 39
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:iron_shovel x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 3.53%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20 to 39
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:emerald x2-6
+      | Chance: 2.35%
+      | Count: 2 to 6
+    ali:item minecraft:iron_horse_armor x1
+      | Chance: 1.18%
+      | Count: 1
+    ali:item minecraft:golden_horse_armor x1
+      | Chance: 1.18%
+      | Count: 1
+    ali:item minecraft:diamond_horse_armor x1
+      | Chance: 1.18%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 93.33%
+    ali:item minecraft:spire_armor_trim_smithing_template x1
+      | Chance: 6.67%
+      | Count: 1
+  ali:reference
+    | Selects all entries
+    ali:loot_table
+      | Selects all entries
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1
+        ali:item irons_spellbooks:arcane_essence x0-15
+          | Count: 0 to 15
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 0 to 2
+        ali:item irons_spellbooks:scroll x1
+          | Chance: 50%
+          | Count: 1
+          | ----- Modifiers -----
+          | Randomize Spell:
+          |   -> Quality: 0.4 to 1
+          |   -> Applicable Spells:
+          |     -> Force: False
+        ali:item irons_spellbooks:scroll x1
+          | Chance: 50%
+          | Count: 1
+          | ----- Modifiers -----
+          | Randomize Spell:
+          |   -> Quality: 0.4 to 1
+          |   -> Applicable Spells:
+          |     -> School: Ender
+          |     -> Force: False
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 0 to 2
+        ali:reference
+          | Selects all entries
+          | Chance: 66.67%
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:item irons_spellbooks:evasion_elixir x1
+                | Chance: 13.33%
+                | Count: 1
+              ali:item irons_spellbooks:oakskin_elixir x1
+                | Chance: 13.33%
+                | Count: 1
+              ali:item irons_spellbooks:invisibility_elixir x1
+                | Chance: 13.33%
+                | Count: 1
+              ali:item irons_spellbooks:greater_evasion_elixir x1
+                | Chance: 6.67%
+                | Count: 1
+              ali:item irons_spellbooks:greater_oakskin_elixir x1
+                | Chance: 6.67%
+                | Count: 1
+              ali:item irons_spellbooks:greater_invisibility_elixir x1
+                | Chance: 6.67%
+                | Count: 1
+              ali:item irons_spellbooks:greater_healing_potion x1
+                | Chance: 6.67%
+                | Count: 1
+        ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"irons_spellbooks:instant_mana_one"}}
+          | Chance: 8.33%
+          | Count: 1
+          | ----- Modifiers -----
+          | Set Potion:
+          |   -> Potion: Potion of Mana
+        ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"irons_spellbooks:instant_mana_two"}}
+          | Chance: 8.33%
+          | Count: 1
+          | ----- Modifiers -----
+          | Set Potion:
+          |   -> Potion: Potion of Mana
+        ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"irons_spellbooks:instant_mana_three"}}
+          | Chance: 8.33%
+          | Count: 1
+          | ----- Modifiers -----
+          | Set Potion:
+          |   -> Potion: Potion of Mana
+        ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"irons_spellbooks:instant_mana_four"}}
+          | Chance: 8.33%
+          | Count: 1
+          | ----- Modifiers -----
+          | Set Potion:
+          |   -> Potion: Potion of Mana
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1
+        ali:item irons_spellbooks:blank_rune x1
+          | Chance: 30%
+          | Count: 1
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1
+        ali:reference
+          | Selects all entries
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:item irons_spellbooks:silver_ring x1
+                | Chance: 3.85%
+                | Count: 1
+              ali:item irons_spellbooks:cooldown_ring x1
+                | Chance: 3.85%
+                | Count: 1
+              ali:item irons_spellbooks:heavy_chain_necklace x1
+                | Chance: 3.85%
+                | Count: 1
+              ali:item irons_spellbooks:emerald_stoneplate_ring x1
+                | Chance: 3.85%
+                | Count: 1
+              ali:item irons_spellbooks:fireward_ring x1
+                | Chance: 3.85%
+                | Count: 1
+              ali:item irons_spellbooks:frostward_ring x1
+                | Chance: 3.85%
+                | Count: 1
+              ali:item irons_spellbooks:cast_time_ring x1
+                | Chance: 3.85%
+                | Count: 1
+              ali:item irons_spellbooks:conjurers_talisman x1
+                | Chance: 3.85%
+                | Count: 1
+              ali:item irons_spellbooks:poisonward_ring x1
+                | Chance: 3.85%
+                | Count: 1
+              ali:item irons_spellbooks:concentration_amulet x1
+                | Chance: 3.85%
+                | Count: 1
+              ali:item irons_spellbooks:invisibility_ring x1
+                | Chance: 3.85%
+                | Count: 1
+              ali:item irons_spellbooks:teleportation_amulet x1
+                | Chance: 3.85%
+                | Count: 1
+              ali:item irons_spellbooks:affinity_ring x1
+                | Chance: 3.85%
+                | Count: 1
+                | ----- Modifiers -----
+                | Randomize Ring Enhancement:
+                |   -> Spell Filter:
+                |     -> Force: False
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 3
+        ali:reference
+          | Selects all entries
+          | Chance: 50%
+          ali:loot_table
+            | Selects all entries
+            ali:loot_pool
+              | Selects random entry
+              | Rolls: 1
+              ali:item irons_spellbooks:uncommon_ink x1
+                | Chance: 24.39%
+                | Count: 1
+              ali:item irons_spellbooks:common_ink x1
+                | Chance: 14.63%
+                | Count: 1
+              ali:item irons_spellbooks:rare_ink x1
+                | Chance: 7.32%
+                | Count: 1
+              ali:item irons_spellbooks:epic_ink x1
+                | Chance: 3.66%
+                | Count: 1
+        ali:empty
+          | Drops nothing
+          | Chance: 50%
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1
+        ali:item irons_spellbooks:ancient_knowledge_fragment x0-3
+          | Chance: 20%
+          | Count: 0 to 3

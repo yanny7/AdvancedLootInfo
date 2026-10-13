@@ -1,0 +1,24 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item irons_spellbooks:tincture_of_forgetfulness x1-2
+            | Count: 1
+            |   -> Looting LVL: min(1 + round(LVL × U[0; 1)); 2)
+            |   -> Looting I: 1 to 2
+            |   -> Looting II: 1 to 2  ~2 (75%)
+            |   -> Looting III: 1 to 2  ~2 (83%)
+            |   [chart 0..1 1-2 base=false modes=[false, false] heights=0.6000,0.6000 | 0..1 1-2 base=false modes=[false, true] heights=0.3000,0.9000 | 0..1 1-2 base=false modes=[false, true] heights=0.2000,1.0000]
+            | ----- Modifiers -----
+            | Enchanted Count Increase:
+            |   -> Enchantment: Looting
+            |   -> Value: U[0; 1)
+            |   -> Limit: 2

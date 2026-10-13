@@ -1,0 +1,16 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item occultism:otherglass_natural x1
+        | Count: 1
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Otherglass
+        |   -> Properties:
+        |     -> uncovered: true
+      ali:item occultism:crushed_end_stone x1
+        | Count: 1

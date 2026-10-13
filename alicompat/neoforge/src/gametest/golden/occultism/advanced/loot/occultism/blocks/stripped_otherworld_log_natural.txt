@@ -1,0 +1,16 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item occultism:stripped_otherworld_log x1
+        | Count: 1
+        | ----- Predicates -----
+        | Block State Property:
+        |   -> Block: Stripped Oak Log
+        |   -> Properties:
+        |     -> uncovered: true
+      ali:item minecraft:stripped_oak_log x1
+        | Count: 1

@@ -1,0 +1,11 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item immersiveengineering:conveyor_redstone x1
+      | Count: 1
+      | ----- Predicates -----
+      | Survives Explosion
+      | ----- Modifiers -----
+      | Conveyor Cover

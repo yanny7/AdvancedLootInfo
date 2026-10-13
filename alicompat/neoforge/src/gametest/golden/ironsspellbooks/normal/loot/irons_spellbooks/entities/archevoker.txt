@@ -1,0 +1,74 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:arcane_essence x0-11
+      | Count: 0 to 8
+      |   -> Looting I: 0 to 9  ~1 to 8 (11%)
+      |   -> Looting II: 0 to 10  ~2 to 8 (11%)
+      |   -> Looting III: 0 to 11  ~3 to 8 (11%)
+      |   [chart 0..8 0-8 base=true modes=[false, false, false, false, false, false, false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.0000,0.0000,0.0000 | 0..9 0-9 base=false modes=[false, true, true, true, true, true, true, true, true, false, false, false] heights=0.5000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.5000,0.0000,0.0000 | 0..10 0-10 base=false modes=[false, false, true, true, true, true, true, true, true, false, false, false] heights=0.2500,0.7500,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.7500,0.2500,0.0000 | 0..11 0-11 base=false modes=[false, false, false, true, true, true, true, true, true, false, false, false] heights=0.1667,0.5000,0.8333,1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.8333,0.5000,0.1667]
+      | ----- Modifiers -----
+      | Enchanted Count Increase:
+      |   -> Enchantment: Looting
+      |   -> Value: 0 to 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:scroll x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Spell:
+      |   -> Quality: 0.25 to 0.85
+      |   -> Applicable Spells:
+      |     -> School: Evocation
+      |     -> Force: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:evocation_rune x1
+      | Chance: 50%
+      | Count: 1
+      | ----- Predicates -----
+      | Killed by player
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item irons_spellbooks:evoker_spell_book x1 {"irons_spellbooks:spell_container":{data:[{id:"irons_spellbooks:fang_strike",index:0,level:6,locked:1b},{id:"irons_spellbooks:fang_ward",index:1,level:4,locked:1b},{id:"irons_spellbooks:summon_vex",index:2,level:4,locked:1b}],maxSpells:10,mustEquip:1b,spellWheel:1b}}
+            | Chance: 1%
+            |   -> Looting I: 2%
+            |   -> Looting II: 3%
+            |   -> Looting III: 4%
+            | Count: 1
+            | ----- Predicates -----
+            | Killed by player
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 3
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item irons_spellbooks:uncommon_ink x1
+            | Chance: 48.78%
+            | Count: 1
+          ali:item irons_spellbooks:common_ink x1
+            | Chance: 29.27%
+            | Count: 1
+          ali:item irons_spellbooks:rare_ink x1
+            | Chance: 14.63%
+            | Count: 1
+          ali:item irons_spellbooks:epic_ink x1
+            | Chance: 7.32%
+            | Count: 1
