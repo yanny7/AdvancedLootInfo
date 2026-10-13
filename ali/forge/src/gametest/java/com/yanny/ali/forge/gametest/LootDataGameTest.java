@@ -3,6 +3,7 @@ package com.yanny.ali.forge.gametest;
 import com.yanny.ali.Utils;
 import com.yanny.ali.forge.AliMod;
 import com.yanny.ali.gametest.LootDataGolden;
+import dev.latvian.mods.kubejs.script.ScriptType;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraftforge.gametest.GameTestHolder;
@@ -24,6 +25,10 @@ public class LootDataGameTest {
 
     @GameTest(template = "empty", timeoutTicks = LootDataGolden.TIMEOUT_TICKS)
     public void lootData(GameTestHelper helper) {
-        LootDataGolden.run(helper, AliMod.SERVER, VARIANTS);
+        LootDataGolden.run(helper, AliMod.SERVER, VARIANTS, LootDataGameTest::scriptErrors);
+    }
+
+    private static List<String> scriptErrors() {
+        return ScriptType.SERVER.console.errors.stream().map((line) -> "KubeJS: " + line.getText()).toList();
     }
 }
