@@ -2,8 +2,7 @@
   "required": true,
   "package": "com.yanny.aci.gametest.mixin",
   "mixins": [
-    "MixinGameTestServer",
-    "MixinMinecraftServer"
+    "MixinGameTestServer"
   ],
   "injectors": {
     "defaultRequire": 1
