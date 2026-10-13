@@ -2,9 +2,130 @@ plugins {
     id 'com.gradleup.shadow'
 }
 
+apply from: rootProject.file("alicompat/gametest.gradle")
+
 architectury {
     platformSetupLoomIde()
     neoForge()
+}
+
+sourceSets {
+    gametest {
+        java.srcDir project(":aci:common").file("src/gametest/java")
+        resources.srcDir project(":aci:common").file("src/gametest/resources")
+        java.srcDir project(":ali:common").file("src/gametest/java")
+        java.srcDir project(":alicompat:common").file("src/gametest/java")
+        java.exclude "com/yanny/ali/gametest/LootDataGolden.java"
+        compileClasspath += sourceSets.main.compileClasspath + sourceSets.main.output
+        runtimeClasspath += sourceSets.main.runtimeClasspath.filter { !(it.name ==~ /(jei|emi)-.*/) } + sourceSets.main.output
+    }
+}
+
+def compatMods = (project.findProperty("compat_mods") ?: "").split(",")*.trim().findAll { it }
+def supportedMods = new groovy.json.JsonSlurper().parse(rootProject.file("scripts/supported_mods.json"))
+def gametestModIds = { String mod -> mod != "base" && compatMods.contains(mod) && project.findProperty("${mod}_${project.name}_dep") ? (supportedMods.find { it.key == mod }?.mod_ids?.join(",") ?: "") : "" }
+def gametestProperty = project.findProperty("alicompat_gametest")
+def gametestMods = gametestProperty == "all" ? ["base"] + compatMods.findAll { gametestModIds(it) }.sort() : [gametestProperty ?: "base"]
+def gametestName = { String mod -> "gametest" + mod.capitalize() }
+def gametestCoordinates = { String mod -> gametestModIds(mod) ? ["${mod}_neoforge_dep", "${mod}_neoforge_runtime_deps"].collectMany { (project.findProperty(it) ?: "").split(",")*.trim().findAll { it } } : [] }
+def nestedCache = [:]
+
+// a NeoForge dev launch does not unpack jar-in-jar: jars using Minecraft go through loom to be remapped, the rest into mods/
+def extractNested = { List<String> coordinates, File nestedDir ->
+    if (nestedCache.containsKey(nestedDir)) {
+        return nestedCache[nestedDir]
+    }
+
+    def nestedMods = []
+    def readJar = { byte[] bytes ->
+        def input = new java.util.jar.JarInputStream(new ByteArrayInputStream(bytes))
+        def entries = [:]
+
+        for (def entry = input.nextJarEntry; entry != null; entry = input.nextJarEntry) {
+            entries[entry.name] = input.readAllBytes()
+        }
+
+        input.close()
+        [manifest: input.manifest ?: new java.util.jar.Manifest(), entries: entries]
+    }
+    def modIdOf = { Map entries ->
+        def toml = entries["META-INF/neoforge.mods.toml"] ?: entries["META-INF/mods.toml"]
+        def match = toml ? new String(toml, "UTF-8") =~ /modId\s*=\s*"([^"]+)"/ : null
+
+        match?.find() ? match.group(1) : null
+    }
+    def packagesOf = { Collection<String> names -> names.findAll { it.endsWith(".class") && it.contains("/") && !it.startsWith("META-INF/") }.collect { it.substring(0, it.lastIndexOf("/")) } as Set }
+    def providedArtifacts = configurations.minecraftLibraries.resolvedConfiguration.resolvedArtifacts.collect { it.name } as Set
+    def providedPackages = configurations.minecraftLibraries.resolve().collectMany { jar ->
+        def zip = new java.util.zip.ZipFile(jar)
+        def packages = packagesOf(zip.entries().collect { it.name })
+
+        zip.close()
+        packages
+    } as Set
+    def outerJars = configurations.detachedConfiguration(*coordinates.collect { dependencies.create(it) }).tap { transitive = false }.resolve()
+    def provided = outerJars.collect { modIdOf(readJar(it.bytes).entries) }.findAll { it } as Set
+
+    nestedDir.deleteDir()
+    new File(nestedDir, "mods").mkdirs()
+    new File(nestedDir, "libs").mkdirs()
+
+    def walk
+
+    walk = { Map jar ->
+        def libraryType = jar.manifest.mainAttributes.getValue("FMLModType") in ["LIBRARY", "LANGPROVIDER"] ? "LIBRARY" : "GAMELIBRARY"
+
+        jar.entries.findAll { entryName, data -> entryName ==~ /META-INF\/(jars|jarjar)\/[^\/]+\.jar/ }.each { entryName, bytes ->
+            def name = entryName.substring(entryName.lastIndexOf("/") + 1)
+            def content = readJar(bytes)
+            def modId = modIdOf(content.entries)
+            def referencesMinecraft = content.entries.any { innerName, data -> innerName.endsWith(".class") && new String(data, "ISO-8859-1").contains("net/minecraft/") }
+
+            if (referencesMinecraft) {
+                if (!modId || provided.add(modId)) {
+                    def target = new File(nestedDir, "mods/$name")
+
+                    target.bytes = bytes
+                    nestedMods << target
+                    walk(content)
+                }
+            } else if (!modId || provided.add(modId)) {
+                def packages = packagesOf(content.entries.keySet())
+                def providedLibrary = packages ? packages.any { providedPackages.contains(it) } : providedArtifacts.any { name.startsWith("$it-") }
+
+                if (!modId && providedLibrary) {
+                    return
+                }
+
+                def manifest = content.manifest
+
+                if (!modId && !manifest.mainAttributes.getValue("FMLModType")) {
+                    manifest.mainAttributes.putValue("Manifest-Version", "1.0")
+                    manifest.mainAttributes.putValue("FMLModType", libraryType)
+                }
+
+                def output = new java.util.jar.JarOutputStream(new FileOutputStream(new File(nestedDir, "libs/$name")), manifest)
+
+                content.entries.each { innerName, data ->
+                    output.putNextEntry(new java.util.jar.JarEntry(innerName))
+                    output.write(data)
+                    output.closeEntry()
+                }
+
+                output.close()
+                walk(content)
+            }
+        }
+    }
+    outerJars.each { walk(readJar(it.bytes)) }
+
+    nestedCache[nestedDir] = nestedMods
+    return nestedMods
+}
+def extractGametestNested = { String mod -> extractNested(gametestCoordinates(mod), file("build/gametest/nested/${mod}")) }
+
+gametestMods.findAll { gametestCoordinates(it) }.each { mod ->
+    loom.createRemapConfigurations(sourceSets.create(gametestName(mod)))
 }
 
 loom {
@@ -16,6 +137,90 @@ loom {
             programArgs "--all", "--mod", "${alicompat_mod_id}"
             programArgs "--output", "${file('src/main/generated/')}"
             programArgs "--existing", "${file("src/main/resources").absolutePath}"
+        }
+        gametestMods.each { mod ->
+            create(gametestName(mod)) {
+                environment "gametestserver"
+                forgeTemplate "gameTestServer"
+                name mod == "base" ? "Minecraft GameTest" : "Minecraft GameTest ${mod}".toString()
+                source sourceSets.gametest
+                ideConfigGenerated mod == "base"
+                property "neoforge.enabledGameTestNamespaces", alicompat_mod_id
+                property "alicompat.golden.dir", project.file("src/gametest/golden").absolutePath
+                property "alicompat.golden.actual", project.file("build/gametest/golden").absolutePath
+                property "alicompat.golden.regenerate", (project.findProperty("alicompat_golden_regenerate") ?: "false").toString()
+                property "alicompat.gametest.mod", mod
+                property "alicompat.gametest.modids", gametestModIds(mod)
+                programArgs "--mixin.config", "aci.gametest.mixins.json"
+
+                runDir "build/gametest/run/${mod}"
+
+                mods {
+                    main {
+                        sourceSet sourceSets.main
+                        sourceSet sourceSets.gametest
+                    }
+                }
+            }
+        }
+    }
+}
+
+def gametestFailures = []
+def gametestTasks = gametestMods.collect { "run" + gametestName(it).capitalize() }
+
+gametestMods.eachWithIndex { mod, index ->
+    def runDir = "build/gametest/run/${mod}"
+
+    tasks.matching { it.name == gametestTasks[index] }.configureEach {
+        timeout = java.time.Duration.ofMinutes(10)
+        ignoreExitValue = true
+
+        if (index > 0) {
+            mustRunAfter gametestTasks[index - 1]
+        }
+        if (gametestCoordinates(mod)) {
+            classpath(sourceSets.named(gametestName(mod)).map { it.runtimeClasspath })
+        }
+
+        doFirst { task ->
+            gametestWatchdog(task, mod)
+
+            if (mod != "base" && !gametestModIds(mod)) {
+                throw new GradleException("alicompat_gametest=${mod} is not a mod enabled in compat_mods with a ${project.name} dependency")
+            }
+
+            delete "${runDir}/config", "${runDir}/world", "${runDir}/mods", "${runDir}/kubejs"
+            copy {
+                from project(":alicompat:common").file("src/gametest/kubejs/${mod}")
+                into "${runDir}/kubejs"
+            }
+            copy {
+                from project(":alicompat:common").file("src/gametest/datapacks/${mod}")
+                into "${runDir}/world/datapacks/${mod}"
+            }
+            if (gametestCoordinates(mod)) {
+                extractGametestNested(mod)
+                copy {
+                    from "build/gametest/nested/${mod}/libs"
+                    into "${runDir}/mods"
+                }
+            }
+        }
+        doLast {
+            if (executionResult.get().exitValue != 0) {
+                gametestFailures << mod
+            }
+        }
+    }
+}
+
+tasks.register("runGametest") {
+    dependsOn gametestTasks
+
+    doLast {
+        if (gametestFailures) {
+            throw new GradleException("GameTests failed for ${gametestFailures.join(", ")}")
         }
     }
 }
@@ -37,6 +242,14 @@ dependencies {
     common(project(path: ":ali:common", configuration: "namedElements")) { transitive false }
     runtimeOnly project(path: ":aci:neoforge", configuration: "namedElements")
     runtimeOnly project(path: ":ali:neoforge", configuration: "namedElements")
+    gametestCompileOnly project(path: ":ali:neoforge", configuration: "namedElements")
+
+    gametestMods.findAll { gametestCoordinates(it) }.each { mod ->
+        def configuration = "mod" + gametestName(mod).capitalize() + "RuntimeOnly"
+
+        gametestCoordinates(mod).each { add(configuration, it) }
+        add(configuration, files({ extractGametestNested(mod) }))
+    }
     rootProject.project(":ali:neoforge").ext.commonProjects.each { p ->
         common(project(path: p, configuration: "namedElements")) { transitive false }
     }

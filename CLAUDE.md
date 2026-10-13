@@ -170,6 +170,7 @@ ALICompat's GameTest runs once per target mod and stores what that mod changes a
 ./gradlew :alicompat:forge:runGametest -Precipe_viewer=none -Palicompat_gametest=adastra
 ./gradlew :alicompat:forge:runGametest -Precipe_viewer=none -Palicompat_gametest=all -Palicompat_golden_regenerate=true
 ./gradlew :alicompat:fabric:runGametest -Precipe_viewer=none -Palicompat_gametest=adastra -Palicompat_golden_regenerate=true
+./gradlew :alicompat:neoforge:runGametest -Precipe_viewer=none -Palicompat_gametest=arsnouveau
 ```
 
 AWI has the same per-loader GameTest over a vanilla world with seed 0 (see `awi/CLAUDE.md`'s gametest section), regenerated with `-Pawi_golden_regenerate=true`:
