@@ -1,0 +1,58 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 8
+    ali:item ad_astra:mars_sand x6-14
+      | Chance: 18.52%
+      | Count: 6 to 14
+    ali:item minecraft:ice x5-10
+      | Chance: 18.52%
+      | Count: 5 to 10
+    ali:item minecraft:emerald x6-9
+      | Chance: 13.89%
+      | Count: 6 to 9
+    ali:item minecraft:enchanted_book x1
+      | Chance: 9.26%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+    ali:item ad_astra:ice_shard x6-12
+      | Chance: 4.63%
+      | Count: 6 to 12
+    ali:item minecraft:iron_ingot x5-15
+      | Chance: 4.63%
+      | Count: 5 to 15
+    ali:item minecraft:bone x4-8
+      | Chance: 4.63%
+      | Count: 4 to 8
+    ali:item minecraft:string x3-6
+      | Chance: 4.63%
+      | Count: 3 to 6
+    ali:item minecraft:rotten_flesh x5-10
+      | Chance: 4.63%
+      | Count: 5 to 10
+    ali:item minecraft:golden_apple x1
+      | Chance: 2.78%
+      | Count: 1
+    ali:item ad_astra:raw_ostrum x1-2
+      | Chance: 2.31%
+      | Count: 1 to 2
+    ali:item minecraft:diamond x2-4
+      | Chance: 2.31%
+      | Count: 2 to 4
+    ali:item minecraft:redstone x6-12
+      | Chance: 2.31%
+      | Count: 6 to 12
+    ali:item minecraft:stick x5-10
+      | Chance: 2.31%
+      | Count: 5 to 10
+    ali:item minecraft:glow_berries x4-8
+      | Chance: 2.31%
+      | Count: 4 to 8
+    ali:item minecraft:suspicious_stew x1
+      | Chance: 1.39%
+      | Count: 1
+    ali:item minecraft:enchanted_golden_apple x1
+      | Chance: 0.93%
+      | Count: 1

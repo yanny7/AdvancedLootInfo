@@ -1,0 +1,48 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item twilightforest:rope x0-3
+      | Count: max(0; (max(0; (max(0; (2 | 1) + 1) | 2 | 1) + 1) | max(0; (2 | 1) + 1) | 2 | 1) − 1)
+      |   -> Block State Property:
+      |     -> Block: Rope
+      |     -> Properties:
+      |       -> x: true
+      |   -> Block State Property:
+      |     -> Block: Rope
+      |     -> Properties:
+      |       -> y: true
+      |   -> Block State Property:
+      |     -> Block: Rope
+      |     -> Properties:
+      |       -> z: true
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: True
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Rope
+      |       -> Properties:
+      |         -> x: true
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: True
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Rope
+      |       -> Properties:
+      |         -> y: true
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: True
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Rope
+      |       -> Properties:
+      |         -> z: true
+      | Set Count:
+      |   -> Count: −1
+      |   -> Add: True
+      | Explosion Decay

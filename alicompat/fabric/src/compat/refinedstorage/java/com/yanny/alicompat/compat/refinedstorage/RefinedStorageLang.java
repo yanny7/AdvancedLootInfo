@@ -16,9 +16,9 @@ public class RefinedStorageLang implements ICompatTranslations {
     public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 
     public enum Functions implements ITooltipKey {
-        COPY_PORTABLE_GRID_DATA("copy_portable_grid_data", "Copy Portable Grid Data:"),
-        COPY_STORAGE_ID("copy_storage_id", "Copy Storage Id:"),
-        COPY_STORED_ENERGY("copy_stored_energy", "Copy Stored Energy:"),
+        COPY_PORTABLE_GRID_DATA("copy_portable_grid_data", "Copy Portable Grid Data"),
+        COPY_STORAGE_ID("copy_storage_id", "Copy Storage Id"),
+        COPY_STORED_ENERGY("copy_stored_energy", "Copy Stored Energy"),
         ;
 
         private final Translation translation;

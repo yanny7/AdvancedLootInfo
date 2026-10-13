@@ -1,7 +1,9 @@
 ## []
 
+- Fixed mixins failing when AWI is used as a dependency in a Forge mod development environment
 - Tooltips wider than the window wrap their lines
 - Fixed widget textures being sampled one pixel off
+- Fixed blocks of a placed feature changing their order after every server restart
 
 ## [1.3.0]
 

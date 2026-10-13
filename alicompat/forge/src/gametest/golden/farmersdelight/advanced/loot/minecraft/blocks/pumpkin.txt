@@ -1,0 +1,22 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:modified
+      | Selects only first successful entry
+      ali:item farmersdelight:pumpkin_slice x4
+        | Count: 4
+        | ----- Predicates -----
+        | All Of:
+        |   -> Match Tool:
+        |     -> Tag: Knives
+        |   -> Inverted:
+        |     -> Match Tool:
+        |       -> Enchantments:
+        |         -> Enchantment: Silk Touch
+        | Survives Explosion
+      ali:item minecraft:pumpkin x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion

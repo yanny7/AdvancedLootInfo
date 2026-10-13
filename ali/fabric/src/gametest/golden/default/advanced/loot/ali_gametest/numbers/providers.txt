@@ -1,0 +1,24 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: binom(3; 50%)  ~1 to 2 (38%)
+    |   [chart 0..3 0-3 base=true modes=[false, true, true, false] heights=0.3333,1.0000,1.0000,0.3333]
+    ali:item minecraft:egg x0-5
+      | Count: max(0; binom(5; 30%))  ~1 (36%)
+      |   [chart 0..5 0-5 base=true modes=[false, true, false, false, false, false] heights=0.4667,1.0000,0.8571,0.3673,0.0787,0.0067]
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: binom(5; 30%)  ~1 (36%)
+      |     [chart 0..5 0-5 base=true modes=[false, true, false, false, false, false] heights=0.4667,1.0000,0.8571,0.3673,0.0787,0.0067]
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: U[binom(2; 50%); 4]  ~2 to 4 (26%)
+    |   [chart 0..4 0-4 base=true modes=[false, false, true, true, true] heights=0.1935,0.6774,1.0000,1.0000,1.0000]
+    ali:item minecraft:snowball x?
+      | Count: max(0; round(score(this; level) × 0.5))
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: round(score(this; level) × 0.5)
+      |   -> Add: False

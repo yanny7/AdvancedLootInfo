@@ -1,0 +1,10 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item patchouli:guide_book x1 {"patchouli:book":"apotheosis:apoth_chronicle"}
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {"patchouli:book":"apotheosis:apoth_chronicle"}

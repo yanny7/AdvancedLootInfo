@@ -1,0 +1,134 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:lodestone x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 2
+    ali:item minecraft:crossbow x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 7.69%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: 10% to 50%
+      |   -> Add: False
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:spectral_arrow x10-28
+      | Chance: 7.69%
+      | Count: 10 to 28
+    ali:item minecraft:gilded_blackstone x8-12
+      | Chance: 7.69%
+      | Count: 8 to 12
+    ali:item minecraft:crying_obsidian x3-8
+      | Chance: 7.69%
+      | Count: 3 to 8
+    ali:item minecraft:gold_block x1
+      | Chance: 7.69%
+      | Count: 1
+    ali:item minecraft:gold_ingot x4-9
+      | Chance: 7.69%
+      | Count: 4 to 9
+    ali:item minecraft:iron_ingot x4-9
+      | Chance: 7.69%
+      | Count: 4 to 9
+    ali:item minecraft:golden_sword x1
+      | Chance: 7.69%
+      | Count: 1
+    ali:item minecraft:golden_chestplate x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 7.69%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:golden_helmet x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 7.69%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:golden_leggings x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 7.69%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:golden_boots x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 7.69%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:golden_axe x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 7.69%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 4
+    ali:item minecraft:string x1-6
+      | Chance: 20%
+      | Count: 1 to 6
+    ali:item minecraft:leather x1-3
+      | Chance: 20%
+      | Count: 1 to 3
+    ali:item minecraft:arrow x5-17
+      | Chance: 20%
+      | Count: 5 to 17
+    ali:item minecraft:iron_nugget x2-6
+      | Chance: 20%
+      | Count: 2 to 6
+    ali:item minecraft:gold_nugget x2-6
+      | Chance: 20%
+      | Count: 2 to 6
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 91.67%
+    ali:item minecraft:snout_armor_trim_smithing_template x1
+      | Chance: 8.33%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 90%
+    ali:item minecraft:netherite_upgrade_smithing_template x1
+      | Chance: 10%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 0 to 1  ~0 (80%)
+    |   -> Bad Luck: 0
+    |   -> Luck 1: 0 to 1  ~0 (80%)
+    |   -> Luck 2: 0 to 1  ~0 (80%)
+    |   -> Luck 3: 0 to 1  ~0 (80%)
+    |   -> Luck 4: 0 to 1  ~0 (80%)
+    |   [chart 0..1 0-1 base=true modes=[true, false] heights=1.0000,0.2500 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.2500 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.2500 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.2500 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.2500]
+    ali:item spell_engine:spell_scroll x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Spell Bind Randomly:
+      |   -> Tier: 2 to 3
+      |   -> Spell Pool: spell_engine:treasure
+      |   -> Count: 1

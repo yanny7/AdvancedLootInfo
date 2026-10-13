@@ -1,0 +1,11 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:arrow x4-8
+      | Count: max(0; U[4; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4 to 8
+      |   -> Add: False

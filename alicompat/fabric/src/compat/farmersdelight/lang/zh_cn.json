@@ -14,6 +14,6 @@
   "alicompat.farmersdelight.type.consume_effect.extinguish": "灭火",
   "alicompat.farmersdelight.type.consume_effect.heal": "治疗：",
   "alicompat.farmersdelight.type.consume_effect.remove_random_effects": "移除随机状态效果：",
-  "alicompat.farmersdelight.type.function.copy_skillet": "复制煎锅：",
-  "alicompat.farmersdelight.type.function.smoker_cook": "烟熏炉烹饪："
+  "alicompat.farmersdelight.type.function.copy_skillet": "复制煎锅",
+  "alicompat.farmersdelight.type.function.smoker_cook": "烟熏炉烹饪"
 }

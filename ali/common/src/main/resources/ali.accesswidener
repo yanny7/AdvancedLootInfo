@@ -171,6 +171,7 @@ accessible class net/minecraft/world/entity/npc/villager/VillagerTrades$EnchantB
 accessible class net/minecraft/world/entity/npc/villager/VillagerTrades$TreasureMapForEmeralds
 accessible class net/minecraft/world/entity/npc/villager/VillagerTrades$ItemsAndEmeraldsToItems
 accessible class net/minecraft/world/entity/npc/villager/VillagerTrades$TypeSpecificTrade
+accessible class net/minecraft/world/entity/npc/villager/VillagerTrades$FailureItemListing
 
 accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$EmeraldForItems itemStack Lnet/minecraft/world/item/trading/ItemCost;
 accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$EmeraldForItems emeraldAmount I

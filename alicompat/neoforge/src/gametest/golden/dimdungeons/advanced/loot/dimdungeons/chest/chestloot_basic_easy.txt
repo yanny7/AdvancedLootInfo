@@ -1,0 +1,1863 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      | Chance: 80%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:reference
+            | Selects all entries
+            | Chance: 25.6%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 1.51%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Silk Touch
+                  |       -> Levels: 1
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 1.51%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Blast Protection
+                  |       -> Levels: 4
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 1.51%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Fire Protection
+                  |       -> Levels: 4
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 1.51%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Projectile Protection
+                  |       -> Levels: 4
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 1.51%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Feather Falling
+                  |       -> Levels: 4
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 1.51%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Aqua Affinity
+                  |       -> Levels: 1
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 1.51%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Frost Walker
+                  |       -> Levels: 2
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 1.51%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Smite
+                  |       -> Levels: 5
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 1.51%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Bane of Arthropods
+                  |       -> Levels: 5
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 1.51%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Knockback
+                  |       -> Levels: 2
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 1.51%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Punch
+                  |       -> Levels: 2
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 1.51%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Flame
+                  |       -> Levels: 1
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 1.51%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Infinity
+                  |       -> Levels: 1
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 1.51%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Multishot
+                  |       -> Levels: 1
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 1.51%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Lure
+                  |       -> Levels: 3
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 1.51%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Luck of the Sea
+                  |       -> Levels: 3
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 1.51%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Riptide
+                  |       -> Levels: 3
+                  |   -> Add: False
+          ali:reference
+            | Selects all entries
+            | Chance: 16%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:reference
+                  | Selects all entries
+                  | Chance: 2.67%
+                  ali:loot_table
+                    | Selects all entries
+                    ali:loot_pool
+                      | Selects random entry
+                      | Rolls: 27
+                      ali:item minecraft:cooked_beef x1
+                        | Chance: 0.54%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:apple x1
+                        | Chance: 0.27%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:carrot x1
+                        | Chance: 0.22%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:sweet_berries x1
+                        | Chance: 0.22%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:cooked_cod x1
+                        | Chance: 0.22%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:cooked_mutton x1
+                        | Chance: 0.22%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:bread x1
+                        | Chance: 0.16%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:glow_berries x1
+                        | Chance: 0.16%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:honey_bottle x1
+                        | Chance: 0.16%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:baked_potato x1
+                        | Chance: 0.16%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:cookie x1
+                        | Chance: 0.11%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:pumpkin_pie x1
+                        | Chance: 0.11%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:rabbit_stew x1
+                        | Chance: 0.11%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                ali:reference
+                  | Selects all entries
+                  | Chance: 2.67%
+                  ali:loot_table
+                    | Selects all entries
+                    ali:loot_pool
+                      | Selects random entry
+                      | Rolls: 27
+                      ali:item minecraft:white_concrete x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:orange_concrete x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:magenta_concrete x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:light_blue_concrete x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:yellow_concrete x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:lime_concrete x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:pink_concrete x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:gray_concrete x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:light_gray_concrete x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:cyan_concrete x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:purple_concrete x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:blue_concrete x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:brown_concrete x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:green_concrete x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:red_concrete x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:black_concrete x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:white_terracotta x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:orange_terracotta x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:magenta_terracotta x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:light_blue_terracotta x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:yellow_terracotta x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:lime_terracotta x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:pink_terracotta x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:gray_terracotta x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:light_gray_terracotta x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:cyan_terracotta x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:purple_terracotta x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:blue_terracotta x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:brown_terracotta x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:green_terracotta x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:red_terracotta x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:black_terracotta x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                ali:reference
+                  | Selects all entries
+                  | Chance: 2.67%
+                  ali:loot_table
+                    | Selects all entries
+                    ali:loot_pool
+                      | Selects random entry
+                      | Rolls: 27
+                      ali:item minecraft:tinted_glass x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:white_stained_glass x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:orange_stained_glass x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:magenta_stained_glass x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:light_blue_stained_glass x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:yellow_stained_glass x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:lime_stained_glass x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:pink_stained_glass x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:gray_stained_glass x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:light_gray_stained_glass x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:cyan_stained_glass x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:purple_stained_glass x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:blue_stained_glass x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:brown_stained_glass x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:green_stained_glass x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:red_stained_glass x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:black_stained_glass x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:white_stained_glass_pane x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:orange_stained_glass_pane x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:magenta_stained_glass_pane x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:light_blue_stained_glass_pane x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:yellow_stained_glass_pane x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:lime_stained_glass_pane x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:pink_stained_glass_pane x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:gray_stained_glass_pane x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:light_gray_stained_glass_pane x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:cyan_stained_glass_pane x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:purple_stained_glass_pane x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:blue_stained_glass_pane x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:brown_stained_glass_pane x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:green_stained_glass_pane x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:red_stained_glass_pane x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:black_stained_glass_pane x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                ali:reference
+                  | Selects all entries
+                  | Chance: 2.67%
+                  ali:loot_table
+                    | Selects all entries
+                    ali:loot_pool
+                      | Selects random entry
+                      | Rolls: 27
+                      ali:item minecraft:hopper x1
+                        | Chance: 0.43%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:redstone x1
+                        | Chance: 0.43%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:dropper x1
+                        | Chance: 0.32%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:redstone_torch x1
+                        | Chance: 0.21%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:repeater x1
+                        | Chance: 0.21%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:observer x1
+                        | Chance: 0.21%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:crafter x1
+                        | Chance: 0.21%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:piston x1
+                        | Chance: 0.11%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:sticky_piston x1
+                        | Chance: 0.11%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:comparator x1
+                        | Chance: 0.11%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:daylight_detector x1
+                        | Chance: 0.11%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:redstone_lamp x1
+                        | Chance: 0.11%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:item minecraft:note_block x1
+                        | Chance: 0.11%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                ali:reference
+                  | Selects all entries
+                  | Chance: 2.67%
+                  ali:loot_table
+                    | Selects all entries
+                    ali:loot_pool
+                      | Selects random entry
+                      | Rolls: 27
+                      ali:item minecraft:white_wool x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:orange_wool x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:magenta_wool x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:light_blue_wool x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:yellow_wool x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:lime_wool x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:pink_wool x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:gray_wool x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:light_gray_wool x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:cyan_wool x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:purple_wool x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:blue_wool x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:brown_wool x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:green_wool x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:red_wool x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:black_wool x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:white_banner x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:orange_banner x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:magenta_banner x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:light_blue_banner x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:yellow_banner x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:lime_banner x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:pink_banner x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:gray_banner x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:light_gray_banner x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:cyan_banner x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:purple_banner x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:blue_banner x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:brown_banner x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:green_banner x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:red_banner x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:black_banner x5-9
+                        | Chance: 0.08%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                ali:reference
+                  | Selects all entries
+                  | Chance: 2.67%
+                  ali:loot_table
+                    | Selects all entries
+                    ali:loot_pool
+                      | Selects random entry
+                      | Rolls: 27
+                      ali:item minecraft:brick x5-9
+                        | Chance: 0.67%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:clay_ball x5-9
+                        | Chance: 0.44%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:clay x2-4
+                        | Chance: 0.44%
+                        | Count: max(0; U[2; 4])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 2 to 4
+                        |   -> Add: False
+                      ali:item minecraft:flower_pot x5-9
+                        | Chance: 0.44%
+                        | Count: max(0; U[5; 9])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 5 to 9
+                        |   -> Add: False
+                      ali:item minecraft:decorated_pot x2-4
+                        | Chance: 0.22%
+                        | Count: max(0; U[2; 4])
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 2 to 4
+                        |   -> Add: False
+                      ali:item minecraft:furnace x1
+                        | Chance: 0.22%
+                        | Count: 1
+                        | ----- Modifiers -----
+                        | Set Count:
+                        |   -> Count: 1
+                        |   -> Add: False
+                      ali:reference
+                        | Selects all entries
+                        | Chance: 0.22%
+                        ali:loot_table
+                          | Selects all entries
+                          ali:loot_pool
+                            | Selects random entry
+                            | Rolls: 1
+                            ali:item minecraft:angler_pottery_sherd x1
+                              | Chance: 0.01%
+                              | Count: 1
+                            ali:item minecraft:archer_pottery_sherd x1
+                              | Chance: 0.01%
+                              | Count: 1
+                            ali:item minecraft:arms_up_pottery_sherd x1
+                              | Chance: 0.01%
+                              | Count: 1
+                            ali:item minecraft:blade_pottery_sherd x1
+                              | Chance: 0.01%
+                              | Count: 1
+                            ali:item minecraft:brewer_pottery_sherd x1
+                              | Chance: 0.01%
+                              | Count: 1
+                            ali:item minecraft:burn_pottery_sherd x1
+                              | Chance: 0.01%
+                              | Count: 1
+                            ali:item minecraft:danger_pottery_sherd x1
+                              | Chance: 0.01%
+                              | Count: 1
+                            ali:item minecraft:explorer_pottery_sherd x1
+                              | Chance: 0.01%
+                              | Count: 1
+                            ali:item minecraft:flow_pottery_sherd x1
+                              | Chance: 0.01%
+                              | Count: 1
+                            ali:item minecraft:friend_pottery_sherd x1
+                              | Chance: 0.01%
+                              | Count: 1
+                            ali:item minecraft:guster_pottery_sherd x1
+                              | Chance: 0.01%
+                              | Count: 1
+                            ali:item minecraft:heart_pottery_sherd x1
+                              | Chance: 0.01%
+                              | Count: 1
+                            ali:item minecraft:heartbreak_pottery_sherd x1
+                              | Chance: 0.01%
+                              | Count: 1
+                            ali:item minecraft:howl_pottery_sherd x1
+                              | Chance: 0.01%
+                              | Count: 1
+                            ali:item minecraft:miner_pottery_sherd x1
+                              | Chance: 0.01%
+                              | Count: 1
+                            ali:item minecraft:mourner_pottery_sherd x1
+                              | Chance: 0.01%
+                              | Count: 1
+                            ali:item minecraft:prize_pottery_sherd x1
+                              | Chance: 0.01%
+                              | Count: 1
+                            ali:item minecraft:plenty_pottery_sherd x1
+                              | Chance: 0.01%
+                              | Count: 1
+                            ali:item minecraft:scrape_pottery_sherd x1
+                              | Chance: 0.01%
+                              | Count: 1
+                            ali:item minecraft:sheaf_pottery_sherd x1
+                              | Chance: 0.01%
+                              | Count: 1
+                            ali:item minecraft:shelter_pottery_sherd x1
+                              | Chance: 0.01%
+                              | Count: 1
+                            ali:item minecraft:skull_pottery_sherd x1
+                              | Chance: 0.01%
+                              | Count: 1
+                            ali:item minecraft:snort_pottery_sherd x1
+                              | Chance: 0.01%
+                              | Count: 1
+          ali:item minecraft:quartz x16-24
+            | Chance: 3.2%
+            | Count: max(0; U[16; 24])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 16 to 24
+            |   -> Add: False
+          ali:item minecraft:name_tag x1-2
+            | Chance: 3.2%
+            | Count: max(0; U[1; 2])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1 to 2
+            |   -> Add: False
+          ali:item minecraft:raw_copper_block x2-4
+            | Chance: 2.4%
+            | Count: max(0; U[2; 4])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 2 to 4
+            |   -> Add: False
+          ali:item minecraft:raw_gold_block x2-4
+            | Chance: 2.4%
+            | Count: max(0; U[2; 4])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 2 to 4
+            |   -> Add: False
+          ali:item minecraft:glowstone x8-12
+            | Chance: 2.4%
+            | Count: max(0; U[8; 12])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 8 to 12
+            |   -> Add: False
+          ali:item minecraft:obsidian x8-12
+            | Chance: 2.4%
+            | Count: max(0; U[8; 12])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 8 to 12
+            |   -> Add: False
+          ali:item minecraft:experience_bottle x16-24
+            | Chance: 2.4%
+            | Count: max(0; U[16; 24])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 16 to 24
+            |   -> Add: False
+          ali:item minecraft:potion x1-2 {"minecraft:potion_contents":{potion:"minecraft:luck"}}
+            | Chance: 2.4%
+            | Count: max(0; U[1; 2])
+            | ----- Modifiers -----
+            | Set Potion:
+            |   -> Potion: Potion of Luck
+            | Set Count:
+            |   -> Count: 1 to 2
+            |   -> Add: False
+          ali:item minecraft:echo_shard x2-3
+            | Chance: 2.4%
+            | Count: max(0; U[2; 3])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 2 to 3
+            |   -> Add: False
+          ali:item minecraft:potion x1-2 {"minecraft:potion_contents":{potion:"minecraft:strong_swiftness"}}
+            | Chance: 2.4%
+            | Count: max(0; U[1; 2])
+            | ----- Modifiers -----
+            | Set Potion:
+            |   -> Potion: Potion of Swiftness
+            | Set Count:
+            |   -> Count: 1 to 2
+            |   -> Add: False
+          ali:item dimdungeons:item_homeward_pearl x1-3
+            | Chance: 2.4%
+            | Count: max(0; U[1; 3])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1 to 3
+            |   -> Add: False
+          ali:item minecraft:firework_rocket x12-40
+            | Chance: 2.4%
+            | Count: max(0; U[12; 40])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 12 to 40
+            |   -> Add: False
+          ali:item minecraft:map x1-2
+            | Chance: 2.4%
+            | Count: max(0; U[1; 2])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1 to 2
+            |   -> Add: False
+          ali:item minecraft:slime_ball x8-12
+            | Chance: 2.4%
+            | Count: max(0; U[8; 12])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 8 to 12
+            |   -> Add: False
+          ali:item minecraft:ender_pearl x5-8
+            | Chance: 2.4%
+            | Count: max(0; U[5; 8])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 5 to 8
+            |   -> Add: False
+          ali:reference
+            | Selects all entries
+            | Chance: 0.8%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:item dimdungeons:item_trophy_1 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_1"}'}
+                  | Chance: 0.1%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Name:
+                  |   -> Name: 1UP Mushroom
+                  |   -> Target: Item Name
+                  | Set Lore:
+                  |   -> List Operation: Append
+                  |   -> Lore:
+                  |     -> Trophy 1/8
+                  |     -> A rare mushroom. It will not grow on mycelium.
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                ali:item dimdungeons:item_trophy_2 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_2"}'}
+                  | Chance: 0.1%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Name:
+                  |   -> Name: Master Sword
+                  |   -> Target: Item Name
+                  | Set Lore:
+                  |   -> List Operation: Append
+                  |   -> Lore:
+                  |     -> Trophy 2/8
+                  |     -> This blessed sword sleeps, waiting for a specific hero.
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                ali:item dimdungeons:item_trophy_3 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_3"}'}
+                  | Chance: 0.1%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Name:
+                  |   -> Name: Ist Rune
+                  |   -> Target: Item Name
+                  | Set Lore:
+                  |   -> List Operation: Append
+                  |   -> Lore:
+                  |     -> Trophy 3/8
+                  |     -> A coveted symbol of greed. But aren't diamonds worth more than stone?
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                ali:item dimdungeons:item_trophy_4 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_4"}'}
+                  | Chance: 0.1%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Name:
+                  |   -> Name: The Terrarian
+                  |   -> Target: Item Name
+                  | Set Lore:
+                  |   -> List Operation: Append
+                  |   -> Lore:
+                  |     -> Trophy 4/8
+                  |     -> A most legendary yoyo from another world's moon.
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                ali:item dimdungeons:item_trophy_5 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_5"}'}
+                  | Chance: 0.1%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Name:
+                  |   -> Name: Matter Manipulator
+                  |   -> Target: Item Name
+                  | Set Lore:
+                  |   -> List Operation: Append
+                  |   -> Lore:
+                  |     -> Trophy 5/8
+                  |     -> A powerful mining tool from a far away galaxy.
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                ali:item dimdungeons:item_trophy_6 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_6"}'}
+                  | Chance: 0.1%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Name:
+                  |   -> Name: Sunlight Medal
+                  |   -> Target: Item Name
+                  | Set Lore:
+                  |   -> List Operation: Append
+                  |   -> Lore:
+                  |     -> Trophy 6/8
+                  |     -> Give this to a friend in the name of jolly cooperation!
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                ali:item dimdungeons:item_trophy_7 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_7"}'}
+                  | Chance: 0.1%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Name:
+                  |   -> Name: Pink Arrow Panel
+                  |   -> Target: Item Name
+                  | Set Lore:
+                  |   -> List Operation: Append
+                  |   -> Lore:
+                  |     -> Trophy 7/8
+                  |     -> What purpose does this magenta terracotta pressure plate serve?
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                ali:item dimdungeons:item_trophy_8 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_8"}'}
+                  | Chance: 0.1%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Name:
+                  |   -> Name: Ultros Painting
+                  |   -> Target: Item Name
+                  | Set Lore:
+                  |   -> List Operation: Append
+                  |   -> Lore:
+                  |     -> Trophy 8/8
+                  |     -> An image of a mischievous octopus from another world.
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+    ali:reference
+      | Selects all entries
+      | Chance: 20%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:reference
+            | Selects all entries
+            | Chance: 6.4%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 0.4%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Efficiency
+                  |       -> Levels: 5
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 0.4%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Unbreaking
+                  |       -> Levels: 3
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 0.4%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Fortune
+                  |       -> Levels: 3
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 0.4%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Protection
+                  |       -> Levels: 4
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 0.4%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Respiration
+                  |       -> Levels: 3
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 0.4%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Thorns
+                  |       -> Levels: 3
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 0.4%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Depth Strider
+                  |       -> Levels: 1
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 0.4%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Sharpness
+                  |       -> Levels: 5
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 0.4%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Fire Aspect
+                  |       -> Levels: 2
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 0.4%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Looting
+                  |       -> Levels: 3
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 0.4%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Sweeping Edge
+                  |       -> Levels: 3
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 0.4%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Power
+                  |       -> Levels: 5
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 0.4%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Loyalty
+                  |       -> Levels: 3
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 0.4%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Impaling
+                  |       -> Levels: 5
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 0.4%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Piercing
+                  |       -> Levels: 4
+                  |   -> Add: False
+                ali:item minecraft:enchanted_book x1
+                  | Chance: 0.4%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Enchantments:
+                  |   -> Enchantments:
+                  |     -> Quick Charge
+                  |       -> Levels: 3
+                  |   -> Add: False
+          ali:item dimdungeons:item_portal_key x1
+            | Chance: 1.4%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1
+            |   -> Add: False
+          ali:item minecraft:enchanted_book x1
+            | Chance: 1%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Enchantments:
+            |   -> Enchantments:
+            |     -> Mending
+            |       -> Levels: 1
+            |   -> Add: False
+          ali:item dimdungeons:block_portal_crown x1
+            | Chance: 1%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1
+            |   -> Add: False
+          ali:item dimdungeons:item_secret_bell x1
+            | Chance: 0.8%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1
+            |   -> Add: False
+          ali:item dimdungeons:block_key_charger x1
+            | Chance: 0.8%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1
+            |   -> Add: False
+          ali:item minecraft:emerald x8-16
+            | Chance: 0.6%
+            | Count: max(0; U[8; 16])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 8 to 16
+            |   -> Add: False
+          ali:item minecraft:diamond x4-8
+            | Chance: 0.6%
+            | Count: max(0; U[4; 8])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 4 to 8
+            |   -> Add: False
+          ali:item minecraft:ender_chest x1
+            | Chance: 0.6%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1
+            |   -> Add: False
+          ali:item minecraft:ghast_tear x2-4
+            | Chance: 0.6%
+            | Count: max(0; U[2; 4])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 2 to 4
+            |   -> Add: False
+          ali:item minecraft:sculk_catalyst x1-3
+            | Chance: 0.6%
+            | Count: max(0; U[1; 3])
+            | ----- Modifiers -----
+            | Set Count:
+            |   -> Count: 1 to 3
+            |   -> Add: False
+          ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b}
+            | Chance: 0.6%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant With Levels:
+            |   -> Levels: 30
+            |   -> Options:
+            |     -> Tag: minecraft:on_random_loot
+          ali:item minecraft:diamond_helmet x1 {"minecraft:enchantment_glint_override":1b}
+            | Chance: 0.6%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant With Levels:
+            |   -> Levels: 30
+            |   -> Options:
+            |     -> Tag: minecraft:on_random_loot
+          ali:item minecraft:diamond_leggings x1 {"minecraft:enchantment_glint_override":1b}
+            | Chance: 0.6%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant With Levels:
+            |   -> Levels: 30
+            |   -> Options:
+            |     -> Tag: minecraft:on_random_loot
+          ali:item minecraft:diamond_boots x1 {"minecraft:enchantment_glint_override":1b}
+            | Chance: 0.6%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant With Levels:
+            |   -> Levels: 30
+            |   -> Options:
+            |     -> Tag: minecraft:on_random_loot
+          ali:item minecraft:diamond_pickaxe x1 {"minecraft:enchantment_glint_override":1b}
+            | Chance: 0.6%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant With Levels:
+            |   -> Levels: 30
+            |   -> Options:
+            |     -> Tag: minecraft:on_random_loot
+          ali:item minecraft:diamond_sword x1 {"minecraft:enchantment_glint_override":1b}
+            | Chance: 0.6%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant With Levels:
+            |   -> Levels: 30
+            |   -> Options:
+            |     -> Tag: minecraft:on_random_loot
+          ali:item minecraft:trident x1 {"minecraft:enchantment_glint_override":1b}
+            | Chance: 0.6%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant With Levels:
+            |   -> Levels: 30
+            |   -> Options:
+            |     -> Tag: minecraft:on_random_loot
+          ali:item minecraft:crossbow x1 {"minecraft:enchantment_glint_override":1b}
+            | Chance: 0.6%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant With Levels:
+            |   -> Levels: 30
+            |   -> Options:
+            |     -> Tag: minecraft:on_random_loot
+          ali:item minecraft:bow x1 {"minecraft:enchantment_glint_override":1b}
+            | Chance: 0.6%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant With Levels:
+            |   -> Levels: 30
+            |   -> Options:
+            |     -> Tag: minecraft:on_random_loot
+          ali:reference
+            | Selects all entries
+            | Chance: 0.2%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:item dimdungeons:item_trophy_1 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_1"}'}
+                  | Chance: 0.03%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Name:
+                  |   -> Name: 1UP Mushroom
+                  |   -> Target: Item Name
+                  | Set Lore:
+                  |   -> List Operation: Append
+                  |   -> Lore:
+                  |     -> Trophy 1/8
+                  |     -> A rare mushroom. It will not grow on mycelium.
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                ali:item dimdungeons:item_trophy_2 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_2"}'}
+                  | Chance: 0.03%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Name:
+                  |   -> Name: Master Sword
+                  |   -> Target: Item Name
+                  | Set Lore:
+                  |   -> List Operation: Append
+                  |   -> Lore:
+                  |     -> Trophy 2/8
+                  |     -> This blessed sword sleeps, waiting for a specific hero.
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                ali:item dimdungeons:item_trophy_3 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_3"}'}
+                  | Chance: 0.03%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Name:
+                  |   -> Name: Ist Rune
+                  |   -> Target: Item Name
+                  | Set Lore:
+                  |   -> List Operation: Append
+                  |   -> Lore:
+                  |     -> Trophy 3/8
+                  |     -> A coveted symbol of greed. But aren't diamonds worth more than stone?
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                ali:item dimdungeons:item_trophy_4 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_4"}'}
+                  | Chance: 0.03%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Name:
+                  |   -> Name: The Terrarian
+                  |   -> Target: Item Name
+                  | Set Lore:
+                  |   -> List Operation: Append
+                  |   -> Lore:
+                  |     -> Trophy 4/8
+                  |     -> A most legendary yoyo from another world's moon.
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                ali:item dimdungeons:item_trophy_5 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_5"}'}
+                  | Chance: 0.03%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Name:
+                  |   -> Name: Matter Manipulator
+                  |   -> Target: Item Name
+                  | Set Lore:
+                  |   -> List Operation: Append
+                  |   -> Lore:
+                  |     -> Trophy 5/8
+                  |     -> A powerful mining tool from a far away galaxy.
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                ali:item dimdungeons:item_trophy_6 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_6"}'}
+                  | Chance: 0.03%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Name:
+                  |   -> Name: Sunlight Medal
+                  |   -> Target: Item Name
+                  | Set Lore:
+                  |   -> List Operation: Append
+                  |   -> Lore:
+                  |     -> Trophy 6/8
+                  |     -> Give this to a friend in the name of jolly cooperation!
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                ali:item dimdungeons:item_trophy_7 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_7"}'}
+                  | Chance: 0.03%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Name:
+                  |   -> Name: Pink Arrow Panel
+                  |   -> Target: Item Name
+                  | Set Lore:
+                  |   -> List Operation: Append
+                  |   -> Lore:
+                  |     -> Trophy 7/8
+                  |     -> What purpose does this magenta terracotta pressure plate serve?
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity
+                ali:item dimdungeons:item_trophy_8 x1 {"minecraft:item_name":'{"bold":true,"color":"yellow","translate":"item.dimdungeons.item_trophy_8"}'}
+                  | Chance: 0.03%
+                  | Count: 1
+                  | ----- Modifiers -----
+                  | Set Name:
+                  |   -> Name: Ultros Painting
+                  |   -> Target: Item Name
+                  | Set Lore:
+                  |   -> List Operation: Append
+                  |   -> Lore:
+                  |     -> Trophy 8/8
+                  |     -> An image of a mischievous octopus from another world.
+                  |     -> Found by: @s
+                  |   -> Resolution Context: This Entity

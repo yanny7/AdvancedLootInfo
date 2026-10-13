@@ -1,9 +1,18 @@
 ## []
 
+- Fixed mixins failing when ALI is used as a dependency in a Forge mod development environment
 - Tooltips wider than the window wrap their lines
 - Air in loot tables shows as an empty entry
+- References to the empty loot table show as an empty entry
+- Fixed trades that other mods add when the world loads missing on Fabric
 - Fixed empty, dynamic and unsupported entries and global loot modifiers disappearing when a loot modifier removes an item from the same loot table
 - Plugins can replace a trader's trades, split a trade level into separately picked groups and use loot entries as trade items
+- Fixed loot tables referencing each other in a loop being nested hundreds of levels deep, the loop ends at a recursive reference
+- Fixed predicate references labelled as loot tables
+- LootJS experience drops, explosions and lightning strikes show on the loot they come with
+- Fixed conditions inside LootJS pools being ignored
+- Fixed loot replaced by LootJS losing the chance of the entry it replaces
+- Fixed LootJS loot functions shown on the loot added after them instead of the loot they change
 
 ## [2.4.0]
 

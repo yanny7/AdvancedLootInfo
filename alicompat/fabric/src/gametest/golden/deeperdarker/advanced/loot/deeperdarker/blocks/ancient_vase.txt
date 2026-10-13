@@ -1,0 +1,274 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item deeperdarker:ancient_vase x1
+      | Count: 1
+      | ----- Predicates -----
+      | Match Tool:
+      |   -> Item Predicates:
+      |     -> Enchantments:
+      |       -> Enchantment: Silk Touch
+      |       -> Level: ≥ 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 3
+    ali:empty
+      | Drops nothing
+      | Chance: 27.03%
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+    ali:item minecraft:sand x1-6
+      | Chance: 14.86%
+      | Count: max(0; U[1; 6])
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 6
+      |   -> Add: False
+    ali:item minecraft:string x3-9
+      | Chance: 13.51%
+      | Count: max(0; U[3; 9])
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 3 to 9
+      |   -> Add: False
+    ali:item minecraft:rotten_flesh x5-8
+      | Chance: 12.16%
+      | Count: max(0; U[5; 8])
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 8
+      |   -> Add: False
+    ali:item minecraft:gold_ingot x1-5
+      | Chance: 8.11%
+      | Count: max(0; U[1; 5])
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 5
+      |   -> Add: False
+    ali:item minecraft:iron_ingot x2-8
+      | Chance: 6.76%
+      | Count: max(0; U[2; 8])
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 8
+      |   -> Add: False
+    ali:item minecraft:golden_apple x1-2
+      | Chance: 5.41%
+      | Count: max(0; U[1; 2])
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
+    ali:item minecraft:emerald x1-3
+      | Chance: 4.05%
+      | Count: max(0; U[1; 3])
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 3
+      |   -> Add: False
+    ali:item minecraft:diamond x1-2
+      | Chance: 2.7%
+      | Count: max(0; U[1; 2])
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 2.7%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:enchanted_golden_apple x1
+      | Chance: 1.35%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+    ali:item deeperdarker:warden_carapace x1
+      | Chance: 1.35%
+      | Count: 1
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item minecraft:cobweb x1-2
+      | Chance: 29.55%
+      | Count: max(0; U[1; 2])
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
+    ali:item minecraft:redstone x3-6
+      | Chance: 15.91%
+      | Count: max(0; U[3; 6])
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 3 to 6
+      |   -> Add: False
+    ali:item minecraft:stick x1-2
+      | Chance: 15.91%
+      | Count: max(0; U[1; 2])
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False
+    ali:item minecraft:rotten_flesh x1-4
+      | Chance: 11.36%
+      | Count: max(0; U[1; 4])
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False
+    ali:item minecraft:string x1-4
+      | Chance: 11.36%
+      | Count: max(0; U[1; 4])
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 4
+      |   -> Add: False
+    ali:item minecraft:lapis_lazuli x5-6
+      | Chance: 9.09%
+      | Count: max(0; U[5; 6])
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 6
+      |   -> Add: False
+    ali:item minecraft:sand x1-2
+      | Chance: 6.82%
+      | Count: max(0; U[1; 2])
+      | ----- Predicates -----
+      | Inverted:
+      |   -> Match Tool:
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 2
+      |   -> Add: False

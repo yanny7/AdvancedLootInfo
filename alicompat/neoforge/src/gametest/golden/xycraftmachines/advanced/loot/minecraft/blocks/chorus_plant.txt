@@ -1,0 +1,24 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:modified
+      | Selects only first successful entry
+      ali:item minecraft:popped_chorus_fruit x0-1
+        | Count: max(0; U[0; 1])
+        | ----- Predicates -----
+        | Match Tool:
+        |   -> Component: xycraft_machines:auto_smelt
+        | ----- Modifiers -----
+        | Set Count:
+        |   -> Count: 0 to 1
+        |   -> Add: False
+        | Explosion Decay
+      ali:item minecraft:chorus_fruit x0-1
+        | Count: max(0; U[0; 1])
+        | ----- Modifiers -----
+        | Set Count:
+        |   -> Count: 0 to 1
+        |   -> Add: False
+        | Explosion Decay

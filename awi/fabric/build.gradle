@@ -7,8 +7,25 @@ architectury {
     fabric()
 }
 
+sourceSets {
+    gametest {
+        java.srcDir project(":aci:common").file("src/gametest/java")
+        resources.srcDir project(":aci:common").file("src/gametest/resources")
+        java.srcDir project(":awi:common").file("src/gametest/java")
+        resources.srcDir project(":awi:common").file("src/gametest/resources")
+        compileClasspath += sourceSets.main.compileClasspath + sourceSets.main.output
+        runtimeClasspath += sourceSets.main.runtimeClasspath + sourceSets.main.output
+    }
+}
+
 loom {
     accessWidenerPath = project(":awi:common").loom.accessWidenerPath
+    createRemapConfigurations(sourceSets.gametest)
+
+    mixin {
+        useLegacyMixinAp = true
+        defaultRefmapName = "awi.fabric.refmap.json"
+    }
 
     runs {
         datagen {
@@ -20,6 +37,26 @@ loom {
 
             runDir "build/datagen"
         }
+        gametest {
+            server()
+            name "Minecraft GameTest"
+            source sourceSets.gametest
+            vmArg "-Dfabric-api.gametest"
+            vmArg "-Dfabric-api.gametest.report-file=${project.file("build/gametest/report.xml")}"
+            vmArg "-Dawi.golden.dir=${project.file("src/gametest/golden")}"
+            vmArg "-Dawi.golden.actual=${project.file("build/gametest/golden")}"
+            vmArg "-Dawi.golden.regenerate=${project.findProperty("awi_golden_regenerate") ?: false}"
+
+            runDir "build/gametest/run"
+        }
+    }
+}
+
+tasks.matching { it.name == "runGametest" }.configureEach {
+    timeout = java.time.Duration.ofMinutes(10)
+
+    doFirst {
+        delete "build/gametest/run/config"
     }
 }
 

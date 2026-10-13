@@ -1,0 +1,167 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4
+    ali:item minecraft:iron_ingot x1-9
+      | Chance: 14.29%
+      | Count: 1 to 9
+    ali:item minecraft:emerald x1-5
+      | Chance: 14.29%
+      | Count: 1 to 5
+    ali:item twilightforest:ironwood_ingot x1-9
+      | Chance: 14.29%
+      | Count: 1 to 9
+    ali:item twilightforest:maze_wafer x1-12
+      | Chance: 14.29%
+      | Count: 1 to 12
+    ali:item minecraft:potion x1 {Potion:"minecraft:strong_regeneration"}
+      | Chance: 14.29%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {Potion:"minecraft:strong_regeneration"}
+    ali:item minecraft:potion x1 {Potion:"minecraft:strong_healing"}
+      | Chance: 14.29%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {Potion:"minecraft:strong_healing"}
+    ali:item minecraft:potion x1 {Potion:"minecraft:strong_swiftness"}
+      | Chance: 14.29%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Nbt:
+      |   -> Tag: {Potion:"minecraft:strong_swiftness"}
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item minecraft:bow x1 {Damage:0}
+      | Chance: 10%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Infinity
+      |       -> Levels: 1
+      |     -> Punch
+      |       -> Levels: 2
+      |   -> Add: False
+    ali:item minecraft:bow x1 {Damage:0}
+      | Chance: 10%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Flame
+      |       -> Levels: 1
+      |     -> Power
+      |       -> Levels: 3
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 10%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Fire React
+    ali:item twilightforest:steeleaf_ingot x1-12
+      | Chance: 10%
+      | Count: 1 to 12
+    ali:item twilightforest:steeleaf_shovel x1 {Damage:0}
+      | Chance: 10%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Efficiency
+      |       -> Levels: 4
+      |     -> Unbreaking
+      |       -> Levels: 2
+      |   -> Add: False
+    ali:item twilightforest:steeleaf_axe x1 {Damage:0}
+      | Chance: 10%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Efficiency
+      |       -> Levels: 5
+      |   -> Add: False
+    ali:item twilightforest:steeleaf_chestplate x1 {Damage:0}
+      | Chance: 10%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Protection
+      |       -> Levels: 3
+      |   -> Add: False
+    ali:item twilightforest:steeleaf_boots x1 {Damage:0}
+      | Chance: 10%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Protection
+      |       -> Levels: 2
+      |   -> Add: False
+    ali:item twilightforest:steeleaf_leggings x1 {Damage:0}
+      | Chance: 10%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Fire Protection
+      |       -> Levels: 4
+      |   -> Add: False
+    ali:item twilightforest:steeleaf_helmet x1 {Damage:0}
+      | Chance: 10%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Respiration
+      |       -> Levels: 3
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:emerald_block x1
+      | Chance: 20%
+      | Count: 1
+    ali:item minecraft:ender_chest x1
+      | Chance: 20%
+      | Count: 1
+    ali:item twilightforest:steeleaf_pickaxe x1 {Damage:0}
+      | Chance: 20%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Efficiency
+      |       -> Levels: 4
+      |     -> Silk Touch
+      |       -> Levels: 1
+      |   -> Add: False
+    ali:item twilightforest:steeleaf_sword x1 {Damage:0}
+      | Chance: 20%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Knockback
+      |       -> Levels: 2
+      |     -> Sharpness
+      |       -> Levels: 4
+      |   -> Add: False
+    ali:item twilightforest:steeleaf_sword x1 {Damage:0}
+      | Chance: 20%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Bane of Arthropods
+      |       -> Levels: 5
+      |     -> Fire Aspect
+      |       -> Levels: 2
+      |   -> Add: False

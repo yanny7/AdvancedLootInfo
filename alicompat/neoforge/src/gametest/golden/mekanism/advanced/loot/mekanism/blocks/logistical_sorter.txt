@@ -1,0 +1,24 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item mekanism:logistical_sorter x1
+      | Count: 1
+      | ----- Predicates -----
+      | Survives Explosion
+      | ----- Modifiers -----
+      | Copy Name:
+      |   -> Source: Block Entity
+      | Copy Components:
+      |   -> Source: Block Entity
+      |   -> Include:
+      |     -> mekanism:color
+      |     -> mekanism:eject
+      |     -> mekanism:filters
+      |     -> mekanism:owner
+      |     -> mekanism:redstone_control
+      |     -> mekanism:round_robin
+      |     -> mekanism:security
+      |     -> mekanism:single
+      |     -> mekanism:upgrades

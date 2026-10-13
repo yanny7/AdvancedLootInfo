@@ -9,7 +9,13 @@ import com.mojang.logging.LogUtils;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.*;
+import com.yanny.ali.lootjs.mixin.MixinDropExperienceAction;
+import com.yanny.ali.lootjs.mixin.MixinExplodeAction;
+import com.yanny.ali.lootjs.mixin.MixinLightningStrikeAction;
 import com.yanny.ali.lootjs.modifier.CustomPlayerFunction;
+import com.yanny.ali.lootjs.modifier.DropExperienceFunction;
+import com.yanny.ali.lootjs.modifier.ExplodeFunction;
+import com.yanny.ali.lootjs.modifier.LightningStrikeFunction;
 import com.yanny.ali.lootjs.modifier.ModifiedItemFunction;
 import com.yanny.ali.lootjs.modifier.PreserveComponentsFunction;
 import com.yanny.ali.lootjs.node.ItemStackNode;
@@ -54,12 +60,23 @@ public abstract class AbstractLootModifier<T> implements ILootModifier<T> {
         for (LootAction action : actions) {
             if (action instanceof CustomPlayerAction customPlayerAction) {
                 functions.add(new CustomPlayerFunction(customPlayerAction));
+            } else if (action instanceof DropExperienceAction dropExperienceAction) {
+                functions.add(new DropExperienceFunction(((MixinDropExperienceAction) dropExperienceAction).getAmount()));
+            } else if (action instanceof ExplodeAction explodeAction) {
+                MixinExplodeAction explode = (MixinExplodeAction) explodeAction;
+
+                functions.add(new ExplodeFunction(explode.getRadius(), explode.getMode(), explode.getFire()));
+            } else if (action instanceof LightningStrikeAction lightningStrikeAction) {
+                functions.add(new LightningStrikeFunction(((MixinLightningStrikeAction) lightningStrikeAction).getShouldDamageEntity()));
             }
         }
 
         for (LootAction action : actions) {
             switch (action) {
                 case CustomPlayerAction ignoredAction -> {}
+                case DropExperienceAction ignoredAction -> {}
+                case ExplodeAction ignoredAction -> {}
+                case LightningStrikeAction ignoredAction -> {}
                 case AddLootAction addLootAction -> {
                     for (LootPoolEntryContainer entry : addLootAction.entries()) {
                         operations.add(new IOperation.AddOperation((s) -> true, utils.getEntryFactory(utils, entry).create(utils, entry, NumberExpr.constant(1), NumberExpr.constant(1), List.of(), functions, conditions)));

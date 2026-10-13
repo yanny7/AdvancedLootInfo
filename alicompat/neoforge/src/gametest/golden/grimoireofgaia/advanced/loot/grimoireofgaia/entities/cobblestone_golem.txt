@@ -1,0 +1,102 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item #c:nuggets/iron x0-3
+      | Count: max(0; U[0; 3])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 0 to 3
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item #c:nuggets/gold x0-3
+      | Count: max(0; U[0; 3])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 0 to 3
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item grimoireofgaia:box_gold x1
+      | Chance: 1.25%
+      |   -> Looting LVL: 50% × [2.5%][LVL] | 3.5% + 1% × (LVL − 100%)
+      |   -> Looting I: 1.75%
+      |   -> Looting II: 2.25%
+      |   -> Looting III: 2.75%
+      | Count: 1
+      | ----- Predicates -----
+      | Random Chance With Enchanted Bonus:
+      |   -> Chance: 0.03
+      |     -> Looting LVL: [0.03][LVL] | 0.04 + 0.01 × (LVL − 1)
+      |     -> Looting I: 0.04
+      |     -> Looting II: 0.04
+      |     -> Looting III: 0.05
+    ali:item grimoireofgaia:bag_book x1
+      | Chance: 1.25%
+      |   -> Looting LVL: 50% × [2.5%][LVL] | 3.5% + 1% × (LVL − 100%)
+      |   -> Looting I: 1.75%
+      |   -> Looting II: 2.25%
+      |   -> Looting III: 2.75%
+      | Count: 1
+      | ----- Predicates -----
+      | Random Chance With Enchanted Bonus:
+      |   -> Chance: 0.03
+      |     -> Looting LVL: [0.03][LVL] | 0.04 + 0.01 × (LVL − 1)
+      |     -> Looting I: 0.04
+      |     -> Looting II: 0.04
+      |     -> Looting III: 0.05
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item grimoireofgaia:chest_jungle x1
+      | Chance: 1%
+      |   -> Looting LVL: [1%][LVL] | 2% + 1% × (LVL − 100%)
+      |   -> Looting I: 2%
+      |   -> Looting II: 3%
+      |   -> Looting III: 4%
+      | Count: 1
+      | ----- Predicates -----
+      | Random Chance With Enchanted Bonus:
+      |   -> Chance: 0.01
+      |     -> Looting LVL: [0.01][LVL] | 0.02 + 0.01 × (LVL − 1)
+      |     -> Looting I: 0.02
+      |     -> Looting II: 0.03
+      |     -> Looting III: 0.04
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item grimoireofgaia:totem_of_undying_fragment x1
+      | Chance: 1%
+      |   -> Looting LVL: [1%][LVL] | 2% + 1% × (LVL − 100%)
+      |   -> Looting I: 2%
+      |   -> Looting II: 3%
+      |   -> Looting III: 4%
+      | Count: 1
+      | ----- Predicates -----
+      | Random Chance With Enchanted Bonus:
+      |   -> Chance: 0.01
+      |     -> Looting LVL: [0.01][LVL] | 0.02 + 0.01 × (LVL − 1)
+      |     -> Looting I: 0.02
+      |     -> Looting II: 0.03
+      |     -> Looting III: 0.04
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item grimoireofgaia:weapon_book_metal x1
+      | Chance: 1%
+      |   -> Looting LVL: [1%][LVL] | 2% + 1% × (LVL − 100%)
+      |   -> Looting I: 2%
+      |   -> Looting II: 3%
+      |   -> Looting III: 4%
+      | Count: 1
+      | ----- Predicates -----
+      | Random Chance With Enchanted Bonus:
+      |   -> Chance: 0.01
+      |     -> Looting LVL: [0.01][LVL] | 0.02 + 0.01 × (LVL − 1)
+      |     -> Looting I: 0.02
+      |     -> Looting II: 0.03
+      |     -> Looting III: 0.04

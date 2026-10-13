@@ -1,0 +1,120 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 5
+    ali:item minecraft:arrow x4-14
+      | Chance: 11.11%
+      | Count: max(0; U[4; 14])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4 to 14
+      |   -> Add: False
+    ali:item minecraft:baked_potato x2-4
+      | Chance: 11.11%
+      | Count: max(0; U[2; 4])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 4
+      |   -> Add: False
+    ali:item minecraft:glow_berries x2-10
+      | Chance: 11.11%
+      | Count: max(0; U[2; 10])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 10
+      |   -> Add: False
+    ali:item minecraft:stone_pickaxe x1
+      | Chance: 11.11%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+      | Set Damage:
+      |   -> Damage: U[15%; 80%)
+      |   -> Add: False
+    ali:item minecraft:tipped_arrow x4-8 {"minecraft:potion_contents":{potion:"minecraft:poison"}}
+      | Chance: 5.56%
+      | Count: max(0; U[4; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4 to 8
+      |   -> Add: False
+      | Set Potion:
+      |   -> Potion: Potion of Poison
+    ali:item minecraft:tipped_arrow x4-8 {"minecraft:potion_contents":{potion:"minecraft:slowness"}}
+      | Chance: 5.56%
+      | Count: max(0; U[4; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4 to 8
+      |   -> Add: False
+      | Set Potion:
+      |   -> Potion: Potion of Slowness
+    ali:item minecraft:acacia_planks x3-6
+      | Chance: 5.56%
+      | Count: max(0; U[3; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 3 to 6
+      |   -> Add: False
+    ali:item minecraft:moss_block x2-5
+      | Chance: 5.56%
+      | Count: max(0; U[2; 5])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 5
+      |   -> Add: False
+    ali:item minecraft:bone_meal x2-5
+      | Chance: 5.56%
+      | Count: max(0; U[2; 5])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 5
+      |   -> Add: False
+    ali:item minecraft:tuff x5-10
+      | Chance: 5.56%
+      | Count: max(0; U[5; 10])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 10
+      |   -> Add: False
+    ali:item minecraft:torch x3-6
+      | Chance: 5.56%
+      | Count: max(0; U[3; 6])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 3 to 6
+      |   -> Add: False
+    ali:item minecraft:potion x2 {"minecraft:potion_contents":{potion:"minecraft:regeneration"}}
+      | Chance: 5.56%
+      | Count: 2
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2
+      |   -> Add: False
+      | Set Potion:
+      |   -> Potion: Potion of Regeneration
+    ali:item minecraft:potion x2 {"minecraft:potion_contents":{potion:"minecraft:strength"}}
+      | Chance: 5.56%
+      | Count: 2
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2
+      |   -> Add: False
+      | Set Potion:
+      |   -> Potion: Potion of Strength
+    ali:item minecraft:milk_bucket x1
+      | Chance: 5.56%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1
+    | ----- Predicates -----
+    | Random Chance:
+    |   -> Chance: 0.01

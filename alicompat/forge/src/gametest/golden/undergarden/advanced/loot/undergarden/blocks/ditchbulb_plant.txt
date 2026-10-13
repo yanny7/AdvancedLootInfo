@@ -1,0 +1,24 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item undergarden:ditchbulb x1-4
+      | Count: 1
+      |   -> Fortune LVL: 1 + U[0; LVL]
+      |   -> Fortune I: 1 to 2
+      |   -> Fortune II: 1 to 3
+      |   -> Fortune III: 1 to 4
+      | ----- Predicates -----
+      | Block State Property:
+      |   -> Block: Ditchbulb Plant
+      |   -> Properties:
+      |     -> age: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+      | Apply Bonus:
+      |   -> Enchantment: Fortune
+      |   -> Formula: minecraft:uniform_bonus_count
+      |     -> Bonus Multiplier: 1

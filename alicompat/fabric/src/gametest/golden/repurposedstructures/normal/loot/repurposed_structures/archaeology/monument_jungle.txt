@@ -1,0 +1,38 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:bone x1
+      | Chance: 32.65%
+      | Count: 1
+    ali:item minecraft:skeleton_skull x1
+      | Chance: 16.33%
+      | Count: 1
+    ali:item minecraft:potato x1
+      | Chance: 16.33%
+      | Count: 1
+    ali:item minecraft:poisonous_potato x1
+      | Chance: 8.16%
+      | Count: 1
+    ali:item minecraft:diamond x1
+      | Chance: 4.08%
+      | Count: 1
+    ali:item minecraft:emerald x1
+      | Chance: 4.08%
+      | Count: 1
+    ali:item minecraft:brewer_pottery_sherd x1
+      | Chance: 4.08%
+      | Count: 1
+    ali:item minecraft:heart_pottery_sherd x1
+      | Chance: 4.08%
+      | Count: 1
+    ali:item minecraft:angler_pottery_sherd x1
+      | Chance: 4.08%
+      | Count: 1
+    ali:item minecraft:skull_pottery_sherd x1
+      | Chance: 4.08%
+      | Count: 1
+    ali:item minecraft:tide_armor_trim_smithing_template x1
+      | Chance: 2.04%
+      | Count: 1

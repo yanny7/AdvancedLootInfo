@@ -1,0 +1,42 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:emerald x4-10
+      | Chance: 33.33%
+      | Count: 4 to 10
+    ali:item minecraft:wind_charge x8-12
+      | Chance: 26.67%
+      | Count: 8 to 12
+    ali:item minecraft:tipped_arrow x4-12 {"minecraft:potion_contents":{potion:"minecraft:strong_slowness"}}
+      | Chance: 20%
+      | Count: 4 to 12
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Slowness
+    ali:item minecraft:diamond x2-3
+      | Chance: 13.33%
+      | Count: 2 to 3
+    ali:item minecraft:ominous_bottle x1
+      | Chance: 6.67%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Ominous Bottle Amplifier:
+      |   -> Amplifier: 2 to 4
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 0 to 1  ~0 (75%)
+    |   -> Bad Luck: 0
+    |   -> Luck 1: 0 to 1  ~0 (75%)
+    |   -> Luck 2: 0 to 1  ~0 (75%)
+    |   -> Luck 3: 0 to 1  ~0 (75%)
+    |   -> Luck 4: 0 to 1  ~0 (75%)
+    |   [chart 0..1 0-1 base=true modes=[true, false] heights=1.0000,0.3333 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.3333 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.3333 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.3333 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.3333]
+    ali:item spell_engine:spell_scroll x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Spell Bind Randomly:
+      |   -> Tier: 2 to 3
+      |   -> Spell Pool: spell_engine:treasure
+      |   -> Count: 1

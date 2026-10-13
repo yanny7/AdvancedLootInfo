@@ -1,0 +1,16 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item the_bumblezone:luminescent_wax_node_green x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion
+        | Player carries an Essence of the Bees
+      ali:item the_bumblezone:luminescent_wax_corner x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion

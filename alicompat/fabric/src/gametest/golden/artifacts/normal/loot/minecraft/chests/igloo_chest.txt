@@ -1,0 +1,113 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 8
+    ali:item minecraft:apple x1-3
+      | Chance: 23.81%
+      | Count: 1 to 3
+    ali:item minecraft:coal x1-4
+      | Chance: 23.81%
+      | Count: 1 to 4
+    ali:item minecraft:gold_nugget x1-3
+      | Chance: 15.87%
+      | Count: 1 to 3
+    ali:item minecraft:rotten_flesh x1
+      | Chance: 15.87%
+      | Count: 1
+    ali:item minecraft:wheat x2-3
+      | Chance: 15.87%
+      | Count: 2 to 3
+    ali:item minecraft:stone_axe x1
+      | Chance: 3.17%
+      | Count: 1
+    ali:item minecraft:emerald x1
+      | Chance: 1.59%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:golden_apple x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:reference
+            | Selects all entries
+            | Chance: 50%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:alternatives
+                  | Selects only first successful entry
+                  ali:item artifacts:snowshoes x1
+                    | Chance: 50%
+                    | Count: 1
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.3
+                    | Config Value:
+                    |   -> Config: snowshoes.generateAsLoot
+                  ali:empty
+                    | Drops nothing
+                    | Chance: 50%
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.3
+          ali:reference
+            | Selects all entries
+            | Chance: 25%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:alternatives
+                  | Selects only first successful entry
+                  ali:item artifacts:villager_hat x1
+                    | Chance: 25%
+                    | Count: 1
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.3
+                    | Config Value:
+                    |   -> Config: villager_hat.generateAsLoot
+                  ali:empty
+                    | Drops nothing
+                    | Chance: 25%
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.3
+          ali:reference
+            | Selects all entries
+            | Chance: 25%
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:alternatives
+                  | Selects only first successful entry
+                  ali:item artifacts:lucky_scarf x1
+                    | Chance: 25%
+                    | Count: 1
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.3
+                    | Config Value:
+                    |   -> Config: lucky_scarf.generateAsLoot
+                  ali:empty
+                    | Drops nothing
+                    | Chance: 25%
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.3

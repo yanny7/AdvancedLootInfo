@@ -37,8 +37,8 @@ public class FarmersDelightLang implements ICompatTranslations {
     }
 
     public enum Functions implements ITooltipKey {
-        COPY_SKILLET("copy_skillet", "Copy Skillet:"),
-        SMOKER_COOK("smoker_cook", "Smoker Cook:"),
+        COPY_SKILLET("copy_skillet", "Copy Skillet"),
+        SMOKER_COOK("smoker_cook", "Smoker Cook"),
         ;
 
         private final Translation translation;

@@ -1,0 +1,38 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item aether:music_disc_ascending_dawn x1
+      | Chance: 66.67%
+      | Count: 1
+    ali:item aether:music_disc_aether_tune x1
+      | Chance: 33.33%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 10
+    ali:item aether:ambrosium_shard x3-8
+      | Chance: 21.05%
+      | Count: 3 to 8
+    ali:item aether:ambrosium_torch x2-16
+      | Chance: 21.05%
+      | Count: 2 to 16
+    ali:item minecraft:flint x1-3
+      | Chance: 15.79%
+      | Count: 1 to 3
+    ali:item aether:golden_amber x1-2
+      | Chance: 10.53%
+      | Count: 1 to 2
+    ali:item aether:zanite_gemstone x1-2
+      | Chance: 10.53%
+      | Count: 1 to 2
+    ali:item aether:healing_stone x1-3
+      | Chance: 10.53%
+      | Count: 1 to 3
+    ali:item aether:holystone_sword x1 {Damage:0}
+      | Chance: 5.26%
+      | Count: 1
+    ali:item minecraft:name_tag x1
+      | Chance: 5.26%
+      | Count: 1

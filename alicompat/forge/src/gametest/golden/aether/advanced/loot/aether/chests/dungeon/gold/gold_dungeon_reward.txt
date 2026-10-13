@@ -1,0 +1,140 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 2 to 5
+          ali:item aether:phoenix_helmet x1 {Damage:0}
+            | Chance: 18.18%
+            | Count: 1
+          ali:item aether:phoenix_chestplate x1 {Damage:0}
+            | Chance: 18.18%
+            | Count: 1
+          ali:item aether:phoenix_leggings x1 {Damage:0}
+            | Chance: 18.18%
+            | Count: 1
+          ali:item aether:phoenix_boots x1 {Damage:0}
+            | Chance: 18.18%
+            | Count: 1
+          ali:item aether:phoenix_gloves x1 {Damage:0}
+            | Chance: 18.18%
+            | Count: 1
+          ali:item aether:life_shard x1
+            | Chance: 9.09%
+            | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 5 to 8
+    ali:item aether:iron_bubble x1
+      | Chance: 12.37%
+      | Count: 1
+    ali:item aether:vampire_blade x1 {Damage:0}
+      | Chance: 12.37%
+      | Count: 1
+    ali:item aether:pig_slayer x1 {Damage:0}
+      | Chance: 12.37%
+      | Count: 1
+    ali:item aether:ice_pendant x1 {Damage:0}
+      | Chance: 6.19%
+      | Count: 1
+    ali:item aether:ice_ring x1 {Damage:0}
+      | Chance: 6.19%
+      | Count: 1
+    ali:item aether:gravitite_helmet x1 {Damage:0}
+      | Chance: 5.15%
+      | Count: 1
+    ali:item aether:gravitite_chestplate x1 {Damage:0}
+      | Chance: 5.15%
+      | Count: 1
+    ali:item aether:gravitite_leggings x1 {Damage:0}
+      | Chance: 5.15%
+      | Count: 1
+    ali:item aether:gravitite_boots x1 {Damage:0}
+      | Chance: 5.15%
+      | Count: 1
+    ali:item aether:gravitite_gloves x1 {Damage:0}
+      | Chance: 5.15%
+      | Count: 1
+    ali:item aether:gravitite_sword x1 {Damage:0}
+      | Chance: 5.15%
+      | Count: 1
+    ali:item aether:gravitite_axe x1 {Damage:0}
+      | Chance: 5.15%
+      | Count: 1
+    ali:reference
+      | Selects all entries
+      | Chance: 2.06%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 2 to 5
+          ali:item aether:phoenix_helmet x1 {Damage:0}
+            | Chance: 0.37%
+            | Count: 1
+          ali:item aether:phoenix_chestplate x1 {Damage:0}
+            | Chance: 0.37%
+            | Count: 1
+          ali:item aether:phoenix_leggings x1 {Damage:0}
+            | Chance: 0.37%
+            | Count: 1
+          ali:item aether:phoenix_boots x1 {Damage:0}
+            | Chance: 0.37%
+            | Count: 1
+          ali:item aether:phoenix_gloves x1 {Damage:0}
+            | Chance: 0.37%
+            | Count: 1
+          ali:item aether:life_shard x1
+            | Chance: 0.19%
+            | Count: 1
+    ali:item minecraft:chainmail_helmet x1 {Damage:0}
+      | Chance: 2.06%
+      | Count: 1
+    ali:item minecraft:chainmail_chestplate x1 {Damage:0}
+      | Chance: 2.06%
+      | Count: 1
+    ali:item minecraft:chainmail_leggings x1 {Damage:0}
+      | Chance: 2.06%
+      | Count: 1
+    ali:item minecraft:chainmail_boots x1 {Damage:0}
+      | Chance: 2.06%
+      | Count: 1
+    ali:item aether:chainmail_gloves x1 {Damage:0}
+      | Chance: 2.06%
+      | Count: 1
+    ali:item aether:life_shard x1
+      | Chance: 1.03%
+      | Count: 1
+    ali:item aether:enchanted_gravitite x1
+      | Chance: 1.03%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4 to 20
+    ali:item aether:golden_gummy_swet x1
+      | Chance: 42.86%
+      | Count: 1
+    ali:item aether:enchanted_berry x1
+      | Chance: 35.71%
+      | Count: 1
+    ali:item aether:healing_stone x1
+      | Chance: 21.43%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 0 to 4
+    ali:item aether:icestone x1
+      | Chance: 50%
+      | Count: 1
+    ali:item minecraft:obsidian x1
+      | Chance: 33.33%
+      | Count: 1
+    ali:item aether:aerogel x1
+      | Chance: 16.67%
+      | Count: 1

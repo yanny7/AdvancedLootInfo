@@ -1,0 +1,109 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:arcane_essence x2-10
+      | Chance: 85%
+      | Count: 2 to 10
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:empty
+      | Drops nothing
+      | Chance: 66.67%
+    ali:item irons_spellbooks:scroll x1
+      | Chance: 33.33%
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Spell:
+      |   -> Quality: 0 to 0.6
+      |   -> Applicable Spells:
+      |     -> Force: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:rotten_spell_book x1 {"irons_spellbooks:spell_container":{data:[],maxSpells:8,mustEquip:1b,spellWheel:1b}}
+      | Chance: 1%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:blank_rune x1
+      | Chance: 10%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item irons_spellbooks:silver_ring x1
+            | Chance: 1.15%
+            | Count: 1
+          ali:item irons_spellbooks:cooldown_ring x1
+            | Chance: 1.15%
+            | Count: 1
+          ali:item irons_spellbooks:heavy_chain_necklace x1
+            | Chance: 1.15%
+            | Count: 1
+          ali:item irons_spellbooks:emerald_stoneplate_ring x1
+            | Chance: 1.15%
+            | Count: 1
+          ali:item irons_spellbooks:fireward_ring x1
+            | Chance: 1.15%
+            | Count: 1
+          ali:item irons_spellbooks:frostward_ring x1
+            | Chance: 1.15%
+            | Count: 1
+          ali:item irons_spellbooks:cast_time_ring x1
+            | Chance: 1.15%
+            | Count: 1
+          ali:item irons_spellbooks:conjurers_talisman x1
+            | Chance: 1.15%
+            | Count: 1
+          ali:item irons_spellbooks:poisonward_ring x1
+            | Chance: 1.15%
+            | Count: 1
+          ali:item irons_spellbooks:concentration_amulet x1
+            | Chance: 1.15%
+            | Count: 1
+          ali:item irons_spellbooks:invisibility_ring x1
+            | Chance: 1.15%
+            | Count: 1
+          ali:item irons_spellbooks:teleportation_amulet x1
+            | Chance: 1.15%
+            | Count: 1
+          ali:item irons_spellbooks:affinity_ring x1
+            | Chance: 1.15%
+            | Count: 1
+            | ----- Modifiers -----
+            | Randomize Ring Enhancement:
+            |   -> Spell Filter:
+            |     -> Force: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 4
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item irons_spellbooks:uncommon_ink x1
+            | Chance: 12.2%
+            | Count: 1
+          ali:item irons_spellbooks:common_ink x1
+            | Chance: 7.32%
+            | Count: 1
+          ali:item irons_spellbooks:rare_ink x1
+            | Chance: 3.66%
+            | Count: 1
+          ali:item irons_spellbooks:epic_ink x1
+            | Chance: 1.83%
+            | Count: 1

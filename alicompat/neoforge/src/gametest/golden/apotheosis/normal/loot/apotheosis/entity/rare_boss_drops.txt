@@ -1,0 +1,61 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item apotheosis:gem x1
+      | Quality: 1
+      | Chance: 45%
+      |   -> Bad Luck: 44.9%
+      |   -> Luck 1: 45.1%
+      |   -> Luck 2: 45.19%
+      |   -> Luck 3: 45.28%
+      |   -> Luck 4: 45.37%
+      | Count: 1
+    ali:item apotheosis:sigil_of_malice x1
+      | Quality: 1
+      | Chance: 30%
+      |   -> Bad Luck: 29.59%
+      |   -> Luck 1: 30.39%
+      |   -> Luck 2: 30.77%
+      |   -> Luck 3: 31.13%
+      |   -> Luck 4: 31.48%
+      | Count: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 20%
+      |   -> Bad Luck: 20.41%
+      |   -> Luck 1: 19.61%
+      |   -> Luck 2: 19.23%
+      |   -> Luck 3: 18.87%
+      |   -> Luck 4: 18.52%
+    ali:item #apotheosis:boss_music_discs x1
+      | Chance: 5%
+      |   -> Bad Luck: 5.1%
+      |   -> Luck 1: 4.9%
+      |   -> Luck 2: 4.81%
+      |   -> Luck 3: 4.72%
+      |   -> Luck 4: 4.63%
+      | Count: 1
+  ali:item apotheosis:gem x1
+    | Chance: 4%
+    | Count: 1
+    | ----- Predicates -----
+    | Entity Properties:
+    |   -> Target: This Entity
+    |   -> Predicate:
+    |     -> Entity Sub Predicate:
+    |       -> Is Monster
+    | Killed by real player
+    | Requires a player
+  ali:item apotheosis:gem x1
+    | Chance: 0.5%
+    | Count: 1
+    | ----- Predicates -----
+    | Entity Properties:
+    |   -> Target: This Entity
+    |   -> Predicate:
+    |     -> Entity Sub Predicate:
+    |       -> Is Monster
+    | Killed by player
+    | Requires a player

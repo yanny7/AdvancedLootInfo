@@ -1,0 +1,156 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 10
+      | XP: 1
+      | Price Multiplier: 1.0
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item advancedperipherals:peripheral_casing x1
+    ali:items_to_items
+      | Uses: 10
+      | XP: 2
+      | Price Multiplier: 1.0
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item advancedperipherals:chat_box x1
+    ali:items_to_items
+      | Uses: 10
+      | XP: 2
+      | Price Multiplier: 1.0
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item computercraft:monitor_normal x2
+    ali:items_to_items
+      | Uses: 5
+      | XP: 2
+      | Price Multiplier: 1.0
+      ali:item advancedperipherals:peripheral_casing x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x1
+  ali:trade_level
+    | Level: 2
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 10
+      | XP: 4
+      | Price Multiplier: 1.0
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item advancedperipherals:inventory_manager x1
+    ali:items_to_items
+      | Uses: 10
+      | XP: 3
+      | Price Multiplier: 1.0
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item advancedperipherals:redstone_integrator x1
+    ali:items_to_items
+      | Uses: 10
+      | XP: 4
+      | Price Multiplier: 1.0
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item computercraft:computer_advanced x1
+  ali:trade_level
+    | Level: 3
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 4
+      | XP: 5
+      | Price Multiplier: 1.0
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item computercraft:turtle_normal x1 {RightUpgrade:"advancedperipherals:environment_turtle"}
+    ali:items_to_items
+      | Uses: 4
+      | XP: 7
+      | Price Multiplier: 1.0
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item computercraft:pocket_computer_advanced x1 {Upgrade:"advancedperipherals:player_pocket"}
+    ali:items_to_items
+      | Uses: 6
+      | XP: 8
+      | Price Multiplier: 1.0
+      ali:item advancedperipherals:chunk_controller x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x5
+    ali:items_to_items
+      | Uses: 1
+      | XP: 16
+      | Price Multiplier: 1.0
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item advancedperipherals:computer_tool x1
+    ali:items_to_items
+      | Uses: 10
+      | XP: 7
+      | Price Multiplier: 1.0
+      ali:item minecraft:emerald x6
+      ali:item minecraft:air x0
+      ali:item computercraft:monitor_advanced x4
+  ali:trade_level
+    | Level: 4
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 10
+      | XP: 6
+      | Price Multiplier: 1.0
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item advancedperipherals:energy_detector x1
+    ali:items_to_items
+      | Uses: 3
+      | XP: 5
+      | Price Multiplier: 1.0
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item computercraft:computer_advanced x1
+    ali:items_to_items
+      | Uses: 10
+      | XP: 4
+      | Price Multiplier: 1.0
+      ali:item advancedperipherals:memory_card x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x2
+    ali:items_to_items
+      | Uses: 10
+      | XP: 7
+      | Price Multiplier: 1.0
+      ali:item minecraft:emerald x8
+      ali:item minecraft:air x0
+      ali:item computercraft:turtle_advanced x1 {RightUpgrade:"advancedperipherals:chunky_turtle"}
+    ali:items_to_items
+      | Uses: 6
+      | XP: 6
+      | Price Multiplier: 1.0
+      ali:item minecraft:emerald x6
+      ali:item minecraft:air x0
+      ali:item advancedperipherals:chunk_controller x1
+  ali:trade_level
+    | Level: 5
+    | Randomly Selects 2 Of These Trades
+    ali:items_to_items
+      | Uses: 10
+      | XP: 4
+      | Price Multiplier: 1.0
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item advancedperipherals:me_bridge x2
+    ali:items_to_items
+      | Uses: 10
+      | XP: 6
+      | Price Multiplier: 1.0
+      ali:item minecraft:emerald x3
+      ali:item minecraft:air x0
+      ali:item computercraft:speaker x1
+    ali:items_to_items
+      | Uses: 10
+      | XP: 8
+      | Price Multiplier: 1.0
+      ali:item minecraft:emerald x4
+      ali:item minecraft:air x0
+      ali:item computercraft:wireless_modem_advanced x1

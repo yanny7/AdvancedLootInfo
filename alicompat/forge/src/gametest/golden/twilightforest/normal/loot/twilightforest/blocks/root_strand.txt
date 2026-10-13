@@ -1,0 +1,16 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item twilightforest:root_strand x1
+        | Count: 1
+        | ----- Predicates -----
+        | Match Tool:
+        |   -> Tag: forge:shears
+      ali:item minecraft:stick x1-3
+        | Count: 1 to 3
+        | ----- Modifiers -----
+        | Explosion Decay

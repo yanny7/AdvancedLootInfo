@@ -1,0 +1,11 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:affinity_ring x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Randomize Ring Enhancement:
+      |   -> Spell Filter:
+      |     -> Force: False

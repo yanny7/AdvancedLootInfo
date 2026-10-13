@@ -1,0 +1,32 @@
+ali:trade
+  ali:trade_level
+    | Level: 1
+    | Randomly Selects 4 Of These Trades
+    ali:items_to_items
+      | Uses: 1
+      | XP: 5
+      | Price Multiplier: 10.0
+      ali:item minecraft:emerald x24
+      ali:item minecraft:air x0
+      ali:item irons_spellbooks:furled_map x1 {"irons_spellbooks:furled_map_data":{descriptionOverride:{translate:"item.irons_spellbooks.evoker_fort_battle_plans"},destination:"irons_spellbooks:evoker_fort",dimension:"minecraft:overworld"},"minecraft:lore":['{"color":"gold","translate":"item.irons_spellbooks.furled_map_descriptor_framing","with":[{"translate":"item.irons_spellbooks.evoker_fort_battle_plans"}]}']}
+    ali:items_to_items
+      | Uses: 3
+      | XP: 0
+      | Price Multiplier: 0.2
+      ali:item irons_spellbooks:greater_healing_potion x1
+      ali:item minecraft:air x0
+      ali:item minecraft:emerald x18
+    ali:items_to_items
+      | Uses: 2
+      | XP: 0
+      | Price Multiplier: 0.2
+      ali:item minecraft:emerald x6
+      ali:item minecraft:air x0
+      ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:healing"}}
+    ali:items_to_items
+      | Uses: 1
+      | XP: 5
+      | Price Multiplier: 0.5
+      ali:item irons_spellbooks:archevoker_logbook_translated x1
+      ali:item minecraft:air x0
+      ali:item irons_spellbooks:villager_spell_book x1 {"irons_spellbooks:spell_container":{data:[],maxSpells:10,mustEquip:1b,spellWheel:1b}}

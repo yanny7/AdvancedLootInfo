@@ -1,0 +1,50 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 4
+    ali:item minecraft:bread x1-3
+      | Chance: 24.19%
+      | Count: 1 to 3
+    ali:item minecraft:apple x1-3
+      | Chance: 24.19%
+      | Count: 1 to 3
+    ali:item minecraft:iron_ingot x1-5
+      | Chance: 16.13%
+      | Count: 1 to 5
+    ali:item minecraft:coal x3-8
+      | Chance: 16.13%
+      | Count: 3 to 8
+    ali:item minecraft:gold_ingot x1-3
+      | Chance: 8.06%
+      | Count: 1 to 3
+    ali:item minecraft:redstone x4-9
+      | Chance: 8.06%
+      | Count: 4 to 9
+    ali:item minecraft:iron_pickaxe x1
+      | Chance: 1.61%
+      | Count: 1
+    ali:item minecraft:enchanted_book x1
+      | Chance: 1.61%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 0 to 1  ~0 (80%)
+    |   -> Bad Luck: 0
+    |   -> Luck 1: 0 to 1  ~0 (80%)
+    |   -> Luck 2: 0 to 1  ~0 (80%)
+    |   -> Luck 3: 0 to 1  ~0 (80%)
+    |   -> Luck 4: 0 to 1  ~0 (80%)
+    |   [chart 0..1 0-1 base=true modes=[true, false] heights=1.0000,0.2500 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.2500 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.2500 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.2500 | 0..1 0-1 base=false modes=[true, false] heights=1.0000,0.2500]
+    ali:item spell_engine:spell_scroll x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Spell Bind Randomly:
+      |   -> Tier: 2 to 3
+      |   -> Spell Pool: spell_engine:treasure
+      |   -> Count: 1

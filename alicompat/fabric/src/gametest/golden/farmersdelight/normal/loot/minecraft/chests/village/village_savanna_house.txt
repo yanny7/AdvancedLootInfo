@@ -1,0 +1,51 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 8
+    ali:item minecraft:bread x1-4
+      | Chance: 21.74%
+      | Count: 1 to 4
+    ali:item minecraft:wheat_seeds x1-5
+      | Chance: 21.74%
+      | Count: 1 to 5
+    ali:item minecraft:acacia_sapling x1-2
+      | Chance: 21.74%
+      | Count: 1 to 2
+    ali:item minecraft:short_grass x1
+      | Chance: 10.87%
+      | Count: 1
+    ali:item minecraft:tall_grass x1
+      | Chance: 10.87%
+      | Count: 1
+    ali:item minecraft:emerald x1-4
+      | Chance: 4.35%
+      | Count: 1 to 4
+    ali:item minecraft:gold_nugget x1-3
+      | Chance: 2.17%
+      | Count: 1 to 3
+    ali:item minecraft:saddle x1
+      | Chance: 2.17%
+      | Count: 1
+    ali:item minecraft:torch x1-2
+      | Chance: 2.17%
+      | Count: 1 to 2
+    ali:item minecraft:bucket x1
+      | Chance: 2.17%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1 to 3
+          ali:item farmersdelight:tomato_seeds x1-3
+            | Chance: 50%
+            | Count: 1 to 3
+          ali:item farmersdelight:cabbage_seeds x1-3
+            | Chance: 50%
+            | Count: 1 to 3

@@ -1,0 +1,59 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:ominous_bottle x1
+      | Count: 1
+      | ----- Predicates -----
+      | Entity Properties:
+      |   -> Target: This Entity
+      |   -> Predicate:
+      |     -> Entity Sub Predicate:
+      |       -> Raider:
+      |         -> Has Raid: False
+      |         -> Is Captain: True
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+      | Set Ominous Bottle Amplifier:
+      |   -> Amplifier: 0 to 4
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1
+    | ----- Predicates -----
+    | Random Chance:
+    |   -> Chance: 0.01
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:crossbow x1
+      | Chance: 8.5%
+      |   -> Looting LVL: [8.5%][LVL] | 9.5% + 1% × (LVL − 100%)
+      |   -> Looting I: 9.5%
+      |   -> Looting II: 10.5%
+      |   -> Looting III: 11.5%
+      | Count: 1
+      | ----- Predicates -----
+      | Random Chance With Enchanted Bonus:
+      |   -> Chance: 0.09
+      |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
+      |     -> Looting I: 0.09
+      |     -> Looting II: 0.1
+      |     -> Looting III: 0.11
+      | Entity Properties:
+      |   -> Target: This Entity
+      |   -> Predicate:
+      |     -> Entity Equipment:
+      |       -> Main Hand:
+      |         -> Item: Crossbow
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Only Compatible: True
+      |   -> Predicates:
+      |     -> Random Chance:
+      |       -> Chance: 0.25
+      | Set Damage:
+      |   -> Damage: U[0%; 100%)
+      |   -> Add: False

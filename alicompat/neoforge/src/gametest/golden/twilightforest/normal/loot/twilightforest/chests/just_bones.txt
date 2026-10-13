@@ -1,0 +1,34 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:bone x15
+      | Chance: 24.88%
+      | Count: 15
+    ali:item minecraft:bone x16
+      | Chance: 24.88%
+      | Count: 16
+    ali:item minecraft:bone x12-13
+      | Chance: 24.88%
+      | Count: 12 to 13
+    ali:item minecraft:bone x13
+      | Chance: 24.88%
+      | Count: 13
+    ali:reference
+      | Selects all entries
+      | Chance: 0.5%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item minecraft:bone x49-50
+            | Chance: 0.5%
+            | Count: 49 to 50
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item minecraft:bone x39
+            | Chance: 0.5%
+            | Count: 39

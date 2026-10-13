@@ -1,0 +1,14 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:nether_quartz_ore x1-8
+      | Chance: 37.5%
+      | Count: 1 to 8
+    ali:item minecraft:nether_gold_ore x1-8
+      | Chance: 37.5%
+      | Count: 1 to 8
+    ali:item minecraft:glowstone x1-4
+      | Chance: 25%
+      | Count: 1 to 4

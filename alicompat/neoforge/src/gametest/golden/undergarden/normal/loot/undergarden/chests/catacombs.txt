@@ -1,0 +1,82 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 5
+    ali:item undergarden:cloggrum_nugget x1-8
+      | Chance: 25%
+      | Count: 1 to 8
+    ali:item undergarden:froststeel_nugget x1-8
+      | Chance: 25%
+      | Count: 1 to 8
+    ali:item undergarden:slop_bowl x1-8
+      | Chance: 25%
+      | Count: 1 to 8
+    ali:item undergarden:utheric_shard x1-4
+      | Chance: 12.5%
+      | Count: 1 to 4
+    ali:item undergarden:regalium_crystal x1-4
+      | Chance: 12.5%
+      | Count: 1 to 4
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item undergarden:cloggrum_sword x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 23.81%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 15 to 20
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+      | Set Damage:
+      |   -> Damage: 60% to 90%
+      |   -> Add: False
+    ali:item undergarden:cloggrum_axe x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 23.81%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 15 to 20
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+      | Set Damage:
+      |   -> Damage: 60% to 90%
+      |   -> Add: False
+    ali:item undergarden:cloggrum_sword x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 23.81%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 25 to 30
+      |   -> Options:
+      |     -> Tag: minecraft:treasure
+      | Set Damage:
+      |   -> Damage: 20% to 50%
+      |   -> Add: False
+    ali:item undergarden:cloggrum_axe x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 23.81%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 25 to 30
+      |   -> Options:
+      |     -> Tag: minecraft:treasure
+      | Set Damage:
+      |   -> Damage: 20% to 50%
+      |   -> Add: False
+    ali:empty
+      | Drops nothing
+      | Chance: 4.76%
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 66.67%
+    ali:item undergarden:forgotten_upgrade_smithing_template x1
+      | Chance: 25%
+      | Count: 1
+    ali:item undergarden:forgotten_nugget x1
+      | Chance: 8.33%
+      | Count: 1

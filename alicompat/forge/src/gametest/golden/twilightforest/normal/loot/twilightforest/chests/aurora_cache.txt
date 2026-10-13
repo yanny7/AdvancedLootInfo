@@ -1,0 +1,148 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4
+    ali:item minecraft:stick x1-12
+      | Chance: 13.64%
+      | Count: 1 to 12
+    ali:item minecraft:coal x1-12
+      | Chance: 13.64%
+      | Count: 1 to 12
+    ali:item minecraft:arrow x1-12
+      | Chance: 13.64%
+      | Count: 1 to 12
+    ali:item minecraft:ice x1-4
+      | Chance: 13.64%
+      | Count: 1 to 4
+    ali:item minecraft:packed_ice x1-4
+      | Chance: 13.64%
+      | Count: 1 to 4
+    ali:item twilightforest:ironwood_ingot x1-2
+      | Chance: 13.64%
+      | Count: 1 to 2
+    ali:item twilightforest:maze_wafer x1-9
+      | Chance: 13.64%
+      | Count: 1 to 9
+    ali:reference
+      | Selects all entries
+      | Chance: 4.55%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item minecraft:poppy x1-4
+            | Chance: 0.45%
+            | Count: 1 to 4
+          ali:item minecraft:dandelion x1-4
+            | Chance: 0.45%
+            | Count: 1 to 4
+          ali:item minecraft:feather x1-3
+            | Chance: 0.45%
+            | Count: 1 to 3
+          ali:item minecraft:wheat_seeds x1-2
+            | Chance: 0.45%
+            | Count: 1 to 2
+          ali:item minecraft:flint x1-2
+            | Chance: 0.45%
+            | Count: 1 to 2
+          ali:item minecraft:cactus x1-2
+            | Chance: 0.45%
+            | Count: 1 to 2
+          ali:item minecraft:sugar_cane x1-4
+            | Chance: 0.45%
+            | Count: 1 to 4
+          ali:item minecraft:sand x1-4
+            | Chance: 0.45%
+            | Count: 1 to 4
+          ali:item minecraft:flower_pot x1
+            | Chance: 0.45%
+            | Count: 1
+          ali:item minecraft:bone_meal x1
+            | Chance: 0.45%
+            | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item twilightforest:charm_of_keeping_1 x1
+      | Chance: 20%
+      | Count: 1
+    ali:item twilightforest:ironwood_ingot x1-6
+      | Chance: 20%
+      | Count: 1 to 6
+    ali:item twilightforest:firefly x1-5
+      | Chance: 20%
+      | Count: 1 to 5
+    ali:item twilightforest:aurora_block x1-12
+      | Chance: 20%
+      | Count: 1 to 12
+    ali:item twilightforest:arctic_fur x1-3
+      | Chance: 20%
+      | Count: 1 to 3
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item twilightforest:arctic_fur x1-8
+      | Chance: 16.67%
+      | Count: 1 to 8
+    ali:item twilightforest:ice_bow x1 {Damage:0}
+      | Chance: 16.67%
+      | Count: 1
+    ali:item twilightforest:ender_bow x1 {Damage:0}
+      | Chance: 16.67%
+      | Count: 1
+    ali:item twilightforest:ice_sword x1 {Damage:0}
+      | Chance: 16.67%
+      | Count: 1
+    ali:item minecraft:enchanted_book x1
+      | Chance: 5.56%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Sharpness
+      |       -> Levels: 4
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 5.56%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Power
+      |       -> Levels: 4
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 5.56%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Punch
+      |       -> Levels: 2
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 5.56%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Unbreaking
+      |       -> Levels: 2
+      |   -> Add: False
+    ali:item minecraft:enchanted_book x1
+      | Chance: 5.56%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Chill Aura
+    ali:item minecraft:enchanted_book x1
+      | Chance: 5.56%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Enchantments:
+      |   -> Enchantments:
+      |     -> Infinity
+      |       -> Levels: 1
+      |   -> Add: False

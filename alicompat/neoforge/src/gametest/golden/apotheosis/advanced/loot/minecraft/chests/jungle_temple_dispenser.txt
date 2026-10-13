@@ -1,0 +1,30 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 2
+    ali:item minecraft:arrow x2-7
+      | Count: max(0; U[2; 7])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 7
+      |   -> Add: False
+  ali:empty
+    | Chance: 35%
+    | Count: 1
+    | Requires a player
+  ali:item apotheosis:gem x1
+    | Chance: 25%
+    | Count: 1
+    | Requires a player
+  ali:item apotheosis:gem x1
+    | Chance: 4%
+    | Count: 1
+    | ----- Predicates -----
+    | Entity Properties:
+    |   -> Target: This Entity
+    |   -> Predicate:
+    |     -> Entity Sub Predicate:
+    |       -> Is Monster
+    | Killed by real player
+    | Requires a player

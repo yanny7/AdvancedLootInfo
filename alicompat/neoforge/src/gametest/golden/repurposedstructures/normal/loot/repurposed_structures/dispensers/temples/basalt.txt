@@ -1,0 +1,20 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 2
+    ali:item minecraft:tipped_arrow x5-14 {"minecraft:potion_contents":{potion:"minecraft:long_weakness"}}
+      | Count: 5 to 14
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Weakness
+  ali:reference
+    | Selects all entries
+    | Only items added by other mods
+    ali:loot_table
+      | Selects all entries
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1 to 2
+        ali:item minecraft:arrow x2-7
+          | Count: 2 to 7

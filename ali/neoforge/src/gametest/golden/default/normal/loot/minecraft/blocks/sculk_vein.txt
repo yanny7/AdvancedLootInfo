@@ -1,0 +1,87 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:sculk_vein x0-6
+      | Count: 0 to 6
+      |   -> Block State Property:
+      |     -> Block: Sculk Vein
+      |     -> Properties:
+      |       -> down: true
+      |   -> Block State Property:
+      |     -> Block: Sculk Vein
+      |     -> Properties:
+      |       -> up: true
+      |   -> Block State Property:
+      |     -> Block: Sculk Vein
+      |     -> Properties:
+      |       -> north: true
+      |   -> Block State Property:
+      |     -> Block: Sculk Vein
+      |     -> Properties:
+      |       -> south: true
+      |   -> Block State Property:
+      |     -> Block: Sculk Vein
+      |     -> Properties:
+      |       -> west: true
+      |   -> Block State Property:
+      |     -> Block: Sculk Vein
+      |     -> Properties:
+      |       -> east: true
+      | ----- Predicates -----
+      | Match Tool:
+      |   -> Item Predicates:
+      |     -> Enchantments:
+      |       -> Enchantment: Silk Touch
+      |       -> Level: ≥ 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: True
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Sculk Vein
+      |       -> Properties:
+      |         -> down: true
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: True
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Sculk Vein
+      |       -> Properties:
+      |         -> up: true
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: True
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Sculk Vein
+      |       -> Properties:
+      |         -> north: true
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: True
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Sculk Vein
+      |       -> Properties:
+      |         -> south: true
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: True
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Sculk Vein
+      |       -> Properties:
+      |         -> west: true
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: True
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Sculk Vein
+      |       -> Properties:
+      |         -> east: true
+      | Explosion Decay

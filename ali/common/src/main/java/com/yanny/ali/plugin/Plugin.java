@@ -572,6 +572,7 @@ public class Plugin implements IPlugin {
         registry.registerItemListing(VillagerTrades.EmeraldsForVillagerTypeItem.class, EmeraldsForVillagerTypeItemNode::new);
         registry.registerItemListing(VillagerTrades.EnchantBookForEmeralds.class, TradeUtils::getNode);
         registry.registerItemListing(VillagerTrades.EnchantedItemForEmeralds.class, TradeUtils::getNode);
+        registry.registerItemListing(VillagerTrades.FailureItemListing.class, TradeUtils::getNode);
         registry.registerItemListing(VillagerTrades.ItemsAndEmeraldsToItems.class, TradeUtils::getNode);
         registry.registerItemListing(VillagerTrades.ItemsForEmeralds.class, TradeUtils::getNode);
         registry.registerItemListing(VillagerTrades.SuspiciousStewForEmerald.class, TradeUtils::getNode);

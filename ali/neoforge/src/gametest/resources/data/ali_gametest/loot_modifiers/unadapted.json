@@ -1,0 +1,10 @@
+{
+  "type": "ali:gametest_unadapted",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "ali_gametest:glm/target"
+    }
+  ],
+  "item": "minecraft:stick"
+}

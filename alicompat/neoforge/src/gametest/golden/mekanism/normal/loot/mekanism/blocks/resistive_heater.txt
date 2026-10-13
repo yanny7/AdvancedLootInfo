@@ -1,0 +1,21 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item mekanism:resistive_heater x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Copy Name:
+      |   -> Source: Block Entity
+      | Copy Components:
+      |   -> Source: Block Entity
+      |   -> Include:
+      |     -> mekanism:energy_usage
+      |     -> mekanism:owner
+      |     -> mekanism:redstone_control
+      |     -> mekanism:security
+      |     -> mekanism:upgrades
+      |     -> mekanism:energy
+      |     -> mekanism:items
+      |     -> mekanism:heat_data

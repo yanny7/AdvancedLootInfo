@@ -1,0 +1,49 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:emerald x1
+      | Chance: 20%
+      | Count: 1
+    ali:item minecraft:lapis_lazuli x1
+      | Chance: 13.33%
+      | Count: 1
+    ali:item minecraft:blade_pottery_sherd x1
+      | Chance: 6.67%
+      | Count: 1
+    ali:item minecraft:explorer_pottery_sherd x1
+      | Chance: 6.67%
+      | Count: 1
+    ali:item minecraft:mourner_pottery_sherd x1
+      | Chance: 6.67%
+      | Count: 1
+    ali:item minecraft:plenty_pottery_sherd x1
+      | Chance: 6.67%
+      | Count: 1
+    ali:item minecraft:iron_axe x1 {Damage:0}
+      | Chance: 6.67%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: U[10%; 70%)
+      |   -> Add: False
+    ali:item minecraft:rabbit_hide x1
+      | Chance: 6.67%
+      | Count: 1
+    ali:item minecraft:rabbit_foot x1
+      | Chance: 6.67%
+      | Count: 1
+    ali:item minecraft:stone_sword x1 {Damage:0}
+      | Chance: 6.67%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: U[10%; 70%)
+      |   -> Add: False
+    ali:item minecraft:charcoal x1
+      | Chance: 6.67%
+      | Count: 1
+    ali:item minecraft:coal_block x1
+      | Chance: 6.67%
+      | Count: 1

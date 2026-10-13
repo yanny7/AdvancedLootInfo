@@ -1,0 +1,16 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item hybrid_aquatic:dunegrass x1
+      | Count: 1
+      | ----- Predicates -----
+      | Any Of:
+      |   -> Match Tool:
+      |     -> Item: Shears
+      |   -> Match Tool:
+      |     -> Item Predicates:
+      |       -> Enchantments:
+      |         -> Enchantment: Silk Touch
+      |         -> Level: ≥ 1

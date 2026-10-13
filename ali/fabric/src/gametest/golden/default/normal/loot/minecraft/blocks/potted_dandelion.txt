@@ -1,0 +1,16 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:flower_pot x1
+      | Count: 1
+      | ----- Predicates -----
+      | Survives Explosion
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:dandelion x1
+      | Count: 1
+      | ----- Predicates -----
+      | Survives Explosion

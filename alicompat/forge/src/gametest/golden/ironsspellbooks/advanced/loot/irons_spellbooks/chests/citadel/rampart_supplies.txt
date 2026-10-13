@@ -1,0 +1,73 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item irons_spellbooks:ominous_bottle x1
+      | Chance: 10%
+      | Count: 1
+      | ----- Predicates -----
+      | Random Chance:
+      |   -> Probability: 0.1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 2
+    ali:item minecraft:crossbow x1 {Damage:0}
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: U[15%; 35%)
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:arrow x0-32
+      | Count: max(0; U[0; 32])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 0 to 32
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:lantern x0-8
+      | Count: max(0; U[0; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 0 to 8
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3
+    ali:item minecraft:soul_sand x4-8
+      | Chance: 25%
+      | Count: max(0; U[4; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4 to 8
+      |   -> Add: False
+    ali:item minecraft:bone x4-8
+      | Chance: 25%
+      | Count: max(0; U[4; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4 to 8
+      |   -> Add: False
+    ali:item minecraft:flint x4-8
+      | Chance: 25%
+      | Count: max(0; U[4; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4 to 8
+      |   -> Add: False
+    ali:item irons_spellbooks:arcane_essence x2-5
+      | Chance: 25%
+      | Count: max(0; U[2; 5])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 2 to 5
+      |   -> Add: False

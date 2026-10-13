@@ -1,0 +1,304 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:cod x1
+      | Chance: 31.58%
+      |   -> luck: 6000% ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck)))
+      |   -> Bad Luck: 32.43%
+      |   -> Luck 1: 30.77%
+      |   -> Luck 2: 30%
+      |   -> Luck 3: 29.27%
+      |   -> Luck 4: 28.57%
+      | Count: 1
+    ali:reference
+      | Selects all entries
+      | Quality: 1
+      | Chance: 15.79%
+      |   -> luck: max(0%; 3000% + floor(luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck)))
+      |   -> Bad Luck: 15.68%
+      |   -> Luck 1: 15.9%
+      |   -> Luck 2: 16%
+      |   -> Luck 3: 16.1%
+      |   -> Luck 4: 16.19%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item #hybrid_aquatic:small_fish x1
+            | Chance: 15.79%
+            |   -> luck: max(0%; 3000% + floor(luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck)))
+            |   -> Bad Luck: 15.68%
+            |   -> Luck 1: 15.9%
+            |   -> Luck 2: 16%
+            |   -> Luck 3: 16.1%
+            |   -> Luck 4: 16.19%
+            | Count: 1
+    ali:item minecraft:salmon x1
+      | Chance: 13.16%
+      |   -> luck: 2500% ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck)))
+      |   -> Bad Luck: 13.51%
+      |   -> Luck 1: 12.82%
+      |   -> Luck 2: 12.5%
+      |   -> Luck 3: 12.2%
+      |   -> Luck 4: 11.9%
+      | Count: 1
+    ali:reference
+      | Selects all entries
+      | Quality: 1
+      | Chance: 13.16%
+      |   -> luck: max(0%; 2500% + floor(luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck)))
+      |   -> Bad Luck: 12.97%
+      |   -> Luck 1: 13.33%
+      |   -> Luck 2: 13.5%
+      |   -> Luck 3: 13.66%
+      |   -> Luck 4: 13.81%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item #hybrid_aquatic:medium_fish x1
+            | Chance: 13.16%
+            |   -> luck: max(0%; 2500% + floor(luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck)))
+            |   -> Bad Luck: 12.97%
+            |   -> Luck 1: 13.33%
+            |   -> Luck 2: 13.5%
+            |   -> Luck 3: 13.66%
+            |   -> Luck 4: 13.81%
+            | Count: 1
+    ali:reference
+      | Selects all entries
+      | Quality: 1
+      | Chance: 10.53%
+      |   -> luck: max(0%; 2000% + floor(luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck)))
+      |   -> Bad Luck: 10.27%
+      |   -> Luck 1: 10.77%
+      |   -> Luck 2: 11%
+      |   -> Luck 3: 11.22%
+      |   -> Luck 4: 11.43%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item #hybrid_aquatic:large_fish x1
+            | Chance: 10.53%
+            |   -> luck: max(0%; 2000% + floor(luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck)))
+            |   -> Bad Luck: 10.27%
+            |   -> Luck 1: 10.77%
+            |   -> Luck 2: 11%
+            |   -> Luck 3: 11.22%
+            |   -> Luck 4: 11.43%
+            | Count: 1
+    ali:reference
+      | Selects all entries
+      | Quality: 2
+      | Chance: 7.89%
+      |   -> luck: max(0%; 1500% + floor(200% × luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck)))
+      |   -> Bad Luck: 7.03%
+      |   -> Luck 1: 8.72%
+      |   -> Luck 2: 9.5%
+      |   -> Luck 3: 10.24%
+      |   -> Luck 4: 10.95%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item hybrid_aquatic:crab_pot x1
+            | Chance: 0.72%
+            |   -> luck: max(0%; 1500% + floor(200% × luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 9.09%
+            |   -> Bad Luck: 0.64%
+            |   -> Luck 1: 0.79%
+            |   -> Luck 2: 0.86%
+            |   -> Luck 3: 0.93%
+            |   -> Luck 4: 1%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
+          ali:item hybrid_aquatic:hybrid_crate x1
+            | Chance: 0.72%
+            |   -> luck: max(0%; 1500% + floor(200% × luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 9.09%
+            |   -> Bad Luck: 0.64%
+            |   -> Luck 1: 0.79%
+            |   -> Luck 2: 0.86%
+            |   -> Luck 3: 0.93%
+            |   -> Luck 4: 1%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
+          ali:item hybrid_aquatic:oak_crate x1
+            | Chance: 0.72%
+            |   -> luck: max(0%; 1500% + floor(200% × luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 9.09%
+            |   -> Bad Luck: 0.64%
+            |   -> Luck 1: 0.79%
+            |   -> Luck 2: 0.86%
+            |   -> Luck 3: 0.93%
+            |   -> Luck 4: 1%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
+          ali:item hybrid_aquatic:spruce_crate x1
+            | Chance: 0.72%
+            |   -> luck: max(0%; 1500% + floor(200% × luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 9.09%
+            |   -> Bad Luck: 0.64%
+            |   -> Luck 1: 0.79%
+            |   -> Luck 2: 0.86%
+            |   -> Luck 3: 0.93%
+            |   -> Luck 4: 1%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
+          ali:item hybrid_aquatic:birch_crate x1
+            | Chance: 0.72%
+            |   -> luck: max(0%; 1500% + floor(200% × luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 9.09%
+            |   -> Bad Luck: 0.64%
+            |   -> Luck 1: 0.79%
+            |   -> Luck 2: 0.86%
+            |   -> Luck 3: 0.93%
+            |   -> Luck 4: 1%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
+          ali:item hybrid_aquatic:dark_oak_crate x1
+            | Chance: 0.72%
+            |   -> luck: max(0%; 1500% + floor(200% × luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 9.09%
+            |   -> Bad Luck: 0.64%
+            |   -> Luck 1: 0.79%
+            |   -> Luck 2: 0.86%
+            |   -> Luck 3: 0.93%
+            |   -> Luck 4: 1%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
+          ali:item hybrid_aquatic:acacia_crate x1
+            | Chance: 0.72%
+            |   -> luck: max(0%; 1500% + floor(200% × luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 9.09%
+            |   -> Bad Luck: 0.64%
+            |   -> Luck 1: 0.79%
+            |   -> Luck 2: 0.86%
+            |   -> Luck 3: 0.93%
+            |   -> Luck 4: 1%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
+          ali:item hybrid_aquatic:jungle_crate x1
+            | Chance: 0.72%
+            |   -> luck: max(0%; 1500% + floor(200% × luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 9.09%
+            |   -> Bad Luck: 0.64%
+            |   -> Luck 1: 0.79%
+            |   -> Luck 2: 0.86%
+            |   -> Luck 3: 0.93%
+            |   -> Luck 4: 1%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
+          ali:item hybrid_aquatic:bamboo_crate x1
+            | Chance: 0.72%
+            |   -> luck: max(0%; 1500% + floor(200% × luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 9.09%
+            |   -> Bad Luck: 0.64%
+            |   -> Luck 1: 0.79%
+            |   -> Luck 2: 0.86%
+            |   -> Luck 3: 0.93%
+            |   -> Luck 4: 1%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
+          ali:item hybrid_aquatic:mangrove_crate x1
+            | Chance: 0.72%
+            |   -> luck: max(0%; 1500% + floor(200% × luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 9.09%
+            |   -> Bad Luck: 0.64%
+            |   -> Luck 1: 0.79%
+            |   -> Luck 2: 0.86%
+            |   -> Luck 3: 0.93%
+            |   -> Luck 4: 1%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
+          ali:item hybrid_aquatic:cherry_crate x1
+            | Chance: 0.72%
+            |   -> luck: max(0%; 1500% + floor(200% × luck)) ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck))) × 9.09%
+            |   -> Bad Luck: 0.64%
+            |   -> Luck 1: 0.79%
+            |   -> Luck 2: 0.86%
+            |   -> Luck 3: 0.93%
+            |   -> Luck 4: 1%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
+    ali:item minecraft:pufferfish x1
+      | Chance: 6.84%
+      |   -> luck: 1300% ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck)))
+      |   -> Bad Luck: 7.03%
+      |   -> Luck 1: 6.67%
+      |   -> Luck 2: 6.5%
+      |   -> Luck 3: 6.34%
+      |   -> Luck 4: 6.19%
+      | Count: 1
+    ali:item minecraft:tropical_fish x1
+      | Chance: 1.05%
+      |   -> luck: 200% ÷ (10000% + max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + max(0%; 2000% + floor(luck)) + max(0%; 1500% + floor(200% × luck)))
+      |   -> Bad Luck: 1.08%
+      |   -> Luck 1: 1.03%
+      |   -> Luck 2: 1%
+      |   -> Luck 3: 0.98%
+      |   -> Luck 4: 0.95%
+      | Count: 1

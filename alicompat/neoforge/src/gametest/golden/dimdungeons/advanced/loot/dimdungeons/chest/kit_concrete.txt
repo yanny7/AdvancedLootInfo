@@ -1,0 +1,229 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 27
+    ali:item minecraft:white_concrete x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:orange_concrete x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:magenta_concrete x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:light_blue_concrete x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:yellow_concrete x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:lime_concrete x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:pink_concrete x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:gray_concrete x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:light_gray_concrete x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:cyan_concrete x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:purple_concrete x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:blue_concrete x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:brown_concrete x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:green_concrete x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:red_concrete x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:black_concrete x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:white_terracotta x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:orange_terracotta x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:magenta_terracotta x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:light_blue_terracotta x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:yellow_terracotta x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:lime_terracotta x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:pink_terracotta x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:gray_terracotta x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:light_gray_terracotta x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:cyan_terracotta x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:purple_terracotta x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:blue_terracotta x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:brown_terracotta x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:green_terracotta x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:red_terracotta x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False
+    ali:item minecraft:black_terracotta x5-9
+      | Chance: 3.13%
+      | Count: max(0; U[5; 9])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 5 to 9
+      |   -> Add: False

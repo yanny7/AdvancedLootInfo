@@ -1,0 +1,15 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item hybrid_aquatic:red_algae x1
+      | Count: 1
+      | ----- Predicates -----
+      | Any Of:
+      |   -> Match Tool:
+      |     -> Item: Shears
+      |   -> Match Tool:
+      |     -> Enchantments:
+      |       -> Enchantment: Silk Touch
+      |       -> Level: ≥ 1

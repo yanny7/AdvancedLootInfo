@@ -1,0 +1,81 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item twilightforest:red_thread x0-6
+      | Count: 0 to 6
+      |   -> Block State Property:
+      |     -> Block: Red Thread
+      |     -> Properties:
+      |       -> east: true
+      |   -> Block State Property:
+      |     -> Block: Red Thread
+      |     -> Properties:
+      |       -> west: true
+      |   -> Block State Property:
+      |     -> Block: Red Thread
+      |     -> Properties:
+      |       -> north: true
+      |   -> Block State Property:
+      |     -> Block: Red Thread
+      |     -> Properties:
+      |       -> south: true
+      |   -> Block State Property:
+      |     -> Block: Red Thread
+      |     -> Properties:
+      |       -> up: true
+      |   -> Block State Property:
+      |     -> Block: Red Thread
+      |     -> Properties:
+      |       -> down: true
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: True
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Red Thread
+      |       -> Properties:
+      |         -> east: true
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: True
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Red Thread
+      |       -> Properties:
+      |         -> west: true
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: True
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Red Thread
+      |       -> Properties:
+      |         -> north: true
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: True
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Red Thread
+      |       -> Properties:
+      |         -> south: true
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: True
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Red Thread
+      |       -> Properties:
+      |         -> up: true
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: True
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Red Thread
+      |       -> Properties:
+      |         -> down: true
+      | Explosion Decay

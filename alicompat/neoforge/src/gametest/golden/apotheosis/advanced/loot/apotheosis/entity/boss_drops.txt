@@ -1,0 +1,56 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 45%
+      |   -> luck: 4500% ÷ (max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + 4500%)
+      |   -> Bad Luck: 45.92%
+      |   -> Luck 1: 44.12%
+      |   -> Luck 2: 43.27%
+      |   -> Luck 3: 42.45%
+      |   -> Luck 4: 41.67%
+    ali:item apotheosis:gem x1
+      | Quality: 1
+      | Chance: 30%
+      |   -> luck: max(0%; 3000% + floor(luck)) ÷ (max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + 4500%)
+      |   -> Bad Luck: 29.59%
+      |   -> Luck 1: 30.39%
+      |   -> Luck 2: 30.77%
+      |   -> Luck 3: 31.13%
+      |   -> Luck 4: 31.48%
+      | Count: 1
+    ali:item apotheosis:sigil_of_malice x1
+      | Quality: 1
+      | Chance: 25%
+      |   -> luck: max(0%; 2500% + floor(luck)) ÷ (max(0%; 3000% + floor(luck)) + max(0%; 2500% + floor(luck)) + 4500%)
+      |   -> Bad Luck: 24.49%
+      |   -> Luck 1: 25.49%
+      |   -> Luck 2: 25.96%
+      |   -> Luck 3: 26.42%
+      |   -> Luck 4: 26.85%
+      | Count: 1
+  ali:item apotheosis:gem x1
+    | Chance: 4%
+    | Count: 1
+    | ----- Predicates -----
+    | Entity Properties:
+    |   -> Target: This Entity
+    |   -> Predicate:
+    |     -> Entity Sub Predicate:
+    |       -> Is Monster
+    | Killed by real player
+    | Requires a player
+  ali:item apotheosis:gem x1
+    | Chance: 0.5%
+    | Count: 1
+    | ----- Predicates -----
+    | Entity Properties:
+    |   -> Target: This Entity
+    |   -> Predicate:
+    |     -> Entity Sub Predicate:
+    |       -> Is Monster
+    | Killed by player
+    | Requires a player

@@ -7,8 +7,20 @@ architectury {
     forge()
 }
 
+sourceSets {
+    gametest {
+        java.srcDir project(":aci:common").file("src/gametest/java")
+        resources.srcDir project(":aci:common").file("src/gametest/resources")
+        java.srcDir project(":awi:common").file("src/gametest/java")
+        resources.srcDir project(":awi:common").file("src/gametest/resources")
+        compileClasspath += sourceSets.main.compileClasspath + sourceSets.main.output
+        runtimeClasspath += sourceSets.main.runtimeClasspath + sourceSets.main.output
+    }
+}
+
 loom {
     accessWidenerPath = project(":awi:common").loom.accessWidenerPath
+    createRemapConfigurations(sourceSets.gametest)
 
     forge {
         convertAccessWideners = true
@@ -22,6 +34,7 @@ loom {
     }
 
     mixin {
+        useLegacyMixinAp = true
         defaultRefmapName = "awi.forge.refmap.json"
     }
 
@@ -32,6 +45,35 @@ loom {
             programArgs "--output", "${file('src/main/generated/')}"
             programArgs "--existing", "${file("src/main/resources").absolutePath}"
         }
+        gametest {
+            environment "gametestserver"
+            forgeTemplate "gameTestServer"
+            name "Minecraft GameTest"
+            source sourceSets.gametest
+            property "forge.enabledGameTestNamespaces", awi_mod_id
+            property "awi.golden.dir", project.file("src/gametest/golden").absolutePath
+            property "awi.golden.actual", project.file("build/gametest/golden").absolutePath
+            property "awi.golden.regenerate", (project.findProperty("awi_golden_regenerate") ?: "false").toString()
+            programArgs "--mixin.config", "aci.gametest.mixins.json"
+            programArgs "--mixin.config", "awi.gametest.mixins.json"
+
+            runDir "build/gametest/run"
+
+            mods {
+                main {
+                    sourceSet sourceSets.main
+                    sourceSet sourceSets.gametest
+                }
+            }
+        }
+    }
+}
+
+tasks.matching { it.name == "runGametest" }.configureEach {
+    timeout = java.time.Duration.ofMinutes(10)
+
+    doFirst {
+        delete "build/gametest/run/config"
     }
 }
 

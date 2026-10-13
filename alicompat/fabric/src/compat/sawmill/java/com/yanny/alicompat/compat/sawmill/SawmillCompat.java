@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -128,7 +129,7 @@ public class SawmillCompat implements IModCompat {
 
         getByBiome(biomeWoods).values().forEach(types::addAll);
         types.add(VanillaWoodTypes.OAK);
-        return List.copyOf(types);
+        return types.stream().sorted(Comparator.comparing(WoodType::getId)).toList();
     }
 
     @NotNull

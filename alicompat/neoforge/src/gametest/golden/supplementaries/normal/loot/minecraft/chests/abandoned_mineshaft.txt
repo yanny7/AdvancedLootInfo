@@ -1,0 +1,139 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:name_tag x1
+      | Chance: 42.25%
+      | Count: 1
+    ali:item minecraft:golden_apple x1
+      | Chance: 28.17%
+      | Count: 1
+    ali:item minecraft:enchanted_book x1
+      | Chance: 14.08%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantments:
+      |     -> Tag: minecraft:on_random_loot
+      |   -> Only Compatible: True
+    ali:item minecraft:iron_pickaxe x1
+      | Chance: 7.04%
+      | Count: 1
+    ali:empty
+      | Drops nothing
+      | Chance: 7.04%
+    ali:item minecraft:enchanted_golden_apple x1
+      | Chance: 1.41%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 4
+    ali:item minecraft:bread x1-3
+      | Chance: 15.31%
+      | Count: 1 to 3
+    ali:item minecraft:glow_berries x3-6
+      | Chance: 15.31%
+      | Count: 3 to 6
+    ali:item minecraft:iron_ingot x1-5
+      | Chance: 10.2%
+      | Count: 1 to 5
+    ali:item minecraft:coal x3-8
+      | Chance: 10.2%
+      | Count: 3 to 8
+    ali:item minecraft:melon_seeds x2-4
+      | Chance: 10.2%
+      | Count: 2 to 4
+    ali:item minecraft:pumpkin_seeds x2-4
+      | Chance: 10.2%
+      | Count: 2 to 4
+    ali:item minecraft:beetroot_seeds x2-4
+      | Chance: 10.2%
+      | Count: 2 to 4
+    ali:item minecraft:gold_ingot x1-3
+      | Chance: 5.1%
+      | Count: 1 to 3
+    ali:item minecraft:redstone x4-9
+      | Chance: 5.1%
+      | Count: 4 to 9
+    ali:item minecraft:lapis_lazuli x4-9
+      | Chance: 5.1%
+      | Count: 4 to 9
+    ali:item minecraft:diamond x1-2
+      | Chance: 3.06%
+      | Count: 1 to 2
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3
+    ali:item minecraft:rail x4-8
+      | Chance: 40%
+      | Count: 4 to 8
+    ali:item minecraft:torch x1-16
+      | Chance: 30%
+      | Count: 1 to 16
+    ali:item minecraft:powered_rail x1-4
+      | Chance: 10%
+      | Count: 1 to 4
+    ali:item minecraft:detector_rail x1-4
+      | Chance: 10%
+      | Count: 1 to 4
+    ali:item minecraft:activator_rail x1-4
+      | Chance: 10%
+      | Count: 1 to 4
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item supplementaries:rope x5-17
+            | Chance: 35%
+            | Count: 5 to 17
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item supplementaries:flax_seeds x1-3
+            | Chance: 14%
+            | Count: 1 to 3
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          |   -> Bad Luck: 0 to 1
+          |   -> Luck 1: 1 to 2
+          |   -> Luck 2: 1 to 4
+          |   -> Luck 3: 1 to 6
+          |   -> Luck 4: 1 to 8
+          ali:item supplementaries:bomb_blue x1
+            | Chance: 2.5%
+            | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item supplementaries:bomb x1-3
+            | Chance: 12%
+            | Count: 1 to 3

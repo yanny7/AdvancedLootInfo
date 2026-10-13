@@ -1,0 +1,23 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item twilightforest:naga_scale x6-14
+      | Count: max(0; U[6; 11])
+      |   -> Looting LVL: max(0; U[6; 11]) + round(LVL × U[0; 1))
+      |   -> Looting I: 6 to 12  ~7 to 11 (17%)
+      |   -> Looting II: 6 to 13  ~8 to 11 (17%)
+      |   -> Looting III: 6 to 14  ~9 to 11 (17%)
+      |   [chart 0..5 6-11 base=true modes=[false, false, false, false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.0000,0.0000,0.0000 | 0..6 6-12 base=false modes=[false, true, true, true, true, true, false, false, false] heights=0.5000,1.0000,1.0000,1.0000,1.0000,1.0000,0.5000,0.0000,0.0000 | 0..7 6-13 base=false modes=[false, false, true, true, true, true, false, false, false] heights=0.2500,0.7500,1.0000,1.0000,1.0000,1.0000,0.7500,0.2500,0.0000 | 0..8 6-14 base=false modes=[false, false, false, true, true, true, false, false, false] heights=0.1667,0.5000,0.8333,1.0000,1.0000,1.0000,0.8333,0.5000,0.1667]
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 6 to 11
+      |   -> Add: False
+      | Looting Enchant:
+      |   -> Value: U[0; 1)
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item twilightforest:naga_trophy x1
+      | Count: 1

@@ -1,0 +1,10 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item twilightforest:clover_patch x1
+      | Count: 1
+      | ----- Predicates -----
+      | Can Item Perform Ability:
+      |   -> shears_dig

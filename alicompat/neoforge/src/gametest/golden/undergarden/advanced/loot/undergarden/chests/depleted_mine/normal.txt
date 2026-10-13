@@ -1,0 +1,74 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 2
+    ali:empty
+      | Drops nothing
+      | Chance: 41.18%
+    ali:item undergarden:cloggrum_pickaxe x1
+      | Chance: 29.41%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: U[25%; 95%)
+      |   -> Add: False
+    ali:item undergarden:cloggrum_shovel x1
+      | Chance: 29.41%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Damage:
+      |   -> Damage: U[25%; 95%)
+      |   -> Add: False
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 3
+    ali:item minecraft:torch x1-8
+      | Chance: 25%
+      | Count: max(0; U[1; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 8
+      |   -> Add: False
+    ali:item undergarden:dweller_steak x4-8
+      | Chance: 16.67%
+      | Count: max(0; U[4; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4 to 8
+      |   -> Add: False
+    ali:item minecraft:stick x1-8
+      | Chance: 16.67%
+      | Count: max(0; U[1; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 8
+      |   -> Add: False
+    ali:item undergarden:smogstem_planks x4-8
+      | Chance: 16.67%
+      | Count: max(0; U[4; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4 to 8
+      |   -> Add: False
+    ali:item minecraft:coal x1-16
+      | Chance: 8.33%
+      | Count: max(0; U[1; 16])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 16
+      |   -> Add: False
+    ali:item undergarden:raw_cloggrum x1-8
+      | Chance: 8.33%
+      | Count: max(0; U[1; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 8
+      |   -> Add: False
+    ali:item undergarden:raw_froststeel x1-8
+      | Chance: 8.33%
+      | Count: max(0; U[1; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1 to 8
+      |   -> Add: False

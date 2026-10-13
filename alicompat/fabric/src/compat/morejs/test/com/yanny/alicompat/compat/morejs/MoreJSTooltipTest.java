@@ -3,7 +3,10 @@ package com.yanny.alicompat.compat.morejs;
 import com.almostreliable.morejs.features.villager.IntRange;
 import com.almostreliable.morejs.features.villager.TradeItem;
 import com.almostreliable.morejs.features.villager.trades.*;
+import com.almostreliable.morejs.util.ResourceOrTag;
+import com.almostreliable.morejs.util.WeightedList;
 import com.yanny.aci.tooltip.TooltipNode;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
@@ -93,6 +96,24 @@ public class MoreJSTooltipTest {
                 "Uses: 2",
                 "XP: 11",
                 "Price Multiplier: 0.3"
+        ));
+    }
+
+    @Test
+    public void testDestinationsTooltip() {
+        WeightedList<Object> destinations = new WeightedList.Builder<>()
+                .add(3, ResourceOrTag.get("minecraft:village_plains", Registries.STRUCTURE))
+                .add(1, ResourceOrTag.get("#minecraft:is_jungle", Registries.BIOME))
+                .build();
+
+        assertTooltip(UTILS.getValueTooltip(UTILS, destinations).build(MoreJSLang.Branch.DESTINATIONS), List.of(
+                "Destinations:",
+                "  -> Entry:",
+                "    -> Weight: 3",
+                "    -> Structure: minecraft:village_plains",
+                "  -> Entry:",
+                "    -> Weight: 1",
+                "    -> Biome: minecraft:is_jungle"
         ));
     }
 

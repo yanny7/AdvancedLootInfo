@@ -1,0 +1,312 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      | Quality: -1
+      | Chance: 85%
+      |   -> Bad Luck: 85.15%
+      |   -> Luck 1: 84.85%
+      |   -> Luck 2: 84.69%
+      |   -> Luck 3: 84.54%
+      |   -> Luck 4: 84.38%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item minecraft:cod x1
+            | Chance: 51%
+            |   -> Bad Luck: 51.09%
+            |   -> Luck 1: 50.91%
+            |   -> Luck 2: 50.82%
+            |   -> Luck 3: 50.72%
+            |   -> Luck 4: 50.63%
+            | Count: 1
+          ali:item minecraft:salmon x1
+            | Chance: 21.25%
+            |   -> Bad Luck: 21.29%
+            |   -> Luck 1: 21.21%
+            |   -> Luck 2: 21.17%
+            |   -> Luck 3: 21.13%
+            |   -> Luck 4: 21.09%
+            | Count: 1
+          ali:item minecraft:pufferfish x1
+            | Chance: 11.05%
+            |   -> Bad Luck: 11.07%
+            |   -> Luck 1: 11.03%
+            |   -> Luck 2: 11.01%
+            |   -> Luck 3: 10.99%
+            |   -> Luck 4: 10.97%
+            | Count: 1
+          ali:item minecraft:tropical_fish x1
+            | Chance: 1.7%
+            |   -> Bad Luck: 1.7%
+            |   -> Luck 1: 1.7%
+            |   -> Luck 2: 1.69%
+            |   -> Luck 3: 1.69%
+            |   -> Luck 4: 1.69%
+            | Count: 1
+    ali:reference
+      | Selects all entries
+      | Quality: -2
+      | Chance: 10%
+      |   -> Bad Luck: 11.88%
+      |   -> Luck 1: 8.08%
+      |   -> Luck 2: 6.12%
+      |   -> Luck 3: 4.12%
+      |   -> Luck 4: 2.08%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item minecraft:lily_pad x1
+            | Chance: 1.55%
+            |   -> Bad Luck: 1.84%
+            |   -> Luck 1: 1.25%
+            |   -> Luck 2: 0.95%
+            |   -> Luck 3: 0.64%
+            |   -> Luck 4: 0.32%
+            | Count: 1
+          ali:item minecraft:leather_boots x1
+            | Chance: 0.91%
+            |   -> Bad Luck: 1.08%
+            |   -> Luck 1: 0.73%
+            |   -> Luck 2: 0.56%
+            |   -> Luck 3: 0.37%
+            |   -> Luck 4: 0.19%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Damage:
+            |   -> Damage: 0% to 90%
+            |   -> Add: False
+          ali:item minecraft:leather x1
+            | Chance: 0.91%
+            |   -> Bad Luck: 1.08%
+            |   -> Luck 1: 0.73%
+            |   -> Luck 2: 0.56%
+            |   -> Luck 3: 0.37%
+            |   -> Luck 4: 0.19%
+            | Count: 1
+          ali:item minecraft:bone x1
+            | Chance: 0.91%
+            |   -> Bad Luck: 1.08%
+            |   -> Luck 1: 0.73%
+            |   -> Luck 2: 0.56%
+            |   -> Luck 3: 0.37%
+            |   -> Luck 4: 0.19%
+            | Count: 1
+          ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:water"}}
+            | Chance: 0.91%
+            |   -> Bad Luck: 1.08%
+            |   -> Luck 1: 0.73%
+            |   -> Luck 2: 0.56%
+            |   -> Luck 3: 0.37%
+            |   -> Luck 4: 0.19%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Potion:
+            |   -> Potion: Water Bottle
+          ali:item minecraft:bowl x1
+            | Chance: 0.91%
+            |   -> Bad Luck: 1.08%
+            |   -> Luck 1: 0.73%
+            |   -> Luck 2: 0.56%
+            |   -> Luck 3: 0.37%
+            |   -> Luck 4: 0.19%
+            | Count: 1
+          ali:item minecraft:tripwire_hook x1
+            | Chance: 0.91%
+            |   -> Bad Luck: 1.08%
+            |   -> Luck 1: 0.73%
+            |   -> Luck 2: 0.56%
+            |   -> Luck 3: 0.37%
+            |   -> Luck 4: 0.19%
+            | Count: 1
+          ali:item minecraft:rotten_flesh x1
+            | Chance: 0.91%
+            |   -> Bad Luck: 1.08%
+            |   -> Luck 1: 0.73%
+            |   -> Luck 2: 0.56%
+            |   -> Luck 3: 0.37%
+            |   -> Luck 4: 0.19%
+            | Count: 1
+          ali:item minecraft:bamboo x1
+            | Chance: 0.91%
+            |   -> Bad Luck: 1.08%
+            |   -> Luck 1: 0.73%
+            |   -> Luck 2: 0.56%
+            |   -> Luck 3: 0.37%
+            |   -> Luck 4: 0.19%
+            | Count: 1
+            | ----- Predicates -----
+            | Location Check:
+            |   -> Location:
+            |     -> Biomes:
+            |       -> Jungle
+            |       -> Sparse Jungle
+            |       -> Bamboo Jungle
+          ali:item minecraft:string x1
+            | Chance: 0.45%
+            |   -> Bad Luck: 0.54%
+            |   -> Luck 1: 0.37%
+            |   -> Luck 2: 0.28%
+            |   -> Luck 3: 0.19%
+            |   -> Luck 4: 0.09%
+            | Count: 1
+          ali:item minecraft:stick x1
+            | Chance: 0.45%
+            |   -> Bad Luck: 0.54%
+            |   -> Luck 1: 0.37%
+            |   -> Luck 2: 0.28%
+            |   -> Luck 3: 0.19%
+            |   -> Luck 4: 0.09%
+            | Count: 1
+          ali:item minecraft:fishing_rod x1
+            | Chance: 0.18%
+            |   -> Bad Luck: 0.22%
+            |   -> Luck 1: 0.15%
+            |   -> Luck 2: 0.11%
+            |   -> Luck 3: 0.07%
+            |   -> Luck 4: 0.04%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Damage:
+            |   -> Damage: 0% to 90%
+            |   -> Add: False
+          ali:item minecraft:ink_sac x10
+            | Chance: 0.09%
+            |   -> Bad Luck: 0.11%
+            |   -> Luck 1: 0.07%
+            |   -> Luck 2: 0.06%
+            |   -> Luck 3: 0.04%
+            |   -> Luck 4: 0.02%
+            | Count: 10
+    ali:reference
+      | Selects all entries
+      | Quality: 2
+      | Chance: 5%
+      |   -> Bad Luck: 2.97%
+      |   -> Luck 1: 7.07%
+      |   -> Luck 2: 9.18%
+      |   -> Luck 3: 11.34%
+      |   -> Luck 4: 13.54%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item minecraft:name_tag x1
+            | Chance: 0.83%
+            |   -> Bad Luck: 0.5%
+            |   -> Luck 1: 1.18%
+            |   -> Luck 2: 1.53%
+            |   -> Luck 3: 1.89%
+            |   -> Luck 4: 2.26%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
+          ali:item minecraft:saddle x1
+            | Chance: 0.83%
+            |   -> Bad Luck: 0.5%
+            |   -> Luck 1: 1.18%
+            |   -> Luck 2: 1.53%
+            |   -> Luck 3: 1.89%
+            |   -> Luck 4: 2.26%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
+          ali:item minecraft:bow x1 {"minecraft:enchantment_glint_override":1b}
+            | Chance: 0.83%
+            |   -> Bad Luck: 0.5%
+            |   -> Luck 1: 1.18%
+            |   -> Luck 2: 1.53%
+            |   -> Luck 3: 1.89%
+            |   -> Luck 4: 2.26%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
+            | ----- Modifiers -----
+            | Set Damage:
+            |   -> Damage: 0% to 25%
+            |   -> Add: False
+            | Enchant With Levels:
+            |   -> Levels: 30
+            |   -> Options:
+            |     -> Tag: minecraft:on_random_loot
+          ali:item minecraft:fishing_rod x1 {"minecraft:enchantment_glint_override":1b}
+            | Chance: 0.83%
+            |   -> Bad Luck: 0.5%
+            |   -> Luck 1: 1.18%
+            |   -> Luck 2: 1.53%
+            |   -> Luck 3: 1.89%
+            |   -> Luck 4: 2.26%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
+            | ----- Modifiers -----
+            | Set Damage:
+            |   -> Damage: 0% to 25%
+            |   -> Add: False
+            | Enchant With Levels:
+            |   -> Levels: 30
+            |   -> Options:
+            |     -> Tag: minecraft:on_random_loot
+          ali:item minecraft:enchanted_book x1
+            | Chance: 0.83%
+            |   -> Bad Luck: 0.5%
+            |   -> Luck 1: 1.18%
+            |   -> Luck 2: 1.53%
+            |   -> Luck 3: 1.89%
+            |   -> Luck 4: 2.26%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True
+            | ----- Modifiers -----
+            | Enchant With Levels:
+            |   -> Levels: 30
+            |   -> Options:
+            |     -> Tag: minecraft:on_random_loot
+          ali:item minecraft:nautilus_shell x1
+            | Chance: 0.83%
+            |   -> Bad Luck: 0.5%
+            |   -> Luck 1: 1.18%
+            |   -> Luck 2: 1.53%
+            |   -> Luck 3: 1.89%
+            |   -> Luck 4: 2.26%
+            | Count: 1
+            | ----- Predicates -----
+            | Entity Properties:
+            |   -> Target: This Entity
+            |   -> Predicate:
+            |     -> Entity Sub Predicate:
+            |       -> Fishing Hook:
+            |         -> Is In Open Water: True

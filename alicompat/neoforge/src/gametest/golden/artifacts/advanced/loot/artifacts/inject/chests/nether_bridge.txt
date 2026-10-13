@@ -1,0 +1,237 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      | Chance: 11.11%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:cross_necklace x1
+              | Chance: 11.11%
+              | Count: 1
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.15
+              | Config Value:
+              |   -> Config: cross_necklace.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 11.11%
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.15
+    ali:reference
+      | Selects all entries
+      | Chance: 11.11%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:night_vision_goggles x1
+              | Chance: 11.11%
+              | Count: 1
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.15
+              | Config Value:
+              |   -> Config: night_vision_goggles.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 11.11%
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.15
+    ali:reference
+      | Selects all entries
+      | Chance: 11.11%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:pocket_piston x1
+              | Chance: 11.11%
+              | Count: 1
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.15
+              | Config Value:
+              |   -> Config: pocket_piston.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 11.11%
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.15
+    ali:reference
+      | Selects all entries
+      | Chance: 11.11%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:running_shoes x1
+              | Chance: 11.11%
+              | Count: 1
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.15
+              | Config Value:
+              |   -> Config: running_shoes.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 11.11%
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.15
+    ali:reference
+      | Selects all entries
+      | Chance: 11.11%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:cowboy_hat x1
+              | Chance: 11.11%
+              | Count: 1
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.15
+              | Config Value:
+              |   -> Config: cowboy_hat.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 11.11%
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.15
+    ali:reference
+      | Selects all entries
+      | Chance: 11.11%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:charm_of_shrinking x1
+              | Chance: 11.11%
+              | Count: 1
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.15
+              | Config Value:
+              |   -> Config: charm_of_shrinking.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 11.11%
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.15
+    ali:reference
+      | Selects all entries
+      | Chance: 11.11%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:strider_shoes x1
+              | Chance: 11.11%
+              | Count: 1
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.15
+              | Config Value:
+              |   -> Config: strider_shoes.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 11.11%
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.15
+    ali:reference
+      | Selects all entries
+      | Chance: 11.11%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:withered_bracelet x1
+              | Chance: 11.11%
+              | Count: 1
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.15
+              | Config Value:
+              |   -> Config: withered_bracelet.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 11.11%
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.15
+    ali:reference
+      | Selects all entries
+      | Chance: 11.11%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:plastic_drinking_hat x1
+              | Chance: 8.33%
+              | Count: 1
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.15
+              | Config Value:
+              |   -> Config: plastic_drinking_hat.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 8.33%
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.15
+          ali:alternatives
+            | Selects only first successful entry
+            ali:item artifacts:novelty_drinking_hat x1
+              | Chance: 2.78%
+              | Count: 1
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.15
+              | Config Value:
+              |   -> Config: novelty_drinking_hat.generateAsLoot
+            ali:empty
+              | Drops nothing
+              | Chance: 2.78%
+              | ----- Predicates -----
+              | Artifact Rarity Adjusted Chance:
+              |   -> Default Probability: 0.15

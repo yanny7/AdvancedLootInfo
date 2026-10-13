@@ -1,0 +1,12 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item aether:bronze_dungeon_key x1
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item aether:carved_stone x7-9
+      | Count: 7 to 9

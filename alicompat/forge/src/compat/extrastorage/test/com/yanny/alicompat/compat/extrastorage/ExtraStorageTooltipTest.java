@@ -15,7 +15,7 @@ public class ExtraStorageTooltipTest {
     @Test
     public void testStorageBlockFunction() {
         assertTooltip(UTILS.getFunctionTooltip(UTILS, StorageBlockLootFunction.builder().build()).build(), List.of(
-                "Copy Storage Id:"
+                "Copy Storage Id"
         ));
     }
 
@@ -24,7 +24,7 @@ public class ExtraStorageTooltipTest {
         LootItemFunction function = StorageBlockLootFunction.builder().when(ExplosionCondition.survivesExplosion()).build();
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Copy Storage Id:",
+                "Copy Storage Id",
                 "  -> Predicates:",
                 "    -> Survives Explosion"
         ));
@@ -33,7 +33,7 @@ public class ExtraStorageTooltipTest {
     @Test
     public void testAdvancedCrafterFunction() {
         assertTooltip(UTILS.getFunctionTooltip(UTILS, AdvancedCrafterLootFunction.builder().build()).build(), List.of(
-                "Copy Crafter Name:"
+                "Copy Crafter Name"
         ));
     }
 
@@ -42,7 +42,7 @@ public class ExtraStorageTooltipTest {
         LootItemFunction function = AdvancedCrafterLootFunction.builder().when(ExplosionCondition.survivesExplosion()).build();
 
         assertTooltip(UTILS.getFunctionTooltip(UTILS, function).build(), List.of(
-                "Copy Crafter Name:",
+                "Copy Crafter Name",
                 "  -> Predicates:",
                 "    -> Survives Explosion"
         ));

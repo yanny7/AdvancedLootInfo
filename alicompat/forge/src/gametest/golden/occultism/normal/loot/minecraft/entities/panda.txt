@@ -1,0 +1,16 @@
+ali:entity_loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:bamboo x1
+      | Count: 1
+  ali:item occultism:tallow x3
+    | Count: 3
+    | ----- Predicates -----
+    | Entity Properties:
+    |   -> Target: Killer
+    |   -> Predicate:
+    |     -> Entity Equipment:
+    |       -> Main Hand:
+    |         -> Tag: Knives

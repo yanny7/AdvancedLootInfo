@@ -1,0 +1,17 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2 to 3
+    ali:item minecraft:tipped_arrow x2-4 {"minecraft:potion_contents":{potion:"minecraft:strong_harming"}}
+      | Chance: 50%
+      | Count: 2 to 4
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Harming
+    ali:item minecraft:tipped_arrow x2-4 {"minecraft:potion_contents":{potion:"minecraft:strong_poison"}}
+      | Chance: 50%
+      | Count: 2 to 4
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Poison

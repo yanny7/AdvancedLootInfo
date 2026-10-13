@@ -1,0 +1,31 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      | Chance: 50%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item #minecraft:flowers x1
+            | Chance: 50%
+            | Count: 1
+            | ----- Modifiers -----
+            | Tag Item Removals:
+            |   -> Tag: Disallowed Bumblezone Structure Flower Loots
+    ali:item #minecraft:villager_plantable_seeds x2-3
+      | Chance: 12.5%
+      | Count: 2 to 3
+    ali:item minecraft:cocoa_beans x2-3
+      | Chance: 12.5%
+      | Count: 2 to 3
+    ali:item minecraft:pumpkin_seeds x2-3
+      | Chance: 12.5%
+      | Count: 2 to 3
+    ali:item minecraft:melon_seeds x2-3
+      | Chance: 12.5%
+      | Count: 2 to 3

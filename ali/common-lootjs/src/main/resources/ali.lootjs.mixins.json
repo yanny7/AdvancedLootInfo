@@ -4,6 +4,9 @@
   "package": "com.yanny.ali.lootjs.mixin",
   "mixins": [
     "MixinCustomParamPredicate",
+    "MixinDropExperienceAction",
+    "MixinExplodeAction",
+    "MixinLightningStrikeAction",
     "MixinLootModificationsAPI"
   ],
   "injectors": {

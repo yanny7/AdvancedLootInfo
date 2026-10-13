@@ -8,6 +8,7 @@ import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.NodeUtils;
+import com.yanny.ali.plugin.common.nodes.EmptyNode;
 import com.yanny.ali.plugin.common.nodes.GroupNode;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.server.DataComponentTooltipUtils;
@@ -25,11 +26,9 @@ import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class TradeUtils {
     @NotNull
@@ -154,6 +153,11 @@ public class TradeUtils {
     }
 
     @NotNull
+    public static EmptyNode getNode(IServerUtils ignoredUtils, VillagerTrades.FailureItemListing ignoredListing, TooltipNode condition) {
+        return new EmptyNode(1, condition);
+    }
+
+    @NotNull
     public static ItemsToItemsNode getNode(IServerUtils utils, VillagerTrades.ItemsAndEmeraldsToItems listing, TooltipNode condition) {
         return new ItemsToItemsNode(
                 utils,
@@ -261,7 +265,11 @@ public class TradeUtils {
             public List<IDataNode> getSubTrades(IServerUtils utils, VillagerTrades.TypeSpecificTrade listing) {
                 List<IDataNode> nodes = new ArrayList<>();
 
-                for (Map.Entry<ResourceKey<VillagerType>, VillagerTrades.ItemListing> entry : listing.trades().entrySet()) {
+                List<Map.Entry<ResourceKey<VillagerType>, VillagerTrades.ItemListing>> entries = new ArrayList<>(listing.trades().entrySet());
+
+                entries.sort(Comparator.comparing((entry) -> entry.getKey().identifier().getPath()));
+
+                for (Map.Entry<ResourceKey<VillagerType>, VillagerTrades.ItemListing> entry : entries) {
                     ResourceKey<VillagerType> type = entry.getKey();
                     TooltipBuilder cond = utils.getValueTooltip(utils, type).key(Lang.Value.VILLAGER_TYPE);
 

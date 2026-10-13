@@ -1,0 +1,1685 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      | Chance: 41.67%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 3 to 10
+          ali:item minecraft:suspicious_stew x1
+            | Chance: 4.96%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Stew Effect:
+            |   -> Night Vision
+            |     -> Duration: 7 to 10
+            |   -> Jump Boost
+            |     -> Duration: 7 to 10
+            |   -> Weakness
+            |     -> Duration: 6 to 8
+            |   -> Blindness
+            |     -> Duration: 5 to 7
+            |   -> Poison
+            |     -> Duration: 10 to 20
+            |   -> Saturation
+            |     -> Duration: 7 to 10
+          ali:item minecraft:paper x1-12
+            | Chance: 3.97%
+            | Count: 1 to 12
+          ali:item minecraft:potato x2-6
+            | Chance: 3.47%
+            | Count: 2 to 6
+          ali:item minecraft:moss_block x1-4
+            | Chance: 3.47%
+            | Count: 1 to 4
+          ali:item minecraft:poisonous_potato x2-6
+            | Chance: 3.47%
+            | Count: 2 to 6
+          ali:item minecraft:carrot x4-8
+            | Chance: 3.47%
+            | Count: 4 to 8
+          ali:item minecraft:wheat x8-21
+            | Chance: 3.47%
+            | Count: 8 to 21
+          ali:item minecraft:coal x2-8
+            | Chance: 2.98%
+            | Count: 2 to 8
+          ali:item minecraft:rotten_flesh x5-24
+            | Chance: 2.48%
+            | Count: 5 to 24
+          ali:item minecraft:gunpowder x1-5
+            | Chance: 1.49%
+            | Count: 1 to 5
+          ali:item minecraft:leather_helmet x1 {"minecraft:enchantment_glint_override":1b}
+            | Chance: 1.49%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant Randomly:
+            |   -> Enchantments:
+            |     -> Tag: minecraft:on_random_loot
+            |   -> Only Compatible: True
+          ali:item minecraft:leather_chestplate x1 {"minecraft:enchantment_glint_override":1b}
+            | Chance: 1.49%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant Randomly:
+            |   -> Enchantments:
+            |     -> Tag: minecraft:on_random_loot
+            |   -> Only Compatible: True
+          ali:item minecraft:leather_leggings x1 {"minecraft:enchantment_glint_override":1b}
+            | Chance: 1.49%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant Randomly:
+            |   -> Enchantments:
+            |     -> Tag: minecraft:on_random_loot
+            |   -> Only Compatible: True
+          ali:item minecraft:leather_boots x1 {"minecraft:enchantment_glint_override":1b}
+            | Chance: 1.49%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant Randomly:
+            |   -> Enchantments:
+            |     -> Tag: minecraft:on_random_loot
+            |   -> Only Compatible: True
+          ali:item minecraft:pumpkin x1-3
+            | Chance: 0.99%
+            | Count: 1 to 3
+          ali:item minecraft:bamboo x1-3
+            | Chance: 0.99%
+            | Count: 1 to 3
+          ali:item minecraft:tnt x1-2
+            | Chance: 0.5%
+            | Count: 1 to 2
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:empty
+            | Drops nothing
+            | Chance: 34.72%
+          ali:item minecraft:coast_armor_trim_smithing_template x2
+            | Chance: 6.94%
+            | Count: 2
+    ali:reference
+      | Selects all entries
+      | Chance: 34.09%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1 to 3
+          ali:item minecraft:saddle x1
+            | Chance: 5.29%
+            | Count: 1
+          ali:item minecraft:name_tag x1
+            | Chance: 5.29%
+            | Count: 1
+          ali:item minecraft:golden_apple x1
+            | Chance: 3.96%
+            | Count: 1
+          ali:item minecraft:music_disc_13 x1
+            | Chance: 3.96%
+            | Count: 1
+          ali:item minecraft:music_disc_cat x1
+            | Chance: 3.96%
+            | Count: 1
+          ali:item minecraft:iron_horse_armor x1
+            | Chance: 3.96%
+            | Count: 1
+          ali:item minecraft:golden_horse_armor x1
+            | Chance: 2.64%
+            | Count: 1
+          ali:item minecraft:enchanted_book x1
+            | Chance: 2.64%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant Randomly:
+            |   -> Enchantments:
+            |     -> Tag: minecraft:on_random_loot
+            |   -> Only Compatible: True
+          ali:item minecraft:diamond_horse_armor x1
+            | Chance: 1.32%
+            | Count: 1
+          ali:item minecraft:enchanted_golden_apple x1
+            | Chance: 0.53%
+            | Count: 1
+          ali:item minecraft:music_disc_otherside x1
+            | Chance: 0.53%
+            | Count: 1
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1 to 4
+          ali:item minecraft:bread x1
+            | Chance: 5.45%
+            | Count: 1
+          ali:item minecraft:wheat x1-4
+            | Chance: 5.45%
+            | Count: 1 to 4
+          ali:item minecraft:redstone x1-4
+            | Chance: 4.09%
+            | Count: 1 to 4
+          ali:item minecraft:coal x1-4
+            | Chance: 4.09%
+            | Count: 1 to 4
+          ali:item minecraft:iron_ingot x1-4
+            | Chance: 2.73%
+            | Count: 1 to 4
+          ali:item minecraft:bucket x1
+            | Chance: 2.73%
+            | Count: 1
+          ali:item minecraft:melon_seeds x2-4
+            | Chance: 2.73%
+            | Count: 2 to 4
+          ali:item minecraft:pumpkin_seeds x2-4
+            | Chance: 2.73%
+            | Count: 2 to 4
+          ali:item minecraft:beetroot_seeds x2-4
+            | Chance: 2.73%
+            | Count: 2 to 4
+          ali:item minecraft:gold_ingot x1-4
+            | Chance: 1.36%
+            | Count: 1 to 4
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 3
+          ali:item minecraft:bone x1-8
+            | Chance: 8.52%
+            | Count: 1 to 8
+          ali:item minecraft:gunpowder x1-8
+            | Chance: 8.52%
+            | Count: 1 to 8
+          ali:item minecraft:rotten_flesh x1-8
+            | Chance: 8.52%
+            | Count: 1 to 8
+          ali:item minecraft:string x1-8
+            | Chance: 8.52%
+            | Count: 1 to 8
+    ali:reference
+      | Selects all entries
+      | Chance: 16.67%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 2 to 8
+          ali:item minecraft:coal x1-4
+            | Chance: 5.95%
+            | Count: 1 to 4
+          ali:item minecraft:wheat x2-3
+            | Chance: 5.95%
+            | Count: 2 to 3
+          ali:item minecraft:rotten_flesh x1
+            | Chance: 2.98%
+            | Count: 1
+          ali:item minecraft:stone_axe x1
+            | Chance: 1.19%
+            | Count: 1
+          ali:item minecraft:emerald x1
+            | Chance: 0.6%
+            | Count: 1
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item minecraft:fishing_rod x1 {"minecraft:enchantment_glint_override":1b}
+            | Chance: 6.94%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant Randomly:
+            |   -> Enchantments:
+            |     -> Tag: minecraft:on_random_loot
+            |   -> Only Compatible: True
+          ali:item minecraft:map x1 {"minecraft:item_name":'{"translate":"filled_map.buried_treasure"}'}
+            | Chance: 6.94%
+            | Count: 1
+            | ----- Modifiers -----
+            | Exploration Map:
+            |   -> Destination: minecraft:on_treasure_maps
+            |   -> Map Decoration: minecraft:red_x
+            |   -> Zoom: 1
+            |   -> Search Radius: 50
+            |   -> Skip Known Structures: False
+            | Set Name:
+            |   -> Name: Buried Treasure Map
+            |   -> Target: Item Name
+          ali:item minecraft:leather_chestplate x1
+            | Chance: 1.39%
+            | Count: 1
+          ali:item minecraft:golden_helmet x1
+            | Chance: 1.39%
+            | Count: 1
+    ali:reference
+      | Selects all entries
+      | Chance: 6.82%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 2 to 8
+          ali:item minecraft:coal x1-4
+            | Chance: 2.2%
+            | Count: 1 to 4
+          ali:item minecraft:gold_nugget x1-3
+            | Chance: 2.2%
+            | Count: 1 to 3
+          ali:item minecraft:wheat x2-3
+            | Chance: 2.2%
+            | Count: 2 to 3
+          ali:item minecraft:emerald x1
+            | Chance: 0.22%
+            | Count: 1
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item minecraft:map x1 {"minecraft:item_name":'{"translate":"filled_map.buried_treasure"}'}
+            | Chance: 2.96%
+            | Count: 1
+            | ----- Modifiers -----
+            | Exploration Map:
+            |   -> Destination: minecraft:on_treasure_maps
+            |   -> Map Decoration: minecraft:red_x
+            |   -> Zoom: 1
+            |   -> Search Radius: 50
+            |   -> Skip Known Structures: False
+            | Set Name:
+            |   -> Name: Buried Treasure Map
+            |   -> Target: Item Name
+          ali:item minecraft:enchanted_book x1
+            | Chance: 1.48%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant Randomly:
+            |   -> Enchantments:
+            |     -> Tag: minecraft:on_random_loot
+            |   -> Only Compatible: True
+          ali:item minecraft:fishing_rod x1 {"minecraft:enchantment_glint_override":1b}
+            | Chance: 1.48%
+            | Count: 1
+            | ----- Modifiers -----
+            | Enchant Randomly:
+            |   -> Enchantments:
+            |     -> Tag: minecraft:on_random_loot
+            |   -> Only Compatible: True
+          ali:item minecraft:golden_apple x1
+            | Chance: 0.3%
+            | Count: 1
+          ali:item minecraft:leather_chestplate x1
+            | Chance: 0.3%
+            | Count: 1
+          ali:item minecraft:golden_helmet x1
+            | Chance: 0.3%
+            | Count: 1
+    ali:reference
+      | Selects all entries
+      | Chance: 0.76%
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:item minecraft:heart_of_the_sea x1
+            | Chance: 0.76%
+            | Count: 1
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 5 to 8
+          ali:item minecraft:iron_ingot x1-4
+            | Chance: 0.43%
+            | Count: 1 to 4
+          ali:item minecraft:gold_ingot x1-4
+            | Chance: 0.22%
+            | Count: 1 to 4
+          ali:item minecraft:tnt x1-2
+            | Chance: 0.11%
+            | Count: 1 to 2
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1 to 3
+          ali:item minecraft:emerald x4-8
+            | Chance: 0.25%
+            | Count: 4 to 8
+          ali:item minecraft:diamond x1-2
+            | Chance: 0.25%
+            | Count: 1 to 2
+          ali:item minecraft:prismarine_crystals x1-5
+            | Chance: 0.25%
+            | Count: 1 to 5
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 0 to 1
+          ali:item minecraft:leather_chestplate x1
+            | Chance: 0.38%
+            | Count: 1
+          ali:item minecraft:iron_sword x1
+            | Chance: 0.38%
+            | Count: 1
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 2
+          ali:item minecraft:cooked_cod x2-4
+            | Chance: 0.38%
+            | Count: 2 to 4
+          ali:item minecraft:cooked_salmon x2-4
+            | Chance: 0.38%
+            | Count: 2 to 4
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 0 to 2
+          ali:item minecraft:potion x1 {"minecraft:potion_contents":{potion:"minecraft:water_breathing"}}
+            | Chance: 0.76%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Potion:
+            |   -> Potion: Potion of Water Breathing
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 3
+    ali:item minecraft:nautilus_shell x3-6
+      | Chance: 25%
+      | Count: 3 to 6
+    ali:item minecraft:prismarine_crystals x1-2
+      | Chance: 25%
+      | Count: 1 to 2
+    ali:item minecraft:prismarine_shard x1-6
+      | Chance: 25%
+      | Count: 1 to 6
+    ali:item minecraft:name_tag x1
+      | Chance: 14.06%
+      | Count: 1
+    ali:item minecraft:music_disc_wait x1
+      | Chance: 4.69%
+      | Count: 1
+    ali:item minecraft:music_disc_mall x1
+      | Chance: 4.69%
+      | Count: 1
+    ali:item minecraft:music_disc_otherside x1
+      | Chance: 1.56%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 0
+          |   -> Bad Luck: 0
+          |   -> Luck 1: 1
+          |   -> Luck 2: 2
+          |   -> Luck 3: 3
+          |   -> Luck 4: 4
+          ali:empty
+            | Drops nothing
+            | Chance: 81.74%
+          ali:item minecraft:experience_bottle x1
+            | Chance: 8.17%
+            | Count: 1
+          ali:item minecraft:black_banner x1 {"minecraft:banner_patterns":[{color:"lime",pattern:"minecraft:stripe_top"},{color:"black",pattern:"minecraft:rhombus"},{color:"black",pattern:"minecraft:rhombus"},{color:"lime",pattern:"minecraft:stripe_downleft"},{color:"black",pattern:"minecraft:stripe_bottom"},{color:"black",pattern:"minecraft:stripe_bottom"},{color:"black",pattern:"minecraft:stripe_bottom"},{color:"lime",pattern:"minecraft:triangles_bottom"},{color:"black",pattern:"minecraft:curly_border"},{color:"black",pattern:"minecraft:curly_border"},{color:"black",pattern:"minecraft:curly_border"},{color:"black",pattern:"minecraft:curly_border"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:stripe_top
+            |       -> Color: Lime
+            |     -> minecraft:rhombus
+            |       -> Color: Black
+            |     -> minecraft:rhombus
+            |       -> Color: Black
+            |     -> minecraft:stripe_downleft
+            |       -> Color: Lime
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Black
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Black
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Black
+            |     -> minecraft:triangles_bottom
+            |       -> Color: Lime
+            |     -> minecraft:curly_border
+            |       -> Color: Black
+            |     -> minecraft:curly_border
+            |       -> Color: Black
+            |     -> minecraft:curly_border
+            |       -> Color: Black
+            |     -> minecraft:curly_border
+            |       -> Color: Black
+          ali:item minecraft:white_banner x1 {"minecraft:banner_patterns":[{color:"white",pattern:"minecraft:half_horizontal"},{color:"white",pattern:"minecraft:half_horizontal_bottom"},{color:"light_blue",pattern:"minecraft:stripe_downleft"},{color:"light_blue",pattern:"minecraft:stripe_downleft"},{color:"light_blue",pattern:"minecraft:stripe_downleft"},{color:"light_blue",pattern:"minecraft:stripe_downleft"},{color:"white",pattern:"minecraft:stripe_left"},{color:"white",pattern:"minecraft:stripe_right"},{color:"white",pattern:"minecraft:stripe_left"},{color:"white",pattern:"minecraft:stripe_right"},{color:"white",pattern:"minecraft:stripe_left"},{color:"white",pattern:"minecraft:stripe_right"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:half_horizontal
+            |       -> Color: White
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: White
+            |     -> minecraft:stripe_downleft
+            |       -> Color: Light Blue
+            |     -> minecraft:stripe_downleft
+            |       -> Color: Light Blue
+            |     -> minecraft:stripe_downleft
+            |       -> Color: Light Blue
+            |     -> minecraft:stripe_downleft
+            |       -> Color: Light Blue
+            |     -> minecraft:stripe_left
+            |       -> Color: White
+            |     -> minecraft:stripe_right
+            |       -> Color: White
+            |     -> minecraft:stripe_left
+            |       -> Color: White
+            |     -> minecraft:stripe_right
+            |       -> Color: White
+            |     -> minecraft:stripe_left
+            |       -> Color: White
+            |     -> minecraft:stripe_right
+            |       -> Color: White
+          ali:item minecraft:orange_banner x1 {"minecraft:banner_patterns":[{color:"orange",pattern:"minecraft:half_horizontal"},{color:"white",pattern:"minecraft:small_stripes"},{color:"white",pattern:"minecraft:small_stripes"},{color:"white",pattern:"minecraft:small_stripes"},{color:"white",pattern:"minecraft:stripe_right"},{color:"orange",pattern:"minecraft:curly_border"},{color:"orange",pattern:"minecraft:stripe_top"},{color:"orange",pattern:"minecraft:half_horizontal_bottom"},{color:"orange",pattern:"minecraft:curly_border"},{color:"orange",pattern:"minecraft:curly_border"},{color:"orange",pattern:"minecraft:stripe_top"},{color:"orange",pattern:"minecraft:stripe_top"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:half_horizontal
+            |       -> Color: Orange
+            |     -> minecraft:small_stripes
+            |       -> Color: White
+            |     -> minecraft:small_stripes
+            |       -> Color: White
+            |     -> minecraft:small_stripes
+            |       -> Color: White
+            |     -> minecraft:stripe_right
+            |       -> Color: White
+            |     -> minecraft:curly_border
+            |       -> Color: Orange
+            |     -> minecraft:stripe_top
+            |       -> Color: Orange
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: Orange
+            |     -> minecraft:curly_border
+            |       -> Color: Orange
+            |     -> minecraft:curly_border
+            |       -> Color: Orange
+            |     -> minecraft:stripe_top
+            |       -> Color: Orange
+            |     -> minecraft:stripe_top
+            |       -> Color: Orange
+          ali:item minecraft:red_banner x1 {"minecraft:banner_patterns":[{color:"red",pattern:"minecraft:half_horizontal_bottom"},{color:"red",pattern:"minecraft:half_horizontal"},{color:"white",pattern:"minecraft:rhombus"},{color:"white",pattern:"minecraft:rhombus"},{color:"white",pattern:"minecraft:rhombus"},{color:"red",pattern:"minecraft:half_vertical"},{color:"red",pattern:"minecraft:half_vertical"},{color:"red",pattern:"minecraft:half_vertical"},{color:"red",pattern:"minecraft:half_vertical"},{color:"red",pattern:"minecraft:half_vertical"},{color:"red",pattern:"minecraft:half_vertical"},{color:"red",pattern:"minecraft:half_vertical"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: Red
+            |     -> minecraft:half_horizontal
+            |       -> Color: Red
+            |     -> minecraft:rhombus
+            |       -> Color: White
+            |     -> minecraft:rhombus
+            |       -> Color: White
+            |     -> minecraft:rhombus
+            |       -> Color: White
+            |     -> minecraft:half_vertical
+            |       -> Color: Red
+            |     -> minecraft:half_vertical
+            |       -> Color: Red
+            |     -> minecraft:half_vertical
+            |       -> Color: Red
+            |     -> minecraft:half_vertical
+            |       -> Color: Red
+            |     -> minecraft:half_vertical
+            |       -> Color: Red
+            |     -> minecraft:half_vertical
+            |       -> Color: Red
+            |     -> minecraft:half_vertical
+            |       -> Color: Red
+          ali:item minecraft:white_banner x1 {"minecraft:banner_patterns":[{color:"purple",pattern:"minecraft:stripe_bottom"},{color:"white",pattern:"minecraft:rhombus"},{color:"white",pattern:"minecraft:rhombus"},{color:"purple",pattern:"minecraft:square_bottom_left"},{color:"purple",pattern:"minecraft:border"},{color:"purple",pattern:"minecraft:stripe_top"},{color:"purple",pattern:"minecraft:piglin"},{color:"purple",pattern:"minecraft:stripe_top"},{color:"purple",pattern:"minecraft:border"},{color:"purple",pattern:"minecraft:border"},{color:"purple",pattern:"minecraft:square_bottom_left"},{color:"purple",pattern:"minecraft:square_bottom_left"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Purple
+            |     -> minecraft:rhombus
+            |       -> Color: White
+            |     -> minecraft:rhombus
+            |       -> Color: White
+            |     -> minecraft:square_bottom_left
+            |       -> Color: Purple
+            |     -> minecraft:border
+            |       -> Color: Purple
+            |     -> minecraft:stripe_top
+            |       -> Color: Purple
+            |     -> minecraft:piglin
+            |       -> Color: Purple
+            |     -> minecraft:stripe_top
+            |       -> Color: Purple
+            |     -> minecraft:border
+            |       -> Color: Purple
+            |     -> minecraft:border
+            |       -> Color: Purple
+            |     -> minecraft:square_bottom_left
+            |       -> Color: Purple
+            |     -> minecraft:square_bottom_left
+            |       -> Color: Purple
+          ali:item minecraft:black_banner x1 {"minecraft:banner_patterns":[{color:"black",pattern:"minecraft:half_horizontal_bottom"},{color:"black",pattern:"minecraft:half_horizontal"},{color:"red",pattern:"minecraft:stripe_left"},{color:"red",pattern:"minecraft:stripe_left"},{color:"red",pattern:"minecraft:stripe_right"},{color:"red",pattern:"minecraft:stripe_right"},{color:"black",pattern:"minecraft:gradient"},{color:"red",pattern:"minecraft:stripe_downright"},{color:"black",pattern:"minecraft:border"},{color:"black",pattern:"minecraft:border"},{color:"black",pattern:"minecraft:border"},{color:"black",pattern:"minecraft:border"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: Black
+            |     -> minecraft:half_horizontal
+            |       -> Color: Black
+            |     -> minecraft:stripe_left
+            |       -> Color: Red
+            |     -> minecraft:stripe_left
+            |       -> Color: Red
+            |     -> minecraft:stripe_right
+            |       -> Color: Red
+            |     -> minecraft:stripe_right
+            |       -> Color: Red
+            |     -> minecraft:gradient
+            |       -> Color: Black
+            |     -> minecraft:stripe_downright
+            |       -> Color: Red
+            |     -> minecraft:border
+            |       -> Color: Black
+            |     -> minecraft:border
+            |       -> Color: Black
+            |     -> minecraft:border
+            |       -> Color: Black
+            |     -> minecraft:border
+            |       -> Color: Black
+          ali:item minecraft:lime_banner x1 {"minecraft:banner_patterns":[{color:"yellow",pattern:"minecraft:stripe_right"},{color:"yellow",pattern:"minecraft:square_bottom_right"},{color:"yellow",pattern:"minecraft:square_bottom_right"},{color:"yellow",pattern:"minecraft:square_bottom_right"},{color:"red",pattern:"minecraft:triangle_top"},{color:"red",pattern:"minecraft:triangle_top"},{color:"red",pattern:"minecraft:triangle_top"},{color:"red",pattern:"minecraft:square_top_left"},{color:"red",pattern:"minecraft:square_top_left"},{color:"white",pattern:"minecraft:circle"},{color:"white",pattern:"minecraft:circle"},{color:"blue",pattern:"minecraft:circle"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:stripe_right
+            |       -> Color: Yellow
+            |     -> minecraft:square_bottom_right
+            |       -> Color: Yellow
+            |     -> minecraft:square_bottom_right
+            |       -> Color: Yellow
+            |     -> minecraft:square_bottom_right
+            |       -> Color: Yellow
+            |     -> minecraft:triangle_top
+            |       -> Color: Red
+            |     -> minecraft:triangle_top
+            |       -> Color: Red
+            |     -> minecraft:triangle_top
+            |       -> Color: Red
+            |     -> minecraft:square_top_left
+            |       -> Color: Red
+            |     -> minecraft:square_top_left
+            |       -> Color: Red
+            |     -> minecraft:circle
+            |       -> Color: White
+            |     -> minecraft:circle
+            |       -> Color: White
+            |     -> minecraft:circle
+            |       -> Color: Blue
+          ali:item minecraft:green_banner x1 {"minecraft:banner_patterns":[{color:"lime",pattern:"minecraft:triangle_bottom"},{color:"black",pattern:"minecraft:bricks"},{color:"lime",pattern:"minecraft:gradient_up"},{color:"black",pattern:"minecraft:rhombus"},{color:"lime",pattern:"minecraft:creeper"},{color:"green",pattern:"minecraft:diagonal_right"},{color:"green",pattern:"minecraft:diagonal_left"},{color:"green",pattern:"minecraft:diagonal_right"},{color:"green",pattern:"minecraft:diagonal_left"},{color:"lime",pattern:"minecraft:triangle_top"},{color:"orange",pattern:"minecraft:gradient"},{color:"green",pattern:"minecraft:gradient"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:triangle_bottom
+            |       -> Color: Lime
+            |     -> minecraft:bricks
+            |       -> Color: Black
+            |     -> minecraft:gradient_up
+            |       -> Color: Lime
+            |     -> minecraft:rhombus
+            |       -> Color: Black
+            |     -> minecraft:creeper
+            |       -> Color: Lime
+            |     -> minecraft:diagonal_right
+            |       -> Color: Green
+            |     -> minecraft:diagonal_left
+            |       -> Color: Green
+            |     -> minecraft:diagonal_right
+            |       -> Color: Green
+            |     -> minecraft:diagonal_left
+            |       -> Color: Green
+            |     -> minecraft:triangle_top
+            |       -> Color: Lime
+            |     -> minecraft:gradient
+            |       -> Color: Orange
+            |     -> minecraft:gradient
+            |       -> Color: Green
+          ali:item minecraft:yellow_banner x1 {"minecraft:banner_patterns":[{color:"black",pattern:"minecraft:flower"},{color:"yellow",pattern:"minecraft:circle"},{color:"black",pattern:"minecraft:small_stripes"},{color:"yellow",pattern:"minecraft:border"},{color:"yellow",pattern:"minecraft:flower"},{color:"black",pattern:"minecraft:gradient_up"},{color:"black",pattern:"minecraft:stripe_top"},{color:"black",pattern:"minecraft:stripe_top"},{color:"black",pattern:"minecraft:curly_border"},{color:"lime",pattern:"minecraft:gradient_up"},{color:"black",pattern:"minecraft:triangle_bottom"},{color:"black",pattern:"minecraft:triangle_bottom"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:flower
+            |       -> Color: Black
+            |     -> minecraft:circle
+            |       -> Color: Yellow
+            |     -> minecraft:small_stripes
+            |       -> Color: Black
+            |     -> minecraft:border
+            |       -> Color: Yellow
+            |     -> minecraft:flower
+            |       -> Color: Yellow
+            |     -> minecraft:gradient_up
+            |       -> Color: Black
+            |     -> minecraft:stripe_top
+            |       -> Color: Black
+            |     -> minecraft:stripe_top
+            |       -> Color: Black
+            |     -> minecraft:curly_border
+            |       -> Color: Black
+            |     -> minecraft:gradient_up
+            |       -> Color: Lime
+            |     -> minecraft:triangle_bottom
+            |       -> Color: Black
+            |     -> minecraft:triangle_bottom
+            |       -> Color: Black
+          ali:item minecraft:white_banner x1 {"minecraft:banner_patterns":[{color:"white",pattern:"minecraft:half_horizontal"},{color:"white",pattern:"minecraft:half_horizontal_bottom"},{color:"red",pattern:"minecraft:square_top_left"},{color:"red",pattern:"minecraft:square_top_left"},{color:"lime",pattern:"minecraft:square_top_right"},{color:"lime",pattern:"minecraft:square_top_right"},{color:"light_blue",pattern:"minecraft:square_bottom_left"},{color:"yellow",pattern:"minecraft:square_bottom_right"},{color:"light_blue",pattern:"minecraft:square_bottom_left"},{color:"white",pattern:"minecraft:straight_cross"},{color:"white",pattern:"minecraft:straight_cross"},{color:"white",pattern:"minecraft:straight_cross"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:half_horizontal
+            |       -> Color: White
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: White
+            |     -> minecraft:square_top_left
+            |       -> Color: Red
+            |     -> minecraft:square_top_left
+            |       -> Color: Red
+            |     -> minecraft:square_top_right
+            |       -> Color: Lime
+            |     -> minecraft:square_top_right
+            |       -> Color: Lime
+            |     -> minecraft:square_bottom_left
+            |       -> Color: Light Blue
+            |     -> minecraft:square_bottom_right
+            |       -> Color: Yellow
+            |     -> minecraft:square_bottom_left
+            |       -> Color: Light Blue
+            |     -> minecraft:straight_cross
+            |       -> Color: White
+            |     -> minecraft:straight_cross
+            |       -> Color: White
+            |     -> minecraft:straight_cross
+            |       -> Color: White
+          ali:item minecraft:black_banner x1 {"minecraft:banner_patterns":[{color:"white",pattern:"minecraft:half_vertical_right"},{color:"red",pattern:"minecraft:straight_cross"},{color:"red",pattern:"minecraft:straight_cross"},{color:"red",pattern:"minecraft:straight_cross"},{color:"black",pattern:"minecraft:square_bottom_left"},{color:"white",pattern:"minecraft:square_bottom_right"},{color:"white",pattern:"minecraft:square_top_right"},{color:"black",pattern:"minecraft:square_top_left"},{color:"black",pattern:"minecraft:square_top_left"},{color:"white",pattern:"minecraft:square_top_right"},{color:"white",pattern:"minecraft:square_bottom_right"},{color:"black",pattern:"minecraft:square_bottom_left"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:half_vertical_right
+            |       -> Color: White
+            |     -> minecraft:straight_cross
+            |       -> Color: Red
+            |     -> minecraft:straight_cross
+            |       -> Color: Red
+            |     -> minecraft:straight_cross
+            |       -> Color: Red
+            |     -> minecraft:square_bottom_left
+            |       -> Color: Black
+            |     -> minecraft:square_bottom_right
+            |       -> Color: White
+            |     -> minecraft:square_top_right
+            |       -> Color: White
+            |     -> minecraft:square_top_left
+            |       -> Color: Black
+            |     -> minecraft:square_top_left
+            |       -> Color: Black
+            |     -> minecraft:square_top_right
+            |       -> Color: White
+            |     -> minecraft:square_bottom_right
+            |       -> Color: White
+            |     -> minecraft:square_bottom_left
+            |       -> Color: Black
+          ali:item minecraft:white_banner x1 {"minecraft:banner_patterns":[{color:"white",pattern:"minecraft:half_horizontal"},{color:"white",pattern:"minecraft:half_horizontal_bottom"},{color:"yellow",pattern:"minecraft:stripe_right"},{color:"yellow",pattern:"minecraft:stripe_right"},{color:"yellow",pattern:"minecraft:stripe_right"},{color:"yellow",pattern:"minecraft:stripe_right"},{color:"yellow",pattern:"minecraft:stripe_right"},{color:"purple",pattern:"minecraft:stripe_left"},{color:"purple",pattern:"minecraft:stripe_left"},{color:"purple",pattern:"minecraft:stripe_left"},{color:"purple",pattern:"minecraft:stripe_left"},{color:"purple",pattern:"minecraft:stripe_left"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:half_horizontal
+            |       -> Color: White
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: White
+            |     -> minecraft:stripe_right
+            |       -> Color: Yellow
+            |     -> minecraft:stripe_right
+            |       -> Color: Yellow
+            |     -> minecraft:stripe_right
+            |       -> Color: Yellow
+            |     -> minecraft:stripe_right
+            |       -> Color: Yellow
+            |     -> minecraft:stripe_right
+            |       -> Color: Yellow
+            |     -> minecraft:stripe_left
+            |       -> Color: Purple
+            |     -> minecraft:stripe_left
+            |       -> Color: Purple
+            |     -> minecraft:stripe_left
+            |       -> Color: Purple
+            |     -> minecraft:stripe_left
+            |       -> Color: Purple
+            |     -> minecraft:stripe_left
+            |       -> Color: Purple
+          ali:item minecraft:blue_banner x1 {"minecraft:banner_patterns":[{color:"yellow",pattern:"minecraft:half_horizontal"},{color:"yellow",pattern:"minecraft:half_horizontal_bottom"},{color:"blue",pattern:"minecraft:stripe_middle"},{color:"blue",pattern:"minecraft:stripe_top"},{color:"blue",pattern:"minecraft:stripe_bottom"},{color:"blue",pattern:"minecraft:border"},{color:"blue",pattern:"minecraft:border"},{color:"blue",pattern:"minecraft:border"},{color:"blue",pattern:"minecraft:stripe_top"},{color:"blue",pattern:"minecraft:stripe_bottom"},{color:"blue",pattern:"minecraft:stripe_middle"},{color:"blue",pattern:"minecraft:stripe_middle"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:half_horizontal
+            |       -> Color: Yellow
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: Yellow
+            |     -> minecraft:stripe_middle
+            |       -> Color: Blue
+            |     -> minecraft:stripe_top
+            |       -> Color: Blue
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Blue
+            |     -> minecraft:border
+            |       -> Color: Blue
+            |     -> minecraft:border
+            |       -> Color: Blue
+            |     -> minecraft:border
+            |       -> Color: Blue
+            |     -> minecraft:stripe_top
+            |       -> Color: Blue
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Blue
+            |     -> minecraft:stripe_middle
+            |       -> Color: Blue
+            |     -> minecraft:stripe_middle
+            |       -> Color: Blue
+          ali:item minecraft:blue_banner x1 {"minecraft:banner_patterns":[{color:"blue",pattern:"minecraft:half_horizontal_bottom"},{color:"blue",pattern:"minecraft:half_horizontal"},{color:"yellow",pattern:"minecraft:flower"},{color:"yellow",pattern:"minecraft:flower"},{color:"yellow",pattern:"minecraft:flower"},{color:"blue",pattern:"minecraft:small_stripes"},{color:"blue",pattern:"minecraft:small_stripes"},{color:"blue",pattern:"minecraft:piglin"},{color:"blue",pattern:"minecraft:circle"},{color:"blue",pattern:"minecraft:circle"},{color:"blue",pattern:"minecraft:circle"},{color:"blue",pattern:"minecraft:border"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: Blue
+            |     -> minecraft:half_horizontal
+            |       -> Color: Blue
+            |     -> minecraft:flower
+            |       -> Color: Yellow
+            |     -> minecraft:flower
+            |       -> Color: Yellow
+            |     -> minecraft:flower
+            |       -> Color: Yellow
+            |     -> minecraft:small_stripes
+            |       -> Color: Blue
+            |     -> minecraft:small_stripes
+            |       -> Color: Blue
+            |     -> minecraft:piglin
+            |       -> Color: Blue
+            |     -> minecraft:circle
+            |       -> Color: Blue
+            |     -> minecraft:circle
+            |       -> Color: Blue
+            |     -> minecraft:circle
+            |       -> Color: Blue
+            |     -> minecraft:border
+            |       -> Color: Blue
+          ali:item minecraft:light_blue_banner x1 {"minecraft:banner_patterns":[{color:"light_blue",pattern:"minecraft:half_horizontal_bottom"},{color:"light_blue",pattern:"minecraft:half_horizontal"},{color:"white",pattern:"minecraft:triangles_bottom"},{color:"white",pattern:"minecraft:curly_border"},{color:"white",pattern:"minecraft:triangles_bottom"},{color:"white",pattern:"minecraft:curly_border"},{color:"light_blue",pattern:"minecraft:border"},{color:"light_blue",pattern:"minecraft:stripe_top"},{color:"white",pattern:"minecraft:globe"},{color:"white",pattern:"minecraft:globe"},{color:"white",pattern:"minecraft:globe"},{color:"white",pattern:"minecraft:globe"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: Light Blue
+            |     -> minecraft:half_horizontal
+            |       -> Color: Light Blue
+            |     -> minecraft:triangles_bottom
+            |       -> Color: White
+            |     -> minecraft:curly_border
+            |       -> Color: White
+            |     -> minecraft:triangles_bottom
+            |       -> Color: White
+            |     -> minecraft:curly_border
+            |       -> Color: White
+            |     -> minecraft:border
+            |       -> Color: Light Blue
+            |     -> minecraft:stripe_top
+            |       -> Color: Light Blue
+            |     -> minecraft:globe
+            |       -> Color: White
+            |     -> minecraft:globe
+            |       -> Color: White
+            |     -> minecraft:globe
+            |       -> Color: White
+            |     -> minecraft:globe
+            |       -> Color: White
+          ali:item minecraft:white_banner x1 {"minecraft:banner_patterns":[{color:"white",pattern:"minecraft:half_horizontal"},{color:"white",pattern:"minecraft:half_horizontal_bottom"},{color:"red",pattern:"minecraft:straight_cross"},{color:"red",pattern:"minecraft:straight_cross"},{color:"red",pattern:"minecraft:straight_cross"},{color:"white",pattern:"minecraft:border"},{color:"white",pattern:"minecraft:border"},{color:"white",pattern:"minecraft:border"},{color:"white",pattern:"minecraft:stripe_top"},{color:"white",pattern:"minecraft:stripe_top"},{color:"white",pattern:"minecraft:stripe_bottom"},{color:"white",pattern:"minecraft:stripe_bottom"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:half_horizontal
+            |       -> Color: White
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: White
+            |     -> minecraft:straight_cross
+            |       -> Color: Red
+            |     -> minecraft:straight_cross
+            |       -> Color: Red
+            |     -> minecraft:straight_cross
+            |       -> Color: Red
+            |     -> minecraft:border
+            |       -> Color: White
+            |     -> minecraft:border
+            |       -> Color: White
+            |     -> minecraft:border
+            |       -> Color: White
+            |     -> minecraft:stripe_top
+            |       -> Color: White
+            |     -> minecraft:stripe_top
+            |       -> Color: White
+            |     -> minecraft:stripe_bottom
+            |       -> Color: White
+            |     -> minecraft:stripe_bottom
+            |       -> Color: White
+          ali:item minecraft:black_banner x1 {"minecraft:banner_patterns":[{color:"white",pattern:"minecraft:bricks"},{color:"white",pattern:"minecraft:bricks"},{color:"black",pattern:"minecraft:small_stripes"},{color:"black",pattern:"minecraft:small_stripes"},{color:"black",pattern:"minecraft:small_stripes"},{color:"black",pattern:"minecraft:small_stripes"},{color:"white",pattern:"minecraft:stripe_center"},{color:"white",pattern:"minecraft:stripe_center"},{color:"white",pattern:"minecraft:stripe_center"},{color:"black",pattern:"minecraft:border"},{color:"black",pattern:"minecraft:border"},{color:"black",pattern:"minecraft:border"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:bricks
+            |       -> Color: White
+            |     -> minecraft:bricks
+            |       -> Color: White
+            |     -> minecraft:small_stripes
+            |       -> Color: Black
+            |     -> minecraft:small_stripes
+            |       -> Color: Black
+            |     -> minecraft:small_stripes
+            |       -> Color: Black
+            |     -> minecraft:small_stripes
+            |       -> Color: Black
+            |     -> minecraft:stripe_center
+            |       -> Color: White
+            |     -> minecraft:stripe_center
+            |       -> Color: White
+            |     -> minecraft:stripe_center
+            |       -> Color: White
+            |     -> minecraft:border
+            |       -> Color: Black
+            |     -> minecraft:border
+            |       -> Color: Black
+            |     -> minecraft:border
+            |       -> Color: Black
+          ali:item minecraft:black_banner x1 {"minecraft:banner_patterns":[{color:"black",pattern:"minecraft:stripe_center"},{color:"red",pattern:"minecraft:stripe_left"},{color:"red",pattern:"minecraft:stripe_left"},{color:"red",pattern:"minecraft:stripe_left"},{color:"green",pattern:"minecraft:stripe_right"},{color:"green",pattern:"minecraft:stripe_right"},{color:"green",pattern:"minecraft:stripe_right"},{color:"green",pattern:"minecraft:stripe_right"},{color:"green",pattern:"minecraft:stripe_right"},{color:"red",pattern:"minecraft:stripe_left"},{color:"red",pattern:"minecraft:stripe_left"},{color:"black",pattern:"minecraft:stripe_center"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:stripe_center
+            |       -> Color: Black
+            |     -> minecraft:stripe_left
+            |       -> Color: Red
+            |     -> minecraft:stripe_left
+            |       -> Color: Red
+            |     -> minecraft:stripe_left
+            |       -> Color: Red
+            |     -> minecraft:stripe_right
+            |       -> Color: Green
+            |     -> minecraft:stripe_right
+            |       -> Color: Green
+            |     -> minecraft:stripe_right
+            |       -> Color: Green
+            |     -> minecraft:stripe_right
+            |       -> Color: Green
+            |     -> minecraft:stripe_right
+            |       -> Color: Green
+            |     -> minecraft:stripe_left
+            |       -> Color: Red
+            |     -> minecraft:stripe_left
+            |       -> Color: Red
+            |     -> minecraft:stripe_center
+            |       -> Color: Black
+          ali:item minecraft:white_banner x1 {"minecraft:banner_patterns":[{color:"black",pattern:"minecraft:half_horizontal_bottom"},{color:"white",pattern:"minecraft:half_horizontal"},{color:"blue",pattern:"minecraft:stripe_bottom"},{color:"blue",pattern:"minecraft:stripe_bottom"},{color:"blue",pattern:"minecraft:stripe_bottom"},{color:"magenta",pattern:"minecraft:stripe_top"},{color:"magenta",pattern:"minecraft:stripe_top"},{color:"magenta",pattern:"minecraft:stripe_top"},{color:"purple",pattern:"minecraft:stripe_middle"},{color:"purple",pattern:"minecraft:stripe_middle"},{color:"purple",pattern:"minecraft:stripe_middle"},{color:"purple",pattern:"minecraft:stripe_middle"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: Black
+            |     -> minecraft:half_horizontal
+            |       -> Color: White
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Blue
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Blue
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Blue
+            |     -> minecraft:stripe_top
+            |       -> Color: Magenta
+            |     -> minecraft:stripe_top
+            |       -> Color: Magenta
+            |     -> minecraft:stripe_top
+            |       -> Color: Magenta
+            |     -> minecraft:stripe_middle
+            |       -> Color: Purple
+            |     -> minecraft:stripe_middle
+            |       -> Color: Purple
+            |     -> minecraft:stripe_middle
+            |       -> Color: Purple
+            |     -> minecraft:stripe_middle
+            |       -> Color: Purple
+          ali:item minecraft:white_banner x1 {"minecraft:banner_patterns":[{color:"gray",pattern:"minecraft:half_horizontal_bottom"},{color:"gray",pattern:"minecraft:half_horizontal_bottom"},{color:"black",pattern:"minecraft:stripe_bottom"},{color:"black",pattern:"minecraft:stripe_bottom"},{color:"black",pattern:"minecraft:stripe_bottom"},{color:"lime",pattern:"minecraft:half_horizontal"},{color:"green",pattern:"minecraft:stripe_top"},{color:"green",pattern:"minecraft:stripe_top"},{color:"white",pattern:"minecraft:stripe_middle"},{color:"white",pattern:"minecraft:stripe_middle"},{color:"white",pattern:"minecraft:stripe_middle"},{color:"green",pattern:"minecraft:stripe_top"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: Gray
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: Gray
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Black
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Black
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Black
+            |     -> minecraft:half_horizontal
+            |       -> Color: Lime
+            |     -> minecraft:stripe_top
+            |       -> Color: Green
+            |     -> minecraft:stripe_top
+            |       -> Color: Green
+            |     -> minecraft:stripe_middle
+            |       -> Color: White
+            |     -> minecraft:stripe_middle
+            |       -> Color: White
+            |     -> minecraft:stripe_middle
+            |       -> Color: White
+            |     -> minecraft:stripe_top
+            |       -> Color: Green
+          ali:item minecraft:purple_banner x1 {"minecraft:banner_patterns":[{color:"purple",pattern:"minecraft:stripe_center"},{color:"magenta",pattern:"minecraft:stripe_left"},{color:"magenta",pattern:"minecraft:stripe_left"},{color:"magenta",pattern:"minecraft:stripe_left"},{color:"blue",pattern:"minecraft:stripe_right"},{color:"blue",pattern:"minecraft:stripe_right"},{color:"blue",pattern:"minecraft:stripe_right"},{color:"blue",pattern:"minecraft:stripe_right"},{color:"blue",pattern:"minecraft:stripe_right"},{color:"magenta",pattern:"minecraft:stripe_left"},{color:"magenta",pattern:"minecraft:stripe_left"},{color:"purple",pattern:"minecraft:stripe_center"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:stripe_center
+            |       -> Color: Purple
+            |     -> minecraft:stripe_left
+            |       -> Color: Magenta
+            |     -> minecraft:stripe_left
+            |       -> Color: Magenta
+            |     -> minecraft:stripe_left
+            |       -> Color: Magenta
+            |     -> minecraft:stripe_right
+            |       -> Color: Blue
+            |     -> minecraft:stripe_right
+            |       -> Color: Blue
+            |     -> minecraft:stripe_right
+            |       -> Color: Blue
+            |     -> minecraft:stripe_right
+            |       -> Color: Blue
+            |     -> minecraft:stripe_right
+            |       -> Color: Blue
+            |     -> minecraft:stripe_left
+            |       -> Color: Magenta
+            |     -> minecraft:stripe_left
+            |       -> Color: Magenta
+            |     -> minecraft:stripe_center
+            |       -> Color: Purple
+          ali:item minecraft:yellow_banner x1 {"minecraft:banner_patterns":[{color:"yellow",pattern:"minecraft:half_horizontal"},{color:"red",pattern:"minecraft:gradient"},{color:"red",pattern:"minecraft:gradient_up"},{color:"yellow",pattern:"minecraft:gradient"},{color:"yellow",pattern:"minecraft:gradient"},{color:"magenta",pattern:"minecraft:gradient_up"},{color:"purple",pattern:"minecraft:gradient_up"},{color:"yellow",pattern:"minecraft:gradient"},{color:"red",pattern:"minecraft:gradient"},{color:"white",pattern:"minecraft:stripe_middle"},{color:"white",pattern:"minecraft:stripe_middle"},{color:"white",pattern:"minecraft:stripe_middle"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:half_horizontal
+            |       -> Color: Yellow
+            |     -> minecraft:gradient
+            |       -> Color: Red
+            |     -> minecraft:gradient_up
+            |       -> Color: Red
+            |     -> minecraft:gradient
+            |       -> Color: Yellow
+            |     -> minecraft:gradient
+            |       -> Color: Yellow
+            |     -> minecraft:gradient_up
+            |       -> Color: Magenta
+            |     -> minecraft:gradient_up
+            |       -> Color: Purple
+            |     -> minecraft:gradient
+            |       -> Color: Yellow
+            |     -> minecraft:gradient
+            |       -> Color: Red
+            |     -> minecraft:stripe_middle
+            |       -> Color: White
+            |     -> minecraft:stripe_middle
+            |       -> Color: White
+            |     -> minecraft:stripe_middle
+            |       -> Color: White
+          ali:item minecraft:yellow_banner x1 {"minecraft:banner_patterns":[{color:"yellow",pattern:"minecraft:half_horizontal_bottom"},{color:"yellow",pattern:"minecraft:half_horizontal"},{color:"pink",pattern:"minecraft:stripe_top"},{color:"pink",pattern:"minecraft:stripe_top"},{color:"pink",pattern:"minecraft:stripe_top"},{color:"pink",pattern:"minecraft:stripe_top"},{color:"pink",pattern:"minecraft:stripe_top"},{color:"light_blue",pattern:"minecraft:stripe_bottom"},{color:"light_blue",pattern:"minecraft:stripe_bottom"},{color:"light_blue",pattern:"minecraft:stripe_bottom"},{color:"light_blue",pattern:"minecraft:stripe_bottom"},{color:"light_blue",pattern:"minecraft:stripe_bottom"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: Yellow
+            |     -> minecraft:half_horizontal
+            |       -> Color: Yellow
+            |     -> minecraft:stripe_top
+            |       -> Color: Pink
+            |     -> minecraft:stripe_top
+            |       -> Color: Pink
+            |     -> minecraft:stripe_top
+            |       -> Color: Pink
+            |     -> minecraft:stripe_top
+            |       -> Color: Pink
+            |     -> minecraft:stripe_top
+            |       -> Color: Pink
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Light Blue
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Light Blue
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Light Blue
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Light Blue
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Light Blue
+          ali:item minecraft:white_banner x1 {"minecraft:banner_patterns":[{color:"white",pattern:"minecraft:half_horizontal"},{color:"yellow",pattern:"minecraft:stripe_top"},{color:"yellow",pattern:"minecraft:stripe_top"},{color:"purple",pattern:"minecraft:half_horizontal_bottom"},{color:"purple",pattern:"minecraft:half_horizontal_bottom"},{color:"purple",pattern:"minecraft:half_horizontal_bottom"},{color:"purple",pattern:"minecraft:half_horizontal_bottom"},{color:"purple",pattern:"minecraft:half_horizontal_bottom"},{color:"purple",pattern:"minecraft:half_horizontal_bottom"},{color:"black",pattern:"minecraft:stripe_bottom"},{color:"black",pattern:"minecraft:stripe_bottom"},{color:"black",pattern:"minecraft:stripe_bottom"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:half_horizontal
+            |       -> Color: White
+            |     -> minecraft:stripe_top
+            |       -> Color: Yellow
+            |     -> minecraft:stripe_top
+            |       -> Color: Yellow
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: Purple
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: Purple
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: Purple
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: Purple
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: Purple
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: Purple
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Black
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Black
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Black
+          ali:item minecraft:light_gray_banner x1 {"minecraft:banner_patterns":[{color:"light_gray",pattern:"minecraft:half_horizontal"},{color:"black",pattern:"minecraft:stripe_top"},{color:"white",pattern:"minecraft:half_horizontal_bottom"},{color:"white",pattern:"minecraft:half_horizontal_bottom"},{color:"white",pattern:"minecraft:half_horizontal_bottom"},{color:"white",pattern:"minecraft:half_horizontal_bottom"},{color:"white",pattern:"minecraft:half_horizontal_bottom"},{color:"white",pattern:"minecraft:half_horizontal_bottom"},{color:"purple",pattern:"minecraft:stripe_bottom"},{color:"purple",pattern:"minecraft:stripe_bottom"},{color:"purple",pattern:"minecraft:stripe_bottom"},{color:"black",pattern:"minecraft:stripe_top"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:half_horizontal
+            |       -> Color: Light Gray
+            |     -> minecraft:stripe_top
+            |       -> Color: Black
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: White
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: White
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: White
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: White
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: White
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: White
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Purple
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Purple
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Purple
+            |     -> minecraft:stripe_top
+            |       -> Color: Black
+          ali:item minecraft:red_banner x1 {"minecraft:banner_patterns":[{color:"green",pattern:"minecraft:half_horizontal_bottom"},{color:"blue",pattern:"minecraft:stripe_bottom"},{color:"blue",pattern:"minecraft:stripe_bottom"},{color:"purple",pattern:"minecraft:triangles_bottom"},{color:"yellow",pattern:"minecraft:half_horizontal"},{color:"orange",pattern:"minecraft:stripe_top"},{color:"orange",pattern:"minecraft:stripe_top"},{color:"red",pattern:"minecraft:triangles_top"},{color:"red",pattern:"minecraft:triangles_top"},{color:"purple",pattern:"minecraft:triangles_bottom"},{color:"purple",pattern:"minecraft:triangles_bottom"},{color:"red",pattern:"minecraft:triangles_top"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: Green
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Blue
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Blue
+            |     -> minecraft:triangles_bottom
+            |       -> Color: Purple
+            |     -> minecraft:half_horizontal
+            |       -> Color: Yellow
+            |     -> minecraft:stripe_top
+            |       -> Color: Orange
+            |     -> minecraft:stripe_top
+            |       -> Color: Orange
+            |     -> minecraft:triangles_top
+            |       -> Color: Red
+            |     -> minecraft:triangles_top
+            |       -> Color: Red
+            |     -> minecraft:triangles_bottom
+            |       -> Color: Purple
+            |     -> minecraft:triangles_bottom
+            |       -> Color: Purple
+            |     -> minecraft:triangles_top
+            |       -> Color: Red
+          ali:item minecraft:yellow_banner x1 {"minecraft:banner_patterns":[{color:"yellow",pattern:"minecraft:half_horizontal_bottom"},{color:"blue",pattern:"minecraft:half_horizontal"},{color:"blue",pattern:"minecraft:half_horizontal"},{color:"blue",pattern:"minecraft:half_horizontal"},{color:"blue",pattern:"minecraft:half_horizontal"},{color:"blue",pattern:"minecraft:half_horizontal"},{color:"blue",pattern:"minecraft:half_horizontal"},{color:"blue",pattern:"minecraft:half_horizontal"},{color:"blue",pattern:"minecraft:half_horizontal"},{color:"blue",pattern:"minecraft:half_horizontal"},{color:"blue",pattern:"minecraft:half_horizontal"},{color:"blue",pattern:"minecraft:half_horizontal"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: Yellow
+            |     -> minecraft:half_horizontal
+            |       -> Color: Blue
+            |     -> minecraft:half_horizontal
+            |       -> Color: Blue
+            |     -> minecraft:half_horizontal
+            |       -> Color: Blue
+            |     -> minecraft:half_horizontal
+            |       -> Color: Blue
+            |     -> minecraft:half_horizontal
+            |       -> Color: Blue
+            |     -> minecraft:half_horizontal
+            |       -> Color: Blue
+            |     -> minecraft:half_horizontal
+            |       -> Color: Blue
+            |     -> minecraft:half_horizontal
+            |       -> Color: Blue
+            |     -> minecraft:half_horizontal
+            |       -> Color: Blue
+            |     -> minecraft:half_horizontal
+            |       -> Color: Blue
+            |     -> minecraft:half_horizontal
+            |       -> Color: Blue
+          ali:item minecraft:pink_banner x1 {"minecraft:banner_patterns":[{color:"white",pattern:"minecraft:stripe_center"},{color:"white",pattern:"minecraft:stripe_center"},{color:"white",pattern:"minecraft:stripe_center"},{color:"light_blue",pattern:"minecraft:border"},{color:"light_blue",pattern:"minecraft:border"},{color:"light_blue",pattern:"minecraft:border"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:stripe_center
+            |       -> Color: White
+            |     -> minecraft:stripe_center
+            |       -> Color: White
+            |     -> minecraft:stripe_center
+            |       -> Color: White
+            |     -> minecraft:border
+            |       -> Color: Light Blue
+            |     -> minecraft:border
+            |       -> Color: Light Blue
+            |     -> minecraft:border
+            |       -> Color: Light Blue
+          ali:item minecraft:green_banner x1 {"minecraft:banner_patterns":[{color:"cyan",pattern:"minecraft:flower"},{color:"cyan",pattern:"minecraft:rhombus"},{color:"light_blue",pattern:"minecraft:circle"},{color:"black",pattern:"minecraft:globe"},{color:"green",pattern:"minecraft:globe"},{color:"black",pattern:"minecraft:border"},{color:"black",pattern:"minecraft:stripe_top"},{color:"black",pattern:"minecraft:stripe_bottom"},{color:"black",pattern:"minecraft:border"},{color:"black",pattern:"minecraft:border"},{color:"black",pattern:"minecraft:stripe_top"},{color:"black",pattern:"minecraft:stripe_bottom"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:flower
+            |       -> Color: Cyan
+            |     -> minecraft:rhombus
+            |       -> Color: Cyan
+            |     -> minecraft:circle
+            |       -> Color: Light Blue
+            |     -> minecraft:globe
+            |       -> Color: Black
+            |     -> minecraft:globe
+            |       -> Color: Green
+            |     -> minecraft:border
+            |       -> Color: Black
+            |     -> minecraft:stripe_top
+            |       -> Color: Black
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Black
+            |     -> minecraft:border
+            |       -> Color: Black
+            |     -> minecraft:border
+            |       -> Color: Black
+            |     -> minecraft:stripe_top
+            |       -> Color: Black
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Black
+          ali:item minecraft:red_banner x1 {"minecraft:banner_patterns":[{color:"red",pattern:"minecraft:gradient_up"},{color:"yellow",pattern:"minecraft:triangle_top"},{color:"yellow",pattern:"minecraft:triangle_top"},{color:"yellow",pattern:"minecraft:triangle_top"},{color:"yellow",pattern:"minecraft:stripe_right"},{color:"yellow",pattern:"minecraft:stripe_left"},{color:"red",pattern:"minecraft:border"},{color:"red",pattern:"minecraft:border"},{color:"red",pattern:"minecraft:border"},{color:"red",pattern:"minecraft:triangles_top"},{color:"red",pattern:"minecraft:triangles_top"},{color:"red",pattern:"minecraft:triangles_top"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:gradient_up
+            |       -> Color: Red
+            |     -> minecraft:triangle_top
+            |       -> Color: Yellow
+            |     -> minecraft:triangle_top
+            |       -> Color: Yellow
+            |     -> minecraft:triangle_top
+            |       -> Color: Yellow
+            |     -> minecraft:stripe_right
+            |       -> Color: Yellow
+            |     -> minecraft:stripe_left
+            |       -> Color: Yellow
+            |     -> minecraft:border
+            |       -> Color: Red
+            |     -> minecraft:border
+            |       -> Color: Red
+            |     -> minecraft:border
+            |       -> Color: Red
+            |     -> minecraft:triangles_top
+            |       -> Color: Red
+            |     -> minecraft:triangles_top
+            |       -> Color: Red
+            |     -> minecraft:triangles_top
+            |       -> Color: Red
+          ali:item minecraft:white_banner x1 {"minecraft:banner_patterns":[{color:"gray",pattern:"minecraft:gradient_up"},{color:"white",pattern:"minecraft:gradient"},{color:"black",pattern:"minecraft:cross"},{color:"black",pattern:"minecraft:cross"},{color:"lime",pattern:"minecraft:cross"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:gradient_up
+            |       -> Color: Gray
+            |     -> minecraft:gradient
+            |       -> Color: White
+            |     -> minecraft:cross
+            |       -> Color: Black
+            |     -> minecraft:cross
+            |       -> Color: Black
+            |     -> minecraft:cross
+            |       -> Color: Lime
+          ali:item minecraft:red_banner x1 {"minecraft:banner_patterns":[{color:"white",pattern:"minecraft:circle"},{color:"red",pattern:"minecraft:flower"},{color:"white",pattern:"minecraft:stripe_bottom"},{color:"white",pattern:"minecraft:stripe_top"},{color:"white",pattern:"minecraft:border"},{color:"white",pattern:"minecraft:curly_border"},{color:"white",pattern:"minecraft:curly_border"},{color:"white",pattern:"minecraft:stripe_top"},{color:"white",pattern:"minecraft:stripe_bottom"},{color:"white",pattern:"minecraft:stripe_top"},{color:"white",pattern:"minecraft:stripe_bottom"},{color:"white",pattern:"minecraft:border"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:circle
+            |       -> Color: White
+            |     -> minecraft:flower
+            |       -> Color: Red
+            |     -> minecraft:stripe_bottom
+            |       -> Color: White
+            |     -> minecraft:stripe_top
+            |       -> Color: White
+            |     -> minecraft:border
+            |       -> Color: White
+            |     -> minecraft:curly_border
+            |       -> Color: White
+            |     -> minecraft:curly_border
+            |       -> Color: White
+            |     -> minecraft:stripe_top
+            |       -> Color: White
+            |     -> minecraft:stripe_bottom
+            |       -> Color: White
+            |     -> minecraft:stripe_top
+            |       -> Color: White
+            |     -> minecraft:stripe_bottom
+            |       -> Color: White
+            |     -> minecraft:border
+            |       -> Color: White
+          ali:item minecraft:white_banner x1 {"minecraft:banner_patterns":[{color:"white",pattern:"minecraft:gradient_up"},{color:"white",pattern:"minecraft:gradient"},{color:"black",pattern:"minecraft:circle"},{color:"black",pattern:"minecraft:circle"},{color:"cyan",pattern:"minecraft:circle"},{color:"white",pattern:"minecraft:circle"},{color:"black",pattern:"minecraft:stripe_bottom"},{color:"black",pattern:"minecraft:stripe_bottom"},{color:"lime",pattern:"minecraft:stripe_bottom"},{color:"white",pattern:"minecraft:border"},{color:"white",pattern:"minecraft:border"},{color:"white",pattern:"minecraft:stripe_bottom"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:gradient_up
+            |       -> Color: White
+            |     -> minecraft:gradient
+            |       -> Color: White
+            |     -> minecraft:circle
+            |       -> Color: Black
+            |     -> minecraft:circle
+            |       -> Color: Black
+            |     -> minecraft:circle
+            |       -> Color: Cyan
+            |     -> minecraft:circle
+            |       -> Color: White
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Black
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Black
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Lime
+            |     -> minecraft:border
+            |       -> Color: White
+            |     -> minecraft:border
+            |       -> Color: White
+            |     -> minecraft:stripe_bottom
+            |       -> Color: White
+          ali:item minecraft:white_banner x1 {"minecraft:banner_patterns":[{color:"green",pattern:"minecraft:stripe_center"},{color:"orange",pattern:"minecraft:half_horizontal"},{color:"white",pattern:"minecraft:small_stripes"},{color:"white",pattern:"minecraft:small_stripes"},{color:"white",pattern:"minecraft:small_stripes"},{color:"orange",pattern:"minecraft:stripe_top"},{color:"white",pattern:"minecraft:stripe_left"},{color:"white",pattern:"minecraft:stripe_right"},{color:"white",pattern:"minecraft:stripe_left"},{color:"white",pattern:"minecraft:stripe_right"},{color:"white",pattern:"minecraft:curly_border"},{color:"white",pattern:"minecraft:curly_border"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:stripe_center
+            |       -> Color: Green
+            |     -> minecraft:half_horizontal
+            |       -> Color: Orange
+            |     -> minecraft:small_stripes
+            |       -> Color: White
+            |     -> minecraft:small_stripes
+            |       -> Color: White
+            |     -> minecraft:small_stripes
+            |       -> Color: White
+            |     -> minecraft:stripe_top
+            |       -> Color: Orange
+            |     -> minecraft:stripe_left
+            |       -> Color: White
+            |     -> minecraft:stripe_right
+            |       -> Color: White
+            |     -> minecraft:stripe_left
+            |       -> Color: White
+            |     -> minecraft:stripe_right
+            |       -> Color: White
+            |     -> minecraft:curly_border
+            |       -> Color: White
+            |     -> minecraft:curly_border
+            |       -> Color: White
+          ali:item minecraft:white_banner x1 {"minecraft:banner_patterns":[{color:"white",pattern:"minecraft:half_horizontal_bottom"},{color:"white",pattern:"minecraft:half_horizontal"},{color:"light_blue",pattern:"minecraft:stripe_bottom"},{color:"light_blue",pattern:"minecraft:stripe_top"},{color:"white",pattern:"minecraft:curly_border"},{color:"white",pattern:"minecraft:rhombus"},{color:"light_blue",pattern:"minecraft:cross"},{color:"white",pattern:"minecraft:triangle_bottom"},{color:"light_blue",pattern:"minecraft:curly_border"},{color:"light_blue",pattern:"minecraft:border"},{color:"white",pattern:"minecraft:border"},{color:"white",pattern:"minecraft:curly_border"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: White
+            |     -> minecraft:half_horizontal
+            |       -> Color: White
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Light Blue
+            |     -> minecraft:stripe_top
+            |       -> Color: Light Blue
+            |     -> minecraft:curly_border
+            |       -> Color: White
+            |     -> minecraft:rhombus
+            |       -> Color: White
+            |     -> minecraft:cross
+            |       -> Color: Light Blue
+            |     -> minecraft:triangle_bottom
+            |       -> Color: White
+            |     -> minecraft:curly_border
+            |       -> Color: Light Blue
+            |     -> minecraft:border
+            |       -> Color: Light Blue
+            |     -> minecraft:border
+            |       -> Color: White
+            |     -> minecraft:curly_border
+            |       -> Color: White
+          ali:item minecraft:yellow_banner x1 {"minecraft:banner_patterns":[{color:"yellow",pattern:"minecraft:diagonal_up_right"},{color:"black",pattern:"minecraft:stripe_downright"},{color:"black",pattern:"minecraft:stripe_downright"},{color:"black",pattern:"minecraft:stripe_downright"},{color:"black",pattern:"minecraft:stripe_left"},{color:"black",pattern:"minecraft:stripe_left"},{color:"black",pattern:"minecraft:stripe_left"},{color:"black",pattern:"minecraft:stripe_top"},{color:"black",pattern:"minecraft:stripe_top"},{color:"yellow",pattern:"minecraft:border"},{color:"yellow",pattern:"minecraft:border"},{color:"yellow",pattern:"minecraft:border"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:diagonal_up_right
+            |       -> Color: Yellow
+            |     -> minecraft:stripe_downright
+            |       -> Color: Black
+            |     -> minecraft:stripe_downright
+            |       -> Color: Black
+            |     -> minecraft:stripe_downright
+            |       -> Color: Black
+            |     -> minecraft:stripe_left
+            |       -> Color: Black
+            |     -> minecraft:stripe_left
+            |       -> Color: Black
+            |     -> minecraft:stripe_left
+            |       -> Color: Black
+            |     -> minecraft:stripe_top
+            |       -> Color: Black
+            |     -> minecraft:stripe_top
+            |       -> Color: Black
+            |     -> minecraft:border
+            |       -> Color: Yellow
+            |     -> minecraft:border
+            |       -> Color: Yellow
+            |     -> minecraft:border
+            |       -> Color: Yellow
+          ali:item minecraft:lime_banner x1 {"minecraft:banner_patterns":[{color:"lime",pattern:"minecraft:half_horizontal_bottom"},{color:"lime",pattern:"minecraft:half_horizontal"},{color:"white",pattern:"minecraft:stripe_bottom"},{color:"white",pattern:"minecraft:stripe_top"},{color:"lime",pattern:"minecraft:curly_border"},{color:"lime",pattern:"minecraft:stripe_bottom"},{color:"lime",pattern:"minecraft:rhombus"},{color:"white",pattern:"minecraft:cross"},{color:"lime",pattern:"minecraft:border"},{color:"lime",pattern:"minecraft:curly_border"},{color:"lime",pattern:"minecraft:border"},{color:"lime",pattern:"minecraft:curly_border"}]}
+            | Chance: 0.27%
+            | Count: 1
+            | ----- Modifiers -----
+            | Set Banner Pattern:
+            |   -> Append: True
+            |   -> Banner Patterns:
+            |     -> minecraft:half_horizontal_bottom
+            |       -> Color: Lime
+            |     -> minecraft:half_horizontal
+            |       -> Color: Lime
+            |     -> minecraft:stripe_bottom
+            |       -> Color: White
+            |     -> minecraft:stripe_top
+            |       -> Color: White
+            |     -> minecraft:curly_border
+            |       -> Color: Lime
+            |     -> minecraft:stripe_bottom
+            |       -> Color: Lime
+            |     -> minecraft:rhombus
+            |       -> Color: Lime
+            |     -> minecraft:cross
+            |       -> Color: White
+            |     -> minecraft:border
+            |       -> Color: Lime
+            |     -> minecraft:curly_border
+            |       -> Color: Lime
+            |     -> minecraft:border
+            |       -> Color: Lime
+            |     -> minecraft:curly_border
+            |       -> Color: Lime
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 0
+    |   -> Bad Luck: 0
+    |   -> Luck 1: 1
+    |   -> Luck 2: 2
+    |   -> Luck 3: 3
+    |   -> Luck 4: 4
+    ali:empty
+      | Drops nothing
+      | Chance: 72.22%
+    ali:item minecraft:black_banner x1 {"minecraft:banner_patterns":[{color:"blue",pattern:"minecraft:rhombus"},{color:"blue",pattern:"minecraft:flower"},{color:"black",pattern:"minecraft:flower"},{color:"black",pattern:"minecraft:triangles_top"},{color:"black",pattern:"minecraft:triangles_top"},{color:"blue",pattern:"minecraft:triangles_top"},{color:"black",pattern:"minecraft:triangles_bottom"},{color:"black",pattern:"minecraft:triangles_bottom"},{color:"blue",pattern:"minecraft:triangles_bottom"},{color:"gray",pattern:"minecraft:curly_border"},{color:"blue",pattern:"minecraft:border"},{color:"black",pattern:"minecraft:curly_border"}]}
+      | Chance: 16.67%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Banner Pattern:
+      |   -> Append: True
+      |   -> Banner Patterns:
+      |     -> minecraft:rhombus
+      |       -> Color: Blue
+      |     -> minecraft:flower
+      |       -> Color: Blue
+      |     -> minecraft:flower
+      |       -> Color: Black
+      |     -> minecraft:triangles_top
+      |       -> Color: Black
+      |     -> minecraft:triangles_top
+      |       -> Color: Black
+      |     -> minecraft:triangles_top
+      |       -> Color: Blue
+      |     -> minecraft:triangles_bottom
+      |       -> Color: Black
+      |     -> minecraft:triangles_bottom
+      |       -> Color: Black
+      |     -> minecraft:triangles_bottom
+      |       -> Color: Blue
+      |     -> minecraft:curly_border
+      |       -> Color: Gray
+      |     -> minecraft:border
+      |       -> Color: Blue
+      |     -> minecraft:curly_border
+      |       -> Color: Black
+    ali:item minecraft:music_disc_11 x1
+      | Chance: 5.56%
+      | Count: 1
+    ali:item minecraft:name_tag x1
+      | Chance: 5.56%
+      | Count: 1
+  ali:reference
+    | Selects all entries
+    | Only items added by other mods
+    ali:loot_table
+      | Selects all entries
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1 to 3
+        ali:item minecraft:saddle x1
+          | Chance: 15.5%
+          | Count: 1
+        ali:item minecraft:name_tag x1
+          | Chance: 15.5%
+          | Count: 1
+        ali:item minecraft:golden_apple x1
+          | Chance: 11.63%
+          | Count: 1
+        ali:item minecraft:music_disc_13 x1
+          | Chance: 11.63%
+          | Count: 1
+        ali:item minecraft:music_disc_cat x1
+          | Chance: 11.63%
+          | Count: 1
+        ali:item minecraft:iron_horse_armor x1
+          | Chance: 11.63%
+          | Count: 1
+        ali:item minecraft:golden_horse_armor x1
+          | Chance: 7.75%
+          | Count: 1
+        ali:item minecraft:enchanted_book x1
+          | Chance: 7.75%
+          | Count: 1
+          | ----- Modifiers -----
+          | Enchant Randomly:
+          |   -> Enchantments:
+          |     -> Tag: minecraft:on_random_loot
+          |   -> Only Compatible: True
+        ali:item minecraft:diamond_horse_armor x1
+          | Chance: 3.88%
+          | Count: 1
+        ali:item minecraft:enchanted_golden_apple x1
+          | Chance: 1.55%
+          | Count: 1
+        ali:item minecraft:music_disc_otherside x1
+          | Chance: 1.55%
+          | Count: 1
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1 to 4
+        ali:item minecraft:bread x1
+          | Chance: 16%
+          | Count: 1
+        ali:item minecraft:wheat x1-4
+          | Chance: 16%
+          | Count: 1 to 4
+        ali:item minecraft:redstone x1-4
+          | Chance: 12%
+          | Count: 1 to 4
+        ali:item minecraft:coal x1-4
+          | Chance: 12%
+          | Count: 1 to 4
+        ali:item minecraft:iron_ingot x1-4
+          | Chance: 8%
+          | Count: 1 to 4
+        ali:item minecraft:bucket x1
+          | Chance: 8%
+          | Count: 1
+        ali:item minecraft:melon_seeds x2-4
+          | Chance: 8%
+          | Count: 2 to 4
+        ali:item minecraft:pumpkin_seeds x2-4
+          | Chance: 8%
+          | Count: 2 to 4
+        ali:item minecraft:beetroot_seeds x2-4
+          | Chance: 8%
+          | Count: 2 to 4
+        ali:item minecraft:gold_ingot x1-4
+          | Chance: 4%
+          | Count: 1 to 4
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 3
+        ali:item minecraft:bone x1-8
+          | Chance: 25%
+          | Count: 1 to 8
+        ali:item minecraft:gunpowder x1-8
+          | Chance: 25%
+          | Count: 1 to 8
+        ali:item minecraft:rotten_flesh x1-8
+          | Chance: 25%
+          | Count: 1 to 8
+        ali:item minecraft:string x1-8
+          | Chance: 25%
+          | Count: 1 to 8

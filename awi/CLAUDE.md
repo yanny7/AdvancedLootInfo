@@ -154,7 +154,7 @@ The type carried end to end is `Either<Block, TagKey<Block>>`, deliberately the 
 GUI-side rendering: `ClientUtils`, `WidgetUtils` (dispatch to per-node-id widget), widgets `LevelStemWidget`, `BiomeWidget`, `GenerationStepWidget`, `PlacedFeatureWidget`, `BlockWidget`, `BaseTerrainWidget`, `TextureWidget`.
 
 ### `compatibility`
-`GenericUtils` (gunzip + decode the reassembled network buffer client-side into `Map<ResourceLocation, LevelStemNode>` — the recipe-viewer-integration glue analogous to ALI's `compatibility/common`, consumed by `awi/common-emi`/`common-jei`/`common-rei`).
+`GenericUtils` (turns the reassembled network buffer into `Map<ResourceLocation, LevelStemNode>` and applies the client's `dimensions` filter — the recipe-viewer-integration glue analogous to ALI's `compatibility/common`, consumed by `awi/common-emi`/`common-jei`/`common-rei`). The gunzip and decode themselves are `network.WorldgenDataReader`, which references no client-only class, so the same decode runs on a dedicated server.
 
 `GenericUtils` also owns `rendersAsFluid`/`rendersAsBlockModel`, the shared rule for how a `Block` becomes a viewer ingredient — item, else fluid, else 3D model. It lives here because all three viewer modules need the same answer — don't let a viewer module carry its own copy. Order is load-bearing: testing the fluid first renders every block waterlogged in its default state (all 30 coral/coral-fan variants, seagrass, kelp, sea pickle, conduit) as plain water, so the fluid must stay the *last* resort, gated on `RenderShape.INVISIBLE` — an item-less block that still has a model (`tall_seagrass`, `kelp_plant`) belongs in the 3D-model branch, not the fluid one.
 
@@ -182,6 +182,15 @@ The surface-rule scan is empirical, so it is guarded by a golden file rather tha
 - **`BaseLayoutSweepTest`** — cost/coverage sweep over candidate `ScanSettings`; asserts nothing, reports. Skipped unless `-Dawi.baselayout.sweep=true`. It diffs **atomic coverage** — `(block, storage, position, water, placement)` with `ANY` expanded into both halves — not just the set of block ids, because a narrowed range or a lost flag is a regression too — a setting can keep reporting every block while silently losing depths or flags.
 
 Both properties are forwarded to the test JVM from `awi/common/build.gradle`.
+
+## Gametests
+
+The integration test is one server-side GameTest per loader, in a `gametest` source set of `awi/fabric`, `awi/forge` and `awi/neoforge` that never reaches the release jar — the same arrangement as ALI's (see `ali/CLAUDE.md`'s gametest section). It takes the chunks the startup scan of a vanilla world left in `AbstractServer.getChunks()`, decodes them through `network.WorldgenDataReader` with the client registry, renders every biome of every dimension to text, `normal` and `advanced`, and compares the result against the golden files in `awi/<loader>/src/gametest/golden/`; what the run produced is written to `awi/<loader>/build/gametest/golden/`. There is one pass with the default configuration and no variants or reload, since the scan runs once per server start.
+
+- **Layout.** The logic is `awi/common/src/gametest/java/.../WorldgenDataGolden`; every loader compiles `awi/common/src/gametest/` and ACI's shared `GoldenFiles`/`GoldenRenderer`/`GoldenLanguage` (see `aci/CLAUDE.md`'s tests section) into their own source set and add only a wrapper carrying the `@GameTest` annotation — on Forge also `GameTestServerScan`, which starts the scan on `ServerStartedEvent`, since Forge's `GameTestServer` never posts `ServerStartingEvent`.
+- **The world must be a normal one with seed 0**, or the base layouts differ. Vanilla's `GameTestServer.create` builds a flat world with seed 0; `MixinGameTestServer` (`awi.gametest.mixins.json`, registered by every loader's run) swaps the preset for `NORMAL`. It targets the lambda by its intermediary name, which loom keeps on Forge as well.
+- **Language.** `WorldgenDataGolden` injects AWI's and ACI's `en_us` through `GoldenLanguage` before rendering, as ALI's does (see `ali/CLAUDE.md`'s gametest section) — Forge loads no mod languages on a GameTest server.
+- **Output must not depend on hash order.** A `HashSet` of blocks iterates in identity-hash order, which differs per JVM start; anything that reaches a node's child order is sorted first.
 
 ## Networking
 

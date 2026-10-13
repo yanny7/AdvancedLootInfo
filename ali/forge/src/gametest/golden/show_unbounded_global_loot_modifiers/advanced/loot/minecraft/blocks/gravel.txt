@@ -1,0 +1,43 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item minecraft:gravel x1
+        | Count: 1
+        | ----- Predicates -----
+        | Match Tool:
+        |   -> Item Predicates:
+        |     -> Enchantments:
+        |       -> Enchantment: Silk Touch
+        |       -> Level: ≥ 1
+      ali:alternatives
+        | Selects only first successful entry
+        ali:item minecraft:flint x1
+          | Chance: 10%
+          |   -> Fortune LVL: [10%; 14.29%; 25%; 100%][min(LVL; 3)]
+          |   -> Fortune I: 14.29%
+          |   -> Fortune II: 25%
+          |   -> Fortune III: 100%
+          | Count: 1
+          | ----- Predicates -----
+          | Survives Explosion
+          | Table Bonus:
+          |   -> Enchantment: Fortune
+          |   -> Values: 10%
+          |     -> Fortune LVL: [10%; 14.29%; 25%; 100%][min(LVL; 3)]
+          |     -> Fortune I: 14.29%
+          |     -> Fortune II: 25%
+          |     -> Fortune III: 100%
+        ali:item minecraft:gravel x1
+          | Count: 1
+          | ----- Predicates -----
+          | Survives Explosion
+  ali:item minecraft:diamond x1
+    | Chance: 1%
+    | Count: 1
+    | ----- Predicates -----
+    | Random Chance:
+    |   -> Chance: 0.01

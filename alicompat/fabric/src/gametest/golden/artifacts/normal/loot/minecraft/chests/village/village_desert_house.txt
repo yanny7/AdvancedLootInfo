@@ -1,0 +1,60 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 8
+    ali:item minecraft:cactus x1-4
+      | Chance: 27.78%
+      | Count: 1 to 4
+    ali:item minecraft:wheat x1-7
+      | Chance: 27.78%
+      | Count: 1 to 7
+    ali:item minecraft:bread x1-4
+      | Chance: 27.78%
+      | Count: 1 to 4
+    ali:item minecraft:dead_bush x1-3
+      | Chance: 5.56%
+      | Count: 1 to 3
+    ali:item minecraft:clay_ball x1
+      | Chance: 2.78%
+      | Count: 1
+    ali:item minecraft:green_dye x1
+      | Chance: 2.78%
+      | Count: 1
+    ali:item minecraft:book x1
+      | Chance: 2.78%
+      | Count: 1
+    ali:item minecraft:emerald x1-3
+      | Chance: 2.78%
+      | Count: 1 to 3
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:reference
+      | Selects all entries
+      ali:loot_table
+        | Selects all entries
+        ali:loot_pool
+          | Selects random entry
+          | Rolls: 1
+          ali:reference
+            | Selects all entries
+            ali:loot_table
+              | Selects all entries
+              ali:loot_pool
+                | Selects random entry
+                | Rolls: 1
+                ali:alternatives
+                  | Selects only first successful entry
+                  ali:item artifacts:villager_hat x1
+                    | Count: 1
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.05
+                    | Config Value:
+                    |   -> Config: villager_hat.generateAsLoot
+                  ali:empty
+                    | Drops nothing
+                    | ----- Predicates -----
+                    | Artifact Rarity Adjusted Chance:
+                    |   -> Default Probability: 0.05

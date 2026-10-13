@@ -1,0 +1,114 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:snowball x4-8
+      | Chance: 20.69%
+      | Count: max(0; U[4; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4 to 8
+      |   -> Add: False
+    ali:item minecraft:fire_charge x4-8
+      | Chance: 20.69%
+      | Count: max(0; U[4; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4 to 8
+      |   -> Add: False
+    ali:item minecraft:water_bucket x1
+      | Chance: 13.79%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 1
+      |   -> Add: False
+    ali:item minecraft:arrow x4-8
+      | Chance: 13.79%
+      | Count: max(0; U[4; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4 to 8
+      |   -> Add: False
+    ali:item minecraft:egg x4-8
+      | Chance: 6.9%
+      | Count: max(0; U[4; 8])
+      | ----- Modifiers -----
+      | Set Count:
+      |   -> Count: 4 to 8
+      |   -> Add: False
+    ali:item minecraft:splash_potion x2-5 {"minecraft:potion_contents":{potion:"minecraft:slowness"}}
+      | Chance: 3.45%
+      | Count: max(0; U[2; 5])
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Slowness
+      | Set Count:
+      |   -> Count: 2 to 5
+      |   -> Add: False
+    ali:item minecraft:splash_potion x2-5 {"minecraft:potion_contents":{potion:"minecraft:poison"}}
+      | Chance: 3.45%
+      | Count: max(0; U[2; 5])
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Poison
+      | Set Count:
+      |   -> Count: 2 to 5
+      |   -> Add: False
+    ali:item minecraft:splash_potion x2-5 {"minecraft:potion_contents":{potion:"minecraft:weakness"}}
+      | Chance: 3.45%
+      | Count: max(0; U[2; 5])
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Weakness
+      | Set Count:
+      |   -> Count: 2 to 5
+      |   -> Add: False
+    ali:item minecraft:lingering_potion x2-5 {"minecraft:potion_contents":{potion:"minecraft:slowness"}}
+      | Chance: 3.45%
+      | Count: max(0; U[2; 5])
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Slowness
+      | Set Count:
+      |   -> Count: 2 to 5
+      |   -> Add: False
+    ali:item minecraft:lingering_potion x2-5 {"minecraft:potion_contents":{potion:"minecraft:poison"}}
+      | Chance: 3.45%
+      | Count: max(0; U[2; 5])
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Poison
+      | Set Count:
+      |   -> Count: 2 to 5
+      |   -> Add: False
+    ali:item minecraft:lingering_potion x2-5 {"minecraft:potion_contents":{potion:"minecraft:weakness"}}
+      | Chance: 3.45%
+      | Count: max(0; U[2; 5])
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Weakness
+      | Set Count:
+      |   -> Count: 2 to 5
+      |   -> Add: False
+    ali:item minecraft:lingering_potion x2-5 {"minecraft:potion_contents":{potion:"minecraft:healing"}}
+      | Chance: 3.45%
+      | Count: max(0; U[2; 5])
+      | ----- Modifiers -----
+      | Set Potion:
+      |   -> Potion: Potion of Healing
+      | Set Count:
+      |   -> Count: 2 to 5
+      |   -> Add: False
+  ali:item apotheosis:gem x1
+    | Chance: 4%
+    | Count: 1
+    | ----- Predicates -----
+    | Entity Properties:
+    |   -> Target: This Entity
+    |   -> Predicate:
+    |     -> Entity Sub Predicate:
+    |       -> Is Monster
+    | Killed by real player
+    | Requires a player

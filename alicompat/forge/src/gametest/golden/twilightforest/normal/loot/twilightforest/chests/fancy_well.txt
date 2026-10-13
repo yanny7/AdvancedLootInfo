@@ -1,0 +1,62 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4
+    ali:item minecraft:gold_nugget x5-15
+      | Chance: 25%
+      | Count: 5 to 15
+    ali:item minecraft:iron_nugget x6-12
+      | Chance: 25%
+      | Count: 6 to 12
+    ali:item minecraft:string x4-7
+      | Chance: 25%
+      | Count: 4 to 7
+    ali:item minecraft:stick x5-20
+      | Chance: 25%
+      | Count: 5 to 20
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item minecraft:bucket x1
+      | Chance: 16.67%
+      | Count: 1
+    ali:item minecraft:water_bucket x1
+      | Chance: 16.67%
+      | Count: 1
+    ali:item twilightforest:raw_ironwood x3-7
+      | Chance: 16.67%
+      | Count: 3 to 7
+    ali:item minecraft:iron_ingot x3-5
+      | Chance: 16.67%
+      | Count: 3 to 5
+    ali:item minecraft:gold_ingot x2-4
+      | Chance: 16.67%
+      | Count: 2 to 4
+    ali:item minecraft:copper_ingot x4-8
+      | Chance: 16.67%
+      | Count: 4 to 8
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:experience_bottle x5-9
+      | Chance: 25%
+      | Count: 5 to 9
+    ali:item twilightforest:charm_of_life_1 x1
+      | Chance: 25%
+      | Count: 1
+    ali:item twilightforest:music_disc_steps x1
+      | Chance: 16.67%
+      | Count: 1
+    ali:item minecraft:emerald x4-9
+      | Chance: 8.33%
+      | Count: 4 to 9
+    ali:item minecraft:diamond x3-5
+      | Chance: 8.33%
+      | Count: 3 to 5
+    ali:item twilightforest:charm_of_keeping_2 x1
+      | Chance: 8.33%
+      | Count: 1
+    ali:item twilightforest:transformation_powder x5-17
+      | Chance: 8.33%
+      | Count: 5 to 17

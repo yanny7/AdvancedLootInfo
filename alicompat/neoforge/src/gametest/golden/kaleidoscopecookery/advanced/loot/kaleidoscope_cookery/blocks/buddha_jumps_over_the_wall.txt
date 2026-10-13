@@ -1,0 +1,19 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:alternatives
+      | Selects only first successful entry
+      ali:item kaleidoscope_cookery:buddha_jumps_over_the_wall x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion
+        | Block State Property:
+        |   -> Block: Buddha Jumps Over the Wall
+        |   -> Properties:
+        |     -> bites: 0
+      ali:item minecraft:flower_pot x1
+        | Count: 1
+        | ----- Predicates -----
+        | Survives Explosion

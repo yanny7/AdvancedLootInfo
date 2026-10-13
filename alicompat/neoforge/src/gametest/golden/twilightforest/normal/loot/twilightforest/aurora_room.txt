@@ -1,0 +1,89 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 4
+    ali:item twilightforest:maze_wafer x1-12
+      | Chance: 20%
+      | Count: 1 to 12
+    ali:item twilightforest:ice_bomb x1-4
+      | Chance: 20%
+      | Count: 1 to 4
+    ali:item twilightforest:firefly x1-5
+      | Chance: 20%
+      | Count: 1 to 5
+    ali:item minecraft:ice x1-4
+      | Chance: 20%
+      | Count: 1 to 4
+    ali:item minecraft:packed_ice x1-4
+      | Chance: 20%
+      | Count: 1 to 4
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item twilightforest:arctic_fur x1-6
+      | Chance: 12.5%
+      | Count: 1 to 6
+    ali:item twilightforest:arctic_helmet x1
+      | Chance: 12.5%
+      | Count: 1
+    ali:item twilightforest:arctic_chestplate x1
+      | Chance: 12.5%
+      | Count: 1
+    ali:item twilightforest:arctic_leggings x1
+      | Chance: 12.5%
+      | Count: 1
+    ali:item twilightforest:arctic_boots x1
+      | Chance: 12.5%
+      | Count: 1
+    ali:item twilightforest:knightmetal_chestplate x1
+      | Chance: 12.5%
+      | Count: 1
+    ali:item twilightforest:knightmetal_sword x1
+      | Chance: 12.5%
+      | Count: 1
+    ali:item twilightforest:charm_of_life_1 x1
+      | Chance: 12.5%
+      | Count: 1
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item twilightforest:ice_bow x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 20%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 30
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item twilightforest:ender_bow x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 20%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 5
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item twilightforest:ice_sword x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 20%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 25
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot
+    ali:item minecraft:enchanted_book x1
+      | Chance: 20%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant Randomly:
+      |   -> Enchantment: Chill Aura
+      |   -> Only Compatible: True
+    ali:item twilightforest:glass_sword x1 {"minecraft:enchantment_glint_override":1b}
+      | Chance: 20%
+      | Count: 1
+      | ----- Modifiers -----
+      | Enchant With Levels:
+      |   -> Levels: 20
+      |   -> Options:
+      |     -> Tag: minecraft:on_random_loot

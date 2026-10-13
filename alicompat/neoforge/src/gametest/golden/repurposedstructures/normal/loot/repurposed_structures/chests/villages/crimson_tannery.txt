@@ -1,0 +1,67 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3 to 8
+    ali:item minecraft:nether_wart x1-4
+      | Chance: 19.23%
+      | Count: 1 to 4
+    ali:item minecraft:leather x2-6
+      | Chance: 11.54%
+      | Count: 2 to 6
+    ali:item minecraft:porkchop x1-4
+      | Chance: 11.54%
+      | Count: 1 to 4
+    ali:item minecraft:cooked_porkchop x1-4
+      | Chance: 11.54%
+      | Count: 1 to 4
+    ali:item minecraft:saddle x1
+      | Chance: 11.54%
+      | Count: 1
+    ali:item minecraft:leather_chestplate x1
+      | Chance: 7.69%
+      | Count: 1
+    ali:item minecraft:leather_boots x1
+      | Chance: 7.69%
+      | Count: 1
+    ali:item minecraft:leather_helmet x1
+      | Chance: 7.69%
+      | Count: 1
+    ali:item minecraft:leather_leggings x1
+      | Chance: 7.69%
+      | Count: 1
+    ali:item minecraft:gold_ingot x1-4
+      | Chance: 3.85%
+      | Count: 1 to 4
+  ali:reference
+    | Selects all entries
+    | Only items added by other mods
+    ali:loot_table
+      | Selects all entries
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1 to 5
+        ali:item minecraft:bread x1-4
+          | Chance: 31.25%
+          | Count: 1 to 4
+        ali:item minecraft:leather_chestplate x1
+          | Chance: 12.5%
+          | Count: 1
+        ali:item minecraft:leather_boots x1
+          | Chance: 12.5%
+          | Count: 1
+        ali:item minecraft:leather_helmet x1
+          | Chance: 12.5%
+          | Count: 1
+        ali:item minecraft:leather_leggings x1
+          | Chance: 12.5%
+          | Count: 1
+        ali:item minecraft:leather x1-3
+          | Chance: 6.25%
+          | Count: 1 to 3
+        ali:item minecraft:saddle x1
+          | Chance: 6.25%
+          | Count: 1
+        ali:item minecraft:emerald x1-4
+          | Chance: 6.25%
+          | Count: 1 to 4

@@ -1,0 +1,17 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item deeperdarker:ice_lily x1
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Components:
+      |   -> Components:
+      |     -> deeperdarker:has_flower
+      |       -> Value: True
+      |   -> Predicates:
+      |     -> Block State Property:
+      |       -> Block: Ice Lily
+      |       -> Properties:
+      |         -> has_flower: true

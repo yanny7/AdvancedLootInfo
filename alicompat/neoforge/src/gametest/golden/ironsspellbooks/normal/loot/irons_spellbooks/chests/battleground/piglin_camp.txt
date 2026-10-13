@@ -1,0 +1,41 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 3
+    ali:item minecraft:gunpowder x3-5
+      | Chance: 21.43%
+      | Count: 3 to 5
+    ali:item minecraft:porkchop x4-12
+      | Chance: 17.86%
+      | Count: 4 to 12
+    ali:item minecraft:crimson_fungus x1-2
+      | Chance: 17.86%
+      | Count: 1 to 2
+    ali:item minecraft:flint x1-3
+      | Chance: 17.86%
+      | Count: 1 to 3
+    ali:item minecraft:nether_brick x4-9
+      | Chance: 14.29%
+      | Count: 4 to 9
+    ali:item minecraft:soul_soil x8-22
+      | Chance: 10.71%
+      | Count: 8 to 22
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 2
+    ali:item minecraft:gold_nugget x4-12
+      | Chance: 50%
+      | Count: 4 to 12
+    ali:item minecraft:iron_nugget x4-12
+      | Chance: 50%
+      | Count: 4 to 12
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1 to 3
+    ali:item minecraft:golden_shovel x1
+      | Chance: 50%
+      | Count: 1
+    ali:item minecraft:golden_pickaxe x1
+      | Chance: 50%
+      | Count: 1

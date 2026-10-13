@@ -1,0 +1,19 @@
+ali:loot_table
+  | Selects all entries
+  ali:loot_pool
+    | Selects random entry
+    | Rolls: 1
+    ali:item minecraft:cod x1
+      | Count: 1
+  ali:glm
+    | Auto-detected: ali_gametest:unadapted
+    |   -> conditions:
+    |     -> condition:
+    |       -> ali_gametest:glm/target
+    |       -> forge:loot_table_id
+    |   -> item: minecraft:stick
+  ali:item minecraft:gold_nugget x1
+    | Chance: 50%
+    | Count: 1
+  ali:item minecraft:emerald x2
+    | Count: 2

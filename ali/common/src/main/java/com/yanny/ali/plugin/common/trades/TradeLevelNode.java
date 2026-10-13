@@ -10,6 +10,7 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ListNode;
 import com.yanny.ali.api.TradeLevelInfo;
 import com.yanny.ali.language.Lang;
+import com.yanny.ali.plugin.common.nodes.EmptyNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.npc.villager.VillagerTrades;
@@ -27,16 +28,19 @@ public class TradeLevelNode extends ListNode {
 
     // a trader adds every entry instead of picking randomly once its pool is no bigger than the number it picks
     public TradeLevelNode(IServerUtils utils, int level, VillagerTrades.ItemListing[] itemListings, TradeLevelInfo levelInfo) {
-        this.level = level;
-        this.selectionCount = NumberExpr.min(levelInfo.offers(), NumberExpr.constant(itemListings.length));
-        this.chance = levelInfo.chance();
-
         for (VillagerTrades.ItemListing itemListing : itemListings) {
             if (itemListing != null) {
-                addChildren(utils.getItemListing(utils, itemListing, TooltipNode.empty()));
+                IDataNode trade = utils.getItemListing(utils, itemListing, TooltipNode.empty());
+
+                if (!(trade instanceof EmptyNode)) {
+                    addChildren(trade);
+                }
             }
         }
 
+        this.level = level;
+        this.selectionCount = NumberExpr.min(levelInfo.offers(), NumberExpr.constant(nodes().size()));
+        this.chance = levelInfo.chance();
         tooltip = getTooltip(level, selectionCount, chance);
     }
 

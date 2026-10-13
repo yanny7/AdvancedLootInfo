@@ -2,9 +2,129 @@ plugins {
     id 'com.gradleup.shadow'
 }
 
+apply from: rootProject.file("alicompat/gametest.gradle")
+
 architectury {
     platformSetupLoomIde()
     fabric()
+}
+
+sourceSets {
+    gametest {
+        java.srcDir project(":aci:common").file("src/gametest/java")
+        resources.srcDir project(":aci:common").file("src/gametest/resources")
+        java.srcDir project(":ali:common").file("src/gametest/java")
+        java.srcDir project(":alicompat:common").file("src/gametest/java")
+        java.exclude "com/yanny/ali/gametest/LootDataGolden.java"
+        compileClasspath += sourceSets.main.compileClasspath + sourceSets.main.output
+        runtimeClasspath += sourceSets.main.runtimeClasspath.filter { !(it.name ==~ /(jei|emi)-.*/) } + sourceSets.main.output
+    }
+}
+
+def compatMods = (project.findProperty("compat_mods") ?: "").split(",")*.trim().findAll { it }
+def supportedMods = new groovy.json.JsonSlurper().parse(rootProject.file("scripts/supported_mods.json"))
+def gametestModIds = { String mod -> mod != "base" && compatMods.contains(mod) && project.findProperty("${mod}_${project.name}_dep") ? (supportedMods.find { it.key == mod }?.mod_ids?.join(",") ?: "") : "" }
+def gametestProperty = project.findProperty("alicompat_gametest")
+def gametestMods = gametestProperty == "all" ? ["base"] + compatMods.findAll { gametestModIds(it) }.sort() : [gametestProperty ?: "base"]
+def gametestName = { String mod -> "gametest" + mod.capitalize() }
+def gametestCoordinates = { String mod -> gametestModIds(mod) ? ["${mod}_fabric_dep", "${mod}_fabric_runtime_deps"].collectMany { (project.findProperty(it) ?: "").split(",")*.trim().findAll { it } } : [] }
+def compatCoordinates = compatMods.collectMany { mod ->
+    ["${mod}_fabric_dep", "${mod}_fabric_runtime_deps"].collectMany { (project.findProperty(it) ?: "").split(",")*.trim().findAll { it } }
+}.unique()
+def nestedCache = [:]
+
+// loom strips the jar-in-jar of a remapped mod, so nested jars are unpacked here and added as mods of their own
+def extractNested = { List<String> coordinates, File nestedDir, boolean withOuter ->
+    if (nestedCache.containsKey(nestedDir)) {
+        return nestedCache[nestedDir]
+    }
+
+    def readJar = { byte[] bytes ->
+        def input = new java.util.zip.ZipInputStream(new ByteArrayInputStream(bytes))
+        def entries = [:]
+
+        for (def entry = input.nextEntry; entry != null; entry = input.nextEntry) {
+            if (entry.name == "fabric.mod.json" || entry.name ==~ /META-INF\/jars\/[^\/]+\.jar/) {
+                entries[entry.name] = input.readAllBytes()
+            }
+        }
+
+        input.close()
+        entries
+    }
+    def modOf = { Map entries -> entries["fabric.mod.json"] ? new groovy.json.JsonSlurper().setType(groovy.json.JsonParserType.LAX).parse(entries["fabric.mod.json"], "UTF-8") : null }
+    def compareVersions = { String a, String b ->
+        def left = a.split(/[^0-9]+/).findAll { it }.collect { it as BigInteger }
+        def right = b.split(/[^0-9]+/).findAll { it }.collect { it as BigInteger }
+        def common = (0..<Math.min(left.size(), right.size())).collect { left[it] <=> right[it] }.find { it != 0 }
+
+        common ?: left.size() <=> right.size()
+    }
+    def outerJars = configurations.detachedConfiguration(*coordinates.collect { dependencies.create(it) }).tap { transitive = false }.resolve()
+    def fabricApi = configurations.detachedConfiguration(dependencies.create("net.fabricmc.fabric-api:fabric-api:${fabric_version}")).resolve()
+    def idsOf = { mod -> mod ? [mod.id] + (mod.provides ?: []) : [] }
+    def provided = (outerJars + fabricApi).collectMany { idsOf(modOf(readJar(it.bytes))) } as Set
+    def nested = [:]
+    def collect
+
+    collect = { Map entries ->
+        entries.findAll { name, bytes -> name.startsWith("META-INF/jars/") }.each { name, bytes ->
+            def content = readJar(bytes)
+            def mod = modOf(content)
+            def fileName = name.substring(name.lastIndexOf("/") + 1)
+            def key = mod?.id ?: fileName
+            def version = mod?.version?.toString() ?: ""
+
+            if (!idsOf(mod).any { provided.contains(it) } && (!nested[key] || compareVersions(version, nested[key].version) > 0)) {
+                nested[key] = [version: version, name: fileName, bytes: bytes]
+            }
+
+            collect(content)
+        }
+    }
+    outerJars.each { collect(readJar(it.bytes)) }
+
+    def withoutGameTests = { byte[] bytes ->
+        def mod = modOf(readJar(bytes))
+
+        if (!mod?.entrypoints?."fabric-gametest") {
+            return bytes
+        }
+
+        mod.entrypoints.remove("fabric-gametest")
+
+        def input = new java.util.zip.ZipInputStream(new ByteArrayInputStream(bytes))
+        def buffer = new ByteArrayOutputStream()
+        def output = new java.util.zip.ZipOutputStream(buffer)
+
+        for (def entry = input.nextEntry; entry != null; entry = input.nextEntry) {
+            output.putNextEntry(new java.util.zip.ZipEntry(entry.name))
+            output.write(entry.name == "fabric.mod.json" ? groovy.json.JsonOutput.toJson(mod).getBytes("UTF-8") : input.readAllBytes())
+            output.closeEntry()
+        }
+
+        input.close()
+        output.close()
+        buffer.toByteArray()
+    }
+
+    nestedDir.deleteDir()
+    nestedDir.mkdirs()
+
+    def jars = withOuter ? outerJars.collect { [name: it.name, bytes: it.bytes] } + nested.values() : nested.values()
+    def nestedJars = jars.collect {
+        def target = new File(nestedDir, it.name)
+
+        target.bytes = withoutGameTests(it.bytes)
+        target
+    }
+
+    nestedCache[nestedDir] = nestedJars
+    return nestedJars
+}
+
+gametestMods.findAll { gametestCoordinates(it) }.each { mod ->
+    loom.createRemapConfigurations(sourceSets.create(gametestName(mod)))
 }
 
 loom {
@@ -19,6 +139,77 @@ loom {
             vmArg "-Dfabric-api.datagen.modid=${alicompat_mod_id}"
 
             runDir "build/datagen"
+        }
+        gametestMods.each { mod ->
+            create(gametestName(mod)) {
+                server()
+                name mod == "base" ? "Minecraft GameTest" : "Minecraft GameTest ${mod}".toString()
+                source sourceSets.gametest
+                ideConfigGenerated mod == "base"
+                vmArg "-Dfabric-api.gametest"
+                vmArg "-Dfabric-api.gametest.report-file=${project.file("build/gametest/report-${mod}.xml")}"
+                vmArg "-Dalicompat.golden.dir=${project.file("src/gametest/golden")}"
+                vmArg "-Dalicompat.golden.actual=${project.file("build/gametest/golden")}"
+                vmArg "-Dalicompat.golden.regenerate=${project.findProperty("alicompat_golden_regenerate") ?: false}"
+                vmArg "-Dalicompat.gametest.mod=${mod}"
+                vmArg "-Dalicompat.gametest.modids=${gametestModIds(mod)}"
+
+                runDir "build/gametest/run/${mod}"
+            }
+        }
+    }
+}
+
+def gametestFailures = []
+def gametestTasks = gametestMods.collect { "run" + gametestName(it).capitalize() }
+
+gametestMods.eachWithIndex { mod, index ->
+    def runDir = "build/gametest/run/${mod}"
+
+    tasks.matching { it.name == gametestTasks[index] }.configureEach {
+        timeout = java.time.Duration.ofMinutes(10)
+        ignoreExitValue = true
+
+        if (index > 0) {
+            mustRunAfter gametestTasks[index - 1]
+        }
+        if (gametestCoordinates(mod)) {
+            classpath(sourceSets.named(gametestName(mod)).map { it.runtimeClasspath })
+        }
+
+        doFirst { task ->
+            gametestWatchdog(task, mod)
+
+            if (mod != "base" && !gametestModIds(mod)) {
+                throw new GradleException("alicompat_gametest=${mod} is not a mod enabled in compat_mods with a ${project.name} dependency")
+            }
+
+            delete "${runDir}/config", "${runDir}/world", "${runDir}/kubejs"
+            file(runDir).mkdirs()
+            file("${runDir}/eula.txt").text = "eula=true\n"
+            copy {
+                from project(":alicompat:common").file("src/gametest/kubejs/${mod}")
+                into "${runDir}/kubejs"
+            }
+            copy {
+                from project(":alicompat:common").file("src/gametest/datapacks/${mod}")
+                into "${runDir}/world/datapacks/${mod}"
+            }
+        }
+        doLast {
+            if (executionResult.get().exitValue != 0) {
+                gametestFailures << mod
+            }
+        }
+    }
+}
+
+tasks.register("runGametest") {
+    dependsOn gametestTasks
+
+    doLast {
+        if (gametestFailures) {
+            throw new GradleException("GameTests failed for ${gametestFailures.join(", ")}")
         }
     }
 }
@@ -41,6 +232,17 @@ dependencies {
     common(project(path: ":ali:common", configuration: "namedElements")) { transitive false }
     runtimeOnly project(path: ":aci:fabric", configuration: "namedElements")
     runtimeOnly project(path: ":ali:fabric", configuration: "namedElements")
+    gametestCompileOnly project(path: ":ali:fabric", configuration: "namedElements")
+
+    gametestMods.findAll { gametestCoordinates(it) }.each { mod ->
+        def configuration = "mod" + gametestName(mod).capitalize() + "RuntimeOnly"
+
+        add(configuration, files({ extractNested(gametestCoordinates(mod), file("build/gametest/nested/${mod}"), true) }))
+    }
+
+    if (compatCoordinates) {
+        modCompileOnly files({ extractNested(compatCoordinates, file("build/compat-nested"), false) })
+    }
     rootProject.project(":ali:fabric").ext.commonProjects.each { p ->
         common(project(path: p, configuration: "namedElements")) { transitive false }
     }
