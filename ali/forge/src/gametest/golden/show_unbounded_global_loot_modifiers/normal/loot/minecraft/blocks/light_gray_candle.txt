@@ -4,7 +4,7 @@ ali:loot_table
     | Selects random entry
     | Rolls: 1
     ali:item minecraft:light_gray_candle x1-4
-      | Count: 
+      | Count:
       |   -> 4
       |     -> Block State Property:
       |       -> Block: Light Gray Candle

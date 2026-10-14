@@ -5,6 +5,7 @@
 - Every config reset keeps its own timestamped backup instead of overwriting the previous one
 - Scrollable tooltip wraps lines wider than the window
 - Fixed widget textures being sampled one pixel off
+- Fixed a stray space after the name of a number whose value depends on conditions
 
 ## [1.4.0]
 

@@ -4,7 +4,7 @@ ali:loot_table
     | Selects random entry
     | Rolls: 1
     ali:item supplementaries:candle_holder_light_gray x1-4
-      | Count: 
+      | Count:
       |   -> 4
       |     -> Block State Property:
       |       -> Block: Light Gray Candle Holder
