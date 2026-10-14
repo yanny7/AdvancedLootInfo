@@ -200,7 +200,7 @@ public class TooltipTest {
                 .when(ExplosionCondition.survivesExplosion()).build());
 
         assertTooltip(itemTooltip(functions, List.of()), false, List.of(
-                "Count: ",
+                "Count:",
                 "  -> 10",
                 "    -> Survives Explosion",
                 "  -> otherwise 1",
@@ -218,7 +218,7 @@ public class TooltipTest {
         assertTooltip(getCountTooltip(getCount(UTILS, List.of(
                 SetItemCountFunction.setCount(ConstantValue.exactly(10)).when(ExplosionCondition.survivesExplosion()).build()
         )), null).build(), List.of(
-                "Count: ",
+                "Count:",
                 "  -> 10",
                 "    -> Survives Explosion",
                 "  -> otherwise 1"
@@ -228,7 +228,7 @@ public class TooltipTest {
                 SetItemCountFunction.setCount(ConstantValue.exactly(5)).build(),
                 SetItemCountFunction.setCount(ConstantValue.exactly(2), true).when(ExplosionCondition.survivesExplosion()).build()
         )), null).build(), List.of(
-                "Count: ",
+                "Count:",
                 "  -> 7",
                 "    -> Survives Explosion",
                 "  -> otherwise 5"
@@ -238,7 +238,7 @@ public class TooltipTest {
                 SetItemCountFunction.setCount(UniformGenerator.between(4, 8)).build(),
                 LimitCount.limitCount(IntRange.upperBound(6)).when(ExplosionCondition.survivesExplosion()).build()
         )), null).build(), List.of(
-                "Count: ",
+                "Count:",
                 "  -> 4 to 6  ~6 (60%)",
                 "    -> Survives Explosion",
                 "  -> otherwise 4 to 8"
@@ -247,7 +247,7 @@ public class TooltipTest {
         assertTooltip(getCountTooltip(getCount(UTILS, List.of(
                 ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE, 2).when(ExplosionCondition.survivesExplosion()).build()
         )), null).build(), List.of(
-                "Count: ",
+                "Count:",
                 "  -> 1",
                 "    -> Survives Explosion",
                 "    -> Fortune I: 1 to 3",

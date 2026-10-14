@@ -4,7 +4,7 @@ ali:loot_table
     | Selects random entry
     | Rolls: 1
     ali:item minecraft:nether_wart x1-7
-      | Count: 
+      | Count:
       |   -> max(0; U[2; 4]) | 1
       |     -> Block State Property:
       |       -> Block: Nether Wart

@@ -4,7 +4,7 @@ ali:loot_table
     | Selects random entry
     | Rolls: 1
     ali:item the_bumblezone:ancient_wax_compound_eyes_slab x1-2
-      | Count: 
+      | Count:
       |   -> 2
       |     -> Block State Property:
       |       -> Block: Ancient Wax Compound Eyes Slab

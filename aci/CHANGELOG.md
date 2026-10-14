@@ -4,6 +4,7 @@
 - Options missing from an existing config file are added to it with their default values
 - Every config reset keeps its own timestamped backup instead of overwriting the previous one
 - Scrollable tooltip wraps lines wider than the window
+- Fixed a stray space after the name of a number whose value depends on conditions
 
 ## [1.4.0]
 
