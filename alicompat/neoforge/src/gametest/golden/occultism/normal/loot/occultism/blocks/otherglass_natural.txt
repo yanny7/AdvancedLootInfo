@@ -8,7 +8,7 @@ ali:loot_table
       ali:item occultism:otherglass_natural x1
         | Count: 1
         | ----- Predicates -----
-        | Block State Property:
+        | Match Block:
         |   -> Block: Otherglass
         |   -> Properties:
         |     -> uncovered: true

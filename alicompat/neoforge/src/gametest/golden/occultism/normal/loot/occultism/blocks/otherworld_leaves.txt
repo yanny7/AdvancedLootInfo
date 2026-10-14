@@ -9,8 +9,8 @@ ali:loot_table
         | Count: 1
         | ----- Predicates -----
         | Any Of:
-        |   -> Match Tool:
-        |     -> Item: Shears
+        |   -> Can Item Perform Ability:
+        |     -> shears_dig
         |   -> Match Tool:
         |     -> Components:
         |       -> Partial Matchers:
@@ -37,8 +37,8 @@ ali:loot_table
       | ----- Predicates -----
       | Inverted:
       |   -> Any Of:
-      |     -> Match Tool:
-      |       -> Item: Shears
+      |     -> Can Item Perform Ability:
+      |       -> shears_dig
       |     -> Match Tool:
       |       -> Components:
       |         -> Partial Matchers:
@@ -59,8 +59,8 @@ ali:loot_table
       | ----- Predicates -----
       | Inverted:
       |   -> Any Of:
-      |     -> Match Tool:
-      |       -> Item: Shears
+      |     -> Can Item Perform Ability:
+      |       -> shears_dig
       |     -> Match Tool:
       |       -> Components:
       |         -> Partial Matchers:

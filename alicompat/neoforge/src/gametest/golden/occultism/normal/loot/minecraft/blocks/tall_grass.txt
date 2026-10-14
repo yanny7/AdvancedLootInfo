@@ -8,7 +8,7 @@ ali:loot_table
       ali:item minecraft:short_grass x2
         | Count: 2
         | ----- Predicates -----
-        | Block State Property:
+        | Match Block:
         |   -> Block: Tall Grass
         |   -> Properties:
         |     -> half: lower
@@ -25,7 +25,7 @@ ali:loot_table
         | Chance: 12.5%
         | Count: 1
         | ----- Predicates -----
-        | Block State Property:
+        | Match Block:
         |   -> Block: Tall Grass
         |   -> Properties:
         |     -> half: lower
@@ -45,7 +45,7 @@ ali:loot_table
       ali:item minecraft:short_grass x2
         | Count: 2
         | ----- Predicates -----
-        | Block State Property:
+        | Match Block:
         |   -> Block: Tall Grass
         |   -> Properties:
         |     -> half: upper
@@ -62,7 +62,7 @@ ali:loot_table
         | Chance: 12.5%
         | Count: 1
         | ----- Predicates -----
-        | Block State Property:
+        | Match Block:
         |   -> Block: Tall Grass
         |   -> Properties:
         |     -> half: upper

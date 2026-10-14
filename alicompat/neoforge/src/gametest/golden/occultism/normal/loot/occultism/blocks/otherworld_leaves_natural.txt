@@ -6,40 +6,38 @@ ali:loot_table
     ali:item occultism:otherworld_leaves_natural x1
       | Count: 1
       | ----- Predicates -----
-      | All Of:
-      |   -> Block State Property:
-      |     -> Block: Oak Leaves
-      |     -> Properties:
-      |       -> uncovered: true
-      |   -> Any Of:
-      |     -> Match Tool:
-      |       -> Item: Shears
-      |     -> Match Tool:
-      |       -> Components:
-      |         -> Partial Matchers:
-      |           -> minecraft:enchantments
-      |             -> Enchantment: Silk Touch
-      |             -> Level: ≥ 1
+      | Match Block:
+      |   -> Block: Oak Leaves
+      |   -> Properties:
+      |     -> uncovered: true
+      | Any Of:
+      |   -> Can Item Perform Ability:
+      |     -> shears_dig
+      |   -> Match Tool:
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> minecraft:enchantments
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
     ali:item minecraft:oak_leaves x1
       | Count: 1
       | ----- Predicates -----
-      | All Of:
-      |   -> Block State Property:
-      |     -> Block: Oak Leaves
-      |     -> Properties:
-      |       -> uncovered: false
-      |   -> Any Of:
-      |     -> Match Tool:
-      |       -> Item: Shears
-      |     -> Match Tool:
-      |       -> Components:
-      |         -> Partial Matchers:
-      |           -> minecraft:enchantments
-      |             -> Enchantment: Silk Touch
-      |             -> Level: ≥ 1
+      | Match Block:
+      |   -> Block: Oak Leaves
+      |   -> Properties:
+      |     -> uncovered: false
+      | Any Of:
+      |   -> Can Item Perform Ability:
+      |     -> shears_dig
+      |   -> Match Tool:
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> minecraft:enchantments
+      |           -> Enchantment: Silk Touch
+      |           -> Level: ≥ 1
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
@@ -54,8 +52,8 @@ ali:loot_table
         | ----- Predicates -----
         | Inverted:
         |   -> Any Of:
-        |     -> Match Tool:
-        |       -> Item: Shears
+        |     -> Can Item Perform Ability:
+        |       -> shears_dig
         |     -> Match Tool:
         |       -> Components:
         |         -> Partial Matchers:
@@ -63,7 +61,7 @@ ali:loot_table
         |             -> Enchantment: Silk Touch
         |             -> Level: ≥ 1
         | Survives Explosion
-        | Block State Property:
+        | Match Block:
         |   -> Block: Oak Leaves
         |   -> Properties:
         |     -> uncovered: true
@@ -76,8 +74,8 @@ ali:loot_table
         | ----- Predicates -----
         | Inverted:
         |   -> Any Of:
-        |     -> Match Tool:
-        |       -> Item: Shears
+        |     -> Can Item Perform Ability:
+        |       -> shears_dig
         |     -> Match Tool:
         |       -> Components:
         |         -> Partial Matchers:
@@ -99,8 +97,8 @@ ali:loot_table
         | ----- Predicates -----
         | Inverted:
         |   -> Any Of:
-        |     -> Match Tool:
-        |       -> Item: Shears
+        |     -> Can Item Perform Ability:
+        |       -> shears_dig
         |     -> Match Tool:
         |       -> Components:
         |         -> Partial Matchers:
@@ -108,7 +106,7 @@ ali:loot_table
         |             -> Enchantment: Silk Touch
         |             -> Level: ≥ 1
         | Survives Explosion
-        | Block State Property:
+        | Match Block:
         |   -> Block: Oak Leaves
         |   -> Properties:
         |     -> uncovered: true
@@ -121,8 +119,8 @@ ali:loot_table
         | ----- Predicates -----
         | Inverted:
         |   -> Any Of:
-        |     -> Match Tool:
-        |       -> Item: Shears
+        |     -> Can Item Perform Ability:
+        |       -> shears_dig
         |     -> Match Tool:
         |       -> Components:
         |         -> Partial Matchers:
@@ -142,8 +140,8 @@ ali:loot_table
       | ----- Predicates -----
       | Inverted:
       |   -> Any Of:
-      |     -> Match Tool:
-      |       -> Item: Shears
+      |     -> Can Item Perform Ability:
+      |       -> shears_dig
       |     -> Match Tool:
       |       -> Components:
       |         -> Partial Matchers:

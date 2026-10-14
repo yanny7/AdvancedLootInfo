@@ -128,7 +128,7 @@ ali:loot_table
             | Count: 1
             | ----- Modifiers -----
             | Spell Bind Randomly:
-            |   -> Tier: U[3; 4)
+            |   -> Tier: 3 to 4
             |   -> Spell Pool: spell_engine:treasure
             |   -> Count: 1
     ali:reference
@@ -221,7 +221,7 @@ ali:loot_table
             | Count: 1
             | ----- Modifiers -----
             | Spell Bind Randomly:
-            |   -> Tier: U[2; 3)
+            |   -> Tier: 2 to 3
             |   -> Spell Pool: spell_engine:treasure
             |   -> Count: 1
   ali:loot_pool
@@ -315,7 +315,7 @@ ali:loot_table
             | Count: 1
             | ----- Modifiers -----
             | Spell Bind Randomly:
-            |   -> Tier: U[2; 3)
+            |   -> Tier: 2 to 3
             |   -> Spell Pool: spell_engine:treasure
             |   -> Count: 1
   ali:loot_pool

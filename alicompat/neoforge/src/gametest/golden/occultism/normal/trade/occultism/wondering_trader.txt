@@ -140,6 +140,12 @@ ali:trade
       ali:item minecraft:air x0
       ali:item minecraft:pale_oak_log x8
     ali:items_to_items
+      | Uses: 4
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:poplar_log x8
+    ali:items_to_items
       | Uses: 1
       | XP: 1
       ali:item minecraft:emerald x1
@@ -489,6 +495,12 @@ ali:trade
     ali:items_to_items
       | Uses: 8
       | XP: 1
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item minecraft:poplar_sapling x1
+    ali:items_to_items
+      | Uses: 8
+      | XP: 1
       ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item minecraft:brain_coral_block x1
@@ -624,6 +636,12 @@ ali:trade
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:name_tag x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 1
+      ali:item minecraft:emerald x1
+      ali:item minecraft:air x0
+      ali:item minecraft:shelf_mushroom x3
   ali:trade_level
     | Level: 5
     | Randomly Selects 1 Of These Trades

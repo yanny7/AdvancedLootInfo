@@ -41,19 +41,26 @@ ali:loot_table
       |     -> Tag: minecraft:on_random_loot
       |   -> Only Compatible: True
       |   -> Include Additional Cost Component: False
-    ali:item minecraft:map x1 {"minecraft:item_name":{translate:"filled_map.buried_treasure"}}
+    ali:item minecraft:buried_treasure_map x1
       | Chance: 41.67%
       | Count: 1
       | ----- Modifiers -----
       | Exploration Map:
-      |   -> Destination: minecraft:on_treasure_maps
+      |   -> Destination:
+      |     -> Tag: minecraft:on_treasure_maps
       |   -> Map Decoration: minecraft:red_x
       |   -> Zoom: 1
       |   -> Search Radius: 50
       |   -> Skip Known Structures: False
-      | Set Name:
-      |   -> Name: Buried Treasure Map
-      |   -> Target: Item Name
+      | Filtered:
+      |   -> Filter:
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> minecraft:map_id
+      |           -> Predicate:
+      |             -> Type: minecraft:map_id
+      |   -> On Fail:
+      |     -> Discard Item:
     ali:item minecraft:leather_chestplate x1
       | Chance: 8.33%
       | Count: 1
@@ -107,6 +114,6 @@ ali:loot_table
       | Count: 1
       | ----- Modifiers -----
       | Spell Bind Randomly:
-      |   -> Tier: U[1; 2)
+      |   -> Tier: 1 to 2
       |   -> Spell Pool: spell_engine:treasure
       |   -> Count: 1

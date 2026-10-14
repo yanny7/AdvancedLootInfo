@@ -7,7 +7,7 @@ ali:loot_table
       | Count: 1
       | ----- Predicates -----
       | Survives Explosion
-      | Block State Property:
+      | Match Block:
       |   -> Block: Otherplanks Door
       |   -> Properties:
       |     -> half: lower

@@ -71,6 +71,6 @@ ali:loot_table
       | Count: 1
       | ----- Modifiers -----
       | Spell Bind Randomly:
-      |   -> Tier: U[2; 3)
+      |   -> Tier: 2 to 3
       |   -> Spell Pool: spell_engine:treasure
       |   -> Count: 1

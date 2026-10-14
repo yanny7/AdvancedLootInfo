@@ -6,7 +6,7 @@ ali:loot_table
     ali:item occultism:otherrock_slab x1-2
       | Count:
       |   -> 2
-      |     -> Block State Property:
+      |     -> Match Block:
       |       -> Block: Otherrock Slab
       |       -> Properties:
       |         -> type: double
@@ -16,7 +16,7 @@ ali:loot_table
       |   -> Count: 2
       |   -> Add: False
       |   -> Predicates:
-      |     -> Block State Property:
+      |     -> Match Block:
       |       -> Block: Otherrock Slab
       |       -> Properties:
       |         -> type: double

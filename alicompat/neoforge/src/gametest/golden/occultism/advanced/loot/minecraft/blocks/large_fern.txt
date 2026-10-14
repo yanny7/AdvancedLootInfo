@@ -8,7 +8,7 @@ ali:loot_table
       ali:item minecraft:fern x2
         | Count: 2
         | ----- Predicates -----
-        | Block State Property:
+        | Match Block:
         |   -> Block: Large Fern
         |   -> Properties:
         |     -> half: lower
@@ -29,7 +29,7 @@ ali:loot_table
         | Chance: 12.5%
         | Count: 1
         | ----- Predicates -----
-        | Block State Property:
+        | Match Block:
         |   -> Block: Large Fern
         |   -> Properties:
         |     -> half: lower
@@ -51,7 +51,7 @@ ali:loot_table
       ali:item minecraft:fern x2
         | Count: 2
         | ----- Predicates -----
-        | Block State Property:
+        | Match Block:
         |   -> Block: Large Fern
         |   -> Properties:
         |     -> half: upper
@@ -72,7 +72,7 @@ ali:loot_table
         | Chance: 12.5%
         | Count: 1
         | ----- Predicates -----
-        | Block State Property:
+        | Match Block:
         |   -> Block: Large Fern
         |   -> Properties:
         |     -> half: upper

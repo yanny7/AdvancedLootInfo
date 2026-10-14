@@ -3,42 +3,72 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item minecraft:map x1 {"minecraft:custom_name":{translate:"Nether Fortress Map"}}
+    ali:item minecraft:buried_treasure_map x1 {"minecraft:custom_name":{translate:"Nether Fortress Map"}}
       | Chance: 49.02%
       | Count: 1
       | ----- Modifiers -----
       | Exploration Map:
-      |   -> Destination: repurposed_structures:explorer_maps/nether_fortress
+      |   -> Destination:
+      |     -> Tag: repurposed_structures:explorer_maps/nether_fortress
       |   -> Map Decoration: minecraft:banner_red
       |   -> Zoom: 2
       |   -> Search Radius: 50
       |   -> Skip Known Structures: False
+      | Filtered:
+      |   -> Filter:
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> minecraft:map_id
+      |           -> Predicate:
+      |             -> Type: minecraft:map_id
+      |   -> On Fail:
+      |     -> Discard Item:
       | Set Name:
       |   -> Name: Nether Fortress Map
       |   -> Target: Custom Name
-    ali:item minecraft:map x1 {"minecraft:custom_name":{translate:"Bastion Remnant Map"}}
+    ali:item minecraft:buried_ancient_city_map x1 {"minecraft:custom_name":{translate:"Bastion Remnant Map"}}
       | Chance: 49.02%
       | Count: 1
       | ----- Modifiers -----
       | Exploration Map:
-      |   -> Destination: repurposed_structures:explorer_maps/bastion_remnant
+      |   -> Destination:
+      |     -> Tag: repurposed_structures:explorer_maps/bastion_remnant
       |   -> Map Decoration: minecraft:banner_black
       |   -> Zoom: 2
       |   -> Search Radius: 50
       |   -> Skip Known Structures: False
+      | Filtered:
+      |   -> Filter:
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> minecraft:map_id
+      |           -> Predicate:
+      |             -> Type: minecraft:map_id
+      |   -> On Fail:
+      |     -> Discard Item:
       | Set Name:
       |   -> Name: Bastion Remnant Map
       |   -> Target: Custom Name
-    ali:item minecraft:map x1 {"minecraft:custom_name":{translate:"Nether City Map"}}
+    ali:item minecraft:buried_treasure_map x1 {"minecraft:custom_name":{translate:"Nether City Map"}}
       | Chance: 1.96%
       | Count: 1
       | ----- Modifiers -----
       | Exploration Map:
-      |   -> Destination: repurposed_structures:explorer_maps/city_nether
+      |   -> Destination:
+      |     -> Tag: repurposed_structures:explorer_maps/city_nether
       |   -> Map Decoration: minecraft:banner_gray
       |   -> Zoom: 2
       |   -> Search Radius: 50
       |   -> Skip Known Structures: False
+      | Filtered:
+      |   -> Filter:
+      |     -> Components:
+      |       -> Partial Matchers:
+      |         -> minecraft:map_id
+      |           -> Predicate:
+      |             -> Type: minecraft:map_id
+      |   -> On Fail:
+      |     -> Discard Item:
       | Set Name:
       |   -> Name: Nether City Map
       |   -> Target: Custom Name

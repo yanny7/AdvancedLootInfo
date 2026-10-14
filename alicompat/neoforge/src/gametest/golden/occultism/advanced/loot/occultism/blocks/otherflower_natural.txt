@@ -8,7 +8,7 @@ ali:loot_table
       ali:item occultism:otherflower x1
         | Count: 1
         | ----- Predicates -----
-        | Block State Property:
+        | Match Block:
         |   -> Block: Poppy
         |   -> Properties:
         |     -> uncovered: true

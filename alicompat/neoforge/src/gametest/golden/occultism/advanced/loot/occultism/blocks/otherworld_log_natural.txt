@@ -8,7 +8,7 @@ ali:loot_table
       ali:item occultism:otherworld_log x1
         | Count: 1
         | ----- Predicates -----
-        | Block State Property:
+        | Match Block:
         |   -> Block: Oak Log
         |   -> Properties:
         |     -> uncovered: true

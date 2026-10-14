@@ -8,3 +8,13 @@ ali:loot_table
       | ----- Modifiers -----
       | Set Potion:
       |   -> Potion: Potion of Harming
+  ali:reference
+    | Selects all entries
+    | Only items added by other mods
+    ali:loot_table
+      | Selects all entries
+      ali:loot_pool
+        | Selects random entry
+        | Rolls: 1 to 2
+        ali:item minecraft:arrow x2-7
+          | Count: 2 to 7

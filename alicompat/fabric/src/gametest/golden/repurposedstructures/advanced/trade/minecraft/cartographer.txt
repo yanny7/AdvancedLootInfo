@@ -28,19 +28,16 @@ ali:trade
       | XP: 5
       ali:item minecraft:emerald x8
       ali:item minecraft:compass x1
-      ali:item minecraft:map x1
+      ali:item minecraft:taiga_village_map x1
         | Exploration Map:
-        |   -> Destination: minecraft:on_taiga_village_maps
+        |   -> Destination:
+        |     -> Tag: minecraft:on_taiga_village_maps
         |   -> Map Decoration: minecraft:village_taiga
         |   -> Zoom: 2
         |   -> Search Radius: 100
         |   -> Skip Known Structures: True
-        | Set Name:
-        |   -> Name: Taiga Village Map
-        |   -> Target: Item Name
         | Filtered:
         |   -> Filter:
-        |     -> Item: Map
         |     -> Components:
         |       -> Partial Matchers:
         |         -> minecraft:map_id
@@ -53,19 +50,16 @@ ali:trade
       | XP: 5
       ali:item minecraft:emerald x8
       ali:item minecraft:compass x1
-      ali:item minecraft:map x1
+      ali:item minecraft:swamp_hut_map x1
         | Exploration Map:
-        |   -> Destination: minecraft:on_swamp_explorer_maps
+        |   -> Destination:
+        |     -> Tag: minecraft:on_swamp_hut_maps
         |   -> Map Decoration: minecraft:swamp_hut
         |   -> Zoom: 2
         |   -> Search Radius: 100
         |   -> Skip Known Structures: True
-        | Set Name:
-        |   -> Name: Swamp Explorer Map
-        |   -> Target: Item Name
         | Filtered:
         |   -> Filter:
-        |     -> Item: Map
         |     -> Components:
         |       -> Partial Matchers:
         |         -> minecraft:map_id
@@ -78,19 +72,16 @@ ali:trade
       | XP: 5
       ali:item minecraft:emerald x8
       ali:item minecraft:compass x1
-      ali:item minecraft:map x1
+      ali:item minecraft:snowy_village_map x1
         | Exploration Map:
-        |   -> Destination: minecraft:on_snowy_village_maps
+        |   -> Destination:
+        |     -> Tag: minecraft:on_snowy_village_maps
         |   -> Map Decoration: minecraft:village_snowy
         |   -> Zoom: 2
         |   -> Search Radius: 100
         |   -> Skip Known Structures: True
-        | Set Name:
-        |   -> Name: Snowy Village Map
-        |   -> Target: Item Name
         | Filtered:
         |   -> Filter:
-        |     -> Item: Map
         |     -> Components:
         |       -> Partial Matchers:
         |         -> minecraft:map_id
@@ -103,19 +94,16 @@ ali:trade
       | XP: 5
       ali:item minecraft:emerald x8
       ali:item minecraft:compass x1
-      ali:item minecraft:map x1
+      ali:item minecraft:savanna_village_map x1
         | Exploration Map:
-        |   -> Destination: minecraft:on_savanna_village_maps
+        |   -> Destination:
+        |     -> Tag: minecraft:on_savanna_village_maps
         |   -> Map Decoration: minecraft:village_savanna
         |   -> Zoom: 2
         |   -> Search Radius: 100
         |   -> Skip Known Structures: True
-        | Set Name:
-        |   -> Name: Savanna Village Map
-        |   -> Target: Item Name
         | Filtered:
         |   -> Filter:
-        |     -> Item: Map
         |     -> Components:
         |       -> Partial Matchers:
         |         -> minecraft:map_id
@@ -128,19 +116,16 @@ ali:trade
       | XP: 5
       ali:item minecraft:emerald x8
       ali:item minecraft:compass x1
-      ali:item minecraft:map x1
+      ali:item minecraft:plains_village_map x1
         | Exploration Map:
-        |   -> Destination: minecraft:on_plains_village_maps
+        |   -> Destination:
+        |     -> Tag: minecraft:on_plains_village_maps
         |   -> Map Decoration: minecraft:village_plains
         |   -> Zoom: 2
         |   -> Search Radius: 100
         |   -> Skip Known Structures: True
-        | Set Name:
-        |   -> Name: Plains Village Map
-        |   -> Target: Item Name
         | Filtered:
         |   -> Filter:
-        |     -> Item: Map
         |     -> Components:
         |       -> Partial Matchers:
         |         -> minecraft:map_id
@@ -153,19 +138,16 @@ ali:trade
       | XP: 5
       ali:item minecraft:emerald x8
       ali:item minecraft:compass x1
-      ali:item minecraft:map x1
+      ali:item minecraft:jungle_pyramid_map x1
         | Exploration Map:
-        |   -> Destination: minecraft:on_jungle_explorer_maps
+        |   -> Destination:
+        |     -> Tag: minecraft:on_jungle_pyramid_maps
         |   -> Map Decoration: minecraft:jungle_temple
         |   -> Zoom: 2
         |   -> Search Radius: 100
         |   -> Skip Known Structures: True
-        | Set Name:
-        |   -> Name: Jungle Explorer Map
-        |   -> Target: Item Name
         | Filtered:
         |   -> Filter:
-        |     -> Item: Map
         |     -> Components:
         |       -> Partial Matchers:
         |         -> minecraft:map_id
@@ -178,19 +160,16 @@ ali:trade
       | XP: 5
       ali:item minecraft:emerald x8
       ali:item minecraft:compass x1
-      ali:item minecraft:map x1
+      ali:item minecraft:desert_village_map x1
         | Exploration Map:
-        |   -> Destination: minecraft:on_desert_village_maps
+        |   -> Destination:
+        |     -> Tag: minecraft:on_desert_village_maps
         |   -> Map Decoration: minecraft:village_desert
         |   -> Zoom: 2
         |   -> Search Radius: 100
         |   -> Skip Known Structures: True
-        | Set Name:
-        |   -> Name: Desert Village Map
-        |   -> Target: Item Name
         | Filtered:
         |   -> Filter:
-        |     -> Item: Map
         |     -> Components:
         |       -> Partial Matchers:
         |         -> minecraft:map_id
@@ -202,20 +181,20 @@ ali:trade
       | Uses: 12
       | XP: 5
       ali:item minecraft:emerald x14
-      ali:item minecraft:air x0
-      ali:item minecraft:map x1
+      ali:item minecraft:compass x1
+      ali:item minecraft:jungle_pyramid_map x1
+        | Set Name:
+        |   -> Name: Jungle Fortress Map
+        |   -> Target: Item Name
         | Exploration Map:
-        |   -> Destination: repurposed_structures:explorer_maps/fortress
+        |   -> Destination:
+        |     -> Tag: repurposed_structures:explorer_maps/fortress
         |   -> Map Decoration: minecraft:banner_green
         |   -> Zoom: 2
         |   -> Search Radius: 50
         |   -> Skip Known Structures: True
-        | Set Name:
-        |   -> Name: Jungle Fortress Map
-        |   -> Target: Item Name
         | Filtered:
         |   -> Filter:
-        |     -> Item: Map
         |     -> Components:
         |       -> Partial Matchers:
         |         -> minecraft:map_id
@@ -227,20 +206,20 @@ ali:trade
       | Uses: 12
       | XP: 5
       ali:item minecraft:emerald x13
-      ali:item minecraft:air x0
-      ali:item minecraft:map x1
+      ali:item minecraft:compass x1
+      ali:item minecraft:ocean_monument_map x1
+        | Set Name:
+        |   -> Name: RS Monument Map
+        |   -> Target: Item Name
         | Exploration Map:
-        |   -> Destination: repurposed_structures:explorer_maps/monument
+        |   -> Destination:
+        |     -> Tag: repurposed_structures:explorer_maps/monument
         |   -> Map Decoration: minecraft:monument
         |   -> Zoom: 2
         |   -> Search Radius: 50
         |   -> Skip Known Structures: True
-        | Set Name:
-        |   -> Name: RS Monument Map
-        |   -> Target: Item Name
         | Filtered:
         |   -> Filter:
-        |     -> Item: Map
         |     -> Components:
         |       -> Partial Matchers:
         |         -> minecraft:map_id
@@ -252,20 +231,20 @@ ali:trade
       | Uses: 12
       | XP: 10
       ali:item minecraft:emerald x14
-      ali:item minecraft:air x0
-      ali:item minecraft:map x1
+      ali:item minecraft:compass x1
+      ali:item minecraft:woodland_mansion_map x1
+        | Set Name:
+        |   -> Name: RS Mansion Map
+        |   -> Target: Item Name
         | Exploration Map:
-        |   -> Destination: repurposed_structures:explorer_maps/mansion
+        |   -> Destination:
+        |     -> Tag: repurposed_structures:explorer_maps/mansion
         |   -> Map Decoration: minecraft:mansion
         |   -> Zoom: 2
         |   -> Search Radius: 50
         |   -> Skip Known Structures: True
-        | Set Name:
-        |   -> Name: RS Mansion Map
-        |   -> Target: Item Name
         | Filtered:
         |   -> Filter:
-        |     -> Item: Map
         |     -> Components:
         |       -> Partial Matchers:
         |         -> minecraft:map_id
@@ -287,19 +266,16 @@ ali:trade
       | XP: 10
       ali:item minecraft:emerald x13
       ali:item minecraft:compass x1
-      ali:item minecraft:map x1
+      ali:item minecraft:ocean_monument_map x1
         | Exploration Map:
-        |   -> Destination: minecraft:on_ocean_explorer_maps
+        |   -> Destination:
+        |     -> Tag: minecraft:on_ocean_monument_maps
         |   -> Map Decoration: minecraft:monument
         |   -> Zoom: 2
         |   -> Search Radius: 100
         |   -> Skip Known Structures: True
-        | Set Name:
-        |   -> Name: Ocean Explorer Map
-        |   -> Target: Item Name
         | Filtered:
         |   -> Filter:
-        |     -> Item: Map
         |     -> Components:
         |       -> Partial Matchers:
         |         -> minecraft:map_id
@@ -312,19 +288,16 @@ ali:trade
       | XP: 10
       ali:item minecraft:emerald x12
       ali:item minecraft:compass x1
-      ali:item minecraft:map x1
+      ali:item minecraft:buried_trial_chambers_map x1
         | Exploration Map:
-        |   -> Destination: minecraft:on_trial_chambers_maps
+        |   -> Destination:
+        |     -> Tag: minecraft:on_buried_trial_chambers_maps
         |   -> Map Decoration: minecraft:trial_chambers
         |   -> Zoom: 2
         |   -> Search Radius: 100
         |   -> Skip Known Structures: True
-        | Set Name:
-        |   -> Name: Trial Explorer Map
-        |   -> Target: Item Name
         | Filtered:
         |   -> Filter:
-        |     -> Item: Map
         |     -> Components:
         |       -> Partial Matchers:
         |         -> minecraft:map_id
@@ -445,19 +418,16 @@ ali:trade
       | XP: 30
       ali:item minecraft:emerald x14
       ali:item minecraft:compass x1
-      ali:item minecraft:map x1
+      ali:item minecraft:woodland_mansion_map x1
         | Exploration Map:
-        |   -> Destination: minecraft:on_woodland_explorer_maps
+        |   -> Destination:
+        |     -> Tag: minecraft:on_woodland_mansion_maps
         |   -> Map Decoration: minecraft:mansion
         |   -> Zoom: 2
         |   -> Search Radius: 100
         |   -> Skip Known Structures: True
-        | Set Name:
-        |   -> Name: Woodland Explorer Map
-        |   -> Target: Item Name
         | Filtered:
         |   -> Filter:
-        |     -> Item: Map
         |     -> Components:
         |       -> Partial Matchers:
         |         -> minecraft:map_id

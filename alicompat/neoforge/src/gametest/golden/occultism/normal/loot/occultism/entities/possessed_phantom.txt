@@ -5,14 +5,14 @@ ali:entity_loot_table
     | Rolls: 1
     ali:item minecraft:phantom_membrane x1-10
       | Count: 1 to 4
-      |   -> Looting I: 2 to 6  ~3 to 5 (25%)
-      |   -> Looting II: 2 to 8  ~5 (25%)
-      |   -> Looting III: 3 to 10  ~6 (22%)
-      |   [chart 0..3 1-4 base=true modes=[false, false, false, false, false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,1.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000 | 1..5 2-6 base=false modes=[false, false, true, true, true, false, false, false, false, false] heights=0.0000,0.6667,1.0000,1.0000,1.0000,0.3333,0.0000,0.0000,0.0000,0.0000 | 1..7 2-8 base=false modes=[false, false, false, false, true, false, false, false, false, false] heights=0.0000,0.1667,0.5000,0.8333,1.0000,0.8333,0.5000,0.1667,0.0000,0.0000 | 2..9 3-10 base=false modes=[false, false, false, false, false, true, false, false, false, false] heights=0.0000,0.0000,0.2222,0.4444,0.6667,0.8889,0.7778,0.5556,0.3333,0.1111]
+      |   -> Looting I: 1 to 6  ~3 to 4 (25%)
+      |   -> Looting II: 1 to 8  ~4 to 5 (22%)
+      |   -> Looting III: 1 to 10  ~5 to 6 (17%)
+      |   [chart 0..3 1-4 base=true modes=[false, false, false, false, false, false, false, false, false, false] heights=1.0000,1.0000,1.0000,1.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000 | 0..5 1-6 base=false modes=[false, false, true, true, false, false, false, false, false, false] heights=0.2500,0.7500,1.0000,1.0000,0.7500,0.2500,0.0000,0.0000,0.0000,0.0000 | 0..7 1-8 base=false modes=[false, false, false, true, true, false, false, false, false, false] heights=0.1250,0.3750,0.6250,0.8750,0.8750,0.6250,0.3750,0.1250,0.0000,0.0000 | 0..9 1-10 base=false modes=[false, false, false, false, true, true, false, false, false, false] heights=0.0833,0.2500,0.4167,0.5833,0.6667,0.6667,0.5833,0.4167,0.2500,0.0833]
       | ----- Modifiers -----
       | Enchanted Count Increase:
       |   -> Enchantment: Looting
-      |   -> Count: 0.5 to 2
+      |   -> Count: 0 to 2
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
