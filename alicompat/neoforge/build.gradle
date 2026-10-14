@@ -145,7 +145,7 @@ loom {
                 name mod == "base" ? "Minecraft GameTest" : "Minecraft GameTest ${mod}".toString()
                 source sourceSets.gametest
                 ideConfigGenerated mod == "base"
-                property "neoforge.enabledGameTestNamespaces", alicompat_mod_id
+                programArgs "--tests", "${alicompat_mod_id}:*"
                 property "alicompat.golden.dir", project.file("src/gametest/golden").absolutePath
                 property "alicompat.golden.actual", project.file("build/gametest/golden").absolutePath
                 property "alicompat.golden.regenerate", (project.findProperty("alicompat_golden_regenerate") ?: "false").toString()

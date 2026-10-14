@@ -41,7 +41,7 @@ loom {
             forgeTemplate "gameTestServer"
             name "Minecraft GameTest"
             source sourceSets.gametest
-            property "neoforge.enabledGameTestNamespaces", awi_mod_id
+            programArgs "--tests", "${awi_mod_id}:*"
             property "awi.golden.dir", project.file("src/gametest/golden").absolutePath
             property "awi.golden.actual", project.file("build/gametest/golden").absolutePath
             property "awi.golden.regenerate", (project.findProperty("awi_golden_regenerate") ?: "false").toString()
