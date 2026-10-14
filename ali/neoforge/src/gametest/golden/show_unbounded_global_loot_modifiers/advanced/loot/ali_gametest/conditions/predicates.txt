@@ -81,7 +81,7 @@ ali:loot_table
       | Count: 1
       | ----- Predicates -----
       | Int Value Check:
-      |   -> Value: 
+      |   -> Value:
       |     -> score(gametest; points)
       |       -> Score Exists
       |     -> otherwise 0

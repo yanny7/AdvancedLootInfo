@@ -49,7 +49,7 @@ public class FloatProviderTest {
     public void testStorage() throws CommandSyntaxException {
         StoredNumberAccess access = new StoredNumberAccess(Identifier.withDefaultNamespace("test"), new NbtPathArgument().parse(new StringReader("value")));
 
-        assertValue(Holder.direct(new StorageValue(access, ContextFloatProviders.exactly(1f))), "Value: ", "  -> any (storage \"value\" (minecraft:test))", "    -> Storage Value Exists", "  -> otherwise 1");
+        assertValue(Holder.direct(new StorageValue(access, ContextFloatProviders.exactly(1f))), "Value:", "  -> any (storage \"value\" (minecraft:test))", "    -> Storage Value Exists", "  -> otherwise 1");
     }
 
     @Test
@@ -154,14 +154,14 @@ public class FloatProviderTest {
 
     @Test
     public void testConditional() {
-        assertValue(Holder.direct(new ConditionalValue(CONDITION, ContextFloatProviders.exactly(1f), ContextFloatProviders.exactly(9f))), "Value: ", "  -> 1", "    -> Survives Explosion", "  -> otherwise 9");
+        assertValue(Holder.direct(new ConditionalValue(CONDITION, ContextFloatProviders.exactly(1f), ContextFloatProviders.exactly(9f))), "Value:", "  -> 1", "    -> Survives Explosion", "  -> otherwise 9");
     }
 
     @Test
     public void testDispatcher() {
         List<DispatcherProvider.Case<ContextFloatProvider>> cases = List.of(new DispatcherProvider.Case<>(CONDITION, ContextFloatProviders.exactly(7f)));
 
-        assertValue(Holder.direct(new NumberDispatcher(cases, ContextFloatProviders.exactly(1f))), "Value: ", "  -> 7", "    -> Survives Explosion", "  -> otherwise 1");
+        assertValue(Holder.direct(new NumberDispatcher(cases, ContextFloatProviders.exactly(1f))), "Value:", "  -> 7", "    -> Survives Explosion", "  -> otherwise 1");
     }
 
     @Test

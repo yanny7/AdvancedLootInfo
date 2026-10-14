@@ -110,7 +110,7 @@ ali:loot_table
       |   -> Filter:
       |     -> Components:
       |       -> Partial Matchers:
-      |         -> null
+      |         -> minecraft:map_id
       |           -> Predicate:
       |             -> Type: minecraft:map_id
       |   -> On Fail:
@@ -138,7 +138,7 @@ ali:loot_table
       |   -> Filter:
       |     -> Components:
       |       -> Partial Matchers:
-      |         -> null
+      |         -> minecraft:map_id
       |           -> Predicate:
       |             -> Type: minecraft:map_id
       |   -> On Fail:
@@ -166,7 +166,7 @@ ali:loot_table
       |   -> Filter:
       |     -> Components:
       |       -> Partial Matchers:
-      |         -> null
+      |         -> minecraft:map_id
       |           -> Predicate:
       |             -> Type: minecraft:map_id
       |   -> On Fail:
@@ -194,7 +194,7 @@ ali:loot_table
       |   -> Filter:
       |     -> Components:
       |       -> Partial Matchers:
-      |         -> null
+      |         -> minecraft:map_id
       |           -> Predicate:
       |             -> Type: minecraft:map_id
       |   -> On Fail:
@@ -222,7 +222,7 @@ ali:loot_table
       |   -> Filter:
       |     -> Components:
       |       -> Partial Matchers:
-      |         -> null
+      |         -> minecraft:map_id
       |           -> Predicate:
       |             -> Type: minecraft:map_id
       |   -> On Fail:
@@ -250,7 +250,7 @@ ali:loot_table
       |   -> Filter:
       |     -> Components:
       |       -> Partial Matchers:
-      |         -> null
+      |         -> minecraft:map_id
       |           -> Predicate:
       |             -> Type: minecraft:map_id
       |   -> On Fail:
@@ -278,7 +278,7 @@ ali:loot_table
       |   -> Filter:
       |     -> Components:
       |       -> Partial Matchers:
-      |         -> null
+      |         -> minecraft:map_id
       |           -> Predicate:
       |             -> Type: minecraft:map_id
       |   -> On Fail:
@@ -306,7 +306,7 @@ ali:loot_table
       |   -> Filter:
       |     -> Components:
       |       -> Partial Matchers:
-      |         -> null
+      |         -> minecraft:map_id
       |           -> Predicate:
       |             -> Type: minecraft:map_id
       |   -> On Fail:

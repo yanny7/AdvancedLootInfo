@@ -51,14 +51,14 @@ public class IntProviderTest {
 
     @Test
     public void testScore() {
-        assertValue(ContextIntProviders.fromScoreboard(LootContext.EntityTarget.THIS, "objective"), "Value: ", "  -> any (score \"objective\" (this))", "    -> Score Exists", "  -> otherwise 0");
+        assertValue(ContextIntProviders.fromScoreboard(LootContext.EntityTarget.THIS, "objective"), "Value:", "  -> any (score \"objective\" (this))", "    -> Score Exists", "  -> otherwise 0");
     }
 
     @Test
     public void testStorage() throws CommandSyntaxException {
         StoredNumberAccess access = new StoredNumberAccess(Identifier.withDefaultNamespace("test"), new NbtPathArgument().parse(new StringReader("value")));
 
-        assertValue(Holder.direct(new StorageValue(access, ContextIntProviders.exactly(1))), "Value: ", "  -> any (storage \"value\" (minecraft:test))", "    -> Storage Value Exists", "  -> otherwise 1");
+        assertValue(Holder.direct(new StorageValue(access, ContextIntProviders.exactly(1))), "Value:", "  -> any (storage \"value\" (minecraft:test))", "    -> Storage Value Exists", "  -> otherwise 1");
     }
 
     @Test
@@ -114,14 +114,14 @@ public class IntProviderTest {
 
     @Test
     public void testConditional() {
-        assertValue(Holder.direct(new ConditionalValue(CONDITION, ContextIntProviders.exactly(1), ContextIntProviders.exactly(9))), "Value: ", "  -> 1", "    -> Survives Explosion", "  -> otherwise 9");
+        assertValue(Holder.direct(new ConditionalValue(CONDITION, ContextIntProviders.exactly(1), ContextIntProviders.exactly(9))), "Value:", "  -> 1", "    -> Survives Explosion", "  -> otherwise 9");
     }
 
     @Test
     public void testDispatcher() {
         List<DispatcherProvider.Case<ContextIntProvider>> cases = List.of(new DispatcherProvider.Case<>(CONDITION, ContextIntProviders.exactly(7)));
 
-        assertValue(Holder.direct(new NumberDispatcher(cases, ContextIntProviders.exactly(1))), "Value: ", "  -> 7", "    -> Survives Explosion", "  -> otherwise 1");
+        assertValue(Holder.direct(new NumberDispatcher(cases, ContextIntProviders.exactly(1))), "Value:", "  -> 7", "    -> Survives Explosion", "  -> otherwise 1");
     }
 
     @Test
