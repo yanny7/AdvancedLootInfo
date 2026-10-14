@@ -4,7 +4,7 @@ ali:loot_table
     | Selects random entry
     | Rolls: 1
     ali:item minecraft:nether_wart x1-7
-      | Count: 
+      | Count:
       |   -> 1 to 4
       |     -> Match Block:
       |       -> Block: Nether Wart

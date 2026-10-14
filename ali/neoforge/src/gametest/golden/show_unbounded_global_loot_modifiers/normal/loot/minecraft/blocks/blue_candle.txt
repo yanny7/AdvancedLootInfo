@@ -4,7 +4,7 @@ ali:loot_table
     | Selects random entry
     | Rolls: 1
     ali:item minecraft:blue_candle x1-4
-      | Count: 
+      | Count:
       |   -> 4
       |     -> Match Block:
       |       -> Block: Blue Candle

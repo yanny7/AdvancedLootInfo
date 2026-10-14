@@ -3,91 +3,111 @@ ali:trade
     | Level: 1
     | Randomly Selects 2 Of These Trades
     ali:items_to_items
-      | Uses: 16
+      | Uses: 12
       | XP: 2
       | Price Multiplier: 0.05
-      ali:item immersiveengineering:empty_casing x6-12
+      ali:item minecraft:gunpowder x4
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 16
-      | XP: 2
+      | XP: 1
       | Price Multiplier: 0.05
-      ali:item immersiveengineering:empty_shell x6-12
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
-      ali:item minecraft:emerald x1
+      ali:item immersiveengineering:gunpowder_barrel x1
     ali:items_to_items
-      | Uses: 1
-      | XP: 12
+      | Uses: 3
+      | XP: 5
       | Price Multiplier: 0.2
-      ali:item minecraft:emerald x2-4
+      ali:item minecraft:emerald x4
       ali:item minecraft:air x0
-      ali:item immersiveengineering:wooden_grip x1
+      ali:item immersiveengineering:blueprint x1 {"immersiveengineering:blueprint":"bullet"}
   ali:trade_level
     | Level: 2
     | Randomly Selects 2 Of These Trades
     ali:items_to_items
-      | Uses: 1
-      | XP: 25
-      | Price Multiplier: 0.05
-      ali:item minecraft:emerald x3-6
-      ali:item minecraft:air x0
-      ali:item immersiveengineering:blueprint x1 {blueprint:"bullet"}
-    ali:items_to_items
       | Uses: 12
-      | XP: 5
+      | XP: 10
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
+      ali:item minecraft:target x1
       ali:item minecraft:air x0
-      ali:item immersiveengineering:casull x2-4
-    ali:items_to_items
-      | Uses: 12
-      | XP: 5
-      | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item immersiveengineering:buckshot x2-6
-    ali:items_to_items
-      | Uses: 1
-      | XP: 45
-      | Price Multiplier: 0.25
-      ali:item minecraft:emerald x5-29
-      ali:item minecraft:air x0
-      ali:group
-        ali:item immersiveengineering:gunpart_barrel x1
-        ali:item immersiveengineering:gunpart_drum x1
-        ali:item immersiveengineering:gunpart_hammer x1
+      ali:item minecraft:emerald x2
+    ali:sub_trades
+      ali:items_to_items
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x2
+        ali:item immersiveengineering:empty_casing x4
+        ali:item immersiveengineering:bullet_casull x4
+      ali:items_to_items
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x2
+        ali:item immersiveengineering:empty_casing x4
+        ali:item immersiveengineering:bullet_silver x4
+      ali:items_to_items
+        | Uses: 12
+        | XP: 5
+        | Price Multiplier: 0.05
+        ali:item minecraft:emerald x2
+        ali:item immersiveengineering:empty_shell x4
+        ali:item immersiveengineering:bullet_buckshot x4
   ali:trade_level
     | Level: 3
     | Randomly Selects 2 Of These Trades
     ali:items_to_items
-      | Uses: 1
-      | XP: 45
-      | Price Multiplier: 0.25
-      ali:item minecraft:emerald x5-29
-      ali:item minecraft:air x0
-      ali:group
-        ali:item immersiveengineering:gunpart_barrel x1
-        ali:item immersiveengineering:gunpart_drum x1
-        ali:item immersiveengineering:gunpart_hammer x1
-    ali:items_to_items
-      | Uses: 12
-      | XP: 10
-      | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item immersiveengineering:flare x1-2
-    ali:items_to_items
-      | Uses: 1
-      | XP: 30
+      | Uses: 3
+      | XP: 20
       | Price Multiplier: 0.2
-      ali:item minecraft:emerald x5-9
+      ali:item minecraft:emerald x12
       ali:item minecraft:air x0
-      ali:item immersiveengineering:blueprint x1 {blueprint:"specialBullet"}
+      ali:item immersiveengineering:blueprint x1 {"immersiveengineering:blueprint":"specialBullet"}
+    ali:sub_trades
+      ali:items_to_items
+        | Uses: 16
+        | XP: 20
+        | Price Multiplier: 0.05
+        ali:item immersiveengineering:empty_casing x8
+        ali:item minecraft:air x0
+        ali:item minecraft:emerald x1
+      ali:items_to_items
+        | Uses: 16
+        | XP: 20
+        | Price Multiplier: 0.05
+        ali:item immersiveengineering:empty_shell x8
+        ali:item minecraft:air x0
+        ali:item minecraft:emerald x1
+      ali:items_to_items
+        | Uses: 1
+        | XP: 45
+        | Price Multiplier: 0.25
+        ali:item minecraft:emerald x5-29
+        ali:item minecraft:air x0
+        ali:group
+          ali:item immersiveengineering:gunpart_barrel x1
+          ali:item immersiveengineering:gunpart_drum x1
+          ali:item immersiveengineering:gunpart_hammer x1
   ali:trade_level
     | Level: 4
     | Randomly Selects 2 Of These Trades
     ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x2
+      ali:item immersiveengineering:empty_casing x2
+      ali:item immersiveengineering:bullet_he x2
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x2
+      ali:item immersiveengineering:empty_shell x2
+      ali:item immersiveengineering:bullet_flare x2
+    ali:items_to_items
       | Uses: 1
       | XP: 45
       | Price Multiplier: 0.25
@@ -97,33 +117,9 @@ ali:trade
         ali:item immersiveengineering:gunpart_barrel x1
         ali:item immersiveengineering:gunpart_drum x1
         ali:item immersiveengineering:gunpart_hammer x1
-    ali:items_to_items
-      | Uses: 8
-      | XP: 15
-      | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1
-      ali:item minecraft:air x0
-      ali:item immersiveengineering:silver x1-4
-    ali:items_to_items
-      | Uses: 8
-      | XP: 15
-      | Price Multiplier: 0.05
-      ali:item minecraft:emerald x2-4
-      ali:item minecraft:air x0
-      ali:item immersiveengineering:he x1
   ali:trade_level
     | Level: 5
     | Randomly Selects 2 Of These Trades
-    ali:items_to_items
-      | Uses: 1
-      | XP: 45
-      | Price Multiplier: 0.25
-      ali:item minecraft:emerald x5-29
-      ali:item minecraft:air x0
-      ali:group
-        ali:item immersiveengineering:gunpart_barrel x1
-        ali:item immersiveengineering:gunpart_drum x1
-        ali:item immersiveengineering:gunpart_hammer x1
     ali:items_to_items
       | Uses: 1
       | XP: 45

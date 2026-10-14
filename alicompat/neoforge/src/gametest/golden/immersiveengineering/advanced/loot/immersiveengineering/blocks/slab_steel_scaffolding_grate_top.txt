@@ -4,10 +4,10 @@ ali:loot_table
     | Selects random entry
     | Rolls: 1
     ali:item immersiveengineering:slab_steel_scaffolding_grate_top x1-2
-      | Count: 
+      | Count:
       |   -> 2
       |     -> Block State Property:
-      |       -> Block: Steel Scaffolding Slab
+      |       -> Block: Grated Steel Scaffolding Slab
       |       -> Properties:
       |         -> type: double
       |   -> otherwise 1
@@ -19,6 +19,6 @@ ali:loot_table
       |   -> Add: False
       |   -> Predicates:
       |     -> Block State Property:
-      |       -> Block: Steel Scaffolding Slab
+      |       -> Block: Grated Steel Scaffolding Slab
       |       -> Properties:
       |         -> type: double

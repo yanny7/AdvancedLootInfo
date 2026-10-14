@@ -161,7 +161,7 @@ public class NumberTooltipTest {
                 .build(COUNT);
 
         assertEquals(List.of(
-                "Count: ",
+                "Count:",
                 "  -> 2 to 4",
                 "    -> Killed by player",
                 "  -> otherwise 1"
@@ -173,7 +173,7 @@ public class NumberTooltipTest {
         TooltipNode node = TooltipBuilder.number(cond(List.of(new Branch(3, uniformInt(2, 4))), constant(1))).build(COUNT);
 
         assertEquals(List.of(
-                "Count: ",
+                "Count:",
                 "  -> 2 to 4",
                 "  -> otherwise 1"
         ), lines(node, TEXT));
