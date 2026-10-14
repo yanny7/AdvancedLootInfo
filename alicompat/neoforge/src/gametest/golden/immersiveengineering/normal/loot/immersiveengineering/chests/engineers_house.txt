@@ -4,62 +4,450 @@ ali:loot_table
     | Selects random entry
     | Rolls: 4
     ali:item immersiveengineering:stick_treated x2-7
-      | Chance: 13.89%
+      | Chance: 13.51%
       | Count: 2 to 7
+      | ----- Modifiers -----
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:max_stack_size
+      |       -> Value: 64
+      | Set Components:
+      |   -> Component: minecraft:lore
+      | Set Components:
+      |   -> Component: minecraft:enchantments
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:repair_cost
+      |       -> Value: 0
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:attribute_modifiers
+      |       -> Show In Tooltip: True
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:rarity
+      |       -> Rarity: Common
     ali:item immersiveengineering:stick_iron x1-4
-      | Chance: 6.94%
+      | Chance: 6.76%
       | Count: 1 to 4
+      | ----- Modifiers -----
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:max_stack_size
+      |       -> Value: 64
+      | Set Components:
+      |   -> Component: minecraft:lore
+      | Set Components:
+      |   -> Component: minecraft:enchantments
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:repair_cost
+      |       -> Value: 0
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:attribute_modifiers
+      |       -> Show In Tooltip: True
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:rarity
+      |       -> Rarity: Common
     ali:item immersiveengineering:stick_aluminum x1-4
-      | Chance: 6.94%
+      | Chance: 6.76%
       | Count: 1 to 4
+      | ----- Modifiers -----
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:max_stack_size
+      |       -> Value: 64
+      | Set Components:
+      |   -> Component: minecraft:lore
+      | Set Components:
+      |   -> Component: minecraft:enchantments
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:repair_cost
+      |       -> Value: 0
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:attribute_modifiers
+      |       -> Show In Tooltip: True
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:rarity
+      |       -> Rarity: Common
     ali:item immersiveengineering:hemp_fabric x1-3
-      | Chance: 6.94%
+      | Chance: 6.76%
       | Count: 1 to 3
+      | ----- Modifiers -----
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:max_stack_size
+      |       -> Value: 64
+      | Set Components:
+      |   -> Component: minecraft:lore
+      | Set Components:
+      |   -> Component: minecraft:enchantments
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:repair_cost
+      |       -> Value: 0
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:attribute_modifiers
+      |       -> Show In Tooltip: True
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:rarity
+      |       -> Rarity: Common
     ali:item immersiveengineering:coal_coke x1-3
-      | Chance: 6.94%
+      | Chance: 6.76%
       | Count: 1 to 3
+      | ----- Modifiers -----
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:max_stack_size
+      |       -> Value: 64
+      | Set Components:
+      |   -> Component: minecraft:lore
+      | Set Components:
+      |   -> Component: minecraft:enchantments
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:repair_cost
+      |       -> Value: 0
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:attribute_modifiers
+      |       -> Show In Tooltip: True
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:rarity
+      |       -> Rarity: Common
     ali:item minecraft:iron_ingot x1-4
-      | Chance: 6.94%
+      | Chance: 6.76%
       | Count: 1 to 4
+      | ----- Modifiers -----
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:max_stack_size
+      |       -> Value: 64
+      | Set Components:
+      |   -> Component: minecraft:lore
+      | Set Components:
+      |   -> Component: minecraft:enchantments
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:repair_cost
+      |       -> Value: 0
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:attribute_modifiers
+      |       -> Show In Tooltip: True
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:rarity
+      |       -> Rarity: Common
     ali:item minecraft:copper_ingot x1-4
-      | Chance: 6.94%
+      | Chance: 6.76%
       | Count: 1 to 4
+      | ----- Modifiers -----
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:max_stack_size
+      |       -> Value: 64
+      | Set Components:
+      |   -> Component: minecraft:lore
+      | Set Components:
+      |   -> Component: minecraft:enchantments
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:repair_cost
+      |       -> Value: 0
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:attribute_modifiers
+      |       -> Show In Tooltip: True
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:rarity
+      |       -> Rarity: Common
     ali:item immersiveengineering:ingot_aluminum x1-4
-      | Chance: 6.94%
+      | Chance: 6.76%
       | Count: 1 to 4
+      | ----- Modifiers -----
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:max_stack_size
+      |       -> Value: 64
+      | Set Components:
+      |   -> Component: minecraft:lore
+      | Set Components:
+      |   -> Component: minecraft:enchantments
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:repair_cost
+      |       -> Value: 0
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:attribute_modifiers
+      |       -> Show In Tooltip: True
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:rarity
+      |       -> Rarity: Common
     ali:item immersiveengineering:nugget_lead x1-4
-      | Chance: 6.25%
+      | Chance: 6.08%
       | Count: 1 to 4
+      | ----- Modifiers -----
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:max_stack_size
+      |       -> Value: 64
+      | Set Components:
+      |   -> Component: minecraft:lore
+      | Set Components:
+      |   -> Component: minecraft:enchantments
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:repair_cost
+      |       -> Value: 0
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:attribute_modifiers
+      |       -> Show In Tooltip: True
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:rarity
+      |       -> Rarity: Common
     ali:item immersiveengineering:component_iron x1-2
-      | Chance: 5.56%
+      | Chance: 5.41%
       | Count: 1 to 2
+      | ----- Modifiers -----
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:max_stack_size
+      |       -> Value: 64
+      | Set Components:
+      |   -> Component: minecraft:lore
+      | Set Components:
+      |   -> Component: minecraft:enchantments
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:repair_cost
+      |       -> Value: 0
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:attribute_modifiers
+      |       -> Show In Tooltip: True
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:rarity
+      |       -> Rarity: Common
     ali:item immersiveengineering:nugget_silver x1-2
-      | Chance: 4.86%
+      | Chance: 4.73%
       | Count: 1 to 2
+      | ----- Modifiers -----
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:max_stack_size
+      |       -> Value: 64
+      | Set Components:
+      |   -> Component: minecraft:lore
+      | Set Components:
+      |   -> Component: minecraft:enchantments
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:repair_cost
+      |       -> Value: 0
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:attribute_modifiers
+      |       -> Show In Tooltip: True
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:rarity
+      |       -> Rarity: Common
     ali:item immersiveengineering:nugget_nickel x1-2
-      | Chance: 4.86%
+      | Chance: 4.73%
       | Count: 1 to 2
+      | ----- Modifiers -----
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:max_stack_size
+      |       -> Value: 64
+      | Set Components:
+      |   -> Component: minecraft:lore
+      | Set Components:
+      |   -> Component: minecraft:enchantments
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:repair_cost
+      |       -> Value: 0
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:attribute_modifiers
+      |       -> Show In Tooltip: True
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:rarity
+      |       -> Rarity: Common
     ali:item immersiveengineering:stick_steel x1-4
-      | Chance: 4.17%
+      | Chance: 4.05%
       | Count: 1 to 4
+      | ----- Modifiers -----
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:max_stack_size
+      |       -> Value: 64
+      | Set Components:
+      |   -> Component: minecraft:lore
+      | Set Components:
+      |   -> Component: minecraft:enchantments
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:repair_cost
+      |       -> Value: 0
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:attribute_modifiers
+      |       -> Show In Tooltip: True
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:rarity
+      |       -> Rarity: Common
     ali:item immersiveengineering:component_steel x1
-      | Chance: 3.47%
-      | Count: 1
-    ali:item immersiveengineering:blueprint x1 {blueprint:"bullet"}
-      | Chance: 2.78%
+      | Chance: 3.38%
       | Count: 1
       | ----- Modifiers -----
-      | Set Nbt:
-      |   -> Tag: {blueprint:"bullet"}
-    ali:item immersiveengineering:blueprint x1 {blueprint:"specialBullet"}
-      | Chance: 2.78%
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:max_stack_size
+      |       -> Value: 64
+      | Set Components:
+      |   -> Component: minecraft:lore
+      | Set Components:
+      |   -> Component: minecraft:enchantments
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:repair_cost
+      |       -> Value: 0
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:attribute_modifiers
+      |       -> Show In Tooltip: True
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:rarity
+      |       -> Rarity: Common
+    ali:item immersiveengineering:blueprint x1 {"immersiveengineering:blueprint":"components"}
+      | Chance: 2.7%
       | Count: 1
       | ----- Modifiers -----
-      | Set Nbt:
-      |   -> Tag: {blueprint:"specialBullet"}
-    ali:item immersiveengineering:blueprint x1 {blueprint:"electrode"}
-      | Chance: 2.78%
+      | Set Components:
+      |   -> Components:
+      |     -> immersiveengineering:blueprint
+      |       -> Value: components
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:max_stack_size
+      |       -> Value: 1
+      | Set Components:
+      |   -> Component: minecraft:lore
+      | Set Components:
+      |   -> Component: minecraft:enchantments
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:repair_cost
+      |       -> Value: 0
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:attribute_modifiers
+      |       -> Show In Tooltip: True
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:rarity
+      |       -> Rarity: Common
+    ali:item immersiveengineering:blueprint x1 {"immersiveengineering:blueprint":"bullet"}
+      | Chance: 2.7%
       | Count: 1
       | ----- Modifiers -----
-      | Set Nbt:
-      |   -> Tag: {blueprint:"electrode"}
+      | Set Components:
+      |   -> Components:
+      |     -> immersiveengineering:blueprint
+      |       -> Value: bullet
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:max_stack_size
+      |       -> Value: 1
+      | Set Components:
+      |   -> Component: minecraft:lore
+      | Set Components:
+      |   -> Component: minecraft:enchantments
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:repair_cost
+      |       -> Value: 0
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:attribute_modifiers
+      |       -> Show In Tooltip: True
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:rarity
+      |       -> Rarity: Common
+    ali:item immersiveengineering:blueprint x1 {"immersiveengineering:blueprint":"specialBullet"}
+      | Chance: 2.7%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Components:
+      |   -> Components:
+      |     -> immersiveengineering:blueprint
+      |       -> Value: specialBullet
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:max_stack_size
+      |       -> Value: 1
+      | Set Components:
+      |   -> Component: minecraft:lore
+      | Set Components:
+      |   -> Component: minecraft:enchantments
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:repair_cost
+      |       -> Value: 0
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:attribute_modifiers
+      |       -> Show In Tooltip: True
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:rarity
+      |       -> Rarity: Common
+    ali:item immersiveengineering:blueprint x1 {"immersiveengineering:blueprint":"molds"}
+      | Chance: 2.7%
+      | Count: 1
+      | ----- Modifiers -----
+      | Set Components:
+      |   -> Components:
+      |     -> immersiveengineering:blueprint
+      |       -> Value: molds
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:max_stack_size
+      |       -> Value: 1
+      | Set Components:
+      |   -> Component: minecraft:lore
+      | Set Components:
+      |   -> Component: minecraft:enchantments
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:repair_cost
+      |       -> Value: 0
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:attribute_modifiers
+      |       -> Show In Tooltip: True
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:rarity
+      |       -> Rarity: Common

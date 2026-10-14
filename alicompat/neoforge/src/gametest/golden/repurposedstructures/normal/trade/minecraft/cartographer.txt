@@ -43,7 +43,7 @@ ali:trade
         |     -> Item: Map
         |     -> Components:
         |       -> Partial Matchers:
-        |         -> null
+        |         -> minecraft:map_id
         |           -> Predicate:
         |             -> Type: minecraft:map_id
         |   -> On Fail:
@@ -68,7 +68,7 @@ ali:trade
         |     -> Item: Map
         |     -> Components:
         |       -> Partial Matchers:
-        |         -> null
+        |         -> minecraft:map_id
         |           -> Predicate:
         |             -> Type: minecraft:map_id
         |   -> On Fail:
@@ -93,7 +93,7 @@ ali:trade
         |     -> Item: Map
         |     -> Components:
         |       -> Partial Matchers:
-        |         -> null
+        |         -> minecraft:map_id
         |           -> Predicate:
         |             -> Type: minecraft:map_id
         |   -> On Fail:
@@ -118,7 +118,7 @@ ali:trade
         |     -> Item: Map
         |     -> Components:
         |       -> Partial Matchers:
-        |         -> null
+        |         -> minecraft:map_id
         |           -> Predicate:
         |             -> Type: minecraft:map_id
         |   -> On Fail:
@@ -143,7 +143,7 @@ ali:trade
         |     -> Item: Map
         |     -> Components:
         |       -> Partial Matchers:
-        |         -> null
+        |         -> minecraft:map_id
         |           -> Predicate:
         |             -> Type: minecraft:map_id
         |   -> On Fail:
@@ -168,7 +168,7 @@ ali:trade
         |     -> Item: Map
         |     -> Components:
         |       -> Partial Matchers:
-        |         -> null
+        |         -> minecraft:map_id
         |           -> Predicate:
         |             -> Type: minecraft:map_id
         |   -> On Fail:
@@ -193,7 +193,7 @@ ali:trade
         |     -> Item: Map
         |     -> Components:
         |       -> Partial Matchers:
-        |         -> null
+        |         -> minecraft:map_id
         |           -> Predicate:
         |             -> Type: minecraft:map_id
         |   -> On Fail:
@@ -218,7 +218,7 @@ ali:trade
         |     -> Item: Map
         |     -> Components:
         |       -> Partial Matchers:
-        |         -> null
+        |         -> minecraft:map_id
         |           -> Predicate:
         |             -> Type: minecraft:map_id
         |   -> On Fail:
@@ -243,7 +243,7 @@ ali:trade
         |     -> Item: Map
         |     -> Components:
         |       -> Partial Matchers:
-        |         -> null
+        |         -> minecraft:map_id
         |           -> Predicate:
         |             -> Type: minecraft:map_id
         |   -> On Fail:
@@ -268,7 +268,7 @@ ali:trade
         |     -> Item: Map
         |     -> Components:
         |       -> Partial Matchers:
-        |         -> null
+        |         -> minecraft:map_id
         |           -> Predicate:
         |             -> Type: minecraft:map_id
         |   -> On Fail:
@@ -302,7 +302,7 @@ ali:trade
         |     -> Item: Map
         |     -> Components:
         |       -> Partial Matchers:
-        |         -> null
+        |         -> minecraft:map_id
         |           -> Predicate:
         |             -> Type: minecraft:map_id
         |   -> On Fail:
@@ -327,7 +327,7 @@ ali:trade
         |     -> Item: Map
         |     -> Components:
         |       -> Partial Matchers:
-        |         -> null
+        |         -> minecraft:map_id
         |           -> Predicate:
         |             -> Type: minecraft:map_id
         |   -> On Fail:
@@ -460,7 +460,7 @@ ali:trade
         |     -> Item: Map
         |     -> Components:
         |       -> Partial Matchers:
-        |         -> null
+        |         -> minecraft:map_id
         |           -> Predicate:
         |             -> Type: minecraft:map_id
         |   -> On Fail:

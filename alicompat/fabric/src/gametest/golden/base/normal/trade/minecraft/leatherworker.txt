@@ -22,7 +22,7 @@ ali:trade
         |     -> Item: Leather Pants
         |     -> Components:
         |       -> Partial Matchers:
-        |         -> null
+        |         -> minecraft:dyed_color
         |           -> Predicate:
         |             -> Type: minecraft:dyed_color
         |   -> On Fail:
@@ -41,7 +41,7 @@ ali:trade
         |     -> Item: Leather Tunic
         |     -> Components:
         |       -> Partial Matchers:
-        |         -> null
+        |         -> minecraft:dyed_color
         |           -> Predicate:
         |             -> Type: minecraft:dyed_color
         |   -> On Fail:
@@ -69,7 +69,7 @@ ali:trade
         |     -> Item: Leather Cap
         |     -> Components:
         |       -> Partial Matchers:
-        |         -> null
+        |         -> minecraft:dyed_color
         |           -> Predicate:
         |             -> Type: minecraft:dyed_color
         |   -> On Fail:
@@ -88,7 +88,7 @@ ali:trade
         |     -> Item: Leather Boots
         |     -> Components:
         |       -> Partial Matchers:
-        |         -> null
+        |         -> minecraft:dyed_color
         |           -> Predicate:
         |             -> Type: minecraft:dyed_color
         |   -> On Fail:
@@ -116,7 +116,7 @@ ali:trade
         |     -> Item: Leather Tunic
         |     -> Components:
         |       -> Partial Matchers:
-        |         -> null
+        |         -> minecraft:dyed_color
         |           -> Predicate:
         |             -> Type: minecraft:dyed_color
         |   -> On Fail:
@@ -144,7 +144,7 @@ ali:trade
         |     -> Item: Leather Horse Armor
         |     -> Components:
         |       -> Partial Matchers:
-        |         -> null
+        |         -> minecraft:dyed_color
         |           -> Predicate:
         |             -> Type: minecraft:dyed_color
         |   -> On Fail:
@@ -172,7 +172,7 @@ ali:trade
         |     -> Item: Leather Cap
         |     -> Components:
         |       -> Partial Matchers:
-        |         -> null
+        |         -> minecraft:dyed_color
         |           -> Predicate:
         |             -> Type: minecraft:dyed_color
         |   -> On Fail:

@@ -4,7 +4,7 @@ ali:loot_table
     | Selects random entry
     | Rolls: 1
     ali:item ars_nouveau:bastion_pod x1-3
-      | Count: 
+      | Count:
       |   -> 3
       |     -> Block State Property:
       |       -> Block: Bastion Fruit

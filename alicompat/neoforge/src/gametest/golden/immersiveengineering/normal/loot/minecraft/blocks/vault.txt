@@ -1,0 +1,5 @@
+ali:loot_table
+  | Selects all entries
+  ali:item immersiveengineering:blueprint x1 {"immersiveengineering:blueprint":"automatons"}
+    | Chance: 6.2%
+    | Count: 1

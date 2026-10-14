@@ -4,7 +4,7 @@ ali:loot_table
     | Selects random entry
     | Rolls: 1
     ali:item ars_nouveau:archwood_slab x1-2
-      | Count: 
+      | Count:
       |   -> 2
       |     -> Block State Property:
       |       -> Block: Archwood Slab

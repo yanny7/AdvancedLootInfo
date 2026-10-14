@@ -9,6 +9,7 @@
 - Fixed loot tables referencing each other in a loop being nested hundreds of levels deep, the loop ends at a recursive reference
 - Fixed predicate references labelled as loot tables
 - Fixed block entity and tool sources of copied names and components shown untranslated
+- Fixed item predicates on the mere presence of a component shown as null
 
 ## [2.4.0]
 

@@ -6,23 +6,23 @@ ali:trade
       | Uses: 16
       | XP: 2
       | Price Multiplier: 0.05
-      ali:item #forge:coal_coke x8-16
+      ali:item #c:coal_coke x8
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
-      | Uses: 12
-      | XP: 1
-      | Price Multiplier: 0.2
-      ali:item minecraft:emerald x1-3
+      | Uses: 4
+      | XP: 5
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item immersiveengineering:hammer x1 {Damage:0}
+      ali:item immersiveengineering:hammer x1
     ali:items_to_items
       | Uses: 3
       | XP: 5
       | Price Multiplier: 0.2
-      ali:item minecraft:emerald x6-16
+      ali:item minecraft:emerald x4
       ali:item minecraft:air x0
-      ali:item immersiveengineering:blueprint x1 {blueprint:"components"}
+      ali:item immersiveengineering:blueprint x1 {"immersiveengineering:blueprint":"components"}
   ali:trade_level
     | Level: 2
     | Randomly Selects 2 Of These Trades
@@ -30,99 +30,99 @@ ali:trade
       | Uses: 12
       | XP: 10
       | Price Multiplier: 0.05
-      ali:item #forge:ingots/steel x3-6
+      ali:item #c:ingots/copper x4
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 12
       | XP: 5
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1-3
+      ali:item minecraft:emerald x2
       ali:item minecraft:air x0
-      ali:item immersiveengineering:component_steel x1
+      ali:item immersiveengineering:component_iron x1
     ali:items_to_items
-      | Uses: 8
-      | XP: 10
+      | Uses: 12
+      | XP: 5
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x1-3
+      ali:item minecraft:emerald x4
       ali:item minecraft:air x0
-      ali:item immersiveengineering:waterwheel_segment x1
+      ali:item immersiveengineering:basic_engineering x1
   ali:trade_level
     | Level: 3
     | Randomly Selects 2 Of These Trades
     ali:items_to_items
-      | Uses: 3
+      | Uses: 12
       | XP: 20
-      | Price Multiplier: 0.2
-      ali:item minecraft:emerald x6-8
+      | Price Multiplier: 0.05
+      ali:item #c:ingots/steel x3
       ali:item minecraft:air x0
-      ali:item immersiveengineering:toolbox x1
+      ali:item minecraft:emerald x1
     ali:items_to_items
-      | Uses: 3
-      | XP: 15
-      | Price Multiplier: 0.2
-      ali:item minecraft:emerald x20-40
+      | Uses: 12
+      | XP: 10
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x3
       ali:item minecraft:air x0
-      ali:item immersiveengineering:drillhead_iron x1
+      ali:item immersiveengineering:component_steel x1
     ali:items_to_items
-      | Uses: 3
-      | XP: 15
-      | Price Multiplier: 0.2
-      ali:item minecraft:emerald x20-40
+      | Uses: 12
+      | XP: 10
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x4
       ali:item minecraft:air x0
-      ali:item immersiveengineering:sawblade x1 {Damage:0}
+      ali:item immersiveengineering:light_engineering x1
     ali:items_to_items
-      | Uses: 3
-      | XP: 20
-      | Price Multiplier: 0.2
-      ali:item minecraft:emerald x4-9
+      | Uses: 12
+      | XP: 10
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x2
       ali:item minecraft:air x0
-      ali:item immersiveengineering:earmuffs x1
+      ali:item immersiveengineering:fluid_pipe x1
   ali:trade_level
     | Level: 4
     | Randomly Selects 2 Of These Trades
     ali:items_to_items
-      | Uses: 3
+      | Uses: 12
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x5
+      ali:item minecraft:air x0
+      ali:item immersiveengineering:heavy_engineering x1
+    ali:items_to_items
+      | Uses: 12
+      | XP: 15
+      | Price Multiplier: 0.05
+      ali:item minecraft:emerald x2
+      ali:item minecraft:air x0
+      ali:item immersiveengineering:conveyor_basic x1
+    ali:items_to_items
+      | Uses: 12
       | XP: 30
-      | Price Multiplier: 0.2
-      ali:item minecraft:emerald x32-48
-      ali:item minecraft:air x0
-      ali:item immersiveengineering:drillhead_steel x1
-    ali:items_to_items
-      | Uses: 8
-      | XP: 10
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x5-10
+      ali:item immersiveengineering:generator x1
       ali:item minecraft:air x0
-      ali:item immersiveengineering:toolupgrade_drill_lube x1
+      ali:item minecraft:emerald x4
     ali:items_to_items
-      | Uses: 8
-      | XP: 10
+      | Uses: 12
+      | XP: 30
       | Price Multiplier: 0.05
-      ali:item minecraft:emerald x5-10
+      ali:item immersiveengineering:radiator x1
       ali:item minecraft:air x0
-      ali:item immersiveengineering:toolupgrade_drill_capacity x1
-    ali:items_to_items
-      | Uses: 16
-      | XP: 10
-      | Price Multiplier: 0.05
-      ali:item immersiveengineering:light_engineering x1-2
-      ali:item minecraft:air x0
-      ali:item minecraft:emerald x1
+      ali:item minecraft:emerald x4
   ali:trade_level
     | Level: 5
     | Randomly Selects 2 Of These Trades
     ali:items_to_items
-      | Uses: 8
-      | XP: 10
-      | Price Multiplier: 0.05
-      ali:item minecraft:emerald x5-10
+      | Uses: 3
+      | XP: 30
+      | Price Multiplier: 0.2
+      ali:item minecraft:emerald x24
       ali:item minecraft:air x0
-      ali:item immersiveengineering:toolupgrade_drill_fortune x1
+      ali:item immersiveengineering:drillhead_steel x1
     ali:items_to_items
       | Uses: 3
       | XP: 30
       | Price Multiplier: 0.2
-      ali:item minecraft:emerald x12-24
+      ali:item minecraft:emerald x24
       ali:item minecraft:air x0
-      ali:item immersiveengineering:blueprint x1 {blueprint:"electrode"}
+      ali:item immersiveengineering:grindingdisk x1
