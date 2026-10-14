@@ -136,7 +136,7 @@ public class EntryWeightTest {
         List<IDataNode> nodes = NodeUtils.getChildren(UTILS, entries, constant(1), sumWeight, conditions, List.of(), List.of());
 
         assertTooltip(nodes.get(1).getTooltip(), List.of(
-                "Chance: ",
+                "Chance:",
                 "  -> 25%",
                 "    -> Survives Explosion",
                 "  -> otherwise 50%",
@@ -163,7 +163,7 @@ public class EntryWeightTest {
                 "Count: 1"
         ));
         assertTooltip(nodes.get(1).getTooltip(), List.of(
-                "Chance: ",
+                "Chance:",
                 "  -> 80%",
                 "    -> Killed by player",
                 "  -> otherwise 44.44%",
@@ -225,7 +225,7 @@ public class EntryWeightTest {
                 "Count: 1"
         ));
         assertTooltip(nodes.get(1).getTooltip(), List.of(
-                "Chance: ",
+                "Chance:",
                 "  -> 57.14%",
                 "    -> Killed by player",
                 "  -> otherwise 66.67%",
@@ -249,7 +249,7 @@ public class EntryWeightTest {
                 "Killed by player"
         ));
         assertTooltip(nodes.get(1).getTooltip(), List.of(
-                "Chance: ",
+                "Chance:",
                 "  -> 80%",
                 "    -> Killed by player",
                 "  -> otherwise 100%",
@@ -268,7 +268,7 @@ public class EntryWeightTest {
         List<IDataNode> second = alternatives(nodes.get(1));
 
         assertTooltip(first.get(0).getTooltip(), List.of(
-                "Chance: ",
+                "Chance:",
                 "  -> 14.29%",
                 "    -> Survives Explosion",
                 "  -> otherwise 9.09%",
@@ -277,14 +277,14 @@ public class EntryWeightTest {
                 "Killed by player"
         ));
         assertTooltip(first.get(1).getTooltip(), List.of(
-                "Chance: ",
+                "Chance:",
                 "  -> 45.45%",
                 "    -> Survives Explosion",
                 "  -> otherwise 33.33%",
                 "Count: 1"
         ));
         assertTooltip(second.get(0).getTooltip(), List.of(
-                "Chance: ",
+                "Chance:",
                 "  -> 28.57%",
                 "    -> Killed by player",
                 "  -> otherwise 18.18%",
@@ -293,14 +293,14 @@ public class EntryWeightTest {
                 "Survives Explosion"
         ));
         assertTooltip(second.get(1).getTooltip(), List.of(
-                "Chance: ",
+                "Chance:",
                 "  -> 54.55%",
                 "    -> Killed by player",
                 "  -> otherwise 40%",
                 "Count: 1"
         ));
         assertTooltip(nodes.get(2).getTooltip(), List.of(
-                "Chance: ",
+                "Chance:",
                 "  -> 36.36% to 57.14%",
                 "    -> Killed by player",
                 "  -> otherwise 26.67% to 36.36%",

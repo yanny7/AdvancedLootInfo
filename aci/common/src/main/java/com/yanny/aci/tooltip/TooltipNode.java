@@ -8,6 +8,7 @@ import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.language.CoreLang;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import com.yanny.aci.number.NumberFormatter;
+import net.minecraft.locale.Language;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
@@ -278,6 +279,8 @@ public class TooltipNode {
         } else if (is(FLAG_COMPONENT)) {
             assert component != null;
             line.append(Component.translatable(key, component.copy().withStyle(style.value())).withStyle(style.text()));
+        } else if (numberValue != null && numberValue.getString().isEmpty()) {
+            line.append(Component.literal(Language.getInstance().getOrDefault(key).replace("%s", "").stripTrailing()).withStyle(style.text()));
         } else if (numberValue != null) {
             line.append(Component.translatable(key, numberValue).withStyle(style.text()));
         } else {
