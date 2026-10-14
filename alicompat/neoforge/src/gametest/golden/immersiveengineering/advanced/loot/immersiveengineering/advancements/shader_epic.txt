@@ -6,6 +6,26 @@ ali:loot_table
     ali:item immersiveengineering:shader_bag_epic x1
       | Count: 1
       | ----- Modifiers -----
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:max_stack_size
+      |       -> Value: 64
+      | Set Components:
+      |   -> Component: minecraft:lore
+      | Set Components:
+      |   -> Component: minecraft:enchantments
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:repair_cost
+      |       -> Value: 0
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:attribute_modifiers
+      |       -> Show In Tooltip: True
+      | Set Components:
+      |   -> Components:
+      |     -> minecraft:rarity
+      |       -> Rarity: Epic
       | Set Count:
       |   -> Count: 1
       |   -> Add: False

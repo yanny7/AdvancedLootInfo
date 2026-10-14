@@ -273,6 +273,10 @@ public class RegistriesTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getDataComponentPredicateTypeTooltip(IServerUtils utils, DataComponentPredicate.Type<?> type) {
+        if (type instanceof DataComponentPredicate.AnyValueType anyValueType) {
+            return getDataComponentTypeTooltip(utils, anyValueType.componentType());
+        }
+
         return getBuiltInRegistryTooltip(utils, BuiltInRegistries.DATA_COMPONENT_PREDICATE_TYPE, type, utils.getConfiguration().showInGameNames);
     }
 

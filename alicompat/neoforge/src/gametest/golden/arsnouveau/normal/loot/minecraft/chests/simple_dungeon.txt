@@ -789,7 +789,42 @@ ali:loot_table
     |     -> minecraft:chests/underwater_ruin_big
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_containment x1
+  ali:item ars_nouveau:ritual_harvest x1
+    | Chance: 0.31%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:ritual_restoration x1
     | Chance: 0.28%
     | Count: 1
     | ----- Predicates -----
@@ -824,7 +859,77 @@ ali:loot_table
     |     -> minecraft:chests/underwater_ruin_big
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_burrowing x1
+  ali:item ars_nouveau:ritual_gravity x1
+    | Chance: 0.26%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:ritual_flight x1
+    | Chance: 0.26%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:ritual_sunrise x1
     | Chance: 0.24%
     | Count: 1
     | ----- Predicates -----
@@ -859,43 +964,43 @@ ali:loot_table
     |     -> minecraft:chests/underwater_ruin_big
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_cloudshaping x1
-    | Chance: 0.24%
-    | Count: 1
-    | ----- Predicates -----
-    | Any Of:
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/simple_dungeon
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/jungle_temple
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/abandoned_mineshaft
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/bastion_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/desert_pyramid
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/end_city_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/ruined_portal
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/pillager_outpost
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/nether_bridge
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_corridor
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_crossing
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_library
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/woodland_mansion
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_big
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_animal_summon x1
+  ali:item ars_nouveau:ritual_containment x1
     | Chance: 0.23%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:ritual_warping x1
+    | Chance: 0.21%
     | Count: 1
     | ----- Predicates -----
     | Any Of:
@@ -930,76 +1035,6 @@ ali:loot_table
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
   ali:item ars_nouveau:ritual_disintegration x1
-    | Chance: 0.23%
-    | Count: 1
-    | ----- Predicates -----
-    | Any Of:
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/simple_dungeon
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/jungle_temple
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/abandoned_mineshaft
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/bastion_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/desert_pyramid
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/end_city_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/ruined_portal
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/pillager_outpost
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/nether_bridge
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_corridor
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_crossing
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_library
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/woodland_mansion
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_big
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_conjure_island_plains x1
-    | Chance: 0.23%
-    | Count: 1
-    | ----- Predicates -----
-    | Any Of:
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/simple_dungeon
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/jungle_temple
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/abandoned_mineshaft
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/bastion_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/desert_pyramid
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/end_city_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/ruined_portal
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/pillager_outpost
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/nether_bridge
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_corridor
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_crossing
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_library
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/woodland_mansion
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_big
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_flowering x1
     | Chance: 0.21%
     | Count: 1
     | ----- Predicates -----
@@ -1034,42 +1069,7 @@ ali:loot_table
     |     -> minecraft:chests/underwater_ruin_big
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_fertility x1
-    | Chance: 0.21%
-    | Count: 1
-    | ----- Predicates -----
-    | Any Of:
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/simple_dungeon
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/jungle_temple
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/abandoned_mineshaft
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/bastion_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/desert_pyramid
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/end_city_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/ruined_portal
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/pillager_outpost
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/nether_bridge
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_corridor
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_crossing
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_library
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/woodland_mansion
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_big
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_moonfall x1
+  ali:item ars_nouveau:ritual_cloudshaping x1
     | Chance: 0.21%
     | Count: 1
     | ----- Predicates -----
@@ -1139,42 +1139,7 @@ ali:loot_table
     |     -> minecraft:chests/underwater_ruin_big
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_sunrise x1
-    | Chance: 0.21%
-    | Count: 1
-    | ----- Predicates -----
-    | Any Of:
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/simple_dungeon
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/jungle_temple
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/abandoned_mineshaft
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/bastion_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/desert_pyramid
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/end_city_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/ruined_portal
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/pillager_outpost
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/nether_bridge
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_corridor
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_crossing
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_library
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/woodland_mansion
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_big
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_binding x1
+  ali:item ars_nouveau:ritual_challenge x1
     | Chance: 0.19%
     | Count: 1
     | ----- Predicates -----
@@ -1209,8 +1174,78 @@ ali:loot_table
     |     -> minecraft:chests/underwater_ruin_big
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_flight x1
+  ali:item ars_nouveau:ritual_flowering x1
     | Chance: 0.19%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:ritual_moonfall x1
+    | Chance: 0.17%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:ritual_animal_summon x1
+    | Chance: 0.16%
     | Count: 1
     | ----- Predicates -----
     | Any Of:
@@ -1245,7 +1280,7 @@ ali:loot_table
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
   ali:item ars_nouveau:ritual_wilden_summon x1
-    | Chance: 0.19%
+    | Chance: 0.16%
     | Count: 1
     | ----- Predicates -----
     | Any Of:
@@ -1279,8 +1314,8 @@ ali:loot_table
     |     -> minecraft:chests/underwater_ruin_big
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_harvest x1
-    | Chance: 0.19%
+  ali:item ars_nouveau:ritual_binding x1
+    | Chance: 0.16%
     | Count: 1
     | ----- Predicates -----
     | Any Of:
@@ -1315,112 +1350,42 @@ ali:loot_table
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
   ali:item ars_nouveau:ritual_conjure_island_desert x1
-    | Chance: 0.17%
-    | Count: 1
-    | ----- Predicates -----
-    | Any Of:
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/simple_dungeon
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/jungle_temple
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/abandoned_mineshaft
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/bastion_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/desert_pyramid
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/end_city_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/ruined_portal
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/pillager_outpost
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/nether_bridge
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_corridor
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_crossing
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_library
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/woodland_mansion
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_big
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_sanctuary x1
-    | Chance: 0.17%
-    | Count: 1
-    | ----- Predicates -----
-    | Any Of:
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/simple_dungeon
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/jungle_temple
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/abandoned_mineshaft
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/bastion_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/desert_pyramid
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/end_city_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/ruined_portal
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/pillager_outpost
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/nether_bridge
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_corridor
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_crossing
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_library
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/woodland_mansion
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_big
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_forestation x1
-    | Chance: 0.17%
-    | Count: 1
-    | ----- Predicates -----
-    | Any Of:
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/simple_dungeon
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/jungle_temple
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/abandoned_mineshaft
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/bastion_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/desert_pyramid
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/end_city_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/ruined_portal
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/pillager_outpost
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/nether_bridge
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_corridor
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_crossing
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_library
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/woodland_mansion
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_big
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_challenge x1
     | Chance: 0.16%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:ritual_overgrowth x1
+    | Chance: 0.14%
     | Count: 1
     | ----- Predicates -----
     | Any Of:
@@ -1489,8 +1454,8 @@ ali:loot_table
     |     -> minecraft:chests/underwater_ruin_big
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_gravity x1
-    | Chance: 0.1%
+  ali:item ars_nouveau:ritual_forestation x1
+    | Chance: 0.12%
     | Count: 1
     | ----- Predicates -----
     | Any Of:
@@ -1524,8 +1489,8 @@ ali:loot_table
     |     -> minecraft:chests/underwater_ruin_big
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_warping x1
-    | Chance: 0.1%
+  ali:item ars_nouveau:ritual_burrowing x1
+    | Chance: 0.12%
     | Count: 1
     | ----- Predicates -----
     | Any Of:
@@ -1559,8 +1524,8 @@ ali:loot_table
     |     -> minecraft:chests/underwater_ruin_big
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_overgrowth x1
-    | Chance: 0.09%
+  ali:item ars_nouveau:ritual_sanctuary x1
+    | Chance: 0.12%
     | Count: 1
     | ----- Predicates -----
     | Any Of:
@@ -1594,7 +1559,42 @@ ali:loot_table
     |     -> minecraft:chests/underwater_ruin_big
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_restoration x1
+  ali:item ars_nouveau:ritual_fertility x1
+    | Chance: 0.12%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:ritual_conjure_island_plains x1
     | Chance: 0.09%
     | Count: 1
     | ----- Predicates -----

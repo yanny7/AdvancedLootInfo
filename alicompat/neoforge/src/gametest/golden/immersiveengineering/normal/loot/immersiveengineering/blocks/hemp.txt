@@ -36,4 +36,4 @@ ali:loot_table
       | Block State Property:
       |   -> Block: Industrial Hemp
       |   -> Properties:
-      |     -> top: true
+      |     -> half: upper

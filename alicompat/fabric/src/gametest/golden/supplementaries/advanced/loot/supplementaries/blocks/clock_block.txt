@@ -4,7 +4,7 @@ ali:loot_table
     | Selects random entry
     | Rolls: 1
     ali:item supplementaries:clock_block x1-2
-      | Count: 
+      | Count:
       |   -> 2
       |     -> Block State Property:
       |       -> Block: Clock Block

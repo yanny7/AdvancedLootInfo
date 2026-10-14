@@ -13,6 +13,7 @@
 - Fixed loot replaced by LootJS losing the chance of the entry it replaces
 - Fixed LootJS loot functions shown on the loot added after them instead of the loot they change
 - Fixed block entity and tool sources of copied names and components shown untranslated
+- Fixed item predicates on the mere presence of a component shown as null
 
 ## [2.4.0]
 
