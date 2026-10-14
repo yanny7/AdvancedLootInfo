@@ -10,6 +10,7 @@
 - Fixed loot tables referencing each other in a loop being nested hundreds of levels deep, the loop ends at a recursive reference
 - Fixed block entity and tool sources of copied names and components shown untranslated
 - Fixed location check offset shown as placeholders
+- Fixed trade item modifiers shown nested under a sequence
 
 ## [2.4.1]
 

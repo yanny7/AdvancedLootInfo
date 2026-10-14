@@ -62,19 +62,18 @@ ali:trade
       ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item minecraft:fishing_rod x1
-        | Sequence:
-        |   -> Enchant With Levels:
-        |     -> Levels: 5 to 19
-        |     -> Options:
-        |       -> Tag: minecraft:on_traded_equipment
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Fishing Rod
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant With Levels:
+        |   -> Levels: 5 to 19
+        |   -> Options:
+        |     -> Tag: minecraft:on_traded_equipment
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Fishing Rod
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
   ali:trade_level
     | Level: 4
     | Randomly Selects 1 Of These Trades

@@ -22,19 +22,18 @@ ali:trade
       ali:item minecraft:emerald x0
       ali:item minecraft:book x1
       ali:item minecraft:enchanted_book x1
-        | Sequence:
-        |   -> Enchant Randomly:
-        |     -> Enchantments:
-        |       -> Tag: minecraft:trades/desert_common
-        |     -> Only Compatible: False
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Enchanted Book
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:stored_enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant Randomly:
+        |   -> Enchantments:
+        |     -> Tag: minecraft:trades/desert_common
+        |   -> Only Compatible: False
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Enchanted Book
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:stored_enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
     ali:items_to_items
       | Uses: 12
       | XP: 1
@@ -43,19 +42,18 @@ ali:trade
       ali:item minecraft:emerald x0
       ali:item minecraft:book x1
       ali:item minecraft:enchanted_book x1
-        | Sequence:
-        |   -> Enchant Randomly:
-        |     -> Enchantments:
-        |       -> Tag: minecraft:trades/jungle_common
-        |     -> Only Compatible: False
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Enchanted Book
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:stored_enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant Randomly:
+        |   -> Enchantments:
+        |     -> Tag: minecraft:trades/jungle_common
+        |   -> Only Compatible: False
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Enchanted Book
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:stored_enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
     ali:items_to_items
       | Uses: 12
       | XP: 1
@@ -64,19 +62,18 @@ ali:trade
       ali:item minecraft:emerald x0
       ali:item minecraft:book x1
       ali:item minecraft:enchanted_book x1
-        | Sequence:
-        |   -> Enchant Randomly:
-        |     -> Enchantments:
-        |       -> Tag: minecraft:trades/plains_common
-        |     -> Only Compatible: False
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Enchanted Book
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:stored_enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant Randomly:
+        |   -> Enchantments:
+        |     -> Tag: minecraft:trades/plains_common
+        |   -> Only Compatible: False
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Enchanted Book
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:stored_enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
     ali:items_to_items
       | Uses: 12
       | XP: 1
@@ -85,19 +82,18 @@ ali:trade
       ali:item minecraft:emerald x0
       ali:item minecraft:book x1
       ali:item minecraft:enchanted_book x1
-        | Sequence:
-        |   -> Enchant Randomly:
-        |     -> Enchantments:
-        |       -> Tag: minecraft:trades/savanna_common
-        |     -> Only Compatible: False
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Enchanted Book
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:stored_enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant Randomly:
+        |   -> Enchantments:
+        |     -> Tag: minecraft:trades/savanna_common
+        |   -> Only Compatible: False
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Enchanted Book
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:stored_enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
     ali:items_to_items
       | Uses: 12
       | XP: 1
@@ -106,19 +102,18 @@ ali:trade
       ali:item minecraft:emerald x0
       ali:item minecraft:book x1
       ali:item minecraft:enchanted_book x1
-        | Sequence:
-        |   -> Enchant Randomly:
-        |     -> Enchantments:
-        |       -> Tag: minecraft:trades/snow_common
-        |     -> Only Compatible: False
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Enchanted Book
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:stored_enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant Randomly:
+        |   -> Enchantments:
+        |     -> Tag: minecraft:trades/snow_common
+        |   -> Only Compatible: False
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Enchanted Book
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:stored_enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
     ali:items_to_items
       | Uses: 12
       | XP: 1
@@ -127,19 +122,18 @@ ali:trade
       ali:item minecraft:emerald x0
       ali:item minecraft:book x1
       ali:item minecraft:enchanted_book x1
-        | Sequence:
-        |   -> Enchant Randomly:
-        |     -> Enchantments:
-        |       -> Tag: minecraft:trades/swamp_common
-        |     -> Only Compatible: False
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Enchanted Book
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:stored_enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant Randomly:
+        |   -> Enchantments:
+        |     -> Tag: minecraft:trades/swamp_common
+        |   -> Only Compatible: False
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Enchanted Book
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:stored_enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
     ali:items_to_items
       | Uses: 12
       | XP: 1
@@ -148,19 +142,18 @@ ali:trade
       ali:item minecraft:emerald x0
       ali:item minecraft:book x1
       ali:item minecraft:enchanted_book x1
-        | Sequence:
-        |   -> Enchant Randomly:
-        |     -> Enchantments:
-        |       -> Tag: minecraft:trades/taiga_common
-        |     -> Only Compatible: False
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Enchanted Book
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:stored_enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant Randomly:
+        |   -> Enchantments:
+        |     -> Tag: minecraft:trades/taiga_common
+        |   -> Only Compatible: False
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Enchanted Book
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:stored_enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
   ali:trade_level
     | Level: 2
     | Randomly Selects 2 Of These Trades
@@ -184,19 +177,18 @@ ali:trade
       ali:item minecraft:emerald x0
       ali:item minecraft:book x1
       ali:item minecraft:enchanted_book x1
-        | Sequence:
-        |   -> Enchant Randomly:
-        |     -> Enchantments:
-        |       -> Tag: minecraft:trades/desert_common
-        |     -> Only Compatible: False
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Enchanted Book
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:stored_enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant Randomly:
+        |   -> Enchantments:
+        |     -> Tag: minecraft:trades/desert_common
+        |   -> Only Compatible: False
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Enchanted Book
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:stored_enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
     ali:items_to_items
       | Uses: 12
       | XP: 5
@@ -205,19 +197,18 @@ ali:trade
       ali:item minecraft:emerald x0
       ali:item minecraft:book x1
       ali:item minecraft:enchanted_book x1
-        | Sequence:
-        |   -> Enchant Randomly:
-        |     -> Enchantments:
-        |       -> Tag: minecraft:trades/jungle_common
-        |     -> Only Compatible: False
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Enchanted Book
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:stored_enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant Randomly:
+        |   -> Enchantments:
+        |     -> Tag: minecraft:trades/jungle_common
+        |   -> Only Compatible: False
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Enchanted Book
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:stored_enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
     ali:items_to_items
       | Uses: 12
       | XP: 5
@@ -226,19 +217,18 @@ ali:trade
       ali:item minecraft:emerald x0
       ali:item minecraft:book x1
       ali:item minecraft:enchanted_book x1
-        | Sequence:
-        |   -> Enchant Randomly:
-        |     -> Enchantments:
-        |       -> Tag: minecraft:trades/plains_common
-        |     -> Only Compatible: False
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Enchanted Book
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:stored_enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant Randomly:
+        |   -> Enchantments:
+        |     -> Tag: minecraft:trades/plains_common
+        |   -> Only Compatible: False
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Enchanted Book
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:stored_enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
     ali:items_to_items
       | Uses: 12
       | XP: 5
@@ -247,19 +237,18 @@ ali:trade
       ali:item minecraft:emerald x0
       ali:item minecraft:book x1
       ali:item minecraft:enchanted_book x1
-        | Sequence:
-        |   -> Enchant Randomly:
-        |     -> Enchantments:
-        |       -> Tag: minecraft:trades/savanna_common
-        |     -> Only Compatible: False
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Enchanted Book
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:stored_enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant Randomly:
+        |   -> Enchantments:
+        |     -> Tag: minecraft:trades/savanna_common
+        |   -> Only Compatible: False
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Enchanted Book
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:stored_enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
     ali:items_to_items
       | Uses: 12
       | XP: 5
@@ -268,19 +257,18 @@ ali:trade
       ali:item minecraft:emerald x0
       ali:item minecraft:book x1
       ali:item minecraft:enchanted_book x1
-        | Sequence:
-        |   -> Enchant Randomly:
-        |     -> Enchantments:
-        |       -> Tag: minecraft:trades/snow_common
-        |     -> Only Compatible: False
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Enchanted Book
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:stored_enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant Randomly:
+        |   -> Enchantments:
+        |     -> Tag: minecraft:trades/snow_common
+        |   -> Only Compatible: False
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Enchanted Book
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:stored_enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
     ali:items_to_items
       | Uses: 12
       | XP: 5
@@ -289,19 +277,18 @@ ali:trade
       ali:item minecraft:emerald x0
       ali:item minecraft:book x1
       ali:item minecraft:enchanted_book x1
-        | Sequence:
-        |   -> Enchant Randomly:
-        |     -> Enchantments:
-        |       -> Tag: minecraft:trades/swamp_common
-        |     -> Only Compatible: False
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Enchanted Book
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:stored_enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant Randomly:
+        |   -> Enchantments:
+        |     -> Tag: minecraft:trades/swamp_common
+        |   -> Only Compatible: False
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Enchanted Book
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:stored_enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
     ali:items_to_items
       | Uses: 12
       | XP: 5
@@ -310,19 +297,18 @@ ali:trade
       ali:item minecraft:emerald x0
       ali:item minecraft:book x1
       ali:item minecraft:enchanted_book x1
-        | Sequence:
-        |   -> Enchant Randomly:
-        |     -> Enchantments:
-        |       -> Tag: minecraft:trades/taiga_common
-        |     -> Only Compatible: False
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Enchanted Book
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:stored_enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant Randomly:
+        |   -> Enchantments:
+        |     -> Tag: minecraft:trades/taiga_common
+        |   -> Only Compatible: False
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Enchanted Book
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:stored_enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
   ali:trade_level
     | Level: 3
     | Randomly Selects 2 Of These Trades
@@ -346,19 +332,18 @@ ali:trade
       ali:item minecraft:emerald x0
       ali:item minecraft:book x1
       ali:item minecraft:enchanted_book x1
-        | Sequence:
-        |   -> Enchant Randomly:
-        |     -> Enchantments:
-        |       -> Tag: minecraft:trades/desert_common
-        |     -> Only Compatible: False
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Enchanted Book
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:stored_enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant Randomly:
+        |   -> Enchantments:
+        |     -> Tag: minecraft:trades/desert_common
+        |   -> Only Compatible: False
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Enchanted Book
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:stored_enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
     ali:items_to_items
       | Uses: 12
       | XP: 10
@@ -367,19 +352,18 @@ ali:trade
       ali:item minecraft:emerald x0
       ali:item minecraft:book x1
       ali:item minecraft:enchanted_book x1
-        | Sequence:
-        |   -> Enchant Randomly:
-        |     -> Enchantments:
-        |       -> Tag: minecraft:trades/jungle_common
-        |     -> Only Compatible: False
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Enchanted Book
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:stored_enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant Randomly:
+        |   -> Enchantments:
+        |     -> Tag: minecraft:trades/jungle_common
+        |   -> Only Compatible: False
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Enchanted Book
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:stored_enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
     ali:items_to_items
       | Uses: 12
       | XP: 10
@@ -388,19 +372,18 @@ ali:trade
       ali:item minecraft:emerald x0
       ali:item minecraft:book x1
       ali:item minecraft:enchanted_book x1
-        | Sequence:
-        |   -> Enchant Randomly:
-        |     -> Enchantments:
-        |       -> Tag: minecraft:trades/plains_common
-        |     -> Only Compatible: False
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Enchanted Book
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:stored_enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant Randomly:
+        |   -> Enchantments:
+        |     -> Tag: minecraft:trades/plains_common
+        |   -> Only Compatible: False
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Enchanted Book
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:stored_enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
     ali:items_to_items
       | Uses: 12
       | XP: 10
@@ -409,19 +392,18 @@ ali:trade
       ali:item minecraft:emerald x0
       ali:item minecraft:book x1
       ali:item minecraft:enchanted_book x1
-        | Sequence:
-        |   -> Enchant Randomly:
-        |     -> Enchantments:
-        |       -> Tag: minecraft:trades/savanna_common
-        |     -> Only Compatible: False
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Enchanted Book
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:stored_enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant Randomly:
+        |   -> Enchantments:
+        |     -> Tag: minecraft:trades/savanna_common
+        |   -> Only Compatible: False
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Enchanted Book
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:stored_enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
     ali:items_to_items
       | Uses: 12
       | XP: 10
@@ -430,19 +412,18 @@ ali:trade
       ali:item minecraft:emerald x0
       ali:item minecraft:book x1
       ali:item minecraft:enchanted_book x1
-        | Sequence:
-        |   -> Enchant Randomly:
-        |     -> Enchantments:
-        |       -> Tag: minecraft:trades/snow_common
-        |     -> Only Compatible: False
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Enchanted Book
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:stored_enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant Randomly:
+        |   -> Enchantments:
+        |     -> Tag: minecraft:trades/snow_common
+        |   -> Only Compatible: False
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Enchanted Book
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:stored_enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
     ali:items_to_items
       | Uses: 12
       | XP: 10
@@ -451,19 +432,18 @@ ali:trade
       ali:item minecraft:emerald x0
       ali:item minecraft:book x1
       ali:item minecraft:enchanted_book x1
-        | Sequence:
-        |   -> Enchant Randomly:
-        |     -> Enchantments:
-        |       -> Tag: minecraft:trades/swamp_common
-        |     -> Only Compatible: False
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Enchanted Book
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:stored_enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant Randomly:
+        |   -> Enchantments:
+        |     -> Tag: minecraft:trades/swamp_common
+        |   -> Only Compatible: False
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Enchanted Book
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:stored_enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
     ali:items_to_items
       | Uses: 12
       | XP: 10
@@ -472,19 +452,18 @@ ali:trade
       ali:item minecraft:emerald x0
       ali:item minecraft:book x1
       ali:item minecraft:enchanted_book x1
-        | Sequence:
-        |   -> Enchant Randomly:
-        |     -> Enchantments:
-        |       -> Tag: minecraft:trades/taiga_common
-        |     -> Only Compatible: False
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Enchanted Book
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:stored_enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant Randomly:
+        |   -> Enchantments:
+        |     -> Tag: minecraft:trades/taiga_common
+        |   -> Only Compatible: False
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Enchanted Book
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:stored_enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
   ali:trade_level
     | Level: 4
     | Randomly Selects 2 Of These Trades
@@ -529,21 +508,20 @@ ali:trade
       ali:item minecraft:emerald x11-46
       ali:item minecraft:book x1
       ali:item minecraft:enchanted_book x1
-        | Sequence:
-        |   -> Set Enchantments:
-        |     -> Enchantments:
-        |       -> Efficiency
-        |         -> Levels: 3
-        |     -> Add: False
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Enchanted Book
-        |       -> Components:
-        |         -> Partial Matchers:
-        |           -> minecraft:stored_enchantments
-        |             -> Level: 3
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Set Enchantments:
+        |   -> Enchantments:
+        |     -> Efficiency
+        |       -> Levels: 3
+        |   -> Add: False
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Enchanted Book
+        |     -> Components:
+        |       -> Partial Matchers:
+        |         -> minecraft:stored_enchantments
+        |           -> Level: 3
+        |   -> On Fail:
+        |     -> Discard Item:
     ali:items_to_items
       | Uses: 12
       | XP: 30
@@ -552,21 +530,20 @@ ali:trade
       ali:item minecraft:emerald x8-33
       ali:item minecraft:book x1
       ali:item minecraft:enchanted_book x1
-        | Sequence:
-        |   -> Set Enchantments:
-        |     -> Enchantments:
-        |       -> Unbreaking
-        |         -> Levels: 2
-        |     -> Add: False
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Enchanted Book
-        |       -> Components:
-        |         -> Partial Matchers:
-        |           -> minecraft:stored_enchantments
-        |             -> Level: 2
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Set Enchantments:
+        |   -> Enchantments:
+        |     -> Unbreaking
+        |       -> Levels: 2
+        |   -> Add: False
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Enchanted Book
+        |     -> Components:
+        |       -> Partial Matchers:
+        |         -> minecraft:stored_enchantments
+        |           -> Level: 2
+        |   -> On Fail:
+        |     -> Discard Item:
     ali:items_to_items
       | Uses: 12
       | XP: 30
@@ -575,21 +552,20 @@ ali:trade
       ali:item minecraft:emerald x11-46
       ali:item minecraft:book x1
       ali:item minecraft:enchanted_book x1
-        | Sequence:
-        |   -> Set Enchantments:
-        |     -> Enchantments:
-        |       -> Protection
-        |         -> Levels: 3
-        |     -> Add: False
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Enchanted Book
-        |       -> Components:
-        |         -> Partial Matchers:
-        |           -> minecraft:stored_enchantments
-        |             -> Level: 3
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Set Enchantments:
+        |   -> Enchantments:
+        |     -> Protection
+        |       -> Levels: 3
+        |   -> Add: False
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Enchanted Book
+        |     -> Components:
+        |       -> Partial Matchers:
+        |         -> minecraft:stored_enchantments
+        |           -> Level: 3
+        |   -> On Fail:
+        |     -> Discard Item:
     ali:items_to_items
       | Uses: 12
       | XP: 30
@@ -598,21 +574,20 @@ ali:trade
       ali:item minecraft:emerald x11-46
       ali:item minecraft:book x1
       ali:item minecraft:enchanted_book x1
-        | Sequence:
-        |   -> Set Enchantments:
-        |     -> Enchantments:
-        |       -> Sharpness
-        |         -> Levels: 3
-        |     -> Add: False
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Enchanted Book
-        |       -> Components:
-        |         -> Partial Matchers:
-        |           -> minecraft:stored_enchantments
-        |             -> Level: 3
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Set Enchantments:
+        |   -> Enchantments:
+        |     -> Sharpness
+        |       -> Levels: 3
+        |   -> Add: False
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Enchanted Book
+        |     -> Components:
+        |       -> Partial Matchers:
+        |         -> minecraft:stored_enchantments
+        |           -> Level: 3
+        |   -> On Fail:
+        |     -> Discard Item:
     ali:items_to_items
       | Uses: 12
       | XP: 30
@@ -621,18 +596,17 @@ ali:trade
       ali:item minecraft:emerald x0
       ali:item minecraft:book x1
       ali:item minecraft:enchanted_book x1
-        | Sequence:
-        |   -> Enchant Randomly:
-        |     -> Enchantment: Silk Touch
-        |     -> Only Compatible: False
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Enchanted Book
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:stored_enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant Randomly:
+        |   -> Enchantment: Silk Touch
+        |   -> Only Compatible: False
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Enchanted Book
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:stored_enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
     ali:items_to_items
       | Uses: 12
       | XP: 30
@@ -641,18 +615,17 @@ ali:trade
       ali:item minecraft:emerald x0
       ali:item minecraft:book x1
       ali:item minecraft:enchanted_book x1
-        | Sequence:
-        |   -> Enchant Randomly:
-        |     -> Enchantment: Mending
-        |     -> Only Compatible: False
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Enchanted Book
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:stored_enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant Randomly:
+        |   -> Enchantment: Mending
+        |   -> Only Compatible: False
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Enchanted Book
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:stored_enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
     ali:items_to_items
       | Uses: 12
       | XP: 30
@@ -661,18 +634,17 @@ ali:trade
       ali:item minecraft:emerald x8-33
       ali:item minecraft:book x1
       ali:item minecraft:enchanted_book x1
-        | Sequence:
-        |   -> Set Enchantments:
-        |     -> Enchantments:
-        |       -> Fortune
-        |         -> Levels: 2
-        |     -> Add: False
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Enchanted Book
-        |       -> Components:
-        |         -> Partial Matchers:
-        |           -> minecraft:stored_enchantments
-        |             -> Level: 2
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Set Enchantments:
+        |   -> Enchantments:
+        |     -> Fortune
+        |       -> Levels: 2
+        |   -> Add: False
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Enchanted Book
+        |     -> Components:
+        |       -> Partial Matchers:
+        |         -> minecraft:stored_enchantments
+        |           -> Level: 2
+        |   -> On Fail:
+        |     -> Discard Item:

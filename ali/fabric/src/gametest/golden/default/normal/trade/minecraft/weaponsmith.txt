@@ -20,19 +20,18 @@ ali:trade
       ali:item minecraft:emerald x2
       ali:item minecraft:air x0
       ali:item minecraft:iron_sword x1
-        | Sequence:
-        |   -> Enchant With Levels:
-        |     -> Levels: 5 to 19
-        |     -> Options:
-        |       -> Tag: minecraft:on_traded_equipment
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Iron Sword
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant With Levels:
+        |   -> Levels: 5 to 19
+        |   -> Options:
+        |     -> Tag: minecraft:on_traded_equipment
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Iron Sword
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
   ali:trade_level
     | Level: 2
     | Randomly Selects 2 Of These Trades
@@ -66,19 +65,18 @@ ali:trade
       ali:item minecraft:emerald x12
       ali:item minecraft:air x0
       ali:item minecraft:diamond_axe x1
-        | Sequence:
-        |   -> Enchant With Levels:
-        |     -> Levels: 5 to 19
-        |     -> Options:
-        |       -> Tag: minecraft:on_traded_equipment
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Diamond Axe
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant With Levels:
+        |   -> Levels: 5 to 19
+        |   -> Options:
+        |     -> Tag: minecraft:on_traded_equipment
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Diamond Axe
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
     ali:items_to_items
       | Uses: 12
       | XP: 30
@@ -94,16 +92,15 @@ ali:trade
       ali:item minecraft:emerald x8
       ali:item minecraft:air x0
       ali:item minecraft:diamond_sword x1
-        | Sequence:
-        |   -> Enchant With Levels:
-        |     -> Levels: 5 to 19
-        |     -> Options:
-        |       -> Tag: minecraft:on_traded_equipment
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Diamond Sword
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant With Levels:
+        |   -> Levels: 5 to 19
+        |   -> Options:
+        |     -> Tag: minecraft:on_traded_equipment
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Diamond Sword
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:enchantments
+        |   -> On Fail:
+        |     -> Discard Item:

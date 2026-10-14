@@ -65,19 +65,18 @@ ali:trade
       ali:item minecraft:emerald x2
       ali:item minecraft:air x0
       ali:item minecraft:bow x1
-        | Sequence:
-        |   -> Enchant With Levels:
-        |     -> Levels: 5 to 19
-        |     -> Options:
-        |       -> Tag: minecraft:on_traded_equipment
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Bow
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant With Levels:
+        |   -> Levels: 5 to 19
+        |   -> Options:
+        |     -> Tag: minecraft:on_traded_equipment
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Bow
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
   ali:trade_level
     | Level: 5
     | Randomly Selects 2 Of These Trades
@@ -93,19 +92,18 @@ ali:trade
       ali:item minecraft:emerald x3
       ali:item minecraft:air x0
       ali:item minecraft:crossbow x1
-        | Sequence:
-        |   -> Enchant With Levels:
-        |     -> Levels: 5 to 19
-        |     -> Options:
-        |       -> Tag: minecraft:on_traded_equipment
-        |     -> Include Additional Cost Component: True
-        |   -> Filtered:
-        |     -> Filter:
-        |       -> Item: Crossbow
-        |       -> Components:
-        |         -> Partial Matchers: minecraft:enchantments
-        |     -> On Fail:
-        |       -> Discard Item:
+        | Enchant With Levels:
+        |   -> Levels: 5 to 19
+        |   -> Options:
+        |     -> Tag: minecraft:on_traded_equipment
+        |   -> Include Additional Cost Component: True
+        | Filtered:
+        |   -> Filter:
+        |     -> Item: Crossbow
+        |     -> Components:
+        |       -> Partial Matchers: minecraft:enchantments
+        |   -> On Fail:
+        |     -> Discard Item:
     ali:items_to_items
       | Uses: 12
       | XP: 30

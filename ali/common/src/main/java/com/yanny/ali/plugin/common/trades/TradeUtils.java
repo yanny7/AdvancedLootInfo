@@ -58,7 +58,7 @@ public class TradeUtils {
                 trade.additionalWants.map((t) -> utils.getValueTooltip(utils, t.components())).orElse(TooltipBuilder.empty()).build(Lang.Branch.EXPECTED_COMPONENTS),
                 Either.left(trade.gives.create()),
                 NumberExpr.constant(trade.gives.count()),
-                utils.getValueTooltip(utils, trade.givenItemModifier).build(),
+                utils.getValueTooltip(utils, NodeUtils.unwrapFunctions(utils, trade.givenItemModifier)).build(),
                 TooltipUtils.collectConditions((c) -> utils.convertContextInt(utils, trade.maxUses, c)),
                 TooltipUtils.collectConditions((c) -> utils.convertContextInt(utils, trade.xp, c)),
                 utils.getValueTooltip(utils, trade.doubleTradePriceEnchantments).build(Lang.Branch.DOUBLE_TRADE_PRICE_ENCHANTMENTS)
