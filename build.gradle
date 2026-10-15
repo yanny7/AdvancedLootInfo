@@ -533,6 +533,16 @@ modpackPlatforms.each { platform ->
     ]
 }
 
+pythonRunConfigs << [
+        task       : "generateClientCheckRunConfig",
+        group      : "Client Check",
+        description: "Writes an IntelliJ Python run configuration that checks every ALI/AWI client run loads its recipe viewer data",
+        name       : "Client Check ALL",
+        script     : "scripts/client_check.py",
+        parameters : "",
+        file       : file(".idea/runConfigurations/Client_Check_ALL.xml"),
+]
+
 ["": "reports the outdated", "Update": "repins the outdated"].each { suffix, label ->
     pythonRunConfigs << [
             task       : "generateCheckVersionsRunConfig${suffix}",
