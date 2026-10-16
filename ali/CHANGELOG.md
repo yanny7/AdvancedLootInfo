@@ -1,4 +1,4 @@
-## []
+## [2.5.0]
 
 - Added REI support
 - Tooltips wider than the window wrap their lines
