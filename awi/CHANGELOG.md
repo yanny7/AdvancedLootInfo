@@ -1,4 +1,4 @@
-## []
+## [1.3.2]
 
 - Tooltips wider than the window wrap their lines
 - Fixed widget textures being sampled one pixel off

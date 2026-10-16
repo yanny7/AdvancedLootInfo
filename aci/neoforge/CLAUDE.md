@@ -1,6 +1,6 @@
 # aci/neoforge/CLAUDE.md
 
-Guidance for `aci/neoforge` (`com.yanny.aci.neoforge`) — ACI's NeoForge loader wrapper. See `aci/CLAUDE.md` for the library this packages, and `aci/fabric/CLAUDE.md` / `aci/forge/CLAUDE.md` for the other two halves. Like them it carries **no mod logic**: no networking, no mixins, no platform-service implementation. Its whole job is to shadow `aci:common` into a jar NeoForge accepts, with `aci.accesswidener` converted to `META-INF/accesstransformer.cfg`.
+Guidance for `aci/neoforge` (`com.yanny.aci.neoforge`) — ACI's NeoForge loader wrapper. See `aci/CLAUDE.md` for the library this packages, and `aci/fabric/CLAUDE.md` / `aci/forge/CLAUDE.md` for the other two halves. Like `aci/fabric` it carries **no mod logic**: no networking, no mixins, no platform-service implementation. Its whole job is to shadow `aci:common` into a jar NeoForge accepts, with `aci.accesswidener` converted to `META-INF/accesstransformer.cfg`.
 
 ## What is in it
 

@@ -1,4 +1,4 @@
-## []
+## [2.5.0]
 
 - Tooltips wider than the window wrap their lines
 - Air in loot tables shows as an empty entry
