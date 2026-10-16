@@ -1,4 +1,4 @@
-## []
+## [1.5.0]
 
 - Added `registerEnumTranslation` and `getEnumTranslation` to the shared server registry and utils
 - Options missing from an existing config file are added to it with their default values

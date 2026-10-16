@@ -1,4 +1,4 @@
-## []
+## [1.3.2]
 
 - Fixed mixins failing when AWI is used as a dependency in a Forge mod development environment
 - Tooltips wider than the window wrap their lines

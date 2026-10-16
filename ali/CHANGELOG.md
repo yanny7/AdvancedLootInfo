@@ -1,4 +1,4 @@
-## []
+## [2.5.0]
 
 - Fixed mixins failing when ALI is used as a dependency in a Forge mod development environment
 - Tooltips wider than the window wrap their lines
