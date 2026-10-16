@@ -182,6 +182,12 @@ AWI has the same per-loader GameTest over a vanilla world with seed 0 (see `awi/
 ./gradlew :awi:neoforge:runGametest -Precipe_viewer=none
 ```
 
+The client side has no GameTest. `scripts/client_check.py` (IDE run configuration `Client Check ALL`) runs every enabled ALI/AWI `runClient` combination of loader and recipe viewer serially, joins the `New World` save each `<mod>/<loader>/run/saves` must hold, and passes a run on `Data registration finished successfully.`; an error logged by `GenericUtils.register`, a crash, an early exit or the timeout fails it. It echoes the `[ali]`/`[awi]`/`[aci]` log lines, writes each full log to `build/client_check/`, stops the game JVM found by its `/proc/<pid>/cwd`, and exits with the number of failed runs:
+```
+python3 scripts/client_check.py
+python3 scripts/client_check.py --mod ali --loader forge --viewer jei --timeout 300
+```
+
 Generate data (recipes/loot/lang, per loader) via the IDE run configurations in `.idea/runConfigurations/Minecraft_Data_*.xml`, or the equivalent `run<Platform><Loader>Datagen`-style Gradle tasks wired by the `architectury-loom` plugin. All four mods have datagen; ACI's generates only its own `aci.*` language keys, ALICompat's only the tooltip keys of the compat shims that are built into it. Fabric datagen initialises the `fabric-datagen` entrypoint of every loaded mod, so a broken ACI datagen class breaks ALI's and AWI's datagen runs too.
 
 Language files other than `en_us.json` belong to the translators: a change adds and edits English text only, and a key missing from another locale shows its English text.
@@ -193,7 +199,7 @@ Manual testing against the real target mods runs out of a generated modpack rath
 python3 scripts/modpack.py --loader forge
 python3 scripts/modpack.py --loader fabric --viewer jei
 ```
-Mods with no matching file, and mods whose author disabled third-party downloads (Prism asks for those by hand), are listed at the end of the run instead of failing it. IDE run configurations for it, for `scripts/check_versions.py` and for `scripts/upload.py` are written on every Gradle refresh — IntelliJ only configures the build then, so the root `build.gradle` writes the files under `idea.sync.active` rather than from a task — and `./gradlew generatePythonRunConfigs` writes the same set on demand. The modpack ones are one `.idea/runConfigurations/Modpack_<Loader>.xml` per enabled loader, plus a compound `Modpack_ALL.xml` that starts them all at once.
+Mods with no matching file, and mods whose author disabled third-party downloads (Prism asks for those by hand), are listed at the end of the run instead of failing it. IDE run configurations for it, for `scripts/check_versions.py`, `scripts/client_check.py` and `scripts/upload.py` are written on every Gradle refresh — IntelliJ only configures the build then, so the root `build.gradle` writes the files under `idea.sync.active` rather than from a task — and `./gradlew generatePythonRunConfigs` writes the same set on demand. The modpack ones are one `.idea/runConfigurations/Modpack_<Loader>.xml` per enabled loader, plus a compound `Modpack_ALL.xml` that starts them all at once.
 
 `scripts/check_versions.py` resolves the registry against CurseForge, then the entry's maven sources, for `minecraft_version` and each enabled loader, and reports what is outdated, what has become newly available, what no longer has a file, which registry entries are dormant (source set present, slug absent from `compat_mods` — a shim merged down but not ported yet, left untouched, but resolved anyway so the report says which loaders it has a file on here, i.e. which ones are worth porting) and which pinned mods are no longer in the registry. `--update` regenerates the whole block in `gradle.properties` from that resolution — file ids or comma-separated `<group>:<artifact>:<version>` lists, `compat_mods`, the per-mod comments — drops what disappeared, and scaffolds a compiling `IModCompat` skeleton for a registry entry whose shim source set does not exist yet:
 ```
