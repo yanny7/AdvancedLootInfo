@@ -1,0 +1,16 @@
+{
+  "aci.spawn.biome_excluded": "- %s",
+  "aci.spawn.biome_included": "+ %s",
+  "aci.spawn.category": "分類：%s",
+  "aci.spawn.dimension": "維度：%s",
+  "aci.spawn.group_size": "群體大小：%s",
+  "aci.spawn.spawn_cost": "生成消耗：佔用 %s，預算 %s",
+  "aci.spawn.spawns": "生成：",
+  "aci.spawn.structure": "結構：%s",
+  "aci.spawn.weight": "權重：%s",
+  "aci.util.auto_detected": "自動偵測：%s",
+  "aci.util.entry": "項目：",
+  "aci.util.missing": "未實作：%s",
+  "aci.util.removed": "已移除",
+  "aci.util.tag": "標籤：%s"
+}
