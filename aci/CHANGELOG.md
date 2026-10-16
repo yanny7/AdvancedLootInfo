@@ -5,6 +5,7 @@
 - Every config reset keeps its own timestamped backup instead of overwriting the previous one
 - Scrollable tooltip wraps lines wider than the window
 - Fixed a stray space after the name of a number whose value depends on conditions
+- Fixed missing loot and worldgen information and a crash on Forge when the game starts straight into a world
 
 ## [1.4.0]
 
