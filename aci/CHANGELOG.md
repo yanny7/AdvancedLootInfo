@@ -1,4 +1,4 @@
-## []
+## [1.5.0]
 
 - Added `registerEnumTranslation` and `getEnumTranslation` to the shared server registry and utils
 - Options missing from an existing config file are added to it with their default values
@@ -6,6 +6,7 @@
 - Scrollable tooltip wraps lines wider than the window
 - Fixed widget textures being sampled one pixel off
 - Fixed a stray space after the name of a number whose value depends on conditions
+- Fixed missing loot and worldgen information and a crash on Forge when the game starts straight into a world
 
 ## [1.4.0]
 

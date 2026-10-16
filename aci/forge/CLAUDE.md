@@ -1,13 +1,19 @@
 # aci/forge/CLAUDE.md
 
-Guidance for `aci/forge` (`com.yanny.aci.forge`) — ACI's Forge loader wrapper. See `aci/CLAUDE.md` for the library this packages, and `aci/fabric/CLAUDE.md` / `aci/neoforge/CLAUDE.md` for the other two halves. Like those it carries **no mod logic**: no networking, no mixins, no platform-service implementation. Its whole job is to shadow `aci:common` into a jar Forge accepts, with `aci.accesswidener` converted to `META-INF/accesstransformer.cfg` (`convertAccessWideners` + `extraAccessWideners`, the same wiring as `ali/forge`).
+Guidance for `aci/forge` (`com.yanny.aci.forge`) — ACI's Forge loader wrapper. See `aci/CLAUDE.md` for the library this packages, and `aci/fabric/CLAUDE.md` / `aci/neoforge/CLAUDE.md` for the other two halves. Like those it carries **no mod logic** — no networking, no platform-service implementation — with the one exception of the client mixin below. Its whole job is to shadow `aci:common` into a jar Forge accepts, with `aci.accesswidener` converted to `META-INF/accesstransformer.cfg` (`convertAccessWideners` + `extraAccessWideners`, the same wiring as `ali/forge`).
 
 ## What is in it
 
 - `AciMod` — `@Mod(Utils.MOD_ID)`. Forge's `javafml` loader requires an entrypoint class, so this exists even though the only thing its constructor does is add the `GatherDataEvent` listener (`DataGeneration::generate`) to the mod event bus. `modLoader="lowcodefml"` would avoid the class entirely; `javafml` plus a near-empty class is the more predictable option.
 - `datagen.DataGeneration` + package-private `datagen.LanguageProvider` — generate `assets/aci/lang/en_us.json` from `aci.datagen.LanguageHolder`. `LanguageProvider`'s `super(output, Utils.MOD_ID, locale)` call is why `aci:common` carries a `Utils.MOD_ID` constant at all.
-- `src/main/resources/META-INF/mods.toml` — `modId="aci"`, `modLoader="javafml"`, `displayTest="IGNORE_ALL_VERSION"`, `[[dependencies.aci]]` for `forge` and `minecraft` only. No `[[mixins]]` blocks.
+- `src/main/resources/META-INF/mods.toml` — `modId="aci"`, `modLoader="javafml"`, `displayTest="IGNORE_ALL_VERSION"`, `[[dependencies.aci]]` for `forge` and `minecraft` only, and one `[[mixins]]` block for `aci.forge.mixins.json`.
 - `gradle.properties` — a single line, `loom.platform=forge`.
+
+## Mixin
+
+`aci.forge.mixins.json` (registered through `build.gradle`'s `mixinConfig`, with `useLegacyMixinAp` and `aci.forge.refmap.json` like every module that compiles mixins, and through `mods.toml`) holds one client mixin, `mixin.MixinMinecraft`: at `HEAD` of `Minecraft.buildInitialScreens` it starts `MinecraftForge.EVENT_BUS` when `ModLoader.isLoadingStateValid()`.
+
+Forge 1.21 starts that bus in `ClientModLoader.completeModLoading()`, which its `Minecraft` patch calls only after `onResourceLoadFinished` has run the initial screens. With `--quickPlaySingleplayer` (a launcher's "join world on launch", `scripts/client_check.py`) the initial screens load the world and start the integrated server, so `AddReloadListenerEvent` and `ServerStartingEvent` reach a shut-down bus and are dropped silently: neither ALI's nor AWI's scan runs, and Forge's own global-loot-modifier manager throws on the first loot roll. Forge 1.20.1 opened the initial screens after `completeModLoading()`, and NeoForge wraps them in it, so this is a regression of the 1.21 port, not intended behaviour. `start()` only clears the bus's shutdown flag, so Forge calling it again later is harmless. It lives in ACI because both mods need it and both depend on ACI.
 
 ## Gotchas
 

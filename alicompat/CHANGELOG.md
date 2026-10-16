@@ -1,4 +1,4 @@
-## []
+## [1.3.0]
 
 - Added VillagerConfig support
 - Fixed a stray colon after loot functions that carry no values (Farmer's Delight, Sophisticated Backpacks and Sophisticated Storage)
