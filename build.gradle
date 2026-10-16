@@ -326,6 +326,8 @@ subprojects {
                         if (project.name == "forge") {
                             runtimeOnly "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
                             runtimeOnly "dev.architectury:architectury-forge:${architectury_version}"
+                        } else if (project.name == "neoforge") {
+                            runtimeOnly "dev.architectury:architectury-neoforge:${architectury_version}"
                         }
                     }
                 }
