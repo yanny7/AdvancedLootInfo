@@ -11,6 +11,39 @@ architectury {
 def platforms = enabled_platforms.split(",")
 def viewers = ["emi", "jei", "rei"]
 
+// Architectury Loom 1.13.466+ remaps a Forge jar statically if any mixin config lacks a refmap, breaking EMI's targets
+def patchEmiForgeMixinConfig = { Project project ->
+    def source = project.configurations.detachedConfiguration(project.dependencies.create("dev.emi:emi-forge:${emi_version}")).tap { transitive = false }.singleFile
+    def target = rootProject.layout.buildDirectory.file("emi-patched/emi-forge-${emi_version}-refmap.jar").get().asFile
+
+    if (!target.exists()) {
+        def partial = new File(target.path + ".tmp")
+        target.parentFile.mkdirs()
+
+        new java.util.zip.ZipFile(source).withCloseable { zip ->
+            new java.util.zip.ZipOutputStream(partial.newOutputStream()).withCloseable { out ->
+                zip.entries().each { entry ->
+                    def bytes = zip.getInputStream(entry).bytes
+
+                    if (entry.name == "emi-forge.mixins.json") {
+                        def config = new groovy.json.JsonSlurper().parse(bytes) as Map
+                        config.refmap = "emi-xplat-refmap.json"
+                        bytes = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(config)).getBytes("UTF-8")
+                    }
+
+                    out.putNextEntry(new java.util.zip.ZipEntry(entry.name))
+                    out.write(bytes)
+                    out.closeEntry()
+                }
+            }
+        }
+
+        partial.renameTo(target)
+    }
+
+    return target
+}
+
 subprojects {
     if (project.name == "processor") {
         return
@@ -275,7 +308,9 @@ subprojects {
                 if (emi_available) {
                     compileOnlyApi "dev.emi:emi-${project.name}:${emi_version}"
 
-                    if (recipe_viewer == "emi") {
+                    if (recipe_viewer == "emi" && project.name == "forge") {
+                        modRuntimeOnly files({ patchEmiForgeMixinConfig(project) })
+                    } else if (recipe_viewer == "emi") {
                         runtimeOnly "dev.emi:emi-${project.name}:${emi_version}"
                     }
                 }
@@ -541,6 +576,16 @@ modpackPlatforms.each { platform ->
             file       : file(".idea/runConfigurations/Modpack_${platform.capitalize()}.xml"),
     ]
 }
+
+pythonRunConfigs << [
+        task       : "generateClientCheckRunConfig",
+        group      : "Client Check",
+        description: "Writes an IntelliJ Python run configuration that checks every ALI/AWI client run loads its recipe viewer data",
+        name       : "Client Check ALL",
+        script     : "scripts/client_check.py",
+        parameters : "",
+        file       : file(".idea/runConfigurations/Client_Check_ALL.xml"),
+]
 
 ["": "reports the outdated", "Update": "repins the outdated"].each { suffix, label ->
     pythonRunConfigs << [
