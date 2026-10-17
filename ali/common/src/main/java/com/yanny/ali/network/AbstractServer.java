@@ -20,6 +20,7 @@ import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.common.EntityLootTableResolver;
 import com.yanny.ali.plugin.common.NodeUtils;
+import com.yanny.ali.plugin.common.TraderDetector;
 import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.common.nodes.EntityLootTableNode;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
@@ -158,6 +159,7 @@ public abstract class AbstractServer {
             addEntitiesWithoutLoot(config, spawnInfo, lootNodes);
         }
 
+        logUnregisteredTraders(serverRegistry, config);
         tradeNodes = new HashMap<>(processTrades(serverRegistry, config));
 
         LOGGER.info("Processing {} loot tables, {} fake loot tables and {} trades took {}ms", lootNodes.size(), fakeLootTables.size(), tradeNodes.size(), System.currentTimeMillis() - startTime);
@@ -573,6 +575,22 @@ public abstract class AbstractServer {
         }
 
         return node;
+    }
+
+    private static void logUnregisteredTraders(AliServerRegistry serverRegistry, AliConfig config) {
+        long startTime = System.currentTimeMillis();
+        Set<EntityType<?>> registered = serverRegistry.getTrades().values().stream()
+                .map(AliServerRegistry.Trades::entityType)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+        TraderDetector detector = new TraderDetector(serverRegistry, serverRegistry.getServerLevel());
+
+        detector.findUnregistered(registered).forEach((type, entityClass) ->
+                LOGGER.warn("Unregistered trading entity {} ({})", BuiltInRegistries.ENTITY_TYPE.getKey(type), entityClass.getName()));
+
+        if (config.logMoreStatistics) {
+            LOGGER.info("Detecting unregistered trading entities took {}ms, {} entity types had to be created", System.currentTimeMillis() - startTime, detector.getCreatedTypes());
+        }
     }
 
     @NotNull

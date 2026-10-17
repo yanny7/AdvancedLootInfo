@@ -28,6 +28,7 @@ LOG_CATEGORIES = OrderedDict([
     ("trade_item_listing", ("item_listing", "Trade item listings")),
     ("trade_listing_fallback", ("item_listing", "Trade listings on the MerchantOffer fallback")),
     ("value_tooltip", ("value", "Value tooltips")),
+    ("unregistered_trader", ("trader_entity", "Trading entities no plugin registers")),
     ("unresolved_entity_loot_table", (None, "Entity loot tables needing an entityLootTables entry")),
     ("unexpected_loot_action", (None, "Unexpected loot actions")),
 ])

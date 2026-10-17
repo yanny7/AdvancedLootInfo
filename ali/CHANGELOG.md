@@ -1,3 +1,7 @@
+## []
+
+- Server log names trading mobs whose trades ALI cannot show
+
 ## [2.5.0]
 
 - Fixed mixins failing when ALI is used as a dependency in a Forge mod development environment

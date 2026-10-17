@@ -16,6 +16,7 @@ PATTERNS = [
     (re.compile(r"Skipping unexpected loot action (\S+)"), "unexpected_loot_action"),
     (re.compile(r"Using MerchantOffer fallback for trade item listing (\S+?),"), "trade_listing_fallback"),
     (re.compile(r"Loot table (\S+) belongs to no entity"), "unresolved_entity_loot_table"),
+    (re.compile(r"Unregistered trading entity \S+ \((\S+)\)"), "unregistered_trader"),
     (re.compile(r"\[ali\] Missing (.+?) for (\S+)"), None),
 ]
 
