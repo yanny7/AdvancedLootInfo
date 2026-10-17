@@ -162,6 +162,10 @@ public abstract class AbstractServer {
         logUnregisteredTraders(serverRegistry, config);
         tradeNodes = new HashMap<>(processTrades(serverRegistry, config));
 
+        if (config.logMoreStatistics) {
+            serverRegistry.logBytecodeStatistics();
+        }
+
         LOGGER.info("Processing {} loot tables, {} fake loot tables and {} trades took {}ms", lootNodes.size(), fakeLootTables.size(), tradeNodes.size(), System.currentTimeMillis() - startTime);
 
         ByteBuf rawBuf = Unpooled.buffer();

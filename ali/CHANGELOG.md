@@ -2,6 +2,7 @@
 
 - Server log names trading mobs whose trades ALI cannot show
 - Fixed tooltips of unsupported trades showing a name that changes on every server start
+- Trades no mod adds support for show their random prices and amounts as ranges instead of being unsupported
 
 ## [2.5.0]
 

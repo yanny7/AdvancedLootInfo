@@ -1,7 +1,7 @@
 ## []
 
-- Iron's Spellbooks wandering trades with a random price show as unsupported instead of one random price
-- Ars Nouveau dungeon loot with a random count, and its random ritual tablet, shows as unsupported instead of estimated chances
+- Iron's Spellbooks wandering trades with a random price show the price range instead of one random price
+- Ars Nouveau dungeon loot shows exact chances and count ranges instead of estimated ones
 
 ## [1.3.0]
 

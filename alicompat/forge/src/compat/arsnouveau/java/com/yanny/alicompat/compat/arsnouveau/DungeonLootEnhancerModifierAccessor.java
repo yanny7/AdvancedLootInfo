@@ -11,6 +11,7 @@ import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.ali.plugin.server.MissingTooltipUtils;
+import com.yanny.ali.plugin.server.bytecode.BytecodeInterpreter;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.GlmNodeUtils;
@@ -22,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -38,20 +38,13 @@ public class DungeonLootEnhancerModifierAccessor extends BaseAccessor<DungeonLoo
     public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
         List<Drop> drops = new ArrayList<>();
         List<Supplier<ItemStack>> unsupported = new ArrayList<>();
-        Random random = DungeonLootTables.r;
 
-        DungeonLootTables.r = TrapRandom.INSTANCE;
+        collect(drops, unsupported, DungeonLootTables.BASIC_LOOT, parent.commonChance, parent.commonRolls);
+        collect(drops, unsupported, DungeonLootTables.UNCOMMON_LOOT, parent.uncommonChance, parent.uncommonRolls);
+        collect(drops, unsupported, DungeonLootTables.RARE_LOOT, parent.rareChance, parent.rareRolls);
 
-        try {
-            collect(drops, unsupported, DungeonLootTables.BASIC_LOOT, parent.commonChance, parent.commonRolls);
-            collect(drops, unsupported, DungeonLootTables.UNCOMMON_LOOT, parent.uncommonChance, parent.uncommonRolls);
-            collect(drops, unsupported, DungeonLootTables.RARE_LOOT, parent.rareChance, parent.rareRolls);
-
-            if (Config.SPAWN_TOMES.get()) {
-                collect(drops, unsupported, DungeonLootTables.CASTER_TOMES, parent.rareChance, parent.rareRolls);
-            }
-        } finally {
-            DungeonLootTables.r = random;
+        if (Config.SPAWN_TOMES.get()) {
+            collect(drops, unsupported, DungeonLootTables.CASTER_TOMES, parent.rareChance, parent.rareRolls);
         }
 
         if (drops.isEmpty() && unsupported.isEmpty()) {
@@ -71,32 +64,22 @@ public class DungeonLootEnhancerModifierAccessor extends BaseAccessor<DungeonLoo
             return;
         }
 
-        float rolledChance = (float) (1 - Math.pow(1 - chance / pool.size(), rolls));
-
         for (Supplier<ItemStack> supplier : pool) {
-            ItemStack stack;
+            BytecodeInterpreter.Stacks stacks = BytecodeInterpreter.getItemStack(supplier);
 
-            try {
-                stack = supplier.get();
-            } catch (Throwable e) {
+            if (stacks == null) {
                 unsupported.add(supplier);
                 continue;
             }
 
-            if (!stack.isEmpty()) {
-                drops.add(new Drop(stack, NumberExpr.constant(stack.getCount()), rolledChance));
+            double perRoll = chance / ((double) pool.size() * stacks.options().size());
+            float rolledChance = (float) (1 - Math.pow(1 - perRoll, rolls));
+
+            for (ItemStack option : stacks.options()) {
+                drops.add(new Drop(option, stacks.count(), rolledChance));
             }
         }
     }
 
     private record Drop(ItemStack stack, NumberExpr count, float chance) {}
-
-    private static final class TrapRandom extends Random {
-        private static final TrapRandom INSTANCE = new TrapRandom();
-
-        @Override
-        protected int next(int bits) {
-            throw new UnsupportedOperationException();
-        }
-    }
 }

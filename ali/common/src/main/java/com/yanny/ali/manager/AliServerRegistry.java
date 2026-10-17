@@ -22,6 +22,7 @@ import com.yanny.ali.plugin.common.trades.TradeUtils;
 import com.yanny.ali.plugin.glm.*;
 import com.yanny.ali.plugin.server.MissingTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
+import com.yanny.ali.plugin.server.bytecode.BytecodeInterpreter;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
@@ -87,6 +88,9 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final ManagedRegistry<Class<?>, IEntitySubPredicateResolver<EntitySubPredicate>> entitySubPredicateResolvers = registerClassKeyed("entity sub-predicate resolvers", false, HashMap::new, null);
 
     private final Set<String> fallbackItemListings = new HashSet<>();
+    private int computedItemListings;
+    private int uncomputedItemListings;
+    private long bytecodeNanos;
     private final Set<String> failedRenderers = new HashSet<>();
     private final Map<ResourceLocation, LootTable> lootTableMap = new HashMap<>();
     private final Map<ResourceLocation, Integer> hitMap = new HashMap<>();
@@ -113,6 +117,9 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     public void clearData() {
         super.clearData();
         fallbackItemListings.clear();
+        computedItemListings = 0;
+        uncomputedItemListings = 0;
+        bytecodeNanos = 0;
         failedRenderers.clear();
         NodeUtils.clearFailedOperations();
         lootTableMap.clear();
@@ -452,6 +459,13 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @NotNull
+    public void logBytecodeStatistics() {
+        if (computedItemListings + uncomputedItemListings > 0) {
+            LOGGER.info("Working out {} trade item listings from their bytecode took {}ms, {} of them could not be worked out",
+                    computedItemListings + uncomputedItemListings, bytecodeNanos / 1_000_000, uncomputedItemListings);
+        }
+    }
+
     @Override
     public <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, TooltipNode condition) {
         return tradeItemListings.get(entry.getClass())
@@ -461,6 +475,25 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     @NotNull
     private IDataNode getFallbackItemListing(IServerUtils utils, VillagerTrades.ItemListing entry, TooltipNode condition) {
+        long start = System.nanoTime();
+        IDataNode computed = BytecodeInterpreter.getItemListing(utils, entry, condition);
+
+        bytecodeNanos += System.nanoTime() - start;
+
+        if (computed != null) {
+            String name = ManagedRegistry.classKeyName(entry.getClass());
+
+            computedItemListings++;
+
+            if (fallbackItemListings.add(name)) {
+                LOGGER.info("Computed trade item listing {} from its bytecode", name);
+            }
+
+            return computed;
+        }
+
+        uncomputedItemListings++;
+
         try {
             // try to get result from MerchantOffer. only if params aren't used (otherwise values can be dynamic)
             //noinspection DataFlowIssue

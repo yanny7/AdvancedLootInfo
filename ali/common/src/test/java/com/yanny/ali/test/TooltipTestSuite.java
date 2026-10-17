@@ -86,6 +86,7 @@ import java.util.concurrent.ExecutionException;
         UnwrapperTest.class,
         ServerUtilsTest.class,
         GlobalLootModifierTest.class,
+        BytecodeInterpreterTest.class,
         ConfigTest.class,
         ValueCharacterizationTest.class,
         EntryWeightTest.class

@@ -337,6 +337,9 @@ public final class Lang {
         COUNT("count", "Count: %s"),
         QUALITY("quality", "Quality: %s"),
         RANDOM_TRADE_SELECTION("random_trade_selection", "Randomly Selects %s Of These Trades"),
+        RANDOM_PROPERTIES("random_properties", "Random properties"),
+        RANDOM_CHANCE("random_chance", "Random chance"),
+        UNKNOWN_PREDICATE("unknown_predicate", "Unknown additional predicate"),
         ;
 
         private final Translation translation;
