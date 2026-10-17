@@ -73,6 +73,8 @@ The compat classes are compiled against the target mod (`modCompileOnly`), so it
 
 Numbers follow ALI's model (`ali/CLAUDE.md`'s "Numbers"): `INumberProvider.convertNumber` returns the float `NumberExpr` and `convertIntNumber` defaults to its rounding, so override it only where the target's `getInt` differs; `ICountModifier`/`IChanceModifier` return the transformed expression. Every one of them, and `IEntry.create`, receives the conditions list of ACI's `NumberConverter` contract (see `aci/CLAUDE.md`) and passes it on to every nested `convertNumber`/`getChance`; an entry builds its chance with `NodeUtils.getChance(utils, parent, chance, sumWeight, chanceConditions)`. A value whose distribution is not verified in the target mod's source is a `NumberExpr.range` (bounds only), never a guessed `uniformInt`. A replacement or added item node builds its tooltip through `NodeUtils.getChance`, a `LootCount` and `NodeUtils.getCountLimit`, as `GlmNodeUtils` does.
 
+A shim never rolls a target's randomness to show the result. An item listing goes through `getOffer(null, null)` (see `ali/CLAUDE.md`'s `plugin/common`); target code that draws from a static `Random` runs with that field swapped for one that throws (`DungeonLootEnhancerModifierAccessor`). Whatever throws renders as a `MissingNode`.
+
 A tooltip whose only branch can come out empty must call `showEmpty()` on the builder, otherwise `TooltipBuilder.build` collapses the whole node and the entry silently renders nothing (see `aci/CLAUDE.md`'s tree-model section).
 
 ## Tooltip code style

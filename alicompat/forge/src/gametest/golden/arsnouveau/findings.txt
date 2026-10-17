@@ -1,0 +1,45 @@
+advanced/loot/minecraft/chests/abandoned_mineshaft.txt
+  ali:missing
+  | Not implemented: [com.hollingsworth.arsnouveau.api.loot.DungeonLootTables$$Lambda]
+advanced/loot/minecraft/chests/bastion_treasure.txt
+  ali:missing
+  | Not implemented: [com.hollingsworth.arsnouveau.api.loot.DungeonLootTables$$Lambda]
+advanced/loot/minecraft/chests/desert_pyramid.txt
+  ali:missing
+  | Not implemented: [com.hollingsworth.arsnouveau.api.loot.DungeonLootTables$$Lambda]
+advanced/loot/minecraft/chests/end_city_treasure.txt
+  ali:missing
+  | Not implemented: [com.hollingsworth.arsnouveau.api.loot.DungeonLootTables$$Lambda]
+advanced/loot/minecraft/chests/jungle_temple.txt
+  ali:missing
+  | Not implemented: [com.hollingsworth.arsnouveau.api.loot.DungeonLootTables$$Lambda]
+advanced/loot/minecraft/chests/nether_bridge.txt
+  ali:missing
+  | Not implemented: [com.hollingsworth.arsnouveau.api.loot.DungeonLootTables$$Lambda]
+advanced/loot/minecraft/chests/pillager_outpost.txt
+  ali:missing
+  | Not implemented: [com.hollingsworth.arsnouveau.api.loot.DungeonLootTables$$Lambda]
+advanced/loot/minecraft/chests/ruined_portal.txt
+  ali:missing
+  | Not implemented: [com.hollingsworth.arsnouveau.api.loot.DungeonLootTables$$Lambda]
+advanced/loot/minecraft/chests/simple_dungeon.txt
+  ali:missing
+  | Not implemented: [com.hollingsworth.arsnouveau.api.loot.DungeonLootTables$$Lambda]
+advanced/loot/minecraft/chests/stronghold_corridor.txt
+  ali:missing
+  | Not implemented: [com.hollingsworth.arsnouveau.api.loot.DungeonLootTables$$Lambda]
+advanced/loot/minecraft/chests/stronghold_crossing.txt
+  ali:missing
+  | Not implemented: [com.hollingsworth.arsnouveau.api.loot.DungeonLootTables$$Lambda]
+advanced/loot/minecraft/chests/stronghold_library.txt
+  ali:missing
+  | Not implemented: [com.hollingsworth.arsnouveau.api.loot.DungeonLootTables$$Lambda]
+advanced/loot/minecraft/chests/underwater_ruin_big.txt
+  ali:missing
+  | Not implemented: [com.hollingsworth.arsnouveau.api.loot.DungeonLootTables$$Lambda]
+advanced/loot/minecraft/chests/underwater_ruin_small.txt
+  ali:missing
+  | Not implemented: [com.hollingsworth.arsnouveau.api.loot.DungeonLootTables$$Lambda]
+advanced/loot/minecraft/chests/woodland_mansion.txt
+  ali:missing
+  | Not implemented: [com.hollingsworth.arsnouveau.api.loot.DungeonLootTables$$Lambda]

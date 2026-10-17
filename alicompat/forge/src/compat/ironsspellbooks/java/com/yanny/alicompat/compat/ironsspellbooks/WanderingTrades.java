@@ -18,7 +18,6 @@ import io.redspace.ironsspellbooks.item.InkItem;
 import io.redspace.ironsspellbooks.player.AdditionalWanderingTrades;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -44,7 +43,7 @@ public class WanderingTrades {
                 (utils, listing, condition) -> inkNode(utils, listing, condition, true));
         registry.registerItemListing(AdditionalWanderingTrades.InkSellTrade.class,
                 (utils, listing, condition) -> inkNode(utils, listing, condition, false));
-        registry.registerItemListing(AdditionalWanderingTrades.SimpleTrade.class, WanderingTrades::rolledNode);
+        registry.registerItemListing(AdditionalWanderingTrades.SimpleTrade.class, WanderingTrades::offerNode);
 
         registerNested(registry, "RandomCurioTrade", (utils, condition) ->
                 lootTableNode(utils, condition, BASIC_CURIOS, NumberExpr.constant(64)));
@@ -56,24 +55,22 @@ public class WanderingTrades {
         InkItem ink = SimpleTradeAccessor.of(listing).getCaptured(InkItem.class);
 
         if (ink == null) {
-            return rolledNode(utils, listing, condition);
+            return offerNode(utils, listing, condition);
         }
 
         return (buy ? WizardTrades.inkBuy(ink) : WizardTrades.inkSell(ink)).getNode(utils, condition);
     }
 
     @NotNull
-    private static IDataNode rolledNode(IServerUtils utils, AdditionalWanderingTrades.SimpleTrade listing, TooltipNode condition) {
+    private static IDataNode offerNode(IServerUtils utils, AdditionalWanderingTrades.SimpleTrade listing, TooltipNode condition) {
         try {
-            //noinspection DataFlowIssue - none of these lambdas reads the trader, only the random source
-            MerchantOffer offer = listing.getOffer(null, RandomSource.create());
+            //noinspection DataFlowIssue
+            MerchantOffer offer = listing.getOffer(null, null);
 
             if (offer != null) {
                 return TradeUtils.getNode(utils, offer, condition);
             }
-        } catch (Throwable e) {
-            LOGGER.warn("Failed to roll trade offer for {}: {}", listing.getClass().getName(), e.getMessage());
-        }
+        } catch (Throwable ignored) {}
 
         return new MissingNode(MissingTooltipUtils.getMissingItemListingTooltip(utils, listing).build());
     }

@@ -1,6 +1,7 @@
 ## []
 
 - Server log names trading mobs whose trades ALI cannot show
+- Fixed tooltips of unsupported trades showing a name that changes on every server start
 
 ## [2.5.0]
 

@@ -1,3 +1,8 @@
+## []
+
+- Iron's Spellbooks wandering trades with a random price show as unsupported instead of one random price
+- Ars Nouveau dungeon loot with a random count, and its random ritual tablet, shows as unsupported instead of estimated chances
+
 ## [1.3.0]
 
 - Added VillagerConfig support on Fabric

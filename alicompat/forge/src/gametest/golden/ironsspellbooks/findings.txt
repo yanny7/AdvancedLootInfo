@@ -1,2 +1,5 @@
 advanced/loot/irons_spellbooks/chests/citadel/citadel_bookshelf.txt
   ali:missing
+advanced/trade/minecraft/wandering_trader.txt
+  ali:missing
+  |     -> Not implemented: [io.redspace.ironsspellbooks.player.AdditionalWanderingTrades$$Lambda]
