@@ -2,6 +2,7 @@
 
 - Iron's Spellbooks wandering trades with a random price show the price range instead of one random price
 - Ars Nouveau dungeon loot shows exact chances and count ranges instead of estimated ones
+- Fixed an Ars Nouveau error hiding a whole trade level of the Shards trader
 
 ## [1.3.0]
 

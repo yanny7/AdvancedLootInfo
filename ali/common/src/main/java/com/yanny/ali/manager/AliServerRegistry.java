@@ -233,12 +233,12 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     @Override
     public <T> void registerPageResolver(Class<T> type, IPageResolver<T> resolver) {
-        pageResolvers.put(type, (u, v, p) -> resolver.test(u, type.cast(v), p));
+        pageResolvers.put(type, (u, v, p) -> attempt("page resolver", v, () -> resolver.test(u, type.cast(v), p), () -> null));
     }
 
     @Override
     public <T extends EntitySubPredicate> void registerEntitySubPredicateResolver(Class<T> type, IEntitySubPredicateResolver<T> resolver) {
-        entitySubPredicateResolvers.put(type, (u, s, p) -> resolver.test(u, type.cast(s), p));
+        entitySubPredicateResolvers.put(type, (u, s, p) -> attempt("entity sub-predicate resolver", s, () -> resolver.test(u, type.cast(s), p), () -> null));
     }
 
     @Override
@@ -332,7 +332,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @Override
     public <T extends Ingredient> TooltipBuilder getIngredientTooltip(IServerUtils utils, T ingredient) {
         for (Function<Ingredient, Object> unwrapper : ingredientUnwrappers) {
-            Object unwrapped = unwrapper.apply(ingredient);
+            Object unwrapped = attempt("ingredient unwrapper", unwrapper, () -> unwrapper.apply(ingredient), () -> null);
 
             if (unwrapped != null) {
                 return valueTooltips.get(unwrapped.getClass())
@@ -517,6 +517,20 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         }
     }
 
+    private <R> R attempt(String kind, Object value, Supplier<R> call, Supplier<R> fallback) {
+        try {
+            return call.get();
+        } catch (Throwable e) {
+            String name = ManagedRegistry.classKeyName(value.getClass());
+
+            if (failedRenderers.add(kind + " " + name)) {
+                LOGGER.warn("Failed to run {} {}: {}", kind, name, e.getMessage(), e);
+            }
+
+            return fallback.get();
+        }
+    }
+
     private <R> R guarded(String kind, Object value, Supplier<R> renderer, Supplier<R> fallback) {
         try {
             return renderer.get();
@@ -603,21 +617,34 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @NotNull
     private Int2ObjectMap<TradeLevel> getTradeLevels(ResourceLocation traderId, Trades trades) {
         for (BiFunction<IServerUtils, ResourceLocation, Int2ObjectMap<TradeLevel>> override : tradeOverrides) {
-            Int2ObjectMap<TradeLevel> levels = override.apply(this, traderId);
+            Int2ObjectMap<TradeLevel> levels = attempt("trade override", override, () -> override.apply(this, traderId), Int2ObjectOpenHashMap::new);
 
             if (levels != null) {
-                return levels;
+                Int2ObjectMap<TradeLevel> guardedLevels = new Int2ObjectOpenHashMap<>();
+
+                levels.int2ObjectEntrySet().forEach((e) -> guardedLevels.put(e.getIntKey(), guardedLevel(e.getValue())));
+                return guardedLevels;
             }
         }
 
         Int2ObjectMap<TradeLevel> levels = new Int2ObjectOpenHashMap<>();
-        Int2ObjectMap<VillagerTrades.ItemListing[]> itemListings = trades.itemListings().get();
+        Int2ObjectMap<VillagerTrades.ItemListing[]> itemListings = attempt("trade item listings", trades.itemListings(), () -> trades.itemListings().get(), () -> null);
 
         if (itemListings != null) {
-            itemListings.int2ObjectEntrySet().forEach((e) -> levels.put(e.getIntKey(), new TradeLevel.OfListings(e.getValue(), trades.levelInfo().apply(e.getIntKey()))));
+            itemListings.int2ObjectEntrySet().forEach((e) -> levels.put(e.getIntKey(), new TradeLevel.OfListings(e.getValue(), attempt("trade level info", trades.levelInfo(),
+                    () -> trades.levelInfo().apply(e.getIntKey()), () -> new TradeLevelInfo(NumberExpr.opaque(traderId.toString()))))));
         }
 
         return levels;
+    }
+
+    @NotNull
+    private TradeLevel guardedLevel(TradeLevel level) {
+        if (level instanceof TradeLevel.OfTrades ofTrades) {
+            return new TradeLevel.OfTrades(ofTrades.levelInfo(), (u) -> attempt("trade level", ofTrades.trades(), () -> ofTrades.trades().apply(u), List::of));
+        }
+
+        return level;
     }
 
     // hitCount != null means this table is referenced from another table's tree; the paramSet check
@@ -657,11 +684,11 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
         try {
             for (Function<IServerUtils, List<ILootModifier<?>>> lootModifierGetter : lootModifierGetters) {
-                lootModifierMap.addAll(lootModifierGetter.apply(this));
+                lootModifierMap.addAll(attempt("loot modifier getter", lootModifierGetter, () -> lootModifierGetter.apply(this), List::of));
             }
 
             for (Function<IServerUtils, List<IPageLootModifier>> pageLootModifierGetter : pageLootModifierGetters) {
-                pageLootModifiers.addAll(pageLootModifierGetter.apply(this));
+                pageLootModifiers.addAll(attempt("loot modifier getter", pageLootModifierGetter, () -> pageLootModifierGetter.apply(this), List::of));
             }
         } finally {
             TooltipContext.clearPalette();
