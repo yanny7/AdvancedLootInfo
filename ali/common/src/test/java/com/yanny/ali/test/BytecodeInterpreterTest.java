@@ -5,7 +5,10 @@ import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.ListNode;
+import com.yanny.ali.api.TradeLevel;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
+import com.yanny.ali.plugin.common.nodes.MissingNode;
+import com.yanny.ali.plugin.common.trades.TradeGroupNode;
 import com.yanny.ali.plugin.common.trades.TradeUtils;
 import com.yanny.ali.plugin.server.bytecode.BytecodeInterpreter;
 import net.minecraft.core.BlockPos;
@@ -14,7 +17,11 @@ import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.StructureTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.VillagerDataHolder;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.npc.VillagerType;
@@ -31,6 +38,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
@@ -360,6 +368,222 @@ public class BytecodeInterpreterTest {
     }
 
     @Test
+    public void testTraderWithOneLevel() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(OneLevelTrader.class);
+
+        Assertions.assertNotNull(levels);
+        Assertions.assertEquals(List.of(1), levels.keySet().intStream().boxed().toList());
+
+        TradeLevel.OfListings level = (TradeLevel.OfListings) levels.get(1);
+
+        Assertions.assertSame(Traders.COMMON, level.listings());
+        Assertions.assertEquals(NumberExpr.constant(2), level.levelInfo().offers());
+    }
+
+    @Test
+    public void testTraderWithTwoGroupsInOneLevel() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(TwoGroupTrader.class);
+
+        Assertions.assertNotNull(levels);
+        Assertions.assertEquals(List.of(1), levels.keySet().intStream().boxed().toList());
+
+        TradeLevel.OfTrades level = (TradeLevel.OfTrades) levels.get(1);
+        List<IDataNode> groups = level.trades().apply(UTILS);
+
+        Assertions.assertEquals(NumberInterval.point(2), level.levelInfo().offers().bounds());
+        Assertions.assertEquals(2, groups.size());
+        Assertions.assertEquals(2, ((TradeGroupNode) groups.get(0)).nodes().size());
+        Assertions.assertFalse(groups.get(1) instanceof TradeGroupNode);
+    }
+
+    @Test
+    public void testTraderWithGroupsFromMapKeys() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(KeyedGroupTrader.class);
+
+        Assertions.assertNotNull(levels);
+        Assertions.assertEquals(List.of(1, 2), levels.keySet().intStream().sorted().boxed().toList());
+        Assertions.assertSame(Traders.COMMON, ((TradeLevel.OfListings) levels.get(1)).listings());
+        Assertions.assertEquals(NumberExpr.constant(2), ((TradeLevel.OfListings) levels.get(1)).levelInfo().offers());
+        Assertions.assertSame(Traders.RARE, ((TradeLevel.OfListings) levels.get(2)).listings());
+        Assertions.assertEquals(NumberExpr.constant(1), ((TradeLevel.OfListings) levels.get(2)).levelInfo().offers());
+    }
+
+    @Test
+    public void testTraderWithLevelFromItsState() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(LeveledTrader.class);
+
+        Assertions.assertNotNull(levels);
+        Assertions.assertEquals(List.of(1, 2), levels.keySet().intStream().sorted().boxed().toList());
+        Assertions.assertSame(Traders.COMMON, ((TradeLevel.OfListings) levels.get(1)).listings());
+        Assertions.assertSame(Traders.RARE, ((TradeLevel.OfListings) levels.get(2)).listings());
+    }
+
+    @Test
+    public void testTraderWithRandomNumberOfOffers() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(RandomCountTrader.class);
+
+        Assertions.assertNotNull(levels);
+        Assertions.assertEquals(new NumberInterval(7, 9, true, true), ((TradeLevel.OfListings) levels.get(1)).levelInfo().offers().bounds());
+    }
+
+    @Test
+    public void testTraderBuildingItsOwnOffers() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(OwnOffersTrader.class);
+
+        Assertions.assertNotNull(levels);
+
+        List<IDataNode> trades = ((TradeLevel.OfTrades) levels.get(1)).trades().apply(UTILS);
+
+        Assertions.assertEquals(1, trades.size());
+        assertSlot(trades.get(0), 2, Items.APPLE, NumberExpr.constant(1));
+    }
+
+    @Test
+    public void testTraderWithOwnLazyOffersAndOwnSelection() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(OwnSelectionTrader.class);
+
+        Assertions.assertNotNull(levels);
+        Assertions.assertEquals(List.of(1, 2), levels.keySet().intStream().sorted().boxed().toList());
+        Assertions.assertEquals(List.of(Items.APPLE, Items.BREAD), listingItems(((TradeLevel.OfListings) levels.get(1)).listings()));
+        Assertions.assertEquals(NumberExpr.constant(2), ((TradeLevel.OfListings) levels.get(1)).levelInfo().offers());
+        Assertions.assertEquals(List.of(Items.CARROT), listingItems(((TradeLevel.OfListings) levels.get(2)).listings()));
+        Assertions.assertEquals(NumberExpr.constant(1), ((TradeLevel.OfListings) levels.get(2)).levelInfo().offers());
+    }
+
+    @Test
+    public void testTraderWithRandomIndexSet() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(IndexSetTrader.class);
+
+        Assertions.assertNotNull(levels);
+        Assertions.assertEquals(List.of(1, 2), levels.keySet().intStream().sorted().boxed().toList());
+        Assertions.assertEquals(List.of(Items.APPLE, Items.BREAD), listingItems(((TradeLevel.OfListings) levels.get(1)).listings()));
+        Assertions.assertEquals(NumberExpr.constant(1), ((TradeLevel.OfListings) levels.get(1)).levelInfo().offers());
+        Assertions.assertEquals(List.of(Items.CARROT), listingItems(((TradeLevel.OfListings) levels.get(2)).listings()));
+        Assertions.assertEquals(NumberExpr.constant(1), ((TradeLevel.OfListings) levels.get(2)).levelInfo().offers());
+    }
+
+    @Test
+    public void testTraderWithShuffledIndices() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(ShuffleTrader.class);
+
+        Assertions.assertNotNull(levels);
+        Assertions.assertEquals(List.of(1), levels.keySet().intStream().boxed().toList());
+        Assertions.assertEquals(List.of(Items.APPLE, Items.BREAD), listingItems(((TradeLevel.OfListings) levels.get(1)).listings()));
+        Assertions.assertEquals(NumberExpr.constant(1), ((TradeLevel.OfListings) levels.get(1)).levelInfo().offers());
+    }
+
+    @Test
+    public void testTraderWithGroupsIncludedByChance() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(ChanceTrader.class);
+
+        Assertions.assertNotNull(levels);
+        Assertions.assertEquals(List.of(1, 2), levels.keySet().intStream().sorted().boxed().toList());
+
+        TradeLevel.OfListings common = (TradeLevel.OfListings) levels.get(1);
+        TradeLevel.OfListings rare = (TradeLevel.OfListings) levels.get(2);
+
+        Assertions.assertEquals(List.of(Items.APPLE, Items.BREAD), listingItems(common.listings()));
+        Assertions.assertEquals(1F, common.levelInfo().chance(), 1e-6);
+        Assertions.assertEquals(List.of(Items.CARROT), listingItems(rare.listings()));
+        Assertions.assertEquals(0.25F, rare.levelInfo().chance(), 1e-6);
+        Assertions.assertEquals(new NumberInterval(1, 1, true, true), rare.levelInfo().offers().bounds());
+    }
+
+    @Test
+    public void testTraderWithGroupsFromOneRoll() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(OneRollTrader.class);
+
+        Assertions.assertNotNull(levels);
+        Assertions.assertEquals(List.of(1, 2), levels.keySet().intStream().sorted().boxed().toList());
+        Assertions.assertEquals(1F / 3, ((TradeLevel.OfListings) levels.get(1)).levelInfo().chance(), 1e-6);
+        Assertions.assertEquals(1F / 3, ((TradeLevel.OfListings) levels.get(2)).levelInfo().chance(), 1e-6);
+    }
+
+    @Test
+    public void testTraderWithEmptyGroup() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(EmptyGroupTrader.class);
+
+        Assertions.assertNotNull(levels);
+        Assertions.assertEquals(List.of(1), levels.keySet().intStream().boxed().toList());
+        Assertions.assertEquals(List.of(Items.APPLE, Items.BREAD), listingItems(((TradeLevel.OfListings) levels.get(1)).listings()));
+    }
+
+    @Test
+    public void testTraderWithTradesDependingOnItsState() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(EmptyHandTrader.class);
+
+        Assertions.assertNotNull(levels);
+
+        List<IDataNode> trades = ((TradeLevel.OfTrades) levels.get(1)).trades().apply(UTILS);
+
+        Assertions.assertEquals(1, trades.size());
+        assertTooltip(trades.get(0).getTooltip(), List.of(
+                "Unknown additional predicate",
+                "Uses: 12",
+                "XP: 5",
+                "Price Multiplier: 0.05"
+        ));
+    }
+
+    @Test
+    public void testTraderFillingItsOffersOnInteraction() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(InteractionTrader.class);
+
+        Assertions.assertNotNull(levels);
+        Assertions.assertEquals(List.of(1), levels.keySet().intStream().boxed().toList());
+
+        List<IDataNode> trades = ((TradeLevel.OfTrades) levels.get(1)).trades().apply(UTILS);
+
+        Assertions.assertEquals(2, trades.size());
+    }
+
+    @Test
+    public void testTraderRepeatingAnOffer() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(RepeatingTrader.class);
+
+        Assertions.assertNotNull(levels);
+
+        TradeLevel.OfTrades level = (TradeLevel.OfTrades) levels.get(1);
+        List<IDataNode> trades = level.trades().apply(UTILS);
+
+        Assertions.assertEquals(NumberExpr.constant(4), level.levelInfo().offers());
+        Assertions.assertEquals(2, trades.size());
+        Assertions.assertEquals(NumberExpr.constant(3), ((TradeGroupNode) trades.get(0)).selectionCount);
+        Assertions.assertEquals(1, ((TradeGroupNode) trades.get(0)).nodes().size());
+    }
+
+    @Test
+    public void testTraderWithSomeTradesUnknown() {
+        BytecodeInterpreter.ComputedTrades trades = BytecodeInterpreter.getTradeLevels(UTILS, PartlyKnownTrader.class);
+
+        Assertions.assertNotNull(trades);
+        Assertions.assertTrue(trades.incomplete());
+
+        List<IDataNode> nodes = ((TradeLevel.OfTrades) trades.levels().get(1)).trades().apply(UTILS);
+
+        Assertions.assertEquals(3, nodes.size());
+        Assertions.assertInstanceOf(MissingNode.class, nodes.get(2));
+        assertTooltip(nodes.get(2).getTooltip(), List.of("Unable to auto-detect some custom trades"));
+    }
+
+    @Test
+    public void testTraderWithAllTradesUnknown() {
+        BytecodeInterpreter.ComputedTrades trades = BytecodeInterpreter.getTradeLevels(UTILS, UnknownTrader.class);
+
+        Assertions.assertNotNull(trades);
+        Assertions.assertTrue(trades.incomplete());
+        Assertions.assertTrue(trades.levels().isEmpty());
+    }
+
+    @Test
+    public void testTraderWithoutTrades() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(NoTradesTrader.class);
+
+        Assertions.assertNotNull(levels);
+        Assertions.assertTrue(levels.isEmpty());
+    }
+
+    @Test
     public void testMutatedFieldStaysUntouched() {
         MutatingListing listing = new MutatingListing();
         IDataNode trade = interpret(listing);
@@ -410,6 +634,10 @@ public class BytecodeInterpreterTest {
 
     private static IDataNode trade(List<IDataNode> trades, Item result) {
         return trades.stream().filter((t) -> slot(t, 2).getItem().left().orElseThrow().is(result)).findFirst().orElseThrow();
+    }
+
+    private static List<Item> listingItems(VillagerTrades.ItemListing[] listings) {
+        return java.util.Arrays.stream(listings).map((l) -> ((OfferListing) l).item()).toList();
     }
 
     private static MerchantOffer offerFor(Item result) {
@@ -717,6 +945,401 @@ public class BytecodeInterpreterTest {
             }
 
             return offerFor(item);
+        }
+    }
+
+    private static final class Traders {
+        private static final VillagerTrades.ItemListing[] COMMON = {new OfferListing(Items.APPLE), new OfferListing(Items.BREAD)};
+        private static final VillagerTrades.ItemListing[] RARE = {new OfferListing(Items.CARROT)};
+        private static final Int2ObjectMap<VillagerTrades.ItemListing[]> BY_LEVEL = new Int2ObjectOpenHashMap<>(Map.of(1, COMMON, 2, RARE));
+    }
+
+    private static Int2ObjectMap<TradeLevel> computedLevels(Class<?> trader) {
+        BytecodeInterpreter.ComputedTrades trades = BytecodeInterpreter.getTradeLevels(UTILS, trader);
+
+        Assertions.assertNotNull(trades);
+        Assertions.assertFalse(trades.incomplete());
+        return trades.levels();
+    }
+
+    private record OfferListing(Item item) implements VillagerTrades.ItemListing {
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            return offerFor(item);
+        }
+    }
+
+    private abstract static class OneLevelTrader extends AbstractVillager {
+        private OneLevelTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void updateTrades() {
+            addOffersFromItemListings(getOffers(), Traders.COMMON, 2);
+        }
+    }
+
+    private abstract static class TwoGroupTrader extends AbstractVillager {
+        private TwoGroupTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void updateTrades() {
+            MerchantOffers offers = getOffers();
+
+            addOffersFromItemListings(offers, Traders.COMMON, 1);
+            addOffersFromItemListings(offers, Traders.RARE, 1);
+        }
+    }
+
+    private abstract static class KeyedGroupTrader extends AbstractVillager {
+        private KeyedGroupTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void updateTrades() {
+            MerchantOffers offers = getOffers();
+
+            addOffersFromItemListings(offers, Traders.BY_LEVEL.get(1), 2);
+            addOffersFromItemListings(offers, Traders.BY_LEVEL.get(2), 1);
+        }
+    }
+
+    private abstract static class LeveledTrader extends AbstractVillager {
+        private int tradeLevel;
+
+        private LeveledTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        private int getTradeLevel() {
+            return tradeLevel;
+        }
+
+        @Override
+        protected void updateTrades() {
+            VillagerTrades.ItemListing[] listings = Traders.BY_LEVEL.get(getTradeLevel());
+
+            if (listings != null) {
+                addOffersFromItemListings(getOffers(), listings, 2);
+            }
+        }
+    }
+
+    private abstract static class RandomCountTrader extends AbstractVillager {
+        private RandomCountTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void updateTrades() {
+            addOffersFromItemListings(getOffers(), Traders.COMMON, random.nextInt(3) + 7);
+        }
+    }
+
+    private abstract static class OwnOffersTrader extends AbstractVillager {
+        private OwnOffersTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        public MerchantOffers getOffers() {
+            MerchantOffers offers = new MerchantOffers();
+
+            offers.add(offerFor(Items.APPLE));
+            return offers;
+        }
+    }
+
+    private abstract static class OwnSelectionTrader extends AbstractVillager {
+        @Nullable
+        private MerchantOffers offers;
+
+        private OwnSelectionTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        public MerchantOffers getOffers() {
+            if (offers == null) {
+                offers = new MerchantOffers();
+                populate();
+            }
+
+            return offers;
+        }
+
+        private void populate() {
+            MerchantOffers offers = getOffers();
+
+            addRandomOffers(offers, Traders.BY_LEVEL.get(1), 2);
+            addRandomOffers(offers, Traders.BY_LEVEL.get(2), 4);
+        }
+
+        private void addRandomOffers(MerchantOffers offers, VillagerTrades.ItemListing[] listings, int count) {
+            ArrayList<VillagerTrades.ItemListing> remaining = com.google.common.collect.Lists.newArrayList(listings);
+            int added = 0;
+
+            while (added < count && !remaining.isEmpty()) {
+                MerchantOffer offer = remaining.remove(random.nextInt(remaining.size())).getOffer(this, random);
+
+                if (offer != null) {
+                    offers.add(offer);
+                    added++;
+                }
+            }
+        }
+    }
+
+    private abstract static class IndexSetTrader extends AbstractVillager {
+        private IndexSetTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void updateTrades() {
+            addTrades(getOffers(), Traders.BY_LEVEL.get(1), 1);
+            addTrades(getOffers(), Traders.BY_LEVEL.get(2), 3);
+        }
+
+        private void addTrades(MerchantOffers offers, VillagerTrades.ItemListing[] listings, int count) {
+            java.util.Set<Integer> picked = com.google.common.collect.Sets.newHashSet();
+
+            if (listings.length > count) {
+                while (picked.size() < count) {
+                    picked.add(random.nextInt(listings.length));
+                }
+            } else {
+                for (int i = 0; i < listings.length; i++) {
+                    picked.add(i);
+                }
+            }
+
+            for (Integer index : picked) {
+                MerchantOffer offer = listings[index].getOffer(this, random);
+
+                if (offer != null) {
+                    offers.add(offer);
+                }
+            }
+        }
+    }
+
+    private abstract static class ShuffleTrader extends AbstractVillager {
+        private static final List<VillagerTrades.ItemListing> LISTINGS = List.of(Traders.COMMON);
+
+        private ShuffleTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void updateTrades() {
+            List<Integer> indexes = java.util.stream.IntStream.range(0, LISTINGS.size()).boxed().collect(java.util.stream.Collectors.toList());
+
+            java.util.Collections.shuffle(indexes);
+
+            for (Integer index : indexes.subList(0, Math.min(LISTINGS.size(), 1))) {
+                MerchantOffer offer = LISTINGS.get(index).getOffer(this, random);
+
+                if (offer != null) {
+                    getOffers().add(offer);
+                }
+            }
+        }
+    }
+
+    private enum Rarity {
+        COMMON,
+        RARE,
+    }
+
+    private abstract static class OneRollTrader extends AbstractVillager {
+        private OneRollTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void updateTrades() {
+            int roll = random.nextInt(3);
+
+            if (roll == 0) {
+                addOffersFromItemListings(getOffers(), Traders.BY_LEVEL.get(1), 1);
+            } else if (roll == 1) {
+                addOffersFromItemListings(getOffers(), Traders.BY_LEVEL.get(2), 1);
+            }
+        }
+    }
+
+    private abstract static class EmptyGroupTrader extends AbstractVillager {
+        private static final Map<Rarity, List<VillagerTrades.ItemListing>> TRADES = Map.of(Rarity.COMMON, List.of(Traders.COMMON), Rarity.RARE, List.of());
+
+        private EmptyGroupTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void updateTrades() {
+            for (Rarity rarity : Rarity.values()) {
+                List<VillagerTrades.ItemListing> listings = TRADES.get(rarity);
+                List<Integer> indexes = java.util.stream.IntStream.range(0, listings.size()).boxed().collect(java.util.stream.Collectors.toList());
+                int count = 1 + random.nextInt(2);
+
+                java.util.Collections.shuffle(indexes);
+
+                for (Integer index : indexes.subList(0, Math.min(listings.size(), count))) {
+                    MerchantOffer offer = listings.get(index).getOffer(this, random);
+
+                    if (offer != null) {
+                        getOffers().add(offer);
+                    }
+                }
+            }
+        }
+    }
+
+    private abstract static class ChanceTrader extends AbstractVillager {
+        private static final Map<Rarity, List<VillagerTrades.ItemListing>> TRADES = Map.of(Rarity.COMMON, List.of(Traders.COMMON), Rarity.RARE, List.of(Traders.RARE));
+        private static final Map<Rarity, Double> CHANCES = Map.of(Rarity.COMMON, 1.0, Rarity.RARE, 0.25);
+
+        private ChanceTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void updateTrades() {
+            for (Rarity rarity : Rarity.values()) {
+                double chance = CHANCES.get(rarity);
+
+                if (chance < 1 && random.nextDouble() > chance) {
+                    continue;
+                }
+
+                List<VillagerTrades.ItemListing> listings = TRADES.get(rarity);
+                List<Integer> indexes = java.util.stream.IntStream.range(0, listings.size()).boxed().collect(java.util.stream.Collectors.toList());
+
+                java.util.Collections.shuffle(indexes);
+
+                for (Integer index : indexes.subList(0, Math.min(listings.size(), 2))) {
+                    MerchantOffer offer = listings.get(index).getOffer(this, random);
+
+                    if (offer != null) {
+                        getOffers().add(offer);
+                    }
+                }
+            }
+        }
+    }
+
+    private abstract static class EmptyHandTrader extends AbstractVillager {
+        private EmptyHandTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        public MerchantOffers getOffers() {
+            MerchantOffers offers = new MerchantOffers();
+
+            if (getMainHandItem().isEmpty()) {
+                offers.add(offerFor(Items.APPLE));
+            }
+
+            return offers;
+        }
+    }
+
+    private abstract static class InteractionTrader extends AbstractVillager {
+        private InteractionTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        public MerchantOffers getOffers() {
+            if (offers == null) {
+                offers = new MerchantOffers();
+                offers.clear();
+            }
+
+            return offers;
+        }
+
+        @Override
+        protected void updateTrades() {
+        }
+
+        @Override
+        public net.minecraft.world.InteractionResult mobInteract(net.minecraft.world.entity.player.Player player, net.minecraft.world.InteractionHand hand) {
+            if (offers == null || offers.isEmpty()) {
+                offers = generateOffers();
+            }
+
+            return super.mobInteract(player, hand);
+        }
+
+        private static MerchantOffers generateOffers() {
+            MerchantOffers generated = new MerchantOffers();
+
+            generated.clear();
+            generated.add(offerFor(Items.APPLE));
+            generated.add(offerFor(Items.BREAD));
+            return generated;
+        }
+    }
+
+    private abstract static class RepeatingTrader extends AbstractVillager {
+        private RepeatingTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void updateTrades() {
+            MerchantOffers offers = getOffers();
+
+            for (int i = 0; i < 3; i++) {
+                offers.add(new MerchantOffer(new ItemStack(Items.EMERALD, 1 + random.nextInt(3)), new ItemStack(Items.APPLE), 12, 5, 0.05F));
+            }
+
+            offers.add(offerFor(Items.BREAD));
+            offers.sort(java.util.Comparator.comparingInt(MerchantOffer::getXp));
+            java.util.Collections.reverse(offers);
+        }
+    }
+
+    private abstract static class PartlyKnownTrader extends AbstractVillager {
+        private PartlyKnownTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void updateTrades() {
+            if (getMainHandItem().isEmpty()) {
+                addOffersFromItemListings(getOffers(), Traders.COMMON, 2);
+            } else {
+                getOffers().add(new MerchantOffer(new ItemStack(Items.EMERALD, (int) random.nextLong()), new ItemStack(Items.APPLE), 12, 5, 0.05F));
+            }
+        }
+    }
+
+    private abstract static class UnknownTrader extends AbstractVillager {
+        private UnknownTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void updateTrades() {
+            getOffers().add(new MerchantOffer(new ItemStack(Items.EMERALD, (int) random.nextLong()), new ItemStack(Items.APPLE), 12, 5, 0.05F));
+        }
+    }
+
+    private abstract static class NoTradesTrader extends AbstractVillager {
+        private NoTradesTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void updateTrades() {
         }
     }
 

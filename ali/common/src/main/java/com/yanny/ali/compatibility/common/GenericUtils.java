@@ -500,7 +500,13 @@ public class GenericUtils {
         }
 
         int leftWidth = pois.isEmpty() ? maxWidth : maxWidth - SLOT_SIZE - HEADER_GAP;
-        Component title = ellipsis(getTraderTranslationKey(type.id()), type.id().getPath(), leftWidth - titleX);
+        String titleKey = getTraderTranslationKey(type.id());
+
+        if (entityType != null && !Language.getInstance().has(titleKey)) {
+            titleKey = entityType.getDescriptionId();
+        }
+
+        Component title = ellipsis(titleKey, type.id().getPath(), leftWidth - titleX);
         Rect titleRect = new Rect(titleX, titleY, font.width(title), TEXT_HEIGHT);
         Component acceptsLabel = Component.translatable("ali.util.advanced_loot_info.accepts");
         int acceptsLabelWidth = font.width(acceptsLabel);

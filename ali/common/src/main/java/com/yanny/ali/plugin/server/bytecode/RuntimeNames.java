@@ -3,10 +3,14 @@ package com.yanny.ali.plugin.server.bytecode;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MapItem;
+import net.minecraft.world.item.trading.Merchant;
 import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import org.jetbrains.annotations.Nullable;
@@ -49,6 +53,10 @@ final class RuntimeNames {
     static final Ref MAP_CREATE;
     static final Ref MAP_RENDER_BIOME_PREVIEW;
     static final Ref MAP_ADD_TARGET_DECORATION;
+    static final Ref GET_OFFERS;
+    static final Ref UPDATE_TRADES;
+    static final Ref ADD_OFFERS_FROM_ITEM_LISTINGS;
+    static final Ref OFFERS;
 
     static {
         Map<String, Ref> refs = read();
@@ -79,7 +87,11 @@ final class RuntimeNames {
         MAP_CREATE = refs.get("mapCreate");
         MAP_RENDER_BIOME_PREVIEW = refs.get("mapRenderBiomePreview");
         MAP_ADD_TARGET_DECORATION = refs.get("mapAddTargetDecoration");
-        AVAILABLE = refs.size() == 26;
+        GET_OFFERS = refs.get("getOffers");
+        UPDATE_TRADES = refs.get("villagerUpdateTrades");
+        ADD_OFFERS_FROM_ITEM_LISTINGS = refs.get("villagerAddOffers");
+        OFFERS = refs.get("villagerOffers");
+        AVAILABLE = refs.size() == 30;
     }
 
     private RuntimeNames() {}
@@ -95,9 +107,21 @@ final class RuntimeNames {
     private static Map<String, Ref> read() {
         Map<String, Ref> refs = new HashMap<>();
 
-        try (InputStream is = RuntimeNames.class.getResourceAsStream(RuntimeNames.class.getSimpleName() + ".class")) {
+        read(RuntimeNames.class, refs);
+        read(VillagerNames.class, refs);
+        refs.keySet().retainAll(java.util.Set.of("nextInt", "nextIntBound", "nextIntBetween", "nextIntOrigin", "nextLong", "nextBoolean",
+                "nextFloat", "nextDouble", "nextGaussian", "fork", "setSeed", "consumeCount", "stackSetCount", "stackGrow", "stackShrink",
+                "stackGetCount", "stackGetItem", "stackCopy", "stackCopyWithCount", "stackIsEmpty", "getOffer", "levelIsClientSide", "findMapStructure",
+                "mapCreate", "mapRenderBiomePreview", "mapAddTargetDecoration", "getOffers", "villagerUpdateTrades", "villagerAddOffers", "villagerOffers"));
+        return refs;
+    }
+
+    private static void read(Class<?> type, Map<String, Ref> refs) {
+        String name = type.getName();
+
+        try (InputStream is = type.getResourceAsStream(name.substring(name.lastIndexOf('.') + 1) + ".class")) {
             if (is == null) {
-                return refs;
+                return;
             }
 
             ClassNode node = new ClassNode();
@@ -117,12 +141,6 @@ final class RuntimeNames {
                 }
             }
         } catch (Throwable ignored) {}
-
-        refs.keySet().retainAll(java.util.Set.of("nextInt", "nextIntBound", "nextIntBetween", "nextIntOrigin", "nextLong", "nextBoolean",
-                "nextFloat", "nextDouble", "nextGaussian", "fork", "setSeed", "consumeCount", "stackSetCount", "stackGrow", "stackShrink",
-                "stackGetCount", "stackGetItem", "stackCopy", "stackCopyWithCount", "stackIsEmpty", "getOffer", "levelIsClientSide", "findMapStructure",
-                "mapCreate", "mapRenderBiomePreview", "mapAddTargetDecoration"));
-        return refs;
     }
 
     record Ref(String name, String desc) {
@@ -232,5 +250,27 @@ final class RuntimeNames {
 
     private static void mapAddTargetDecoration() {
         MapItemSavedData.addTargetDecoration(null, null, null, null);
+    }
+
+    private static MerchantOffers getOffers(Merchant merchant) {
+        return merchant.getOffers();
+    }
+
+    private abstract static class VillagerNames extends AbstractVillager {
+        private VillagerNames(EntityType<? extends AbstractVillager> type) {
+            super(type, null);
+        }
+
+        private void villagerUpdateTrades() {
+            updateTrades();
+        }
+
+        private void villagerAddOffers() {
+            addOffersFromItemListings(null, null, 0);
+        }
+
+        private MerchantOffers villagerOffers() {
+            return offers;
+        }
     }
 }

@@ -14,6 +14,7 @@ import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.configuration.AliConfig;
+import com.yanny.ali.language.Lang;
 import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
@@ -614,16 +615,23 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         return new TradeNode(this, trades.entityType(), getTradeLevels(traderId, trades));
     }
 
+    public TradeNode parseTrade(EntityType<?> entityType, Int2ObjectMap<TradeLevel> levels, boolean incomplete) {
+        TradeNode node = new TradeNode(this, entityType, guardedLevels(levels));
+
+        if (incomplete && node.nodes().isEmpty()) {
+            node.addChildren(new MissingNode(TooltipBuilder.keyOnly(Lang.Description.UNKNOWN_TRADES).build()));
+        }
+
+        return node;
+    }
+
     @NotNull
     private Int2ObjectMap<TradeLevel> getTradeLevels(ResourceLocation traderId, Trades trades) {
         for (BiFunction<IServerUtils, ResourceLocation, Int2ObjectMap<TradeLevel>> override : tradeOverrides) {
             Int2ObjectMap<TradeLevel> levels = attempt("trade override", override, () -> override.apply(this, traderId), Int2ObjectOpenHashMap::new);
 
             if (levels != null) {
-                Int2ObjectMap<TradeLevel> guardedLevels = new Int2ObjectOpenHashMap<>();
-
-                levels.int2ObjectEntrySet().forEach((e) -> guardedLevels.put(e.getIntKey(), guardedLevel(e.getValue())));
-                return guardedLevels;
+                return guardedLevels(levels);
             }
         }
 
@@ -636,6 +644,14 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         }
 
         return levels;
+    }
+
+    @NotNull
+    private Int2ObjectMap<TradeLevel> guardedLevels(Int2ObjectMap<TradeLevel> levels) {
+        Int2ObjectMap<TradeLevel> guardedLevels = new Int2ObjectOpenHashMap<>();
+
+        levels.int2ObjectEntrySet().forEach((e) -> guardedLevels.put(e.getIntKey(), guardedLevel(e.getValue())));
+        return guardedLevels;
     }
 
     @NotNull

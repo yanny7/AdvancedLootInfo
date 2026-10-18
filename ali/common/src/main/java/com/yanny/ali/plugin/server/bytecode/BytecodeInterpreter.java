@@ -9,10 +9,16 @@ import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.api.TradeLevel;
+import com.yanny.ali.api.TradeLevelInfo;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
+import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
+import com.yanny.ali.plugin.common.trades.TradeGroupNode;
 import com.yanny.ali.plugin.common.trades.TradeUtils;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -24,6 +30,7 @@ import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -44,7 +51,8 @@ public final class BytecodeInterpreter {
         String reason;
 
         try {
-            List<Path> paths = paths(listing);
+            List<Path> paths = paths((i) -> i.call(listing, VillagerTrades.ItemListing.class, RuntimeNames.GET_OFFER.name(), RuntimeNames.GET_OFFER.desc(),
+                    List.of(Value.Unknown.of(Type.getType(Entity.class), Origin.TRADER), new Value.Rng(false))), false);
             Map<String, List<Path>> offers = new LinkedHashMap<>();
 
             for (Path path : paths) {
@@ -113,7 +121,250 @@ public final class BytecodeInterpreter {
         }).build();
     }
 
-    private static List<Path> paths(VillagerTrades.ItemListing listing) {
+    @Nullable
+    public static ComputedTrades getTradeLevels(IServerUtils utils, Class<?> merchant) {
+        if (!RuntimeNames.AVAILABLE) {
+            return null;
+        }
+
+        Int2ObjectMap<TradeLevel> levels = new Int2ObjectOpenHashMap<>();
+        Set<Integer> incomplete = new TreeSet<>();
+        boolean unknownLevel = false;
+        String reason = null;
+
+        try {
+            List<Path> paths = paths((i) -> i.trades(merchant), true);
+
+            if (productive(paths).isEmpty() && paths.stream().allMatch((p) -> p.failure() == null) && Interpreter.writesOffers(merchant)) {
+                paths = paths((i) -> i.writtenTrades(merchant), true);
+            }
+
+            List<Path> productive = new ArrayList<>();
+
+            for (Path path : paths) {
+                Integer level = path.failure() == null ? null : pathLevel(path.decisions());
+
+                if (path.failure() != null) {
+                    reason = reason != null ? reason : path.failure();
+                    unknownLevel |= level == null;
+
+                    if (level != null) {
+                        incomplete.add(level);
+                    }
+                } else if (path.result() instanceof Value.Offers offers && !offers.entries.isEmpty()) {
+                    productive.add(path);
+                }
+            }
+
+            Map<Integer, Map<List<Object>, Group>> groups = new TreeMap<>();
+
+            for (Path path : productive) {
+                Split split;
+
+                try {
+                    split = split(path.decisions());
+                } catch (Interpreter.Fail fail) {
+                    reason = reason != null ? reason : fail.describe();
+                    unknownLevel = true;
+                    continue;
+                }
+
+                double probability = probability(path.decisions());
+                Map<List<Object>, Value.Offers.Entry> entries = new LinkedHashMap<>();
+                Map<List<Object>, Integer> times = new HashMap<>();
+                boolean twice = false;
+
+                for (Value.Offers.Entry entry : ((Value.Offers) Objects.requireNonNull(path.result())).entries) {
+                    int level = entry instanceof Value.Offers.Listings listings && listings.key() != null ? listings.key() : split.level();
+                    List<Object> identity = entry instanceof Value.Offers.Listings listings ? List.of(Arrays.asList(listings.listings()), listings.count(), level)
+                            : List.of(String.valueOf(describeOffer(((Value.Offers.Single) entry).offer())), level);
+
+                    if (entries.putIfAbsent(identity, entry) != null && entry instanceof Value.Offers.Listings) {
+                        reason = reason != null ? reason : "the same trades added twice";
+                        incomplete.add(level);
+                        twice = true;
+                    }
+
+                    times.merge(identity, 1, Integer::sum);
+                }
+
+                if (twice) {
+                    continue;
+                }
+
+                for (Map.Entry<List<Object>, Value.Offers.Entry> entry : entries.entrySet()) {
+                    int repeated = times.get(entry.getKey());
+                    List<Object> identity = List.of(entry.getKey(), repeated);
+
+                    groups.computeIfAbsent((Integer) entry.getKey().get(entry.getKey().size() - 1), (l) -> new LinkedHashMap<>())
+                            .computeIfAbsent(identity, (i) -> new Group(entry.getValue(), repeated)).worlds.merge(split.world(), probability, Double::sum);
+                }
+            }
+
+            for (Map.Entry<Integer, Map<List<Object>, Group>> level : groups.entrySet()) {
+                List<Group> levelGroups = List.copyOf(level.getValue().values());
+                List<Double> chances = levelGroups.stream().flatMap((g) -> g.worlds.values().stream()).toList();
+                double chance = chances.get(0);
+
+                if (chances.stream().anyMatch((c) -> Math.abs(c - chance) > 1e-6) || chance > 1 + 1e-6) {
+                    reason = reason != null ? reason : "several sets of trades of one level";
+                    incomplete.add(level.getKey());
+                    continue;
+                }
+
+                levels.put((int) level.getKey(), tradeLevel(levelGroups, (float) Math.min(1, chance)));
+            }
+
+            if (levels.isEmpty() && reason == null && !(paths.size() == 1 && paths.get(0).decisions().isEmpty() && paths.get(0).result() instanceof Value.Offers)) {
+                reason = "no trades";
+                unknownLevel = true;
+            }
+        } catch (Interpreter.Fail fail) {
+            reason = fail.describe();
+            unknownLevel = true;
+        } catch (Throwable e) {
+            reason = e.toString();
+            unknownLevel = true;
+        }
+
+        if (reason == null) {
+            return new ComputedTrades(levels, false);
+        }
+
+        String name = ManagedRegistry.classKeyName(merchant);
+
+        if (utils.getConfiguration().logMoreStatistics && FAILED.add(name + reason)) {
+            LOGGER.info("Could not auto-detect all trades of trading entity {} from its bytecode: {}", name, reason);
+        }
+
+        if (unknownLevel) {
+            incomplete.addAll(levels.keySet());
+        }
+
+        for (int level : incomplete) {
+            levels.put(level, incomplete(levels.get(level), name));
+        }
+
+        return new ComputedTrades(levels, true);
+    }
+
+    private static TradeLevel incomplete(@Nullable TradeLevel level, String merchant) {
+        if (level instanceof TradeLevel.OfListings listings) {
+            return new TradeLevel.OfTrades(listings.levelInfo(), (u) -> {
+                List<IDataNode> nodes = new ArrayList<>(Arrays.stream(listings.listings()).filter(Objects::nonNull).map((l) -> u.getItemListing(u, l, TooltipNode.empty())).toList());
+
+                nodes.add(incompleteNode());
+                return nodes;
+            });
+        }
+        if (level instanceof TradeLevel.OfTrades trades) {
+            return new TradeLevel.OfTrades(trades.levelInfo(), (u) -> {
+                List<IDataNode> nodes = new ArrayList<>(trades.trades().apply(u));
+
+                nodes.add(incompleteNode());
+                return nodes;
+            });
+        }
+
+        return new TradeLevel.OfTrades(new TradeLevelInfo(NumberExpr.opaque(merchant)), (u) -> List.of(incompleteNode()));
+    }
+
+    private static IDataNode incompleteNode() {
+        return new MissingNode(TooltipBuilder.keyOnly(Lang.Description.INCOMPLETE_TRADES).build());
+    }
+
+    @Nullable
+    private static Integer pathLevel(List<Decision> decisions) {
+        try {
+            Split split = split(decisions);
+
+            return decisions.stream().anyMatch((d) -> d.holds() && d.kind() == Decision.Kind.EQUALS && d.value() instanceof Integer) ? split.level() : null;
+        } catch (Interpreter.Fail fail) {
+            return null;
+        }
+    }
+
+    private static List<Path> productive(List<Path> paths) {
+        return paths.stream().filter((p) -> p.result() instanceof Value.Offers offers && !offers.entries.isEmpty()).toList();
+    }
+
+    private static Split split(List<Decision> decisions) {
+        List<Decision> world = decisions.stream().filter((d) -> d.kind() != Decision.Kind.RANDOM || !(d.value() instanceof Double)).toList();
+        List<Decision> levels = world.stream().filter((d) -> d.holds() && d.kind() == Decision.Kind.EQUALS && d.value() instanceof Integer).toList();
+
+        if (levels.size() > 1) {
+            throw new Interpreter.Fail("trades depending on several levels");
+        }
+        if (levels.isEmpty()) {
+            return new Split(1, world);
+        }
+
+        Decision level = levels.get(0);
+
+        return new Split((Integer) Objects.requireNonNull(level.value()),
+                world.stream().filter((d) -> d.kind() != Decision.Kind.EQUALS || !Objects.equals(d.subject(), level.subject())).toList());
+    }
+
+    private static double probability(List<Decision> decisions) {
+        double probability = 1;
+
+        for (Decision decision : decisions) {
+            if (decision.kind() == Decision.Kind.RANDOM && decision.value() instanceof Double chance) {
+                probability *= decision.holds() ? chance : 1 - chance;
+            }
+        }
+
+        return probability;
+    }
+
+    private static TradeLevel tradeLevel(List<Group> groups, float chance) {
+        List<Value.Offers.Entry> entries = groups.stream().map((g) -> g.entry).toList();
+        List<PathCondition> conditions = groups.stream().map((g) -> PathCondition.of(List.copyOf(g.worlds.keySet()))).toList();
+        List<NumberExpr> counts = groups.stream().map((g) -> g.entry instanceof Value.Offers.Listings listings ? count(listings.count()) : NumberExpr.constant(g.times)).toList();
+
+        if (entries.size() == 1 && entries.get(0) instanceof Value.Offers.Listings listings && conditions.get(0) == PathCondition.ALWAYS) {
+            return new TradeLevel.OfListings(listings.listings(), new TradeLevelInfo(counts.get(0), chance));
+        }
+
+        NumberExpr total = counts.stream().reduce(NumberExpr.constant(0), NumberExpr::add);
+
+        return new TradeLevel.OfTrades(new TradeLevelInfo(total, chance), (u) -> {
+            List<IDataNode> nodes = new ArrayList<>();
+
+            for (int i = 0; i < entries.size(); i++) {
+                TooltipNode condition = conditions.get(i).tooltip(u);
+
+                if (entries.get(i) instanceof Value.Offers.Listings listings) {
+                    List<IDataNode> trades = Arrays.stream(listings.listings()).filter(Objects::nonNull).map((l) -> u.getItemListing(u, l, condition)).toList();
+
+                    if (entries.size() == 1 || counts.get(i).bounds().lo() >= trades.size()) {
+                        nodes.addAll(trades);
+                    } else {
+                        nodes.add(new TradeGroupNode(counts.get(i), trades));
+                    }
+                } else {
+                    IDataNode trade = node(u, ((Value.Offers.Single) entries.get(i)).offer(), condition);
+
+                    nodes.add(groups.get(i).times > 1 ? TradeGroupNode.repeated(counts.get(i), trade) : trade);
+                }
+            }
+
+            return nodes;
+        });
+    }
+
+    private static NumberExpr count(Value value) {
+        if (value instanceof Value.Known known && known.value() instanceof Number number) {
+            return NumberExpr.constant(number.doubleValue());
+        }
+        if (value instanceof Value.Num num) {
+            return num.expr();
+        }
+
+        throw new Interpreter.Fail("number of offers");
+    }
+
+    private static List<Path> paths(Function<Interpreter, Value> run, boolean partial) {
         List<Path> results = new ArrayList<>();
         Deque<List<Boolean>> scripts = new ArrayDeque<>();
 
@@ -121,17 +372,32 @@ public final class BytecodeInterpreter {
 
         while (!scripts.isEmpty()) {
             if (results.size() >= MAX_PATHS) {
-                throw new Interpreter.Fail("too many branches");
+                if (!partial) {
+                    throw new Interpreter.Fail("too many branches");
+                }
+
+                results.add(new Path(null, List.of(), "too many branches"));
+                break;
             }
 
             List<Boolean> script = scripts.poll();
             Interpreter interpreter = new Interpreter(Interpreter.Mode.SYMBOLIC, 0, script);
+            Value result = null;
+            String failure = null;
 
-            Value result = interpreter.call(listing, VillagerTrades.ItemListing.class, RuntimeNames.GET_OFFER.name(), RuntimeNames.GET_OFFER.desc(),
-                    List.of(Value.Unknown.of(Type.getType(Entity.class), Origin.TRADER), new Value.Rng(false)));
+            try {
+                result = run.apply(interpreter);
+            } catch (Interpreter.Fail fail) {
+                if (!partial) {
+                    throw fail;
+                }
+
+                failure = fail.describe();
+            }
+
             List<Boolean> taken = interpreter.decisions().stream().map(Decision::holds).toList();
 
-            results.add(new Path(result, interpreter.decisions()));
+            results.add(new Path(result, interpreter.decisions(), failure));
 
             for (int i = script.size(); i < taken.size(); i++) {
                 List<Boolean> other = new ArrayList<>(taken.subList(0, i));
@@ -286,6 +552,23 @@ public final class BytecodeInterpreter {
     public record Stacks(List<ItemStack> options, NumberExpr count) {
     }
 
-    private record Path(@Nullable Value result, List<Decision> decisions) {
+    private record Path(@Nullable Value result, List<Decision> decisions, @Nullable String failure) {
+    }
+
+    public record ComputedTrades(Int2ObjectMap<TradeLevel> levels, boolean incomplete) {
+    }
+
+    private record Split(int level, List<Decision> world) {
+    }
+
+    private static final class Group {
+        final Value.Offers.Entry entry;
+        final int times;
+        final Map<List<Decision>, Double> worlds = new LinkedHashMap<>();
+
+        Group(Value.Offers.Entry entry, int times) {
+            this.entry = entry;
+            this.times = times;
+        }
     }
 }

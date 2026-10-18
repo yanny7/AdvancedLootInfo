@@ -1,6 +1,7 @@
 package com.yanny.ali.plugin.server.bytecode;
 
 import com.yanny.aci.api.NumberExpr;
+import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Handle;
@@ -8,7 +9,9 @@ import org.objectweb.asm.Type;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 
 sealed interface Value {
     Unknown UNKNOWN = new Unknown(false, null, null, null);
@@ -92,6 +95,35 @@ sealed interface Value {
             copy.destination = destination;
             copy.decoration = decoration;
             return copy;
+        }
+    }
+
+    record Pick(List<Object> listings, Object pool, @Nullable Integer key) implements Value {
+    }
+
+    final class Draws implements Value {
+        final Object pool;
+        final List<Object> options;
+        int left;
+
+        Draws(Object pool, List<Object> options, int left) {
+            this.pool = pool;
+            this.options = options;
+            this.left = left;
+        }
+    }
+
+    final class Offers implements Value {
+        final List<Entry> entries = new ArrayList<>();
+        final Map<Object, Integer> picks = new IdentityHashMap<>();
+
+        sealed interface Entry {
+        }
+
+        record Listings(VillagerTrades.ItemListing[] listings, Value count, @Nullable Integer key) implements Entry {
+        }
+
+        record Single(Value offer) implements Entry {
         }
     }
 
