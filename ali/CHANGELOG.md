@@ -5,6 +5,7 @@
 - Trades no mod adds support for show their random prices and amounts as ranges instead of being unsupported
 - Fixed an error in another mod's trader, ingredient or loot modifier support taking down more than that one part, or the whole server start
 - Unsupported trading mods shows trades that can be auto-detected from the mod's code
+- Fixed missing trades and loot that other mods prepare only once the server has started
 
 ## [2.5.0]
 
