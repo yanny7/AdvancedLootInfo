@@ -3,11 +3,13 @@ package com.yanny.ali.plugin.server.bytecode;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.*;
+import org.objectweb.asm.tree.analysis.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -25,6 +27,7 @@ final class LambdaResolver {
     private static final Set<Class<?>> IN_PROGRESS = ConcurrentHashMap.newKeySet();
     private static final Map<Class<?>, String> REASONS = new ConcurrentHashMap<>();
     private static final Map<StubKey, StubResult> STUB_RESULTS = new ConcurrentHashMap<>();
+    private static final Map<Class<?>, List<Stored>> STORAGE = new ConcurrentHashMap<>();
 
     private LambdaResolver() {}
 
@@ -36,6 +39,7 @@ final class LambdaResolver {
         CACHE.clear();
         REASONS.clear();
         STUB_RESULTS.clear();
+        STORAGE.clear();
     }
 
     static String reason(Object lambda) {
@@ -90,8 +94,9 @@ final class LambdaResolver {
 
         for (MethodNode method : node.methods) {
             for (AbstractInsnNode insn : method.instructions) {
-                if (insn instanceof InvokeDynamicInsnNode indy && indy.bsm.getOwner().equals(LAMBDA_METAFACTORY) && indy.bsmArgs.length >= 3
-                        && indy.bsmArgs[1] instanceof Handle handle && interfaces.contains(Type.getReturnType(indy.desc).getInternalName())
+                Handle handle = lambdaHandle(insn);
+
+                if (handle != null && insn instanceof InvokeDynamicInsnNode indy && interfaces.contains(Type.getReturnType(indy.desc).getInternalName())
                         && capturedTypesMatch(Type.getArgumentTypes(indy.desc), fields) && !candidates.contains(handle)) {
                     candidates.add(handle);
                     instantiated.add(List.of(((Type) indy.bsmArgs[2]).getArgumentTypes()));
@@ -112,25 +117,197 @@ final class LambdaResolver {
             return Optional.empty();
         }
 
-        Handle identified = identify(lambda, owner, candidates, fields, instantiated.iterator().next());
+        Handle identified = fromStorage(lambda, owner, node, candidates);
+
+        if (identified == null) {
+            identified = identify(lambda, owner, candidates, fields, instantiated.iterator().next());
+        }
 
         return identified != null ? Optional.of(new Resolved(owner, identified, fields)) : Optional.empty();
     }
 
     @Nullable
+    private static Handle lambdaHandle(@Nullable AbstractInsnNode insn) {
+        if (insn instanceof InvokeDynamicInsnNode indy && indy.bsm.getOwner().equals(LAMBDA_METAFACTORY) && indy.bsmArgs.length >= 3
+                && indy.bsmArgs[1] instanceof Handle handle) {
+            return handle;
+        }
+
+        return null;
+    }
+
+    @Nullable
+    private static Handle fromStorage(Object lambda, Class<?> owner, ClassNode node, List<Handle> candidates) {
+        for (Stored stored : STORAGE.computeIfAbsent(owner, (o) -> storage(node))) {
+            if (candidates.contains(stored.handle()) && holds(owner, stored, lambda)) {
+                return stored.handle();
+            }
+        }
+
+        return null;
+    }
+
+    @NotNull
+    private static List<Stored> storage(ClassNode node) {
+        MethodNode clinit = Interpreter.findMethod(node, "<clinit>", "()V");
+
+        if (clinit == null) {
+            return List.of();
+        }
+
+        Frame<SourceValue>[] frames;
+
+        try {
+            frames = new Analyzer<>(new SourceInterpreter()).analyze(node.name, clinit);
+        } catch (AnalyzerException e) {
+            return List.of();
+        }
+
+        List<Stored> stored = new ArrayList<>();
+        Map<AbstractInsnNode, Map<Integer, Handle>> arrays = new HashMap<>();
+        Map<String, Integer> adds = new HashMap<>();
+        Set<String> shifted = new HashSet<>();
+
+        for (int i = 0; i < clinit.instructions.size(); i++) {
+            AbstractInsnNode insn = clinit.instructions.get(i);
+            Frame<SourceValue> frame = frames[i];
+
+            if (insn instanceof JumpInsnNode || insn instanceof TableSwitchInsnNode || insn instanceof LookupSwitchInsnNode) {
+                break;
+            }
+            if (frame == null) {
+                continue;
+            }
+
+            if (insn instanceof FieldInsnNode field && field.getOpcode() == Opcodes.PUTSTATIC && field.owner.equals(node.name)) {
+                AbstractInsnNode value = origin(top(frame, 0), frames, clinit);
+                Handle handle = lambdaHandle(value);
+
+                if (handle != null) {
+                    stored.add(new Stored(field.name, -1, handle));
+                } else if (arrays.containsKey(value)) {
+                    arrays.get(value).forEach((index, element) -> stored.add(new Stored(field.name, index, element)));
+                }
+            } else if (insn.getOpcode() == Opcodes.AASTORE) {
+                AbstractInsnNode array = origin(top(frame, 2), frames, clinit);
+                Integer index = constant(origin(top(frame, 1), frames, clinit));
+                Handle handle = lambdaHandle(origin(top(frame, 0), frames, clinit));
+
+                if (array != null && index != null && handle != null) {
+                    arrays.computeIfAbsent(array, (a) -> new HashMap<>()).put(index, handle);
+                }
+            } else if (insn instanceof MethodInsnNode call) {
+                int argCount = Type.getArgumentTypes(call.desc).length;
+
+                for (int arg = 0; arg < argCount; arg++) {
+                    String passed = ownStatic(origin(top(frame, arg), frames, clinit), node);
+
+                    if (passed != null) {
+                        shifted.add(passed);
+                    }
+                }
+
+                String list = call.getOpcode() != Opcodes.INVOKESTATIC ? ownStatic(origin(top(frame, argCount), frames, clinit), node) : null;
+
+                if (list != null) {
+                    if (call.name.equals("add") && call.desc.equals("(Ljava/lang/Object;)Z")) {
+                        int index = adds.merge(list, 1, Integer::sum) - 1;
+                        Handle handle = lambdaHandle(origin(top(frame, 0), frames, clinit));
+
+                        if (handle != null) {
+                            stored.add(new Stored(list, index, handle));
+                        }
+                    } else {
+                        shifted.add(list);
+                    }
+                }
+            }
+        }
+
+        stored.removeIf((s) -> s.index() >= 0 && shifted.contains(s.field()));
+        return stored;
+    }
+
+    private static SourceValue top(Frame<SourceValue> frame, int depth) {
+        return frame.getStack(frame.getStackSize() - 1 - depth);
+    }
+
+    @Nullable
+    private static AbstractInsnNode origin(SourceValue value, Frame<SourceValue>[] frames, MethodNode method) {
+        if (value.insns.size() != 1) {
+            return null;
+        }
+
+        AbstractInsnNode insn = value.insns.iterator().next();
+
+        if (insn.getOpcode() == Opcodes.DUP) {
+            Frame<SourceValue> frame = frames[method.instructions.indexOf(insn)];
+
+            return frame != null ? origin(top(frame, 0), frames, method) : null;
+        }
+
+        return insn;
+    }
+
+    @Nullable
+    private static String ownStatic(@Nullable AbstractInsnNode insn, ClassNode node) {
+        if (insn instanceof FieldInsnNode field && field.getOpcode() == Opcodes.GETSTATIC && field.owner.equals(node.name)) {
+            return field.name;
+        }
+
+        return null;
+    }
+
+    @Nullable
+    private static Integer constant(@Nullable AbstractInsnNode insn) {
+        if (insn == null) {
+            return null;
+        }
+        if (insn.getOpcode() >= Opcodes.ICONST_0 && insn.getOpcode() <= Opcodes.ICONST_5) {
+            return insn.getOpcode() - Opcodes.ICONST_0;
+        }
+        if (insn instanceof IntInsnNode push && insn.getOpcode() != Opcodes.NEWARRAY) {
+            return push.operand;
+        }
+
+        return insn instanceof LdcInsnNode ldc && ldc.cst instanceof Integer value ? value : null;
+    }
+
+    private static boolean holds(Class<?> owner, Stored stored, Object lambda) {
+        try {
+            Object value = Interpreter.field(owner, stored.field()).get(null);
+
+            if (stored.index() < 0) {
+                return value == lambda;
+            }
+            if (value instanceof List<?> list) {
+                return stored.index() < list.size() && list.get(stored.index()) == lambda;
+            }
+
+            return value instanceof Object[] array && stored.index() < array.length && array[stored.index()] == lambda;
+        } catch (Throwable e) {
+            return false;
+        }
+    }
+
+    @Nullable
     private static Handle identify(Object lambda, Class<?> owner, List<Handle> candidates, List<Field> fields, List<Type> params) {
         Method sam = samMethod(lambda.getClass());
-        List<Field> statics = staticRandoms(owner, candidates);
 
-        if (sam == null || statics == null) {
-            REASONS.put(lambda.getClass(), sam == null ? "no SAM method" : "unswappable static random in " + owner.getName());
+        if (sam == null) {
+            REASONS.put(lambda.getClass(), "no SAM method");
             return null;
         }
 
         List<Object> captured = captured(lambda, fields);
-        List<Handle> matching = candidates;
+        List<Handle> matching = candidates.stream().filter((c) -> !readsStaticRandom(owner, c)).toList();
 
-        for (int pick = 0; pick < STUB_PICKS && matching.size() > 1; pick++) {
+        if (matching.isEmpty()) {
+            REASONS.put(lambda.getClass(), "every candidate reads a static random in " + owner.getName());
+            return null;
+        }
+
+        for (int pick = 0; pick < STUB_PICKS && (pick == 0 || matching.size() > 1); pick++) {
             Object[] stubArgs = new Object[params.size()];
             List<Value> stubValues = new ArrayList<>();
 
@@ -153,13 +330,13 @@ final class LambdaResolver {
                 }
             }
 
-            Object first = runReal(lambda, sam, stubArgs, statics, pick);
+            Object first = runReal(lambda, sam, stubArgs);
 
             if (first instanceof Failed failed) {
                 return fromStackTrace(failed.cause(), matching);
             }
 
-            Object second = runReal(lambda, sam, stubArgs, statics, pick);
+            Object second = runReal(lambda, sam, stubArgs);
 
             if (second instanceof Failed || !sameReal(first, second)) {
                 if (!(second instanceof Failed)) {
@@ -210,6 +387,7 @@ final class LambdaResolver {
         return matching.size() == 1 ? matching.get(0) : null;
     }
 
+    @NotNull
     private static StubResult interpretStub(Handle candidate, List<Object> captured, List<Value> stubValues, ClassLoader loader, int pick) {
         try {
             Interpreter interpreter = new Interpreter(Interpreter.Mode.STUB, pick);
@@ -266,6 +444,7 @@ final class LambdaResolver {
         return true;
     }
 
+    @NotNull
     private static List<Object> code(MethodNode method) {
         Map<LabelNode, Integer> labels = new HashMap<>();
         List<Object> code = new ArrayList<>();
@@ -311,35 +490,20 @@ final class LambdaResolver {
         return code;
     }
 
-    private static Object runReal(Object lambda, Method sam, Object[] args, List<Field> statics, int pick) {
-        Map<Field, Object> previous = new HashMap<>();
-
+    private static Object runReal(Object lambda, Method sam, Object[] args) {
         try {
-            for (Field field : statics) {
-                previous.put(field, field.get(null));
-                field.set(null, RandomSource.class.isAssignableFrom(field.getType()) ? new StubRandom(pick) : new StubRandom.Legacy(pick));
-            }
-
             return sam.invoke(lambda, args);
         } catch (Throwable e) {
             Throwable cause = e instanceof InvocationTargetException target && target.getCause() != null ? target.getCause() : e;
 
             REASONS.put(lambda.getClass(), "real run threw " + cause);
             return new Failed(cause);
-        } finally {
-            previous.forEach((field, value) -> {
-                try {
-                    field.set(null, value);
-                } catch (Throwable ignored) {}
-            });
         }
     }
 
-    @Nullable
-    private static List<Field> staticRandoms(Class<?> owner, List<Handle> candidates) {
-        List<Field> fields = new ArrayList<>();
+    private static boolean readsStaticRandom(Class<?> owner, Handle candidate) {
         Set<String> visited = new HashSet<>();
-        Deque<Handle> queue = new ArrayDeque<>(candidates);
+        Deque<Handle> queue = new ArrayDeque<>(List.of(candidate));
         ClassLoader loader = owner.getClassLoader();
 
         while (!queue.isEmpty() && visited.size() < MAX_SCANNED_METHODS) {
@@ -370,19 +534,7 @@ final class LambdaResolver {
 
             for (AbstractInsnNode insn : method.instructions) {
                 if (insn instanceof FieldInsnNode field && field.getOpcode() == Opcodes.GETSTATIC && isRandom(Type.getType(field.desc), loader)) {
-                    try {
-                        Field reflected = Interpreter.field(Interpreter.load(field.owner, loader), field.name);
-
-                        boolean swappable = !Modifier.isFinal(reflected.getModifiers()) && reflected.getType().isAssignableFrom(
-                                RandomSource.class.isAssignableFrom(reflected.getType()) ? StubRandom.class : StubRandom.Legacy.class);
-
-                        if (!swappable && reflected.getDeclaringClass() == owner) {
-                            return null;
-                        }
-                        if (swappable && !fields.contains(reflected)) {
-                            fields.add(reflected);
-                        }
-                    } catch (Interpreter.Fail ignored) {}
+                    return true;
                 } else if (insn instanceof MethodInsnNode call) {
                     queue.add(new Handle(Opcodes.H_INVOKESTATIC, call.owner, call.name, call.desc, call.itf));
                 } else if (insn instanceof InvokeDynamicInsnNode indy) {
@@ -395,7 +547,7 @@ final class LambdaResolver {
             }
         }
 
-        return fields;
+        return false;
     }
 
     private static boolean isPlatform(String internalName) {
@@ -431,6 +583,7 @@ final class LambdaResolver {
         return null;
     }
 
+    @NotNull
     private static List<Field> capturedFields(Class<?> type) {
         List<Field> fields = new ArrayList<>();
 
@@ -469,6 +622,7 @@ final class LambdaResolver {
         return true;
     }
 
+    @NotNull
     private static List<Object> captured(Object lambda, List<Field> fields) {
         List<Object> values = new ArrayList<>();
 
@@ -570,5 +724,8 @@ final class LambdaResolver {
     }
 
     private record Resolved(Class<?> owner, Handle impl, List<Field> fields) {
+    }
+
+    private record Stored(String field, int index, Handle handle) {
     }
 }
