@@ -31,7 +31,7 @@ public class TradeLevelNode extends ListNode {
         this.selectionCount = NumberExpr.min(levelInfo.offers(), NumberExpr.constant(itemListings.length));
         this.chance = levelInfo.chance();
 
-        for (VillagerTrades.ItemListing itemListing : itemListings) {
+        for (VillagerTrades.ItemListing itemListing : TradeUtils.distinctListings(itemListings)) {
             if (itemListing != null) {
                 addChildren(utils.getItemListing(utils, itemListing, TooltipNode.empty()));
             }

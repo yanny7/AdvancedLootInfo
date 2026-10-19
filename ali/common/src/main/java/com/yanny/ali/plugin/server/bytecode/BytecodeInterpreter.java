@@ -176,7 +176,7 @@ public final class BytecodeInterpreter {
 
                 for (Value.Offers.Entry entry : ((Value.Offers) Objects.requireNonNull(path.result())).entries) {
                     int level = entry instanceof Value.Offers.Listings listings && listings.key() != null ? listings.key() : split.level();
-                    List<Object> identity = entry instanceof Value.Offers.Listings listings ? List.of(Arrays.asList(listings.listings()), listings.count(), level)
+                    List<Object> identity = entry instanceof Value.Offers.Listings listings ? List.of(Arrays.stream(listings.listings()).map(TradeUtils::listingKey).toList(), listings.count(), level)
                             : List.of(String.valueOf(describeOffer(((Value.Offers.Single) entry).offer())), level);
 
                     if (entries.putIfAbsent(identity, entry) != null && entry instanceof Value.Offers.Listings) {
@@ -251,7 +251,7 @@ public final class BytecodeInterpreter {
     private static TradeLevel incomplete(@Nullable TradeLevel level, String merchant) {
         if (level instanceof TradeLevel.OfListings listings) {
             return new TradeLevel.OfTrades(listings.levelInfo(), (u) -> {
-                List<IDataNode> nodes = new ArrayList<>(Arrays.stream(listings.listings()).filter(Objects::nonNull).map((l) -> u.getItemListing(u, l, TooltipNode.empty())).toList());
+                List<IDataNode> nodes = new ArrayList<>(Arrays.stream(TradeUtils.distinctListings(listings.listings())).filter(Objects::nonNull).map((l) -> u.getItemListing(u, l, TooltipNode.empty())).toList());
 
                 nodes.add(incompleteNode());
                 return nodes;
@@ -335,7 +335,7 @@ public final class BytecodeInterpreter {
                 TooltipNode condition = conditions.get(i).tooltip(u);
 
                 if (entries.get(i) instanceof Value.Offers.Listings listings) {
-                    List<IDataNode> trades = Arrays.stream(listings.listings()).filter(Objects::nonNull).map((l) -> u.getItemListing(u, l, condition)).toList();
+                    List<IDataNode> trades = Arrays.stream(TradeUtils.distinctListings(listings.listings())).filter(Objects::nonNull).map((l) -> u.getItemListing(u, l, condition)).toList();
 
                     if (entries.size() == 1 || counts.get(i).bounds().lo() >= trades.size()) {
                         nodes.addAll(trades);

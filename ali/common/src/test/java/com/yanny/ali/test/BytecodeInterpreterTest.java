@@ -576,6 +576,29 @@ public class BytecodeInterpreterTest {
     }
 
     @Test
+    public void testDistinctListings() {
+        VillagerTrades.ItemListing apple = new PlainListing(Items.APPLE);
+        VillagerTrades.ItemListing[] distinct = TradeUtils.distinctListings(new VillagerTrades.ItemListing[]{apple, new PlainListing(Items.APPLE), new PlainListing(Items.BREAD)});
+
+        Assertions.assertEquals(2, distinct.length);
+        Assertions.assertSame(apple, distinct[0]);
+        Assertions.assertEquals(Items.BREAD, ((PlainListing) distinct[1]).item);
+    }
+
+    @Test
+    public void testTraderBuildingEqualListingsOnEveryPath() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(RebuildingTrader.class);
+        List<IDataNode> trades = ((TradeLevel.OfTrades) levels.get(1)).trades().apply(UTILS);
+
+        Assertions.assertEquals(2, trades.size());
+        assertTooltip(trades.get(0).getTooltip(), List.of(
+                "Uses: 12",
+                "XP: 5",
+                "Price Multiplier: 0.05"
+        ));
+    }
+
+    @Test
     public void testTraderWithoutTrades() {
         Int2ObjectMap<TradeLevel> levels = computedLevels(NoTradesTrader.class);
 
@@ -962,6 +985,19 @@ public class BytecodeInterpreterTest {
         return trades.levels();
     }
 
+    private static final class PlainListing implements VillagerTrades.ItemListing {
+        private final Item item;
+
+        private PlainListing(Item item) {
+            this.item = item;
+        }
+
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            return offerFor(item);
+        }
+    }
+
     private record OfferListing(Item item) implements VillagerTrades.ItemListing {
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
@@ -1330,6 +1366,23 @@ public class BytecodeInterpreterTest {
         @Override
         protected void updateTrades() {
             getOffers().add(new MerchantOffer(new ItemStack(Items.EMERALD, (int) random.nextLong()), new ItemStack(Items.APPLE), 12, 5, 0.05F));
+        }
+    }
+
+    private abstract static class RebuildingTrader extends AbstractVillager {
+        private RebuildingTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void updateTrades() {
+            VillagerTrades.ItemListing apple = new PlainListing(Items.APPLE);
+
+            getOffers().add(apple.getOffer(this, random));
+
+            if (!getMainHandItem().isEmpty()) {
+                getOffers().add(new PlainListing(Items.BREAD).getOffer(this, random));
+            }
         }
     }
 

@@ -18,11 +18,102 @@ import net.minecraft.world.item.SuspiciousStewItem;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.*;
 
 public class TradeUtils {
+    private static final int MAX_KEY_DEPTH = 4;
+
+    public static VillagerTrades.ItemListing[] distinctListings(VillagerTrades.ItemListing[] listings) {
+        Set<Object> seen = new HashSet<>();
+        List<VillagerTrades.ItemListing> distinct = new ArrayList<>(listings.length);
+
+        for (VillagerTrades.ItemListing listing : listings) {
+            if (listing == null || seen.add(listingKey(listing))) {
+                distinct.add(listing);
+            }
+        }
+
+        return distinct.size() == listings.length ? listings : distinct.toArray(new VillagerTrades.ItemListing[0]);
+    }
+
+    public static Object listingKey(@Nullable VillagerTrades.ItemListing listing) {
+        return structuralKey(listing, new IdentityHashMap<>(), 0);
+    }
+
+    @Nullable
+    private static Object structuralKey(@Nullable Object value, Map<Object, Boolean> visiting, int depth) {
+        if (value == null) {
+            return null;
+        }
+        if (value instanceof ItemStack stack) {
+            return Arrays.asList(ItemStack.class, stack.getItem(), stack.getCount(), stack.getTag());
+        }
+
+        Class<?> type = value.getClass();
+
+        if (type.isArray()) {
+            List<Object> elements = new ArrayList<>();
+
+            elements.add(type);
+
+            for (int i = 0; i < Array.getLength(value); i++) {
+                elements.add(structuralKey(Array.get(value, i), visiting, depth + 1));
+            }
+
+            return elements;
+        }
+        if (value instanceof List<?> list) {
+            List<Object> elements = new ArrayList<>();
+
+            elements.add(List.class);
+            list.forEach((e) -> elements.add(structuralKey(e, visiting, depth + 1)));
+            return elements;
+        }
+        if (depth >= MAX_KEY_DEPTH || visiting.containsKey(value) || !isStructural(type)) {
+            return value;
+        }
+
+        List<Object> fields = new ArrayList<>();
+
+        fields.add(type);
+        visiting.put(value, true);
+
+        try {
+            for (Class<?> c = type; c != null && c != Object.class; c = c.getSuperclass()) {
+                for (Field field : c.getDeclaredFields()) {
+                    if (!Modifier.isStatic(field.getModifiers())) {
+                        field.setAccessible(true);
+                        fields.add(structuralKey(field.get(value), visiting, depth + 1));
+                    }
+                }
+            }
+        } catch (Throwable e) {
+            return value;
+        } finally {
+            visiting.remove(value);
+        }
+
+        return fields;
+    }
+
+    private static boolean isStructural(Class<?> type) {
+        String name = type.getName();
+
+        if (type.isEnum() || name.startsWith("java.") || name.startsWith("net.minecraft.") || name.startsWith("com.mojang.")) {
+            return false;
+        }
+
+        try {
+            return type.isRecord() || type.getMethod("equals", Object.class).getDeclaringClass() == Object.class;
+        } catch (NoSuchMethodException e) {
+            return false;
+        }
+    }
     @NotNull
     public static IDataNode getSlotNode(IServerUtils utils, LootPoolEntryContainer entry) {
         List<TooltipNode> conditions = new ArrayList<>();
