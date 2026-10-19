@@ -263,7 +263,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
-    public void registerTrades(ResourceLocation traderId, @Nullable EntityType<?> entityType, Supplier<Int2ObjectMap<VillagerTrades.ItemListing[]>> itemListings, IntFunction<TradeLevelInfo> levelInfo) {
+    public void registerTrades(ResourceLocation traderId, EntityType<?> entityType, Supplier<Int2ObjectMap<VillagerTrades.ItemListing[]>> itemListings, IntFunction<TradeLevelInfo> levelInfo) {
         trades.put(traderId, new Trades(entityType, itemListings, levelInfo));
     }
 
@@ -459,14 +459,14 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         return result;
     }
 
-    @NotNull
     public void logBytecodeStatistics() {
         if (computedItemListings + uncomputedItemListings > 0) {
-            LOGGER.info("Working out {} trade item listings from their bytecode took {}ms, {} of them could not be worked out",
+            LOGGER.info("Auto-detected {} trade item listings from their bytecode took {}ms, {} of them could not be auto-detected",
                     computedItemListings + uncomputedItemListings, bytecodeNanos / 1_000_000, uncomputedItemListings);
         }
     }
 
+    @NotNull
     @Override
     public <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, TooltipNode condition) {
         return tradeItemListings.get(entry.getClass())
@@ -719,7 +719,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         return String.valueOf(BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE.getKey(numberProvider.getType()));
     }
 
-    public record Trades(@Nullable EntityType<?> entityType, Supplier<Int2ObjectMap<VillagerTrades.ItemListing[]>> itemListings, IntFunction<TradeLevelInfo> levelInfo) {}
+    public record Trades(EntityType<?> entityType, Supplier<Int2ObjectMap<VillagerTrades.ItemListing[]>> itemListings, IntFunction<TradeLevelInfo> levelInfo) {}
 
     private static <T> void unwrap(IServerUtils utils, T value, ManagedRegistry<Class<?>, BiFunction<IServerUtils, T, List<T>>> unwrappers, Set<Object> visiting, List<T> result) {
         // predicate and item modifier references can form cycles, vanilla only logs them

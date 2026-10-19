@@ -474,14 +474,8 @@ public class GenericUtils {
     public static TraderHeader prepareTraderHeader(TradeLootType type, int maxWidth) {
         Font font = Minecraft.getInstance().font;
         EntityType<?> entityType = type.entityType();
-        SpawnEggItem spawnEgg = null;
-        Component titleTooltip = null;
-
-        if (entityType != null) {
-            spawnEgg = Services.getPlatform().getSpawnEggItem(entityType);
-            titleTooltip = Component.literal(BuiltInRegistries.ENTITY_TYPE.getKey(entityType).toString());
-        }
-
+        SpawnEggItem spawnEgg = Services.getPlatform().getSpawnEggItem(entityType);
+        Component titleTooltip = Component.literal(BuiltInRegistries.ENTITY_TYPE.getKey(entityType).toString());
         Rect spawnEggRect = new Rect(0, 0, SLOT_SIZE, SLOT_SIZE);
         int titleX = 0;
         int titleY = 0;
@@ -533,13 +527,13 @@ public class GenericUtils {
 
     // every villager profession, modded ones included, is named by a key under the vanilla villager prefix
     @NotNull
-    private static String getTraderTranslationKey(ResourceLocation location, @Nullable EntityType<?> entityType) {
+    private static String getTraderTranslationKey(ResourceLocation location, EntityType<?> entityType) {
         if (BuiltInRegistries.VILLAGER_PROFESSION.containsKey(location)) {
             return "entity.minecraft.villager." + location.getPath();
         }
 
         String key = "entity." + location.getNamespace() + "." + location.getPath();
-        return entityType != null && !Language.getInstance().has(key) ? entityType.getDescriptionId() : key;
+        return Language.getInstance().has(key) ? key : entityType.getDescriptionId();
     }
 
     // split table path and make uppercased text

@@ -38,12 +38,10 @@ public class ReiTradeDisplay extends ReiBaseDisplay {
         ingredients.addAll(entry.pois().stream().map(EntryIngredients::of).toList());
         ingredients.addAll(entry.accepts().stream().map(EntryIngredients::of).toList());
 
-        if (entry.entityType() != null) {
-            SpawnEggItem spawnEgg = Services.getPlatform().getSpawnEggItem(entry.entityType());
+        SpawnEggItem spawnEgg = Services.getPlatform().getSpawnEggItem(entry.entityType());
 
-            if (spawnEgg != null) {
-                ingredients.add(EntryIngredients.of(spawnEgg));
-            }
+        if (spawnEgg != null) {
+            ingredients.add(EntryIngredients.of(spawnEgg));
         }
 
         return ingredients;

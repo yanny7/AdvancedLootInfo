@@ -8,12 +8,7 @@ import com.yanny.aci.spawn.SpawnInfo;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
-import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.IItemNode;
-import com.yanny.ali.api.ILootModifier;
-import com.yanny.ali.api.IOperation;
-import com.yanny.ali.api.ListNode;
-import com.yanny.ali.api.TradeLevel;
+import com.yanny.ali.api.*;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.AliServerRegistry;
 import com.yanny.ali.manager.FakeLootDataManager;
@@ -22,19 +17,19 @@ import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.common.EntityLootTableResolver;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.TraderDetector;
-import com.yanny.ali.plugin.common.trades.TradeNode;
-import com.yanny.ali.plugin.server.bytecode.BytecodeInterpreter;
 import com.yanny.ali.plugin.common.nodes.EntityLootTableNode;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
+import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.ali.plugin.glm.LootPage;
 import com.yanny.ali.plugin.glm.Match;
 import com.yanny.ali.plugin.glm.PageMatch;
+import com.yanny.ali.plugin.server.bytecode.BytecodeInterpreter;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -585,11 +580,11 @@ public abstract class AbstractServer {
         return node;
     }
 
+    @NotNull
     private static Map<ResourceLocation, ComputedTrader> computeUnregisteredTraders(AliServerRegistry serverRegistry, AliConfig config) {
         long startTime = System.currentTimeMillis();
         Set<EntityType<?>> registered = serverRegistry.getTrades().values().stream()
                 .map(AliServerRegistry.Trades::entityType)
-                .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
         TraderDetector detector = new TraderDetector(serverRegistry, serverRegistry.getServerLevel());
         Map<ResourceLocation, ComputedTrader> computed = new LinkedHashMap<>();
