@@ -296,7 +296,7 @@ sealed interface PathCondition {
     record UnknownPredicate() implements PathCondition {
         @Override
         public TooltipNode tooltip(IServerUtils utils) {
-            return TooltipBuilder.keyOnly(Lang.Description.UNKNOWN_PREDICATE).build();
+            return TooltipBuilder.error(TooltipBuilder.translate(Lang.Description.UNKNOWN_PREDICATE.singular())).build();
         }
 
         @Override

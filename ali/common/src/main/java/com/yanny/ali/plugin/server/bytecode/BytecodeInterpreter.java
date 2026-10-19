@@ -19,7 +19,9 @@ import com.yanny.ali.plugin.common.trades.TradeGroupNode;
 import com.yanny.ali.plugin.common.trades.TradeUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
@@ -39,6 +41,7 @@ public final class BytecodeInterpreter {
     private static final Set<String> FAILED = ConcurrentHashMap.newKeySet();
     private static final boolean LOG_TRADES = Boolean.getBoolean("ali.debug.trades");
     private static final int MAX_PATHS = 32;
+    private static final int MAX_RESTARTS = 8;
 
     private BytecodeInterpreter() {}
 
@@ -48,55 +51,67 @@ public final class BytecodeInterpreter {
             return null;
         }
 
-        String reason;
+        String name = ManagedRegistry.classKeyName(listing.getClass());
+        String reason = null;
 
         try {
-            List<Path> paths = paths((i) -> i.call(listing, VillagerTrades.ItemListing.class, RuntimeNames.GET_OFFER.name(), RuntimeNames.GET_OFFER.desc(),
-                    List.of(Value.Unknown.of(Type.getType(Entity.class), Origin.TRADER), new Value.Rng(false))), false);
+            List<Path> paths = paths(utils, (i) -> i.call(listing, VillagerTrades.ItemListing.class, RuntimeNames.GET_OFFER.name(), RuntimeNames.GET_OFFER.desc(),
+                    List.of(Value.Unknown.of(Type.getType(Entity.class), Origin.TRADER), new Value.Rng(false))));
             Map<String, List<Path>> offers = new LinkedHashMap<>();
 
             for (Path path : paths) {
                 String text = describeOffer(path.result());
 
-                if (text != null) {
+                if (path.failure() != null) {
+                    reason = reason != null ? reason : path.failure();
+                } else if (text != null) {
                     offers.computeIfAbsent(text, (t) -> new ArrayList<>()).add(path);
                 }
             }
 
             if (!offers.isEmpty()) {
                 List<IDataNode> nodes = new ArrayList<>();
+                TooltipNode outer = reason == null ? condition : withIncomplete(condition);
 
                 for (Map.Entry<String, List<Path>> entry : offers.entrySet()) {
                     PathCondition when = entry.getValue().size() == paths.size() ? PathCondition.ALWAYS
                             : PathCondition.of(entry.getValue().stream().map(Path::decisions).toList());
 
                     if (LOG_TRADES) {
-                        LOGGER.info("Trade item listing {}: {}{}", ManagedRegistry.classKeyName(listing.getClass()), entry.getKey(),
-                                when == PathCondition.ALWAYS ? "" : " if " + when.text());
+                        LOGGER.info("Trade item listing {}: {}{}", name, entry.getKey(), when == PathCondition.ALWAYS ? "" : " if " + when.text());
                     }
 
-                    TooltipNode tooltip = offers.size() > 1 ? when.tooltip(utils) : combine(condition, when.tooltip(utils), when);
+                    TooltipNode tooltip = offers.size() > 1 ? when.tooltip(utils) : combine(outer, when.tooltip(utils), when);
 
                     nodes.add(node(utils, entry.getValue().get(0).result(), tooltip));
                 }
 
-                return nodes.size() == 1 ? nodes.get(0) : new ConditionalTradesNode(utils, nodes, condition);
+                if (reason != null && utils.getConfiguration().logMoreStatistics && FAILED.add(name + reason)) {
+                    LOGGER.info("Computed only some variants of trade item listing {} from its bytecode: {}", name, reason);
+                }
+
+                return nodes.size() == 1 ? nodes.get(0) : new ConditionalTradesNode(utils, nodes, outer);
             }
 
-            reason = "no offer returned (" + paths.get(paths.size() - 1).result() + ")";
+            reason = reason != null ? reason : "no offer returned (" + paths.get(paths.size() - 1).result() + ")";
         } catch (Interpreter.Fail fail) {
             reason = fail.describe();
         } catch (Throwable e) {
             reason = e.toString();
         }
 
-        String name = ManagedRegistry.classKeyName(listing.getClass());
-
         if (utils.getConfiguration().logMoreStatistics && FAILED.add(name + reason)) {
             LOGGER.info("Could not work out trade item listing {} from its bytecode: {}", name, reason);
         }
 
         return null;
+    }
+
+    private static TooltipNode withIncomplete(TooltipNode condition) {
+        return TooltipBuilder.array((b) -> {
+            b.add(condition);
+            b.add(TooltipBuilder.error(TooltipBuilder.translate(Lang.Description.INCOMPLETE_TRADE.singular())).build());
+        }).build();
     }
 
     private static IDataNode node(IServerUtils utils, @Nullable Value result, TooltipNode condition) {
@@ -133,10 +148,10 @@ public final class BytecodeInterpreter {
         String reason = null;
 
         try {
-            List<Path> paths = paths((i) -> i.trades(merchant), true);
+            List<Path> paths = paths(utils, (i) -> i.trades(merchant));
 
             if (productive(paths).isEmpty() && paths.stream().allMatch((p) -> p.failure() == null) && Interpreter.writesOffers(merchant)) {
-                paths = paths((i) -> i.writtenTrades(merchant), true);
+                paths = paths(utils, (i) -> i.writtenTrades(merchant));
             }
 
             List<Path> productive = new ArrayList<>();
@@ -270,7 +285,7 @@ public final class BytecodeInterpreter {
     }
 
     private static IDataNode incompleteNode() {
-        return new MissingNode(TooltipBuilder.keyOnly(Lang.Description.INCOMPLETE_TRADES).build());
+        return new MissingNode(TooltipBuilder.error(TooltipBuilder.translate(Lang.Description.INCOMPLETE_TRADES.singular())).build());
     }
 
     @Nullable
@@ -364,7 +379,11 @@ public final class BytecodeInterpreter {
         throw new Interpreter.Fail("number of offers");
     }
 
-    private static List<Path> paths(Function<Interpreter, Value> run, boolean partial) {
+    private static List<Path> paths(IServerUtils utils, Function<Interpreter, Value> run) {
+        ServerLevel level = utils.getServerLevel();
+        RegistryAccess registries = level != null ? level.registryAccess() : null;
+        Set<String> opaque = new HashSet<>();
+        int restarts = 0;
         List<Path> results = new ArrayList<>();
         Deque<List<Boolean>> scripts = new ArrayDeque<>();
 
@@ -372,27 +391,25 @@ public final class BytecodeInterpreter {
 
         while (!scripts.isEmpty()) {
             if (results.size() >= MAX_PATHS) {
-                if (!partial) {
-                    throw new Interpreter.Fail("too many branches");
-                }
-
                 results.add(new Path(null, List.of(), "too many branches"));
                 break;
             }
 
             List<Boolean> script = scripts.poll();
-            Interpreter interpreter = new Interpreter(Interpreter.Mode.SYMBOLIC, 0, script);
+            Interpreter interpreter = new Interpreter(Interpreter.Mode.SYMBOLIC, 0, script, registries, opaque);
             Value result = null;
             String failure = null;
 
             try {
                 result = run.apply(interpreter);
             } catch (Interpreter.Fail fail) {
-                if (!partial) {
-                    throw fail;
-                }
-
                 failure = fail.describe();
+            }
+            if (interpreter.retry() && ++restarts < MAX_RESTARTS) {
+                results.clear();
+                scripts.clear();
+                scripts.add(List.of());
+                continue;
             }
 
             List<Boolean> taken = interpreter.decisions().stream().map(Decision::holds).toList();

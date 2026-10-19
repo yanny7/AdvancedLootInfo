@@ -339,6 +339,8 @@ public final class Lang {
         RANDOM_TRADE_SELECTION("random_trade_selection", "Randomly Selects %s Of These Trades"),
         REPEATED_TRADE("repeated_trade", "Offered %s Times"),
         INCOMPLETE_TRADES("incomplete_trades", "Unable to auto-detect some custom trades"),
+        INCOMPLETE_TRADE("incomplete_trade", "Unable to auto-detect some variants of this trade"),
+        ROLLED_TRADE("rolled_trade", "Unable to auto-detect this trade, shows one random offer"),
         UNKNOWN_TRADES("unknown_trades", "Unable to auto-detect custom trades"),
         RANDOM_PROPERTIES("random_properties", "Random properties"),
         RANDOM_CHANCE("random_chance", "Random chance"),

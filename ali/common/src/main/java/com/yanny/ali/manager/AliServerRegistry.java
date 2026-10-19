@@ -507,7 +507,10 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
                     LOGGER.info("Using MerchantOffer fallback for trade item listing {}, reported values can be inaccurate", name);
                 }
 
-                return TradeUtils.getNode(utils, offer, condition);
+                return TradeUtils.getNode(utils, offer, TooltipBuilder.array((b) -> {
+                    b.add(condition);
+                    b.add(TooltipBuilder.error(TooltipBuilder.translate(Lang.Description.ROLLED_TRADE.singular())).build());
+                }).build());
             }
         } catch (Throwable ignored) {}
 
@@ -619,7 +622,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         TradeNode node = new TradeNode(this, entityType, guardedLevels(levels));
 
         if (incomplete && node.nodes().isEmpty()) {
-            node.addChildren(new MissingNode(TooltipBuilder.keyOnly(Lang.Description.UNKNOWN_TRADES).build()));
+            node.addChildren(new MissingNode(TooltipBuilder.error(TooltipBuilder.translate(Lang.Description.UNKNOWN_TRADES.singular())).build()));
         }
 
         return node;

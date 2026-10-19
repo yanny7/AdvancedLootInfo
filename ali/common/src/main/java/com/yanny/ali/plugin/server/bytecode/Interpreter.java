@@ -3,6 +3,7 @@ package com.yanny.ali.plugin.server.bytecode;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberFunctions;
 import com.yanny.aci.api.NumberInterval;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
@@ -35,6 +36,7 @@ final class Interpreter implements Opcodes {
     private static final String CONSTRUCTOR = "<init>";
     private static final String ITEM_STACK = Type.getInternalName(ItemStack.class);
     private static final String MERCHANT_OFFER = Type.getInternalName(MerchantOffer.class);
+    private static final Set<String> TRADE_TYPES = Set.of(ITEM_STACK, MERCHANT_OFFER, Type.getInternalName(MerchantOffers.class));
     private static final String LAMBDA_METAFACTORY = "java/lang/invoke/LambdaMetafactory";
     private static final String STRING_CONCAT_FACTORY = "java/lang/invoke/StringConcatFactory";
     private static final Value.Known NULL = new Value.Known(null);
@@ -73,6 +75,10 @@ final class Interpreter implements Opcodes {
     private Value.Offers merchantOffers;
     private final Map<Object, Integer> listingKeys = new IdentityHashMap<>();
     private final Map<String, Value> merchantFields = new HashMap<>();
+    private final Map<String, Value> statics = new HashMap<>();
+    private final Set<Object> tainted = Collections.newSetFromMap(new IdentityHashMap<>());
+    private final Map<Object, Value.Stack> stackParts = new IdentityHashMap<>();
+    private final Map<String, Integer> heavyWorldCalls = new HashMap<>();
     private final Map<Object, Integer> removed = new IdentityHashMap<>();
     private final Map<Object, int[]> randomSets = new IdentityHashMap<>();
     private final Map<Object, Value.Draws> shuffled = new IdentityHashMap<>();
@@ -81,15 +87,21 @@ final class Interpreter implements Opcodes {
     private final Set<Object> pools = Collections.newSetFromMap(new IdentityHashMap<>());
     private final Map<NumberExpr, Drawn> drawn = new IdentityHashMap<>();
     private boolean ownGetOffers;
+    @Nullable
+    private final RegistryAccess registries;
+    private final Set<String> opaque;
+    private boolean retry;
 
     Interpreter(Mode mode, int pick) {
-        this(mode, pick, null);
+        this(mode, pick, null, null, new HashSet<>());
     }
 
-    Interpreter(Mode mode, int pick, @Nullable List<Boolean> script) {
+    Interpreter(Mode mode, int pick, @Nullable List<Boolean> script, @Nullable RegistryAccess registries, Set<String> opaque) {
         this.mode = mode;
         this.pick = pick;
         this.script = script;
+        this.registries = registries;
+        this.opaque = opaque;
     }
 
     List<Decision> decisions() {
@@ -113,6 +125,8 @@ final class Interpreter implements Opcodes {
         }
 
         if (decisions.size() >= MAX_DECISIONS) {
+            heavyWorldCalls.entrySet().stream().filter((e) -> e.getValue() > 1 && !opaque.contains(e.getKey())).max(Map.Entry.comparingByValue())
+                    .ifPresent((e) -> retry = opaque.add(e.getKey()));
             throw new Fail("too many branches");
         }
 
@@ -483,6 +497,11 @@ final class Interpreter implements Opcodes {
                     return null;
                 }
                 case GETSTATIC -> f.push(getStatic((FieldInsnNode) insn, loader));
+                case PUTSTATIC -> {
+                    FieldInsnNode field = (FieldInsnNode) insn;
+
+                    statics.put(field.owner + "." + field.name, f.pop());
+                }
                 case GETFIELD -> f.push(getField((FieldInsnNode) insn, f.pop(), loader));
                 case PUTFIELD -> {
                     Value value = f.pop();
@@ -635,6 +654,13 @@ final class Interpreter implements Opcodes {
             return choice;
         }
 
+        if (!isStatic && args.get(0) instanceof Value.Known known && known.value() instanceof List<?> list && owned.containsKey(list)
+                && call.name.equals("remove") && call.desc.equals("(Ljava/lang/Object;)Z") && args.get(1) instanceof Value.Choice choice
+                && choice.options().size() == list.size() - removed.getOrDefault(list, 0) && list.containsAll(choice.options())) {
+            removed.merge(list, 1, Integer::sum);
+            return new Value.Known(1);
+        }
+
         int[] choices = choiceIndices(args);
 
         if (choices.length > 0) {
@@ -700,6 +726,9 @@ final class Interpreter implements Opcodes {
 
             throw new Fail("iteration over random draws");
         }
+        if (receiver instanceof Value.Unknown && registries != null && RuntimeNames.is(RuntimeNames.REGISTRY_ACCESS, call)) {
+            return new Value.Known(registries);
+        }
         if (receiver instanceof Value.Unknown) {
             Type returnType = Type.getReturnType(call.desc);
 
@@ -738,15 +767,32 @@ final class Interpreter implements Opcodes {
             return stackArgumentCall(call, args, loader);
         }
 
-        if (declaration != null) {
-            try {
-                return execute(declaration.owner(), declaration.method(), args, depth + 1);
-            } catch (Fail fail) {
-                return fallbackCall(call, args, loader, fail);
-            }
+        if (declaration != null && opaque.contains(call.owner + "." + call.name + call.desc) && isWorldCall(call, args, loader)) {
+            return worldResult(call, args);
+        }
+        if (!isStatic && receiver instanceof Value.Known known && known.value() != null && args.stream().skip(1).anyMatch(this::isTainted)
+                && !returnsTradeData(call)) {
+            return uncertainChange(call, known.value());
         }
 
-        return fallbackCall(call, args, loader, new Fail("no bytecode for " + call.owner + "." + call.name));
+        Value result;
+
+        if (declaration != null) {
+            int before = decisions.size();
+
+            try {
+                result = execute(declaration.owner(), declaration.method(), args, depth + 1);
+            } catch (Fail fail) {
+                result = fallbackCall(call, args, loader, fail);
+            }
+            if (decisions.size() - before > 1 && isWorldCall(call, args, loader)) {
+                heavyWorldCalls.merge(call.owner + "." + call.name + call.desc, decisions.size() - before, Math::max);
+            }
+        } else {
+            result = fallbackCall(call, args, loader, new Fail("no bytecode for " + call.owner + "." + call.name));
+        }
+
+        return result;
     }
 
     @Nullable
@@ -771,8 +817,76 @@ final class Interpreter implements Opcodes {
         if (args.stream().allMatch(this::isConcrete)) {
             return concreteCall(call, args, loader, false);
         }
+        if (isWorldCall(call, args, loader)) {
+            if (fail.isBudget()) {
+                retry = retry || opaque.add(call.owner + "." + call.name + call.desc);
+                throw fail;
+            }
+
+            return worldResult(call, args);
+        }
+        if (!fail.isBudget() && call.getOpcode() != INVOKESTATIC && args.get(0) instanceof Value.Known known && known.value() != null
+                && owned.containsKey(known.value()) && args.stream().skip(1).allMatch((v) -> isConcrete(v) || v instanceof Value.Num || v instanceof Value.Unknown)
+                && !returnsTradeData(call)) {
+            return uncertainChange(call, known.value());
+        }
 
         throw fail;
+    }
+
+    private static boolean returnsTradeData(MethodInsnNode call) {
+        Type returnType = Type.getReturnType(call.desc);
+
+        return returnType.getSort() == Type.OBJECT && TRADE_TYPES.contains(returnType.getInternalName());
+    }
+
+    @Nullable
+    private Value uncertainChange(MethodInsnNode call, @Nullable Object changed) {
+        Type returnType = Type.getReturnType(call.desc);
+
+        taint(changed);
+        return returnType.getSort() == Type.VOID ? null : Value.Unknown.of(returnType, null);
+    }
+
+    private boolean isTainted(Value value) {
+        return value instanceof Value.Known known && known.value() != null && tainted.contains(known.value());
+    }
+
+    private void taint(@Nullable Object object) {
+        if (object != null && tainted.add(object) && stackParts.containsKey(object)) {
+            stackParts.get(object).randomTag = true;
+        }
+    }
+
+    private boolean isWorldCall(MethodInsnNode call, List<Value> args, ClassLoader loader) {
+        Type returnType = Type.getReturnType(call.desc);
+
+        if (returnsTradeData(call) || returnType.getSort() == Type.OBJECT && isRandomType(returnType, loader)) {
+            return false;
+        }
+
+        return args.stream().anyMatch((v) -> v instanceof Value.Unknown || v instanceof Value.Rng)
+                && args.stream().allMatch((v) -> v instanceof Value.Unknown || v instanceof Value.Rng || v instanceof Value.Known);
+    }
+
+    @Nullable
+    private Value worldResult(MethodInsnNode call, List<Value> args) {
+        Type returnType = Type.getReturnType(call.desc);
+
+        args.forEach((v) -> taint(v instanceof Value.Known known && known.value() != null && owned.containsKey(known.value()) ? known.value() : null));
+
+        if (returnType.getSort() == Type.VOID) {
+            return null;
+        }
+        if (call.getOpcode() == INVOKESTATIC) {
+            return Value.Unknown.of(returnType, Origin.of(null, call.owner + "." + call.name + call.desc, args));
+        }
+
+        return Value.Unknown.of(returnType, Origin.of(args.get(0), call.name + call.desc, args.subList(1, args.size())));
+    }
+
+    boolean retry() {
+        return retry;
     }
 
     @Nullable
@@ -1112,20 +1226,36 @@ final class Interpreter implements Opcodes {
         if (shadowedArgs.stream().filter((v) -> v != stack).allMatch(this::isConcrete)) {
             return onTemplates(call, stack, shadowedArgs, index, loader);
         }
-        if (Type.getReturnType(call.desc).getSort() == Type.OBJECT && Type.getReturnType(call.desc).getInternalName().equals(ITEM_STACK)) {
+
+        return unknownStackChange(call, stack, "stack with symbolic arguments");
+    }
+
+    @Nullable
+    private Value unknownStackChange(MethodInsnNode call, Value.Stack stack, String reason) {
+        Type returnType = Type.getReturnType(call.desc);
+
+        if (returnType.getSort() == Type.VOID) {
+            stack.randomTag = true;
+            return null;
+        }
+        if (returnType.getSort() == Type.OBJECT && returnType.getInternalName().equals(ITEM_STACK)) {
             Value.Stack copy = stack.copy();
 
             copy.randomTag = true;
             return copy;
         }
 
-        throw new Fail("stack with symbolic arguments");
+        throw new Fail(reason);
     }
 
     @Nullable
     private Value onTemplates(MethodInsnNode call, Value.Stack stack, List<Value> args, int index, ClassLoader loader) {
         if (!args.stream().filter((v) -> v != stack).allMatch(this::isConcrete)) {
-            throw new Fail("stack call with symbolic arguments");
+            return unknownStackChange(call, stack, "stack call with symbolic arguments");
+        }
+
+        if (args.stream().anyMatch(this::isTainted)) {
+            return unknownStackChange(call, stack, "stack call with uncertain arguments");
         }
 
         NumberExpr.Const constant = stack.count instanceof NumberExpr.Const c ? c : null;
@@ -1147,8 +1277,12 @@ final class Interpreter implements Opcodes {
             if (result instanceof Value.Known known && known.value() != template) {
                 returnsTemplate = false;
                 results.add(known.value());
+
+                if (known.value() != null && !(known.value() instanceof ItemStack)) {
+                    stackParts.put(known.value(), stack);
+                }
             } else if (result != null && !(result instanceof Value.Known)) {
-                throw new Fail("symbolic result of a stack call");
+                return unknownStackChange(call, stack, "symbolic result of a stack call");
             }
         }
 
@@ -1627,6 +1761,11 @@ final class Interpreter implements Opcodes {
                 default -> throw new Fail("change under a random choice");
             };
         }
+        if (!isStatic && args.get(0) instanceof Value.Known known && known.value() != null && owned.containsKey(known.value())
+                && args.stream().skip(1).anyMatch(Value.Unknown.class::isInstance)
+                && args.stream().skip(1).allMatch((v) -> isConcrete(v) || v instanceof Value.Unknown) && !returnsTradeData(call)) {
+            return uncertainChange(call, READ_ONLY.contains(call.name) ? null : known.value());
+        }
         if (!args.stream().allMatch(this::isConcrete)) {
             throw new Fail("symbolic argument of " + call.owner + "." + call.name);
         }
@@ -1641,6 +1780,10 @@ final class Interpreter implements Opcodes {
         Object receiver = ((Value.Known) args.get(0)).value();
         boolean ownedReceiver = owned.containsKey(receiver) || receiver instanceof BaseStream<?, ?>;
 
+        if (READ_ONLY.contains(call.name) && receiver != null && tainted.contains(receiver)) {
+            throw new Fail("uncertain contents of " + declaring.getName());
+        }
+
         if (!ownedReceiver && !READ_ONLY.contains(call.name)) {
             throw new Fail("JDK call " + declaring.getName() + "." + call.name);
         }
@@ -1652,6 +1795,9 @@ final class Interpreter implements Opcodes {
 
         if (result instanceof Value.Known known && known.value() != null && (ownedReceiver || FRESH_RESULTS.contains(call.name))) {
             own(known.value());
+        }
+        if (!READ_ONLY.contains(call.name) && args.stream().skip(1).anyMatch(this::isTainted)) {
+            taint(receiver);
         }
 
         return result;
@@ -1892,6 +2038,10 @@ final class Interpreter implements Opcodes {
     }
 
     private Value getStatic(FieldInsnNode insn, ClassLoader loader) {
+        if (statics.containsKey(insn.owner + "." + insn.name)) {
+            return statics.get(insn.owner + "." + insn.name);
+        }
+
         Field field = field(load(insn.owner, loader, true), insn.name);
 
         try {
@@ -1978,6 +2128,9 @@ final class Interpreter implements Opcodes {
 
         Object arr = known.value();
 
+        if (tainted.contains(arr)) {
+            throw new Fail("uncertain array element");
+        }
         if (index instanceof Value.Known k) {
             int i = (Integer) k.value();
 
@@ -1993,9 +2146,12 @@ final class Interpreter implements Opcodes {
 
             return wrap(element, arr.getClass().getComponentType());
         }
-        if (index instanceof Value.Choice choice && choice.options().stream().allMatch((o) -> o instanceof Integer i && i >= 0 && i < Array.getLength(arr))
-                && !arr.getClass().getComponentType().isPrimitive()) {
+        if (index instanceof Value.Choice choice && choice.options().stream().allMatch((o) -> o instanceof Integer i && i >= 0 && i < Array.getLength(arr))) {
             List<Object> elements = choice.options().stream().map((o) -> Array.get(arr, (Integer) o)).toList();
+
+            if (arr.getClass().getComponentType().isPrimitive()) {
+                return sameDraw(combine(elements.stream().map((o) -> wrap(o, arr.getClass().getComponentType())).toList()), choice);
+            }
 
             elements.stream().filter(VillagerTrades.ItemListing.class::isInstance).forEach((e) -> elementSources.put(e, arr));
             return new Value.Choice(elements, choice.draw());
@@ -2029,6 +2185,12 @@ final class Interpreter implements Opcodes {
 
         Object arr = known.value();
         int i = (Integer) k.value();
+
+        if (value instanceof Value.Num || value instanceof Value.Choice || value instanceof Value.Unknown) {
+            taint(arr);
+            return;
+        }
+
         Object element = value instanceof Value.Closure closure ? materialize(closure) : concrete(value);
 
         switch (op) {
@@ -2187,12 +2349,60 @@ final class Interpreter implements Opcodes {
             return false;
         }
 
-        return decide(Decision.Kind.RANDOM, decisions.size(), null, "reference comparison of a random choice");
+        boolean holds = decide(Decision.Kind.RANDOM, decisions.size(), null, "reference comparison of a random choice");
+
+        narrow(choice, (o) -> test.test(o) == holds);
+        return holds;
+    }
+
+    @Nullable
+    private Value.Choice narrow(Value.Choice choice, java.util.function.Predicate<Object> keep) {
+        List<Integer> kept = IntStream.range(0, choice.options().size()).filter((i) -> keep.test(choice.options().get(i))).boxed().toList();
+        Map<Value, Value> narrowed = new IdentityHashMap<>();
+
+        for (Frame frame : frames) {
+            frame.replace((v) -> v instanceof Value.Choice other && (other == choice || choice.draw() != null && other.draw() == choice.draw()
+                    && other.options().size() == choice.options().size()), (v) -> narrowed.computeIfAbsent(v, (o) -> narrowed((Value.Choice) o, kept)));
+        }
+
+        return kept.size() > 1 ? (Value.Choice) narrowed((Value.Choice) choice, kept) : null;
+    }
+
+    private Value narrowed(Value.Choice choice, List<Integer> kept) {
+        List<Object> options = kept.stream().map(choice.options()::get).toList();
+
+        return options.size() == 1 ? wrap(options.get(0)) : new Value.Choice(options, choice.draw());
     }
 
     private int switchCase(Value value, List<Integer> keys) {
         if (value instanceof Value.Known known) {
             return keys.indexOf((Integer) known.value());
+        }
+        if (value instanceof Value.Choice choice && choice.options().stream().allMatch(Integer.class::isInstance)) {
+            Value.Choice rest = choice;
+
+            for (int i = 0; i < keys.size() && rest != null; i++) {
+                Integer key = keys.get(i);
+                Value.Choice current = rest;
+
+                if (current.options().stream().allMatch(key::equals)) {
+                    return i;
+                }
+                if (current.options().stream().anyMatch(key::equals)) {
+                    if (decide(Decision.Kind.RANDOM, decisions.size(), null, "switch on a random choice")) {
+                        narrow(current, key::equals);
+                        return i;
+                    }
+
+                    rest = narrow(current, (o) -> !key.equals(o));
+
+                    if (rest == null) {
+                        return keys.indexOf(current.options().stream().filter((o) -> !key.equals(o)).findFirst().map(Integer.class::cast).orElseThrow());
+                    }
+                }
+            }
+
+            return -1;
         }
         if (value instanceof Value.Num num && num.expr().bounds().isPoint()) {
             return keys.indexOf((int) num.expr().bounds().lo());
@@ -2864,6 +3074,8 @@ final class Interpreter implements Opcodes {
     }
 
     static final class Fail extends RuntimeException {
+        private static final Set<String> BUDGETS = Set.of("too many branches", "step budget", "call depth");
+
         @Nullable
         private String where;
 
@@ -2881,6 +3093,10 @@ final class Interpreter implements Opcodes {
 
         String describe() {
             return where != null ? getMessage() + " in " + where : getMessage();
+        }
+
+        boolean isBudget() {
+            return BUDGETS.contains(getMessage());
         }
     }
 
@@ -2923,13 +3139,17 @@ final class Interpreter implements Opcodes {
         }
 
         void replace(java.util.function.Predicate<Value> match, Value with) {
+            replace(match, (v) -> with);
+        }
+
+        void replace(java.util.function.Predicate<Value> match, java.util.function.UnaryOperator<Value> with) {
             for (int i = 0; i < locals.length; i++) {
                 if (locals[i] != null && match.test(locals[i])) {
-                    locals[i] = with;
+                    locals[i] = with.apply(locals[i]);
                 }
             }
 
-            stack.replaceAll((v) -> match.test(v) ? with : v);
+            stack.replaceAll((v) -> match.test(v) ? with.apply(v) : v);
         }
     }
 }

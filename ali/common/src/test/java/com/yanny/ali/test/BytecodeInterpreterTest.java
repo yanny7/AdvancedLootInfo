@@ -2,8 +2,13 @@ package com.yanny.ali.test;
 
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberInterval;
+import com.yanny.aci.tooltip.CoreTooltipUtils;
+import com.yanny.aci.tooltip.NumberOptions;
+import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.aci.tooltip.TooltipNode;
+import com.yanny.aci.tooltip.TooltipStyle;
 import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ListNode;
 import com.yanny.ali.api.TradeLevel;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
@@ -12,6 +17,13 @@ import com.yanny.ali.plugin.common.trades.TradeGroupNode;
 import com.yanny.ali.plugin.common.trades.TradeUtils;
 import com.yanny.ali.plugin.server.bytecode.BytecodeInterpreter;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.StructureTags;
@@ -53,15 +65,23 @@ import org.objectweb.asm.Opcodes;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
 import java.util.function.IntUnaryOperator;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
+import static com.yanny.aci.test.utils.TestUtils.componentToPlainString;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 
 public class BytecodeInterpreterTest {
     @Test
@@ -170,7 +190,12 @@ public class BytecodeInterpreterTest {
 
     @Test
     public void testRandomPickRemovedFromList() {
-        Assertions.assertNull(BytecodeInterpreter.getItemListing(UTILS, new RemovingPickListing(), TooltipNode.empty()));
+        IDataNode trade = interpret(new RemovingPickListing());
+        IDataNode result = ((ListNode) trade).nodes().get(2);
+
+        assertSlot(trade, 0, Items.EMERALD, NumberExpr.constant(2));
+        Assertions.assertEquals(List.of(Items.APPLE, Items.BREAD, Items.CARROT), ((ListNode) result).nodes().stream()
+                .map((n) -> ((ItemNode) n).getItem().left().orElseThrow().getItem()).toList());
     }
 
     @Test
@@ -648,6 +673,144 @@ public class BytecodeInterpreterTest {
         Assertions.assertSame(random, Suppliers.random);
     }
 
+    @Test
+    public void testListingWithSomeVariantsUnknown() {
+        IDataNode trade = interpret(new PartlyRandomListing());
+
+        assertSlot(trade, 2, Items.APPLE, NumberExpr.constant(1));
+        assertTooltip(trade.getTooltip(), List.of(
+                "Unable to auto-detect some variants of this trade",
+                "Random chance",
+                "Uses: 12",
+                "XP: 5",
+                "Price Multiplier: 0.05"
+        ));
+        Assertions.assertEquals(List.of("Unable to auto-detect some variants of this trade"), errorLines(trade.getTooltip()));
+    }
+
+    @Test
+    public void testUnknownPredicateInErrorColor() {
+        List<IDataNode> trades = ((ListNode) interpret(new HeightListing())).nodes();
+
+        Assertions.assertEquals(List.of("Unknown additional predicate"), errorLines(trades.get(0).getTooltip()));
+    }
+
+    @Test
+    public void testRolledOfferFallback() {
+        IDataNode trade = UTILS.getItemListing(UTILS, new ClockListing(), TooltipNode.empty());
+
+        assertSlot(trade, 2, Items.APPLE, NumberExpr.constant(1));
+        Assertions.assertEquals(List.of("Unable to auto-detect this trade, shows one random offer"), errorLines(trade.getTooltip()));
+    }
+
+    @Test
+    public void testFailingWorldCallIsUnknownPredicate() {
+        List<IDataNode> trades = ((ListNode) interpret(new RoomListing())).nodes();
+
+        Assertions.assertEquals(2, trades.size());
+        assertTooltip(trade(trades, Items.APPLE).getTooltip(), List.of(
+                "Unknown additional predicate",
+                "Uses: 12",
+                "XP: 5",
+                "Price Multiplier: 0.05"
+        ));
+        assertTooltip(trade(trades, Items.BREAD).getTooltip(), List.of(
+                "Unknown additional predicate",
+                "Uses: 12",
+                "XP: 5",
+                "Price Multiplier: 0.05"
+        ));
+    }
+
+    @Test
+    public void testHeavyWorldCallIsOneDecision() {
+        IDataNode node = interpret(new ManyChecksListing());
+        List<IDataNode> trades = ((ListNode) node).nodes();
+
+        Assertions.assertEquals(List.of(), errorLines(node.getTooltip()));
+        Assertions.assertEquals(5, trades.size());
+        Assertions.assertEquals(Set.of(Items.APPLE, Items.BREAD, Items.CARROT, Items.WHEAT, Items.POTATO),
+                trades.stream().map((t) -> slot(t, 2).getItem().left().orElseThrow().getItem()).collect(Collectors.toSet()));
+        trades.forEach((t) -> Assertions.assertEquals(List.of("Unknown additional predicate"), errorLines(t.getTooltip()).stream().distinct().toList()));
+    }
+
+    @Test
+    public void testRegistriesOfTradersLevel() {
+        ServerLevel level = mock(ServerLevel.class);
+        IServerUtils utils = spy(UTILS);
+
+        doReturn(RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY)).when(level).registryAccess();
+        doReturn(level).when(utils).getServerLevel();
+
+        IDataNode trade = BytecodeInterpreter.getItemListing(utils, new RegistryListing(), TooltipNode.empty());
+
+        Assertions.assertNotNull(trade);
+        assertSlot(trade, 2, Items.APPLE, NumberExpr.constant(1));
+    }
+
+    @Test
+    public void testStaticFieldWrittenByListing() {
+        IDataNode trade = interpret(new CountingListing());
+
+        assertSlot(trade, 0, Items.EMERALD, NumberExpr.constant(3));
+        Assertions.assertEquals(0, CountingListing.calls);
+    }
+
+    @Test
+    public void testStackChangedByWorldValue() {
+        IDataNode trade = interpret(new NamedListing());
+
+        assertSlot(trade, 2, Items.PAPER, NumberExpr.constant(1));
+        assertTooltip(slot(trade, 2).getTooltip(), List.of(
+                "Random properties"
+        ));
+    }
+
+    @Test
+    public void testTagChangedByRandomValue() {
+        IDataNode trade = interpret(new StarListing());
+        ItemStack star = slot(trade, 2).getItem().left().orElseThrow();
+
+        Assertions.assertSame(Items.FIREWORK_STAR, star.getItem());
+        Assertions.assertNull(star.getTagElement("Explosion"));
+        assertTooltip(slot(trade, 2).getTooltip(), List.of(
+                "Random properties"
+        ));
+    }
+
+    @Test
+    public void testListTakingWorldValue() {
+        IDataNode trade = interpret(new LoreListing());
+
+        assertSlot(trade, 2, Items.PAPER, NumberExpr.constant(1));
+        assertTooltip(slot(trade, 2).getTooltip(), List.of(
+                "Random properties"
+        ));
+    }
+
+    @Test
+    public void testUncertainArrayIsNotRead() {
+        Assertions.assertNull(BytecodeInterpreter.getItemListing(UTILS, new StoredDrawListing(), TooltipNode.empty()));
+    }
+
+    @Test
+    public void testNullCheckNarrowsChoice() {
+        IDataNode trade = interpret(new SkippedPickListing());
+
+        Assertions.assertEquals(List.of(Items.APPLE, Items.BREAD), ((ListNode) ((ListNode) trade).nodes().get(2)).nodes().stream()
+                .map((n) -> ((ItemNode) n).getItem().left().orElseThrow().getItem()).toList());
+    }
+
+    @Test
+    public void testSwitchOnRandomChoice() {
+        List<IDataNode> trades = ((ListNode) interpret(new SizeListing())).nodes();
+
+        Assertions.assertEquals(3, trades.size());
+        assertSlot(trade(trades, Items.APPLE), 0, Items.EMERALD, NumberExpr.constant(1));
+        assertSlot(trade(trades, Items.BREAD), 0, Items.EMERALD, NumberExpr.constant(2));
+        assertSlot(trade(trades, Items.CARROT), 0, Items.EMERALD, NumberExpr.constant(3));
+    }
+
     private static IDataNode interpret(VillagerTrades.ItemListing listing) {
         IDataNode node = BytecodeInterpreter.getItemListing(UTILS, listing, TooltipNode.empty());
 
@@ -665,6 +828,15 @@ public class BytecodeInterpreterTest {
 
     private static MerchantOffer offerFor(Item result) {
         return new MerchantOffer(new ItemStack(Items.EMERALD), new ItemStack(result), 12, 5, 0.05F);
+    }
+
+    private static List<String> errorLines(TooltipNode tooltip) {
+        Optional<TextColor> error = Optional.ofNullable(TooltipStyle.DEFAULT.error().getColor());
+
+        return CoreTooltipUtils.toLines(tooltip, 0, true, TooltipStyle.DEFAULT, NumberOptions.DEFAULT).stream()
+                .filter(TooltipLine.Text.class::isInstance).map((l) -> ((TooltipLine.Text) l).component())
+                .filter((c) -> c.toFlatList().stream().anyMatch((p) -> Optional.ofNullable(p.getStyle().getColor()).equals(error)))
+                .map((c) -> componentToPlainString(c).trim()).toList();
     }
 
     private static ItemNode slot(IDataNode trade, int index) {
@@ -1426,5 +1598,156 @@ public class BytecodeInterpreterTest {
         static final Supplier<ItemStack> ARROWS = () -> new ItemStack(Items.ARROW, 16 + random.nextInt(16));
         static final Supplier<ItemStack> APPLE = () -> new ItemStack(Items.APPLE);
         static final Supplier<ItemStack> PICK = () -> new ItemStack(List.of(Items.APPLE, Items.BREAD).get(random.nextInt(2)));
+    }
+
+    private static final class PartlyRandomListing implements VillagerTrades.ItemListing {
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            return random.nextBoolean() ? offerFor(Items.APPLE) : new MerchantOffer(new ItemStack(Items.EMERALD, (int) random.nextLong()), new ItemStack(Items.BREAD), 12, 5, 0.05F);
+        }
+    }
+
+    private static final class ClockListing implements VillagerTrades.ItemListing {
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            return System.nanoTime() != 0 ? offerFor(Items.APPLE) : offerFor(Items.BREAD);
+        }
+    }
+
+    private static final class RoomListing implements VillagerTrades.ItemListing {
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            return hasRoom(trader) ? offerFor(Items.APPLE) : offerFor(Items.BREAD);
+        }
+
+        private static boolean hasRoom(Entity trader) {
+            return new int[trader.getId()].length > 2;
+        }
+    }
+
+    private static final class ManyChecksListing implements VillagerTrades.ItemListing {
+        @Nullable
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            if (!isCalm(trader)) {
+                return null;
+            }
+
+            return offerFor(trader.isInWater() ? Items.APPLE : trader.isOnFire() ? Items.BREAD : trader.isCrouching() ? Items.CARROT
+                    : trader.isSprinting() ? Items.WHEAT : Items.POTATO);
+        }
+
+        private static boolean isCalm(Entity trader) {
+            return !trader.isSilent() && !trader.isInLava() && !trader.isPassenger() && !trader.isVehicle() && !trader.isInvisible();
+        }
+    }
+
+    private static final class RegistryListing implements VillagerTrades.ItemListing {
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            Item item = trader.level().registryAccess().registryOrThrow(Registries.ITEM).get(new ResourceLocation("minecraft", "apple"));
+
+            return offerFor(Objects.requireNonNull(item));
+        }
+    }
+
+    private static final class CountingListing implements VillagerTrades.ItemListing {
+        private static int calls;
+
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            calls = 3;
+            return new MerchantOffer(new ItemStack(Items.EMERALD, calls), new ItemStack(Items.APPLE), 12, 5, 0.05F);
+        }
+    }
+
+    private static final class NamedListing implements VillagerTrades.ItemListing {
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            ItemStack paper = new ItemStack(Items.PAPER);
+
+            name(paper, trader);
+            return new MerchantOffer(new ItemStack(Items.EMERALD), paper, 12, 5, 0.05F);
+        }
+
+        private static void name(ItemStack stack, Entity trader) {
+            stack.setHoverName(trader.getName());
+        }
+    }
+
+    private static final class StarListing implements VillagerTrades.ItemListing {
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            CompoundTag explosion = new CompoundTag();
+            ItemStack star = new ItemStack(Items.FIREWORK_STAR);
+
+            explosion.putByte("Type", (byte) random.nextInt(4));
+            star.addTagElement("Explosion", explosion);
+            return new MerchantOffer(new ItemStack(Items.EMERALD), star, 12, 5, 0.05F);
+        }
+    }
+
+    private static final class LoreListing implements VillagerTrades.ItemListing {
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            List<Component> lore = new ArrayList<>();
+            ItemStack paper = new ItemStack(Items.PAPER);
+
+            lore.add(trader.getName());
+            describe(paper, lore);
+            return new MerchantOffer(new ItemStack(Items.EMERALD), paper, 12, 5, 0.05F);
+        }
+
+        private static void describe(ItemStack stack, List<Component> lore) {
+            stack.setHoverName(lore.get(0));
+        }
+    }
+
+    private static final class StoredDrawListing implements VillagerTrades.ItemListing {
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            int[] draws = new int[1];
+
+            draws[0] = random.nextInt(3);
+            return offerFor(draws[0] == 0 ? Items.APPLE : Items.BREAD);
+        }
+    }
+
+    private static final class SkippedPickListing implements VillagerTrades.ItemListing {
+        private static final List<Item> ITEMS = Arrays.asList(Items.APPLE, null, Items.BREAD);
+
+        @Nullable
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            Item item = ITEMS.get(random.nextInt(ITEMS.size()));
+
+            if (item == null) {
+                return null;
+            }
+
+            return new MerchantOffer(new ItemStack(Items.EMERALD), new ItemStack(item), 12, 5, 0.05F);
+        }
+    }
+
+    private enum Size {
+        SMALL,
+        MEDIUM,
+        LARGE,
+    }
+
+    private static final class SizeListing implements VillagerTrades.ItemListing {
+        private static final Item[] RESULTS = {Items.APPLE, Items.BREAD, Items.CARROT};
+
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            Size size = Size.values()[random.nextInt(Size.values().length)];
+            int price = switch (size) {
+                case SMALL -> 1;
+                case MEDIUM -> 2;
+                case LARGE -> 3;
+            };
+
+            return new MerchantOffer(new ItemStack(Items.EMERALD, price), new ItemStack(RESULTS[size.ordinal()]), 12, 5, 0.05F);
+        }
     }
 }

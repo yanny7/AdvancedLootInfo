@@ -50,6 +50,7 @@ final class RuntimeNames {
     static final Ref GET_OFFER;
     static final Ref LEVEL_IS_CLIENT_SIDE;
     static final Ref FIND_MAP_STRUCTURE;
+    static final Ref REGISTRY_ACCESS;
     static final Ref MAP_CREATE;
     static final Ref MAP_RENDER_BIOME_PREVIEW;
     static final Ref MAP_ADD_TARGET_DECORATION;
@@ -84,6 +85,7 @@ final class RuntimeNames {
         GET_OFFER = refs.get("getOffer");
         LEVEL_IS_CLIENT_SIDE = refs.get("levelIsClientSide");
         FIND_MAP_STRUCTURE = refs.get("findMapStructure");
+        REGISTRY_ACCESS = refs.get("registryAccess");
         MAP_CREATE = refs.get("mapCreate");
         MAP_RENDER_BIOME_PREVIEW = refs.get("mapRenderBiomePreview");
         MAP_ADD_TARGET_DECORATION = refs.get("mapAddTargetDecoration");
@@ -91,7 +93,7 @@ final class RuntimeNames {
         UPDATE_TRADES = refs.get("villagerUpdateTrades");
         ADD_OFFERS_FROM_ITEM_LISTINGS = refs.get("villagerAddOffers");
         OFFERS = refs.get("villagerOffers");
-        AVAILABLE = refs.size() == 30;
+        AVAILABLE = refs.size() == 31;
     }
 
     private RuntimeNames() {}
@@ -112,7 +114,8 @@ final class RuntimeNames {
         refs.keySet().retainAll(java.util.Set.of("nextInt", "nextIntBound", "nextIntBetween", "nextIntOrigin", "nextLong", "nextBoolean",
                 "nextFloat", "nextDouble", "nextGaussian", "fork", "setSeed", "consumeCount", "stackSetCount", "stackGrow", "stackShrink",
                 "stackGetCount", "stackGetItem", "stackCopy", "stackCopyWithCount", "stackIsEmpty", "getOffer", "levelIsClientSide", "findMapStructure",
-                "mapCreate", "mapRenderBiomePreview", "mapAddTargetDecoration", "getOffers", "villagerUpdateTrades", "villagerAddOffers", "villagerOffers"));
+                "registryAccess", "mapCreate", "mapRenderBiomePreview", "mapAddTargetDecoration", "getOffers", "villagerUpdateTrades", "villagerAddOffers",
+                "villagerOffers"));
         return refs;
     }
 
@@ -238,6 +241,10 @@ final class RuntimeNames {
 
     private static BlockPos findMapStructure(ServerLevel level) {
         return level.findNearestMapStructure(null, null, 0, false);
+    }
+
+    private static Object registryAccess(Level level) {
+        return level.registryAccess();
     }
 
     private static ItemStack mapCreate() {
