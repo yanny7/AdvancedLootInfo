@@ -2,11 +2,7 @@ package com.yanny.ali.test;
 
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberInterval;
-import com.yanny.aci.tooltip.CoreTooltipUtils;
-import com.yanny.aci.tooltip.NumberOptions;
-import com.yanny.aci.tooltip.TooltipLine;
-import com.yanny.aci.tooltip.TooltipNode;
-import com.yanny.aci.tooltip.TooltipStyle;
+import com.yanny.aci.tooltip.*;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ListNode;
@@ -16,6 +12,8 @@ import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.trades.TradeGroupNode;
 import com.yanny.ali.plugin.common.trades.TradeUtils;
 import com.yanny.ali.plugin.server.bytecode.BytecodeInterpreter;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -29,19 +27,16 @@ import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.StructureTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.VillagerDataHolder;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.npc.VillagerType;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.EnchantedBookItem;
-import net.minecraft.world.item.MapItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
@@ -54,7 +49,9 @@ import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.AnnotationVisitor;
@@ -64,14 +61,7 @@ import org.objectweb.asm.Opcodes;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.function.IntUnaryOperator;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -79,9 +69,7 @@ import java.util.stream.Collectors;
 import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
 import static com.yanny.aci.test.utils.TestUtils.componentToPlainString;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.*;
 
 public class BytecodeInterpreterTest {
     @Test
@@ -666,10 +654,11 @@ public class BytecodeInterpreterTest {
         Assertions.assertNotNull(arrows);
         Assertions.assertNotNull(apple);
         Assertions.assertNotNull(pick);
-        Assertions.assertEquals(NumberExpr.uniformInt(16, 31), arrows.count());
-        Assertions.assertEquals(List.of(Items.ARROW), arrows.options().stream().map(ItemStack::getItem).toList());
-        Assertions.assertEquals(NumberExpr.constant(1), apple.count());
-        Assertions.assertEquals(List.of(Items.APPLE, Items.BREAD), pick.options().stream().map(ItemStack::getItem).toList());
+        Assertions.assertEquals(List.of(Items.ARROW), arrows.options().stream().map((o) -> o.stack().getItem()).toList());
+        Assertions.assertEquals(NumberExpr.uniformInt(16, 31), arrows.options().get(0).count());
+        Assertions.assertEquals(NumberExpr.constant(1), apple.options().get(0).count());
+        Assertions.assertEquals(List.of(Items.APPLE, Items.BREAD), pick.options().stream().map((o) -> o.stack().getItem()).toList());
+        Assertions.assertEquals(List.of(0.5, 0.5), pick.options().stream().map(BytecodeInterpreter.Option::chance).toList());
         Assertions.assertSame(random, Suppliers.random);
     }
 
@@ -818,18 +807,24 @@ public class BytecodeInterpreterTest {
         return node;
     }
 
+    @NotNull
     private static IDataNode trade(List<IDataNode> trades, Item result) {
         return trades.stream().filter((t) -> slot(t, 2).getItem().left().orElseThrow().is(result)).findFirst().orElseThrow();
     }
 
+    @Unmodifiable
+    @NotNull
     private static List<Item> listingItems(VillagerTrades.ItemListing[] listings) {
         return java.util.Arrays.stream(listings).map((l) -> ((OfferListing) l).item()).toList();
     }
 
+    @NotNull
     private static MerchantOffer offerFor(Item result) {
         return new MerchantOffer(new ItemStack(Items.EMERALD), new ItemStack(result), 12, 5, 0.05F);
     }
 
+    @Unmodifiable
+    @NotNull
     private static List<String> errorLines(TooltipNode tooltip) {
         Optional<TextColor> error = Optional.ofNullable(TooltipStyle.DEFAULT.error().getColor());
 
@@ -843,6 +838,8 @@ public class BytecodeInterpreterTest {
         return (ItemNode) ((ListNode) trade).nodes().get(index);
     }
 
+    @Unmodifiable
+    @NotNull
     private static List<Map<Enchantment, Integer>> enchantments(IDataNode trade, int index) {
         return ((ListNode) ((ListNode) trade).nodes().get(index)).nodes().stream()
                 .map((n) -> EnchantmentHelper.getEnchantments(((ItemNode) n).getItem().left().orElseThrow())).toList();
@@ -871,6 +868,7 @@ public class BytecodeInterpreterTest {
     }
 
     private static final class RandomCountListing implements VillagerTrades.ItemListing {
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             return new MerchantOffer(new ItemStack(Items.EMERALD, 2 + random.nextInt(3)), new ItemStack(Items.APPLE, random.nextIntBetweenInclusive(1, 4)), 12, 5, 0.05F);
@@ -880,6 +878,7 @@ public class BytecodeInterpreterTest {
     private static final class PickListing implements VillagerTrades.ItemListing {
         private final List<Item> items = List.of(Items.APPLE, Items.BREAD, Items.CARROT);
 
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             return new MerchantOffer(new ItemStack(Items.EMERALD), new ItemStack(items.get(random.nextInt(items.size()))), 12, 5, 0.05F);
@@ -889,6 +888,7 @@ public class BytecodeInterpreterTest {
     private static final class PotionPickListing implements VillagerTrades.ItemListing {
         private final List<Potion> potions = List.of(Potions.NIGHT_VISION, Potions.INVISIBILITY, Potions.LEAPING);
 
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             Potion potion = potions.get(random.nextInt(potions.size()));
@@ -900,6 +900,7 @@ public class BytecodeInterpreterTest {
     private static final class StackPickListing implements VillagerTrades.ItemListing {
         private final List<ItemStack> stacks = List.of(new ItemStack(Items.APPLE, 2), new ItemStack(Items.BREAD, 3));
 
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             return new MerchantOffer(new ItemStack(Items.EMERALD), stacks.get(random.nextInt(stacks.size())), 12, 5, 0.05F);
@@ -909,6 +910,7 @@ public class BytecodeInterpreterTest {
     private static final class EnchantmentPickListing implements VillagerTrades.ItemListing {
         private final List<Enchantment> enchantments = List.of(Enchantments.SHARPNESS, Enchantments.MENDING, Enchantments.UNBREAKING);
 
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             Enchantment enchantment = enchantments.get(random.nextInt(enchantments.size()));
@@ -919,6 +921,7 @@ public class BytecodeInterpreterTest {
     }
 
     private static final class EnchantmentLevelListing implements VillagerTrades.ItemListing {
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             Enchantment enchantment = Enchantments.UNBREAKING;
@@ -957,6 +960,7 @@ public class BytecodeInterpreterTest {
     }
 
     private record PriceListing(IntUnaryOperator price, boolean random) implements VillagerTrades.ItemListing {
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             return new MerchantOffer(new ItemStack(Items.EMERALD, price.applyAsInt(this.random ? random.nextInt(3) : 2)), new ItemStack(Items.APPLE), 12, 5, 0.05F);
@@ -972,6 +976,7 @@ public class BytecodeInterpreterTest {
             this.bytes = bytes;
         }
 
+        @NotNull
         static IntUnaryOperator create(boolean overwritten) throws ReflectiveOperationException {
             ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
 
@@ -1024,6 +1029,7 @@ public class BytecodeInterpreterTest {
         private final List<String> keys = List.of("apple", "none", "bread");
         private final Map<String, Item> items = Map.of("apple", Items.APPLE, "bread", Items.BREAD);
 
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             Item item = Optional.ofNullable(items.get(keys.get(random.nextInt(keys.size())))).orElse(Items.BARRIER);
@@ -1033,6 +1039,7 @@ public class BytecodeInterpreterTest {
     }
 
     private static final class RemovingPickListing implements VillagerTrades.ItemListing {
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             List<Item> items = new ArrayList<>(List.of(Items.APPLE, Items.BREAD, Items.CARROT));
@@ -1068,6 +1075,7 @@ public class BytecodeInterpreterTest {
     }
 
     private static final class DimensionListing implements VillagerTrades.ItemListing {
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             if (trader.level().dimension() == Level.NETHER) {
@@ -1090,6 +1098,7 @@ public class BytecodeInterpreterTest {
     }
 
     private static final class BiomeListing implements VillagerTrades.ItemListing {
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             return offerFor(trader.level().getBiome(trader.blockPosition()).is(BiomeTags.IS_OCEAN) ? Items.APPLE : Items.BREAD);
@@ -1099,6 +1108,7 @@ public class BytecodeInterpreterTest {
     private static final class VillagerTypeListing implements VillagerTrades.ItemListing {
         private static final Map<VillagerType, Item> ITEMS = Map.of(VillagerType.DESERT, Items.APPLE, VillagerType.SNOW, Items.BREAD);
 
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             return offerFor(ITEMS.getOrDefault(((VillagerDataHolder) trader).getVillagerData().getType(), Items.CARROT));
@@ -1106,6 +1116,7 @@ public class BytecodeInterpreterTest {
     }
 
     private static final class HeightListing implements VillagerTrades.ItemListing {
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             return offerFor(trader.getY() < 0 ? Items.APPLE : Items.BREAD);
@@ -1113,6 +1124,7 @@ public class BytecodeInterpreterTest {
     }
 
     private static final class CoinListing implements VillagerTrades.ItemListing {
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             return offerFor(random.nextBoolean() ? Items.APPLE : Items.BREAD);
@@ -1120,6 +1132,7 @@ public class BytecodeInterpreterTest {
     }
 
     private static final class DiceListing implements VillagerTrades.ItemListing {
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             return switch (random.nextInt(3)) {
@@ -1131,6 +1144,7 @@ public class BytecodeInterpreterTest {
     }
 
     private static final class SameCoinListing implements VillagerTrades.ItemListing {
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             Item item = Items.APPLE;
@@ -1157,13 +1171,8 @@ public class BytecodeInterpreterTest {
         return trades.levels();
     }
 
-    private static final class PlainListing implements VillagerTrades.ItemListing {
-        private final Item item;
-
-        private PlainListing(Item item) {
-            this.item = item;
-        }
-
+    private record PlainListing(Item item) implements VillagerTrades.ItemListing {
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             return offerFor(item);
@@ -1171,6 +1180,7 @@ public class BytecodeInterpreterTest {
     }
 
     private record OfferListing(Item item) implements VillagerTrades.ItemListing {
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             return offerFor(item);
@@ -1253,6 +1263,7 @@ public class BytecodeInterpreterTest {
             super(type, level);
         }
 
+        @NotNull
         @Override
         public MerchantOffers getOffers() {
             MerchantOffers offers = new MerchantOffers();
@@ -1270,6 +1281,7 @@ public class BytecodeInterpreterTest {
             super(type, level);
         }
 
+        @NotNull
         @Override
         public MerchantOffers getOffers() {
             if (offers == null) {
@@ -1446,6 +1458,7 @@ public class BytecodeInterpreterTest {
             super(type, level);
         }
 
+        @NotNull
         @Override
         public MerchantOffers getOffers() {
             MerchantOffers offers = new MerchantOffers();
@@ -1463,6 +1476,7 @@ public class BytecodeInterpreterTest {
             super(type, level);
         }
 
+        @NotNull
         @Override
         public MerchantOffers getOffers() {
             if (offers == null) {
@@ -1477,8 +1491,9 @@ public class BytecodeInterpreterTest {
         protected void updateTrades() {
         }
 
+        @NotNull
         @Override
-        public net.minecraft.world.InteractionResult mobInteract(net.minecraft.world.entity.player.Player player, net.minecraft.world.InteractionHand hand) {
+        public InteractionResult mobInteract(Player player, InteractionHand hand) {
             if (offers == null || offers.isEmpty()) {
                 offers = generateOffers();
             }
@@ -1486,6 +1501,7 @@ public class BytecodeInterpreterTest {
             return super.mobInteract(player, hand);
         }
 
+        @NotNull
         private static MerchantOffers generateOffers() {
             MerchantOffers generated = new MerchantOffers();
 
@@ -1571,6 +1587,7 @@ public class BytecodeInterpreterTest {
     private static final class MutatingListing implements VillagerTrades.ItemListing {
         private final ItemStack price = new ItemStack(Items.EMERALD, 1);
 
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             price.setCount(1 + random.nextInt(4));
@@ -1579,7 +1596,7 @@ public class BytecodeInterpreterTest {
     }
 
     private static final class EntityListing implements VillagerTrades.ItemListing {
-        @Nullable
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             return new MerchantOffer(new ItemStack(Items.EMERALD, trader.getId()), new ItemStack(Items.APPLE), 12, 5, 0.05F);
@@ -1601,6 +1618,7 @@ public class BytecodeInterpreterTest {
     }
 
     private static final class PartlyRandomListing implements VillagerTrades.ItemListing {
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             return random.nextBoolean() ? offerFor(Items.APPLE) : new MerchantOffer(new ItemStack(Items.EMERALD, (int) random.nextLong()), new ItemStack(Items.BREAD), 12, 5, 0.05F);
@@ -1608,6 +1626,7 @@ public class BytecodeInterpreterTest {
     }
 
     private static final class ClockListing implements VillagerTrades.ItemListing {
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             return System.nanoTime() != 0 ? offerFor(Items.APPLE) : offerFor(Items.BREAD);
@@ -1615,6 +1634,7 @@ public class BytecodeInterpreterTest {
     }
 
     private static final class RoomListing implements VillagerTrades.ItemListing {
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             return hasRoom(trader) ? offerFor(Items.APPLE) : offerFor(Items.BREAD);
@@ -1643,6 +1663,7 @@ public class BytecodeInterpreterTest {
     }
 
     private static final class RegistryListing implements VillagerTrades.ItemListing {
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             Item item = trader.level().registryAccess().registryOrThrow(Registries.ITEM).get(new ResourceLocation("minecraft", "apple"));
@@ -1654,6 +1675,7 @@ public class BytecodeInterpreterTest {
     private static final class CountingListing implements VillagerTrades.ItemListing {
         private static int calls;
 
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             calls = 3;
@@ -1662,6 +1684,7 @@ public class BytecodeInterpreterTest {
     }
 
     private static final class NamedListing implements VillagerTrades.ItemListing {
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             ItemStack paper = new ItemStack(Items.PAPER);
@@ -1676,6 +1699,7 @@ public class BytecodeInterpreterTest {
     }
 
     private static final class StarListing implements VillagerTrades.ItemListing {
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             CompoundTag explosion = new CompoundTag();
@@ -1688,6 +1712,7 @@ public class BytecodeInterpreterTest {
     }
 
     private static final class LoreListing implements VillagerTrades.ItemListing {
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             List<Component> lore = new ArrayList<>();
@@ -1704,6 +1729,7 @@ public class BytecodeInterpreterTest {
     }
 
     private static final class StoredDrawListing implements VillagerTrades.ItemListing {
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             int[] draws = new int[1];
@@ -1738,6 +1764,7 @@ public class BytecodeInterpreterTest {
     private static final class SizeListing implements VillagerTrades.ItemListing {
         private static final Item[] RESULTS = {Items.APPLE, Items.BREAD, Items.CARROT};
 
+        @NotNull
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             Size size = Size.values()[random.nextInt(Size.values().length)];

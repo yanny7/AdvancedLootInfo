@@ -26,6 +26,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Type;
 import org.slf4j.Logger;
@@ -114,15 +115,17 @@ public final class BytecodeInterpreter {
         }).build();
     }
 
+    @NotNull
     private static IDataNode node(IServerUtils utils, @Nullable Value result, TooltipNode condition) {
         if (result instanceof Value.Known known && known.value() instanceof MerchantOffer offer) {
             return TradeUtils.getNode(utils, offer, condition);
         }
+        if (result instanceof Value.Offer offer) {
+            return new ItemsToItemsNode(utils, slot(utils, offer.costA()), slot(utils, offer.costB()), slot(utils, offer.result()),
+                    offer.maxUses(), offer.xp(), offer.priceMultiplier(), condition);
+        }
 
-        Value.Offer offer = (Value.Offer) Objects.requireNonNull(result);
-
-        return new ItemsToItemsNode(utils, slot(utils, offer.costA()), slot(utils, offer.costB()), slot(utils, offer.result()),
-                offer.maxUses(), offer.xp(), offer.priceMultiplier(), condition);
+        throw new IllegalArgumentException("Unknown offer type " + result);
     }
 
     private static TooltipNode combine(TooltipNode condition, TooltipNode tooltip, PathCondition when) {
@@ -263,6 +266,7 @@ public final class BytecodeInterpreter {
         return new ComputedTrades(levels, true);
     }
 
+    @NotNull
     private static TradeLevel incomplete(@Nullable TradeLevel level, String merchant) {
         if (level instanceof TradeLevel.OfListings listings) {
             return new TradeLevel.OfTrades(listings.levelInfo(), (u) -> {
@@ -284,6 +288,7 @@ public final class BytecodeInterpreter {
         return new TradeLevel.OfTrades(new TradeLevelInfo(NumberExpr.opaque(merchant)), (u) -> List.of(incompleteNode()));
     }
 
+    @NotNull
     private static IDataNode incompleteNode() {
         return new MissingNode(TooltipBuilder.error(TooltipBuilder.translate(Lang.Description.INCOMPLETE_TRADES.singular())).build());
     }
@@ -299,10 +304,12 @@ public final class BytecodeInterpreter {
         }
     }
 
+    @NotNull
     private static List<Path> productive(List<Path> paths) {
         return paths.stream().filter((p) -> p.result() instanceof Value.Offers offers && !offers.entries.isEmpty()).toList();
     }
 
+    @NotNull
     private static Split split(List<Decision> decisions) {
         List<Decision> world = decisions.stream().filter((d) -> d.kind() != Decision.Kind.RANDOM || !(d.value() instanceof Double)).toList();
         List<Decision> levels = world.stream().filter((d) -> d.holds() && d.kind() == Decision.Kind.EQUALS && d.value() instanceof Integer).toList();
@@ -332,6 +339,7 @@ public final class BytecodeInterpreter {
         return probability;
     }
 
+    @NotNull
     private static TradeLevel tradeLevel(List<Group> groups, float chance) {
         List<Value.Offers.Entry> entries = groups.stream().map((g) -> g.entry).toList();
         List<PathCondition> conditions = groups.stream().map((g) -> PathCondition.of(List.copyOf(g.worlds.keySet()))).toList();
@@ -379,9 +387,10 @@ public final class BytecodeInterpreter {
         throw new Interpreter.Fail("number of offers");
     }
 
+    @NotNull
     private static List<Path> paths(IServerUtils utils, Function<Interpreter, Value> run) {
         ServerLevel level = utils.getServerLevel();
-        RegistryAccess registries = level != null ? level.registryAccess() : null;
+        RegistryAccess registries = level.registryAccess();
         Set<String> opaque = new HashSet<>();
         int restarts = 0;
         List<Path> results = new ArrayList<>();
@@ -452,21 +461,48 @@ public final class BytecodeInterpreter {
             Value result = new Interpreter(Interpreter.Mode.SYMBOLIC, 0).call(supplier, Supplier.class, "get", "()Ljava/lang/Object;", List.of());
 
             if (result instanceof Value.Known known && known.value() instanceof ItemStack stack) {
-                return stack.isEmpty() ? new Stacks(List.of(), NumberExpr.constant(0)) : new Stacks(List.of(stack.copy()), NumberExpr.constant(stack.getCount()));
+                return stacks(List.of(stack), null);
             }
             if (result instanceof Value.Stack stack) {
-                return new Stacks(templates(stack).stream().filter((s) -> !s.isEmpty()).toList(), stack.count);
+                return stacks(templates(stack), stack.count);
             }
             if (result instanceof Value.Choice choice && choice.options().stream().allMatch(ItemStack.class::isInstance)) {
-                List<ItemStack> options = choice.options().stream().map((o) -> ((ItemStack) o).copy()).filter((s) -> !s.isEmpty()).toList();
-
-                if (options.stream().mapToInt(ItemStack::getCount).distinct().count() <= 1) {
-                    return new Stacks(options, NumberExpr.constant(options.isEmpty() ? 0 : options.get(0).getCount()));
-                }
+                return stacks(choice.options().stream().map(ItemStack.class::cast).toList(), null);
             }
         } catch (Throwable ignored) {}
 
         return null;
+    }
+
+    @NotNull
+    private static Stacks stacks(List<ItemStack> stacks, @Nullable NumberExpr count) {
+        List<Option> options = new ArrayList<>();
+
+        for (ItemStack stack : stacks) {
+            if (stack.isEmpty()) {
+                continue;
+            }
+
+            NumberExpr stackCount = count != null ? count : NumberExpr.constant(stack.getCount());
+            double chance = 1.0 / stacks.size();
+            int same = -1;
+
+            for (int i = 0; i < options.size() && same < 0; i++) {
+                if (ItemStack.isSameItemSameTags(options.get(i).stack(), stack) && options.get(i).count().equals(stackCount)) {
+                    same = i;
+                }
+            }
+
+            if (same < 0) {
+                options.add(new Option(stack.copy(), stackCount, chance));
+            } else {
+                Option option = options.get(same);
+
+                options.set(same, new Option(option.stack(), option.count(), option.chance() + chance));
+            }
+        }
+
+        return new Stacks(options);
     }
 
     public static void clearCaches() {
@@ -519,6 +555,7 @@ public final class BytecodeInterpreter {
         }).build();
     }
 
+    @NotNull
     private static String describe(Value value) {
         if (value instanceof Value.Known known && known.value() instanceof ItemStack stack) {
             return stack.isEmpty() ? "-" : stackText(stack) + " x" + stack.getCount();
@@ -537,10 +574,12 @@ public final class BytecodeInterpreter {
         return "?";
     }
 
+    @NotNull
     private static String stackText(ItemStack stack) {
         return BuiltInRegistries.ITEM.getKey(stack.getItem()) + (stack.hasTag() ? " " + stack.getTag() : "");
     }
 
+    @NotNull
     private static String countText(NumberExpr count) {
         NumberInterval bounds = count.bounds();
 
@@ -551,10 +590,12 @@ public final class BytecodeInterpreter {
         return bounds.isPoint() ? numberText(bounds.lo()) : numberText(bounds.lo()) + "-" + numberText(bounds.hi());
     }
 
+    @NotNull
     private static String numberText(double value) {
         return value == Math.rint(value) ? String.valueOf((long) value) : String.valueOf(value);
     }
 
+    @NotNull
     private static List<ItemStack> templates(Value.Stack stack) {
         List<ItemStack> options = new ArrayList<>();
         int count = stack.count instanceof NumberExpr.Const c ? (int) c.value() : 1;
@@ -566,7 +607,10 @@ public final class BytecodeInterpreter {
         return options;
     }
 
-    public record Stacks(List<ItemStack> options, NumberExpr count) {
+    public record Stacks(List<Option> options) {
+    }
+
+    public record Option(ItemStack stack, NumberExpr count, double chance) {
     }
 
     private record Path(@Nullable Value result, List<Decision> decisions, @Nullable String failure) {

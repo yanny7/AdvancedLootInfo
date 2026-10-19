@@ -72,11 +72,11 @@ public class DungeonLootEnhancerModifierAccessor extends BaseAccessor<DungeonLoo
                 continue;
             }
 
-            double perRoll = chance / ((double) pool.size() * stacks.options().size());
-            float rolledChance = (float) (1 - Math.pow(1 - perRoll, rolls));
+            for (BytecodeInterpreter.Option option : stacks.options()) {
+                double perRoll = chance * option.chance() / pool.size();
+                float rolledChance = (float) (1 - Math.pow(1 - perRoll, rolls));
 
-            for (ItemStack option : stacks.options()) {
-                drops.add(new Drop(option, stacks.count(), rolledChance));
+                drops.add(new Drop(option.stack(), option.count(), rolledChance));
             }
         }
     }
