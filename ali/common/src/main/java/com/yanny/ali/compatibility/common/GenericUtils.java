@@ -500,13 +500,7 @@ public class GenericUtils {
         }
 
         int leftWidth = pois.isEmpty() ? maxWidth : maxWidth - SLOT_SIZE - HEADER_GAP;
-        String titleKey = getTraderTranslationKey(type.id());
-
-        if (entityType != null && !Language.getInstance().has(titleKey)) {
-            titleKey = entityType.getDescriptionId();
-        }
-
-        Component title = ellipsis(titleKey, type.id().getPath(), leftWidth - titleX);
+        Component title = ellipsis(getTraderTranslationKey(type.id(), entityType), type.id().getPath(), leftWidth - titleX);
         Rect titleRect = new Rect(titleX, titleY, font.width(title), TEXT_HEIGHT);
         Component acceptsLabel = Component.translatable("ali.util.advanced_loot_info.accepts");
         int acceptsLabelWidth = font.width(acceptsLabel);
@@ -539,12 +533,13 @@ public class GenericUtils {
 
     // every villager profession, modded ones included, is named by a key under the vanilla villager prefix
     @NotNull
-    private static String getTraderTranslationKey(ResourceLocation location) {
+    private static String getTraderTranslationKey(ResourceLocation location, @Nullable EntityType<?> entityType) {
         if (BuiltInRegistries.VILLAGER_PROFESSION.containsKey(location)) {
             return "entity.minecraft.villager." + location.getPath();
         }
 
-        return "entity." + location.getNamespace() + "." + location.getPath();
+        String key = "entity." + location.getNamespace() + "." + location.getPath();
+        return entityType != null && !Language.getInstance().has(key) ? entityType.getDescriptionId() : key;
     }
 
     // split table path and make uppercased text
