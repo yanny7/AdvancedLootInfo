@@ -18,6 +18,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.WildcardType;
 import java.util.*;
+import java.util.function.Predicate;
 
 public class TraderDetector {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
@@ -38,11 +39,11 @@ public class TraderDetector {
     }
 
     @NotNull
-    public Map<EntityType<?>, Class<?>> findUnregistered(Set<EntityType<?>> registered) {
+    public Map<EntityType<?>, Class<?>> findTraders(Predicate<EntityType<?>> wanted) {
         Map<EntityType<?>, Class<?>> traders = new LinkedHashMap<>();
 
         for (EntityType<?> type : BuiltInRegistries.ENTITY_TYPE) {
-            if (type != EntityType.PLAYER && !registered.contains(type)) {
+            if (type != EntityType.PLAYER && wanted.test(type)) {
                 Class<?> merchantClass = getMerchantClass(type);
 
                 if (merchantClass != null) {

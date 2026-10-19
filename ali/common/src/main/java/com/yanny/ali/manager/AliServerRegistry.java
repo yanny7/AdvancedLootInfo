@@ -88,11 +88,10 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final ManagedRegistry<Class<?>, IPageResolver<Object>> pageResolvers = registerClassKeyed("global loot modifier page resolvers", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, IEntitySubPredicateResolver<EntitySubPredicate>> entitySubPredicateResolvers = registerClassKeyed("entity sub-predicate resolvers", false, HashMap::new, null);
 
-    private final Set<String> fallbackItemListings = new HashSet<>();
+    private final Set<String> loggedOnce = new HashSet<>();
     private int computedItemListings;
     private int uncomputedItemListings;
     private long bytecodeNanos;
-    private final Set<String> failedRenderers = new HashSet<>();
     private final Map<ResourceLocation, LootTable> lootTableMap = new HashMap<>();
     private final Map<ResourceLocation, Integer> hitMap = new HashMap<>();
     private final List<Function<IServerUtils, List<ILootModifier<?>>>> lootModifierGetters = new LinkedList<>();
@@ -117,11 +116,10 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     public void clearData() {
         super.clearData();
-        fallbackItemListings.clear();
+        loggedOnce.clear();
         computedItemListings = 0;
         uncomputedItemListings = 0;
         bytecodeNanos = 0;
-        failedRenderers.clear();
         NodeUtils.clearFailedOperations();
         lootTableMap.clear();
         ingredientUnwrappers.clear();
@@ -478,16 +476,17 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private IDataNode getFallbackItemListing(IServerUtils utils, VillagerTrades.ItemListing entry, TooltipNode condition) {
         long start = System.nanoTime();
         IDataNode computed = BytecodeInterpreter.getItemListing(utils, entry, condition);
+        String name = ManagedRegistry.classKeyName(entry.getClass());
 
         bytecodeNanos += System.nanoTime() - start;
 
         if (computed != null) {
-            String name = ManagedRegistry.classKeyName(entry.getClass());
+            String message = "Computed trade item listing " + name + " from its bytecode";
 
             computedItemListings++;
 
-            if (fallbackItemListings.add(name)) {
-                LOGGER.info("Computed trade item listing {} from its bytecode", name);
+            if (loggedOnce.add(message)) {
+                LOGGER.info(message);
             }
 
             return computed;
@@ -501,10 +500,10 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
             MerchantOffer offer = entry.getOffer(null, null);
 
             if (offer != null) {
-                String name = ManagedRegistry.classKeyName(entry.getClass());
+                String message = "Using MerchantOffer fallback for trade item listing " + name + ", reported values can be inaccurate";
 
-                if (fallbackItemListings.add(name)) {
-                    LOGGER.info("Using MerchantOffer fallback for trade item listing {}, reported values can be inaccurate", name);
+                if (loggedOnce.add(message)) {
+                    LOGGER.info(message);
                 }
 
                 return TradeUtils.getNode(utils, offer, TooltipBuilder.array((b) -> {
@@ -522,27 +521,21 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     private <R> R attempt(String kind, Object value, Supplier<R> call, Supplier<R> fallback) {
-        try {
-            return call.get();
-        } catch (Throwable e) {
-            String name = ManagedRegistry.classKeyName(value.getClass());
-
-            if (failedRenderers.add(kind + " " + name)) {
-                LOGGER.warn("Failed to run {} {}: {}", kind, name, e.getMessage(), e);
-            }
-
-            return fallback.get();
-        }
+        return isolate(value, call, fallback, (name) -> "Failed to run " + kind + " " + name);
     }
 
     private <R> R guarded(String kind, Object value, Supplier<R> renderer, Supplier<R> fallback) {
-        try {
-            return renderer.get();
-        } catch (Throwable e) {
-            String name = ManagedRegistry.classKeyName(value.getClass());
+        return isolate(value, renderer, fallback, (name) -> "Failed to build " + kind + " for " + name + ", showing it as unsupported");
+    }
 
-            if (failedRenderers.add(kind + " " + name)) {
-                LOGGER.warn("Failed to build {} for {}, showing it as unsupported: {}", kind, name, e.getMessage(), e);
+    private <R> R isolate(Object value, Supplier<R> call, Supplier<R> fallback, Function<String, String> message) {
+        try {
+            return call.get();
+        } catch (Throwable e) {
+            String text = message.apply(ManagedRegistry.classKeyName(value.getClass()));
+
+            if (loggedOnce.add(text)) {
+                LOGGER.warn("{}: {}", text, e.getMessage(), e);
             }
 
             return fallback.get();

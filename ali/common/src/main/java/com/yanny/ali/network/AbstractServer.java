@@ -28,6 +28,7 @@ import com.yanny.ali.plugin.server.bytecode.BytecodeInterpreter;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -589,32 +590,32 @@ public abstract class AbstractServer {
         TraderDetector detector = new TraderDetector(serverRegistry, serverRegistry.getServerLevel());
         Map<ResourceLocation, ComputedTrader> computed = new LinkedHashMap<>();
 
-        detector.findUnregistered(registered).forEach((type, entityClass) -> {
+        detector.findTraders((type) -> !registered.contains(type) && isTradeShown(config, traderKey(type))).forEach((type, entityClass) -> {
             ResourceLocation id = BuiltInRegistries.ENTITY_TYPE.getKey(type);
-            ResourceLocation key = new ResourceLocation(id.getNamespace(), "entity/" + id.getPath());
             BytecodeInterpreter.ComputedTrades trades;
 
             try {
                 trades = BytecodeInterpreter.getTradeLevels(serverRegistry, entityClass);
             } catch (Throwable e) {
-                trades = null;
+                LOGGER.warn("Failed to compute trades of trading entity {} ({})", id, entityClass.getName(), e);
+                trades = new BytecodeInterpreter.ComputedTrades(new Int2ObjectOpenHashMap<>(), true);
             }
 
-            if (trades != null && trades.levels().isEmpty() && !trades.incomplete()) {
+            if (trades.levels().isEmpty() && !trades.incomplete()) {
                 if (config.logMoreStatistics) {
                     LOGGER.info("Trading entity {} ({}) offers no trades", id, entityClass.getName());
                 }
-            } else if (trades != null && !trades.incomplete()) {
-                computed.put(key, new ComputedTrader(type, trades.levels(), false));
+
+                return;
+            }
+
+            computed.put(traderKey(type), new ComputedTrader(type, trades.levels(), trades.incomplete()));
+
+            if (!trades.incomplete()) {
                 LOGGER.info("Computed trades of trading entity {} ({}) from its bytecode", id, entityClass.getName());
-            } else if (trades != null && !trades.levels().isEmpty()) {
-                computed.put(key, new ComputedTrader(type, trades.levels(), true));
+            } else if (!trades.levels().isEmpty()) {
                 LOGGER.warn("Computed only some trades of trading entity {} ({}) from its bytecode", id, entityClass.getName());
             } else {
-                if (trades != null) {
-                    computed.put(key, new ComputedTrader(type, trades.levels(), true));
-                }
-
                 LOGGER.warn("Unregistered trading entity {} ({})", id, entityClass.getName());
             }
         });
@@ -641,10 +642,20 @@ public abstract class AbstractServer {
         return nodes;
     }
 
+    private static ResourceLocation traderKey(EntityType<?> type) {
+        ResourceLocation id = BuiltInRegistries.ENTITY_TYPE.getKey(type);
+
+        return new ResourceLocation(id.getNamespace(), "entity/" + id.getPath());
+    }
+
+    private static boolean isTradeShown(AliConfig config, ResourceLocation location) {
+        return config.tradeCategories.stream().filter((f) -> f.validate(location)).findFirst().map((f) -> !f.isHidden()).orElse(false);
+    }
+
     private static void processTrade(AliConfig config, Map<ResourceLocation, IDataNode> nodes, ResourceLocation location, Supplier<TradeNode> parser) {
         TooltipContext.set(location);
 
-        if (config.tradeCategories.stream().filter((f) -> f.validate(location)).findFirst().map((f) -> !f.isHidden()).orElse(false)) {
+        if (isTradeShown(config, location)) {
             try {
                 TradeNode tradeNode = parser.get();
 
