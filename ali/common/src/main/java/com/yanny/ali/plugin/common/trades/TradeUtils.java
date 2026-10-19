@@ -42,7 +42,15 @@ public class TradeUtils {
     }
 
     public static Object listingKey(@Nullable VillagerTrades.ItemListing listing) {
-        return structuralKey(listing, new IdentityHashMap<>(), 0);
+        try {
+            Object key = structuralKey(listing, new IdentityHashMap<>(), 0);
+
+            // hashed here so a foreign hashCode that throws is caught, not inside the caller's HashSet
+            Objects.hashCode(key);
+            return key;
+        } catch (Throwable e) {
+            return new Ref(listing);
+        }
     }
 
     @Nullable
@@ -55,35 +63,53 @@ public class TradeUtils {
         }
 
         Class<?> type = value.getClass();
+        boolean container = type.isArray() || value instanceof Collection<?> || value instanceof Map<?, ?>;
 
-        if (type.isArray()) {
-            List<Object> elements = new ArrayList<>();
-
-            elements.add(type);
-
-            for (int i = 0; i < Array.getLength(value); i++) {
-                elements.add(structuralKey(Array.get(value, i), visiting, depth + 1));
-            }
-
-            return elements;
-        }
-        if (value instanceof List<?> list) {
-            List<Object> elements = new ArrayList<>();
-
-            elements.add(List.class);
-            list.forEach((e) -> elements.add(structuralKey(e, visiting, depth + 1)));
-            return elements;
-        }
-        if (depth >= MAX_KEY_DEPTH || visiting.containsKey(value) || !isStructural(type)) {
+        if (!container && !isStructural(type)) {
             return value;
         }
+        if (depth >= MAX_KEY_DEPTH || visiting.containsKey(value)) {
+            return new Ref(value);
+        }
 
-        List<Object> fields = new ArrayList<>();
-
-        fields.add(type);
         visiting.put(value, true);
 
         try {
+            if (type.isArray()) {
+                List<Object> elements = new ArrayList<>();
+
+                elements.add(type);
+
+                for (int i = 0; i < Array.getLength(value); i++) {
+                    elements.add(structuralKey(Array.get(value, i), visiting, depth + 1));
+                }
+
+                return elements;
+            }
+            if (value instanceof Set<?> set) {
+                Set<Object> elements = new HashSet<>();
+
+                set.forEach((e) -> elements.add(structuralKey(e, visiting, depth + 1)));
+                return Arrays.asList(Set.class, elements);
+            }
+            if (value instanceof Collection<?> collection) {
+                List<Object> elements = new ArrayList<>();
+
+                elements.add(List.class);
+                collection.forEach((e) -> elements.add(structuralKey(e, visiting, depth + 1)));
+                return elements;
+            }
+            if (value instanceof Map<?, ?> map) {
+                Map<Object, Object> entries = new HashMap<>();
+
+                map.forEach((k, v) -> entries.put(structuralKey(k, visiting, depth + 1), structuralKey(v, visiting, depth + 1)));
+                return Arrays.asList(Map.class, entries);
+            }
+
+            List<Object> fields = new ArrayList<>();
+
+            fields.add(type);
+
             for (Class<?> c = type; c != null && c != Object.class; c = c.getSuperclass()) {
                 for (Field field : c.getDeclaredFields()) {
                     if (!Modifier.isStatic(field.getModifiers())) {
@@ -92,13 +118,13 @@ public class TradeUtils {
                     }
                 }
             }
+
+            return fields;
         } catch (Throwable e) {
-            return value;
+            return new Ref(value);
         } finally {
             visiting.remove(value);
         }
-
-        return fields;
     }
 
     private static boolean isStructural(Class<?> type) {
@@ -338,5 +364,17 @@ public class TradeUtils {
                 0.2F,
                 condition
         );
+    }
+
+    private record Ref(@Nullable Object value) {
+        @Override
+        public boolean equals(Object o) {
+            return o instanceof Ref ref && ref.value == value;
+        }
+
+        @Override
+        public int hashCode() {
+            return System.identityHashCode(value);
+        }
     }
 }
