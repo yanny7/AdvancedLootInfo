@@ -36,6 +36,7 @@ public class TradeGroupNode extends ListNode {
         tooltip = TooltipBuilder.branch((b) -> b.add(TooltipBuilder.number(times).build(Lang.Description.REPEATED_TRADE))).build();
     }
 
+    @NotNull
     public static TradeGroupNode repeated(NumberExpr times, IDataNode trade) {
         return new TradeGroupNode(times, trade);
     }

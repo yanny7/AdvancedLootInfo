@@ -1,12 +1,14 @@
 package com.yanny.ali.plugin.server.bytecode;
 
 import com.yanny.aci.api.NumberInterval;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 
 final class Arithmetic implements Opcodes {
     private Arithmetic() {}
 
+    @NotNull
     static Object compute(int op, Object a, Object b) {
         return switch (op) {
             case IADD -> i(a) + i(b);

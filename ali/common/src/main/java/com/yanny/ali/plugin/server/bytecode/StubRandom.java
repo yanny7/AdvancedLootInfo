@@ -47,6 +47,10 @@ final class StubRandom implements RandomSource {
     }
 
     @Override
+    public void consumeCount(int count) {
+    }
+
+    @Override
     public int nextInt() {
         draw(++draws);
         return pick;

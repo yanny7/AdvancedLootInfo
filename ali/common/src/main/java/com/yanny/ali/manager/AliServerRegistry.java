@@ -91,7 +91,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final Set<String> loggedOnce = new HashSet<>();
     private int computedItemListings;
     private int uncomputedItemListings;
-    private long bytecodeNanos;
     private final Map<ResourceLocation, LootTable> lootTableMap = new HashMap<>();
     private final Map<ResourceLocation, Integer> hitMap = new HashMap<>();
     private final List<Function<IServerUtils, List<ILootModifier<?>>>> lootModifierGetters = new LinkedList<>();
@@ -119,7 +118,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         loggedOnce.clear();
         computedItemListings = 0;
         uncomputedItemListings = 0;
-        bytecodeNanos = 0;
         NodeUtils.clearFailedOperations();
         lootTableMap.clear();
         ingredientUnwrappers.clear();
@@ -459,8 +457,8 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     public void logBytecodeStatistics() {
         if (computedItemListings + uncomputedItemListings > 0) {
-            LOGGER.info("Auto-detected {} trade item listings from their bytecode took {}ms, {} of them could not be auto-detected",
-                    computedItemListings + uncomputedItemListings, bytecodeNanos / 1_000_000, uncomputedItemListings);
+            LOGGER.info("Auto-detected {} trade item listings from their bytecode, {} of them could not be auto-detected",
+                    computedItemListings + uncomputedItemListings, uncomputedItemListings);
         }
     }
 
@@ -474,11 +472,8 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     @NotNull
     private IDataNode getFallbackItemListing(IServerUtils utils, VillagerTrades.ItemListing entry, TooltipNode condition) {
-        long start = System.nanoTime();
         IDataNode computed = BytecodeInterpreter.getItemListing(utils, entry, condition);
         String name = ManagedRegistry.classKeyName(entry.getClass());
-
-        bytecodeNanos += System.nanoTime() - start;
 
         if (computed != null) {
             String message = "Computed trade item listing " + name + " from its bytecode";

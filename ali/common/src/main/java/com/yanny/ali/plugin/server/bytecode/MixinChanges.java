@@ -3,6 +3,7 @@ package com.yanny.ali.plugin.server.bytecode;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
@@ -43,6 +44,7 @@ final class MixinChanges {
         return CHANGED.computeIfAbsent(owner, MixinChanges::changed).stream().anyMatch((t) -> t.matches(method.name, method.desc));
     }
 
+    @NotNull
     private static List<Target> changed(Class<?> owner) {
         List<Target> changed = new ArrayList<>();
         Set<String> mixinNames = new LinkedHashSet<>();
@@ -56,7 +58,9 @@ final class MixinChanges {
                     }
                 }
             }
-        } catch (Throwable ignored) {}
+        } catch (Throwable e) {
+            return isMixinTarget(owner) ? List.of(Target.ALL) : List.of();
+        }
 
         for (String name : mixinNames) {
             try {
@@ -71,6 +75,14 @@ final class MixinChanges {
         }
 
         return changed;
+    }
+
+    private static boolean isMixinTarget(Class<?> owner) {
+        try {
+            return Mixins.getConfigs().stream().anyMatch((config) -> config.getConfig().getTargets().contains(owner.getName()));
+        } catch (Throwable e) {
+            return true;
+        }
     }
 
     private static void injected(IMixinInfo mixin, Class<?> owner, List<Target> changed) {
@@ -106,6 +118,7 @@ final class MixinChanges {
         }
     }
 
+    @NotNull
     private static List<String> selectors(AnnotationNode annotation) {
         List<String> selectors = new ArrayList<>();
 
@@ -122,12 +135,43 @@ final class MixinChanges {
                 } else if (value instanceof List<?> list) {
                     list.stream().filter(String.class::isInstance).map(String.class::cast).forEach(selectors::add);
                 }
+            } else if (annotation.values.get(i).equals("target") && annotation.values.get(i + 1) instanceof List<?> list) {
+                list.stream().filter(AnnotationNode.class::isInstance).map((d) -> descSelector((AnnotationNode) d)).filter(Objects::nonNull).forEach(selectors::add);
             }
         }
 
         return selectors;
     }
 
+    @Nullable
+    private static String descSelector(AnnotationNode desc) {
+        String name = null;
+        Type owner = null;
+        Type ret = Type.VOID_TYPE;
+        List<Type> args = List.of();
+
+        for (int i = 0; desc.values != null && i + 1 < desc.values.size(); i += 2) {
+            Object value = desc.values.get(i + 1);
+
+            switch (String.valueOf(desc.values.get(i))) {
+                case "value" -> name = value instanceof String string ? string : null;
+                case "owner" -> owner = value instanceof Type type && type.getSort() == Type.OBJECT ? type : null;
+                case "ret" -> ret = value instanceof Type type ? type : ret;
+                case "args" -> args = value instanceof List<?> list ? list.stream().filter(Type.class::isInstance).map(Type.class::cast).toList() : args;
+                default -> {}
+            }
+        }
+
+        if (name == null) {
+            return null;
+        }
+
+        String selector = name + Type.getMethodDescriptor(ret, args.toArray(new Type[0]));
+
+        return owner != null ? "L" + owner.getInternalName() + ";" + selector : selector;
+    }
+
+    @NotNull
     private static IReferenceMapper refmap(IMixinConfig config) {
         JsonObject json = configJson(config.getName());
         JsonElement refmapName = json != null ? json.get("refmap") : null;

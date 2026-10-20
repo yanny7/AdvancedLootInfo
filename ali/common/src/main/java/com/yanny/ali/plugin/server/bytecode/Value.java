@@ -3,6 +3,7 @@ package com.yanny.ali.plugin.server.bytecode;
 import com.yanny.aci.api.NumberExpr;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Type;
@@ -89,6 +90,7 @@ sealed interface Value {
             this.randomTag = randomTag;
         }
 
+        @NotNull
         Stack copy() {
             Stack copy = new Stack(options.stream().map(ItemStack::copy).toList(), count, randomTag);
 
@@ -98,7 +100,7 @@ sealed interface Value {
         }
     }
 
-    record Pick(List<Object> listings, Object pool, @Nullable Integer key) implements Value {
+    record Pick(List<VillagerTrades.ItemListing> listings, Object pool, @Nullable Integer key) implements Value {
     }
 
     final class Draws implements Value {

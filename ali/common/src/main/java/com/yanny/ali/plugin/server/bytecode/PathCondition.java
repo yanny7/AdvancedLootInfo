@@ -10,6 +10,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -84,6 +85,7 @@ sealed interface PathCondition {
 
     String text();
 
+    @NotNull
     private static Set<Decision> withoutImplied(List<Decision> path) {
         Set<Decision> set = new LinkedHashSet<>();
 
@@ -136,14 +138,21 @@ sealed interface PathCondition {
         for (Decision decision : set) {
             if (decision.kind() == Decision.Kind.RANDOM) {
                 random = true;
-            } else if (decision.kind() == Decision.Kind.UNKNOWN) {
+                continue;
+            }
+            if (decision.kind() == Decision.Kind.UNKNOWN) {
                 unknown = true;
-            } else if (decision.holds()) {
-                terms.add(new Is(decision.value()));
+                continue;
+            }
+
+            Object value = Objects.requireNonNull(decision.value());
+
+            if (decision.holds()) {
+                terms.add(new Is(value));
             } else if (decision.kind() == Decision.Kind.EQUALS) {
-                excluded.computeIfAbsent(decision.subject(), (s) -> new ArrayList<>()).add(decision.value());
+                excluded.computeIfAbsent(decision.subject(), (s) -> new ArrayList<>()).add(value);
             } else {
-                terms.add(new Not(new Is(decision.value())));
+                terms.add(new Not(new Is(value)));
             }
         }
 
@@ -167,11 +176,13 @@ sealed interface PathCondition {
     }
 
     record Always() implements PathCondition {
+        @NotNull
         @Override
         public TooltipNode tooltip(IServerUtils utils) {
             return TooltipNode.empty();
         }
 
+        @NotNull
         @Override
         public String text() {
             return "always";
@@ -184,6 +195,7 @@ sealed interface PathCondition {
             return utils.getValueTooltip(utils, shown(value)).build(label(value));
         }
 
+        @NotNull
         @Override
         public String text() {
             return label(value).getTranslation().sEng().replace("%s", String.valueOf(shown(value)));
@@ -251,6 +263,7 @@ sealed interface PathCondition {
             return TooltipBuilder.array((b) -> b.add(term.tooltip(utils)), Lang.Conditions.INVERTED).build();
         }
 
+        @NotNull
         @Override
         public String text() {
             return "not " + term.text();

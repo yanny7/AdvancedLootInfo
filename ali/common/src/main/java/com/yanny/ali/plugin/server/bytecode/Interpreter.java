@@ -6,13 +6,14 @@ import com.yanny.aci.api.NumberInterval;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
-import net.minecraft.world.entity.npc.AbstractVillager;
-import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Handle;
@@ -240,9 +241,7 @@ final class Interpreter implements Opcodes {
     }
 
     private static boolean isPlainOffers(Class<?> type) {
-        Declaration add = declaration(type, "add", "(Ljava/lang/Object;)Z", false);
-
-        return MerchantOffers.class.isAssignableFrom(type) && add != null && isJdk(add.owner());
+        return MerchantOffers.class.isAssignableFrom(type) && declaration(type, "add", "(Ljava/lang/Object;)Z", false) instanceof JdkDeclaration;
     }
 
     private static boolean isVillagerOffers(FieldInsnNode insn, ClassLoader loader) {
@@ -255,9 +254,7 @@ final class Interpreter implements Opcodes {
 
     @Nullable
     private static Declaration ownDeclaration(Class<?> start, String name, String desc, boolean exact) {
-        Declaration declaration = declaration(start, name, desc, exact);
-
-        if (declaration == null || declaration.method() == null || declaration.owner().getName().startsWith("net.minecraft.")) {
+        if (!(declaration(start, name, desc, exact) instanceof Declaration declaration) || LambdaResolver.isPlatform(Type.getInternalName(declaration.owner()))) {
             return null;
         }
 
@@ -271,7 +268,7 @@ final class Interpreter implements Opcodes {
             case H_INVOKEVIRTUAL -> invoke(new MethodInsnNode(INVOKEVIRTUAL, handle.getOwner(), handle.getName(), handle.getDesc(), false), args, loader, depth);
             case H_INVOKEINTERFACE -> invoke(new MethodInsnNode(INVOKEINTERFACE, handle.getOwner(), handle.getName(), handle.getDesc(), true), args, loader, depth);
             case H_INVOKESPECIAL -> invoke(new MethodInsnNode(INVOKESPECIAL, handle.getOwner(), handle.getName(), handle.getDesc(), handle.isInterface()), args, loader, depth);
-            case H_NEWINVOKESPECIAL -> construct(handle.getOwner(), handle.getDesc(), args, loader, depth);
+            case H_NEWINVOKESPECIAL -> construct(handle.getOwner(), handle.getDesc(), args, loader);
             default -> throw new Fail("unsupported method handle");
         };
     }
@@ -364,7 +361,7 @@ final class Interpreter implements Opcodes {
 
                     arrayStore(op, f.pop(), idx, value);
                 }
-                case POP -> f.pop();
+                case POP, MONITORENTER, MONITOREXIT -> f.pop();
                 case POP2 -> {
                     if (!f.pop().isWide()) {
                         f.pop();
@@ -540,7 +537,6 @@ final class Interpreter implements Opcodes {
                 }
                 case CHECKCAST -> f.push(checkCast(f.pop(), ((TypeInsnNode) insn).desc, loader));
                 case INSTANCEOF -> f.push(new Value.Known(instanceOf(f.pop(), ((TypeInsnNode) insn).desc, loader) ? 1 : 0));
-                case MONITORENTER, MONITOREXIT -> f.pop();
                 default -> throw new Fail("opcode " + op);
             }
 
@@ -611,7 +607,7 @@ final class Interpreter implements Opcodes {
                 throw new Fail("constructor chaining");
             }
 
-            replace(uninit, construct(uninit.type, call.desc, args.subList(1, args.size()), loader, depth));
+            replace(uninit, construct(uninit.type, call.desc, args.subList(1, args.size()), loader));
             return null;
         }
         if (RuntimeNames.is(RuntimeNames.FIND_MAP_STRUCTURE, call)) {
@@ -642,7 +638,7 @@ final class Interpreter implements Opcodes {
         if (merchant != null && RuntimeNames.is(RuntimeNames.GET_OFFER, call)) {
             if (args.get(0) instanceof Value.Choice choice && choice.draw() != null && pools.contains(choice.draw())
                     && choice.options().stream().allMatch(VillagerTrades.ItemListing.class::isInstance)) {
-                return new Value.Pick(choice.options(), choice.draw(), poolKey(choice.options()));
+                return new Value.Pick(choice.options().stream().map(VillagerTrades.ItemListing.class::cast).toList(), choice.draw(), poolKey(choice.options()));
             }
             if (args.get(0) instanceof Value.Known known && known.value() instanceof VillagerTrades.ItemListing listing) {
                 Object source = elementSources.containsKey(listing) ? elementSources.get(listing) : keyedSource(listing);
@@ -656,7 +652,7 @@ final class Interpreter implements Opcodes {
 
         if (!isStatic && args.get(0) instanceof Value.Known known && known.value() instanceof List<?> list && owned.containsKey(list)
                 && call.name.equals("remove") && call.desc.equals("(Ljava/lang/Object;)Z") && args.get(1) instanceof Value.Choice choice
-                && choice.options().size() == list.size() - removed.getOrDefault(list, 0) && list.containsAll(choice.options())) {
+                && choice.options().size() == list.size() - removed.getOrDefault(list, 0) && new HashSet<Object>(list).containsAll(choice.options())) {
             removed.merge(list, 1, Integer::sum);
             return new Value.Known(1);
         }
@@ -670,7 +666,7 @@ final class Interpreter implements Opcodes {
         Value receiver = isStatic ? null : args.get(0);
 
         if (receiver instanceof Value.Rng rng) {
-            return random(call, rng, args, loader, depth);
+            return random(call, rng, args, depth);
         }
         if (receiver instanceof Value.Stack stack) {
             return stackCall(call, stack, args, loader);
@@ -706,10 +702,14 @@ final class Interpreter implements Opcodes {
             }
 
             boolean special = call.getOpcode() == INVOKESPECIAL;
-            Declaration own = ownDeclaration(special ? load(call.owner, loader) : merchant, call.name, call.desc, special);
+            Class<?> start = special ? load(call.owner, loader) : merchant;
 
-            if (own != null) {
-                return execute(own.owner(), own.method(), args, depth + 1);
+            if (start != null) {
+                Declaration own = ownDeclaration(start, call.name, call.desc, special);
+
+                if (own != null) {
+                    return execute(own.owner(), own.method(), args, depth + 1);
+                }
             }
         }
         if (receiver instanceof Value.Offers offers) {
@@ -733,7 +733,7 @@ final class Interpreter implements Opcodes {
             Type returnType = Type.getReturnType(call.desc);
 
             if (returnType.getSort() == Type.OBJECT && isRandomType(returnType, loader)) {
-                return new Value.Rng(!returnType.getInternalName().equals(Type.getInternalName(RandomSource.class)));
+                return new Value.Rng(isLegacyRandom(returnType, loader));
             }
 
             return Value.Unknown.of(returnType, Origin.of(receiver, call.name + call.desc, args.subList(1, args.size())));
@@ -749,14 +749,23 @@ final class Interpreter implements Opcodes {
             throw new Fail("null receiver");
         }
         if (receiver instanceof Value.Known known && LambdaResolver.isLambda(known.value())) {
-            return lambdaCall(known.value(), call, args, depth);
+            return lambdaCall(known.value(), args, depth);
         }
 
-        Class<?> start = isStatic || call.getOpcode() == INVOKESPECIAL ? load(call.owner, loader) : ((Value.Known) receiver).value().getClass();
-        Declaration declaration = declaration(start, call.name, call.desc, call.getOpcode() == INVOKESPECIAL);
+        Class<?> start;
 
-        if (declaration != null && isJdk(declaration.owner())) {
-            return jdkCall(call, declaration.owner(), args, loader);
+        if (isStatic || call.getOpcode() == INVOKESPECIAL) {
+            start = load(call.owner, loader);
+        } else if (receiver instanceof Value.Known known) {
+            start = known.value().getClass();
+        } else {
+            throw new Fail("unsupported receiver");
+        }
+
+        Declared declared = declaration(start, call.name, call.desc, call.getOpcode() == INVOKESPECIAL);
+
+        if (declared instanceof JdkDeclaration jdk) {
+            return jdkCall(call, jdk.owner(), args, loader);
         }
 
         if (isStatic && isJdk(start)) {
@@ -767,17 +776,16 @@ final class Interpreter implements Opcodes {
             return stackArgumentCall(call, args, loader);
         }
 
-        if (declaration != null && opaque.contains(call.owner + "." + call.name + call.desc) && isWorldCall(call, args, loader)) {
+        if (declared != null && opaque.contains(call.owner + "." + call.name + call.desc) && isWorldCall(call, args, loader)) {
             return worldResult(call, args);
         }
-        if (!isStatic && receiver instanceof Value.Known known && known.value() != null && args.stream().skip(1).anyMatch(this::isTainted)
-                && !returnsTradeData(call)) {
+        if (!isStatic && receiver instanceof Value.Known known && args.stream().skip(1).anyMatch(this::isTainted) && !returnsTradeData(call)) {
             return uncertainChange(call, known.value());
         }
 
         Value result;
 
-        if (declaration != null) {
+        if (declared instanceof Declaration declaration) {
             int before = decisions.size();
 
             try {
@@ -796,7 +804,7 @@ final class Interpreter implements Opcodes {
     }
 
     @Nullable
-    private Value lambdaCall(Object lambda, MethodInsnNode call, List<Value> args, int depth) {
+    private Value lambdaCall(Object lambda, List<Value> args, int depth) {
         LambdaResolver.Target target = LambdaResolver.resolve(lambda);
 
         if (target == null) {
@@ -1014,13 +1022,11 @@ final class Interpreter implements Opcodes {
     }
 
     @Nullable
-    private Value random(MethodInsnNode call, Value.Rng rng, List<Value> args, ClassLoader loader, int depth) {
+    private Value random(MethodInsnNode call, Value.Rng rng, List<Value> args, int depth) {
         Semantic semantic = rng.legacy() ? legacySemantic(call) : sourceSemantic(call);
 
         if (semantic == null) {
-            Declaration declaration = declaration(RandomSource.class, call.name, call.desc, false);
-
-            if (!rng.legacy() && declaration != null) {
+            if (!rng.legacy() && declaration(RandomSource.class, call.name, call.desc, false) instanceof Declaration declaration) {
                 return execute(declaration.owner(), declaration.method(), args, depth + 1);
             }
 
@@ -1144,6 +1150,10 @@ final class Interpreter implements Opcodes {
         } catch (Fail fail) {
             return false;
         }
+    }
+
+    private static boolean isLegacyRandom(Type type, ClassLoader loader) {
+        return Random.class.isAssignableFrom(load(type.getInternalName(), loader));
     }
 
     @Nullable
@@ -1296,7 +1306,7 @@ final class Interpreter implements Opcodes {
             return stack;
         }
 
-        results.forEach(this::own);
+        results.stream().filter(Objects::nonNull).forEach(this::own);
 
         if (results.stream().allMatch(ItemStack.class::isInstance)) {
             return combine(results.stream().map(this::wrap).toList());
@@ -1383,22 +1393,22 @@ final class Interpreter implements Opcodes {
 
     @Nullable
     private Value offersCall(MethodInsnNode call, Value.Offers offers, List<Value> args) {
-        if (call.name.equals("add") && call.desc.equals("(Ljava/lang/Object;)Z") && args.get(1) instanceof Value.Pick pick) {
-            Integer index = offers.picks.get(pick.pool());
+        if (call.name.equals("add") && call.desc.equals("(Ljava/lang/Object;)Z") && args.get(1) instanceof Value.Pick pickValue) {
+            Integer index = offers.picks.get(pickValue.pool());
 
-            NumberExpr drawCount = drawCounts.get(pick.pool());
+            NumberExpr drawCount = drawCounts.get(pickValue.pool());
 
             if (index == null) {
-                offers.picks.put(pick.pool(), offers.entries.size());
-                offers.entries.add(new Value.Offers.Listings(pick.listings().toArray(new VillagerTrades.ItemListing[0]),
-                        drawCount != null ? new Value.Num(drawCount, Value.Kind.INT) : new Value.Known(1), pick.key()));
+                offers.picks.put(pickValue.pool(), offers.entries.size());
+                offers.entries.add(new Value.Offers.Listings(pickValue.listings().toArray(new VillagerTrades.ItemListing[0]),
+                        drawCount != null ? new Value.Num(drawCount, Value.Kind.INT) : new Value.Known(1), pickValue.key()));
             } else {
                 Value.Offers.Listings listings = (Value.Offers.Listings) offers.entries.get(index);
                 List<VillagerTrades.ItemListing> union = new ArrayList<>(Arrays.asList(listings.listings()));
 
-                for (Object listing : pick.listings()) {
+                for (VillagerTrades.ItemListing listing : pickValue.listings()) {
                     if (union.stream().noneMatch((l) -> l == listing)) {
-                        union.add((VillagerTrades.ItemListing) listing);
+                        union.add(listing);
                     }
                 }
 
@@ -1428,15 +1438,15 @@ final class Interpreter implements Opcodes {
         throw new Fail("merchant offers call " + call.name);
     }
 
-    private Value construct(String type, String desc, List<Value> args, ClassLoader loader, int depth) {
+    private Value construct(String type, String desc, List<Value> args, ClassLoader loader) {
         if (desc.equals("()V") && isPlainOffers(load(type, loader))) {
             return new Value.Offers();
         }
         if (type.equals(ITEM_STACK)) {
-            return constructStack(desc, args, loader);
+            return constructStack(desc, args);
         }
         if (type.equals(MERCHANT_OFFER)) {
-            return constructOffer(desc, args, loader);
+            return constructOffer(desc, args);
         }
         List<Value> drawn = args.stream().map(Interpreter::drawnInt).toList();
         int[] choices = choiceIndices(drawn);
@@ -1446,7 +1456,7 @@ final class Interpreter implements Opcodes {
             List<Value> results = new ArrayList<>();
 
             for (int option = 0; option < first.options().size(); option++) {
-                results.add(construct(type, desc, select(drawn, choices, option), loader, depth));
+                results.add(construct(type, desc, select(drawn, choices, option), loader));
             }
 
             return Objects.requireNonNull(sameDraw(combine(results), first));
@@ -1470,10 +1480,23 @@ final class Interpreter implements Opcodes {
         }
     }
 
-    private Value constructStack(String desc, List<Value> args, ClassLoader loader) {
+    @NotNull
+    private Value constructStack(String desc, List<Value> args) {
         Type[] params = Type.getArgumentTypes(desc);
         NumberExpr count = params.length >= 2 && params[1].getSort() == Type.INT ? expr(args.get(1)) : NumberExpr.constant(1);
-        List<Object> items = args.get(0) instanceof Value.Choice choice ? choice.options() : List.of(concrete(args.get(0)));
+        List<Object> items;
+
+        if (args.get(0) instanceof Value.Choice choice) {
+            items = choice.options();
+        } else {
+            Object item = concrete(args.get(0));
+
+            if (item == null) {
+                throw new Fail("null item");
+            }
+
+            items = List.of(item);
+        }
         Constructor<?> constructor = constructor(ItemStack.class, desc);
         List<ItemStack> templates = new ArrayList<>();
 
@@ -1500,7 +1523,7 @@ final class Interpreter implements Opcodes {
         return limit(new Value.Stack(templates, count, false));
     }
 
-    private Value constructOffer(String desc, List<Value> args, ClassLoader loader) {
+    private Value constructOffer(String desc, List<Value> args) {
         Type[] params = Type.getArgumentTypes(desc);
         int stacks = 0;
 
@@ -1556,13 +1579,15 @@ final class Interpreter implements Opcodes {
             }
 
             String recipe = (String) indy.bsmArgs[0];
+            Type[] types = Type.getArgumentTypes(indy.desc);
             StringBuilder builder = new StringBuilder();
             int arg = 0;
             int constant = 1;
 
             for (char c : recipe.toCharArray()) {
                 if (c == '\u0001') {
-                    builder.append(((Value.Known) captured[arg++]).value());
+                    builder.append(toJava(captured[arg], javaType(types[arg])));
+                    arg++;
                 } else if (c == '\u0002') {
                     builder.append(indy.bsmArgs[constant++]);
                 } else {
@@ -1576,6 +1601,7 @@ final class Interpreter implements Opcodes {
         throw new Fail("invokedynamic " + indy.bsm.getOwner());
     }
 
+    @NotNull
     private Object materialize(Value.Closure closure) {
         List<Value> captured = closure.captured();
 
@@ -1787,7 +1813,7 @@ final class Interpreter implements Opcodes {
         if (!ownedReceiver && !READ_ONLY.contains(call.name)) {
             throw new Fail("JDK call " + declaring.getName() + "." + call.name);
         }
-        if (!READ_ONLY.contains(call.name) && isFrozen(receiver)) {
+        if (!READ_ONLY.contains(call.name) && receiver != null && isFrozen(receiver)) {
             throw new Fail("change under a random choice");
         }
 
@@ -1854,7 +1880,7 @@ final class Interpreter implements Opcodes {
             throw new Fail("index out of range");
         }
 
-        return new Value.Choice(new ArrayList<>(list.subList(from, to + 1)), new Object());
+        return new Value.Choice(new ArrayList<>(list.subList(from, to + 1)), index.expr());
     }
 
     private Value removeRandom(List<?> list, Value index) {
@@ -1903,7 +1929,7 @@ final class Interpreter implements Opcodes {
                 options.add(i);
             }
 
-            return new Value.Choice(options, new Object());
+            return new Value.Choice(options, num.expr());
         }
 
         return value;
@@ -2066,7 +2092,7 @@ final class Interpreter implements Opcodes {
             return NULL;
         }
         if (receiver instanceof Value.Unknown && Type.getType(insn.desc).getSort() == Type.OBJECT && isRandomType(Type.getType(insn.desc), loader)) {
-            return new Value.Rng(!insn.desc.equals(Type.getDescriptor(RandomSource.class)));
+            return new Value.Rng(isLegacyRandom(Type.getType(insn.desc), loader));
         }
         if (receiver instanceof Value.Unknown) {
             return Value.Unknown.of(Type.getType(insn.desc), Origin.of(receiver, insn.name, List.of()));
@@ -2108,7 +2134,7 @@ final class Interpreter implements Opcodes {
         if (!(receiver instanceof Value.Known known) || !owned.containsKey(known.value()) || !(value instanceof Value.Known known2)) {
             throw new Fail("write to a field");
         }
-        if (isFrozen(known.value())) {
+        if (known.value() != null && isFrozen(known.value())) {
             throw new Fail("change under a random choice");
         }
 
@@ -2166,7 +2192,7 @@ final class Interpreter implements Opcodes {
             Value.Choice choice = (Value.Choice) pick(elements, num);
 
             if (arr.getClass().getComponentType().isPrimitive()) {
-                return combine(choice.options().stream().map((o) -> wrap(o, arr.getClass().getComponentType())).toList());
+                return sameDraw(combine(choice.options().stream().map((o) -> wrap(o, arr.getClass().getComponentType())).toList()), choice);
             }
 
             return choice;
@@ -2179,7 +2205,7 @@ final class Interpreter implements Opcodes {
         if (!(array instanceof Value.Known known) || !owned.containsKey(known.value()) || !(index instanceof Value.Known k)) {
             throw new Fail("array store");
         }
-        if (isFrozen(known.value())) {
+        if (known.value() != null && isFrozen(known.value())) {
             throw new Fail("change under a random choice");
         }
 
@@ -2272,6 +2298,8 @@ final class Interpreter implements Opcodes {
             return type.isAssignableFrom(closure.iface());
         } else if (value instanceof Value.Rng rng) {
             return type.isAssignableFrom(rng.legacy() ? Random.class : RandomSource.class);
+        } else if (value instanceof Value.Choice choice) {
+            return decided(choice, type::isInstance);
         } else if (value instanceof Value.Unknown unknown && unknown.type() != null && type.isAssignableFrom(onServer(load(unknown.type(), loader)))) {
             return true;
         } else if (value instanceof Value.Unknown unknown) {
@@ -2349,23 +2377,33 @@ final class Interpreter implements Opcodes {
             return false;
         }
 
-        boolean holds = decide(Decision.Kind.RANDOM, decisions.size(), null, "reference comparison of a random choice");
+        boolean holds = decide(Decision.Kind.RANDOM, decisions.size(), share(choice, test), "reference comparison of a random choice");
 
         narrow(choice, (o) -> test.test(o) == holds);
         return holds;
     }
 
     @Nullable
+    private static Double share(Value.Choice choice, java.util.function.Predicate<Object> test) {
+        return choice.draw() != null ? (double) choice.options().stream().filter(test).count() / choice.options().size() : null;
+    }
+
+    @Nullable
     private Value.Choice narrow(Value.Choice choice, java.util.function.Predicate<Object> keep) {
         List<Integer> kept = IntStream.range(0, choice.options().size()).filter((i) -> keep.test(choice.options().get(i))).boxed().toList();
         Map<Value, Value> narrowed = new IdentityHashMap<>();
+        java.util.function.Predicate<Value> match = (v) -> v instanceof Value.Choice other && (other == choice || choice.draw() != null
+                && other.draw() == choice.draw() && other.options().size() == choice.options().size());
+        java.util.function.UnaryOperator<Value> with = (v) -> narrowed.computeIfAbsent(v, (o) -> narrowed((Value.Choice) o, kept));
 
         for (Frame frame : frames) {
-            frame.replace((v) -> v instanceof Value.Choice other && (other == choice || choice.draw() != null && other.draw() == choice.draw()
-                    && other.options().size() == choice.options().size()), (v) -> narrowed.computeIfAbsent(v, (o) -> narrowed((Value.Choice) o, kept)));
+            frame.replace(match, with);
         }
 
-        return kept.size() > 1 ? (Value.Choice) narrowed((Value.Choice) choice, kept) : null;
+        statics.replaceAll((k, v) -> match.test(v) ? with.apply(v) : v);
+        merchantFields.replaceAll((k, v) -> match.test(v) ? with.apply(v) : v);
+
+        return kept.size() > 1 ? (Value.Choice) narrowed(choice, kept) : null;
     }
 
     private Value narrowed(Value.Choice choice, List<Integer> kept) {
@@ -2381,7 +2419,7 @@ final class Interpreter implements Opcodes {
         if (value instanceof Value.Choice choice && choice.options().stream().allMatch(Integer.class::isInstance)) {
             Value.Choice rest = choice;
 
-            for (int i = 0; i < keys.size() && rest != null; i++) {
+            for (int i = 0; i < keys.size(); i++) {
                 Integer key = keys.get(i);
                 Value.Choice current = rest;
 
@@ -2389,7 +2427,7 @@ final class Interpreter implements Opcodes {
                     return i;
                 }
                 if (current.options().stream().anyMatch(key::equals)) {
-                    if (decide(Decision.Kind.RANDOM, decisions.size(), null, "switch on a random choice")) {
+                    if (decide(Decision.Kind.RANDOM, decisions.size(), share(current, key::equals), "switch on a random choice")) {
                         narrow(current, key::equals);
                         return i;
                     }
@@ -2461,6 +2499,7 @@ final class Interpreter implements Opcodes {
         throw new Fail("symbolic switch");
     }
 
+    @NotNull
     private static Value ldc(Object cst, ClassLoader loader) {
         if (cst instanceof Integer || cst instanceof Float || cst instanceof Long || cst instanceof Double || cst instanceof String) {
             return new Value.Known(cst);
@@ -2473,7 +2512,7 @@ final class Interpreter implements Opcodes {
     }
 
     private Value binary(int op, Value a, Value b) {
-        if (a instanceof Value.Known ka && b instanceof Value.Known kb) {
+        if (a instanceof Value.Known ka && b instanceof Value.Known kb && ka.value() != null && kb.value() != null) {
             return new Value.Known(Arithmetic.compute(op, ka.value(), kb.value()));
         }
         if (a instanceof Value.Unknown || b instanceof Value.Unknown) {
@@ -2496,7 +2535,7 @@ final class Interpreter implements Opcodes {
     }
 
     private Value negate(int op, Value a) {
-        if (a instanceof Value.Known known) {
+        if (a instanceof Value.Known known && known.value() != null) {
             return new Value.Known(Arithmetic.negate(known.value()));
         }
         if (a instanceof Value.Unknown) {
@@ -2507,7 +2546,7 @@ final class Interpreter implements Opcodes {
     }
 
     private Value convert(int op, Value a) {
-        if (a instanceof Value.Known known) {
+        if (a instanceof Value.Known known && known.value() != null) {
             return new Value.Known(Arithmetic.convert(op, known.value()));
         }
         if (a instanceof Value.Unknown) {
@@ -2530,8 +2569,9 @@ final class Interpreter implements Opcodes {
         };
     }
 
+    @NotNull
     private Value compare(int op, Value a, Value b) {
-        if (a instanceof Value.Known ka && b instanceof Value.Known kb) {
+        if (a instanceof Value.Known ka && b instanceof Value.Known kb && ka.value() != null && kb.value() != null) {
             return new Value.Known(Arithmetic.compare(op, ka.value(), kb.value()));
         }
         if (a instanceof Value.Unknown || b instanceof Value.Unknown) {
@@ -2541,6 +2581,7 @@ final class Interpreter implements Opcodes {
         return new Value.Cmp(expr(a), expr(b));
     }
 
+    @NotNull
     private static Value unknownNumber(Value.Kind kind) {
         return new Value.Unknown(kind == Value.Kind.LONG || kind == Value.Kind.DOUBLE, null, null, null);
     }
@@ -2667,16 +2708,19 @@ final class Interpreter implements Opcodes {
             };
         }
         if (fn.id().equals(NumberFunctions.UNIFORM_INT) && hi.value() >= lo.value()) {
-            long count = IntStream.rangeClosed((int) lo.value(), (int) hi.value()).filter((i) -> switch (op) {
-                case IFLT -> i < value;
-                case IFLE -> i <= value;
-                case IFGT -> i > value;
-                case IFGE -> i >= value;
-                case IFEQ -> i == value;
-                default -> i != value;
-            }).count();
+            double total = hi.value() - lo.value() + 1;
+            double below = Math.max(0, Math.min(hi.value(), Math.ceil(value) - 1) - lo.value() + 1);
+            double atMost = Math.max(0, Math.min(hi.value(), Math.floor(value)) - lo.value() + 1);
+            double count = switch (op) {
+                case IFLT -> below;
+                case IFLE -> atMost;
+                case IFGT -> total - atMost;
+                case IFGE -> total - below;
+                case IFEQ -> atMost - below;
+                default -> total - (atMost - below);
+            };
 
-            return (double) count / (hi.value() - lo.value() + 1);
+            return count / total;
         }
 
         return null;
@@ -2712,6 +2756,7 @@ final class Interpreter implements Opcodes {
         throw new Fail(value instanceof Value.Unknown ? "value from the trader or world" : "not a number");
     }
 
+    @NotNull
     private static Value num(NumberExpr expr, Value.Kind kind) {
         NumberInterval bounds = expr instanceof NumberExpr.Const ? null : expr.bounds();
 
@@ -2730,6 +2775,7 @@ final class Interpreter implements Opcodes {
         return new Value.Num(expr, kind);
     }
 
+    @NotNull
     private NumberExpr add(NumberExpr a, NumberExpr b) {
         NumberExpr shifted = null;
 
@@ -2742,12 +2788,14 @@ final class Interpreter implements Opcodes {
         return shifted != null ? shifted : NumberExpr.add(a, b);
     }
 
+    @NotNull
     private NumberExpr sub(NumberExpr a, NumberExpr b) {
         NumberExpr shifted = b instanceof NumberExpr.Const c ? shift(a, -c.value()) : null;
 
         return shifted != null ? shifted : NumberExpr.sub(a, b);
     }
 
+    @NotNull
     private static NumberExpr uniformInt(NumberExpr min, NumberExpr max) {
         return NumberExpr.uniformInt(min, max);
     }
@@ -2820,10 +2868,12 @@ final class Interpreter implements Opcodes {
         return indices;
     }
 
+    @NotNull
     static Class<?> load(String internalName, ClassLoader loader) {
         return load(internalName, loader, false);
     }
 
+    @NotNull
     static Class<?> load(String internalName, @Nullable ClassLoader loader, boolean initialize) {
         try {
             return Class.forName(internalName.replace('/', '.'), initialize, loader);
@@ -2876,10 +2926,14 @@ final class Interpreter implements Opcodes {
     }
 
     @Nullable
-    private static Declaration declaration(Class<?> start, String name, String desc, boolean exact) {
+    private static Declared declaration(Class<?> start, String name, String desc, boolean exact) {
         for (Class<?> type = start; type != null; type = exact ? null : type.getSuperclass()) {
             if (isJdk(type)) {
-                return method(type, name, desc) != null ? new Declaration(type, null) : null;
+                if (method(type, name, desc) != null) {
+                    return new JdkDeclaration(type);
+                }
+
+                break;
             }
 
             ClassNode node = classNode(type);
@@ -2953,6 +3007,7 @@ final class Interpreter implements Opcodes {
         throw new Fail("no constructor " + owner.getName());
     }
 
+    @NotNull
     static Field field(Class<?> owner, String name) {
         return FIELDS.computeIfAbsent(owner.getName() + '.' + name, (key) -> {
             Deque<Class<?>> types = new ArrayDeque<>();
@@ -3022,10 +3077,12 @@ final class Interpreter implements Opcodes {
             this.hi = hi;
         }
 
+        @NotNull
         static Draw discrete(int lo, int hi) {
             return new Draw(IntStream.rangeClosed(lo, hi).boxed().collect(Collectors.toCollection(ArrayList::new)), lo, hi);
         }
 
+        @NotNull
         static Draw continuous(double lo, double hi) {
             return new Draw(null, lo, hi);
         }
@@ -3070,7 +3127,14 @@ final class Interpreter implements Opcodes {
         }
     }
 
-    private record Declaration(Class<?> owner, @Nullable MethodNode method) {
+    private sealed interface Declared permits Declaration, JdkDeclaration {
+        Class<?> owner();
+    }
+
+    private record Declaration(Class<?> owner, MethodNode method) implements Declared {
+    }
+
+    private record JdkDeclaration(Class<?> owner) implements Declared {
     }
 
     static final class Fail extends RuntimeException {
@@ -3128,6 +3192,7 @@ final class Interpreter implements Opcodes {
             return stack.get(stack.size() - 1);
         }
 
+        @NotNull
         Value load(int var) {
             Value value = locals[var];
 

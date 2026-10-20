@@ -1,5 +1,7 @@
 package com.yanny.ali.plugin.server.bytecode;
 
+import com.yanny.aci.CommonLogUtils;
+import com.yanny.ali.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -20,12 +22,16 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.slf4j.Logger;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 final class RuntimeNames {
+    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
     static final boolean AVAILABLE;
     static final Ref NEXT_INT;
     static final Ref NEXT_INT_BOUND;
@@ -60,40 +66,48 @@ final class RuntimeNames {
     static final Ref OFFERS;
 
     static {
-        Map<String, Ref> refs = read();
+        Map<String, Ref> refs = new HashMap<>();
+        List<String> missing = new ArrayList<>();
 
-        NEXT_INT = refs.get("nextInt");
-        NEXT_INT_BOUND = refs.get("nextIntBound");
-        NEXT_INT_BETWEEN = refs.get("nextIntBetween");
-        NEXT_INT_ORIGIN = refs.get("nextIntOrigin");
-        NEXT_LONG = refs.get("nextLong");
-        NEXT_BOOLEAN = refs.get("nextBoolean");
-        NEXT_FLOAT = refs.get("nextFloat");
-        NEXT_DOUBLE = refs.get("nextDouble");
-        NEXT_GAUSSIAN = refs.get("nextGaussian");
-        FORK = refs.get("fork");
-        SET_SEED = refs.get("setSeed");
-        CONSUME_COUNT = refs.get("consumeCount");
-        STACK_SET_COUNT = refs.get("stackSetCount");
-        STACK_GROW = refs.get("stackGrow");
-        STACK_SHRINK = refs.get("stackShrink");
-        STACK_GET_COUNT = refs.get("stackGetCount");
-        STACK_GET_ITEM = refs.get("stackGetItem");
-        STACK_COPY = refs.get("stackCopy");
-        STACK_COPY_WITH_COUNT = refs.get("stackCopyWithCount");
-        STACK_IS_EMPTY = refs.get("stackIsEmpty");
-        GET_OFFER = refs.get("getOffer");
-        LEVEL_IS_CLIENT_SIDE = refs.get("levelIsClientSide");
-        FIND_MAP_STRUCTURE = refs.get("findMapStructure");
-        REGISTRY_ACCESS = refs.get("registryAccess");
-        MAP_CREATE = refs.get("mapCreate");
-        MAP_RENDER_BIOME_PREVIEW = refs.get("mapRenderBiomePreview");
-        MAP_ADD_TARGET_DECORATION = refs.get("mapAddTargetDecoration");
-        GET_OFFERS = refs.get("getOffers");
-        UPDATE_TRADES = refs.get("villagerUpdateTrades");
-        ADD_OFFERS_FROM_ITEM_LISTINGS = refs.get("villagerAddOffers");
-        OFFERS = refs.get("villagerOffers");
-        AVAILABLE = refs.size() == 31;
+        read(Probes.class, refs);
+        read(Probes.VillagerNames.class, refs);
+
+        NEXT_INT = ref(refs, "nextInt", missing);
+        NEXT_INT_BOUND = ref(refs, "nextIntBound", missing);
+        NEXT_INT_BETWEEN = ref(refs, "nextIntBetween", missing);
+        NEXT_INT_ORIGIN = ref(refs, "nextIntOrigin", missing);
+        NEXT_LONG = ref(refs, "nextLong", missing);
+        NEXT_BOOLEAN = ref(refs, "nextBoolean", missing);
+        NEXT_FLOAT = ref(refs, "nextFloat", missing);
+        NEXT_DOUBLE = ref(refs, "nextDouble", missing);
+        NEXT_GAUSSIAN = ref(refs, "nextGaussian", missing);
+        FORK = ref(refs, "fork", missing);
+        SET_SEED = ref(refs, "setSeed", missing);
+        CONSUME_COUNT = ref(refs, "consumeCount", missing);
+        STACK_SET_COUNT = ref(refs, "stackSetCount", missing);
+        STACK_GROW = ref(refs, "stackGrow", missing);
+        STACK_SHRINK = ref(refs, "stackShrink", missing);
+        STACK_GET_COUNT = ref(refs, "stackGetCount", missing);
+        STACK_GET_ITEM = ref(refs, "stackGetItem", missing);
+        STACK_COPY = ref(refs, "stackCopy", missing);
+        STACK_COPY_WITH_COUNT = ref(refs, "stackCopyWithCount", missing);
+        STACK_IS_EMPTY = ref(refs, "stackIsEmpty", missing);
+        GET_OFFER = ref(refs, "getOffer", missing);
+        LEVEL_IS_CLIENT_SIDE = ref(refs, "levelIsClientSide", missing);
+        FIND_MAP_STRUCTURE = ref(refs, "findMapStructure", missing);
+        REGISTRY_ACCESS = ref(refs, "registryAccess", missing);
+        MAP_CREATE = ref(refs, "mapCreate", missing);
+        MAP_RENDER_BIOME_PREVIEW = ref(refs, "mapRenderBiomePreview", missing);
+        MAP_ADD_TARGET_DECORATION = ref(refs, "mapAddTargetDecoration", missing);
+        GET_OFFERS = ref(refs, "getOffers", missing);
+        UPDATE_TRADES = ref(refs, "villagerUpdateTrades", missing);
+        ADD_OFFERS_FROM_ITEM_LISTINGS = ref(refs, "villagerAddOffers", missing);
+        OFFERS = ref(refs, "villagerOffers", missing);
+        AVAILABLE = missing.isEmpty();
+
+        if (!AVAILABLE) {
+            LOGGER.warn("Auto-detection of trades from bytecode is disabled, runtime names not found: {}", missing);
+        }
     }
 
     private RuntimeNames() {}
@@ -106,17 +120,15 @@ final class RuntimeNames {
         return ref != null && ref.name.equals(field.name) && ref.desc.equals(field.desc);
     }
 
-    private static Map<String, Ref> read() {
-        Map<String, Ref> refs = new HashMap<>();
+    @Nullable
+    private static Ref ref(Map<String, Ref> refs, String name, List<String> missing) {
+        Ref ref = refs.get(name);
 
-        read(RuntimeNames.class, refs);
-        read(VillagerNames.class, refs);
-        refs.keySet().retainAll(java.util.Set.of("nextInt", "nextIntBound", "nextIntBetween", "nextIntOrigin", "nextLong", "nextBoolean",
-                "nextFloat", "nextDouble", "nextGaussian", "fork", "setSeed", "consumeCount", "stackSetCount", "stackGrow", "stackShrink",
-                "stackGetCount", "stackGetItem", "stackCopy", "stackCopyWithCount", "stackIsEmpty", "getOffer", "levelIsClientSide", "findMapStructure",
-                "registryAccess", "mapCreate", "mapRenderBiomePreview", "mapAddTargetDecoration", "getOffers", "villagerUpdateTrades", "villagerAddOffers",
-                "villagerOffers"));
-        return refs;
+        if (ref == null) {
+            missing.add(name);
+        }
+
+        return ref;
     }
 
     private static void read(Class<?> type, Map<String, Ref> refs) {
@@ -150,134 +162,136 @@ final class RuntimeNames {
     }
 
     // The methods below are never called; read() takes the runtime name and descriptor of the call or field each uses.
-
-    private static int nextInt(RandomSource random) {
-        return random.nextInt();
-    }
-
-    private static int nextIntBound(RandomSource random) {
-        return random.nextInt(1);
-    }
-
-    private static int nextIntBetween(RandomSource random) {
-        return random.nextIntBetweenInclusive(0, 1);
-    }
-
-    private static int nextIntOrigin(RandomSource random) {
-        return random.nextInt(0, 1);
-    }
-
-    private static long nextLong(RandomSource random) {
-        return random.nextLong();
-    }
-
-    private static boolean nextBoolean(RandomSource random) {
-        return random.nextBoolean();
-    }
-
-    private static float nextFloat(RandomSource random) {
-        return random.nextFloat();
-    }
-
-    private static double nextDouble(RandomSource random) {
-        return random.nextDouble();
-    }
-
-    private static double nextGaussian(RandomSource random) {
-        return random.nextGaussian();
-    }
-
-    private static RandomSource fork(RandomSource random) {
-        return random.fork();
-    }
-
-    private static void setSeed(RandomSource random) {
-        random.setSeed(0);
-    }
-
-    private static void consumeCount(RandomSource random) {
-        random.consumeCount(0);
-    }
-
-    private static void stackSetCount(ItemStack stack) {
-        stack.setCount(0);
-    }
-
-    private static void stackGrow(ItemStack stack) {
-        stack.grow(0);
-    }
-
-    private static void stackShrink(ItemStack stack) {
-        stack.shrink(0);
-    }
-
-    private static int stackGetCount(ItemStack stack) {
-        return stack.getCount();
-    }
-
-    private static Object stackGetItem(ItemStack stack) {
-        return stack.getItem();
-    }
-
-    private static ItemStack stackCopy(ItemStack stack) {
-        return stack.copy();
-    }
-
-    private static ItemStack stackCopyWithCount(ItemStack stack) {
-        return stack.copyWithCount(0);
-    }
-
-    private static boolean stackIsEmpty(ItemStack stack) {
-        return stack.isEmpty();
-    }
-
-    private static MerchantOffer getOffer(VillagerTrades.ItemListing listing) {
-        return listing.getOffer(null, null);
-    }
-
-    private static boolean levelIsClientSide(Level level) {
-        return level.isClientSide;
-    }
-
-    private static BlockPos findMapStructure(ServerLevel level) {
-        return level.findNearestMapStructure(null, null, 0, false);
-    }
-
-    private static Object registryAccess(Level level) {
-        return level.registryAccess();
-    }
-
-    private static ItemStack mapCreate() {
-        return MapItem.create(null, 0, 0, (byte) 0, false, false);
-    }
-
-    private static void mapRenderBiomePreview() {
-        MapItem.renderBiomePreviewMap(null, null);
-    }
-
-    private static void mapAddTargetDecoration() {
-        MapItemSavedData.addTargetDecoration(null, null, null, null);
-    }
-
-    private static MerchantOffers getOffers(Merchant merchant) {
-        return merchant.getOffers();
-    }
-
-    private abstract static class VillagerNames extends AbstractVillager {
-        private VillagerNames(EntityType<? extends AbstractVillager> type) {
-            super(type, null);
+    @SuppressWarnings({"unused", "DataFlowIssue"})
+    private static final class Probes {
+        private static int nextInt(RandomSource random) {
+            return random.nextInt();
         }
 
-        private void villagerUpdateTrades() {
-            updateTrades();
+        private static int nextIntBound(RandomSource random) {
+            return random.nextInt(1);
         }
 
-        private void villagerAddOffers() {
-            addOffersFromItemListings(null, null, 0);
+        private static int nextIntBetween(RandomSource random) {
+            return random.nextIntBetweenInclusive(0, 1);
         }
 
-        private MerchantOffers villagerOffers() {
-            return offers;
+        private static int nextIntOrigin(RandomSource random) {
+            return random.nextInt(0, 1);
+        }
+
+        private static long nextLong(RandomSource random) {
+            return random.nextLong();
+        }
+
+        private static boolean nextBoolean(RandomSource random) {
+            return random.nextBoolean();
+        }
+
+        private static float nextFloat(RandomSource random) {
+            return random.nextFloat();
+        }
+
+        private static double nextDouble(RandomSource random) {
+            return random.nextDouble();
+        }
+
+        private static double nextGaussian(RandomSource random) {
+            return random.nextGaussian();
+        }
+
+        private static RandomSource fork(RandomSource random) {
+            return random.fork();
+        }
+
+        private static void setSeed(RandomSource random) {
+            random.setSeed(0);
+        }
+
+        private static void consumeCount(RandomSource random) {
+            random.consumeCount(0);
+        }
+
+        private static void stackSetCount(ItemStack stack) {
+            stack.setCount(0);
+        }
+
+        private static void stackGrow(ItemStack stack) {
+            stack.grow(0);
+        }
+
+        private static void stackShrink(ItemStack stack) {
+            stack.shrink(0);
+        }
+
+        private static int stackGetCount(ItemStack stack) {
+            return stack.getCount();
+        }
+
+        private static Object stackGetItem(ItemStack stack) {
+            return stack.getItem();
+        }
+
+        private static ItemStack stackCopy(ItemStack stack) {
+            return stack.copy();
+        }
+
+        private static ItemStack stackCopyWithCount(ItemStack stack) {
+            return stack.copyWithCount(0);
+        }
+
+        private static boolean stackIsEmpty(ItemStack stack) {
+            return stack.isEmpty();
+        }
+
+        private static MerchantOffer getOffer(VillagerTrades.ItemListing listing) {
+            return listing.getOffer(null, null);
+        }
+
+        private static boolean levelIsClientSide(Level level) {
+            return level.isClientSide;
+        }
+
+        private static BlockPos findMapStructure(ServerLevel level) {
+            return level.findNearestMapStructure(null, null, 0, false);
+        }
+
+        private static Object registryAccess(Level level) {
+            return level.registryAccess();
+        }
+
+        private static ItemStack mapCreate() {
+            return MapItem.create(null, 0, 0, (byte) 0, false, false);
+        }
+
+        private static void mapRenderBiomePreview() {
+            MapItem.renderBiomePreviewMap(null, null);
+        }
+
+        private static void mapAddTargetDecoration() {
+            MapItemSavedData.addTargetDecoration(null, null, null, null);
+        }
+
+        private static MerchantOffers getOffers(Merchant merchant) {
+            return merchant.getOffers();
+        }
+
+        private abstract static class VillagerNames extends AbstractVillager {
+            private VillagerNames(EntityType<? extends AbstractVillager> type) {
+                super(type, null);
+            }
+
+            private void villagerUpdateTrades() {
+                updateTrades();
+            }
+
+            private void villagerAddOffers() {
+                addOffersFromItemListings(null, null, 0);
+            }
+
+            private MerchantOffers villagerOffers() {
+                return offers;
+            }
         }
     }
 }

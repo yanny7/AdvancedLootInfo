@@ -642,6 +642,7 @@ public abstract class AbstractServer {
         return nodes;
     }
 
+    @NotNull
     private static ResourceLocation traderKey(EntityType<?> type) {
         ResourceLocation id = BuiltInRegistries.ENTITY_TYPE.getKey(type);
 

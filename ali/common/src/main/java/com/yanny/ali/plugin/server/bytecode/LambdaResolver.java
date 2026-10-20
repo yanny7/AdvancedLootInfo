@@ -1,5 +1,6 @@
 package com.yanny.ali.plugin.server.bytecode;
 
+import com.yanny.ali.plugin.common.trades.TradeUtils;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
@@ -184,9 +185,9 @@ final class LambdaResolver {
                 Handle handle = lambdaHandle(value);
 
                 if (handle != null) {
-                    stored.add(new Stored(field.name, -1, handle));
+                    stored.add(new Stored(field.name, -1, handle, -1));
                 } else if (arrays.containsKey(value)) {
-                    arrays.get(value).forEach((index, element) -> stored.add(new Stored(field.name, index, element)));
+                    arrays.get(value).forEach((index, element) -> stored.add(new Stored(field.name, index, element, -1)));
                 }
             } else if (insn.getOpcode() == Opcodes.AASTORE) {
                 AbstractInsnNode array = origin(top(frame, 2), frames, clinit);
@@ -215,7 +216,7 @@ final class LambdaResolver {
                         Handle handle = lambdaHandle(origin(top(frame, 0), frames, clinit));
 
                         if (handle != null) {
-                            stored.add(new Stored(list, index, handle));
+                            stored.add(new Stored(list, index, handle, -1));
                         }
                     } else {
                         shifted.add(list);
@@ -225,7 +226,7 @@ final class LambdaResolver {
         }
 
         stored.removeIf((s) -> s.index() >= 0 && shifted.contains(s.field()));
-        return stored;
+        return stored.stream().map((s) -> adds.containsKey(s.field()) ? new Stored(s.field(), s.index(), s.handle(), adds.get(s.field())) : s).toList();
     }
 
     private static SourceValue top(Frame<SourceValue> frame, int depth) {
@@ -281,7 +282,7 @@ final class LambdaResolver {
                 return value == lambda;
             }
             if (value instanceof List<?> list) {
-                return stored.index() < list.size() && list.get(stored.index()) == lambda;
+                return list.size() == stored.size() && stored.index() < list.size() && list.get(stored.index()) == lambda;
             }
 
             return value instanceof Object[] array && stored.index() < array.length && array[stored.index()] == lambda;
@@ -336,7 +337,7 @@ final class LambdaResolver {
                 return fromStackTrace(failed.cause(), matching);
             }
 
-            Object second = runReal(lambda, sam, stubArgs);
+            Object second = runReal(lambda, sam, freshStubs(stubArgs, pick));
 
             if (second instanceof Failed || !sameReal(first, second)) {
                 if (!(second instanceof Failed)) {
@@ -387,6 +388,20 @@ final class LambdaResolver {
         return matching.size() == 1 ? matching.get(0) : null;
     }
 
+    private static Object[] freshStubs(Object[] args, int pick) {
+        Object[] copy = args.clone();
+
+        for (int i = 0; i < copy.length; i++) {
+            if (copy[i] instanceof StubRandom) {
+                copy[i] = new StubRandom(pick);
+            } else if (copy[i] instanceof StubRandom.Legacy) {
+                copy[i] = new StubRandom.Legacy(pick);
+            }
+        }
+
+        return copy;
+    }
+
     @NotNull
     private static StubResult interpretStub(Handle candidate, List<Object> captured, List<Value> stubValues, ClassLoader loader, int pick) {
         try {
@@ -405,10 +420,12 @@ final class LambdaResolver {
         StackTraceElement[] trace = cause.getStackTrace();
 
         for (int i = trace.length - 1; i >= 0; i--) {
-            for (Handle candidate : candidates) {
-                if (trace[i].getMethodName().equals(candidate.getName()) && trace[i].getClassName().equals(candidate.getOwner().replace('/', '.'))) {
-                    return candidate;
-                }
+            StackTraceElement frame = trace[i];
+            List<Handle> named = candidates.stream().filter((c) -> frame.getMethodName().equals(c.getName())
+                    && frame.getClassName().equals(c.getOwner().replace('/', '.'))).toList();
+
+            if (!named.isEmpty()) {
+                return named.size() == 1 ? named.get(0) : null;
             }
         }
 
@@ -550,7 +567,7 @@ final class LambdaResolver {
         return false;
     }
 
-    private static boolean isPlatform(String internalName) {
+    static boolean isPlatform(String internalName) {
         return internalName.startsWith("net/minecraft/") || internalName.startsWith("com/mojang/") || internalName.startsWith("net/minecraftforge/")
                 || internalName.startsWith("net/neoforged/") || internalName.startsWith("net/fabricmc/");
     }
@@ -573,7 +590,7 @@ final class LambdaResolver {
     private static Method samMethod(Class<?> type) {
         for (Class<?> iface : type.getInterfaces()) {
             for (Method method : iface.getMethods()) {
-                if (Modifier.isAbstract(method.getModifiers()) && !Modifier.isStatic(method.getModifiers())) {
+                if (Modifier.isAbstract(method.getModifiers()) && !Modifier.isStatic(method.getModifiers()) && !isObjectMethod(method)) {
                     method.setAccessible(true);
                     return method;
                 }
@@ -581,6 +598,15 @@ final class LambdaResolver {
         }
 
         return null;
+    }
+
+    private static boolean isObjectMethod(Method method) {
+        try {
+            Object.class.getMethod(method.getName(), method.getParameterTypes());
+            return true;
+        } catch (NoSuchMethodException e) {
+            return false;
+        }
     }
 
     @NotNull
@@ -654,7 +680,7 @@ final class LambdaResolver {
                     && Float.compare(o.priceMultiplier(), offer.getPriceMultiplier()) == 0;
         }
 
-        return result instanceof Value.Known known && Objects.equals(normalize(known.value()), normalize(real));
+        return result instanceof Value.Known known && TradeUtils.valueKey(normalize(known.value())).equals(TradeUtils.valueKey(normalize(real)));
     }
 
     private static boolean sameStack(@Nullable Value value, ItemStack real) {
@@ -685,7 +711,7 @@ final class LambdaResolver {
             return sameOffer(x, y);
         }
 
-        return Objects.equals(a, b);
+        return TradeUtils.valueKey(a).equals(TradeUtils.valueKey(b));
     }
 
     private static String describe(@Nullable Object real) {
@@ -726,6 +752,6 @@ final class LambdaResolver {
     private record Resolved(Class<?> owner, Handle impl, List<Field> fields) {
     }
 
-    private record Stored(String field, int index, Handle handle) {
+    private record Stored(String field, int index, Handle handle, int size) {
     }
 }

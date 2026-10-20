@@ -28,6 +28,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 import org.objectweb.asm.Type;
 import org.slf4j.Logger;
 
@@ -43,6 +44,7 @@ public final class BytecodeInterpreter {
     private static final boolean LOG_TRADES = Boolean.getBoolean("ali.debug.trades");
     private static final int MAX_PATHS = 32;
     private static final int MAX_RESTARTS = 8;
+    private static final String UNRENDERABLE = "offer that cannot be shown";
 
     private BytecodeInterpreter() {}
 
@@ -61,12 +63,12 @@ public final class BytecodeInterpreter {
             Map<String, List<Path>> offers = new LinkedHashMap<>();
 
             for (Path path : paths) {
-                String text = describeOffer(path.result());
-
                 if (path.failure() != null) {
                     reason = reason != null ? reason : path.failure();
-                } else if (text != null) {
-                    offers.computeIfAbsent(text, (t) -> new ArrayList<>()).add(path);
+                } else if (isRenderable(path.result())) {
+                    offers.computeIfAbsent(Objects.requireNonNull(describeOffer(path.result())), (t) -> new ArrayList<>()).add(path);
+                } else if (!isNoOffer(path.result())) {
+                    reason = reason != null ? reason : UNRENDERABLE;
                 }
             }
 
@@ -139,10 +141,9 @@ public final class BytecodeInterpreter {
         }).build();
     }
 
-    @Nullable
     public static ComputedTrades getTradeLevels(IServerUtils utils, Class<?> merchant) {
         if (!RuntimeNames.AVAILABLE) {
-            return null;
+            return new ComputedTrades(new Int2ObjectOpenHashMap<>(), true);
         }
 
         Int2ObjectMap<TradeLevel> levels = new Int2ObjectOpenHashMap<>();
@@ -194,6 +195,13 @@ public final class BytecodeInterpreter {
 
                 for (Value.Offers.Entry entry : ((Value.Offers) Objects.requireNonNull(path.result())).entries) {
                     int level = entry instanceof Value.Offers.Listings listings && listings.key() != null ? listings.key() : split.level();
+
+                    if (entry instanceof Value.Offers.Single single && !isRenderable(single.offer())) {
+                        reason = reason != null ? reason : UNRENDERABLE;
+                        incomplete.add(level);
+                        continue;
+                    }
+
                     List<Object> identity = entry instanceof Value.Offers.Listings listings ? List.of(Arrays.stream(listings.listings()).map(TradeUtils::listingKey).toList(), listings.count(), level)
                             : List.of(String.valueOf(describeOffer(((Value.Offers.Single) entry).offer())), level);
 
@@ -304,6 +312,7 @@ public final class BytecodeInterpreter {
         }
     }
 
+    @Unmodifiable
     @NotNull
     private static List<Path> productive(List<Path> paths) {
         return paths.stream().filter((p) -> p.result() instanceof Value.Offers offers && !offers.entries.isEmpty()).toList();
@@ -434,6 +443,23 @@ public final class BytecodeInterpreter {
         }
 
         return results;
+    }
+
+    private static boolean isRenderable(@Nullable Value result) {
+        if (result instanceof Value.Known known && known.value() instanceof MerchantOffer) {
+            return true;
+        }
+
+        return result instanceof Value.Offer offer && isSlot(offer.costA()) && isSlot(offer.costB()) && isSlot(offer.result());
+    }
+
+    private static boolean isSlot(Value value) {
+        return value instanceof Value.Known known && known.value() instanceof ItemStack || value instanceof Value.Stack
+                || value instanceof Value.Choice choice && choice.options().stream().allMatch(ItemStack.class::isInstance);
+    }
+
+    private static boolean isNoOffer(@Nullable Value result) {
+        return result == null || result instanceof Value.Known known && known.value() == null;
     }
 
     @Nullable
