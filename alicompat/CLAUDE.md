@@ -73,6 +73,8 @@ The compat classes are compiled against the target mod (`modCompileOnly`), so it
 
 Numbers follow ALI's model (`ali/CLAUDE.md`'s "Numbers"): `INumberProvider.convertNumber` returns the float `NumberExpr` and `convertIntNumber` defaults to its rounding, so override it only where the target's `getInt` differs; `ICountModifier`/`IChanceModifier` return the transformed expression. Every one of them, and `IEntry.create`, receives the conditions list of ACI's `NumberConverter` contract (see `aci/CLAUDE.md`) and passes it on to every nested `convertNumber`/`getChance`; an entry builds its chance with `NodeUtils.getChance(utils, parent, chance, sumWeight, chanceConditions)`. A value whose distribution is not verified in the target mod's source is a `NumberExpr.range` (bounds only), never a guessed `uniformInt`. A replacement or added item node builds its tooltip through `NodeUtils.getChance`, a `LootCount` and `NodeUtils.getCountLimit`, as `GlmNodeUtils` does.
 
+A shim never rolls a target's randomness to show the result. An item listing it does not model goes through `BytecodeInterpreter.getItemListing`, a `Supplier<ItemStack>` through `BytecodeInterpreter.getItemStack` (see `ali/CLAUDE.md`'s `plugin/server/bytecode`); whatever they cannot work out renders as a `MissingNode`.
+
 A tooltip whose only branch can come out empty must call `showEmpty()` on the builder, otherwise `TooltipBuilder.build` collapses the whole node and the entry silently renders nothing (see `aci/CLAUDE.md`'s tree-model section).
 
 ## Tooltip code style
@@ -132,7 +134,7 @@ Register nothing ALI already registers: node ids, widgets and data-node factorie
 
 ## Gametests
 
-One server-side GameTest per loader, in a `gametest` source set of `alicompat/fabric`, `alicompat/forge` and `alicompat/neoforge`, run once per target mod — `-Palicompat_gametest=<slug>`, or `all` for the base and every mod at once — so a shim is checked against the real mod in a real loader. It compiles ACI's shared gametest classes and ALI's `LootDataCapture` (see `ali/CLAUDE.md`'s gametest section) next to `alicompat/common/src/gametest/java/.../CompatDataGolden`, and each loader adds only the `@GameTest` wrapper — on Forge also `GameTestServerScan`, which starts ALI's scan on `ServerStartedEvent` because Forge's `GameTestServer` never posts `ServerStartingEvent`.
+One server-side GameTest per loader, in a `gametest` source set of `alicompat/fabric`, `alicompat/forge` and `alicompat/neoforge`, run once per target mod — `-Palicompat_gametest=<slug>`, or `all` for the base and every mod at once — so a shim is checked against the real mod in a real loader. It compiles ACI's shared gametest classes and ALI's `LootDataCapture` (see `ali/CLAUDE.md`'s gametest section) next to `alicompat/common/src/gametest/java/.../CompatDataGolden`, and each loader adds only the `@GameTest` wrapper.
 
 Every slug in `compat_mods` has passed its run on every loader it is pinned for, so `-Palicompat_gametest=all` is the regression check of all shims at once; a new or newly activated shim keeps that true (step 5 of Adding a target mod).
 

@@ -16,7 +16,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class TradeLevelNode extends ListNode {
     public static final ResourceLocation ID = Utils.modLoc("trade_level");
@@ -28,27 +31,34 @@ public class TradeLevelNode extends ListNode {
 
     // a trader adds every entry instead of picking randomly once its pool is no bigger than the number it picks
     public TradeLevelNode(IServerUtils utils, int level, VillagerTrades.ItemListing[] itemListings, TradeLevelInfo levelInfo) {
-        for (VillagerTrades.ItemListing itemListing : itemListings) {
+        Set<Object> empty = new HashSet<>();
+
+        for (VillagerTrades.ItemListing itemListing : TradeUtils.distinctListings(itemListings)) {
             if (itemListing != null) {
                 IDataNode trade = utils.getItemListing(utils, itemListing, TooltipNode.empty());
 
-                if (!(trade instanceof EmptyNode)) {
+                if (trade instanceof EmptyNode) {
+                    empty.add(TradeUtils.listingKey(itemListing));
+                } else {
                     addChildren(trade);
                 }
             }
         }
 
+        long offered = Arrays.stream(itemListings).filter((l) -> l != null && !empty.contains(TradeUtils.listingKey(l))).count();
+
         this.level = level;
-        this.selectionCount = NumberExpr.min(levelInfo.offers(), NumberExpr.constant(nodes().size()));
+        this.selectionCount = NumberExpr.min(levelInfo.offers(), NumberExpr.constant(offered));
         this.chance = levelInfo.chance();
         tooltip = getTooltip(level, selectionCount, chance);
     }
 
     public TradeLevelNode(int level, TradeLevelInfo levelInfo, List<IDataNode> trades) {
-        int tradeCount = trades.stream().mapToInt((t) -> t instanceof TradeGroupNode group ? group.nodes().size() : 1).sum();
+        NumberExpr tradeCount = trades.stream().map((t) -> t instanceof TradeGroupNode group ? group.capacity() : NumberExpr.constant(1))
+                .reduce(NumberExpr.constant(0), NumberExpr::add);
 
         this.level = level;
-        this.selectionCount = NumberExpr.min(levelInfo.offers(), NumberExpr.constant(tradeCount));
+        this.selectionCount = NumberExpr.min(levelInfo.offers(), tradeCount);
         this.chance = levelInfo.chance();
         trades.forEach(this::addChildren);
         tooltip = getTooltip(level, selectionCount, chance);

@@ -31,6 +31,7 @@ LOG_CATEGORIES = OrderedDict([
     ("entity_sub_predicate_tooltip", ("entity_sub_predicate", "Entity sub-predicate tooltips")),
     ("value_tooltip", ("value", "Value tooltips")),
     ("data_component_type_tooltip", ("data_component_type", "Data component type tooltips")),
+    ("unregistered_trader", ("trader_entity", "Trading entities no plugin registers")),
     ("unresolved_entity_loot_table", (None, "Entity loot tables needing an entityLootTables entry")),
     ("unexpected_loot_action", (None, "Unexpected loot actions")),
 ])

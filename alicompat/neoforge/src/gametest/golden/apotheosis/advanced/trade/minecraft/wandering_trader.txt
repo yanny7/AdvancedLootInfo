@@ -479,13 +479,6 @@ ali:trade
       ali:item minecraft:air x0
       ali:item minecraft:gold_ingot x1
     ali:items_to_items
-      | Uses: 1
-      | XP: 100
-      | Price Multiplier: 1.0
-      ali:item minecraft:air x0
-      ali:item minecraft:emerald x1-29
-      ali:item minecraft:air x0
-    ali:items_to_items
       | Uses: 5
       | XP: 15
       | Price Multiplier: 1.0
@@ -541,62 +534,6 @@ ali:trade
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
       ali:item minecraft:iron_ingot x3
-    ali:items_to_items
-      | Uses: 1
-      | XP: 100
-      | Price Multiplier: 1.0
-      ali:item minecraft:air x0
-      ali:item minecraft:emerald x1-29
-      ali:item minecraft:air x0
-    ali:items_to_items
-      | Uses: 1
-      | XP: 100
-      | Price Multiplier: 1.0
-      ali:item minecraft:air x0
-      ali:item minecraft:emerald x1-29
-      ali:item minecraft:air x0
-    ali:items_to_items
-      | Uses: 1
-      | XP: 100
-      | Price Multiplier: 1.0
-      ali:item minecraft:air x0
-      ali:item minecraft:emerald x1-29
-      ali:item minecraft:air x0
-    ali:items_to_items
-      | Uses: 1
-      | XP: 100
-      | Price Multiplier: 1.0
-      ali:item minecraft:air x0
-      ali:item minecraft:emerald x1-29
-      ali:item minecraft:air x0
-    ali:items_to_items
-      | Uses: 1
-      | XP: 100
-      | Price Multiplier: 1.0
-      ali:item minecraft:air x0
-      ali:item minecraft:emerald x1-29
-      ali:item minecraft:air x0
-    ali:items_to_items
-      | Uses: 1
-      | XP: 100
-      | Price Multiplier: 1.0
-      ali:item minecraft:air x0
-      ali:item minecraft:emerald x1-29
-      ali:item minecraft:air x0
-    ali:items_to_items
-      | Uses: 1
-      | XP: 100
-      | Price Multiplier: 1.0
-      ali:item minecraft:air x0
-      ali:item minecraft:emerald x1-29
-      ali:item minecraft:air x0
-    ali:items_to_items
-      | Uses: 1
-      | XP: 100
-      | Price Multiplier: 1.0
-      ali:item minecraft:air x0
-      ali:item minecraft:emerald x1-29
-      ali:item minecraft:air x0
     ali:items_to_items
       | Uses: 5
       | XP: 15

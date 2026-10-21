@@ -2,15 +2,16 @@ package com.yanny.ali.neoforge;
 
 import com.yanny.ali.Utils;
 import com.yanny.ali.manager.PluginManager;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 
 @EventBusSubscriber(modid = Utils.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class NeoForgeCommonBusSubscriber {
-    @SubscribeEvent
-    public static void onServerStarting(ServerStartingEvent event) {
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void onServerStarted(ServerStartedEvent event) {
         PluginManager.getInstance().registerServerEvent(event.getServer().overworld());
         AliMod.SERVER.readLootTables(event.getServer().reloadableRegistries());
     }

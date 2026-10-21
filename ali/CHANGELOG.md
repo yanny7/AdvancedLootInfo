@@ -1,3 +1,13 @@
+## []
+
+- Server log names trading mobs whose trades ALI cannot show
+- Fixed tooltips of unsupported trades showing a name that changes on every server start
+- Trades no mod adds support for show their random prices and amounts as ranges instead of being unsupported
+- Fixed an error in another mod's trader, ingredient or loot modifier support taking down more than that one part, or the whole server start
+- Unsupported trading mods shows trades that can be auto-detected from the mod's code
+- Fixed missing trades and loot that other mods prepare only once the server has started
+- Trade added several times to the same trader level shows once
+
 ## [2.5.0]
 
 - Fixed mixins failing when ALI is used as a dependency in a Forge mod development environment

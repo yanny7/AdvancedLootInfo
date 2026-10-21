@@ -12,6 +12,7 @@ import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.trades.TradeUtils;
 import com.yanny.ali.plugin.server.MissingTooltipUtils;
+import com.yanny.ali.plugin.server.bytecode.BytecodeInterpreter;
 import com.yanny.alicompat.Utils;
 import com.yanny.alicompat.accessor.PluginUtils;
 import io.redspace.ironsspellbooks.api.spells.SpellRarity;
@@ -22,11 +23,9 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
@@ -48,7 +47,7 @@ public class WanderingTrades {
                 (utils, listing, condition) -> inkNode(utils, listing, condition, true));
         registry.registerItemListing(AdditionalWanderingTrades.InkSellTrade.class,
                 (utils, listing, condition) -> inkNode(utils, listing, condition, false));
-        registry.registerItemListing(AdditionalWanderingTrades.SimpleTrade.class, WanderingTrades::rolledNode);
+        registry.registerItemListing(AdditionalWanderingTrades.SimpleTrade.class, WanderingTrades::offerNode);
 
         registerNested(registry, "RandomCurioTrade", (utils, condition) ->
                 lootTableNode(utils, condition, BASIC_CURIOS, NumberExpr.constant(64)));
@@ -60,26 +59,17 @@ public class WanderingTrades {
         InkItem ink = SimpleTradeAccessor.of(listing).getCaptured(InkItem.class);
 
         if (ink == null) {
-            return rolledNode(utils, listing, condition);
+            return offerNode(utils, listing, condition);
         }
 
         return (buy ? WizardTrades.inkBuy(ink) : WizardTrades.inkSell(ink)).getNode(utils, condition);
     }
 
     @NotNull
-    private static IDataNode rolledNode(IServerUtils utils, AdditionalWanderingTrades.SimpleTrade listing, TooltipNode condition) {
-        try {
-            //noinspection DataFlowIssue - none of these lambdas reads the trader, only the random source
-            MerchantOffer offer = listing.getOffer(null, RandomSource.create());
+    private static IDataNode offerNode(IServerUtils utils, AdditionalWanderingTrades.SimpleTrade listing, TooltipNode condition) {
+        IDataNode node = BytecodeInterpreter.getItemListing(utils, listing, condition);
 
-            if (offer != null) {
-                return TradeUtils.getNode(utils, offer, condition);
-            }
-        } catch (Throwable e) {
-            LOGGER.warn("Failed to roll trade offer for {}: {}", listing.getClass().getName(), e.getMessage());
-        }
-
-        return new MissingNode(MissingTooltipUtils.getMissingItemListingTooltip(utils, listing).build());
+        return node != null ? node : new MissingNode(MissingTooltipUtils.getMissingItemListingTooltip(utils, listing).build());
     }
 
     @NotNull

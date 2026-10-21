@@ -31,6 +31,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.registries.VanillaRegistries;
@@ -79,6 +80,9 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+
 @Suite
 @SelectClasses({
         GenericTooltipTest.class,
@@ -95,6 +99,7 @@ import java.util.concurrent.ExecutionException;
         UnwrapperTest.class,
         ServerUtilsTest.class,
         GlobalLootModifierTest.class,
+        BytecodeInterpreterTest.class,
         ConfigTest.class,
         ValueCharacterizationTest.class,
         EntryWeightTest.class
@@ -124,7 +129,10 @@ public class TooltipTestSuite {
 
         PluginManager.getInstance().registerCommonEvent();
         PluginManager.getInstance().registerClientEvent();
-        PluginManager.getInstance().registerServerEvent(null);
+        ServerLevel level = mock(ServerLevel.class);
+
+        doReturn(RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY)).when(level).registryAccess();
+        PluginManager.getInstance().registerServerEvent(level);
         TooltipContext.setPalette(PluginManager.getInstance().serverRegistry.getTooltipCache());
         UTILS = new IServerUtils() {
             @NotNull

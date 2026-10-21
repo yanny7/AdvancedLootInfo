@@ -19,17 +19,36 @@ public class TradeGroupNode extends ListNode {
     public static final ResourceLocation ID = Utils.modLoc("trade_group");
 
     public final NumberExpr selectionCount;
+    private final boolean repeated;
     private final TooltipNode tooltip;
 
     public TradeGroupNode(NumberExpr offers, List<IDataNode> trades) {
         selectionCount = NumberExpr.min(offers, NumberExpr.constant(trades.size()));
+        repeated = false;
         trades.forEach(this::addChildren);
         tooltip = TooltipBuilder.branch((b) -> b.add(TooltipBuilder.number(selectionCount).build(Lang.Description.RANDOM_TRADE_SELECTION))).build();
+    }
+
+    private TradeGroupNode(NumberExpr times, IDataNode trade) {
+        selectionCount = times;
+        repeated = true;
+        addChildren(trade);
+        tooltip = TooltipBuilder.branch((b) -> b.add(TooltipBuilder.number(times).build(Lang.Description.REPEATED_TRADE))).build();
+    }
+
+    @NotNull
+    public static TradeGroupNode repeated(NumberExpr times, IDataNode trade) {
+        return new TradeGroupNode(times, trade);
+    }
+
+    public NumberExpr capacity() {
+        return repeated ? selectionCount : NumberExpr.constant(nodes().size());
     }
 
     public TradeGroupNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
         selectionCount = NumberExpr.decode(buf);
+        repeated = false;
         tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
     }
 

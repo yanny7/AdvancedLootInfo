@@ -24,6 +24,7 @@ import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.server.*;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import com.yanny.ali.plugin.server.bytecode.BytecodeInterpreter;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.commands.arguments.NbtPathArgument;
 import net.minecraft.core.BlockPos;
@@ -147,6 +148,7 @@ public class Plugin implements IPlugin {
         EnumTypes.TRANSLATED_ENUMS.forEach((type, owner) -> registry.registerEnumTranslation(type, Utils.MOD_ID, owner));
 
         registry.registerCacheCleaner(GlobalLootModifierUtils::clearCaches);
+        registry.registerCacheCleaner(BytecodeInterpreter::clearCaches);
 
         registry.registerNumberProvider(ConstantValue.class, Plugin::convertConstant);
         registry.registerNumberProvider(UniformGenerator.class, Plugin::convertUniform, Plugin::convertIntUniform);
