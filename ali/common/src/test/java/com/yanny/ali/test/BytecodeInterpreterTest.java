@@ -574,6 +574,31 @@ public class BytecodeInterpreterTest {
     }
 
     @Test
+    public void testTraderRemovingMissingOffers() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(NullFilteringTrader.class);
+
+        Assertions.assertNotNull(levels);
+
+        List<IDataNode> trades = ((TradeLevel.OfTrades) levels.get(1)).trades().apply(UTILS);
+
+        Assertions.assertEquals(Set.of(Items.CARROT, Items.APPLE), trades.stream().map((t) -> slot(t, 2).getItem().left().orElseThrow().getItem()).collect(Collectors.toSet()));
+        Assertions.assertEquals(2, trades.size());
+    }
+
+    @Test
+    public void testTraderAddingOffersFromCollection() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(CollectionTrader.class);
+
+        Assertions.assertNotNull(levels);
+
+        List<IDataNode> trades = ((TradeLevel.OfTrades) levels.get(1)).trades().apply(UTILS);
+
+        Assertions.assertEquals(2, trades.size());
+        assertSlot(trades.get(0), 2, Items.BREAD, NumberExpr.constant(1));
+        assertSlot(trades.get(1), 2, Items.APPLE, NumberExpr.constant(1));
+    }
+
+    @Test
     public void testTraderWithSomeTradesUnknown() {
         BytecodeInterpreter.ComputedTrades trades = BytecodeInterpreter.getTradeLevels(UTILS, PartlyKnownTrader.class);
 
@@ -1390,6 +1415,48 @@ public class BytecodeInterpreterTest {
         public MerchantOffers getOffers() {
             MerchantOffers offers = new MerchantOffers();
 
+            offers.add(offerFor(Items.APPLE));
+            return offers;
+        }
+    }
+
+    private abstract static class NullFilteringTrader extends AbstractVillager {
+        private NullFilteringTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @NotNull
+        @Override
+        public MerchantOffers getOffers() {
+            MerchantOffers offers = new MerchantOffers();
+
+            offers.add(offerFor(Items.CARROT));
+            offers.add(missingOffer());
+            offers.add(Traders.COMMON[0].getOffer(this, random));
+            offers.removeIf(Objects::isNull);
+            return offers;
+        }
+
+        @Nullable
+        private MerchantOffer missingOffer() {
+            return null;
+        }
+    }
+
+    private abstract static class CollectionTrader extends AbstractVillager {
+        private static final List<MerchantOffer> EXTRA = List.of(offerFor(Items.BREAD));
+
+        private CollectionTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @NotNull
+        @Override
+        public MerchantOffers getOffers() {
+            MerchantOffers offers = new MerchantOffers();
+
+            offers.addAll(EXTRA);
+            offers.addAll(new ArrayList<>());
             offers.add(offerFor(Items.APPLE));
             return offers;
         }

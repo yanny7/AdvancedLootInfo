@@ -713,7 +713,7 @@ final class Interpreter implements Opcodes {
             }
         }
         if (receiver instanceof Value.Offers offers) {
-            return offersCall(call, offers, args);
+            return offersCall(call, offers, args, depth);
         }
         if (receiver instanceof Value.Draws draws) {
             if (call.name.equals("hasNext") && call.desc.equals("()Z")) {
@@ -1392,7 +1392,7 @@ final class Interpreter implements Opcodes {
     }
 
     @Nullable
-    private Value offersCall(MethodInsnNode call, Value.Offers offers, List<Value> args) {
+    private Value offersCall(MethodInsnNode call, Value.Offers offers, List<Value> args, int depth) {
         if (call.name.equals("add") && call.desc.equals("(Ljava/lang/Object;)Z") && args.get(1) instanceof Value.Pick pickValue) {
             Integer index = offers.picks.get(pickValue.pool());
 
@@ -1423,6 +1423,14 @@ final class Interpreter implements Opcodes {
             offers.entries.add(new Value.Offers.Single(args.get(1)));
             return new Value.Known(1);
         }
+        if (call.name.equals("addAll") && call.desc.equals("(Ljava/util/Collection;)Z") && args.get(1) instanceof Value.Known known
+                && known.value() instanceof Collection<?> collection && !tainted.contains(collection)) {
+            collection.forEach((offer) -> offers.entries.add(new Value.Offers.Single(wrap(offer))));
+            return new Value.Known(collection.isEmpty() ? 0 : 1);
+        }
+        if (call.name.equals("removeIf") && call.desc.equals("(Ljava/util/function/Predicate;)Z") && args.get(1) instanceof Value.Closure predicate) {
+            return removeOffers(offers, predicate, depth);
+        }
         if (call.name.equals("isEmpty") && call.desc.equals("()Z")) {
             return new Value.Known(offers.entries.isEmpty() ? 1 : 0);
         }
@@ -1436,6 +1444,39 @@ final class Interpreter implements Opcodes {
         }
 
         throw new Fail("merchant offers call " + call.name);
+    }
+
+    private Value removeOffers(Value.Offers offers, Value.Closure predicate, int depth) {
+        boolean nullCheck = predicate.impl().getOwner().equals("java/util/Objects") && predicate.impl().getName().equals("isNull");
+        List<Integer> removedIndices = new ArrayList<>();
+
+        for (int i = 0; i < offers.entries.size(); i++) {
+            if (!(offers.entries.get(i) instanceof Value.Offers.Single single)) {
+                if (!nullCheck) {
+                    throw new Fail("merchant offers call removeIf");
+                }
+
+                continue;
+            }
+
+            List<Value> all = new ArrayList<>(predicate.captured());
+
+            all.add(single.offer());
+
+            if (!(invokeHandle(predicate.impl(), all, predicate.loader(), depth + 1) instanceof Value.Known known) || !(known.value() instanceof Integer test)) {
+                throw new Fail("merchant offers call removeIf");
+            }
+            if (test != 0) {
+                removedIndices.add(i);
+            }
+        }
+
+        for (int i = removedIndices.size() - 1; i >= 0; i--) {
+            offers.entries.remove((int) removedIndices.get(i));
+        }
+
+        offers.picks.replaceAll((pool, index) -> index - (int) removedIndices.stream().filter((removed) -> removed < index).count());
+        return new Value.Known(removedIndices.isEmpty() ? 0 : 1);
     }
 
     private Value construct(String type, String desc, List<Value> args, ClassLoader loader) {
@@ -1695,6 +1736,9 @@ final class Interpreter implements Opcodes {
             }
 
             return args.get(0);
+        }
+        if (isStatic && call.owner.equals("java/util/Objects") && (call.name.equals("isNull") || call.name.equals("nonNull"))) {
+            return new Value.Known(isNull(args.get(0)) == call.name.equals("isNull") ? 1 : 0);
         }
         if (isStatic && call.owner.equals("java/util/concurrent/ThreadLocalRandom") && call.name.equals("current")) {
             return new Value.Rng(true);
