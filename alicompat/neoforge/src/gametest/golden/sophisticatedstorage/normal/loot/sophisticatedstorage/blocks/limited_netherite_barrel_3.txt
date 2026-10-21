@@ -8,4 +8,4 @@ ali:loot_table
       | ----- Modifiers -----
       | Copy Name:
       |   -> Source: Block Entity
-      | Copy Storage Data:
+      | Copy Storage Data

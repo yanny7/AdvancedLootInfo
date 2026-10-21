@@ -12,7 +12,7 @@ ali:loot_table
       |       -> Enchantment: Silk Touch
       |       -> Level: ≥ 1
       | ----- Modifiers -----
-      | Double Drops:
+      | Double Drops
       | Explosion Decay
   ali:loot_pool
     | Selects random entry
@@ -27,7 +27,7 @@ ali:loot_table
       |         -> Enchantment: Silk Touch
       |         -> Level: ≥ 1
       | ----- Modifiers -----
-      | Double Drops:
+      | Double Drops
       | Explosion Decay
   ali:loot_pool
     | Selects random entry
@@ -50,7 +50,7 @@ ali:loot_table
       |         -> Enchantment: Silk Touch
       |         -> Level: ≥ 1
       | ----- Modifiers -----
-      | Double Drops:
+      | Double Drops
       | Explosion Decay
       | Set Count:
       |   -> Count: 1 to 2

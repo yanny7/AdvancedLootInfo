@@ -12,7 +12,7 @@ ali:entity_loot_table
       | Set Count:
       |   -> Count: 0 to 1
       |   -> Add: False
-      | Revolver Perks:
+      | Revolver Perks
     ali:item immersiveengineering:gunpart_drum x0-1
       | Chance: 33.33%
       | Count: max(0; U[0; 1])
@@ -22,7 +22,7 @@ ali:entity_loot_table
       | Set Count:
       |   -> Count: 0 to 1
       |   -> Add: False
-      | Revolver Perks:
+      | Revolver Perks
     ali:item immersiveengineering:gunpart_hammer x0-1
       | Chance: 33.33%
       | Count: max(0; U[0; 1])
@@ -32,4 +32,4 @@ ali:entity_loot_table
       | Set Count:
       |   -> Count: 0 to 1
       |   -> Add: False
-      | Revolver Perks:
+      | Revolver Perks

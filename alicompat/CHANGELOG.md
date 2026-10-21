@@ -3,6 +3,7 @@
 - Iron's Spellbooks wandering trades with a random price show the price range instead of one random price
 - Ars Nouveau dungeon loot shows exact chances and count ranges instead of estimated ones
 - Fixed an Ars Nouveau error hiding a whole trade level of the Shards trader
+- Fixed a stray colon after loot functions that carry no values on NeoForge (Aether, Applied Cooking, Bumblezone, ExtraStorage, Farmer's Delight, Immersive Engineering, Refined Storage, Sophisticated Backpacks and Sophisticated Storage)
 
 ## [1.3.0]
 

@@ -6,7 +6,7 @@ ali:loot_table
     ali:item refinedstorage:creative_portable_grid x1
       | Count: 1
       | ----- Modifiers -----
-      | Copy Portable Grid Data:
+      | Copy Portable Grid Data
       | Copy Components:
       |   -> Source: Block Entity
       |   -> Include: minecraft:custom_name
