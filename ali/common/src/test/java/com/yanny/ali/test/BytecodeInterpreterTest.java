@@ -430,6 +430,18 @@ public class BytecodeInterpreterTest {
     }
 
     @Test
+    public void testTraderPickingListingAtRandomIndex() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(RandomIndexTrader.class);
+
+        Assertions.assertNotNull(levels);
+        Assertions.assertEquals(List.of(1, 2), levels.keySet().intStream().sorted().boxed().toList());
+        Assertions.assertEquals(List.of(Items.CARROT), listingItems(((TradeLevel.OfListings) levels.get(1)).listings()));
+        Assertions.assertEquals(NumberExpr.constant(1), ((TradeLevel.OfListings) levels.get(1)).levelInfo().offers());
+        Assertions.assertEquals(List.of(Items.APPLE, Items.BREAD), listingItems(((TradeLevel.OfListings) levels.get(2)).listings()));
+        Assertions.assertEquals(NumberExpr.constant(1), ((TradeLevel.OfListings) levels.get(2)).levelInfo().offers());
+    }
+
+    @Test
     public void testTraderWithLevelFromItsState() {
         Int2ObjectMap<TradeLevel> levels = computedLevels(LeveledTrader.class);
 
@@ -1404,6 +1416,32 @@ public class BytecodeInterpreterTest {
 
             addOffersFromItemListings(offers, Traders.BY_LEVEL.get(1), 2);
             addOffersFromItemListings(offers, Traders.BY_LEVEL.get(2), 1);
+        }
+    }
+
+    private abstract static class RandomIndexTrader extends AbstractVillager {
+        private static final Int2ObjectMap<VillagerTrades.ItemListing[]> TRADES = new Int2ObjectOpenHashMap<>(Map.of(1, Traders.RARE, 2, Traders.COMMON));
+
+        private RandomIndexTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void updateTrades() {
+            VillagerTrades.ItemListing[] listings1 = TRADES.get(1);
+            VillagerTrades.ItemListing[] listings2 = TRADES.get(2);
+
+            if (listings1 != null && listings2 != null) {
+                MerchantOffers offers = getOffers();
+
+                addOffersFromItemListings(offers, listings1, 1);
+
+                MerchantOffer offer = listings2[random.nextInt(listings2.length)].getOffer(this, random);
+
+                if (offer != null) {
+                    offers.add(offer);
+                }
+            }
         }
     }
 

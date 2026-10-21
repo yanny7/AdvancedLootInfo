@@ -637,7 +637,7 @@ final class Interpreter implements Opcodes {
         }
 
         if (merchant != null && RuntimeNames.is(RuntimeNames.GET_OFFER, call)) {
-            if (args.get(0) instanceof Value.Choice choice && choice.draw() != null && pools.contains(choice.draw())
+            if (args.get(0) instanceof Value.Choice choice && (choice.draw() != null && pools.contains(choice.draw()) || isUniformPick(choice))
                     && choice.options().stream().allMatch(VillagerTrades.ItemListing.class::isInstance)) {
                 return new Value.Pick(choice.options().stream().map(VillagerTrades.ItemListing.class::cast).toList(), choice.draw(), poolKey(choice.options()));
             }
@@ -1381,6 +1381,13 @@ final class Interpreter implements Opcodes {
         }
 
         return null;
+    }
+
+    private static boolean isUniformPick(Value.Choice choice) {
+        Set<Object> distinct = Collections.newSetFromMap(new IdentityHashMap<>());
+
+        distinct.addAll(choice.options());
+        return choice.draw() instanceof NumberExpr && distinct.size() == choice.options().size();
     }
 
     private static boolean isListings(@Nullable Object value) {
