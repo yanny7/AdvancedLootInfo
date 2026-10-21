@@ -586,6 +586,41 @@ public class BytecodeInterpreterTest {
     }
 
     @Test
+    public void testTraderCollectingPickedListings() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(CollectedListingsTrader.class);
+
+        Assertions.assertNotNull(levels);
+
+        TradeLevel.OfListings level = (TradeLevel.OfListings) levels.get(1);
+
+        Assertions.assertEquals(List.of(Items.APPLE, Items.BREAD, Items.CARROT), listingItems(level.listings()));
+        Assertions.assertEquals(oneOrTwo(), level.levelInfo().offers());
+        Assertions.assertEquals(1F, level.levelInfo().chance());
+    }
+
+    @Test
+    public void testTraderCollectingPickedOffers() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(CollectedOffersTrader.class);
+
+        Assertions.assertNotNull(levels);
+
+        TradeLevel.OfTrades level = (TradeLevel.OfTrades) levels.get(1);
+        List<IDataNode> trades = level.trades().apply(UTILS);
+
+        Assertions.assertEquals(oneOrTwo(), level.levelInfo().offers());
+        Assertions.assertEquals(1F, level.levelInfo().chance());
+        Assertions.assertEquals(3, trades.size());
+        assertSlot(trades.get(0), 2, Items.APPLE, NumberExpr.constant(1));
+        assertSlot(trades.get(1), 2, Items.BREAD, NumberExpr.constant(1));
+        assertSlot(trades.get(2), 2, Items.CARROT, NumberExpr.constant(1));
+    }
+
+    @NotNull
+    private static NumberExpr oneOrTwo() {
+        return NumberExpr.weighted(List.of(new NumberExpr.WeightedEntry(0.5, NumberExpr.constant(2)), new NumberExpr.WeightedEntry(0.5, NumberExpr.constant(1))));
+    }
+
+    @Test
     public void testTraderAddingOffersFromCollection() {
         Int2ObjectMap<TradeLevel> levels = computedLevels(CollectionTrader.class);
 
@@ -1440,6 +1475,76 @@ public class BytecodeInterpreterTest {
         @Nullable
         private MerchantOffer missingOffer() {
             return null;
+        }
+    }
+
+    private abstract static class CollectedListingsTrader extends AbstractVillager {
+        private static final List<VillagerTrades.ItemListing> FILLER = List.of(new OfferListing(Items.APPLE), new OfferListing(Items.BREAD), new OfferListing(Items.CARROT));
+
+        private CollectedListingsTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @NotNull
+        @Override
+        public MerchantOffers getOffers() {
+            MerchantOffers offers = new MerchantOffers();
+
+            offers.addAll(createRandomOffers(1, 2));
+            return offers;
+        }
+
+        @NotNull
+        private Collection<MerchantOffer> createRandomOffers(int min, int max) {
+            Set<Integer> indices = com.google.common.collect.Sets.newHashSet();
+            int count = random.nextIntBetweenInclusive(min, max);
+
+            for (int i = 0; i < 10 && indices.size() < count; i++) {
+                indices.add(random.nextInt(FILLER.size()));
+            }
+
+            Collection<MerchantOffer> offers = new ArrayList<>();
+
+            for (Integer index : indices) {
+                offers.add(FILLER.get(index).getOffer(this, random));
+            }
+
+            return offers;
+        }
+    }
+
+    private abstract static class CollectedOffersTrader extends AbstractVillager {
+        private static final List<MerchantOffer> FILLER = List.of(offerFor(Items.APPLE), offerFor(Items.BREAD), offerFor(Items.CARROT));
+
+        private CollectedOffersTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @NotNull
+        @Override
+        public MerchantOffers getOffers() {
+            MerchantOffers offers = new MerchantOffers();
+
+            offers.addAll(createRandomOffers(1, 2));
+            return offers;
+        }
+
+        @NotNull
+        private Collection<MerchantOffer> createRandomOffers(int min, int max) {
+            Set<Integer> indices = com.google.common.collect.Sets.newHashSet();
+            int count = random.nextIntBetweenInclusive(min, max);
+
+            for (int i = 0; i < 10 && indices.size() < count; i++) {
+                indices.add(random.nextInt(FILLER.size()));
+            }
+
+            Collection<MerchantOffer> offers = new ArrayList<>();
+
+            for (Integer index : indices) {
+                offers.add(FILLER.get(index));
+            }
+
+            return offers;
         }
     }
 

@@ -127,6 +127,9 @@ sealed interface Value {
 
         record Single(Value offer) implements Entry {
         }
+
+        record Picked(List<Object> offers, Value count) implements Entry {
+        }
     }
 
     final class Uninit implements Value {

@@ -86,6 +86,7 @@ final class Interpreter implements Opcodes {
     private final Map<Object, NumberExpr> drawCounts = new IdentityHashMap<>();
     private final Map<Object, Object> elementSources = new IdentityHashMap<>();
     private final Set<Object> pools = Collections.newSetFromMap(new IdentityHashMap<>());
+    private final Map<Object, Value.Offers> offerLists = new IdentityHashMap<>();
     private final Map<NumberExpr, Drawn> drawn = new IdentityHashMap<>();
     private boolean ownGetOffers;
     @Nullable
@@ -655,6 +656,15 @@ final class Interpreter implements Opcodes {
                 && choice.options().size() == list.size() - removed.getOrDefault(list, 0) && new HashSet<Object>(list).containsAll(choice.options())) {
             removed.merge(list, 1, Integer::sum);
             return new Value.Known(1);
+        }
+        Value.Offers collected = !isStatic && call.name.equals("add") && call.desc.equals("(Ljava/lang/Object;)Z") && isSymbolicOffer(args.get(1))
+                ? offerList(args.get(0), true) : null;
+
+        if (collected != null) {
+            return args.get(1) instanceof Value.Choice choice ? addPicked(collected, choice) : offersCall(call, collected, args, depth);
+        }
+        if (!isStatic && args.get(0) instanceof Value.Known known && known.value() != null && offerLists.containsKey(known.value())) {
+            return offersCall(call, offerLists.get(known.value()), args, depth);
         }
 
         int[] choices = choiceIndices(args);
@@ -1403,7 +1413,10 @@ final class Interpreter implements Opcodes {
                 offers.entries.add(new Value.Offers.Listings(pickValue.listings().toArray(new VillagerTrades.ItemListing[0]),
                         drawCount != null ? new Value.Num(drawCount, Value.Kind.INT) : new Value.Known(1), pickValue.key()));
             } else {
-                Value.Offers.Listings listings = (Value.Offers.Listings) offers.entries.get(index);
+                if (!(offers.entries.get(index) instanceof Value.Offers.Listings listings)) {
+                    throw new Fail("merchant offers call add");
+                }
+
                 List<VillagerTrades.ItemListing> union = new ArrayList<>(Arrays.asList(listings.listings()));
 
                 for (VillagerTrades.ItemListing listing : pickValue.listings()) {
@@ -1422,6 +1435,20 @@ final class Interpreter implements Opcodes {
         if (call.name.equals("add") && call.desc.equals("(Ljava/lang/Object;)Z")) {
             offers.entries.add(new Value.Offers.Single(args.get(1)));
             return new Value.Known(1);
+        }
+        Value.Offers source = call.name.equals("addAll") && call.desc.equals("(Ljava/util/Collection;)Z") ? offerList(args.get(1), false) : null;
+
+        if (source != null) {
+            int start = offers.entries.size();
+
+            for (Map.Entry<Object, Integer> pick : source.picks.entrySet()) {
+                if (offers.picks.putIfAbsent(pick.getKey(), start + pick.getValue()) != null) {
+                    throw new Fail("merchant offers call addAll");
+                }
+            }
+
+            offers.entries.addAll(source.entries);
+            return new Value.Known(source.entries.isEmpty() ? 0 : 1);
         }
         if (call.name.equals("addAll") && call.desc.equals("(Ljava/util/Collection;)Z") && args.get(1) instanceof Value.Known known
                 && known.value() instanceof Collection<?> collection && !tainted.contains(collection)) {
@@ -1444,6 +1471,60 @@ final class Interpreter implements Opcodes {
         }
 
         throw new Fail("merchant offers call " + call.name);
+    }
+
+    private Value addPicked(Value.Offers offers, Value.Choice choice) {
+        Integer index = offers.picks.get(choice.draw());
+        NumberExpr drawCount = drawCounts.get(choice.draw());
+
+        if (index == null) {
+            offers.picks.put(choice.draw(), offers.entries.size());
+            offers.entries.add(new Value.Offers.Picked(choice.options(), drawCount != null ? new Value.Num(drawCount, Value.Kind.INT) : new Value.Known(1)));
+        } else if (offers.entries.get(index) instanceof Value.Offers.Picked picked) {
+            List<Object> union = new ArrayList<>(picked.offers());
+
+            for (Object offer : choice.options()) {
+                if (union.stream().noneMatch((o) -> o == offer)) {
+                    union.add(offer);
+                }
+            }
+
+            Value count = drawCount != null ? picked.count() : new Value.Known((Integer) ((Value.Known) picked.count()).value() + 1);
+
+            offers.entries.set(index, new Value.Offers.Picked(union, count));
+        } else {
+            throw new Fail("merchant offers call add");
+        }
+
+        return new Value.Known(1);
+    }
+
+    private boolean isSymbolicOffer(Value value) {
+        return value instanceof Value.Pick || value instanceof Value.Offer || value instanceof Value.Choice choice && choice.draw() != null
+                && pools.contains(choice.draw()) && !choice.options().isEmpty() && choice.options().stream().allMatch(MerchantOffer.class::isInstance);
+    }
+
+    @Nullable
+    private Value.Offers offerList(Value value, boolean create) {
+        if (value instanceof Value.Offers offers) {
+            return offers;
+        }
+        if (!(value instanceof Value.Known known) || !(known.value() instanceof Collection<?> collection) || !owned.containsKey(collection)) {
+            return null;
+        }
+        if (offerLists.containsKey(collection) || !create) {
+            return offerLists.get(collection);
+        }
+        if (isFrozen(collection) || !collection.stream().allMatch(MerchantOffer.class::isInstance)) {
+            throw new Fail("offers in a collection");
+        }
+
+        Value.Offers offers = new Value.Offers();
+
+        collection.forEach((offer) -> offers.entries.add(new Value.Offers.Single(wrap(offer))));
+        collection.clear();
+        offerLists.put(collection, offers);
+        return offers;
     }
 
     private Value removeOffers(Value.Offers offers, Value.Closure predicate, int depth) {
