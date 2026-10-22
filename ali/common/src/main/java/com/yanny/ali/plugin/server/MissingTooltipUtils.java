@@ -9,6 +9,7 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.plugin.server.bytecode.BytecodeInterpreter;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -104,9 +105,10 @@ public class MissingTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getMissingItemListingTooltip(IServerUtils utils, VillagerTrades.ItemListing itemListing) {
-        TooltipBuilder tooltip = TooltipBuilder.value(ManagedRegistry.classKeyName(itemListing.getClass()));
+        Object source = BytecodeInterpreter.listingSource(itemListing);
+        TooltipBuilder tooltip = TooltipBuilder.value(ManagedRegistry.classKeyName(source.getClass()));
 
-        TooltipUtils.addObjectFields(utils, tooltip, itemListing, VillagerTrades.ItemListing.class);
+        TooltipUtils.addObjectFields(utils, tooltip, source, source == itemListing ? VillagerTrades.ItemListing.class : Object.class);
         return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
     }
 

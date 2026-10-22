@@ -76,6 +76,7 @@ final class Interpreter implements Opcodes {
     @Nullable
     private Value.Offers merchantOffers;
     private final Map<Object, Integer> listingKeys = new IdentityHashMap<>();
+    private final Map<Object, List<BoundOffer>> boundOffers = new IdentityHashMap<>();
     private final Map<String, Value> merchantFields = new HashMap<>();
     private final Map<String, Value> statics = new HashMap<>();
     private final Set<Object> tainted = Collections.newSetFromMap(new IdentityHashMap<>());
@@ -147,11 +148,15 @@ final class Interpreter implements Opcodes {
 
     @Nullable
     Value call(Object receiver, Class<?> iface, String name, String desc, List<Value> args) {
+        return call(receiver, new MethodInsnNode(INVOKEINTERFACE, Type.getInternalName(iface), name, desc, true), args);
+    }
+
+    Value call(Object receiver, MethodInsnNode call, List<Value> args) {
         List<Value> all = new ArrayList<>();
 
         all.add(wrap(receiver));
         all.addAll(args);
-        return invoke(new MethodInsnNode(INVOKEINTERFACE, Type.getInternalName(iface), name, desc, true), all, receiver.getClass().getClassLoader(), 0);
+        return invoke(call, all, receiver.getClass().getClassLoader(), 0);
     }
 
     Value.Offers trades(Class<?> merchant) {
@@ -593,7 +598,7 @@ final class Interpreter implements Opcodes {
         }
 
         if (call.getOpcode() != INVOKESTATIC && call.name.equals("get") && args.size() == 2 && args.get(0) instanceof Value.Known map && map.value() instanceof Map<?, ?>
-                && args.get(1) instanceof Value.Known key && result instanceof Value.Known listings && isListings(listings.value())) {
+                && args.get(1) instanceof Value.Known key && result instanceof Value.Known listings && isKeyedList(listings.value())) {
             if (key.value() instanceof Integer level) {
                 listingKeys.put(listings.value(), level);
             } else if (key.value() instanceof Enum<?> constant) {
@@ -659,6 +664,16 @@ final class Interpreter implements Opcodes {
                 Object source = elementSources.containsKey(listing) ? elementSources.get(listing) : keyedSource(listing);
 
                 return new Value.Pick(List.of(listing), source != null ? source : listing, source != null ? listingKeys.get(source) : null);
+            }
+        }
+        if (merchant != null && !isStatic && args.get(0) instanceof Value.Choice choice && (choice.draw() != null && pools.contains(choice.draw()) || isUniformPick(choice))
+                && choice.options().stream().noneMatch(MerchantOffer.class::isInstance) && returnsOffer(call, loader)) {
+            List<Object> bound = bound(args.subList(1, args.size()));
+
+            if (bound != null) {
+                List<VillagerTrades.ItemListing> listings = choice.options().stream().<VillagerTrades.ItemListing>map((element) -> boundOffer(element, call, bound)).toList();
+
+                return new Value.Pick(listings, choice.draw(), poolKey(choice.options()));
             }
         }
         if (call.name.equals("intValue") && call.desc.equals("()I") && args.get(0) instanceof Value.Choice choice && choice.options().stream().allMatch(Integer.class::isInstance)) {
@@ -1444,9 +1459,42 @@ final class Interpreter implements Opcodes {
         return choice.draw() instanceof NumberExpr && distinct.size() == choice.options().size();
     }
 
-    private static boolean isListings(@Nullable Object value) {
-        return value instanceof VillagerTrades.ItemListing[]
-                || value instanceof List<?> list && !list.isEmpty() && list.stream().allMatch(VillagerTrades.ItemListing.class::isInstance);
+    private static boolean returnsOffer(MethodInsnNode call, ClassLoader loader) {
+        Type returnType = Type.getReturnType(call.desc);
+
+        return returnType.getSort() == Type.OBJECT && MerchantOffer.class.isAssignableFrom(load(returnType.getInternalName(), loader));
+    }
+
+    @Nullable
+    private List<Object> bound(List<Value> args) {
+        List<Object> bound = new ArrayList<>();
+
+        for (Value arg : args) {
+            if (isSelf(arg)) {
+                bound.add(BoundOffer.Bound.TRADER);
+            } else if (arg instanceof Value.Rng rng) {
+                bound.add(rng.legacy() ? BoundOffer.Bound.LEGACY_RANDOM : BoundOffer.Bound.RANDOM);
+            } else if (arg instanceof Value.Known known && isConcrete(arg)) {
+                bound.add(known.value());
+            } else {
+                return null;
+            }
+        }
+
+        return bound;
+    }
+
+    private BoundOffer boundOffer(Object element, MethodInsnNode call, List<Object> args) {
+        BoundOffer offer = new BoundOffer(element, call.owner, call.name, call.desc, call.itf, args);
+
+        return boundOffers.computeIfAbsent(element, (e) -> new ArrayList<>()).stream().filter(offer::equals).findFirst().orElseGet(() -> {
+            boundOffers.get(element).add(offer);
+            return offer;
+        });
+    }
+
+    private static boolean isKeyedList(@Nullable Object value) {
+        return value instanceof Object[] array && array.length > 0 || value instanceof List<?> list && !list.isEmpty();
     }
 
     @Nullable
@@ -1628,7 +1676,7 @@ final class Interpreter implements Opcodes {
         if (type.equals(ITEM_STACK)) {
             return constructStack(desc, args);
         }
-        if (type.equals(MERCHANT_OFFER)) {
+        if (type.equals(MERCHANT_OFFER) || !args.stream().allMatch(this::isConcrete) && isForwardingOffer(load(type, loader), desc)) {
             return constructOffer(desc, args);
         }
         List<Value> drawn = args.stream().map(Interpreter::drawnInt).toList();
@@ -1748,6 +1796,35 @@ final class Interpreter implements Opcodes {
         }
 
         throw new Fail("offer constructor");
+    }
+
+    private static boolean isForwardingOffer(Class<?> type, String desc) {
+        ClassNode node = type != MerchantOffer.class && MerchantOffer.class.isAssignableFrom(type) ? classNode(type) : null;
+        MethodNode init = node != null ? findMethod(node, CONSTRUCTOR, desc) : null;
+
+        if (init == null) {
+            return false;
+        }
+
+        List<AbstractInsnNode> insns = Arrays.stream(init.instructions.toArray()).filter((i) -> i.getOpcode() >= 0).toList();
+        Type[] params = Type.getArgumentTypes(desc);
+
+        if (insns.size() != params.length + 3 || !(insns.get(0) instanceof VarInsnNode self) || self.getOpcode() != ALOAD || self.var != 0) {
+            return false;
+        }
+
+        int slot = 1;
+
+        for (int i = 0; i < params.length; i++) {
+            if (!(insns.get(i + 1) instanceof VarInsnNode load) || load.getOpcode() != params[i].getOpcode(ILOAD) || load.var != slot) {
+                return false;
+            }
+
+            slot += params[i].getSize();
+        }
+
+        return insns.get(params.length + 1) instanceof MethodInsnNode call && call.getOpcode() == INVOKESPECIAL && call.owner.equals(MERCHANT_OFFER)
+                && call.name.equals(CONSTRUCTOR) && call.desc.equals(desc) && insns.get(params.length + 2).getOpcode() == RETURN;
     }
 
     private void replace(Value.Uninit uninit, Value created) {
