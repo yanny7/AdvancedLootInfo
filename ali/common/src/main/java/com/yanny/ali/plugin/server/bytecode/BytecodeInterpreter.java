@@ -55,12 +55,12 @@ public final class BytecodeInterpreter {
             return null;
         }
 
-        String name = ManagedRegistry.classKeyName(listing.getClass());
+        String name = ManagedRegistry.classKeyName(listingSource(listing).getClass());
         String reason = null;
 
         try {
-            List<Path> paths = paths(utils, (i) -> i.call(listing, VillagerTrades.ItemListing.class, RuntimeNames.GET_OFFER.name(), RuntimeNames.GET_OFFER.desc(),
-                    List.of(Value.Unknown.of(Type.getType(Entity.class), Origin.TRADER), new Value.Rng(false))));
+            List<Path> paths = paths(utils, (i) -> listing instanceof BoundOffer bound ? bound.call(i) : i.call(listing, VillagerTrades.ItemListing.class,
+                    RuntimeNames.GET_OFFER.name(), RuntimeNames.GET_OFFER.desc(), List.of(Value.Unknown.of(Type.getType(Entity.class), Origin.TRADER), new Value.Rng(false))));
             Map<String, List<Path>> offers = new LinkedHashMap<>();
 
             for (Path path : paths) {
@@ -111,6 +111,10 @@ public final class BytecodeInterpreter {
         }
 
         return null;
+    }
+
+    public static Object listingSource(VillagerTrades.ItemListing listing) {
+        return listing instanceof BoundOffer bound ? bound.receiver() : listing;
     }
 
     private static TooltipNode withIncomplete(TooltipNode condition) {

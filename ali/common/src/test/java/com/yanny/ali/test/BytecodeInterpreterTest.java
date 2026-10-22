@@ -89,6 +89,7 @@ import java.util.*;
 import java.util.function.IntUnaryOperator;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
@@ -537,6 +538,24 @@ public class BytecodeInterpreterTest {
     }
 
     @Test
+    public void testTraderPickingOwnTradeObjects() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(ShuffledTradesTrader.class);
+
+        Assertions.assertNotNull(levels);
+
+        TradeLevel.OfListings level = (TradeLevel.OfListings) levels.get(1);
+        VillagerTrades.ItemListing[] listings = level.listings();
+
+        Assertions.assertEquals(NumberExpr.constant(2), level.levelInfo().offers());
+        Assertions.assertEquals(1F, level.levelInfo().chance());
+        Assertions.assertEquals(3, listings.length);
+        assertSlot(interpret(listings[0]), 0, Items.EMERALD, NumberExpr.uniformInt(2, 4));
+        assertSlot(interpret(listings[0]), 2, Items.APPLE, NumberExpr.constant(1));
+        assertSlot(interpret(listings[1]), 2, Items.BREAD, NumberExpr.constant(1));
+        assertSlot(interpret(listings[2]), 2, Items.CARROT, NumberExpr.constant(1));
+    }
+
+    @Test
     public void testTraderWithLevelFromItsState() {
         Int2ObjectMap<TradeLevel> levels = computedLevels(LeveledTrader.class);
 
@@ -975,6 +994,14 @@ public class BytecodeInterpreterTest {
         assertSlot(trade, 2, Items.APPLE, NumberExpr.constant(1));
         assertSlot(single, 0, Items.EMERALD, NumberExpr.uniformInt(2, 4));
         assertSlot(single, 2, Items.APPLE, NumberExpr.constant(1));
+    }
+
+    @Test
+    public void testListingBuildingOfferSubclass() {
+        IDataNode trade = interpret(new SubclassOfferListing());
+
+        assertSlot(trade, 0, Items.EMERALD, NumberExpr.uniformInt(2, 4));
+        assertSlot(trade, 2, Items.APPLE, NumberExpr.constant(1));
     }
 
     @Test
@@ -1704,6 +1731,41 @@ public class BytecodeInterpreterTest {
         }
     }
 
+    private abstract static class ShuffledTradesTrader extends AbstractVillager {
+        private static final List<SoldItem> TRADES = List.of(new SoldItem(Items.APPLE, false), new SoldItem(Items.BREAD, true), new SoldItem(Items.CARROT, false));
+
+        private ShuffledTradesTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void updateTrades() {
+            List<Integer> indices = IntStream.range(0, TRADES.size()).boxed().collect(Collectors.toList());
+
+            Collections.shuffle(indices);
+            indices = indices.subList(0, Math.min(TRADES.size(), 2));
+
+            for (Integer index : indices) {
+                MerchantOffer offer = TRADES.get(index).create(this, getRandom());
+
+                if (offer != null) {
+                    getOffers().add(offer);
+                }
+            }
+        }
+    }
+
+    private record SoldItem(Item item, boolean sometimes) {
+        @Nullable
+        MerchantOffer create(Entity trader, RandomSource random) {
+            if (sometimes && random.nextBoolean()) {
+                return null;
+            }
+
+            return new MatchingOffer(new ItemCost(Items.EMERALD, random.nextIntBetweenInclusive(2, 4)), Optional.empty(), new ItemStack(item), 12, 5, 0.05F);
+        }
+    }
+
     private abstract static class TwoStackTrader extends AbstractVillager {
         private TwoStackTrader(EntityType<? extends AbstractVillager> type, Level level) {
             super(type, level);
@@ -2383,6 +2445,25 @@ public class BytecodeInterpreterTest {
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             return new MerchantOffer(new TradeCost(Items.EMERALD, 2, 4).create(random), secondary.map((c) -> c.create(random)), new ItemStack(Items.APPLE), 12, 5, 0.05F);
+        }
+    }
+
+    private static final class MatchingOffer extends MerchantOffer {
+        MatchingOffer(ItemCost costA, Optional<ItemCost> costB, ItemStack result, int maxUses, int xp, float priceMultiplier) {
+            super(costA, costB, result, maxUses, xp, priceMultiplier);
+        }
+
+        @Override
+        public boolean satisfiedBy(@NotNull ItemStack playerOfferA, @NotNull ItemStack playerOfferB) {
+            return false;
+        }
+    }
+
+    private static final class SubclassOfferListing implements VillagerTrades.ItemListing {
+        @NotNull
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            return new MatchingOffer(new ItemCost(Items.EMERALD, random.nextIntBetweenInclusive(2, 4)), Optional.empty(), new ItemStack(Items.APPLE), 12, 5, 0.05F);
         }
     }
 
