@@ -42,7 +42,7 @@ public final class BytecodeInterpreter {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
     private static final Set<String> FAILED = ConcurrentHashMap.newKeySet();
     private static final boolean LOG_TRADES = Boolean.getBoolean("ali.debug.trades");
-    private static final int MAX_PATHS = 32;
+    private static final int MAX_PATHS = 128;
     private static final int MAX_RESTARTS = 8;
     private static final String UNRENDERABLE = "offer that cannot be shown";
 
@@ -141,6 +141,7 @@ public final class BytecodeInterpreter {
         }).build();
     }
 
+    @NotNull
     public static ComputedTrades getTradeLevels(IServerUtils utils, Class<?> merchant) {
         if (!RuntimeNames.AVAILABLE) {
             return new ComputedTrades(new Int2ObjectOpenHashMap<>(), true);
@@ -202,10 +203,17 @@ public final class BytecodeInterpreter {
                         continue;
                     }
 
-                    List<Object> identity = entry instanceof Value.Offers.Listings listings ? List.of(Arrays.stream(listings.listings()).map(TradeUtils::listingKey).toList(), listings.count(), level)
-                            : List.of(String.valueOf(describeOffer(((Value.Offers.Single) entry).offer())), level);
+                    List<Object> identity;
 
-                    if (entries.putIfAbsent(identity, entry) != null && entry instanceof Value.Offers.Listings) {
+                    if (entry instanceof Value.Offers.Listings listings) {
+                        identity = List.of(Arrays.stream(listings.listings()).map(TradeUtils::listingKey).toList(), listings.count(), level);
+                    } else if (entry instanceof Value.Offers.Picked picked) {
+                        identity = List.of(picked.offers().stream().map((o) -> String.valueOf(describeOffer(new Value.Known(o)))).toList(), picked.count(), level);
+                    } else {
+                        identity = List.of(String.valueOf(describeOffer(((Value.Offers.Single) entry).offer())), level);
+                    }
+
+                    if (entries.putIfAbsent(identity, entry) != null && !(entry instanceof Value.Offers.Single)) {
                         reason = reason != null ? reason : "the same trades added twice";
                         incomplete.add(level);
                         twice = true;
@@ -220,10 +228,17 @@ public final class BytecodeInterpreter {
 
                 for (Map.Entry<List<Object>, Value.Offers.Entry> entry : entries.entrySet()) {
                     int repeated = times.get(entry.getKey());
-                    List<Object> identity = List.of(entry.getKey(), repeated);
+                    List<Object> key = entry.getKey();
+                    boolean single = entry.getValue() instanceof Value.Offers.Single;
+                    List<Object> identity = List.of(single || !split.world().isEmpty() ? key : List.of(key.get(0), key.get(2)), repeated);
+                    Group group = groups.computeIfAbsent((Integer) key.get(key.size() - 1), (l) -> new LinkedHashMap<>())
+                            .computeIfAbsent(identity, (i) -> new Group(entry.getValue(), repeated));
 
-                    groups.computeIfAbsent((Integer) entry.getKey().get(entry.getKey().size() - 1), (l) -> new LinkedHashMap<>())
-                            .computeIfAbsent(identity, (i) -> new Group(entry.getValue(), repeated)).worlds.merge(split.world(), probability, Double::sum);
+                    group.worlds.merge(split.world(), probability, Double::sum);
+
+                    if (!single) {
+                        group.counts.merge(count((Value) key.get(1)), probability, Double::sum);
+                    }
                 }
             }
 
@@ -352,7 +367,7 @@ public final class BytecodeInterpreter {
     private static TradeLevel tradeLevel(List<Group> groups, float chance) {
         List<Value.Offers.Entry> entries = groups.stream().map((g) -> g.entry).toList();
         List<PathCondition> conditions = groups.stream().map((g) -> PathCondition.of(List.copyOf(g.worlds.keySet()))).toList();
-        List<NumberExpr> counts = groups.stream().map((g) -> g.entry instanceof Value.Offers.Listings listings ? count(listings.count()) : NumberExpr.constant(g.times)).toList();
+        List<NumberExpr> counts = groups.stream().map(BytecodeInterpreter::count).toList();
 
         if (entries.size() == 1 && entries.get(0) instanceof Value.Offers.Listings listings && conditions.get(0) == PathCondition.ALWAYS) {
             return new TradeLevel.OfListings(listings.listings(), new TradeLevelInfo(counts.get(0), chance));
@@ -366,8 +381,14 @@ public final class BytecodeInterpreter {
             for (int i = 0; i < entries.size(); i++) {
                 TooltipNode condition = conditions.get(i).tooltip(u);
 
-                if (entries.get(i) instanceof Value.Offers.Listings listings) {
-                    List<IDataNode> trades = Arrays.stream(TradeUtils.distinctListings(listings.listings())).filter(Objects::nonNull).map((l) -> u.getItemListing(u, l, condition)).toList();
+                if (!(entries.get(i) instanceof Value.Offers.Single single)) {
+                    List<IDataNode> trades;
+
+                    if (entries.get(i) instanceof Value.Offers.Listings listings) {
+                        trades = Arrays.stream(TradeUtils.distinctListings(listings.listings())).filter(Objects::nonNull).map((l) -> u.getItemListing(u, l, condition)).toList();
+                    } else {
+                        trades = ((Value.Offers.Picked) entries.get(i)).offers().stream().map((o) -> node(u, new Value.Known(o), condition)).toList();
+                    }
 
                     if (entries.size() == 1 || counts.get(i).bounds().lo() >= trades.size()) {
                         nodes.addAll(trades);
@@ -375,7 +396,7 @@ public final class BytecodeInterpreter {
                         nodes.add(new TradeGroupNode(counts.get(i), trades));
                     }
                 } else {
-                    IDataNode trade = node(u, ((Value.Offers.Single) entries.get(i)).offer(), condition);
+                    IDataNode trade = node(u, single.offer(), condition);
 
                     nodes.add(groups.get(i).times > 1 ? TradeGroupNode.repeated(counts.get(i), trade) : trade);
                 }
@@ -383,6 +404,14 @@ public final class BytecodeInterpreter {
 
             return nodes;
         });
+    }
+
+    private static NumberExpr count(Group group) {
+        if (group.counts.isEmpty()) {
+            return NumberExpr.constant(group.times);
+        }
+
+        return NumberExpr.weighted(group.counts.entrySet().stream().map((e) -> new NumberExpr.WeightedEntry(e.getValue(), e.getKey())).toList());
     }
 
     private static NumberExpr count(Value value) {
@@ -652,6 +681,7 @@ public final class BytecodeInterpreter {
         final Value.Offers.Entry entry;
         final int times;
         final Map<List<Decision>, Double> worlds = new LinkedHashMap<>();
+        final Map<NumberExpr, Double> counts = new LinkedHashMap<>();
 
         Group(Value.Offers.Entry entry, int times) {
             this.entry = entry;

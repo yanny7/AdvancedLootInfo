@@ -27,6 +27,9 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -36,11 +39,16 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.npc.VillagerData;
 import net.minecraft.world.entity.npc.VillagerDataHolder;
+import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.entity.player.Player;
@@ -52,11 +60,15 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BeehiveBlock;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
@@ -144,6 +156,14 @@ public class BytecodeInterpreterTest {
 
         Assertions.assertEquals(List.of(Items.APPLE, Items.BREAD, Items.CARROT), ((ListNode) result).nodes().stream()
                 .map((n) -> ((ItemNode) n).getItem().left().orElseThrow().getItem()).toList());
+    }
+
+    @Test
+    public void testRandomPickFromLargeTag() {
+        TagPickListing listing = new TagPickListing();
+        IDataNode result = ((ListNode) interpret(listing)).nodes().get(2);
+
+        Assertions.assertEquals(listing.items, ((ListNode) result).nodes().stream().map((n) -> ((ItemNode) n).getItem().left().orElseThrow().getItem()).toList());
     }
 
     @Test
@@ -451,6 +471,72 @@ public class BytecodeInterpreterTest {
     }
 
     @Test
+    public void testTraderPickingListingAtRandomIndex() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(RandomIndexTrader.class);
+
+        Assertions.assertNotNull(levels);
+        Assertions.assertEquals(List.of(1, 2), levels.keySet().intStream().sorted().boxed().toList());
+        Assertions.assertEquals(List.of(Items.CARROT), listingItems(((TradeLevel.OfListings) levels.get(1)).listings()));
+        Assertions.assertEquals(NumberExpr.constant(1), ((TradeLevel.OfListings) levels.get(1)).levelInfo().offers());
+        Assertions.assertEquals(List.of(Items.APPLE, Items.BREAD), listingItems(((TradeLevel.OfListings) levels.get(2)).listings()));
+        Assertions.assertEquals(NumberExpr.constant(1), ((TradeLevel.OfListings) levels.get(2)).levelInfo().offers());
+    }
+
+    @Test
+    public void testTraderWithTradesByProfessionAndLevel() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(ProfessionTrader.class);
+
+        Assertions.assertNotNull(levels);
+        Assertions.assertEquals(List.of(1, 2, 3, 4, 5), levels.keySet().intStream().sorted().boxed().toList());
+
+        for (TradeLevel level : levels.values()) {
+            List<IDataNode> groups = ((TradeLevel.OfTrades) level).trades().apply(UTILS);
+
+            Assertions.assertEquals(ProfessionTrader.TRADES.size(), groups.size());
+            Assertions.assertTrue(groups.stream().allMatch(TradeGroupNode.class::isInstance));
+        }
+
+        assertTooltip(((TradeGroupNode) ((TradeLevel.OfTrades) levels.get(1)).trades().apply(UTILS).get(0)).nodes().get(0).getTooltip(), List.of(
+                "Value: minecraft:armorer",
+                "Uses: 12",
+                "XP: 5",
+                "Price Multiplier: 0.05"
+        ));
+    }
+
+    @Test
+    public void testTraderWithProfessionFromRegistry() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(RegistryProfessionTrader.class);
+        List<IDataNode> trades = ((TradeLevel.OfTrades) levels.get(1)).trades().apply(UTILS);
+
+        Assertions.assertEquals(List.of(1), levels.keySet().intStream().boxed().toList());
+        Assertions.assertEquals(3, trades.size());
+        assertTooltip(trade(trades, Items.APPLE).getTooltip(), List.of(
+                "Value: ali:farmer",
+                "Uses: 12",
+                "XP: 5",
+                "Price Multiplier: 0.05"
+        ));
+        assertTooltip(trade(trades, Items.IRON_INGOT).getTooltip(), List.of(
+                "Value: ali:smith",
+                "Uses: 12",
+                "XP: 5",
+                "Price Multiplier: 0.05"
+        ));
+    }
+
+    @Test
+    public void testTraderPassingTwoStacksToListingFactory() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(TwoStackTrader.class);
+        VillagerTrades.ItemListing[] listings = ((TradeLevel.OfListings) levels.get(1)).listings();
+        IDataNode trade = interpret(listings[0]);
+
+        Assertions.assertEquals(1, listings.length);
+        assertSlot(trade, 0, Items.EMERALD, NumberExpr.constant(10));
+        assertSlot(trade, 2, Items.APPLE, NumberExpr.constant(1));
+    }
+
+    @Test
     public void testTraderWithLevelFromItsState() {
         Int2ObjectMap<TradeLevel> levels = computedLevels(LeveledTrader.class);
 
@@ -595,6 +681,66 @@ public class BytecodeInterpreterTest {
     }
 
     @Test
+    public void testTraderRemovingMissingOffers() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(NullFilteringTrader.class);
+
+        Assertions.assertNotNull(levels);
+
+        List<IDataNode> trades = ((TradeLevel.OfTrades) levels.get(1)).trades().apply(UTILS);
+
+        Assertions.assertEquals(Set.of(Items.CARROT, Items.APPLE), trades.stream().map((t) -> slot(t, 2).getItem().left().orElseThrow().getItem()).collect(Collectors.toSet()));
+        Assertions.assertEquals(2, trades.size());
+    }
+
+    @Test
+    public void testTraderCollectingPickedListings() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(CollectedListingsTrader.class);
+
+        Assertions.assertNotNull(levels);
+
+        TradeLevel.OfListings level = (TradeLevel.OfListings) levels.get(1);
+
+        Assertions.assertEquals(List.of(Items.APPLE, Items.BREAD, Items.CARROT), listingItems(level.listings()));
+        Assertions.assertEquals(oneOrTwo(), level.levelInfo().offers());
+        Assertions.assertEquals(1F, level.levelInfo().chance());
+    }
+
+    @Test
+    public void testTraderCollectingPickedOffers() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(CollectedOffersTrader.class);
+
+        Assertions.assertNotNull(levels);
+
+        TradeLevel.OfTrades level = (TradeLevel.OfTrades) levels.get(1);
+        List<IDataNode> trades = level.trades().apply(UTILS);
+
+        Assertions.assertEquals(oneOrTwo(), level.levelInfo().offers());
+        Assertions.assertEquals(1F, level.levelInfo().chance());
+        Assertions.assertEquals(3, trades.size());
+        assertSlot(trades.get(0), 2, Items.APPLE, NumberExpr.constant(1));
+        assertSlot(trades.get(1), 2, Items.BREAD, NumberExpr.constant(1));
+        assertSlot(trades.get(2), 2, Items.CARROT, NumberExpr.constant(1));
+    }
+
+    @NotNull
+    private static NumberExpr oneOrTwo() {
+        return NumberExpr.weighted(List.of(new NumberExpr.WeightedEntry(0.5, NumberExpr.constant(2)), new NumberExpr.WeightedEntry(0.5, NumberExpr.constant(1))));
+    }
+
+    @Test
+    public void testTraderAddingOffersFromCollection() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(CollectionTrader.class);
+
+        Assertions.assertNotNull(levels);
+
+        List<IDataNode> trades = ((TradeLevel.OfTrades) levels.get(1)).trades().apply(UTILS);
+
+        Assertions.assertEquals(2, trades.size());
+        assertSlot(trades.get(0), 2, Items.BREAD, NumberExpr.constant(1));
+        assertSlot(trades.get(1), 2, Items.APPLE, NumberExpr.constant(1));
+    }
+
+    @Test
     public void testTraderWithSomeTradesUnknown() {
         BytecodeInterpreter.ComputedTrades trades = BytecodeInterpreter.getTradeLevels(UTILS, PartlyKnownTrader.class);
 
@@ -625,6 +771,14 @@ public class BytecodeInterpreterTest {
         Assertions.assertEquals(2, distinct.length);
         Assertions.assertSame(apple, distinct[0]);
         Assertions.assertEquals(Items.BREAD, ((PlainListing) distinct[1]).item);
+    }
+
+    @Test
+    public void testMinecraftRecordsHoldingStacksCompareByContents() {
+        Object emeralds = TradeUtils.valueKey(new Display.ItemDisplay.ItemRenderState(new ItemStack(Items.EMERALD, 2), ItemDisplayContext.NONE));
+
+        Assertions.assertEquals(emeralds, TradeUtils.valueKey(new Display.ItemDisplay.ItemRenderState(new ItemStack(Items.EMERALD, 2), ItemDisplayContext.NONE)));
+        Assertions.assertNotEquals(emeralds, TradeUtils.valueKey(new Display.ItemDisplay.ItemRenderState(new ItemStack(Items.EMERALD, 3), ItemDisplayContext.NONE)));
     }
 
     @Test
@@ -666,6 +820,30 @@ public class BytecodeInterpreterTest {
         assertSlot(first, 2, Items.APPLE, NumberExpr.constant(1));
         assertSlot(second, 0, Items.EMERALD, NumberExpr.uniformInt(5, 9));
         assertSlot(second, 2, Items.BREAD, NumberExpr.constant(1));
+    }
+
+    @Test
+    public void testListingBuildingEntityInTradersLevel() {
+        IDataNode trade = interpret(new BeehiveListing());
+
+        assertSlot(trade, 0, Items.EMERALD, NumberExpr.uniformInt(2, 4));
+        assertSlot(trade, 2, Items.BEEHIVE, NumberExpr.constant(1));
+        assertTooltip(slot(trade, 2).getTooltip(), List.of(
+                "Random properties"
+        ));
+    }
+
+    @Test
+    public void testListingPuttingRandomLevelIntoMap() {
+        List<IDataNode> trades = ((ListNode) interpret(new ShearsListing())).nodes();
+        IDataNode unbreaking = trades.stream().filter((t) -> slot(t, 0).getCount().equals(NumberExpr.constant(14))).findFirst().orElseThrow();
+        IDataNode random = trades.stream().filter((t) -> slot(t, 0).getCount().equals(NumberExpr.constant(5))).findFirst().orElseThrow();
+
+        Assertions.assertEquals(3, trades.size());
+        Assertions.assertEquals(3, EnchantmentHelper.getItemEnchantmentLevel(enchantment(Enchantments.UNBREAKING), slot(unbreaking, 2).getItem().left().orElseThrow()));
+        assertTooltip(slot(random, 2).getTooltip(), List.of(
+                "Random properties"
+        ));
     }
 
     @Test
@@ -775,6 +953,39 @@ public class BytecodeInterpreterTest {
     }
 
     @Test
+    public void testListingRecordingTraderStateUnderNumberText() {
+        IDataNode trade = interpret(new RerollingListing("apple"));
+
+        assertSlot(trade, 0, Items.EMERALD, NumberExpr.uniformInt(1, 3));
+        assertSlot(trade, 2, Items.APPLE, NumberExpr.constant(1));
+        assertTooltip(trade.getTooltip(), List.of(
+                "Uses: 12",
+                "XP: 5",
+                "Price Multiplier: 0.05"
+        ));
+    }
+
+    @Test
+    public void testStackNamedByRandomText() {
+        IDataNode trade = interpret(new TextNameListing(false));
+
+        assertSlot(trade, 2, Items.PAPER, NumberExpr.constant(1));
+        assertTooltip(slot(trade, 2).getTooltip(), List.of(
+                "Random properties"
+        ));
+    }
+
+    @Test
+    public void testStackNamedByTextFromWorld() {
+        IDataNode trade = interpret(new TextNameListing(true));
+
+        assertSlot(trade, 2, Items.PAPER, NumberExpr.constant(1));
+        assertTooltip(slot(trade, 2).getTooltip(), List.of(
+                "Random properties"
+        ));
+    }
+
+    @Test
     public void testStackChangedByWorldValue() {
         IDataNode trade = interpret(new NamedListing());
 
@@ -817,6 +1028,15 @@ public class BytecodeInterpreterTest {
 
         Assertions.assertEquals(List.of(Items.APPLE, Items.BREAD), ((ListNode) ((ListNode) trade).nodes().get(2)).nodes().stream()
                 .map((n) -> ((ItemNode) n).getItem().left().orElseThrow().getItem()).toList());
+    }
+
+    @Test
+    public void testBranchNarrowsRandomNumber() {
+        List<IDataNode> trades = ((ListNode) interpret(new SquareListing())).nodes();
+
+        Assertions.assertEquals(2, trades.size());
+        assertSlot(trade(trades, Items.APPLE, 1), 0, Items.EMERALD, NumberExpr.constant(5));
+        assertSlot(trade(trades, Items.APPLE, 2), 0, Items.EMERALD, NumberExpr.constant(9));
     }
 
     @Test
@@ -939,6 +1159,12 @@ public class BytecodeInterpreterTest {
         return trades.stream().filter((t) -> slot(t, 2).getItem().left().orElseThrow().is(result)).findFirst().orElseThrow();
     }
 
+    @NotNull
+    private static IDataNode trade(List<IDataNode> trades, Item result, int count) {
+        return trades.stream().filter((t) -> slot(t, 2).getItem().left().orElseThrow().is(result) && slot(t, 2).getCount().equals(NumberExpr.constant(count)))
+                .findFirst().orElseThrow();
+    }
+
     @Unmodifiable
     @NotNull
     private static List<Item> listingItems(VillagerTrades.ItemListing[] listings) {
@@ -1038,6 +1264,18 @@ public class BytecodeInterpreterTest {
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             return new MerchantOffer(new ItemCost(Items.EMERALD), new ItemStack(items.get(random.nextInt(items.size()))), 12, 5, 0.05F);
+        }
+    }
+
+    private static final class TagPickListing implements VillagerTrades.ItemListing {
+        private final List<Item> items = BuiltInRegistries.ITEM.stream().filter((i) -> i != Items.AIR).limit(300).toList();
+
+        @NotNull
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            List<Item> values = new LinkedList<>(items);
+
+            return new MerchantOffer(new ItemCost(Items.EMERALD), new ItemStack(values.get(random.nextInt(values.size()))), 12, 5, 0.05F);
         }
     }
 
@@ -1384,6 +1622,133 @@ public class BytecodeInterpreterTest {
         }
     }
 
+    private abstract static class RandomIndexTrader extends AbstractVillager {
+        private static final Int2ObjectMap<VillagerTrades.ItemListing[]> TRADES = new Int2ObjectOpenHashMap<>(Map.of(1, Traders.RARE, 2, Traders.COMMON));
+
+        private RandomIndexTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void updateTrades() {
+            VillagerTrades.ItemListing[] listings1 = TRADES.get(1);
+            VillagerTrades.ItemListing[] listings2 = TRADES.get(2);
+
+            if (listings1 != null && listings2 != null) {
+                MerchantOffers offers = getOffers();
+
+                addOffersFromItemListings(offers, listings1, 1);
+
+                MerchantOffer offer = listings2[random.nextInt(listings2.length)].getOffer(this, random);
+
+                if (offer != null) {
+                    offers.add(offer);
+                }
+            }
+        }
+    }
+
+    private abstract static class RegistryProfessionTrader extends AbstractVillager {
+        private static final EntityDataAccessor<String> PROFESSION = SynchedEntityData.defineId(RegistryProfessionTrader.class, EntityDataSerializers.STRING);
+        private static final MappedRegistry<TraderProfession> PROFESSIONS = new MappedRegistry<>(ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath("ali", "trader_profession")), Lifecycle.stable());
+
+        static {
+            Registry.register(PROFESSIONS, ResourceLocation.fromNamespaceAndPath("ali", "farmer"), new FarmerProfession());
+            Registry.register(PROFESSIONS, ResourceLocation.fromNamespaceAndPath("ali", "smith"), new SmithProfession());
+            PROFESSIONS.freeze();
+        }
+
+        private RegistryProfessionTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void updateTrades() {
+            if (getProfession() != null) {
+                addOffersFromItemListings(getOffers(), getProfession().getTrades(this), 5);
+            }
+        }
+
+        private TraderProfession getProfession() {
+            return PROFESSIONS.get(ResourceLocation.parse(getEntityData().get(PROFESSION)));
+        }
+    }
+
+    private abstract static class TraderProfession {
+        abstract VillagerTrades.ItemListing[] getTrades(AbstractVillager trader);
+    }
+
+    private static final class FarmerProfession extends TraderProfession {
+        @Override
+        VillagerTrades.ItemListing[] getTrades(AbstractVillager trader) {
+            return new VillagerTrades.ItemListing[]{new PlainListing(Items.APPLE), new PlainListing(Items.BREAD)};
+        }
+    }
+
+    private static final class SmithProfession extends TraderProfession {
+        @Override
+        VillagerTrades.ItemListing[] getTrades(AbstractVillager trader) {
+            return new VillagerTrades.ItemListing[]{new PlainListing(Items.IRON_INGOT)};
+        }
+    }
+
+    private abstract static class TwoStackTrader extends AbstractVillager {
+        private TwoStackTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void updateTrades() {
+            addOffersFromItemListings(getOffers(), new VillagerTrades.ItemListing[]{simpleTrade(new ItemStack(Items.EMERALD, 10), new ItemStack(Items.APPLE), 10)}, 5);
+        }
+
+        private static VillagerTrades.ItemListing simpleTrade(ItemStack cost, ItemStack result, int uses) {
+            return (trader, random) -> new MerchantOffer(new ItemCost(cost.getItem(), cost.getCount()), result.copy(), uses, 0, 0);
+        }
+    }
+
+    private abstract static class ProfessionTrader extends Villager {
+        private static final Map<VillagerProfession, Int2ObjectMap<VillagerTrades.ItemListing[]>> TRADES = BuiltInRegistries.VILLAGER_PROFESSION.stream()
+                .filter((p) -> p != VillagerProfession.NONE && p != VillagerProfession.NITWIT)
+                .collect(Collectors.toMap((p) -> p, (p) -> {
+                    Int2ObjectMap<VillagerTrades.ItemListing[]> byLevel = new Int2ObjectOpenHashMap<>();
+
+                    for (int level = 1; level <= 5; level++) {
+                        byLevel.put(level, new VillagerTrades.ItemListing[]{new ProfessionListing(p, Items.APPLE), new ProfessionListing(p, Items.BREAD), new ProfessionListing(p, Items.CARROT)});
+                    }
+
+                    return byLevel;
+                }));
+
+        private ProfessionTrader(EntityType<? extends Villager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void updateTrades() {
+            VillagerData data = getVillagerData();
+            Int2ObjectMap<VillagerTrades.ItemListing[]> byLevel = TRADES.get(data.getProfession());
+
+            if (byLevel == null || byLevel.isEmpty()) {
+                return;
+            }
+
+            VillagerTrades.ItemListing[] listings = byLevel.get(data.getLevel());
+
+            if (listings != null) {
+                addOffersFromItemListings(getOffers(), listings, 2);
+            }
+        }
+    }
+
+    private record ProfessionListing(VillagerProfession profession, Item item) implements VillagerTrades.ItemListing {
+        @NotNull
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            return offerFor(item);
+        }
+    }
+
     private abstract static class LeveledTrader extends AbstractVillager {
         @SuppressWarnings("unused")
         private int tradeLevel;
@@ -1427,6 +1792,118 @@ public class BytecodeInterpreterTest {
         public MerchantOffers getOffers() {
             MerchantOffers offers = new MerchantOffers();
 
+            offers.add(offerFor(Items.APPLE));
+            return offers;
+        }
+    }
+
+    private abstract static class NullFilteringTrader extends AbstractVillager {
+        private NullFilteringTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @NotNull
+        @Override
+        public MerchantOffers getOffers() {
+            MerchantOffers offers = new MerchantOffers();
+
+            offers.add(offerFor(Items.CARROT));
+            offers.add(missingOffer());
+            offers.add(Traders.COMMON[0].getOffer(this, random));
+            offers.removeIf(Objects::isNull);
+            return offers;
+        }
+
+        @Nullable
+        private MerchantOffer missingOffer() {
+            return null;
+        }
+    }
+
+    private abstract static class CollectedListingsTrader extends AbstractVillager {
+        private static final List<VillagerTrades.ItemListing> FILLER = List.of(new OfferListing(Items.APPLE), new OfferListing(Items.BREAD), new OfferListing(Items.CARROT));
+
+        private CollectedListingsTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @NotNull
+        @Override
+        public MerchantOffers getOffers() {
+            MerchantOffers offers = new MerchantOffers();
+
+            offers.addAll(createRandomOffers(1, 2));
+            return offers;
+        }
+
+        @NotNull
+        private Collection<MerchantOffer> createRandomOffers(int min, int max) {
+            Set<Integer> indices = com.google.common.collect.Sets.newHashSet();
+            int count = random.nextIntBetweenInclusive(min, max);
+
+            for (int i = 0; i < 10 && indices.size() < count; i++) {
+                indices.add(random.nextInt(FILLER.size()));
+            }
+
+            Collection<MerchantOffer> offers = new ArrayList<>();
+
+            for (Integer index : indices) {
+                offers.add(FILLER.get(index).getOffer(this, random));
+            }
+
+            return offers;
+        }
+    }
+
+    private abstract static class CollectedOffersTrader extends AbstractVillager {
+        private static final List<MerchantOffer> FILLER = List.of(offerFor(Items.APPLE), offerFor(Items.BREAD), offerFor(Items.CARROT));
+
+        private CollectedOffersTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @NotNull
+        @Override
+        public MerchantOffers getOffers() {
+            MerchantOffers offers = new MerchantOffers();
+
+            offers.addAll(createRandomOffers(1, 2));
+            return offers;
+        }
+
+        @NotNull
+        private Collection<MerchantOffer> createRandomOffers(int min, int max) {
+            Set<Integer> indices = com.google.common.collect.Sets.newHashSet();
+            int count = random.nextIntBetweenInclusive(min, max);
+
+            for (int i = 0; i < 10 && indices.size() < count; i++) {
+                indices.add(random.nextInt(FILLER.size()));
+            }
+
+            Collection<MerchantOffer> offers = new ArrayList<>();
+
+            for (Integer index : indices) {
+                offers.add(FILLER.get(index));
+            }
+
+            return offers;
+        }
+    }
+
+    private abstract static class CollectionTrader extends AbstractVillager {
+        private static final List<MerchantOffer> EXTRA = List.of(offerFor(Items.BREAD));
+
+        private CollectionTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @NotNull
+        @Override
+        public MerchantOffers getOffers() {
+            MerchantOffers offers = new MerchantOffers();
+
+            offers.addAll(EXTRA);
+            offers.addAll(new ArrayList<>());
             offers.add(offerFor(Items.APPLE));
             return offers;
         }
@@ -1855,6 +2332,97 @@ public class BytecodeInterpreterTest {
 
         private static void name(ItemStack stack, Entity trader) {
             stack.set(DataComponents.CUSTOM_NAME, trader.getName());
+        }
+    }
+
+    private record RerollingListing(String key) implements VillagerTrades.ItemListing {
+        private static final Map<String, GenerateOffer> FUNCTIONS = new HashMap<>();
+
+        static {
+            FUNCTIONS.put("apple", (trader, player, random) ->
+                    new MerchantOffer(new ItemCost(Items.EMERALD, 1 + random.nextInt(3)), new ItemStack(Items.APPLE), 12, 5, 0.05F));
+        }
+
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            Player player = null;
+
+            if (trader instanceof AbstractVillager villager && !villager.level().isClientSide()) {
+                player = villager.getTradingPlayer();
+                trader.addTag(String.valueOf(villager.getOffers().size()));
+            }
+
+            return FUNCTIONS.get(key).generateOffer(trader, player, random);
+        }
+
+        private interface GenerateOffer {
+            MerchantOffer generateOffer(Entity trader, @Nullable Player player, RandomSource random);
+        }
+    }
+
+    private record TextNameListing(boolean fromWorld) implements VillagerTrades.ItemListing {
+        @NotNull
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            ItemStack paper = new ItemStack(Items.PAPER);
+
+            paper.set(DataComponents.CUSTOM_NAME, Component.literal(fromWorld ? trader.getName().getString() : String.valueOf(random.nextInt(3))));
+            return new MerchantOffer(new ItemCost(Items.EMERALD), paper, 12, 5, 0.05F);
+        }
+    }
+
+    private static final class BeehiveListing implements VillagerTrades.ItemListing {
+        @NotNull
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            ItemStack stack = new ItemStack(Items.BEEHIVE);
+            BeehiveBlockEntity hive = new BeehiveBlockEntity(BlockPos.ZERO, Blocks.BEEHIVE.defaultBlockState());
+
+            for (int i = 0; i < 2; i++) {
+                Bee bee = new Bee(EntityType.BEE, trader.level());
+
+                hive.addOccupant(bee);
+            }
+
+            stack.applyComponents(hive.collectComponents());
+            stack.set(DataComponents.BLOCK_STATE, BlockItemStateProperties.EMPTY.with(BeehiveBlock.HONEY_LEVEL, 0));
+            return new MerchantOffer(new ItemCost(Items.EMERALD, 2 + random.nextInt(3)), stack, 12, 5, 0.2F);
+        }
+    }
+
+    private static final class ShearsListing implements VillagerTrades.ItemListing {
+        private final Holder<Enchantment> unbreaking = enchantment(Enchantments.UNBREAKING);
+
+        @NotNull
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            ItemStack shears = new ItemStack(Items.SHEARS);
+            int emeralds = 5;
+            int level = random.nextDouble() < 0.1 ? 3 : random.nextInt(2) + 1;
+
+            EnchantmentHelper.updateEnchantments(shears, (enchantments) -> enchantments.set(unbreaking, level));
+
+            if (level > 1) {
+                emeralds += level * level;
+            }
+
+            return new MerchantOffer(new ItemCost(Items.EMERALD, emeralds), shears, 12, 5, 0.2F);
+        }
+    }
+
+    private static final class SquareListing implements VillagerTrades.ItemListing {
+        @NotNull
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            int level = random.nextInt(2) + 1;
+            int emeralds = 5;
+            ItemStack apples = new ItemStack(Items.APPLE, level);
+
+            if (level > 1) {
+                emeralds += level * level;
+            }
+
+            return new MerchantOffer(new ItemCost(Items.EMERALD, emeralds), apples, 12, 5, 0.05F);
         }
     }
 

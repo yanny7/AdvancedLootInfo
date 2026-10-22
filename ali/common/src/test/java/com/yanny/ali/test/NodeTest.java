@@ -7,8 +7,13 @@ import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.ListNode;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.*;
+import com.yanny.ali.plugin.common.trades.EmeraldsForVillagerTypeItemNode;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -24,7 +29,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
@@ -250,6 +257,22 @@ public class NodeTest {
 
     private static ListNode child(ListNode node, int index) {
         return (ListNode) node.nodes().get(index);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testVillagerTypeTradesSkipForeignKeys() {
+        Map<VillagerType, Item> trades = new HashMap<>();
+
+        BuiltInRegistries.VILLAGER_TYPE.forEach((type) -> trades.put(type, Items.OAK_BOAT));
+
+        VillagerTrades.EmeraldsForVillagerTypeItem listing = new VillagerTrades.EmeraldsForVillagerTypeItem(1, 12, 5, trades);
+
+        ((Map<Object, Item>) (Map<?, ?>) trades).put(ResourceKey.create(Registries.VILLAGER_TYPE, ResourceLocation.fromNamespaceAndPath("ali", "foreign")), Items.APPLE);
+
+        EmeraldsForVillagerTypeItemNode node = new EmeraldsForVillagerTypeItemNode(UTILS, listing, TooltipNode.empty());
+
+        Assertions.assertEquals(BuiltInRegistries.VILLAGER_TYPE.size(), node.nodes().size());
     }
 
     private static List<ResourceLocation> ids(ListNode node) {

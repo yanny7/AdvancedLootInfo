@@ -168,9 +168,13 @@ explains.
 GameTest golden files (`ali/<loader>/src/gametest/golden/`, `awi/…`, `alicompat/<loader>/src/gametest/golden/`)
 describe one Minecraft version's output, so the lower branch's copy is never right here. A conflict takes `ours`. A
 `golden/<slug>/` arriving for a slug that is dormant here stays as it came, unread, like its source set — phase 2
-replaces it. After the build, run ALI's and ALICompat's gametests in compare mode
-(`-Palicompat_gametest=all` covers the ALICompat base and every active slug) and regenerate only when every
-difference is one the merged change explains; anything else is reported, not regenerated.
+replaces it. After the build, with the resolved merge staged, run ALI's and ALICompat's gametests once with
+regeneration on (`-Pali_golden_regenerate=true`; `-Palicompat_gametest=all -Palicompat_golden_regenerate=true` covers
+the ALICompat base and every active slug, base first) and read the result as `git diff` against the index. The index
+holds the goldens as they were before the run, so a compare run first shows nothing the diff does not, at the cost of
+another full run. Keep every change the merged change explains; restore anything else from the index
+(`git restore -- <path>`) and report it. A run that dies during startup writes nothing and so leaves no diff: check
+which runs failed, not only what changed.
 
 A merged change that alters rendered output (a number format, a tooltip shape) also breaks tests that exist only on
 this branch, because their expectations still hold the old output. Run the `common` modules' `test` tasks and take the

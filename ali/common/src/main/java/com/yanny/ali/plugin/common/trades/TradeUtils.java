@@ -142,12 +142,18 @@ public class TradeUtils {
     private static boolean isStructural(Class<?> type) {
         String name = type.getName();
 
-        if (type.isEnum() || name.startsWith("java.") || name.startsWith("net.minecraft.") || name.startsWith("com.mojang.")) {
+        if (type.isEnum() || name.startsWith("java.")) {
+            return false;
+        }
+        if (type.isRecord()) {
+            return true;
+        }
+        if (name.startsWith("net.minecraft.") || name.startsWith("com.mojang.")) {
             return false;
         }
 
         try {
-            return type.isRecord() || type.getMethod("equals", Object.class).getDeclaringClass() == Object.class;
+            return type.getMethod("equals", Object.class).getDeclaringClass() == Object.class;
         } catch (NoSuchMethodException e) {
             return false;
         }
