@@ -38,6 +38,7 @@ final class Interpreter implements Opcodes {
     private static final String CONSTRUCTOR = "<init>";
     private static final String ITEM_STACK = Type.getInternalName(ItemStack.class);
     private static final String MERCHANT_OFFER = Type.getInternalName(MerchantOffer.class);
+    private static final String OPTIONAL = Type.getInternalName(Optional.class);
     private static final Set<String> TRADE_TYPES = Set.of(ITEM_STACK, MERCHANT_OFFER, Type.getInternalName(MerchantOffers.class));
     private static final String LAMBDA_METAFACTORY = "java/lang/invoke/LambdaMetafactory";
     private static final String STRING_CONCAT_FACTORY = "java/lang/invoke/StringConcatFactory";
@@ -679,6 +680,16 @@ final class Interpreter implements Opcodes {
         if (call.name.equals("intValue") && call.desc.equals("()I") && args.get(0) instanceof Value.Choice choice && choice.options().stream().allMatch(Integer.class::isInstance)) {
             return choice;
         }
+        if (isStatic && call.owner.equals(OPTIONAL) && (call.name.equals("of") || call.name.equals("ofNullable")) && args.get(0) instanceof Value.Stack stack) {
+            return stack;
+        }
+        if (!isStatic && call.owner.equals(OPTIONAL) && args.get(0) instanceof Value.Stack stack) {
+            return optionalCall(call, stack, args, depth);
+        }
+        if (!isStatic && call.owner.equals(OPTIONAL) && args.get(0) instanceof Value.Known known && known.value() instanceof Optional<?> optional
+                && args.stream().skip(1).anyMatch((arg) -> arg instanceof Value.Closure || !isConcrete(arg))) {
+            return optionalCall(call, optional.isPresent() ? wrap(optional.get()) : null, args, depth);
+        }
 
         if (!isStatic && args.get(0) instanceof Value.Known known && known.value() instanceof List<?> list && owned.containsKey(list)
                 && call.name.equals("remove") && call.desc.equals("(Ljava/lang/Object;)Z") && args.get(1) instanceof Value.Choice choice
@@ -841,6 +852,67 @@ final class Interpreter implements Opcodes {
         }
 
         return result;
+    }
+
+    @Nullable
+    private Value optionalCall(MethodInsnNode call, @Nullable Value present, List<Value> args, int depth) {
+        switch (call.name) {
+            case "isPresent" -> {
+                return new Value.Known(present != null ? 1 : 0);
+            }
+            case "isEmpty" -> {
+                return new Value.Known(present == null ? 1 : 0);
+            }
+            case "get", "orElseThrow" -> {
+                if (present == null) {
+                    throw new Fail("value of an empty Optional");
+                }
+
+                return present;
+            }
+            case "orElse" -> {
+                return present != null ? present : args.get(1);
+            }
+            case "orElseGet" -> {
+                return present != null ? present : applyClosure(args.get(1), List.of(), depth);
+            }
+            case "ifPresent" -> {
+                if (present != null) {
+                    applyClosure(args.get(1), List.of(present), depth);
+                }
+
+                return null;
+            }
+            case "map" -> {
+                if (present == null) {
+                    return new Value.Known(Optional.empty());
+                }
+
+                Value mapped = applyClosure(args.get(1), List.of(present), depth);
+
+                if (mapped instanceof Value.Stack stack) {
+                    return stack;
+                }
+                if (mapped == null || mapped instanceof Value.Known) {
+                    return new Value.Known(Optional.ofNullable(mapped instanceof Value.Known known ? known.value() : null));
+                }
+
+                throw new Fail("symbolic result of Optional.map");
+            }
+            default -> throw new Fail("symbolic Optional." + call.name);
+        }
+    }
+
+    @Nullable
+    private Value applyClosure(Value function, List<Value> args, int depth) {
+        if (!(function instanceof Value.Closure closure)) {
+            throw new Fail("symbolic Optional function");
+        }
+
+        List<Value> all = new ArrayList<>(closure.captured());
+
+        all.addAll(args);
+        return invokeHandle(closure.impl(), all, closure.loader(), depth + 1);
     }
 
     @Nullable

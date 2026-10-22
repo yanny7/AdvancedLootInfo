@@ -987,6 +987,26 @@ public class BytecodeInterpreterTest {
     }
 
     @Test
+    public void testListingMappingOptionalCost() {
+        IDataNode trade = interpret(new OptionalCostListing(Optional.of(new TradeCost(Items.BOOK, 1, 3))));
+        IDataNode single = interpret(new OptionalCostListing(Optional.empty()));
+
+        assertSlot(trade, 0, Items.EMERALD, NumberExpr.uniformInt(2, 4));
+        assertSlot(trade, 1, Items.BOOK, NumberExpr.uniformInt(1, 3));
+        assertSlot(trade, 2, Items.APPLE, NumberExpr.constant(1));
+        assertSlot(single, 0, Items.EMERALD, NumberExpr.uniformInt(2, 4));
+        assertSlot(single, 2, Items.APPLE, NumberExpr.constant(1));
+    }
+
+    @Test
+    public void testListingReadingOptionalStack() {
+        IDataNode trade = interpret(new OptionalStackListing());
+
+        assertSlot(trade, 0, Items.EMERALD, NumberExpr.constant(1));
+        assertSlot(trade, 2, Items.APPLE, NumberExpr.uniformInt(1, 3));
+    }
+
+    @Test
     public void testListingBuildingOfferSubclass() {
         IDataNode trade = interpret(new SubclassOfferListing());
 
@@ -2405,6 +2425,34 @@ public class BytecodeInterpreterTest {
 
         private interface GenerateOffer {
             MerchantOffer generateOffer(Entity trader, @Nullable Player player, RandomSource random);
+        }
+    }
+
+    private record TradeCost(Item item, int min, int max) {
+        ItemStack create(RandomSource random) {
+            return new ItemStack(item, random.nextIntBetweenInclusive(min, max));
+        }
+    }
+
+    private record OptionalCostListing(Optional<TradeCost> secondary) implements VillagerTrades.ItemListing {
+        @NotNull
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            return new MerchantOffer(new TradeCost(Items.EMERALD, 2, 4).create(random), secondary.map((c) -> c.create(random)).orElse(ItemStack.EMPTY), new ItemStack(Items.APPLE), 12, 5, 0.05F);
+        }
+    }
+
+    private static final class OptionalStackListing implements VillagerTrades.ItemListing {
+        @NotNull
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            Optional<ItemStack> sold = Optional.of(new ItemStack(Items.APPLE, random.nextIntBetweenInclusive(1, 3)));
+
+            if (sold.isEmpty()) {
+                return new MerchantOffer(new ItemStack(Items.EMERALD), new ItemStack(Items.BREAD), 12, 5, 0.05F);
+            }
+
+            return new MerchantOffer(new ItemStack(Items.EMERALD), sold.get(), 12, 5, 0.05F);
         }
     }
 
