@@ -1259,10 +1259,8 @@ final class Interpreter implements Opcodes {
             return null;
         }
         if (returnType.getSort() == Type.OBJECT && returnType.getInternalName().equals(ITEM_STACK)) {
-            Value.Stack copy = stack.copy();
-
-            copy.randomTag = true;
-            return copy;
+            stack.randomTag = true;
+            return stack.copy();
         }
 
         throw new Fail(reason);
@@ -1835,7 +1833,7 @@ final class Interpreter implements Opcodes {
             return math(call, args, returnType);
         }
         if (isStatic && call.name.equals("valueOf") && args.size() == 1 && args.get(0) instanceof Value.Num num) {
-            return num;
+            return call.owner.equals("java/lang/String") ? Value.UNKNOWN : num;
         }
         if (!isStatic && args.get(0) instanceof Value.Known known && known.value() instanceof List<?> list && call.name.equals("get")
                 && call.desc.equals("(I)Ljava/lang/Object;") && args.get(1) instanceof Value.Num num) {
@@ -1923,6 +1921,10 @@ final class Interpreter implements Opcodes {
                 && args.stream().skip(1).anyMatch(Value.Unknown.class::isInstance)
                 && args.stream().skip(1).allMatch((v) -> isConcrete(v) || v instanceof Value.Unknown) && !returnsTradeData(call)) {
             return uncertainChange(call, READ_ONLY.contains(call.name) ? null : known.value());
+        }
+        if (isStatic && STATIC_SAFE.contains(call.owner) && !STATIC_RANDOM.contains(call.name) && returnType.getSort() != Type.VOID
+                && args.stream().anyMatch(Value.Unknown.class::isInstance) && args.stream().allMatch((v) -> v instanceof Value.Unknown || isScalar(v))) {
+            return Value.Unknown.of(returnType, null);
         }
         if (!args.stream().allMatch(this::isConcrete)) {
             throw new Fail("symbolic argument of " + call.owner + "." + call.name);
@@ -2165,6 +2167,11 @@ final class Interpreter implements Opcodes {
     private boolean isConcrete(Value value) {
         return value instanceof Value.Known || value instanceof Value.Closure closure && closure.captured().stream().allMatch(this::isConcrete)
                 || value instanceof Value.Rng && mode == Mode.STUB;
+    }
+
+    private static boolean isScalar(Value value) {
+        return value instanceof Value.Known known && (known.value() == null || known.value() instanceof Number || known.value() instanceof String
+                || known.value() instanceof Boolean || known.value() instanceof Character);
     }
 
     private Value wrap(@Nullable Object value, Class<?> type) {

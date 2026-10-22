@@ -851,6 +851,39 @@ public class BytecodeInterpreterTest {
     }
 
     @Test
+    public void testListingRecordingTraderStateUnderNumberText() {
+        IDataNode trade = interpret(new RerollingListing("apple"));
+
+        assertSlot(trade, 0, Items.EMERALD, NumberExpr.uniformInt(1, 3));
+        assertSlot(trade, 2, Items.APPLE, NumberExpr.constant(1));
+        assertTooltip(trade.getTooltip(), List.of(
+                "Uses: 12",
+                "XP: 5",
+                "Price Multiplier: 0.05"
+        ));
+    }
+
+    @Test
+    public void testStackNamedByRandomText() {
+        IDataNode trade = interpret(new TextNameListing(false));
+
+        assertSlot(trade, 2, Items.PAPER, NumberExpr.constant(1));
+        assertTooltip(slot(trade, 2).getTooltip(), List.of(
+                "Random properties"
+        ));
+    }
+
+    @Test
+    public void testStackNamedByTextFromWorld() {
+        IDataNode trade = interpret(new TextNameListing(true));
+
+        assertSlot(trade, 2, Items.PAPER, NumberExpr.constant(1));
+        assertTooltip(slot(trade, 2).getTooltip(), List.of(
+                "Random properties"
+        ));
+    }
+
+    @Test
     public void testStackChangedByWorldValue() {
         IDataNode trade = interpret(new NamedListing());
 
@@ -2095,6 +2128,42 @@ public class BytecodeInterpreterTest {
 
         private static void name(ItemStack stack, Entity trader) {
             stack.setHoverName(trader.getName());
+        }
+    }
+
+    private record RerollingListing(String key) implements VillagerTrades.ItemListing {
+        private static final Map<String, GenerateOffer> FUNCTIONS = new HashMap<>();
+
+        static {
+            FUNCTIONS.put("apple", (trader, player, random) ->
+                    new MerchantOffer(new ItemStack(Items.EMERALD, 1 + random.nextInt(3)), new ItemStack(Items.APPLE), 12, 5, 0.05F));
+        }
+
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            Player player = null;
+
+            if (trader instanceof AbstractVillager villager && !villager.level().isClientSide()) {
+                player = villager.getTradingPlayer();
+                trader.addTag(String.valueOf(villager.getOffers().size()));
+            }
+
+            return FUNCTIONS.get(key).generateOffer(trader, player, random);
+        }
+
+        private interface GenerateOffer {
+            MerchantOffer generateOffer(Entity trader, @Nullable Player player, RandomSource random);
+        }
+    }
+
+    private record TextNameListing(boolean fromWorld) implements VillagerTrades.ItemListing {
+        @NotNull
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            ItemStack paper = new ItemStack(Items.PAPER);
+
+            paper.setHoverName(Component.literal(fromWorld ? trader.getName().getString() : String.valueOf(random.nextInt(3))));
+            return new MerchantOffer(new ItemStack(Items.EMERALD), paper, 12, 5, 0.05F);
         }
     }
 
