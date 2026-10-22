@@ -42,7 +42,7 @@ public final class BytecodeInterpreter {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
     private static final Set<String> FAILED = ConcurrentHashMap.newKeySet();
     private static final boolean LOG_TRADES = Boolean.getBoolean("ali.debug.trades");
-    private static final int MAX_PATHS = 32;
+    private static final int MAX_PATHS = 128;
     private static final int MAX_RESTARTS = 8;
     private static final String UNRENDERABLE = "offer that cannot be shown";
 

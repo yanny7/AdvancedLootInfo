@@ -126,13 +126,13 @@ final class Interpreter implements Opcodes {
             }
         }
 
-        if (decisions.size() >= MAX_DECISIONS) {
+        boolean holds = decisions.size() < script.size() && script.get(decisions.size());
+
+        if ((kind != Decision.Kind.EQUALS || holds) && decisions.stream().filter((d) -> d.kind() != Decision.Kind.EQUALS || d.holds()).count() >= MAX_DECISIONS) {
             heavyWorldCalls.entrySet().stream().filter((e) -> e.getValue() > 1 && !opaque.contains(e.getKey())).max(Map.Entry.comparingByValue())
                     .ifPresent((e) -> retry = opaque.add(e.getKey()));
             throw new Fail("too many branches");
         }
-
-        boolean holds = decisions.size() < script.size() && script.get(decisions.size());
 
         decisions.add(holds ? decision.negated() : decision);
         return holds;

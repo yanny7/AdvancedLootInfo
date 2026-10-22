@@ -33,7 +33,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.npc.VillagerData;
 import net.minecraft.world.entity.npc.VillagerDataHolder;
+import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.entity.player.Player;
@@ -439,6 +442,28 @@ public class BytecodeInterpreterTest {
         Assertions.assertEquals(NumberExpr.constant(1), ((TradeLevel.OfListings) levels.get(1)).levelInfo().offers());
         Assertions.assertEquals(List.of(Items.APPLE, Items.BREAD), listingItems(((TradeLevel.OfListings) levels.get(2)).listings()));
         Assertions.assertEquals(NumberExpr.constant(1), ((TradeLevel.OfListings) levels.get(2)).levelInfo().offers());
+    }
+
+    @Test
+    public void testTraderWithTradesByProfessionAndLevel() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(ProfessionTrader.class);
+
+        Assertions.assertNotNull(levels);
+        Assertions.assertEquals(List.of(1, 2, 3, 4, 5), levels.keySet().intStream().sorted().boxed().toList());
+
+        for (TradeLevel level : levels.values()) {
+            List<IDataNode> groups = ((TradeLevel.OfTrades) level).trades().apply(UTILS);
+
+            Assertions.assertEquals(ProfessionTrader.TRADES.size(), groups.size());
+            Assertions.assertTrue(groups.stream().allMatch(TradeGroupNode.class::isInstance));
+        }
+
+        assertTooltip(((TradeGroupNode) ((TradeLevel.OfTrades) levels.get(1)).trades().apply(UTILS).get(0)).nodes().get(0).getTooltip(), List.of(
+                "Value: minecraft:armorer",
+                "Uses: 12",
+                "XP: 5",
+                "Price Multiplier: 0.05"
+        ));
     }
 
     @Test
@@ -1442,6 +1467,48 @@ public class BytecodeInterpreterTest {
                     offers.add(offer);
                 }
             }
+        }
+    }
+
+    private abstract static class ProfessionTrader extends Villager {
+        private static final Map<VillagerProfession, Int2ObjectMap<VillagerTrades.ItemListing[]>> TRADES = BuiltInRegistries.VILLAGER_PROFESSION.stream()
+                .filter((p) -> p != VillagerProfession.NONE && p != VillagerProfession.NITWIT)
+                .collect(Collectors.toMap((p) -> p, (p) -> {
+                    Int2ObjectMap<VillagerTrades.ItemListing[]> byLevel = new Int2ObjectOpenHashMap<>();
+
+                    for (int level = 1; level <= 5; level++) {
+                        byLevel.put(level, new VillagerTrades.ItemListing[]{new ProfessionListing(p, Items.APPLE), new ProfessionListing(p, Items.BREAD), new ProfessionListing(p, Items.CARROT)});
+                    }
+
+                    return byLevel;
+                }));
+
+        private ProfessionTrader(EntityType<? extends Villager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void updateTrades() {
+            VillagerData data = getVillagerData();
+            Int2ObjectMap<VillagerTrades.ItemListing[]> byLevel = TRADES.get(data.getProfession());
+
+            if (byLevel == null || byLevel.isEmpty()) {
+                return;
+            }
+
+            VillagerTrades.ItemListing[] listings = byLevel.get(data.getLevel());
+
+            if (listings != null) {
+                addOffersFromItemListings(getOffers(), listings, 2);
+            }
+        }
+    }
+
+    private record ProfessionListing(VillagerProfession profession, Item item) implements VillagerTrades.ItemListing {
+        @NotNull
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            return offerFor(item);
         }
     }
 
