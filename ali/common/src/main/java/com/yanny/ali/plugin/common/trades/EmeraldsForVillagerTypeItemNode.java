@@ -25,9 +25,11 @@ public class EmeraldsForVillagerTypeItemNode extends SubTradesNode<VillagerTrade
     public List<IDataNode> getSubTrades(IServerUtils utils, VillagerTrades.EmeraldsForVillagerTypeItem listing) {
         List<IDataNode> nodes = new ArrayList<>();
 
-        for (Map.Entry<VillagerType, Item> entry : listing.trades.entrySet()) {
-            VillagerType type = entry.getKey();
-            Item item = entry.getValue();
+        for (Map.Entry<?, ?> entry : listing.trades.entrySet()) {
+            if (!(entry.getKey() instanceof VillagerType type) || !(entry.getValue() instanceof Item item)) {
+                continue;
+            }
+
             TooltipNode cond = utils.getValueTooltip(utils, ResourceKey.create(Registries.VILLAGER_TYPE, BuiltInRegistries.VILLAGER_TYPE.getKey(type))).build(Lang.Value.VILLAGER_TYPE);
 
             nodes.add(utils.getItemListing(utils, new VillagerTrades.ItemsForEmeralds(new ItemStack(item), listing.cost, 1, listing.maxUses, listing.villagerXp, 0.05F), cond));
