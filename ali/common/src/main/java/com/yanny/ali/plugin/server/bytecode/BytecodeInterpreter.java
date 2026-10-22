@@ -24,6 +24,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
 import org.jetbrains.annotations.NotNull;
@@ -71,6 +72,8 @@ public final class BytecodeInterpreter {
                     reason = reason != null ? reason : UNRENDERABLE;
                 }
             }
+
+            absorbRandomProperties(offers);
 
             if (!offers.isEmpty()) {
                 List<IDataNode> nodes = new ArrayList<>();
@@ -241,6 +244,8 @@ public final class BytecodeInterpreter {
                     }
                 }
             }
+
+            groups.values().forEach(BytecodeInterpreter::absorbRandomTrades);
 
             for (Map.Entry<Integer, Map<List<Object>, Group>> level : groups.entrySet()) {
                 List<Group> levelGroups = List.copyOf(level.getValue().values());
@@ -472,6 +477,98 @@ public final class BytecodeInterpreter {
         }
 
         return results;
+    }
+
+    private static void absorbRandomProperties(Map<String, List<Path>> offers) {
+        boolean merged = true;
+
+        while (merged) {
+            merged = false;
+
+            for (List<Path> random : offers.values()) {
+                Set<List<Decision>> known = knownDecisions(random.stream().map(Path::decisions).toList());
+                String other = offers.entrySet().stream().filter((e) -> e.getValue() != random && absorbs(random.get(0).result(), e.getValue().get(0).result())
+                        && known.equals(knownDecisions(e.getValue().stream().map(Path::decisions).toList()))).map(Map.Entry::getKey).findFirst().orElse(null);
+
+                if (other != null) {
+                    random.addAll(offers.remove(other));
+                    merged = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    private static void absorbRandomTrades(Map<List<Object>, Group> groups) {
+        boolean merged = true;
+
+        while (merged) {
+            merged = false;
+
+            for (Group random : groups.values()) {
+                if (!(random.entry instanceof Value.Offers.Single single)) {
+                    continue;
+                }
+
+                Set<List<Decision>> known = knownDecisions(random.worlds.keySet());
+                List<Object> other = groups.entrySet().stream().filter((e) -> e.getValue() != random && e.getValue().times == random.times
+                        && e.getValue().entry instanceof Value.Offers.Single absorbed && absorbs(single.offer(), absorbed.offer())
+                        && known.equals(knownDecisions(e.getValue().worlds.keySet()))).map(Map.Entry::getKey).findFirst().orElse(null);
+
+                if (other != null) {
+                    groups.remove(other).worlds.forEach((world, probability) -> random.worlds.merge(world, probability, Double::sum));
+                    merged = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    private static Set<List<Decision>> knownDecisions(Collection<List<Decision>> paths) {
+        return paths.stream().map((p) -> p.stream().filter((d) -> d.kind() != Decision.Kind.UNKNOWN).toList()).collect(Collectors.toSet());
+    }
+
+    private static boolean absorbs(@Nullable Value random, @Nullable Value other) {
+        Value.Offer offer = random instanceof Value.Offer o ? o : null;
+        Value.Offer absorbed = offer(other);
+
+        if (offer == null || absorbed == null || offer.maxUses() != absorbed.maxUses() || offer.xp() != absorbed.xp()
+                || offer.priceMultiplier() != absorbed.priceMultiplier()) {
+            return false;
+        }
+
+        return absorbsSlot(offer.costA(), absorbed.costA()) && absorbsSlot(offer.costB(), absorbed.costB()) && absorbsSlot(offer.result(), absorbed.result());
+    }
+
+    @Nullable
+    private static Value.Offer offer(@Nullable Value value) {
+        if (value instanceof Value.Offer offer) {
+            return offer;
+        }
+        if (value instanceof Value.Known known && known.value() instanceof MerchantOffer offer) {
+            return new Value.Offer(new Value.Known(offer.getBaseCostA()), new Value.Known(offer.getCostB()), new Value.Known(offer.getResult()), offer.getMaxUses(),
+                    offer.getXp(), offer.getPriceMultiplier());
+        }
+
+        return null;
+    }
+
+    private static boolean absorbsSlot(Value random, Value other) {
+        if (describe(random).equals(describe(other))) {
+            return true;
+        }
+        if (!(random instanceof Value.Stack stack) || !stack.randomTag) {
+            return false;
+        }
+
+        List<Item> items = stack.options.stream().map(ItemStack::getItem).toList();
+
+        if (other instanceof Value.Known known && known.value() instanceof ItemStack real) {
+            return items.equals(List.of(real.getItem())) && stack.count.equals(NumberExpr.constant(real.getCount())) && stack.destination == null && stack.decoration == null;
+        }
+
+        return other instanceof Value.Stack absorbed && items.equals(absorbed.options.stream().map(ItemStack::getItem).toList()) && stack.count.equals(absorbed.count)
+                && Objects.equals(stack.destination, absorbed.destination) && Objects.equals(stack.decoration, absorbed.decoration);
     }
 
     private static boolean isRenderable(@Nullable Value result) {
