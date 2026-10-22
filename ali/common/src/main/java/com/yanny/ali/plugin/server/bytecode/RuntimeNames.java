@@ -3,6 +3,7 @@ package com.yanny.ali.plugin.server.bytecode;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.ali.Utils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
@@ -10,6 +11,7 @@ import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MapItem;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.Merchant;
 import net.minecraft.world.item.trading.MerchantOffer;
@@ -30,6 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.UnaryOperator;
 
 final class RuntimeNames {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
@@ -54,6 +57,9 @@ final class RuntimeNames {
     static final Ref STACK_COPY;
     static final Ref STACK_COPY_WITH_COUNT;
     static final Ref STACK_IS_EMPTY;
+    static final Ref STACK_SET;
+    static final Ref STACK_UPDATE;
+    static final Ref UPDATE_ENCHANTMENTS;
     static final Ref COST_ITEM_STACK;
     static final Ref COST_COUNT;
     static final Ref GET_OFFER;
@@ -95,6 +101,9 @@ final class RuntimeNames {
         STACK_COPY = ref(refs, "stackCopy", missing);
         STACK_COPY_WITH_COUNT = ref(refs, "stackCopyWithCount", missing);
         STACK_IS_EMPTY = ref(refs, "stackIsEmpty", missing);
+        STACK_SET = ref(refs, "stackSet", missing);
+        STACK_UPDATE = ref(refs, "stackUpdate", missing);
+        UPDATE_ENCHANTMENTS = ref(refs, "updateEnchantments", missing);
         COST_ITEM_STACK = ref(refs, "costItemStack", missing);
         COST_COUNT = ref(refs, "costCount", missing);
         GET_OFFER = ref(refs, "getOffer", missing);
@@ -247,6 +256,18 @@ final class RuntimeNames {
 
         private static boolean stackIsEmpty(ItemStack stack) {
             return stack.isEmpty();
+        }
+
+        private static Object stackSet(ItemStack stack) {
+            return stack.set((DataComponentType<Object>) null, null);
+        }
+
+        private static Object stackUpdate(ItemStack stack) {
+            return stack.update((DataComponentType<Object>) null, null, (UnaryOperator<Object>) null);
+        }
+
+        private static Object updateEnchantments() {
+            return EnchantmentHelper.updateEnchantments(null, null);
         }
 
         private static ItemStack costItemStack(ItemCost cost) {

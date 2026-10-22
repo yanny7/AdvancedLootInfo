@@ -4,6 +4,8 @@ import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberFunctions;
 import com.yanny.aci.api.NumberInterval;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentPredicate;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
@@ -902,7 +904,8 @@ final class Interpreter implements Opcodes {
     }
 
     private static boolean isData(@Nullable Object value) {
-        return value instanceof Collection<?> || value instanceof Map<?, ?> || value instanceof Tag || value != null && value.getClass().isArray();
+        return value instanceof Collection<?> || value instanceof Map<?, ?> || value instanceof Tag || value instanceof DataComponentMap || value instanceof DataComponentPatch
+                || value != null && value.getClass().isArray();
     }
 
     private void taint(@Nullable Object object) {
@@ -1369,8 +1372,20 @@ final class Interpreter implements Opcodes {
             copy.randomTag = true;
             return copy;
         }
+        if (isComponentWrite(call)) {
+            stack.randomTag = true;
+            return Value.Unknown.of(returnType, null);
+        }
 
         throw new Fail(reason);
+    }
+
+    private static boolean isComponentWrite(MethodInsnNode call) {
+        if (call.owner.equals(ITEM_STACK) && RuntimeNames.STACK_SET != null && RuntimeNames.STACK_UPDATE != null) {
+            return call.name.equals(RuntimeNames.STACK_SET.name()) || call.name.equals(RuntimeNames.STACK_UPDATE.name());
+        }
+
+        return RuntimeNames.is(RuntimeNames.UPDATE_ENCHANTMENTS, call);
     }
 
     @Nullable
