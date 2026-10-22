@@ -2658,12 +2658,14 @@ final class Interpreter implements Opcodes {
 
                 if (probability >= 1 || probability > 0 && decide(Decision.Kind.RANDOM, decisions.size(), probability, "switch on a random value")) {
                     source.draw().narrow(IFEQ, key);
+                    narrowed(source.draw());
                     return i;
                 }
 
                 source.draw().narrow(IFNE, key);
             }
 
+            narrowed(source.draw());
             return -1;
         }
         if (value instanceof Value.Num num) {
@@ -2869,7 +2871,56 @@ final class Interpreter implements Opcodes {
         boolean holds = decide(Decision.Kind.RANDOM, decisions.size(), probability, "branch on a random value");
 
         draw.narrow(holds ? op : negation(op), bound);
+        narrowed(draw);
         return holds;
+    }
+
+    private void narrowed(Draw draw) {
+        Map<NumberExpr, NumberExpr> replacements = new IdentityHashMap<>();
+
+        drawn.forEach((expr, source) -> {
+            if (source.draw() == draw) {
+                replacements.put(expr, draw.expr(source.offset()));
+            }
+        });
+        replacements.forEach((from, to) -> {
+            if (!(to instanceof NumberExpr.Const)) {
+                drawn.put(to, drawn.get(from));
+            }
+        });
+
+        for (Frame frame : frames) {
+            frame.replace((v) -> v instanceof Value.Num || v instanceof Value.Stack, (v) -> {
+                if (v instanceof Value.Stack stack) {
+                    stack.count = substitute(stack.count, replacements);
+                    return stack;
+                }
+
+                Value.Num num = (Value.Num) v;
+                NumberExpr expr = substitute(num.expr(), replacements);
+
+                return expr == num.expr() ? num : num(expr, num.kind());
+            });
+        }
+    }
+
+    private static NumberExpr substitute(NumberExpr expr, Map<NumberExpr, NumberExpr> replacements) {
+        if (replacements.containsKey(expr)) {
+            return replacements.get(expr);
+        }
+        if (expr instanceof NumberExpr.Fn fn) {
+            List<NumberExpr> args = fn.args().stream().map((a) -> substitute(a, replacements)).toList();
+
+            return IntStream.range(0, args.size()).allMatch((i) -> args.get(i) == fn.args().get(i)) ? expr : NumberExpr.fn(fn.id(), args);
+        }
+        if (expr instanceof NumberExpr.Weighted weighted) {
+            List<NumberExpr.WeightedEntry> entries = weighted.entries().stream()
+                    .map((e) -> new NumberExpr.WeightedEntry(e.weight(), substitute(e.value(), replacements))).toList();
+
+            return IntStream.range(0, entries.size()).allMatch((i) -> entries.get(i).value() == weighted.entries().get(i).value()) ? expr : NumberExpr.weighted(entries);
+        }
+
+        return expr;
     }
 
     private static int negation(int op) {
@@ -3307,6 +3358,24 @@ final class Interpreter implements Opcodes {
                 case IFEQ -> 0;
                 default -> 1;
             };
+        }
+
+        NumberExpr expr(double offset) {
+            if (values == null) {
+                return NumberExpr.uniformFloat(lo + offset, hi + offset);
+            }
+            if (values.size() == 1) {
+                return NumberExpr.constant(values.get(0) + offset);
+            }
+
+            int min = Collections.min(values);
+            int max = Collections.max(values);
+
+            if (max - min + 1 == values.size()) {
+                return NumberExpr.uniformInt(min + offset, max + offset);
+            }
+
+            return NumberExpr.weighted(values.stream().map((v) -> new NumberExpr.WeightedEntry(1, NumberExpr.constant(v + offset))).toList());
         }
 
         void narrow(int op, double bound) {

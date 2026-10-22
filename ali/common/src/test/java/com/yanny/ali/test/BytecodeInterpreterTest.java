@@ -1012,6 +1012,15 @@ public class BytecodeInterpreterTest {
     }
 
     @Test
+    public void testBranchNarrowsRandomNumber() {
+        List<IDataNode> trades = ((ListNode) interpret(new SquareListing())).nodes();
+
+        Assertions.assertEquals(2, trades.size());
+        assertSlot(trade(trades, Items.APPLE, 1), 0, Items.EMERALD, NumberExpr.constant(5));
+        assertSlot(trade(trades, Items.APPLE, 2), 0, Items.EMERALD, NumberExpr.constant(9));
+    }
+
+    @Test
     public void testSwitchOnRandomChoice() {
         List<IDataNode> trades = ((ListNode) interpret(new SizeListing())).nodes();
 
@@ -1129,6 +1138,12 @@ public class BytecodeInterpreterTest {
     @NotNull
     private static IDataNode trade(List<IDataNode> trades, Item result) {
         return trades.stream().filter((t) -> slot(t, 2).getItem().left().orElseThrow().is(result)).findFirst().orElseThrow();
+    }
+
+    @NotNull
+    private static IDataNode trade(List<IDataNode> trades, Item result, int count) {
+        return trades.stream().filter((t) -> slot(t, 2).getItem().left().orElseThrow().is(result) && slot(t, 2).getCount().equals(NumberExpr.constant(count)))
+                .findFirst().orElseThrow();
     }
 
     @Unmodifiable
@@ -2361,6 +2376,22 @@ public class BytecodeInterpreterTest {
             }
 
             return new MerchantOffer(new ItemStack(Items.EMERALD, emeralds), shears, 12, 5, 0.2F);
+        }
+    }
+
+    private static final class SquareListing implements VillagerTrades.ItemListing {
+        @NotNull
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            int level = random.nextInt(2) + 1;
+            int emeralds = 5;
+            ItemStack apples = new ItemStack(Items.APPLE, level);
+
+            if (level > 1) {
+                emeralds += level * level;
+            }
+
+            return new MerchantOffer(new ItemStack(Items.EMERALD, emeralds), apples, 12, 5, 0.05F);
         }
     }
 
