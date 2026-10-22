@@ -815,6 +815,11 @@ public class BytecodeInterpreterTest {
     }
 
     @Test
+    public void testListingCopyingRandomSelection() {
+        Assertions.assertNull(BytecodeInterpreter.getItemListing(UTILS, new CopiedSelectionListing(), TooltipNode.empty()));
+    }
+
+    @Test
     public void testListingPuttingRandomLevelIntoMap() {
         List<IDataNode> trades = ((ListNode) interpret(new ShearsListing())).nodes();
         IDataNode unbreaking = trades.stream().filter((t) -> slot(t, 0).getCount().equals(NumberExpr.constant(14))).findFirst().orElseThrow();
@@ -2356,6 +2361,22 @@ public class BytecodeInterpreterTest {
             stack.addTagElement("BlockEntityTag", blockEntityTag);
             stack.addTagElement("BlockStateTag", blockStateTag);
             return new MerchantOffer(new ItemStack(Items.EMERALD, 2 + random.nextInt(3)), stack, 12, 5, 0.2F);
+        }
+    }
+
+    private static final class CopiedSelectionListing implements VillagerTrades.ItemListing {
+        private final List<Item> items = List.of(Items.APPLE, Items.BREAD, Items.CARROT);
+
+        @NotNull
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            List<Item> shuffled = new ArrayList<>(items);
+
+            Collections.shuffle(shuffled);
+
+            List<Item> picked = List.copyOf(shuffled.subList(0, 2));
+
+            return new MerchantOffer(new ItemStack(Items.EMERALD), new ItemStack(picked.isEmpty() ? Items.BARRIER : picked.get(0)), 12, 5, 0.05F);
         }
     }
 

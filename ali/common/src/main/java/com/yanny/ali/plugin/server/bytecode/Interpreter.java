@@ -1642,6 +1642,9 @@ final class Interpreter implements Opcodes {
         if (!args.stream().allMatch(this::isConcrete)) {
             throw new Fail("symbolic constructor arguments");
         }
+        if (args.stream().anyMatch(this::isSelection)) {
+            throw new Fail("random selection passed to a call");
+        }
 
         Class<?> owner = load(type, loader);
         Constructor<?> constructor = constructor(owner, desc);
@@ -1881,6 +1884,9 @@ final class Interpreter implements Opcodes {
         }
         if (isStatic && call.owner.equals("java/util/Objects") && (call.name.equals("isNull") || call.name.equals("nonNull"))) {
             return new Value.Known(isNull(args.get(0)) == call.name.equals("isNull") ? 1 : 0);
+        }
+        if (args.stream().skip(isStatic ? 0 : 1).anyMatch(this::isSelection)) {
+            throw new Fail("random selection passed to a call");
         }
         if (isStatic && call.owner.equals("java/util/concurrent/ThreadLocalRandom") && call.name.equals("current")) {
             return new Value.Rng(true);
@@ -2141,6 +2147,10 @@ final class Interpreter implements Opcodes {
     @Nullable
     private Value concreteCall(MethodInsnNode call, List<Value> args, ClassLoader loader, boolean ownedResult) {
         boolean isStatic = call.getOpcode() == INVOKESTATIC;
+
+        if (args.stream().anyMatch(this::isSelection)) {
+            throw new Fail("random selection passed to a call");
+        }
         Method method = method(load(call.owner, loader), call.name, call.desc);
 
         if (method == null) {
@@ -2221,6 +2231,11 @@ final class Interpreter implements Opcodes {
         }
 
         throw new Fail("symbolic value");
+    }
+
+    private boolean isSelection(Value value) {
+        return value instanceof Value.Known known && known.value() != null
+                && (shuffled.containsKey(known.value()) || randomSets.containsKey(known.value()) || removed.containsKey(known.value()));
     }
 
     private boolean isConcrete(Value value) {
