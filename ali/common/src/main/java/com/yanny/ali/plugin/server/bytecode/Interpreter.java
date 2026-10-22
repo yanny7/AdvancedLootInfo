@@ -1243,6 +1243,39 @@ final class Interpreter implements Opcodes {
     @Nullable
     private Value stackArgumentCall(MethodInsnNode call, List<Value> args, ClassLoader loader) {
         List<Value> shadowedArgs = shadowed(args);
+        List<Value.Stack> stacks = shadowedArgs.stream().filter(Value.Stack.class::isInstance).map(Value.Stack.class::cast).toList();
+        Map<ItemStack, ItemStack> fixed = new IdentityHashMap<>();
+
+        if (stacks.size() > 1) {
+            Value.Stack kept = stacks.stream().filter((s) -> !isFixed(s)).findFirst().orElse(stacks.get(0));
+
+            shadowedArgs = shadowedArgs.stream().map((v) -> v instanceof Value.Stack s && s != kept && isFixed(s) ? fixedStack(s, fixed) : v).toList();
+        }
+
+        Value result = singleStackArgumentCall(call, shadowedArgs, loader);
+
+        if (fixed.entrySet().stream().anyMatch((e) -> !ItemStack.matches(e.getKey(), e.getValue()))) {
+            throw new Fail("stack argument changed");
+        }
+
+        return result;
+    }
+
+    private static boolean isFixed(Value.Stack stack) {
+        return stack.options.size() == 1 && stack.count instanceof NumberExpr.Const && !stack.randomTag && stack.destination == null && stack.decoration == null;
+    }
+
+    private Value fixedStack(Value.Stack stack, Map<ItemStack, ItemStack> fixed) {
+        ItemStack real = stack.options.get(0).copy();
+
+        real.setCount((int) ((NumberExpr.Const) stack.count).value());
+        own(real);
+        fixed.put(real, real.copy());
+        return new Value.Known(real);
+    }
+
+    @Nullable
+    private Value singleStackArgumentCall(MethodInsnNode call, List<Value> shadowedArgs, ClassLoader loader) {
         int index = -1;
 
         for (int i = 0; i < shadowedArgs.size(); i++) {

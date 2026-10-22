@@ -1,5 +1,6 @@
 package com.yanny.ali.test;
 
+import com.mojang.serialization.Lifecycle;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.tooltip.*;
@@ -15,12 +16,18 @@ import com.yanny.ali.plugin.server.bytecode.BytecodeInterpreter;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.MappedRegistry;
+import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BiomeTags;
@@ -476,6 +483,38 @@ public class BytecodeInterpreterTest {
                 "XP: 5",
                 "Price Multiplier: 0.05"
         ));
+    }
+
+    @Test
+    public void testTraderWithProfessionFromRegistry() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(RegistryProfessionTrader.class);
+        List<IDataNode> trades = ((TradeLevel.OfTrades) levels.get(1)).trades().apply(UTILS);
+
+        Assertions.assertEquals(List.of(1), levels.keySet().intStream().boxed().toList());
+        Assertions.assertEquals(3, trades.size());
+        assertTooltip(trade(trades, Items.APPLE).getTooltip(), List.of(
+                "Value: ali:farmer",
+                "Uses: 12",
+                "XP: 5",
+                "Price Multiplier: 0.05"
+        ));
+        assertTooltip(trade(trades, Items.IRON_INGOT).getTooltip(), List.of(
+                "Value: ali:smith",
+                "Uses: 12",
+                "XP: 5",
+                "Price Multiplier: 0.05"
+        ));
+    }
+
+    @Test
+    public void testTraderPassingTwoStacksToListingFactory() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(TwoStackTrader.class);
+        VillagerTrades.ItemListing[] listings = ((TradeLevel.OfListings) levels.get(1)).listings();
+        IDataNode trade = interpret(listings[0]);
+
+        Assertions.assertEquals(1, listings.length);
+        assertSlot(trade, 0, Items.EMERALD, NumberExpr.constant(10));
+        assertSlot(trade, 2, Items.APPLE, NumberExpr.constant(1));
     }
 
     @Test
@@ -1556,6 +1595,65 @@ public class BytecodeInterpreterTest {
                     offers.add(offer);
                 }
             }
+        }
+    }
+
+    private abstract static class RegistryProfessionTrader extends AbstractVillager {
+        private static final EntityDataAccessor<String> PROFESSION = SynchedEntityData.defineId(RegistryProfessionTrader.class, EntityDataSerializers.STRING);
+        private static final MappedRegistry<TraderProfession> PROFESSIONS = new MappedRegistry<>(ResourceKey.createRegistryKey(new ResourceLocation("ali", "trader_profession")), Lifecycle.stable());
+
+        static {
+            Registry.register(PROFESSIONS, new ResourceLocation("ali", "farmer"), new FarmerProfession());
+            Registry.register(PROFESSIONS, new ResourceLocation("ali", "smith"), new SmithProfession());
+            PROFESSIONS.freeze();
+        }
+
+        private RegistryProfessionTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void updateTrades() {
+            if (getProfession() != null) {
+                addOffersFromItemListings(getOffers(), getProfession().getTrades(this), 5);
+            }
+        }
+
+        private TraderProfession getProfession() {
+            return PROFESSIONS.get(new ResourceLocation(getEntityData().get(PROFESSION)));
+        }
+    }
+
+    private abstract static class TraderProfession {
+        abstract VillagerTrades.ItemListing[] getTrades(AbstractVillager trader);
+    }
+
+    private static final class FarmerProfession extends TraderProfession {
+        @Override
+        VillagerTrades.ItemListing[] getTrades(AbstractVillager trader) {
+            return new VillagerTrades.ItemListing[]{new PlainListing(Items.APPLE), new PlainListing(Items.BREAD)};
+        }
+    }
+
+    private static final class SmithProfession extends TraderProfession {
+        @Override
+        VillagerTrades.ItemListing[] getTrades(AbstractVillager trader) {
+            return new VillagerTrades.ItemListing[]{new PlainListing(Items.IRON_INGOT)};
+        }
+    }
+
+    private abstract static class TwoStackTrader extends AbstractVillager {
+        private TwoStackTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void updateTrades() {
+            addOffersFromItemListings(getOffers(), new VillagerTrades.ItemListing[]{simpleTrade(new ItemStack(Items.EMERALD, 10), new ItemStack(Items.APPLE), 10)}, 5);
+        }
+
+        private static VillagerTrades.ItemListing simpleTrade(ItemStack cost, ItemStack result, int uses) {
+            return (trader, random) -> new MerchantOffer(cost.copy(), result.copy(), uses, 0, 0);
         }
     }
 
