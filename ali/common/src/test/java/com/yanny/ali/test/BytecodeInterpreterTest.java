@@ -21,6 +21,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.component.DataComponentPredicate;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -994,6 +995,14 @@ public class BytecodeInterpreterTest {
         assertSlot(trade, 2, Items.APPLE, NumberExpr.constant(1));
         assertSlot(single, 0, Items.EMERALD, NumberExpr.uniformInt(2, 4));
         assertSlot(single, 2, Items.APPLE, NumberExpr.constant(1));
+    }
+
+    @Test
+    public void testListingBuildingCostFromStack() {
+        IDataNode trade = interpret(new StackPriceListing(new ItemStack(Items.EMERALD, 5), new ItemStack(Items.APPLE, 2)));
+
+        assertSlot(trade, 0, Items.EMERALD, NumberExpr.constant(5));
+        assertSlot(trade, 2, Items.APPLE, NumberExpr.constant(2));
     }
 
     @Test
@@ -2445,6 +2454,16 @@ public class BytecodeInterpreterTest {
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             return new MerchantOffer(new TradeCost(Items.EMERALD, 2, 4).create(random), secondary.map((c) -> c.create(random)), new ItemStack(Items.APPLE), 12, 5, 0.05F);
+        }
+    }
+
+    private record StackPriceListing(ItemStack price, ItemStack forSale) implements VillagerTrades.ItemListing {
+        @NotNull
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            ItemCost cost = new ItemCost(price.getItemHolder(), price.getCount(), DataComponentPredicate.EMPTY, price);
+
+            return new MerchantOffer(cost, Optional.empty(), forSale, 12, 5, 0.05F);
         }
     }
 

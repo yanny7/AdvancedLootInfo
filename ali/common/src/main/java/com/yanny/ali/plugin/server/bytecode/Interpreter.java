@@ -1813,6 +1813,14 @@ final class Interpreter implements Opcodes {
     @NotNull
     private Value constructStack(Class<?> type, String desc, List<Value> args) {
         Type[] params = Type.getArgumentTypes(desc);
+
+        if (type == ItemCost.class && params.length == 4 && args.get(3) instanceof Value.Stack shown) {
+            Value.Stack cost = shown.copy();
+
+            cost.count = expr(args.get(1));
+            return cost;
+        }
+
         NumberExpr count = params.length >= 2 && params[1].getSort() == Type.INT ? expr(args.get(1)) : NumberExpr.constant(1);
         List<Object> items;
 
