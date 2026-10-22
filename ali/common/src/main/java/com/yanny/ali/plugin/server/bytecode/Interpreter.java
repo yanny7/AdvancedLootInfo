@@ -616,6 +616,15 @@ final class Interpreter implements Opcodes {
             replace(uninit, construct(uninit.type, call.desc, args.subList(1, args.size()), loader));
             return null;
         }
+        if (isLogging(call.owner)) {
+            Type returnType = Type.getReturnType(call.desc);
+
+            if (returnType.getSort() == Type.VOID) {
+                return null;
+            }
+
+            return returnType.getSort() == Type.BOOLEAN ? new Value.Known(0) : Value.Unknown.of(returnType, null);
+        }
         if (RuntimeNames.is(RuntimeNames.FIND_MAP_STRUCTURE, call)) {
             return new Value.Unknown(false, Type.getReturnType(call.desc).getInternalName(), args.get(1) instanceof Value.Known known ? known.value() : null,
                     Origin.of(args.get(0), call.name + call.desc, args.subList(1, args.size())));
@@ -2231,6 +2240,10 @@ final class Interpreter implements Opcodes {
         }
 
         throw new Fail("symbolic value");
+    }
+
+    private static boolean isLogging(String owner) {
+        return owner.startsWith("org/slf4j/") || owner.startsWith("org/apache/logging/log4j/") || owner.startsWith("java/util/logging/");
     }
 
     private boolean isSelection(Value value) {

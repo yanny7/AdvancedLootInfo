@@ -74,11 +74,14 @@ import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.slf4j.Logger;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.lang.reflect.Proxy;
 import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.IntUnaryOperator;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -812,6 +815,19 @@ public class BytecodeInterpreterTest {
         assertTooltip(slot(trade, 2).getTooltip(), List.of(
                 "Random properties"
         ));
+    }
+
+    @Test
+    public void testListingLoggingWithoutWritingToTheLog() {
+        AtomicInteger calls = new AtomicInteger();
+        Logger logger = (Logger) Proxy.newProxyInstance(Logger.class.getClassLoader(), new Class<?>[]{Logger.class}, (proxy, method, args) -> {
+            calls.incrementAndGet();
+            return null;
+        });
+        IDataNode trade = interpret(new LoggingListing(logger));
+
+        assertSlot(trade, 2, Items.APPLE, NumberExpr.constant(1));
+        Assertions.assertEquals(0, calls.get());
     }
 
     @Test
@@ -2361,6 +2377,15 @@ public class BytecodeInterpreterTest {
             stack.addTagElement("BlockEntityTag", blockEntityTag);
             stack.addTagElement("BlockStateTag", blockStateTag);
             return new MerchantOffer(new ItemStack(Items.EMERALD, 2 + random.nextInt(3)), stack, 12, 5, 0.2F);
+        }
+    }
+
+    private record LoggingListing(Logger logger) implements VillagerTrades.ItemListing {
+        @NotNull
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            logger.error("Found no structure for the map");
+            return new MerchantOffer(new ItemStack(Items.EMERALD), new ItemStack(Items.APPLE), 12, 5, 0.05F);
         }
     }
 
