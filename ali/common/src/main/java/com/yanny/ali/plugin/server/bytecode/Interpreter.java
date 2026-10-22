@@ -800,7 +800,7 @@ final class Interpreter implements Opcodes {
 
             throw new Fail("iteration over random draws");
         }
-        if (receiver instanceof Value.Unknown && registries != null && RuntimeNames.is(RuntimeNames.REGISTRY_ACCESS, call)) {
+        if (receiver instanceof Value.Unknown && registries != null && (RuntimeNames.is(RuntimeNames.REGISTRY_ACCESS, call) || RuntimeNames.is(RuntimeNames.ENTITY_REGISTRY_ACCESS, call))) {
             return new Value.Known(registries);
         }
         if (receiver instanceof Value.Unknown) {

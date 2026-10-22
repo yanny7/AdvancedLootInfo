@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -66,6 +67,7 @@ final class RuntimeNames {
     static final Ref LEVEL_IS_CLIENT_SIDE;
     static final Ref FIND_MAP_STRUCTURE;
     static final Ref REGISTRY_ACCESS;
+    static final Ref ENTITY_REGISTRY_ACCESS;
     static final Ref MAP_CREATE;
     static final Ref MAP_RENDER_BIOME_PREVIEW;
     static final Ref MAP_ADD_TARGET_DECORATION;
@@ -110,6 +112,7 @@ final class RuntimeNames {
         LEVEL_IS_CLIENT_SIDE = ref(refs, "levelIsClientSide", missing);
         FIND_MAP_STRUCTURE = ref(refs, "findMapStructure", missing);
         REGISTRY_ACCESS = ref(refs, "registryAccess", missing);
+        ENTITY_REGISTRY_ACCESS = ref(refs, "entityRegistryAccess", missing);
         MAP_CREATE = ref(refs, "mapCreate", missing);
         MAP_RENDER_BIOME_PREVIEW = ref(refs, "mapRenderBiomePreview", missing);
         MAP_ADD_TARGET_DECORATION = ref(refs, "mapAddTargetDecoration", missing);
@@ -292,6 +295,10 @@ final class RuntimeNames {
 
         private static Object registryAccess(Level level) {
             return level.registryAccess();
+        }
+
+        private static Object entityRegistryAccess(Entity entity) {
+            return entity.registryAccess();
         }
 
         private static ItemStack mapCreate() {
