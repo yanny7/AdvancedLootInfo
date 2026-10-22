@@ -4,6 +4,7 @@ import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberFunctions;
 import com.yanny.aci.api.NumberInterval;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.npc.AbstractVillager;
@@ -587,6 +588,10 @@ final class Interpreter implements Opcodes {
     private Value invoke(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
         Value result = dispatch(call, args, loader, depth);
 
+        if (result instanceof Value.Known known && isData(known.value()) && args.stream().anyMatch(this::isTainted)) {
+            taint(known.value());
+        }
+
         if (call.getOpcode() != INVOKESTATIC && call.name.equals("get") && args.size() == 2 && args.get(0) instanceof Value.Known map && map.value() instanceof Map<?, ?>
                 && args.get(1) instanceof Value.Known key && result instanceof Value.Known listings && isListings(listings.value())) {
             if (key.value() instanceof Integer level) {
@@ -746,6 +751,7 @@ final class Interpreter implements Opcodes {
                 return new Value.Rng(isLegacyRandom(returnType, loader));
             }
 
+            taintOwned(args);
             return Value.Unknown.of(returnType, Origin.of(receiver, call.name + call.desc, args.subList(1, args.size())));
         }
         if (receiver instanceof Value.Offer || receiver instanceof Value.Uninit || receiver instanceof Value.Cmp) {
@@ -870,6 +876,14 @@ final class Interpreter implements Opcodes {
         return value instanceof Value.Known known && known.value() != null && tainted.contains(known.value());
     }
 
+    private void taintOwned(List<Value> args) {
+        args.forEach((v) -> taint(v instanceof Value.Known known && known.value() != null && owned.containsKey(known.value()) ? known.value() : null));
+    }
+
+    private static boolean isData(@Nullable Object value) {
+        return value instanceof Collection<?> || value instanceof Map<?, ?> || value instanceof Tag || value != null && value.getClass().isArray();
+    }
+
     private void taint(@Nullable Object object) {
         if (object != null && tainted.add(object) && stackParts.containsKey(object)) {
             stackParts.get(object).randomTag = true;
@@ -891,7 +905,7 @@ final class Interpreter implements Opcodes {
     private Value worldResult(MethodInsnNode call, List<Value> args) {
         Type returnType = Type.getReturnType(call.desc);
 
-        args.forEach((v) -> taint(v instanceof Value.Known known && known.value() != null && owned.containsKey(known.value()) ? known.value() : null));
+        taintOwned(args);
 
         if (returnType.getSort() == Type.VOID) {
             return null;
@@ -1588,6 +1602,10 @@ final class Interpreter implements Opcodes {
 
             return Objects.requireNonNull(sameDraw(combine(results), first));
         }
+        if (args.stream().anyMatch(Value.Unknown.class::isInstance) && args.stream().allMatch((v) -> v instanceof Value.Unknown || isConcrete(v))) {
+            taintOwned(args);
+            return Value.Unknown.of(Type.getObjectType(type), Origin.of(null, type + "." + CONSTRUCTOR + desc, args));
+        }
         if (!args.stream().allMatch(this::isConcrete)) {
             throw new Fail("symbolic constructor arguments");
         }
@@ -1601,6 +1619,11 @@ final class Interpreter implements Opcodes {
             Object created = constructor.newInstance(javaArgs(args, constructor.getParameterTypes(), 0));
 
             own(created);
+
+            if (args.stream().anyMatch(this::isTainted)) {
+                taint(created);
+            }
+
             return wrap(created);
         } catch (Throwable e) {
             throw new Fail("constructor failed");
@@ -1918,8 +1941,8 @@ final class Interpreter implements Opcodes {
             };
         }
         if (!isStatic && args.get(0) instanceof Value.Known known && known.value() != null && owned.containsKey(known.value())
-                && args.stream().skip(1).anyMatch(Value.Unknown.class::isInstance)
-                && args.stream().skip(1).allMatch((v) -> isConcrete(v) || v instanceof Value.Unknown) && !returnsTradeData(call)) {
+                && args.stream().skip(1).anyMatch((v) -> v instanceof Value.Unknown || v instanceof Value.Num)
+                && args.stream().skip(1).allMatch((v) -> isConcrete(v) || v instanceof Value.Unknown || v instanceof Value.Num) && !returnsTradeData(call)) {
             return uncertainChange(call, READ_ONLY.contains(call.name) ? null : known.value());
         }
         if (isStatic && STATIC_SAFE.contains(call.owner) && !STATIC_RANDOM.contains(call.name) && returnType.getSort() != Type.VOID
@@ -2255,7 +2278,13 @@ final class Interpreter implements Opcodes {
         Field field = field(load(insn.owner, loader), insn.name);
 
         try {
-            return wrap(field.get(known.value()), field.getType());
+            Object value = field.get(known.value());
+
+            if (tainted.contains(known.value()) && isData(value)) {
+                taint(value);
+            }
+
+            return wrap(value, field.getType());
         } catch (Throwable e) {
             throw new Fail("field " + insn.owner + "." + insn.name);
         }

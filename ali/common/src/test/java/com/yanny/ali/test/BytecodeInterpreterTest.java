@@ -33,6 +33,7 @@ import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerData;
@@ -52,6 +53,8 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
@@ -759,6 +762,30 @@ public class BytecodeInterpreterTest {
         assertSlot(first, 2, Items.APPLE, NumberExpr.constant(1));
         assertSlot(second, 0, Items.EMERALD, NumberExpr.uniformInt(5, 9));
         assertSlot(second, 2, Items.BREAD, NumberExpr.constant(1));
+    }
+
+    @Test
+    public void testListingBuildingEntityInTradersLevel() {
+        IDataNode trade = interpret(new BeehiveListing());
+
+        assertSlot(trade, 0, Items.EMERALD, NumberExpr.uniformInt(2, 4));
+        assertSlot(trade, 2, Items.BEEHIVE, NumberExpr.constant(1));
+        assertTooltip(slot(trade, 2).getTooltip(), List.of(
+                "Random properties"
+        ));
+    }
+
+    @Test
+    public void testListingPuttingRandomLevelIntoMap() {
+        List<IDataNode> trades = ((ListNode) interpret(new ShearsListing())).nodes();
+        IDataNode unbreaking = trades.stream().filter((t) -> slot(t, 0).getCount().equals(NumberExpr.constant(14))).findFirst().orElseThrow();
+        IDataNode random = trades.stream().filter((t) -> slot(t, 0).getCount().equals(NumberExpr.constant(5))).findFirst().orElseThrow();
+
+        Assertions.assertEquals(3, trades.size());
+        Assertions.assertEquals(3, EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, slot(unbreaking, 2).getItem().left().orElseThrow()));
+        assertTooltip(slot(random, 2).getTooltip(), List.of(
+                "Random properties"
+        ));
     }
 
     @Test
@@ -2193,6 +2220,49 @@ public class BytecodeInterpreterTest {
 
             paper.setHoverName(Component.literal(fromWorld ? trader.getName().getString() : String.valueOf(random.nextInt(3))));
             return new MerchantOffer(new ItemStack(Items.EMERALD), paper, 12, 5, 0.05F);
+        }
+    }
+
+    private static final class BeehiveListing implements VillagerTrades.ItemListing {
+        @NotNull
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            ItemStack stack = new ItemStack(Items.BEEHIVE);
+            BeehiveBlockEntity hive = new BeehiveBlockEntity(BlockPos.ZERO, Blocks.BEEHIVE.defaultBlockState());
+            CompoundTag blockEntityTag = new CompoundTag();
+            CompoundTag blockStateTag = new CompoundTag();
+
+            for (int i = 0; i < 2; i++) {
+                Bee bee = new Bee(EntityType.BEE, trader.level());
+
+                hive.addOccupantWithPresetTicks(bee, false, 0);
+            }
+
+            blockEntityTag.put("Bees", hive.writeBees());
+            blockStateTag.putInt("honey_level", 0);
+            stack.addTagElement("BlockEntityTag", blockEntityTag);
+            stack.addTagElement("BlockStateTag", blockStateTag);
+            return new MerchantOffer(new ItemStack(Items.EMERALD, 2 + random.nextInt(3)), stack, 12, 5, 0.2F);
+        }
+    }
+
+    private static final class ShearsListing implements VillagerTrades.ItemListing {
+        @NotNull
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            Map<Enchantment, Integer> enchantments = new HashMap<>();
+            ItemStack shears = new ItemStack(Items.SHEARS);
+            int emeralds = 5;
+            int level = random.nextDouble() < 0.1 ? 3 : random.nextInt(2) + 1;
+
+            enchantments.put(Enchantments.UNBREAKING, level);
+            EnchantmentHelper.setEnchantments(enchantments, shears);
+
+            if (level > 1) {
+                emeralds += level * level;
+            }
+
+            return new MerchantOffer(new ItemStack(Items.EMERALD, emeralds), shears, 12, 5, 0.2F);
         }
     }
 
