@@ -29,6 +29,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -701,6 +702,14 @@ public class BytecodeInterpreterTest {
         Assertions.assertEquals(2, distinct.length);
         Assertions.assertSame(apple, distinct[0]);
         Assertions.assertEquals(Items.BREAD, ((PlainListing) distinct[1]).item);
+    }
+
+    @Test
+    public void testMinecraftRecordsHoldingStacksCompareByContents() {
+        Object emeralds = TradeUtils.valueKey(new Display.ItemDisplay.ItemRenderState(new ItemStack(Items.EMERALD, 2), ItemDisplayContext.NONE));
+
+        Assertions.assertEquals(emeralds, TradeUtils.valueKey(new Display.ItemDisplay.ItemRenderState(new ItemStack(Items.EMERALD, 2), ItemDisplayContext.NONE)));
+        Assertions.assertNotEquals(emeralds, TradeUtils.valueKey(new Display.ItemDisplay.ItemRenderState(new ItemStack(Items.EMERALD, 3), ItemDisplayContext.NONE)));
     }
 
     @Test
