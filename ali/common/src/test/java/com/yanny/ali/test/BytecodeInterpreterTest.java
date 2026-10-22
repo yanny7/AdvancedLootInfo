@@ -82,11 +82,14 @@ import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.slf4j.Logger;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.lang.reflect.Proxy;
 import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.IntUnaryOperator;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -854,6 +857,19 @@ public class BytecodeInterpreterTest {
     }
 
     @Test
+    public void testListingLoggingWithoutWritingToTheLog() {
+        AtomicInteger calls = new AtomicInteger();
+        Logger logger = (Logger) Proxy.newProxyInstance(Logger.class.getClassLoader(), new Class<?>[]{Logger.class}, (proxy, method, args) -> {
+            calls.incrementAndGet();
+            return null;
+        });
+        IDataNode trade = interpret(new LoggingListing(logger));
+
+        assertSlot(trade, 2, Items.APPLE, NumberExpr.constant(1));
+        Assertions.assertEquals(0, calls.get());
+    }
+
+    @Test
     public void testListingCopyingRandomSelection() {
         Assertions.assertNull(BytecodeInterpreter.getItemListing(UTILS, new CopiedSelectionListing(), TooltipNode.empty()));
     }
@@ -1008,6 +1024,14 @@ public class BytecodeInterpreterTest {
 
         assertSlot(trade, 0, Items.EMERALD, NumberExpr.constant(5));
         assertSlot(trade, 2, Items.APPLE, NumberExpr.constant(2));
+    }
+
+    @Test
+    public void testListingReadingOptionalStack() {
+        IDataNode trade = interpret(new OptionalStackListing());
+
+        assertSlot(trade, 0, Items.EMERALD, NumberExpr.constant(1));
+        assertSlot(trade, 2, Items.APPLE, NumberExpr.uniformInt(1, 3));
     }
 
     @Test
@@ -2472,6 +2496,20 @@ public class BytecodeInterpreterTest {
         }
     }
 
+    private static final class OptionalStackListing implements VillagerTrades.ItemListing {
+        @NotNull
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            Optional<ItemStack> sold = Optional.of(new ItemStack(Items.APPLE, random.nextIntBetweenInclusive(1, 3)));
+
+            if (sold.isEmpty()) {
+                return new MerchantOffer(new ItemCost(Items.EMERALD), new ItemStack(Items.BREAD), 12, 5, 0.05F);
+            }
+
+            return new MerchantOffer(new ItemCost(Items.EMERALD), sold.get(), 12, 5, 0.05F);
+        }
+    }
+
     private static final class MatchingOffer extends MerchantOffer {
         MatchingOffer(ItemCost costA, Optional<ItemCost> costB, ItemStack result, int maxUses, int xp, float priceMultiplier) {
             super(costA, costB, result, maxUses, xp, priceMultiplier);
@@ -2518,6 +2556,15 @@ public class BytecodeInterpreterTest {
             stack.applyComponents(hive.collectComponents());
             stack.set(DataComponents.BLOCK_STATE, BlockItemStateProperties.EMPTY.with(BeehiveBlock.HONEY_LEVEL, 0));
             return new MerchantOffer(new ItemCost(Items.EMERALD, 2 + random.nextInt(3)), stack, 12, 5, 0.2F);
+        }
+    }
+
+    private record LoggingListing(Logger logger) implements VillagerTrades.ItemListing {
+        @NotNull
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            logger.error("Found no structure for the map");
+            return new MerchantOffer(new ItemCost(Items.EMERALD), new ItemStack(Items.APPLE), 12, 5, 0.05F);
         }
     }
 

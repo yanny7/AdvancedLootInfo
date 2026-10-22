@@ -627,6 +627,15 @@ final class Interpreter implements Opcodes {
             replace(uninit, construct(uninit.type, call.desc, args.subList(1, args.size()), loader));
             return null;
         }
+        if (isLogging(call.owner)) {
+            Type returnType = Type.getReturnType(call.desc);
+
+            if (returnType.getSort() == Type.VOID) {
+                return null;
+            }
+
+            return returnType.getSort() == Type.BOOLEAN ? new Value.Known(0) : Value.Unknown.of(returnType, null);
+        }
         if (RuntimeNames.is(RuntimeNames.FIND_MAP_STRUCTURE, call)) {
             return new Value.Unknown(false, Type.getReturnType(call.desc).getInternalName(), args.get(1) instanceof Value.Known known ? known.value() : null,
                     Origin.of(args.get(0), call.name + call.desc, args.subList(1, args.size())));
@@ -679,37 +688,12 @@ final class Interpreter implements Opcodes {
         if (isStatic && call.owner.equals(OPTIONAL) && (call.name.equals("of") || call.name.equals("ofNullable")) && args.get(0) instanceof Value.Stack stack) {
             return stack;
         }
-        if (!isStatic && call.owner.equals(OPTIONAL) && call.name.equals("ifPresent") && args.get(0) instanceof Value.Known known
-                && known.value() instanceof Optional<?> optional && args.get(1) instanceof Value.Closure closure) {
-            if (optional.isPresent()) {
-                List<Value> all = new ArrayList<>(closure.captured());
-
-                all.add(wrap(optional.get()));
-                invokeHandle(closure.impl(), all, closure.loader(), depth + 1);
-            }
-
-            return null;
+        if (!isStatic && call.owner.equals(OPTIONAL) && args.get(0) instanceof Value.Stack stack) {
+            return optionalCall(call, stack, args, depth);
         }
-        if (!isStatic && call.owner.equals(OPTIONAL) && call.name.equals("map") && args.get(0) instanceof Value.Known known
-                && known.value() instanceof Optional<?> optional && args.get(1) instanceof Value.Closure closure) {
-            if (optional.isEmpty()) {
-                return known;
-            }
-
-            List<Value> all = new ArrayList<>(closure.captured());
-
-            all.add(wrap(optional.get()));
-
-            Value mapped = invokeHandle(closure.impl(), all, closure.loader(), depth + 1);
-
-            if (mapped instanceof Value.Stack stack) {
-                return stack;
-            }
-            if (mapped == null || mapped instanceof Value.Known) {
-                return new Value.Known(Optional.ofNullable(mapped instanceof Value.Known k ? k.value() : null));
-            }
-
-            throw new Fail("symbolic result of Optional.map");
+        if (!isStatic && call.owner.equals(OPTIONAL) && args.get(0) instanceof Value.Known known && known.value() instanceof Optional<?> optional
+                && args.stream().skip(1).anyMatch((arg) -> arg instanceof Value.Closure || !isConcrete(arg))) {
+            return optionalCall(call, optional.isPresent() ? wrap(optional.get()) : null, args, depth);
         }
 
         if (!isStatic && args.get(0) instanceof Value.Known known && known.value() instanceof List<?> list && owned.containsKey(list)
@@ -876,6 +860,67 @@ final class Interpreter implements Opcodes {
         }
 
         return result;
+    }
+
+    @Nullable
+    private Value optionalCall(MethodInsnNode call, @Nullable Value present, List<Value> args, int depth) {
+        switch (call.name) {
+            case "isPresent" -> {
+                return new Value.Known(present != null ? 1 : 0);
+            }
+            case "isEmpty" -> {
+                return new Value.Known(present == null ? 1 : 0);
+            }
+            case "get", "orElseThrow" -> {
+                if (present == null) {
+                    throw new Fail("value of an empty Optional");
+                }
+
+                return present;
+            }
+            case "orElse" -> {
+                return present != null ? present : args.get(1);
+            }
+            case "orElseGet" -> {
+                return present != null ? present : applyClosure(args.get(1), List.of(), depth);
+            }
+            case "ifPresent" -> {
+                if (present != null) {
+                    applyClosure(args.get(1), List.of(present), depth);
+                }
+
+                return null;
+            }
+            case "map" -> {
+                if (present == null) {
+                    return new Value.Known(Optional.empty());
+                }
+
+                Value mapped = applyClosure(args.get(1), List.of(present), depth);
+
+                if (mapped instanceof Value.Stack stack) {
+                    return stack;
+                }
+                if (mapped == null || mapped instanceof Value.Known) {
+                    return new Value.Known(Optional.ofNullable(mapped instanceof Value.Known known ? known.value() : null));
+                }
+
+                throw new Fail("symbolic result of Optional.map");
+            }
+            default -> throw new Fail("symbolic Optional." + call.name);
+        }
+    }
+
+    @Nullable
+    private Value applyClosure(Value function, List<Value> args, int depth) {
+        if (!(function instanceof Value.Closure closure)) {
+            throw new Fail("symbolic Optional function");
+        }
+
+        List<Value> all = new ArrayList<>(closure.captured());
+
+        all.addAll(args);
+        return invokeHandle(closure.impl(), all, closure.loader(), depth + 1);
     }
 
     @Nullable
@@ -2439,6 +2484,10 @@ final class Interpreter implements Opcodes {
         }
 
         throw new Fail("symbolic value");
+    }
+
+    private static boolean isLogging(String owner) {
+        return owner.startsWith("org/slf4j/") || owner.startsWith("org/apache/logging/log4j/") || owner.startsWith("java/util/logging/");
     }
 
     private boolean isSelection(Value value) {
