@@ -130,6 +130,14 @@ public class BytecodeInterpreterTest {
     }
 
     @Test
+    public void testRandomPickFromLargeTag() {
+        TagPickListing listing = new TagPickListing();
+        IDataNode result = ((ListNode) interpret(listing)).nodes().get(2);
+
+        Assertions.assertEquals(listing.items, ((ListNode) result).nodes().stream().map((n) -> ((ItemNode) n).getItem().left().orElseThrow().getItem()).toList());
+    }
+
+    @Test
     public void testRandomPickOfStacks() {
         IDataNode trade = interpret(new StackPickListing());
         List<ItemNode> options = ((ListNode) ((ListNode) trade).nodes().get(2)).nodes().stream().map(ItemNode.class::cast).toList();
@@ -1141,6 +1149,18 @@ public class BytecodeInterpreterTest {
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             return new MerchantOffer(new ItemStack(Items.EMERALD), new ItemStack(items.get(random.nextInt(items.size()))), 12, 5, 0.05F);
+        }
+    }
+
+    private static final class TagPickListing implements VillagerTrades.ItemListing {
+        private final List<Item> items = BuiltInRegistries.ITEM.stream().filter((i) -> i != Items.AIR).limit(300).toList();
+
+        @NotNull
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            List<Item> values = new LinkedList<>(items);
+
+            return new MerchantOffer(new ItemStack(Items.EMERALD), new ItemStack(values.get(random.nextInt(values.size()))), 12, 5, 0.05F);
         }
     }
 

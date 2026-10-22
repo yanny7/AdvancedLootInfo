@@ -32,7 +32,7 @@ import java.util.stream.IntStream;
 final class Interpreter implements Opcodes {
     private static final int MAX_STEPS = 200_000;
     private static final int MAX_DEPTH = 12;
-    private static final int MAX_OPTIONS = 256;
+    private static final int MAX_OPTIONS = 1024;
     private static final int MAX_DECISIONS = 8;
     private static final String CONSTRUCTOR = "<init>";
     private static final String ITEM_STACK = Type.getInternalName(ItemStack.class);
@@ -2010,8 +2010,11 @@ final class Interpreter implements Opcodes {
         int from = (int) lo.value();
         int to = (int) hi.value();
 
-        if (from < 0 || to >= list.size() || from > to || to - from + 1 > MAX_OPTIONS) {
+        if (from < 0 || to >= list.size() || from > to) {
             throw new Fail("index out of range");
+        }
+        if (to - from + 1 > MAX_OPTIONS) {
+            throw new Fail("too many options");
         }
 
         return new Value.Choice(new ArrayList<>(list.subList(from, to + 1)), index.expr());
