@@ -966,6 +966,18 @@ public class BytecodeInterpreterTest {
     }
 
     @Test
+    public void testListingMappingOptionalCost() {
+        IDataNode trade = interpret(new OptionalCostListing(Optional.of(new TradeCost(Items.BOOK, 1, 3))));
+        IDataNode single = interpret(new OptionalCostListing(Optional.empty()));
+
+        assertSlot(trade, 0, Items.EMERALD, NumberExpr.uniformInt(2, 4));
+        assertSlot(trade, 1, Items.BOOK, NumberExpr.uniformInt(1, 3));
+        assertSlot(trade, 2, Items.APPLE, NumberExpr.constant(1));
+        assertSlot(single, 0, Items.EMERALD, NumberExpr.uniformInt(2, 4));
+        assertSlot(single, 2, Items.APPLE, NumberExpr.constant(1));
+    }
+
+    @Test
     public void testStackNamedByRandomText() {
         IDataNode trade = interpret(new TextNameListing(false));
 
@@ -2357,6 +2369,20 @@ public class BytecodeInterpreterTest {
 
         private interface GenerateOffer {
             MerchantOffer generateOffer(Entity trader, @Nullable Player player, RandomSource random);
+        }
+    }
+
+    private record TradeCost(Item item, int min, int max) {
+        ItemCost create(RandomSource random) {
+            return new ItemCost(item, random.nextIntBetweenInclusive(min, max));
+        }
+    }
+
+    private record OptionalCostListing(Optional<TradeCost> secondary) implements VillagerTrades.ItemListing {
+        @NotNull
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            return new MerchantOffer(new TradeCost(Items.EMERALD, 2, 4).create(random), secondary.map((c) -> c.create(random)), new ItemStack(Items.APPLE), 12, 5, 0.05F);
         }
     }
 

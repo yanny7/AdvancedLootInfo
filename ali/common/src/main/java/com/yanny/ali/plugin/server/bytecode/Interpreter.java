@@ -675,6 +675,27 @@ final class Interpreter implements Opcodes {
 
             return null;
         }
+        if (!isStatic && call.owner.equals(OPTIONAL) && call.name.equals("map") && args.get(0) instanceof Value.Known known
+                && known.value() instanceof Optional<?> optional && args.get(1) instanceof Value.Closure closure) {
+            if (optional.isEmpty()) {
+                return known;
+            }
+
+            List<Value> all = new ArrayList<>(closure.captured());
+
+            all.add(wrap(optional.get()));
+
+            Value mapped = invokeHandle(closure.impl(), all, closure.loader(), depth + 1);
+
+            if (mapped instanceof Value.Stack stack) {
+                return stack;
+            }
+            if (mapped == null || mapped instanceof Value.Known) {
+                return new Value.Known(Optional.ofNullable(mapped instanceof Value.Known k ? k.value() : null));
+            }
+
+            throw new Fail("symbolic result of Optional.map");
+        }
 
         if (!isStatic && args.get(0) instanceof Value.Known known && known.value() instanceof List<?> list && owned.containsKey(list)
                 && call.name.equals("remove") && call.desc.equals("(Ljava/lang/Object;)Z") && args.get(1) instanceof Value.Choice choice
