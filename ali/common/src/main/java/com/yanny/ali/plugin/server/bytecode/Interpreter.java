@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.BaseStream;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -61,6 +62,8 @@ final class Interpreter implements Opcodes {
     private static final Map<String, Optional<ClassNode>> CLASS_NODES = new ConcurrentHashMap<>();
     private static final Map<String, Optional<Method>> METHODS = new ConcurrentHashMap<>();
     private static final Map<String, Optional<Field>> FIELDS = new ConcurrentHashMap<>();
+    private static final boolean TRACE = Boolean.getBoolean("ali.debug.dispatch");
+    private static final Map<String, LongAdder> TRACED = new ConcurrentHashMap<>();
 
     private final Mode mode;
     private final int pick;
@@ -145,6 +148,25 @@ final class Interpreter implements Opcodes {
         CLASS_NODES.clear();
         METHODS.clear();
         FIELDS.clear();
+    }
+
+    static List<String> dispatchTrace() {
+        List<String> lines = TRACED.entrySet().stream().sorted(Map.Entry.comparingByKey()).map((e) -> e.getKey() + " " + e.getValue().sum()).toList();
+
+        TRACED.clear();
+        return lines;
+    }
+
+    private static void trace(String label, MethodInsnNode call) {
+        if (TRACE) {
+            TRACED.computeIfAbsent(label + " " + call.owner + "." + call.name + call.desc, (k) -> new LongAdder()).increment();
+        }
+    }
+
+    private static void trace(String label, String type, String desc) {
+        if (TRACE) {
+            TRACED.computeIfAbsent(label + " " + type + "." + CONSTRUCTOR + desc, (k) -> new LongAdder()).increment();
+        }
     }
 
     @Nullable
@@ -595,14 +617,17 @@ final class Interpreter implements Opcodes {
         Value result = dispatch(call, args, loader, depth);
 
         if (result instanceof Value.Known known && isData(known.value()) && args.stream().anyMatch(this::isTainted)) {
+            trace("after.taint", call);
             taint(known.value());
         }
 
         if (call.getOpcode() != INVOKESTATIC && call.name.equals("get") && args.size() == 2 && args.get(0) instanceof Value.Known map && map.value() instanceof Map<?, ?>
                 && args.get(1) instanceof Value.Known key && result instanceof Value.Known listings && isKeyedList(listings.value())) {
             if (key.value() instanceof Integer level) {
+                trace("after.levelKey", call);
                 listingKeys.put(listings.value(), level);
             } else if (key.value() instanceof Enum<?> constant) {
+                trace("after.levelKey", call);
                 listingKeys.put(listings.value(), constant.ordinal() + 1);
             }
         }
@@ -616,6 +641,7 @@ final class Interpreter implements Opcodes {
 
         if (call.name.equals(CONSTRUCTOR)) {
             if (!(args.get(0) instanceof Value.Uninit uninit)) {
+                trace("constructor.chaining.fail", call);
                 throw new Fail("constructor chaining");
             }
 
@@ -626,44 +652,54 @@ final class Interpreter implements Opcodes {
             Type returnType = Type.getReturnType(call.desc);
 
             if (returnType.getSort() == Type.VOID) {
+                trace("owner.logger", call);
                 return null;
             }
 
+            trace("owner.logger", call);
             return returnType.getSort() == Type.BOOLEAN ? new Value.Known(0) : Value.Unknown.of(returnType, null);
         }
         if (RuntimeNames.is(RuntimeNames.FIND_MAP_STRUCTURE, call)) {
+            trace("owner.findMapStructure", call);
             return new Value.Unknown(false, Type.getReturnType(call.desc).getInternalName(), args.get(1) instanceof Value.Known known ? known.value() : null,
                     Origin.of(args.get(0), call.name + call.desc, args.subList(1, args.size())));
         }
         if (RuntimeNames.is(RuntimeNames.MAP_CREATE, call)) {
+            trace("owner.mapCreate", call);
             return new Value.Stack(List.of(new ItemStack(Items.FILLED_MAP)), NumberExpr.constant(1), false);
         }
         if (RuntimeNames.is(RuntimeNames.MAP_RENDER_BIOME_PREVIEW, call)) {
+            trace("owner.renderBiomePreview", call);
             return null;
         }
         if (RuntimeNames.is(RuntimeNames.MAP_ADD_TARGET_DECORATION, call)) {
             if (!(args.get(0) instanceof Value.Stack stack) || !(args.get(3) instanceof Value.Known decoration)) {
+                trace("owner.mapDecoration.fail", call);
                 throw new Fail("map decoration");
             }
 
             stack.destination = args.get(1) instanceof Value.Unknown pos ? pos.found() : null;
             stack.decoration = decoration.value();
+            trace("owner.mapDecoration", call);
             return null;
         }
 
         if (!isStatic && call.name.equals("equals") && call.desc.equals("(Ljava/lang/Object;)Z") && args.get(0) instanceof Value.Known known
                 && args.get(1) instanceof Value.Unknown unknown) {
+            trace("owner.equalsUnknown", call);
             return new Value.Unknown(false, null, null, Origin.equality(unknown, known.value()));
         }
 
         if (merchant != null && RuntimeNames.is(RuntimeNames.GET_OFFER, call)) {
             if (args.get(0) instanceof Value.Choice choice && (choice.draw() != null && pools.contains(choice.draw()) || isUniformPick(choice))
                     && choice.options().stream().allMatch(VillagerTrades.ItemListing.class::isInstance)) {
+                trace("undistributed.getOffer.choice", call);
                 return new Value.Pick(choice.options().stream().map(VillagerTrades.ItemListing.class::cast).toList(), choice.draw(), poolKey(choice.options()));
             }
             if (args.get(0) instanceof Value.Known known && known.value() instanceof VillagerTrades.ItemListing listing) {
                 Object source = elementSources.containsKey(listing) ? elementSources.get(listing) : keyedSource(listing);
 
+                trace("undistributed.getOffer.known", call);
                 return new Value.Pick(List.of(listing), source != null ? source : listing, source != null ? listingKeys.get(source) : null);
             }
         }
@@ -674,20 +710,25 @@ final class Interpreter implements Opcodes {
             if (bound != null) {
                 List<VillagerTrades.ItemListing> listings = choice.options().stream().<VillagerTrades.ItemListing>map((element) -> boundOffer(element, call, bound)).toList();
 
+                trace("undistributed.boundOffer", call);
                 return new Value.Pick(listings, choice.draw(), poolKey(choice.options()));
             }
         }
         if (call.name.equals("intValue") && call.desc.equals("()I") && args.get(0) instanceof Value.Choice choice && choice.options().stream().allMatch(Integer.class::isInstance)) {
+            trace("undistributed.intValue", call);
             return choice;
         }
         if (isStatic && call.owner.equals(OPTIONAL) && (call.name.equals("of") || call.name.equals("ofNullable")) && args.get(0) instanceof Value.Stack stack) {
+            trace("undistributed.optionalOf", call);
             return stack;
         }
         if (!isStatic && call.owner.equals(OPTIONAL) && args.get(0) instanceof Value.Stack stack) {
+            trace("undistributed.optionalStack", call);
             return optionalCall(call, stack, args, depth);
         }
         if (!isStatic && call.owner.equals(OPTIONAL) && args.get(0) instanceof Value.Known known && known.value() instanceof Optional<?> optional
                 && args.stream().skip(1).anyMatch((arg) -> arg instanceof Value.Closure || !isConcrete(arg))) {
+            trace("undistributed.optionalConcrete", call);
             return optionalCall(call, optional.isPresent() ? wrap(optional.get()) : null, args, depth);
         }
 
@@ -695,59 +736,72 @@ final class Interpreter implements Opcodes {
                 && call.name.equals("remove") && call.desc.equals("(Ljava/lang/Object;)Z") && args.get(1) instanceof Value.Choice choice
                 && choice.options().size() == list.size() - removed.getOrDefault(list, 0) && new HashSet<Object>(list).containsAll(choice.options())) {
             removed.merge(list, 1, Integer::sum);
+            trace("undistributed.removeChoice", call);
             return new Value.Known(1);
         }
         Value.Offers collected = !isStatic && call.name.equals("add") && call.desc.equals("(Ljava/lang/Object;)Z") && isSymbolicOffer(args.get(1))
                 ? offerList(args.get(0), true) : null;
 
         if (collected != null) {
+            trace("undistributed.addOffer", call);
             return args.get(1) instanceof Value.Choice choice ? addPicked(collected, choice) : offersCall(call, collected, args, depth);
         }
         if (!isStatic && args.get(0) instanceof Value.Known known && known.value() != null && offerLists.containsKey(known.value())) {
+            trace("undistributed.collectedOffers", call);
             return offersCall(call, offerLists.get(known.value()), args, depth);
         }
 
         int[] choices = choiceIndices(args);
 
         if (choices.length > 0) {
+            trace("distribute", call);
             return distribute(call, args, choices, loader, depth);
         }
 
         Value receiver = isStatic ? null : args.get(0);
 
         if (receiver instanceof Value.Rng rng) {
+            trace("receiver.rng", call);
             return random(call, rng, args, depth);
         }
         if (receiver instanceof Value.Stack stack) {
+            trace("receiver.stack", call);
             return stackCall(call, stack, args, loader);
         }
         if (receiver instanceof Value.Known known && known.value() instanceof ItemStack real) {
+            trace("receiver.realStack", call);
             return knownStackCall(call, real, args, loader);
         }
         if (receiver instanceof Value.Num num) {
+            trace("receiver.num", call);
             return unbox(call, num);
         }
         if (receiver instanceof Value.Closure closure) {
             if (!call.name.equals(closure.samName())) {
+                trace("receiver.closure.fail", call);
                 throw new Fail("closure default method");
             }
 
             List<Value> all = new ArrayList<>(closure.captured());
 
             all.addAll(args.subList(1, args.size()));
+            trace("receiver.closure", call);
             return invokeHandle(closure.impl(), all, closure.loader(), depth + 1);
         }
         if (isSelf(receiver)) {
             if (!ownGetOffers && RuntimeNames.is(RuntimeNames.GET_OFFERS, call)) {
+                trace("receiver.trader.getOffers", call);
                 return merchantOffers;
             }
             if (RuntimeNames.is(RuntimeNames.ADD_OFFERS_FROM_ITEM_LISTINGS, call)) {
                 if (!(args.get(1) instanceof Value.Offers offers) || !(args.get(2) instanceof Value.Known known)
                         || !(known.value() instanceof VillagerTrades.ItemListing[] listings)) {
+                    trace("receiver.trader.addOffers.fail", call);
                     throw new Fail("offers from item listings");
                 }
 
                 offers.entries.add(new Value.Offers.Listings(listings, args.get(3), listingKeys.get(listings)));
+                trace("receiver.trader.addOffers", call);
                 return null;
             }
 
@@ -758,48 +812,60 @@ final class Interpreter implements Opcodes {
                 Declaration own = ownDeclaration(start, call.name, call.desc, special);
 
                 if (own != null) {
+                    trace("receiver.trader.own", call);
                     return execute(own.owner(), own.method(), args, depth + 1);
                 }
             }
         }
         if (receiver instanceof Value.Offers offers) {
+            trace("receiver.offers", call);
             return offersCall(call, offers, args, depth);
         }
         if (receiver instanceof Value.Draws draws) {
             if (call.name.equals("hasNext") && call.desc.equals("()Z")) {
+                trace("receiver.draws.hasNext", call);
                 return new Value.Known(draws.left > 0 ? 1 : 0);
             }
             if (call.name.equals("next") && call.desc.equals("()Ljava/lang/Object;") && draws.left > 0) {
                 draws.left--;
+                trace("receiver.draws.next", call);
                 return new Value.Choice(draws.options, draws.pool);
             }
 
+            trace("receiver.draws.fail", call);
             throw new Fail("iteration over random draws");
         }
         if (receiver instanceof Value.Unknown && registries != null && RuntimeNames.is(RuntimeNames.REGISTRY_ACCESS, call)) {
+            trace("receiver.registryAccess", call);
             return new Value.Known(registries);
         }
         if (receiver instanceof Value.Unknown) {
             Type returnType = Type.getReturnType(call.desc);
 
             if (returnType.getSort() == Type.OBJECT && isRandomType(returnType, loader)) {
+                trace("receiver.unknown.random", call);
                 return new Value.Rng(isLegacyRandom(returnType, loader));
             }
 
             taintOwned(args);
+            trace("receiver.unknown", call);
             return Value.Unknown.of(returnType, Origin.of(receiver, call.name + call.desc, args.subList(1, args.size())));
         }
         if (receiver instanceof Value.Offer || receiver instanceof Value.Uninit || receiver instanceof Value.Cmp) {
+            trace("receiver.unsupported.fail", call);
             throw new Fail("unsupported receiver");
         }
         if (!isStatic && receiver instanceof Value.Known known && known.value() instanceof Map<?, ?> map && LOOKUPS.contains(call.name)
                 && args.get(1) instanceof Value.Unknown key && key.origin() != null && args.subList(2, args.size()).stream().allMatch(this::isConcrete)) {
+            trace("receiver.lookup", call);
             return lookup(call, map.getClass(), map, key.origin(), args, loader);
         }
         if (receiver instanceof Value.Known known && known.value() == null) {
+            trace("receiver.null.fail", call);
             throw new Fail("null receiver");
         }
         if (receiver instanceof Value.Known known && LambdaResolver.isLambda(known.value())) {
+            trace("receiver.lambda", call);
             return lambdaCall(known.value(), args, depth);
         }
 
@@ -810,6 +876,7 @@ final class Interpreter implements Opcodes {
         } else if (receiver instanceof Value.Known known) {
             start = known.value().getClass();
         } else {
+            trace("resolve.unsupported.fail", call);
             throw new Fail("unsupported receiver");
         }
 
@@ -824,13 +891,16 @@ final class Interpreter implements Opcodes {
         }
 
         if (args.stream().anyMatch(this::holdsStack)) {
+            trace("arguments.stacks", call);
             return stackArgumentCall(call, args, loader);
         }
 
         if (declared != null && opaque.contains(call.owner + "." + call.name + call.desc) && isWorldCall(call, args, loader)) {
+            trace("arguments.opaqueWorldCall", call);
             return worldResult(call, args);
         }
         if (!isStatic && receiver instanceof Value.Known known && args.stream().skip(1).anyMatch(this::isTainted) && !returnsTradeData(call)) {
+            trace("arguments.tainted", call);
             return uncertainChange(call, known.value());
         }
 
@@ -840,6 +910,7 @@ final class Interpreter implements Opcodes {
             int before = decisions.size();
 
             try {
+                trace("execution.interpret", call);
                 result = execute(declaration.owner(), declaration.method(), args, depth + 1);
             } catch (Fail fail) {
                 result = fallbackCall(call, args, loader, fail);
@@ -848,6 +919,7 @@ final class Interpreter implements Opcodes {
                 heavyWorldCalls.merge(call.owner + "." + call.name + call.desc, decisions.size() - before, Math::max);
             }
         } else {
+            trace("execution.noBytecode", call);
             result = fallbackCall(call, args, loader, new Fail("no bytecode for " + call.owner + "." + call.name));
         }
 
@@ -932,25 +1004,31 @@ final class Interpreter implements Opcodes {
     @Nullable
     private Value fallbackCall(MethodInsnNode call, List<Value> args, ClassLoader loader, Fail fail) {
         if (args.stream().anyMatch(this::holdsStack)) {
+            trace("fallback.stacks", call);
             return stackArgumentCall(call, args, loader);
         }
         if (args.stream().allMatch(this::isConcrete)) {
+            trace("fallback.concrete", call);
             return concreteCall(call, args, loader, false);
         }
         if (isWorldCall(call, args, loader)) {
             if (fail.isBudget()) {
+                trace("fallback.opaqueBudget", call);
                 retry = retry || opaque.add(call.owner + "." + call.name + call.desc);
                 throw fail;
             }
 
+            trace("fallback.worldResult", call);
             return worldResult(call, args);
         }
         if (!fail.isBudget() && call.getOpcode() != INVOKESTATIC && args.get(0) instanceof Value.Known known && known.value() != null
                 && owned.containsKey(known.value()) && args.stream().skip(1).allMatch((v) -> isConcrete(v) || v instanceof Value.Num || v instanceof Value.Unknown)
                 && !returnsTradeData(call)) {
+            trace("fallback.uncertain", call);
             return uncertainChange(call, known.value());
         }
 
+        trace("fallback.rethrow", call);
         throw fail;
     }
 
@@ -1743,12 +1821,15 @@ final class Interpreter implements Opcodes {
 
     private Value construct(String type, String desc, List<Value> args, ClassLoader loader) {
         if (desc.equals("()V") && isPlainOffers(load(type, loader))) {
+            trace("constructor.offers", type, desc);
             return new Value.Offers();
         }
         if (type.equals(ITEM_STACK)) {
+            trace("constructor.stack", type, desc);
             return constructStack(desc, args);
         }
         if (type.equals(MERCHANT_OFFER) || !args.stream().allMatch(this::isConcrete) && isForwardingOffer(load(type, loader), desc)) {
+            trace("constructor.offer", type, desc);
             return constructOffer(desc, args);
         }
         List<Value> drawn = args.stream().map(Interpreter::drawnInt).toList();
@@ -1762,16 +1843,20 @@ final class Interpreter implements Opcodes {
                 results.add(construct(type, desc, select(drawn, choices, option), loader));
             }
 
+            trace("constructor.perChoice", type, desc);
             return Objects.requireNonNull(sameDraw(combine(results), first));
         }
         if (args.stream().anyMatch(Value.Unknown.class::isInstance) && args.stream().allMatch((v) -> v instanceof Value.Unknown || isConcrete(v))) {
             taintOwned(args);
+            trace("constructor.unknown", type, desc);
             return Value.Unknown.of(Type.getObjectType(type), Origin.of(null, type + "." + CONSTRUCTOR + desc, args));
         }
         if (!args.stream().allMatch(this::isConcrete)) {
+            trace("constructor.symbolic.fail", type, desc);
             throw new Fail("symbolic constructor arguments");
         }
         if (args.stream().anyMatch(this::isSelection)) {
+            trace("constructor.guard.fail", type, desc);
             throw new Fail("random selection passed to a call");
         }
 
@@ -1789,8 +1874,10 @@ final class Interpreter implements Opcodes {
                 taint(created);
             }
 
+            trace("constructor.real", type, desc);
             return wrap(created);
         } catch (Throwable e) {
+            trace("constructor.real.fail", type, desc);
             throw new Fail("constructor failed");
         }
     }
@@ -2035,36 +2122,46 @@ final class Interpreter implements Opcodes {
 
         if (isStatic && call.owner.equals("java/util/Objects") && call.name.startsWith("requireNonNull")) {
             if (isNull(args.get(0))) {
+                trace("jdk.requireNonNull.fail", call);
                 throw new Fail("requireNonNull");
             }
 
+            trace("jdk.requireNonNull", call);
             return args.get(0);
         }
         if (isStatic && call.owner.equals("java/util/Objects") && (call.name.equals("isNull") || call.name.equals("nonNull"))) {
+            trace("jdk.isNull", call);
             return new Value.Known(isNull(args.get(0)) == call.name.equals("isNull") ? 1 : 0);
         }
         if (args.stream().skip(isStatic ? 0 : 1).anyMatch(this::isSelection)) {
+            trace("jdk.guard.fail", call);
             throw new Fail("random selection passed to a call");
         }
         if (isStatic && call.owner.equals("java/util/concurrent/ThreadLocalRandom") && call.name.equals("current")) {
+            trace("jdk.threadLocalRandom", call);
             return new Value.Rng(true);
         }
         if (isStatic && (call.owner.equals("java/lang/Math") || call.owner.equals("java/lang/StrictMath")) && args.stream().anyMatch((v) -> v instanceof Value.Num)) {
+            trace("jdk.math", call);
             return math(call, args, returnType);
         }
         if (isStatic && call.name.equals("valueOf") && args.size() == 1 && args.get(0) instanceof Value.Num num) {
+            trace("jdk.valueOf", call);
             return call.owner.equals("java/lang/String") ? Value.UNKNOWN : num;
         }
         if (!isStatic && args.get(0) instanceof Value.Known known && known.value() instanceof List<?> list && call.name.equals("get")
                 && call.desc.equals("(I)Ljava/lang/Object;") && args.get(1) instanceof Value.Num num) {
+            trace("jdk.listPick", call);
             return pick(list, num);
         }
         if (!isStatic && args.get(0) instanceof Value.Known known && known.value() instanceof List<?> list && owned.containsKey(list)
                 && call.name.equals("remove") && call.desc.equals("(I)Ljava/lang/Object;")
                 && (args.get(1) instanceof Value.Num || removed.containsKey(list) || merchant != null && list.size() == 1)) {
+            trace("jdk.removeRandom", call);
             return removeRandom(list, args.get(1));
         }
         if (isStatic && call.owner.equals("java/util/Collections") && ORDER_ONLY.contains(call.name) && args.get(0) instanceof Value.Offers) {
+            trace("jdk.orderOffers", call);
             return null;
         }
         if (isStatic && call.owner.equals("java/util/Collections") && call.name.equals("shuffle") && args.get(0) instanceof Value.Known known
@@ -2074,6 +2171,7 @@ final class Interpreter implements Opcodes {
                 pools.add(list);
             }
 
+            trace("jdk.shuffle", call);
             return null;
         }
         if (!isStatic && args.get(0) instanceof Value.Known known && known.value() != null && shuffled.containsKey(known.value())) {
@@ -2081,16 +2179,20 @@ final class Interpreter implements Opcodes {
 
             switch (call.name + call.desc) {
                 case "size()I" -> {
+                    trace("jdk.shuffled", call);
                     return new Value.Known(draws.left);
                 }
                 case "isEmpty()Z" -> {
+                    trace("jdk.shuffled", call);
                     return new Value.Known(draws.left == 0 ? 1 : 0);
                 }
                 case "iterator()Ljava/util/Iterator;" -> {
+                    trace("jdk.shuffled", call);
                     return new Value.Draws(draws.pool, draws.options, draws.left);
                 }
                 case "get(I)Ljava/lang/Object;" -> {
                     if (args.get(1) instanceof Value.Known index && (Integer) index.value() < draws.left) {
+                        trace("jdk.shuffled", call);
                         return new Value.Choice(draws.options, draws.pool);
                     }
                 }
@@ -2106,6 +2208,7 @@ final class Interpreter implements Opcodes {
 
                         own(view);
                         shuffled.put(view, new Value.Draws(draws.pool, draws.options, Math.min(draws.left, (int) Math.floor(to.bounds().hi()))));
+                        trace("jdk.shuffled", call);
                         return new Value.Known(view);
                     }
                 }
@@ -2113,15 +2216,18 @@ final class Interpreter implements Opcodes {
                 }
             }
 
+            trace("jdk.shuffled.fail", call);
             throw new Fail("change under a random choice");
         }
         if (!isStatic && args.get(0) instanceof Value.Known known && known.value() instanceof Set<?> set && owned.containsKey(set)
                 && call.name.equals("add") && call.desc.equals("(Ljava/lang/Object;)Z") && args.get(1) instanceof Value.Num num) {
+            trace("jdk.addRandom", call);
             return addRandom(set, num);
         }
         if (!isStatic && args.get(0) instanceof Value.Known known && known.value() != null && randomSets.containsKey(known.value())) {
             int[] draws = randomSets.get(known.value());
 
+            trace("jdk.randomSet", call);
             return switch (call.name + call.desc) {
                 case "size()I" -> new Value.Known(draws[1]);
                 case "iterator()Ljava/util/Iterator;" -> new Value.Draws(known.value(), IntStream.range(0, draws[0]).boxed().map(Object.class::cast).toList(), draws[1]);
@@ -2131,6 +2237,7 @@ final class Interpreter implements Opcodes {
         if (!isStatic && args.get(0) instanceof Value.Known known && known.value() != null && removed.containsKey(known.value())) {
             int remaining = ((List<?>) known.value()).size() - removed.get(known.value());
 
+            trace("jdk.removed", call);
             return switch (call.name + call.desc) {
                 case "size()I" -> new Value.Known(remaining);
                 case "isEmpty()Z" -> new Value.Known(remaining == 0 ? 1 : 0);
@@ -2140,20 +2247,25 @@ final class Interpreter implements Opcodes {
         if (!isStatic && args.get(0) instanceof Value.Known known && known.value() != null && owned.containsKey(known.value())
                 && args.stream().skip(1).anyMatch((v) -> v instanceof Value.Unknown || v instanceof Value.Num)
                 && args.stream().skip(1).allMatch((v) -> isConcrete(v) || v instanceof Value.Unknown || v instanceof Value.Num) && !returnsTradeData(call)) {
+            trace("jdk.uncertain", call);
             return uncertainChange(call, READ_ONLY.contains(call.name) ? null : known.value());
         }
         if (isStatic && STATIC_SAFE.contains(call.owner) && !STATIC_RANDOM.contains(call.name) && returnType.getSort() != Type.VOID
                 && args.stream().anyMatch(Value.Unknown.class::isInstance) && args.stream().allMatch((v) -> v instanceof Value.Unknown || isScalar(v))) {
+            trace("jdk.staticUnknown", call);
             return Value.Unknown.of(returnType, null);
         }
         if (!args.stream().allMatch(this::isConcrete)) {
+            trace("jdk.symbolic.fail", call);
             throw new Fail("symbolic argument of " + call.owner + "." + call.name);
         }
         if (isStatic) {
             if (!STATIC_SAFE.contains(call.owner) || STATIC_RANDOM.contains(call.name)) {
+                trace("jdk.static.fail", call);
                 throw new Fail("JDK call " + call.owner + "." + call.name);
             }
 
+            trace("jdk.static", call);
             return concreteCall(call, args, loader, false);
         }
 
@@ -2161,16 +2273,20 @@ final class Interpreter implements Opcodes {
         boolean ownedReceiver = owned.containsKey(receiver) || receiver instanceof BaseStream<?, ?>;
 
         if (READ_ONLY.contains(call.name) && receiver != null && tainted.contains(receiver)) {
+            trace("jdk.taintedRead.fail", call);
             throw new Fail("uncertain contents of " + declaring.getName());
         }
 
         if (!ownedReceiver && !READ_ONLY.contains(call.name)) {
+            trace("jdk.notOwned.fail", call);
             throw new Fail("JDK call " + declaring.getName() + "." + call.name);
         }
         if (!READ_ONLY.contains(call.name) && receiver != null && isFrozen(receiver)) {
+            trace("jdk.frozen.fail", call);
             throw new Fail("change under a random choice");
         }
 
+        trace("jdk.real", call);
         Value result = concreteCall(call, args, loader, false);
 
         if (result instanceof Value.Known known && known.value() != null && (ownedReceiver || FRESH_RESULTS.contains(call.name))) {
