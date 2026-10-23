@@ -19,8 +19,10 @@ import com.yanny.ali.plugin.common.trades.TradeGroupNode;
 import com.yanny.ali.plugin.common.trades.TradeUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -262,7 +264,13 @@ public final class BytecodeInterpreter {
                     continue;
                 }
 
-                levels.put((int) level.getKey(), tradeLevel(levelGroups, (float) Math.min(1, chance)));
+                TradeLevel tradeLevel = tradeLevel(levelGroups, (float) Math.min(1, chance));
+
+                levels.put((int) level.getKey(), tradeLevel);
+
+                if (LOG_TRADES) {
+                    logLevel(ManagedRegistry.classKeyName(merchant), level.getKey(), levelGroups, tradeLevel);
+                }
             }
 
             if (levels.isEmpty() && reason == null && !(paths.size() == 1 && paths.get(0).decisions().isEmpty() && paths.get(0).result() instanceof Value.Offers)) {
@@ -289,6 +297,16 @@ public final class BytecodeInterpreter {
 
         if (unknownLevel) {
             incomplete.addAll(levels.keySet());
+        }
+
+        if (LOG_TRADES) {
+            if (unknownLevel) {
+                LOGGER.info("Trades of trading entity {}: incomplete at an unknown level, {}", name, reason);
+            }
+
+            for (int level : incomplete) {
+                LOGGER.info("Trades of trading entity {} level {}: incomplete, {}", name, level, reason);
+            }
         }
 
         for (int level : incomplete) {
@@ -399,10 +417,10 @@ public final class BytecodeInterpreter {
                         trades = ((Value.Offers.Picked) entries.get(i)).offers().stream().map((o) -> node(u, new Value.Known(o), condition)).toList();
                     }
 
-                    if (entries.size() == 1 || counts.get(i).bounds().lo() >= trades.size()) {
-                        nodes.addAll(trades);
-                    } else {
+                    if (shownAsGroup(entries.size(), counts.get(i), trades.size())) {
                         nodes.add(new TradeGroupNode(counts.get(i), trades));
+                    } else {
+                        nodes.addAll(trades);
                     }
                 } else {
                     IDataNode trade = node(u, single.offer(), condition);
@@ -432,6 +450,92 @@ public final class BytecodeInterpreter {
         }
 
         throw new Interpreter.Fail("number of offers");
+    }
+
+    private static boolean shownAsGroup(int entries, NumberExpr count, int trades) {
+        return entries > 1 && count.bounds().lo() < trades;
+    }
+
+    private static void logLevel(String name, int level, List<Group> groups, TradeLevel tradeLevel) {
+        TradeLevelInfo info = tradeLevel instanceof TradeLevel.OfListings listings ? listings.levelInfo() : ((TradeLevel.OfTrades) tradeLevel).levelInfo();
+
+        LOGGER.info("Trades of trading entity {} level {}: {}, chance {}, {} offers", name, level, tradeLevel instanceof TradeLevel.OfListings ? "OfListings" : "OfTrades",
+                info.chance(), info.offers());
+
+        for (int i = 0; i < groups.size(); i++) {
+            Group group = groups.get(i);
+            PathCondition when = PathCondition.of(List.copyOf(group.worlds.keySet()));
+            NumberExpr count = count(group);
+            String kind;
+            String shown;
+            List<String> trades;
+
+            if (group.entry instanceof Value.Offers.Listings listings) {
+                trades = Arrays.stream(TradeUtils.distinctListings(listings.listings())).filter(Objects::nonNull).map((l) -> keyText(TradeUtils.listingKey(l))).toList();
+                kind = "listings";
+                shown = shownAsGroup(groups.size(), count, trades.size()) ? "shown as a group" : "shown as plain trades";
+            } else if (group.entry instanceof Value.Offers.Picked picked) {
+                trades = picked.offers().stream().map((o) -> String.valueOf(describeOffer(new Value.Known(o)))).toList();
+                kind = "picked offers";
+                shown = shownAsGroup(groups.size(), count, trades.size()) ? "shown as a group" : "shown as plain trades";
+            } else {
+                trades = List.of(String.valueOf(describeOffer(((Value.Offers.Single) group.entry).offer())));
+                kind = "single";
+                shown = group.times > 1 ? "shown repeated" : "shown as a plain trade";
+            }
+
+            LOGGER.info("Trades of trading entity {} level {} group {}: {}, {} offers, {}{}: {}", name, level, i, kind, count, shown,
+                    when == PathCondition.ALWAYS ? "" : " if " + when.text(), trades.stream().sorted().collect(Collectors.joining("; ")));
+        }
+    }
+
+    @NotNull
+    private static String keyText(@Nullable Object key) {
+        if (key instanceof Class<?> type) {
+            return className(type);
+        }
+        if (key instanceof List<?> list) {
+            return list.stream().map(BytecodeInterpreter::keyText).collect(Collectors.joining(", ", "[", "]"));
+        }
+        if (key instanceof Set<?> set) {
+            return set.stream().map(BytecodeInterpreter::keyText).sorted().collect(Collectors.joining(", ", "{", "}"));
+        }
+        if (key instanceof Map<?, ?> map) {
+            return map.entrySet().stream().map((e) -> keyText(e.getKey()) + "=" + keyText(e.getValue())).sorted().collect(Collectors.joining(", ", "{", "}"));
+        }
+
+        return leafText(key);
+    }
+
+    @SuppressWarnings("unchecked")
+    @NotNull
+    private static String leafText(@Nullable Object value) {
+        if (value == null) {
+            return "null";
+        }
+
+        for (Registry<?> registry : BuiltInRegistries.REGISTRY) {
+            Optional<ResourceKey<Object>> key = ((Registry<Object>) registry).getResourceKey(value);
+
+            if (key.isPresent()) {
+                return key.get().toString();
+            }
+        }
+
+        try {
+            if (value.getClass().isHidden() || value.getClass().getMethod("toString").getDeclaringClass() == Object.class) {
+                return className(value.getClass());
+            }
+        } catch (NoSuchMethodException ignored) {}
+
+        return String.valueOf(value);
+    }
+
+    @NotNull
+    private static String className(Class<?> type) {
+        int lambda = type.getName().indexOf("$$Lambda");
+
+        return lambda >= 0 ? type.getName().substring(0, lambda) + "$$Lambda" : type.getName();
     }
 
     @NotNull
