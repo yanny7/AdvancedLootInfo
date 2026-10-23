@@ -765,7 +765,12 @@ public final class BytecodeInterpreter {
         return new Stacks(options);
     }
 
+    public static List<String> dispatchTrace() {
+        return Interpreter.dispatchTrace();
+    }
+
     public static void clearCaches() {
+        dispatchTrace().forEach((line) -> LOGGER.info("Dispatch {}", line));
         Interpreter.clearCaches();
         MixinChanges.clearCaches();
         LambdaResolver.clearCaches();

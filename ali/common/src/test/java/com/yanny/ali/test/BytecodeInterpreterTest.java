@@ -875,6 +875,11 @@ public class BytecodeInterpreterTest {
     }
 
     @Test
+    public void testListingReshufflingRandomSelection() {
+        Assertions.assertNull(BytecodeInterpreter.getItemListing(UTILS, new ReshuffledListing(), TooltipNode.empty()));
+    }
+
+    @Test
     public void testListingPuttingRandomLevelIntoMap() {
         List<IDataNode> trades = ((ListNode) interpret(new ShearsListing())).nodes();
         IDataNode unbreaking = trades.stream().filter((t) -> slot(t, 0).getCount().equals(NumberExpr.constant(14))).findFirst().orElseThrow();
@@ -969,6 +974,28 @@ public class BytecodeInterpreterTest {
         Assertions.assertEquals(Set.of(Items.APPLE, Items.BREAD, Items.CARROT, Items.WHEAT, Items.POTATO),
                 trades.stream().map((t) -> slot(t, 2).getItem().left().orElseThrow().getItem()).collect(Collectors.toSet()));
         trades.forEach((t) -> Assertions.assertEquals(List.of("Unknown additional predicate"), errorLines(t.getTooltip()).stream().distinct().toList()));
+    }
+
+    @Test
+    public void testWorldCallOverBudgetIsOneDecision() {
+        IDataNode trade = interpret(new HeavyCallsListing(1));
+
+        assertSlot(trade, 2, Items.APPLE, NumberExpr.constant(1));
+        Assertions.assertEquals(List.of(), errorLines(trade.getTooltip()));
+    }
+
+    @Test
+    public void testWorldCallsOverBudgetRestartAtMostSevenTimes() {
+        Assertions.assertEquals(List.of(), errorLines(interpret(new HeavyCallsListing(7)).getTooltip()));
+        Assertions.assertEquals(List.of("Unable to auto-detect some variants of this trade"), errorLines(interpret(new HeavyCallsListing(8)).getTooltip()));
+    }
+
+    @Test
+    public void testListingCutAtPathLimit() {
+        IDataNode trade = interpret(new BranchingListing());
+
+        assertSlot(trade, 2, Items.APPLE, NumberExpr.constant(1));
+        Assertions.assertEquals(List.of("Unable to auto-detect some variants of this trade", "Unknown additional predicate"), errorLines(trade.getTooltip()));
     }
 
     @Test
@@ -1222,6 +1249,11 @@ public class BytecodeInterpreterTest {
     @Test
     public void testLambdasDrawingManyTimes() {
         assertSlot(interpret(ManyDraws.LISTINGS.get(0)), 2, Items.APPLE, NumberExpr.constant(1));
+    }
+
+    @Test
+    public void testLambdasHandingRandomSourceToRealCode() {
+        assertSlot(interpret(RealCodeLambdas.LISTINGS.get(1)), 2, Items.BREAD, NumberExpr.constant(1));
     }
 
     private static IDataNode interpret(VillagerTrades.ItemListing listing) {
@@ -2410,6 +2442,117 @@ public class BytecodeInterpreterTest {
         }
     }
 
+    private record HeavyCallsListing(int calls) implements VillagerTrades.ItemListing {
+        @NotNull
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            if (calls > 0) {
+                lookAround1(trader);
+            }
+            if (calls > 1) {
+                lookAround2(trader);
+            }
+            if (calls > 2) {
+                lookAround3(trader);
+            }
+            if (calls > 3) {
+                lookAround4(trader);
+            }
+            if (calls > 4) {
+                lookAround5(trader);
+            }
+            if (calls > 5) {
+                lookAround6(trader);
+            }
+            if (calls > 6) {
+                lookAround7(trader);
+            }
+            if (calls > 7) {
+                lookAround8(trader);
+            }
+
+            return offerFor(Items.APPLE);
+        }
+
+        private static void lookAround1(Entity trader) {
+            for (int i = 0; i < 9; i++) {
+                if (trader.distanceToSqr(i, 0, 0) < 1) {
+                    trader.setGlowingTag(true);
+                }
+            }
+        }
+
+        private static void lookAround2(Entity trader) {
+            for (int i = 0; i < 9; i++) {
+                if (trader.distanceToSqr(i, 0, 0) < 1) {
+                    trader.setGlowingTag(true);
+                }
+            }
+        }
+
+        private static void lookAround3(Entity trader) {
+            for (int i = 0; i < 9; i++) {
+                if (trader.distanceToSqr(i, 0, 0) < 1) {
+                    trader.setGlowingTag(true);
+                }
+            }
+        }
+
+        private static void lookAround4(Entity trader) {
+            for (int i = 0; i < 9; i++) {
+                if (trader.distanceToSqr(i, 0, 0) < 1) {
+                    trader.setGlowingTag(true);
+                }
+            }
+        }
+
+        private static void lookAround5(Entity trader) {
+            for (int i = 0; i < 9; i++) {
+                if (trader.distanceToSqr(i, 0, 0) < 1) {
+                    trader.setGlowingTag(true);
+                }
+            }
+        }
+
+        private static void lookAround6(Entity trader) {
+            for (int i = 0; i < 9; i++) {
+                if (trader.distanceToSqr(i, 0, 0) < 1) {
+                    trader.setGlowingTag(true);
+                }
+            }
+        }
+
+        private static void lookAround7(Entity trader) {
+            for (int i = 0; i < 9; i++) {
+                if (trader.distanceToSqr(i, 0, 0) < 1) {
+                    trader.setGlowingTag(true);
+                }
+            }
+        }
+
+        private static void lookAround8(Entity trader) {
+            for (int i = 0; i < 9; i++) {
+                if (trader.distanceToSqr(i, 0, 0) < 1) {
+                    trader.setGlowingTag(true);
+                }
+            }
+        }
+    }
+
+    private static final class BranchingListing implements VillagerTrades.ItemListing {
+        @NotNull
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            for (int i = 0; i < 8; i++) {
+                if (trader.distanceToSqr(i, 0, 0) < 1) {
+                    trader.setGlowingTag(true);
+                }
+            }
+
+            return offerFor(Items.APPLE);
+        }
+    }
+
     private static final class RegistryListing implements VillagerTrades.ItemListing {
         @SuppressWarnings("resource")
         @NotNull
@@ -2581,6 +2724,20 @@ public class BytecodeInterpreterTest {
             List<Item> picked = List.copyOf(shuffled.subList(0, 2));
 
             return new MerchantOffer(new ItemCost(Items.EMERALD), new ItemStack(picked.isEmpty() ? Items.BARRIER : picked.get(0)), 12, 5, 0.05F);
+        }
+    }
+
+    private static final class ReshuffledListing implements VillagerTrades.ItemListing {
+        private final List<Item> items = List.of(Items.APPLE, Items.BREAD, Items.CARROT);
+
+        @NotNull
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            List<Item> shuffled = new ArrayList<>(items);
+
+            Collections.shuffle(shuffled);
+            Collections.shuffle(shuffled);
+            return new MerchantOffer(new ItemCost(Items.EMERALD), new ItemStack(shuffled.get(0)), 12, 5, 0.05F);
         }
     }
 
@@ -2859,5 +3016,21 @@ public class BytecodeInterpreterTest {
 
             return offerFor(Items.BREAD);
         });
+    }
+
+    private static final class RealCodeLambdas {
+        private static final List<VillagerTrades.ItemListing> LISTINGS = List.of((trader, random) -> {
+            warmUp(random, 20);
+            return offerFor(Items.APPLE);
+        }, (trader, random) -> {
+            warmUp(random, 20);
+            return offerFor(Items.BREAD);
+        });
+
+        private static void warmUp(RandomSource random, int depth) {
+            if (depth > 0) {
+                warmUp(random, depth - 1);
+            }
+        }
     }
 }
