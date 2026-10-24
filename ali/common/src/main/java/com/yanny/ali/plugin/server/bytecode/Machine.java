@@ -213,40 +213,40 @@ final class Machine implements Opcodes {
                     f.push(compare(op, f.pop(), b));
                 }
                 case IFEQ, IFNE, IFLT, IFGE, IFGT, IFLE -> {
-                    if (interpreter.branch(op, f.pop(), new Value.Known(0))) {
+                    if (interpreter.decisions.branch(op, f.pop(), new Value.Known(0))) {
                         next = ((JumpInsnNode) insn).label;
                     }
                 }
                 case IF_ICMPEQ, IF_ICMPNE, IF_ICMPLT, IF_ICMPGE, IF_ICMPGT, IF_ICMPLE -> {
                     Value b = f.pop();
 
-                    if (interpreter.branch(op - IF_ICMPEQ + IFEQ, f.pop(), b)) {
+                    if (interpreter.decisions.branch(op - IF_ICMPEQ + IFEQ, f.pop(), b)) {
                         next = ((JumpInsnNode) insn).label;
                     }
                 }
                 case IF_ACMPEQ, IF_ACMPNE -> {
                     Value b = f.pop();
-                    boolean same = interpreter.sameReference(f.pop(), b);
+                    boolean same = interpreter.decisions.sameReference(f.pop(), b);
 
                     if (same == (op == IF_ACMPEQ)) {
                         next = ((JumpInsnNode) insn).label;
                     }
                 }
                 case IFNULL, IFNONNULL -> {
-                    if (interpreter.isNull(f.pop()) == (op == IFNULL)) {
+                    if (interpreter.decisions.isNull(f.pop()) == (op == IFNULL)) {
                         next = ((JumpInsnNode) insn).label;
                     }
                 }
                 case GOTO -> next = ((JumpInsnNode) insn).label;
                 case TABLESWITCH -> {
                     TableSwitchInsnNode sw = (TableSwitchInsnNode) insn;
-                    int at = interpreter.switchCase(f.pop(), IntStream.rangeClosed(sw.min, sw.max).boxed().toList());
+                    int at = interpreter.decisions.switchCase(f.pop(), IntStream.rangeClosed(sw.min, sw.max).boxed().toList());
 
                     next = at >= 0 ? sw.labels.get(at) : sw.dflt;
                 }
                 case LOOKUPSWITCH -> {
                     LookupSwitchInsnNode sw = (LookupSwitchInsnNode) insn;
-                    int at = interpreter.switchCase(f.pop(), sw.keys);
+                    int at = interpreter.decisions.switchCase(f.pop(), sw.keys);
 
                     next = at >= 0 ? sw.labels.get(at) : sw.dflt;
                 }
@@ -389,12 +389,12 @@ final class Machine implements Opcodes {
         }
 
         Value.Kind kind = Arithmetic.kindOf(op);
-        NumberExpr x = interpreter.expr(a);
-        NumberExpr y = interpreter.expr(b);
+        NumberExpr x = NumberDomain.expr(a);
+        NumberExpr y = NumberDomain.expr(b);
 
         return switch (op) {
-            case IADD, LADD, FADD, DADD -> num(interpreter.add(x, y), kind);
-            case ISUB, LSUB, FSUB, DSUB -> num(interpreter.sub(x, y), kind);
+            case IADD, LADD, FADD, DADD -> num(interpreter.numbers.add(x, y), kind);
+            case ISUB, LSUB, FSUB, DSUB -> num(interpreter.numbers.sub(x, y), kind);
             case IMUL, LMUL, FMUL, DMUL -> num(NumberExpr.mul(x, y), kind);
             case IDIV, LDIV -> num(NumberExpr.fn(NumberFunctions.TRUNC, NumberExpr.div(x, y)), kind);
             case FDIV, DDIV -> num(NumberExpr.div(x, y), kind);
@@ -411,7 +411,7 @@ final class Machine implements Opcodes {
             return unknownNumber(Arithmetic.kindOf(op - INEG + IADD));
         }
 
-        return num(NumberExpr.fn(NumberFunctions.NEG, interpreter.expr(a)), Arithmetic.kindOf(op - INEG + IADD));
+        return num(NumberExpr.fn(NumberFunctions.NEG, NumberDomain.expr(a)), Arithmetic.kindOf(op - INEG + IADD));
     }
 
     private Value convert(int op, Value a) {
@@ -427,7 +427,7 @@ final class Machine implements Opcodes {
             });
         }
 
-        NumberExpr x = interpreter.expr(a);
+        NumberExpr x = NumberDomain.expr(a);
 
         return switch (op) {
             case I2L, F2L, D2L -> num(op == I2L ? x : NumberExpr.fn(NumberFunctions.TRUNC, x), Value.Kind.LONG);
@@ -447,7 +447,7 @@ final class Machine implements Opcodes {
             return unknownNumber(Value.Kind.INT);
         }
 
-        return new Value.Cmp(interpreter.expr(a), interpreter.expr(b));
+        return new Value.Cmp(NumberDomain.expr(a), NumberDomain.expr(b));
     }
 
     @NotNull
@@ -607,11 +607,11 @@ final class Machine implements Opcodes {
         } else if (value instanceof Value.Rng rng) {
             return type.isAssignableFrom(rng.legacy() ? Random.class : RandomSource.class);
         } else if (value instanceof Value.Choice choice) {
-            return interpreter.decided(choice, type::isInstance);
+            return interpreter.decisions.decided(choice, type::isInstance);
         } else if (value instanceof Value.Unknown unknown && unknown.type() != null && type.isAssignableFrom(onServer(load(unknown.type(), loader)))) {
             return true;
         } else if (value instanceof Value.Unknown unknown) {
-            return interpreter.decide(Decision.Kind.UNKNOWN, unknown.origin(), desc, "instanceof of an unknown value");
+            return interpreter.decisions.decide(Decision.Kind.UNKNOWN, unknown.origin(), desc, "instanceof of an unknown value");
         }
 
         throw new Fail("instanceof of an unknown value");

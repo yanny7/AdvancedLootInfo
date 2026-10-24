@@ -26,7 +26,6 @@ import static com.yanny.ali.plugin.server.bytecode.Resolution.*;
 
 final class Interpreter implements Opcodes {
     static final int MAX_OPTIONS = 1024;
-    private static final int MAX_DECISIONS = 8;
     static final String CONSTRUCTOR = "<init>";
     static final String ITEM_STACK = Type.getInternalName(ItemStack.class);
     static final String MERCHANT_OFFER = Type.getInternalName(MerchantOffer.class);
@@ -53,19 +52,15 @@ final class Interpreter implements Opcodes {
     final ValueStore store = new ValueStore();
     final Heap heap = new Heap(store);
     @Nullable
-    private final List<Boolean> script;
-    final List<Decision> decisions = new ArrayList<>();
-    @Nullable
     TraderModel.TraderRun traderRun;
     final Map<Object, Integer> listingKeys = new IdentityHashMap<>();
     private final Map<Object, List<BoundOffer>> boundOffers = new IdentityHashMap<>();
-    final Map<String, Integer> heavyWorldCalls = new HashMap<>();
     final Map<Object, Object> elementSources = new IdentityHashMap<>();
-    private final Map<NumberExpr, Drawn> drawn = new IdentityHashMap<>();
     @Nullable
     final RegistryAccess registries;
-    final Set<String> opaque;
-    boolean retry;
+    final OpaqueCalls opaque;
+    final NumberDomain numbers = new NumberDomain(store);
+    final Decisions decisions;
 
     Interpreter(Mode mode, int pick) {
         this(mode, pick, null, null, new HashSet<>());
@@ -74,41 +69,9 @@ final class Interpreter implements Opcodes {
     Interpreter(Mode mode, int pick, @Nullable List<Boolean> script, @Nullable RegistryAccess registries, Set<String> opaque) {
         this.mode = mode;
         this.pick = pick;
-        this.script = script;
         this.registries = registries;
-        this.opaque = opaque;
-    }
-
-    List<Decision> decisions() {
-        return decisions;
-    }
-
-    boolean decide(Decision.Kind kind, @Nullable Object subject, @Nullable Object value, String reason) {
-        if (script == null) {
-            throw new Fail(reason);
-        }
-
-        Decision decision = new Decision(kind, subject, value, false);
-
-        for (Decision earlier : decisions) {
-            if (earlier.sameTest(decision)) {
-                return earlier.holds();
-            }
-            if (kind == Decision.Kind.EQUALS && earlier.kind() == kind && earlier.holds() && subject != null && subject.equals(earlier.subject())) {
-                return false;
-            }
-        }
-
-        boolean holds = decisions.size() < script.size() && script.get(decisions.size());
-
-        if ((kind != Decision.Kind.EQUALS || holds) && decisions.stream().filter((d) -> d.kind() != Decision.Kind.EQUALS || d.holds()).count() >= MAX_DECISIONS) {
-            heavyWorldCalls.entrySet().stream().filter((e) -> e.getValue() > 1 && !opaque.contains(e.getKey())).max(Map.Entry.comparingByValue())
-                    .ifPresent((e) -> retry = opaque.add(e.getKey()));
-            throw new Fail("too many branches");
-        }
-
-        decisions.add(holds ? decision.negated() : decision);
-        return holds;
+        this.opaque = new OpaqueCalls(opaque);
+        this.decisions = new Decisions(script, this.opaque, numbers, store, heap);
     }
 
     @Nullable
@@ -119,7 +82,7 @@ final class Interpreter implements Opcodes {
     Value call(Object receiver, MethodInsnNode call, List<Value> args) {
         List<Value> all = new ArrayList<>();
 
-        all.add(wrap(receiver));
+        all.add(heap.wrap(receiver));
         all.addAll(args);
         return dispatcher.invoke(call, all, receiver.getClass().getClassLoader(), 0);
     }
@@ -239,7 +202,7 @@ final class Interpreter implements Opcodes {
             throw new Fail("unresolved lambda (" + LambdaResolver.reason(lambda) + ")");
         }
 
-        List<Value> all = new ArrayList<>(target.captured().stream().map(this::wrap).toList());
+        List<Value> all = new ArrayList<>(target.captured().stream().map(heap::wrap).toList());
 
         all.addAll(args.subList(1, args.size()));
         return invokeHandle(target.impl(), all, target.owner().getClassLoader(), depth + 1);
@@ -259,10 +222,6 @@ final class Interpreter implements Opcodes {
 
     void taintOwned(List<Value> args) {
         args.forEach((v) -> heap.taint(v instanceof Value.Known known && known.value() != null && heap.isOwned(known.value()) ? known.value() : null));
-    }
-
-    boolean retry() {
-        return retry;
     }
 
     @Nullable
@@ -316,7 +275,7 @@ final class Interpreter implements Opcodes {
         List<Value> copy = new ArrayList<>(args);
 
         for (int index : choices) {
-            copy.set(index, wrap(((Value.Choice) args.get(index)).options().get(option)));
+            copy.set(index, heap.wrap(((Value.Choice) args.get(index)).options().get(option)));
         }
 
         return copy;
@@ -378,22 +337,10 @@ final class Interpreter implements Opcodes {
         if (results.stream().allMatch((r) -> r instanceof Value.Num || r instanceof Value.Known known && known.value() instanceof Number)) {
             Value.Kind kind = results.stream().filter(Value.Num.class::isInstance).map((r) -> ((Value.Num) r).kind()).findFirst().orElse(Value.Kind.INT);
 
-            return new Value.Num(NumberExpr.weighted(results.stream().map((r) -> new NumberExpr.WeightedEntry(1, expr(r))).toList()), kind);
+            return new Value.Num(NumberExpr.weighted(results.stream().map((r) -> new NumberExpr.WeightedEntry(1, NumberDomain.expr(r))).toList()), kind);
         }
 
         throw new Fail("results cannot be combined");
-    }
-
-    Value draw(NumberExpr expr, Value.Kind kind) {
-        if (expr instanceof NumberExpr.Fn fn && fn.args().size() == 2 && fn.args().get(0) instanceof NumberExpr.Const lo && fn.args().get(1) instanceof NumberExpr.Const hi) {
-            if (fn.id().equals(NumberFunctions.UNIFORM_INT) && hi.value() - lo.value() < MAX_OPTIONS) {
-                drawn.put(expr, new Drawn(Draw.discrete((int) lo.value(), (int) hi.value()), 0));
-            } else if (fn.id().equals(NumberFunctions.UNIFORM_FLOAT) && hi.value() > lo.value()) {
-                drawn.put(expr, new Drawn(Draw.continuous(lo.value(), hi.value()), 0));
-            }
-        }
-
-        return num(expr, kind);
     }
 
     static boolean isRandomType(Type type, ClassLoader loader) {
@@ -544,7 +491,7 @@ final class Interpreter implements Opcodes {
         }
         if (call.name.equals("addAll") && call.desc.equals("(Ljava/util/Collection;)Z") && args.get(1) instanceof Value.Known known
                 && known.value() instanceof Collection<?> collection && !heap.isTainted(collection)) {
-            collection.forEach((offer) -> offers.entries.add(new Value.Offers.Single(wrap(offer))));
+            collection.forEach((offer) -> offers.entries.add(new Value.Offers.Single(heap.wrap(offer))));
             return new Value.Known(collection.isEmpty() ? 0 : 1);
         }
         if (call.name.equals("removeIf") && call.desc.equals("(Ljava/util/function/Predicate;)Z") && args.get(1) instanceof Value.Closure predicate) {
@@ -616,7 +563,7 @@ final class Interpreter implements Opcodes {
 
         Value.Offers offers = new Value.Offers();
 
-        collection.forEach((offer) -> offers.entries.add(new Value.Offers.Single(wrap(offer))));
+        collection.forEach((offer) -> offers.entries.add(new Value.Offers.Single(heap.wrap(offer))));
         collection.clear();
         heap.coll(collection).offers = offers;
         return offers;
@@ -864,7 +811,7 @@ final class Interpreter implements Opcodes {
 
     Value wrap(@Nullable Object value, Class<?> type) {
         if (!type.isPrimitive()) {
-            return wrap(value);
+            return heap.wrap(value);
         } else if (value instanceof Boolean b) {
             return new Value.Known(b ? 1 : 0);
         } else if (value instanceof Character c) {
@@ -876,422 +823,6 @@ final class Interpreter implements Opcodes {
         }
 
         return new Value.Known(value);
-    }
-
-    Value wrap(@Nullable Object value) {
-        if (value instanceof RandomSource) {
-            return new Value.Rng(false);
-        } else if (value instanceof Random) {
-            return new Value.Rng(true);
-        } else if (value != null && heap.shadowOf(value) != null) {
-            return heap.shadowOf(value);
-        }
-
-        return new Value.Known(value);
-    }
-
-    boolean isNull(Value value) {
-        if (value instanceof Value.Known known) {
-            return known.value() == null;
-        }
-        if (value instanceof Value.Choice choice) {
-            return decided(choice, Objects::isNull);
-        }
-        if (value instanceof Value.Unknown unknown && unknown.found() != null && unknown.origin() != null) {
-            return !decide(Decision.Kind.FOUND, unknown.origin(), unknown.found(), "null check of an unknown value");
-        }
-        if (value instanceof Value.Unknown unknown) {
-            return !decide(Decision.Kind.UNKNOWN, unknown.origin(), NULL, "null check of an unknown value");
-        }
-        if (value instanceof Value.Uninit) {
-            throw new Fail("null check of an unknown value");
-        }
-
-        return false;
-    }
-
-    boolean sameReference(Value a, Value b) {
-        if (a instanceof Value.Known ka && b instanceof Value.Known kb) {
-            return ka.value() == kb.value();
-        }
-        if (a instanceof Value.Choice choice && b instanceof Value.Known known) {
-            return decided(choice, (o) -> o == known.value());
-        }
-        if (b instanceof Value.Choice choice && a instanceof Value.Known known) {
-            return decided(choice, (o) -> o == known.value());
-        }
-        if (a instanceof Value.Unknown unknown && b instanceof Value.Known known) {
-            return equality(unknown, known.value());
-        }
-        if (b instanceof Value.Unknown unknown && a instanceof Value.Known known) {
-            return equality(unknown, known.value());
-        }
-        if (a instanceof Value.Unknown || b instanceof Value.Unknown) {
-            return decide(Decision.Kind.UNKNOWN, null, null, "reference comparison of an unknown value");
-        }
-        if (a instanceof Value.Known ka && ka.value() == null || b instanceof Value.Known kb && kb.value() == null) {
-            return false;
-        }
-        if (a instanceof Value.Known || b instanceof Value.Known) {
-            throw new Fail("reference comparison of a symbolic value");
-        }
-
-        return a == b;
-    }
-
-    private boolean equality(Value.Unknown unknown, @Nullable Object value) {
-        if (value == null) {
-            return isNull(unknown);
-        }
-        if (unknown.origin() == null) {
-            return decide(Decision.Kind.UNKNOWN, null, null, "reference comparison of an unknown value");
-        }
-
-        return decide(Decision.Kind.EQUALS, unknown.origin(), value, "reference comparison of an unknown value");
-    }
-
-    boolean decided(Value.Choice choice, java.util.function.Predicate<Object> test) {
-        if (choice.options().stream().allMatch(test)) {
-            return true;
-        }
-        if (choice.options().stream().noneMatch(test)) {
-            return false;
-        }
-
-        boolean holds = decide(Decision.Kind.RANDOM, decisions.size(), share(choice, test), "reference comparison of a random choice");
-
-        narrow(choice, (o) -> test.test(o) == holds);
-        return holds;
-    }
-
-    @Nullable
-    private static Double share(Value.Choice choice, java.util.function.Predicate<Object> test) {
-        return choice.draw() != null ? (double) choice.options().stream().filter(test).count() / choice.options().size() : null;
-    }
-
-    @Nullable
-    private Value.Choice narrow(Value.Choice choice, java.util.function.Predicate<Object> keep) {
-        List<Integer> kept = IntStream.range(0, choice.options().size()).filter((i) -> keep.test(choice.options().get(i))).boxed().toList();
-        Map<Value, Value> narrowed = new IdentityHashMap<>();
-        java.util.function.Predicate<Value> match = (v) -> v instanceof Value.Choice other && (other == choice || choice.draw() != null
-                && other.draw() == choice.draw() && other.options().size() == choice.options().size());
-        java.util.function.UnaryOperator<Value> with = (v) -> narrowed.computeIfAbsent(v, (o) -> narrowed((Value.Choice) o, kept));
-
-        store.replace(match, with);
-
-        return kept.size() > 1 ? (Value.Choice) narrowed(choice, kept) : null;
-    }
-
-    private Value narrowed(Value.Choice choice, List<Integer> kept) {
-        List<Object> options = kept.stream().map(choice.options()::get).toList();
-
-        return options.size() == 1 ? wrap(options.get(0)) : new Value.Choice(options, choice.draw());
-    }
-
-    int switchCase(Value value, List<Integer> keys) {
-        if (value instanceof Value.Known known) {
-            return keys.indexOf((Integer) known.value());
-        }
-        if (value instanceof Value.Choice choice && choice.options().stream().allMatch(Integer.class::isInstance)) {
-            Value.Choice rest = choice;
-
-            for (int i = 0; i < keys.size(); i++) {
-                Integer key = keys.get(i);
-                Value.Choice current = rest;
-
-                if (current.options().stream().allMatch(key::equals)) {
-                    return i;
-                }
-                if (current.options().stream().anyMatch(key::equals)) {
-                    if (decide(Decision.Kind.RANDOM, decisions.size(), share(current, key::equals), "switch on a random choice")) {
-                        narrow(current, key::equals);
-                        return i;
-                    }
-
-                    rest = narrow(current, (o) -> !key.equals(o));
-
-                    if (rest == null) {
-                        return keys.indexOf(current.options().stream().filter((o) -> !key.equals(o)).findFirst().map(Integer.class::cast).orElseThrow());
-                    }
-                }
-            }
-
-            return -1;
-        }
-        if (value instanceof Value.Num num && num.expr().bounds().isPoint()) {
-            return keys.indexOf((int) num.expr().bounds().lo());
-        }
-        Drawn source = value instanceof Value.Num num ? drawn.get(num.expr()) : null;
-
-        if (source != null && source.draw().values != null) {
-            for (int i = 0; i < keys.size(); i++) {
-                double key = keys.get(i) - source.offset();
-                double probability = source.draw().probability(IFEQ, key);
-
-                if (probability >= 1 || probability > 0 && decide(Decision.Kind.RANDOM, decisions.size(), probability, "switch on a random value")) {
-                    source.draw().narrow(IFEQ, key);
-                    narrowed(source.draw());
-                    return i;
-                }
-
-                source.draw().narrow(IFNE, key);
-            }
-
-            narrowed(source.draw());
-            return -1;
-        }
-        if (value instanceof Value.Num num) {
-            NumberInterval bounds = num.expr().bounds();
-            List<Integer> possible = IntStream.range(0, keys.size()).filter((i) -> keys.get(i) >= bounds.lo() && keys.get(i) <= bounds.hi()).boxed().toList();
-            boolean covered = possible.size() == Math.floor(bounds.hi()) - Math.ceil(bounds.lo()) + 1;
-            int subject = decisions.size();
-
-            for (int i = 0; i < possible.size(); i++) {
-                boolean last = covered && i == possible.size() - 1;
-
-                if (last || decide(Decision.Kind.RANDOM, subject, keys.get(possible.get(i)), "switch on a random value")) {
-                    return possible.get(i);
-                }
-            }
-
-            return -1;
-        }
-        if (value instanceof Value.Unknown unknown) {
-            for (int i = 0; i < keys.size(); i++) {
-                boolean holds;
-
-                if (unknown.origin() != null) {
-                    holds = decide(Decision.Kind.EQUALS, unknown.origin(), keys.get(i), "switch on a value from the trader or world");
-                } else {
-                    holds = decide(Decision.Kind.UNKNOWN, null, null, "switch on a value from the trader or world");
-                }
-
-                if (holds) {
-                    return i;
-                }
-            }
-
-            return -1;
-        }
-
-        throw new Fail("symbolic switch");
-    }
-
-    boolean branch(int op, Value a, Value b) {
-        if ((op == IFEQ || op == IFNE) && a instanceof Value.Unknown unknown && unknown.origin() != null && unknown.origin().isBoolean()
-                && b instanceof Value.Known known && Integer.valueOf(0).equals(known.value())) {
-            return test(unknown.origin()) == (op == IFNE);
-        }
-        if (a instanceof Value.Unknown || b instanceof Value.Unknown) {
-            return decide(Decision.Kind.UNKNOWN, null, null, "value from the trader or world");
-        }
-        if (a instanceof Value.Known ka && b instanceof Value.Known kb) {
-            int x = (Integer) ka.value();
-            int y = (Integer) kb.value();
-
-            return switch (op) {
-                case IFEQ -> x == y;
-                case IFNE -> x != y;
-                case IFLT -> x < y;
-                case IFGE -> x >= y;
-                case IFGT -> x > y;
-                default -> x <= y;
-            };
-        }
-
-        Boolean onDraw = drawnBranch(op, a, b);
-
-        if (onDraw != null) {
-            return onDraw;
-        }
-
-        NumberInterval difference;
-
-        if (a instanceof Value.Cmp cmp) {
-            difference = cmp.left().bounds().minus(cmp.right().bounds());
-        } else {
-            difference = expr(a).bounds().minus(expr(b).bounds());
-        }
-
-        Boolean decided = Arithmetic.decide(op, difference);
-
-        if (decided == null) {
-            return decide(Decision.Kind.RANDOM, decisions.size(), probability(op, a, b), "branch on a random value");
-        }
-
-        return decided;
-    }
-
-    @Nullable
-    private Boolean drawnBranch(int op, Value a, Value b) {
-        NumberExpr left = a instanceof Value.Cmp cmp ? cmp.left() : expr(a);
-        NumberExpr right = a instanceof Value.Cmp cmp ? cmp.right() : expr(b);
-
-        if (!drawn.containsKey(left) && drawn.containsKey(right)) {
-            return drawnBranch(mirror(op), right, left);
-        }
-
-        return drawnBranch(op, left, right);
-    }
-
-    @Nullable
-    private Boolean drawnBranch(int op, NumberExpr left, NumberExpr right) {
-        Drawn source = drawn.get(left);
-
-        if (source == null || !(right instanceof NumberExpr.Const constant)) {
-            return null;
-        }
-
-        Draw draw = source.draw();
-        double bound = constant.value() - source.offset();
-        double probability = draw.probability(op, bound);
-
-        if (probability <= 0) {
-            return false;
-        }
-        if (probability >= 1) {
-            return true;
-        }
-
-        boolean holds = decide(Decision.Kind.RANDOM, decisions.size(), probability, "branch on a random value");
-
-        draw.narrow(holds ? op : negation(op), bound);
-        narrowed(draw);
-        return holds;
-    }
-
-    private void narrowed(Draw draw) {
-        Map<NumberExpr, NumberExpr> replacements = new IdentityHashMap<>();
-
-        drawn.forEach((expr, source) -> {
-            if (source.draw() == draw) {
-                replacements.put(expr, draw.expr(source.offset()));
-            }
-        });
-        replacements.forEach((from, to) -> {
-            if (!(to instanceof NumberExpr.Const)) {
-                drawn.put(to, drawn.get(from));
-            }
-        });
-
-        store.replaceInFrames((v) -> v instanceof Value.Num || v instanceof Value.Stack, (v) -> {
-            if (v instanceof Value.Stack stack) {
-                stack.count = substitute(stack.count, replacements);
-                return stack;
-            }
-
-            Value.Num num = (Value.Num) v;
-            NumberExpr expr = substitute(num.expr(), replacements);
-
-            return expr == num.expr() ? num : num(expr, num.kind());
-        });
-    }
-
-    private static NumberExpr substitute(NumberExpr expr, Map<NumberExpr, NumberExpr> replacements) {
-        if (replacements.containsKey(expr)) {
-            return replacements.get(expr);
-        }
-        if (expr instanceof NumberExpr.Fn fn) {
-            List<NumberExpr> args = fn.args().stream().map((a) -> substitute(a, replacements)).toList();
-
-            return IntStream.range(0, args.size()).allMatch((i) -> args.get(i) == fn.args().get(i)) ? expr : NumberExpr.fn(fn.id(), args);
-        }
-        if (expr instanceof NumberExpr.Weighted weighted) {
-            List<NumberExpr.WeightedEntry> entries = weighted.entries().stream()
-                    .map((e) -> new NumberExpr.WeightedEntry(e.weight(), substitute(e.value(), replacements))).toList();
-
-            return IntStream.range(0, entries.size()).allMatch((i) -> entries.get(i).value() == weighted.entries().get(i).value()) ? expr : NumberExpr.weighted(entries);
-        }
-
-        return expr;
-    }
-
-    private static int negation(int op) {
-        return switch (op) {
-            case IFEQ -> IFNE;
-            case IFNE -> IFEQ;
-            case IFLT -> IFGE;
-            case IFGE -> IFLT;
-            case IFGT -> IFLE;
-            default -> IFGT;
-        };
-    }
-
-    @Nullable
-    private Double probability(int op, Value a, Value b) {
-        NumberExpr left = a instanceof Value.Cmp cmp ? cmp.left() : expr(a);
-        NumberExpr right = a instanceof Value.Cmp cmp ? cmp.right() : expr(b);
-        Double probability = uniformProbability(op, left, right);
-
-        return probability != null ? probability : uniformProbability(mirror(op), right, left);
-    }
-
-    @Nullable
-    private static Double uniformProbability(int op, NumberExpr draw, NumberExpr bound) {
-        if (!(bound instanceof NumberExpr.Const constant) || !(draw instanceof NumberExpr.Fn fn) || fn.args().size() != 2
-                || !(fn.args().get(0) instanceof NumberExpr.Const lo) || !(fn.args().get(1) instanceof NumberExpr.Const hi)) {
-            return null;
-        }
-
-        double value = constant.value();
-
-        if (fn.id().equals(NumberFunctions.UNIFORM_FLOAT) && hi.value() > lo.value()) {
-            double below = Math.max(0, Math.min(1, (value - lo.value()) / (hi.value() - lo.value())));
-
-            return switch (op) {
-                case IFLT, IFLE -> below;
-                case IFGT, IFGE -> 1 - below;
-                case IFEQ -> 0.0;
-                default -> 1.0;
-            };
-        }
-        if (fn.id().equals(NumberFunctions.UNIFORM_INT) && hi.value() >= lo.value()) {
-            double total = hi.value() - lo.value() + 1;
-            double below = Math.max(0, Math.min(hi.value(), Math.ceil(value) - 1) - lo.value() + 1);
-            double atMost = Math.max(0, Math.min(hi.value(), Math.floor(value)) - lo.value() + 1);
-            double count = switch (op) {
-                case IFLT -> below;
-                case IFLE -> atMost;
-                case IFGT -> total - atMost;
-                case IFGE -> total - below;
-                case IFEQ -> atMost - below;
-                default -> total - (atMost - below);
-            };
-
-            return count / total;
-        }
-
-        return null;
-    }
-
-    private static int mirror(int op) {
-        return switch (op) {
-            case IFLT -> IFGT;
-            case IFGT -> IFLT;
-            case IFLE -> IFGE;
-            case IFGE -> IFLE;
-            default -> op;
-        };
-    }
-
-    private boolean test(Origin origin) {
-        if (origin.receiver() instanceof Origin subject && origin.args().size() == 1 && origin.args().get(0) != null && !(origin.args().get(0) instanceof Origin)) {
-            return decide(origin.isEquality() ? Decision.Kind.EQUALS : Decision.Kind.TEST, subject, origin.args().get(0), "value from the trader or world");
-        }
-
-        return decide(Decision.Kind.UNKNOWN, origin, null, "value from the trader or world");
-    }
-
-    NumberExpr expr(Value value) {
-        if (value instanceof Value.Known known && known.value() instanceof Number number) {
-            return NumberExpr.constant(number.doubleValue());
-        } else if (value instanceof Value.Num num) {
-            return num.expr();
-        } else if (value instanceof Value.Choice choice && choice.options().stream().allMatch(Number.class::isInstance)) {
-            return NumberExpr.weighted(choice.options().stream().map((o) -> new NumberExpr.WeightedEntry(1, NumberExpr.constant(((Number) o).doubleValue()))).toList());
-        }
-
-        throw new Fail(value instanceof Value.Unknown ? "value from the trader or world" : "not a number");
     }
 
     @NotNull
@@ -1311,43 +842,6 @@ final class Interpreter implements Opcodes {
         }
 
         return new Value.Num(expr, kind);
-    }
-
-    @NotNull
-    NumberExpr add(NumberExpr a, NumberExpr b) {
-        NumberExpr shifted = null;
-
-        if (b instanceof NumberExpr.Const c) {
-            shifted = shift(a, c.value());
-        } else if (a instanceof NumberExpr.Const c) {
-            shifted = shift(b, c.value());
-        }
-
-        return shifted != null ? shifted : NumberExpr.add(a, b);
-    }
-
-    @NotNull
-    NumberExpr sub(NumberExpr a, NumberExpr b) {
-        NumberExpr shifted = b instanceof NumberExpr.Const c ? shift(a, -c.value()) : null;
-
-        return shifted != null ? shifted : NumberExpr.sub(a, b);
-    }
-
-    @Nullable
-    private NumberExpr shift(NumberExpr value, double by) {
-        if (value instanceof NumberExpr.Fn fn && (fn.id().equals(NumberFunctions.UNIFORM_INT) || fn.id().equals(NumberFunctions.UNIFORM_FLOAT))
-                && fn.args().get(0) instanceof NumberExpr.Const lo && fn.args().get(1) instanceof NumberExpr.Const hi) {
-            NumberExpr shifted = NumberExpr.fn(fn.id(), NumberExpr.constant(lo.value() + by), NumberExpr.constant(hi.value() + by));
-            Drawn source = drawn.get(value);
-
-            if (source != null) {
-                drawn.put(shifted, new Drawn(source.draw(), source.offset() + by));
-            }
-
-            return shifted;
-        }
-
-        return null;
     }
 
     static int[] choiceIndices(List<Value> args) {
@@ -1371,88 +865,5 @@ final class Interpreter implements Opcodes {
     enum Mode {
         SYMBOLIC,
         STUB,
-    }
-
-    private record Drawn(Draw draw, double offset) {
-    }
-
-    private static final class Draw {
-        @Nullable
-        final List<Integer> values;
-        double lo;
-        double hi;
-
-        private Draw(@Nullable List<Integer> values, double lo, double hi) {
-            this.values = values;
-            this.lo = lo;
-            this.hi = hi;
-        }
-
-        @NotNull
-        static Draw discrete(int lo, int hi) {
-            return new Draw(IntStream.rangeClosed(lo, hi).boxed().collect(Collectors.toCollection(ArrayList::new)), lo, hi);
-        }
-
-        @NotNull
-        static Draw continuous(double lo, double hi) {
-            return new Draw(null, lo, hi);
-        }
-
-        double probability(int op, double bound) {
-            if (values != null) {
-                return values.isEmpty() ? 0 : (double) values.stream().filter((v) -> compares(op, v, bound)).count() / values.size();
-            }
-            if (hi <= lo) {
-                return 0;
-            }
-
-            double below = Math.max(0, Math.min(1, (bound - lo) / (hi - lo)));
-
-            return switch (op) {
-                case IFLT, IFLE -> below;
-                case IFGT, IFGE -> 1 - below;
-                case IFEQ -> 0;
-                default -> 1;
-            };
-        }
-
-        NumberExpr expr(double offset) {
-            if (values == null) {
-                return NumberExpr.uniformFloat(lo + offset, hi + offset);
-            }
-            if (values.size() == 1) {
-                return NumberExpr.constant(values.get(0) + offset);
-            }
-
-            int min = Collections.min(values);
-            int max = Collections.max(values);
-
-            if (max - min + 1 == values.size()) {
-                return NumberExpr.uniformInt(min + offset, max + offset);
-            }
-
-            return NumberExpr.weighted(values.stream().map((v) -> new NumberExpr.WeightedEntry(1, NumberExpr.constant(v + offset))).toList());
-        }
-
-        void narrow(int op, double bound) {
-            if (values != null) {
-                values.removeIf((v) -> !compares(op, v, bound));
-            } else if (op == IFLT || op == IFLE) {
-                hi = Math.min(hi, bound);
-            } else if (op == IFGT || op == IFGE) {
-                lo = Math.max(lo, bound);
-            }
-        }
-
-        private static boolean compares(int op, double value, double bound) {
-            return switch (op) {
-                case IFEQ -> value == bound;
-                case IFNE -> value != bound;
-                case IFLT -> value < bound;
-                case IFGE -> value >= bound;
-                case IFGT -> value > bound;
-                default -> value <= bound;
-            };
-        }
     }
 }
