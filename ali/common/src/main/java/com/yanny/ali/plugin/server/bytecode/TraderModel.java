@@ -4,11 +4,14 @@ import net.minecraft.world.entity.npc.VillagerTrades;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.tree.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.yanny.ali.plugin.server.bytecode.Resolution.Declaration;
+import static com.yanny.ali.plugin.server.bytecode.Resolution.classNode;
 import static com.yanny.ali.plugin.server.bytecode.Resolution.declaration;
 import static com.yanny.ali.plugin.server.bytecode.Resolution.load;
 
@@ -58,6 +61,50 @@ final class TraderModel implements MethodModel {
         }
 
         return declaration;
+    }
+
+    static boolean writesOffers(Class<?> merchant) {
+        return offersWriter(merchant) != null;
+    }
+
+    private static boolean writesOffers(MethodNode method, ClassLoader loader) {
+        for (AbstractInsnNode insn : method.instructions) {
+            try {
+                if (insn.getOpcode() == Opcodes.PUTFIELD && FieldModel.isVillagerOffers((FieldInsnNode) insn, loader)) {
+                    return true;
+                }
+            } catch (Fail ignored) {}
+        }
+
+        return false;
+    }
+
+    @Nullable
+    static Declaration offersWriter(Class<?> merchant) {
+        Map<String, Declaration> writers = new HashMap<>();
+
+        for (Class<?> type = merchant; type != null && !type.getName().startsWith("net.minecraft."); type = type.getSuperclass()) {
+            ClassNode node = classNode(type);
+
+            if (node == null) {
+                continue;
+            }
+
+            for (MethodNode method : node.methods) {
+                if ((method.access & Opcodes.ACC_STATIC) != 0 || method.name.startsWith("<") || RuntimeNames.GET_OFFERS.name().equals(method.name)
+                        && RuntimeNames.GET_OFFERS.desc().equals(method.desc)) {
+                    continue;
+                }
+
+                Declaration own = ownDeclaration(merchant, method.name, method.desc, false);
+
+                if (own != null && writesOffers(own.method(), own.owner().getClassLoader())) {
+                    writers.put(method.name + method.desc, own);
+                }
+            }
+        }
+
+        return writers.size() == 1 ? writers.values().iterator().next() : null;
     }
 
     static final class TraderRun {

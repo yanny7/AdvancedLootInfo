@@ -5,10 +5,8 @@ import com.yanny.aci.api.NumberFunctions;
 import com.yanny.aci.api.NumberInterval;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
-import net.minecraft.world.item.trading.MerchantOffers;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Handle;
@@ -42,7 +40,6 @@ final class Interpreter implements Opcodes {
             "trim", "toLowerCase", "toUpperCase", "concat", "getKey", "getValue", "intValue", "longValue", "floatValue",
             "doubleValue", "booleanValue", "byteValue", "shortValue", "charValue", "compareTo", "ordinal", "name", "getClass",
             "map", "filter", "subList", "first", "firstKey", "lastKey"), OptionalModel.READ_ONLY.stream()).collect(Collectors.toUnmodifiableSet());
-    static final Set<String> ORDER_ONLY = Set.of("reverse", "shuffle", "sort");
     static final Set<String> FRESH_RESULTS = Set.of("stream", "iterator", "listIterator", "spliterator", "toArray");
 
     final Mode mode;
@@ -53,9 +50,7 @@ final class Interpreter implements Opcodes {
     final Heap heap = new Heap(store);
     @Nullable
     TraderModel.TraderRun traderRun;
-    final Map<Object, Integer> listingKeys = new IdentityHashMap<>();
-    private final Map<Object, List<BoundOffer>> boundOffers = new IdentityHashMap<>();
-    final Map<Object, Object> elementSources = new IdentityHashMap<>();
+    final PickSources pickSources = new PickSources();
     @Nullable
     final RegistryAccess registries;
     final OpaqueCalls opaque;
@@ -113,7 +108,7 @@ final class Interpreter implements Opcodes {
     }
 
     Value.Offers writtenTrades(Class<?> merchant) {
-        Declaration writer = offersWriter(merchant);
+        Declaration writer = TraderModel.offersWriter(merchant);
 
         if (writer == null) {
             throw new Fail("no method writing the offers of the trader");
@@ -128,58 +123,6 @@ final class Interpreter implements Opcodes {
         traderRun = run;
         machine.execute(writer.owner(), writer.method(), args, 0);
         return run.offers;
-    }
-
-    static boolean writesOffers(Class<?> merchant) {
-        return offersWriter(merchant) != null;
-    }
-
-    @Nullable
-    private static Declaration offersWriter(Class<?> merchant) {
-        Map<String, Declaration> writers = new HashMap<>();
-
-        for (Class<?> type = merchant; type != null && !type.getName().startsWith("net.minecraft."); type = type.getSuperclass()) {
-            ClassNode node = classNode(type);
-
-            if (node == null) {
-                continue;
-            }
-
-            for (MethodNode method : node.methods) {
-                if ((method.access & ACC_STATIC) != 0 || method.name.startsWith("<") || RuntimeNames.GET_OFFERS.name().equals(method.name)
-                        && RuntimeNames.GET_OFFERS.desc().equals(method.desc)) {
-                    continue;
-                }
-
-                Declaration own = TraderModel.ownDeclaration(merchant, method.name, method.desc, false);
-
-                if (own != null && writesOffers(own.method(), own.owner().getClassLoader())) {
-                    writers.put(method.name + method.desc, own);
-                }
-            }
-        }
-
-        return writers.size() == 1 ? writers.values().iterator().next() : null;
-    }
-
-    private static boolean writesOffers(MethodNode method, ClassLoader loader) {
-        for (AbstractInsnNode insn : method.instructions) {
-            try {
-                if (insn.getOpcode() == PUTFIELD && FieldModel.isVillagerOffers((FieldInsnNode) insn, loader)) {
-                    return true;
-                }
-            } catch (Fail ignored) {}
-        }
-
-        return false;
-    }
-
-    static boolean isPlainOffers(Class<?> type) {
-        return MerchantOffers.class.isAssignableFrom(type) && declaration(type, "add", "(Ljava/lang/Object;)Z", false) instanceof JdkDeclaration;
-    }
-
-    boolean isSelf(@Nullable Value value) {
-        return traderRun != null && traderRun.isSelf(value);
     }
 
     @Nullable
@@ -371,235 +314,6 @@ final class Interpreter implements Opcodes {
         }
 
         return stack;
-    }
-
-    @Nullable
-    Object keyedSource(Object listing) {
-        for (Object keyed : listingKeys.keySet()) {
-            List<?> elements = keyed instanceof Object[] array ? Arrays.asList(array) : (List<?>) keyed;
-
-            if (elements.stream().anyMatch((e) -> e == listing)) {
-                return keyed;
-            }
-        }
-
-        return null;
-    }
-
-    static boolean isUniformPick(Value.Choice choice) {
-        Set<Object> distinct = Collections.newSetFromMap(new IdentityHashMap<>());
-
-        distinct.addAll(choice.options());
-        return choice.draw() instanceof NumberExpr && distinct.size() == choice.options().size();
-    }
-
-    static boolean returnsOffer(MethodInsnNode call, ClassLoader loader) {
-        Type returnType = Type.getReturnType(call.desc);
-
-        return returnType.getSort() == Type.OBJECT && MerchantOffer.class.isAssignableFrom(load(returnType.getInternalName(), loader));
-    }
-
-    @Nullable
-    List<Object> bound(List<Value> args) {
-        List<Object> bound = new ArrayList<>();
-
-        for (Value arg : args) {
-            if (isSelf(arg)) {
-                bound.add(BoundOffer.Bound.TRADER);
-            } else if (arg instanceof Value.Rng rng) {
-                bound.add(rng.legacy() ? BoundOffer.Bound.LEGACY_RANDOM : BoundOffer.Bound.RANDOM);
-            } else if (arg instanceof Value.Known known && isConcrete(arg)) {
-                bound.add(known.value());
-            } else {
-                return null;
-            }
-        }
-
-        return bound;
-    }
-
-    BoundOffer boundOffer(Object element, MethodInsnNode call, List<Object> args) {
-        BoundOffer offer = new BoundOffer(element, call.owner, call.name, call.desc, call.itf, args);
-
-        return boundOffers.computeIfAbsent(element, (e) -> new ArrayList<>()).stream().filter(offer::equals).findFirst().orElseGet(() -> {
-            boundOffers.get(element).add(offer);
-            return offer;
-        });
-    }
-
-    @Nullable
-    Integer poolKey(List<Object> listings) {
-        for (Map.Entry<Object, Integer> entry : listingKeys.entrySet()) {
-            List<?> keyed = entry.getKey() instanceof Object[] array ? Arrays.asList(array) : (List<?>) entry.getKey();
-
-            if (keyed.equals(listings)) {
-                return entry.getValue();
-            }
-        }
-
-        return null;
-    }
-
-    @Nullable
-    Value offersCall(MethodInsnNode call, Value.Offers offers, List<Value> args, int depth) {
-        if (call.name.equals("add") && call.desc.equals("(Ljava/lang/Object;)Z") && args.get(1) instanceof Value.Pick pickValue) {
-            Integer index = offers.picks.get(pickValue.pool());
-
-            NumberExpr drawCount = heap.drawCount(pickValue.pool());
-
-            if (index == null) {
-                offers.picks.put(pickValue.pool(), offers.entries.size());
-                offers.entries.add(new Value.Offers.Listings(pickValue.listings().toArray(new VillagerTrades.ItemListing[0]),
-                        drawCount != null ? new Value.Num(drawCount, Value.Kind.INT) : new Value.Known(1), pickValue.key()));
-            } else {
-                if (!(offers.entries.get(index) instanceof Value.Offers.Listings listings)) {
-                    throw new Fail("merchant offers call add");
-                }
-
-                List<VillagerTrades.ItemListing> union = new ArrayList<>(Arrays.asList(listings.listings()));
-
-                for (VillagerTrades.ItemListing listing : pickValue.listings()) {
-                    if (union.stream().noneMatch((l) -> l == listing)) {
-                        union.add(listing);
-                    }
-                }
-
-                Value count = drawCount != null ? listings.count() : new Value.Known((Integer) ((Value.Known) listings.count()).value() + 1);
-
-                offers.entries.set(index, new Value.Offers.Listings(union.toArray(new VillagerTrades.ItemListing[0]), count, listings.key()));
-            }
-
-            return new Value.Known(1);
-        }
-        if (call.name.equals("add") && call.desc.equals("(Ljava/lang/Object;)Z")) {
-            offers.entries.add(new Value.Offers.Single(args.get(1)));
-            return new Value.Known(1);
-        }
-        Value.Offers source = call.name.equals("addAll") && call.desc.equals("(Ljava/util/Collection;)Z") ? offerList(args.get(1), false) : null;
-
-        if (source != null) {
-            int start = offers.entries.size();
-
-            for (Map.Entry<Object, Integer> pick : source.picks.entrySet()) {
-                if (offers.picks.putIfAbsent(pick.getKey(), start + pick.getValue()) != null) {
-                    throw new Fail("merchant offers call addAll");
-                }
-            }
-
-            offers.entries.addAll(source.entries);
-            return new Value.Known(source.entries.isEmpty() ? 0 : 1);
-        }
-        if (call.name.equals("addAll") && call.desc.equals("(Ljava/util/Collection;)Z") && args.get(1) instanceof Value.Known known
-                && known.value() instanceof Collection<?> collection && !heap.isTainted(collection)) {
-            collection.forEach((offer) -> offers.entries.add(new Value.Offers.Single(heap.wrap(offer))));
-            return new Value.Known(collection.isEmpty() ? 0 : 1);
-        }
-        if (call.name.equals("removeIf") && call.desc.equals("(Ljava/util/function/Predicate;)Z") && args.get(1) instanceof Value.Closure predicate) {
-            return removeOffers(offers, predicate, depth);
-        }
-        if (call.name.equals("isEmpty") && call.desc.equals("()Z")) {
-            return new Value.Known(offers.entries.isEmpty() ? 1 : 0);
-        }
-        if (call.name.equals("clear") && call.desc.equals("()V")) {
-            offers.entries.clear();
-            offers.picks.clear();
-            return null;
-        }
-        if (call.name.equals("sort") && call.desc.equals("(Ljava/util/Comparator;)V")) {
-            return null;
-        }
-
-        throw new Fail("merchant offers call " + call.name);
-    }
-
-    Value addPicked(Value.Offers offers, Value.Choice choice) {
-        Integer index = offers.picks.get(choice.draw());
-        NumberExpr drawCount = heap.drawCount(choice.draw());
-
-        if (index == null) {
-            offers.picks.put(choice.draw(), offers.entries.size());
-            offers.entries.add(new Value.Offers.Picked(choice.options(), drawCount != null ? new Value.Num(drawCount, Value.Kind.INT) : new Value.Known(1)));
-        } else if (offers.entries.get(index) instanceof Value.Offers.Picked picked) {
-            List<Object> union = new ArrayList<>(picked.offers());
-
-            for (Object offer : choice.options()) {
-                if (union.stream().noneMatch((o) -> o == offer)) {
-                    union.add(offer);
-                }
-            }
-
-            Value count = drawCount != null ? picked.count() : new Value.Known((Integer) ((Value.Known) picked.count()).value() + 1);
-
-            offers.entries.set(index, new Value.Offers.Picked(union, count));
-        } else {
-            throw new Fail("merchant offers call add");
-        }
-
-        return new Value.Known(1);
-    }
-
-    boolean isSymbolicOffer(Value value) {
-        return value instanceof Value.Pick || value instanceof Value.Offer || value instanceof Value.Choice choice && choice.draw() != null
-                && heap.isPool(choice.draw()) && !choice.options().isEmpty() && choice.options().stream().allMatch(MerchantOffer.class::isInstance);
-    }
-
-    @Nullable
-    Value.Offers offerList(Value value, boolean create) {
-        if (value instanceof Value.Offers offers) {
-            return offers;
-        }
-        if (!(value instanceof Value.Known known) || !(known.value() instanceof Collection<?> collection) || !heap.isOwned(collection)) {
-            return null;
-        }
-
-        Value.Offers collected = heap.offers(collection);
-
-        if (collected != null || !create) {
-            return collected;
-        }
-        if (heap.isFrozen(collection) || !collection.stream().allMatch(MerchantOffer.class::isInstance)) {
-            throw new Fail("offers in a collection");
-        }
-
-        Value.Offers offers = new Value.Offers();
-
-        collection.forEach((offer) -> offers.entries.add(new Value.Offers.Single(heap.wrap(offer))));
-        collection.clear();
-        heap.coll(collection).offers = offers;
-        return offers;
-    }
-
-    private Value removeOffers(Value.Offers offers, Value.Closure predicate, int depth) {
-        boolean nullCheck = predicate.impl().getOwner().equals("java/util/Objects") && predicate.impl().getName().equals("isNull");
-        List<Integer> removedIndices = new ArrayList<>();
-
-        for (int i = 0; i < offers.entries.size(); i++) {
-            if (!(offers.entries.get(i) instanceof Value.Offers.Single single)) {
-                if (!nullCheck) {
-                    throw new Fail("merchant offers call removeIf");
-                }
-
-                continue;
-            }
-
-            List<Value> all = new ArrayList<>(predicate.captured());
-
-            all.add(single.offer());
-
-            if (!(invokeHandle(predicate.impl(), all, predicate.loader(), depth + 1) instanceof Value.Known known) || !(known.value() instanceof Integer test)) {
-                throw new Fail("merchant offers call removeIf");
-            }
-            if (test != 0) {
-                removedIndices.add(i);
-            }
-        }
-
-        for (int i = removedIndices.size() - 1; i >= 0; i--) {
-            offers.entries.remove((int) removedIndices.get(i));
-        }
-
-        offers.picks.replaceAll((pool, index) -> index - (int) removedIndices.stream().filter((removed) -> removed < index).count());
-        return new Value.Known(removedIndices.isEmpty() ? 0 : 1);
     }
 
     @NotNull

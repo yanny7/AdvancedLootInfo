@@ -73,6 +73,14 @@ interface CallContext {
     @Nullable
     int[] randomIndexSet(Object object);
 
+    boolean isPool(@Nullable Object draw);
+
+    @Nullable
+    NumberExpr drawCount(@Nullable Object draw);
+
+    @Nullable
+    Value.Offers offers(Object collection);
+
     @Nullable
     TraderModel.TraderRun traderRun();
 
@@ -83,6 +91,14 @@ interface CallContext {
 
     @Nullable
     Integer levelKey(Object listings);
+
+    @Nullable
+    Object listingSource(Object listing);
+
+    @Nullable
+    Integer poolKey(List<Object> listings);
+
+    BoundOffer boundOffer(Object element, MethodInsnNode call, List<Object> args);
 
     @Nullable
     RegistryAccess registries();

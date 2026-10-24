@@ -475,7 +475,7 @@ final class Machine implements Opcodes {
             Object element = Array.get(arr, i);
 
             if (element instanceof VillagerTrades.ItemListing) {
-                interpreter.elementSources.put(element, arr);
+                interpreter.pickSources.putSource(element, arr);
             }
 
             return interpreter.wrap(element, arr.getClass().getComponentType());
@@ -487,7 +487,7 @@ final class Machine implements Opcodes {
                 return sameDraw(interpreter.combine(elements.stream().map((o) -> interpreter.wrap(o, arr.getClass().getComponentType())).toList()), choice);
             }
 
-            elements.stream().filter(VillagerTrades.ItemListing.class::isInstance).forEach((e) -> interpreter.elementSources.put(e, arr));
+            elements.stream().filter(VillagerTrades.ItemListing.class::isInstance).forEach((e) -> interpreter.pickSources.putSource(e, arr));
             return new Value.Choice(elements, choice.draw());
         }
         if (index instanceof Value.Num num) {

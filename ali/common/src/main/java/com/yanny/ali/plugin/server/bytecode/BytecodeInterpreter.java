@@ -164,7 +164,7 @@ public final class BytecodeInterpreter {
         try {
             List<Path> paths = paths(utils, (i) -> i.trades(merchant));
 
-            if (productive(paths).isEmpty() && paths.stream().allMatch((p) -> p.failure() == null) && Interpreter.writesOffers(merchant)) {
+            if (productive(paths).isEmpty() && paths.stream().allMatch((p) -> p.failure() == null) && TraderModel.writesOffers(merchant)) {
                 paths = paths(utils, (i) -> i.writtenTrades(merchant));
             }
 

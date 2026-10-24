@@ -2,9 +2,7 @@ package com.yanny.ali.plugin.server.bytecode;
 
 import com.yanny.aci.api.NumberExpr;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.trading.MerchantOffer;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
@@ -19,17 +17,13 @@ import java.util.stream.BaseStream;
 
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.CONSTRUCTOR;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.FRESH_RESULTS;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.ORDER_ONLY;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.READ_ONLY;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.STATIC_RANDOM;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.STATIC_SAFE;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.choiceIndices;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.isLegacyRandom;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.isPlainOffers;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.isRandomType;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.isScalar;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.isUniformPick;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.returnsOffer;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.sameDraw;
 import static com.yanny.ali.plugin.server.bytecode.MethodModel.NO_OPINION;
 import static com.yanny.ali.plugin.server.bytecode.Resolution.*;
@@ -45,7 +39,7 @@ final class Dispatcher implements Opcodes, CallContext {
         MethodModel stacks = new ItemStackModel();
 
         MODELS.put(Phase.CONSTRUCTOR, List.of(
-                construction(Dispatcher::newOffers),
+                OffersModel.NEW,
                 stacks,
                 new MerchantOfferModel(),
                 construction(Dispatcher::newPerChoice),
@@ -57,13 +51,11 @@ final class Dispatcher implements Opcodes, CallContext {
                 branch(Dispatcher::equalsUnknown)
         ));
         MODELS.put(Phase.UNDISTRIBUTED, List.of(
-                branch(Dispatcher::getOffer),
-                branch(Dispatcher::boundOffer),
+                new PickModel(),
                 branch(Dispatcher::intValue),
                 new OptionalModel(),
                 CollectionsModel.REMOVE_CHOICE,
-                branch(Dispatcher::addOffer),
-                branch(Dispatcher::collectedOffers)
+                OffersModel.COLLECTED
         ));
         MODELS.put(Phase.RECEIVER, List.of(
                 new RandomModel(),
@@ -71,7 +63,7 @@ final class Dispatcher implements Opcodes, CallContext {
                 new NumberModel(),
                 branch(Dispatcher::closure),
                 new TraderModel(),
-                branch(Dispatcher::offers),
+                new OffersModel(),
                 branch(Dispatcher::draws),
                 new WorldModel(),
                 branch(Dispatcher::unknown),
@@ -86,7 +78,7 @@ final class Dispatcher implements Opcodes, CallContext {
                 branch(Dispatcher::selectionGuard),
                 branch(Dispatcher::threadLocalRandom),
                 NumberModel.STATICS,
-                branch(Dispatcher::orderOffers),
+                OffersModel.ORDER,
                 new CollectionsModel(),
                 branch(Dispatcher::uncertain),
                 branch(Dispatcher::staticUnknown)
@@ -129,10 +121,10 @@ final class Dispatcher implements Opcodes, CallContext {
                 && args.get(1) instanceof Value.Known key && result instanceof Value.Known listings && isKeyedList(listings.value())) {
             if (key.value() instanceof Integer level) {
                 trace("after.levelKey", call);
-                interpreter.listingKeys.put(listings.value(), level);
+                interpreter.pickSources.putLevel(listings.value(), level);
             } else if (key.value() instanceof Enum<?> constant) {
                 trace("after.levelKey", call);
-                interpreter.listingKeys.put(listings.value(), constant.ordinal() + 1);
+                interpreter.pickSources.putLevel(listings.value(), constant.ordinal() + 1);
             }
         }
 
@@ -295,6 +287,23 @@ final class Dispatcher implements Opcodes, CallContext {
         return interpreter.heap.randomIndexSet(object);
     }
 
+    @Override
+    public boolean isPool(@Nullable Object draw) {
+        return interpreter.heap.isPool(draw);
+    }
+
+    @Nullable
+    @Override
+    public NumberExpr drawCount(@Nullable Object draw) {
+        return interpreter.heap.drawCount(draw);
+    }
+
+    @Nullable
+    @Override
+    public Value.Offers offers(Object collection) {
+        return interpreter.heap.offers(collection);
+    }
+
     @Nullable
     @Override
     public TraderModel.TraderRun traderRun() {
@@ -315,7 +324,24 @@ final class Dispatcher implements Opcodes, CallContext {
     @Nullable
     @Override
     public Integer levelKey(Object listings) {
-        return interpreter.listingKeys.get(listings);
+        return interpreter.pickSources.levelKey(listings);
+    }
+
+    @Nullable
+    @Override
+    public Object listingSource(Object listing) {
+        return interpreter.pickSources.source(listing);
+    }
+
+    @Nullable
+    @Override
+    public Integer poolKey(List<Object> listings) {
+        return interpreter.pickSources.poolKey(listings);
+    }
+
+    @Override
+    public BoundOffer boundOffer(Object element, MethodInsnNode call, List<Object> args) {
+        return interpreter.pickSources.boundOffer(element, call, args);
     }
 
     @Nullable
@@ -531,15 +557,6 @@ final class Dispatcher implements Opcodes, CallContext {
         return result;
     }
 
-    private Value newOffers(String type, String desc, List<Value> args, ClassLoader loader, int depth) {
-        if (desc.equals("()V") && isPlainOffers(load(type, loader))) {
-            trace("constructor.offers", type, desc);
-            return new Value.Offers();
-        }
-
-        return NO_OPINION;
-    }
-
     private Value newPerChoice(String type, String desc, List<Value> args, ClassLoader loader, int depth) {
         List<Value> drawn = args.stream().map(Interpreter::drawnInt).toList();
         int[] choices = choiceIndices(drawn);
@@ -581,74 +598,10 @@ final class Dispatcher implements Opcodes, CallContext {
         return NO_OPINION;
     }
 
-    private Value getOffer(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        if (interpreter.traderRun != null && RuntimeNames.is(RuntimeNames.GET_OFFER, call)) {
-            if (args.get(0) instanceof Value.Choice choice && (choice.draw() != null && interpreter.heap.isPool(choice.draw()) || isUniformPick(choice))
-                    && choice.options().stream().allMatch(VillagerTrades.ItemListing.class::isInstance)) {
-                trace("undistributed.getOffer.choice", call);
-                return new Value.Pick(choice.options().stream().map(VillagerTrades.ItemListing.class::cast).toList(), choice.draw(), interpreter.poolKey(choice.options()));
-            }
-            if (args.get(0) instanceof Value.Known known && known.value() instanceof VillagerTrades.ItemListing listing) {
-                Object source = interpreter.elementSources.containsKey(listing) ? interpreter.elementSources.get(listing) : interpreter.keyedSource(listing);
-
-                trace("undistributed.getOffer.known", call);
-                return new Value.Pick(List.of(listing), source != null ? source : listing, source != null ? interpreter.listingKeys.get(source) : null);
-            }
-        }
-
-        return NO_OPINION;
-    }
-
-    @Nullable
-    private Value boundOffer(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        boolean isStatic = call.getOpcode() == INVOKESTATIC;
-
-        if (interpreter.traderRun != null && !isStatic && args.get(0) instanceof Value.Choice choice && (choice.draw() != null && interpreter.heap.isPool(choice.draw()) || isUniformPick(choice))
-                && choice.options().stream().noneMatch(MerchantOffer.class::isInstance) && returnsOffer(call, loader)) {
-            List<Object> bound = interpreter.bound(args.subList(1, args.size()));
-
-            if (bound != null) {
-                List<VillagerTrades.ItemListing> listings = choice.options().stream().<VillagerTrades.ItemListing>map((element) -> interpreter.boundOffer(element, call, bound)).toList();
-
-                trace("undistributed.boundOffer", call);
-                return new Value.Pick(listings, choice.draw(), interpreter.poolKey(choice.options()));
-            }
-        }
-
-        return NO_OPINION;
-    }
-
     private Value intValue(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
         if (call.name.equals("intValue") && call.desc.equals("()I") && args.get(0) instanceof Value.Choice choice && choice.options().stream().allMatch(Integer.class::isInstance)) {
             trace("undistributed.intValue", call);
             return choice;
-        }
-
-        return NO_OPINION;
-    }
-
-    @Nullable
-    private Value addOffer(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        boolean isStatic = call.getOpcode() == INVOKESTATIC;
-
-        Value.Offers collected = !isStatic && call.name.equals("add") && call.desc.equals("(Ljava/lang/Object;)Z") && interpreter.isSymbolicOffer(args.get(1))
-                ? interpreter.offerList(args.get(0), true) : null;
-
-        if (collected != null) {
-            trace("undistributed.addOffer", call);
-            return args.get(1) instanceof Value.Choice choice ? interpreter.addPicked(collected, choice) : interpreter.offersCall(call, collected, args, depth);
-        }
-
-        return NO_OPINION;
-    }
-
-    @Nullable
-    private Value collectedOffers(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        boolean isStatic = call.getOpcode() == INVOKESTATIC;
-
-        if (!isStatic && args.get(0) instanceof Value.Known known && known.value() != null && interpreter.heap.offers(known.value()) != null) {
-            trace("undistributed.collectedOffers", call);
-            return interpreter.offersCall(call, interpreter.heap.offers(known.value()), args, depth);
         }
 
         return NO_OPINION;
@@ -670,19 +623,6 @@ final class Dispatcher implements Opcodes, CallContext {
             all.addAll(args.subList(1, args.size()));
             trace("receiver.closure", call);
             return interpreter.invokeHandle(closure.impl(), all, closure.loader(), depth + 1);
-        }
-
-        return NO_OPINION;
-    }
-
-    @Nullable
-    private Value offers(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        boolean isStatic = call.getOpcode() == INVOKESTATIC;
-        Value receiver = isStatic ? null : args.get(0);
-
-        if (receiver instanceof Value.Offers offers) {
-            trace("receiver.offers", call);
-            return interpreter.offersCall(call, offers, args, depth);
         }
 
         return NO_OPINION;
@@ -812,18 +752,6 @@ final class Dispatcher implements Opcodes, CallContext {
         if (isStatic && call.owner.equals("java/util/concurrent/ThreadLocalRandom") && call.name.equals("current")) {
             trace("jdk.threadLocalRandom", call);
             return new Value.Rng(true);
-        }
-
-        return NO_OPINION;
-    }
-
-    @Nullable
-    private Value orderOffers(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        boolean isStatic = call.getOpcode() == INVOKESTATIC;
-
-        if (isStatic && call.owner.equals("java/util/Collections") && ORDER_ONLY.contains(call.name) && args.get(0) instanceof Value.Offers) {
-            trace("jdk.orderOffers", call);
-            return null;
         }
 
         return NO_OPINION;

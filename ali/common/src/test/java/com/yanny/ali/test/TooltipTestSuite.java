@@ -28,7 +28,9 @@ import com.yanny.ali.plugin.server.bytecode.MapItemModelTest;
 import com.yanny.ali.plugin.server.bytecode.MapModelTest;
 import com.yanny.ali.plugin.server.bytecode.MerchantOfferModelTest;
 import com.yanny.ali.plugin.server.bytecode.NumberModelTest;
+import com.yanny.ali.plugin.server.bytecode.OffersModelTest;
 import com.yanny.ali.plugin.server.bytecode.OptionalModelTest;
+import com.yanny.ali.plugin.server.bytecode.PickModelTest;
 import com.yanny.ali.plugin.server.bytecode.RandomModelTest;
 import com.yanny.ali.plugin.server.bytecode.TraderModelTest;
 import com.yanny.ali.plugin.server.bytecode.WorldModelTest;
@@ -122,7 +124,9 @@ import static org.mockito.Mockito.mock;
         WorldModelTest.class,
         NumberModelTest.class,
         FieldModelTest.class,
-        IndyTest.class
+        IndyTest.class,
+        PickModelTest.class,
+        OffersModelTest.class
 })
 public class TooltipTestSuite {
     public static IServerUtils UTILS;
