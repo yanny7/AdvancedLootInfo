@@ -565,16 +565,16 @@ public final class BytecodeInterpreter {
             } catch (Fail fail) {
                 failure = fail.describe();
             }
-            if (interpreter.retry() && ++restarts < MAX_RESTARTS) {
+            if (interpreter.opaque.retry() && ++restarts < MAX_RESTARTS) {
                 results.clear();
                 scripts.clear();
                 scripts.add(List.of());
                 continue;
             }
 
-            List<Boolean> taken = interpreter.decisions().stream().map(Decision::holds).toList();
+            List<Boolean> taken = interpreter.decisions.taken().stream().map(Decision::holds).toList();
 
-            results.add(new Path(result, interpreter.decisions(), failure));
+            results.add(new Path(result, interpreter.decisions.taken(), failure));
 
             for (int i = script.size(); i < taken.size(); i++) {
                 List<Boolean> other = new ArrayList<>(taken.subList(0, i));

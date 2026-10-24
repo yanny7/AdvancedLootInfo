@@ -162,7 +162,7 @@ final class Dispatcher implements Opcodes, CallContext {
 
     @Override
     public Value wrap(@Nullable Object value) {
-        return interpreter.wrap(value);
+        return interpreter.heap.wrap(value);
     }
 
     @Override
@@ -220,22 +220,22 @@ final class Dispatcher implements Opcodes, CallContext {
 
     @Override
     public NumberExpr expr(Value value) {
-        return interpreter.expr(value);
+        return NumberDomain.expr(value);
     }
 
     @Override
     public NumberExpr add(NumberExpr a, NumberExpr b) {
-        return interpreter.add(a, b);
+        return interpreter.numbers.add(a, b);
     }
 
     @Override
     public NumberExpr sub(NumberExpr a, NumberExpr b) {
-        return interpreter.sub(a, b);
+        return interpreter.numbers.sub(a, b);
     }
 
     @Override
     public Value draw(NumberExpr expr, Value.Kind kind) {
-        return interpreter.draw(expr, kind);
+        return interpreter.numbers.draw(expr, kind);
     }
 
     @Override
@@ -326,7 +326,7 @@ final class Dispatcher implements Opcodes, CallContext {
 
     @Override
     public boolean decide(Decision.Kind kind, @Nullable Object subject, @Nullable Object value, String reason) {
-        return interpreter.decide(kind, subject, value, reason);
+        return interpreter.decisions.decide(kind, subject, value, reason);
     }
 
     @Nullable
@@ -420,7 +420,7 @@ final class Dispatcher implements Opcodes, CallContext {
             return ItemStackModel.argumentCall(this, invocation);
         }
 
-        if (declared != null && interpreter.opaque.contains(call.owner + "." + call.name + call.desc) && isWorldCall(call, args, loader)) {
+        if (declared != null && interpreter.opaque.isOpaque(call) && isWorldCall(call, args, loader)) {
             trace("arguments.opaqueWorldCall", call);
             return worldResult(call, args);
         }
@@ -432,7 +432,7 @@ final class Dispatcher implements Opcodes, CallContext {
         Value result;
 
         if (declared instanceof Declaration declaration) {
-            int before = interpreter.decisions.size();
+            int before = interpreter.decisions.taken().size();
 
             try {
                 trace("execution.interpret", call);
@@ -440,8 +440,8 @@ final class Dispatcher implements Opcodes, CallContext {
             } catch (Fail fail) {
                 result = fallbackCall(call, args, loader, fail);
             }
-            if (interpreter.decisions.size() - before > 1 && isWorldCall(call, args, loader)) {
-                interpreter.heavyWorldCalls.merge(call.owner + "." + call.name + call.desc, interpreter.decisions.size() - before, Math::max);
+            if (interpreter.decisions.taken().size() - before > 1 && isWorldCall(call, args, loader)) {
+                interpreter.opaque.count(call, interpreter.decisions.taken().size() - before);
             }
         } else {
             trace("execution.noBytecode", call);
@@ -476,7 +476,7 @@ final class Dispatcher implements Opcodes, CallContext {
             }
 
             trace("constructor.real", type, desc);
-            return interpreter.wrap(created);
+            return interpreter.heap.wrap(created);
         } catch (Throwable e) {
             trace("constructor.real.fail", type, desc);
             throw new Fail("constructor failed");
@@ -772,7 +772,7 @@ final class Dispatcher implements Opcodes, CallContext {
         boolean isStatic = call.getOpcode() == INVOKESTATIC;
 
         if (isStatic && call.owner.equals("java/util/Objects") && call.name.startsWith("requireNonNull")) {
-            if (interpreter.isNull(args.get(0))) {
+            if (interpreter.decisions.isNull(args.get(0))) {
                 trace("jdk.requireNonNull.fail", call);
                 throw new Fail("requireNonNull");
             }
@@ -789,7 +789,7 @@ final class Dispatcher implements Opcodes, CallContext {
 
         if (isStatic && call.owner.equals("java/util/Objects") && (call.name.equals("isNull") || call.name.equals("nonNull"))) {
             trace("jdk.isNull", call);
-            return new Value.Known(interpreter.isNull(args.get(0)) == call.name.equals("isNull") ? 1 : 0);
+            return new Value.Known(interpreter.decisions.isNull(args.get(0)) == call.name.equals("isNull") ? 1 : 0);
         }
 
         return NO_OPINION;
@@ -865,7 +865,7 @@ final class Dispatcher implements Opcodes, CallContext {
         if (isWorldCall(call, args, loader)) {
             if (fail.isBudget()) {
                 trace("fallback.opaqueBudget", call);
-                interpreter.retry = interpreter.retry || interpreter.opaque.add(call.owner + "." + call.name + call.desc);
+                interpreter.opaque.mark(call);
                 throw fail;
             }
 

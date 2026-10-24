@@ -1,11 +1,13 @@
 package com.yanny.ali.plugin.server.bytecode;
 
 import com.yanny.aci.api.NumberExpr;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
+import java.util.Random;
 
 final class Heap {
     private final Map<Object, ObjectInfo> objects = new IdentityHashMap<>();
@@ -81,6 +83,18 @@ final class Heap {
         }
 
         return info.shadow;
+    }
+
+    Value wrap(@Nullable Object value) {
+        if (value instanceof RandomSource) {
+            return new Value.Rng(false);
+        } else if (value instanceof Random) {
+            return new Value.Rng(true);
+        } else if (value != null && shadowOf(value) != null) {
+            return shadowOf(value);
+        }
+
+        return new Value.Known(value);
     }
 
     @Nullable
