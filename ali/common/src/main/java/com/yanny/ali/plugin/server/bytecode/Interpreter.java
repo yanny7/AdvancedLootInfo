@@ -4,14 +4,11 @@ import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberFunctions;
 import com.yanny.aci.api.NumberInterval;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
-import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Handle;
@@ -28,15 +25,11 @@ import java.util.stream.Stream;
 import static com.yanny.ali.plugin.server.bytecode.Resolution.*;
 
 final class Interpreter implements Opcodes {
-    private static final int MAX_STEPS = 200_000;
-    private static final int MAX_DEPTH = 12;
     static final int MAX_OPTIONS = 1024;
     private static final int MAX_DECISIONS = 8;
     static final String CONSTRUCTOR = "<init>";
     static final String ITEM_STACK = Type.getInternalName(ItemStack.class);
     static final String MERCHANT_OFFER = Type.getInternalName(MerchantOffer.class);
-    private static final String LAMBDA_METAFACTORY = "java/lang/invoke/LambdaMetafactory";
-    private static final String STRING_CONCAT_FACTORY = "java/lang/invoke/StringConcatFactory";
     static final Value.Known NULL = new Value.Known(null);
     static final Set<String> STATIC_SAFE = Set.of("java/lang/Math", "java/lang/StrictMath", "java/lang/Integer", "java/lang/Long",
             "java/lang/Float", "java/lang/Double", "java/lang/Boolean", "java/lang/Character", "java/lang/Short", "java/lang/Byte",
@@ -54,11 +47,11 @@ final class Interpreter implements Opcodes {
     static final Set<String> FRESH_RESULTS = Set.of("stream", "iterator", "listIterator", "spliterator", "toArray");
 
     final Mode mode;
-    private final Dispatcher dispatcher = new Dispatcher(this);
+    final Dispatcher dispatcher = new Dispatcher(this);
+    final Machine machine = new Machine(this);
     final int pick;
     final ValueStore store = new ValueStore();
     final Heap heap = new Heap(store);
-    private int steps;
     @Nullable
     private final List<Boolean> script;
     final List<Decision> decisions = new ArrayList<>();
@@ -139,7 +132,7 @@ final class Interpreter implements Opcodes {
         traderRun = run;
 
         if (getOffers != null) {
-            if (execute(getOffers.owner(), getOffers.method(), List.of(self), 0) instanceof Value.Offers offers) {
+            if (machine.execute(getOffers.owner(), getOffers.method(), List.of(self), 0) instanceof Value.Offers offers) {
                 return offers;
             }
 
@@ -152,7 +145,7 @@ final class Interpreter implements Opcodes {
             throw new Fail("no trades of the trader");
         }
 
-        execute(updateTrades.owner(), updateTrades.method(), List.of(self), 0);
+        machine.execute(updateTrades.owner(), updateTrades.method(), List.of(self), 0);
         return run.offers;
     }
 
@@ -170,7 +163,7 @@ final class Interpreter implements Opcodes {
         TraderModel.TraderRun run = new TraderModel.TraderRun(merchant, TraderModel.ownDeclaration(merchant, RuntimeNames.GET_OFFERS.name(), RuntimeNames.GET_OFFERS.desc(), false) != null);
 
         traderRun = run;
-        execute(writer.owner(), writer.method(), args, 0);
+        machine.execute(writer.owner(), writer.method(), args, 0);
         return run.offers;
     }
 
@@ -209,7 +202,7 @@ final class Interpreter implements Opcodes {
     private static boolean writesOffers(MethodNode method, ClassLoader loader) {
         for (AbstractInsnNode insn : method.instructions) {
             try {
-                if (insn.getOpcode() == PUTFIELD && isVillagerOffers((FieldInsnNode) insn, loader)) {
+                if (insn.getOpcode() == PUTFIELD && FieldModel.isVillagerOffers((FieldInsnNode) insn, loader)) {
                     return true;
                 }
             } catch (Fail ignored) {}
@@ -220,10 +213,6 @@ final class Interpreter implements Opcodes {
 
     static boolean isPlainOffers(Class<?> type) {
         return MerchantOffers.class.isAssignableFrom(type) && declaration(type, "add", "(Ljava/lang/Object;)Z", false) instanceof JdkDeclaration;
-    }
-
-    private static boolean isVillagerOffers(FieldInsnNode insn, ClassLoader loader) {
-        return RuntimeNames.is(RuntimeNames.OFFERS, insn) && field(load(insn.owner, loader), insn.name).getDeclaringClass() == AbstractVillager.class;
     }
 
     boolean isSelf(@Nullable Value value) {
@@ -240,315 +229,6 @@ final class Interpreter implements Opcodes {
             case H_NEWINVOKESPECIAL -> dispatcher.construct(handle.getOwner(), handle.getDesc(), args, loader, depth);
             default -> throw new Fail("unsupported method handle");
         };
-    }
-
-    @Nullable
-    Value execute(Class<?> owner, MethodNode method, List<Value> args, int depth) {
-        if (depth > MAX_DEPTH) {
-            throw new Fail("call depth");
-        }
-        if ((method.access & (ACC_ABSTRACT | ACC_NATIVE)) != 0) {
-            throw new Fail("no body");
-        }
-        if (MixinChanges.isChanged(owner, method)) {
-            throw new Fail("changed by a mixin: " + owner.getName() + "." + method.name);
-        }
-
-        Frame frame = new Frame(Math.max(method.maxLocals, 1));
-        int slot = 0;
-        int index = 0;
-
-        if ((method.access & ACC_STATIC) == 0) {
-            frame.locals[slot++] = args.get(index++);
-        }
-
-        for (Type type : Type.getArgumentTypes(method.desc)) {
-            Value arg = args.get(index++);
-
-            frame.locals[slot] = arg instanceof Value.Known known ? wrap(known.value(), javaType(type)) : arg;
-            slot += type.getSize();
-        }
-
-        store.enter(frame);
-
-        try {
-            return run(frame, owner.getClassLoader(), method, depth);
-        } catch (Fail fail) {
-            throw fail.at(owner.getName() + "." + method.name);
-        } finally {
-            store.leave();
-        }
-    }
-
-    @Nullable
-    private Value run(Frame f, ClassLoader loader, MethodNode method, int depth) {
-        AbstractInsnNode insn = method.instructions.getFirst();
-
-        while (insn != null) {
-            if (++steps > MAX_STEPS) {
-                throw new Fail("step budget");
-            }
-
-            int op = insn.getOpcode();
-            AbstractInsnNode next = insn.getNext();
-
-            if (op < 0) {
-                insn = next;
-                continue;
-            }
-
-            switch (op) {
-                case NOP -> {}
-                case ACONST_NULL -> f.push(NULL);
-                case ICONST_M1, ICONST_0, ICONST_1, ICONST_2, ICONST_3, ICONST_4, ICONST_5 -> f.push(new Value.Known(op - ICONST_0));
-                case LCONST_0, LCONST_1 -> f.push(new Value.Known((long) (op - LCONST_0)));
-                case FCONST_0, FCONST_1, FCONST_2 -> f.push(new Value.Known((float) (op - FCONST_0)));
-                case DCONST_0, DCONST_1 -> f.push(new Value.Known((double) (op - DCONST_0)));
-                case BIPUSH, SIPUSH -> f.push(new Value.Known(((IntInsnNode) insn).operand));
-                case LDC -> f.push(ldc(((LdcInsnNode) insn).cst, loader));
-                case ILOAD, LLOAD, FLOAD, DLOAD, ALOAD -> f.push(f.load(((VarInsnNode) insn).var));
-                case ISTORE, FSTORE, ASTORE -> f.locals[((VarInsnNode) insn).var] = f.pop();
-                case LSTORE, DSTORE -> {
-                    int var = ((VarInsnNode) insn).var;
-
-                    f.locals[var] = f.pop();
-                    f.locals[var + 1] = null;
-                }
-                case IINC -> {
-                    IincInsnNode iinc = (IincInsnNode) insn;
-
-                    f.locals[iinc.var] = binary(IADD, f.load(iinc.var), new Value.Known(iinc.incr));
-                }
-                case IALOAD, LALOAD, FALOAD, DALOAD, AALOAD, BALOAD, CALOAD, SALOAD -> {
-                    Value idx = f.pop();
-
-                    f.push(arrayLoad(f.pop(), idx));
-                }
-                case IASTORE, LASTORE, FASTORE, DASTORE, AASTORE, BASTORE, CASTORE, SASTORE -> {
-                    Value value = f.pop();
-                    Value idx = f.pop();
-
-                    arrayStore(op, f.pop(), idx, value);
-                }
-                case POP, MONITORENTER, MONITOREXIT -> f.pop();
-                case POP2 -> {
-                    if (!f.pop().isWide()) {
-                        f.pop();
-                    }
-                }
-                case DUP -> f.push(f.peek());
-                case DUP_X1 -> {
-                    Value v1 = f.pop();
-                    Value v2 = f.pop();
-
-                    f.push(v1);
-                    f.push(v2);
-                    f.push(v1);
-                }
-                case DUP_X2 -> {
-                    Value v1 = f.pop();
-                    Value v2 = f.pop();
-
-                    if (v2.isWide()) {
-                        f.push(v1);
-                        f.push(v2);
-                    } else {
-                        Value v3 = f.pop();
-
-                        f.push(v1);
-                        f.push(v3);
-                        f.push(v2);
-                    }
-
-                    f.push(v1);
-                }
-                case DUP2 -> {
-                    Value v1 = f.pop();
-
-                    if (v1.isWide()) {
-                        f.push(v1);
-                        f.push(v1);
-                    } else {
-                        Value v2 = f.pop();
-
-                        f.push(v2);
-                        f.push(v1);
-                        f.push(v2);
-                        f.push(v1);
-                    }
-                }
-                case DUP2_X1 -> {
-                    Value v1 = f.pop();
-
-                    if (v1.isWide()) {
-                        Value v2 = f.pop();
-
-                        f.push(v1);
-                        f.push(v2);
-                        f.push(v1);
-                    } else {
-                        Value v2 = f.pop();
-                        Value v3 = f.pop();
-
-                        f.push(v2);
-                        f.push(v1);
-                        f.push(v3);
-                        f.push(v2);
-                        f.push(v1);
-                    }
-                }
-                case DUP2_X2 -> dup2x2(f);
-                case SWAP -> {
-                    Value v1 = f.pop();
-                    Value v2 = f.pop();
-
-                    f.push(v1);
-                    f.push(v2);
-                }
-                case IADD, LADD, FADD, DADD, ISUB, LSUB, FSUB, DSUB, IMUL, LMUL, FMUL, DMUL, IDIV, LDIV, FDIV, DDIV, IREM, LREM, FREM, DREM,
-                     ISHL, LSHL, ISHR, LSHR, IUSHR, LUSHR, IAND, LAND, IOR, LOR, IXOR, LXOR -> {
-                    Value b = f.pop();
-
-                    f.push(binary(op, f.pop(), b));
-                }
-                case INEG, LNEG, FNEG, DNEG -> f.push(negate(op, f.pop()));
-                case I2L, I2F, I2D, L2I, L2F, L2D, F2I, F2L, F2D, D2I, D2L, D2F, I2B, I2C, I2S -> f.push(convert(op, f.pop()));
-                case LCMP, FCMPL, FCMPG, DCMPL, DCMPG -> {
-                    Value b = f.pop();
-
-                    f.push(compare(op, f.pop(), b));
-                }
-                case IFEQ, IFNE, IFLT, IFGE, IFGT, IFLE -> {
-                    if (branch(op, f.pop(), new Value.Known(0))) {
-                        next = ((JumpInsnNode) insn).label;
-                    }
-                }
-                case IF_ICMPEQ, IF_ICMPNE, IF_ICMPLT, IF_ICMPGE, IF_ICMPGT, IF_ICMPLE -> {
-                    Value b = f.pop();
-
-                    if (branch(op - IF_ICMPEQ + IFEQ, f.pop(), b)) {
-                        next = ((JumpInsnNode) insn).label;
-                    }
-                }
-                case IF_ACMPEQ, IF_ACMPNE -> {
-                    Value b = f.pop();
-                    boolean same = sameReference(f.pop(), b);
-
-                    if (same == (op == IF_ACMPEQ)) {
-                        next = ((JumpInsnNode) insn).label;
-                    }
-                }
-                case IFNULL, IFNONNULL -> {
-                    if (isNull(f.pop()) == (op == IFNULL)) {
-                        next = ((JumpInsnNode) insn).label;
-                    }
-                }
-                case GOTO -> next = ((JumpInsnNode) insn).label;
-                case TABLESWITCH -> {
-                    TableSwitchInsnNode sw = (TableSwitchInsnNode) insn;
-                    int at = switchCase(f.pop(), IntStream.rangeClosed(sw.min, sw.max).boxed().toList());
-
-                    next = at >= 0 ? sw.labels.get(at) : sw.dflt;
-                }
-                case LOOKUPSWITCH -> {
-                    LookupSwitchInsnNode sw = (LookupSwitchInsnNode) insn;
-                    int at = switchCase(f.pop(), sw.keys);
-
-                    next = at >= 0 ? sw.labels.get(at) : sw.dflt;
-                }
-                case IRETURN, LRETURN, FRETURN, DRETURN, ARETURN -> {
-                    return f.pop();
-                }
-                case RETURN -> {
-                    return null;
-                }
-                case GETSTATIC -> f.push(getStatic((FieldInsnNode) insn, loader));
-                case PUTSTATIC -> {
-                    FieldInsnNode field = (FieldInsnNode) insn;
-
-                    store.putStatic(field.owner + "." + field.name, f.pop());
-                }
-                case GETFIELD -> f.push(getField((FieldInsnNode) insn, f.pop(), loader));
-                case PUTFIELD -> {
-                    Value value = f.pop();
-
-                    putField((FieldInsnNode) insn, f.pop(), value, loader);
-                }
-                case INVOKEVIRTUAL, INVOKESPECIAL, INVOKESTATIC, INVOKEINTERFACE -> {
-                    MethodInsnNode call = (MethodInsnNode) insn;
-                    Value[] args = new Value[Type.getArgumentTypes(call.desc).length + (op == INVOKESTATIC ? 0 : 1)];
-
-                    for (int i = args.length - 1; i >= 0; i--) {
-                        args[i] = f.pop();
-                    }
-
-                    Value result = dispatcher.invoke(call, Arrays.asList(args), loader, depth);
-                    Type returnType = Type.getReturnType(call.desc);
-
-                    if (returnType.getSort() != Type.VOID) {
-                        if (result == null) {
-                            throw new Fail("missing return value");
-                        }
-
-                        f.push(result instanceof Value.Unknown unknown && unknown.type() == null ? Value.Unknown.of(returnType, unknown.origin()) : result);
-                    }
-                }
-                case INVOKEDYNAMIC -> f.push(invokeDynamic((InvokeDynamicInsnNode) insn, f, loader));
-                case NEW -> f.push(new Value.Uninit(((TypeInsnNode) insn).desc));
-                case NEWARRAY -> f.push(newArray(primitiveArrayType(((IntInsnNode) insn).operand), f.pop()));
-                case ANEWARRAY -> f.push(newArray(arrayComponent(((TypeInsnNode) insn).desc, loader), f.pop()));
-                case ARRAYLENGTH -> {
-                    if (!(f.pop() instanceof Value.Known known) || known.value() == null || !known.value().getClass().isArray()) {
-                        throw new Fail("array length");
-                    }
-
-                    f.push(new Value.Known(Array.getLength(known.value())));
-                }
-                case CHECKCAST -> f.push(checkCast(f.pop(), ((TypeInsnNode) insn).desc, loader));
-                case INSTANCEOF -> f.push(new Value.Known(instanceOf(f.pop(), ((TypeInsnNode) insn).desc, loader) ? 1 : 0));
-                default -> throw new Fail("opcode " + op);
-            }
-
-            insn = next;
-        }
-
-        throw new Fail("end of method");
-    }
-
-    private static void dup2x2(Frame f) {
-        Value v1 = f.pop();
-        Value v2 = f.pop();
-
-        if (v1.isWide() && v2.isWide()) {
-            f.push(v1);
-            f.push(v2);
-            f.push(v1);
-        } else if (v1.isWide()) {
-            Value v3 = f.pop();
-
-            f.push(v1);
-            f.push(v3);
-            f.push(v2);
-            f.push(v1);
-        } else {
-            Value v3 = f.pop();
-
-            if (v3.isWide()) {
-                f.push(v2);
-                f.push(v1);
-                f.push(v3);
-            } else {
-                Value v4 = f.pop();
-
-                f.push(v2);
-                f.push(v1);
-                f.push(v4);
-                f.push(v3);
-            }
-
-            f.push(v2);
-            f.push(v1);
-        }
     }
 
     @Nullable
@@ -975,48 +655,8 @@ final class Interpreter implements Opcodes {
         return new Value.Known(removedIndices.isEmpty() ? 0 : 1);
     }
 
-    private Value invokeDynamic(InvokeDynamicInsnNode indy, Frame f, ClassLoader loader) {
-        Value[] captured = new Value[Type.getArgumentTypes(indy.desc).length];
-
-        for (int i = captured.length - 1; i >= 0; i--) {
-            captured[i] = f.pop();
-        }
-
-        if (indy.bsm.getOwner().equals(LAMBDA_METAFACTORY) && indy.bsmArgs.length >= 3 && indy.bsmArgs[1] instanceof Handle impl) {
-            Class<?> iface = load(Type.getReturnType(indy.desc).getInternalName(), loader);
-
-            return new Value.Closure(iface, indy.name, ((Type) indy.bsmArgs[0]).getDescriptor(), impl, Arrays.asList(captured), loader);
-        }
-        if (indy.bsm.getOwner().equals(STRING_CONCAT_FACTORY) && indy.bsm.getName().equals("makeConcatWithConstants")) {
-            if (!Arrays.stream(captured).allMatch((v) -> v instanceof Value.Known)) {
-                return Value.UNKNOWN;
-            }
-
-            String recipe = (String) indy.bsmArgs[0];
-            Type[] types = Type.getArgumentTypes(indy.desc);
-            StringBuilder builder = new StringBuilder();
-            int arg = 0;
-            int constant = 1;
-
-            for (char c : recipe.toCharArray()) {
-                if (c == '\u0001') {
-                    builder.append(toJava(captured[arg], javaType(types[arg])));
-                    arg++;
-                } else if (c == '\u0002') {
-                    builder.append(indy.bsmArgs[constant++]);
-                } else {
-                    builder.append(c);
-                }
-            }
-
-            return new Value.Known(builder.toString());
-        }
-
-        throw new Fail("invokedynamic " + indy.bsm.getOwner());
-    }
-
     @NotNull
-    private Object materialize(Value.Closure closure) {
+    Object materialize(Value.Closure closure) {
         List<Value> captured = closure.captured();
 
         if (!captured.stream().allMatch(this::isConcrete)) {
@@ -1053,7 +693,7 @@ final class Interpreter implements Opcodes {
         for (int i = 0; i < captured.size(); i++) {
             int param = hasReceiver ? i - 1 : i;
 
-            all.add(toJava(captured.get(i), param >= 0 && param < params.length ? javaType(params[param]) : Object.class));
+            all.add(toJava(captured.get(i), param >= 0 && param < params.length ? Machine.javaType(params[param]) : Object.class));
         }
 
         all.addAll(Arrays.asList(callArgs));
@@ -1082,20 +722,6 @@ final class Interpreter implements Opcodes {
         } catch (InvocationTargetException e) {
             throw e.getCause();
         }
-    }
-
-    private static Class<?> javaType(Type type) {
-        return switch (type.getSort()) {
-            case Type.BOOLEAN -> boolean.class;
-            case Type.CHAR -> char.class;
-            case Type.BYTE -> byte.class;
-            case Type.SHORT -> short.class;
-            case Type.INT -> int.class;
-            case Type.LONG -> long.class;
-            case Type.FLOAT -> float.class;
-            case Type.DOUBLE -> double.class;
-            default -> Object.class;
-        };
     }
 
     static Value pick(List<?> list, Value.Num index) {
@@ -1183,7 +809,7 @@ final class Interpreter implements Opcodes {
     }
 
     @Nullable
-    private Object toJava(Value value, Class<?> type) {
+    Object toJava(Value value, Class<?> type) {
         if (value instanceof Value.Closure closure) {
             return materialize(closure);
         }
@@ -1236,7 +862,7 @@ final class Interpreter implements Opcodes {
                 || known.value() instanceof Boolean || known.value() instanceof Character);
     }
 
-    private Value wrap(@Nullable Object value, Class<?> type) {
+    Value wrap(@Nullable Object value, Class<?> type) {
         if (!type.isPrimitive()) {
             return wrap(value);
         } else if (value instanceof Boolean b) {
@@ -1264,258 +890,6 @@ final class Interpreter implements Opcodes {
         return new Value.Known(value);
     }
 
-    private Value getStatic(FieldInsnNode insn, ClassLoader loader) {
-        if (store.hasStatic(insn.owner + "." + insn.name)) {
-            return store.getStatic(insn.owner + "." + insn.name);
-        }
-
-        Field field = field(load(insn.owner, loader, true), insn.name);
-
-        try {
-            return wrap(field.get(null), field.getType());
-        } catch (Throwable e) {
-            throw new Fail("static field " + insn.owner + "." + insn.name);
-        }
-    }
-
-    private Value getField(FieldInsnNode insn, Value receiver, ClassLoader loader) {
-        if (receiver instanceof Value.Unknown && RuntimeNames.is(RuntimeNames.LEVEL_IS_CLIENT_SIDE, insn)
-                && Level.class.isAssignableFrom(load(insn.owner, loader))) {
-            return new Value.Known(0);
-        }
-        if (isSelf(receiver) && !traderRun.ownGetOffers && isVillagerOffers(insn, loader)) {
-            return traderRun.offers;
-        }
-        if (isSelf(receiver) && store.hasTraderField(insn.owner + "." + insn.name)) {
-            return store.getTraderField(insn.owner + "." + insn.name);
-        }
-        if (isSelf(receiver) && insn.desc.equals(Type.getDescriptor(MerchantOffers.class))) {
-            return NULL;
-        }
-        if (receiver instanceof Value.Unknown && Type.getType(insn.desc).getSort() == Type.OBJECT && isRandomType(Type.getType(insn.desc), loader)) {
-            return new Value.Rng(isLegacyRandom(Type.getType(insn.desc), loader));
-        }
-        if (receiver instanceof Value.Unknown) {
-            return Value.Unknown.of(Type.getType(insn.desc), Origin.of(receiver, insn.name, List.of()));
-        }
-        if (receiver instanceof Value.Choice choice) {
-            List<Value> results = new ArrayList<>();
-
-            for (Object option : choice.options()) {
-                results.add(getField(insn, wrap(option), loader));
-            }
-
-            return Objects.requireNonNull(sameDraw(combine(results), choice));
-        }
-        if (!(receiver instanceof Value.Known known) || known.value() == null) {
-            throw new Fail("field of a symbolic value");
-        }
-
-        Field field = field(load(insn.owner, loader), insn.name);
-
-        try {
-            Object value = field.get(known.value());
-
-            if (heap.isTainted(known.value()) && TradeTypes.isData(value)) {
-                heap.taint(value);
-            }
-
-            return wrap(value, field.getType());
-        } catch (Throwable e) {
-            throw new Fail("field " + insn.owner + "." + insn.name);
-        }
-    }
-
-    private void putField(FieldInsnNode insn, Value receiver, Value value, ClassLoader loader) {
-        if (isSelf(receiver) && isVillagerOffers(insn, loader) && value instanceof Value.Offers offers) {
-            traderRun.offers = offers;
-
-            if (!traderRun.ownGetOffers) {
-                return;
-            }
-        }
-        if (isSelf(receiver)) {
-            store.putTraderField(insn.owner + "." + insn.name, value);
-            return;
-        }
-        if (!(receiver instanceof Value.Known known) || !heap.isOwned(known.value()) || !(value instanceof Value.Known known2)) {
-            throw new Fail("write to a field");
-        }
-        if (known.value() != null && heap.isFrozen(known.value())) {
-            throw new Fail("change under a random choice");
-        }
-
-        Field field = field(load(insn.owner, loader), insn.name);
-
-        try {
-            field.set(known.value(), toJava(known2, field.getType()));
-        } catch (Throwable e) {
-            throw new Fail("field write " + insn.owner + "." + insn.name);
-        }
-    }
-
-    private Value arrayLoad(Value array, Value index) {
-        if (!(array instanceof Value.Known known) || known.value() == null || !known.value().getClass().isArray()) {
-            throw new Fail("array load");
-        }
-
-        Object arr = known.value();
-
-        if (heap.isTainted(arr)) {
-            throw new Fail("uncertain array element");
-        }
-        if (index instanceof Value.Known k) {
-            int i = (Integer) k.value();
-
-            if (i < 0 || i >= Array.getLength(arr)) {
-                throw new Fail("array index");
-            }
-
-            Object element = Array.get(arr, i);
-
-            if (element instanceof VillagerTrades.ItemListing) {
-                elementSources.put(element, arr);
-            }
-
-            return wrap(element, arr.getClass().getComponentType());
-        }
-        if (index instanceof Value.Choice choice && choice.options().stream().allMatch((o) -> o instanceof Integer i && i >= 0 && i < Array.getLength(arr))) {
-            List<Object> elements = choice.options().stream().map((o) -> Array.get(arr, (Integer) o)).toList();
-
-            if (arr.getClass().getComponentType().isPrimitive()) {
-                return sameDraw(combine(elements.stream().map((o) -> wrap(o, arr.getClass().getComponentType())).toList()), choice);
-            }
-
-            elements.stream().filter(VillagerTrades.ItemListing.class::isInstance).forEach((e) -> elementSources.put(e, arr));
-            return new Value.Choice(elements, choice.draw());
-        }
-        if (index instanceof Value.Num num) {
-            List<Object> elements = new ArrayList<>();
-
-            for (int i = 0; i < Array.getLength(arr); i++) {
-                elements.add(Array.get(arr, i));
-            }
-
-            Value.Choice choice = (Value.Choice) pick(elements, num);
-
-            if (arr.getClass().getComponentType().isPrimitive()) {
-                return sameDraw(combine(choice.options().stream().map((o) -> wrap(o, arr.getClass().getComponentType())).toList()), choice);
-            }
-
-            return choice;
-        }
-
-        throw new Fail("array index");
-    }
-
-    private void arrayStore(int op, Value array, Value index, Value value) {
-        if (!(array instanceof Value.Known known) || !heap.isOwned(known.value()) || !(index instanceof Value.Known k)) {
-            throw new Fail("array store");
-        }
-        if (known.value() != null && heap.isFrozen(known.value())) {
-            throw new Fail("change under a random choice");
-        }
-
-        Object arr = known.value();
-        int i = (Integer) k.value();
-
-        if (value instanceof Value.Num || value instanceof Value.Choice || value instanceof Value.Unknown) {
-            heap.taint(arr);
-            return;
-        }
-
-        Object element = value instanceof Value.Closure closure ? materialize(closure) : concrete(value);
-
-        switch (op) {
-            case BASTORE -> {
-                if (arr instanceof boolean[] booleans) {
-                    booleans[i] = (Integer) element != 0;
-                } else {
-                    ((byte[]) arr)[i] = (byte) (int) (Integer) element;
-                }
-            }
-            case CASTORE -> ((char[]) arr)[i] = (char) (int) (Integer) element;
-            case SASTORE -> ((short[]) arr)[i] = (short) (int) (Integer) element;
-            default -> Array.set(arr, i, element);
-        }
-    }
-
-    private Value newArray(Class<?> component, Value size) {
-        if (!(size instanceof Value.Known known)) {
-            throw new Fail("symbolic array size");
-        }
-
-        Object array = Array.newInstance(component, (Integer) known.value());
-
-        heap.own(array);
-        return new Value.Known(array);
-    }
-
-    private static Class<?> primitiveArrayType(int type) {
-        return switch (type) {
-            case T_BOOLEAN -> boolean.class;
-            case T_CHAR -> char.class;
-            case T_FLOAT -> float.class;
-            case T_DOUBLE -> double.class;
-            case T_BYTE -> byte.class;
-            case T_SHORT -> short.class;
-            case T_INT -> int.class;
-            case T_LONG -> long.class;
-            default -> throw new Fail("array type");
-        };
-    }
-
-    private static Class<?> arrayComponent(String desc, ClassLoader loader) {
-        if (desc.startsWith("[")) {
-            try {
-                return Class.forName(desc.replace('/', '.'), false, loader);
-            } catch (Throwable e) {
-                throw new Fail("array class");
-            }
-        }
-
-        return load(desc, loader);
-    }
-
-    private Value checkCast(Value value, String desc, ClassLoader loader) {
-        if (value instanceof Value.Known known && known.value() != null && !arrayComponent(desc, loader).isInstance(known.value())) {
-            throw new Fail("class cast");
-        }
-        if (value instanceof Value.Unknown unknown && !desc.startsWith("[")) {
-            return unknown.withType(desc);
-        }
-
-        return value;
-    }
-
-    private static Class<?> onServer(Class<?> type) {
-        return type.isAssignableFrom(ServerLevel.class) && Level.class.isAssignableFrom(type) ? ServerLevel.class : type;
-    }
-
-    private boolean instanceOf(Value value, String desc, ClassLoader loader) {
-        Class<?> type = arrayComponent(desc, loader);
-
-        if (value instanceof Value.Known known) {
-            return type.isInstance(known.value());
-        } else if (value instanceof Value.Stack) {
-            return type.isAssignableFrom(ItemStack.class);
-        } else if (value instanceof Value.Offer) {
-            return type.isAssignableFrom(MerchantOffer.class);
-        } else if (value instanceof Value.Closure closure) {
-            return type.isAssignableFrom(closure.iface());
-        } else if (value instanceof Value.Rng rng) {
-            return type.isAssignableFrom(rng.legacy() ? Random.class : RandomSource.class);
-        } else if (value instanceof Value.Choice choice) {
-            return decided(choice, type::isInstance);
-        } else if (value instanceof Value.Unknown unknown && unknown.type() != null && type.isAssignableFrom(onServer(load(unknown.type(), loader)))) {
-            return true;
-        } else if (value instanceof Value.Unknown unknown) {
-            return decide(Decision.Kind.UNKNOWN, unknown.origin(), desc, "instanceof of an unknown value");
-        }
-
-        throw new Fail("instanceof of an unknown value");
-    }
-
     boolean isNull(Value value) {
         if (value instanceof Value.Known known) {
             return known.value() == null;
@@ -1536,7 +910,7 @@ final class Interpreter implements Opcodes {
         return false;
     }
 
-    private boolean sameReference(Value a, Value b) {
+    boolean sameReference(Value a, Value b) {
         if (a instanceof Value.Known ka && b instanceof Value.Known kb) {
             return ka.value() == kb.value();
         }
@@ -1576,7 +950,7 @@ final class Interpreter implements Opcodes {
         return decide(Decision.Kind.EQUALS, unknown.origin(), value, "reference comparison of an unknown value");
     }
 
-    private boolean decided(Value.Choice choice, java.util.function.Predicate<Object> test) {
+    boolean decided(Value.Choice choice, java.util.function.Predicate<Object> test) {
         if (choice.options().stream().allMatch(test)) {
             return true;
         }
@@ -1614,7 +988,7 @@ final class Interpreter implements Opcodes {
         return options.size() == 1 ? wrap(options.get(0)) : new Value.Choice(options, choice.draw());
     }
 
-    private int switchCase(Value value, List<Integer> keys) {
+    int switchCase(Value value, List<Integer> keys) {
         if (value instanceof Value.Known known) {
             return keys.indexOf((Integer) known.value());
         }
@@ -1703,94 +1077,7 @@ final class Interpreter implements Opcodes {
         throw new Fail("symbolic switch");
     }
 
-    @NotNull
-    private static Value ldc(Object cst, ClassLoader loader) {
-        if (cst instanceof Integer || cst instanceof Float || cst instanceof Long || cst instanceof Double || cst instanceof String) {
-            return new Value.Known(cst);
-        }
-        if (cst instanceof Type type && (type.getSort() == Type.OBJECT || type.getSort() == Type.ARRAY)) {
-            return new Value.Known(type.getSort() == Type.OBJECT ? load(type.getInternalName(), loader) : arrayComponent(type.getDescriptor(), loader));
-        }
-
-        throw new Fail("constant " + cst);
-    }
-
-    private Value binary(int op, Value a, Value b) {
-        if (a instanceof Value.Known ka && b instanceof Value.Known kb && ka.value() != null && kb.value() != null) {
-            return new Value.Known(Arithmetic.compute(op, ka.value(), kb.value()));
-        }
-        if (a instanceof Value.Unknown || b instanceof Value.Unknown) {
-            return unknownNumber(Arithmetic.kindOf(op));
-        }
-
-        Value.Kind kind = Arithmetic.kindOf(op);
-        NumberExpr x = expr(a);
-        NumberExpr y = expr(b);
-
-        return switch (op) {
-            case IADD, LADD, FADD, DADD -> num(add(x, y), kind);
-            case ISUB, LSUB, FSUB, DSUB -> num(sub(x, y), kind);
-            case IMUL, LMUL, FMUL, DMUL -> num(NumberExpr.mul(x, y), kind);
-            case IDIV, LDIV -> num(NumberExpr.fn(NumberFunctions.TRUNC, NumberExpr.div(x, y)), kind);
-            case FDIV, DDIV -> num(NumberExpr.div(x, y), kind);
-            case IREM, LREM, FREM, DREM -> num(NumberExpr.fn(NumberFunctions.MOD, x, y), kind);
-            default -> throw new Fail("bitwise operation on a symbolic value");
-        };
-    }
-
-    private Value negate(int op, Value a) {
-        if (a instanceof Value.Known known && known.value() != null) {
-            return new Value.Known(Arithmetic.negate(known.value()));
-        }
-        if (a instanceof Value.Unknown) {
-            return unknownNumber(Arithmetic.kindOf(op - INEG + IADD));
-        }
-
-        return num(NumberExpr.fn(NumberFunctions.NEG, expr(a)), Arithmetic.kindOf(op - INEG + IADD));
-    }
-
-    private Value convert(int op, Value a) {
-        if (a instanceof Value.Known known && known.value() != null) {
-            return new Value.Known(Arithmetic.convert(op, known.value()));
-        }
-        if (a instanceof Value.Unknown) {
-            return unknownNumber(switch (op) {
-                case I2L, F2L, D2L -> Value.Kind.LONG;
-                case I2D, L2D, F2D -> Value.Kind.DOUBLE;
-                case I2F, L2F, D2F -> Value.Kind.FLOAT;
-                default -> Value.Kind.INT;
-            });
-        }
-
-        NumberExpr x = expr(a);
-
-        return switch (op) {
-            case I2L, F2L, D2L -> num(op == I2L ? x : NumberExpr.fn(NumberFunctions.TRUNC, x), Value.Kind.LONG);
-            case I2F, L2F, D2F -> num(x, Value.Kind.FLOAT);
-            case I2D, L2D, F2D -> num(x, Value.Kind.DOUBLE);
-            case F2I, D2I -> num(NumberExpr.fn(NumberFunctions.TRUNC, x), Value.Kind.INT);
-            default -> num(x, Value.Kind.INT);
-        };
-    }
-
-    @NotNull
-    private Value compare(int op, Value a, Value b) {
-        if (a instanceof Value.Known ka && b instanceof Value.Known kb && ka.value() != null && kb.value() != null) {
-            return new Value.Known(Arithmetic.compare(op, ka.value(), kb.value()));
-        }
-        if (a instanceof Value.Unknown || b instanceof Value.Unknown) {
-            return unknownNumber(Value.Kind.INT);
-        }
-
-        return new Value.Cmp(expr(a), expr(b));
-    }
-
-    @NotNull
-    private static Value unknownNumber(Value.Kind kind) {
-        return new Value.Unknown(kind == Value.Kind.LONG || kind == Value.Kind.DOUBLE, null, null, null);
-    }
-
-    private boolean branch(int op, Value a, Value b) {
+    boolean branch(int op, Value a, Value b) {
         if ((op == IFEQ || op == IFNE) && a instanceof Value.Unknown unknown && unknown.origin() != null && unknown.origin().isBoolean()
                 && b instanceof Value.Known known && Integer.valueOf(0).equals(known.value())) {
             return test(unknown.origin()) == (op == IFNE);
@@ -2166,56 +1453,6 @@ final class Interpreter implements Opcodes {
                 case IFGT -> value > bound;
                 default -> value <= bound;
             };
-        }
-    }
-
-    static final class Frame {
-        final Value[] locals;
-        final List<Value> stack = new ArrayList<>();
-
-        Frame(int maxLocals) {
-            locals = new Value[maxLocals];
-        }
-
-        void push(Value value) {
-            stack.add(value);
-        }
-
-        Value pop() {
-            if (stack.isEmpty()) {
-                throw new Fail("empty stack");
-            }
-
-            return stack.remove(stack.size() - 1);
-        }
-
-        Value peek() {
-            if (stack.isEmpty()) {
-                throw new Fail("empty stack");
-            }
-
-            return stack.get(stack.size() - 1);
-        }
-
-        @NotNull
-        Value load(int var) {
-            Value value = locals[var];
-
-            if (value == null) {
-                throw new Fail("unset local");
-            }
-
-            return value;
-        }
-
-        void replace(java.util.function.Predicate<Value> match, java.util.function.UnaryOperator<Value> with) {
-            for (int i = 0; i < locals.length; i++) {
-                if (locals[i] != null && match.test(locals[i])) {
-                    locals[i] = with.apply(locals[i]);
-                }
-            }
-
-            stack.replaceAll((v) -> match.test(v) ? with.apply(v) : v);
         }
     }
 }

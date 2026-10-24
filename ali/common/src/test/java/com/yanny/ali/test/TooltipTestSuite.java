@@ -20,6 +20,8 @@ import com.yanny.ali.plugin.server.LootConditionTypes;
 import com.yanny.ali.plugin.server.LootFunctionTypes;
 import com.yanny.ali.plugin.server.bytecode.BytecodeInterpreter;
 import com.yanny.ali.plugin.server.bytecode.CollectionsModelTest;
+import com.yanny.ali.plugin.server.bytecode.FieldModelTest;
+import com.yanny.ali.plugin.server.bytecode.IndyTest;
 import com.yanny.ali.plugin.server.bytecode.LoggerModelTest;
 import com.yanny.ali.plugin.server.bytecode.ItemStackModelTest;
 import com.yanny.ali.plugin.server.bytecode.MapItemModelTest;
@@ -118,7 +120,9 @@ import static org.mockito.Mockito.mock;
         MapModelTest.class,
         TraderModelTest.class,
         WorldModelTest.class,
-        NumberModelTest.class
+        NumberModelTest.class,
+        FieldModelTest.class,
+        IndyTest.class
 })
 public class TooltipTestSuite {
     public static IServerUtils UTILS;

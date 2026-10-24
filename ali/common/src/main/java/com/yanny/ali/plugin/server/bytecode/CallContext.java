@@ -18,6 +18,11 @@ interface CallContext {
 
     Value wrap(@Nullable Object value);
 
+    Value wrap(@Nullable Object value, Class<?> type);
+
+    @Nullable
+    Object toJava(Value value, Class<?> type);
+
     @Nullable
     Value invoke(Value.Closure closure, List<Value> args, int depth);
 
@@ -52,7 +57,11 @@ interface CallContext {
 
     List<Value> shadowed(List<Value> args);
 
-    boolean isOwned(Object object);
+    boolean isOwned(@Nullable Object object);
+
+    boolean isFrozen(Object object);
+
+    void taint(@Nullable Object object);
 
     CollState coll(Object object);
 
@@ -66,6 +75,11 @@ interface CallContext {
 
     @Nullable
     TraderModel.TraderRun traderRun();
+
+    @Nullable
+    Value traderField(String field);
+
+    void putTraderField(String field, Value value);
 
     @Nullable
     Integer levelKey(Object listings);

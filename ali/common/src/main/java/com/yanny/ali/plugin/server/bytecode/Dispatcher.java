@@ -165,6 +165,17 @@ final class Dispatcher implements Opcodes, CallContext {
         return interpreter.wrap(value);
     }
 
+    @Override
+    public Value wrap(@Nullable Object value, Class<?> type) {
+        return interpreter.wrap(value, type);
+    }
+
+    @Nullable
+    @Override
+    public Object toJava(Value value, Class<?> type) {
+        return interpreter.toJava(value, type);
+    }
+
     @Nullable
     @Override
     public Value invoke(Value.Closure closure, List<Value> args, int depth) {
@@ -177,7 +188,7 @@ final class Dispatcher implements Opcodes, CallContext {
     @Nullable
     @Override
     public Value execute(Class<?> owner, MethodNode method, List<Value> args, int depth) {
-        return interpreter.execute(owner, method, args, depth + 1);
+        return interpreter.machine.execute(owner, method, args, depth + 1);
     }
 
     @Nullable
@@ -248,8 +259,18 @@ final class Dispatcher implements Opcodes, CallContext {
     }
 
     @Override
-    public boolean isOwned(Object object) {
+    public boolean isOwned(@Nullable Object object) {
         return interpreter.heap.isOwned(object);
+    }
+
+    @Override
+    public boolean isFrozen(Object object) {
+        return interpreter.heap.isFrozen(object);
+    }
+
+    @Override
+    public void taint(@Nullable Object object) {
+        interpreter.heap.taint(object);
     }
 
     @Override
@@ -278,6 +299,17 @@ final class Dispatcher implements Opcodes, CallContext {
     @Override
     public TraderModel.TraderRun traderRun() {
         return interpreter.traderRun;
+    }
+
+    @Nullable
+    @Override
+    public Value traderField(String field) {
+        return interpreter.store.hasTraderField(field) ? interpreter.store.getTraderField(field) : null;
+    }
+
+    @Override
+    public void putTraderField(String field, Value value) {
+        interpreter.store.putTraderField(field, value);
     }
 
     @Nullable
@@ -404,7 +436,7 @@ final class Dispatcher implements Opcodes, CallContext {
 
             try {
                 trace("execution.interpret", call);
-                result = interpreter.execute(declaration.owner(), declaration.method(), args, depth + 1);
+                result = interpreter.machine.execute(declaration.owner(), declaration.method(), args, depth + 1);
             } catch (Fail fail) {
                 result = fallbackCall(call, args, loader, fail);
             }
