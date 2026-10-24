@@ -766,7 +766,7 @@ public final class BytecodeInterpreter {
     }
 
     public static List<String> dispatchTrace() {
-        return Interpreter.dispatchTrace();
+        return Dispatcher.dispatchTrace();
     }
 
     public static void clearCaches() {
