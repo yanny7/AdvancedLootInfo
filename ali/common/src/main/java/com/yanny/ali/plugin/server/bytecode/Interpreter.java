@@ -63,15 +63,12 @@ final class Interpreter implements Opcodes {
     private final List<Boolean> script;
     final List<Decision> decisions = new ArrayList<>();
     @Nullable
-    Class<?> merchant;
-    @Nullable
-    Value.Offers merchantOffers;
+    TraderModel.TraderRun traderRun;
     final Map<Object, Integer> listingKeys = new IdentityHashMap<>();
     private final Map<Object, List<BoundOffer>> boundOffers = new IdentityHashMap<>();
     final Map<String, Integer> heavyWorldCalls = new HashMap<>();
     final Map<Object, Object> elementSources = new IdentityHashMap<>();
     private final Map<NumberExpr, Drawn> drawn = new IdentityHashMap<>();
-    boolean ownGetOffers;
     @Nullable
     final RegistryAccess registries;
     final Set<String> opaque;
@@ -136,11 +133,10 @@ final class Interpreter implements Opcodes {
 
     Value.Offers trades(Class<?> merchant) {
         Value self = Value.Unknown.of(Type.getType(merchant), Origin.TRADER);
-        Declaration getOffers = ownDeclaration(merchant, RuntimeNames.GET_OFFERS.name(), RuntimeNames.GET_OFFERS.desc(), false);
+        Declaration getOffers = TraderModel.ownDeclaration(merchant, RuntimeNames.GET_OFFERS.name(), RuntimeNames.GET_OFFERS.desc(), false);
+        TraderModel.TraderRun run = new TraderModel.TraderRun(merchant, getOffers != null);
 
-        this.merchant = merchant;
-        merchantOffers = new Value.Offers();
-        ownGetOffers = getOffers != null;
+        traderRun = run;
 
         if (getOffers != null) {
             if (execute(getOffers.owner(), getOffers.method(), List.of(self), 0) instanceof Value.Offers offers) {
@@ -150,14 +146,14 @@ final class Interpreter implements Opcodes {
             throw new Fail("offers of the trader");
         }
 
-        Declaration updateTrades = ownDeclaration(merchant, RuntimeNames.UPDATE_TRADES.name(), RuntimeNames.UPDATE_TRADES.desc(), false);
+        Declaration updateTrades = TraderModel.ownDeclaration(merchant, RuntimeNames.UPDATE_TRADES.name(), RuntimeNames.UPDATE_TRADES.desc(), false);
 
         if (updateTrades == null) {
             throw new Fail("no trades of the trader");
         }
 
         execute(updateTrades.owner(), updateTrades.method(), List.of(self), 0);
-        return merchantOffers;
+        return run.offers;
     }
 
     Value.Offers writtenTrades(Class<?> merchant) {
@@ -171,11 +167,11 @@ final class Interpreter implements Opcodes {
 
         args.add(Value.Unknown.of(Type.getType(merchant), Origin.TRADER));
         Arrays.stream(Type.getArgumentTypes(writer.method().desc)).forEach((type) -> args.add(Value.Unknown.of(type, null)));
-        this.merchant = merchant;
-        merchantOffers = new Value.Offers();
-        ownGetOffers = ownDeclaration(merchant, RuntimeNames.GET_OFFERS.name(), RuntimeNames.GET_OFFERS.desc(), false) != null;
+        TraderModel.TraderRun run = new TraderModel.TraderRun(merchant, TraderModel.ownDeclaration(merchant, RuntimeNames.GET_OFFERS.name(), RuntimeNames.GET_OFFERS.desc(), false) != null);
+
+        traderRun = run;
         execute(writer.owner(), writer.method(), args, 0);
-        return merchantOffers;
+        return run.offers;
     }
 
     static boolean writesOffers(Class<?> merchant) {
@@ -199,7 +195,7 @@ final class Interpreter implements Opcodes {
                     continue;
                 }
 
-                Declaration own = ownDeclaration(merchant, method.name, method.desc, false);
+                Declaration own = TraderModel.ownDeclaration(merchant, method.name, method.desc, false);
 
                 if (own != null && writesOffers(own.method(), own.owner().getClassLoader())) {
                     writers.put(method.name + method.desc, own);
@@ -231,16 +227,7 @@ final class Interpreter implements Opcodes {
     }
 
     boolean isSelf(@Nullable Value value) {
-        return merchant != null && value instanceof Value.Unknown unknown && Origin.TRADER.equals(unknown.origin());
-    }
-
-    @Nullable
-    static Declaration ownDeclaration(Class<?> start, String name, String desc, boolean exact) {
-        if (!(declaration(start, name, desc, exact) instanceof Declaration declaration) || LambdaResolver.isPlatform(Type.getInternalName(declaration.owner()))) {
-            return null;
-        }
-
-        return declaration;
+        return traderRun != null && traderRun.isSelf(value);
     }
 
     @Nullable
@@ -1111,22 +1098,6 @@ final class Interpreter implements Opcodes {
         };
     }
 
-    Value math(MethodInsnNode call, List<Value> args, Type returnType) {
-        Value.Kind kind = kindOf(returnType);
-
-        return switch (call.name) {
-            case "min" -> num(NumberExpr.min(expr(args.get(0)), expr(args.get(1))), kind);
-            case "max" -> num(NumberExpr.max(expr(args.get(0)), expr(args.get(1))), kind);
-            case "abs" -> num(NumberExpr.fn(NumberFunctions.ABS, expr(args.get(0))), kind);
-            case "floor" -> num(NumberExpr.fn(NumberFunctions.FLOOR, expr(args.get(0))), kind);
-            case "ceil" -> num(NumberExpr.fn(NumberFunctions.CEIL, expr(args.get(0))), kind);
-            case "round" -> num(NumberExpr.fn(NumberFunctions.ROUND, expr(args.get(0))), kind);
-            case "sqrt" -> num(NumberExpr.fn(NumberFunctions.SQRT, expr(args.get(0))), kind);
-            case "pow" -> num(NumberExpr.fn(NumberFunctions.POW, expr(args.get(0)), expr(args.get(1))), kind);
-            default -> throw new Fail("Math." + call.name);
-        };
-    }
-
     static Value pick(List<?> list, Value.Num index) {
         if (!(index.expr() instanceof NumberExpr.Fn fn) || !fn.id().equals(NumberFunctions.UNIFORM_INT)
                 || !(fn.args().get(0) instanceof NumberExpr.Const lo) || !(fn.args().get(1) instanceof NumberExpr.Const hi)) {
@@ -1159,16 +1130,6 @@ final class Interpreter implements Opcodes {
         }
 
         return value;
-    }
-
-    Value unbox(MethodInsnNode call, Value.Num num) {
-        return switch (call.name) {
-            case "intValue", "shortValue", "byteValue" -> new Value.Num(num.expr(), Value.Kind.INT);
-            case "longValue" -> new Value.Num(num.expr(), Value.Kind.LONG);
-            case "floatValue" -> new Value.Num(num.expr(), Value.Kind.FLOAT);
-            case "doubleValue" -> new Value.Num(num.expr(), Value.Kind.DOUBLE);
-            default -> throw new Fail("number method " + call.name);
-        };
     }
 
     @Nullable
@@ -1322,8 +1283,8 @@ final class Interpreter implements Opcodes {
                 && Level.class.isAssignableFrom(load(insn.owner, loader))) {
             return new Value.Known(0);
         }
-        if (isSelf(receiver) && !ownGetOffers && isVillagerOffers(insn, loader)) {
-            return merchantOffers;
+        if (isSelf(receiver) && !traderRun.ownGetOffers && isVillagerOffers(insn, loader)) {
+            return traderRun.offers;
         }
         if (isSelf(receiver) && store.hasTraderField(insn.owner + "." + insn.name)) {
             return store.getTraderField(insn.owner + "." + insn.name);
@@ -1367,9 +1328,9 @@ final class Interpreter implements Opcodes {
 
     private void putField(FieldInsnNode insn, Value receiver, Value value, ClassLoader loader) {
         if (isSelf(receiver) && isVillagerOffers(insn, loader) && value instanceof Value.Offers offers) {
-            merchantOffers = offers;
+            traderRun.offers = offers;
 
-            if (!ownGetOffers) {
+            if (!traderRun.ownGetOffers) {
                 return;
             }
         }
@@ -2100,15 +2061,6 @@ final class Interpreter implements Opcodes {
         }
 
         return null;
-    }
-
-    private static Value.Kind kindOf(Type type) {
-        return switch (type.getSort()) {
-            case Type.LONG -> Value.Kind.LONG;
-            case Type.FLOAT -> Value.Kind.FLOAT;
-            case Type.DOUBLE -> Value.Kind.DOUBLE;
-            default -> Value.Kind.INT;
-        };
     }
 
     static int[] choiceIndices(List<Value> args) {

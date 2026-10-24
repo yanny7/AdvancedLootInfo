@@ -1,6 +1,7 @@
 package com.yanny.ali.plugin.server.bytecode;
 
 import com.yanny.aci.api.NumberExpr;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Handle;
@@ -26,7 +27,11 @@ class FakeCallContext implements CallContext {
     final List<Decision> decisions = new ArrayList<>();
     final Deque<Boolean> answers = new ArrayDeque<>();
     final List<Call> jdkCalls = new ArrayList<>();
-    boolean traderRun;
+    final Map<Object, Integer> levelKeys = new IdentityHashMap<>();
+    @Nullable
+    TraderModel.TraderRun traderRun;
+    @Nullable
+    RegistryAccess registries;
     Interpreter.Mode mode = Interpreter.Mode.SYMBOLIC;
     int pick;
     @Nullable
@@ -188,9 +193,22 @@ class FakeCallContext implements CallContext {
         return colls.containsKey(object) ? colls.get(object).randomIndexSet : null;
     }
 
+    @Nullable
     @Override
-    public boolean isTraderRun() {
+    public TraderModel.TraderRun traderRun() {
         return traderRun;
+    }
+
+    @Nullable
+    @Override
+    public Integer levelKey(Object listings) {
+        return levelKeys.get(listings);
+    }
+
+    @Nullable
+    @Override
+    public RegistryAccess registries() {
+        return registries;
     }
 
     @Override

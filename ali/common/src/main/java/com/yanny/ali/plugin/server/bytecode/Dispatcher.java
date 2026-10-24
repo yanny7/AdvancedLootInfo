@@ -1,6 +1,7 @@
 package com.yanny.ali.plugin.server.bytecode;
 
 import com.yanny.aci.api.NumberExpr;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
@@ -28,7 +29,6 @@ import static com.yanny.ali.plugin.server.bytecode.Interpreter.isPlainOffers;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.isRandomType;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.isScalar;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.isUniformPick;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.ownDeclaration;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.returnsOffer;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.sameDraw;
 import static com.yanny.ali.plugin.server.bytecode.MethodModel.NO_OPINION;
@@ -71,12 +71,12 @@ final class Dispatcher implements Opcodes, CallContext {
                 new RandomModel(),
                 costs,
                 stacks,
-                branch(Dispatcher::num),
+                new NumberModel(),
                 branch(Dispatcher::closure),
-                branch(Dispatcher::trader),
+                new TraderModel(),
                 branch(Dispatcher::offers),
                 branch(Dispatcher::draws),
-                branch(Dispatcher::registryAccess),
+                new WorldModel(),
                 branch(Dispatcher::unknown),
                 branch(Dispatcher::unsupported),
                 new MapModel(),
@@ -88,8 +88,7 @@ final class Dispatcher implements Opcodes, CallContext {
                 branch(Dispatcher::isNull),
                 branch(Dispatcher::selectionGuard),
                 branch(Dispatcher::threadLocalRandom),
-                branch(Dispatcher::math),
-                branch(Dispatcher::valueOf),
+                NumberModel.STATICS,
                 branch(Dispatcher::orderOffers),
                 new CollectionsModel(),
                 branch(Dispatcher::uncertain),
@@ -278,9 +277,22 @@ final class Dispatcher implements Opcodes, CallContext {
         return interpreter.heap.randomIndexSet(object);
     }
 
+    @Nullable
     @Override
-    public boolean isTraderRun() {
-        return interpreter.merchant != null;
+    public TraderModel.TraderRun traderRun() {
+        return interpreter.traderRun;
+    }
+
+    @Nullable
+    @Override
+    public Integer levelKey(Object listings) {
+        return interpreter.listingKeys.get(listings);
+    }
+
+    @Nullable
+    @Override
+    public RegistryAccess registries() {
+        return interpreter.registries;
     }
 
     @Override
@@ -541,7 +553,7 @@ final class Dispatcher implements Opcodes, CallContext {
     }
 
     private Value getOffer(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        if (interpreter.merchant != null && RuntimeNames.is(RuntimeNames.GET_OFFER, call)) {
+        if (interpreter.traderRun != null && RuntimeNames.is(RuntimeNames.GET_OFFER, call)) {
             if (args.get(0) instanceof Value.Choice choice && (choice.draw() != null && interpreter.heap.isPool(choice.draw()) || isUniformPick(choice))
                     && choice.options().stream().allMatch(VillagerTrades.ItemListing.class::isInstance)) {
                 trace("undistributed.getOffer.choice", call);
@@ -562,7 +574,7 @@ final class Dispatcher implements Opcodes, CallContext {
     private Value boundOffer(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
         boolean isStatic = call.getOpcode() == INVOKESTATIC;
 
-        if (interpreter.merchant != null && !isStatic && args.get(0) instanceof Value.Choice choice && (choice.draw() != null && interpreter.heap.isPool(choice.draw()) || isUniformPick(choice))
+        if (interpreter.traderRun != null && !isStatic && args.get(0) instanceof Value.Choice choice && (choice.draw() != null && interpreter.heap.isPool(choice.draw()) || isUniformPick(choice))
                 && choice.options().stream().noneMatch(MerchantOffer.class::isInstance) && returnsOffer(call, loader)) {
             List<Object> bound = interpreter.bound(args.subList(1, args.size()));
 
@@ -613,18 +625,6 @@ final class Dispatcher implements Opcodes, CallContext {
         return NO_OPINION;
     }
 
-    private Value num(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        boolean isStatic = call.getOpcode() == INVOKESTATIC;
-        Value receiver = isStatic ? null : args.get(0);
-
-        if (receiver instanceof Value.Num num) {
-            trace("receiver.num", call);
-            return interpreter.unbox(call, num);
-        }
-
-        return NO_OPINION;
-    }
-
     @Nullable
     private Value closure(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
         boolean isStatic = call.getOpcode() == INVOKESTATIC;
@@ -641,44 +641,6 @@ final class Dispatcher implements Opcodes, CallContext {
             all.addAll(args.subList(1, args.size()));
             trace("receiver.closure", call);
             return interpreter.invokeHandle(closure.impl(), all, closure.loader(), depth + 1);
-        }
-
-        return NO_OPINION;
-    }
-
-    @Nullable
-    private Value trader(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        boolean isStatic = call.getOpcode() == INVOKESTATIC;
-        Value receiver = isStatic ? null : args.get(0);
-
-        if (interpreter.isSelf(receiver)) {
-            if (!interpreter.ownGetOffers && RuntimeNames.is(RuntimeNames.GET_OFFERS, call)) {
-                trace("receiver.trader.getOffers", call);
-                return interpreter.merchantOffers;
-            }
-            if (RuntimeNames.is(RuntimeNames.ADD_OFFERS_FROM_ITEM_LISTINGS, call)) {
-                if (!(args.get(1) instanceof Value.Offers offers) || !(args.get(2) instanceof Value.Known known)
-                        || !(known.value() instanceof VillagerTrades.ItemListing[] listings)) {
-                    trace("receiver.trader.addOffers.fail", call);
-                    throw new Fail("offers from item listings");
-                }
-
-                offers.entries.add(new Value.Offers.Listings(listings, args.get(3), interpreter.listingKeys.get(listings)));
-                trace("receiver.trader.addOffers", call);
-                return null;
-            }
-
-            boolean special = call.getOpcode() == INVOKESPECIAL;
-            Class<?> start = special ? load(call.owner, loader) : interpreter.merchant;
-
-            if (start != null) {
-                Declaration own = ownDeclaration(start, call.name, call.desc, special);
-
-                if (own != null) {
-                    trace("receiver.trader.own", call);
-                    return interpreter.execute(own.owner(), own.method(), args, depth + 1);
-                }
-            }
         }
 
         return NO_OPINION;
@@ -714,18 +676,6 @@ final class Dispatcher implements Opcodes, CallContext {
 
             trace("receiver.draws.fail", call);
             throw new Fail("iteration over random draws");
-        }
-
-        return NO_OPINION;
-    }
-
-    private Value registryAccess(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        boolean isStatic = call.getOpcode() == INVOKESTATIC;
-        Value receiver = isStatic ? null : args.get(0);
-
-        if (receiver instanceof Value.Unknown && interpreter.registries != null && (RuntimeNames.is(RuntimeNames.REGISTRY_ACCESS, call) || RuntimeNames.is(RuntimeNames.ENTITY_REGISTRY_ACCESS, call))) {
-            trace("receiver.registryAccess", call);
-            return new Value.Known(interpreter.registries);
         }
 
         return NO_OPINION;
@@ -833,29 +783,6 @@ final class Dispatcher implements Opcodes, CallContext {
         if (isStatic && call.owner.equals("java/util/concurrent/ThreadLocalRandom") && call.name.equals("current")) {
             trace("jdk.threadLocalRandom", call);
             return new Value.Rng(true);
-        }
-
-        return NO_OPINION;
-    }
-
-    private Value math(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        boolean isStatic = call.getOpcode() == INVOKESTATIC;
-        Type returnType = Type.getReturnType(call.desc);
-
-        if (isStatic && (call.owner.equals("java/lang/Math") || call.owner.equals("java/lang/StrictMath")) && args.stream().anyMatch((v) -> v instanceof Value.Num)) {
-            trace("jdk.math", call);
-            return interpreter.math(call, args, returnType);
-        }
-
-        return NO_OPINION;
-    }
-
-    private Value valueOf(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        boolean isStatic = call.getOpcode() == INVOKESTATIC;
-
-        if (isStatic && call.name.equals("valueOf") && args.size() == 1 && args.get(0) instanceof Value.Num num) {
-            trace("jdk.valueOf", call);
-            return call.owner.equals("java/lang/String") ? Value.UNKNOWN : num;
         }
 
         return NO_OPINION;

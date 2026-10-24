@@ -1,6 +1,7 @@
 package com.yanny.ali.plugin.server.bytecode;
 
 import com.yanny.aci.api.NumberExpr;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.tree.MethodInsnNode;
@@ -63,7 +64,14 @@ interface CallContext {
     @Nullable
     int[] randomIndexSet(Object object);
 
-    boolean isTraderRun();
+    @Nullable
+    TraderModel.TraderRun traderRun();
+
+    @Nullable
+    Integer levelKey(Object listings);
+
+    @Nullable
+    RegistryAccess registries();
 
     boolean decide(Decision.Kind kind, @Nullable Object subject, @Nullable Object value, String reason);
 
