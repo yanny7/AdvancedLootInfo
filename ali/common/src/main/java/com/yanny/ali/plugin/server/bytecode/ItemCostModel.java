@@ -10,12 +10,17 @@ import org.objectweb.asm.tree.MethodInsnNode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import static com.yanny.ali.plugin.server.bytecode.Arithmetic.floatOf;
+import static com.yanny.ali.plugin.server.bytecode.Arithmetic.intOf;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.CONSTRUCTOR;
+import static com.yanny.ali.plugin.server.bytecode.Interpreter.ITEM_STACK;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.num;
 
 final class ItemCostModel implements MethodModel {
     static final String ITEM_COST = Type.getInternalName(ItemCost.class);
+    private static final String OPTIONAL = Type.getInternalName(Optional.class);
 
     @Nullable
     @Override
@@ -25,7 +30,7 @@ final class ItemCostModel implements MethodModel {
         if (insn.name.equals(CONSTRUCTOR)) {
             if (insn.owner.equals(ITEM_COST)) {
                 context.traceCase("constructor.itemCost", insn);
-                return ItemStackModel.construct(context, ItemCost.class, insn.desc, call.args());
+                return construct(context, insn.desc, call.args());
             }
 
             return NO_OPINION;
@@ -39,6 +44,57 @@ final class ItemCostModel implements MethodModel {
         }
 
         return NO_OPINION;
+    }
+
+    @Nullable
+    static Value.Offer offer(Type[] params, List<Value> args) {
+        if (params.length >= 5 && TradeTypes.isObject(params[0], ITEM_COST)) {
+            boolean hasCostB = TradeTypes.isObject(params[1], OPTIONAL);
+            int resultIndex = hasCostB ? 2 : 1;
+            List<Value> numbers = args.subList(resultIndex + 1, args.size());
+            Value costA = cost(args.get(0));
+            Value costB = hasCostB ? optionalCost(args.get(1)) : new Value.Known(ItemStack.EMPTY);
+            Value result = args.get(resultIndex);
+
+            if (TradeTypes.isObject(params[resultIndex], ITEM_STACK) && numbers.size() == 3) {
+                return new Value.Offer(costA, costB, result, intOf(numbers.get(0)), intOf(numbers.get(1)), floatOf(numbers.get(2)));
+            }
+            if (TradeTypes.isObject(params[resultIndex], ITEM_STACK) && numbers.size() >= 4) {
+                return new Value.Offer(costA, costB, result, intOf(numbers.get(1)), intOf(numbers.get(2)), floatOf(numbers.get(3)));
+            }
+        }
+
+        return null;
+    }
+
+    private static Value construct(CallContext context, String desc, List<Value> args) {
+        if (Type.getArgumentTypes(desc).length == 4 && args.get(3) instanceof Value.Stack shown) {
+            Value.Stack cost = shown.copy();
+
+            cost.count = context.expr(args.get(1));
+            return cost;
+        }
+
+        return ItemStackModel.construct(context, ItemCost.class, desc, args);
+    }
+
+    private static Value cost(Value value) {
+        if (value instanceof Value.Known known && known.value() instanceof ItemCost cost) {
+            return new Value.Known(cost.itemStack());
+        }
+        if (value instanceof Value.Choice choice && choice.options().stream().allMatch(ItemCost.class::isInstance)) {
+            return new Value.Choice(choice.options().stream().<Object>map((o) -> ((ItemCost) o).itemStack()).toList(), choice.draw());
+        }
+
+        return value;
+    }
+
+    private static Value optionalCost(Value value) {
+        if (value instanceof Value.Known known && known.value() instanceof Optional<?> optional) {
+            return optional.isPresent() ? cost(new Value.Known(optional.get())) : new Value.Known(ItemStack.EMPTY);
+        }
+
+        return cost(value);
     }
 
     @Nullable

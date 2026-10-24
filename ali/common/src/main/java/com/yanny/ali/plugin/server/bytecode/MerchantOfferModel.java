@@ -1,7 +1,5 @@
 package com.yanny.ali.plugin.server.bytecode;
 
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
@@ -11,17 +9,11 @@ import org.objectweb.asm.tree.*;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
-import static com.yanny.ali.plugin.server.bytecode.Arithmetic.floatOf;
-import static com.yanny.ali.plugin.server.bytecode.Arithmetic.intOf;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.CONSTRUCTOR;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.ITEM_STACK;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.MERCHANT_OFFER;
 
 final class MerchantOfferModel implements MethodModel, Opcodes {
-    private static final String OPTIONAL = Type.getInternalName(Optional.class);
-
     @Nullable
     @Override
     public Value apply(CallContext context, Call call) {
@@ -37,22 +29,10 @@ final class MerchantOfferModel implements MethodModel, Opcodes {
     }
 
     private static Value construct(CallContext context, String desc, List<Value> args) {
-        Type[] params = Type.getArgumentTypes(desc);
+        Value.Offer offer = ItemCostModel.offer(Type.getArgumentTypes(desc), args);
 
-        if (params.length >= 5 && TradeTypes.isObject(params[0], ItemCostModel.ITEM_COST)) {
-            boolean hasCostB = TradeTypes.isObject(params[1], OPTIONAL);
-            int resultIndex = hasCostB ? 2 : 1;
-            List<Value> numbers = args.subList(resultIndex + 1, args.size());
-            Value costA = cost(args.get(0));
-            Value costB = hasCostB ? optionalCost(args.get(1)) : new Value.Known(ItemStack.EMPTY);
-            Value result = args.get(resultIndex);
-
-            if (TradeTypes.isObject(params[resultIndex], ITEM_STACK) && numbers.size() == 3) {
-                return new Value.Offer(costA, costB, result, intOf(numbers.get(0)), intOf(numbers.get(1)), floatOf(numbers.get(2)));
-            }
-            if (TradeTypes.isObject(params[resultIndex], ITEM_STACK) && numbers.size() >= 4) {
-                return new Value.Offer(costA, costB, result, intOf(numbers.get(1)), intOf(numbers.get(2)), floatOf(numbers.get(3)));
-            }
+        if (offer != null) {
+            return offer;
         }
         if (args.stream().allMatch(context::isConcrete)) {
             Constructor<?> constructor = Resolution.constructor(MerchantOffer.class, desc);
@@ -65,25 +45,6 @@ final class MerchantOfferModel implements MethodModel, Opcodes {
         }
 
         throw new Fail("offer constructor");
-    }
-
-    private static Value cost(Value value) {
-        if (value instanceof Value.Known known && known.value() instanceof ItemCost cost) {
-            return new Value.Known(cost.itemStack());
-        }
-        if (value instanceof Value.Choice choice && choice.options().stream().allMatch(ItemCost.class::isInstance)) {
-            return new Value.Choice(choice.options().stream().<Object>map((o) -> ((ItemCost) o).itemStack()).toList(), choice.draw());
-        }
-
-        return value;
-    }
-
-    private static Value optionalCost(Value value) {
-        if (value instanceof Value.Known known && known.value() instanceof Optional<?> optional) {
-            return optional.isPresent() ? cost(new Value.Known(optional.get())) : new Value.Known(ItemStack.EMPTY);
-        }
-
-        return cost(value);
     }
 
     private static boolean isForwardingOffer(Class<?> type, String desc) {

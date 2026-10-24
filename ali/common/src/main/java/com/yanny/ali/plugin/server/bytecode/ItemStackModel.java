@@ -73,14 +73,6 @@ final class ItemStackModel implements MethodModel {
     @NotNull
     static Value construct(CallContext context, Class<?> type, String desc, List<Value> args) {
         Type[] params = Type.getArgumentTypes(desc);
-
-        if (type == ItemCost.class && params.length == 4 && args.get(3) instanceof Value.Stack shown) {
-            Value.Stack cost = shown.copy();
-
-            cost.count = context.expr(args.get(1));
-            return cost;
-        }
-
         NumberExpr count = params.length >= 2 && params[1].getSort() == Type.INT ? context.expr(args.get(1)) : NumberExpr.constant(1);
         List<Object> items;
 
@@ -232,30 +224,18 @@ final class ItemStackModel implements MethodModel {
             stack.randomTag = true;
             return null;
         }
-        if (TradeTypes.isObject(returnType, ITEM_STACK)) {
+        if (returnType.getSort() == Type.OBJECT && returnType.getInternalName().equals(ITEM_STACK)) {
             stack.randomTag = true;
             return stack.copy();
         }
-        if (TradeTypes.isObject(returnType, ItemCostModel.ITEM_COST)) {
-            Value.Stack copy = stack.copy();
 
-            copy.randomTag = true;
-            return copy;
-        }
-        if (isComponentWrite(call)) {
-            stack.randomTag = true;
-            return Value.Unknown.of(returnType, null);
+        Value changed = ComponentModel.unknownChange(call, stack);
+
+        if (changed != NO_OPINION) {
+            return changed;
         }
 
         throw new Fail(reason);
-    }
-
-    private static boolean isComponentWrite(MethodInsnNode call) {
-        if (call.owner.equals(ITEM_STACK) && RuntimeNames.STACK_SET != null && RuntimeNames.STACK_UPDATE != null) {
-            return call.name.equals(RuntimeNames.STACK_SET.name()) || call.name.equals(RuntimeNames.STACK_UPDATE.name());
-        }
-
-        return RuntimeNames.is(RuntimeNames.UPDATE_ENCHANTMENTS, call);
     }
 
     @Nullable
