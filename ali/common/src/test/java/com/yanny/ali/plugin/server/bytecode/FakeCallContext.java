@@ -30,6 +30,10 @@ class FakeCallContext implements CallContext {
     final List<Call> jdkCalls = new ArrayList<>();
     final Map<Object, Integer> levelKeys = new IdentityHashMap<>();
     final Map<String, Value> traderFields = new HashMap<>();
+    final Set<Object> pools = Collections.newSetFromMap(new IdentityHashMap<>());
+    final Map<Object, NumberExpr> drawCounts = new IdentityHashMap<>();
+    final Map<Object, Object> listingSources = new IdentityHashMap<>();
+    final Map<List<Object>, Integer> poolKeys = new HashMap<>();
     @Nullable
     TraderModel.TraderRun traderRun;
     @Nullable
@@ -218,6 +222,23 @@ class FakeCallContext implements CallContext {
         return colls.containsKey(object) ? colls.get(object).randomIndexSet : null;
     }
 
+    @Override
+    public boolean isPool(@Nullable Object draw) {
+        return pools.contains(draw);
+    }
+
+    @Nullable
+    @Override
+    public NumberExpr drawCount(@Nullable Object draw) {
+        return drawCounts.get(draw);
+    }
+
+    @Nullable
+    @Override
+    public Value.Offers offers(Object collection) {
+        return colls.containsKey(collection) ? colls.get(collection).offers : null;
+    }
+
     @Nullable
     @Override
     public TraderModel.TraderRun traderRun() {
@@ -239,6 +260,23 @@ class FakeCallContext implements CallContext {
     @Override
     public Integer levelKey(Object listings) {
         return levelKeys.get(listings);
+    }
+
+    @Nullable
+    @Override
+    public Object listingSource(Object listing) {
+        return listingSources.get(listing);
+    }
+
+    @Nullable
+    @Override
+    public Integer poolKey(List<Object> listings) {
+        return poolKeys.get(listings);
+    }
+
+    @Override
+    public BoundOffer boundOffer(Object element, MethodInsnNode call, List<Object> args) {
+        return new BoundOffer(element, call.owner, call.name, call.desc, call.itf, args);
     }
 
     @Nullable
