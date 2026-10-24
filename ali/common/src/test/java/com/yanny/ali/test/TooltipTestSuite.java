@@ -19,9 +19,11 @@ import com.yanny.ali.plugin.glm.Verdict;
 import com.yanny.ali.plugin.server.LootConditionTypes;
 import com.yanny.ali.plugin.server.LootFunctionTypes;
 import com.yanny.ali.plugin.server.bytecode.BytecodeInterpreter;
+import com.yanny.ali.plugin.server.bytecode.CollectionsModelTest;
 import com.yanny.ali.plugin.server.bytecode.LoggerModelTest;
 import com.yanny.ali.plugin.server.bytecode.ItemStackModelTest;
 import com.yanny.ali.plugin.server.bytecode.MapItemModelTest;
+import com.yanny.ali.plugin.server.bytecode.MapModelTest;
 import com.yanny.ali.plugin.server.bytecode.MerchantOfferModelTest;
 import com.yanny.ali.plugin.server.bytecode.OptionalModelTest;
 import com.yanny.ali.plugin.server.bytecode.RandomModelTest;
@@ -108,7 +110,9 @@ import static org.mockito.Mockito.mock;
         MapItemModelTest.class,
         RandomModelTest.class,
         ItemStackModelTest.class,
-        MerchantOfferModelTest.class
+        MerchantOfferModelTest.class,
+        CollectionsModelTest.class,
+        MapModelTest.class
 })
 public class TooltipTestSuite {
     public static IServerUtils UTILS;

@@ -15,12 +15,9 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.BaseStream;
-import java.util.stream.IntStream;
 
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.CONSTRUCTOR;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.FRESH_RESULTS;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.LOOKUPS;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.MAX_OPTIONS;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.ORDER_ONLY;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.READ_ONLY;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.STATIC_RANDOM;
@@ -34,7 +31,6 @@ import static com.yanny.ali.plugin.server.bytecode.Interpreter.isUniformPick;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.ownDeclaration;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.returnsOffer;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.sameDraw;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.withoutCap;
 import static com.yanny.ali.plugin.server.bytecode.MethodModel.NO_OPINION;
 import static com.yanny.ali.plugin.server.bytecode.Resolution.*;
 
@@ -65,7 +61,7 @@ final class Dispatcher implements Opcodes, CallContext {
                 branch(Dispatcher::boundOffer),
                 branch(Dispatcher::intValue),
                 new OptionalModel(),
-                branch(Dispatcher::removeChoice),
+                CollectionsModel.REMOVE_CHOICE,
                 branch(Dispatcher::addOffer),
                 branch(Dispatcher::collectedOffers)
         ));
@@ -80,7 +76,7 @@ final class Dispatcher implements Opcodes, CallContext {
                 branch(Dispatcher::registryAccess),
                 branch(Dispatcher::unknown),
                 branch(Dispatcher::unsupported),
-                branch(Dispatcher::lookup),
+                new MapModel(),
                 branch(Dispatcher::nullReceiver),
                 branch(Dispatcher::lambda)
         ));
@@ -91,14 +87,8 @@ final class Dispatcher implements Opcodes, CallContext {
                 branch(Dispatcher::threadLocalRandom),
                 branch(Dispatcher::math),
                 branch(Dispatcher::valueOf),
-                branch(Dispatcher::listPick),
-                branch(Dispatcher::removeRandom),
                 branch(Dispatcher::orderOffers),
-                branch(Dispatcher::shuffle),
-                branch(Dispatcher::shuffled),
-                branch(Dispatcher::addRandom),
-                branch(Dispatcher::randomSet),
-                branch(Dispatcher::removed),
+                new CollectionsModel(),
                 branch(Dispatcher::uncertain),
                 branch(Dispatcher::staticUnknown)
         ));
@@ -154,13 +144,6 @@ final class Dispatcher implements Opcodes, CallContext {
         Value answer = apply(Phase.CONSTRUCTOR, new Call(new MethodInsnNode(INVOKESPECIAL, type, CONSTRUCTOR, desc, false), args, loader, depth));
 
         return answer != NO_OPINION ? answer : realConstructor(type, desc, args, loader);
-    }
-
-    @Nullable
-    Value jdk(MethodInsnNode call, Class<?> declaring, List<Value> args, ClassLoader loader, int depth) {
-        Value answer = apply(Phase.JDK, new Call(call, args, loader, depth));
-
-        return answer != NO_OPINION ? answer : jdkReal(call, declaring, args, loader);
     }
 
     @Override
@@ -265,6 +248,51 @@ final class Dispatcher implements Opcodes, CallContext {
         return interpreter.shadowed(args);
     }
 
+    @Override
+    public boolean isOwned(Object object) {
+        return interpreter.heap.isOwned(object);
+    }
+
+    @Override
+    public CollState coll(Object object) {
+        return interpreter.heap.coll(object);
+    }
+
+    @Override
+    public int removals(Object object) {
+        return interpreter.heap.removals(object);
+    }
+
+    @Nullable
+    @Override
+    public Value.Draws shuffled(Object object) {
+        return interpreter.heap.shuffled(object);
+    }
+
+    @Nullable
+    @Override
+    public int[] randomIndexSet(Object object) {
+        return interpreter.heap.randomIndexSet(object);
+    }
+
+    @Override
+    public boolean isTraderRun() {
+        return interpreter.merchant != null;
+    }
+
+    @Override
+    public boolean decide(Decision.Kind kind, @Nullable Object subject, @Nullable Object value, String reason) {
+        return interpreter.decide(kind, subject, value, reason);
+    }
+
+    @Nullable
+    @Override
+    public Value jdk(Call call, Class<?> declaring) {
+        Value answer = apply(Phase.JDK, call);
+
+        return answer != NO_OPINION ? answer : jdkReal(call.insn(), declaring, call.args(), call.loader());
+    }
+
     @Nullable
     private Value apply(Phase phase, Call call) {
         for (MethodModel model : MODELS.get(phase)) {
@@ -336,11 +364,11 @@ final class Dispatcher implements Opcodes, CallContext {
         Declared declared = declaration(start, call.name, call.desc, call.getOpcode() == INVOKESPECIAL);
 
         if (declared instanceof JdkDeclaration jdk) {
-            return jdk(call, jdk.owner(), args, loader, depth);
+            return jdk(invocation, jdk.owner());
         }
 
         if (isStatic && isJdk(start)) {
-            return jdk(call, start, args, loader, depth);
+            return jdk(invocation, start);
         }
 
         if (args.stream().anyMatch(this::holdsStack)) {
@@ -555,20 +583,6 @@ final class Dispatcher implements Opcodes, CallContext {
         return NO_OPINION;
     }
 
-    private Value removeChoice(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        boolean isStatic = call.getOpcode() == INVOKESTATIC;
-
-        if (!isStatic && args.get(0) instanceof Value.Known known && known.value() instanceof List<?> list && interpreter.heap.isOwned(list)
-                && call.name.equals("remove") && call.desc.equals("(Ljava/lang/Object;)Z") && args.get(1) instanceof Value.Choice choice
-                && choice.options().size() == list.size() - interpreter.heap.removals(list) && new HashSet<Object>(list).containsAll(choice.options())) {
-            interpreter.heap.coll(list).removals++;
-            trace("undistributed.removeChoice", call);
-            return new Value.Known(1);
-        }
-
-        return NO_OPINION;
-    }
-
     @Nullable
     private Value addOffer(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
         boolean isStatic = call.getOpcode() == INVOKESTATIC;
@@ -746,20 +760,6 @@ final class Dispatcher implements Opcodes, CallContext {
         return NO_OPINION;
     }
 
-    @Nullable
-    private Value lookup(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        boolean isStatic = call.getOpcode() == INVOKESTATIC;
-        Value receiver = isStatic ? null : args.get(0);
-
-        if (!isStatic && receiver instanceof Value.Known known && known.value() instanceof Map<?, ?> map && LOOKUPS.contains(call.name)
-                && args.get(1) instanceof Value.Unknown key && key.origin() != null && args.subList(2, args.size()).stream().allMatch(interpreter::isConcrete)) {
-            trace("receiver.lookup", call);
-            return interpreter.lookup(call, map.getClass(), map, key.origin(), args, loader, depth);
-        }
-
-        return NO_OPINION;
-    }
-
     private Value nullReceiver(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
         boolean isStatic = call.getOpcode() == INVOKESTATIC;
         Value receiver = isStatic ? null : args.get(0);
@@ -858,31 +858,6 @@ final class Dispatcher implements Opcodes, CallContext {
         return NO_OPINION;
     }
 
-    private Value listPick(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        boolean isStatic = call.getOpcode() == INVOKESTATIC;
-
-        if (!isStatic && args.get(0) instanceof Value.Known known && known.value() instanceof List<?> list && call.name.equals("get")
-                && call.desc.equals("(I)Ljava/lang/Object;") && args.get(1) instanceof Value.Num num) {
-            trace("jdk.listPick", call);
-            return interpreter.pick(list, num);
-        }
-
-        return NO_OPINION;
-    }
-
-    private Value removeRandom(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        boolean isStatic = call.getOpcode() == INVOKESTATIC;
-
-        if (!isStatic && args.get(0) instanceof Value.Known known && known.value() instanceof List<?> list && interpreter.heap.isOwned(list)
-                && call.name.equals("remove") && call.desc.equals("(I)Ljava/lang/Object;")
-                && (args.get(1) instanceof Value.Num || interpreter.heap.removals(list) > 0 || interpreter.merchant != null && list.size() == 1)) {
-            trace("jdk.removeRandom", call);
-            return interpreter.removeRandom(list, args.get(1));
-        }
-
-        return NO_OPINION;
-    }
-
     @Nullable
     private Value orderOffers(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
         boolean isStatic = call.getOpcode() == INVOKESTATIC;
@@ -890,124 +865,6 @@ final class Dispatcher implements Opcodes, CallContext {
         if (isStatic && call.owner.equals("java/util/Collections") && ORDER_ONLY.contains(call.name) && args.get(0) instanceof Value.Offers) {
             trace("jdk.orderOffers", call);
             return null;
-        }
-
-        return NO_OPINION;
-    }
-
-    @Nullable
-    private Value shuffle(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        boolean isStatic = call.getOpcode() == INVOKESTATIC;
-
-        if (isStatic && call.owner.equals("java/util/Collections") && call.name.equals("shuffle") && args.get(0) instanceof Value.Known known
-                && known.value() instanceof List<?> list && interpreter.heap.isOwned(list) && list.size() <= MAX_OPTIONS) {
-            if (!list.isEmpty()) {
-                CollState coll = interpreter.heap.coll(list);
-
-                coll.shuffled = new Value.Draws(list, new ArrayList<>(list), list.size());
-                coll.pool = true;
-            }
-
-            trace("jdk.shuffle", call);
-            return null;
-        }
-
-        return NO_OPINION;
-    }
-
-    private Value shuffled(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        boolean isStatic = call.getOpcode() == INVOKESTATIC;
-
-        if (!isStatic && args.get(0) instanceof Value.Known known && known.value() != null && interpreter.heap.shuffled(known.value()) != null) {
-            Value.Draws draws = interpreter.heap.shuffled(known.value());
-
-            switch (call.name + call.desc) {
-                case "size()I" -> {
-                    trace("jdk.shuffled", call);
-                    return new Value.Known(draws.left);
-                }
-                case "isEmpty()Z" -> {
-                    trace("jdk.shuffled", call);
-                    return new Value.Known(draws.left == 0 ? 1 : 0);
-                }
-                case "iterator()Ljava/util/Iterator;" -> {
-                    trace("jdk.shuffled", call);
-                    return new Value.Draws(draws.pool, draws.options, draws.left);
-                }
-                case "get(I)Ljava/lang/Object;" -> {
-                    if (args.get(1) instanceof Value.Known index && (Integer) index.value() < draws.left) {
-                        trace("jdk.shuffled", call);
-                        return new Value.Choice(draws.options, draws.pool);
-                    }
-                }
-                case "subList(II)Ljava/util/List;" -> {
-                    if (args.get(1) instanceof Value.Known from && Integer.valueOf(0).equals(from.value())
-                            && (args.get(2) instanceof Value.Known || args.get(2) instanceof Value.Num)) {
-                        NumberExpr to = interpreter.expr(args.get(2));
-                        Object view = new ArrayList<>();
-
-                        if (args.get(2) instanceof Value.Num) {
-                            interpreter.heap.coll(draws.pool).drawCount = withoutCap(to, draws.left);
-                        }
-
-                        interpreter.heap.own(view);
-                        interpreter.heap.coll(view).shuffled = new Value.Draws(draws.pool, draws.options, Math.min(draws.left, (int) Math.floor(to.bounds().hi())));
-                        trace("jdk.shuffled", call);
-                        return new Value.Known(view);
-                    }
-                }
-                default -> {
-                }
-            }
-
-            trace("jdk.shuffled.fail", call);
-            throw new Fail("change under a random choice");
-        }
-
-        return NO_OPINION;
-    }
-
-    private Value addRandom(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        boolean isStatic = call.getOpcode() == INVOKESTATIC;
-
-        if (!isStatic && args.get(0) instanceof Value.Known known && known.value() instanceof Set<?> set && interpreter.heap.isOwned(set)
-                && call.name.equals("add") && call.desc.equals("(Ljava/lang/Object;)Z") && args.get(1) instanceof Value.Num num) {
-            trace("jdk.addRandom", call);
-            return interpreter.addRandom(set, num);
-        }
-
-        return NO_OPINION;
-    }
-
-    private Value randomSet(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        boolean isStatic = call.getOpcode() == INVOKESTATIC;
-
-        if (!isStatic && args.get(0) instanceof Value.Known known && known.value() != null && interpreter.heap.randomIndexSet(known.value()) != null) {
-            int[] draws = interpreter.heap.randomIndexSet(known.value());
-
-            trace("jdk.randomSet", call);
-            return switch (call.name + call.desc) {
-                case "size()I" -> new Value.Known(draws[1]);
-                case "iterator()Ljava/util/Iterator;" -> new Value.Draws(known.value(), IntStream.range(0, draws[0]).boxed().map(Object.class::cast).toList(), draws[1]);
-                default -> throw new Fail("change under a random choice");
-            };
-        }
-
-        return NO_OPINION;
-    }
-
-    private Value removed(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        boolean isStatic = call.getOpcode() == INVOKESTATIC;
-
-        if (!isStatic && args.get(0) instanceof Value.Known known && known.value() != null && interpreter.heap.removals(known.value()) > 0) {
-            int remaining = ((List<?>) known.value()).size() - interpreter.heap.removals(known.value());
-
-            trace("jdk.removed", call);
-            return switch (call.name + call.desc) {
-                case "size()I" -> new Value.Known(remaining);
-                case "isEmpty()Z" -> new Value.Known(remaining == 0 ? 1 : 0);
-                default -> throw new Fail("change under a random choice");
-            };
         }
 
         return NO_OPINION;

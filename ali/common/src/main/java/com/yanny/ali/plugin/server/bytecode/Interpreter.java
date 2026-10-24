@@ -37,7 +37,7 @@ final class Interpreter implements Opcodes {
     static final String MERCHANT_OFFER = Type.getInternalName(MerchantOffer.class);
     private static final String LAMBDA_METAFACTORY = "java/lang/invoke/LambdaMetafactory";
     private static final String STRING_CONCAT_FACTORY = "java/lang/invoke/StringConcatFactory";
-    private static final Value.Known NULL = new Value.Known(null);
+    static final Value.Known NULL = new Value.Known(null);
     static final Set<String> STATIC_SAFE = Set.of("java/lang/Math", "java/lang/StrictMath", "java/lang/Integer", "java/lang/Long",
             "java/lang/Float", "java/lang/Double", "java/lang/Boolean", "java/lang/Character", "java/lang/Short", "java/lang/Byte",
             "java/lang/String", "java/lang/Enum", "java/util/Objects", "java/util/List", "java/util/Set", "java/util/Map",
@@ -50,7 +50,6 @@ final class Interpreter implements Opcodes {
             "trim", "toLowerCase", "toUpperCase", "concat", "getKey", "getValue", "intValue", "longValue", "floatValue",
             "doubleValue", "booleanValue", "byteValue", "shortValue", "charValue", "compareTo", "ordinal", "name", "getClass",
             "map", "filter", "subList", "first", "firstKey", "lastKey"), OptionalModel.READ_ONLY.stream()).collect(Collectors.toUnmodifiableSet());
-    static final Set<String> LOOKUPS = Set.of("get", "getOrDefault", "containsKey");
     static final Set<String> ORDER_ONLY = Set.of("reverse", "shuffle", "sort");
     static final Set<String> FRESH_RESULTS = Set.of("stream", "iterator", "listIterator", "spliterator", "toArray");
 
@@ -94,7 +93,7 @@ final class Interpreter implements Opcodes {
         return decisions;
     }
 
-    private boolean decide(Decision.Kind kind, @Nullable Object subject, @Nullable Object value, String reason) {
+    boolean decide(Decision.Kind kind, @Nullable Object subject, @Nullable Object value, String reason) {
         if (script == null) {
             throw new Fail(reason);
         }
@@ -1112,28 +1111,6 @@ final class Interpreter implements Opcodes {
         };
     }
 
-    @Nullable
-    Value lookup(MethodInsnNode call, Class<?> declaring, Map<?, ?> map, Origin key, List<Value> args, ClassLoader loader, int depth) {
-        List<Object> candidates = new ArrayList<>(map.keySet());
-
-        candidates.sort(Comparator.comparing(String::valueOf));
-
-        for (Object candidate : candidates) {
-            if (candidate != null && decide(Decision.Kind.EQUALS, key, candidate, "map lookup by a value from the trader or world")) {
-                List<Value> concrete = new ArrayList<>(args);
-
-                concrete.set(1, new Value.Known(candidate));
-                return dispatcher.jdk(call, declaring, concrete, loader, depth);
-            }
-        }
-
-        return switch (call.name) {
-            case "get" -> NULL;
-            case "getOrDefault" -> args.get(2);
-            default -> new Value.Known(0);
-        };
-    }
-
     Value math(MethodInsnNode call, List<Value> args, Type returnType) {
         Value.Kind kind = kindOf(returnType);
 
@@ -1150,7 +1127,7 @@ final class Interpreter implements Opcodes {
         };
     }
 
-    Value pick(List<?> list, Value.Num index) {
+    static Value pick(List<?> list, Value.Num index) {
         if (!(index.expr() instanceof NumberExpr.Fn fn) || !fn.id().equals(NumberFunctions.UNIFORM_INT)
                 || !(fn.args().get(0) instanceof NumberExpr.Const lo) || !(fn.args().get(1) instanceof NumberExpr.Const hi)) {
             throw new Fail("non-uniform index");
@@ -1167,51 +1144,6 @@ final class Interpreter implements Opcodes {
         }
 
         return new Value.Choice(new ArrayList<>(list.subList(from, to + 1)), index.expr());
-    }
-
-    Value removeRandom(List<?> list, Value index) {
-        int remaining = list.size() - heap.removals(list);
-        NumberInterval bounds = expr(index).bounds();
-
-        if (remaining <= 0 || bounds.lo() != 0 || bounds.hi() != remaining - 1 || list.size() > MAX_OPTIONS) {
-            throw new Fail("removal of a random element");
-        }
-
-        CollState coll = heap.coll(list);
-
-        coll.removals++;
-        coll.pool = true;
-        return new Value.Choice(new ArrayList<>(list), list);
-    }
-
-    static NumberExpr withoutCap(NumberExpr count, int size) {
-        if (count instanceof NumberExpr.Fn fn && fn.id().equals(NumberFunctions.MIN)) {
-            List<NumberExpr> args = fn.args().stream().filter((a) -> !(a instanceof NumberExpr.Const c && c.value() >= size)).map((a) -> withoutCap(a, size)).toList();
-
-            return args.size() == 1 ? args.get(0) : NumberExpr.fn(NumberFunctions.MIN, args.toArray(new NumberExpr[0]));
-        }
-
-        return count;
-    }
-
-    Value addRandom(Set<?> set, Value.Num index) {
-        NumberInterval bounds = index.expr().bounds();
-        int bound = (int) bounds.hi() + 1;
-        CollState coll = heap.coll(set);
-
-        if (coll.randomIndexSet == null) {
-            coll.randomIndexSet = new int[]{bound, 0};
-        }
-
-        int[] draws = coll.randomIndexSet;
-
-        if (!set.isEmpty() || bounds.lo() != 0 || bounds.hi() != Math.rint(bounds.hi()) || draws[0] != bound || bound > MAX_OPTIONS) {
-            throw new Fail("random set element");
-        }
-
-        draws[1] = Math.min(draws[1] + 1, bound);
-        coll.pool = true;
-        return new Value.Known(1);
     }
 
     static Value drawnInt(Value value) {

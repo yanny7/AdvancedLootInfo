@@ -50,4 +50,23 @@ interface CallContext {
     Value.Stack shadow(ItemStack real);
 
     List<Value> shadowed(List<Value> args);
+
+    boolean isOwned(Object object);
+
+    CollState coll(Object object);
+
+    int removals(Object object);
+
+    @Nullable
+    Value.Draws shuffled(Object object);
+
+    @Nullable
+    int[] randomIndexSet(Object object);
+
+    boolean isTraderRun();
+
+    boolean decide(Decision.Kind kind, @Nullable Object subject, @Nullable Object value, String reason);
+
+    @Nullable
+    Value jdk(Call call, Class<?> declaring);
 }
