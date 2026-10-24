@@ -77,7 +77,7 @@ final class LambdaResolver {
         Class<?> type = lambda.getClass();
         String name = type.getName();
         Class<?> owner = Class.forName(name.substring(0, name.indexOf(LAMBDA_MARKER)), false, type.getClassLoader());
-        ClassNode node = Interpreter.classNode(owner);
+        ClassNode node = Resolution.classNode(owner);
 
         if (node == null) {
             REASONS.put(type, "no bytecode of " + owner.getName());
@@ -150,7 +150,7 @@ final class LambdaResolver {
 
     @NotNull
     private static List<Stored> storage(ClassNode node) {
-        MethodNode clinit = Interpreter.findMethod(node, "<clinit>", "()V");
+        MethodNode clinit = Resolution.findMethod(node, "<clinit>", "()V");
 
         if (clinit == null) {
             return List.of();
@@ -276,7 +276,7 @@ final class LambdaResolver {
 
     private static boolean holds(Class<?> owner, Stored stored, Object lambda) {
         try {
-            Object value = Interpreter.field(owner, stored.field()).get(null);
+            Object value = Resolution.field(owner, stored.field()).get(null);
 
             if (stored.index() < 0) {
                 return value == lambda;
@@ -318,7 +318,7 @@ final class LambdaResolver {
                     return null;
                 }
 
-                Class<?> param = Interpreter.load(params.get(i).getInternalName(), owner.getClassLoader());
+                Class<?> param = Resolution.load(params.get(i).getInternalName(), owner.getClassLoader());
 
                 if (param == RandomSource.class) {
                     stubArgs[i] = new StubRandom(pick);
@@ -411,7 +411,7 @@ final class LambdaResolver {
             args.addAll(stubValues);
             return new StubResult(interpreter.invokeHandle(candidate, args, loader, 0), null);
         } catch (Throwable e) {
-            return new StubResult(null, e instanceof Interpreter.Fail fail ? fail.describe() : e.toString());
+            return new StubResult(null, e instanceof Fail fail ? fail.describe() : e.toString());
         }
     }
 
@@ -439,15 +439,15 @@ final class LambdaResolver {
             List<Object> code;
 
             try {
-                ClassNode node = Interpreter.classNode(Interpreter.load(handle.getOwner(), loader));
-                MethodNode method = node != null ? Interpreter.findMethod(node, handle.getName(), handle.getDesc()) : null;
+                ClassNode node = Resolution.classNode(Resolution.load(handle.getOwner(), loader));
+                MethodNode method = node != null ? Resolution.findMethod(node, handle.getName(), handle.getDesc()) : null;
 
                 if (method == null || !method.tryCatchBlocks.isEmpty()) {
                     return false;
                 }
 
                 code = code(method);
-            } catch (Interpreter.Fail fail) {
+            } catch (Fail fail) {
                 return false;
             }
 
@@ -533,17 +533,17 @@ final class LambdaResolver {
             Class<?> type;
 
             try {
-                type = Interpreter.load(handle.getOwner(), loader);
-            } catch (Interpreter.Fail fail) {
+                type = Resolution.load(handle.getOwner(), loader);
+            } catch (Fail fail) {
                 continue;
             }
 
-            if (Interpreter.isJdk(type) || isPlatform(handle.getOwner())) {
+            if (Resolution.isJdk(type) || isPlatform(handle.getOwner())) {
                 continue;
             }
 
-            ClassNode node = Interpreter.classNode(type);
-            MethodNode method = node != null ? Interpreter.findMethod(node, handle.getName(), handle.getDesc()) : null;
+            ClassNode node = Resolution.classNode(type);
+            MethodNode method = node != null ? Resolution.findMethod(node, handle.getName(), handle.getDesc()) : null;
 
             if (method == null) {
                 continue;
@@ -578,10 +578,10 @@ final class LambdaResolver {
         }
 
         try {
-            Class<?> cls = Interpreter.load(type.getInternalName(), loader);
+            Class<?> cls = Resolution.load(type.getInternalName(), loader);
 
             return RandomSource.class.isAssignableFrom(cls) || Random.class.isAssignableFrom(cls);
-        } catch (Interpreter.Fail fail) {
+        } catch (Fail fail) {
             return false;
         }
     }
@@ -656,7 +656,7 @@ final class LambdaResolver {
             try {
                 values.add(field.get(lambda));
             } catch (IllegalAccessException e) {
-                throw new Interpreter.Fail("captured value");
+                throw new Fail("captured value");
             }
         }
 

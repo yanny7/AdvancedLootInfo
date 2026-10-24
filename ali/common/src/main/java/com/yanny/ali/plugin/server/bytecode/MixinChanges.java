@@ -87,7 +87,7 @@ final class MixinChanges {
 
     private static void injected(IMixinInfo mixin, Class<?> owner, List<Target> changed) {
         ClassNode node = mixin.getClassNode(ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
-        ClassNode ownerNode = Interpreter.classNode(owner);
+        ClassNode ownerNode = Resolution.classNode(owner);
         IReferenceMapper refmap = null;
 
         for (MethodNode method : node.methods) {
