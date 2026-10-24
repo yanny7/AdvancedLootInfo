@@ -23,7 +23,6 @@ import java.util.stream.Stream;
 import static com.yanny.ali.plugin.server.bytecode.Resolution.*;
 
 final class Interpreter implements Opcodes {
-    static final int MAX_OPTIONS = 1024;
     static final String CONSTRUCTOR = "<init>";
     static final String ITEM_STACK = Type.getInternalName(ItemStack.class);
     static final String MERCHANT_OFFER = Type.getInternalName(MerchantOffer.class);
@@ -309,7 +308,7 @@ final class Interpreter implements Opcodes {
     }
 
     static Value limit(Value.Stack stack) {
-        if (stack.options.size() > MAX_OPTIONS) {
+        if (stack.options.size() > Limits.OPTIONS) {
             throw new Fail("too many options");
         }
 
@@ -397,7 +396,7 @@ final class Interpreter implements Opcodes {
         if (from < 0 || to >= list.size() || from > to) {
             throw new Fail("index out of range");
         }
-        if (to - from + 1 > MAX_OPTIONS) {
+        if (to - from + 1 > Limits.OPTIONS) {
             throw new Fail("too many options");
         }
 
@@ -406,7 +405,7 @@ final class Interpreter implements Opcodes {
 
     static Value drawnInt(Value value) {
         if (value instanceof Value.Num num && num.kind() == Value.Kind.INT && num.expr() instanceof NumberExpr.Fn fn && fn.id().equals(NumberFunctions.UNIFORM_INT)
-                && fn.args().get(0) instanceof NumberExpr.Const lo && fn.args().get(1) instanceof NumberExpr.Const hi && hi.value() - lo.value() < MAX_OPTIONS) {
+                && fn.args().get(0) instanceof NumberExpr.Const lo && fn.args().get(1) instanceof NumberExpr.Const hi && hi.value() - lo.value() < Limits.OPTIONS) {
             List<Object> options = new ArrayList<>();
 
             for (int i = (int) lo.value(); i <= (int) hi.value(); i++) {

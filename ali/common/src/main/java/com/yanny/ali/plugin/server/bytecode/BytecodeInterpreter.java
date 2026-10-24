@@ -17,13 +17,12 @@ import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.ali.plugin.common.trades.TradeGroupNode;
 import com.yanny.ali.plugin.common.trades.TradeUtils;
+import com.yanny.ali.plugin.server.bytecode.Explorer.Path;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
@@ -31,13 +30,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Unmodifiable;
 import org.objectweb.asm.Type;
 import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -45,8 +42,6 @@ public final class BytecodeInterpreter {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
     private static final Set<String> FAILED = ConcurrentHashMap.newKeySet();
     private static final boolean LOG_TRADES = Boolean.getBoolean("ali.debug.trades");
-    private static final int MAX_PATHS = 128;
-    private static final int MAX_RESTARTS = 8;
     private static final String UNRENDERABLE = "offer that cannot be shown";
 
     private BytecodeInterpreter() {}
@@ -61,7 +56,7 @@ public final class BytecodeInterpreter {
         String reason = null;
 
         try {
-            List<Path> paths = paths(utils, (i) -> listing instanceof BoundOffer bound ? bound.call(i) : i.call(listing, VillagerTrades.ItemListing.class,
+            List<Path> paths = Explorer.explore(utils.getServerLevel().registryAccess(), (i) -> listing instanceof BoundOffer bound ? bound.call(i) : i.call(listing, VillagerTrades.ItemListing.class,
                     RuntimeNames.GET_OFFER.name(), RuntimeNames.GET_OFFER.desc(), List.of(Value.Unknown.of(Type.getType(Entity.class), Origin.TRADER), new Value.Rng(false))));
             Map<String, List<Path>> offers = new LinkedHashMap<>();
 
@@ -162,12 +157,7 @@ public final class BytecodeInterpreter {
         String reason = null;
 
         try {
-            List<Path> paths = paths(utils, (i) -> i.trades(merchant));
-
-            if (productive(paths).isEmpty() && paths.stream().allMatch((p) -> p.failure() == null) && TraderModel.writesOffers(merchant)) {
-                paths = paths(utils, (i) -> i.writtenTrades(merchant));
-            }
-
+            List<Path> paths = Explorer.trader(utils.getServerLevel().registryAccess(), merchant);
             List<Path> productive = new ArrayList<>();
 
             for (Path path : paths) {
@@ -354,12 +344,6 @@ public final class BytecodeInterpreter {
         }
     }
 
-    @Unmodifiable
-    @NotNull
-    private static List<Path> productive(List<Path> paths) {
-        return paths.stream().filter((p) -> p.result() instanceof Value.Offers offers && !offers.entries.isEmpty()).toList();
-    }
-
     @NotNull
     private static Split split(List<Decision> decisions) {
         List<Decision> world = decisions.stream().filter((d) -> d.kind() != Decision.Kind.RANDOM || !(d.value() instanceof Double)).toList();
@@ -536,55 +520,6 @@ public final class BytecodeInterpreter {
         int lambda = type.getName().indexOf("$$Lambda");
 
         return lambda >= 0 ? type.getName().substring(0, lambda) + "$$Lambda" : type.getName();
-    }
-
-    @NotNull
-    private static List<Path> paths(IServerUtils utils, Function<Interpreter, Value> run) {
-        ServerLevel level = utils.getServerLevel();
-        RegistryAccess registries = level.registryAccess();
-        Set<String> opaque = new HashSet<>();
-        int restarts = 0;
-        List<Path> results = new ArrayList<>();
-        Deque<List<Boolean>> scripts = new ArrayDeque<>();
-
-        scripts.add(List.of());
-
-        while (!scripts.isEmpty()) {
-            if (results.size() >= MAX_PATHS) {
-                results.add(new Path(null, List.of(), "too many branches"));
-                break;
-            }
-
-            List<Boolean> script = scripts.poll();
-            Interpreter interpreter = new Interpreter(Interpreter.Mode.SYMBOLIC, 0, script, registries, opaque);
-            Value result = null;
-            String failure = null;
-
-            try {
-                result = run.apply(interpreter);
-            } catch (Fail fail) {
-                failure = fail.describe();
-            }
-            if (interpreter.opaque.retry() && ++restarts < MAX_RESTARTS) {
-                results.clear();
-                scripts.clear();
-                scripts.add(List.of());
-                continue;
-            }
-
-            List<Boolean> taken = interpreter.decisions.taken().stream().map(Decision::holds).toList();
-
-            results.add(new Path(result, interpreter.decisions.taken(), failure));
-
-            for (int i = script.size(); i < taken.size(); i++) {
-                List<Boolean> other = new ArrayList<>(taken.subList(0, i));
-
-                other.add(!taken.get(i));
-                scripts.add(other);
-            }
-        }
-
-        return results;
     }
 
     private static void absorbRandomProperties(Map<String, List<Path>> offers) {
@@ -876,9 +811,6 @@ public final class BytecodeInterpreter {
     }
 
     public record Option(ItemStack stack, NumberExpr count, double chance) {
-    }
-
-    private record Path(@Nullable Value result, List<Decision> decisions, @Nullable String failure) {
     }
 
     public record ComputedTrades(Int2ObjectMap<TradeLevel> levels, boolean incomplete) {
