@@ -43,7 +43,7 @@ final class Arithmetic implements Opcodes {
             case DMUL -> d(a) * d(b);
             case DDIV -> d(a) / d(b);
             case DREM -> d(a) % d(b);
-            default -> throw new Interpreter.Fail("arithmetic " + op);
+            default -> throw new Fail("arithmetic " + op);
         };
     }
 
@@ -58,7 +58,7 @@ final class Arithmetic implements Opcodes {
             return -d;
         }
 
-        throw new Interpreter.Fail("negate");
+        throw new Fail("negate");
     }
 
     static Object convert(int op, Object a) {
@@ -78,7 +78,7 @@ final class Arithmetic implements Opcodes {
             case I2B -> (int) (byte) i(a);
             case I2C -> (int) (char) i(a);
             case I2S -> (int) (short) i(a);
-            default -> throw new Interpreter.Fail("conversion " + op);
+            default -> throw new Fail("conversion " + op);
         };
     }
 
@@ -167,7 +167,7 @@ final class Arithmetic implements Opcodes {
 
     private static int nonZero(int value) {
         if (value == 0) {
-            throw new Interpreter.Fail("division by zero");
+            throw new Fail("division by zero");
         }
 
         return value;
@@ -175,7 +175,7 @@ final class Arithmetic implements Opcodes {
 
     private static long nonZero(long value) {
         if (value == 0) {
-            throw new Interpreter.Fail("division by zero");
+            throw new Fail("division by zero");
         }
 
         return value;

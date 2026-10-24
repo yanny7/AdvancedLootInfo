@@ -102,7 +102,7 @@ public final class BytecodeInterpreter {
             }
 
             reason = reason != null ? reason : "no offer returned (" + paths.get(paths.size() - 1).result() + ")";
-        } catch (Interpreter.Fail fail) {
+        } catch (Fail fail) {
             reason = fail.describe();
         } catch (Throwable e) {
             reason = e.toString();
@@ -192,7 +192,7 @@ public final class BytecodeInterpreter {
 
                 try {
                     split = split(path.decisions());
-                } catch (Interpreter.Fail fail) {
+                } catch (Fail fail) {
                     reason = reason != null ? reason : fail.describe();
                     unknownLevel = true;
                     continue;
@@ -277,7 +277,7 @@ public final class BytecodeInterpreter {
                 reason = "no trades";
                 unknownLevel = true;
             }
-        } catch (Interpreter.Fail fail) {
+        } catch (Fail fail) {
             reason = fail.describe();
             unknownLevel = true;
         } catch (Throwable e) {
@@ -349,7 +349,7 @@ public final class BytecodeInterpreter {
             Split split = split(decisions);
 
             return decisions.stream().anyMatch((d) -> d.holds() && d.kind() == Decision.Kind.EQUALS && d.value() instanceof Integer) ? split.level() : null;
-        } catch (Interpreter.Fail fail) {
+        } catch (Fail fail) {
             return null;
         }
     }
@@ -366,7 +366,7 @@ public final class BytecodeInterpreter {
         List<Decision> levels = world.stream().filter((d) -> d.holds() && d.kind() == Decision.Kind.EQUALS && d.value() instanceof Integer).toList();
 
         if (levels.size() > 1) {
-            throw new Interpreter.Fail("trades depending on several levels");
+            throw new Fail("trades depending on several levels");
         }
         if (levels.isEmpty()) {
             return new Split(1, world);
@@ -449,7 +449,7 @@ public final class BytecodeInterpreter {
             return num.expr();
         }
 
-        throw new Interpreter.Fail("number of offers");
+        throw new Fail("number of offers");
     }
 
     private static boolean shownAsGroup(int entries, NumberExpr count, int trades) {
@@ -562,7 +562,7 @@ public final class BytecodeInterpreter {
 
             try {
                 result = run.apply(interpreter);
-            } catch (Interpreter.Fail fail) {
+            } catch (Fail fail) {
                 failure = fail.describe();
             }
             if (interpreter.retry() && ++restarts < MAX_RESTARTS) {
@@ -771,7 +771,7 @@ public final class BytecodeInterpreter {
 
     public static void clearCaches() {
         dispatchTrace().forEach((line) -> LOGGER.info("Dispatch {}", line));
-        Interpreter.clearCaches();
+        Resolution.clearCaches();
         MixinChanges.clearCaches();
         LambdaResolver.clearCaches();
         FAILED.clear();
@@ -799,7 +799,7 @@ public final class BytecodeInterpreter {
             }).toList());
         }
 
-        throw new Interpreter.Fail("trade slot");
+        throw new Fail("trade slot");
     }
 
     private static TooltipNode tooltip(IServerUtils utils, Value.Stack stack) {
