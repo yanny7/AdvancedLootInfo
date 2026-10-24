@@ -3,7 +3,6 @@ package com.yanny.ali.plugin.server.bytecode;
 import com.yanny.aci.api.NumberExpr;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
@@ -23,7 +22,6 @@ import static com.yanny.ali.plugin.server.bytecode.Interpreter.ITEM_STACK;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.LOOKUPS;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.MAX_OPTIONS;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.MERCHANT_OFFER;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.OPTIONAL;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.ORDER_ONLY;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.READ_ONLY;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.STATIC_RANDOM;
@@ -58,20 +56,15 @@ final class Dispatcher implements Opcodes, CallContext {
                 construction(Dispatcher::newUnknown)
         ));
         MODELS.put(Phase.OWNER, List.of(
-                branch(Dispatcher::logger),
-                branch(Dispatcher::findMapStructure),
-                branch(Dispatcher::mapCreate),
-                branch(Dispatcher::renderBiomePreview),
-                branch(Dispatcher::mapDecoration),
+                new LoggerModel(),
+                new MapItemModel(),
                 branch(Dispatcher::equalsUnknown)
         ));
         MODELS.put(Phase.UNDISTRIBUTED, List.of(
                 branch(Dispatcher::getOffer),
                 branch(Dispatcher::boundOffer),
                 branch(Dispatcher::intValue),
-                branch(Dispatcher::optionalOf),
-                branch(Dispatcher::optionalStack),
-                branch(Dispatcher::optionalConcrete),
+                new OptionalModel(),
                 branch(Dispatcher::removeChoice),
                 branch(Dispatcher::addOffer),
                 branch(Dispatcher::collectedOffers)
@@ -169,6 +162,30 @@ final class Dispatcher implements Opcodes, CallContext {
         Value answer = apply(Phase.JDK, new Call(call, args, loader, depth));
 
         return answer != NO_OPINION ? answer : jdkReal(call, declaring, args, loader);
+    }
+
+    @Override
+    public void traceCase(String label, MethodInsnNode call) {
+        trace(label, call);
+    }
+
+    @Override
+    public boolean isConcrete(Value value) {
+        return interpreter.isConcrete(value);
+    }
+
+    @Override
+    public Value wrap(@Nullable Object value) {
+        return interpreter.wrap(value);
+    }
+
+    @Nullable
+    @Override
+    public Value invoke(Value.Closure closure, List<Value> args, int depth) {
+        List<Value> all = new ArrayList<>(closure.captured());
+
+        all.addAll(args);
+        return interpreter.invokeHandle(closure.impl(), all, closure.loader(), depth + 1);
     }
 
     @Nullable
@@ -420,69 +437,6 @@ final class Dispatcher implements Opcodes, CallContext {
         return NO_OPINION;
     }
 
-    @Nullable
-    private Value logger(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        if (isLogging(call.owner)) {
-            Type returnType = Type.getReturnType(call.desc);
-
-            if (returnType.getSort() == Type.VOID) {
-                trace("owner.logger", call);
-                return null;
-            }
-
-            trace("owner.logger", call);
-            return returnType.getSort() == Type.BOOLEAN ? new Value.Known(0) : Value.Unknown.of(returnType, null);
-        }
-
-        return NO_OPINION;
-    }
-
-    private Value findMapStructure(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        if (RuntimeNames.is(RuntimeNames.FIND_MAP_STRUCTURE, call)) {
-            trace("owner.findMapStructure", call);
-            return new Value.Unknown(false, Type.getReturnType(call.desc).getInternalName(), args.get(1) instanceof Value.Known known ? known.value() : null,
-                    Origin.of(args.get(0), call.name + call.desc, args.subList(1, args.size())));
-        }
-
-        return NO_OPINION;
-    }
-
-    private Value mapCreate(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        if (RuntimeNames.is(RuntimeNames.MAP_CREATE, call)) {
-            trace("owner.mapCreate", call);
-            return new Value.Stack(List.of(new ItemStack(Items.FILLED_MAP)), NumberExpr.constant(1), false);
-        }
-
-        return NO_OPINION;
-    }
-
-    @Nullable
-    private Value renderBiomePreview(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        if (RuntimeNames.is(RuntimeNames.MAP_RENDER_BIOME_PREVIEW, call)) {
-            trace("owner.renderBiomePreview", call);
-            return null;
-        }
-
-        return NO_OPINION;
-    }
-
-    @Nullable
-    private Value mapDecoration(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        if (RuntimeNames.is(RuntimeNames.MAP_ADD_TARGET_DECORATION, call)) {
-            if (!(args.get(0) instanceof Value.Stack stack) || !(args.get(3) instanceof Value.Known decoration)) {
-                trace("owner.mapDecoration.fail", call);
-                throw new Fail("map decoration");
-            }
-
-            stack.destination = args.get(1) instanceof Value.Unknown pos ? pos.found() : null;
-            stack.decoration = decoration.value();
-            trace("owner.mapDecoration", call);
-            return null;
-        }
-
-        return NO_OPINION;
-    }
-
     private Value equalsUnknown(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
         boolean isStatic = call.getOpcode() == INVOKESTATIC;
 
@@ -536,42 +490,6 @@ final class Dispatcher implements Opcodes, CallContext {
         if (call.name.equals("intValue") && call.desc.equals("()I") && args.get(0) instanceof Value.Choice choice && choice.options().stream().allMatch(Integer.class::isInstance)) {
             trace("undistributed.intValue", call);
             return choice;
-        }
-
-        return NO_OPINION;
-    }
-
-    private Value optionalOf(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        boolean isStatic = call.getOpcode() == INVOKESTATIC;
-
-        if (isStatic && call.owner.equals(OPTIONAL) && (call.name.equals("of") || call.name.equals("ofNullable")) && args.get(0) instanceof Value.Stack stack) {
-            trace("undistributed.optionalOf", call);
-            return stack;
-        }
-
-        return NO_OPINION;
-    }
-
-    @Nullable
-    private Value optionalStack(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        boolean isStatic = call.getOpcode() == INVOKESTATIC;
-
-        if (!isStatic && call.owner.equals(OPTIONAL) && args.get(0) instanceof Value.Stack stack) {
-            trace("undistributed.optionalStack", call);
-            return interpreter.optionalCall(call, stack, args, depth);
-        }
-
-        return NO_OPINION;
-    }
-
-    @Nullable
-    private Value optionalConcrete(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        boolean isStatic = call.getOpcode() == INVOKESTATIC;
-
-        if (!isStatic && call.owner.equals(OPTIONAL) && args.get(0) instanceof Value.Known known && known.value() instanceof Optional<?> optional
-                && args.stream().skip(1).anyMatch((arg) -> arg instanceof Value.Closure || !interpreter.isConcrete(arg))) {
-            trace("undistributed.optionalConcrete", call);
-            return interpreter.optionalCall(call, optional.isPresent() ? interpreter.wrap(optional.get()) : null, args, depth);
         }
 
         return NO_OPINION;
@@ -1159,10 +1077,6 @@ final class Dispatcher implements Opcodes, CallContext {
 
     private static boolean isKeyedList(@Nullable Object value) {
         return value instanceof Object[] array && array.length > 0 || value instanceof List<?> list && !list.isEmpty();
-    }
-
-    private static boolean isLogging(String owner) {
-        return owner.startsWith("org/slf4j/") || owner.startsWith("org/apache/logging/log4j/") || owner.startsWith("java/util/logging/");
     }
 
     private static MethodModel branch(Branch branch) {

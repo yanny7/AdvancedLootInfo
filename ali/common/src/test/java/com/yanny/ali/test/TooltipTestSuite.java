@@ -19,6 +19,9 @@ import com.yanny.ali.plugin.glm.Verdict;
 import com.yanny.ali.plugin.server.LootConditionTypes;
 import com.yanny.ali.plugin.server.LootFunctionTypes;
 import com.yanny.ali.plugin.server.bytecode.BytecodeInterpreter;
+import com.yanny.ali.plugin.server.bytecode.LoggerModelTest;
+import com.yanny.ali.plugin.server.bytecode.MapItemModelTest;
+import com.yanny.ali.plugin.server.bytecode.OptionalModelTest;
 import net.minecraft.DetectedVersion;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.SharedConstants;
@@ -96,7 +99,10 @@ import static org.mockito.Mockito.mock;
         BytecodeInterpreterTest.class,
         ConfigTest.class,
         ValueCharacterizationTest.class,
-        EntryWeightTest.class
+        EntryWeightTest.class,
+        LoggerModelTest.class,
+        OptionalModelTest.class,
+        MapItemModelTest.class
 })
 public class TooltipTestSuite {
     public static IServerUtils UTILS;
