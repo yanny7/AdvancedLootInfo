@@ -4,13 +4,11 @@ import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberFunctions;
 import com.yanny.aci.api.NumberInterval;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
@@ -23,12 +21,11 @@ import org.objectweb.asm.tree.*;
 
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.BaseStream;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.yanny.ali.plugin.server.bytecode.Dispatcher.trace;
 import static com.yanny.ali.plugin.server.bytecode.Resolution.*;
 
 final class Interpreter implements Opcodes {
@@ -36,11 +33,10 @@ final class Interpreter implements Opcodes {
     private static final int MAX_DEPTH = 12;
     private static final int MAX_OPTIONS = 1024;
     private static final int MAX_DECISIONS = 8;
-    private static final String CONSTRUCTOR = "<init>";
+    static final String CONSTRUCTOR = "<init>";
     private static final String ITEM_STACK = Type.getInternalName(ItemStack.class);
     private static final String MERCHANT_OFFER = Type.getInternalName(MerchantOffer.class);
-    private static final String OPTIONAL = Type.getInternalName(Optional.class);
-    private static final Set<String> TRADE_TYPES = Set.of(ITEM_STACK, MERCHANT_OFFER, Type.getInternalName(MerchantOffers.class));
+    static final String OPTIONAL = Type.getInternalName(Optional.class);
     private static final String LAMBDA_METAFACTORY = "java/lang/invoke/LambdaMetafactory";
     private static final String STRING_CONCAT_FACTORY = "java/lang/invoke/StringConcatFactory";
     private static final Value.Known NULL = new Value.Known(null);
@@ -56,46 +52,45 @@ final class Interpreter implements Opcodes {
             "trim", "toLowerCase", "toUpperCase", "concat", "getKey", "getValue", "intValue", "longValue", "floatValue",
             "doubleValue", "booleanValue", "byteValue", "shortValue", "charValue", "compareTo", "ordinal", "name", "getClass",
             "isPresent", "orElse", "orElseGet", "orElseThrow", "map", "filter", "subList", "first", "firstKey", "lastKey");
-    private static final Set<String> LOOKUPS = Set.of("get", "getOrDefault", "containsKey");
+    static final Set<String> LOOKUPS = Set.of("get", "getOrDefault", "containsKey");
     private static final Set<String> ORDER_ONLY = Set.of("reverse", "shuffle", "sort");
     private static final Set<String> FRESH_RESULTS = Set.of("stream", "iterator", "listIterator", "spliterator", "toArray");
-    private static final boolean TRACE = Boolean.getBoolean("ali.debug.dispatch");
-    private static final Map<String, LongAdder> TRACED = new ConcurrentHashMap<>();
 
     private final Mode mode;
+    private final Dispatcher dispatcher = new Dispatcher(this);
     private final int pick;
-    private final Map<Object, Integer> owned = new IdentityHashMap<>();
+    final Map<Object, Integer> owned = new IdentityHashMap<>();
     private final Map<Object, Value.Stack> shadows = new IdentityHashMap<>();
     private final List<Frame> frames = new ArrayList<>();
     private int frozenBelow;
     private int steps;
     @Nullable
     private final List<Boolean> script;
-    private final List<Decision> decisions = new ArrayList<>();
+    final List<Decision> decisions = new ArrayList<>();
     @Nullable
-    private Class<?> merchant;
+    Class<?> merchant;
     @Nullable
-    private Value.Offers merchantOffers;
-    private final Map<Object, Integer> listingKeys = new IdentityHashMap<>();
+    Value.Offers merchantOffers;
+    final Map<Object, Integer> listingKeys = new IdentityHashMap<>();
     private final Map<Object, List<BoundOffer>> boundOffers = new IdentityHashMap<>();
     private final Map<String, Value> merchantFields = new HashMap<>();
     private final Map<String, Value> statics = new HashMap<>();
     private final Set<Object> tainted = Collections.newSetFromMap(new IdentityHashMap<>());
     private final Map<Object, Value.Stack> stackParts = new IdentityHashMap<>();
-    private final Map<String, Integer> heavyWorldCalls = new HashMap<>();
-    private final Map<Object, Integer> removed = new IdentityHashMap<>();
+    final Map<String, Integer> heavyWorldCalls = new HashMap<>();
+    final Map<Object, Integer> removed = new IdentityHashMap<>();
     private final Map<Object, int[]> randomSets = new IdentityHashMap<>();
     private final Map<Object, Value.Draws> shuffled = new IdentityHashMap<>();
     private final Map<Object, NumberExpr> drawCounts = new IdentityHashMap<>();
-    private final Map<Object, Object> elementSources = new IdentityHashMap<>();
-    private final Set<Object> pools = Collections.newSetFromMap(new IdentityHashMap<>());
-    private final Map<Object, Value.Offers> offerLists = new IdentityHashMap<>();
+    final Map<Object, Object> elementSources = new IdentityHashMap<>();
+    final Set<Object> pools = Collections.newSetFromMap(new IdentityHashMap<>());
+    final Map<Object, Value.Offers> offerLists = new IdentityHashMap<>();
     private final Map<NumberExpr, Drawn> drawn = new IdentityHashMap<>();
-    private boolean ownGetOffers;
+    boolean ownGetOffers;
     @Nullable
-    private final RegistryAccess registries;
-    private final Set<String> opaque;
-    private boolean retry;
+    final RegistryAccess registries;
+    final Set<String> opaque;
+    boolean retry;
 
     Interpreter(Mode mode, int pick) {
         this(mode, pick, null, null, new HashSet<>());
@@ -141,25 +136,6 @@ final class Interpreter implements Opcodes {
         return holds;
     }
 
-    static List<String> dispatchTrace() {
-        List<String> lines = TRACED.entrySet().stream().sorted(Map.Entry.comparingByKey()).map((e) -> e.getKey() + " " + e.getValue().sum()).toList();
-
-        TRACED.clear();
-        return lines;
-    }
-
-    private static void trace(String label, MethodInsnNode call) {
-        if (TRACE) {
-            TRACED.computeIfAbsent(label + " " + call.owner + "." + call.name + call.desc, (k) -> new LongAdder()).increment();
-        }
-    }
-
-    private static void trace(String label, String type, String desc) {
-        if (TRACE) {
-            TRACED.computeIfAbsent(label + " " + type + "." + CONSTRUCTOR + desc, (k) -> new LongAdder()).increment();
-        }
-    }
-
     @Nullable
     Value call(Object receiver, Class<?> iface, String name, String desc, List<Value> args) {
         return call(receiver, new MethodInsnNode(INVOKEINTERFACE, Type.getInternalName(iface), name, desc, true), args);
@@ -170,7 +146,7 @@ final class Interpreter implements Opcodes {
 
         all.add(wrap(receiver));
         all.addAll(args);
-        return invoke(call, all, receiver.getClass().getClassLoader(), 0);
+        return dispatcher.invoke(call, all, receiver.getClass().getClassLoader(), 0);
     }
 
     Value.Offers trades(Class<?> merchant) {
@@ -269,12 +245,12 @@ final class Interpreter implements Opcodes {
         return RuntimeNames.is(RuntimeNames.OFFERS, insn) && field(load(insn.owner, loader), insn.name).getDeclaringClass() == AbstractVillager.class;
     }
 
-    private boolean isSelf(@Nullable Value value) {
+    boolean isSelf(@Nullable Value value) {
         return merchant != null && value instanceof Value.Unknown unknown && Origin.TRADER.equals(unknown.origin());
     }
 
     @Nullable
-    private static Declaration ownDeclaration(Class<?> start, String name, String desc, boolean exact) {
+    static Declaration ownDeclaration(Class<?> start, String name, String desc, boolean exact) {
         if (!(declaration(start, name, desc, exact) instanceof Declaration declaration) || LambdaResolver.isPlatform(Type.getInternalName(declaration.owner()))) {
             return null;
         }
@@ -285,17 +261,17 @@ final class Interpreter implements Opcodes {
     @Nullable
     Value invokeHandle(Handle handle, List<Value> args, ClassLoader loader, int depth) {
         return switch (handle.getTag()) {
-            case H_INVOKESTATIC -> invoke(new MethodInsnNode(INVOKESTATIC, handle.getOwner(), handle.getName(), handle.getDesc(), handle.isInterface()), args, loader, depth);
-            case H_INVOKEVIRTUAL -> invoke(new MethodInsnNode(INVOKEVIRTUAL, handle.getOwner(), handle.getName(), handle.getDesc(), false), args, loader, depth);
-            case H_INVOKEINTERFACE -> invoke(new MethodInsnNode(INVOKEINTERFACE, handle.getOwner(), handle.getName(), handle.getDesc(), true), args, loader, depth);
-            case H_INVOKESPECIAL -> invoke(new MethodInsnNode(INVOKESPECIAL, handle.getOwner(), handle.getName(), handle.getDesc(), handle.isInterface()), args, loader, depth);
+            case H_INVOKESTATIC -> dispatcher.invoke(new MethodInsnNode(INVOKESTATIC, handle.getOwner(), handle.getName(), handle.getDesc(), handle.isInterface()), args, loader, depth);
+            case H_INVOKEVIRTUAL -> dispatcher.invoke(new MethodInsnNode(INVOKEVIRTUAL, handle.getOwner(), handle.getName(), handle.getDesc(), false), args, loader, depth);
+            case H_INVOKEINTERFACE -> dispatcher.invoke(new MethodInsnNode(INVOKEINTERFACE, handle.getOwner(), handle.getName(), handle.getDesc(), true), args, loader, depth);
+            case H_INVOKESPECIAL -> dispatcher.invoke(new MethodInsnNode(INVOKESPECIAL, handle.getOwner(), handle.getName(), handle.getDesc(), handle.isInterface()), args, loader, depth);
             case H_NEWINVOKESPECIAL -> construct(handle.getOwner(), handle.getDesc(), args, loader);
             default -> throw new Fail("unsupported method handle");
         };
     }
 
     @Nullable
-    private Value execute(Class<?> owner, MethodNode method, List<Value> args, int depth) {
+    Value execute(Class<?> owner, MethodNode method, List<Value> args, int depth) {
         if (depth > MAX_DEPTH) {
             throw new Fail("call depth");
         }
@@ -534,7 +510,7 @@ final class Interpreter implements Opcodes {
                         args[i] = f.pop();
                     }
 
-                    Value result = invoke(call, Arrays.asList(args), loader, depth);
+                    Value result = dispatcher.invoke(call, Arrays.asList(args), loader, depth);
                     Type returnType = Type.getReturnType(call.desc);
 
                     if (returnType.getSort() != Type.VOID) {
@@ -604,321 +580,7 @@ final class Interpreter implements Opcodes {
     }
 
     @Nullable
-    private Value invoke(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        Value result = dispatch(call, args, loader, depth);
-
-        if (result instanceof Value.Known known && isData(known.value()) && args.stream().anyMatch(this::isTainted)) {
-            trace("after.taint", call);
-            taint(known.value());
-        }
-
-        if (call.getOpcode() != INVOKESTATIC && call.name.equals("get") && args.size() == 2 && args.get(0) instanceof Value.Known map && map.value() instanceof Map<?, ?>
-                && args.get(1) instanceof Value.Known key && result instanceof Value.Known listings && isKeyedList(listings.value())) {
-            if (key.value() instanceof Integer level) {
-                trace("after.levelKey", call);
-                listingKeys.put(listings.value(), level);
-            } else if (key.value() instanceof Enum<?> constant) {
-                trace("after.levelKey", call);
-                listingKeys.put(listings.value(), constant.ordinal() + 1);
-            }
-        }
-
-        return result;
-    }
-
-    @Nullable
-    private Value dispatch(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        boolean isStatic = call.getOpcode() == INVOKESTATIC;
-
-        if (call.name.equals(CONSTRUCTOR)) {
-            if (!(args.get(0) instanceof Value.Uninit uninit)) {
-                trace("constructor.chaining.fail", call);
-                throw new Fail("constructor chaining");
-            }
-
-            replace(uninit, construct(uninit.type, call.desc, args.subList(1, args.size()), loader));
-            return null;
-        }
-        if (isLogging(call.owner)) {
-            Type returnType = Type.getReturnType(call.desc);
-
-            if (returnType.getSort() == Type.VOID) {
-                trace("owner.logger", call);
-                return null;
-            }
-
-            trace("owner.logger", call);
-            return returnType.getSort() == Type.BOOLEAN ? new Value.Known(0) : Value.Unknown.of(returnType, null);
-        }
-        if (RuntimeNames.is(RuntimeNames.FIND_MAP_STRUCTURE, call)) {
-            trace("owner.findMapStructure", call);
-            return new Value.Unknown(false, Type.getReturnType(call.desc).getInternalName(), args.get(1) instanceof Value.Known known ? known.value() : null,
-                    Origin.of(args.get(0), call.name + call.desc, args.subList(1, args.size())));
-        }
-        if (RuntimeNames.is(RuntimeNames.MAP_CREATE, call)) {
-            trace("owner.mapCreate", call);
-            return new Value.Stack(List.of(new ItemStack(Items.FILLED_MAP)), NumberExpr.constant(1), false);
-        }
-        if (RuntimeNames.is(RuntimeNames.MAP_RENDER_BIOME_PREVIEW, call)) {
-            trace("owner.renderBiomePreview", call);
-            return null;
-        }
-        if (RuntimeNames.is(RuntimeNames.MAP_ADD_TARGET_DECORATION, call)) {
-            if (!(args.get(0) instanceof Value.Stack stack) || !(args.get(3) instanceof Value.Known decoration)) {
-                trace("owner.mapDecoration.fail", call);
-                throw new Fail("map decoration");
-            }
-
-            stack.destination = args.get(1) instanceof Value.Unknown pos ? pos.found() : null;
-            stack.decoration = decoration.value();
-            trace("owner.mapDecoration", call);
-            return null;
-        }
-
-        if (!isStatic && call.name.equals("equals") && call.desc.equals("(Ljava/lang/Object;)Z") && args.get(0) instanceof Value.Known known
-                && args.get(1) instanceof Value.Unknown unknown) {
-            trace("owner.equalsUnknown", call);
-            return new Value.Unknown(false, null, null, Origin.equality(unknown, known.value()));
-        }
-
-        if (merchant != null && RuntimeNames.is(RuntimeNames.GET_OFFER, call)) {
-            if (args.get(0) instanceof Value.Choice choice && (choice.draw() != null && pools.contains(choice.draw()) || isUniformPick(choice))
-                    && choice.options().stream().allMatch(VillagerTrades.ItemListing.class::isInstance)) {
-                trace("undistributed.getOffer.choice", call);
-                return new Value.Pick(choice.options().stream().map(VillagerTrades.ItemListing.class::cast).toList(), choice.draw(), poolKey(choice.options()));
-            }
-            if (args.get(0) instanceof Value.Known known && known.value() instanceof VillagerTrades.ItemListing listing) {
-                Object source = elementSources.containsKey(listing) ? elementSources.get(listing) : keyedSource(listing);
-
-                trace("undistributed.getOffer.known", call);
-                return new Value.Pick(List.of(listing), source != null ? source : listing, source != null ? listingKeys.get(source) : null);
-            }
-        }
-        if (merchant != null && !isStatic && args.get(0) instanceof Value.Choice choice && (choice.draw() != null && pools.contains(choice.draw()) || isUniformPick(choice))
-                && choice.options().stream().noneMatch(MerchantOffer.class::isInstance) && returnsOffer(call, loader)) {
-            List<Object> bound = bound(args.subList(1, args.size()));
-
-            if (bound != null) {
-                List<VillagerTrades.ItemListing> listings = choice.options().stream().<VillagerTrades.ItemListing>map((element) -> boundOffer(element, call, bound)).toList();
-
-                trace("undistributed.boundOffer", call);
-                return new Value.Pick(listings, choice.draw(), poolKey(choice.options()));
-            }
-        }
-        if (call.name.equals("intValue") && call.desc.equals("()I") && args.get(0) instanceof Value.Choice choice && choice.options().stream().allMatch(Integer.class::isInstance)) {
-            trace("undistributed.intValue", call);
-            return choice;
-        }
-        if (isStatic && call.owner.equals(OPTIONAL) && (call.name.equals("of") || call.name.equals("ofNullable")) && args.get(0) instanceof Value.Stack stack) {
-            trace("undistributed.optionalOf", call);
-            return stack;
-        }
-        if (!isStatic && call.owner.equals(OPTIONAL) && args.get(0) instanceof Value.Stack stack) {
-            trace("undistributed.optionalStack", call);
-            return optionalCall(call, stack, args, depth);
-        }
-        if (!isStatic && call.owner.equals(OPTIONAL) && args.get(0) instanceof Value.Known known && known.value() instanceof Optional<?> optional
-                && args.stream().skip(1).anyMatch((arg) -> arg instanceof Value.Closure || !isConcrete(arg))) {
-            trace("undistributed.optionalConcrete", call);
-            return optionalCall(call, optional.isPresent() ? wrap(optional.get()) : null, args, depth);
-        }
-
-        if (!isStatic && args.get(0) instanceof Value.Known known && known.value() instanceof List<?> list && owned.containsKey(list)
-                && call.name.equals("remove") && call.desc.equals("(Ljava/lang/Object;)Z") && args.get(1) instanceof Value.Choice choice
-                && choice.options().size() == list.size() - removed.getOrDefault(list, 0) && new HashSet<Object>(list).containsAll(choice.options())) {
-            removed.merge(list, 1, Integer::sum);
-            trace("undistributed.removeChoice", call);
-            return new Value.Known(1);
-        }
-        Value.Offers collected = !isStatic && call.name.equals("add") && call.desc.equals("(Ljava/lang/Object;)Z") && isSymbolicOffer(args.get(1))
-                ? offerList(args.get(0), true) : null;
-
-        if (collected != null) {
-            trace("undistributed.addOffer", call);
-            return args.get(1) instanceof Value.Choice choice ? addPicked(collected, choice) : offersCall(call, collected, args, depth);
-        }
-        if (!isStatic && args.get(0) instanceof Value.Known known && known.value() != null && offerLists.containsKey(known.value())) {
-            trace("undistributed.collectedOffers", call);
-            return offersCall(call, offerLists.get(known.value()), args, depth);
-        }
-
-        int[] choices = choiceIndices(args);
-
-        if (choices.length > 0) {
-            trace("distribute", call);
-            return distribute(call, args, choices, loader, depth);
-        }
-
-        Value receiver = isStatic ? null : args.get(0);
-
-        if (receiver instanceof Value.Rng rng) {
-            trace("receiver.rng", call);
-            return random(call, rng, args, depth);
-        }
-        if (receiver instanceof Value.Stack stack) {
-            trace("receiver.stack", call);
-            return stackCall(call, stack, args, loader);
-        }
-        if (receiver instanceof Value.Known known && known.value() instanceof ItemStack real) {
-            trace("receiver.realStack", call);
-            return knownStackCall(call, real, args, loader);
-        }
-        if (receiver instanceof Value.Num num) {
-            trace("receiver.num", call);
-            return unbox(call, num);
-        }
-        if (receiver instanceof Value.Closure closure) {
-            if (!call.name.equals(closure.samName())) {
-                trace("receiver.closure.fail", call);
-                throw new Fail("closure default method");
-            }
-
-            List<Value> all = new ArrayList<>(closure.captured());
-
-            all.addAll(args.subList(1, args.size()));
-            trace("receiver.closure", call);
-            return invokeHandle(closure.impl(), all, closure.loader(), depth + 1);
-        }
-        if (isSelf(receiver)) {
-            if (!ownGetOffers && RuntimeNames.is(RuntimeNames.GET_OFFERS, call)) {
-                trace("receiver.trader.getOffers", call);
-                return merchantOffers;
-            }
-            if (RuntimeNames.is(RuntimeNames.ADD_OFFERS_FROM_ITEM_LISTINGS, call)) {
-                if (!(args.get(1) instanceof Value.Offers offers) || !(args.get(2) instanceof Value.Known known)
-                        || !(known.value() instanceof VillagerTrades.ItemListing[] listings)) {
-                    trace("receiver.trader.addOffers.fail", call);
-                    throw new Fail("offers from item listings");
-                }
-
-                offers.entries.add(new Value.Offers.Listings(listings, args.get(3), listingKeys.get(listings)));
-                trace("receiver.trader.addOffers", call);
-                return null;
-            }
-
-            boolean special = call.getOpcode() == INVOKESPECIAL;
-            Class<?> start = special ? load(call.owner, loader) : merchant;
-
-            if (start != null) {
-                Declaration own = ownDeclaration(start, call.name, call.desc, special);
-
-                if (own != null) {
-                    trace("receiver.trader.own", call);
-                    return execute(own.owner(), own.method(), args, depth + 1);
-                }
-            }
-        }
-        if (receiver instanceof Value.Offers offers) {
-            trace("receiver.offers", call);
-            return offersCall(call, offers, args, depth);
-        }
-        if (receiver instanceof Value.Draws draws) {
-            if (call.name.equals("hasNext") && call.desc.equals("()Z")) {
-                trace("receiver.draws.hasNext", call);
-                return new Value.Known(draws.left > 0 ? 1 : 0);
-            }
-            if (call.name.equals("next") && call.desc.equals("()Ljava/lang/Object;") && draws.left > 0) {
-                draws.left--;
-                trace("receiver.draws.next", call);
-                return new Value.Choice(draws.options, draws.pool);
-            }
-
-            trace("receiver.draws.fail", call);
-            throw new Fail("iteration over random draws");
-        }
-        if (receiver instanceof Value.Unknown && registries != null && RuntimeNames.is(RuntimeNames.REGISTRY_ACCESS, call)) {
-            trace("receiver.registryAccess", call);
-            return new Value.Known(registries);
-        }
-        if (receiver instanceof Value.Unknown) {
-            Type returnType = Type.getReturnType(call.desc);
-
-            if (returnType.getSort() == Type.OBJECT && isRandomType(returnType, loader)) {
-                trace("receiver.unknown.random", call);
-                return new Value.Rng(isLegacyRandom(returnType, loader));
-            }
-
-            taintOwned(args);
-            trace("receiver.unknown", call);
-            return Value.Unknown.of(returnType, Origin.of(receiver, call.name + call.desc, args.subList(1, args.size())));
-        }
-        if (receiver instanceof Value.Offer || receiver instanceof Value.Uninit || receiver instanceof Value.Cmp) {
-            trace("receiver.unsupported.fail", call);
-            throw new Fail("unsupported receiver");
-        }
-        if (!isStatic && receiver instanceof Value.Known known && known.value() instanceof Map<?, ?> map && LOOKUPS.contains(call.name)
-                && args.get(1) instanceof Value.Unknown key && key.origin() != null && args.subList(2, args.size()).stream().allMatch(this::isConcrete)) {
-            trace("receiver.lookup", call);
-            return lookup(call, map.getClass(), map, key.origin(), args, loader);
-        }
-        if (receiver instanceof Value.Known known && known.value() == null) {
-            trace("receiver.null.fail", call);
-            throw new Fail("null receiver");
-        }
-        if (receiver instanceof Value.Known known && LambdaResolver.isLambda(known.value())) {
-            trace("receiver.lambda", call);
-            return lambdaCall(known.value(), args, depth);
-        }
-
-        Class<?> start;
-
-        if (isStatic || call.getOpcode() == INVOKESPECIAL) {
-            start = load(call.owner, loader);
-        } else if (receiver instanceof Value.Known known) {
-            start = known.value().getClass();
-        } else {
-            trace("resolve.unsupported.fail", call);
-            throw new Fail("unsupported receiver");
-        }
-
-        Declared declared = declaration(start, call.name, call.desc, call.getOpcode() == INVOKESPECIAL);
-
-        if (declared instanceof JdkDeclaration jdk) {
-            return jdkCall(call, jdk.owner(), args, loader);
-        }
-
-        if (isStatic && isJdk(start)) {
-            return jdkCall(call, start, args, loader);
-        }
-
-        if (args.stream().anyMatch(this::holdsStack)) {
-            trace("arguments.stacks", call);
-            return stackArgumentCall(call, args, loader);
-        }
-
-        if (declared != null && opaque.contains(call.owner + "." + call.name + call.desc) && isWorldCall(call, args, loader)) {
-            trace("arguments.opaqueWorldCall", call);
-            return worldResult(call, args);
-        }
-        if (!isStatic && receiver instanceof Value.Known known && args.stream().skip(1).anyMatch(this::isTainted) && !returnsTradeData(call)) {
-            trace("arguments.tainted", call);
-            return uncertainChange(call, known.value());
-        }
-
-        Value result;
-
-        if (declared instanceof Declaration declaration) {
-            int before = decisions.size();
-
-            try {
-                trace("execution.interpret", call);
-                result = execute(declaration.owner(), declaration.method(), args, depth + 1);
-            } catch (Fail fail) {
-                result = fallbackCall(call, args, loader, fail);
-            }
-            if (decisions.size() - before > 1 && isWorldCall(call, args, loader)) {
-                heavyWorldCalls.merge(call.owner + "." + call.name + call.desc, decisions.size() - before, Math::max);
-            }
-        } else {
-            trace("execution.noBytecode", call);
-            result = fallbackCall(call, args, loader, new Fail("no bytecode for " + call.owner + "." + call.name));
-        }
-
-        return result;
-    }
-
-    @Nullable
-    private Value optionalCall(MethodInsnNode call, @Nullable Value present, List<Value> args, int depth) {
+    Value optionalCall(MethodInsnNode call, @Nullable Value present, List<Value> args, int depth) {
         switch (call.name) {
             case "isPresent" -> {
                 return new Value.Known(present != null ? 1 : 0);
@@ -979,7 +641,7 @@ final class Interpreter implements Opcodes {
     }
 
     @Nullable
-    private Value lambdaCall(Object lambda, List<Value> args, int depth) {
+    Value lambdaCall(Object lambda, List<Value> args, int depth) {
         LambdaResolver.Target target = LambdaResolver.resolve(lambda);
 
         if (target == null) {
@@ -993,93 +655,25 @@ final class Interpreter implements Opcodes {
     }
 
     @Nullable
-    private Value fallbackCall(MethodInsnNode call, List<Value> args, ClassLoader loader, Fail fail) {
-        if (args.stream().anyMatch(this::holdsStack)) {
-            trace("fallback.stacks", call);
-            return stackArgumentCall(call, args, loader);
-        }
-        if (args.stream().allMatch(this::isConcrete)) {
-            trace("fallback.concrete", call);
-            return concreteCall(call, args, loader, false);
-        }
-        if (isWorldCall(call, args, loader)) {
-            if (fail.isBudget()) {
-                trace("fallback.opaqueBudget", call);
-                retry = retry || opaque.add(call.owner + "." + call.name + call.desc);
-                throw fail;
-            }
-
-            trace("fallback.worldResult", call);
-            return worldResult(call, args);
-        }
-        if (!fail.isBudget() && call.getOpcode() != INVOKESTATIC && args.get(0) instanceof Value.Known known && known.value() != null
-                && owned.containsKey(known.value()) && args.stream().skip(1).allMatch((v) -> isConcrete(v) || v instanceof Value.Num || v instanceof Value.Unknown)
-                && !returnsTradeData(call)) {
-            trace("fallback.uncertain", call);
-            return uncertainChange(call, known.value());
-        }
-
-        trace("fallback.rethrow", call);
-        throw fail;
-    }
-
-    private static boolean returnsTradeData(MethodInsnNode call) {
-        Type returnType = Type.getReturnType(call.desc);
-
-        return returnType.getSort() == Type.OBJECT && TRADE_TYPES.contains(returnType.getInternalName());
-    }
-
-    @Nullable
-    private Value uncertainChange(MethodInsnNode call, @Nullable Object changed) {
+    Value uncertainChange(MethodInsnNode call, @Nullable Object changed) {
         Type returnType = Type.getReturnType(call.desc);
 
         taint(changed);
         return returnType.getSort() == Type.VOID ? null : Value.Unknown.of(returnType, null);
     }
 
-    private boolean isTainted(Value value) {
+    boolean isTainted(Value value) {
         return value instanceof Value.Known known && known.value() != null && tainted.contains(known.value());
     }
 
-    private void taintOwned(List<Value> args) {
+    void taintOwned(List<Value> args) {
         args.forEach((v) -> taint(v instanceof Value.Known known && known.value() != null && owned.containsKey(known.value()) ? known.value() : null));
     }
 
-    private static boolean isData(@Nullable Object value) {
-        return value instanceof Collection<?> || value instanceof Map<?, ?> || value instanceof Tag || value != null && value.getClass().isArray();
-    }
-
-    private void taint(@Nullable Object object) {
+    void taint(@Nullable Object object) {
         if (object != null && tainted.add(object) && stackParts.containsKey(object)) {
             stackParts.get(object).randomTag = true;
         }
-    }
-
-    private boolean isWorldCall(MethodInsnNode call, List<Value> args, ClassLoader loader) {
-        Type returnType = Type.getReturnType(call.desc);
-
-        if (returnsTradeData(call) || returnType.getSort() == Type.OBJECT && isRandomType(returnType, loader)) {
-            return false;
-        }
-
-        return args.stream().anyMatch((v) -> v instanceof Value.Unknown || v instanceof Value.Rng)
-                && args.stream().allMatch((v) -> v instanceof Value.Unknown || v instanceof Value.Rng || v instanceof Value.Known);
-    }
-
-    @Nullable
-    private Value worldResult(MethodInsnNode call, List<Value> args) {
-        Type returnType = Type.getReturnType(call.desc);
-
-        taintOwned(args);
-
-        if (returnType.getSort() == Type.VOID) {
-            return null;
-        }
-        if (call.getOpcode() == INVOKESTATIC) {
-            return Value.Unknown.of(returnType, Origin.of(null, call.owner + "." + call.name + call.desc, args));
-        }
-
-        return Value.Unknown.of(returnType, Origin.of(args.get(0), call.name + call.desc, args.subList(1, args.size())));
     }
 
     boolean retry() {
@@ -1087,7 +681,7 @@ final class Interpreter implements Opcodes {
     }
 
     @Nullable
-    private Value distribute(MethodInsnNode call, List<Value> args, int[] choices, ClassLoader loader, int depth) {
+    Value distribute(MethodInsnNode call, List<Value> args, int[] choices, ClassLoader loader, int depth) {
         List<Value> base = shadowed(args);
         Value.Choice first = (Value.Choice) args.get(choices[0]);
         int stackIndex = -1;
@@ -1125,7 +719,7 @@ final class Interpreter implements Opcodes {
                     branches.add(branch);
                 }
 
-                results.add(invoke(call, copy, loader, depth));
+                results.add(dispatcher.invoke(call, copy, loader, depth));
             }
         } finally {
             frozenBelow = outer;
@@ -1211,7 +805,7 @@ final class Interpreter implements Opcodes {
     }
 
     @Nullable
-    private Value random(MethodInsnNode call, Value.Rng rng, List<Value> args, int depth) {
+    Value random(MethodInsnNode call, Value.Rng rng, List<Value> args, int depth) {
         Semantic semantic = rng.legacy() ? legacySemantic(call) : sourceSemantic(call);
 
         if (semantic == null) {
@@ -1331,7 +925,7 @@ final class Interpreter implements Opcodes {
         };
     }
 
-    private static boolean isRandomType(Type type, ClassLoader loader) {
+    static boolean isRandomType(Type type, ClassLoader loader) {
         try {
             Class<?> cls = load(type.getInternalName(), loader);
 
@@ -1341,12 +935,12 @@ final class Interpreter implements Opcodes {
         }
     }
 
-    private static boolean isLegacyRandom(Type type, ClassLoader loader) {
+    static boolean isLegacyRandom(Type type, ClassLoader loader) {
         return Random.class.isAssignableFrom(load(type.getInternalName(), loader));
     }
 
     @Nullable
-    private Value stackCall(MethodInsnNode call, Value.Stack stack, List<Value> args, ClassLoader loader) {
+    Value stackCall(MethodInsnNode call, Value.Stack stack, List<Value> args, ClassLoader loader) {
         if (RuntimeNames.is(RuntimeNames.STACK_SET_COUNT, call)) {
             stack.count = expr(args.get(1));
             return null;
@@ -1386,7 +980,7 @@ final class Interpreter implements Opcodes {
     }
 
     @Nullable
-    private Value knownStackCall(MethodInsnNode call, ItemStack real, List<Value> args, ClassLoader loader) {
+    Value knownStackCall(MethodInsnNode call, ItemStack real, List<Value> args, ClassLoader loader) {
         if (RuntimeNames.is(RuntimeNames.STACK_GET_COUNT, call)) {
             return new Value.Known(real.getCount());
         } else if (RuntimeNames.is(RuntimeNames.STACK_GET_ITEM, call)) {
@@ -1406,7 +1000,7 @@ final class Interpreter implements Opcodes {
     }
 
     @Nullable
-    private Value stackArgumentCall(MethodInsnNode call, List<Value> args, ClassLoader loader) {
+    Value stackArgumentCall(MethodInsnNode call, List<Value> args, ClassLoader loader) {
         List<Value> shadowedArgs = shadowed(args);
         List<Value.Stack> stacks = shadowedArgs.stream().filter(Value.Stack.class::isInstance).map(Value.Stack.class::cast).toList();
         Map<ItemStack, ItemStack> fixed = new IdentityHashMap<>();
@@ -1564,10 +1158,6 @@ final class Interpreter implements Opcodes {
         return args.stream().map((v) -> v instanceof Value.Known known && known.value() instanceof ItemStack real && !owned.containsKey(real) ? shadow(real) : v).toList();
     }
 
-    private boolean holdsStack(Value value) {
-        return value instanceof Value.Stack;
-    }
-
     private Value.Stack stackOf(ItemStack real) {
         return new Value.Stack(List.of(real.copy()), NumberExpr.constant(real.getCount()), false);
     }
@@ -1581,7 +1171,7 @@ final class Interpreter implements Opcodes {
     }
 
     @Nullable
-    private Object keyedSource(Object listing) {
+    Object keyedSource(Object listing) {
         for (Object keyed : listingKeys.keySet()) {
             List<?> elements = keyed instanceof Object[] array ? Arrays.asList(array) : (List<?>) keyed;
 
@@ -1593,21 +1183,21 @@ final class Interpreter implements Opcodes {
         return null;
     }
 
-    private static boolean isUniformPick(Value.Choice choice) {
+    static boolean isUniformPick(Value.Choice choice) {
         Set<Object> distinct = Collections.newSetFromMap(new IdentityHashMap<>());
 
         distinct.addAll(choice.options());
         return choice.draw() instanceof NumberExpr && distinct.size() == choice.options().size();
     }
 
-    private static boolean returnsOffer(MethodInsnNode call, ClassLoader loader) {
+    static boolean returnsOffer(MethodInsnNode call, ClassLoader loader) {
         Type returnType = Type.getReturnType(call.desc);
 
         return returnType.getSort() == Type.OBJECT && MerchantOffer.class.isAssignableFrom(load(returnType.getInternalName(), loader));
     }
 
     @Nullable
-    private List<Object> bound(List<Value> args) {
+    List<Object> bound(List<Value> args) {
         List<Object> bound = new ArrayList<>();
 
         for (Value arg : args) {
@@ -1625,7 +1215,7 @@ final class Interpreter implements Opcodes {
         return bound;
     }
 
-    private BoundOffer boundOffer(Object element, MethodInsnNode call, List<Object> args) {
+    BoundOffer boundOffer(Object element, MethodInsnNode call, List<Object> args) {
         BoundOffer offer = new BoundOffer(element, call.owner, call.name, call.desc, call.itf, args);
 
         return boundOffers.computeIfAbsent(element, (e) -> new ArrayList<>()).stream().filter(offer::equals).findFirst().orElseGet(() -> {
@@ -1634,12 +1224,8 @@ final class Interpreter implements Opcodes {
         });
     }
 
-    private static boolean isKeyedList(@Nullable Object value) {
-        return value instanceof Object[] array && array.length > 0 || value instanceof List<?> list && !list.isEmpty();
-    }
-
     @Nullable
-    private Integer poolKey(List<Object> listings) {
+    Integer poolKey(List<Object> listings) {
         for (Map.Entry<Object, Integer> entry : listingKeys.entrySet()) {
             List<?> keyed = entry.getKey() instanceof Object[] array ? Arrays.asList(array) : (List<?>) entry.getKey();
 
@@ -1652,7 +1238,7 @@ final class Interpreter implements Opcodes {
     }
 
     @Nullable
-    private Value offersCall(MethodInsnNode call, Value.Offers offers, List<Value> args, int depth) {
+    Value offersCall(MethodInsnNode call, Value.Offers offers, List<Value> args, int depth) {
         if (call.name.equals("add") && call.desc.equals("(Ljava/lang/Object;)Z") && args.get(1) instanceof Value.Pick pickValue) {
             Integer index = offers.picks.get(pickValue.pool());
 
@@ -1723,7 +1309,7 @@ final class Interpreter implements Opcodes {
         throw new Fail("merchant offers call " + call.name);
     }
 
-    private Value addPicked(Value.Offers offers, Value.Choice choice) {
+    Value addPicked(Value.Offers offers, Value.Choice choice) {
         Integer index = offers.picks.get(choice.draw());
         NumberExpr drawCount = drawCounts.get(choice.draw());
 
@@ -1749,13 +1335,13 @@ final class Interpreter implements Opcodes {
         return new Value.Known(1);
     }
 
-    private boolean isSymbolicOffer(Value value) {
+    boolean isSymbolicOffer(Value value) {
         return value instanceof Value.Pick || value instanceof Value.Offer || value instanceof Value.Choice choice && choice.draw() != null
                 && pools.contains(choice.draw()) && !choice.options().isEmpty() && choice.options().stream().allMatch(MerchantOffer.class::isInstance);
     }
 
     @Nullable
-    private Value.Offers offerList(Value value, boolean create) {
+    Value.Offers offerList(Value value, boolean create) {
         if (value instanceof Value.Offers offers) {
             return offers;
         }
@@ -1810,7 +1396,7 @@ final class Interpreter implements Opcodes {
         return new Value.Known(removedIndices.isEmpty() ? 0 : 1);
     }
 
-    private Value construct(String type, String desc, List<Value> args, ClassLoader loader) {
+    Value construct(String type, String desc, List<Value> args, ClassLoader loader) {
         if (desc.equals("()V") && isPlainOffers(load(type, loader))) {
             trace("constructor.offers", type, desc);
             return new Value.Offers();
@@ -1977,7 +1563,7 @@ final class Interpreter implements Opcodes {
                 && call.name.equals(CONSTRUCTOR) && call.desc.equals(desc) && insns.get(params.length + 2).getOpcode() == RETURN;
     }
 
-    private void replace(Value.Uninit uninit, Value created) {
+    void replace(Value.Uninit uninit, Value created) {
         for (Frame frame : frames) {
             frame.replace((v) -> v == uninit, created);
         }
@@ -2107,7 +1693,7 @@ final class Interpreter implements Opcodes {
     }
 
     @Nullable
-    private Value jdkCall(MethodInsnNode call, Class<?> declaring, List<Value> args, ClassLoader loader) {
+    Value jdkCall(MethodInsnNode call, Class<?> declaring, List<Value> args, ClassLoader loader) {
         boolean isStatic = call.getOpcode() == INVOKESTATIC;
         Type returnType = Type.getReturnType(call.desc);
 
@@ -2237,7 +1823,7 @@ final class Interpreter implements Opcodes {
         }
         if (!isStatic && args.get(0) instanceof Value.Known known && known.value() != null && owned.containsKey(known.value())
                 && args.stream().skip(1).anyMatch((v) -> v instanceof Value.Unknown || v instanceof Value.Num)
-                && args.stream().skip(1).allMatch((v) -> isConcrete(v) || v instanceof Value.Unknown || v instanceof Value.Num) && !returnsTradeData(call)) {
+                && args.stream().skip(1).allMatch((v) -> isConcrete(v) || v instanceof Value.Unknown || v instanceof Value.Num) && !TradeTypes.returnsTradeData(call)) {
             trace("jdk.uncertain", call);
             return uncertainChange(call, READ_ONLY.contains(call.name) ? null : known.value());
         }
@@ -2291,7 +1877,7 @@ final class Interpreter implements Opcodes {
     }
 
     @Nullable
-    private Value lookup(MethodInsnNode call, Class<?> declaring, Map<?, ?> map, Origin key, List<Value> args, ClassLoader loader) {
+    Value lookup(MethodInsnNode call, Class<?> declaring, Map<?, ?> map, Origin key, List<Value> args, ClassLoader loader) {
         List<Object> candidates = new ArrayList<>(map.keySet());
 
         candidates.sort(Comparator.comparing(String::valueOf));
@@ -2399,7 +1985,7 @@ final class Interpreter implements Opcodes {
         return value;
     }
 
-    private Value unbox(MethodInsnNode call, Value.Num num) {
+    Value unbox(MethodInsnNode call, Value.Num num) {
         return switch (call.name) {
             case "intValue", "shortValue", "byteValue" -> new Value.Num(num.expr(), Value.Kind.INT);
             case "longValue" -> new Value.Num(num.expr(), Value.Kind.LONG);
@@ -2410,7 +1996,7 @@ final class Interpreter implements Opcodes {
     }
 
     @Nullable
-    private Value concreteCall(MethodInsnNode call, List<Value> args, ClassLoader loader, boolean ownedResult) {
+    Value concreteCall(MethodInsnNode call, List<Value> args, ClassLoader loader, boolean ownedResult) {
         boolean isStatic = call.getOpcode() == INVOKESTATIC;
 
         if (args.stream().anyMatch(this::isSelection)) {
@@ -2498,16 +2084,12 @@ final class Interpreter implements Opcodes {
         throw new Fail("symbolic value");
     }
 
-    private static boolean isLogging(String owner) {
-        return owner.startsWith("org/slf4j/") || owner.startsWith("org/apache/logging/log4j/") || owner.startsWith("java/util/logging/");
-    }
-
     private boolean isSelection(Value value) {
         return value instanceof Value.Known known && known.value() != null
                 && (shuffled.containsKey(known.value()) || randomSets.containsKey(known.value()) || removed.containsKey(known.value()));
     }
 
-    private boolean isConcrete(Value value) {
+    boolean isConcrete(Value value) {
         return value instanceof Value.Known || value instanceof Value.Closure closure && closure.captured().stream().allMatch(this::isConcrete)
                 || value instanceof Value.Rng && mode == Mode.STUB;
     }
@@ -2597,7 +2179,7 @@ final class Interpreter implements Opcodes {
         try {
             Object value = field.get(known.value());
 
-            if (tainted.contains(known.value()) && isData(value)) {
+            if (tainted.contains(known.value()) && TradeTypes.isData(value)) {
                 taint(value);
             }
 
@@ -3389,7 +2971,7 @@ final class Interpreter implements Opcodes {
         throw new Fail("symbolic double");
     }
 
-    private static int[] choiceIndices(List<Value> args) {
+    static int[] choiceIndices(List<Value> args) {
         int[] indices = IntStream.range(0, args.size()).filter((i) -> args.get(i) instanceof Value.Choice).toArray();
 
         if (indices.length > 1) {
