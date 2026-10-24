@@ -27,6 +27,10 @@ final class TradeTypes {
         return returnType.getSort() == Type.OBJECT && TRADE_TYPES.contains(returnType.getInternalName());
     }
 
+    static boolean isObject(Type type, String internalName) {
+        return type.getSort() == Type.OBJECT && type.getInternalName().equals(internalName);
+    }
+
     static boolean isData(@Nullable Object value) {
         return value instanceof Collection<?> || value instanceof Map<?, ?> || value instanceof Tag || value instanceof DataComponentMap || value instanceof DataComponentPatch
                 || value != null && value.getClass().isArray();

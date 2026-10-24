@@ -3,12 +3,12 @@ package com.yanny.ali.plugin.server.bytecode;
 import com.yanny.aci.api.NumberExpr;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.tree.MethodNode;
 
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -19,17 +19,13 @@ import java.util.stream.IntStream;
 
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.CONSTRUCTOR;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.FRESH_RESULTS;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.ITEM_COST;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.ITEM_STACK;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.LOOKUPS;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.MAX_OPTIONS;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.MERCHANT_OFFER;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.ORDER_ONLY;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.READ_ONLY;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.STATIC_RANDOM;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.STATIC_SAFE;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.choiceIndices;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.isForwardingOffer;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.isLegacyRandom;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.isPlainOffers;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.isRandomType;
@@ -50,11 +46,14 @@ final class Dispatcher implements Opcodes, CallContext {
     private final Interpreter interpreter;
 
     static {
+        MethodModel stacks = new ItemStackModel();
+        MethodModel costs = new ItemCostModel();
+
         MODELS.put(Phase.CONSTRUCTOR, List.of(
                 construction(Dispatcher::newOffers),
-                construction(Dispatcher::newStack),
-                construction(Dispatcher::newItemCost),
-                construction(Dispatcher::newOffer),
+                stacks,
+                costs,
+                new MerchantOfferModel(),
                 construction(Dispatcher::newPerChoice),
                 construction(Dispatcher::newUnknown)
         ));
@@ -73,10 +72,9 @@ final class Dispatcher implements Opcodes, CallContext {
                 branch(Dispatcher::collectedOffers)
         ));
         MODELS.put(Phase.RECEIVER, List.of(
-                branch(Dispatcher::rng),
-                branch(Dispatcher::cost),
-                branch(Dispatcher::stack),
-                branch(Dispatcher::realStack),
+                new RandomModel(),
+                costs,
+                stacks,
                 branch(Dispatcher::num),
                 branch(Dispatcher::closure),
                 branch(Dispatcher::trader),
@@ -179,6 +177,11 @@ final class Dispatcher implements Opcodes, CallContext {
     }
 
     @Override
+    public boolean isTainted(Value value) {
+        return interpreter.isTainted(value);
+    }
+
+    @Override
     public Value wrap(@Nullable Object value) {
         return interpreter.wrap(value);
     }
@@ -190,6 +193,79 @@ final class Dispatcher implements Opcodes, CallContext {
 
         all.addAll(args);
         return interpreter.invokeHandle(closure.impl(), all, closure.loader(), depth + 1);
+    }
+
+    @Nullable
+    @Override
+    public Value execute(Class<?> owner, MethodNode method, List<Value> args, int depth) {
+        return interpreter.execute(owner, method, args, depth + 1);
+    }
+
+    @Nullable
+    @Override
+    public Value concreteCall(Call call, boolean ownedResult) {
+        return interpreter.concreteCall(call.insn(), call.args(), call.loader(), ownedResult);
+    }
+
+    @Nullable
+    @Override
+    public Value combine(List<Value> results) {
+        return interpreter.combine(results);
+    }
+
+    @Override
+    public Object[] javaArgs(List<Value> args, Class<?>[] types, int offset) {
+        return interpreter.javaArgs(args, types, offset);
+    }
+
+    @Override
+    public Interpreter.Mode mode() {
+        return interpreter.mode;
+    }
+
+    @Override
+    public int pick() {
+        return interpreter.pick;
+    }
+
+    @Override
+    public NumberExpr expr(Value value) {
+        return interpreter.expr(value);
+    }
+
+    @Override
+    public NumberExpr add(NumberExpr a, NumberExpr b) {
+        return interpreter.add(a, b);
+    }
+
+    @Override
+    public NumberExpr sub(NumberExpr a, NumberExpr b) {
+        return interpreter.sub(a, b);
+    }
+
+    @Override
+    public Value draw(NumberExpr expr, Value.Kind kind) {
+        return interpreter.draw(expr, kind);
+    }
+
+    @Override
+    public void own(Object object) {
+        interpreter.heap.own(object);
+    }
+
+    @Override
+    public void stackPart(Object part, Value.Stack stack) {
+        interpreter.heap.stackPart(part, stack);
+    }
+
+    @Override
+    public Value.Stack shadow(ItemStack real) {
+        return interpreter.heap.shadow(real);
+    }
+
+    @Override
+    public List<Value> shadowed(List<Value> args) {
+        return interpreter.shadowed(args);
     }
 
     @Nullable
@@ -272,7 +348,7 @@ final class Dispatcher implements Opcodes, CallContext {
 
         if (args.stream().anyMatch(this::holdsStack)) {
             trace("arguments.stacks", call);
-            return interpreter.stackArgumentCall(call, args, loader);
+            return ItemStackModel.argumentCall(this, invocation);
         }
 
         if (declared != null && interpreter.opaque.contains(call.owner + "." + call.name + call.desc) && isWorldCall(call, args, loader)) {
@@ -390,34 +466,6 @@ final class Dispatcher implements Opcodes, CallContext {
         if (desc.equals("()V") && isPlainOffers(load(type, loader))) {
             trace("constructor.offers", type, desc);
             return new Value.Offers();
-        }
-
-        return NO_OPINION;
-    }
-
-    private Value newStack(String type, String desc, List<Value> args, ClassLoader loader, int depth) {
-        if (type.equals(ITEM_STACK)) {
-            trace("constructor.stack", type, desc);
-            return interpreter.constructStack(ItemStack.class, desc, args);
-        }
-
-        return NO_OPINION;
-    }
-
-    private Value newItemCost(String type, String desc, List<Value> args, ClassLoader loader, int depth) {
-        if (type.equals(ITEM_COST)) {
-            trace("constructor.itemCost", type, desc);
-            return interpreter.constructStack(ItemCost.class, desc, args);
-        }
-
-        return NO_OPINION;
-    }
-
-    @Nullable
-    private Value newOffer(String type, String desc, List<Value> args, ClassLoader loader, int depth) {
-        if (type.equals(MERCHANT_OFFER) || !args.stream().allMatch(interpreter::isConcrete) && isForwardingOffer(load(type, loader), desc)) {
-            trace("constructor.offer", type, desc);
-            return interpreter.constructOffer(desc, args);
         }
 
         return NO_OPINION;
@@ -546,58 +594,6 @@ final class Dispatcher implements Opcodes, CallContext {
         if (!isStatic && args.get(0) instanceof Value.Known known && known.value() != null && interpreter.heap.offers(known.value()) != null) {
             trace("undistributed.collectedOffers", call);
             return interpreter.offersCall(call, interpreter.heap.offers(known.value()), args, depth);
-        }
-
-        return NO_OPINION;
-    }
-
-    @Nullable
-    private Value rng(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        boolean isStatic = call.getOpcode() == INVOKESTATIC;
-        Value receiver = isStatic ? null : args.get(0);
-
-        if (receiver instanceof Value.Rng rng) {
-            trace("receiver.rng", call);
-            return interpreter.random(call, rng, args, depth);
-        }
-
-        return NO_OPINION;
-    }
-
-    @Nullable
-    private Value cost(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        boolean isStatic = call.getOpcode() == INVOKESTATIC;
-        Value receiver = isStatic ? null : args.get(0);
-
-        if (receiver instanceof Value.Stack stack && call.owner.equals(ITEM_COST)) {
-            trace("receiver.cost", call);
-            return interpreter.costCall(call, stack, args, loader);
-        }
-
-        return NO_OPINION;
-    }
-
-    @Nullable
-    private Value stack(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        boolean isStatic = call.getOpcode() == INVOKESTATIC;
-        Value receiver = isStatic ? null : args.get(0);
-
-        if (receiver instanceof Value.Stack stack) {
-            trace("receiver.stack", call);
-            return interpreter.stackCall(call, stack, args, loader);
-        }
-
-        return NO_OPINION;
-    }
-
-    @Nullable
-    private Value realStack(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        boolean isStatic = call.getOpcode() == INVOKESTATIC;
-        Value receiver = isStatic ? null : args.get(0);
-
-        if (receiver instanceof Value.Known known && known.value() instanceof ItemStack real) {
-            trace("receiver.realStack", call);
-            return interpreter.knownStackCall(call, real, args, loader);
         }
 
         return NO_OPINION;

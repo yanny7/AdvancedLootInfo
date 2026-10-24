@@ -4,13 +4,11 @@ import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberFunctions;
 import com.yanny.aci.api.NumberInterval;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.component.DataComponentPredicate;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
@@ -36,9 +34,7 @@ final class Interpreter implements Opcodes {
     private static final int MAX_DECISIONS = 8;
     static final String CONSTRUCTOR = "<init>";
     static final String ITEM_STACK = Type.getInternalName(ItemStack.class);
-    static final String ITEM_COST = Type.getInternalName(ItemCost.class);
     static final String MERCHANT_OFFER = Type.getInternalName(MerchantOffer.class);
-    static final String OPTIONAL = Type.getInternalName(Optional.class);
     private static final String LAMBDA_METAFACTORY = "java/lang/invoke/LambdaMetafactory";
     private static final String STRING_CONCAT_FACTORY = "java/lang/invoke/StringConcatFactory";
     private static final Value.Known NULL = new Value.Known(null);
@@ -58,9 +54,9 @@ final class Interpreter implements Opcodes {
     static final Set<String> ORDER_ONLY = Set.of("reverse", "shuffle", "sort");
     static final Set<String> FRESH_RESULTS = Set.of("stream", "iterator", "listIterator", "spliterator", "toArray");
 
-    private final Mode mode;
+    final Mode mode;
     private final Dispatcher dispatcher = new Dispatcher(this);
-    private final int pick;
+    final int pick;
     final ValueStore store = new ValueStore();
     final Heap heap = new Heap(store);
     private int steps;
@@ -722,44 +718,7 @@ final class Interpreter implements Opcodes {
         throw new Fail("results cannot be combined");
     }
 
-    @Nullable
-    Value random(MethodInsnNode call, Value.Rng rng, List<Value> args, int depth) {
-        Semantic semantic = rng.legacy() ? legacySemantic(call) : sourceSemantic(call);
-
-        if (semantic == null) {
-            if (!rng.legacy() && declaration(RandomSource.class, call.name, call.desc, false) instanceof Declaration declaration) {
-                return execute(declaration.owner(), declaration.method(), args, depth + 1);
-            }
-
-            throw new Fail("random method " + call.name);
-        }
-
-        boolean stub = mode == Mode.STUB;
-
-        if (stub) {
-            return stubRandom(semantic, rng, args);
-        }
-
-        return switch (semantic) {
-            case BOUND -> draw(NumberExpr.uniformInt(NumberExpr.constant(0), sub(expr(args.get(1)), NumberExpr.constant(1))), Value.Kind.INT);
-            case BETWEEN -> draw(uniformInt(expr(args.get(1)), expr(args.get(2))), Value.Kind.INT);
-            case ORIGIN -> draw(uniformInt(expr(args.get(1)), sub(expr(args.get(2)), NumberExpr.constant(1))), Value.Kind.INT);
-            case FLOAT -> draw(NumberExpr.uniformFloat(0, 1), Value.Kind.FLOAT);
-            case FLOAT_BOUND -> draw(NumberExpr.fn(NumberFunctions.UNIFORM_FLOAT, NumberExpr.constant(0), expr(args.get(1))), Value.Kind.FLOAT);
-            case FLOAT_ORIGIN -> draw(NumberExpr.fn(NumberFunctions.UNIFORM_FLOAT, expr(args.get(1)), expr(args.get(2))), Value.Kind.FLOAT);
-            case DOUBLE -> draw(NumberExpr.uniformFloat(0, 1), Value.Kind.DOUBLE);
-            case DOUBLE_BOUND -> draw(NumberExpr.fn(NumberFunctions.UNIFORM_FLOAT, NumberExpr.constant(0), expr(args.get(1))), Value.Kind.DOUBLE);
-            case DOUBLE_ORIGIN -> draw(NumberExpr.fn(NumberFunctions.UNIFORM_FLOAT, expr(args.get(1)), expr(args.get(2))), Value.Kind.DOUBLE);
-            case BOOLEAN -> draw(NumberExpr.uniformInt(0, 1), Value.Kind.INT);
-            case INT -> throw new Fail("unbounded random int");
-            case LONG -> throw new Fail("random long");
-            case GAUSSIAN -> throw new Fail("random gaussian");
-            case FORK -> rng;
-            case IGNORED -> null;
-        };
-    }
-
-    private Value draw(NumberExpr expr, Value.Kind kind) {
+    Value draw(NumberExpr expr, Value.Kind kind) {
         if (expr instanceof NumberExpr.Fn fn && fn.args().size() == 2 && fn.args().get(0) instanceof NumberExpr.Const lo && fn.args().get(1) instanceof NumberExpr.Const hi) {
             if (fn.id().equals(NumberFunctions.UNIFORM_INT) && hi.value() - lo.value() < MAX_OPTIONS) {
                 drawn.put(expr, new Drawn(Draw.discrete((int) lo.value(), (int) hi.value()), 0));
@@ -769,78 +728,6 @@ final class Interpreter implements Opcodes {
         }
 
         return num(expr, kind);
-    }
-
-    @Nullable
-    private Value stubRandom(Semantic semantic, Value.Rng rng, List<Value> args) {
-        float fraction = StubRandom.fraction(pick);
-
-        return switch (semantic) {
-            case BOUND -> new Value.Known(StubRandom.bound(pick, intOf(args.get(1))));
-            case BETWEEN -> new Value.Known(intOf(args.get(1)) + StubRandom.bound(pick, intOf(args.get(2)) - intOf(args.get(1)) + 1));
-            case ORIGIN -> new Value.Known(intOf(args.get(1)) + StubRandom.bound(pick, intOf(args.get(2)) - intOf(args.get(1))));
-            case FLOAT -> new Value.Known(fraction);
-            case FLOAT_BOUND -> new Value.Known(fraction * floatOf(args.get(1)));
-            case FLOAT_ORIGIN -> new Value.Known(floatOf(args.get(1)) + fraction * (floatOf(args.get(2)) - floatOf(args.get(1))));
-            case DOUBLE -> new Value.Known((double) fraction);
-            case DOUBLE_BOUND -> new Value.Known(fraction * doubleOf(args.get(1)));
-            case DOUBLE_ORIGIN -> new Value.Known(doubleOf(args.get(1)) + fraction * (doubleOf(args.get(2)) - doubleOf(args.get(1))));
-            case BOOLEAN -> new Value.Known(pick != 0 ? 1 : 0);
-            case INT -> new Value.Known(pick);
-            case LONG -> new Value.Known((long) pick);
-            case GAUSSIAN -> new Value.Known(0D);
-            case FORK -> rng;
-            case IGNORED -> null;
-        };
-    }
-
-    @Nullable
-    private static Semantic sourceSemantic(MethodInsnNode call) {
-        if (RuntimeNames.is(RuntimeNames.NEXT_INT_BOUND, call)) {
-            return Semantic.BOUND;
-        } else if (RuntimeNames.is(RuntimeNames.NEXT_INT_BETWEEN, call)) {
-            return Semantic.BETWEEN;
-        } else if (RuntimeNames.is(RuntimeNames.NEXT_INT_ORIGIN, call)) {
-            return Semantic.ORIGIN;
-        } else if (RuntimeNames.is(RuntimeNames.NEXT_FLOAT, call)) {
-            return Semantic.FLOAT;
-        } else if (RuntimeNames.is(RuntimeNames.NEXT_DOUBLE, call)) {
-            return Semantic.DOUBLE;
-        } else if (RuntimeNames.is(RuntimeNames.NEXT_BOOLEAN, call)) {
-            return Semantic.BOOLEAN;
-        } else if (RuntimeNames.is(RuntimeNames.NEXT_INT, call)) {
-            return Semantic.INT;
-        } else if (RuntimeNames.is(RuntimeNames.NEXT_LONG, call)) {
-            return Semantic.LONG;
-        } else if (RuntimeNames.is(RuntimeNames.NEXT_GAUSSIAN, call)) {
-            return Semantic.GAUSSIAN;
-        } else if (RuntimeNames.is(RuntimeNames.FORK, call)) {
-            return Semantic.FORK;
-        } else if (RuntimeNames.is(RuntimeNames.SET_SEED, call) || RuntimeNames.is(RuntimeNames.CONSUME_COUNT, call)) {
-            return Semantic.IGNORED;
-        }
-
-        return null;
-    }
-
-    @Nullable
-    private static Semantic legacySemantic(MethodInsnNode call) {
-        return switch (call.name + call.desc) {
-            case "nextInt(I)I" -> Semantic.BOUND;
-            case "nextInt(II)I" -> Semantic.ORIGIN;
-            case "nextInt()I" -> Semantic.INT;
-            case "nextFloat()F" -> Semantic.FLOAT;
-            case "nextFloat(F)F" -> Semantic.FLOAT_BOUND;
-            case "nextFloat(FF)F" -> Semantic.FLOAT_ORIGIN;
-            case "nextDouble()D" -> Semantic.DOUBLE;
-            case "nextDouble(D)D" -> Semantic.DOUBLE_BOUND;
-            case "nextDouble(DD)D" -> Semantic.DOUBLE_ORIGIN;
-            case "nextBoolean()Z" -> Semantic.BOOLEAN;
-            case "nextLong()J" -> Semantic.LONG;
-            case "nextGaussian()D" -> Semantic.GAUSSIAN;
-            case "setSeed(J)V" -> Semantic.IGNORED;
-            default -> null;
-        };
     }
 
     static boolean isRandomType(Type type, ClassLoader loader) {
@@ -857,248 +744,7 @@ final class Interpreter implements Opcodes {
         return Random.class.isAssignableFrom(load(type.getInternalName(), loader));
     }
 
-    @Nullable
-    Value stackCall(MethodInsnNode call, Value.Stack stack, List<Value> args, ClassLoader loader) {
-        if (RuntimeNames.is(RuntimeNames.STACK_SET_COUNT, call)) {
-            stack.count = expr(args.get(1));
-            return null;
-        } else if (RuntimeNames.is(RuntimeNames.STACK_GROW, call)) {
-            stack.count = add(stack.count, expr(args.get(1)));
-            return null;
-        } else if (RuntimeNames.is(RuntimeNames.STACK_SHRINK, call)) {
-            stack.count = sub(stack.count, expr(args.get(1)));
-            return null;
-        } else if (RuntimeNames.is(RuntimeNames.STACK_GET_COUNT, call)) {
-            return num(stack.count, Value.Kind.INT);
-        } else if (RuntimeNames.is(RuntimeNames.STACK_GET_ITEM, call)) {
-            List<Object> items = stack.options.stream().<Object>map(ItemStack::getItem).distinct().toList();
-
-            return items.size() == 1 ? new Value.Known(items.get(0)) : new Value.Choice(items);
-        } else if (RuntimeNames.is(RuntimeNames.STACK_COPY, call)) {
-            return stack.copy();
-        } else if (RuntimeNames.is(RuntimeNames.STACK_COPY_WITH_COUNT, call)) {
-            Value.Stack copy = stack.copy();
-
-            copy.count = expr(args.get(1));
-            return copy;
-        } else if (RuntimeNames.is(RuntimeNames.STACK_IS_EMPTY, call)) {
-            NumberInterval bounds = stack.count.bounds();
-
-            if (stack.options.stream().noneMatch(ItemStack::isEmpty) && !bounds.isUnknown() && bounds.lo() >= 1) {
-                return new Value.Known(0);
-            }
-            if (stack.count instanceof NumberExpr.Const c && c.value() <= 0) {
-                return new Value.Known(1);
-            }
-
-            throw new Fail("stack emptiness");
-        }
-
-        return onTemplates(call, stack, args, 0, loader);
-    }
-
-    @Nullable
-    Value costCall(MethodInsnNode call, Value.Stack stack, List<Value> args, ClassLoader loader) {
-        if (RuntimeNames.is(RuntimeNames.COST_ITEM_STACK, call)) {
-            return stack;
-        } else if (RuntimeNames.is(RuntimeNames.COST_COUNT, call)) {
-            return num(stack.count, Value.Kind.INT);
-        } else if (!isObject(Type.getReturnType(call.desc), ITEM_COST)) {
-            throw new Fail("item cost call " + call.name);
-        } else if (!args.stream().skip(1).allMatch(this::isConcrete) || args.stream().anyMatch(this::isTainted)) {
-            return unknownStackChange(call, stack, "item cost call with symbolic arguments");
-        }
-
-        List<ItemStack> templates = new ArrayList<>();
-
-        for (ItemStack template : stack.options) {
-            List<Value> copy = new ArrayList<>(args);
-
-            copy.set(0, new Value.Known(new ItemCost(template.getItemHolder(), 1, DataComponentPredicate.EMPTY)));
-
-            if (!(concreteCall(call, copy, loader, true) instanceof Value.Known known) || !(known.value() instanceof ItemCost cost)) {
-                throw new Fail("item cost call " + call.name);
-            }
-
-            templates.add(cost.itemStack());
-        }
-
-        Value.Stack result = new Value.Stack(templates, stack.count, stack.randomTag);
-
-        result.destination = stack.destination;
-        result.decoration = stack.decoration;
-        return result;
-    }
-
-    @Nullable
-    Value knownStackCall(MethodInsnNode call, ItemStack real, List<Value> args, ClassLoader loader) {
-        if (RuntimeNames.is(RuntimeNames.STACK_GET_COUNT, call)) {
-            return new Value.Known(real.getCount());
-        } else if (RuntimeNames.is(RuntimeNames.STACK_GET_ITEM, call)) {
-            return wrap(real.getItem());
-        } else if (RuntimeNames.is(RuntimeNames.STACK_IS_EMPTY, call)) {
-            return new Value.Known(real.isEmpty() ? 1 : 0);
-        } else if (RuntimeNames.is(RuntimeNames.STACK_COPY, call)) {
-            return stackOf(real);
-        } else if (RuntimeNames.is(RuntimeNames.STACK_COPY_WITH_COUNT, call)) {
-            Value.Stack copy = stackOf(real);
-
-            copy.count = expr(args.get(1));
-            return copy;
-        }
-
-        return stackCall(call, heap.shadow(real), shadowed(args), loader);
-    }
-
-    @Nullable
-    Value stackArgumentCall(MethodInsnNode call, List<Value> args, ClassLoader loader) {
-        List<Value> shadowedArgs = shadowed(args);
-        List<Value.Stack> stacks = shadowedArgs.stream().filter(Value.Stack.class::isInstance).map(Value.Stack.class::cast).toList();
-        Map<ItemStack, ItemStack> fixed = new IdentityHashMap<>();
-
-        if (stacks.size() > 1) {
-            Value.Stack kept = stacks.stream().filter((s) -> !isFixed(s)).findFirst().orElse(stacks.get(0));
-
-            shadowedArgs = shadowedArgs.stream().map((v) -> v instanceof Value.Stack s && s != kept && isFixed(s) ? fixedStack(s, fixed) : v).toList();
-        }
-
-        Value result = singleStackArgumentCall(call, shadowedArgs, loader);
-
-        if (fixed.entrySet().stream().anyMatch((e) -> !ItemStack.matches(e.getKey(), e.getValue()))) {
-            throw new Fail("stack argument changed");
-        }
-
-        return result;
-    }
-
-    private static boolean isFixed(Value.Stack stack) {
-        return stack.options.size() == 1 && stack.count instanceof NumberExpr.Const && !stack.randomTag && stack.destination == null && stack.decoration == null;
-    }
-
-    private Value fixedStack(Value.Stack stack, Map<ItemStack, ItemStack> fixed) {
-        ItemStack real = stack.options.get(0).copy();
-
-        real.setCount((int) ((NumberExpr.Const) stack.count).value());
-        heap.own(real);
-        fixed.put(real, real.copy());
-        return new Value.Known(real);
-    }
-
-    @Nullable
-    private Value singleStackArgumentCall(MethodInsnNode call, List<Value> shadowedArgs, ClassLoader loader) {
-        int index = -1;
-
-        for (int i = 0; i < shadowedArgs.size(); i++) {
-            if (shadowedArgs.get(i) instanceof Value.Stack) {
-                if (index >= 0) {
-                    throw new Fail("several stack arguments");
-                }
-
-                index = i;
-            }
-        }
-
-        Value.Stack stack = (Value.Stack) shadowedArgs.get(index);
-
-        if (shadowedArgs.stream().filter((v) -> v != stack).allMatch(this::isConcrete)) {
-            return onTemplates(call, stack, shadowedArgs, index, loader);
-        }
-
-        return unknownStackChange(call, stack, "stack with symbolic arguments");
-    }
-
-    @Nullable
-    private Value unknownStackChange(MethodInsnNode call, Value.Stack stack, String reason) {
-        Type returnType = Type.getReturnType(call.desc);
-
-        if (returnType.getSort() == Type.VOID) {
-            stack.randomTag = true;
-            return null;
-        }
-        if (isObject(returnType, ITEM_STACK)) {
-            stack.randomTag = true;
-            return stack.copy();
-        }
-        if (isObject(returnType, ITEM_COST)) {
-            Value.Stack copy = stack.copy();
-
-            copy.randomTag = true;
-            return copy;
-        }
-        if (isComponentWrite(call)) {
-            stack.randomTag = true;
-            return Value.Unknown.of(returnType, null);
-        }
-
-        throw new Fail(reason);
-    }
-
-    private static boolean isComponentWrite(MethodInsnNode call) {
-        if (call.owner.equals(ITEM_STACK) && RuntimeNames.STACK_SET != null && RuntimeNames.STACK_UPDATE != null) {
-            return call.name.equals(RuntimeNames.STACK_SET.name()) || call.name.equals(RuntimeNames.STACK_UPDATE.name());
-        }
-
-        return RuntimeNames.is(RuntimeNames.UPDATE_ENCHANTMENTS, call);
-    }
-
-    @Nullable
-    private Value onTemplates(MethodInsnNode call, Value.Stack stack, List<Value> args, int index, ClassLoader loader) {
-        if (!args.stream().filter((v) -> v != stack).allMatch(this::isConcrete)) {
-            return unknownStackChange(call, stack, "stack call with symbolic arguments");
-        }
-
-        if (args.stream().anyMatch(this::isTainted)) {
-            return unknownStackChange(call, stack, "stack call with uncertain arguments");
-        }
-
-        NumberExpr.Const constant = stack.count instanceof NumberExpr.Const c ? c : null;
-        List<Object> results = new ArrayList<>();
-        boolean returnsTemplate = true;
-
-        for (ItemStack template : stack.options) {
-            template.setCount(constant != null ? (int) constant.value() : 1);
-
-            List<Value> copy = new ArrayList<>(args);
-
-            copy.set(index, new Value.Known(template));
-
-            Value result = concreteCall(call, copy, loader, true);
-
-            if (constant == null && template.getCount() != 1) {
-                throw new Fail("stack count changed by an unknown call");
-            }
-            if (result instanceof Value.Known known && known.value() != template) {
-                returnsTemplate = false;
-                results.add(known.value());
-
-                if (known.value() != null && !(known.value() instanceof ItemStack)) {
-                    heap.stackPart(known.value(), stack);
-                }
-            } else if (result != null && !(result instanceof Value.Known)) {
-                return unknownStackChange(call, stack, "symbolic result of a stack call");
-            }
-        }
-
-        if (constant != null && !stack.options.isEmpty()) {
-            stack.count = NumberExpr.constant(stack.options.get(0).getCount());
-        }
-        if (Type.getReturnType(call.desc).getSort() == Type.VOID) {
-            return null;
-        }
-        if (returnsTemplate) {
-            return stack;
-        }
-
-        results.stream().filter(Objects::nonNull).forEach(heap::own);
-
-        if (results.stream().allMatch(ItemStack.class::isInstance)) {
-            return combine(results.stream().map(this::wrap).toList());
-        }
-
-        return results.size() == 1 ? wrap(results.get(0)) : new Value.Choice(results);
-    }
-
-    private List<Value> shadowed(List<Value> args) {
+    List<Value> shadowed(List<Value> args) {
         return args.stream().map((v) -> v instanceof Value.Known known && known.value() instanceof ItemStack real && !heap.isOwned(real) ? heap.shadow(real) : v).toList();
     }
 
@@ -1106,7 +752,7 @@ final class Interpreter implements Opcodes {
         return new Value.Stack(List.of(real.copy()), NumberExpr.constant(real.getCount()), false);
     }
 
-    private Value limit(Value.Stack stack) {
+    static Value limit(Value.Stack stack) {
         if (stack.options.size() > MAX_OPTIONS) {
             throw new Fail("too many options");
         }
@@ -1341,142 +987,6 @@ final class Interpreter implements Opcodes {
 
         offers.picks.replaceAll((pool, index) -> index - (int) removedIndices.stream().filter((removed) -> removed < index).count());
         return new Value.Known(removedIndices.isEmpty() ? 0 : 1);
-    }
-
-    @NotNull
-    Value constructStack(Class<?> type, String desc, List<Value> args) {
-        Type[] params = Type.getArgumentTypes(desc);
-
-        if (type == ItemCost.class && params.length == 4 && args.get(3) instanceof Value.Stack shown) {
-            Value.Stack cost = shown.copy();
-
-            cost.count = expr(args.get(1));
-            return cost;
-        }
-
-        NumberExpr count = params.length >= 2 && params[1].getSort() == Type.INT ? expr(args.get(1)) : NumberExpr.constant(1);
-        List<Object> items;
-
-        if (args.get(0) instanceof Value.Choice choice) {
-            items = choice.options();
-        } else {
-            Object item = concrete(args.get(0));
-
-            if (item == null) {
-                throw new Fail("null item");
-            }
-
-            items = List.of(item);
-        }
-        Constructor<?> constructor = constructor(type, desc);
-        List<ItemStack> templates = new ArrayList<>();
-
-        for (Object item : items) {
-            List<Value> copy = new ArrayList<>(args);
-
-            copy.set(0, new Value.Known(item));
-
-            if (params.length >= 2 && params[1].getSort() == Type.INT) {
-                copy.set(1, new Value.Known(count instanceof NumberExpr.Const c ? (int) c.value() : 1));
-            }
-            if (!copy.stream().allMatch(this::isConcrete)) {
-                throw new Fail("symbolic stack argument");
-            }
-
-            try {
-                constructor.setAccessible(true);
-                Object created = constructor.newInstance(javaArgs(copy, constructor.getParameterTypes(), 0));
-
-                templates.add(created instanceof ItemCost cost ? cost.itemStack() : (ItemStack) created);
-            } catch (Throwable e) {
-                throw new Fail("stack constructor failed");
-            }
-        }
-
-        return limit(new Value.Stack(templates, count, false));
-    }
-
-    Value constructOffer(String desc, List<Value> args) {
-        Type[] params = Type.getArgumentTypes(desc);
-
-        if (params.length >= 5 && isObject(params[0], ITEM_COST)) {
-            boolean hasCostB = isObject(params[1], OPTIONAL);
-            int resultIndex = hasCostB ? 2 : 1;
-            List<Value> numbers = args.subList(resultIndex + 1, args.size());
-            Value costA = cost(args.get(0));
-            Value costB = hasCostB ? optionalCost(args.get(1)) : new Value.Known(ItemStack.EMPTY);
-            Value result = args.get(resultIndex);
-
-            if (isObject(params[resultIndex], ITEM_STACK) && numbers.size() == 3) {
-                return new Value.Offer(costA, costB, result, intOf(numbers.get(0)), intOf(numbers.get(1)), floatOf(numbers.get(2)));
-            }
-            if (isObject(params[resultIndex], ITEM_STACK) && numbers.size() >= 4) {
-                return new Value.Offer(costA, costB, result, intOf(numbers.get(1)), intOf(numbers.get(2)), floatOf(numbers.get(3)));
-            }
-        }
-        if (args.stream().allMatch(this::isConcrete)) {
-            Constructor<?> constructor = constructor(MerchantOffer.class, desc);
-
-            try {
-                return wrap(constructor.newInstance(javaArgs(args, constructor.getParameterTypes(), 0)));
-            } catch (Throwable e) {
-                throw new Fail("offer constructor failed");
-            }
-        }
-
-        throw new Fail("offer constructor");
-    }
-
-    static boolean isForwardingOffer(Class<?> type, String desc) {
-        ClassNode node = type != MerchantOffer.class && MerchantOffer.class.isAssignableFrom(type) ? classNode(type) : null;
-        MethodNode init = node != null ? findMethod(node, CONSTRUCTOR, desc) : null;
-
-        if (init == null) {
-            return false;
-        }
-
-        List<AbstractInsnNode> insns = Arrays.stream(init.instructions.toArray()).filter((i) -> i.getOpcode() >= 0).toList();
-        Type[] params = Type.getArgumentTypes(desc);
-
-        if (insns.size() != params.length + 3 || !(insns.get(0) instanceof VarInsnNode self) || self.getOpcode() != ALOAD || self.var != 0) {
-            return false;
-        }
-
-        int slot = 1;
-
-        for (int i = 0; i < params.length; i++) {
-            if (!(insns.get(i + 1) instanceof VarInsnNode load) || load.getOpcode() != params[i].getOpcode(ILOAD) || load.var != slot) {
-                return false;
-            }
-
-            slot += params[i].getSize();
-        }
-
-        return insns.get(params.length + 1) instanceof MethodInsnNode call && call.getOpcode() == INVOKESPECIAL && call.owner.equals(MERCHANT_OFFER)
-                && call.name.equals(CONSTRUCTOR) && call.desc.equals(desc) && insns.get(params.length + 2).getOpcode() == RETURN;
-    }
-
-    private static boolean isObject(Type type, String internalName) {
-        return type.getSort() == Type.OBJECT && type.getInternalName().equals(internalName);
-    }
-
-    private static Value cost(Value value) {
-        if (value instanceof Value.Known known && known.value() instanceof ItemCost cost) {
-            return new Value.Known(cost.itemStack());
-        }
-        if (value instanceof Value.Choice choice && choice.options().stream().allMatch(ItemCost.class::isInstance)) {
-            return new Value.Choice(choice.options().stream().<Object>map((o) -> ((ItemCost) o).itemStack()).toList(), choice.draw());
-        }
-
-        return value;
-    }
-
-    private static Value optionalCost(Value value) {
-        if (value instanceof Value.Known known && known.value() instanceof Optional<?> optional) {
-            return optional.isPresent() ? cost(new Value.Known(optional.get())) : new Value.Known(ItemStack.EMPTY);
-        }
-
-        return cost(value);
     }
 
     private Value invokeDynamic(InvokeDynamicInsnNode indy, Frame f, ClassLoader loader) {
@@ -1810,7 +1320,7 @@ final class Interpreter implements Opcodes {
     }
 
     @Nullable
-    private static Object concrete(Value value) {
+    static Object concrete(Value value) {
         if (value instanceof Value.Known known) {
             return known.value();
         }
@@ -2605,7 +2115,7 @@ final class Interpreter implements Opcodes {
     }
 
     @NotNull
-    private static Value num(NumberExpr expr, Value.Kind kind) {
+    static Value num(NumberExpr expr, Value.Kind kind) {
         NumberInterval bounds = expr instanceof NumberExpr.Const ? null : expr.bounds();
 
         if (bounds != null && bounds.isPoint() && Double.isFinite(bounds.lo())) {
@@ -2624,7 +2134,7 @@ final class Interpreter implements Opcodes {
     }
 
     @NotNull
-    private NumberExpr add(NumberExpr a, NumberExpr b) {
+    NumberExpr add(NumberExpr a, NumberExpr b) {
         NumberExpr shifted = null;
 
         if (b instanceof NumberExpr.Const c) {
@@ -2637,15 +2147,10 @@ final class Interpreter implements Opcodes {
     }
 
     @NotNull
-    private NumberExpr sub(NumberExpr a, NumberExpr b) {
+    NumberExpr sub(NumberExpr a, NumberExpr b) {
         NumberExpr shifted = b instanceof NumberExpr.Const c ? shift(a, -c.value()) : null;
 
         return shifted != null ? shifted : NumberExpr.sub(a, b);
-    }
-
-    @NotNull
-    private static NumberExpr uniformInt(NumberExpr min, NumberExpr max) {
-        return NumberExpr.uniformInt(min, max);
     }
 
     @Nullable
@@ -2674,30 +2179,6 @@ final class Interpreter implements Opcodes {
         };
     }
 
-    private int intOf(Value value) {
-        if (value instanceof Value.Known known && known.value() instanceof Integer i) {
-            return i;
-        }
-
-        throw new Fail("symbolic trade number");
-    }
-
-    private float floatOf(Value value) {
-        if (value instanceof Value.Known known && known.value() instanceof Float f) {
-            return f;
-        }
-
-        throw new Fail("symbolic float");
-    }
-
-    private double doubleOf(Value value) {
-        if (value instanceof Value.Known known && known.value() instanceof Double d) {
-            return d;
-        }
-
-        throw new Fail("symbolic double");
-    }
-
     static int[] choiceIndices(List<Value> args) {
         int[] indices = IntStream.range(0, args.size()).filter((i) -> args.get(i) instanceof Value.Choice).toArray();
 
@@ -2719,24 +2200,6 @@ final class Interpreter implements Opcodes {
     enum Mode {
         SYMBOLIC,
         STUB,
-    }
-
-    private enum Semantic {
-        BOUND,
-        BETWEEN,
-        ORIGIN,
-        FLOAT,
-        FLOAT_BOUND,
-        FLOAT_ORIGIN,
-        DOUBLE,
-        DOUBLE_BOUND,
-        DOUBLE_ORIGIN,
-        BOOLEAN,
-        INT,
-        LONG,
-        GAUSSIAN,
-        FORK,
-        IGNORED,
     }
 
     private record Drawn(Draw draw, double offset) {

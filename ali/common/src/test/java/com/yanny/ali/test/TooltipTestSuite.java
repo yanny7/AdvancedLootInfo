@@ -21,8 +21,12 @@ import com.yanny.ali.plugin.server.LootConditionTypes;
 import com.yanny.ali.plugin.server.LootFunctionTypes;
 import com.yanny.ali.plugin.server.bytecode.BytecodeInterpreter;
 import com.yanny.ali.plugin.server.bytecode.LoggerModelTest;
+import com.yanny.ali.plugin.server.bytecode.ItemCostModelTest;
+import com.yanny.ali.plugin.server.bytecode.ItemStackModelTest;
 import com.yanny.ali.plugin.server.bytecode.MapItemModelTest;
+import com.yanny.ali.plugin.server.bytecode.MerchantOfferModelTest;
 import com.yanny.ali.plugin.server.bytecode.OptionalModelTest;
+import com.yanny.ali.plugin.server.bytecode.RandomModelTest;
 import net.minecraft.DetectedVersion;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.SharedConstants;
@@ -111,7 +115,11 @@ import static org.mockito.Mockito.mock;
         EntryWeightTest.class,
         LoggerModelTest.class,
         OptionalModelTest.class,
-        MapItemModelTest.class
+        MapItemModelTest.class,
+        RandomModelTest.class,
+        ItemStackModelTest.class,
+        ItemCostModelTest.class,
+        MerchantOfferModelTest.class
 })
 public class TooltipTestSuite {
     public static IServerUtils UTILS;
