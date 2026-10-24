@@ -30,7 +30,7 @@ final class CollectionsModel implements MethodModel {
         }
         if (!isStatic && args.get(0) instanceof Value.Known known && known.value() instanceof List<?> list && context.isOwned(list)
                 && insn.name.equals("remove") && insn.desc.equals("(I)Ljava/lang/Object;")
-                && (args.get(1) instanceof Value.Num || context.removals(list) > 0 || context.isTraderRun() && list.size() == 1)) {
+                && (args.get(1) instanceof Value.Num || context.removals(list) > 0 || context.traderRun() != null && list.size() == 1)) {
             context.traceCase("jdk.removeRandom", insn);
             return removeRandom(context, list, args.get(1));
         }

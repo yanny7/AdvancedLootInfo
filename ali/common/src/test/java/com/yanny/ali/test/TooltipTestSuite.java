@@ -25,8 +25,11 @@ import com.yanny.ali.plugin.server.bytecode.ItemStackModelTest;
 import com.yanny.ali.plugin.server.bytecode.MapItemModelTest;
 import com.yanny.ali.plugin.server.bytecode.MapModelTest;
 import com.yanny.ali.plugin.server.bytecode.MerchantOfferModelTest;
+import com.yanny.ali.plugin.server.bytecode.NumberModelTest;
 import com.yanny.ali.plugin.server.bytecode.OptionalModelTest;
 import com.yanny.ali.plugin.server.bytecode.RandomModelTest;
+import com.yanny.ali.plugin.server.bytecode.TraderModelTest;
+import com.yanny.ali.plugin.server.bytecode.WorldModelTest;
 import net.minecraft.DetectedVersion;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.SharedConstants;
@@ -112,7 +115,10 @@ import static org.mockito.Mockito.mock;
         ItemStackModelTest.class,
         MerchantOfferModelTest.class,
         CollectionsModelTest.class,
-        MapModelTest.class
+        MapModelTest.class,
+        TraderModelTest.class,
+        WorldModelTest.class,
+        NumberModelTest.class
 })
 public class TooltipTestSuite {
     public static IServerUtils UTILS;
