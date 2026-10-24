@@ -10,7 +10,6 @@ import org.objectweb.asm.tree.MethodInsnNode;
 import java.util.*;
 import java.util.stream.IntStream;
 
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.MAX_OPTIONS;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.pick;
 
 final class CollectionsModel implements MethodModel {
@@ -35,7 +34,7 @@ final class CollectionsModel implements MethodModel {
             return removeRandom(context, list, args.get(1));
         }
         if (isStatic && insn.owner.equals("java/util/Collections") && insn.name.equals("shuffle") && args.get(0) instanceof Value.Known known
-                && known.value() instanceof List<?> list && context.isOwned(list) && list.size() <= MAX_OPTIONS) {
+                && known.value() instanceof List<?> list && context.isOwned(list) && list.size() <= Limits.OPTIONS) {
             if (!list.isEmpty()) {
                 CollState coll = context.coll(list);
 
@@ -107,7 +106,7 @@ final class CollectionsModel implements MethodModel {
         int remaining = list.size() - context.removals(list);
         NumberInterval bounds = context.expr(index).bounds();
 
-        if (remaining <= 0 || bounds.lo() != 0 || bounds.hi() != remaining - 1 || list.size() > MAX_OPTIONS) {
+        if (remaining <= 0 || bounds.lo() != 0 || bounds.hi() != remaining - 1 || list.size() > Limits.OPTIONS) {
             throw new Fail("removal of a random element");
         }
 
@@ -173,7 +172,7 @@ final class CollectionsModel implements MethodModel {
 
         int[] draws = coll.randomIndexSet;
 
-        if (!set.isEmpty() || bounds.lo() != 0 || bounds.hi() != Math.rint(bounds.hi()) || draws[0] != bound || bound > MAX_OPTIONS) {
+        if (!set.isEmpty() || bounds.lo() != 0 || bounds.hi() != Math.rint(bounds.hi()) || draws[0] != bound || bound > Limits.OPTIONS) {
             throw new Fail("random set element");
         }
 

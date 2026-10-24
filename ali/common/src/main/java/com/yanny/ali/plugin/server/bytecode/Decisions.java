@@ -9,8 +9,6 @@ import java.util.*;
 import java.util.stream.IntStream;
 
 final class Decisions implements Opcodes {
-    private static final int MAX_DECISIONS = 8;
-
     private final List<Decision> taken = new ArrayList<>();
     @Nullable
     private final List<Boolean> script;
@@ -49,7 +47,7 @@ final class Decisions implements Opcodes {
 
         boolean holds = taken.size() < script.size() && script.get(taken.size());
 
-        if (counts(kind, holds) && taken.stream().filter((t) -> counts(t.kind(), t.holds())).count() >= MAX_DECISIONS) {
+        if (counts(kind, holds) && taken.stream().filter((t) -> counts(t.kind(), t.holds())).count() >= Limits.DECISIONS) {
             opaque.markHeaviest();
             throw new Fail("too many branches");
         }

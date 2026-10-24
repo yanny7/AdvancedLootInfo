@@ -26,9 +26,6 @@ import static com.yanny.ali.plugin.server.bytecode.Interpreter.sameDraw;
 import static com.yanny.ali.plugin.server.bytecode.Resolution.*;
 
 final class Machine implements Opcodes {
-    private static final int MAX_STEPS = 200_000;
-    private static final int MAX_DEPTH = 12;
-
     private final Interpreter interpreter;
     private int steps;
 
@@ -38,7 +35,7 @@ final class Machine implements Opcodes {
 
     @Nullable
     Value execute(Class<?> owner, MethodNode method, List<Value> args, int depth) {
-        if (depth > MAX_DEPTH) {
+        if (depth > Limits.DEPTH) {
             throw new Fail("call depth");
         }
         if ((method.access & (ACC_ABSTRACT | ACC_NATIVE)) != 0) {
@@ -79,7 +76,7 @@ final class Machine implements Opcodes {
         AbstractInsnNode insn = method.instructions.getFirst();
 
         while (insn != null) {
-            if (++steps > MAX_STEPS) {
+            if (++steps > Limits.STEPS) {
                 throw new Fail("step budget");
             }
 

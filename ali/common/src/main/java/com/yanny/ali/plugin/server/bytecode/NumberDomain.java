@@ -27,7 +27,7 @@ final class NumberDomain implements Opcodes {
 
     Value draw(NumberExpr expr, Value.Kind kind) {
         if (expr instanceof NumberExpr.Fn fn && fn.args().size() == 2 && fn.args().get(0) instanceof NumberExpr.Const lo && fn.args().get(1) instanceof NumberExpr.Const hi) {
-            if (fn.id().equals(NumberFunctions.UNIFORM_INT) && hi.value() - lo.value() < Interpreter.MAX_OPTIONS) {
+            if (fn.id().equals(NumberFunctions.UNIFORM_INT) && hi.value() - lo.value() < Limits.OPTIONS) {
                 drawn.put(expr, new Drawn(Draw.discrete((int) lo.value(), (int) hi.value()), 0));
             } else if (fn.id().equals(NumberFunctions.UNIFORM_FLOAT) && hi.value() > lo.value()) {
                 drawn.put(expr, new Drawn(Draw.continuous(lo.value(), hi.value()), 0));
