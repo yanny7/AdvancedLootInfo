@@ -21,6 +21,7 @@ class FakeCallContext implements CallContext {
     final List<NumberExpr> draws = new ArrayList<>();
     final Set<Object> owned = Collections.newSetFromMap(new IdentityHashMap<>());
     final Set<Object> tainted = Collections.newSetFromMap(new IdentityHashMap<>());
+    final Set<Object> frozen = Collections.newSetFromMap(new IdentityHashMap<>());
     final Map<Object, Value.Stack> stackParts = new IdentityHashMap<>();
     final Map<ItemStack, Value.Stack> shadows = new IdentityHashMap<>();
     final Map<Object, CollState> colls = new IdentityHashMap<>();
@@ -28,6 +29,7 @@ class FakeCallContext implements CallContext {
     final Deque<Boolean> answers = new ArrayDeque<>();
     final List<Call> jdkCalls = new ArrayList<>();
     final Map<Object, Integer> levelKeys = new IdentityHashMap<>();
+    final Map<String, Value> traderFields = new HashMap<>();
     @Nullable
     TraderModel.TraderRun traderRun;
     @Nullable
@@ -74,6 +76,17 @@ class FakeCallContext implements CallContext {
     @Override
     public Value wrap(@Nullable Object value) {
         return new Value.Known(value);
+    }
+
+    @Override
+    public Value wrap(@Nullable Object value, Class<?> type) {
+        return new Value.Known(value);
+    }
+
+    @Nullable
+    @Override
+    public Object toJava(Value value, Class<?> type) {
+        return ((Value.Known) value).value();
     }
 
     @Nullable
@@ -167,8 +180,20 @@ class FakeCallContext implements CallContext {
     }
 
     @Override
-    public boolean isOwned(Object object) {
+    public boolean isOwned(@Nullable Object object) {
         return owned.contains(object);
+    }
+
+    @Override
+    public boolean isFrozen(Object object) {
+        return frozen.contains(object);
+    }
+
+    @Override
+    public void taint(@Nullable Object object) {
+        if (object != null) {
+            tainted.add(object);
+        }
     }
 
     @Override
@@ -197,6 +222,17 @@ class FakeCallContext implements CallContext {
     @Override
     public TraderModel.TraderRun traderRun() {
         return traderRun;
+    }
+
+    @Nullable
+    @Override
+    public Value traderField(String field) {
+        return traderFields.get(field);
+    }
+
+    @Override
+    public void putTraderField(String field, Value value) {
+        traderFields.put(field, value);
     }
 
     @Nullable

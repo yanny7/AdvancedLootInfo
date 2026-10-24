@@ -8,11 +8,11 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 final class ValueStore {
-    private final List<Interpreter.Frame> frames = new ArrayList<>();
+    private final List<Machine.Frame> frames = new ArrayList<>();
     private final Map<String, Value> statics = new HashMap<>();
     private final Map<String, Value> traderFields = new HashMap<>();
 
-    void enter(Interpreter.Frame frame) {
+    void enter(Machine.Frame frame) {
         frames.add(frame);
     }
 
@@ -51,7 +51,7 @@ final class ValueStore {
     }
 
     void replaceInFrames(Predicate<Value> match, UnaryOperator<Value> with) {
-        for (Interpreter.Frame frame : frames) {
+        for (Machine.Frame frame : frames) {
             frame.replace(match, with);
         }
     }
