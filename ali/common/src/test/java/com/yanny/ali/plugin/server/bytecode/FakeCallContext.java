@@ -22,6 +22,11 @@ class FakeCallContext implements CallContext {
     final Set<Object> tainted = Collections.newSetFromMap(new IdentityHashMap<>());
     final Map<Object, Value.Stack> stackParts = new IdentityHashMap<>();
     final Map<ItemStack, Value.Stack> shadows = new IdentityHashMap<>();
+    final Map<Object, CollState> colls = new IdentityHashMap<>();
+    final List<Decision> decisions = new ArrayList<>();
+    final Deque<Boolean> answers = new ArrayDeque<>();
+    final List<Call> jdkCalls = new ArrayList<>();
+    boolean traderRun;
     Interpreter.Mode mode = Interpreter.Mode.SYMBOLIC;
     int pick;
     @Nullable
@@ -32,6 +37,9 @@ class FakeCallContext implements CallContext {
     Value combineResult;
     Function<Call, Value> concreteCall = (call) -> {
         throw new Fail("no concrete call");
+    };
+    Function<Call, Value> jdkCall = (call) -> {
+        throw new Fail("no JDK call");
     };
 
     static Call call(int opcode, String owner, String name, String desc, Value... args) {
@@ -151,6 +159,53 @@ class FakeCallContext implements CallContext {
     @Override
     public List<Value> shadowed(List<Value> args) {
         return args.stream().map((v) -> v instanceof Value.Known known && known.value() instanceof ItemStack real && !owned.contains(real) ? shadow(real) : v).toList();
+    }
+
+    @Override
+    public boolean isOwned(Object object) {
+        return owned.contains(object);
+    }
+
+    @Override
+    public CollState coll(Object object) {
+        return colls.computeIfAbsent(object, (o) -> new CollState());
+    }
+
+    @Override
+    public int removals(Object object) {
+        return colls.containsKey(object) ? colls.get(object).removals : 0;
+    }
+
+    @Nullable
+    @Override
+    public Value.Draws shuffled(Object object) {
+        return colls.containsKey(object) ? colls.get(object).shuffled : null;
+    }
+
+    @Nullable
+    @Override
+    public int[] randomIndexSet(Object object) {
+        return colls.containsKey(object) ? colls.get(object).randomIndexSet : null;
+    }
+
+    @Override
+    public boolean isTraderRun() {
+        return traderRun;
+    }
+
+    @Override
+    public boolean decide(Decision.Kind kind, @Nullable Object subject, @Nullable Object value, String reason) {
+        boolean holds = !answers.isEmpty() && answers.pop();
+
+        decisions.add(new Decision(kind, subject, value, holds));
+        return holds;
+    }
+
+    @Nullable
+    @Override
+    public Value jdk(Call call, Class<?> declaring) {
+        jdkCalls.add(call);
+        return jdkCall.apply(call);
     }
 
     record Invocation(Value.Closure closure, List<Value> args, int depth) {
