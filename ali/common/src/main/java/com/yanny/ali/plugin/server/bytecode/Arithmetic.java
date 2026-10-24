@@ -131,6 +131,30 @@ final class Arithmetic implements Opcodes {
         };
     }
 
+    static int intOf(Value value) {
+        if (value instanceof Value.Known known && known.value() instanceof Integer i) {
+            return i;
+        }
+
+        throw new Fail("symbolic trade number");
+    }
+
+    static float floatOf(Value value) {
+        if (value instanceof Value.Known known && known.value() instanceof Float f) {
+            return f;
+        }
+
+        throw new Fail("symbolic float");
+    }
+
+    static double doubleOf(Value value) {
+        if (value instanceof Value.Known known && known.value() instanceof Double d) {
+            return d;
+        }
+
+        throw new Fail("symbolic double");
+    }
+
     @Nullable
     private static Boolean equalsZero(NumberInterval d) {
         if (d.isPoint() && d.lo() == 0) {
