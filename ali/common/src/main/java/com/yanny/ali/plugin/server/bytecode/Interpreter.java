@@ -25,6 +25,7 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static com.yanny.ali.plugin.server.bytecode.Resolution.*;
 
@@ -47,12 +48,12 @@ final class Interpreter implements Opcodes {
             "java/util/Collections", "java/util/Arrays", "java/util/Optional", "java/util/Comparator", "java/util/stream/Stream",
             "java/util/stream/IntStream", "java/util/stream/Collectors");
     static final Set<String> STATIC_RANDOM = Set.of("random", "shuffle");
-    static final Set<String> READ_ONLY = Set.of("get", "getOrDefault", "size", "isEmpty", "contains", "containsKey",
+    static final Set<String> READ_ONLY = Stream.concat(Stream.of("get", "getOrDefault", "size", "isEmpty", "contains", "containsKey",
             "containsValue", "indexOf", "lastIndexOf", "keySet", "values", "entrySet", "stream", "iterator", "listIterator",
             "spliterator", "toArray", "equals", "hashCode", "toString", "length", "charAt", "substring", "startsWith", "endsWith",
             "trim", "toLowerCase", "toUpperCase", "concat", "getKey", "getValue", "intValue", "longValue", "floatValue",
             "doubleValue", "booleanValue", "byteValue", "shortValue", "charValue", "compareTo", "ordinal", "name", "getClass",
-            "isPresent", "orElse", "orElseGet", "orElseThrow", "map", "filter", "subList", "first", "firstKey", "lastKey");
+            "map", "filter", "subList", "first", "firstKey", "lastKey"), OptionalModel.READ_ONLY.stream()).collect(Collectors.toUnmodifiableSet());
     static final Set<String> LOOKUPS = Set.of("get", "getOrDefault", "containsKey");
     static final Set<String> ORDER_ONLY = Set.of("reverse", "shuffle", "sort");
     static final Set<String> FRESH_RESULTS = Set.of("stream", "iterator", "listIterator", "spliterator", "toArray");
@@ -578,67 +579,6 @@ final class Interpreter implements Opcodes {
             f.push(v2);
             f.push(v1);
         }
-    }
-
-    @Nullable
-    Value optionalCall(MethodInsnNode call, @Nullable Value present, List<Value> args, int depth) {
-        switch (call.name) {
-            case "isPresent" -> {
-                return new Value.Known(present != null ? 1 : 0);
-            }
-            case "isEmpty" -> {
-                return new Value.Known(present == null ? 1 : 0);
-            }
-            case "get", "orElseThrow" -> {
-                if (present == null) {
-                    throw new Fail("value of an empty Optional");
-                }
-
-                return present;
-            }
-            case "orElse" -> {
-                return present != null ? present : args.get(1);
-            }
-            case "orElseGet" -> {
-                return present != null ? present : applyClosure(args.get(1), List.of(), depth);
-            }
-            case "ifPresent" -> {
-                if (present != null) {
-                    applyClosure(args.get(1), List.of(present), depth);
-                }
-
-                return null;
-            }
-            case "map" -> {
-                if (present == null) {
-                    return new Value.Known(Optional.empty());
-                }
-
-                Value mapped = applyClosure(args.get(1), List.of(present), depth);
-
-                if (mapped instanceof Value.Stack stack) {
-                    return stack;
-                }
-                if (mapped == null || mapped instanceof Value.Known) {
-                    return new Value.Known(Optional.ofNullable(mapped instanceof Value.Known known ? known.value() : null));
-                }
-
-                throw new Fail("symbolic result of Optional.map");
-            }
-            default -> throw new Fail("symbolic Optional." + call.name);
-        }
-    }
-
-    @Nullable
-    private Value applyClosure(Value function, List<Value> args, int depth) {
-        if (!(function instanceof Value.Closure closure)) {
-            throw new Fail("symbolic Optional function");
-        }
-
-        List<Value> all = new ArrayList<>(closure.captured());
-
-        all.addAll(args);
-        return invokeHandle(closure.impl(), all, closure.loader(), depth + 1);
     }
 
     @Nullable
