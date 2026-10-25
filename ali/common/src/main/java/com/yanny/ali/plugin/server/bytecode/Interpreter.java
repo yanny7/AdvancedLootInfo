@@ -268,7 +268,10 @@ final class Interpreter implements Opcodes {
                 options.addAll(stack.options);
             }
 
-            return limit(new Value.Stack(options, count, results.stream().anyMatch((r) -> r instanceof Value.Stack s && s.randomTag)));
+            Value.Stack stack = new Value.Stack(options, count, results.stream().anyMatch((r) -> r instanceof Value.Stack s && s.randomTag));
+
+            stack.tag = ItemStackModel.tagOf(heap.tags(), options);
+            return limit(stack);
         }
         if (results.stream().allMatch((r) -> r instanceof Value.Known)) {
             List<Object> values = results.stream().map((r) -> ((Value.Known) r).value()).toList();
