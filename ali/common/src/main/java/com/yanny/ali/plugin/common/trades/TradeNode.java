@@ -13,7 +13,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.List;
@@ -22,10 +21,9 @@ public class TradeNode extends ListNode {
     public static final Identifier ID = Utils.modLoc("trade");
 
     private final TooltipNode tooltip;
-    @Nullable
     private final EntityType<?> entityType;
 
-    public TradeNode(IServerUtils utils, @Nullable EntityType<?> entityType, Int2ObjectMap<TradeLevel> levels) {
+    public TradeNode(IServerUtils utils, EntityType<?> entityType, Int2ObjectMap<TradeLevel> levels) {
         List<Int2ObjectMap.Entry<TradeLevel>> entries = levels.int2ObjectEntrySet()
                 .stream()
                 .sorted(Comparator.comparingInt(Int2ObjectMap.Entry::getIntKey))
@@ -52,13 +50,13 @@ public class TradeNode extends ListNode {
     public TradeNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
         tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
-        entityType = buf.readNullable((b) -> BuiltInRegistries.ENTITY_TYPE.getOptional(b.readIdentifier()).orElse(null));
+        entityType = BuiltInRegistries.ENTITY_TYPE.getValue(buf.readIdentifier());
     }
 
     @Override
     public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
-        buf.writeNullable(entityType, (b, type) -> b.writeIdentifier(BuiltInRegistries.ENTITY_TYPE.getKey(type)));
+        buf.writeIdentifier(BuiltInRegistries.ENTITY_TYPE.getKey(entityType));
     }
 
     @NotNull
@@ -67,7 +65,7 @@ public class TradeNode extends ListNode {
         return tooltip;
     }
 
-    @Nullable
+    @NotNull
     public EntityType<?> getEntityType() {
         return entityType;
     }

@@ -32,6 +32,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -118,8 +119,14 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
                 Either<ItemStack, TagKey<? extends ItemLike>> item = ((IItemNode) option).getItem();
 
                 item.left().ifPresent(slotBuilder::add);
-                //noinspection unchecked
-                item.right().ifPresent((t) -> slotBuilder.add(Ingredient.of(BuiltInRegistries.ITEM.get((TagKey<Item>) t).map((f) -> f.stream().map(net.minecraft.core.Holder::value)).orElse(Stream.of()))));
+                item.right().ifPresent((t) -> {
+                    if (t.isFor(Registries.ITEM)) {
+                        //noinspection unchecked
+                        slotBuilder.add(Ingredient.of(BuiltInRegistries.ITEM.get((TagKey<Item>) t).map((f) -> f.stream().map(net.minecraft.core.Holder::value)).orElse(Stream.of())));
+                    } else {
+                        slotBuilder.addItemStacks(((IItemNode) option).getItems());
+                    }
+                });
             }
         }
     }

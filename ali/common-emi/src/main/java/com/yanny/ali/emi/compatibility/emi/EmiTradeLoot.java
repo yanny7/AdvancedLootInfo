@@ -59,10 +59,7 @@ public class EmiTradeLoot extends EmiBaseLoot {
 
         catalysts.forEach((catalyst) -> widgets.add(new SlotWidget(catalyst, header.spawnEggRect().x(), header.spawnEggRect().y())));
         widgets.add(new TextWidget(header.title().getVisualOrderText(), titleRect.x(), titleRect.y(), 0, false));
-
-        if (header.titleTooltip() != null) {
-            widgets.add(new TitleWidget(new Bounds(titleRect.x(), titleRect.y(), titleRect.width(), titleRect.height()), header.titleTooltip()));
-        }
+        widgets.add(new TitleWidget(new Bounds(titleRect.x(), titleRect.y(), titleRect.width(), titleRect.height()), header.titleTooltip()));
 
         addSlots(widgets, type.pois(), header.pois());
 

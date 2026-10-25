@@ -98,7 +98,7 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     <T extends VillagerTrades.ItemListing> void registerItemListing(Class<T> type, TriFunction<IServerUtils, T, TooltipNode, IDataNode> supplier);
 
-    void registerTrades(Identifier traderId, @Nullable EntityType<?> entityType, Supplier<Int2ObjectMap<VillagerTrades.ItemListing[]>> itemListings, IntFunction<TradeLevelInfo> levelInfo);
+    void registerTrades(Identifier traderId, EntityType<?> entityType, Supplier<Int2ObjectMap<VillagerTrades.ItemListing[]>> itemListings, IntFunction<TradeLevelInfo> levelInfo);
 
     @NotNull
     ServerLevel getServerLevel();

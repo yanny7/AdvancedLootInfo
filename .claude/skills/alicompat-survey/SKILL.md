@@ -49,9 +49,10 @@ covers what the pack exercised, and only ALI's *push* paths.
 **Static scan** — what a mod *can* hand ALI, found by walking the supertype chain of every class in
 every jar. It catches two things the log structurally cannot:
 
-- **Pull-model gaps.** `registerTrades` is a pull: ALI asks for a trader's offers by entity id, so a
-  trading entity nobody declared produces **no warning at all**, ever. A static scan is the only way
-  to see it.
+- **Pull-model gaps.** `registerTrades` is a pull: ALI asks for a trader's offers by entity id. A log
+  from an ALI that has `TraderDetector` names every trading entity nobody declared
+  (`Unregistered trading entity`, category `unregistered_trader`); an older one names none, and the
+  static scan is the only way to see them.
 - **Dormant types.** A loot function or condition the pack never triggered but a datapack can.
 
 The report merges them into one confidence ladder:

@@ -6,7 +6,7 @@ ali:loot_table
     ali:item refinedstorage:256b_fluid_storage_block x1
       | Count: 1
       | ----- Modifiers -----
-      | Copy Storage Id:
+      | Copy Storage Id
       | Copy Components:
       |   -> Source: Block Entity
       |   -> Include: minecraft:custom_name

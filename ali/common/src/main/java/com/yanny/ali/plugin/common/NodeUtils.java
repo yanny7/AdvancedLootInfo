@@ -20,6 +20,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -646,7 +647,7 @@ public class NodeUtils {
             return reference
                     .value()
                     .get((TagKey<T>) tag)
-                    .map((holders) -> holders.stream().map(Holder::value).map((i) -> i.asItem().getDefaultInstance()).toList())
+                    .map((holders) -> holders.stream().map((h) -> h.value().asItem()).distinct().map(Item::getDefaultInstance).filter((i) -> !i.isEmpty()).toList())
                     .orElse(Collections.emptyList());
         } else {
             return Collections.emptyList();

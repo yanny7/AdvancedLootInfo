@@ -6,10 +6,12 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.language.CoreLang;
+import com.yanny.aci.manager.ManagedRegistry;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.plugin.server.bytecode.BytecodeInterpreter;
 import net.minecraft.advancements.criterion.EntitySubPredicate;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
@@ -215,14 +217,15 @@ public class MissingTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getMissingItemListingTooltip(IServerUtils utils, VillagerTrades.ItemListing itemListing) {
-        TooltipBuilder tooltip = TooltipBuilder.value(itemListing.getClass().getName());
+        Object source = BytecodeInterpreter.listingSource(itemListing);
+        TooltipBuilder tooltip = TooltipBuilder.value(ManagedRegistry.classKeyName(source.getClass()));
 
-        TooltipUtils.addObjectFields(utils, tooltip, itemListing, VillagerTrades.ItemListing.class);
+        TooltipUtils.addObjectFields(utils, tooltip, source, source == itemListing ? VillagerTrades.ItemListing.class : Object.class);
         return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
     }
 
     @NotNull
     public static TooltipBuilder getMissingValueTooltip(IServerUtils ignoredUtils, Object object) {
-        return TooltipBuilder.error("[" + object.getClass().getTypeName() + "]").key(CoreLang.Utils.NOT_IMPLEMENTED);
+        return TooltipBuilder.error("[" + ManagedRegistry.classKeyName(object.getClass()) + "]").key(CoreLang.Utils.NOT_IMPLEMENTED);
     }
 }

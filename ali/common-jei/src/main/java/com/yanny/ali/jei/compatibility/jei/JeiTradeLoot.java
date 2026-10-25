@@ -65,10 +65,7 @@ public class JeiTradeLoot extends JeiBaseLoot<TradeLootType, Identifier> {
 
         addSlotWidget(builder, widgets, drawables, SPAWN_EGG, header.spawnEggRect());
         widgets.add(createTextWidget(header.title(), titleRect.x(), titleRect.y(), false));
-
-        if (header.titleTooltip() != null) {
-            widgets.add(new TooltipWidget(header.titleTooltip(), titleRect));
-        }
+        widgets.add(new TooltipWidget(header.titleTooltip(), titleRect));
 
         addSlotWidgets(builder, widgets, drawables, POI, header.pois());
 

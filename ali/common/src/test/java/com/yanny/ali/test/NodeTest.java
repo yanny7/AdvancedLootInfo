@@ -2,13 +2,24 @@ package com.yanny.ali.test;
 
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
+import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.ListNode;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.*;
+import com.yanny.ali.plugin.common.trades.EmeraldsForVillagerTypeItemNode;
+import io.netty.buffer.Unpooled;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.npc.villager.VillagerTrades;
+import net.minecraft.world.entity.npc.villager.VillagerType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -24,11 +35,15 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.mock;
 
 public class NodeTest {
     @Test
@@ -220,6 +235,17 @@ public class NodeTest {
         Assertions.assertEquals(List.of(EmptyNode.ID), ids(child(child(table, 0), 1)));
     }
 
+    @Test
+    public void testBlockTagSurvivesTheRoundTrip() {
+        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(Unpooled.buffer(), RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY));
+
+        new ItemNode(1, NumberExpr.constant(1), BlockTags.WOODEN_DOORS, TooltipNode.empty(), List.of(), List.of()).encode(UTILS, buf);
+
+        TagKey<?> decoded = new ItemNode(mock(IClientUtils.class, RETURNS_DEEP_STUBS), buf).getItem().right().orElseThrow();
+
+        Assertions.assertEquals(BlockTags.WOODEN_DOORS, decoded);
+    }
+
     private static IOperation removeDiamond() {
         return new IOperation.RemoveOperation((i) -> i.is(Items.DIAMOND), (n) -> null);
     }
@@ -250,6 +276,22 @@ public class NodeTest {
 
     private static ListNode child(ListNode node, int index) {
         return (ListNode) node.nodes().get(index);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testVillagerTypeTradesSkipForeignKeys() {
+        Map<ResourceKey<VillagerType>, Item> trades = new HashMap<>();
+
+        BuiltInRegistries.VILLAGER_TYPE.registryKeySet().forEach((type) -> trades.put(type, Items.OAK_BOAT));
+
+        VillagerTrades.EmeraldsForVillagerTypeItem listing = new VillagerTrades.EmeraldsForVillagerTypeItem(1, 12, 5, trades);
+
+        ((Map<Object, Item>) (Map<?, ?>) trades).put(BuiltInRegistries.VILLAGER_TYPE.getValue(VillagerType.PLAINS), Items.APPLE);
+
+        EmeraldsForVillagerTypeItemNode node = new EmeraldsForVillagerTypeItemNode(UTILS, listing, TooltipNode.empty());
+
+        Assertions.assertEquals(BuiltInRegistries.VILLAGER_TYPE.size(), node.nodes().size());
     }
 
     private static List<Identifier> ids(ListNode node) {

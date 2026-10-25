@@ -8,7 +8,7 @@ ali:loot_table
       | ----- Predicates -----
       | Survives Explosion
       | ----- Modifiers -----
-      | Copy Stored Energy:
+      | Copy Stored Energy
       | Copy Components:
       |   -> Source: Block Entity
       |   -> Include: minecraft:custom_name

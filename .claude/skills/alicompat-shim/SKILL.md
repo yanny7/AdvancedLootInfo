@@ -61,8 +61,9 @@ python3 scripts/check_versions.py --update                   # repin the file id
 of the run does the class-list diff for you — find the shim's rows in the output or in
 `build/compat_scan.txt`: `-` is a class the new jar no longer has, `!` is one it still has but
 re-parented away from the hook, `+` is one it gained. A target mod's refactor shows up there as a
-missing class, not as a broken tooltip. Build immediately after, then run the gametest in compare mode
-(Step 6b): the diff against the stored golden is what the new version changed on screen.
+missing class, not as a broken tooltip. Build immediately after, then run the gametest with
+`-Palicompat_golden_regenerate=true` (Step 6b) and read `git diff` of its `golden/<slug>/`: that is what the new
+version changed on screen.
 
 ## Step 1 — a finding list is for one Minecraft version only
 

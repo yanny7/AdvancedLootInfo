@@ -8,4 +8,4 @@ ali:loot_table
       | ----- Predicates -----
       | Survives Explosion
       | ----- Modifiers -----
-      | Double Drops:
+      | Double Drops
