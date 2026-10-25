@@ -2,11 +2,13 @@ package com.yanny.ali.plugin.server.bytecode;
 
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.MethodInsnNode;
@@ -34,5 +36,14 @@ final class TradeTypes {
     static boolean isData(@Nullable Object value) {
         return value instanceof Collection<?> || value instanceof Map<?, ?> || value instanceof Tag || value instanceof DataComponentMap || value instanceof DataComponentPatch
                 || value != null && value.getClass().isArray();
+    }
+
+    static boolean isSameStack(ItemStack stack, ItemStack other) {
+        return ItemStack.isSameItemSameComponents(stack, other);
+    }
+
+    @NotNull
+    static String stackText(ItemStack stack) {
+        return BuiltInRegistries.ITEM.getKey(stack.getItem()) + (stack.getComponentsPatch().isEmpty() ? "" : " " + stack.getComponentsPatch());
     }
 }

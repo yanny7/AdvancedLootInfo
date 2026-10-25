@@ -98,6 +98,18 @@ sealed interface Value {
             copy.decoration = decoration;
             return copy;
         }
+
+        @NotNull
+        List<ItemStack> templates() {
+            List<ItemStack> templates = new ArrayList<>();
+            int each = count instanceof NumberExpr.Const c ? (int) c.value() : 1;
+
+            for (ItemStack option : options) {
+                templates.add(option.copyWithCount(each));
+            }
+
+            return templates;
+        }
     }
 
     record Pick(List<VillagerTrades.ItemListing> listings, Object pool, @Nullable Integer key) implements Value {

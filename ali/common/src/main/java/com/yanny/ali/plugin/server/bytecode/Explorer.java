@@ -2,7 +2,6 @@ package com.yanny.ali.plugin.server.bytecode;
 
 import net.minecraft.core.RegistryAccess;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
@@ -11,28 +10,28 @@ final class Explorer {
     private Explorer() {}
 
     @NotNull
-    static List<Path> trader(RegistryAccess registries, Class<?> merchant) {
-        List<Path> paths = explore(registries, (i) -> i.trades(merchant));
+    static List<Outcome> trader(RegistryAccess registries, Class<?> merchant) {
+        List<Outcome> outcomes = explore(registries, (i) -> i.trades(merchant));
 
-        if (paths.stream().noneMatch(Explorer::offers) && paths.stream().allMatch((p) -> p.failure() == null) && TraderModel.writesOffers(merchant)) {
+        if (outcomes.stream().noneMatch(Explorer::offers) && outcomes.stream().allMatch(Outcome.Success.class::isInstance) && TraderModel.writesOffers(merchant)) {
             return explore(registries, (i) -> i.writtenTrades(merchant));
         }
 
-        return paths;
+        return outcomes;
     }
 
     @NotNull
-    static List<Path> explore(RegistryAccess registries, Function<Interpreter, Value> run) {
+    static List<Outcome> explore(RegistryAccess registries, Function<Interpreter, Value> run) {
         Set<String> opaque = new HashSet<>();
         int restarts = 0;
-        List<Path> results = new ArrayList<>();
+        List<Outcome> results = new ArrayList<>();
         Deque<List<Boolean>> scripts = new ArrayDeque<>();
 
         scripts.add(List.of());
 
         while (!scripts.isEmpty()) {
             if (results.size() >= Limits.PATHS) {
-                results.add(new Path(null, List.of(), "too many branches"));
+                results.add(new Outcome.Failure("too many branches", List.of()));
                 break;
             }
 
@@ -55,7 +54,7 @@ final class Explorer {
 
             List<Boolean> taken = interpreter.decisions.taken().stream().map(Decision::holds).toList();
 
-            results.add(new Path(result, interpreter.decisions.taken(), failure));
+            results.add(failure == null ? new Outcome.Success(result, interpreter.decisions.taken()) : new Outcome.Failure(failure, interpreter.decisions.taken()));
 
             for (int i = script.size(); i < taken.size(); i++) {
                 List<Boolean> other = new ArrayList<>(taken.subList(0, i));
@@ -68,10 +67,7 @@ final class Explorer {
         return results;
     }
 
-    private static boolean offers(Path path) {
-        return path.result() instanceof Value.Offers offers && !offers.entries.isEmpty();
-    }
-
-    record Path(@Nullable Value result, List<Decision> decisions, @Nullable String failure) {
+    private static boolean offers(Outcome outcome) {
+        return outcome instanceof Outcome.Success success && success.result() instanceof Value.Offers offers && !offers.entries.isEmpty();
     }
 }
