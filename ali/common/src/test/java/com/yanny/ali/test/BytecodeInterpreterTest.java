@@ -67,6 +67,7 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Block;
@@ -199,6 +200,15 @@ public class BytecodeInterpreterTest {
         IDataNode result = ((ListNode) interpret(new BlockTagValuesListing(BLOCK_TORCHES))).nodes().get(2);
 
         Assertions.assertEquals(BLOCK_TORCHES, ((ItemNode) result).getItem().right().orElseThrow());
+    }
+
+    @Test
+    public void testRandomPickFromTagContentsPassedToStackFactory() {
+        bindDoorTags();
+
+        IDataNode result = ((ListNode) interpret(new TagValuesFactoryListing())).nodes().get(2);
+
+        Assertions.assertEquals(DOORS, ((ItemNode) result).getItem().right().orElseThrow());
     }
 
     @Test
@@ -1474,6 +1484,24 @@ public class BytecodeInterpreterTest {
             }
 
             return new MerchantOffer(new ItemCost(Items.EMERALD), new ItemStack(values.get(random.nextInt(values.size()))), 12, 5, 0.05F);
+        }
+    }
+
+    private static final class TagValuesFactoryListing implements VillagerTrades.ItemListing {
+        @NotNull
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            List<Item> values = new LinkedList<>();
+
+            for (Holder<Item> holder : BuiltInRegistries.ITEM.getTagOrEmpty(DOORS)) {
+                values.add(holder.value());
+            }
+
+            return new MerchantOffer(new ItemCost(Items.EMERALD), stack(values.get(random.nextInt(values.size())), 1), 12, 5, 0.05F);
+        }
+
+        private static ItemStack stack(ItemLike item, int count) {
+            return new ItemStack(item, count);
         }
     }
 

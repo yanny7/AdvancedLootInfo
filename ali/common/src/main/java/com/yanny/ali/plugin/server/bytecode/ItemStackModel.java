@@ -118,12 +118,18 @@ final class ItemStackModel implements MethodModel {
 
         Value.Stack stack = new Value.Stack(templates, count, false);
 
-        if (templates.size() > 1) {
-            stack.tag = context.tags().stream().filter((t) -> t.isFor(Registries.ITEM) || t.isFor(Registries.BLOCK))
-                    .<TagKey<? extends ItemLike>>map((t) -> (TagKey<? extends ItemLike>) t).filter((t) -> isTag(t, templates)).findFirst().orElse(null);
+        stack.tag = tagOf(context.tags(), templates);
+        return limit(stack);
+    }
+
+    @Nullable
+    static TagKey<? extends ItemLike> tagOf(Collection<TagKey<?>> candidates, List<ItemStack> stacks) {
+        if (stacks.size() <= 1) {
+            return null;
         }
 
-        return limit(stack);
+        return candidates.stream().filter((t) -> t.isFor(Registries.ITEM) || t.isFor(Registries.BLOCK))
+                .<TagKey<? extends ItemLike>>map((t) -> (TagKey<? extends ItemLike>) t).filter((t) -> isTag(t, stacks)).findFirst().orElse(null);
     }
 
     static boolean isTag(TagKey<? extends ItemLike> tag, List<ItemStack> stacks) {
