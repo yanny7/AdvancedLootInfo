@@ -1,9 +1,15 @@
 package com.yanny.ali.plugin.server.bytecode;
 
+import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberInterval;
+import com.yanny.ali.plugin.common.NodeUtils;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.ItemCost;
+import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
@@ -12,6 +18,7 @@ import org.objectweb.asm.tree.MethodInsnNode;
 
 import java.lang.reflect.Constructor;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.CONSTRUCTOR;
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.ITEM_STACK;
@@ -109,7 +116,21 @@ final class ItemStackModel implements MethodModel {
             }
         }
 
-        return limit(new Value.Stack(templates, count, false));
+        Value.Stack stack = new Value.Stack(templates, count, false);
+
+        if (templates.size() > 1) {
+            stack.tag = context.tags().stream().filter((t) -> t.isFor(Registries.ITEM) || t.isFor(Registries.BLOCK))
+                    .<TagKey<? extends ItemLike>>map((t) -> (TagKey<? extends ItemLike>) t).filter((t) -> isTag(t, templates)).findFirst().orElse(null);
+        }
+
+        return limit(stack);
+    }
+
+    static boolean isTag(TagKey<? extends ItemLike> tag, List<ItemStack> stacks) {
+        Set<Item> items = stacks.stream().filter((s) -> !s.isEmpty()).map(ItemStack::getItem).collect(Collectors.toSet());
+        Set<Item> contents = NodeUtils.resolveItems(Either.right(tag)).stream().map(ItemStack::getItem).collect(Collectors.toSet());
+
+        return items.equals(contents) && stacks.stream().allMatch(TradeTypes::isPlain);
     }
 
     @Nullable

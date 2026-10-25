@@ -36,6 +36,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.StructureTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -68,6 +69,7 @@ import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BeehiveBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
@@ -169,6 +171,44 @@ public class BytecodeInterpreterTest {
         IDataNode result = ((ListNode) interpret(listing)).nodes().get(2);
 
         Assertions.assertEquals(listing.items, ((ListNode) result).nodes().stream().map((n) -> ((ItemNode) n).getItem().left().orElseThrow().getItem()).toList());
+    }
+
+    @Test
+    public void testRandomPickFromItemTagContents() {
+        bindDoorTags();
+
+        IDataNode result = ((ListNode) interpret(new TagValuesListing(false))).nodes().get(2);
+
+        Assertions.assertEquals(DOORS, ((ItemNode) result).getItem().right().orElseThrow());
+        Assertions.assertEquals(NumberExpr.constant(1), ((ItemNode) result).getCount());
+    }
+
+    @Test
+    public void testRandomPickFromBlockTagContents() {
+        bindDoorTags();
+
+        IDataNode result = ((ListNode) interpret(new BlockTagValuesListing(BLOCK_DOORS))).nodes().get(2);
+
+        Assertions.assertEquals(BLOCK_DOORS, ((ItemNode) result).getItem().right().orElseThrow());
+    }
+
+    @Test
+    public void testRandomPickFromBlockTagWithItemlessAndRepeatedBlocks() {
+        bindDoorTags();
+
+        IDataNode result = ((ListNode) interpret(new BlockTagValuesListing(BLOCK_TORCHES))).nodes().get(2);
+
+        Assertions.assertEquals(BLOCK_TORCHES, ((ItemNode) result).getItem().right().orElseThrow());
+    }
+
+    @Test
+    public void testRandomPickFromChangedTagContents() {
+        bindDoorTags();
+
+        IDataNode result = ((ListNode) interpret(new TagValuesListing(true))).nodes().get(2);
+
+        Assertions.assertEquals(List.of(Items.SPRUCE_DOOR, Items.BIRCH_DOOR), ((ListNode) result).nodes().stream()
+                .map((n) -> ((ItemNode) n).getItem().left().orElseThrow().getItem()).toList());
     }
 
     @Test
@@ -1403,6 +1443,49 @@ public class BytecodeInterpreterTest {
         @Override
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             List<Item> values = new LinkedList<>(items);
+
+            return new MerchantOffer(new ItemCost(Items.EMERALD), new ItemStack(values.get(random.nextInt(values.size()))), 12, 5, 0.05F);
+        }
+    }
+
+    private static final TagKey<Item> DOORS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("ali_test", "doors"));
+    private static final TagKey<Block> BLOCK_DOORS = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("ali_test", "doors"));
+    private static final TagKey<Block> BLOCK_TORCHES = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("ali_test", "torches"));
+
+    private static void bindDoorTags() {
+        BuiltInRegistries.ITEM.bindTags(Map.of(DOORS, List.<Holder<Item>>of(Items.OAK_DOOR.builtInRegistryHolder(),
+                Items.SPRUCE_DOOR.builtInRegistryHolder(), Items.BIRCH_DOOR.builtInRegistryHolder())));
+        BuiltInRegistries.BLOCK.bindTags(Map.of(BLOCK_DOORS, List.<Holder<Block>>of(Blocks.OAK_DOOR.builtInRegistryHolder(),
+                Blocks.SPRUCE_DOOR.builtInRegistryHolder(), Blocks.BIRCH_DOOR.builtInRegistryHolder()),
+                BLOCK_TORCHES, List.<Holder<Block>>of(Blocks.TORCH.builtInRegistryHolder(), Blocks.WALL_TORCH.builtInRegistryHolder(),
+                Blocks.SOUL_TORCH.builtInRegistryHolder(), Blocks.WATER.builtInRegistryHolder())));
+    }
+
+    private record TagValuesListing(boolean withoutOak) implements VillagerTrades.ItemListing {
+        @NotNull
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            List<Item> values = new LinkedList<>();
+
+            for (Holder<Item> holder : BuiltInRegistries.ITEM.getTagOrEmpty(DOORS)) {
+                if (!withoutOak || holder.value() != Items.OAK_DOOR) {
+                    values.add(holder.value());
+                }
+            }
+
+            return new MerchantOffer(new ItemCost(Items.EMERALD), new ItemStack(values.get(random.nextInt(values.size()))), 12, 5, 0.05F);
+        }
+    }
+
+    private record BlockTagValuesListing(TagKey<Block> tag) implements VillagerTrades.ItemListing {
+        @NotNull
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            List<Block> values = new LinkedList<>();
+
+            for (Holder<Block> holder : BuiltInRegistries.BLOCK.getTagOrEmpty(tag)) {
+                values.add(holder.value());
+            }
 
             return new MerchantOffer(new ItemCost(Items.EMERALD), new ItemStack(values.get(random.nextInt(values.size()))), 12, 5, 0.05F);
         }

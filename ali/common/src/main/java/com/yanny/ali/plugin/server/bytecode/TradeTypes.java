@@ -42,6 +42,10 @@ final class TradeTypes {
         return ItemStack.isSameItemSameComponents(stack, other);
     }
 
+    static boolean isPlain(ItemStack stack) {
+        return stack.getComponentsPatch().isEmpty();
+    }
+
     @NotNull
     static String stackText(ItemStack stack) {
         return BuiltInRegistries.ITEM.getKey(stack.getItem()) + (stack.getComponentsPatch().isEmpty() ? "" : " " + stack.getComponentsPatch());

@@ -6,6 +6,7 @@
 - Fixed an error in another mod's trader, ingredient or loot modifier support taking down more than that one part, or the whole server start
 - Unsupported trading mods shows trades that can be auto-detected from the mod's code
 - Fixed missing trades and loot that other mods prepare only once the server has started
+- Fixed trade slots of a block tag showing nothing, like Charm's trades with ALI Compat
 - Trade added several times to the same trader level shows once
 
 ## [2.5.0]

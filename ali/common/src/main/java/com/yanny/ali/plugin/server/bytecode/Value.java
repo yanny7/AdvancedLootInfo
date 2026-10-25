@@ -1,8 +1,10 @@
 package com.yanny.ali.plugin.server.bytecode;
 
 import com.yanny.aci.api.NumberExpr;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Handle;
@@ -83,6 +85,8 @@ sealed interface Value {
         Object destination;
         @Nullable
         Object decoration;
+        @Nullable
+        TagKey<? extends ItemLike> tag;
 
         Stack(List<ItemStack> options, NumberExpr count, boolean randomTag) {
             this.options = new ArrayList<>(options);
@@ -96,6 +100,7 @@ sealed interface Value {
 
             copy.destination = destination;
             copy.decoration = decoration;
+            copy.tag = tag;
             return copy;
         }
 

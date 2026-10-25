@@ -2,11 +2,13 @@ package com.yanny.ali.plugin.server.bytecode;
 
 import com.yanny.aci.api.NumberExpr;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
+import java.util.Collection;
 import java.util.List;
 
 interface CallContext {
@@ -100,6 +102,8 @@ interface CallContext {
 
     @Nullable
     RegistryAccess registries();
+
+    Collection<TagKey<?>> tags();
 
     boolean decide(Decision.Kind kind, @Nullable Object subject, @Nullable Object value, String reason);
 

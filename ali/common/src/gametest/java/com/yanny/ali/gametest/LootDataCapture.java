@@ -16,6 +16,7 @@ import com.yanny.ali.plugin.client.TooltipUtils;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -92,7 +93,7 @@ public class LootDataCapture {
     private static String itemToString(IItemNode node, RegistryAccess registryAccess) {
         String count = " x" + NumberFormatter.slot(TooltipUtils.getSlotCount(node));
 
-        return node.getItem().map((stack) -> stackToString(stack, count, registryAccess), (tag) -> "#" + tag.location() + count);
+        return node.getItem().map((stack) -> stackToString(stack, count, registryAccess), (tag) -> "#" + tag.location() + (tag.isFor(Registries.ITEM) ? "" : " (" + tag.registry().location() + ")") + count);
     }
 
     @NotNull
