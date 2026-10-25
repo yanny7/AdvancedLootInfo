@@ -2270,7 +2270,7 @@ ali:loot_table
     |     -> minecraft:chests/underwater_ruin_big
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.alex_tome",spells:{0:{color:{b:0,g:37,id:"ars_nouveau:rainbow",r:255},name:"Alex's Magnificent Mansion",particleTimeline:{},recipe:["ars_nouveau:glyph_self","ars_nouveau:glyph_burst","ars_nouveau:glyph_sensitive","ars_nouveau:glyph_dampen","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_phantom_block","ars_nouveau:glyph_amplify","ars_nouveau:glyph_pierce"],sound:{sound:{id:"ars_nouveau:tempestry_family"}}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Alex\'s Magnificent Mansion","italic":true,"translate":"ars_nouveau.tome_name.alex_tome"}'}
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.alex_tome",spells:{0:{color:<unstable>,name:"Alex's Magnificent Mansion",particleTimeline:{},recipe:["ars_nouveau:glyph_self","ars_nouveau:glyph_burst","ars_nouveau:glyph_sensitive","ars_nouveau:glyph_dampen","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_phantom_block","ars_nouveau:glyph_amplify","ars_nouveau:glyph_pierce"],sound:{sound:{id:"ars_nouveau:tempestry_family"}}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Alex\'s Magnificent Mansion","italic":true,"translate":"ars_nouveau.tome_name.alex_tome"}'}
     | Chance: 0.2%
     | Count: 1
     | ----- Predicates -----

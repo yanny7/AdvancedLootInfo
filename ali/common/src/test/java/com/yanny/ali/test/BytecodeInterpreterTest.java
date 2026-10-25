@@ -2948,7 +2948,7 @@ public class BytecodeInterpreterTest {
                 emeralds += stored * stored;
             }
 
-            return new MerchantOffer(new ItemStack(Items.EMERALD, emeralds), new ItemStack(Items.APPLE, stored), 12, 5, 0.05F);
+            return new MerchantOffer(new ItemCost(Items.EMERALD, emeralds), new ItemStack(Items.APPLE, stored), 12, 5, 0.05F);
         }
     }
 
