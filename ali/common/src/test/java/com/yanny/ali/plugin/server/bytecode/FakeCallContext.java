@@ -64,10 +64,6 @@ class FakeCallContext implements CallContext {
     }
 
     @Override
-    public void traceCase(String label, MethodInsnNode call) {
-    }
-
-    @Override
     public boolean isConcrete(Value value) {
         return value instanceof Value.Known;
     }

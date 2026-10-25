@@ -1,10 +1,8 @@
 package com.yanny.ali.plugin.server.bytecode;
 
-import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.manager.ManagedRegistry;
 import com.yanny.aci.tooltip.TooltipNode;
-import com.yanny.ali.Utils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.TradeLevel;
@@ -16,7 +14,6 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Type;
-import org.slf4j.Logger;
 
 import java.util.List;
 import java.util.Map;
@@ -24,8 +21,6 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 public final class BytecodeInterpreter {
-    private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
-
     private BytecodeInterpreter() {}
 
     @Nullable
@@ -93,12 +88,7 @@ public final class BytecodeInterpreter {
         return null;
     }
 
-    public static List<String> dispatchTrace() {
-        return Dispatcher.dispatchTrace();
-    }
-
     public static void clearCaches() {
-        dispatchTrace().forEach((line) -> LOGGER.info("Dispatch {}", line));
         Resolution.clearCaches();
         MixinChanges.clearCaches();
         LambdaResolver.clearCaches();

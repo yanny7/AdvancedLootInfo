@@ -24,13 +24,11 @@ final class CollectionsModel implements MethodModel {
 
         if (!isStatic && args.get(0) instanceof Value.Known known && known.value() instanceof List<?> list && insn.name.equals("get")
                 && insn.desc.equals("(I)Ljava/lang/Object;") && args.get(1) instanceof Value.Num num) {
-            context.traceCase("jdk.listPick", insn);
             return pick(list, num);
         }
         if (!isStatic && args.get(0) instanceof Value.Known known && known.value() instanceof List<?> list && context.isOwned(list)
                 && insn.name.equals("remove") && insn.desc.equals("(I)Ljava/lang/Object;")
                 && (args.get(1) instanceof Value.Num || context.removals(list) > 0 || context.traderRun() != null && list.size() == 1)) {
-            context.traceCase("jdk.removeRandom", insn);
             return removeRandom(context, list, args.get(1));
         }
         if (isStatic && insn.owner.equals("java/util/Collections") && insn.name.equals("shuffle") && args.get(0) instanceof Value.Known known
@@ -42,7 +40,6 @@ final class CollectionsModel implements MethodModel {
                 coll.pool = true;
             }
 
-            context.traceCase("jdk.shuffle", insn);
             return null;
         }
         if (!isStatic && args.get(0) instanceof Value.Known known && known.value() != null && context.shuffled(known.value()) != null) {
@@ -50,13 +47,11 @@ final class CollectionsModel implements MethodModel {
         }
         if (!isStatic && args.get(0) instanceof Value.Known known && known.value() instanceof Set<?> set && context.isOwned(set)
                 && insn.name.equals("add") && insn.desc.equals("(Ljava/lang/Object;)Z") && args.get(1) instanceof Value.Num num) {
-            context.traceCase("jdk.addRandom", insn);
             return addRandom(context, set, num);
         }
         if (!isStatic && args.get(0) instanceof Value.Known known && known.value() != null && context.randomIndexSet(known.value()) != null) {
             int[] draws = Objects.requireNonNull(context.randomIndexSet(known.value()));
 
-            context.traceCase("jdk.randomSet", insn);
             return switch (insn.name + insn.desc) {
                 case "size()I" -> new Value.Known(draws[1]);
                 case "iterator()Ljava/util/Iterator;" -> new Value.Draws(known.value(), IntStream.range(0, draws[0]).boxed().map(Object.class::cast).toList(), draws[1]);
@@ -66,7 +61,6 @@ final class CollectionsModel implements MethodModel {
         if (!isStatic && args.get(0) instanceof Value.Known known && known.value() != null && context.removals(known.value()) > 0) {
             int remaining = ((List<?>) known.value()).size() - context.removals(known.value());
 
-            context.traceCase("jdk.removed", insn);
             return switch (insn.name + insn.desc) {
                 case "size()I" -> new Value.Known(remaining);
                 case "isEmpty()Z" -> new Value.Known(remaining == 0 ? 1 : 0);
@@ -95,7 +89,6 @@ final class CollectionsModel implements MethodModel {
                 && insn.name.equals("remove") && insn.desc.equals("(Ljava/lang/Object;)Z") && args.get(1) instanceof Value.Choice choice
                 && choice.options().size() == list.size() - context.removals(list) && new HashSet<Object>(list).containsAll(choice.options())) {
             context.coll(list).removals++;
-            context.traceCase("undistributed.removeChoice", insn);
             return new Value.Known(1);
         }
 
@@ -120,20 +113,16 @@ final class CollectionsModel implements MethodModel {
     private static Value shuffled(CallContext context, MethodInsnNode insn, List<Value> args, Value.Draws draws) {
         switch (insn.name + insn.desc) {
             case "size()I" -> {
-                context.traceCase("jdk.shuffled", insn);
                 return new Value.Known(draws.left);
             }
             case "isEmpty()Z" -> {
-                context.traceCase("jdk.shuffled", insn);
                 return new Value.Known(draws.left == 0 ? 1 : 0);
             }
             case "iterator()Ljava/util/Iterator;" -> {
-                context.traceCase("jdk.shuffled", insn);
                 return new Value.Draws(draws.pool, draws.options, draws.left);
             }
             case "get(I)Ljava/lang/Object;" -> {
                 if (args.get(1) instanceof Value.Known index && (Integer) index.value() < draws.left) {
-                    context.traceCase("jdk.shuffled", insn);
                     return new Value.Choice(draws.options, draws.pool);
                 }
             }
@@ -149,7 +138,6 @@ final class CollectionsModel implements MethodModel {
 
                     context.own(view);
                     context.coll(view).shuffled = new Value.Draws(draws.pool, draws.options, Math.min(draws.left, (int) Math.floor(to.bounds().hi())));
-                    context.traceCase("jdk.shuffled", insn);
                     return new Value.Known(view);
                 }
             }
@@ -157,7 +145,6 @@ final class CollectionsModel implements MethodModel {
             }
         }
 
-        context.traceCase("jdk.shuffled.fail", insn);
         throw new Fail("change under a random choice");
     }
 

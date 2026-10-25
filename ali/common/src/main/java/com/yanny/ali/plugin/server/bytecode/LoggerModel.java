@@ -13,7 +13,6 @@ final class LoggerModel implements MethodModel {
         if (isLogging(insn.owner)) {
             Type returnType = Type.getReturnType(insn.desc);
 
-            context.traceCase("owner.logger", insn);
 
             if (returnType.getSort() == Type.VOID) {
                 return null;

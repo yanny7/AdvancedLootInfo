@@ -27,7 +27,6 @@ final class ItemStackModel implements MethodModel {
 
         if (insn.name.equals(CONSTRUCTOR)) {
             if (insn.owner.equals(ITEM_STACK)) {
-                context.traceCase("constructor.stack", insn);
                 return construct(context, insn.desc, call.args());
             }
 
@@ -37,11 +36,9 @@ final class ItemStackModel implements MethodModel {
         Value receiver = insn.getOpcode() == Opcodes.INVOKESTATIC ? null : call.args().get(0);
 
         if (receiver instanceof Value.Stack stack) {
-            context.traceCase("receiver.stack", insn);
             return stackCall(context, call, stack, call.args());
         }
         if (receiver instanceof Value.Known known && known.value() instanceof ItemStack real) {
-            context.traceCase("receiver.realStack", insn);
             return knownStackCall(context, call, real);
         }
 

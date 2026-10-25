@@ -24,7 +24,6 @@ final class OffersModel implements MethodModel {
     @Override
     public Value apply(CallContext context, Call call) {
         if (call.insn().getOpcode() != Opcodes.INVOKESTATIC && call.args().get(0) instanceof Value.Offers offers) {
-            context.traceCase("receiver.offers", call.insn());
             return offersCall(context, call, offers);
         }
 
@@ -35,7 +34,6 @@ final class OffersModel implements MethodModel {
         MethodInsnNode insn = call.insn();
 
         if (insn.desc.equals("()V") && isPlainOffers(load(insn.owner, call.loader()))) {
-            context.traceCase("constructor.offers", insn);
             return new Value.Offers();
         }
 
@@ -51,11 +49,9 @@ final class OffersModel implements MethodModel {
                 ? offerList(context, args.get(0), true) : null;
 
         if (collected != null) {
-            context.traceCase("undistributed.addOffer", insn);
             return args.get(1) instanceof Value.Choice choice ? addPicked(context, collected, choice) : offersCall(context, call, collected);
         }
         if (!isStatic && args.get(0) instanceof Value.Known known && known.value() != null && context.offers(known.value()) != null) {
-            context.traceCase("undistributed.collectedOffers", insn);
             return offersCall(context, call, context.offers(known.value()));
         }
 
@@ -67,7 +63,6 @@ final class OffersModel implements MethodModel {
         MethodInsnNode insn = call.insn();
 
         if (insn.getOpcode() == Opcodes.INVOKESTATIC && insn.owner.equals("java/util/Collections") && ORDER_ONLY.contains(insn.name) && call.args().get(0) instanceof Value.Offers) {
-            context.traceCase("jdk.orderOffers", insn);
             return null;
         }
 

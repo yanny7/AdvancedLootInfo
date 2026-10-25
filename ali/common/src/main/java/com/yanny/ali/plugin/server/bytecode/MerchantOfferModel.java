@@ -25,7 +25,6 @@ final class MerchantOfferModel implements MethodModel, Opcodes {
 
         if (insn.name.equals(CONSTRUCTOR) && (insn.owner.equals(MERCHANT_OFFER)
                 || !call.args().stream().allMatch(context::isConcrete) && isForwardingOffer(Resolution.load(insn.owner, call.loader()), insn.desc))) {
-            context.traceCase("constructor.offer", insn);
             return construct(context, insn.desc, call.args());
         }
 

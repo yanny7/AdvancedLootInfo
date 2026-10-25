@@ -52,8 +52,4 @@ sourceSets {
 
 test {
     useJUnitPlatform()
-
-    if (System.getProperty("ali.debug.dispatch") != null) {
-        systemProperty "ali.debug.dispatch", System.getProperty("ali.debug.dispatch")
-    }
 }

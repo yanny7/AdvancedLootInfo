@@ -12,7 +12,6 @@ final class WorldModel implements MethodModel {
 
         if (insn.getOpcode() != Opcodes.INVOKESTATIC && call.args().get(0) instanceof Value.Unknown && context.registries() != null
                 && RuntimeNames.is(RuntimeNames.REGISTRY_ACCESS, insn)) {
-            context.traceCase("receiver.registryAccess", insn);
             return new Value.Known(context.registries());
         }
 
