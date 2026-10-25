@@ -711,7 +711,7 @@ final class LambdaResolver {
             return sameOffer(x, y);
         }
 
-        return TradeUtils.valueKey(a).equals(TradeUtils.valueKey(b));
+        return Objects.equals(TradeUtils.valueKey(a), TradeUtils.valueKey(b));
     }
 
     private static String describe(@Nullable Object real) {

@@ -45,7 +45,7 @@ final class Explorer {
             } catch (Fail fail) {
                 failure = fail.describe();
             }
-            if (interpreter.opaque.retry() && ++restarts < Limits.MAX_RESTARTS) {
+            if (interpreter.opaque.retry() && ++restarts <= Limits.RESTARTS) {
                 results.clear();
                 scripts.clear();
                 scripts.add(List.of());

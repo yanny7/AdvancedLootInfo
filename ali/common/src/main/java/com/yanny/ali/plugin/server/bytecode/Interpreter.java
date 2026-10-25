@@ -98,11 +98,10 @@ final class Interpreter implements Opcodes {
 
         Declaration updateTrades = TraderModel.ownDeclaration(merchant, RuntimeNames.UPDATE_TRADES.name(), RuntimeNames.UPDATE_TRADES.desc(), false);
 
-        if (updateTrades == null) {
-            throw new Fail("no trades of the trader");
+        if (updateTrades != null) {
+            machine.execute(updateTrades.owner(), updateTrades.method(), List.of(self), 0);
         }
 
-        machine.execute(updateTrades.owner(), updateTrades.method(), List.of(self), 0);
         return run.offers;
     }
 

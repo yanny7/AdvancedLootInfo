@@ -806,6 +806,11 @@ public class BytecodeInterpreterTest {
     }
 
     @Test
+    public void testVillagerWithoutOwnTrades() {
+        Assertions.assertTrue(computedLevels(IdleVillager.class).isEmpty());
+    }
+
+    @Test
     public void testMutatedFieldStaysUntouched() {
         MutatingListing listing = new MutatingListing();
         IDataNode trade = interpret(listing);
@@ -1116,6 +1121,16 @@ public class BytecodeInterpreterTest {
     }
 
     @Test
+    public void testBranchNarrowsRandomNumberInStaticField() {
+        List<IDataNode> trades = ((ListNode) interpret(new StoredNumberListing())).nodes();
+
+        Assertions.assertEquals(2, trades.size());
+        assertSlot(trade(trades, Items.APPLE, 1), 0, Items.EMERALD, NumberExpr.constant(5));
+        assertSlot(trade(trades, Items.APPLE, 2), 0, Items.EMERALD, NumberExpr.constant(9));
+        Assertions.assertEquals(0, StoredNumberListing.stored);
+    }
+
+    @Test
     public void testSwitchOnRandomChoice() {
         List<IDataNode> trades = ((ListNode) interpret(new SizeListing())).nodes();
 
@@ -1226,6 +1241,11 @@ public class BytecodeInterpreterTest {
     @Test
     public void testLambdasHandingRandomSourceToRealCode() {
         assertSlot(interpret(RealCodeLambdas.LISTINGS.get(1)), 2, Items.BREAD, NumberExpr.constant(1));
+    }
+
+    @Test
+    public void testLambdasReturningNullOnLowestDraws() {
+        assertSlot(interpret(NullLambdas.LISTINGS.get(1)), 2, Items.BREAD, NumberExpr.constant(1));
     }
 
     private static IDataNode interpret(VillagerTrades.ItemListing listing) {
@@ -2320,6 +2340,12 @@ public class BytecodeInterpreterTest {
         }
     }
 
+    private abstract static class IdleVillager extends Villager {
+        private IdleVillager(EntityType<? extends Villager> type, Level level) {
+            super(type, level);
+        }
+    }
+
     private static final class MutatingListing implements VillagerTrades.ItemListing {
         private final ItemStack price = new ItemStack(Items.EMERALD, 1);
 
@@ -2855,6 +2881,24 @@ public class BytecodeInterpreterTest {
         }
     }
 
+    private static final class StoredNumberListing implements VillagerTrades.ItemListing {
+        private static int stored;
+
+        @NotNull
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            int emeralds = 5;
+
+            stored = random.nextInt(2) + 1;
+
+            if (stored > 1) {
+                emeralds += stored * stored;
+            }
+
+            return new MerchantOffer(new ItemStack(Items.EMERALD, emeralds), new ItemStack(Items.APPLE, stored), 12, 5, 0.05F);
+        }
+    }
+
     private static final class StoredPickListing implements VillagerTrades.ItemListing {
         private static final List<Item> ITEMS = List.of(Items.APPLE, Items.BREAD, Items.CARROT);
         private static Item stored;
@@ -2979,5 +3023,12 @@ public class BytecodeInterpreterTest {
                 warmUp(random, depth - 1);
             }
         }
+    }
+
+    private static final class NullLambdas {
+        private static final List<VillagerTrades.ItemListing> LISTINGS = List.of(
+                (trader, random) -> random.nextInt(2) == 1 ? offerFor(Items.APPLE) : null,
+                (trader, random) -> random.nextInt(2) == 1 ? offerFor(Items.BREAD) : null
+        );
     }
 }
