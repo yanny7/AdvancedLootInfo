@@ -1,16 +1,21 @@
 package com.yanny.aci.gametest;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public record GoldenFiles(Path goldenDir, Path actualDir, boolean regenerate) {
     private static final String REMOVED_FILE = "removed.txt";
+    private static final String UNSTABLE_FILE = "unstable.txt";
+    private static final String UNSTABLE = "<unstable>";
 
     @NotNull
     public static GoldenFiles fromProperties(String modId) {
@@ -51,15 +56,17 @@ public record GoldenFiles(Path goldenDir, Path actualDir, boolean regenerate) {
     }
 
     @NotNull
-    public List<String> compare(Map<String, String> actual) {
+    public List<String> compare(Map<String, String> output) {
+        List<String> differences = new ArrayList<>();
+        Map<String, String> actual = mask(output, unstable(), differences);
+
         write(regenerate ? goldenDir : actualDir, actual);
 
         if (regenerate) {
-            return List.of();
+            return differences;
         }
 
         Map<String, String> expected = Files.isDirectory(goldenDir) ? read(goldenDir) : Map.of();
-        List<String> differences = new ArrayList<>();
 
         expected.keySet().stream().filter((key) -> !actual.containsKey(key)).forEach((key) -> differences.add("missing " + key));
         actual.keySet().stream().filter((key) -> !expected.containsKey(key)).forEach((key) -> differences.add("new " + key));
@@ -70,6 +77,49 @@ public record GoldenFiles(Path goldenDir, Path actualDir, boolean regenerate) {
         });
 
         return differences;
+    }
+
+    @Nullable
+    private String unstable() {
+        Path path = goldenDir.resolve(UNSTABLE_FILE);
+
+        try {
+            return Files.isRegularFile(path) ? Files.readString(path) : null;
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    @NotNull
+    private static Map<String, String> mask(Map<String, String> output, @Nullable String unstable, List<String> differences) {
+        if (unstable == null) {
+            return output;
+        }
+
+        Map<String, String> files = new TreeMap<>(output);
+
+        unstable.lines().filter((line) -> !line.isBlank() && !line.startsWith("#")).forEach((regex) -> {
+            Pattern pattern = Pattern.compile(regex);
+            boolean[] used = {false};
+
+            files.replaceAll((key, value) -> {
+                Matcher matcher = pattern.matcher(value);
+
+                if (!matcher.find()) {
+                    return value;
+                }
+
+                used[0] = true;
+                return matcher.replaceAll(UNSTABLE);
+            });
+
+            if (!used[0]) {
+                differences.add("unused mask " + regex);
+            }
+        });
+
+        files.put(UNSTABLE_FILE, unstable);
+        return files;
     }
 
     private static void write(Path dir, Map<String, String> files) {
