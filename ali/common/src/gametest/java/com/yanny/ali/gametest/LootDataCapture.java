@@ -14,6 +14,7 @@ import com.yanny.ali.network.LootDataChunkMessage;
 import com.yanny.ali.network.LootDataReader;
 import com.yanny.ali.plugin.client.TooltipUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -89,7 +90,7 @@ public class LootDataCapture {
     private static String itemToString(IItemNode node) {
         String count = " x" + NumberFormatter.slot(TooltipUtils.getSlotCount(node));
 
-        return node.getItem().map((stack) -> stackToString(stack, count), (tag) -> "#" + tag.location() + count);
+        return node.getItem().map((stack) -> stackToString(stack, count), (tag) -> "#" + tag.location() + (tag.isFor(Registries.ITEM) ? "" : " (" + tag.registry().location() + ")") + count);
     }
 
     @NotNull

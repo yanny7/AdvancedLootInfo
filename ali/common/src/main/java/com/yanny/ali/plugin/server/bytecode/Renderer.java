@@ -331,6 +331,9 @@ final class Renderer {
             if (options.size() == 1) {
                 return new ItemNode(1, stack.count, options.get(0), tooltip, List.of(), List.of());
             }
+            if (stack.tag != null && !stack.randomTag && ItemStackModel.isTag(stack.tag, options)) {
+                return new ItemNode(1, stack.count, stack.tag, tooltip, List.of(), List.of());
+            }
 
             return TradeUtils.getItemSlotNode(options, stack.count, tooltip);
         }

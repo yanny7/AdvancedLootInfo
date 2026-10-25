@@ -30,6 +30,7 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -115,8 +116,14 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
                 Either<ItemStack, TagKey<? extends ItemLike>> item = ((IItemNode) option).getItem();
 
                 item.left().ifPresent(slotBuilder::addItemStack);
-                //noinspection unchecked
-                item.right().ifPresent((t) -> slotBuilder.addIngredients(Ingredient.of((TagKey<Item>) t)));
+                item.right().ifPresent((t) -> {
+                    if (t.isFor(Registries.ITEM)) {
+                        //noinspection unchecked
+                        slotBuilder.addIngredients(Ingredient.of((TagKey<Item>) t));
+                    } else {
+                        slotBuilder.addItemStacks(((IItemNode) option).getItems());
+                    }
+                });
             }
         }
     }

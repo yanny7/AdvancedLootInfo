@@ -10,9 +10,10 @@ import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.common.NodeUtils;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
@@ -61,7 +62,7 @@ public class ItemNode implements IDataNode, IItemNode {
     }
 
     public ItemNode(IClientUtils utils, FriendlyByteBuf buf) {
-        item = buf.readEither(FriendlyByteBuf::readItem, (b) -> TagKey.create(Registries.ITEM, b.readResourceLocation()));
+        item = buf.readEither(FriendlyByteBuf::readItem, ItemNode::readTag);
         items = NodeUtils.resolveItems(item);
         tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
         count = NumberExpr.decode(buf);
@@ -122,7 +123,7 @@ public class ItemNode implements IDataNode, IItemNode {
         int index = buf.writerIndex();
 
         try {
-            buf.writeEither(item, FriendlyByteBuf::writeItem, (b, t) -> b.writeResourceLocation(t.location()));
+            buf.writeEither(item, FriendlyByteBuf::writeItem, ItemNode::writeTag);
         } catch (Throwable e) {
             buf.writerIndex(index);
             buf.writeEither(Either.left(ItemStack.EMPTY), FriendlyByteBuf::writeItem, (b, t) -> {});
@@ -133,6 +134,18 @@ public class ItemNode implements IDataNode, IItemNode {
         count.encode(buf);
         buf.writeFloat(chance);
         buf.writeBoolean(NodeUtils.hasPredicates(utils, conditions));
+    }
+
+    private static void writeTag(FriendlyByteBuf buf, TagKey<? extends ItemLike> tag) {
+        buf.writeResourceLocation(tag.registry().location());
+        buf.writeResourceLocation(tag.location());
+    }
+
+    @NotNull
+    private static TagKey<? extends ItemLike> readTag(FriendlyByteBuf buf) {
+        ResourceKey<Registry<ItemLike>> registry = ResourceKey.createRegistryKey(buf.readResourceLocation());
+
+        return TagKey.create(registry, buf.readResourceLocation());
     }
 
     @NotNull

@@ -6,14 +6,14 @@ ali:trade
       | Uses: 20
       | XP: 2
       | Price Multiplier: 0.05
-      ali:item #charm:overworld_stripped_logs x8-9
+      ali:item #charm:overworld_stripped_logs (minecraft:block) x8-9
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 20
       | XP: 2
       | Price Multiplier: 0.05
-      ali:item #minecraft:overworld_natural_logs x8-9
+      ali:item #minecraft:overworld_natural_logs (minecraft:block) x8-9
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
@@ -22,7 +22,7 @@ ali:trade
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x1
       ali:item minecraft:air x0
-      ali:item #charmony:ladders x1
+      ali:item #charmony:ladders (minecraft:block) x1
   ali:trade_level
     | Level: 2
     | Randomly Selects 2 Of These Trades
@@ -39,21 +39,21 @@ ali:trade
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x3-5
       ali:item minecraft:air x0
-      ali:item #minecraft:beds x1
+      ali:item #minecraft:beds (minecraft:block) x1
     ali:items_to_items
       | Uses: 20
       | XP: 6
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x2-3
       ali:item minecraft:air x0
-      ali:item #minecraft:wooden_fences x1
+      ali:item #minecraft:wooden_fences (minecraft:block) x1
     ali:items_to_items
       | Uses: 20
       | XP: 6
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x2-3
       ali:item minecraft:air x0
-      ali:item #minecraft:fence_gates x1
+      ali:item #minecraft:fence_gates (minecraft:block) x1
   ali:trade_level
     | Level: 3
     | Randomly Selects 2 Of These Trades
@@ -71,14 +71,14 @@ ali:trade
       | Uses: 20
       | XP: 10
       | Price Multiplier: 0.05
-      ali:item #minecraft:warped_stems x7-8
+      ali:item #minecraft:warped_stems (minecraft:block) x7-8
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
       | Uses: 20
       | XP: 10
       | Price Multiplier: 0.05
-      ali:item #minecraft:crimson_stems x7-8
+      ali:item #minecraft:crimson_stems (minecraft:block) x7-8
       ali:item minecraft:air x0
       ali:item minecraft:emerald x1
     ali:items_to_items
@@ -117,7 +117,7 @@ ali:trade
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x2-3
       ali:item minecraft:air x0
-      ali:item #minecraft:wooden_doors x1
+      ali:item #minecraft:wooden_doors (minecraft:block) x1
   ali:trade_level
     | Level: 4
     | Randomly Selects 2 Of These Trades
@@ -127,14 +127,14 @@ ali:trade
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x4-5
       ali:item minecraft:air x0
-      ali:item #charmony:barrels x1
+      ali:item #charmony:barrels (minecraft:block) x1
     ali:items_to_items
       | Uses: 20
       | XP: 15
       | Price Multiplier: 0.05
       ali:item minecraft:emerald x4-5
       ali:item minecraft:air x0
-      ali:item #charmony:chiseled_bookshelves x1
+      ali:item #charmony:chiseled_bookshelves (minecraft:block) x1
     ali:items_to_items
       | Uses: 20
       | XP: 15

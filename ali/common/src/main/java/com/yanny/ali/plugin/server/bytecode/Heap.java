@@ -1,16 +1,16 @@
 package com.yanny.ali.plugin.server.bytecode;
 
 import com.yanny.aci.api.NumberExpr;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.IdentityHashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 final class Heap {
     private final Map<Object, ObjectInfo> objects = new IdentityHashMap<>();
+    private final Set<TagKey<?>> tags = new LinkedHashSet<>();
     private final ValueStore store;
     private int ownedCount;
     private int frozenBelow;
@@ -92,9 +92,15 @@ final class Heap {
             return new Value.Rng(true);
         } else if (value != null && shadowOf(value) != null) {
             return shadowOf(value);
+        } else if (value instanceof TagKey<?> tag) {
+            tags.add(tag);
         }
 
         return new Value.Known(value);
+    }
+
+    Set<TagKey<?>> tags() {
+        return tags;
     }
 
     @Nullable

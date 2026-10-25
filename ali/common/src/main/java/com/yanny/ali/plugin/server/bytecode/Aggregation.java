@@ -423,7 +423,8 @@ final class Aggregation {
             String items = stack.options.stream().map(TradeTypes::stackText).collect(Collectors.joining(" | "));
 
             return (stack.options.size() > 1 ? "[" + items + "]" : items) + " x" + countText(stack.count) + (stack.randomTag ? " (random properties)" : "")
-                    + (stack.destination != null ? " (destination " + stack.destination + ", decoration " + stack.decoration + ")" : "");
+                    + (stack.destination != null ? " (destination " + stack.destination + ", decoration " + stack.decoration + ")" : "")
+                    + (stack.tag != null && ItemStackModel.isTag(stack.tag, stack.options) ? " (" + stack.tag + ")" : "");
         }
         if (value instanceof Value.Choice choice) {
             return "[" + choice.options().stream().map((o) -> o instanceof ItemStack stack ? TradeTypes.stackText(stack) + " x" + stack.getCount() : String.valueOf(o))
