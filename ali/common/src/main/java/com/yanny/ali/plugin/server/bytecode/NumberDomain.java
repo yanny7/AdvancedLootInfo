@@ -157,7 +157,7 @@ final class NumberDomain implements Opcodes {
             }
         });
 
-        store.replaceInFrames((v) -> v instanceof Value.Num || v instanceof Value.Stack, (v) -> {
+        store.replace((v) -> v instanceof Value.Num || v instanceof Value.Stack, (v) -> {
             if (v instanceof Value.Stack stack) {
                 stack.count = substitute(stack.count, replacements);
                 return stack;
