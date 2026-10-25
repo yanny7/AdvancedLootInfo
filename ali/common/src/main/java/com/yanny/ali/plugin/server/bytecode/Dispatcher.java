@@ -11,8 +11,6 @@ import org.objectweb.asm.tree.MethodNode;
 
 import java.lang.reflect.Constructor;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.BaseStream;
 
 import static com.yanny.ali.plugin.server.bytecode.Interpreter.CONSTRUCTOR;
@@ -29,8 +27,6 @@ import static com.yanny.ali.plugin.server.bytecode.MethodModel.NO_OPINION;
 import static com.yanny.ali.plugin.server.bytecode.Resolution.*;
 
 final class Dispatcher implements Opcodes, CallContext {
-    private static final boolean TRACE = Boolean.getBoolean("ali.debug.dispatch");
-    private static final Map<String, LongAdder> TRACED = new ConcurrentHashMap<>();
     private static final Map<Phase, List<MethodModel>> MODELS = new EnumMap<>(Phase.class);
 
     private final Interpreter interpreter;
@@ -92,41 +88,19 @@ final class Dispatcher implements Opcodes, CallContext {
         this.interpreter = interpreter;
     }
 
-    static List<String> dispatchTrace() {
-        List<String> lines = TRACED.entrySet().stream().sorted(Map.Entry.comparingByKey()).map((e) -> e.getKey() + " " + e.getValue().sum()).toList();
-
-        TRACED.clear();
-        return lines;
-    }
-
-    static void trace(String label, MethodInsnNode call) {
-        if (TRACE) {
-            TRACED.computeIfAbsent(label + " " + call.owner + "." + call.name + call.desc, (k) -> new LongAdder()).increment();
-        }
-    }
-
-    static void trace(String label, String type, String desc) {
-        if (TRACE) {
-            TRACED.computeIfAbsent(label + " " + type + "." + CONSTRUCTOR + desc, (k) -> new LongAdder()).increment();
-        }
-    }
-
     @Nullable
     Value invoke(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
         Value result = dispatch(call, args, loader, depth);
 
         if (result instanceof Value.Known known && TradeTypes.isData(known.value()) && args.stream().anyMatch(interpreter::isTainted)) {
-            trace("after.taint", call);
             interpreter.heap.taint(known.value());
         }
 
         if (call.getOpcode() != INVOKESTATIC && call.name.equals("get") && args.size() == 2 && args.get(0) instanceof Value.Known map && map.value() instanceof Map<?, ?>
                 && args.get(1) instanceof Value.Known key && result instanceof Value.Known listings && isKeyedList(listings.value())) {
             if (key.value() instanceof Integer level) {
-                trace("after.levelKey", call);
                 interpreter.pickSources.putLevel(listings.value(), level);
             } else if (key.value() instanceof Enum<?> constant) {
-                trace("after.levelKey", call);
                 interpreter.pickSources.putLevel(listings.value(), constant.ordinal() + 1);
             }
         }
@@ -138,11 +112,6 @@ final class Dispatcher implements Opcodes, CallContext {
         Value answer = apply(Phase.CONSTRUCTOR, new Call(new MethodInsnNode(INVOKESPECIAL, type, CONSTRUCTOR, desc, false), args, loader, depth));
 
         return answer != NO_OPINION ? answer : realConstructor(type, desc, args, loader);
-    }
-
-    @Override
-    public void traceCase(String label, MethodInsnNode call) {
-        trace(label, call);
     }
 
     @Override
@@ -385,7 +354,6 @@ final class Dispatcher implements Opcodes, CallContext {
 
         if (call.name.equals(CONSTRUCTOR)) {
             if (!(args.get(0) instanceof Value.Uninit uninit)) {
-                trace("constructor.chaining.fail", call);
                 throw new Fail("constructor chaining");
             }
 
@@ -411,7 +379,6 @@ final class Dispatcher implements Opcodes, CallContext {
         int[] choices = choiceIndices(args);
 
         if (choices.length > 0) {
-            trace("distribute", call);
             return interpreter.distribute(call, args, choices, loader, depth);
         }
 
@@ -430,7 +397,6 @@ final class Dispatcher implements Opcodes, CallContext {
         } else if (receiver instanceof Value.Known known) {
             start = known.value().getClass();
         } else {
-            trace("resolve.unsupported.fail", call);
             throw new Fail("unsupported receiver");
         }
 
@@ -445,16 +411,13 @@ final class Dispatcher implements Opcodes, CallContext {
         }
 
         if (args.stream().anyMatch(this::holdsStack)) {
-            trace("arguments.stacks", call);
             return ItemStackModel.argumentCall(this, invocation);
         }
 
         if (declared != null && interpreter.opaque.isOpaque(call) && isWorldCall(call, args, loader)) {
-            trace("arguments.opaqueWorldCall", call);
             return worldResult(call, args);
         }
         if (!isStatic && receiver instanceof Value.Known known && args.stream().skip(1).anyMatch(interpreter::isTainted) && !TradeTypes.returnsTradeData(call)) {
-            trace("arguments.tainted", call);
             return interpreter.uncertainChange(call, known.value());
         }
 
@@ -464,7 +427,6 @@ final class Dispatcher implements Opcodes, CallContext {
             int before = interpreter.decisions.taken().size();
 
             try {
-                trace("execution.interpret", call);
                 result = interpreter.machine.execute(declaration.owner(), declaration.method(), args, depth + 1);
             } catch (Fail fail) {
                 result = fallbackCall(call, args, loader, fail);
@@ -473,7 +435,6 @@ final class Dispatcher implements Opcodes, CallContext {
                 interpreter.opaque.count(call, interpreter.decisions.taken().size() - before);
             }
         } else {
-            trace("execution.noBytecode", call);
             result = fallbackCall(call, args, loader, new Fail("no bytecode for " + call.owner + "." + call.name));
         }
 
@@ -482,11 +443,9 @@ final class Dispatcher implements Opcodes, CallContext {
 
     private Value realConstructor(String type, String desc, List<Value> args, ClassLoader loader) {
         if (!args.stream().allMatch(interpreter::isConcrete)) {
-            trace("constructor.symbolic.fail", type, desc);
             throw new Fail("symbolic constructor arguments");
         }
         if (args.stream().anyMatch(interpreter::isSelection)) {
-            trace("constructor.guard.fail", type, desc);
             throw new Fail("random selection passed to a call");
         }
 
@@ -504,10 +463,8 @@ final class Dispatcher implements Opcodes, CallContext {
                 interpreter.heap.taint(created);
             }
 
-            trace("constructor.real", type, desc);
             return interpreter.heap.wrap(created);
         } catch (Throwable e) {
-            trace("constructor.real.fail", type, desc);
             throw new Fail("constructor failed");
         }
     }
@@ -517,16 +474,13 @@ final class Dispatcher implements Opcodes, CallContext {
         boolean isStatic = call.getOpcode() == INVOKESTATIC;
 
         if (!args.stream().allMatch(interpreter::isConcrete)) {
-            trace("jdk.symbolic.fail", call);
             throw new Fail("symbolic argument of " + call.owner + "." + call.name);
         }
         if (isStatic) {
             if (!STATIC_SAFE.contains(call.owner) || STATIC_RANDOM.contains(call.name)) {
-                trace("jdk.static.fail", call);
                 throw new Fail("JDK call " + call.owner + "." + call.name);
             }
 
-            trace("jdk.static", call);
             return interpreter.concreteCall(call, args, loader, false);
         }
 
@@ -534,20 +488,16 @@ final class Dispatcher implements Opcodes, CallContext {
         boolean ownedReceiver = interpreter.heap.isOwned(receiver) || receiver instanceof BaseStream<?, ?>;
 
         if (READ_ONLY.contains(call.name) && receiver != null && interpreter.heap.isTainted(receiver)) {
-            trace("jdk.taintedRead.fail", call);
             throw new Fail("uncertain contents of " + declaring.getName());
         }
 
         if (!ownedReceiver && !READ_ONLY.contains(call.name)) {
-            trace("jdk.notOwned.fail", call);
             throw new Fail("JDK call " + declaring.getName() + "." + call.name);
         }
         if (!READ_ONLY.contains(call.name) && receiver != null && interpreter.heap.isFrozen(receiver)) {
-            trace("jdk.frozen.fail", call);
             throw new Fail("change under a random choice");
         }
 
-        trace("jdk.real", call);
         Value result = interpreter.concreteCall(call, args, loader, false);
 
         if (result instanceof Value.Known known && known.value() != null && (ownedReceiver || FRESH_RESULTS.contains(call.name))) {
@@ -572,7 +522,6 @@ final class Dispatcher implements Opcodes, CallContext {
                 results.add(construct(type, desc, interpreter.select(drawn, choices, option), loader, depth));
             }
 
-            trace("constructor.perChoice", type, desc);
             return Objects.requireNonNull(sameDraw(interpreter.combine(results), first));
         }
 
@@ -582,7 +531,6 @@ final class Dispatcher implements Opcodes, CallContext {
     private Value newUnknown(String type, String desc, List<Value> args, ClassLoader loader, int depth) {
         if (args.stream().anyMatch(Value.Unknown.class::isInstance) && args.stream().allMatch((v) -> v instanceof Value.Unknown || interpreter.isConcrete(v))) {
             interpreter.taintOwned(args);
-            trace("constructor.unknown", type, desc);
             return Value.Unknown.of(Type.getObjectType(type), Origin.of(null, type + "." + CONSTRUCTOR + desc, args));
         }
 
@@ -594,7 +542,6 @@ final class Dispatcher implements Opcodes, CallContext {
 
         if (!isStatic && call.name.equals("equals") && call.desc.equals("(Ljava/lang/Object;)Z") && args.get(0) instanceof Value.Known known
                 && args.get(1) instanceof Value.Unknown unknown) {
-            trace("owner.equalsUnknown", call);
             return new Value.Unknown(false, null, null, Origin.equality(unknown, known.value()));
         }
 
@@ -603,7 +550,6 @@ final class Dispatcher implements Opcodes, CallContext {
 
     private Value intValue(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
         if (call.name.equals("intValue") && call.desc.equals("()I") && args.get(0) instanceof Value.Choice choice && choice.options().stream().allMatch(Integer.class::isInstance)) {
-            trace("undistributed.intValue", call);
             return choice;
         }
 
@@ -617,14 +563,12 @@ final class Dispatcher implements Opcodes, CallContext {
 
         if (receiver instanceof Value.Closure closure) {
             if (!call.name.equals(closure.samName())) {
-                trace("receiver.closure.fail", call);
                 throw new Fail("closure default method");
             }
 
             List<Value> all = new ArrayList<>(closure.captured());
 
             all.addAll(args.subList(1, args.size()));
-            trace("receiver.closure", call);
             return interpreter.invokeHandle(closure.impl(), all, closure.loader(), depth + 1);
         }
 
@@ -637,16 +581,13 @@ final class Dispatcher implements Opcodes, CallContext {
 
         if (receiver instanceof Value.Draws draws) {
             if (call.name.equals("hasNext") && call.desc.equals("()Z")) {
-                trace("receiver.draws.hasNext", call);
                 return new Value.Known(draws.left > 0 ? 1 : 0);
             }
             if (call.name.equals("next") && call.desc.equals("()Ljava/lang/Object;") && draws.left > 0) {
                 draws.left--;
-                trace("receiver.draws.next", call);
                 return new Value.Choice(draws.options, draws.pool);
             }
 
-            trace("receiver.draws.fail", call);
             throw new Fail("iteration over random draws");
         }
 
@@ -661,12 +602,10 @@ final class Dispatcher implements Opcodes, CallContext {
             Type returnType = Type.getReturnType(call.desc);
 
             if (returnType.getSort() == Type.OBJECT && isRandomType(returnType, loader)) {
-                trace("receiver.unknown.random", call);
                 return new Value.Rng(isLegacyRandom(returnType, loader));
             }
 
             interpreter.taintOwned(args);
-            trace("receiver.unknown", call);
             return Value.Unknown.of(returnType, Origin.of(receiver, call.name + call.desc, args.subList(1, args.size())));
         }
 
@@ -678,7 +617,6 @@ final class Dispatcher implements Opcodes, CallContext {
         Value receiver = isStatic ? null : args.get(0);
 
         if (receiver instanceof Value.Offer || receiver instanceof Value.Uninit || receiver instanceof Value.Cmp) {
-            trace("receiver.unsupported.fail", call);
             throw new Fail("unsupported receiver");
         }
 
@@ -690,7 +628,6 @@ final class Dispatcher implements Opcodes, CallContext {
         Value receiver = isStatic ? null : args.get(0);
 
         if (receiver instanceof Value.Known known && known.value() == null) {
-            trace("receiver.null.fail", call);
             throw new Fail("null receiver");
         }
 
@@ -703,7 +640,6 @@ final class Dispatcher implements Opcodes, CallContext {
         Value receiver = isStatic ? null : args.get(0);
 
         if (receiver instanceof Value.Known known && LambdaResolver.isLambda(known.value())) {
-            trace("receiver.lambda", call);
             return interpreter.lambdaCall(known.value(), args, depth);
         }
 
@@ -716,11 +652,9 @@ final class Dispatcher implements Opcodes, CallContext {
 
         if (isStatic && call.owner.equals("java/util/Objects") && call.name.startsWith("requireNonNull")) {
             if (interpreter.decisions.isNull(args.get(0))) {
-                trace("jdk.requireNonNull.fail", call);
                 throw new Fail("requireNonNull");
             }
 
-            trace("jdk.requireNonNull", call);
             return args.get(0);
         }
 
@@ -731,7 +665,6 @@ final class Dispatcher implements Opcodes, CallContext {
         boolean isStatic = call.getOpcode() == INVOKESTATIC;
 
         if (isStatic && call.owner.equals("java/util/Objects") && (call.name.equals("isNull") || call.name.equals("nonNull"))) {
-            trace("jdk.isNull", call);
             return new Value.Known(interpreter.decisions.isNull(args.get(0)) == call.name.equals("isNull") ? 1 : 0);
         }
 
@@ -742,7 +675,6 @@ final class Dispatcher implements Opcodes, CallContext {
         boolean isStatic = call.getOpcode() == INVOKESTATIC;
 
         if (args.stream().skip(isStatic ? 0 : 1).anyMatch(interpreter::isSelection)) {
-            trace("jdk.guard.fail", call);
             throw new Fail("random selection passed to a call");
         }
 
@@ -753,7 +685,6 @@ final class Dispatcher implements Opcodes, CallContext {
         boolean isStatic = call.getOpcode() == INVOKESTATIC;
 
         if (isStatic && call.owner.equals("java/util/concurrent/ThreadLocalRandom") && call.name.equals("current")) {
-            trace("jdk.threadLocalRandom", call);
             return new Value.Rng(true);
         }
 
@@ -767,7 +698,6 @@ final class Dispatcher implements Opcodes, CallContext {
         if (!isStatic && args.get(0) instanceof Value.Known known && known.value() != null && interpreter.heap.isOwned(known.value())
                 && args.stream().skip(1).anyMatch((v) -> v instanceof Value.Unknown || v instanceof Value.Num)
                 && args.stream().skip(1).allMatch((v) -> interpreter.isConcrete(v) || v instanceof Value.Unknown || v instanceof Value.Num) && !TradeTypes.returnsTradeData(call)) {
-            trace("jdk.uncertain", call);
             return interpreter.uncertainChange(call, READ_ONLY.contains(call.name) ? null : known.value());
         }
 
@@ -780,7 +710,6 @@ final class Dispatcher implements Opcodes, CallContext {
 
         if (isStatic && STATIC_SAFE.contains(call.owner) && !STATIC_RANDOM.contains(call.name) && returnType.getSort() != Type.VOID
                 && args.stream().anyMatch(Value.Unknown.class::isInstance) && args.stream().allMatch((v) -> v instanceof Value.Unknown || isScalar(v))) {
-            trace("jdk.staticUnknown", call);
             return Value.Unknown.of(returnType, null);
         }
 
@@ -790,27 +719,22 @@ final class Dispatcher implements Opcodes, CallContext {
     @Nullable
     private Value fallbackCall(MethodInsnNode call, List<Value> args, ClassLoader loader, Fail fail) {
         if (args.stream().allMatch(interpreter::isConcrete)) {
-            trace("fallback.concrete", call);
             return interpreter.concreteCall(call, args, loader, false);
         }
         if (isWorldCall(call, args, loader)) {
             if (fail.isBudget()) {
-                trace("fallback.opaqueBudget", call);
                 interpreter.opaque.mark(call);
                 throw fail;
             }
 
-            trace("fallback.worldResult", call);
             return worldResult(call, args);
         }
         if (!fail.isBudget() && call.getOpcode() != INVOKESTATIC && args.get(0) instanceof Value.Known known && known.value() != null
                 && interpreter.heap.isOwned(known.value()) && args.stream().skip(1).allMatch((v) -> interpreter.isConcrete(v) || v instanceof Value.Num || v instanceof Value.Unknown)
                 && !TradeTypes.returnsTradeData(call)) {
-            trace("fallback.uncertain", call);
             return interpreter.uncertainChange(call, known.value());
         }
 
-        trace("fallback.rethrow", call);
         throw fail;
     }
 

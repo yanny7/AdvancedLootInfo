@@ -26,18 +26,15 @@ final class TraderModel implements MethodModel {
 
         if (run != null && run.isSelf(receiver)) {
             if (!run.ownGetOffers && RuntimeNames.is(RuntimeNames.GET_OFFERS, insn)) {
-                context.traceCase("receiver.trader.getOffers", insn);
                 return run.offers;
             }
             if (RuntimeNames.is(RuntimeNames.ADD_OFFERS_FROM_ITEM_LISTINGS, insn)) {
                 if (!(args.get(1) instanceof Value.Offers offers) || !(args.get(2) instanceof Value.Known known)
                         || !(known.value() instanceof VillagerTrades.ItemListing[] listings)) {
-                    context.traceCase("receiver.trader.addOffers.fail", insn);
                     throw new Fail("offers from item listings");
                 }
 
                 offers.entries.add(new Value.Offers.Listings(listings, args.get(3), context.levelKey(listings)));
-                context.traceCase("receiver.trader.addOffers", insn);
                 return null;
             }
 
@@ -46,7 +43,6 @@ final class TraderModel implements MethodModel {
             Declaration own = ownDeclaration(start, insn.name, insn.desc, special);
 
             if (own != null) {
-                context.traceCase("receiver.trader.own", insn);
                 return context.execute(own.owner(), own.method(), args, call.depth());
             }
         }

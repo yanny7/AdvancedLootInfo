@@ -20,7 +20,6 @@ final class RandomModel implements MethodModel {
         MethodInsnNode insn = call.insn();
 
         if (insn.getOpcode() != Opcodes.INVOKESTATIC && call.args().get(0) instanceof Value.Rng rng) {
-            context.traceCase("receiver.rng", insn);
             return random(context, call, rng);
         }
 

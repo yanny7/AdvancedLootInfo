@@ -29,7 +29,6 @@ final class ItemCostModel implements MethodModel {
 
         if (insn.name.equals(CONSTRUCTOR)) {
             if (insn.owner.equals(ITEM_COST)) {
-                context.traceCase("constructor.itemCost", insn);
                 return construct(context, insn.desc, call.args());
             }
 
@@ -39,7 +38,6 @@ final class ItemCostModel implements MethodModel {
         Value receiver = insn.getOpcode() == Opcodes.INVOKESTATIC ? null : call.args().get(0);
 
         if (receiver instanceof Value.Stack stack && insn.owner.equals(ITEM_COST)) {
-            context.traceCase("receiver.cost", insn);
             return costCall(context, call, stack);
         }
 

@@ -25,13 +25,11 @@ final class PickModel implements MethodModel {
         }
         if (RuntimeNames.is(RuntimeNames.GET_OFFER, insn)) {
             if (args.get(0) instanceof Value.Choice choice && isPick(context, choice) && choice.options().stream().allMatch(VillagerTrades.ItemListing.class::isInstance)) {
-                context.traceCase("undistributed.getOffer.choice", insn);
                 return new Value.Pick(choice.options().stream().map(VillagerTrades.ItemListing.class::cast).toList(), choice.draw(), context.poolKey(choice.options()));
             }
             if (args.get(0) instanceof Value.Known known && known.value() instanceof VillagerTrades.ItemListing listing) {
                 Object source = context.listingSource(listing);
 
-                context.traceCase("undistributed.getOffer.known", insn);
                 return new Value.Pick(List.of(listing), source != null ? source : listing, source != null ? context.levelKey(source) : null);
             }
         }
@@ -42,7 +40,6 @@ final class PickModel implements MethodModel {
             if (bound != null) {
                 List<VillagerTrades.ItemListing> listings = choice.options().stream().<VillagerTrades.ItemListing>map((element) -> context.boundOffer(element, insn, bound)).toList();
 
-                context.traceCase("undistributed.boundOffer", insn);
                 return new Value.Pick(listings, choice.draw(), context.poolKey(choice.options()));
             }
         }

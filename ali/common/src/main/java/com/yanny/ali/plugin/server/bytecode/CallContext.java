@@ -10,8 +10,6 @@ import org.objectweb.asm.tree.MethodNode;
 import java.util.List;
 
 interface CallContext {
-    void traceCase(String label, MethodInsnNode call);
-
     boolean isConcrete(Value value);
 
     boolean isTainted(Value value);

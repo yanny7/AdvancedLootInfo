@@ -20,7 +20,6 @@ final class NumberModel implements MethodModel {
         MethodInsnNode insn = call.insn();
 
         if (insn.getOpcode() != Opcodes.INVOKESTATIC && call.args().get(0) instanceof Value.Num num) {
-            context.traceCase("receiver.num", insn);
             return unbox(insn, num);
         }
 
@@ -35,11 +34,9 @@ final class NumberModel implements MethodModel {
             return NO_OPINION;
         }
         if ((insn.owner.equals("java/lang/Math") || insn.owner.equals("java/lang/StrictMath")) && args.stream().anyMatch((v) -> v instanceof Value.Num)) {
-            context.traceCase("jdk.math", insn);
             return math(context, insn, args);
         }
         if (insn.name.equals("valueOf") && args.size() == 1 && args.get(0) instanceof Value.Num num) {
-            context.traceCase("jdk.valueOf", insn);
             return insn.owner.equals("java/lang/String") ? Value.UNKNOWN : num;
         }
 

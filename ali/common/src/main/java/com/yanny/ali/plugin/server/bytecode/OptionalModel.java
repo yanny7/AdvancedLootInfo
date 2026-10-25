@@ -25,16 +25,13 @@ final class OptionalModel implements MethodModel {
             return NO_OPINION;
         }
         if (isStatic && (insn.name.equals("of") || insn.name.equals("ofNullable")) && args.get(0) instanceof Value.Stack stack) {
-            context.traceCase("undistributed.optionalOf", insn);
             return stack;
         }
         if (!isStatic && args.get(0) instanceof Value.Stack stack) {
-            context.traceCase("undistributed.optionalStack", insn);
             return optionalCall(context, call, stack);
         }
         if (!isStatic && args.get(0) instanceof Value.Known known && known.value() instanceof Optional<?> optional
                 && args.stream().skip(1).anyMatch((arg) -> arg instanceof Value.Closure || !context.isConcrete(arg))) {
-            context.traceCase("undistributed.optionalConcrete", insn);
             return optionalCall(context, call, optional.isPresent() ? context.wrap(optional.get()) : null);
         }
 

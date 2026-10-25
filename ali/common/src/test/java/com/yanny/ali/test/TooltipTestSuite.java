@@ -19,7 +19,6 @@ import com.yanny.ali.plugin.glm.ParamState;
 import com.yanny.ali.plugin.glm.Verdict;
 import com.yanny.ali.plugin.server.LootConditionTypes;
 import com.yanny.ali.plugin.server.LootFunctionTypes;
-import com.yanny.ali.plugin.server.bytecode.BytecodeInterpreter;
 import com.yanny.ali.plugin.server.bytecode.AggregationTest;
 import com.yanny.ali.plugin.server.bytecode.CollectionsModelTest;
 import com.yanny.ali.plugin.server.bytecode.ComponentModelTest;
@@ -92,9 +91,7 @@ import org.junit.platform.suite.api.Suite;
 import org.slf4j.Logger;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Set;
@@ -389,13 +386,9 @@ public class TooltipTestSuite {
     }
 
     @AfterSuite
-    static void afterAllTests() throws IOException {
+    static void afterAllTests() {
         LOGGER.info("----- Unused translation keys ({}) -----", UNUSED.size());
         UNUSED.stream().sorted().forEach(LOGGER::info);
-
-        if (Boolean.getBoolean("ali.debug.dispatch")) {
-            Files.write(Path.of("build/dispatch-trace.txt"), BytecodeInterpreter.dispatchTrace());
-        }
     }
 
     @NotNull
