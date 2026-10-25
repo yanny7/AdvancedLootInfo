@@ -19,6 +19,7 @@ import com.yanny.ali.plugin.glm.Verdict;
 import com.yanny.ali.plugin.server.LootConditionTypes;
 import com.yanny.ali.plugin.server.LootFunctionTypes;
 import com.yanny.ali.plugin.server.bytecode.BytecodeInterpreter;
+import com.yanny.ali.plugin.server.bytecode.AggregationTest;
 import com.yanny.ali.plugin.server.bytecode.CollectionsModelTest;
 import com.yanny.ali.plugin.server.bytecode.FieldModelTest;
 import com.yanny.ali.plugin.server.bytecode.IndyTest;
@@ -126,7 +127,8 @@ import static org.mockito.Mockito.mock;
         FieldModelTest.class,
         IndyTest.class,
         PickModelTest.class,
-        OffersModelTest.class
+        OffersModelTest.class,
+        AggregationTest.class
 })
 public class TooltipTestSuite {
     public static IServerUtils UTILS;
