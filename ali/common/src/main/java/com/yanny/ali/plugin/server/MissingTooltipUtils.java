@@ -6,6 +6,7 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.language.CoreLang;
+import com.yanny.aci.manager.ManagedRegistry;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.ali.Utils;
@@ -215,14 +216,22 @@ public class MissingTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getMissingVillagerTradeTooltip(IServerUtils utils, VillagerTrade villagerTrade) {
-        TooltipBuilder tooltip = TooltipBuilder.value(villagerTrade.getClass().getName());
+        TooltipBuilder tooltip = TooltipBuilder.value(ManagedRegistry.classKeyName(villagerTrade.getClass()));
 
         TooltipUtils.addObjectFields(utils, tooltip, villagerTrade, VillagerTrade.class);
         return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
     }
 
     @NotNull
+    public static TooltipBuilder getMissingItemListingTooltip(IServerUtils utils, Object source) {
+        TooltipBuilder tooltip = TooltipBuilder.value(ManagedRegistry.classKeyName(source.getClass()));
+
+        TooltipUtils.addObjectFields(utils, tooltip, source, Object.class);
+        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
+    }
+
+    @NotNull
     public static TooltipBuilder getMissingValueTooltip(IServerUtils ignoredUtils, Object object) {
-        return TooltipBuilder.error("[" + object.getClass().getTypeName() + "]").key(CoreLang.Utils.NOT_IMPLEMENTED);
+        return TooltipBuilder.error("[" + ManagedRegistry.classKeyName(object.getClass()) + "]").key(CoreLang.Utils.NOT_IMPLEMENTED);
     }
 }

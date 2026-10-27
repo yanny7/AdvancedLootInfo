@@ -1,3 +1,12 @@
+## []
+
+- Server log names trading mobs whose trades ALI cannot show
+- Fixed tooltips of unsupported values showing a name that changes on every server start
+- Fixed an error in another mod's trader, ingredient or loot modifier support taking down more than that one part, or the whole server start
+- Unsupported trading mods shows trades that can be auto-detected from the mod's code
+- Fixed missing trades and loot that other mods prepare only once the server has started
+- Fixed trade slots of a block tag showing nothing
+
 ## [2.5.0]
 
 - Tooltips wider than the window wrap their lines

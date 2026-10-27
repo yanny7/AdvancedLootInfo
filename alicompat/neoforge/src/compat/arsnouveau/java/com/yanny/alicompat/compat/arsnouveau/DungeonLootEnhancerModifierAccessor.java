@@ -4,27 +4,29 @@ import com.hollingsworth.arsnouveau.api.loot.DungeonLootEnhancerModifier;
 import com.hollingsworth.arsnouveau.api.loot.DungeonLootTables;
 import com.hollingsworth.arsnouveau.setup.config.Config;
 import com.yanny.aci.api.NumberExpr;
+import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IPageLootModifier;
+import com.yanny.ali.plugin.server.MissingTooltipUtils;
+import com.yanny.ali.plugin.server.bytecode.BytecodeInterpreter;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
 import com.yanny.alicompat.accessor.GlmNodeUtils;
 import com.yanny.alicompat.accessor.IGlobalLootModifierAccessor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public class DungeonLootEnhancerModifierAccessor extends BaseAccessor<DungeonLootEnhancerModifier> implements IGlobalLootModifierAccessor {
-    private static final int SAMPLES = 256;
-
     @FieldAccessor
     protected LootItemCondition[] conditions;
 
@@ -35,80 +37,49 @@ public class DungeonLootEnhancerModifierAccessor extends BaseAccessor<DungeonLoo
     @Override
     public Optional<IPageLootModifier> getLootModifier(IServerUtils utils) {
         List<Drop> drops = new ArrayList<>();
+        List<Supplier<ItemStack>> unsupported = new ArrayList<>();
 
-        collect(drops, DungeonLootTables.BASIC_LOOT, parent.commonChance, parent.commonRolls);
-        collect(drops, DungeonLootTables.UNCOMMON_LOOT, parent.uncommonChance, parent.uncommonRolls);
-        collect(drops, DungeonLootTables.RARE_LOOT, parent.rareChance, parent.rareRolls);
+        collect(drops, unsupported, DungeonLootTables.BASIC_LOOT, parent.commonChance, parent.commonRolls);
+        collect(drops, unsupported, DungeonLootTables.UNCOMMON_LOOT, parent.uncommonChance, parent.uncommonRolls);
+        collect(drops, unsupported, DungeonLootTables.RARE_LOOT, parent.rareChance, parent.rareRolls);
 
         if (Config.SPAWN_TOMES.get()) {
-            collect(drops, DungeonLootTables.CASTER_TOMES, parent.rareChance, parent.rareRolls);
+            collect(drops, unsupported, DungeonLootTables.CASTER_TOMES, parent.rareChance, parent.rareRolls);
         }
 
-        if (drops.isEmpty()) {
+        if (drops.isEmpty() && unsupported.isEmpty()) {
             return Optional.empty();
         }
 
         return Optional.of(GlobalLootModifierUtils.getLootModifier(utils, parent, Arrays.asList(this.conditions),
-                (page, c) -> drops.stream()
-                        .map((d) -> (IOperation) new IOperation.AddOperation((itemStack) -> true,
-                                GlmNodeUtils.addedNode(utils, c, d.stack(), d.chance(), d.count())))
+                (page, c) -> Stream.concat(
+                                drops.stream().map((d) -> GlmNodeUtils.addedNode(utils, c, d.stack(), d.chance(), d.count())),
+                                unsupported.stream().map((s) -> (IDataNode) new MissingNode(MissingTooltipUtils.getMissingValueTooltip(utils, s).build())))
+                        .map((node) -> (IOperation) new IOperation.AddOperation((itemStack) -> true, node))
                         .toList()));
     }
 
-    private static void collect(List<Drop> drops, List<Supplier<ItemStack>> pool, double chance, int rolls) {
+    private static void collect(List<Drop> drops, List<Supplier<ItemStack>> unsupported, List<Supplier<ItemStack>> pool, double chance, int rolls) {
         if (pool.isEmpty() || rolls <= 0 || chance <= 0) {
             return;
         }
 
         for (Supplier<ItemStack> supplier : pool) {
-            for (Sample sample : sample(supplier)) {
-                double perRoll = chance * sample.hits / (SAMPLES * (double) pool.size());
+            BytecodeInterpreter.Stacks stacks = BytecodeInterpreter.getItemStack(supplier);
 
-                drops.add(new Drop(sample.stack, NumberExpr.uniformInt(sample.min, sample.max), (float) (1 - Math.pow(1 - perRoll, rolls))));
-            }
-        }
-    }
-
-    @NotNull
-    private static List<Sample> sample(Supplier<ItemStack> supplier) {
-        List<Sample> samples = new ArrayList<>();
-
-        for (int i = 0; i < SAMPLES; i++) {
-            ItemStack stack = supplier.get();
-
-            if (stack.isEmpty()) {
+            if (stacks == null) {
+                unsupported.add(supplier);
                 continue;
             }
 
-            samples.stream().filter((s) -> ItemStack.isSameItemSameComponents(s.stack, stack)).findFirst().orElseGet(() -> {
-                Sample sample = new Sample(stack);
+            for (BytecodeInterpreter.Option option : stacks.options()) {
+                double perRoll = chance * option.chance() / pool.size();
+                float rolledChance = (float) (1 - Math.pow(1 - perRoll, rolls));
 
-                samples.add(sample);
-                return sample;
-            }).add(stack.getCount());
+                drops.add(new Drop(option.stack(), option.count(), rolledChance));
+            }
         }
-
-        return samples;
     }
 
     private record Drop(ItemStack stack, NumberExpr count, float chance) {}
-
-    private static class Sample {
-        private final ItemStack stack;
-        private int min;
-        private int max;
-        private int hits;
-
-        Sample(ItemStack stack) {
-            this.stack = stack;
-            this.min = Integer.MAX_VALUE;
-            this.max = 0;
-        }
-
-        void add(int count) {
-            min = Math.min(min, count);
-            max = Math.max(max, count);
-            hits++;
-        }
-    }
 }

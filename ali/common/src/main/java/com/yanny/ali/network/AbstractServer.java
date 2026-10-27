@@ -16,15 +16,19 @@ import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.common.EntityLootTableResolver;
 import com.yanny.ali.plugin.common.NodeUtils;
-import com.yanny.ali.plugin.common.trades.TradeNode;
+import com.yanny.ali.plugin.common.TraderDetector;
 import com.yanny.ali.plugin.common.nodes.EntityLootTableNode;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
+import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.ali.plugin.glm.LootPage;
 import com.yanny.ali.plugin.glm.Match;
 import com.yanny.ali.plugin.glm.PageMatch;
+import com.yanny.ali.plugin.server.bytecode.BytecodeInterpreter;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -166,7 +170,9 @@ public abstract class AbstractServer {
             addEntitiesWithoutLoot(config, spawnInfo, lootNodes);
         }
 
-        tradeNodes = new HashMap<>(processTrades(serverRegistry, config));
+        Map<Identifier, ComputedTrader> computedTraders = computeUnregisteredTraders(serverRegistry, config);
+
+        tradeNodes = new HashMap<>(processTrades(serverRegistry, config, computedTraders));
 
         LOGGER.info("Processing {} loot tables, {} fake loot tables and {} trades took {}ms", lootNodes.size(), fakeLootTables.size(), tradeNodes.size(), System.currentTimeMillis() - startTime);
 
@@ -582,32 +588,95 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static Map<Identifier, IDataNode> processTrades(AliServerRegistry serverRegistry, AliConfig config) {
+    private static Map<Identifier, ComputedTrader> computeUnregisteredTraders(AliServerRegistry serverRegistry, AliConfig config) {
+        long startTime = System.currentTimeMillis();
+        Set<EntityType<?>> registered = serverRegistry.getTrades().values().stream()
+                .map(AliServerRegistry.Trades::entityType)
+                .collect(Collectors.toSet());
+        TraderDetector detector = new TraderDetector(serverRegistry, serverRegistry.getServerLevel());
+        Map<Identifier, ComputedTrader> computed = new LinkedHashMap<>();
+
+        detector.findTraders((type) -> !registered.contains(type) && isTradeShown(config, traderKey(type))).forEach((type, entityClass) -> {
+            Identifier id = BuiltInRegistries.ENTITY_TYPE.getKey(type);
+            BytecodeInterpreter.ComputedTrades trades;
+
+            try {
+                trades = BytecodeInterpreter.getTradeLevels(serverRegistry, entityClass);
+            } catch (Throwable e) {
+                LOGGER.warn("Failed to compute trades of trading entity {} ({})", id, entityClass.getName(), e);
+                trades = new BytecodeInterpreter.ComputedTrades(new Int2ObjectOpenHashMap<>(), true);
+            }
+
+            if (trades.levels().isEmpty() && !trades.incomplete()) {
+                if (config.logMoreStatistics) {
+                    LOGGER.info("Trading entity {} ({}) offers no trades", id, entityClass.getName());
+                }
+
+                return;
+            }
+
+            computed.put(traderKey(type), new ComputedTrader(type, trades.levels(), trades.incomplete()));
+
+            if (!trades.incomplete()) {
+                LOGGER.info("Computed trades of trading entity {} ({}) from its bytecode", id, entityClass.getName());
+            } else if (!trades.levels().isEmpty()) {
+                LOGGER.warn("Computed only some trades of trading entity {} ({}) from its bytecode", id, entityClass.getName());
+            } else {
+                LOGGER.warn("Unregistered trading entity {} ({})", id, entityClass.getName());
+            }
+        });
+
+        if (config.logMoreStatistics) {
+            LOGGER.info("Detecting unregistered trading entities took {}ms, {} entity types had to be created", System.currentTimeMillis() - startTime, detector.getCreatedTypes());
+        }
+
+        return computed;
+    }
+
+    @NotNull
+    private static Map<Identifier, IDataNode> processTrades(AliServerRegistry serverRegistry, AliConfig config, Map<Identifier, ComputedTrader> computedTraders) {
         Map<Identifier, IDataNode> nodes = new HashMap<>();
 
         for (Map.Entry<Identifier, AliServerRegistry.Trades> entry : serverRegistry.getTrades().entrySet()) {
-            Identifier location = entry.getKey();
+            processTrade(config, nodes, entry.getKey(), () -> serverRegistry.parseTrade(entry.getKey(), entry.getValue()));
+        }
 
-            TooltipContext.set(location);
-
-            if (config.tradeCategories.stream().filter((f) -> f.validate(location)).findFirst().map((f) -> !f.isHidden()).orElse(false)) {
-                try {
-                    TradeNode tradeNode = serverRegistry.parseTrade(location, entry.getValue());
-
-                    if (tradeNode.nodes().isEmpty()) {
-                        LOGGER.warn("No trades defined for {}", location);
-                    } else {
-                        nodes.put(location, tradeNode);
-                    }
-                } catch (Throwable e) {
-                    LOGGER.warn("Failed to parse trade for {} with error {}", location, e.getMessage(), e);
-                }
-            }
-
-            TooltipContext.clear();
+        for (Map.Entry<Identifier, ComputedTrader> entry : computedTraders.entrySet()) {
+            processTrade(config, nodes, entry.getKey(), () -> serverRegistry.parseTrade(entry.getValue().entityType(), entry.getValue().levels(), entry.getValue().incomplete()));
         }
 
         return nodes;
+    }
+
+    @NotNull
+    private static Identifier traderKey(EntityType<?> type) {
+        Identifier id = BuiltInRegistries.ENTITY_TYPE.getKey(type);
+
+        return Identifier.fromNamespaceAndPath(id.getNamespace(), "entity/" + id.getPath());
+    }
+
+    private static boolean isTradeShown(AliConfig config, Identifier location) {
+        return config.tradeCategories.stream().filter((f) -> f.validate(location)).findFirst().map((f) -> !f.isHidden()).orElse(false);
+    }
+
+    private static void processTrade(AliConfig config, Map<Identifier, IDataNode> nodes, Identifier location, Supplier<TradeNode> parser) {
+        TooltipContext.set(location);
+
+        if (isTradeShown(config, location)) {
+            try {
+                TradeNode tradeNode = parser.get();
+
+                if (!tradeNode.nodes().isEmpty()) {
+                    nodes.put(location, tradeNode);
+                } else {
+                    LOGGER.warn("No trades defined for {}", location);
+                }
+            } catch (Throwable e) {
+                LOGGER.warn("Failed to parse trade for {} with error {}", location, e.getMessage(), e);
+            }
+        }
+
+        TooltipContext.clear();
     }
 
     private static <T> boolean predicateModifier(ILootModifier<?> modifier, T value) {
@@ -747,6 +816,8 @@ public abstract class AbstractServer {
     private record Candidate(Object source, List<IOperation> operations, boolean unbounded) {}
 
     private record MatchedModifier(IPageLootModifier modifier, PageMatch match) {}
+
+    private record ComputedTrader(EntityType<?> entityType, Int2ObjectMap<TradeLevel> levels, boolean incomplete) {}
 
     private static final class PageTable {
         private final AliServerRegistry serverRegistry;

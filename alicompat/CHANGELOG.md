@@ -1,3 +1,7 @@
+## []
+
+- Fixed a stray colon after loot functions that carry no values (Applied Cooking, ExtraStorage, Farmer's Delight, Refined Storage, Sophisticated Backpacks and Sophisticated Storage)
+
 ## [1.3.0]
 
 - Added VillagerConfig support

@@ -6,4 +6,4 @@ ali:loot_table
     ali:item sophisticatedbackpacks:gold_backpack x1
       | Count: 1
       | ----- Modifiers -----
-      | Copy Backpack Data:
+      | Copy Backpack Data
