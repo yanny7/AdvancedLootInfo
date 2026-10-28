@@ -9,4 +9,4 @@ ali:loot_table
       | Copy Components:
       |   -> Source: Block Entity
       |   -> Include: the_bumblezone:crystalline_flower_data
-      | Drop Container Items:
+      | Drop Container Items

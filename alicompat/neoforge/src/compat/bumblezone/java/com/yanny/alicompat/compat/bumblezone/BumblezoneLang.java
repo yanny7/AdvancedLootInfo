@@ -33,10 +33,10 @@ public class BumblezoneLang implements ICompatTranslations {
     }
 
     public enum Functions implements ITooltipKey {
-        DROP_CONTAINER_ITEMS("drop_container_items", "Drop Container Items:"),
+        DROP_CONTAINER_ITEMS("drop_container_items", "Drop Container Items"),
         HONEY_COMPASS_LOCATE_STRUCTURE("honey_compass_locate_structure", "Honey Compass Locate Structure:"),
         TAG_ITEM_REMOVALS("tag_item_removals", "Tag Item Removals:"),
-        UNIQUIFY_IF_HAS_ITEMS("uniquify_if_has_items", "Uniquify If Has Items:"),
+        UNIQUIFY_IF_HAS_ITEMS("uniquify_if_has_items", "Uniquify If Has Items"),
         ;
 
         private final Translation translation;

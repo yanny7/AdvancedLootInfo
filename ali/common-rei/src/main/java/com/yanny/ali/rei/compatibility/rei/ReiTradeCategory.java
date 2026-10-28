@@ -49,10 +49,7 @@ public class ReiTradeCategory extends ReiBaseCategory<ReiTradeDisplay, Identifie
             innerWidgets.add(createSlot(header.spawnEggRect(), header.spawnEgg()));
         }
 
-        if (header.titleTooltip() != null) {
-            title.tooltip(header.titleTooltip());
-        }
-
+        title.tooltip(header.titleTooltip());
         addSlots(innerWidgets, display.getType().pois(), header.pois());
 
         if (!display.getType().accepts().isEmpty()) {

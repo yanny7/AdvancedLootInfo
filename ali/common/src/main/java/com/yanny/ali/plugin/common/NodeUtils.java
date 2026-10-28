@@ -685,7 +685,7 @@ public class NodeUtils {
             return reference
                     .value()
                     .get((TagKey<T>) tag)
-                    .map((holders) -> holders.stream().map(Holder::value).map((i) -> i.asItem().getDefaultInstance()).toList())
+                    .map((holders) -> holders.stream().map((h) -> h.value().asItem()).distinct().map(Item::getDefaultInstance).filter((i) -> !i.isEmpty()).toList())
                     .orElse(Collections.emptyList());
         } else {
             return Collections.emptyList();

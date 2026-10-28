@@ -11,4 +11,4 @@ ali:loot_table
       | Copy Components:
       |   -> Source: minecraft:block_entity
       |   -> Include: minecraft:custom_name
-      | Copy Portable Grid Data:
+      | Copy Portable Grid Data

@@ -34,6 +34,7 @@ import me.shedaniel.rei.api.common.util.EntryIngredients;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
@@ -147,7 +148,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
 
             for (IDataNode option : h.options) {
                 Either<ItemStack, TagKey<? extends ItemLike>> item = ((IItemNode) option).getItem();
-                List<EntryStack<ItemStack>> optionStacks = item.map((i) -> List.of(EntryStacks.of(i)), (t) -> EntryIngredients.ofItemTag(t).castAsList());
+                List<EntryStack<ItemStack>> optionStacks = item.map((i) -> List.of(EntryStacks.of(i)), (t) -> tagStacks(t, (IItemNode) option));
 
                 for (EntryStack<ItemStack> stack : optionStacks) {
                     stack.tooltipProcessor((s, tooltip) -> addLootTooltip(tooltip, option));
@@ -197,6 +198,14 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
         List<TooltipLine> lines = CoreTooltipUtils.toLines(entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle(), TooltipUtils.getNumberOptions());
 
         return lines.isEmpty() ? tooltip : tooltip.add(new ScrollableTooltip(lines));
+    }
+
+    private static List<EntryStack<ItemStack>> tagStacks(TagKey<? extends ItemLike> tag, IItemNode node) {
+        if (tag.isFor(Registries.ITEM)) {
+            return EntryIngredients.ofItemTag(tag).castAsList();
+        }
+
+        return EntryIngredients.ofItemStacks(node.getItems()).castAsList();
     }
 
     private record Holder(List<IDataNode> options, RelativeRect rect) {}

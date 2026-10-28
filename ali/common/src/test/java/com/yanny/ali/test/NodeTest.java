@@ -4,13 +4,20 @@ import com.yanny.aci.api.NumberExpr;
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProviders;
 import com.yanny.aci.tooltip.TooltipNode;
+import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.ListNode;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.*;
+import io.netty.buffer.Unpooled;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -30,6 +37,8 @@ import java.util.List;
 import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.mock;
 
 public class NodeTest {
     @Test
@@ -219,6 +228,17 @@ public class NodeTest {
         Assertions.assertEquals(0.25F, empty.getChance());
         Assertions.assertSame(tooltip, empty.getTooltip());
         Assertions.assertEquals(List.of(EmptyNode.ID), ids(child(child(table, 0), 1)));
+    }
+
+    @Test
+    public void testBlockTagSurvivesTheRoundTrip() {
+        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(Unpooled.buffer(), RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY));
+
+        new ItemNode(1, NumberExpr.constant(1), BlockTags.WOODEN_DOORS, TooltipNode.empty(), List.of(), List.of()).encode(UTILS, buf);
+
+        TagKey<?> decoded = new ItemNode(mock(IClientUtils.class, RETURNS_DEEP_STUBS), buf).getItem().right().orElseThrow();
+
+        Assertions.assertEquals(BlockTags.WOODEN_DOORS, decoded);
     }
 
     private static IOperation removeDiamond() {

@@ -22,7 +22,7 @@ ali:loot_table
         |     -> minecraft:container
         |     -> minecraft:lock
         |     -> minecraft:container_loot
-        | Uniquify If Has Items:
+        | Uniquify If Has Items
       ali:item the_bumblezone:honey_cocoon x1
         | Count: 1
         | ----- Predicates -----
@@ -33,4 +33,4 @@ ali:loot_table
         |   -> Include:
         |     -> minecraft:custom_name
         |     -> minecraft:lock
-        | Drop Container Items:
+        | Drop Container Items

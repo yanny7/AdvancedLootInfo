@@ -69,11 +69,21 @@ public class ItemsToItemsNode extends ListNode implements ITradeNode {
         this(getChildren(input1, input1Count, input1Condition),
                 getChildren(input2, input2Count, input2Condition),
                 getChildren(output, LootCount.of(outputCount), outputModifier),
-                TooltipBuilder.array((b) -> b
-                        .add(TooltipUtils.getNumberTooltip(maxUses).build(Lang.Value.USES))
-                        .add(TooltipUtils.getNumberTooltip(xp).build(Lang.Value.VILLAGER_XP))
-                        .add(tooltip)
-                ).build());
+                maxUses,
+                xp,
+                tooltip);
+    }
+
+    public ItemsToItemsNode(IDataNode costA, IDataNode costB, IDataNode result, NumberExpr maxUses, NumberExpr xp, TooltipNode tooltip) {
+        this(costA, costB, result, LootCount.of(maxUses), LootCount.of(xp), tooltip);
+    }
+
+    public ItemsToItemsNode(IDataNode costA, IDataNode costB, IDataNode result, LootCount maxUses, LootCount xp, TooltipNode tooltip) {
+        this(costA, costB, result, TooltipBuilder.array((b) -> b
+                .add(TooltipUtils.getNumberTooltip(maxUses).build(Lang.Value.USES))
+                .add(TooltipUtils.getNumberTooltip(xp).build(Lang.Value.VILLAGER_XP))
+                .add(tooltip)
+        ).build());
     }
 
     public ItemsToItemsNode(IDataNode costA, IDataNode costB, IDataNode result, TooltipNode tooltip) {
