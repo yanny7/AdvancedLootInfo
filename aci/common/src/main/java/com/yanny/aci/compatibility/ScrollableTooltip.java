@@ -302,7 +302,7 @@ public class ScrollableTooltip implements TooltipComponent, ClientTooltipCompone
         List<FormattedCharSequence> indented = new ArrayList<>(rows.size());
         FormattedCharSequence prefix = FormattedCharSequence.forward(indent, Style.EMPTY);
 
-        indented.add(rows.get(0));
+        indented.add(rows.getFirst());
 
         for (int i = 1; i < rows.size(); i++) {
             indented.add(FormattedCharSequence.composite(prefix, rows.get(i)));

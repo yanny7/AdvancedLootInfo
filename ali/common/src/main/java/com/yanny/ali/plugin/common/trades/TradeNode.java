@@ -2,20 +2,18 @@ package com.yanny.ali.plugin.common.trades;
 
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
-import com.yanny.ali.api.IClientUtils;
-import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ListNode;
-import com.yanny.ali.api.TradeLevel;
+import com.yanny.ali.api.*;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 
 public class TradeNode extends ListNode {
     public static final Identifier ID = Utils.modLoc("trade");
@@ -30,15 +28,15 @@ public class TradeNode extends ListNode {
                 .toList();
 
         for (Int2ObjectMap.Entry<TradeLevel> entry : entries) {
-            if (entry.getValue() instanceof TradeLevel.OfListings listings) {
-                if (listings.listings().length > 0) {
-                    addChildren(new TradeLevelNode(utils, entry.getIntKey(), listings.listings(), listings.levelInfo()));
+            if (entry.getValue() instanceof TradeLevel.OfListings(VillagerTrades.ItemListing[] listings, TradeLevelInfo levelInfo)) {
+                if (listings.length > 0) {
+                    addChildren(new TradeLevelNode(utils, entry.getIntKey(), listings, levelInfo));
                 }
-            } else if (entry.getValue() instanceof TradeLevel.OfTrades trades) {
-                List<IDataNode> nodes = trades.trades().apply(utils);
+            } else if (entry.getValue() instanceof TradeLevel.OfTrades(TradeLevelInfo levelInfo, Function<IServerUtils, List<IDataNode>> trades)) {
+                List<IDataNode> nodes = trades.apply(utils);
 
                 if (!nodes.isEmpty()) {
-                    addChildren(new TradeLevelNode(entry.getIntKey(), trades.levelInfo(), nodes));
+                    addChildren(new TradeLevelNode(entry.getIntKey(), levelInfo, nodes));
                 }
             }
         }

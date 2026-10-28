@@ -21,10 +21,10 @@ class GoblinTradeUtils {
     static NumberExpr getCount(TradeCost cost) {
         BasePrice price = cost.count();
 
-        if (price instanceof ConstantPrice constantPrice) {
-            return NumberExpr.constant(constantPrice.value());
-        } else if (price instanceof RangedPrice rangedPrice) {
-            return NumberExpr.uniformInt(rangedPrice.min(), rangedPrice.max());
+        if (price instanceof ConstantPrice(int value)) {
+            return NumberExpr.constant(value);
+        } else if (price instanceof RangedPrice(int min, int max)) {
+            return NumberExpr.uniformInt(min, max);
         } else {
             return NumberExpr.opaque(price.getClass().getName());
         }

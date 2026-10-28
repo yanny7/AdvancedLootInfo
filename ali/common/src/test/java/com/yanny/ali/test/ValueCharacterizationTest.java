@@ -157,7 +157,7 @@ public class ValueCharacterizationTest {
         VillagerTrades.EnchantedItemForEmeralds listing = new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_SWORD, baseEmeraldCost, 3, 5);
         ItemsToItemsNode node = TradeUtils.getNode(UTILS, listing, TooltipNode.empty());
 
-        return ((IItemNode) node.nodes().get(0)).getCount();
+        return ((IItemNode) node.nodes().getFirst()).getCount();
     }
 
     private static List<String> describe(NumberExpr expr, double scale) {
@@ -167,7 +167,7 @@ public class ValueCharacterizationTest {
         lines.add(format(bindLevels(expr, levels, null, 0), scale));
 
         for (NumberExpr.Var level : levels) {
-            String name = ((NumberText.Str) level.args().get(0)).text().replace("minecraft:", "");
+            String name = ((NumberText.Str) level.args().getFirst()).text().replace("minecraft:", "");
 
             for (int i = 1; i <= level.max(); i++) {
                 lines.add(name + " " + i + ": " + format(bindLevels(expr, levels, level, i), scale));

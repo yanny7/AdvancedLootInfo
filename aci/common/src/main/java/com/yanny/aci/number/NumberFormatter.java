@@ -140,8 +140,8 @@ public final class NumberFormatter {
         expr.transform((e) -> {
             if (e instanceof NumberExpr.Var v && !v.type().equals(NumberExpr.LEVEL)) {
                 labels.add(new NumberText.Key(varKey(v.type()) + ".desc", v.args()));
-            } else if (e instanceof NumberExpr.Opaque o) {
-                labels.add(NumberText.str(o.typeId()));
+            } else if (e instanceof NumberExpr.Opaque(String typeId)) {
+                labels.add(NumberText.str(typeId));
             } else if (e instanceof NumberExpr.Fn f && f.function() == null) {
                 labels.add(NumberText.str(f.id().toString()));
             }
@@ -153,38 +153,33 @@ public final class NumberFormatter {
 
     @NotNull
     private static Part formula(NumberExpr expr, boolean percent) {
-        if (expr instanceof NumberExpr.Const c) {
-            return new Part(number(c.value(), percent), c.value() < 0 ? NumberFunction.UNARY : ATOM);
-        } else if (expr instanceof NumberExpr.Range r) {
-            return new Part(range(r, percent), ATOM);
-        } else if (expr instanceof NumberExpr.Var v) {
-            return new Part(new NumberText.Key(varKey(v.type()), v.args()), ATOM);
-        } else if (expr instanceof NumberExpr.Lookup l) {
-            return new Part(lookup(l, percent), ATOM);
-        } else if (expr instanceof NumberExpr.Fn f) {
-            return function(f, percent);
-        } else if (expr instanceof NumberExpr.Cond c) {
-            List<NumberText> parts = new ArrayList<>();
+        return switch (expr) {
+            case NumberExpr.Const(double value) -> new Part(number(value, percent), value < 0 ? NumberFunction.UNARY : ATOM);
+            case NumberExpr.Range r -> new Part(range(r, percent), ATOM);
+            case NumberExpr.Var v -> new Part(new NumberText.Key(varKey(v.type()), v.args()), ATOM);
+            case NumberExpr.Lookup l -> new Part(lookup(l, percent), ATOM);
+            case NumberExpr.Fn f -> function(f, percent);
+            case NumberExpr.Cond(List<NumberExpr.Branch> branches, NumberExpr otherwise) -> {
+                List<NumberText> parts = new ArrayList<>();
 
-            c.branches().forEach((b) -> parts.add(formula(b.value(), percent).text));
-            parts.add(formula(c.otherwise(), percent).text);
-            return new Part(join(parts, " | "), LOWEST);
-        } else if (expr instanceof NumberExpr.Weighted w) {
-            List<NumberText> parts = new ArrayList<>();
-            double total = w.totalWeight();
+                branches.forEach((b) -> parts.add(formula(b.value(), percent).text));
+                parts.add(formula(otherwise, percent).text);
+                yield new Part(join(parts, " | "), LOWEST);
+            }
+            case NumberExpr.Weighted w -> {
+                List<NumberText> parts = new ArrayList<>();
+                double total = w.totalWeight();
 
-            w.entries().forEach((e) -> parts.add(NumberText.seq(
-                    formula(e.value(), percent).text,
-                    NumberText.str(" ("),
-                    number(e.weight() / total, true),
-                    NumberText.str(")")
-            )));
-            return new Part(join(parts, " | "), LOWEST);
-        } else if (expr instanceof NumberExpr.Opaque o) {
-            return new Part(unknown(o.typeId()), ATOM);
-        }
-
-        throw new IllegalStateException("Unhandled number expression " + expr);
+                w.entries().forEach((e) -> parts.add(NumberText.seq(
+                        formula(e.value(), percent).text,
+                        NumberText.str(" ("),
+                        number(e.weight() / total, true),
+                        NumberText.str(")")
+                )));
+                yield new Part(join(parts, " | "), LOWEST);
+            }
+            case NumberExpr.Opaque(String typeId) -> new Part(unknown(typeId), ATOM);
+        };
     }
 
     @NotNull
@@ -244,7 +239,7 @@ public final class NumberFormatter {
         NumberFunction.Infix infix = function.infix();
 
         if (infix != null && infix.kind() == NumberFunction.InfixKind.PREFIX && args.size() == 1) {
-            return new Part(NumberText.seq(NumberText.str(infix.symbol()), operand(args.get(0), argPercent(function, 0, percent), infix.precedence())), infix.precedence());
+            return new Part(NumberText.seq(NumberText.str(infix.symbol()), operand(args.getFirst(), argPercent(function, 0, percent), infix.precedence())), infix.precedence());
         }
         if (infix != null && infix.kind() != NumberFunction.InfixKind.PREFIX) {
             List<NumberText> parts = new ArrayList<>();

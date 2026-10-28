@@ -552,21 +552,15 @@ public class GlobalLootModifierTest {
 
     @Nullable
     private static IPageResolver<Object> resolver(Object value) {
-        if (value instanceof LootItemBlockStatePropertyCondition) {
-            return (u, v, p) -> GlobalLootModifierUtils.testBlockStateProperty(u, (LootItemBlockStatePropertyCondition) v, p);
-        } else if (value instanceof LootItemEntityPropertyCondition) {
-            return (u, v, p) -> GlobalLootModifierUtils.testEntityProperty(u, (LootItemEntityPropertyCondition) v, p);
-        } else if (value instanceof DamageSourceCondition) {
-            return (u, v, p) -> GlobalLootModifierUtils.testDamageSource(u, (DamageSourceCondition) v, p);
-        } else if (value instanceof ModModifier) {
-            return (u, v, p) -> ((ModModifier) v).table() == null ? null : GlobalLootModifierUtils.testTable(p, ((ModModifier) v).table()::equals, true);
-        } else if (value instanceof PatternModifier) {
-            return (u, v, p) -> GlobalLootModifierUtils.testTable(p, (id) -> ((PatternModifier) v).pattern().matcher(id.toString()).find(), true);
-        } else if (value instanceof BlockSetCondition) {
-            return (u, v, p) -> p.blocks().isEmpty() ? null : GlobalLootModifierUtils.testBlocks(p, ((BlockSetCondition) v).blocks()::contains, true);
-        }
-
-        return null;
+        return switch (value) {
+            case LootItemBlockStatePropertyCondition ignored -> (u, v, p) -> GlobalLootModifierUtils.testBlockStateProperty(u, (LootItemBlockStatePropertyCondition) v, p);
+            case LootItemEntityPropertyCondition ignored -> (u, v, p) -> GlobalLootModifierUtils.testEntityProperty(u, (LootItemEntityPropertyCondition) v, p);
+            case DamageSourceCondition ignored -> (u, v, p) -> GlobalLootModifierUtils.testDamageSource(u, (DamageSourceCondition) v, p);
+            case ModModifier ignored -> (u, v, p) -> ((ModModifier) v).table() == null ? null : GlobalLootModifierUtils.testTable(p, ((ModModifier) v).table()::equals, true);
+            case PatternModifier ignored -> (u, v, p) -> GlobalLootModifierUtils.testTable(p, (id) -> ((PatternModifier) v).pattern().matcher(id.toString()).find(), true);
+            case BlockSetCondition ignored -> (u, v, p) -> p.blocks().isEmpty() ? null : GlobalLootModifierUtils.testBlocks(p, ((BlockSetCondition) v).blocks()::contains, true);
+            default -> null;
+        };
     }
 
     private static void prepareTableId(IServerUtils ignoredUtils, LootContext context, LootPage page) {

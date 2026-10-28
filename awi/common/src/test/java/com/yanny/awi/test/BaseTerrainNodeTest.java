@@ -42,7 +42,7 @@ public class BaseTerrainNodeTest {
 
         assertEquals(List.of(Blocks.STONE, Blocks.WATER, Blocks.ORANGE_TERRACOTTA, Blocks.RED_SAND),
                 nodes.stream().map(BaseTerrainNodeTest::block).toList());
-        assertTooltip(nodes.get(0).getTooltip(), List.of("Default Block"));
+        assertTooltip(nodes.getFirst().getTooltip(), List.of("Default Block"));
         assertTooltip(nodes.get(1).getTooltip(), List.of("Default Fluid"));
         assertTooltip(nodes.get(3).getTooltip(), List.of("Depth Below Surface: 0 (On Land)"));
     }
@@ -57,7 +57,7 @@ public class BaseTerrainNodeTest {
                 "Layer Shift: ±4",
                 "----------",
                 "Depth Below Surface: 0 to 8"
-        ), lines(nodes.get(0)));
+        ), lines(nodes.getFirst()));
     }
 
     @Test

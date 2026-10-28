@@ -20,15 +20,15 @@ public final class HeightFunctions {
     public static final Identifier TRAPEZOID = Utils.modLoc("trapezoid");
 
     private static final NumberFunction BIASED = NumberFunction.builder(BIASED_TO_BOTTOM).arity(3)
-            .expand((a) -> add(a.get(0), uniformInt(constant(0), add(uniformInt(constant(0), sub(sub(a.get(1), a.get(0)), a.get(2))), a.get(2), constant(-1)))))
+            .expand((a) -> add(a.getFirst(), uniformInt(constant(0), add(uniformInt(constant(0), sub(sub(a.get(1), a.getFirst()), a.get(2))), a.get(2), constant(-1)))))
             .format((a, f) -> hideUnitInner(BIASED_TO_BOTTOM, a, f))
             .build();
     private static final NumberFunction VERY_BIASED = NumberFunction.builder(VERY_BIASED_TO_BOTTOM).arity(3)
             .expand((a) -> {
-                NumberExpr k = uniformInt(add(a.get(0), a.get(2)), a.get(1));
-                NumberExpr l = uniformInt(a.get(0), sub(k, constant(1)));
+                NumberExpr k = uniformInt(add(a.getFirst(), a.get(2)), a.get(1));
+                NumberExpr l = uniformInt(a.getFirst(), sub(k, constant(1)));
 
-                return uniformInt(a.get(0), add(l, constant(-1), a.get(2)));
+                return uniformInt(a.getFirst(), add(l, constant(-1), a.get(2)));
             })
             .format((a, f) -> hideUnitInner(VERY_BIASED_TO_BOTTOM, a, f))
             .build();
@@ -47,17 +47,17 @@ public final class HeightFunctions {
 
     @Nullable
     private static NumberExpr trapezoid(List<NumberExpr> a) {
-        if (!(a.get(0) instanceof Const min) || !(a.get(1) instanceof Const max) || !(a.get(2) instanceof Const plateau)) {
+        if (!(a.getFirst() instanceof Const min) || !(a.get(1) instanceof Const(double max)) || !(a.get(2) instanceof Const(double plateau))) {
             return null;
         }
 
-        double k = max.value() - min.value();
+        double k = max - min.value();
 
-        if (plateau.value() >= k) {
-            return uniformInt(min.value(), max.value());
+        if (plateau >= k) {
+            return uniformInt(min.value(), max);
         }
 
-        double l = Math.floor((k - plateau.value()) / 2);
+        double l = Math.floor((k - plateau) / 2);
 
         return add(min, uniformInt(0, k - l), uniformInt(0, l));
     }
@@ -72,7 +72,7 @@ public final class HeightFunctions {
 
         parts.add(NumberText.key(NumberFunction.translationKey(id)));
         parts.add(NumberText.str("("));
-        parts.add(formatted.get(0));
+        parts.add(formatted.getFirst());
         parts.add(NumberText.str("; "));
         parts.add(formatted.get(1));
         parts.add(NumberText.str(")"));

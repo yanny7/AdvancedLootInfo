@@ -27,7 +27,7 @@ public class TooltipUtils {
                 case RELATIVE -> 2;
             })
             .thenComparing((info) -> info.placement() == BlockInfo.Placement.CEILING)
-            .thenComparing((info) -> info.ranges().isEmpty() ? 0 : info.ranges().get(0).lo());
+            .thenComparing((info) -> info.ranges().isEmpty() ? 0 : info.ranges().getFirst().lo());
 
     public static TooltipBuilder getJsonTooltip(IServerUtils utils, JsonElement element) {
         if (element.isJsonObject()) {

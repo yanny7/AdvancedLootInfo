@@ -1,20 +1,11 @@
 package com.yanny.aci.number;
 
-import com.yanny.aci.api.NumberDistribution;
-import com.yanny.aci.api.NumberExpr;
-import com.yanny.aci.api.NumberFunction;
-import com.yanny.aci.api.NumberFunctions;
-import com.yanny.aci.api.NumberInterval;
-import com.yanny.aci.api.NumberText;
+import com.yanny.aci.api.*;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.function.BinaryOperator;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
@@ -38,9 +29,9 @@ public final class BuiltinFunctions {
                 .distribution((a) -> reduceNullable(a, NumberDistribution::plus)));
         register(NumberFunction.builder(SUB).arity(2).infix("−", NumberFunction.ADDITIVE, LEFT)
                 .evaluate((v) -> v[0] - v[1])
-                .simplify((a) -> simplifySub(a.get(0), a.get(1)))
-                .bounds((a) -> a.get(0).minus(a.get(1)))
-                .distribution((a) -> a.get(0).plus(a.get(1).affine(-1, 0))));
+                .simplify((a) -> simplifySub(a.getFirst(), a.get(1)))
+                .bounds((a) -> a.getFirst().minus(a.get(1)))
+                .distribution((a) -> a.getFirst().plus(a.get(1).affine(-1, 0))));
         register(NumberFunction.builder(MUL).arity(1, Integer.MAX_VALUE).infix("×", NumberFunction.MULTIPLICATIVE, ASSOCIATIVE)
                 .evaluate((v) -> Arrays.stream(v).reduce(1, (x, y) -> x * y))
                 .simplify(BuiltinFunctions::simplifyMul)
@@ -48,19 +39,19 @@ public final class BuiltinFunctions {
                 .distribution((a) -> reduceNullable(a, NumberDistribution::times)));
         register(NumberFunction.builder(DIV).arity(2).infix("÷", NumberFunction.MULTIPLICATIVE, LEFT)
                 .evaluate((v) -> v[0] / v[1])
-                .bounds((a) -> a.get(0).dividedBy(a.get(1)))
-                .distribution((a) -> a.get(0).dividedBy(a.get(1))));
+                .bounds((a) -> a.getFirst().dividedBy(a.get(1)))
+                .distribution((a) -> a.getFirst().dividedBy(a.get(1))));
         register(NumberFunction.builder(NEG).arity(1).infix("−", NumberFunction.UNARY, PREFIX)
                 .evaluate((v) -> -v[0])
-                .bounds((a) -> a.get(0).negate())
-                .distribution((a) -> a.get(0).affine(-1, 0)));
+                .bounds((a) -> a.getFirst().negate())
+                .distribution((a) -> a.getFirst().affine(-1, 0)));
         register(binary(MOD, (x, y) -> x % y, NumberInterval::mod));
         register(binary(FLOOR_MOD, (x, y) -> x - Math.floor(x / y) * y, NumberInterval::floorMod));
         register(binary(FLOOR_DIV, (x, y) -> Math.floor(x / y), (x, y) -> x.dividedBy(y).floor()));
         register(NumberFunction.builder(POW).arity(2).units(SAME, PLAIN)
                 .evaluate((v) -> Math.pow(v[0], v[1]))
-                .bounds((a) -> a.get(0).pow(a.get(1)))
-                .distribution((a) -> a.get(0).combine(a.get(1), Math::pow)));
+                .bounds((a) -> a.getFirst().pow(a.get(1)))
+                .distribution((a) -> a.getFirst().combine(a.get(1), Math::pow)));
         register(NumberFunction.builder(MIN).arity(1, Integer.MAX_VALUE)
                 .evaluate((v) -> Arrays.stream(v).min().orElseThrow())
                 .bounds((a) -> reduce(a, NumberInterval::min))
@@ -69,14 +60,14 @@ public final class BuiltinFunctions {
                 .evaluate((v) -> Arrays.stream(v).max().orElseThrow())
                 .bounds((a) -> reduce(a, NumberInterval::max))
                 .distribution((a) -> reduceNullable(a, NumberDistribution::max)));
-        register(unary(ABS, Math::abs, NumberInterval::abs).distribution((a) -> a.get(0).abs()));
+        register(unary(ABS, Math::abs, NumberInterval::abs).distribution((a) -> a.getFirst().abs()));
         register(rounding(FLOOR, NumberDistribution.Rounding.FLOOR, NumberInterval::floor));
         register(rounding(CEIL, NumberDistribution.Rounding.CEIL, NumberInterval::ceil));
         register(rounding(ROUND, NumberDistribution.Rounding.ROUND, NumberInterval::round));
         register(rounding(TRUNC, NumberDistribution.Rounding.TRUNC, NumberInterval::trunc));
-        register(unary(SQRT, Math::sqrt, NumberInterval::sqrt).distribution((a) -> a.get(0).map(Math::sqrt)));
-        register(unary(SIN, Math::sin, (a) -> UNIT).distribution((a) -> a.get(0).map(Math::sin)));
-        register(unary(COS, Math::cos, (a) -> UNIT).distribution((a) -> a.get(0).map(Math::cos)));
+        register(unary(SQRT, Math::sqrt, NumberInterval::sqrt).distribution((a) -> a.getFirst().map(Math::sqrt)));
+        register(unary(SIN, Math::sin, (a) -> UNIT).distribution((a) -> a.getFirst().map(Math::sin)));
+        register(unary(COS, Math::cos, (a) -> UNIT).distribution((a) -> a.getFirst().map(Math::cos)));
         register(NumberFunction.builder(LENGTH).arity(1, Integer.MAX_VALUE)
                 .evaluate((v) -> Math.sqrt(Arrays.stream(v).map((x) -> x * x).sum()))
                 .bounds((a) -> reduce(a.stream().map(NumberInterval::square).toList(), NumberInterval::plus).sqrt())
@@ -87,8 +78,8 @@ public final class BuiltinFunctions {
                 }));
         register(NumberFunction.builder(CLAMP).arity(3)
                 .evaluate((v) -> Math.min(Math.max(v[0], v[1]), v[2]))
-                .bounds((a) -> a.get(0).max(a.get(1)).min(a.get(2)))
-                .distribution((a) -> a.get(0).clamp(a.get(1), a.get(2))));
+                .bounds((a) -> a.getFirst().max(a.get(1)).min(a.get(2)))
+                .distribution((a) -> a.getFirst().clamp(a.get(1), a.get(2))));
         register(NumberFunction.builder(AVG).arity(1, Integer.MAX_VALUE)
                 .evaluate((v) -> Arrays.stream(v).average().orElseThrow())
                 .bounds((a) -> reduce(a, NumberInterval::plus).times(NumberInterval.point(1.0 / a.size())))
@@ -98,26 +89,26 @@ public final class BuiltinFunctions {
                     return total != null ? total.affine(1.0 / a.size(), 0) : null;
                 }));
         register(NumberFunction.builder(UNIFORM_INT).arity(2)
-                .simplify((a) -> a.get(0).equals(a.get(1)) ? a.get(0) : null)
+                .simplify((a) -> a.getFirst().equals(a.get(1)) ? a.getFirst() : null)
                 .simple((a) -> a.stream().allMatch(NumberExpr.Const.class::isInstance))
-                .bounds((a) -> NumberInterval.closed(a.get(0).lo(), a.get(1).hi()))
+                .bounds((a) -> NumberInterval.closed(a.getFirst().lo(), a.get(1).hi()))
                 .distributionOfParameters((p) -> NumberDistribution.uniformInt((long) p[0], (long) p[1]))
                 .format((a, f) -> interval(UNIFORM_INT, f, true)));
         register(NumberFunction.builder(UNIFORM_FLOAT).arity(2)
-                .simplify((a) -> a.get(0).equals(a.get(1)) ? a.get(0) : null)
-                .bounds((a) -> new NumberInterval(a.get(0).lo(), a.get(1).hi(), a.get(0).loClosed(), false))
+                .simplify((a) -> a.getFirst().equals(a.get(1)) ? a.getFirst() : null)
+                .bounds((a) -> new NumberInterval(a.getFirst().lo(), a.get(1).hi(), a.getFirst().loClosed(), false))
                 .distributionOfParameters((p) -> NumberDistribution.uniformFloat(p[0], p[1]))
                 .format((a, f) -> interval(UNIFORM_FLOAT, f, false)));
         register(NumberFunction.builder(BINOMIAL).arity(2).units(PLAIN, PERCENT)
-                .bounds((a) -> NumberInterval.closed(0, Math.max(0, Math.floor(a.get(0).hi()))))
+                .bounds((a) -> NumberInterval.closed(0, Math.max(0, Math.floor(a.getFirst().hi()))))
                 .distributionOfParameters((p) -> binomial((long) p[0], p[1])));
         register(NumberFunction.builder(NORMAL).arity(2)
                 .bounds((a) -> NumberInterval.ALL)
                 .distributionOfParameters((p) -> normal(p[0], p[1])));
         register(NumberFunction.builder(BIASED_TO_BOTTOM).arity(2)
-                .expand((a) -> NumberExpr.add(a.get(0), NumberExpr.uniformInt(NumberExpr.constant(0), NumberExpr.uniformInt(NumberExpr.constant(0), NumberExpr.sub(a.get(1), a.get(0)))))));
+                .expand((a) -> NumberExpr.add(a.getFirst(), NumberExpr.uniformInt(NumberExpr.constant(0), NumberExpr.uniformInt(NumberExpr.constant(0), NumberExpr.sub(a.get(1), a.getFirst()))))));
         register(NumberFunction.builder(TRAPEZOID_FLOAT).arity(3)
-                .bounds((a) -> new NumberInterval(a.get(0).lo(), a.get(1).hi(), a.get(0).loClosed(), false))
+                .bounds((a) -> new NumberInterval(a.getFirst().lo(), a.get(1).hi(), a.getFirst().loClosed(), false))
                 .distributionOfParameters((p) -> trapezoidFloat(p[0], p[1], p[2])));
     }
 
@@ -125,20 +116,20 @@ public final class BuiltinFunctions {
     private static NumberFunction.Builder unary(Identifier id, DoubleUnaryOperator f, UnaryOperator<NumberInterval> bounds) {
         return NumberFunction.builder(id).arity(1)
                 .evaluate((v) -> f.applyAsDouble(v[0]))
-                .bounds((a) -> bounds.apply(a.get(0)));
+                .bounds((a) -> bounds.apply(a.getFirst()));
     }
 
     @NotNull
     private static NumberFunction.Builder rounding(Identifier id, NumberDistribution.Rounding rounding, UnaryOperator<NumberInterval> bounds) {
-        return unary(id, rounding::apply, bounds).distribution((a) -> a.get(0).round(rounding));
+        return unary(id, rounding::apply, bounds).distribution((a) -> a.getFirst().round(rounding));
     }
 
     @NotNull
     private static NumberFunction.Builder binary(Identifier id, DoubleBinaryOperator f, BinaryOperator<NumberInterval> bounds) {
         return NumberFunction.builder(id).arity(2)
                 .evaluate((v) -> f.applyAsDouble(v[0], v[1]))
-                .bounds((a) -> bounds.apply(a.get(0), a.get(1)))
-                .distribution((a) -> a.get(0).combine(a.get(1), f));
+                .bounds((a) -> bounds.apply(a.getFirst(), a.get(1)))
+                .distribution((a) -> a.getFirst().combine(a.get(1), f));
     }
 
     private static void register(NumberFunction.Builder builder) {
@@ -147,7 +138,7 @@ public final class BuiltinFunctions {
 
     @NotNull
     private static NumberInterval reduce(List<NumberInterval> args, BinaryOperator<NumberInterval> op) {
-        NumberInterval result = args.get(0);
+        NumberInterval result = args.getFirst();
 
         for (int i = 1; i < args.size(); i++) {
             result = op.apply(result, args.get(i));
@@ -158,7 +149,7 @@ public final class BuiltinFunctions {
 
     @Nullable
     private static NumberDistribution reduceNullable(List<NumberDistribution> args, BinaryOperator<NumberDistribution> op) {
-        NumberDistribution result = args.get(0);
+        NumberDistribution result = args.getFirst();
 
         for (int i = 1; i < args.size() && result != null; i++) {
             NumberDistribution next = args.get(i);
@@ -174,7 +165,7 @@ public final class BuiltinFunctions {
         return NumberText.seq(
                 NumberText.key(NumberFunction.translationKey(id)),
                 NumberText.str("["),
-                formatted.get(0),
+                formatted.getFirst(),
                 NumberText.str("; "),
                 formatted.get(1),
                 NumberText.str(maxClosed ? "]" : ")")
@@ -188,33 +179,33 @@ public final class BuiltinFunctions {
         int constantIndex = -1;
 
         for (NumberExpr arg : args) {
-            if (arg instanceof NumberExpr.Const c) {
-                constant += c.value();
+            if (arg instanceof NumberExpr.Const(double value)) {
+                constant += value;
                 constantIndex = constantIndex < 0 ? terms.size() : constantIndex;
-            } else if (arg instanceof NumberExpr.Fn f && f.id().equals(ADD)) {
-                terms.addAll(f.args());
+            } else if (arg instanceof NumberExpr.Fn(Identifier id, List<NumberExpr> args1) && id.equals(ADD)) {
+                terms.addAll(args1);
             } else {
                 terms.add(arg);
             }
         }
 
         if (constant < 0 && !terms.isEmpty()) {
-            return simplifySub(terms.size() == 1 ? terms.get(0) : new NumberExpr.Fn(ADD, terms), NumberExpr.constant(-constant));
+            return simplifySub(terms.size() == 1 ? terms.getFirst() : new NumberExpr.Fn(ADD, terms), NumberExpr.constant(-constant));
         }
         if (constant != 0 || terms.isEmpty()) {
             terms.add(Math.max(constantIndex, 0), NumberExpr.constant(constant));
         }
 
-        return terms.size() == 1 ? terms.get(0) : new NumberExpr.Fn(ADD, terms);
+        return terms.size() == 1 ? terms.getFirst() : new NumberExpr.Fn(ADD, terms);
     }
 
     @NotNull
     private static NumberExpr simplifySub(NumberExpr a, NumberExpr b) {
-        if (b instanceof NumberExpr.Const c && c.value() == 0) {
+        if (b instanceof NumberExpr.Const(double value) && value == 0) {
             return a;
         }
-        if (b instanceof NumberExpr.Const c && c.value() < 0) {
-            return simplifyAdd(List.of(a, NumberExpr.constant(-c.value())));
+        if (b instanceof NumberExpr.Const(double value) && value < 0) {
+            return simplifyAdd(List.of(a, NumberExpr.constant(-value)));
         }
 
         return new NumberExpr.Fn(SUB, List.of(a, b));
@@ -227,11 +218,11 @@ public final class BuiltinFunctions {
         int constantIndex = -1;
 
         for (NumberExpr arg : args) {
-            if (arg instanceof NumberExpr.Const c) {
-                constant *= c.value();
+            if (arg instanceof NumberExpr.Const(double value)) {
+                constant *= value;
                 constantIndex = constantIndex < 0 ? factors.size() : constantIndex;
-            } else if (arg instanceof NumberExpr.Fn f && f.id().equals(MUL)) {
-                factors.addAll(f.args());
+            } else if (arg instanceof NumberExpr.Fn(Identifier id, List<NumberExpr> args1) && id.equals(MUL)) {
+                factors.addAll(args1);
             } else {
                 factors.add(arg);
             }
@@ -244,7 +235,7 @@ public final class BuiltinFunctions {
             factors.add(Math.max(constantIndex, 0), NumberExpr.constant(constant));
         }
 
-        return factors.size() == 1 ? factors.get(0) : new NumberExpr.Fn(MUL, factors);
+        return factors.size() == 1 ? factors.getFirst() : new NumberExpr.Fn(MUL, factors);
     }
 
     @Nullable

@@ -2,6 +2,7 @@ package com.yanny.ali.plugin.server.bytecode;
 
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberFunctions;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
@@ -26,11 +27,11 @@ final class NumberDomain implements Opcodes {
     }
 
     Value draw(NumberExpr expr, Value.Kind kind) {
-        if (expr instanceof NumberExpr.Fn fn && fn.args().size() == 2 && fn.args().get(0) instanceof NumberExpr.Const lo && fn.args().get(1) instanceof NumberExpr.Const hi) {
-            if (fn.id().equals(NumberFunctions.UNIFORM_INT) && hi.value() - lo.value() < Limits.OPTIONS) {
-                drawn.put(expr, new Drawn(Draw.discrete((int) lo.value(), (int) hi.value()), 0));
-            } else if (fn.id().equals(NumberFunctions.UNIFORM_FLOAT) && hi.value() > lo.value()) {
-                drawn.put(expr, new Drawn(Draw.continuous(lo.value(), hi.value()), 0));
+        if (expr instanceof NumberExpr.Fn(Identifier id, List<NumberExpr> args) && args.size() == 2 && args.getFirst() instanceof NumberExpr.Const(double lo) && args.get(1) instanceof NumberExpr.Const(double hi)) {
+            if (id.equals(NumberFunctions.UNIFORM_INT) && hi - lo < Limits.OPTIONS) {
+                drawn.put(expr, new Drawn(Draw.discrete((int) lo, (int) hi), 0));
+            } else if (id.equals(NumberFunctions.UNIFORM_FLOAT) && hi > lo) {
+                drawn.put(expr, new Drawn(Draw.continuous(lo, hi), 0));
             }
         }
 
@@ -38,25 +39,23 @@ final class NumberDomain implements Opcodes {
     }
 
     static NumberExpr expr(Value value) {
-        if (value instanceof Value.Known known && known.value() instanceof Number number) {
-            return NumberExpr.constant(number.doubleValue());
-        } else if (value instanceof Value.Num num) {
-            return num.expr();
-        } else if (value instanceof Value.Choice choice && choice.options().stream().allMatch(Number.class::isInstance)) {
-            return NumberExpr.weighted(choice.options().stream().map((o) -> new NumberExpr.WeightedEntry(1, NumberExpr.constant(((Number) o).doubleValue()))).toList());
-        }
-
-        throw new Fail(value instanceof Value.Unknown ? "value from the trader or world" : "not a number");
+        return switch (value) {
+            case Value.Known(Number number) -> NumberExpr.constant(number.doubleValue());
+            case Value.Num num -> num.expr();
+            case Value.Choice choice when choice.options().stream().allMatch(Number.class::isInstance) ->
+                    NumberExpr.weighted(choice.options().stream().map((o) -> new NumberExpr.WeightedEntry(1, NumberExpr.constant(((Number) o).doubleValue()))).toList());
+            case null, default -> throw new Fail(value instanceof Value.Unknown ? "value from the trader or world" : "not a number");
+        };
     }
 
     @NotNull
     NumberExpr add(NumberExpr a, NumberExpr b) {
         NumberExpr shifted = null;
 
-        if (b instanceof NumberExpr.Const c) {
-            shifted = shift(a, c.value());
-        } else if (a instanceof NumberExpr.Const c) {
-            shifted = shift(b, c.value());
+        if (b instanceof NumberExpr.Const(double value1)) {
+            shifted = shift(a, value1);
+        } else if (a instanceof NumberExpr.Const(double value2)) {
+            shifted = shift(b, value2);
         }
 
         return shifted != null ? shifted : NumberExpr.add(a, b);
@@ -64,16 +63,16 @@ final class NumberDomain implements Opcodes {
 
     @NotNull
     NumberExpr sub(NumberExpr a, NumberExpr b) {
-        NumberExpr shifted = b instanceof NumberExpr.Const c ? shift(a, -c.value()) : null;
+        NumberExpr shifted = b instanceof NumberExpr.Const(double value1) ? shift(a, -value1) : null;
 
         return shifted != null ? shifted : NumberExpr.sub(a, b);
     }
 
     @Nullable
     private NumberExpr shift(NumberExpr value, double by) {
-        if (value instanceof NumberExpr.Fn fn && (fn.id().equals(NumberFunctions.UNIFORM_INT) || fn.id().equals(NumberFunctions.UNIFORM_FLOAT))
-                && fn.args().get(0) instanceof NumberExpr.Const lo && fn.args().get(1) instanceof NumberExpr.Const hi) {
-            NumberExpr shifted = NumberExpr.fn(fn.id(), NumberExpr.constant(lo.value() + by), NumberExpr.constant(hi.value() + by));
+        if (value instanceof NumberExpr.Fn(Identifier id, List<NumberExpr> args) && (id.equals(NumberFunctions.UNIFORM_INT) || id.equals(NumberFunctions.UNIFORM_FLOAT))
+                && args.getFirst() instanceof NumberExpr.Const(double lo) && args.get(1) instanceof NumberExpr.Const(double hi)) {
+            NumberExpr shifted = NumberExpr.fn(id, NumberExpr.constant(lo + by), NumberExpr.constant(hi + by));
             Drawn source = drawn.get(value);
 
             if (source != null) {
@@ -97,15 +96,13 @@ final class NumberDomain implements Opcodes {
 
     @Nullable
     private static Double uniformProbability(int op, NumberExpr draw, NumberExpr bound) {
-        if (!(bound instanceof NumberExpr.Const constant) || !(draw instanceof NumberExpr.Fn fn) || fn.args().size() != 2
-                || !(fn.args().get(0) instanceof NumberExpr.Const lo) || !(fn.args().get(1) instanceof NumberExpr.Const hi)) {
+        if (!(bound instanceof NumberExpr.Const(double value)) || !(draw instanceof NumberExpr.Fn(Identifier id, List<NumberExpr> args)) || args.size() != 2
+                || !(args.getFirst() instanceof NumberExpr.Const(double lo)) || !(args.get(1) instanceof NumberExpr.Const(double hi))) {
             return null;
         }
 
-        double value = constant.value();
-
-        if (fn.id().equals(NumberFunctions.UNIFORM_FLOAT) && hi.value() > lo.value()) {
-            double below = Math.max(0, Math.min(1, (value - lo.value()) / (hi.value() - lo.value())));
+        if (id.equals(NumberFunctions.UNIFORM_FLOAT) && hi > lo) {
+            double below = Math.clamp((value - lo) / (hi - lo), 0, 1);
 
             return switch (op) {
                 case IFLT, IFLE -> below;
@@ -114,10 +111,10 @@ final class NumberDomain implements Opcodes {
                 default -> 1.0;
             };
         }
-        if (fn.id().equals(NumberFunctions.UNIFORM_INT) && hi.value() >= lo.value()) {
-            double total = hi.value() - lo.value() + 1;
-            double below = Math.max(0, Math.min(hi.value(), Math.ceil(value) - 1) - lo.value() + 1);
-            double atMost = Math.max(0, Math.min(hi.value(), Math.floor(value)) - lo.value() + 1);
+        if (id.equals(NumberFunctions.UNIFORM_INT) && hi >= lo) {
+            double total = hi - lo + 1;
+            double below = Math.max(0, Math.min(hi, Math.ceil(value) - 1) - lo + 1);
+            double atMost = Math.max(0, Math.min(hi, Math.floor(value)) - lo + 1);
             double count = switch (op) {
                 case IFLT -> below;
                 case IFLE -> atMost;
@@ -174,16 +171,16 @@ final class NumberDomain implements Opcodes {
         if (replacements.containsKey(expr)) {
             return replacements.get(expr);
         }
-        if (expr instanceof NumberExpr.Fn fn) {
-            List<NumberExpr> args = fn.args().stream().map((a) -> substitute(a, replacements)).toList();
+        if (expr instanceof NumberExpr.Fn(Identifier id, List<NumberExpr> args1)) {
+            List<NumberExpr> args = args1.stream().map((a) -> substitute(a, replacements)).toList();
 
-            return IntStream.range(0, args.size()).allMatch((i) -> args.get(i) == fn.args().get(i)) ? expr : NumberExpr.fn(fn.id(), args);
+            return IntStream.range(0, args.size()).allMatch((i) -> args.get(i) == args1.get(i)) ? expr : NumberExpr.fn(id, args);
         }
-        if (expr instanceof NumberExpr.Weighted weighted) {
-            List<NumberExpr.WeightedEntry> entries = weighted.entries().stream()
+        if (expr instanceof NumberExpr.Weighted(List<NumberExpr.WeightedEntry> entries1)) {
+            List<NumberExpr.WeightedEntry> entries = entries1.stream()
                     .map((e) -> new NumberExpr.WeightedEntry(e.weight(), substitute(e.value(), replacements))).toList();
 
-            return IntStream.range(0, entries.size()).allMatch((i) -> entries.get(i).value() == weighted.entries().get(i).value()) ? expr : NumberExpr.weighted(entries);
+            return IntStream.range(0, entries.size()).allMatch((i) -> entries.get(i).value() == entries1.get(i).value()) ? expr : NumberExpr.weighted(entries);
         }
 
         return expr;
@@ -222,7 +219,7 @@ final class NumberDomain implements Opcodes {
                 return 0;
             }
 
-            double below = Math.max(0, Math.min(1, (bound - lo) / (hi - lo)));
+            double below = Math.clamp((bound - lo) / (hi - lo), 0, 1);
 
             return switch (op) {
                 case IFLT, IFLE -> below;
@@ -237,7 +234,7 @@ final class NumberDomain implements Opcodes {
                 return NumberExpr.uniformFloat(lo + offset, hi + offset);
             }
             if (values.size() == 1) {
-                return NumberExpr.constant(values.get(0) + offset);
+                return NumberExpr.constant(values.getFirst() + offset);
             }
 
             int min = Collections.min(values);

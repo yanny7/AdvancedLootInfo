@@ -36,7 +36,7 @@ final class Aggregation {
 
         if (offers.isEmpty()) {
             if (reason == null) {
-                reason = "no offer returned (" + ((Outcome.Success) outcomes.get(outcomes.size() - 1)).result() + ")";
+                reason = "no offer returned (" + ((Outcome.Success) outcomes.getLast()).result() + ")";
             }
 
             return new Listing(List.of(), reason);
@@ -53,7 +53,7 @@ final class Aggregation {
                 when = PathCondition.of(entry.getValue().stream().map(Outcome::decisions).toList());
             }
 
-            result.add(new Offer(entry.getKey(), Objects.requireNonNull(entry.getValue().get(0).result()), when));
+            result.add(new Offer(entry.getKey(), Objects.requireNonNull(entry.getValue().getFirst().result()), when));
         }
 
         return new Listing(result, reason);
@@ -70,10 +70,10 @@ final class Aggregation {
             List<Outcome.Success> productive = new ArrayList<>();
 
             for (Outcome outcome : outcomes) {
-                if (outcome instanceof Outcome.Failure failure) {
-                    Integer level = pathLevel(failure.decisions());
+                if (outcome instanceof Outcome.Failure(String reason1, List<Decision> decisions)) {
+                    Integer level = pathLevel(decisions);
 
-                    reason = reason != null ? reason : failure.reason();
+                    reason = reason != null ? reason : reason1;
                     unknownLevel |= level == null;
 
                     if (level != null) {
@@ -105,7 +105,7 @@ final class Aggregation {
                 for (Value.Offers.Entry entry : ((Value.Offers) Objects.requireNonNull(path.result())).entries) {
                     int level = entry instanceof Value.Offers.Listings listings && listings.key() != null ? listings.key() : split.level();
 
-                    if (entry instanceof Value.Offers.Single single && !isRenderable(single.offer())) {
+                    if (entry instanceof Value.Offers.Single(Value offer) && !isRenderable(offer)) {
                         reason = reason != null ? reason : UNRENDERABLE;
                         incomplete.add(level);
                         continue;
@@ -115,8 +115,8 @@ final class Aggregation {
 
                     if (entry instanceof Value.Offers.Listings listings) {
                         identity = List.of(Arrays.stream(listings.listings()).map(TradeUtils::listingKey).toList(), listings.count(), level);
-                    } else if (entry instanceof Value.Offers.Picked picked) {
-                        identity = List.of(picked.offers().stream().map((o) -> String.valueOf(describeOffer(new Value.Known(o)))).toList(), picked.count(), level);
+                    } else if (entry instanceof Value.Offers.Picked(List<Object> offers, Value count)) {
+                        identity = List.of(offers.stream().map((o) -> String.valueOf(describeOffer(new Value.Known(o)))).toList(), count, level);
                     } else {
                         identity = List.of(String.valueOf(describeOffer(((Value.Offers.Single) entry).offer())), level);
                     }
@@ -138,8 +138,8 @@ final class Aggregation {
                     int repeated = times.get(entry.getKey());
                     List<Object> key = entry.getKey();
                     boolean single = entry.getValue() instanceof Value.Offers.Single;
-                    List<Object> identity = List.of(single || !split.world().isEmpty() ? key : List.of(key.get(0), key.get(2)), repeated);
-                    Bucket bucket = buckets.computeIfAbsent((Integer) key.get(key.size() - 1), (l) -> new LinkedHashMap<>())
+                    List<Object> identity = List.of(single || !split.world().isEmpty() ? key : List.of(key.getFirst(), key.get(2)), repeated);
+                    Bucket bucket = buckets.computeIfAbsent((Integer) key.getLast(), (l) -> new LinkedHashMap<>())
                             .computeIfAbsent(identity, (i) -> new Bucket(entry.getValue(), repeated));
 
                     bucket.worlds.merge(split.world(), probability, Double::sum);
@@ -155,7 +155,7 @@ final class Aggregation {
             for (Map.Entry<Integer, Map<List<Object>, Bucket>> level : buckets.entrySet()) {
                 List<Bucket> levelBuckets = List.copyOf(level.getValue().values());
                 List<Double> chances = levelBuckets.stream().flatMap((b) -> b.worlds.values().stream()).toList();
-                double chance = chances.get(0);
+                double chance = chances.getFirst();
 
                 if (chances.stream().anyMatch((c) -> Math.abs(c - chance) > 1e-6) || chance > 1 + 1e-6) {
                     reason = reason != null ? reason : "several sets of trades of one level";
@@ -169,7 +169,7 @@ final class Aggregation {
             }
 
             if (levels.isEmpty() && reason == null
-                    && !(outcomes.size() == 1 && outcomes.get(0).decisions().isEmpty() && outcomes.get(0) instanceof Outcome.Success success && success.result() instanceof Value.Offers)) {
+                    && !(outcomes.size() == 1 && outcomes.getFirst().decisions().isEmpty() && outcomes.getFirst() instanceof Outcome.Success success && success.result() instanceof Value.Offers)) {
                 reason = "no trades";
                 unknownLevel = true;
             }
@@ -186,7 +186,7 @@ final class Aggregation {
 
     @Nullable
     static BytecodeInterpreter.Stacks stacks(@Nullable Value result) {
-        if (result instanceof Value.Known known && known.value() instanceof ItemStack stack) {
+        if (result instanceof Value.Known(ItemStack stack)) {
             return stacks(List.of(stack), null);
         }
         if (result instanceof Value.Stack stack) {
@@ -201,11 +201,11 @@ final class Aggregation {
 
     @Nullable
     static String describeOffer(@Nullable Value result) {
-        if (result instanceof Value.Offer offer) {
-            return String.format("%s + %s -> %s, uses %d, xp %d, price multiplier %s", describe(offer.costA()), describe(offer.costB()), describe(offer.result()),
-                    offer.maxUses(), offer.xp(), offer.priceMultiplier());
+        if (result instanceof Value.Offer(Value costA, Value costB, Value result1, int maxUses, int xp, float priceMultiplier)) {
+            return String.format("%s + %s -> %s, uses %d, xp %d, price multiplier %s", describe(costA), describe(costB), describe(result1),
+                    maxUses, xp, priceMultiplier);
         }
-        if (result instanceof Value.Known known && known.value() instanceof MerchantOffer offer) {
+        if (result instanceof Value.Known(MerchantOffer offer)) {
             return String.format("%s + %s -> %s, uses %d, xp %d, price multiplier %s", describe(new Value.Known(offer.getBaseCostA())),
                     describe(new Value.Known(offer.getCostB())), describe(new Value.Known(offer.getResult())), offer.getMaxUses(), offer.getXp(),
                     offer.getPriceMultiplier());
@@ -268,7 +268,7 @@ final class Aggregation {
             return new Split(1, world);
         }
 
-        Decision level = levels.get(0);
+        Decision level = levels.getFirst();
 
         return new Split((Integer) Objects.requireNonNull(level.value()),
                 world.stream().filter((d) -> d.kind() != Decision.Kind.EQUALS || !Objects.equals(d.subject(), level.subject())).toList());
@@ -295,7 +295,7 @@ final class Aggregation {
     }
 
     private static NumberExpr count(Value value) {
-        if (value instanceof Value.Known known && known.value() instanceof Number number) {
+        if (value instanceof Value.Known(Number number)) {
             return NumberExpr.constant(number.doubleValue());
         }
         if (value instanceof Value.Num num) {
@@ -313,7 +313,7 @@ final class Aggregation {
 
             for (List<Outcome.Success> random : offers.values()) {
                 Set<List<Decision>> known = knownDecisions(random.stream().map(Outcome::decisions).toList());
-                String other = offers.entrySet().stream().filter((e) -> e.getValue() != random && absorbs(random.get(0).result(), e.getValue().get(0).result())
+                String other = offers.entrySet().stream().filter((e) -> e.getValue() != random && absorbs(random.getFirst().result(), e.getValue().getFirst().result())
                         && known.equals(knownDecisions(e.getValue().stream().map(Outcome::decisions).toList()))).map(Map.Entry::getKey).findFirst().orElse(null);
 
                 if (other != null) {
@@ -332,13 +332,13 @@ final class Aggregation {
             merged = false;
 
             for (Bucket random : buckets.values()) {
-                if (!(random.entry instanceof Value.Offers.Single single)) {
+                if (!(random.entry instanceof Value.Offers.Single(Value offer))) {
                     continue;
                 }
 
                 Set<List<Decision>> known = knownDecisions(random.worlds.keySet());
                 List<Object> other = buckets.entrySet().stream().filter((e) -> e.getValue() != random && e.getValue().times == random.times
-                        && e.getValue().entry instanceof Value.Offers.Single absorbed && absorbs(single.offer(), absorbed.offer())
+                        && e.getValue().entry instanceof Value.Offers.Single(Value offer1) && absorbs(offer, offer1)
                         && known.equals(knownDecisions(e.getValue().worlds.keySet()))).map(Map.Entry::getKey).findFirst().orElse(null);
 
                 if (other != null) {
@@ -371,7 +371,7 @@ final class Aggregation {
         if (value instanceof Value.Offer offer) {
             return offer;
         }
-        if (value instanceof Value.Known known && known.value() instanceof MerchantOffer offer) {
+        if (value instanceof Value.Known(MerchantOffer offer)) {
             return new Value.Offer(new Value.Known(offer.getBaseCostA()), new Value.Known(offer.getCostB()), new Value.Known(offer.getResult()), offer.getMaxUses(),
                     offer.getXp(), offer.getPriceMultiplier());
         }
@@ -389,7 +389,7 @@ final class Aggregation {
 
         List<Item> items = stack.options.stream().map(ItemStack::getItem).toList();
 
-        if (other instanceof Value.Known known && known.value() instanceof ItemStack real) {
+        if (other instanceof Value.Known(ItemStack real)) {
             return items.equals(List.of(real.getItem())) && stack.count.equals(NumberExpr.constant(real.getCount())) && stack.destination == null && stack.decoration == null;
         }
 
@@ -398,7 +398,7 @@ final class Aggregation {
     }
 
     private static boolean isRenderable(@Nullable Value result) {
-        if (result instanceof Value.Known known && known.value() instanceof MerchantOffer) {
+        if (result instanceof Value.Known(MerchantOffer ignored)) {
             return true;
         }
 
@@ -406,32 +406,29 @@ final class Aggregation {
     }
 
     private static boolean isSlot(Value value) {
-        return value instanceof Value.Known known && known.value() instanceof ItemStack || value instanceof Value.Stack
+        return value instanceof Value.Known(ItemStack ignored) || value instanceof Value.Stack
                 || value instanceof Value.Choice choice && choice.options().stream().allMatch(ItemStack.class::isInstance);
     }
 
     private static boolean isNoOffer(@Nullable Value result) {
-        return result == null || result instanceof Value.Known known && known.value() == null;
+        return result == null || result instanceof Value.Known(Object value) && value == null;
     }
 
     @NotNull
     private static String describe(Value value) {
-        if (value instanceof Value.Known known && known.value() instanceof ItemStack stack) {
-            return stack.isEmpty() ? "-" : TradeTypes.stackText(stack) + " x" + stack.getCount();
-        }
-        if (value instanceof Value.Stack stack) {
-            String items = stack.options.stream().map(TradeTypes::stackText).collect(Collectors.joining(" | "));
+        return switch (value) {
+            case Value.Known(ItemStack stack) -> stack.isEmpty() ? "-" : TradeTypes.stackText(stack) + " x" + stack.getCount();
+            case Value.Stack stack -> {
+                String items = stack.options.stream().map(TradeTypes::stackText).collect(Collectors.joining(" | "));
 
-            return (stack.options.size() > 1 ? "[" + items + "]" : items) + " x" + countText(stack.count) + (stack.randomTag ? " (random properties)" : "")
-                    + (stack.destination != null ? " (destination " + stack.destination + ", decoration " + stack.decoration + ")" : "")
-                    + (stack.tag != null && ItemStackModel.isTag(stack.tag, stack.options) ? " (" + stack.tag + ")" : "");
-        }
-        if (value instanceof Value.Choice choice) {
-            return "[" + choice.options().stream().map((o) -> o instanceof ItemStack stack ? TradeTypes.stackText(stack) + " x" + stack.getCount() : String.valueOf(o))
+                yield (stack.options.size() > 1 ? "[" + items + "]" : items) + " x" + countText(stack.count) + (stack.randomTag ? " (random properties)" : "")
+                        + (stack.destination != null ? " (destination " + stack.destination + ", decoration " + stack.decoration + ")" : "")
+                        + (stack.tag != null && ItemStackModel.isTag(stack.tag, stack.options) ? " (" + stack.tag + ")" : "");
+            }
+            case Value.Choice choice -> "[" + choice.options().stream().map((o) -> o instanceof ItemStack stack ? TradeTypes.stackText(stack) + " x" + stack.getCount() : String.valueOf(o))
                     .collect(Collectors.joining(" | ")) + "]";
-        }
-
-        return "?";
+            default -> "?";
+        };
     }
 
     @NotNull

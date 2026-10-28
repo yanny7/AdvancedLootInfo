@@ -6,7 +6,6 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.alicompat.IGlmModCompat;
 import com.yanny.alicompat.accessor.GlmAccessorUtils;
-import com.yanny.alicompat.accessor.PluginUtils;
 import net.p3pp3rf1y.sophisticatedbackpacks.data.CopyBackpackDataFunction;
 import net.p3pp3rf1y.sophisticatedbackpacks.data.BackpackLootEnabledCondition;
 import net.p3pp3rf1y.sophisticatedbackpacks.data.BackpackLootModifierProvider;

@@ -213,7 +213,7 @@ public class NodeTest {
         NodeUtils.processOperations(List.of(new IOperation.RemoveOperation((i) -> i.is(Items.DIAMOND), (n) -> replacement)), table);
 
         Assertions.assertEquals(List.of(ItemNode.ID, EmptyNode.ID), ids(child(table, 0)));
-        Assertions.assertSame(replacement, child(table, 0).nodes().get(0));
+        Assertions.assertSame(replacement, child(table, 0).nodes().getFirst());
     }
 
     @Test
@@ -227,7 +227,7 @@ public class NodeTest {
 
         NodeUtils.replaceEmptyItems(table);
 
-        IDataNode empty = child(table, 0).nodes().get(0);
+        IDataNode empty = child(table, 0).nodes().getFirst();
 
         Assertions.assertEquals(List.of(EmptyNode.ID, GroupNode.ID, ItemNode.ID), ids(child(table, 0)));
         Assertions.assertEquals(0.25F, empty.getChance());

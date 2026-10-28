@@ -23,7 +23,7 @@ final class OffersModel implements MethodModel {
     @Nullable
     @Override
     public Value apply(CallContext context, Call call) {
-        if (call.insn().getOpcode() != Opcodes.INVOKESTATIC && call.args().get(0) instanceof Value.Offers offers) {
+        if (call.insn().getOpcode() != Opcodes.INVOKESTATIC && call.args().getFirst() instanceof Value.Offers offers) {
             return offersCall(context, call, offers);
         }
 
@@ -46,13 +46,13 @@ final class OffersModel implements MethodModel {
         List<Value> args = call.args();
         boolean isStatic = insn.getOpcode() == Opcodes.INVOKESTATIC;
         Value.Offers collected = !isStatic && insn.name.equals("add") && insn.desc.equals("(Ljava/lang/Object;)Z") && isSymbolicOffer(context, args.get(1))
-                ? offerList(context, args.get(0), true) : null;
+                ? offerList(context, args.getFirst(), true) : null;
 
         if (collected != null) {
             return args.get(1) instanceof Value.Choice choice ? addPicked(context, collected, choice) : offersCall(context, call, collected);
         }
-        if (!isStatic && args.get(0) instanceof Value.Known known && known.value() != null && context.offers(known.value()) != null) {
-            return offersCall(context, call, context.offers(known.value()));
+        if (!isStatic && args.getFirst() instanceof Value.Known(Object value1) && value1 != null && context.offers(value1) != null) {
+            return offersCall(context, call, context.offers(value1));
         }
 
         return NO_OPINION;
@@ -62,7 +62,7 @@ final class OffersModel implements MethodModel {
     private static Value order(CallContext context, Call call) {
         MethodInsnNode insn = call.insn();
 
-        if (insn.getOpcode() == Opcodes.INVOKESTATIC && insn.owner.equals("java/util/Collections") && ORDER_ONLY.contains(insn.name) && call.args().get(0) instanceof Value.Offers) {
+        if (insn.getOpcode() == Opcodes.INVOKESTATIC && insn.owner.equals("java/util/Collections") && ORDER_ONLY.contains(insn.name) && call.args().getFirst() instanceof Value.Offers) {
             return null;
         }
 
@@ -74,31 +74,31 @@ final class OffersModel implements MethodModel {
         MethodInsnNode call = invocation.insn();
         List<Value> args = invocation.args();
 
-        if (call.name.equals("add") && call.desc.equals("(Ljava/lang/Object;)Z") && args.get(1) instanceof Value.Pick pickValue) {
-            Integer index = offers.picks.get(pickValue.pool());
+        if (call.name.equals("add") && call.desc.equals("(Ljava/lang/Object;)Z") && args.get(1) instanceof Value.Pick(List<VillagerTrades.ItemListing> listings1, Object pool, Integer key)) {
+            Integer index = offers.picks.get(pool);
 
-            NumberExpr drawCount = context.drawCount(pickValue.pool());
+            NumberExpr drawCount = context.drawCount(pool);
 
             if (index == null) {
-                offers.picks.put(pickValue.pool(), offers.entries.size());
-                offers.entries.add(new Value.Offers.Listings(pickValue.listings().toArray(new VillagerTrades.ItemListing[0]),
-                        drawCount != null ? new Value.Num(drawCount, Value.Kind.INT) : new Value.Known(1), pickValue.key()));
+                offers.picks.put(pool, offers.entries.size());
+                offers.entries.add(new Value.Offers.Listings(listings1.toArray(new VillagerTrades.ItemListing[0]),
+                        drawCount != null ? new Value.Num(drawCount, Value.Kind.INT) : new Value.Known(1), key));
             } else {
-                if (!(offers.entries.get(index) instanceof Value.Offers.Listings listings)) {
+                if (!(offers.entries.get(index) instanceof Value.Offers.Listings(VillagerTrades.ItemListing[] listings, Value count1, Integer key1))) {
                     throw new Fail("merchant offers call add");
                 }
 
-                List<VillagerTrades.ItemListing> union = new ArrayList<>(Arrays.asList(listings.listings()));
+                List<VillagerTrades.ItemListing> union = new ArrayList<>(Arrays.asList(listings));
 
-                for (VillagerTrades.ItemListing listing : pickValue.listings()) {
+                for (VillagerTrades.ItemListing listing : listings1) {
                     if (union.stream().noneMatch((l) -> l == listing)) {
                         union.add(listing);
                     }
                 }
 
-                Value count = drawCount != null ? listings.count() : new Value.Known((Integer) ((Value.Known) listings.count()).value() + 1);
+                Value count = drawCount != null ? count1 : new Value.Known((Integer) ((Value.Known) count1).value() + 1);
 
-                offers.entries.set(index, new Value.Offers.Listings(union.toArray(new VillagerTrades.ItemListing[0]), count, listings.key()));
+                offers.entries.set(index, new Value.Offers.Listings(union.toArray(new VillagerTrades.ItemListing[0]), count, key1));
             }
 
             return new Value.Known(1);
@@ -151,8 +151,8 @@ final class OffersModel implements MethodModel {
         if (index == null) {
             offers.picks.put(choice.draw(), offers.entries.size());
             offers.entries.add(new Value.Offers.Picked(choice.options(), drawCount != null ? new Value.Num(drawCount, Value.Kind.INT) : new Value.Known(1)));
-        } else if (offers.entries.get(index) instanceof Value.Offers.Picked picked) {
-            List<Object> union = new ArrayList<>(picked.offers());
+        } else if (offers.entries.get(index) instanceof Value.Offers.Picked(List<Object> offers1, Value count1)) {
+            List<Object> union = new ArrayList<>(offers1);
 
             for (Object offer : choice.options()) {
                 if (union.stream().noneMatch((o) -> o == offer)) {
@@ -160,7 +160,7 @@ final class OffersModel implements MethodModel {
                 }
             }
 
-            Value count = drawCount != null ? picked.count() : new Value.Known((Integer) ((Value.Known) picked.count()).value() + 1);
+            Value count = drawCount != null ? count1 : new Value.Known((Integer) ((Value.Known) count1).value() + 1);
 
             offers.entries.set(index, new Value.Offers.Picked(union, count));
         } else {
@@ -171,8 +171,8 @@ final class OffersModel implements MethodModel {
     }
 
     private static boolean isSymbolicOffer(CallContext context, Value value) {
-        return value instanceof Value.Pick || value instanceof Value.Offer || value instanceof Value.Choice choice && choice.draw() != null
-                && context.isPool(choice.draw()) && !choice.options().isEmpty() && choice.options().stream().allMatch(MerchantOffer.class::isInstance);
+        return value instanceof Value.Pick || value instanceof Value.Offer || value instanceof Value.Choice(List<Object> options, Object draw) && draw != null
+                && context.isPool(draw) && !options.isEmpty() && options.stream().allMatch(MerchantOffer.class::isInstance);
     }
 
     @Nullable
@@ -180,7 +180,7 @@ final class OffersModel implements MethodModel {
         if (value instanceof Value.Offers offers) {
             return offers;
         }
-        if (!(value instanceof Value.Known known) || !(known.value() instanceof Collection<?> collection) || !context.isOwned(collection)) {
+        if (!(value instanceof Value.Known(Object value1)) || !(value1 instanceof Collection<?> collection) || !context.isOwned(collection)) {
             return null;
         }
 
@@ -206,7 +206,7 @@ final class OffersModel implements MethodModel {
         List<Integer> removedIndices = new ArrayList<>();
 
         for (int i = 0; i < offers.entries.size(); i++) {
-            if (!(offers.entries.get(i) instanceof Value.Offers.Single single)) {
+            if (!(offers.entries.get(i) instanceof Value.Offers.Single(Value offer))) {
                 if (!nullCheck) {
                     throw new Fail("merchant offers call removeIf");
                 }
@@ -214,7 +214,7 @@ final class OffersModel implements MethodModel {
                 continue;
             }
 
-            if (!(context.invoke(predicate, List.of(single.offer()), depth) instanceof Value.Known known) || !(known.value() instanceof Integer test)) {
+            if (!(context.invoke(predicate, List.of(offer), depth) instanceof Value.Known(Integer test))) {
                 throw new Fail("merchant offers call removeIf");
             }
             if (test != 0) {
@@ -222,8 +222,8 @@ final class OffersModel implements MethodModel {
             }
         }
 
-        for (int i = removedIndices.size() - 1; i >= 0; i--) {
-            offers.entries.remove((int) removedIndices.get(i));
+        for (int index : removedIndices.reversed()) {
+            offers.entries.remove(index);
         }
 
         offers.picks.replaceAll((pool, index) -> index - (int) removedIndices.stream().filter((removed) -> removed < index).count());

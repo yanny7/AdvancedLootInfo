@@ -22,15 +22,15 @@ final class TraderModel implements MethodModel {
         MethodInsnNode insn = call.insn();
         List<Value> args = call.args();
         TraderRun run = context.traderRun();
-        Value receiver = insn.getOpcode() == Opcodes.INVOKESTATIC ? null : args.get(0);
+        Value receiver = insn.getOpcode() == Opcodes.INVOKESTATIC ? null : args.getFirst();
 
         if (run != null && run.isSelf(receiver)) {
             if (!run.ownGetOffers && RuntimeNames.is(RuntimeNames.GET_OFFERS, insn)) {
                 return run.offers;
             }
             if (RuntimeNames.is(RuntimeNames.ADD_OFFERS_FROM_ITEM_LISTINGS, insn)) {
-                if (!(args.get(2) instanceof Value.Offers offers) || !(args.get(3) instanceof Value.Known known)
-                        || !(known.value() instanceof VillagerTrades.ItemListing[] listings)) {
+                if (!(args.get(2) instanceof Value.Offers offers) || !(args.get(3) instanceof Value.Known(Object value1))
+                        || !(value1 instanceof VillagerTrades.ItemListing[] listings)) {
                     throw new Fail("offers from item listings");
                 }
 

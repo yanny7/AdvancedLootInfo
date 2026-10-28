@@ -2,7 +2,6 @@ package com.yanny.ali.plugin.server.bytecode;
 
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberFunctions;
-import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.MethodInsnNode;
@@ -14,12 +13,11 @@ import static com.yanny.ali.plugin.server.bytecode.Interpreter.num;
 final class NumberModel implements MethodModel {
     static final MethodModel STATICS = NumberModel::statics;
 
-    @Nullable
     @Override
     public Value apply(CallContext context, Call call) {
         MethodInsnNode insn = call.insn();
 
-        if (insn.getOpcode() != Opcodes.INVOKESTATIC && call.args().get(0) instanceof Value.Num num) {
+        if (insn.getOpcode() != Opcodes.INVOKESTATIC && call.args().getFirst() instanceof Value.Num num) {
             return unbox(insn, num);
         }
 
@@ -36,7 +34,7 @@ final class NumberModel implements MethodModel {
         if ((insn.owner.equals("java/lang/Math") || insn.owner.equals("java/lang/StrictMath")) && args.stream().anyMatch((v) -> v instanceof Value.Num)) {
             return math(context, insn, args);
         }
-        if (insn.name.equals("valueOf") && args.size() == 1 && args.get(0) instanceof Value.Num num) {
+        if (insn.name.equals("valueOf") && args.size() == 1 && args.getFirst() instanceof Value.Num num) {
             return insn.owner.equals("java/lang/String") ? Value.UNKNOWN : num;
         }
 
@@ -57,14 +55,14 @@ final class NumberModel implements MethodModel {
         Value.Kind kind = kindOf(Type.getReturnType(insn.desc));
 
         return switch (insn.name) {
-            case "min" -> num(NumberExpr.min(context.expr(args.get(0)), context.expr(args.get(1))), kind);
-            case "max" -> num(NumberExpr.max(context.expr(args.get(0)), context.expr(args.get(1))), kind);
-            case "abs" -> num(NumberExpr.fn(NumberFunctions.ABS, context.expr(args.get(0))), kind);
-            case "floor" -> num(NumberExpr.fn(NumberFunctions.FLOOR, context.expr(args.get(0))), kind);
-            case "ceil" -> num(NumberExpr.fn(NumberFunctions.CEIL, context.expr(args.get(0))), kind);
-            case "round" -> num(NumberExpr.fn(NumberFunctions.ROUND, context.expr(args.get(0))), kind);
-            case "sqrt" -> num(NumberExpr.fn(NumberFunctions.SQRT, context.expr(args.get(0))), kind);
-            case "pow" -> num(NumberExpr.fn(NumberFunctions.POW, context.expr(args.get(0)), context.expr(args.get(1))), kind);
+            case "min" -> num(NumberExpr.min(context.expr(args.getFirst()), context.expr(args.get(1))), kind);
+            case "max" -> num(NumberExpr.max(context.expr(args.getFirst()), context.expr(args.get(1))), kind);
+            case "abs" -> num(NumberExpr.fn(NumberFunctions.ABS, context.expr(args.getFirst())), kind);
+            case "floor" -> num(NumberExpr.fn(NumberFunctions.FLOOR, context.expr(args.getFirst())), kind);
+            case "ceil" -> num(NumberExpr.fn(NumberFunctions.CEIL, context.expr(args.getFirst())), kind);
+            case "round" -> num(NumberExpr.fn(NumberFunctions.ROUND, context.expr(args.getFirst())), kind);
+            case "sqrt" -> num(NumberExpr.fn(NumberFunctions.SQRT, context.expr(args.getFirst())), kind);
+            case "pow" -> num(NumberExpr.fn(NumberFunctions.POW, context.expr(args.getFirst()), context.expr(args.get(1))), kind);
             default -> throw new Fail("Math." + insn.name);
         };
     }

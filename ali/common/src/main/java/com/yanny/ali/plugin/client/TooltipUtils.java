@@ -54,6 +54,6 @@ public class TooltipUtils {
             }
         }
 
-        return options.get(0);
+        return options.getFirst();
     }
 }

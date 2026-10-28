@@ -97,7 +97,7 @@ public class EnchantBookFactoryAccessor extends BaseAccessor<VillagerTrades.Item
 
         NumberExpr price = NumberExpr.weighted(weights.entrySet().stream()
                 .map((e) -> new NumberExpr.WeightedEntry(e.getValue(), NumberExpr.mul(
-                        NumberExpr.constant(e.getKey().get(0)),
+                        NumberExpr.constant(e.getKey().getFirst()),
                         NumberExpr.add(NumberExpr.constant(2 + 3 * e.getKey().get(1)), NumberExpr.uniformInt(0, 4 + 10 * e.getKey().get(1)))
                 )))
                 .toList());
